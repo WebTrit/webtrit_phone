@@ -16,9 +16,11 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/core/mixins/widget_state_mixin.dart';
 import 'package:webtrit_phone/widgets/webview/web_view_content.dart';
 import 'package:webtrit_phone/widgets/webview/web_view_toolbar.dart';
-import 'package:webtrit_phone/widgets/webview/extensions/extensions.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+
+import '_widgets/_widgets.dart';
+import 'models/models.dart';
 
 final _logger = Logger('WebViewContainer');
 
@@ -29,7 +31,6 @@ class WebViewContainer extends StatefulWidget {
     required this.userAgent,
     this.title,
     this.addLocaleNameToQueryParameters = true,
-    this.javaScriptChannels = const {},
     this.errorBuilder,
     this.showToolbar = true,
     this.builder,
@@ -39,19 +40,18 @@ class WebViewContainer extends StatefulWidget {
     this.onUrlChange,
     this.connectivityRecoveryStrategy,
     this.pageInjectionStrategies = const [],
-    this.enableEmbeddedLogging = false,
+    this.jSChannelStrategies = const [],
   });
 
   final Widget? title;
   final Uri initialUri;
   final bool addLocaleNameToQueryParameters;
-  final Map<String, void Function(JavaScriptMessage)> javaScriptChannels;
+
   final bool showToolbar;
   final Widget? Function(BuildContext context, WebResourceError error, WebViewController controller)? errorBuilder;
   final TransitionBuilder? builder;
   final String userAgent;
   final WebViewController? webViewController;
-  final bool enableEmbeddedLogging;
 
   final void Function()? onPageLoadedSuccess;
   final void Function(WebResourceError error)? onPageLoadedFailed;
@@ -62,6 +62,8 @@ class WebViewContainer extends StatefulWidget {
 
   /// List of strategies for injecting data into the WebView when it is ready.
   final List<PageInjectionStrategy> pageInjectionStrategies;
+
+  final List<JSChannelStrategy> jSChannelStrategies;
 
   @override
   State<WebViewContainer> createState() => _WebViewContainerState();
@@ -77,6 +79,9 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
   WebResourceError? _latestError;
   WebResourceError? _currentError;
+
+  SslAuthError? _sslAuthError;
+  String? _sslFailingUrl;
 
   /// Indicates whether a page is currently in the process of loading.
   ///
@@ -123,10 +128,26 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
   @override
   Widget build(BuildContext context) {
-    final hasWebViewError = widget.errorBuilder != null && _latestError != null;
+    final hasWebViewError = _sslAuthError != null || _latestError != null;
 
     errorPlaceholderBuilder(BuildContext context) {
-      return widget.errorBuilder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink();
+      if (_sslAuthError != null) {
+        return SslAuthErrorView(
+          error: _sslAuthError!,
+          onReload: _reloadPage,
+          failingUrl: _sslFailingUrl,
+        );
+      }
+
+      if (widget.errorBuilder != null) {
+        return widget.errorBuilder!(context, _latestError!, _webViewController) ?? const SizedBox.shrink();
+      }
+
+      // fallback to default
+      return DefaultWebViewErrorView(
+        error: _latestError!,
+        onReload: _reloadPage,
+      );
     }
 
     successBuilder(BuildContext context) {
@@ -230,6 +251,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
         onUrlChange: _onUrlChange,
         onPageFinished: _onPageFinished,
         onProgress: _onProgress,
+        onSslAuthError: _onSslAuthError,
         onNavigationRequest: _navigationRequestHandler.handle,
         onWebResourceError: _onWebResourceError,
       );
@@ -243,43 +265,13 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
         ..setJavaScriptMode(JavaScriptMode.unrestricted);
     }
 
-    for (var MapEntry(key: name, value: onMessageReceived) in widget.javaScriptChannels.entries) {
-      _webViewController.addJavaScriptChannel(name, onMessageReceived: onMessageReceived);
-    }
-
-    if (widget.enableEmbeddedLogging) {
-      _setupConsoleLoggerChannel();
+    if (widget.jSChannelStrategies.isNotEmpty) {
+      for (final s in widget.jSChannelStrategies) {
+        s._attach(_webViewController);
+      }
     }
 
     widget.connectivityRecoveryStrategy?._startMonitoring(_webViewController);
-  }
-
-  /// Registers the `ConsoleLog` JavaScript channel to receive log messages
-  /// from the WebView (injected via `_injectConsoleLogging()`).
-  ///
-  /// Parses log level prefixes (e.g. "ERROR:", "INFO:") and routes messages
-  /// to the appropriate Dart logger level (`_logger.severe`, `.info`, etc.).
-  void _setupConsoleLoggerChannel() {
-    _webViewController.addJavaScriptChannel(
-      'ConsoleLog',
-      onMessageReceived: (message) {
-        final raw = message.message.trim();
-
-        if (raw.startsWith('ERROR:')) {
-          _logger.webViewLog(level: 'ERROR', message: raw.substring(6).trim());
-        } else if (raw.startsWith('WARN:')) {
-          _logger.webViewLog(level: 'WARN', message: raw.substring(5).trim());
-        } else if (raw.startsWith('INFO:')) {
-          _logger.webViewLog(level: 'INFO', message: raw.substring(5).trim());
-        } else if (raw.startsWith('DEBUG:')) {
-          _logger.webViewLog(level: 'DEBUG', message: raw.substring(6).trim());
-        } else if (raw.startsWith('LOG:')) {
-          _logger.webViewLog(level: 'LOG', message: raw.substring(4).trim());
-        } else {
-          _logger.webViewLog(level: 'INFO', message: raw);
-        }
-      },
-    );
   }
 
   void _onUrlChange(UrlChange change) {
@@ -320,11 +312,6 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
           for (final strategy in widget.pageInjectionStrategies) {
             strategy._handlePageReady(_webViewController, context);
           }
-
-          _injectMediaQueryData();
-          if (widget.enableEmbeddedLogging) {
-            _injectConsoleLogging();
-          }
         } else {
           widget.connectivityRecoveryStrategy?._onPageLoadFailed();
           _logger.warning('Skipped injection, page loading failed');
@@ -347,10 +334,10 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   /// Handles errors reported by the WebView engine during resource loading.
   ///
   /// This callback may be triggered in several situations:
-  /// - **Main frame navigation failures** – e.g. no internet connection,
+  /// - **Main frame navigation failures** - e.g. no internet connection,
   ///   DNS lookup failure, SSL handshake errors, or the server not responding.
   ///   These usually mean the page cannot be displayed at all.
-  /// - **Subresource load errors** – e.g. missing images, blocked fonts,
+  /// - **Subresource load errors** - e.g. missing images, blocked fonts,
   ///   CORS issues, or network hiccups while loading scripts/styles.
   ///   In such cases, the main page may still load and work.
   ///
@@ -375,7 +362,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       return;
     }
 
-    // De-dupe: don’t re-set the same main-frame error over and over.
+    // De-dupe: don't re-set the same main-frame error over and over.
     if (_latestError != null && _latestError!.errorCode == code && _latestError!.url == url) {
       _logger.fine('Duplicate main-frame error suppressed for $url ($code)');
       return;
@@ -387,80 +374,20 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     });
   }
 
-  /// Injects media query-related data from Flutter into the WebView as JSON.
-  ///
-  /// This method gathers the current media query information such as:
-  /// - `brightness`: light or dark theme (`light` / `dark`)
-  /// - `devicePixelRatio`: screen density
-  /// - `topSafeInset`: top padding (usually status bar height)
-  /// - `bottomSafeInset`: bottom padding (gesture area or system-reserved space)
-  ///
-  /// It serializes the data into JSON and calls a JavaScript function
-  /// `window.onMediaQueryReady(json)` inside the WebView, if it's defined.
-  ///
-  /// Example JS hook on the page:
-  /// ```js
-  /// window.onMediaQueryReady = function(payload) {
-  ///   const data = JSON.parse(payload); // or use directly if it's an object
-  ///   // apply UI adjustments here
-  /// };
-  /// ```
-  void _injectMediaQueryData() {
-    final mediaQuery = MediaQuery.of(context);
-    final theme = Theme.of(context);
+  void _onSslAuthError(SslAuthError error) {
+    _logger.severe('SSL Auth Error: $error');
+    safeSetState(() {
+      _sslAuthError = error;
+    });
 
-    final payload = {
-      'brightness': theme.brightness.name,
-      'devicePixelRatio': mediaQuery.devicePixelRatio,
-      'topSafeInset': mediaQuery.viewPadding.top.round(),
-      'bottomSafeInset': mediaQuery.viewPadding.bottom.round(),
-    };
-
-    final jsonString = const JsonEncoder().convert(payload);
-
-    final script = '''
-      if (typeof window.onMediaQueryReady === 'function') {
-        window.onMediaQueryReady($jsonString);
-      }
-    ''';
-
-    _logger.finest('Injecting media query data: $jsonString');
-    _webViewController.runJavaScript(script);
+    widget.connectivityRecoveryStrategy?._onPageLoadFailed();
   }
 
-  /// Injects JavaScript that overrides `console.*` methods to:
-  /// - Send logs to Flutter via the `ConsoleLog` channel (e.g. "ERROR: message")
-  /// - Preserve original browser console output
-  ///
-  /// Must be used with `addJavaScriptChannel('ConsoleLog', ...)`.
-  /// Call after page load (e.g. in `onPageFinished`).
-  void _injectConsoleLogging() {
-    const script = '''
-    (function() {
-      function wrapConsole(method, level) {
-        const original = console[method];
-        console[method] = function(...args) {
-          try {
-            const message = args.map(a =>
-              typeof a === 'object' ? JSON.stringify(a) : a
-            ).join(' ');
-            ConsoleLog.postMessage(level + ": " + message);
-          } catch (e) {
-            ConsoleLog.postMessage(level + ": [Unserializable console args]");
-          }
-          original.apply(console, args);
-        };
-      }
-
-      wrapConsole('log', 'LOG');
-      wrapConsole('info', 'INFO');
-      wrapConsole('warn', 'WARN');
-      wrapConsole('error', 'ERROR');
-      wrapConsole('debug', 'DEBUG');
-    })();
-  ''';
-
-    _webViewController.runJavaScript(script);
+  void _reloadPage() {
+    _sslAuthError = null;
+    _latestError = null;
+    _currentError = null;
+    _webViewController.reload();
   }
 }
 
@@ -617,7 +544,7 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
   /// Skips injection if the WebView or payload is not ready.
   void _attemptPayloadInjection() {
     if (_controller == null || _context == null) {
-      _logger.fine('Cannot inject — WebView not ready');
+      _logger.fine('Cannot inject - WebView not ready');
       return;
     }
 
@@ -647,6 +574,66 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
   void _dispose() {
     _payloadNotifier.removeListener(_attemptPayloadInjection);
   }
+}
+
+/// Strategy for injecting arbitrary JavaScript when the page is ready.
+class JavaScriptInjectionStrategy implements PageInjectionStrategy {
+  JavaScriptInjectionStrategy.raw(
+    this.script, {
+    this.label,
+    this.returnResult = false,
+    this.onError,
+    this.onSuccess,
+  });
+
+  /// Optional label to simplify logging.
+  final String? label;
+
+  /// The JS source to execute.
+  final String script;
+
+  /// If true - uses runJavaScriptReturningResult, otherwise runJavaScript.
+  final bool returnResult;
+
+  /// Optional callbacks.
+  final void Function(Object error, StackTrace st)? onError;
+  final void Function(Object? result)? onSuccess;
+
+  WebViewController? _controller;
+
+  @override
+  void _handlePageReady(WebViewController controller, BuildContext context) {
+    _controller = controller;
+    _inject();
+  }
+
+  @override
+  void setPayload(Map<String, dynamic> payload) {
+    // no-op for pure script injection; kept to satisfy interface
+  }
+
+  Future<void> _inject() async {
+    final c = _controller;
+    if (c == null) return;
+
+    try {
+      if (returnResult) {
+        final res = await c.runJavaScriptReturningResult(script);
+        _logger.finest('${label ?? "JS"} inject result: $res');
+        onSuccess?.call(res);
+      } else {
+        await c.runJavaScript(script);
+        _logger.finest('${label ?? "JS"} injected');
+        onSuccess?.call(null);
+      }
+    } catch (e, st) {
+      _logger.severe('${label ?? "JS"} inject failed', e, st);
+      onError?.call(e, st);
+    }
+  }
+
+  @override
+  void _dispose() {}
 }
 
 /// Builder function for creating a [ConnectivityRecoveryStrategy].
@@ -978,5 +965,116 @@ class HardReloadRecoveryStrategy extends SoftReloadRecoveryStrategy {
   @override
   Future<void> _onRetryAttempt() {
     return _controller.loadRequest(initialUri);
+  }
+}
+
+/// A strategy wrapper for handling JavaScript channels in [WebViewController].
+///
+/// This class provides a convenient way to:
+/// - Register a named JavaScript channel.
+/// - Automatically decode messages into [JsonJsEvent].
+/// - Route events to the correct handler based on the event name.
+/// - Handle malformed or unknown messages gracefully.
+///
+/// Typical usage:
+///
+/// ```dart
+/// // Single handler
+/// final strategy = JSChannelStrategy(
+///   name: 'MyChannel',
+///   onEvent: (controller, event) {
+///     if (event.event == 'signup') {
+///       // You can use controller here (e.g. reload)
+///     }
+///   },
+///   onMalformed: (raw) => print('Malformed message: $raw'),
+/// );
+///
+/// // Router-based handler
+/// final routed = JSChannelStrategy.route(
+///   name: 'MyChannel',
+///   routes: {
+///     'signup': (c, e) => handleSignup(c, e),
+///     'logout': (c, e) => handleLogout(c, e),
+///   },
+///   onUnknown: (e) => print('Unknown event: ${e.event}'),
+/// );
+/// ```
+///
+/// The default channel name is [defaultJSChannelName].
+class JSChannelStrategy {
+  /// Creates a [JSChannelStrategy].
+  ///
+  /// - [name]: The JavaScript channel name to listen for (must match the name used in the web page).
+  /// - [onEvent]: Callback invoked with the [WebViewController] and parsed [JsonJsEvent] when a valid message is received.
+  /// - [onMalformed]: Optional callback when the incoming message is not valid JSON or cannot be parsed.
+  const JSChannelStrategy({
+    required this.name,
+    required this.onEvent,
+    this.onMalformed,
+  });
+
+  /// The JavaScript channel name.
+  final String name;
+
+  /// Handler for successfully decoded events (with controller).
+  final JsonEventHandler onEvent;
+
+  /// Handler for raw, malformed messages that failed to decode.
+  final void Function(String raw)? onMalformed;
+
+  /// Attaches this strategy to a [WebViewController].
+  ///
+  /// Called internally by [WebViewContainer] to register the channel.
+  void _attach(WebViewController controller) {
+    controller.addJavaScriptChannel(
+      name,
+      onMessageReceived: (m) {
+        final e = JsonJsEvent.fromMessage(m);
+        if (e == null) {
+          onMalformed?.call(m.message);
+          return;
+        }
+        onEvent(controller, e);
+      },
+    );
+  }
+
+  /// Creates a router-based [JSChannelStrategy] that dispatches events
+  /// to different handlers based on the [JsonJsEvent.event] field.
+  ///
+  /// - [routes]: A map of event name -> handler.
+  /// - [onUnknown]: Optional handler called if the event name
+  ///   does not match any entry in [routes].
+  /// - [onMalformed]: Optional handler for malformed raw messages.
+  ///
+  /// Example:
+  /// ```dart
+  /// final channel = JSChannelStrategy.route(
+  ///   routes: {
+  ///     'signup': (c, e) => handleSignup(c, e),
+  ///     'logout': (c, e) => handleLogout(c, e),
+  ///   },
+  ///   onUnknown: (e) => print('Unknown event: ${e.event}'),
+  /// );
+  /// ```
+  factory JSChannelStrategy.route({
+    required String name,
+    required Map<String, JsonEventHandler> routes,
+    void Function(String raw)? onMalformed,
+    void Function(JsonJsEvent e)? onUnknown,
+  }) {
+    return JSChannelStrategy(
+      name: name,
+      onMalformed: onMalformed,
+      onEvent: (controller, e) {
+        final handler = routes[e.event];
+        if (handler != null) {
+          handler(controller, e);
+        } else {
+          onUnknown?.call(e);
+        }
+      },
+    );
   }
 }

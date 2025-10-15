@@ -20,7 +20,10 @@ EmbeddedResource _$EmbeddedResourceFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$EmbeddedResource {
-  int get id => throw _privateConstructorUsedError;
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @IntToStringConverter()
+  String get id => throw _privateConstructorUsedError;
   String get uri => throw _privateConstructorUsedError;
   EmbeddedResourceType get type => throw _privateConstructorUsedError;
   Map<String, dynamic> get attributes => throw _privateConstructorUsedError;
@@ -53,7 +56,7 @@ abstract class $EmbeddedResourceCopyWith<$Res> {
       _$EmbeddedResourceCopyWithImpl<$Res, EmbeddedResource>;
   @useResult
   $Res call(
-      {int id,
+      {@IntToStringConverter() String id,
       String uri,
       EmbeddedResourceType type,
       Map<String, dynamic> attributes,
@@ -96,7 +99,7 @@ class _$EmbeddedResourceCopyWithImpl<$Res, $Val extends EmbeddedResource>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       uri: null == uri
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
@@ -162,7 +165,7 @@ abstract class _$$EmbeddedResourceImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int id,
+      {@IntToStringConverter() String id,
       String uri,
       EmbeddedResourceType type,
       Map<String, dynamic> attributes,
@@ -205,7 +208,7 @@ class __$$EmbeddedResourceImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       uri: null == uri
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
@@ -247,7 +250,7 @@ class __$$EmbeddedResourceImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$EmbeddedResourceImpl extends _EmbeddedResource {
   const _$EmbeddedResourceImpl(
-      {required this.id,
+      {@IntToStringConverter() required this.id,
       required this.uri,
       this.type = EmbeddedResourceType.unknown,
       final Map<String, dynamic> attributes = const {},
@@ -263,8 +266,11 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
   factory _$EmbeddedResourceImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmbeddedResourceImplFromJson(json);
 
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  final int id;
+  @IntToStringConverter()
+  final String id;
   @override
   final String uri;
   @override
@@ -366,7 +372,7 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
 
 abstract class _EmbeddedResource extends EmbeddedResource {
   const factory _EmbeddedResource(
-      {required final int id,
+      {@IntToStringConverter() required final String id,
       required final String uri,
       final EmbeddedResourceType type,
       final Map<String, dynamic> attributes,
@@ -380,8 +386,11 @@ abstract class _EmbeddedResource extends EmbeddedResource {
   factory _EmbeddedResource.fromJson(Map<String, dynamic> json) =
       _$EmbeddedResourceImpl.fromJson;
 
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  int get id;
+  @IntToStringConverter()
+  String get id;
   @override
   String get uri;
   @override

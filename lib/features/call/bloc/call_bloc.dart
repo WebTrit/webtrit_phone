@@ -60,6 +60,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallkeepConnections callkeepConnections;
 
   final SDPMunger? sdpMunger;
+  final SdpSanitizer? sdpSanitizer;
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
   final IceFilter? iceFilter;
   final UserMediaBuilder userMediaBuilder;
@@ -67,6 +68,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final ContactNameResolver contactNameResolver;
   final CallErrorReporter callErrorReporter;
   final bool sipPresenceEnabled;
+  final VoidCallback? onCallEnded;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -99,10 +101,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callErrorReporter,
     required this.sipPresenceEnabled,
     this.sdpMunger,
+    this.sdpSanitizer,
     this.webRtcOptionsBuilder,
     this.iceFilter,
     this.peerConnectionPolicyApplier,
     SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
+    this.onCallEnded,
   }) : super(const CallState()) {
     _signalingClientFactory = signalingClientFactory;
 
@@ -294,6 +298,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
     _handleSignalingSessionError(
         previous: change.currentState.callServiceState, current: change.nextState.callServiceState);
+
+    if (change.nextState.activeCalls.length < change.currentState.activeCalls.length) {
+      onCallEnded?.call();
+    }
   }
 
   void _handleSignalingSessionError({
@@ -1009,6 +1017,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
       } else {
         final remoteDescription = jsep.toDescription();
+        sdpSanitizer?.apply(remoteDescription);
         await peerConnection.setRemoteDescription(remoteDescription);
       }
     } else {
@@ -1045,6 +1054,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final pc = await _peerConnectionRetrieve(event.callId);
     if (jsep != null && pc != null) {
       final remoteDescription = jsep.toDescription();
+      sdpSanitizer?.apply(remoteDescription);
       await pc.setRemoteDescription(remoteDescription);
     }
   }
@@ -1133,6 +1143,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final jsep = event.jsep;
       if (jsep != null) {
         final remoteDescription = jsep.toDescription();
+        sdpSanitizer?.apply(remoteDescription);
         await state.performOnActiveCall(event.callId, (activeCall) async {
           final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
           if (peerConnection == null) {
@@ -2005,6 +2016,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }));
 
       final remoteDescription = offer.toDescription();
+      sdpSanitizer?.apply(remoteDescription);
       await peerConnection.setRemoteDescription(remoteDescription);
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);

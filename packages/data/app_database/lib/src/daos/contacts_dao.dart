@@ -136,6 +136,14 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return query.watch().map(_gatherSingleContact);
   }
 
+  Stream<FullContactData?> watchContactByPhoneNumber(String number) {
+    final query = _joinFullData(select(contactsTable))
+      ..where(contactPhonesTable.number.equals(number))
+      ..limit(1);
+
+    return query.watch().map(_gatherSingleContact);
+  }
+
   Future<List<FullContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) async {
     final query = _joinFullData(_selectAllContacts(sourceType));
     final rows = await query.get();

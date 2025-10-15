@@ -1,5 +1,6 @@
 export 'active_message_notifications_table.dart';
 export 'call_logs_table.dart';
+export 'cdr_table.dart';
 export 'chat_members_table.dart';
 export 'chat_message_read_cursor_table.dart';
 export 'chat_message_sync_cursor_table.dart';

@@ -27,7 +27,7 @@ class EmbeddedData {
   });
 
   /// The URI representing either a local asset file path or a remote URL.
-  final int id;
+  final String id;
 
   /// The unique identifier for the embedded resource, used to link it with other features or components.
   final Uri uri;

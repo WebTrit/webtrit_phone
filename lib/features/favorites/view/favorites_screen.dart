@@ -25,6 +25,7 @@ class FavoritesScreen extends StatefulWidget {
     required this.videoEnabled,
     required this.chatsEnabled,
     required this.smssEnabled,
+    required this.cdrsEnabled,
   });
 
   final Widget? title;
@@ -32,6 +33,7 @@ class FavoritesScreen extends StatefulWidget {
   final bool videoEnabled;
   final bool chatsEnabled;
   final bool smssEnabled;
+  final bool cdrsEnabled;
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
@@ -75,7 +77,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   void openCallLog({required String number}) {
-    context.router.navigate(CallLogScreenPageRoute(number: number));
+    if (widget.cdrsEnabled) {
+      context.router.navigate(NumberCdrsScreenPageRoute(number: number));
+    } else {
+      context.router.navigate(CallLogScreenPageRoute(number: number));
+    }
   }
 
   void delete({required Favorite favorite}) {

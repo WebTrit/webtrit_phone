@@ -33,6 +33,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     required this.appInfo,
     required this.platformInfo,
     required this.sessionRepository,
+    required this.appPreferences,
   }) : super(const LoginState());
 
   final WebtritApiClientFactory createWebtritApiClient;
@@ -42,6 +43,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
   // TODO: Replace by AuthRepository in next iteration
   final SessionRepository sessionRepository;
+  final AppPreferences appPreferences;
   final PackageInfo packageInfo;
   final AppInfo appInfo;
 
@@ -78,6 +80,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
         token: change.nextState.token!,
         userId: change.nextState.userId!,
       ));
+      appPreferences.setSystemInfo(change.nextState.systemInfo!);
     }
 
     super.onChange(change);
@@ -464,6 +467,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       emit(state.copyWith(
         processing: false,
         signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
+        tenantId: result.tenantId ?? state.tenantId ?? defaultTenantId,
       ));
     } else if (result is SessionToken) {
       // Maintain processing state during navigation

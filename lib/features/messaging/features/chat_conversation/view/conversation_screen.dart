@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -61,6 +63,8 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider(
       create: (context) => ChatTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<ConversationCubit, ConversationState>(
@@ -74,7 +78,15 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
         },
         builder: (context, state) {
           return Scaffold(
+            extendBodyBehindAppBar: true,
             appBar: AppBar(
+              backgroundColor: theme.canvasColor.withAlpha(150),
+              flexibleSpace: ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(color: theme.canvasColor.withAlpha(150)),
+                ),
+              ),
               title: FadeIn(
                 child: Builder(
                   builder: (context) {
@@ -141,27 +153,49 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
 
   Widget dialogTitle(String participant) {
     return ContactInfoBuilder(
-      sourceType: ContactSourceType.external,
-      sourceId: participant,
-      builder: (context, contact, {required bool loading}) {
-        if (loading) return const SizedBox();
-
+      source: ContactSourceId(ContactSourceType.external, participant),
+      builder: (context, contact) {
         final presenceSource = PresenceViewParams.of(context).viewSource;
-        final text = switch (contact) {
-          null => context.l10n.messaging_ParticipantName_unknown,
-          _ => switch (presenceSource) {
-              PresenceViewSource.contactInfo => contact.displayTitle,
-              PresenceViewSource.sipPresence =>
-                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
-            }
-        };
+        const nameTextStyle = TextStyle(fontSize: 20);
 
-        return Text(
-          text,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 20),
-        );
+        return switch ((presenceSource, contact)) {
+          (_, null) => Text(
+              context.l10n.messaging_ParticipantName_unknown,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: nameTextStyle,
+            ),
+          (PresenceViewSource.contactInfo, Contact contact) => Column(
+              children: [
+                Text(
+                  contact.displayTitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: nameTextStyle,
+                ),
+                if (contact.registered == true)
+                  Text(
+                    context.l10n.messaging_ConversationScreen_titleAvailable,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+              ],
+            ),
+          (PresenceViewSource.sipPresence, Contact contact) => Column(
+              children: [
+                Text(
+                  '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: nameTextStyle,
+                ),
+                if (contact.presenceInfo.anyAvailable == true)
+                  Text(
+                    context.l10n.messaging_ConversationScreen_titleAvailable,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+              ],
+            ),
+        };
       },
     );
   }

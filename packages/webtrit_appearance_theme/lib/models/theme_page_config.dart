@@ -1,8 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'common/common.dart';
 import 'features_config/elevated_button_style_type.dart';
 import 'features_config/metadata.dart';
+import 'common/common.dart';
+import 'resources/image_source.dart';
 import 'theme_widget_config.dart';
 
 part 'theme_page_config.freezed.dart';
@@ -44,8 +45,11 @@ class ThemePageConfig with _$ThemePageConfig {
 class LoginPageConfig with _$LoginPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory LoginPageConfig({
+    /// Structured image source for the picture/logo.
+    ImageSource? imageSource,
+
     /// Path or URL to the picture/logo displayed on the login page.
-    String? picture,
+    @Deprecated('Use structured ImageSource instead') String? picture,
 
     /// Scaling factor for the displayed picture/logo.
     double? scale,
@@ -58,6 +62,12 @@ class LoginPageConfig with _$LoginPageConfig {
 
     /// Metadata section with additional information such as links, version, etc.
     @Default(Metadata()) Metadata metadata,
+
+    /// Configuration for the OTP sign-in verification screen.
+    @Default(LoginOtpSigninVerifyScreenPageConfig()) LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+
+    /// Configuration for the Sign-Up verification screen.
+    @Default(LoginSignupVerifyScreenPageConfig()) LoginSignupVerifyScreenPageConfig signupVerify,
   }) = _LoginPageConfig;
 
   factory LoginPageConfig.fromJson(Map<String, dynamic> json) => _$LoginPageConfigFromJson(json);
@@ -65,6 +75,32 @@ class LoginPageConfig with _$LoginPageConfig {
   /// A globally consistent metadata key used to associate additional resources,
   /// specifically for the login page picture.
   static const String metadataPictureUrl = 'pictureUrl';
+}
+
+@Freezed()
+class LoginOtpSigninVerifyScreenPageConfig with _$LoginOtpSigninVerifyScreenPageConfig {
+  @JsonSerializable(explicitToJson: true)
+  const factory LoginOtpSigninVerifyScreenPageConfig({
+    /// Countdown interval in seconds before the "Repeat" button
+    /// becomes active again. If 0 → countdown disabled, button active immediately.
+    @Default(30) int countdownRepeatIntervalSeconds,
+  }) = _LoginOtpSigninVerifyScreenPageConfig;
+
+  factory LoginOtpSigninVerifyScreenPageConfig.fromJson(Map<String, dynamic> json) =>
+      _$LoginOtpSigninVerifyScreenPageConfigFromJson(json);
+}
+
+@Freezed()
+class LoginSignupVerifyScreenPageConfig with _$LoginSignupVerifyScreenPageConfig {
+  @JsonSerializable(explicitToJson: true)
+  const factory LoginSignupVerifyScreenPageConfig({
+    /// Countdown interval in seconds before the "Repeat" button
+    /// becomes active again. If 0 → countdown disabled, button active immediately.
+    @Default(30) int countdownRepeatIntervalSeconds,
+  }) = _LoginSignupVerifyScreenPageConfig;
+
+  factory LoginSignupVerifyScreenPageConfig.fromJson(Map<String, dynamic> json) =>
+      _$LoginSignupVerifyScreenPageConfigFromJson(json);
 }
 
 @Freezed()
@@ -95,8 +131,11 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
 class AboutPageConfig with _$AboutPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory AboutPageConfig({
+    /// Structured image source for the picture/logo.
+    ImageSource? imageSource,
+
     /// Path or URL to the picture/logo displayed on the About page.
-    String? picture,
+    @Deprecated('Use structured ImageSource instead') String? picture,
 
     /// Metadata section with additional information such as version, build number, etc.
     @Default(Metadata()) Metadata metadata,
@@ -135,9 +174,30 @@ class CallPageConfig with _$CallPageConfig {
 
     /// Style configuration for the call information area (username, number, status).
     CallPageInfoConfig? callInfo,
+
+    /// Style configuration for the action buttons area (call, hangup, mute, etc).
+    CallPageActionsConfig? actions,
   }) = _CallPageConfig;
 
   factory CallPageConfig.fromJson(Map<String, dynamic> json) => _$CallPageConfigFromJson(json);
+}
+
+@Freezed()
+class CallPageActionsConfig with _$CallPageActionsConfig {
+  @JsonSerializable(explicitToJson: true)
+  const factory CallPageActionsConfig({
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig callStart,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig hangup,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig transfer,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig camera,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig muted,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig speaker,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig held,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig swap,
+    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig key,
+  }) = _CallPageActionsConfig;
+
+  factory CallPageActionsConfig.fromJson(Map<String, dynamic> json) => _$CallPageActionsConfigFromJson(json);
 }
 
 /// Declarative configuration for the **Call Info section** on the call screen.

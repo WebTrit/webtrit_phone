@@ -21,7 +21,7 @@ class DiagnosticScreenPage extends StatelessWidget {
     final pushTokensBloc = context.read<PushTokensBloc>();
     final featureAccess = context.read<FeatureAccess>();
 
-    final contactTab = featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
+    final contactTab = featureAccess.bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
 
     final screenContext = DiagnosticScreenContext(
       isLocalContactsFeatureEnabled: contactTab?.contactSourceTypes.contains(ContactSourceType.local) ?? false,

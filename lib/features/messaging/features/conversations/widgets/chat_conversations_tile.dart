@@ -9,7 +9,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-import 'package:webtrit_phone/widgets/leading_avatar.dart';
+import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class ChatConversationsTile extends StatefulWidget {
   const ChatConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
@@ -84,9 +84,8 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
     final lastMessage = widget.lastMessage;
 
     return ContactInfoBuilder(
-      sourceType: ContactSourceType.external,
-      sourceId: participant.userId,
-      builder: (context, contact, {required bool loading}) {
+      source: ContactSourceId(ContactSourceType.external, participant.userId),
+      builder: (context, contact) {
         final presenceSource = PresenceViewParams.of(context).viewSource;
         final text = switch (contact) {
           null => context.l10n.messaging_ParticipantName_unknown,

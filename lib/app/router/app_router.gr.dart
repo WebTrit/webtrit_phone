@@ -509,7 +509,7 @@ class EmbeddedScreenPageRouteArgs {
 /// generated route for
 /// [EmbeddedTabPage]
 class EmbeddedTabPageRoute extends PageRouteInfo<EmbeddedTabPageRouteArgs> {
-  EmbeddedTabPageRoute({required int id, List<PageRouteInfo>? children})
+  EmbeddedTabPageRoute({required String id, List<PageRouteInfo>? children})
       : super(
           EmbeddedTabPageRoute.name,
           args: EmbeddedTabPageRouteArgs(id: id),
@@ -524,7 +524,7 @@ class EmbeddedTabPageRoute extends PageRouteInfo<EmbeddedTabPageRouteArgs> {
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<EmbeddedTabPageRouteArgs>(
-        orElse: () => EmbeddedTabPageRouteArgs(id: pathParams.getInt('id')),
+        orElse: () => EmbeddedTabPageRouteArgs(id: pathParams.getString('id')),
       );
       return EmbeddedTabPage(id: args.id);
     },
@@ -534,7 +534,7 @@ class EmbeddedTabPageRoute extends PageRouteInfo<EmbeddedTabPageRouteArgs> {
 class EmbeddedTabPageRouteArgs {
   const EmbeddedTabPageRouteArgs({required this.id});
 
-  final int id;
+  final String id;
 
   @override
   String toString() {
@@ -971,18 +971,54 @@ class LoginSignupRouterPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LoginSignupVerifyScreenPage]
-class LoginSignupVerifyScreenPageRoute extends PageRouteInfo<void> {
-  const LoginSignupVerifyScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LoginSignupVerifyScreenPageRoute.name, initialChildren: children);
+class LoginSignupVerifyScreenPageRoute
+    extends PageRouteInfo<LoginSignupVerifyScreenPageRouteArgs> {
+  LoginSignupVerifyScreenPageRoute({
+    required Set<SafeAreaSide> bodySafeAreaSides,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LoginSignupVerifyScreenPageRoute.name,
+          args: LoginSignupVerifyScreenPageRouteArgs(
+            bodySafeAreaSides: bodySafeAreaSides,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'LoginSignupVerifyScreenPageRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return LoginSignupVerifyScreenPage();
+      final args = data.argsAs<LoginSignupVerifyScreenPageRouteArgs>();
+      return LoginSignupVerifyScreenPage(
+        bodySafeAreaSides: args.bodySafeAreaSides,
+      );
     },
   );
+}
+
+class LoginSignupVerifyScreenPageRouteArgs {
+  const LoginSignupVerifyScreenPageRouteArgs({required this.bodySafeAreaSides});
+
+  final Set<SafeAreaSide> bodySafeAreaSides;
+
+  @override
+  String toString() {
+    return 'LoginSignupVerifyScreenPageRouteArgs{bodySafeAreaSides: $bodySafeAreaSides}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! LoginSignupVerifyScreenPageRouteArgs) return false;
+    return const SetEquality().equals(
+      bodySafeAreaSides,
+      other.bodySafeAreaSides,
+    );
+  }
+
+  @override
+  int get hashCode => const SetEquality().hash(bodySafeAreaSides);
 }
 
 /// generated route for
@@ -1129,6 +1165,57 @@ class NetworkScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [NumberCdrsScreenPage]
+class NumberCdrsScreenPageRoute
+    extends PageRouteInfo<NumberCdrsScreenPageRouteArgs> {
+  NumberCdrsScreenPageRoute({
+    required String number,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NumberCdrsScreenPageRoute.name,
+          args: NumberCdrsScreenPageRouteArgs(number: number),
+          rawPathParams: {'number': number},
+          initialChildren: children,
+        );
+
+  static const String name = 'NumberCdrsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<NumberCdrsScreenPageRouteArgs>(
+        orElse: () => NumberCdrsScreenPageRouteArgs(
+          number: pathParams.getString('number'),
+        ),
+      );
+      return NumberCdrsScreenPage(args.number);
+    },
+  );
+}
+
+class NumberCdrsScreenPageRouteArgs {
+  const NumberCdrsScreenPageRouteArgs({required this.number});
+
+  final String number;
+
+  @override
+  String toString() {
+    return 'NumberCdrsScreenPageRouteArgs{number: $number}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NumberCdrsScreenPageRouteArgs) return false;
+    return number == other.number;
+  }
+
+  @override
+  int get hashCode => number.hashCode;
+}
+
+/// generated route for
 /// [PermissionsScreenPage]
 class PermissionsScreenPageRoute extends PageRouteInfo<void> {
   const PermissionsScreenPageRoute({List<PageRouteInfo>? children})
@@ -1156,6 +1243,38 @@ class PresenceSettingsScreenPageRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return PresenceSettingsScreenPage();
+    },
+  );
+}
+
+/// generated route for
+/// [RecentCdrsRouterPage]
+class RecentCdrsRouterPageRoute extends PageRouteInfo<void> {
+  const RecentCdrsRouterPageRoute({List<PageRouteInfo>? children})
+      : super(RecentCdrsRouterPageRoute.name, initialChildren: children);
+
+  static const String name = 'RecentCdrsRouterPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RecentCdrsRouterPage();
+    },
+  );
+}
+
+/// generated route for
+/// [RecentCdrsScreenPage]
+class RecentCdrsScreenPageRoute extends PageRouteInfo<void> {
+  const RecentCdrsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(RecentCdrsScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'RecentCdrsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RecentCdrsScreenPage();
     },
   );
 }

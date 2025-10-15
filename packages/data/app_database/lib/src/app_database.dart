@@ -38,6 +38,7 @@ part 'app_database.g.dart';
     SystemNotificationsTable,
     SystemNotificationsOutboxTable,
     PresenceInfoTable,
+    CdrTable,
   ],
   daos: [
     ContactsDao,
@@ -52,6 +53,7 @@ part 'app_database.g.dart';
     VoicemailDao,
     SystemNotificationsDao,
     PresenceInfoDao,
+    CdrsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {

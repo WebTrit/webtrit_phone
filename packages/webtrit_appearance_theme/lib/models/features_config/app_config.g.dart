@@ -65,9 +65,10 @@ _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
         Map<String, dynamic> json) =>
     _$AppConfigModeSelectActionImpl(
       enabled: json['enabled'] as bool,
-      embeddedId: (json['embeddedId'] as num?)?.toInt(),
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
+      embeddedId:
+          const IntToStringOptionalConverter().fromJson(json['embeddedId']),
       isLaunchButtonVisible: json['isLaunchButtonVisible'] as bool? ?? false,
       isLaunchScreen: json['isLaunchScreen'] as bool? ?? false,
     );
@@ -76,9 +77,10 @@ Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
         _$AppConfigModeSelectActionImpl instance) =>
     <String, dynamic>{
       'enabled': instance.enabled,
-      'embeddedId': instance.embeddedId,
       'type': instance.type,
       'titleL10n': instance.titleL10n,
+      'embeddedId':
+          const IntToStringOptionalConverter().toJson(instance.embeddedId),
       'isLaunchButtonVisible': instance.isLaunchButtonVisible,
       'isLaunchScreen': instance.isLaunchScreen,
     };
@@ -87,35 +89,31 @@ _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigMainImpl(
       bottomMenu: json['bottomMenu'] == null
           ? const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
-              BaseTabScheme(
+              FavoritesTabScheme(
                   enabled: true,
                   initial: false,
-                  type: BottomMenuTabType.favorites,
                   titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
                   icon: '0xe5fd'),
-              BaseTabScheme(
-                  enabled: true,
+              RecentsTabScheme(
+                  enabled: false,
                   initial: false,
-                  type: BottomMenuTabType.recents,
                   titleL10n: 'main_BottomNavigationBarItemLabel_recents',
-                  icon: '0xe03a'),
+                  icon: '0xe03a',
+                  useCdrs: false),
               ContactsTabScheme(
                   enabled: true,
                   initial: false,
-                  type: BottomMenuTabType.contacts,
                   titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
                   icon: '0xee35',
                   contactSourceTypes: ['local', 'external']),
-              BaseTabScheme(
+              KeypadTabScheme(
                   enabled: true,
                   initial: true,
-                  type: BottomMenuTabType.keypad,
                   titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
                   icon: '0xe1ce'),
-              BaseTabScheme(
+              MessagingTabScheme(
                   enabled: false,
                   initial: false,
-                  type: BottomMenuTabType.messaging,
                   titleL10n: 'main_BottomNavigationBarItemLabel_chats',
                   icon: '0xe155')
             ])
@@ -249,6 +247,9 @@ _$EncodingDefaultPresetOverrideImpl
           opusBitrate: (json['opusBitrate'] as num?)?.toInt(),
           opusStereo: json['opusStereo'] as bool?,
           opusDtx: json['opusDtx'] as bool?,
+          removeExtmaps: json['removeExtmaps'] as bool?,
+          removeStaticAudioRtpMaps: json['removeStaticAudioRtpMaps'] as bool?,
+          remapTE8payloadTo101: json['remapTE8payloadTo101'] as bool?,
         );
 
 Map<String, dynamic> _$$EncodingDefaultPresetOverrideImplToJson(
@@ -262,26 +263,51 @@ Map<String, dynamic> _$$EncodingDefaultPresetOverrideImplToJson(
       'opusBitrate': instance.opusBitrate,
       'opusStereo': instance.opusStereo,
       'opusDtx': instance.opusDtx,
+      'removeExtmaps': instance.removeExtmaps,
+      'removeStaticAudioRtpMaps': instance.removeStaticAudioRtpMaps,
+      'remapTE8payloadTo101': instance.remapTE8payloadTo101,
     };
 
-_$BaseTabSchemeImpl _$$BaseTabSchemeImplFromJson(Map<String, dynamic> json) =>
-    _$BaseTabSchemeImpl(
+_$FavoritesTabSchemeImpl _$$FavoritesTabSchemeImplFromJson(
+        Map<String, dynamic> json) =>
+    _$FavoritesTabSchemeImpl(
       enabled: json['enabled'] as bool? ?? true,
       initial: json['initial'] as bool? ?? false,
-      type: const BottomMenuTabTypeConverter().fromJson(json['type'] as String),
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['runtimeType'] as String?,
+      $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$$BaseTabSchemeImplToJson(_$BaseTabSchemeImpl instance) =>
+Map<String, dynamic> _$$FavoritesTabSchemeImplToJson(
+        _$FavoritesTabSchemeImpl instance) =>
     <String, dynamic>{
       'enabled': instance.enabled,
       'initial': instance.initial,
-      'type': const BottomMenuTabTypeConverter().toJson(instance.type),
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'runtimeType': instance.$type,
+      'type': instance.$type,
+    };
+
+_$RecentsTabSchemeImpl _$$RecentsTabSchemeImplFromJson(
+        Map<String, dynamic> json) =>
+    _$RecentsTabSchemeImpl(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      useCdrs: json['useCdrs'] as bool? ?? false,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$RecentsTabSchemeImplToJson(
+        _$RecentsTabSchemeImpl instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'useCdrs': instance.useCdrs,
+      'type': instance.$type,
     };
 
 _$ContactsTabSchemeImpl _$$ContactsTabSchemeImplFromJson(
@@ -289,14 +315,13 @@ _$ContactsTabSchemeImpl _$$ContactsTabSchemeImplFromJson(
     _$ContactsTabSchemeImpl(
       enabled: json['enabled'] as bool? ?? true,
       initial: json['initial'] as bool? ?? false,
-      type: const BottomMenuTabTypeConverter().fromJson(json['type'] as String),
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
       contactSourceTypes: (json['contactSourceTypes'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [],
-      $type: json['runtimeType'] as String?,
+          const <String>[],
+      $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$ContactsTabSchemeImplToJson(
@@ -304,35 +329,74 @@ Map<String, dynamic> _$$ContactsTabSchemeImplToJson(
     <String, dynamic>{
       'enabled': instance.enabled,
       'initial': instance.initial,
-      'type': const BottomMenuTabTypeConverter().toJson(instance.type),
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
       'contactSourceTypes': instance.contactSourceTypes,
-      'runtimeType': instance.$type,
+      'type': instance.$type,
     };
 
-_$EmbededTabSchemeImpl _$$EmbededTabSchemeImplFromJson(
+_$KeypadTabSchemeImpl _$$KeypadTabSchemeImplFromJson(
         Map<String, dynamic> json) =>
-    _$EmbededTabSchemeImpl(
+    _$KeypadTabSchemeImpl(
       enabled: json['enabled'] as bool? ?? true,
       initial: json['initial'] as bool? ?? false,
-      type: const BottomMenuTabTypeConverter().fromJson(json['type'] as String),
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      embeddedResourceId: (json['embeddedResourceId'] as num).toInt(),
-      $type: json['runtimeType'] as String?,
+      $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$$EmbededTabSchemeImplToJson(
-        _$EmbededTabSchemeImpl instance) =>
+Map<String, dynamic> _$$KeypadTabSchemeImplToJson(
+        _$KeypadTabSchemeImpl instance) =>
     <String, dynamic>{
       'enabled': instance.enabled,
       'initial': instance.initial,
-      'type': const BottomMenuTabTypeConverter().toJson(instance.type),
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'embeddedResourceId': instance.embeddedResourceId,
-      'runtimeType': instance.$type,
+      'type': instance.$type,
+    };
+
+_$MessagingTabSchemeImpl _$$MessagingTabSchemeImplFromJson(
+        Map<String, dynamic> json) =>
+    _$MessagingTabSchemeImpl(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$MessagingTabSchemeImplToJson(
+        _$MessagingTabSchemeImpl instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.$type,
+    };
+
+_$EmbeddedTabSchemeImpl _$$EmbeddedTabSchemeImplFromJson(
+        Map<String, dynamic> json) =>
+    _$EmbeddedTabSchemeImpl(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      embeddedResourceId:
+          const IntToStringConverter().fromJson(json['embeddedResourceId']),
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$EmbeddedTabSchemeImplToJson(
+        _$EmbeddedTabSchemeImpl instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'embeddedResourceId':
+          const IntToStringConverter().toJson(instance.embeddedResourceId),
+      'type': instance.$type,
     };
 
 _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
@@ -367,7 +431,7 @@ _$AppConfigSettingsImpl _$$AppConfigSettingsImplFromJson(
                       type: 'terms',
                       titleL10n: 'settings_ListViewTileTitle_termsConditions',
                       icon: '0xeedf',
-                      embeddedResourceId: 0),
+                      embeddedResourceId: '0'),
                   AppConfigSettingsItem(
                       enabled: true,
                       type: 'about',
@@ -420,7 +484,8 @@ _$AppConfigSettingsItemImpl _$$AppConfigSettingsItemImplFromJson(
       titleL10n: json['titleL10n'] as String,
       type: json['type'] as String,
       icon: json['icon'] as String,
-      embeddedResourceId: (json['embeddedResourceId'] as num?)?.toInt(),
+      embeddedResourceId: const IntToStringOptionalConverter()
+          .fromJson(json['embeddedResourceId']),
     );
 
 Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
@@ -430,5 +495,6 @@ Map<String, dynamic> _$$AppConfigSettingsItemImplToJson(
       'titleL10n': instance.titleL10n,
       'type': instance.type,
       'icon': instance.icon,
-      'embeddedResourceId': instance.embeddedResourceId,
+      'embeddedResourceId': const IntToStringOptionalConverter()
+          .toJson(instance.embeddedResourceId),
     };

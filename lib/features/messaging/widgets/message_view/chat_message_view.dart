@@ -194,9 +194,8 @@ class _ChatMessageViewState extends State<ChatMessageView> {
           children: [
             if (!isMine) ...[
               ContactInfoBuilder(
-                sourceType: ContactSourceType.external,
-                sourceId: senderId,
-                builder: (context, contact, {required bool loading}) {
+                source: ContactSourceId(ContactSourceType.external, senderId),
+                builder: (context, contact) {
                   return LeadingAvatar(
                     username: contact?.displayTitle,
                     thumbnail: contact?.thumbnail,

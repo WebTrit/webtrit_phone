@@ -1,7 +1,7 @@
 import 'package:clock/clock.dart';
 
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/models/call_direction.dart';
 
 final dAudioActiveCall = ActiveCall(
   line: 0,

@@ -9450,6 +9450,548 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
   }
 }
 
+class $CdrTableTable extends CdrTable
+    with TableInfo<$CdrTableTable, CdrRecordData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CdrTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _callIdMeta = const VerificationMeta('callId');
+  @override
+  late final GeneratedColumn<String> callId = GeneratedColumn<String>(
+      'call_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  @override
+  late final GeneratedColumnWithTypeConverter<CallDirectionData, String>
+      direction = GeneratedColumn<String>('direction', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<CallDirectionData>($CdrTableTable.$converterdirection);
+  @override
+  late final GeneratedColumnWithTypeConverter<CdrStatusData, String> status =
+      GeneratedColumn<String>('status', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<CdrStatusData>($CdrTableTable.$converterstatus);
+  static const VerificationMeta _calleeMeta = const VerificationMeta('callee');
+  @override
+  late final GeneratedColumn<String> callee = GeneratedColumn<String>(
+      'callee', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _callerMeta = const VerificationMeta('caller');
+  @override
+  late final GeneratedColumn<String> caller = GeneratedColumn<String>(
+      'caller', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _connectTimeUsecMeta =
+      const VerificationMeta('connectTimeUsec');
+  @override
+  late final GeneratedColumn<int> connectTimeUsec = GeneratedColumn<int>(
+      'connect_time_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _disconnectTimeUsecMeta =
+      const VerificationMeta('disconnectTimeUsec');
+  @override
+  late final GeneratedColumn<int> disconnectTimeUsec = GeneratedColumn<int>(
+      'disconnect_time_usec', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _disconnectReasonMeta =
+      const VerificationMeta('disconnectReason');
+  @override
+  late final GeneratedColumn<String> disconnectReason = GeneratedColumn<String>(
+      'disconnect_reason', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _durationSecondsMeta =
+      const VerificationMeta('durationSeconds');
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+      'duration_seconds', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _recordingIdMeta =
+      const VerificationMeta('recordingId');
+  @override
+  late final GeneratedColumn<String> recordingId = GeneratedColumn<String>(
+      'recording_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        callId,
+        direction,
+        status,
+        callee,
+        caller,
+        connectTimeUsec,
+        disconnectTimeUsec,
+        disconnectReason,
+        durationSeconds,
+        recordingId
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cdrs';
+  @override
+  VerificationContext validateIntegrity(Insertable<CdrRecordData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('call_id')) {
+      context.handle(_callIdMeta,
+          callId.isAcceptableOrUnknown(data['call_id']!, _callIdMeta));
+    } else if (isInserting) {
+      context.missing(_callIdMeta);
+    }
+    if (data.containsKey('callee')) {
+      context.handle(_calleeMeta,
+          callee.isAcceptableOrUnknown(data['callee']!, _calleeMeta));
+    } else if (isInserting) {
+      context.missing(_calleeMeta);
+    }
+    if (data.containsKey('caller')) {
+      context.handle(_callerMeta,
+          caller.isAcceptableOrUnknown(data['caller']!, _callerMeta));
+    } else if (isInserting) {
+      context.missing(_callerMeta);
+    }
+    if (data.containsKey('connect_time_usec')) {
+      context.handle(
+          _connectTimeUsecMeta,
+          connectTimeUsec.isAcceptableOrUnknown(
+              data['connect_time_usec']!, _connectTimeUsecMeta));
+    } else if (isInserting) {
+      context.missing(_connectTimeUsecMeta);
+    }
+    if (data.containsKey('disconnect_time_usec')) {
+      context.handle(
+          _disconnectTimeUsecMeta,
+          disconnectTimeUsec.isAcceptableOrUnknown(
+              data['disconnect_time_usec']!, _disconnectTimeUsecMeta));
+    } else if (isInserting) {
+      context.missing(_disconnectTimeUsecMeta);
+    }
+    if (data.containsKey('disconnect_reason')) {
+      context.handle(
+          _disconnectReasonMeta,
+          disconnectReason.isAcceptableOrUnknown(
+              data['disconnect_reason']!, _disconnectReasonMeta));
+    } else if (isInserting) {
+      context.missing(_disconnectReasonMeta);
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+          _durationSecondsMeta,
+          durationSeconds.isAcceptableOrUnknown(
+              data['duration_seconds']!, _durationSecondsMeta));
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('recording_id')) {
+      context.handle(
+          _recordingIdMeta,
+          recordingId.isAcceptableOrUnknown(
+              data['recording_id']!, _recordingIdMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {callId};
+  @override
+  CdrRecordData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CdrRecordData(
+      callId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}call_id'])!,
+      direction: $CdrTableTable.$converterdirection.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}direction'])!),
+      status: $CdrTableTable.$converterstatus.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!),
+      callee: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}callee'])!,
+      caller: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}caller'])!,
+      connectTimeUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}connect_time_usec'])!,
+      disconnectTimeUsec: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}disconnect_time_usec'])!,
+      disconnectReason: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}disconnect_reason'])!,
+      durationSeconds: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}duration_seconds'])!,
+      recordingId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}recording_id']),
+    );
+  }
+
+  @override
+  $CdrTableTable createAlias(String alias) {
+    return $CdrTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<CallDirectionData, String, String>
+      $converterdirection =
+      const EnumNameConverter<CallDirectionData>(CallDirectionData.values);
+  static JsonTypeConverter2<CdrStatusData, String, String> $converterstatus =
+      const EnumNameConverter<CdrStatusData>(CdrStatusData.values);
+}
+
+class CdrRecordData extends DataClass implements Insertable<CdrRecordData> {
+  final String callId;
+  final CallDirectionData direction;
+  final CdrStatusData status;
+  final String callee;
+  final String caller;
+  final int connectTimeUsec;
+  final int disconnectTimeUsec;
+  final String disconnectReason;
+  final int durationSeconds;
+  final String? recordingId;
+  const CdrRecordData(
+      {required this.callId,
+      required this.direction,
+      required this.status,
+      required this.callee,
+      required this.caller,
+      required this.connectTimeUsec,
+      required this.disconnectTimeUsec,
+      required this.disconnectReason,
+      required this.durationSeconds,
+      this.recordingId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['call_id'] = Variable<String>(callId);
+    {
+      map['direction'] =
+          Variable<String>($CdrTableTable.$converterdirection.toSql(direction));
+    }
+    {
+      map['status'] =
+          Variable<String>($CdrTableTable.$converterstatus.toSql(status));
+    }
+    map['callee'] = Variable<String>(callee);
+    map['caller'] = Variable<String>(caller);
+    map['connect_time_usec'] = Variable<int>(connectTimeUsec);
+    map['disconnect_time_usec'] = Variable<int>(disconnectTimeUsec);
+    map['disconnect_reason'] = Variable<String>(disconnectReason);
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    if (!nullToAbsent || recordingId != null) {
+      map['recording_id'] = Variable<String>(recordingId);
+    }
+    return map;
+  }
+
+  CdrRecordDataCompanion toCompanion(bool nullToAbsent) {
+    return CdrRecordDataCompanion(
+      callId: Value(callId),
+      direction: Value(direction),
+      status: Value(status),
+      callee: Value(callee),
+      caller: Value(caller),
+      connectTimeUsec: Value(connectTimeUsec),
+      disconnectTimeUsec: Value(disconnectTimeUsec),
+      disconnectReason: Value(disconnectReason),
+      durationSeconds: Value(durationSeconds),
+      recordingId: recordingId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(recordingId),
+    );
+  }
+
+  factory CdrRecordData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CdrRecordData(
+      callId: serializer.fromJson<String>(json['callId']),
+      direction: $CdrTableTable.$converterdirection
+          .fromJson(serializer.fromJson<String>(json['direction'])),
+      status: $CdrTableTable.$converterstatus
+          .fromJson(serializer.fromJson<String>(json['status'])),
+      callee: serializer.fromJson<String>(json['callee']),
+      caller: serializer.fromJson<String>(json['caller']),
+      connectTimeUsec: serializer.fromJson<int>(json['connectTimeUsec']),
+      disconnectTimeUsec: serializer.fromJson<int>(json['disconnectTimeUsec']),
+      disconnectReason: serializer.fromJson<String>(json['disconnectReason']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      recordingId: serializer.fromJson<String?>(json['recordingId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'callId': serializer.toJson<String>(callId),
+      'direction': serializer
+          .toJson<String>($CdrTableTable.$converterdirection.toJson(direction)),
+      'status': serializer
+          .toJson<String>($CdrTableTable.$converterstatus.toJson(status)),
+      'callee': serializer.toJson<String>(callee),
+      'caller': serializer.toJson<String>(caller),
+      'connectTimeUsec': serializer.toJson<int>(connectTimeUsec),
+      'disconnectTimeUsec': serializer.toJson<int>(disconnectTimeUsec),
+      'disconnectReason': serializer.toJson<String>(disconnectReason),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'recordingId': serializer.toJson<String?>(recordingId),
+    };
+  }
+
+  CdrRecordData copyWith(
+          {String? callId,
+          CallDirectionData? direction,
+          CdrStatusData? status,
+          String? callee,
+          String? caller,
+          int? connectTimeUsec,
+          int? disconnectTimeUsec,
+          String? disconnectReason,
+          int? durationSeconds,
+          Value<String?> recordingId = const Value.absent()}) =>
+      CdrRecordData(
+        callId: callId ?? this.callId,
+        direction: direction ?? this.direction,
+        status: status ?? this.status,
+        callee: callee ?? this.callee,
+        caller: caller ?? this.caller,
+        connectTimeUsec: connectTimeUsec ?? this.connectTimeUsec,
+        disconnectTimeUsec: disconnectTimeUsec ?? this.disconnectTimeUsec,
+        disconnectReason: disconnectReason ?? this.disconnectReason,
+        durationSeconds: durationSeconds ?? this.durationSeconds,
+        recordingId: recordingId.present ? recordingId.value : this.recordingId,
+      );
+  CdrRecordData copyWithCompanion(CdrRecordDataCompanion data) {
+    return CdrRecordData(
+      callId: data.callId.present ? data.callId.value : this.callId,
+      direction: data.direction.present ? data.direction.value : this.direction,
+      status: data.status.present ? data.status.value : this.status,
+      callee: data.callee.present ? data.callee.value : this.callee,
+      caller: data.caller.present ? data.caller.value : this.caller,
+      connectTimeUsec: data.connectTimeUsec.present
+          ? data.connectTimeUsec.value
+          : this.connectTimeUsec,
+      disconnectTimeUsec: data.disconnectTimeUsec.present
+          ? data.disconnectTimeUsec.value
+          : this.disconnectTimeUsec,
+      disconnectReason: data.disconnectReason.present
+          ? data.disconnectReason.value
+          : this.disconnectReason,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      recordingId:
+          data.recordingId.present ? data.recordingId.value : this.recordingId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CdrRecordData(')
+          ..write('callId: $callId, ')
+          ..write('direction: $direction, ')
+          ..write('status: $status, ')
+          ..write('callee: $callee, ')
+          ..write('caller: $caller, ')
+          ..write('connectTimeUsec: $connectTimeUsec, ')
+          ..write('disconnectTimeUsec: $disconnectTimeUsec, ')
+          ..write('disconnectReason: $disconnectReason, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('recordingId: $recordingId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      callId,
+      direction,
+      status,
+      callee,
+      caller,
+      connectTimeUsec,
+      disconnectTimeUsec,
+      disconnectReason,
+      durationSeconds,
+      recordingId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CdrRecordData &&
+          other.callId == this.callId &&
+          other.direction == this.direction &&
+          other.status == this.status &&
+          other.callee == this.callee &&
+          other.caller == this.caller &&
+          other.connectTimeUsec == this.connectTimeUsec &&
+          other.disconnectTimeUsec == this.disconnectTimeUsec &&
+          other.disconnectReason == this.disconnectReason &&
+          other.durationSeconds == this.durationSeconds &&
+          other.recordingId == this.recordingId);
+}
+
+class CdrRecordDataCompanion extends UpdateCompanion<CdrRecordData> {
+  final Value<String> callId;
+  final Value<CallDirectionData> direction;
+  final Value<CdrStatusData> status;
+  final Value<String> callee;
+  final Value<String> caller;
+  final Value<int> connectTimeUsec;
+  final Value<int> disconnectTimeUsec;
+  final Value<String> disconnectReason;
+  final Value<int> durationSeconds;
+  final Value<String?> recordingId;
+  final Value<int> rowid;
+  const CdrRecordDataCompanion({
+    this.callId = const Value.absent(),
+    this.direction = const Value.absent(),
+    this.status = const Value.absent(),
+    this.callee = const Value.absent(),
+    this.caller = const Value.absent(),
+    this.connectTimeUsec = const Value.absent(),
+    this.disconnectTimeUsec = const Value.absent(),
+    this.disconnectReason = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.recordingId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CdrRecordDataCompanion.insert({
+    required String callId,
+    required CallDirectionData direction,
+    required CdrStatusData status,
+    required String callee,
+    required String caller,
+    required int connectTimeUsec,
+    required int disconnectTimeUsec,
+    required String disconnectReason,
+    required int durationSeconds,
+    this.recordingId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : callId = Value(callId),
+        direction = Value(direction),
+        status = Value(status),
+        callee = Value(callee),
+        caller = Value(caller),
+        connectTimeUsec = Value(connectTimeUsec),
+        disconnectTimeUsec = Value(disconnectTimeUsec),
+        disconnectReason = Value(disconnectReason),
+        durationSeconds = Value(durationSeconds);
+  static Insertable<CdrRecordData> custom({
+    Expression<String>? callId,
+    Expression<String>? direction,
+    Expression<String>? status,
+    Expression<String>? callee,
+    Expression<String>? caller,
+    Expression<int>? connectTimeUsec,
+    Expression<int>? disconnectTimeUsec,
+    Expression<String>? disconnectReason,
+    Expression<int>? durationSeconds,
+    Expression<String>? recordingId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (callId != null) 'call_id': callId,
+      if (direction != null) 'direction': direction,
+      if (status != null) 'status': status,
+      if (callee != null) 'callee': callee,
+      if (caller != null) 'caller': caller,
+      if (connectTimeUsec != null) 'connect_time_usec': connectTimeUsec,
+      if (disconnectTimeUsec != null)
+        'disconnect_time_usec': disconnectTimeUsec,
+      if (disconnectReason != null) 'disconnect_reason': disconnectReason,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (recordingId != null) 'recording_id': recordingId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CdrRecordDataCompanion copyWith(
+      {Value<String>? callId,
+      Value<CallDirectionData>? direction,
+      Value<CdrStatusData>? status,
+      Value<String>? callee,
+      Value<String>? caller,
+      Value<int>? connectTimeUsec,
+      Value<int>? disconnectTimeUsec,
+      Value<String>? disconnectReason,
+      Value<int>? durationSeconds,
+      Value<String?>? recordingId,
+      Value<int>? rowid}) {
+    return CdrRecordDataCompanion(
+      callId: callId ?? this.callId,
+      direction: direction ?? this.direction,
+      status: status ?? this.status,
+      callee: callee ?? this.callee,
+      caller: caller ?? this.caller,
+      connectTimeUsec: connectTimeUsec ?? this.connectTimeUsec,
+      disconnectTimeUsec: disconnectTimeUsec ?? this.disconnectTimeUsec,
+      disconnectReason: disconnectReason ?? this.disconnectReason,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      recordingId: recordingId ?? this.recordingId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (callId.present) {
+      map['call_id'] = Variable<String>(callId.value);
+    }
+    if (direction.present) {
+      map['direction'] = Variable<String>(
+          $CdrTableTable.$converterdirection.toSql(direction.value));
+    }
+    if (status.present) {
+      map['status'] =
+          Variable<String>($CdrTableTable.$converterstatus.toSql(status.value));
+    }
+    if (callee.present) {
+      map['callee'] = Variable<String>(callee.value);
+    }
+    if (caller.present) {
+      map['caller'] = Variable<String>(caller.value);
+    }
+    if (connectTimeUsec.present) {
+      map['connect_time_usec'] = Variable<int>(connectTimeUsec.value);
+    }
+    if (disconnectTimeUsec.present) {
+      map['disconnect_time_usec'] = Variable<int>(disconnectTimeUsec.value);
+    }
+    if (disconnectReason.present) {
+      map['disconnect_reason'] = Variable<String>(disconnectReason.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (recordingId.present) {
+      map['recording_id'] = Variable<String>(recordingId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CdrRecordDataCompanion(')
+          ..write('callId: $callId, ')
+          ..write('direction: $direction, ')
+          ..write('status: $status, ')
+          ..write('callee: $callee, ')
+          ..write('caller: $caller, ')
+          ..write('connectTimeUsec: $connectTimeUsec, ')
+          ..write('disconnectTimeUsec: $disconnectTimeUsec, ')
+          ..write('disconnectReason: $disconnectReason, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('recordingId: $recordingId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -9504,6 +10046,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $SystemNotificationsOutboxTableTable(this);
   late final $PresenceInfoTableTable presenceInfoTable =
       $PresenceInfoTableTable(this);
+  late final $CdrTableTable cdrTable = $CdrTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
       ContactPhonesDao(this as AppDatabase);
@@ -9521,6 +10064,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       SystemNotificationsDao(this as AppDatabase);
   late final PresenceInfoDao presenceInfoDao =
       PresenceInfoDao(this as AppDatabase);
+  late final CdrsDao cdrsDao = CdrsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -9552,11 +10096,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         voicemailTable,
         systemNotificationsTable,
         systemNotificationsOutboxTable,
-        presenceInfoTable
+        presenceInfoTable,
+        cdrTable
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('contacts',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('contact_phones', kind: UpdateKind.delete),
+            ],
+          ),
           WritePropagation(
             on: TableUpdateQuery.onTableName('chats',
                 limitUpdateKind: UpdateKind.delete),
@@ -9700,6 +10252,29 @@ typedef $$ContactsTableTableUpdateCompanionBuilder = ContactDataCompanion
   Value<DateTime?> updatedAt,
 });
 
+final class $$ContactsTableTableReferences
+    extends BaseReferences<_$AppDatabase, $ContactsTableTable, ContactData> {
+  $$ContactsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$ContactPhonesTableTable, List<ContactPhoneData>>
+      _contactPhonesTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.contactPhonesTable,
+              aliasName: $_aliasNameGenerator(
+                  db.contactsTable.id, db.contactPhonesTable.contactId));
+
+  $$ContactPhonesTableTableProcessedTableManager get contactPhonesTableRefs {
+    final manager =
+        $$ContactPhonesTableTableTableManager($_db, $_db.contactPhonesTable)
+            .filter((f) => f.contactId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_contactPhonesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
 class $$ContactsTableTableFilterComposer
     extends Composer<_$AppDatabase, $ContactsTableTable> {
   $$ContactsTableTableFilterComposer({
@@ -9748,6 +10323,27 @@ class $$ContactsTableTableFilterComposer
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> contactPhonesTableRefs(
+      Expression<bool> Function($$ContactPhonesTableTableFilterComposer f) f) {
+    final $$ContactPhonesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.contactPhonesTable,
+        getReferencedColumn: (t) => t.contactId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContactPhonesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.contactPhonesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$ContactsTableTableOrderingComposer
@@ -9843,6 +10439,28 @@ class $$ContactsTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  Expression<T> contactPhonesTableRefs<T extends Object>(
+      Expression<T> Function($$ContactPhonesTableTableAnnotationComposer a) f) {
+    final $$ContactPhonesTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.contactPhonesTable,
+            getReferencedColumn: (t) => t.contactId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ContactPhonesTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.contactPhonesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$ContactsTableTableTableManager extends RootTableManager<
@@ -9854,12 +10472,9 @@ class $$ContactsTableTableTableManager extends RootTableManager<
     $$ContactsTableTableAnnotationComposer,
     $$ContactsTableTableCreateCompanionBuilder,
     $$ContactsTableTableUpdateCompanionBuilder,
-    (
-      ContactData,
-      BaseReferences<_$AppDatabase, $ContactsTableTable, ContactData>
-    ),
+    (ContactData, $$ContactsTableTableReferences),
     ContactData,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function({bool contactPhonesTableRefs})> {
   $$ContactsTableTableTableManager(_$AppDatabase db, $ContactsTableTable table)
       : super(TableManagerState(
           db: db,
@@ -9927,9 +10542,37 @@ class $$ContactsTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$ContactsTableTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({contactPhonesTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (contactPhonesTableRefs) db.contactPhonesTable
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (contactPhonesTableRefs)
+                    await $_getPrefetchedData<ContactData, $ContactsTableTable,
+                            ContactPhoneData>(
+                        currentTable: table,
+                        referencedTable: $$ContactsTableTableReferences
+                            ._contactPhonesTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ContactsTableTableReferences(db, table, p0)
+                                .contactPhonesTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.contactId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
@@ -9942,12 +10585,9 @@ typedef $$ContactsTableTableProcessedTableManager = ProcessedTableManager<
     $$ContactsTableTableAnnotationComposer,
     $$ContactsTableTableCreateCompanionBuilder,
     $$ContactsTableTableUpdateCompanionBuilder,
-    (
-      ContactData,
-      BaseReferences<_$AppDatabase, $ContactsTableTable, ContactData>
-    ),
+    (ContactData, $$ContactsTableTableReferences),
     ContactData,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function({bool contactPhonesTableRefs})>;
 typedef $$ContactPhonesTableTableCreateCompanionBuilder
     = ContactPhoneDataCompanion Function({
   Value<int> id,
@@ -9967,6 +10607,27 @@ typedef $$ContactPhonesTableTableUpdateCompanionBuilder
   Value<DateTime?> updatedAt,
 });
 
+final class $$ContactPhonesTableTableReferences extends BaseReferences<
+    _$AppDatabase, $ContactPhonesTableTable, ContactPhoneData> {
+  $$ContactPhonesTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ContactsTableTable _contactIdTable(_$AppDatabase db) =>
+      db.contactsTable.createAlias($_aliasNameGenerator(
+          db.contactPhonesTable.contactId, db.contactsTable.id));
+
+  $$ContactsTableTableProcessedTableManager get contactId {
+    final $_column = $_itemColumn<int>('contact_id')!;
+
+    final manager = $$ContactsTableTableTableManager($_db, $_db.contactsTable)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_contactIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
 class $$ContactPhonesTableTableFilterComposer
     extends Composer<_$AppDatabase, $ContactPhonesTableTable> {
   $$ContactPhonesTableTableFilterComposer({
@@ -9985,14 +10646,31 @@ class $$ContactPhonesTableTableFilterComposer
   ColumnFilters<String> get label => $composableBuilder(
       column: $table.label, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get contactId => $composableBuilder(
-      column: $table.contactId, builder: (column) => ColumnFilters(column));
-
   ColumnFilters<DateTime> get insertedAt => $composableBuilder(
       column: $table.insertedAt, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$ContactsTableTableFilterComposer get contactId {
+    final $$ContactsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.contactId,
+        referencedTable: $db.contactsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContactsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.contactsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$ContactPhonesTableTableOrderingComposer
@@ -10013,14 +10691,31 @@ class $$ContactPhonesTableTableOrderingComposer
   ColumnOrderings<String> get label => $composableBuilder(
       column: $table.label, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get contactId => $composableBuilder(
-      column: $table.contactId, builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<DateTime> get insertedAt => $composableBuilder(
       column: $table.insertedAt, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$ContactsTableTableOrderingComposer get contactId {
+    final $$ContactsTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.contactId,
+        referencedTable: $db.contactsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContactsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.contactsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$ContactPhonesTableTableAnnotationComposer
@@ -10041,14 +10736,31 @@ class $$ContactPhonesTableTableAnnotationComposer
   GeneratedColumn<String> get label =>
       $composableBuilder(column: $table.label, builder: (column) => column);
 
-  GeneratedColumn<int> get contactId =>
-      $composableBuilder(column: $table.contactId, builder: (column) => column);
-
   GeneratedColumn<DateTime> get insertedAt => $composableBuilder(
       column: $table.insertedAt, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ContactsTableTableAnnotationComposer get contactId {
+    final $$ContactsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.contactId,
+        referencedTable: $db.contactsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContactsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.contactsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$ContactPhonesTableTableTableManager extends RootTableManager<
@@ -10060,12 +10772,9 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
     $$ContactPhonesTableTableAnnotationComposer,
     $$ContactPhonesTableTableCreateCompanionBuilder,
     $$ContactPhonesTableTableUpdateCompanionBuilder,
-    (
-      ContactPhoneData,
-      BaseReferences<_$AppDatabase, $ContactPhonesTableTable, ContactPhoneData>
-    ),
+    (ContactPhoneData, $$ContactPhonesTableTableReferences),
     ContactPhoneData,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function({bool contactId})> {
   $$ContactPhonesTableTableTableManager(
       _$AppDatabase db, $ContactPhonesTableTable table)
       : super(TableManagerState(
@@ -10111,9 +10820,47 @@ class $$ContactPhonesTableTableTableManager extends RootTableManager<
             updatedAt: updatedAt,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$ContactPhonesTableTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({contactId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (contactId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.contactId,
+                    referencedTable:
+                        $$ContactPhonesTableTableReferences._contactIdTable(db),
+                    referencedColumn: $$ContactPhonesTableTableReferences
+                        ._contactIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
@@ -10126,12 +10873,9 @@ typedef $$ContactPhonesTableTableProcessedTableManager = ProcessedTableManager<
     $$ContactPhonesTableTableAnnotationComposer,
     $$ContactPhonesTableTableCreateCompanionBuilder,
     $$ContactPhonesTableTableUpdateCompanionBuilder,
-    (
-      ContactPhoneData,
-      BaseReferences<_$AppDatabase, $ContactPhonesTableTable, ContactPhoneData>
-    ),
+    (ContactPhoneData, $$ContactPhonesTableTableReferences),
     ContactPhoneData,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function({bool contactId})>;
 typedef $$ContactEmailsTableTableCreateCompanionBuilder
     = ContactEmailDataCompanion Function({
   Value<int> id,
@@ -17663,6 +18407,266 @@ typedef $$PresenceInfoTableTableProcessedTableManager = ProcessedTableManager<
     ),
     PresenceInfoData,
     PrefetchHooks Function()>;
+typedef $$CdrTableTableCreateCompanionBuilder = CdrRecordDataCompanion
+    Function({
+  required String callId,
+  required CallDirectionData direction,
+  required CdrStatusData status,
+  required String callee,
+  required String caller,
+  required int connectTimeUsec,
+  required int disconnectTimeUsec,
+  required String disconnectReason,
+  required int durationSeconds,
+  Value<String?> recordingId,
+  Value<int> rowid,
+});
+typedef $$CdrTableTableUpdateCompanionBuilder = CdrRecordDataCompanion
+    Function({
+  Value<String> callId,
+  Value<CallDirectionData> direction,
+  Value<CdrStatusData> status,
+  Value<String> callee,
+  Value<String> caller,
+  Value<int> connectTimeUsec,
+  Value<int> disconnectTimeUsec,
+  Value<String> disconnectReason,
+  Value<int> durationSeconds,
+  Value<String?> recordingId,
+  Value<int> rowid,
+});
+
+class $$CdrTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CdrTableTable> {
+  $$CdrTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get callId => $composableBuilder(
+      column: $table.callId, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<CallDirectionData, CallDirectionData, String>
+      get direction => $composableBuilder(
+          column: $table.direction,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnWithTypeConverterFilters<CdrStatusData, CdrStatusData, String>
+      get status => $composableBuilder(
+          column: $table.status,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<String> get callee => $composableBuilder(
+      column: $table.callee, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get caller => $composableBuilder(
+      column: $table.caller, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get connectTimeUsec => $composableBuilder(
+      column: $table.connectTimeUsec,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get disconnectTimeUsec => $composableBuilder(
+      column: $table.disconnectTimeUsec,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get disconnectReason => $composableBuilder(
+      column: $table.disconnectReason,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get recordingId => $composableBuilder(
+      column: $table.recordingId, builder: (column) => ColumnFilters(column));
+}
+
+class $$CdrTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CdrTableTable> {
+  $$CdrTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get callId => $composableBuilder(
+      column: $table.callId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get direction => $composableBuilder(
+      column: $table.direction, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get callee => $composableBuilder(
+      column: $table.callee, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get caller => $composableBuilder(
+      column: $table.caller, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get connectTimeUsec => $composableBuilder(
+      column: $table.connectTimeUsec,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get disconnectTimeUsec => $composableBuilder(
+      column: $table.disconnectTimeUsec,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get disconnectReason => $composableBuilder(
+      column: $table.disconnectReason,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get recordingId => $composableBuilder(
+      column: $table.recordingId, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CdrTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CdrTableTable> {
+  $$CdrTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get callId =>
+      $composableBuilder(column: $table.callId, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<CallDirectionData, String> get direction =>
+      $composableBuilder(column: $table.direction, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<CdrStatusData, String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get callee =>
+      $composableBuilder(column: $table.callee, builder: (column) => column);
+
+  GeneratedColumn<String> get caller =>
+      $composableBuilder(column: $table.caller, builder: (column) => column);
+
+  GeneratedColumn<int> get connectTimeUsec => $composableBuilder(
+      column: $table.connectTimeUsec, builder: (column) => column);
+
+  GeneratedColumn<int> get disconnectTimeUsec => $composableBuilder(
+      column: $table.disconnectTimeUsec, builder: (column) => column);
+
+  GeneratedColumn<String> get disconnectReason => $composableBuilder(
+      column: $table.disconnectReason, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds, builder: (column) => column);
+
+  GeneratedColumn<String> get recordingId => $composableBuilder(
+      column: $table.recordingId, builder: (column) => column);
+}
+
+class $$CdrTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CdrTableTable,
+    CdrRecordData,
+    $$CdrTableTableFilterComposer,
+    $$CdrTableTableOrderingComposer,
+    $$CdrTableTableAnnotationComposer,
+    $$CdrTableTableCreateCompanionBuilder,
+    $$CdrTableTableUpdateCompanionBuilder,
+    (
+      CdrRecordData,
+      BaseReferences<_$AppDatabase, $CdrTableTable, CdrRecordData>
+    ),
+    CdrRecordData,
+    PrefetchHooks Function()> {
+  $$CdrTableTableTableManager(_$AppDatabase db, $CdrTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CdrTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CdrTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CdrTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> callId = const Value.absent(),
+            Value<CallDirectionData> direction = const Value.absent(),
+            Value<CdrStatusData> status = const Value.absent(),
+            Value<String> callee = const Value.absent(),
+            Value<String> caller = const Value.absent(),
+            Value<int> connectTimeUsec = const Value.absent(),
+            Value<int> disconnectTimeUsec = const Value.absent(),
+            Value<String> disconnectReason = const Value.absent(),
+            Value<int> durationSeconds = const Value.absent(),
+            Value<String?> recordingId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CdrRecordDataCompanion(
+            callId: callId,
+            direction: direction,
+            status: status,
+            callee: callee,
+            caller: caller,
+            connectTimeUsec: connectTimeUsec,
+            disconnectTimeUsec: disconnectTimeUsec,
+            disconnectReason: disconnectReason,
+            durationSeconds: durationSeconds,
+            recordingId: recordingId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String callId,
+            required CallDirectionData direction,
+            required CdrStatusData status,
+            required String callee,
+            required String caller,
+            required int connectTimeUsec,
+            required int disconnectTimeUsec,
+            required String disconnectReason,
+            required int durationSeconds,
+            Value<String?> recordingId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CdrRecordDataCompanion.insert(
+            callId: callId,
+            direction: direction,
+            status: status,
+            callee: callee,
+            caller: caller,
+            connectTimeUsec: connectTimeUsec,
+            disconnectTimeUsec: disconnectTimeUsec,
+            disconnectReason: disconnectReason,
+            durationSeconds: durationSeconds,
+            recordingId: recordingId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$CdrTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CdrTableTable,
+    CdrRecordData,
+    $$CdrTableTableFilterComposer,
+    $$CdrTableTableOrderingComposer,
+    $$CdrTableTableAnnotationComposer,
+    $$CdrTableTableCreateCompanionBuilder,
+    $$CdrTableTableUpdateCompanionBuilder,
+    (
+      CdrRecordData,
+      BaseReferences<_$AppDatabase, $CdrTableTable, CdrRecordData>
+    ),
+    CdrRecordData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -17743,4 +18747,6 @@ class $AppDatabaseManager {
               _db, _db.systemNotificationsOutboxTable);
   $$PresenceInfoTableTableTableManager get presenceInfoTable =>
       $$PresenceInfoTableTableTableManager(_db, _db.presenceInfoTable);
+  $$CdrTableTableTableManager get cdrTable =>
+      $$CdrTableTableTableManager(_db, _db.cdrTable);
 }

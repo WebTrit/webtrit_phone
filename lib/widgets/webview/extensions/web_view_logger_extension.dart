@@ -2,7 +2,7 @@ import 'package:logging/logging.dart';
 
 extension WebViewLoggerExtension on Logger {
   void webViewLog({required String level, required String message}) {
-    final prefixed = '[WebView] $message';
+    final prefixed = '[WebtritConsoleLogChannel] $message';
 
     switch (level.toUpperCase()) {
       case 'ERROR':

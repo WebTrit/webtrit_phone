@@ -112,25 +112,19 @@ class MainScreenPage extends StatelessWidget {
 
   List<PageRouteInfo> _buildRoutePages(List<BottomMenuTab> tabs) {
     return tabs.map<PageRouteInfo<dynamic>>((tab) {
-      switch (tab.flavor) {
-        case MainFlavor.favorites:
+      switch (tab) {
+        case FavoritesBottomMenuTab():
           return const FavoritesRouterPageRoute();
-        case MainFlavor.recents:
-          return const RecentsRouterPageRoute();
-        case MainFlavor.contacts:
-          return ContactsRouterPageRoute(
-            children: [
-              ContactsScreenPageRoute(
-                sourceTypes: tab.toContacts?.contactSourceTypes ?? [],
-              )
-            ],
-          );
-        case MainFlavor.keypad:
+        case KeypadBottomMenuTab():
           return const KeypadScreenPageRoute();
-        case MainFlavor.messaging:
+        case MessagingBottomMenuTab():
           return const ConversationsScreenPageRoute();
-        default:
-          return EmbeddedTabPageRoute(id: tab.toEmbedded!.id);
+        case RecentsBottomMenuTab():
+          return tab.useCdrs ? const RecentCdrsScreenPageRoute() : const RecentsRouterPageRoute();
+        case ContactsBottomMenuTab():
+          return ContactsRouterPageRoute(children: [ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes)]);
+        case EmbeddedBottomMenuTab():
+          return EmbeddedTabPageRoute(id: tab.id);
       }
     }).toList();
   }

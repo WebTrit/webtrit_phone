@@ -54,6 +54,8 @@ class LoginSignUpScreenshot extends StatelessWidget {
         ),
         body: LoginSignupEmbeddedRequestScreen(
           initialUrl: embedded.customLoginFeature.uri,
+          mediaQueryMetricsData: null,
+          deviceInfoData: null,
           pageInjectionStrategyBuilder: () {
             return DefaultPayloadInjectionStrategy();
           },

@@ -14,6 +14,31 @@ class AppBarStyle with Diagnosticable {
   final bool primary;
   final bool showBackButton;
 
+  /// Shallow updates; null keeps current value.
+  AppBarStyle copyWith({
+    Color? backgroundColor,
+    Color? foregroundColor,
+    bool? primary,
+    bool? showBackButton,
+  }) {
+    return AppBarStyle(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      foregroundColor: foregroundColor ?? this.foregroundColor,
+      primary: primary ?? this.primary,
+      showBackButton: showBackButton ?? this.showBackButton,
+    );
+  }
+
+  AppBarStyle merge(AppBarStyle? other) {
+    if (other == null) return this;
+    return AppBarStyle(
+      backgroundColor: other.backgroundColor ?? backgroundColor,
+      foregroundColor: other.foregroundColor ?? foregroundColor,
+      primary: other.primary,
+      showBackButton: other.showBackButton,
+    );
+  }
+
   static AppBarStyle? lerp(AppBarStyle? a, AppBarStyle? b, double t) {
     if (identical(a, b)) return a;
     if (a == null && b == null) return null;
@@ -34,4 +59,21 @@ class AppBarStyle with Diagnosticable {
       ..add(FlagProperty('primary', value: primary, ifTrue: 'primary'))
       ..add(FlagProperty('showBackButton', value: showBackButton, ifTrue: 'showBackButton'));
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AppBarStyle &&
+        other.backgroundColor == backgroundColor &&
+        other.foregroundColor == foregroundColor &&
+        other.primary == primary &&
+        other.showBackButton == showBackButton;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        backgroundColor,
+        foregroundColor,
+        primary,
+        showBackButton,
+      );
 }

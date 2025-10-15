@@ -530,9 +530,13 @@ AppConfigModeSelectAction _$AppConfigModeSelectActionFromJson(
 /// @nodoc
 mixin _$AppConfigModeSelectAction {
   bool get enabled => throw _privateConstructorUsedError;
-  int? get embeddedId => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @IntToStringOptionalConverter()
+  String? get embeddedId => throw _privateConstructorUsedError;
   bool get isLaunchButtonVisible => throw _privateConstructorUsedError;
   bool get isLaunchScreen => throw _privateConstructorUsedError;
 
@@ -554,9 +558,9 @@ abstract class $AppConfigModeSelectActionCopyWith<$Res> {
   @useResult
   $Res call(
       {bool enabled,
-      int? embeddedId,
       String type,
       String titleL10n,
+      @IntToStringOptionalConverter() String? embeddedId,
       bool isLaunchButtonVisible,
       bool isLaunchScreen});
 }
@@ -578,9 +582,9 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
   @override
   $Res call({
     Object? enabled = null,
-    Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? embeddedId = freezed,
     Object? isLaunchButtonVisible = null,
     Object? isLaunchScreen = null,
   }) {
@@ -589,10 +593,6 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      embeddedId: freezed == embeddedId
-          ? _value.embeddedId
-          : embeddedId // ignore: cast_nullable_to_non_nullable
-              as int?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -601,6 +601,10 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      embeddedId: freezed == embeddedId
+          ? _value.embeddedId
+          : embeddedId // ignore: cast_nullable_to_non_nullable
+              as String?,
       isLaunchButtonVisible: null == isLaunchButtonVisible
           ? _value.isLaunchButtonVisible
           : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
@@ -624,9 +628,9 @@ abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
   @useResult
   $Res call(
       {bool enabled,
-      int? embeddedId,
       String type,
       String titleL10n,
+      @IntToStringOptionalConverter() String? embeddedId,
       bool isLaunchButtonVisible,
       bool isLaunchScreen});
 }
@@ -647,9 +651,9 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? enabled = null,
-    Object? embeddedId = freezed,
     Object? type = null,
     Object? titleL10n = null,
+    Object? embeddedId = freezed,
     Object? isLaunchButtonVisible = null,
     Object? isLaunchScreen = null,
   }) {
@@ -658,10 +662,6 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      embeddedId: freezed == embeddedId
-          ? _value.embeddedId
-          : embeddedId // ignore: cast_nullable_to_non_nullable
-              as int?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -670,6 +670,10 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
               as String,
+      embeddedId: freezed == embeddedId
+          ? _value.embeddedId
+          : embeddedId // ignore: cast_nullable_to_non_nullable
+              as String?,
       isLaunchButtonVisible: null == isLaunchButtonVisible
           ? _value.isLaunchButtonVisible
           : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
@@ -688,9 +692,9 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
 class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   const _$AppConfigModeSelectActionImpl(
       {required this.enabled,
-      this.embeddedId,
       required this.type,
       required this.titleL10n,
+      @IntToStringOptionalConverter() this.embeddedId,
       this.isLaunchButtonVisible = false,
       this.isLaunchScreen = false})
       : super._();
@@ -701,11 +705,15 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   @override
   final bool enabled;
   @override
-  final int? embeddedId;
-  @override
   final String type;
   @override
   final String titleL10n;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @override
+  @IntToStringOptionalConverter()
+  final String? embeddedId;
   @override
   @JsonKey()
   final bool isLaunchButtonVisible;
@@ -715,7 +723,7 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
 
   @override
   String toString() {
-    return 'AppConfigModeSelectAction(enabled: $enabled, embeddedId: $embeddedId, type: $type, titleL10n: $titleL10n, isLaunchButtonVisible: $isLaunchButtonVisible, isLaunchScreen: $isLaunchScreen)';
+    return 'AppConfigModeSelectAction(enabled: $enabled, type: $type, titleL10n: $titleL10n, embeddedId: $embeddedId, isLaunchButtonVisible: $isLaunchButtonVisible, isLaunchScreen: $isLaunchScreen)';
   }
 
   @override
@@ -724,11 +732,11 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
         (other.runtimeType == runtimeType &&
             other is _$AppConfigModeSelectActionImpl &&
             (identical(other.enabled, enabled) || other.enabled == enabled) &&
-            (identical(other.embeddedId, embeddedId) ||
-                other.embeddedId == embeddedId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
+            (identical(other.embeddedId, embeddedId) ||
+                other.embeddedId == embeddedId) &&
             (identical(other.isLaunchButtonVisible, isLaunchButtonVisible) ||
                 other.isLaunchButtonVisible == isLaunchButtonVisible) &&
             (identical(other.isLaunchScreen, isLaunchScreen) ||
@@ -737,8 +745,8 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, enabled, embeddedId, type,
-      titleL10n, isLaunchButtonVisible, isLaunchScreen);
+  int get hashCode => Object.hash(runtimeType, enabled, type, titleL10n,
+      embeddedId, isLaunchButtonVisible, isLaunchScreen);
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -760,9 +768,9 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
 abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   const factory _AppConfigModeSelectAction(
       {required final bool enabled,
-      final int? embeddedId,
       required final String type,
       required final String titleL10n,
+      @IntToStringOptionalConverter() final String? embeddedId,
       final bool isLaunchButtonVisible,
       final bool isLaunchScreen}) = _$AppConfigModeSelectActionImpl;
   const _AppConfigModeSelectAction._() : super._();
@@ -773,11 +781,15 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   @override
   bool get enabled;
   @override
-  int? get embeddedId;
-  @override
   String get type;
   @override
   String get titleL10n;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @override
+  @IntToStringOptionalConverter()
+  String? get embeddedId;
   @override
   bool get isLaunchButtonVisible;
   @override
@@ -929,35 +941,31 @@ class _$AppConfigMainImpl extends _AppConfigMain {
   const _$AppConfigMainImpl(
       {this.bottomMenu =
           const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
-        BaseTabScheme(
+        FavoritesTabScheme(
             enabled: true,
             initial: false,
-            type: BottomMenuTabType.favorites,
             titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
             icon: '0xe5fd'),
-        BaseTabScheme(
-            enabled: true,
+        RecentsTabScheme(
+            enabled: false,
             initial: false,
-            type: BottomMenuTabType.recents,
             titleL10n: 'main_BottomNavigationBarItemLabel_recents',
-            icon: '0xe03a'),
+            icon: '0xe03a',
+            useCdrs: false),
         ContactsTabScheme(
             enabled: true,
             initial: false,
-            type: BottomMenuTabType.contacts,
             titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
             icon: '0xee35',
             contactSourceTypes: ['local', 'external']),
-        BaseTabScheme(
+        KeypadTabScheme(
             enabled: true,
             initial: true,
-            type: BottomMenuTabType.keypad,
             titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
             icon: '0xe1ce'),
-        BaseTabScheme(
+        MessagingTabScheme(
             enabled: false,
             initial: false,
-            type: BottomMenuTabType.messaging,
             titleL10n: 'main_BottomNavigationBarItemLabel_chats',
             icon: '0xe155')
       ]),
@@ -2244,6 +2252,9 @@ mixin _$EncodingDefaultPresetOverride {
   int? get opusBitrate => throw _privateConstructorUsedError;
   bool? get opusStereo => throw _privateConstructorUsedError;
   bool? get opusDtx => throw _privateConstructorUsedError;
+  bool? get removeExtmaps => throw _privateConstructorUsedError;
+  bool? get removeStaticAudioRtpMaps => throw _privateConstructorUsedError;
+  bool? get remapTE8payloadTo101 => throw _privateConstructorUsedError;
 
   /// Serializes this EncodingDefaultPresetOverride to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2271,7 +2282,10 @@ abstract class $EncodingDefaultPresetOverrideCopyWith<$Res> {
       int? opusSamplingRate,
       int? opusBitrate,
       bool? opusStereo,
-      bool? opusDtx});
+      bool? opusDtx,
+      bool? removeExtmaps,
+      bool? removeStaticAudioRtpMaps,
+      bool? remapTE8payloadTo101});
 }
 
 /// @nodoc
@@ -2298,6 +2312,9 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
     Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
+    Object? removeExtmaps = freezed,
+    Object? removeStaticAudioRtpMaps = freezed,
+    Object? remapTE8payloadTo101 = freezed,
   }) {
     return _then(_value.copyWith(
       audioBitrate: freezed == audioBitrate
@@ -2332,6 +2349,18 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
           ? _value.opusDtx
           : opusDtx // ignore: cast_nullable_to_non_nullable
               as bool?,
+      removeExtmaps: freezed == removeExtmaps
+          ? _value.removeExtmaps
+          : removeExtmaps // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps
+          ? _value.removeStaticAudioRtpMaps
+          : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      remapTE8payloadTo101: freezed == remapTE8payloadTo101
+          ? _value.remapTE8payloadTo101
+          : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -2353,7 +2382,10 @@ abstract class _$$EncodingDefaultPresetOverrideImplCopyWith<$Res>
       int? opusSamplingRate,
       int? opusBitrate,
       bool? opusStereo,
-      bool? opusDtx});
+      bool? opusDtx,
+      bool? removeExtmaps,
+      bool? removeStaticAudioRtpMaps,
+      bool? remapTE8payloadTo101});
 }
 
 /// @nodoc
@@ -2379,6 +2411,9 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
     Object? opusBitrate = freezed,
     Object? opusStereo = freezed,
     Object? opusDtx = freezed,
+    Object? removeExtmaps = freezed,
+    Object? removeStaticAudioRtpMaps = freezed,
+    Object? remapTE8payloadTo101 = freezed,
   }) {
     return _then(_$EncodingDefaultPresetOverrideImpl(
       audioBitrate: freezed == audioBitrate
@@ -2413,6 +2448,18 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
           ? _value.opusDtx
           : opusDtx // ignore: cast_nullable_to_non_nullable
               as bool?,
+      removeExtmaps: freezed == removeExtmaps
+          ? _value.removeExtmaps
+          : removeExtmaps // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps
+          ? _value.removeStaticAudioRtpMaps
+          : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      remapTE8payloadTo101: freezed == remapTE8payloadTo101
+          ? _value.remapTE8payloadTo101
+          : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -2430,7 +2477,10 @@ class _$EncodingDefaultPresetOverrideImpl
       this.opusSamplingRate,
       this.opusBitrate,
       this.opusStereo,
-      this.opusDtx})
+      this.opusDtx,
+      this.removeExtmaps,
+      this.removeStaticAudioRtpMaps,
+      this.remapTE8payloadTo101})
       : super._();
 
   factory _$EncodingDefaultPresetOverrideImpl.fromJson(
@@ -2453,10 +2503,16 @@ class _$EncodingDefaultPresetOverrideImpl
   final bool? opusStereo;
   @override
   final bool? opusDtx;
+  @override
+  final bool? removeExtmaps;
+  @override
+  final bool? removeStaticAudioRtpMaps;
+  @override
+  final bool? remapTE8payloadTo101;
 
   @override
   String toString() {
-    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx)';
+    return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx, removeExtmaps: $removeExtmaps, removeStaticAudioRtpMaps: $removeStaticAudioRtpMaps, remapTE8payloadTo101: $remapTE8payloadTo101)';
   }
 
   @override
@@ -2477,13 +2533,31 @@ class _$EncodingDefaultPresetOverrideImpl
                 other.opusBitrate == opusBitrate) &&
             (identical(other.opusStereo, opusStereo) ||
                 other.opusStereo == opusStereo) &&
-            (identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx));
+            (identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx) &&
+            (identical(other.removeExtmaps, removeExtmaps) ||
+                other.removeExtmaps == removeExtmaps) &&
+            (identical(
+                    other.removeStaticAudioRtpMaps, removeStaticAudioRtpMaps) ||
+                other.removeStaticAudioRtpMaps == removeStaticAudioRtpMaps) &&
+            (identical(other.remapTE8payloadTo101, remapTE8payloadTo101) ||
+                other.remapTE8payloadTo101 == remapTE8payloadTo101));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, audioBitrate, videoBitrate,
-      ptime, maxptime, opusSamplingRate, opusBitrate, opusStereo, opusDtx);
+  int get hashCode => Object.hash(
+      runtimeType,
+      audioBitrate,
+      videoBitrate,
+      ptime,
+      maxptime,
+      opusSamplingRate,
+      opusBitrate,
+      opusStereo,
+      opusDtx,
+      removeExtmaps,
+      removeStaticAudioRtpMaps,
+      remapTE8payloadTo101);
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -2513,7 +2587,10 @@ abstract class _EncodingDefaultPresetOverride
       final int? opusSamplingRate,
       final int? opusBitrate,
       final bool? opusStereo,
-      final bool? opusDtx}) = _$EncodingDefaultPresetOverrideImpl;
+      final bool? opusDtx,
+      final bool? removeExtmaps,
+      final bool? removeStaticAudioRtpMaps,
+      final bool? remapTE8payloadTo101}) = _$EncodingDefaultPresetOverrideImpl;
   const _EncodingDefaultPresetOverride._() : super._();
 
   factory _EncodingDefaultPresetOverride.fromJson(Map<String, dynamic> json) =
@@ -2535,6 +2612,12 @@ abstract class _EncodingDefaultPresetOverride
   bool? get opusStereo;
   @override
   bool? get opusDtx;
+  @override
+  bool? get removeExtmaps;
+  @override
+  bool? get removeStaticAudioRtpMaps;
+  @override
+  bool? get remapTE8payloadTo101;
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -2546,17 +2629,23 @@ abstract class _EncodingDefaultPresetOverride
 }
 
 BottomMenuTabScheme _$BottomMenuTabSchemeFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType']) {
-    case 'base':
-      return BaseTabScheme.fromJson(json);
+  switch (json['type']) {
+    case 'favorites':
+      return FavoritesTabScheme.fromJson(json);
+    case 'recents':
+      return RecentsTabScheme.fromJson(json);
     case 'contacts':
       return ContactsTabScheme.fromJson(json);
+    case 'keypad':
+      return KeypadTabScheme.fromJson(json);
+    case 'messaging':
+      return MessagingTabScheme.fromJson(json);
     case 'embedded':
-      return EmbededTabScheme.fromJson(json);
+      return EmbeddedTabScheme.fromJson(json);
 
     default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'BottomMenuTabScheme',
-          'Invalid union type "${json['runtimeType']}"!');
+      throw CheckedFromJsonException(json, 'type', 'BottomMenuTabScheme',
+          'Invalid union type "${json['type']}"!');
   }
 }
 
@@ -2564,111 +2653,100 @@ BottomMenuTabScheme _$BottomMenuTabSchemeFromJson(Map<String, dynamic> json) {
 mixin _$BottomMenuTabScheme {
   bool get enabled => throw _privateConstructorUsedError;
   bool get initial => throw _privateConstructorUsedError;
-  @BottomMenuTabTypeConverter()
-  BottomMenuTabType get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)
-        base,
-    required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            List<String> contactSourceTypes)
+            bool enabled, bool initial, String titleL10n, String icon)
+        favorites,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, bool useCdrs)
+        recents,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, List<String> contactSourceTypes)
         contacts,
     required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)
+            bool enabled, bool initial, String titleL10n, String icon)
+        keypad,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        messaging,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, @IntToStringConverter() String embeddedResourceId)
         embedded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)?
-        base,
-    TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
+            bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
             List<String> contactSourceTypes)?
         contacts,
     TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)?
+            bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)?
-        base,
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
             List<String> contactSourceTypes)?
         contacts,
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)?
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(BaseTabScheme value) base,
+    required TResult Function(FavoritesTabScheme value) favorites,
+    required TResult Function(RecentsTabScheme value) recents,
     required TResult Function(ContactsTabScheme value) contacts,
-    required TResult Function(EmbededTabScheme value) embedded,
+    required TResult Function(KeypadTabScheme value) keypad,
+    required TResult Function(MessagingTabScheme value) messaging,
+    required TResult Function(EmbeddedTabScheme value) embedded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(BaseTabScheme value)? base,
+    TResult? Function(FavoritesTabScheme value)? favorites,
+    TResult? Function(RecentsTabScheme value)? recents,
     TResult? Function(ContactsTabScheme value)? contacts,
-    TResult? Function(EmbededTabScheme value)? embedded,
+    TResult? Function(KeypadTabScheme value)? keypad,
+    TResult? Function(MessagingTabScheme value)? messaging,
+    TResult? Function(EmbeddedTabScheme value)? embedded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(BaseTabScheme value)? base,
+    TResult Function(FavoritesTabScheme value)? favorites,
+    TResult Function(RecentsTabScheme value)? recents,
     TResult Function(ContactsTabScheme value)? contacts,
-    TResult Function(EmbededTabScheme value)? embedded,
+    TResult Function(KeypadTabScheme value)? keypad,
+    TResult Function(MessagingTabScheme value)? messaging,
+    TResult Function(EmbeddedTabScheme value)? embedded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -2689,12 +2767,7 @@ abstract class $BottomMenuTabSchemeCopyWith<$Res> {
           BottomMenuTabScheme value, $Res Function(BottomMenuTabScheme) then) =
       _$BottomMenuTabSchemeCopyWithImpl<$Res, BottomMenuTabScheme>;
   @useResult
-  $Res call(
-      {bool enabled,
-      bool initial,
-      @BottomMenuTabTypeConverter() BottomMenuTabType type,
-      String titleL10n,
-      String icon});
+  $Res call({bool enabled, bool initial, String titleL10n, String icon});
 }
 
 /// @nodoc
@@ -2714,7 +2787,6 @@ class _$BottomMenuTabSchemeCopyWithImpl<$Res, $Val extends BottomMenuTabScheme>
   $Res call({
     Object? enabled = null,
     Object? initial = null,
-    Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
   }) {
@@ -2727,10 +2799,6 @@ class _$BottomMenuTabSchemeCopyWithImpl<$Res, $Val extends BottomMenuTabScheme>
           ? _value.initial
           : initial // ignore: cast_nullable_to_non_nullable
               as bool,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as BottomMenuTabType,
       titleL10n: null == titleL10n
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
@@ -2744,27 +2812,22 @@ class _$BottomMenuTabSchemeCopyWithImpl<$Res, $Val extends BottomMenuTabScheme>
 }
 
 /// @nodoc
-abstract class _$$BaseTabSchemeImplCopyWith<$Res>
+abstract class _$$FavoritesTabSchemeImplCopyWith<$Res>
     implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory _$$BaseTabSchemeImplCopyWith(
-          _$BaseTabSchemeImpl value, $Res Function(_$BaseTabSchemeImpl) then) =
-      __$$BaseTabSchemeImplCopyWithImpl<$Res>;
+  factory _$$FavoritesTabSchemeImplCopyWith(_$FavoritesTabSchemeImpl value,
+          $Res Function(_$FavoritesTabSchemeImpl) then) =
+      __$$FavoritesTabSchemeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool enabled,
-      bool initial,
-      @BottomMenuTabTypeConverter() BottomMenuTabType type,
-      String titleL10n,
-      String icon});
+  $Res call({bool enabled, bool initial, String titleL10n, String icon});
 }
 
 /// @nodoc
-class __$$BaseTabSchemeImplCopyWithImpl<$Res>
-    extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$BaseTabSchemeImpl>
-    implements _$$BaseTabSchemeImplCopyWith<$Res> {
-  __$$BaseTabSchemeImplCopyWithImpl(
-      _$BaseTabSchemeImpl _value, $Res Function(_$BaseTabSchemeImpl) _then)
+class __$$FavoritesTabSchemeImplCopyWithImpl<$Res>
+    extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$FavoritesTabSchemeImpl>
+    implements _$$FavoritesTabSchemeImplCopyWith<$Res> {
+  __$$FavoritesTabSchemeImplCopyWithImpl(_$FavoritesTabSchemeImpl _value,
+      $Res Function(_$FavoritesTabSchemeImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of BottomMenuTabScheme
@@ -2774,11 +2837,10 @@ class __$$BaseTabSchemeImplCopyWithImpl<$Res>
   $Res call({
     Object? enabled = null,
     Object? initial = null,
-    Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
   }) {
-    return _then(_$BaseTabSchemeImpl(
+    return _then(_$FavoritesTabSchemeImpl(
       enabled: null == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
@@ -2787,10 +2849,6 @@ class __$$BaseTabSchemeImplCopyWithImpl<$Res>
           ? _value.initial
           : initial // ignore: cast_nullable_to_non_nullable
               as bool,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as BottomMenuTabType,
       titleL10n: null == titleL10n
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
@@ -2806,19 +2864,18 @@ class __$$BaseTabSchemeImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$BaseTabSchemeImpl extends BaseTabScheme {
-  const _$BaseTabSchemeImpl(
+class _$FavoritesTabSchemeImpl extends FavoritesTabScheme {
+  const _$FavoritesTabSchemeImpl(
       {this.enabled = true,
       this.initial = false,
-      @BottomMenuTabTypeConverter() required this.type,
       required this.titleL10n,
       required this.icon,
       final String? $type})
-      : $type = $type ?? 'base',
+      : $type = $type ?? 'favorites',
         super._();
 
-  factory _$BaseTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BaseTabSchemeImplFromJson(json);
+  factory _$FavoritesTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FavoritesTabSchemeImplFromJson(json);
 
   @override
   @JsonKey()
@@ -2827,29 +2884,25 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
   @JsonKey()
   final bool initial;
   @override
-  @BottomMenuTabTypeConverter()
-  final BottomMenuTabType type;
-  @override
   final String titleL10n;
   @override
   final String icon;
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString() {
-    return 'BottomMenuTabScheme.base(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon)';
+    return 'BottomMenuTabScheme.favorites(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BaseTabSchemeImpl &&
+            other is _$FavoritesTabSchemeImpl &&
             (identical(other.enabled, enabled) || other.enabled == enabled) &&
             (identical(other.initial, initial) || other.initial == initial) &&
-            (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
             (identical(other.icon, icon) || other.icon == icon));
@@ -2858,106 +2911,89 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, enabled, initial, type, titleL10n, icon);
+      Object.hash(runtimeType, enabled, initial, titleL10n, icon);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$BaseTabSchemeImplCopyWith<_$BaseTabSchemeImpl> get copyWith =>
-      __$$BaseTabSchemeImplCopyWithImpl<_$BaseTabSchemeImpl>(this, _$identity);
+  _$$FavoritesTabSchemeImplCopyWith<_$FavoritesTabSchemeImpl> get copyWith =>
+      __$$FavoritesTabSchemeImplCopyWithImpl<_$FavoritesTabSchemeImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)
-        base,
-    required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            List<String> contactSourceTypes)
+            bool enabled, bool initial, String titleL10n, String icon)
+        favorites,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, bool useCdrs)
+        recents,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, List<String> contactSourceTypes)
         contacts,
     required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)
+            bool enabled, bool initial, String titleL10n, String icon)
+        keypad,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        messaging,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, @IntToStringConverter() String embeddedResourceId)
         embedded,
   }) {
-    return base(enabled, initial, type, titleL10n, icon);
+    return favorites(enabled, initial, titleL10n, icon);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)?
-        base,
-    TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
+            bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
             List<String> contactSourceTypes)?
         contacts,
     TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)?
+            bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
   }) {
-    return base?.call(enabled, initial, type, titleL10n, icon);
+    return favorites?.call(enabled, initial, titleL10n, icon);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)?
-        base,
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
             List<String> contactSourceTypes)?
         contacts,
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)?
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
-    if (base != null) {
-      return base(enabled, initial, type, titleL10n, icon);
+    if (favorites != null) {
+      return favorites(enabled, initial, titleL10n, icon);
     }
     return orElse();
   }
@@ -2965,64 +3001,69 @@ class _$BaseTabSchemeImpl extends BaseTabScheme {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(BaseTabScheme value) base,
+    required TResult Function(FavoritesTabScheme value) favorites,
+    required TResult Function(RecentsTabScheme value) recents,
     required TResult Function(ContactsTabScheme value) contacts,
-    required TResult Function(EmbededTabScheme value) embedded,
+    required TResult Function(KeypadTabScheme value) keypad,
+    required TResult Function(MessagingTabScheme value) messaging,
+    required TResult Function(EmbeddedTabScheme value) embedded,
   }) {
-    return base(this);
+    return favorites(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(BaseTabScheme value)? base,
+    TResult? Function(FavoritesTabScheme value)? favorites,
+    TResult? Function(RecentsTabScheme value)? recents,
     TResult? Function(ContactsTabScheme value)? contacts,
-    TResult? Function(EmbededTabScheme value)? embedded,
+    TResult? Function(KeypadTabScheme value)? keypad,
+    TResult? Function(MessagingTabScheme value)? messaging,
+    TResult? Function(EmbeddedTabScheme value)? embedded,
   }) {
-    return base?.call(this);
+    return favorites?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(BaseTabScheme value)? base,
+    TResult Function(FavoritesTabScheme value)? favorites,
+    TResult Function(RecentsTabScheme value)? recents,
     TResult Function(ContactsTabScheme value)? contacts,
-    TResult Function(EmbededTabScheme value)? embedded,
+    TResult Function(KeypadTabScheme value)? keypad,
+    TResult Function(MessagingTabScheme value)? messaging,
+    TResult Function(EmbeddedTabScheme value)? embedded,
     required TResult orElse(),
   }) {
-    if (base != null) {
-      return base(this);
+    if (favorites != null) {
+      return favorites(this);
     }
     return orElse();
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BaseTabSchemeImplToJson(
+    return _$$FavoritesTabSchemeImplToJson(
       this,
     );
   }
 }
 
-abstract class BaseTabScheme extends BottomMenuTabScheme {
-  const factory BaseTabScheme(
+abstract class FavoritesTabScheme extends BottomMenuTabScheme {
+  const factory FavoritesTabScheme(
       {final bool enabled,
       final bool initial,
-      @BottomMenuTabTypeConverter() required final BottomMenuTabType type,
       required final String titleL10n,
-      required final String icon}) = _$BaseTabSchemeImpl;
-  const BaseTabScheme._() : super._();
+      required final String icon}) = _$FavoritesTabSchemeImpl;
+  const FavoritesTabScheme._() : super._();
 
-  factory BaseTabScheme.fromJson(Map<String, dynamic> json) =
-      _$BaseTabSchemeImpl.fromJson;
+  factory FavoritesTabScheme.fromJson(Map<String, dynamic> json) =
+      _$FavoritesTabSchemeImpl.fromJson;
 
   @override
   bool get enabled;
   @override
   bool get initial;
-  @override
-  @BottomMenuTabTypeConverter()
-  BottomMenuTabType get type;
   @override
   String get titleL10n;
   @override
@@ -3032,7 +3073,290 @@ abstract class BaseTabScheme extends BottomMenuTabScheme {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BaseTabSchemeImplCopyWith<_$BaseTabSchemeImpl> get copyWith =>
+  _$$FavoritesTabSchemeImplCopyWith<_$FavoritesTabSchemeImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$RecentsTabSchemeImplCopyWith<$Res>
+    implements $BottomMenuTabSchemeCopyWith<$Res> {
+  factory _$$RecentsTabSchemeImplCopyWith(_$RecentsTabSchemeImpl value,
+          $Res Function(_$RecentsTabSchemeImpl) then) =
+      __$$RecentsTabSchemeImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs});
+}
+
+/// @nodoc
+class __$$RecentsTabSchemeImplCopyWithImpl<$Res>
+    extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$RecentsTabSchemeImpl>
+    implements _$$RecentsTabSchemeImplCopyWith<$Res> {
+  __$$RecentsTabSchemeImplCopyWithImpl(_$RecentsTabSchemeImpl _value,
+      $Res Function(_$RecentsTabSchemeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enabled = null,
+    Object? initial = null,
+    Object? titleL10n = null,
+    Object? icon = null,
+    Object? useCdrs = null,
+  }) {
+    return _then(_$RecentsTabSchemeImpl(
+      enabled: null == enabled
+          ? _value.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      initial: null == initial
+          ? _value.initial
+          : initial // ignore: cast_nullable_to_non_nullable
+              as bool,
+      titleL10n: null == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String,
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String,
+      useCdrs: null == useCdrs
+          ? _value.useCdrs
+          : useCdrs // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$RecentsTabSchemeImpl extends RecentsTabScheme {
+  const _$RecentsTabSchemeImpl(
+      {this.enabled = true,
+      this.initial = false,
+      required this.titleL10n,
+      required this.icon,
+      this.useCdrs = false,
+      final String? $type})
+      : $type = $type ?? 'recents',
+        super._();
+
+  factory _$RecentsTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
+      _$$RecentsTabSchemeImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool enabled;
+  @override
+  @JsonKey()
+  final bool initial;
+  @override
+  final String titleL10n;
+  @override
+  final String icon;
+  @override
+  @JsonKey()
+  final bool useCdrs;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'BottomMenuTabScheme.recents(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, useCdrs: $useCdrs)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RecentsTabSchemeImpl &&
+            (identical(other.enabled, enabled) || other.enabled == enabled) &&
+            (identical(other.initial, initial) || other.initial == initial) &&
+            (identical(other.titleL10n, titleL10n) ||
+                other.titleL10n == titleL10n) &&
+            (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.useCdrs, useCdrs) || other.useCdrs == useCdrs));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, enabled, initial, titleL10n, icon, useCdrs);
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RecentsTabSchemeImplCopyWith<_$RecentsTabSchemeImpl> get copyWith =>
+      __$$RecentsTabSchemeImplCopyWithImpl<_$RecentsTabSchemeImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        favorites,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, bool useCdrs)
+        recents,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, List<String> contactSourceTypes)
+        contacts,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        keypad,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        messaging,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, @IntToStringConverter() String embeddedResourceId)
+        embedded,
+  }) {
+    return recents(enabled, initial, titleL10n, icon, useCdrs);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            List<String> contactSourceTypes)?
+        contacts,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
+        embedded,
+  }) {
+    return recents?.call(enabled, initial, titleL10n, icon, useCdrs);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            List<String> contactSourceTypes)?
+        contacts,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
+        embedded,
+    required TResult orElse(),
+  }) {
+    if (recents != null) {
+      return recents(enabled, initial, titleL10n, icon, useCdrs);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(FavoritesTabScheme value) favorites,
+    required TResult Function(RecentsTabScheme value) recents,
+    required TResult Function(ContactsTabScheme value) contacts,
+    required TResult Function(KeypadTabScheme value) keypad,
+    required TResult Function(MessagingTabScheme value) messaging,
+    required TResult Function(EmbeddedTabScheme value) embedded,
+  }) {
+    return recents(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(FavoritesTabScheme value)? favorites,
+    TResult? Function(RecentsTabScheme value)? recents,
+    TResult? Function(ContactsTabScheme value)? contacts,
+    TResult? Function(KeypadTabScheme value)? keypad,
+    TResult? Function(MessagingTabScheme value)? messaging,
+    TResult? Function(EmbeddedTabScheme value)? embedded,
+  }) {
+    return recents?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(FavoritesTabScheme value)? favorites,
+    TResult Function(RecentsTabScheme value)? recents,
+    TResult Function(ContactsTabScheme value)? contacts,
+    TResult Function(KeypadTabScheme value)? keypad,
+    TResult Function(MessagingTabScheme value)? messaging,
+    TResult Function(EmbeddedTabScheme value)? embedded,
+    required TResult orElse(),
+  }) {
+    if (recents != null) {
+      return recents(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RecentsTabSchemeImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class RecentsTabScheme extends BottomMenuTabScheme {
+  const factory RecentsTabScheme(
+      {final bool enabled,
+      final bool initial,
+      required final String titleL10n,
+      required final String icon,
+      final bool useCdrs}) = _$RecentsTabSchemeImpl;
+  const RecentsTabScheme._() : super._();
+
+  factory RecentsTabScheme.fromJson(Map<String, dynamic> json) =
+      _$RecentsTabSchemeImpl.fromJson;
+
+  @override
+  bool get enabled;
+  @override
+  bool get initial;
+  @override
+  String get titleL10n;
+  @override
+  String get icon;
+  bool get useCdrs;
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RecentsTabSchemeImplCopyWith<_$RecentsTabSchemeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -3047,7 +3371,6 @@ abstract class _$$ContactsTabSchemeImplCopyWith<$Res>
   $Res call(
       {bool enabled,
       bool initial,
-      @BottomMenuTabTypeConverter() BottomMenuTabType type,
       String titleL10n,
       String icon,
       List<String> contactSourceTypes});
@@ -3068,7 +3391,6 @@ class __$$ContactsTabSchemeImplCopyWithImpl<$Res>
   $Res call({
     Object? enabled = null,
     Object? initial = null,
-    Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
     Object? contactSourceTypes = null,
@@ -3082,10 +3404,6 @@ class __$$ContactsTabSchemeImplCopyWithImpl<$Res>
           ? _value.initial
           : initial // ignore: cast_nullable_to_non_nullable
               as bool,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as BottomMenuTabType,
       titleL10n: null == titleL10n
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
@@ -3109,10 +3427,9 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
   const _$ContactsTabSchemeImpl(
       {this.enabled = true,
       this.initial = false,
-      @BottomMenuTabTypeConverter() required this.type,
       required this.titleL10n,
       required this.icon,
-      final List<String> contactSourceTypes = const [],
+      final List<String> contactSourceTypes = const <String>[],
       final String? $type})
       : _contactSourceTypes = contactSourceTypes,
         $type = $type ?? 'contacts',
@@ -3128,9 +3445,6 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
   @JsonKey()
   final bool initial;
   @override
-  @BottomMenuTabTypeConverter()
-  final BottomMenuTabType type;
-  @override
   final String titleL10n;
   @override
   final String icon;
@@ -3144,12 +3458,12 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
     return EqualUnmodifiableListView(_contactSourceTypes);
   }
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString() {
-    return 'BottomMenuTabScheme.contacts(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon, contactSourceTypes: $contactSourceTypes)';
+    return 'BottomMenuTabScheme.contacts(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, contactSourceTypes: $contactSourceTypes)';
   }
 
   @override
@@ -3159,7 +3473,6 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             other is _$ContactsTabSchemeImpl &&
             (identical(other.enabled, enabled) || other.enabled == enabled) &&
             (identical(other.initial, initial) || other.initial == initial) &&
-            (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
             (identical(other.icon, icon) || other.icon == icon) &&
@@ -3169,14 +3482,8 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      enabled,
-      initial,
-      type,
-      titleL10n,
-      icon,
-      const DeepCollectionEquality().hash(_contactSourceTypes));
+  int get hashCode => Object.hash(runtimeType, enabled, initial, titleL10n,
+      icon, const DeepCollectionEquality().hash(_contactSourceTypes));
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -3191,95 +3498,75 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)
-        base,
-    required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            List<String> contactSourceTypes)
+            bool enabled, bool initial, String titleL10n, String icon)
+        favorites,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, bool useCdrs)
+        recents,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, List<String> contactSourceTypes)
         contacts,
     required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)
+            bool enabled, bool initial, String titleL10n, String icon)
+        keypad,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        messaging,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, @IntToStringConverter() String embeddedResourceId)
         embedded,
   }) {
-    return contacts(
-        enabled, initial, type, titleL10n, icon, contactSourceTypes);
+    return contacts(enabled, initial, titleL10n, icon, contactSourceTypes);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)?
-        base,
-    TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
+            bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
             List<String> contactSourceTypes)?
         contacts,
     TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)?
+            bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
   }) {
     return contacts?.call(
-        enabled, initial, type, titleL10n, icon, contactSourceTypes);
+        enabled, initial, titleL10n, icon, contactSourceTypes);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)?
-        base,
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
             List<String> contactSourceTypes)?
         contacts,
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)?
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
     if (contacts != null) {
-      return contacts(
-          enabled, initial, type, titleL10n, icon, contactSourceTypes);
+      return contacts(enabled, initial, titleL10n, icon, contactSourceTypes);
     }
     return orElse();
   }
@@ -3287,9 +3574,12 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(BaseTabScheme value) base,
+    required TResult Function(FavoritesTabScheme value) favorites,
+    required TResult Function(RecentsTabScheme value) recents,
     required TResult Function(ContactsTabScheme value) contacts,
-    required TResult Function(EmbededTabScheme value) embedded,
+    required TResult Function(KeypadTabScheme value) keypad,
+    required TResult Function(MessagingTabScheme value) messaging,
+    required TResult Function(EmbeddedTabScheme value) embedded,
   }) {
     return contacts(this);
   }
@@ -3297,9 +3587,12 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(BaseTabScheme value)? base,
+    TResult? Function(FavoritesTabScheme value)? favorites,
+    TResult? Function(RecentsTabScheme value)? recents,
     TResult? Function(ContactsTabScheme value)? contacts,
-    TResult? Function(EmbededTabScheme value)? embedded,
+    TResult? Function(KeypadTabScheme value)? keypad,
+    TResult? Function(MessagingTabScheme value)? messaging,
+    TResult? Function(EmbeddedTabScheme value)? embedded,
   }) {
     return contacts?.call(this);
   }
@@ -3307,9 +3600,12 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(BaseTabScheme value)? base,
+    TResult Function(FavoritesTabScheme value)? favorites,
+    TResult Function(RecentsTabScheme value)? recents,
     TResult Function(ContactsTabScheme value)? contacts,
-    TResult Function(EmbededTabScheme value)? embedded,
+    TResult Function(KeypadTabScheme value)? keypad,
+    TResult Function(MessagingTabScheme value)? messaging,
+    TResult Function(EmbeddedTabScheme value)? embedded,
     required TResult orElse(),
   }) {
     if (contacts != null) {
@@ -3330,7 +3626,6 @@ abstract class ContactsTabScheme extends BottomMenuTabScheme {
   const factory ContactsTabScheme(
       {final bool enabled,
       final bool initial,
-      @BottomMenuTabTypeConverter() required final BottomMenuTabType type,
       required final String titleL10n,
       required final String icon,
       final List<String> contactSourceTypes}) = _$ContactsTabSchemeImpl;
@@ -3343,9 +3638,6 @@ abstract class ContactsTabScheme extends BottomMenuTabScheme {
   bool get enabled;
   @override
   bool get initial;
-  @override
-  @BottomMenuTabTypeConverter()
-  BottomMenuTabType get type;
   @override
   String get titleL10n;
   @override
@@ -3361,28 +3653,22 @@ abstract class ContactsTabScheme extends BottomMenuTabScheme {
 }
 
 /// @nodoc
-abstract class _$$EmbededTabSchemeImplCopyWith<$Res>
+abstract class _$$KeypadTabSchemeImplCopyWith<$Res>
     implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory _$$EmbededTabSchemeImplCopyWith(_$EmbededTabSchemeImpl value,
-          $Res Function(_$EmbededTabSchemeImpl) then) =
-      __$$EmbededTabSchemeImplCopyWithImpl<$Res>;
+  factory _$$KeypadTabSchemeImplCopyWith(_$KeypadTabSchemeImpl value,
+          $Res Function(_$KeypadTabSchemeImpl) then) =
+      __$$KeypadTabSchemeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool enabled,
-      bool initial,
-      @BottomMenuTabTypeConverter() BottomMenuTabType type,
-      String titleL10n,
-      String icon,
-      int embeddedResourceId});
+  $Res call({bool enabled, bool initial, String titleL10n, String icon});
 }
 
 /// @nodoc
-class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
-    extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$EmbededTabSchemeImpl>
-    implements _$$EmbededTabSchemeImplCopyWith<$Res> {
-  __$$EmbededTabSchemeImplCopyWithImpl(_$EmbededTabSchemeImpl _value,
-      $Res Function(_$EmbededTabSchemeImpl) _then)
+class __$$KeypadTabSchemeImplCopyWithImpl<$Res>
+    extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$KeypadTabSchemeImpl>
+    implements _$$KeypadTabSchemeImplCopyWith<$Res> {
+  __$$KeypadTabSchemeImplCopyWithImpl(
+      _$KeypadTabSchemeImpl _value, $Res Function(_$KeypadTabSchemeImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of BottomMenuTabScheme
@@ -3392,12 +3678,10 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
   $Res call({
     Object? enabled = null,
     Object? initial = null,
-    Object? type = null,
     Object? titleL10n = null,
     Object? icon = null,
-    Object? embeddedResourceId = null,
   }) {
-    return _then(_$EmbededTabSchemeImpl(
+    return _then(_$KeypadTabSchemeImpl(
       enabled: null == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
@@ -3406,10 +3690,544 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
           ? _value.initial
           : initial // ignore: cast_nullable_to_non_nullable
               as bool,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as BottomMenuTabType,
+      titleL10n: null == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String,
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$KeypadTabSchemeImpl extends KeypadTabScheme {
+  const _$KeypadTabSchemeImpl(
+      {this.enabled = true,
+      this.initial = false,
+      required this.titleL10n,
+      required this.icon,
+      final String? $type})
+      : $type = $type ?? 'keypad',
+        super._();
+
+  factory _$KeypadTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
+      _$$KeypadTabSchemeImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool enabled;
+  @override
+  @JsonKey()
+  final bool initial;
+  @override
+  final String titleL10n;
+  @override
+  final String icon;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'BottomMenuTabScheme.keypad(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$KeypadTabSchemeImpl &&
+            (identical(other.enabled, enabled) || other.enabled == enabled) &&
+            (identical(other.initial, initial) || other.initial == initial) &&
+            (identical(other.titleL10n, titleL10n) ||
+                other.titleL10n == titleL10n) &&
+            (identical(other.icon, icon) || other.icon == icon));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, enabled, initial, titleL10n, icon);
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$KeypadTabSchemeImplCopyWith<_$KeypadTabSchemeImpl> get copyWith =>
+      __$$KeypadTabSchemeImplCopyWithImpl<_$KeypadTabSchemeImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        favorites,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, bool useCdrs)
+        recents,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, List<String> contactSourceTypes)
+        contacts,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        keypad,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        messaging,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, @IntToStringConverter() String embeddedResourceId)
+        embedded,
+  }) {
+    return keypad(enabled, initial, titleL10n, icon);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            List<String> contactSourceTypes)?
+        contacts,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
+        embedded,
+  }) {
+    return keypad?.call(enabled, initial, titleL10n, icon);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            List<String> contactSourceTypes)?
+        contacts,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
+        embedded,
+    required TResult orElse(),
+  }) {
+    if (keypad != null) {
+      return keypad(enabled, initial, titleL10n, icon);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(FavoritesTabScheme value) favorites,
+    required TResult Function(RecentsTabScheme value) recents,
+    required TResult Function(ContactsTabScheme value) contacts,
+    required TResult Function(KeypadTabScheme value) keypad,
+    required TResult Function(MessagingTabScheme value) messaging,
+    required TResult Function(EmbeddedTabScheme value) embedded,
+  }) {
+    return keypad(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(FavoritesTabScheme value)? favorites,
+    TResult? Function(RecentsTabScheme value)? recents,
+    TResult? Function(ContactsTabScheme value)? contacts,
+    TResult? Function(KeypadTabScheme value)? keypad,
+    TResult? Function(MessagingTabScheme value)? messaging,
+    TResult? Function(EmbeddedTabScheme value)? embedded,
+  }) {
+    return keypad?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(FavoritesTabScheme value)? favorites,
+    TResult Function(RecentsTabScheme value)? recents,
+    TResult Function(ContactsTabScheme value)? contacts,
+    TResult Function(KeypadTabScheme value)? keypad,
+    TResult Function(MessagingTabScheme value)? messaging,
+    TResult Function(EmbeddedTabScheme value)? embedded,
+    required TResult orElse(),
+  }) {
+    if (keypad != null) {
+      return keypad(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$KeypadTabSchemeImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class KeypadTabScheme extends BottomMenuTabScheme {
+  const factory KeypadTabScheme(
+      {final bool enabled,
+      final bool initial,
+      required final String titleL10n,
+      required final String icon}) = _$KeypadTabSchemeImpl;
+  const KeypadTabScheme._() : super._();
+
+  factory KeypadTabScheme.fromJson(Map<String, dynamic> json) =
+      _$KeypadTabSchemeImpl.fromJson;
+
+  @override
+  bool get enabled;
+  @override
+  bool get initial;
+  @override
+  String get titleL10n;
+  @override
+  String get icon;
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$KeypadTabSchemeImplCopyWith<_$KeypadTabSchemeImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$MessagingTabSchemeImplCopyWith<$Res>
+    implements $BottomMenuTabSchemeCopyWith<$Res> {
+  factory _$$MessagingTabSchemeImplCopyWith(_$MessagingTabSchemeImpl value,
+          $Res Function(_$MessagingTabSchemeImpl) then) =
+      __$$MessagingTabSchemeImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({bool enabled, bool initial, String titleL10n, String icon});
+}
+
+/// @nodoc
+class __$$MessagingTabSchemeImplCopyWithImpl<$Res>
+    extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$MessagingTabSchemeImpl>
+    implements _$$MessagingTabSchemeImplCopyWith<$Res> {
+  __$$MessagingTabSchemeImplCopyWithImpl(_$MessagingTabSchemeImpl _value,
+      $Res Function(_$MessagingTabSchemeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enabled = null,
+    Object? initial = null,
+    Object? titleL10n = null,
+    Object? icon = null,
+  }) {
+    return _then(_$MessagingTabSchemeImpl(
+      enabled: null == enabled
+          ? _value.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      initial: null == initial
+          ? _value.initial
+          : initial // ignore: cast_nullable_to_non_nullable
+              as bool,
+      titleL10n: null == titleL10n
+          ? _value.titleL10n
+          : titleL10n // ignore: cast_nullable_to_non_nullable
+              as String,
+      icon: null == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$MessagingTabSchemeImpl extends MessagingTabScheme {
+  const _$MessagingTabSchemeImpl(
+      {this.enabled = true,
+      this.initial = false,
+      required this.titleL10n,
+      required this.icon,
+      final String? $type})
+      : $type = $type ?? 'messaging',
+        super._();
+
+  factory _$MessagingTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MessagingTabSchemeImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool enabled;
+  @override
+  @JsonKey()
+  final bool initial;
+  @override
+  final String titleL10n;
+  @override
+  final String icon;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'BottomMenuTabScheme.messaging(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MessagingTabSchemeImpl &&
+            (identical(other.enabled, enabled) || other.enabled == enabled) &&
+            (identical(other.initial, initial) || other.initial == initial) &&
+            (identical(other.titleL10n, titleL10n) ||
+                other.titleL10n == titleL10n) &&
+            (identical(other.icon, icon) || other.icon == icon));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, enabled, initial, titleL10n, icon);
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MessagingTabSchemeImplCopyWith<_$MessagingTabSchemeImpl> get copyWith =>
+      __$$MessagingTabSchemeImplCopyWithImpl<_$MessagingTabSchemeImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        favorites,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, bool useCdrs)
+        recents,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, List<String> contactSourceTypes)
+        contacts,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        keypad,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        messaging,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, @IntToStringConverter() String embeddedResourceId)
+        embedded,
+  }) {
+    return messaging(enabled, initial, titleL10n, icon);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            List<String> contactSourceTypes)?
+        contacts,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
+        embedded,
+  }) {
+    return messaging?.call(enabled, initial, titleL10n, icon);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            List<String> contactSourceTypes)?
+        contacts,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
+        embedded,
+    required TResult orElse(),
+  }) {
+    if (messaging != null) {
+      return messaging(enabled, initial, titleL10n, icon);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(FavoritesTabScheme value) favorites,
+    required TResult Function(RecentsTabScheme value) recents,
+    required TResult Function(ContactsTabScheme value) contacts,
+    required TResult Function(KeypadTabScheme value) keypad,
+    required TResult Function(MessagingTabScheme value) messaging,
+    required TResult Function(EmbeddedTabScheme value) embedded,
+  }) {
+    return messaging(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(FavoritesTabScheme value)? favorites,
+    TResult? Function(RecentsTabScheme value)? recents,
+    TResult? Function(ContactsTabScheme value)? contacts,
+    TResult? Function(KeypadTabScheme value)? keypad,
+    TResult? Function(MessagingTabScheme value)? messaging,
+    TResult? Function(EmbeddedTabScheme value)? embedded,
+  }) {
+    return messaging?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(FavoritesTabScheme value)? favorites,
+    TResult Function(RecentsTabScheme value)? recents,
+    TResult Function(ContactsTabScheme value)? contacts,
+    TResult Function(KeypadTabScheme value)? keypad,
+    TResult Function(MessagingTabScheme value)? messaging,
+    TResult Function(EmbeddedTabScheme value)? embedded,
+    required TResult orElse(),
+  }) {
+    if (messaging != null) {
+      return messaging(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$MessagingTabSchemeImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class MessagingTabScheme extends BottomMenuTabScheme {
+  const factory MessagingTabScheme(
+      {final bool enabled,
+      final bool initial,
+      required final String titleL10n,
+      required final String icon}) = _$MessagingTabSchemeImpl;
+  const MessagingTabScheme._() : super._();
+
+  factory MessagingTabScheme.fromJson(Map<String, dynamic> json) =
+      _$MessagingTabSchemeImpl.fromJson;
+
+  @override
+  bool get enabled;
+  @override
+  bool get initial;
+  @override
+  String get titleL10n;
+  @override
+  String get icon;
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$MessagingTabSchemeImplCopyWith<_$MessagingTabSchemeImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$EmbeddedTabSchemeImplCopyWith<$Res>
+    implements $BottomMenuTabSchemeCopyWith<$Res> {
+  factory _$$EmbeddedTabSchemeImplCopyWith(_$EmbeddedTabSchemeImpl value,
+          $Res Function(_$EmbeddedTabSchemeImpl) then) =
+      __$$EmbeddedTabSchemeImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId});
+}
+
+/// @nodoc
+class __$$EmbeddedTabSchemeImplCopyWithImpl<$Res>
+    extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$EmbeddedTabSchemeImpl>
+    implements _$$EmbeddedTabSchemeImplCopyWith<$Res> {
+  __$$EmbeddedTabSchemeImplCopyWithImpl(_$EmbeddedTabSchemeImpl _value,
+      $Res Function(_$EmbeddedTabSchemeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of BottomMenuTabScheme
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enabled = null,
+    Object? initial = null,
+    Object? titleL10n = null,
+    Object? icon = null,
+    Object? embeddedResourceId = null,
+  }) {
+    return _then(_$EmbeddedTabSchemeImpl(
+      enabled: null == enabled
+          ? _value.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      initial: null == initial
+          ? _value.initial
+          : initial // ignore: cast_nullable_to_non_nullable
+              as bool,
       titleL10n: null == titleL10n
           ? _value.titleL10n
           : titleL10n // ignore: cast_nullable_to_non_nullable
@@ -3421,7 +4239,7 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
       embeddedResourceId: null == embeddedResourceId
           ? _value.embeddedResourceId
           : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
     ));
   }
 }
@@ -3429,20 +4247,19 @@ class __$$EmbededTabSchemeImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$EmbededTabSchemeImpl extends EmbededTabScheme {
-  const _$EmbededTabSchemeImpl(
+class _$EmbeddedTabSchemeImpl extends EmbeddedTabScheme {
+  const _$EmbeddedTabSchemeImpl(
       {this.enabled = true,
       this.initial = false,
-      @BottomMenuTabTypeConverter() required this.type,
       required this.titleL10n,
       required this.icon,
-      required this.embeddedResourceId,
+      @IntToStringConverter() required this.embeddedResourceId,
       final String? $type})
       : $type = $type ?? 'embedded',
         super._();
 
-  factory _$EmbededTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
-      _$$EmbededTabSchemeImplFromJson(json);
+  factory _$EmbeddedTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EmbeddedTabSchemeImplFromJson(json);
 
   @override
   @JsonKey()
@@ -3451,31 +4268,28 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
   @JsonKey()
   final bool initial;
   @override
-  @BottomMenuTabTypeConverter()
-  final BottomMenuTabType type;
-  @override
   final String titleL10n;
   @override
   final String icon;
   @override
-  final int embeddedResourceId;
+  @IntToStringConverter()
+  final String embeddedResourceId;
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString() {
-    return 'BottomMenuTabScheme.embedded(enabled: $enabled, initial: $initial, type: $type, titleL10n: $titleL10n, icon: $icon, embeddedResourceId: $embeddedResourceId)';
+    return 'BottomMenuTabScheme.embedded(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, embeddedResourceId: $embeddedResourceId)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EmbededTabSchemeImpl &&
+            other is _$EmbeddedTabSchemeImpl &&
             (identical(other.enabled, enabled) || other.enabled == enabled) &&
             (identical(other.initial, initial) || other.initial == initial) &&
-            (identical(other.type, type) || other.type == type) &&
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
             (identical(other.icon, icon) || other.icon == icon) &&
@@ -3486,110 +4300,90 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, enabled, initial, type, titleL10n, icon, embeddedResourceId);
+      runtimeType, enabled, initial, titleL10n, icon, embeddedResourceId);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$EmbededTabSchemeImplCopyWith<_$EmbededTabSchemeImpl> get copyWith =>
-      __$$EmbededTabSchemeImplCopyWithImpl<_$EmbededTabSchemeImpl>(
+  _$$EmbeddedTabSchemeImplCopyWith<_$EmbeddedTabSchemeImpl> get copyWith =>
+      __$$EmbeddedTabSchemeImplCopyWithImpl<_$EmbeddedTabSchemeImpl>(
           this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)
-        base,
-    required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            List<String> contactSourceTypes)
+            bool enabled, bool initial, String titleL10n, String icon)
+        favorites,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, bool useCdrs)
+        recents,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, List<String> contactSourceTypes)
         contacts,
     required TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)
+            bool enabled, bool initial, String titleL10n, String icon)
+        keypad,
+    required TResult Function(
+            bool enabled, bool initial, String titleL10n, String icon)
+        messaging,
+    required TResult Function(bool enabled, bool initial, String titleL10n,
+            String icon, @IntToStringConverter() String embeddedResourceId)
         embedded,
   }) {
-    return embedded(
-        enabled, initial, type, titleL10n, icon, embeddedResourceId);
+    return embedded(enabled, initial, titleL10n, icon, embeddedResourceId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)?
-        base,
-    TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
+            bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
             List<String> contactSourceTypes)?
         contacts,
     TResult? Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)?
+            bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult? Function(
+            bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
   }) {
     return embedded?.call(
-        enabled, initial, type, titleL10n, icon, embeddedResourceId);
+        enabled, initial, titleL10n, icon, embeddedResourceId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon)?
-        base,
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        favorites,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            bool useCdrs)?
+        recents,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
             List<String> contactSourceTypes)?
         contacts,
-    TResult Function(
-            bool enabled,
-            bool initial,
-            @BottomMenuTabTypeConverter() BottomMenuTabType type,
-            String titleL10n,
-            String icon,
-            int embeddedResourceId)?
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        keypad,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
+        messaging,
+    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
+            @IntToStringConverter() String embeddedResourceId)?
         embedded,
     required TResult orElse(),
   }) {
     if (embedded != null) {
-      return embedded(
-          enabled, initial, type, titleL10n, icon, embeddedResourceId);
+      return embedded(enabled, initial, titleL10n, icon, embeddedResourceId);
     }
     return orElse();
   }
@@ -3597,9 +4391,12 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(BaseTabScheme value) base,
+    required TResult Function(FavoritesTabScheme value) favorites,
+    required TResult Function(RecentsTabScheme value) recents,
     required TResult Function(ContactsTabScheme value) contacts,
-    required TResult Function(EmbededTabScheme value) embedded,
+    required TResult Function(KeypadTabScheme value) keypad,
+    required TResult Function(MessagingTabScheme value) messaging,
+    required TResult Function(EmbeddedTabScheme value) embedded,
   }) {
     return embedded(this);
   }
@@ -3607,9 +4404,12 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(BaseTabScheme value)? base,
+    TResult? Function(FavoritesTabScheme value)? favorites,
+    TResult? Function(RecentsTabScheme value)? recents,
     TResult? Function(ContactsTabScheme value)? contacts,
-    TResult? Function(EmbededTabScheme value)? embedded,
+    TResult? Function(KeypadTabScheme value)? keypad,
+    TResult? Function(MessagingTabScheme value)? messaging,
+    TResult? Function(EmbeddedTabScheme value)? embedded,
   }) {
     return embedded?.call(this);
   }
@@ -3617,9 +4417,12 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(BaseTabScheme value)? base,
+    TResult Function(FavoritesTabScheme value)? favorites,
+    TResult Function(RecentsTabScheme value)? recents,
     TResult Function(ContactsTabScheme value)? contacts,
-    TResult Function(EmbededTabScheme value)? embedded,
+    TResult Function(KeypadTabScheme value)? keypad,
+    TResult Function(MessagingTabScheme value)? messaging,
+    TResult Function(EmbeddedTabScheme value)? embedded,
     required TResult orElse(),
   }) {
     if (embedded != null) {
@@ -3630,43 +4433,41 @@ class _$EmbededTabSchemeImpl extends EmbededTabScheme {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EmbededTabSchemeImplToJson(
+    return _$$EmbeddedTabSchemeImplToJson(
       this,
     );
   }
 }
 
-abstract class EmbededTabScheme extends BottomMenuTabScheme {
-  const factory EmbededTabScheme(
-      {final bool enabled,
-      final bool initial,
-      @BottomMenuTabTypeConverter() required final BottomMenuTabType type,
-      required final String titleL10n,
-      required final String icon,
-      required final int embeddedResourceId}) = _$EmbededTabSchemeImpl;
-  const EmbededTabScheme._() : super._();
+abstract class EmbeddedTabScheme extends BottomMenuTabScheme {
+  const factory EmbeddedTabScheme(
+          {final bool enabled,
+          final bool initial,
+          required final String titleL10n,
+          required final String icon,
+          @IntToStringConverter() required final String embeddedResourceId}) =
+      _$EmbeddedTabSchemeImpl;
+  const EmbeddedTabScheme._() : super._();
 
-  factory EmbededTabScheme.fromJson(Map<String, dynamic> json) =
-      _$EmbededTabSchemeImpl.fromJson;
+  factory EmbeddedTabScheme.fromJson(Map<String, dynamic> json) =
+      _$EmbeddedTabSchemeImpl.fromJson;
 
   @override
   bool get enabled;
   @override
   bool get initial;
   @override
-  @BottomMenuTabTypeConverter()
-  BottomMenuTabType get type;
-  @override
   String get titleL10n;
   @override
   String get icon;
-  int get embeddedResourceId;
+  @IntToStringConverter()
+  String get embeddedResourceId;
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$EmbededTabSchemeImplCopyWith<_$EmbededTabSchemeImpl> get copyWith =>
+  _$$EmbeddedTabSchemeImplCopyWith<_$EmbeddedTabSchemeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -3789,7 +4590,7 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
                   type: 'terms',
                   titleL10n: 'settings_ListViewTileTitle_termsConditions',
                   icon: '0xeedf',
-                  embeddedResourceId: 0),
+                  embeddedResourceId: '0'),
               AppConfigSettingsItem(
                   enabled: true,
                   type: 'about',
@@ -4097,7 +4898,11 @@ mixin _$AppConfigSettingsItem {
   String get titleL10n => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
-  int? get embeddedResourceId => throw _privateConstructorUsedError;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+  @IntToStringOptionalConverter()
+  String? get embeddedResourceId => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigSettingsItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -4120,7 +4925,7 @@ abstract class $AppConfigSettingsItemCopyWith<$Res> {
       String titleL10n,
       String type,
       String icon,
-      int? embeddedResourceId});
+      @IntToStringOptionalConverter() String? embeddedResourceId});
 }
 
 /// @nodoc
@@ -4165,7 +4970,7 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
       embeddedResourceId: freezed == embeddedResourceId
           ? _value.embeddedResourceId
           : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
     ) as $Val);
   }
 }
@@ -4184,7 +4989,7 @@ abstract class _$$AppConfigSettingsItemImplCopyWith<$Res>
       String titleL10n,
       String type,
       String icon,
-      int? embeddedResourceId});
+      @IntToStringOptionalConverter() String? embeddedResourceId});
 }
 
 /// @nodoc
@@ -4227,7 +5032,7 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
       embeddedResourceId: freezed == embeddedResourceId
           ? _value.embeddedResourceId
           : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
     ));
   }
 }
@@ -4241,7 +5046,7 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
       required this.titleL10n,
       required this.type,
       required this.icon,
-      this.embeddedResourceId})
+      @IntToStringOptionalConverter() this.embeddedResourceId})
       : super._();
 
   factory _$AppConfigSettingsItemImpl.fromJson(Map<String, dynamic> json) =>
@@ -4256,8 +5061,12 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
   final String type;
   @override
   final String icon;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  final int? embeddedResourceId;
+  @IntToStringOptionalConverter()
+  final String? embeddedResourceId;
 
   @override
   String toString() {
@@ -4302,11 +5111,12 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
 
 abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   const factory _AppConfigSettingsItem(
-      {final bool enabled,
-      required final String titleL10n,
-      required final String type,
-      required final String icon,
-      final int? embeddedResourceId}) = _$AppConfigSettingsItemImpl;
+          {final bool enabled,
+          required final String titleL10n,
+          required final String type,
+          required final String icon,
+          @IntToStringOptionalConverter() final String? embeddedResourceId}) =
+      _$AppConfigSettingsItemImpl;
   const _AppConfigSettingsItem._() : super._();
 
   factory _AppConfigSettingsItem.fromJson(Map<String, dynamic> json) =
@@ -4320,8 +5130,12 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   String get type;
   @override
   String get icon;
+
+  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  int? get embeddedResourceId;
+  @IntToStringOptionalConverter()
+  String? get embeddedResourceId;
 
   /// Create a copy of AppConfigSettingsItem
   /// with the given fields replaced by the non-null parameter values.

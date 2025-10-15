@@ -91,6 +91,13 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper {
     );
   }
 
+  Stream<Contact?> watchContactByPhoneNumber(String number) {
+    return _appDatabase.contactsDao.watchContactByPhoneNumber(number).map((data) {
+      if (data == null) return null;
+      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
+    });
+  }
+
   Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
     return _appDatabase.favoritesDao.insertFavoriteByContactPhoneId(contactPhone.id);
   }

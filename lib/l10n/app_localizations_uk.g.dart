@@ -947,6 +947,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationScreen_titlePrefix => 'Діалог:';
 
   @override
+  String get messaging_ConversationScreen_titleAvailable => 'доступний';
+
+  @override
   String get messaging_ConversationsScreen_chatsSearch_hint =>
       'Введіть ім\'я чату або користувача';
 
@@ -1632,6 +1635,34 @@ class AppLocalizationsUk extends AppLocalizations {
       'Цільовий бітрейт відео: ';
 
   @override
+  String get settings_encoding_Section_extra_sdp_mod_title =>
+      'Додаткові модифікації SDP';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove =>
+      'Видалити extmaps';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
+      'Видалити усі рядки extmap з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps =>
+      'Видалити статичні rtpmap рядки';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
+      'Видалити статичні RTP map рядки для аудіо кодеків (наприклад, PCMU, PCMA) з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8 =>
+      'Перепризначити код TE_8k на 101';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
+      'Змінити тип навантаження TE8 на 101 в SDP для кращої сумісності з деякими SIP клієнтами.';
+
+  @override
   String get settings_encoding_Section_value_auto => 'Авто';
 
   @override
@@ -2077,6 +2108,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get themeMode_system => 'Системний';
 
   @override
+  String get undefined_autoprovision_invalidToken =>
+      'Облікові дані для автоконфігурації були відхилені сервером. Будь ласка, запросіть нове посилання для конфігурації';
+
+  @override
+  String get undefined_autoprovision_invalidToken_title =>
+      'Недійсна конфігурація';
+
+  @override
+  String get undefined_stackScreenNotSupported =>
+      'Функція не підтримується. Зверніться до адміністратора.';
+
+  @override
+  String get undefined_stackScreenNotSupported_title =>
+      'Функція не підтримується';
+
+  @override
   String get user_agreement_agrement_link => 'Умови договору';
 
   @override
@@ -2149,20 +2196,34 @@ class AppLocalizationsUk extends AppLocalizations {
       'Web resource error';
 
   @override
-  String get undefined_autoprovision_invalidToken =>
-      'Облікові дані для автоконфігурації були відхилені сервером. Будь ласка, запросіть нове посилання для конфігурації';
+  String get webview_defaultError_title => 'Щось пішло не так';
 
   @override
-  String get undefined_autoprovision_invalidToken_title =>
-      'Недійсна конфігурація';
+  String webview_defaultError_details(String description, int code) {
+    return '$description (код: $code)';
+  }
 
   @override
-  String get undefined_stackScreenNotSupported =>
-      'Функція не підтримується. Зверніться до адміністратора.';
+  String get webview_defaultError_reload => 'Перезавантажити';
 
   @override
-  String get undefined_stackScreenNotSupported_title =>
-      'Функція не підтримується';
+  String get webview_sslError_title => 'Ваше з’єднання не є приватним';
+
+  @override
+  String get webview_sslError_message =>
+      'Сертифікат цього сайту не є надійним. Сторінку неможливо відобразити.';
+
+  @override
+  String get webview_sslError_tryAgain => 'Спробувати ще раз';
+
+  @override
+  String get webview_sslError_details => 'Деталі';
+
+  @override
+  String get webview_sslError_details_type => 'Тип';
+
+  @override
+  String get webview_sslError_details_url => 'URL';
 
   @override
   String get presence_preset_available_name => 'Доступний';

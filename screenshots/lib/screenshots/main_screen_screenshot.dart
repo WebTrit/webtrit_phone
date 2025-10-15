@@ -68,38 +68,35 @@ class MainScreenScreenshot extends StatelessWidget {
 
   List<BottomMenuTab> _defaultTabs(BuildContext context) {
     return [
-      const BottomMenuTab(
+      const FavoritesBottomMenuTab(
         enabled: true,
         initial: true,
-        flavor: MainFlavor.favorites,
         titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
         icon: Icons.star,
       ),
-      const BottomMenuTab(
+      const RecentsBottomMenuTab(
         enabled: true,
         initial: false,
-        flavor: MainFlavor.recents,
         titleL10n: 'main_BottomNavigationBarItemLabel_recents',
         icon: Icons.history,
+        useCdrs: false,
       ),
-      const BottomMenuTab(
+      const ContactsBottomMenuTab(
         enabled: true,
         initial: false,
-        flavor: MainFlavor.contacts,
         titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
         icon: Icons.people,
+        contactSourceTypes: [],
       ),
-      const BottomMenuTab(
+      const KeypadBottomMenuTab(
         enabled: true,
         initial: false,
-        flavor: MainFlavor.keypad,
         titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
         icon: Icons.dialpad,
       ),
-      BottomMenuTab(
+      MessagingBottomMenuTab(
         enabled: true,
         initial: false,
-        flavor: MainFlavor.messaging,
         titleL10n: context.l10n.main_BottomNavigationBarItemLabel_chats,
         icon: Icons.messenger_outline,
       ),
@@ -134,6 +131,7 @@ class MainScreenScreenshot extends StatelessWidget {
             videoEnabled: true,
             chatsEnabled: false,
             smssEnabled: false,
+            cdrsEnabled: false,
           ),
         );
       case MainFlavor.recents:
@@ -173,6 +171,8 @@ class MainScreenScreenshot extends StatelessWidget {
           create: (_) => MockEmbeddedCubit.mainScreen(),
           child: EmbeddedScreen(
             initialUri: Uri.parse('https://example.com'),
+            mediaQueryMetricsData: null,
+            deviceInfoData: null,
             appBar: MainAppBar(
               title: const Text('Embedded'),
               context: context,

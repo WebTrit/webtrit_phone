@@ -14,6 +14,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -91,6 +92,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final bottomMenuFeature = context.watch<FeatureAccess>().bottomMenuFeature;
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<WebtritApiClient>(
@@ -245,6 +248,18 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ),
           dispose: (value) => value.clearSettings(),
         ),
+        RepositoryProvider<CdrsLocalRepository>(
+          create: (context) => CdrsLocalRepositoryDriftImpl(
+            context.read<AppDatabase>(),
+          ),
+        ),
+        RepositoryProvider<CdrsRemoteRepository>(
+          create: (context) => CdrsRemoteRepositoryApiImpl(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.session.token!,
+            _sessionGuard,
+          ),
+        ),
       ],
 
       /// Bridge layers for background/periodic tasks between repositories and Blocs
@@ -268,6 +283,15 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     dispose: (context, service) => service.dispose(),
                     lazy: false,
                   ),
+                  if (bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
+                    Provider<CdrsSyncWorker>(
+                      create: (context) => CdrsSyncWorker(
+                        context.read<CdrsLocalRepository>(),
+                        context.read<CdrsRemoteRepository>(),
+                      )..init(),
+                      dispose: (context, worker) => worker.dispose(),
+                      lazy: false,
+                    ),
                 ],
 
                 /// Builds and wires up all feature-level BLoCs together with the main shell widgets.
@@ -319,12 +343,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           final localContactsRepository = context.read<LocalContactsRepository>();
                           final appDatabase = context.read<AppDatabase>();
                           final appPreferences = context.read<AppPreferences>();
-                          final featureAccess = context.read<FeatureAccess>();
                           final appPermissions = context.read<AppPermissions>();
 
                           Future<bool> isFutureEnabled() async {
-                            final contactTab =
-                                featureAccess.bottomMenuFeature.getTabEnabled(MainFlavor.contacts)?.toContacts;
+                            final contactTab = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
                             final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
                             return contactSourceTypes.contains(ContactSourceType.local);
                           }
@@ -388,6 +410,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             contactRepository: context.read<ContactsRepository>(),
                           );
 
+                          // Try to get CDRs sync worker to trigger immediate sync after call ends
+                          // If CDRs feature is disabled, the worker will be null and no sync will be performed
+                          final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
+
                           return CallBloc(
                             coreUrl: appBloc.state.session.coreUrl!,
                             tenantId: appBloc.state.session.tenantId,
@@ -403,6 +429,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             callkeep: _callkeep,
                             callkeepConnections: _callkeepConnections,
                             sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
+                            sdpSanitizer: RemoteSdpSanitizer(),
                             webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
                             userMediaBuilder: userMediaBuilder,
                             contactNameResolver: contactNameResolver,
@@ -411,6 +438,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             iceFilter: FilterWithAppSettings(appPreferences),
                             peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                             sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
+                            onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
                           )..add(const CallStarted());
                         },
                       ),

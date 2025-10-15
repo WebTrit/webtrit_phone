@@ -44,19 +44,14 @@ Future<void> bootstrap() async {
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
+  final appLabels = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
 
   await AppPath.init();
   await AppPermissions.init(featureAccess);
   await AppCertificates.init();
   await AppTime.init();
   await SessionCleanupWorker.init();
-  await AppLogger.init(
-    remoteConfigService: remoteFirebaseConfigService,
-    packageInfo: packageInfo,
-    deviceInfo: deviceInfo,
-    appInfo: appInfo,
-    secureStorage: secureStorage,
-  );
+  await AppLogger.init(remoteFirebaseConfigService, appLabels);
   await AppLifecycle.initMaster();
 
   await _initCallkeep(appPreferences, featureAccess);
@@ -136,14 +131,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
+  final appLabelsProvider = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
-  await AppLogger.init(
-    remoteConfigService: remoteCacheConfigService,
-    packageInfo: packageInfo,
-    deviceInfo: deviceInfo,
-    appInfo: appInfo,
-    secureStorage: secureStorage,
-  );
+  await AppLogger.init(remoteCacheConfigService, appLabelsProvider);
 
   final appPush = AppRemotePush.fromFCM(message);
 

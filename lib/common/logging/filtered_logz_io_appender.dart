@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 // ignore: depend_on_referenced_packages
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/base_remote_appender.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -29,8 +31,9 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
     try {
       await super.sendLogEventsWithDio(entries, userProperties, cancelToken);
     } on DioException catch (e) {
-      if (RemoteLogFilter._shouldIgnoreDioConnectionError(e)) {
+      if (RemoteLogFilter._shouldIgnoreDioConnectionError(e, url)) {
         // Ignore logging this error to prevent log spam
+        debugPrint('LogzIO DioException (ignored): $e');
       } else {
         _logger.warning('LogzIO DioException (not ignored): $e');
       }
@@ -41,18 +44,14 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
 
   @override
   void handle(LogRecord record) {
-    if (RemoteLogFilter.shouldLog(record, minLevel: minLevel)) {
+    if (RemoteLogFilter.shouldLog(record, url, minLevel: minLevel)) {
       super.handle(record);
     }
   }
 }
 
 class RemoteLogFilter {
-  static const List<String> ignoredHosts = [
-    'listener.logz.io',
-  ];
-
-  static bool shouldLog(LogRecord record, {Level? minLevel}) {
+  static bool shouldLog(LogRecord record, String url, {Level? minLevel}) {
     // Check minimum level
     if (minLevel != null && record.level < minLevel) {
       return false;
@@ -65,12 +64,22 @@ class RemoteLogFilter {
 
     // Filter specific Dio errors
     final dioError = record.error as DioException;
-    return !_shouldIgnoreDioConnectionError(dioError);
+    return !_shouldIgnoreDioConnectionError(dioError, url);
   }
 
-  static bool _shouldIgnoreDioConnectionError(DioException dioError) {
+  static bool _shouldIgnoreDioConnectionError(DioException dioError, String url) {
+    final ignoredHosts = {'listener.logz.io'};
+
+    Uri? uri = Uri.tryParse(url);
+    if (uri != null) ignoredHosts.add(uri.host);
+
     // Skip adding spam logs to the buffer if there is no internet connection for the specified hosts
-    return (dioError.type == DioExceptionType.connectionTimeout || dioError.type == DioExceptionType.connectionError) &&
-        ignoredHosts.any((host) => dioError.toString().contains(host));
+    final errorHost = switch (dioError.error) {
+      SocketException se => se.address?.host,
+      HttpException he => he.uri?.host,
+      _ => null,
+    };
+
+    return ignoredHosts.contains(errorHost);
   }
 }

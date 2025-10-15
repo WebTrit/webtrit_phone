@@ -1,9 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_appearance_theme/converters/converters.dart';
-import 'package:webtrit_appearance_theme/parsers/parsers.dart';
 
-import 'bottom_menu_tab_type.dart';
 import 'embedded_resource.dart';
 
 part 'app_config.freezed.dart';
@@ -53,9 +51,12 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigModeSelectAction({
     required bool enabled,
-    int? embeddedId,
     required String type,
     required String titleL10n,
+
+    /// TODO: Migration workaround - accepts both int and string IDs.
+    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+    @IntToStringOptionalConverter() String? embeddedId,
     @Default(false) bool isLaunchButtonVisible,
     @Default(false) bool isLaunchScreen,
   }) = _AppConfigModeSelectAction;
@@ -71,39 +72,35 @@ class AppConfigMain with _$AppConfigMain {
   const factory AppConfigMain({
     @Default(
       AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
-        BaseTabScheme(
+        FavoritesTabScheme(
           enabled: true,
           initial: false,
-          type: BottomMenuTabType.favorites,
           titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
           icon: '0xe5fd',
         ),
-        BaseTabScheme(
-          enabled: true,
+        RecentsTabScheme(
+          enabled: false,
           initial: false,
-          type: BottomMenuTabType.recents,
           titleL10n: 'main_BottomNavigationBarItemLabel_recents',
           icon: '0xe03a',
+          useCdrs: false,
         ),
         ContactsTabScheme(
           enabled: true,
           initial: false,
-          type: BottomMenuTabType.contacts,
           titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
           icon: '0xee35',
           contactSourceTypes: ['local', 'external'],
         ),
-        BaseTabScheme(
+        KeypadTabScheme(
           enabled: true,
           initial: true,
-          type: BottomMenuTabType.keypad,
           titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
           icon: '0xe1ce',
         ),
-        BaseTabScheme(
+        MessagingTabScheme(
           enabled: false,
           initial: false,
-          type: BottomMenuTabType.messaging,
           titleL10n: 'main_BottomNavigationBarItemLabel_chats',
           icon: '0xe155',
         )
@@ -214,52 +211,71 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
     int? opusBitrate,
     bool? opusStereo,
     bool? opusDtx,
+    bool? removeExtmaps,
+    bool? removeStaticAudioRtpMaps,
+    bool? remapTE8payloadTo101,
   }) = _EncodingDefaultPresetOverride;
 
   factory EncodingDefaultPresetOverride.fromJson(Map<String, dynamic> json) =>
       _$EncodingDefaultPresetOverrideFromJson(json);
 }
 
-@freezed
+@Freezed(unionKey: 'type')
 class BottomMenuTabScheme with _$BottomMenuTabScheme {
-  static const String dataContactSourceTypes = 'contactSourceTypes';
-  static const String dataResource = 'resource';
-
   const BottomMenuTabScheme._();
 
   @JsonSerializable(explicitToJson: true)
-  const factory BottomMenuTabScheme.base({
+  const factory BottomMenuTabScheme.favorites({
     @Default(true) bool enabled,
     @Default(false) bool initial,
-    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-  }) = BaseTabScheme;
+  }) = FavoritesTabScheme;
+
+  @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.recents({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    required String titleL10n,
+    required String icon,
+    @Default(false) bool useCdrs,
+  }) = RecentsTabScheme;
 
   @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.contacts({
     @Default(true) bool enabled,
     @Default(false) bool initial,
-    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    @Default([]) List<String> contactSourceTypes,
+    @Default(<String>[]) List<String> contactSourceTypes,
   }) = ContactsTabScheme;
+
+  @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.keypad({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    required String titleL10n,
+    required String icon,
+  }) = KeypadTabScheme;
+
+  @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.messaging({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    required String titleL10n,
+    required String icon,
+  }) = MessagingTabScheme;
 
   @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.embedded({
     @Default(true) bool enabled,
     @Default(false) bool initial,
-    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    required int embeddedResourceId,
-  }) = EmbededTabScheme;
+    @IntToStringConverter() required String embeddedResourceId,
+  }) = EmbeddedTabScheme;
 
-  factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => BottomMenuTabSchemeParser.fromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => BottomMenuTabSchemeParser.toJson(this);
+  factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => _$BottomMenuTabSchemeFromJson(json);
 }
 
 @freezed
@@ -296,7 +312,7 @@ class AppConfigSettings with _$AppConfigSettings {
             type: 'terms',
             titleL10n: 'settings_ListViewTileTitle_termsConditions',
             icon: '0xeedf',
-            embeddedResourceId: 0,
+            embeddedResourceId: '0',
           ),
           AppConfigSettingsItem(
             enabled: true,
@@ -349,7 +365,10 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     required String titleL10n,
     required String type,
     required String icon,
-    int? embeddedResourceId,
+
+    /// TODO: Migration workaround - accepts both int and string IDs.
+    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+    @IntToStringOptionalConverter() String? embeddedResourceId,
   }) = _AppConfigSettingsItem;
 
   factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);

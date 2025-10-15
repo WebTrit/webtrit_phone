@@ -97,6 +97,8 @@ _$ElevatedButtonWidgetConfigImpl _$$ElevatedButtonWidgetConfigImplFromJson(
       textColor: json['textColor'] as String?,
       iconColor: json['iconColor'] as String?,
       disabledIconColor: json['disabledIconColor'] as String?,
+      disabledBackgroundColor: json['disabledBackgroundColor'] as String?,
+      disabledForegroundColor: json['disabledForegroundColor'] as String?,
     );
 
 Map<String, dynamic> _$$ElevatedButtonWidgetConfigImplToJson(
@@ -107,6 +109,8 @@ Map<String, dynamic> _$$ElevatedButtonWidgetConfigImplToJson(
       'textColor': instance.textColor,
       'iconColor': instance.iconColor,
       'disabledIconColor': instance.disabledIconColor,
+      'disabledBackgroundColor': instance.disabledBackgroundColor,
+      'disabledForegroundColor': instance.disabledForegroundColor,
     };
 
 _$GroupWidgetConfigImpl _$$GroupWidgetConfigImplFromJson(
@@ -245,12 +249,14 @@ _$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
     _$ImageAssetsConfigImpl(
       primaryOnboardingLogo: json['primaryOnboardingLogo'] == null
           ? const ImageAssetConfig(
-              uri: 'asset://assets/primary_onboardin_logo.svg')
+              imageSource:
+                  ImageSource(uri: 'asset://assets/primary_onboardin_logo.svg'))
           : ImageAssetConfig.fromJson(
               json['primaryOnboardingLogo'] as Map<String, dynamic>),
       secondaryOnboardingLogo: json['secondaryOnboardingLogo'] == null
           ? const ImageAssetConfig(
-              uri: 'asset://assets/secondary_onboardin_logo.svg')
+              imageSource: ImageSource(
+                  uri: 'asset://assets/secondary_onboardin_logo.svg'))
           : ImageAssetConfig.fromJson(
               json['secondaryOnboardingLogo'] as Map<String, dynamic>),
       appIcon: json['appIcon'] == null
@@ -275,21 +281,25 @@ Map<String, dynamic> _$$ImageAssetsConfigImplToJson(
 _$ImageAssetConfigImpl _$$ImageAssetConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ImageAssetConfigImpl(
-      uri: json['uri'] as String,
+      imageSource: json['imageSource'] == null
+          ? null
+          : ImageSource.fromJson(json['imageSource'] as Map<String, dynamic>),
       widthFactor: (json['widthFactor'] as num?)?.toDouble() ?? 1.0,
       labelColor: json['labelColor'] as String? ?? '#FFFFFF',
       metadata: json['metadata'] == null
           ? const Metadata()
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+      uri: json['uri'] as String?,
     );
 
 Map<String, dynamic> _$$ImageAssetConfigImplToJson(
         _$ImageAssetConfigImpl instance) =>
     <String, dynamic>{
-      'uri': instance.uri,
+      'imageSource': instance.imageSource?.toJson(),
       'widthFactor': instance.widthFactor,
       'labelColor': instance.labelColor,
       'metadata': instance.metadata.toJson(),
+      'uri': instance.uri,
     };
 
 _$AppIconWidgetConfigImpl _$$AppIconWidgetConfigImplFromJson(

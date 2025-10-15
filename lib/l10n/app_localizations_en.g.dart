@@ -930,6 +930,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConversationScreen_titlePrefix => 'Dialog:';
 
   @override
+  String get messaging_ConversationScreen_titleAvailable => 'available';
+
+  @override
   String get messaging_ConversationsScreen_chatsSearch_hint =>
       'Enter chat or user name';
 
@@ -1605,6 +1608,34 @@ class AppLocalizationsEn extends AppLocalizations {
       'Video target bitrate: ';
 
   @override
+  String get settings_encoding_Section_extra_sdp_mod_title =>
+      'Extra SDP modifications';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove =>
+      'Remove extmaps';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
+      'Remove all extmap lines from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps =>
+      'Remove static rtpmap lines';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
+      'Remove static RTP map lines for audio codecs (e.g., PCMU, PCMA) from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8 =>
+      'Remap TE_8k code to 101';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
+      'Change TE8 payload type to 101 in SDP for better compatibility with some SIP endpoints.';
+
+  @override
   String get settings_encoding_Section_value_auto => 'Auto';
 
   @override
@@ -2048,6 +2079,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeMode_system => 'System';
 
   @override
+  String get undefined_autoprovision_invalidToken =>
+      'The autoconfiguration credentials were rejected by the server. Please request a new configuration link';
+
+  @override
+  String get undefined_autoprovision_invalidToken_title =>
+      'Invalid configuration';
+
+  @override
+  String get undefined_stackScreenNotSupported =>
+      'Feature not supported. Please contact the administrator.';
+
+  @override
+  String get undefined_stackScreenNotSupported_title => 'Feature not supported';
+
+  @override
   String get user_agreement_agrement_link =>
       'The terms and conditions of the agreement';
 
@@ -2120,19 +2166,34 @@ class AppLocalizationsEn extends AppLocalizations {
       'Web resource error';
 
   @override
-  String get undefined_autoprovision_invalidToken =>
-      'The autoconfiguration credentials were rejected by the server. Please request a new configuration link';
+  String get webview_defaultError_title => 'Something went wrong';
 
   @override
-  String get undefined_autoprovision_invalidToken_title =>
-      'Invalid configuration';
+  String webview_defaultError_details(String description, int code) {
+    return '$description (code: $code)';
+  }
 
   @override
-  String get undefined_stackScreenNotSupported =>
-      'Feature not supported. Please contact the administrator.';
+  String get webview_defaultError_reload => 'Reload';
 
   @override
-  String get undefined_stackScreenNotSupported_title => 'Feature not supported';
+  String get webview_sslError_title => 'Your connection is not private';
+
+  @override
+  String get webview_sslError_message =>
+      'The certificate for this site isn\'t trusted. The page can\'t be shown.';
+
+  @override
+  String get webview_sslError_tryAgain => 'Try again';
+
+  @override
+  String get webview_sslError_details => 'Details';
+
+  @override
+  String get webview_sslError_details_type => 'Type';
+
+  @override
+  String get webview_sslError_details_url => 'URL';
 
   @override
   String get presence_preset_available_name => 'Available';

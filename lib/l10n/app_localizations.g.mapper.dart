@@ -516,6 +516,8 @@ class AppLocalizationsMapper {
           localizations.messaging_Conversation_failure,
       'messaging_ConversationScreen_titlePrefix':
           localizations.messaging_ConversationScreen_titlePrefix,
+      'messaging_ConversationScreen_titleAvailable':
+          localizations.messaging_ConversationScreen_titleAvailable,
       'messaging_ConversationsScreen_chatsSearch_hint':
           localizations.messaging_ConversationsScreen_chatsSearch_hint,
       'messaging_ConversationsScreen_empty':
@@ -863,6 +865,23 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_target_audio_bitrate,
       'settings_encoding_Section_target_video_bitrate':
           localizations.settings_encoding_Section_target_video_bitrate,
+      'settings_encoding_Section_extra_sdp_mod_title':
+          localizations.settings_encoding_Section_extra_sdp_mod_title,
+      'settings_encoding_Section_extra_sdp_mod_extmapsRemove':
+          localizations.settings_encoding_Section_extra_sdp_mod_extmapsRemove,
+      'settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps,
+      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_remapTE8':
+          localizations.settings_encoding_Section_extra_sdp_mod_remapTE8,
+      'settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip': localizations
+          .settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip,
       'settings_encoding_Section_value_auto':
           localizations.settings_encoding_Section_value_auto,
       'settings_encoding_Section_value_disable':
@@ -1100,6 +1119,14 @@ class AppLocalizationsMapper {
       'themeMode_dark': localizations.themeMode_dark,
       'themeMode_light': localizations.themeMode_light,
       'themeMode_system': localizations.themeMode_system,
+      'undefined_autoprovision_invalidToken':
+          localizations.undefined_autoprovision_invalidToken,
+      'undefined_autoprovision_invalidToken_title':
+          localizations.undefined_autoprovision_invalidToken_title,
+      'undefined_stackScreenNotSupported':
+          localizations.undefined_stackScreenNotSupported,
+      'undefined_stackScreenNotSupported_title':
+          localizations.undefined_stackScreenNotSupported_title,
       'user_agreement_agrement_link':
           localizations.user_agreement_agrement_link,
       'user_agreement_button_text': localizations.user_agreement_button_text,
@@ -1129,14 +1156,16 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
-      'undefined_autoprovision_invalidToken':
-          localizations.undefined_autoprovision_invalidToken,
-      'undefined_autoprovision_invalidToken_title':
-          localizations.undefined_autoprovision_invalidToken_title,
-      'undefined_stackScreenNotSupported':
-          localizations.undefined_stackScreenNotSupported,
-      'undefined_stackScreenNotSupported_title':
-          localizations.undefined_stackScreenNotSupported_title,
+      'webview_defaultError_title': localizations.webview_defaultError_title,
+      'webview_defaultError_reload': localizations.webview_defaultError_reload,
+      'webview_sslError_title': localizations.webview_sslError_title,
+      'webview_sslError_message': localizations.webview_sslError_message,
+      'webview_sslError_tryAgain': localizations.webview_sslError_tryAgain,
+      'webview_sslError_details': localizations.webview_sslError_details,
+      'webview_sslError_details_type':
+          localizations.webview_sslError_details_type,
+      'webview_sslError_details_url':
+          localizations.webview_sslError_details_url,
       'presence_preset_available_name':
           localizations.presence_preset_available_name,
       'presence_preset_unavailable_name':
@@ -1288,6 +1317,8 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
+      'webview_defaultError_details': (description, code) =>
+          localizations.webview_defaultError_details(description, code),
     };
   }
 }
