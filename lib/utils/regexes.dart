@@ -8,3 +8,5 @@ const linkWoFilesRegex =
 
 /// Matches any symbols except letters, digits, spaces, and Cyrillic characters
 const symbolsRegex = r'[^a-zA-Z\d\s\u0400-\u04FF]+';
+
+const numbersExtractRegex = r'[^0-9+]';

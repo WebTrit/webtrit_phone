@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/regexes.dart';
 
 enum CdrStatus { accepted, declined, missed, error }
 
@@ -28,7 +30,12 @@ class CdrRecord extends Equatable {
     this.recordingId,
   });
 
+  /// The other party in the call, depending on the call direction
   late final String participant = direction == CallDirection.outgoing ? callee : caller;
+
+  /// Normalized participant number (only digits and leading +)
+  /// E.g. "+1234567890" or "1234567890" if caller info has additional characters like "123 (John Doe)"
+  late final String participantNumber = participant.replaceAll(RegExp(numbersExtractRegex), '');
 
   @override
   List<Object?> get props =>

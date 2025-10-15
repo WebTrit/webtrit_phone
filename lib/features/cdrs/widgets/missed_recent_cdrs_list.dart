@@ -140,17 +140,18 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                           final historyIndicatorPosition = state.records.length;
                           if (index == historyIndicatorPosition) return HistoryFetchIndicator(state.fetchingHistory);
                           final cdr = state.records[index];
-                          final number = cdr.participant;
+                          final participant = cdr.participant;
+                          final participantNumber = cdr.participantNumber;
 
                           return FadeIn(
                             child: SizedBox(
                               key: Key(cdr.callId.toString()),
                               child: ContactInfoBuilder(
-                                  source: ContactSourcePhone(number),
+                                  source: ContactSourcePhone(participantNumber),
                                   builder: (context, contact) {
                                     final contactSourceId = contact?.sourceId;
                                     final contactSmsNumbers = contact?.smsNumbers ?? [];
-                                    final canSendSms = contactSmsNumbers.contains(number);
+                                    final canSendSms = contactSmsNumbers.contains(participantNumber);
 
                                     return CdrTile(
                                       cdr: cdr,
@@ -158,29 +159,29 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                                       callNumbers: callNumbers,
                                       onTap: () {
                                         if (transfer) {
-                                          submitTransfer(destination: number);
+                                          submitTransfer(destination: participantNumber);
                                         } else {
                                           _callController.createCall(
-                                            destination: number,
+                                            destination: participantNumber,
                                             displayName: contact?.maybeName,
                                           );
                                         }
                                       },
                                       onAudioCallPressed: () => _callController.createCall(
-                                        destination: number,
+                                        destination: participantNumber,
                                         displayName: contact?.maybeName,
                                         video: false,
                                       ),
                                       onVideoCallPressed: widget.videoEnabled
                                           ? () => _callController.createCall(
-                                                destination: number,
+                                                destination: participantNumber,
                                                 displayName: contact?.maybeName,
                                                 video: true,
                                               )
                                           : null,
                                       onTransferPressed: widget.transferEnabled && hasActiveCall
                                           ? () {
-                                              submitTransfer(destination: number);
+                                              submitTransfer(destination: participantNumber);
                                             }
                                           : null,
                                       onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
@@ -192,7 +193,7 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                                           ? () {
                                               sendSms(
                                                 userSmsNumbers: userSmsNumbers,
-                                                contactPhoneNumber: number,
+                                                contactPhoneNumber: participantNumber,
                                                 contactSourceId: contactSourceId,
                                               );
                                             }
@@ -202,9 +203,9 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                                               openContact(contactId: contact.id);
                                             }
                                           : null,
-                                      onCallLogPressed: () => openCallLog(number: number),
+                                      onCallLogPressed: () => openCallLog(number: participant),
                                       onCallFrom: (fromNumber) => _callController.createCall(
-                                        destination: number,
+                                        destination: participantNumber,
                                         displayName: contact?.maybeName,
                                         fromNumber: fromNumber,
                                         video: false,

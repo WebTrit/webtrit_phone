@@ -9,6 +9,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/extension/outlined_button_styles.dart';
 import 'package:webtrit_phone/utils/gravatar.dart';
+import 'package:webtrit_phone/utils/regexes.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../widgets/number_cdr_tile.dart';
@@ -74,6 +75,8 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
     final RenderBox? headerBox = headerKey.currentContext?.findRenderObject() as RenderBox?;
     final headerHeight = headerBox?.size.height ?? 260;
 
+    final normalizedNumber = cubit.number.replaceAll(RegExp(numbersExtractRegex), '');
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(backgroundColor: theme.canvasColor.withAlpha(0)),
@@ -120,7 +123,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
                 padding: EdgeInsets.only(top: topPadding),
                 child: ContactInfoBuilder(
                     key: headerKey,
-                    source: ContactSourcePhone(cubit.number),
+                    source: ContactSourcePhone(normalizedNumber),
                     builder: (context, contact) {
                       final number = cubit.number;
                       final title = contact?.displayTitle ?? number;
@@ -140,9 +143,9 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
                             ),
                           ),
                           CopyToClipboard(
-                            data: number,
+                            data: normalizedNumber,
                             child: Text(
-                              number,
+                              normalizedNumber,
                               style: theme.textTheme.labelLarge?.copyWith(
                                 color: theme.colorScheme.outlineVariant,
                               ),
