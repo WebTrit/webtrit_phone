@@ -132,6 +132,7 @@ class _CdrTileState extends State<CdrTile> {
         thumbnail: contact?.thumbnail,
         thumbnailUrl: contact?.thumbnailUrl,
         registered: contact?.registered,
+        presenceInfo: contact?.presenceInfo,
       ),
       trailing: Column(
         children: [
