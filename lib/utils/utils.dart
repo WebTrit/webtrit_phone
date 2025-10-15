@@ -3,6 +3,7 @@ export 'badge_layout.dart';
 export 'bloc_concurrency.dart';
 export 'buffer_transformer.dart';
 export 'connectivity_checker.dart';
+export 'core_support.dart';
 export 'crashlytics_utils.dart';
 export 'equatable_prop_to_string.dart';
 export 'fixed_delay_scheduler.dart';
