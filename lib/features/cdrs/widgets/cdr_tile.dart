@@ -49,7 +49,7 @@ class _CdrTileState extends State<CdrTile> {
 
   CdrRecord get cdr => widget.cdr;
   Contact? get contact => widget.contact;
-  String get callNumber => widget.cdr.participant;
+  String get callNumber => widget.cdr.participantNumber;
 
   List<PopupMenuEntry> get actions => [
         if (widget.onAudioCallPressed != null)
