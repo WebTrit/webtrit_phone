@@ -662,6 +662,7 @@ class AppLocalizationsMapper {
       'numberActions_callLog': localizations.numberActions_callLog,
       'numberActions_chat': localizations.numberActions_chat,
       'numberActions_copyNumber': localizations.numberActions_copyNumber,
+      'numberActions_copyCallId': localizations.numberActions_copyCallId,
       'numberActions_delete': localizations.numberActions_delete,
       'numberActions_sendSms': localizations.numberActions_sendSms,
       'numberActions_transfer': localizations.numberActions_transfer,

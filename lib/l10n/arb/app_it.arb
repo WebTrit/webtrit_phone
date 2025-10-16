@@ -953,6 +953,8 @@
   "@numberActions_chat": {},
   "numberActions_copyNumber": "Numero di copie",
   "@numberActions_copyNumber": {},
+  "numberActions_copyCallId": "Copia ID chiamata",
+  "@numberActions_copyCallId": {},
   "numberActions_delete": "Elimina",
   "@numberActions_delete": {},
   "numberActions_sendSms": "Invia messaggio SMS",

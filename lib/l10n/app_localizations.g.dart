@@ -2188,6 +2188,12 @@ abstract class AppLocalizations {
   /// **'Copy number'**
   String get numberActions_copyNumber;
 
+  /// No description provided for @numberActions_copyCallId.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy call ID'**
+  String get numberActions_copyCallId;
+
   /// No description provided for @numberActions_delete.
   ///
   /// In en, this message translates to:

@@ -1237,6 +1237,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get numberActions_copyNumber => 'Numero di copie';
 
   @override
+  String get numberActions_copyCallId => 'Copia ID chiamata';
+
+  @override
   String get numberActions_delete => 'Elimina';
 
   @override

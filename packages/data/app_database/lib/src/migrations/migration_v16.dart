@@ -10,7 +10,10 @@ class MigrationV16 extends Migration {
 
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
-    final presenceInfoTable = v16.PresenceInfo(db);
-    await m.createTable(presenceInfoTable);
+    final cdrTable = v16.Cdrs(db);
+
+    // recreate table with breaking changes
+    await m.deleteTable(cdrTable.aliasedName);
+    await m.createTable(cdrTable);
   }
 }

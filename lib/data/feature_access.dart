@@ -7,9 +7,9 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 final Logger _logger = Logger('FeatureAccess');
 
@@ -75,15 +75,17 @@ class FeatureAccess {
 
   static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
     try {
+      final coreSupport = CoreSupport.fromPrefs(preferences);
+
       final embeddedFeature = _tryConfigureEmbeddedFeature(appConfig);
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig, embeddedFeature.embeddedResources);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences, embeddedFeature);
-      final settingsFeature = _tryConfigureSettingsFeature(appConfig, preferences);
+      final settingsFeature = _tryConfigureSettingsFeature(appConfig, coreSupport);
       final callFeature = _tryConfigureCallFeature(appConfig, preferences);
-      final messagingFeature = _tryConfigureMessagingFeature(appConfig, preferences);
+      final messagingFeature = _tryConfigureMessagingFeature(appConfig, coreSupport);
       final termsFeature = _tryConfigureTermsFeature(appConfig);
-      final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(preferences, appConfig);
-      final sipPresenceFeature = _tryConfigureSipPresenceFeature(preferences, appConfig);
+      final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(coreSupport, appConfig);
+      final sipPresenceFeature = _tryConfigureSipPresenceFeature(coreSupport, appConfig);
 
       _instance = FeatureAccess._(
         embeddedFeature,
@@ -182,7 +184,7 @@ class FeatureAccess {
 
   static SettingsFeature _tryConfigureSettingsFeature(
     AppConfig appConfig,
-    AppPreferences preferences,
+    CoreSupport coreSupport,
   ) {
     final settingSections = <SettingsSection>[];
 
@@ -192,8 +194,9 @@ class FeatureAccess {
       for (var item in section.items.where((item) => item.enabled)) {
         final flavor = SettingsFlavor.values.byName(item.type);
 
-        if (!_isSupportedPlatform(flavor)) continue;
-        if (!_isSupportedCore(flavor, preferences)) continue;
+        /// Skip unsupported features based on platform and core support.
+        if (!_isFeatureSupportedByPlatform(flavor)) continue;
+        if (!_isFeatureSupportedByCore(flavor, coreSupport)) continue;
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
@@ -216,19 +219,19 @@ class FeatureAccess {
       }
     }
 
-    return SettingsFeature(settingSections, preferences);
+    return SettingsFeature(settingSections, coreSupport);
   }
 
   // TODO (Serdun): Move platform-specific configuration to a separate config file.
   // Currently, the settings screen includes this configuration only for Android.
   // For other platforms, this item is hidden. Update the logic to handle configurations for all platforms.
-  static bool _isSupportedPlatform(SettingsFlavor flavor) {
+  static bool _isFeatureSupportedByPlatform(SettingsFlavor flavor) {
     return !(flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid);
   }
 
-  static bool _isSupportedCore(SettingsFlavor flavor, AppPreferences preferences) {
-    if (flavor != SettingsFlavor.voicemail) return true;
-    return preferences.getSystemInfo()?.adapter?.supported?.contains(kVoicemailFeatureFlag) ?? false;
+  /// Returns true for all flavors except voicemail, which requires core support verification.
+  static bool _isFeatureSupportedByCore(SettingsFlavor flavor, CoreSupport coreSupport) {
+    return flavor != SettingsFlavor.voicemail || coreSupport.supportsVoicemail;
   }
 
   static EmbeddedData? _getEmbeddedDataResource(
@@ -350,14 +353,14 @@ class FeatureAccess {
 
   static MessagingFeature _tryConfigureMessagingFeature(
     AppConfig appConfig,
-    AppPreferences preferences,
+    CoreSupport coreSupport,
   ) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
       (tab) => tab.maybeWhen(messaging: (enabled, _, __, ___) => enabled, orElse: () => false),
     );
 
     return MessagingFeature(
-      preferences,
+      coreSupport,
       tabEnabled: tabEnabled,
     );
   }
@@ -406,19 +409,19 @@ class FeatureAccess {
   }
 
   static SystemNotificationsFeature _tryConfigureSystemNotificationsFeature(
-    AppPreferences preferences,
+    CoreSupport coreSupport,
     AppConfig appConfig,
   ) {
     final enabled = appConfig.mainConfig.systemNotificationsEnabled;
-    return SystemNotificationsFeature(preferences, enabled);
+    return SystemNotificationsFeature(coreSupport, enabled);
   }
 
   static SipPresenceFeature _tryConfigureSipPresenceFeature(
-    AppPreferences preferences,
+    CoreSupport coreSupport,
     AppConfig appConfig,
   ) {
     final enabled = appConfig.mainConfig.sipPresenceEnabled;
-    return SipPresenceFeature(preferences, enabled);
+    return SipPresenceFeature(coreSupport, enabled);
   }
 }
 
@@ -491,24 +494,16 @@ class BottomMenuFeature {
 }
 
 class SettingsFeature {
-  SettingsFeature(this._sections, this._appPreferences);
+  SettingsFeature(this._sections, this._coreSupport);
 
   final List<SettingsSection> _sections;
-  final AppPreferences _appPreferences;
+  final CoreSupport _coreSupport;
 
   List<SettingsSection> get sections => List.unmodifiable(_sections);
 
-  // TODO(Serdun): Remove duplicate code
-  List<String> get _coreSupportedFeatures {
-    final systemInfo = _appPreferences.getSystemInfo();
-    return systemInfo?.adapter?.supported ?? [];
-  }
-
-  bool get coreVoicemailSupport => _coreSupportedFeatures.contains(kVoicemailFeatureFlag);
-
   bool get isVoicemailsEnabled => _sections.any((section) {
         return section.items.any((item) {
-          return item.flavor == SettingsFlavor.voicemail && coreVoicemailSupport;
+          return item.flavor == SettingsFlavor.voicemail && _coreSupport.supportsVoicemail;
         });
       });
 }
@@ -536,21 +531,16 @@ class CallFeature {
 }
 
 class MessagingFeature {
-  MessagingFeature(this._appPreferences, {bool tabEnabled = false}) : _tabEnabled = tabEnabled;
+  MessagingFeature(this._coreSupport, {bool tabEnabled = false}) : _tabEnabled = tabEnabled;
 
-  final AppPreferences _appPreferences;
+  final CoreSupport _coreSupport;
   final bool _tabEnabled;
 
-  List<String> get _coreSupportedFeatures {
-    final systemInfo = _appPreferences.getSystemInfo();
-    return systemInfo?.adapter?.supported ?? [];
-  }
-
   /// Check if the SMS messaging feature is supported by remote system.
-  bool get coreSmsSupport => _coreSupportedFeatures.contains(kSmsMessagingFeatureFlag);
+  bool get coreSmsSupport => _coreSupport.supportsSms;
 
   /// Check if the internal messaging feature is supported by remote system.
-  bool get coreChatsSupport => _coreSupportedFeatures.contains(kChatMessagingFeatureFlag);
+  bool get coreChatsSupport => _coreSupport.supportsChats;
 
   /// Check if the messaging tab is enabled within the app configuration.
   bool get tabEnabled => _tabEnabled;
@@ -589,20 +579,14 @@ class EmbeddedFeature {
 }
 
 class SystemNotificationsFeature {
-  SystemNotificationsFeature(this._appPreferences, this.enabled);
+  SystemNotificationsFeature(this._coreSupport, this.enabled);
 
   final bool enabled;
-  final AppPreferences _appPreferences;
+  final CoreSupport _coreSupport;
 
-  List<String> get _coreSupportedFeatures {
-    final systemInfo = _appPreferences.getSystemInfo();
-    return systemInfo?.adapter?.supported ?? [];
-  }
+  bool get coreSystemSupport => _coreSupport.supportsSystemNotifications;
 
-  // Check if the core system supports system notifications and push sending.
-  bool get coreSystemSupport => _coreSupportedFeatures.contains(kSystemNotificationsFeatureFlag);
-
-  bool get coreSystemPushSupport => _coreSupportedFeatures.contains(kSystemNotificationsPushFeatureFlag);
+  bool get coreSystemPushSupport => _coreSupport.supportsSystemPushNotifications;
 
   /// Check if the system notifications feature is enabled and supported by the remote system.
   bool get systemNotificationsSupport => enabled && coreSystemSupport;
@@ -612,21 +596,13 @@ class SystemNotificationsFeature {
 }
 
 class SipPresenceFeature {
-  SipPresenceFeature(this._appPreferences, this.enabled);
+  SipPresenceFeature(this._coreSupport, this.enabled);
 
-  final AppPreferences _appPreferences;
+  final CoreSupport _coreSupport;
   final bool enabled;
 
-  List<String> get _coreSupportedFeatures {
-    final systemInfo = _appPreferences.getSystemInfo();
-    return systemInfo?.adapter?.supported ?? [];
-  }
-
-  // Check if the core system supports SIP presence.
-  bool get coreSipPresenceSupport => _coreSupportedFeatures.contains(kSipPresenceFeatureFlag);
-
   /// Check if the SIP presence feature is enabled and supported by the remote system.
-  bool get sipPresenceSupport => enabled && coreSipPresenceSupport;
+  bool get sipPresenceSupport => enabled && _coreSupport.supportsSipPresence;
 }
 
 /// Provides a centralized way to check whether specific [FeatureFlag]s are enabled.

@@ -49,7 +49,9 @@ class _CdrTileState extends State<CdrTile> {
 
   CdrRecord get cdr => widget.cdr;
   Contact? get contact => widget.contact;
-  String get callNumber => widget.cdr.participantNumber;
+
+  String get participant => widget.cdr.participant;
+  String? get participantNumber => widget.cdr.participantNumber;
 
   List<PopupMenuEntry> get actions => [
         if (widget.onAudioCallPressed != null)
@@ -93,11 +95,18 @@ class _CdrTileState extends State<CdrTile> {
             onTap: widget.onCallLogPressed,
             child: Text(context.l10n.numberActions_callLog),
           ),
+        if (participantNumber != null)
+          PopupMenuItem(
+            onTap: () {
+              Clipboard.setData(ClipboardData(text: participantNumber!));
+            },
+            child: Text(context.l10n.numberActions_copyNumber),
+          ),
         PopupMenuItem(
           onTap: () {
-            Clipboard.setData(ClipboardData(text: callNumber));
+            Clipboard.setData(ClipboardData(text: cdr.callId));
           },
-          child: Text(context.l10n.numberActions_copyNumber),
+          child: Text(context.l10n.numberActions_copyCallId),
         ),
       ];
 
@@ -128,7 +137,7 @@ class _CdrTileState extends State<CdrTile> {
       key: tileKey,
       contentPadding: const EdgeInsets.only(left: 16, right: 16),
       leading: LeadingAvatar(
-        username: contact?.maybeName ?? callNumber,
+        username: contact?.maybeName ?? participant,
         thumbnail: contact?.thumbnail,
         thumbnailUrl: contact?.thumbnailUrl,
         registered: contact?.registered,
@@ -145,7 +154,7 @@ class _CdrTileState extends State<CdrTile> {
         ],
       ),
       title: Text(
-        contact?.maybeName ?? callNumber,
+        contact?.maybeName ?? participant,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -159,7 +168,7 @@ class _CdrTileState extends State<CdrTile> {
           SizedBox(width: 4),
           Flexible(
             child: Text(
-              callNumber,
+              participantNumber ?? participant,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

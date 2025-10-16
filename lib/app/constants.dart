@@ -33,11 +33,10 @@ const kChatMessagingFeatureFlag = 'internalMessaging';
 const kVoicemailFeatureFlag = 'voicemail';
 const kSystemNotificationsFeatureFlag = 'notifications';
 const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
+const kSipPresenceFeatureFlag = 'sipPresence';
 
 const kSystemNotificationsTask = 'systemNotificationsTask';
 const kSystemNotificationsTaskId = 'systemNotificationsTask-id';
 
 const kLocalPushSourceSystemNotification = 'system-notification';
 const kLocalPushSourceMessaging = 'messaging';
-
-const kSipPresenceFeatureFlag = 'sipPresence';

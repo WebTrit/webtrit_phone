@@ -1625,6 +1625,91 @@ class SystemNotificationsOutbox extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class PresenceInfo extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  PresenceInfo(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+      'number', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<int> available = GeneratedColumn<int>(
+      'available', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL CHECK (available IN (0, 1))');
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+      'note', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<String> statusIcon = GeneratedColumn<String>(
+      'status_icon', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<String> device = GeneratedColumn<String>(
+      'device', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> timeOffsetMin = GeneratedColumn<int>(
+      'time_offset_min', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      $customConstraints: 'NULL');
+  late final GeneratedColumn<String> activitiesJson = GeneratedColumn<String>(
+      'activities_json', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns => [
+        idKey,
+        number,
+        available,
+        note,
+        statusIcon,
+        device,
+        timeOffsetMin,
+        timestampUsec,
+        activitiesJson
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'presence_info';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {idKey};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  PresenceInfo createAlias(String alias) {
+    return PresenceInfo(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(id_key)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class Cdrs extends Table with TableInfo {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -1728,8 +1813,8 @@ class Cdrs extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
-class DatabaseAtV16 extends GeneratedDatabase {
-  DatabaseAtV16(QueryExecutor e) : super(e);
+class DatabaseAtV17 extends GeneratedDatabase {
+  DatabaseAtV17(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
   late final ContactPhones contactPhones = ContactPhones(this);
   late final ContactEmails contactEmails = ContactEmails(this);
@@ -1768,6 +1853,7 @@ class DatabaseAtV16 extends GeneratedDatabase {
       SystemNotifications(this);
   late final SystemNotificationsOutbox systemNotificationsOutbox =
       SystemNotificationsOutbox(this);
+  late final PresenceInfo presenceInfo = PresenceInfo(this);
   late final Cdrs cdrs = Cdrs(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
       'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
@@ -1818,6 +1904,7 @@ class DatabaseAtV16 extends GeneratedDatabase {
         voicemails,
         systemNotifications,
         systemNotificationsOutbox,
+        presenceInfo,
         cdrs,
         contactsAfterInsertTrigger,
         contactsAfterUpdateTrigger,
@@ -1862,5 +1949,5 @@ class DatabaseAtV16 extends GeneratedDatabase {
         ],
       );
   @override
-  int get schemaVersion => 16;
+  int get schemaVersion => 17;
 }
