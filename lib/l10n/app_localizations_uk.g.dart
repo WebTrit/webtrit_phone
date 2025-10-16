@@ -1230,6 +1230,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get numberActions_copyNumber => 'Скопіювати номер';
 
   @override
+  String get numberActions_copyCallId => 'Скопіювати ID дзвінка';
+
+  @override
   String get numberActions_delete => 'Видалити';
 
   @override

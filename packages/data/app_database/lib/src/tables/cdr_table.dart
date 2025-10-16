@@ -20,7 +20,11 @@ class CdrTable extends Table {
 
   TextColumn get callee => text()();
 
+  TextColumn get calleeNumber => text().nullable()();
+
   TextColumn get caller => text()();
+
+  TextColumn get callerNumber => text().nullable()();
 
   IntColumn get connectTimeUsec => integer()();
 

@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import 'package:webtrit_phone/utils/regexes.dart';
+
 extension StringExtension on String {
   String get capitalize {
     if (isEmpty) {
@@ -31,5 +33,11 @@ extension StringExtension on String {
     } catch (e) {
       throw FormatException('Invalid IconData hex string: $this');
     }
+  }
+
+  String? get extractNumber {
+    final regex = RegExp(numbersExtractRegex);
+    final extracted = replaceAll(regex, '');
+    return extracted.isNotEmpty ? extracted : null;
   }
 }

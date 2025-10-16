@@ -147,7 +147,7 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                             child: SizedBox(
                               key: Key(cdr.callId.toString()),
                               child: ContactInfoBuilder(
-                                  source: ContactSourcePhone(participantNumber),
+                                  source: ContactSourcePhone(participantNumber ?? participant),
                                   builder: (context, contact) {
                                     final contactSourceId = contact?.sourceId;
                                     final contactSmsNumbers = contact?.smsNumbers ?? [];
@@ -158,6 +158,8 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                                       contact: contact,
                                       callNumbers: callNumbers,
                                       onTap: () {
+                                        if (participantNumber == null) return;
+
                                         if (transfer) {
                                           submitTransfer(destination: participantNumber);
                                         } else {
@@ -167,29 +169,35 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                                           );
                                         }
                                       },
-                                      onAudioCallPressed: () => _callController.createCall(
-                                        destination: participantNumber,
-                                        displayName: contact?.maybeName,
-                                        video: false,
-                                      ),
-                                      onVideoCallPressed: widget.videoEnabled
+                                      onAudioCallPressed: participantNumber != null
+                                          ? () => _callController.createCall(
+                                                destination: participantNumber,
+                                                displayName: contact?.maybeName,
+                                                video: false,
+                                              )
+                                          : null,
+                                      onVideoCallPressed: participantNumber != null && widget.videoEnabled
                                           ? () => _callController.createCall(
                                                 destination: participantNumber,
                                                 displayName: contact?.maybeName,
                                                 video: true,
                                               )
                                           : null,
-                                      onTransferPressed: widget.transferEnabled && hasActiveCall
-                                          ? () {
-                                              submitTransfer(destination: participantNumber);
-                                            }
-                                          : null,
+                                      onTransferPressed:
+                                          participantNumber != null && widget.transferEnabled && hasActiveCall
+                                              ? () {
+                                                  submitTransfer(destination: participantNumber);
+                                                }
+                                              : null,
                                       onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
                                           ? () {
                                               openChat(contactSourceId!);
                                             }
                                           : null,
-                                      onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
+                                      onSendSmsPressed: participantNumber != null &&
+                                              widget.smssEnabled &&
+                                              userSmsNumbers.isNotEmpty &&
+                                              canSendSms
                                           ? () {
                                               sendSms(
                                                 userSmsNumbers: userSmsNumbers,
@@ -203,13 +211,17 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                                               openContact(contactId: contact.id);
                                             }
                                           : null,
-                                      onCallLogPressed: () => openCallLog(number: participant),
-                                      onCallFrom: (fromNumber) => _callController.createCall(
-                                        destination: participantNumber,
-                                        displayName: contact?.maybeName,
-                                        fromNumber: fromNumber,
-                                        video: false,
-                                      ),
+                                      onCallLogPressed: participantNumber != null
+                                          ? () => openCallLog(number: participantNumber)
+                                          : null,
+                                      onCallFrom: participantNumber != null
+                                          ? (fromNumber) => _callController.createCall(
+                                                destination: participantNumber,
+                                                displayName: contact?.maybeName,
+                                                fromNumber: fromNumber,
+                                                video: false,
+                                              )
+                                          : null,
                                     );
                                   }),
                             ),
