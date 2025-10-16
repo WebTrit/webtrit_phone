@@ -953,6 +953,8 @@
   "@numberActions_chat": {},
   "numberActions_copyNumber": "Скопіювати номер",
   "@numberActions_copyNumber": {},
+  "numberActions_copyCallId": "Скопіювати ID дзвінка",
+  "@numberActions_copyCallId": {},
   "numberActions_delete": "Видалити",
   "@numberActions_delete": {},
   "numberActions_sendSms": "Надіслати SMS повідомлення",

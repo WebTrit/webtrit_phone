@@ -9,7 +9,6 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/extension/outlined_button_styles.dart';
 import 'package:webtrit_phone/utils/gravatar.dart';
-import 'package:webtrit_phone/utils/regexes.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../widgets/number_cdr_tile.dart';
@@ -75,7 +74,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
     final RenderBox? headerBox = headerKey.currentContext?.findRenderObject() as RenderBox?;
     final headerHeight = headerBox?.size.height ?? 260;
 
-    final normalizedNumber = cubit.number.replaceAll(RegExp(numbersExtractRegex), '');
+    final number = cubit.number;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -123,11 +122,12 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
                 padding: EdgeInsets.only(top: topPadding),
                 child: ContactInfoBuilder(
                     key: headerKey,
-                    source: ContactSourcePhone(normalizedNumber),
+                    source: ContactSourcePhone(number),
                     builder: (context, contact) {
                       final number = cubit.number;
                       final title = contact?.displayTitle ?? number;
                       final email = contact?.emails.firstOrNull?.address;
+
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -143,9 +143,9 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
                             ),
                           ),
                           CopyToClipboard(
-                            data: normalizedNumber,
+                            data: number,
                             child: Text(
-                              normalizedNumber,
+                              number,
                               style: theme.textTheme.labelLarge?.copyWith(
                                 color: theme.colorScheme.outlineVariant,
                               ),

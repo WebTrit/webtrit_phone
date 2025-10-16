@@ -1,4 +1,6 @@
 import 'package:drift/drift.dart';
+// ignore: unused_import
+import 'contacts_table.dart';
 
 @DataClassName('ContactPhoneData')
 class ContactPhonesTable extends Table {
