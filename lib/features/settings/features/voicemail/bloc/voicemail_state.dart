@@ -7,7 +7,7 @@ enum VoicemailStatus {
 }
 
 @freezed
-class VoicemailState with _$VoicemailState {
+abstract class VoicemailState with _$VoicemailState {
   const VoicemailState._();
 
   const factory VoicemailState({

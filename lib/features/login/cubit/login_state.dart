@@ -3,7 +3,7 @@ part of 'login_cubit.dart';
 typedef SessionOtpProvisionalWithDateTime = (SessionOtpProvisional, DateTime);
 
 @freezed
-class LoginState with _$LoginState {
+abstract class LoginState with _$LoginState {
   const factory LoginState({
     @Default(false) bool processing,
     LoginMode? mode,

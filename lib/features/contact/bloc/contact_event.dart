@@ -9,16 +9,16 @@ class ContactStarted extends ContactEvent {
 }
 
 @Freezed(copyWith: false)
-class ContactAddedToFavorites with _$ContactAddedToFavorites implements ContactEvent {
+abstract class ContactAddedToFavorites with _$ContactAddedToFavorites implements ContactEvent {
   const factory ContactAddedToFavorites(ContactPhone contactPhone) = _ContactAddedToFavorites;
 }
 
 @Freezed(copyWith: false)
-class ContactRemovedFromFavorites with _$ContactRemovedFromFavorites implements ContactEvent {
+abstract class ContactRemovedFromFavorites with _$ContactRemovedFromFavorites implements ContactEvent {
   const factory ContactRemovedFromFavorites(ContactPhone contactPhone) = _ContactRemovedFromFavorites;
 }
 
 @Freezed(copyWith: false)
-class ContactEmailSend with _$ContactEmailSend implements ContactEvent {
+abstract class ContactEmailSend with _$ContactEmailSend implements ContactEvent {
   const factory ContactEmailSend(ContactEmail contactEmail) = _ContactEmailSend;
 }

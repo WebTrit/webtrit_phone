@@ -5,7 +5,7 @@ part 'media_query_metrics.freezed.dart';
 part 'media_query_metrics.g.dart';
 
 @freezed
-class MediaQueryMetrics with _$MediaQueryMetrics {
+abstract class MediaQueryMetrics with _$MediaQueryMetrics {
   const factory MediaQueryMetrics({
     required String brightness,
     required double devicePixelRatio,

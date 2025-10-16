@@ -1,7 +1,7 @@
 part of 'call_to_actions_cubit.dart';
 
 @freezed
-class CallToActionsCubitState with _$CallToActionsCubitState {
+abstract class CallToActionsCubitState with _$CallToActionsCubitState {
   const CallToActionsCubitState._();
 
   const factory CallToActionsCubitState({

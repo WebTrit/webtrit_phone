@@ -1,7 +1,7 @@
 part of 'about_bloc.dart';
 
 @freezed
-class AboutState with _$AboutState {
+abstract class AboutState with _$AboutState {
   const AboutState._();
 
   const factory AboutState({

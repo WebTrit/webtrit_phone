@@ -9,6 +9,6 @@ class CallLogStarted extends CallLogEvent {
 }
 
 @Freezed(copyWith: false)
-class CallLogEntryDeleted with _$CallLogEntryDeleted implements CallLogEvent {
+abstract class CallLogEntryDeleted with _$CallLogEntryDeleted implements CallLogEvent {
   const factory CallLogEntryDeleted(CallLogEntry callLogEntry) = _CallLogEntryDeleted;
 }

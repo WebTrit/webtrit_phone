@@ -1,7 +1,7 @@
 part of 'call_log_bloc.dart';
 
 @freezed
-class CallLogState with _$CallLogState {
+abstract class CallLogState with _$CallLogState {
   const factory CallLogState({
     required String number,
     Contact? contact,

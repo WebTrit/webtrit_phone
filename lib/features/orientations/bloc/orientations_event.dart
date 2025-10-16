@@ -5,6 +5,6 @@ abstract class OrientationsEvent {
 }
 
 @Freezed(copyWith: false)
-class OrientationsChanged with _$OrientationsChanged implements OrientationsEvent {
+abstract class OrientationsChanged with _$OrientationsChanged implements OrientationsEvent {
   const factory OrientationsChanged(PreferredOrientation orientation) = _OrientationsChanged;
 }

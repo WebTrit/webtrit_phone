@@ -1,7 +1,7 @@
 part of 'diagnostic_cubit.dart';
 
 @freezed
-class DiagnosticState with _$DiagnosticState {
+abstract class DiagnosticState with _$DiagnosticState {
   const DiagnosticState._();
 
   const factory DiagnosticState({

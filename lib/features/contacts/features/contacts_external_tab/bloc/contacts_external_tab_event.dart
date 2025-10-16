@@ -5,7 +5,7 @@ abstract class ContactsExternalTabEvent {
 }
 
 @Freezed(copyWith: false)
-class ContactsExternalTabStarted with _$ContactsExternalTabStarted implements ContactsExternalTabEvent {
+abstract class ContactsExternalTabStarted with _$ContactsExternalTabStarted implements ContactsExternalTabEvent {
   const factory ContactsExternalTabStarted({required String search}) = _ContactsExternalTabStarted;
 }
 

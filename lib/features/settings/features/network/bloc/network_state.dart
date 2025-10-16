@@ -1,7 +1,7 @@
 part of 'network_cubit.dart';
 
 @freezed
-class NetworkState with _$NetworkState {
+abstract class NetworkState with _$NetworkState {
   const NetworkState._();
 
   const factory NetworkState({

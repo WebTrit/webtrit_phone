@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,79 +9,57 @@ part of 'voicemail_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
 
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
-mixin _$VoicemailState {
-  VoicemailStatus get status => throw _privateConstructorUsedError;
-  List<Voicemail> get items => throw _privateConstructorUsedError;
-  DefaultErrorNotification? get error => throw _privateConstructorUsedError;
+mixin _$VoicemailState implements DiagnosticableTreeMixin {
+  VoicemailStatus get status;
+  List<Voicemail> get items;
+  DefaultErrorNotification? get error;
 
   /// Create a copy of VoicemailState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $VoicemailStateCopyWith<VoicemailState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $VoicemailStateCopyWith<$Res> {
-  factory $VoicemailStateCopyWith(
-          VoicemailState value, $Res Function(VoicemailState) then) =
-      _$VoicemailStateCopyWithImpl<$Res, VoicemailState>;
-  @useResult
-  $Res call(
-      {VoicemailStatus status,
-      List<Voicemail> items,
-      DefaultErrorNotification? error});
-}
-
-/// @nodoc
-class _$VoicemailStateCopyWithImpl<$Res, $Val extends VoicemailState>
-    implements $VoicemailStateCopyWith<$Res> {
-  _$VoicemailStateCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of VoicemailState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $VoicemailStateCopyWith<VoicemailState> get copyWith =>
+      _$VoicemailStateCopyWithImpl<VoicemailState>(
+          this as VoicemailState, _$identity);
+
   @override
-  $Res call({
-    Object? status = null,
-    Object? items = null,
-    Object? error = freezed,
-  }) {
-    return _then(_value.copyWith(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as VoicemailStatus,
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<Voicemail>,
-      error: freezed == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as DefaultErrorNotification?,
-    ) as $Val);
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', 'VoicemailState'))
+      ..add(DiagnosticsProperty('status', status))
+      ..add(DiagnosticsProperty('items', items))
+      ..add(DiagnosticsProperty('error', error));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is VoicemailState &&
+            (identical(other.status, status) || other.status == status) &&
+            const DeepCollectionEquality().equals(other.items, items) &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, status, const DeepCollectionEquality().hash(items), error);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'VoicemailState(status: $status, items: $items, error: $error)';
   }
 }
 
 /// @nodoc
-abstract class _$$VoicemailStateImplCopyWith<$Res>
-    implements $VoicemailStateCopyWith<$Res> {
-  factory _$$VoicemailStateImplCopyWith(_$VoicemailStateImpl value,
-          $Res Function(_$VoicemailStateImpl) then) =
-      __$$VoicemailStateImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $VoicemailStateCopyWith<$Res> {
+  factory $VoicemailStateCopyWith(
+          VoicemailState value, $Res Function(VoicemailState) _then) =
+      _$VoicemailStateCopyWithImpl;
   @useResult
   $Res call(
       {VoicemailStatus status,
@@ -90,12 +68,12 @@ abstract class _$$VoicemailStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$VoicemailStateImplCopyWithImpl<$Res>
-    extends _$VoicemailStateCopyWithImpl<$Res, _$VoicemailStateImpl>
-    implements _$$VoicemailStateImplCopyWith<$Res> {
-  __$$VoicemailStateImplCopyWithImpl(
-      _$VoicemailStateImpl _value, $Res Function(_$VoicemailStateImpl) _then)
-      : super(_value, _then);
+class _$VoicemailStateCopyWithImpl<$Res>
+    implements $VoicemailStateCopyWith<$Res> {
+  _$VoicemailStateCopyWithImpl(this._self, this._then);
+
+  final VoicemailState _self;
+  final $Res Function(VoicemailState) _then;
 
   /// Create a copy of VoicemailState
   /// with the given fields replaced by the non-null parameter values.
@@ -106,28 +84,190 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
     Object? items = null,
     Object? error = freezed,
   }) {
-    return _then(_$VoicemailStateImpl(
+    return _then(_self.copyWith(
       status: null == status
-          ? _value.status
+          ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
               as VoicemailStatus,
       items: null == items
-          ? _value._items
+          ? _self.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<Voicemail>,
       error: freezed == error
-          ? _value.error
+          ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as DefaultErrorNotification?,
     ));
   }
 }
 
+/// Adds pattern-matching-related methods to [VoicemailState].
+extension VoicemailStatePatterns on VoicemailState {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_VoicemailState value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _VoicemailState() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_VoicemailState value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _VoicemailState():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_VoicemailState value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _VoicemailState() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(VoicemailStatus status, List<Voicemail> items,
+            DefaultErrorNotification? error)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _VoicemailState() when $default != null:
+        return $default(_that.status, _that.items, _that.error);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(VoicemailStatus status, List<Voicemail> items,
+            DefaultErrorNotification? error)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _VoicemailState():
+        return $default(_that.status, _that.items, _that.error);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(VoicemailStatus status, List<Voicemail> items,
+            DefaultErrorNotification? error)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _VoicemailState() when $default != null:
+        return $default(_that.status, _that.items, _that.error);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 
-class _$VoicemailStateImpl extends _VoicemailState
-    with DiagnosticableTreeMixin {
-  const _$VoicemailStateImpl(
+class _VoicemailState extends VoicemailState with DiagnosticableTreeMixin {
+  const _VoicemailState(
       {this.status = VoicemailStatus.loading,
       final List<Voicemail> items = const [],
       this.error})
@@ -149,14 +289,16 @@ class _$VoicemailStateImpl extends _VoicemailState
   @override
   final DefaultErrorNotification? error;
 
+  /// Create a copy of VoicemailState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'VoicemailState(status: $status, items: $items, error: $error)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$VoicemailStateCopyWith<_VoicemailState> get copyWith =>
+      __$VoicemailStateCopyWithImpl<_VoicemailState>(this, _$identity);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'VoicemailState'))
       ..add(DiagnosticsProperty('status', status))
@@ -168,7 +310,7 @@ class _$VoicemailStateImpl extends _VoicemailState
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$VoicemailStateImpl &&
+            other is _VoicemailState &&
             (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.error, error) || other.error == error));
@@ -178,34 +320,58 @@ class _$VoicemailStateImpl extends _VoicemailState
   int get hashCode => Object.hash(
       runtimeType, status, const DeepCollectionEquality().hash(_items), error);
 
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'VoicemailState(status: $status, items: $items, error: $error)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$VoicemailStateCopyWith<$Res>
+    implements $VoicemailStateCopyWith<$Res> {
+  factory _$VoicemailStateCopyWith(
+          _VoicemailState value, $Res Function(_VoicemailState) _then) =
+      __$VoicemailStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {VoicemailStatus status,
+      List<Voicemail> items,
+      DefaultErrorNotification? error});
+}
+
+/// @nodoc
+class __$VoicemailStateCopyWithImpl<$Res>
+    implements _$VoicemailStateCopyWith<$Res> {
+  __$VoicemailStateCopyWithImpl(this._self, this._then);
+
+  final _VoicemailState _self;
+  final $Res Function(_VoicemailState) _then;
+
   /// Create a copy of VoicemailState
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$VoicemailStateImplCopyWith<_$VoicemailStateImpl> get copyWith =>
-      __$$VoicemailStateImplCopyWithImpl<_$VoicemailStateImpl>(
-          this, _$identity);
+  $Res call({
+    Object? status = null,
+    Object? items = null,
+    Object? error = freezed,
+  }) {
+    return _then(_VoicemailState(
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as VoicemailStatus,
+      items: null == items
+          ? _self._items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<Voicemail>,
+      error: freezed == error
+          ? _self.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as DefaultErrorNotification?,
+    ));
+  }
 }
 
-abstract class _VoicemailState extends VoicemailState {
-  const factory _VoicemailState(
-      {final VoicemailStatus status,
-      final List<Voicemail> items,
-      final DefaultErrorNotification? error}) = _$VoicemailStateImpl;
-  const _VoicemailState._() : super._();
-
-  @override
-  VoicemailStatus get status;
-  @override
-  List<Voicemail> get items;
-  @override
-  DefaultErrorNotification? get error;
-
-  /// Create a copy of VoicemailState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$VoicemailStateImplCopyWith<_$VoicemailStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

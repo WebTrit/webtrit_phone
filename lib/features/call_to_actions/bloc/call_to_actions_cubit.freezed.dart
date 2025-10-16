@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,89 +9,50 @@ part of 'call_to_actions_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CallToActionsCubitState {
-  Locale get locale => throw _privateConstructorUsedError;
-  Map<MainFlavor, List<CallToAction>> get actions =>
-      throw _privateConstructorUsedError;
-  bool get visible => throw _privateConstructorUsedError;
-  MainFlavor? get flavor => throw _privateConstructorUsedError;
+  Locale get locale;
+  Map<MainFlavor, List<CallToAction>> get actions;
+  bool get visible;
+  MainFlavor? get flavor;
 
   /// Create a copy of CallToActionsCubitState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CallToActionsCubitStateCopyWith<CallToActionsCubitState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CallToActionsCubitStateCopyWith<$Res> {
-  factory $CallToActionsCubitStateCopyWith(CallToActionsCubitState value,
-          $Res Function(CallToActionsCubitState) then) =
-      _$CallToActionsCubitStateCopyWithImpl<$Res, CallToActionsCubitState>;
-  @useResult
-  $Res call(
-      {Locale locale,
-      Map<MainFlavor, List<CallToAction>> actions,
-      bool visible,
-      MainFlavor? flavor});
-}
-
-/// @nodoc
-class _$CallToActionsCubitStateCopyWithImpl<$Res,
-        $Val extends CallToActionsCubitState>
-    implements $CallToActionsCubitStateCopyWith<$Res> {
-  _$CallToActionsCubitStateCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of CallToActionsCubitState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $CallToActionsCubitStateCopyWith<CallToActionsCubitState> get copyWith =>
+      _$CallToActionsCubitStateCopyWithImpl<CallToActionsCubitState>(
+          this as CallToActionsCubitState, _$identity);
+
   @override
-  $Res call({
-    Object? locale = null,
-    Object? actions = null,
-    Object? visible = null,
-    Object? flavor = freezed,
-  }) {
-    return _then(_value.copyWith(
-      locale: null == locale
-          ? _value.locale
-          : locale // ignore: cast_nullable_to_non_nullable
-              as Locale,
-      actions: null == actions
-          ? _value.actions
-          : actions // ignore: cast_nullable_to_non_nullable
-              as Map<MainFlavor, List<CallToAction>>,
-      visible: null == visible
-          ? _value.visible
-          : visible // ignore: cast_nullable_to_non_nullable
-              as bool,
-      flavor: freezed == flavor
-          ? _value.flavor
-          : flavor // ignore: cast_nullable_to_non_nullable
-              as MainFlavor?,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is CallToActionsCubitState &&
+            (identical(other.locale, locale) || other.locale == locale) &&
+            const DeepCollectionEquality().equals(other.actions, actions) &&
+            (identical(other.visible, visible) || other.visible == visible) &&
+            (identical(other.flavor, flavor) || other.flavor == flavor));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, locale,
+      const DeepCollectionEquality().hash(actions), visible, flavor);
+
+  @override
+  String toString() {
+    return 'CallToActionsCubitState(locale: $locale, actions: $actions, visible: $visible, flavor: $flavor)';
   }
 }
 
 /// @nodoc
-abstract class _$$CallToActionsCubitStateImplCopyWith<$Res>
-    implements $CallToActionsCubitStateCopyWith<$Res> {
-  factory _$$CallToActionsCubitStateImplCopyWith(
-          _$CallToActionsCubitStateImpl value,
-          $Res Function(_$CallToActionsCubitStateImpl) then) =
-      __$$CallToActionsCubitStateImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $CallToActionsCubitStateCopyWith<$Res> {
+  factory $CallToActionsCubitStateCopyWith(CallToActionsCubitState value,
+          $Res Function(CallToActionsCubitState) _then) =
+      _$CallToActionsCubitStateCopyWithImpl;
   @useResult
   $Res call(
       {Locale locale,
@@ -101,14 +62,12 @@ abstract class _$$CallToActionsCubitStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CallToActionsCubitStateImplCopyWithImpl<$Res>
-    extends _$CallToActionsCubitStateCopyWithImpl<$Res,
-        _$CallToActionsCubitStateImpl>
-    implements _$$CallToActionsCubitStateImplCopyWith<$Res> {
-  __$$CallToActionsCubitStateImplCopyWithImpl(
-      _$CallToActionsCubitStateImpl _value,
-      $Res Function(_$CallToActionsCubitStateImpl) _then)
-      : super(_value, _then);
+class _$CallToActionsCubitStateCopyWithImpl<$Res>
+    implements $CallToActionsCubitStateCopyWith<$Res> {
+  _$CallToActionsCubitStateCopyWithImpl(this._self, this._then);
+
+  final CallToActionsCubitState _self;
+  final $Res Function(CallToActionsCubitState) _then;
 
   /// Create a copy of CallToActionsCubitState
   /// with the given fields replaced by the non-null parameter values.
@@ -120,31 +79,200 @@ class __$$CallToActionsCubitStateImplCopyWithImpl<$Res>
     Object? visible = null,
     Object? flavor = freezed,
   }) {
-    return _then(_$CallToActionsCubitStateImpl(
+    return _then(_self.copyWith(
       locale: null == locale
-          ? _value.locale
+          ? _self.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
       actions: null == actions
-          ? _value._actions
+          ? _self.actions
           : actions // ignore: cast_nullable_to_non_nullable
               as Map<MainFlavor, List<CallToAction>>,
       visible: null == visible
-          ? _value.visible
+          ? _self.visible
           : visible // ignore: cast_nullable_to_non_nullable
               as bool,
       flavor: freezed == flavor
-          ? _value.flavor
+          ? _self.flavor
           : flavor // ignore: cast_nullable_to_non_nullable
               as MainFlavor?,
     ));
   }
 }
 
+/// Adds pattern-matching-related methods to [CallToActionsCubitState].
+extension CallToActionsCubitStatePatterns on CallToActionsCubitState {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_CallToActionsCubitState value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallToActionsCubitState() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_CallToActionsCubitState value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallToActionsCubitState():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_CallToActionsCubitState value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallToActionsCubitState() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(Locale locale, Map<MainFlavor, List<CallToAction>> actions,
+            bool visible, MainFlavor? flavor)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallToActionsCubitState() when $default != null:
+        return $default(
+            _that.locale, _that.actions, _that.visible, _that.flavor);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(Locale locale, Map<MainFlavor, List<CallToAction>> actions,
+            bool visible, MainFlavor? flavor)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallToActionsCubitState():
+        return $default(
+            _that.locale, _that.actions, _that.visible, _that.flavor);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            Locale locale,
+            Map<MainFlavor, List<CallToAction>> actions,
+            bool visible,
+            MainFlavor? flavor)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallToActionsCubitState() when $default != null:
+        return $default(
+            _that.locale, _that.actions, _that.visible, _that.flavor);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 
-class _$CallToActionsCubitStateImpl extends _CallToActionsCubitState {
-  const _$CallToActionsCubitStateImpl(
+class _CallToActionsCubitState extends CallToActionsCubitState {
+  const _CallToActionsCubitState(
       {required this.locale,
       final Map<MainFlavor, List<CallToAction>> actions = const {},
       this.visible = true,
@@ -169,16 +297,20 @@ class _$CallToActionsCubitStateImpl extends _CallToActionsCubitState {
   @override
   final MainFlavor? flavor;
 
+  /// Create a copy of CallToActionsCubitState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'CallToActionsCubitState(locale: $locale, actions: $actions, visible: $visible, flavor: $flavor)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$CallToActionsCubitStateCopyWith<_CallToActionsCubitState> get copyWith =>
+      __$CallToActionsCubitStateCopyWithImpl<_CallToActionsCubitState>(
+          this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallToActionsCubitStateImpl &&
+            other is _CallToActionsCubitState &&
             (identical(other.locale, locale) || other.locale == locale) &&
             const DeepCollectionEquality().equals(other._actions, _actions) &&
             (identical(other.visible, visible) || other.visible == visible) &&
@@ -189,37 +321,64 @@ class _$CallToActionsCubitStateImpl extends _CallToActionsCubitState {
   int get hashCode => Object.hash(runtimeType, locale,
       const DeepCollectionEquality().hash(_actions), visible, flavor);
 
+  @override
+  String toString() {
+    return 'CallToActionsCubitState(locale: $locale, actions: $actions, visible: $visible, flavor: $flavor)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$CallToActionsCubitStateCopyWith<$Res>
+    implements $CallToActionsCubitStateCopyWith<$Res> {
+  factory _$CallToActionsCubitStateCopyWith(_CallToActionsCubitState value,
+          $Res Function(_CallToActionsCubitState) _then) =
+      __$CallToActionsCubitStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {Locale locale,
+      Map<MainFlavor, List<CallToAction>> actions,
+      bool visible,
+      MainFlavor? flavor});
+}
+
+/// @nodoc
+class __$CallToActionsCubitStateCopyWithImpl<$Res>
+    implements _$CallToActionsCubitStateCopyWith<$Res> {
+  __$CallToActionsCubitStateCopyWithImpl(this._self, this._then);
+
+  final _CallToActionsCubitState _self;
+  final $Res Function(_CallToActionsCubitState) _then;
+
   /// Create a copy of CallToActionsCubitState
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CallToActionsCubitStateImplCopyWith<_$CallToActionsCubitStateImpl>
-      get copyWith => __$$CallToActionsCubitStateImplCopyWithImpl<
-          _$CallToActionsCubitStateImpl>(this, _$identity);
+  $Res call({
+    Object? locale = null,
+    Object? actions = null,
+    Object? visible = null,
+    Object? flavor = freezed,
+  }) {
+    return _then(_CallToActionsCubitState(
+      locale: null == locale
+          ? _self.locale
+          : locale // ignore: cast_nullable_to_non_nullable
+              as Locale,
+      actions: null == actions
+          ? _self._actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as Map<MainFlavor, List<CallToAction>>,
+      visible: null == visible
+          ? _self.visible
+          : visible // ignore: cast_nullable_to_non_nullable
+              as bool,
+      flavor: freezed == flavor
+          ? _self.flavor
+          : flavor // ignore: cast_nullable_to_non_nullable
+              as MainFlavor?,
+    ));
+  }
 }
 
-abstract class _CallToActionsCubitState extends CallToActionsCubitState {
-  const factory _CallToActionsCubitState(
-      {required final Locale locale,
-      final Map<MainFlavor, List<CallToAction>> actions,
-      final bool visible,
-      final MainFlavor? flavor}) = _$CallToActionsCubitStateImpl;
-  const _CallToActionsCubitState._() : super._();
-
-  @override
-  Locale get locale;
-  @override
-  Map<MainFlavor, List<CallToAction>> get actions;
-  @override
-  bool get visible;
-  @override
-  MainFlavor? get flavor;
-
-  /// Create a copy of CallToActionsCubitState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CallToActionsCubitStateImplCopyWith<_$CallToActionsCubitStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
+// dart format on

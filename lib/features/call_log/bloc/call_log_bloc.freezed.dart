@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,126 +9,258 @@ part of 'call_log_bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CallLogEntryDeleted {
-  CallLogEntry get callLogEntry => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$CallLogEntryDeletedImpl implements _CallLogEntryDeleted {
-  const _$CallLogEntryDeletedImpl(this.callLogEntry);
-
-  @override
-  final CallLogEntry callLogEntry;
-
-  @override
-  String toString() {
-    return 'CallLogEntryDeleted(callLogEntry: $callLogEntry)';
-  }
+  CallLogEntry get callLogEntry;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallLogEntryDeletedImpl &&
+            other is CallLogEntryDeleted &&
             (identical(other.callLogEntry, callLogEntry) ||
                 other.callLogEntry == callLogEntry));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, callLogEntry);
-}
-
-abstract class _CallLogEntryDeleted implements CallLogEntryDeleted {
-  const factory _CallLogEntryDeleted(final CallLogEntry callLogEntry) =
-      _$CallLogEntryDeletedImpl;
 
   @override
-  CallLogEntry get callLogEntry;
+  String toString() {
+    return 'CallLogEntryDeleted(callLogEntry: $callLogEntry)';
+  }
 }
 
-/// @nodoc
-mixin _$CallLogState {
-  String get number => throw _privateConstructorUsedError;
-  Contact? get contact => throw _privateConstructorUsedError;
-  List<CallLogEntry>? get callLog => throw _privateConstructorUsedError;
+/// Adds pattern-matching-related methods to [CallLogEntryDeleted].
+extension CallLogEntryDeletedPatterns on CallLogEntryDeleted {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
-  /// Create a copy of CallLogState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $CallLogStateCopyWith<CallLogState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CallLogStateCopyWith<$Res> {
-  factory $CallLogStateCopyWith(
-          CallLogState value, $Res Function(CallLogState) then) =
-      _$CallLogStateCopyWithImpl<$Res, CallLogState>;
-  @useResult
-  $Res call({String number, Contact? contact, List<CallLogEntry>? callLog});
-}
-
-/// @nodoc
-class _$CallLogStateCopyWithImpl<$Res, $Val extends CallLogState>
-    implements $CallLogStateCopyWith<$Res> {
-  _$CallLogStateCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of CallLogState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? number = null,
-    Object? contact = freezed,
-    Object? callLog = freezed,
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_CallLogEntryDeleted value)? $default, {
+    required TResult orElse(),
   }) {
-    return _then(_value.copyWith(
-      number: null == number
-          ? _value.number
-          : number // ignore: cast_nullable_to_non_nullable
-              as String,
-      contact: freezed == contact
-          ? _value.contact
-          : contact // ignore: cast_nullable_to_non_nullable
-              as Contact?,
-      callLog: freezed == callLog
-          ? _value.callLog
-          : callLog // ignore: cast_nullable_to_non_nullable
-              as List<CallLogEntry>?,
-    ) as $Val);
+    final _that = this;
+    switch (_that) {
+      case _CallLogEntryDeleted() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_CallLogEntryDeleted value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogEntryDeleted():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_CallLogEntryDeleted value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogEntryDeleted() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(CallLogEntry callLogEntry)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogEntryDeleted() when $default != null:
+        return $default(_that.callLogEntry);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(CallLogEntry callLogEntry) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogEntryDeleted():
+        return $default(_that.callLogEntry);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(CallLogEntry callLogEntry)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogEntryDeleted() when $default != null:
+        return $default(_that.callLogEntry);
+      case _:
+        return null;
+    }
   }
 }
 
 /// @nodoc
-abstract class _$$CallLogStateImplCopyWith<$Res>
-    implements $CallLogStateCopyWith<$Res> {
-  factory _$$CallLogStateImplCopyWith(
-          _$CallLogStateImpl value, $Res Function(_$CallLogStateImpl) then) =
-      __$$CallLogStateImplCopyWithImpl<$Res>;
+
+class _CallLogEntryDeleted implements CallLogEntryDeleted {
+  const _CallLogEntryDeleted(this.callLogEntry);
+
   @override
+  final CallLogEntry callLogEntry;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _CallLogEntryDeleted &&
+            (identical(other.callLogEntry, callLogEntry) ||
+                other.callLogEntry == callLogEntry));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, callLogEntry);
+
+  @override
+  String toString() {
+    return 'CallLogEntryDeleted(callLogEntry: $callLogEntry)';
+  }
+}
+
+/// @nodoc
+mixin _$CallLogState {
+  String get number;
+  Contact? get contact;
+  List<CallLogEntry>? get callLog;
+
+  /// Create a copy of CallLogState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $CallLogStateCopyWith<CallLogState> get copyWith =>
+      _$CallLogStateCopyWithImpl<CallLogState>(
+          this as CallLogState, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is CallLogState &&
+            (identical(other.number, number) || other.number == number) &&
+            (identical(other.contact, contact) || other.contact == contact) &&
+            const DeepCollectionEquality().equals(other.callLog, callLog));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, number, contact,
+      const DeepCollectionEquality().hash(callLog));
+}
+
+/// @nodoc
+abstract mixin class $CallLogStateCopyWith<$Res> {
+  factory $CallLogStateCopyWith(
+          CallLogState value, $Res Function(CallLogState) _then) =
+      _$CallLogStateCopyWithImpl;
   @useResult
   $Res call({String number, Contact? contact, List<CallLogEntry>? callLog});
 }
 
 /// @nodoc
-class __$$CallLogStateImplCopyWithImpl<$Res>
-    extends _$CallLogStateCopyWithImpl<$Res, _$CallLogStateImpl>
-    implements _$$CallLogStateImplCopyWith<$Res> {
-  __$$CallLogStateImplCopyWithImpl(
-      _$CallLogStateImpl _value, $Res Function(_$CallLogStateImpl) _then)
-      : super(_value, _then);
+class _$CallLogStateCopyWithImpl<$Res> implements $CallLogStateCopyWith<$Res> {
+  _$CallLogStateCopyWithImpl(this._self, this._then);
+
+  final CallLogState _self;
+  final $Res Function(CallLogState) _then;
 
   /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
@@ -139,27 +271,190 @@ class __$$CallLogStateImplCopyWithImpl<$Res>
     Object? contact = freezed,
     Object? callLog = freezed,
   }) {
-    return _then(_$CallLogStateImpl(
+    return _then(_self.copyWith(
       number: null == number
-          ? _value.number
+          ? _self.number
           : number // ignore: cast_nullable_to_non_nullable
               as String,
       contact: freezed == contact
-          ? _value.contact
+          ? _self.contact
           : contact // ignore: cast_nullable_to_non_nullable
               as Contact?,
       callLog: freezed == callLog
-          ? _value._callLog
+          ? _self.callLog
           : callLog // ignore: cast_nullable_to_non_nullable
               as List<CallLogEntry>?,
     ));
   }
 }
 
+/// Adds pattern-matching-related methods to [CallLogState].
+extension CallLogStatePatterns on CallLogState {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_CallLogState value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogState() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_CallLogState value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogState():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_CallLogState value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogState() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            String number, Contact? contact, List<CallLogEntry>? callLog)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogState() when $default != null:
+        return $default(_that.number, _that.contact, _that.callLog);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            String number, Contact? contact, List<CallLogEntry>? callLog)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogState():
+        return $default(_that.number, _that.contact, _that.callLog);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            String number, Contact? contact, List<CallLogEntry>? callLog)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallLogState() when $default != null:
+        return $default(_that.number, _that.contact, _that.callLog);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 
-class _$CallLogStateImpl implements _CallLogState {
-  const _$CallLogStateImpl(
+class _CallLogState implements CallLogState {
+  const _CallLogState(
       {required this.number, this.contact, final List<CallLogEntry>? callLog})
       : _callLog = callLog;
 
@@ -177,11 +472,19 @@ class _$CallLogStateImpl implements _CallLogState {
     return EqualUnmodifiableListView(value);
   }
 
+  /// Create a copy of CallLogState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$CallLogStateCopyWith<_CallLogState> get copyWith =>
+      __$CallLogStateCopyWithImpl<_CallLogState>(this, _$identity);
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallLogStateImpl &&
+            other is _CallLogState &&
             (identical(other.number, number) || other.number == number) &&
             (identical(other.contact, contact) || other.contact == contact) &&
             const DeepCollectionEquality().equals(other._callLog, _callLog));
@@ -190,33 +493,51 @@ class _$CallLogStateImpl implements _CallLogState {
   @override
   int get hashCode => Object.hash(runtimeType, number, contact,
       const DeepCollectionEquality().hash(_callLog));
+}
+
+/// @nodoc
+abstract mixin class _$CallLogStateCopyWith<$Res>
+    implements $CallLogStateCopyWith<$Res> {
+  factory _$CallLogStateCopyWith(
+          _CallLogState value, $Res Function(_CallLogState) _then) =
+      __$CallLogStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call({String number, Contact? contact, List<CallLogEntry>? callLog});
+}
+
+/// @nodoc
+class __$CallLogStateCopyWithImpl<$Res>
+    implements _$CallLogStateCopyWith<$Res> {
+  __$CallLogStateCopyWithImpl(this._self, this._then);
+
+  final _CallLogState _self;
+  final $Res Function(_CallLogState) _then;
 
   /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CallLogStateImplCopyWith<_$CallLogStateImpl> get copyWith =>
-      __$$CallLogStateImplCopyWithImpl<_$CallLogStateImpl>(this, _$identity);
+  $Res call({
+    Object? number = null,
+    Object? contact = freezed,
+    Object? callLog = freezed,
+  }) {
+    return _then(_CallLogState(
+      number: null == number
+          ? _self.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as String,
+      contact: freezed == contact
+          ? _self.contact
+          : contact // ignore: cast_nullable_to_non_nullable
+              as Contact?,
+      callLog: freezed == callLog
+          ? _self._callLog
+          : callLog // ignore: cast_nullable_to_non_nullable
+              as List<CallLogEntry>?,
+    ));
+  }
 }
 
-abstract class _CallLogState implements CallLogState {
-  const factory _CallLogState(
-      {required final String number,
-      final Contact? contact,
-      final List<CallLogEntry>? callLog}) = _$CallLogStateImpl;
-
-  @override
-  String get number;
-  @override
-  Contact? get contact;
-  @override
-  List<CallLogEntry>? get callLog;
-
-  /// Create a copy of CallLogState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CallLogStateImplCopyWith<_$CallLogStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

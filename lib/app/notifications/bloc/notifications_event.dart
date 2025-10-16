@@ -5,7 +5,7 @@ abstract class NotificationsEvent {
 }
 
 @Freezed(copyWith: false)
-class NotificationsSubmitted with _$NotificationsSubmitted implements NotificationsEvent {
+abstract class NotificationsSubmitted with _$NotificationsSubmitted implements NotificationsEvent {
   const factory NotificationsSubmitted(Notification notification) = _NotificationsSubmitted;
 }
 

@@ -9,11 +9,11 @@ class RecentsStarted extends RecentsEvent {
 }
 
 @Freezed(copyWith: false)
-class RecentsFiltered with _$RecentsFiltered implements RecentsEvent {
+abstract class RecentsFiltered with _$RecentsFiltered implements RecentsEvent {
   const factory RecentsFiltered(RecentsVisibilityFilter filter) = _RecentsFiltered;
 }
 
 @Freezed(copyWith: false)
-class RecentsDeleted with _$RecentsDeleted implements RecentsEvent {
+abstract class RecentsDeleted with _$RecentsDeleted implements RecentsEvent {
   const factory RecentsDeleted(Recent recent) = _RecentsDeleted;
 }

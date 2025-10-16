@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,34 +9,15 @@ part of 'call_bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
 
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
-mixin _$AppLifecycleStateChanged {
-  AppLifecycleState get state => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$_AppLifecycleStateChangedImpl
-    with DiagnosticableTreeMixin
-    implements __AppLifecycleStateChanged {
-  const _$_AppLifecycleStateChangedImpl(this.state);
-
-  @override
-  final AppLifecycleState state;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_AppLifecycleStateChanged(state: $state)';
-  }
+mixin _$AppLifecycleStateChanged implements DiagnosticableTreeMixin {
+  AppLifecycleState get state;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_AppLifecycleStateChanged'))
       ..add(DiagnosticsProperty('state', state));
@@ -46,45 +27,216 @@ class _$_AppLifecycleStateChangedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppLifecycleStateChangedImpl &&
+            other is _AppLifecycleStateChanged &&
             (identical(other.state, state) || other.state == state));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, state);
-}
-
-abstract class __AppLifecycleStateChanged implements _AppLifecycleStateChanged {
-  const factory __AppLifecycleStateChanged(final AppLifecycleState state) =
-      _$_AppLifecycleStateChangedImpl;
-
-  @override
-  AppLifecycleState get state;
-}
-
-/// @nodoc
-mixin _$ConnectivityResultChanged {
-  ConnectivityResult get result => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$_ConnectivityResultChangedImpl
-    with DiagnosticableTreeMixin
-    implements __ConnectivityResultChanged {
-  const _$_ConnectivityResultChangedImpl(this.result);
-
-  @override
-  final ConnectivityResult result;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_ConnectivityResultChanged(result: $result)';
+    return '_AppLifecycleStateChanged(state: $state)';
   }
+}
+
+/// Adds pattern-matching-related methods to [_AppLifecycleStateChanged].
+extension _AppLifecycleStateChangedPatterns on _AppLifecycleStateChanged {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(__AppLifecycleStateChanged value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __AppLifecycleStateChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(__AppLifecycleStateChanged value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __AppLifecycleStateChanged():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(__AppLifecycleStateChanged value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __AppLifecycleStateChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(AppLifecycleState state)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __AppLifecycleStateChanged() when $default != null:
+        return $default(_that.state);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(AppLifecycleState state) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __AppLifecycleStateChanged():
+        return $default(_that.state);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(AppLifecycleState state)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __AppLifecycleStateChanged() when $default != null:
+        return $default(_that.state);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class __AppLifecycleStateChanged
+    with DiagnosticableTreeMixin
+    implements _AppLifecycleStateChanged {
+  const __AppLifecycleStateChanged(this.state);
+
+  @override
+  final AppLifecycleState state;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_AppLifecycleStateChanged'))
+      ..add(DiagnosticsProperty('state', state));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is __AppLifecycleStateChanged &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, state);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_AppLifecycleStateChanged(state: $state)';
+  }
+}
+
+/// @nodoc
+mixin _$ConnectivityResultChanged implements DiagnosticableTreeMixin {
+  ConnectivityResult get result;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
       ..add(DiagnosticsProperty('type', '_ConnectivityResultChanged'))
       ..add(DiagnosticsProperty('result', result));
@@ -94,41 +246,214 @@ class _$_ConnectivityResultChangedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ConnectivityResultChangedImpl &&
+            other is _ConnectivityResultChanged &&
             (identical(other.result, result) || other.result == result));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, result);
-}
-
-abstract class __ConnectivityResultChanged
-    implements _ConnectivityResultChanged {
-  const factory __ConnectivityResultChanged(final ConnectivityResult result) =
-      _$_ConnectivityResultChangedImpl;
-
-  @override
-  ConnectivityResult get result;
-}
-
-/// @nodoc
-mixin _$NavigatorMediaDevicesChange {}
-
-/// @nodoc
-
-class _$_NavigatorMediaDevicesChangeImpl
-    with DiagnosticableTreeMixin
-    implements __NavigatorMediaDevicesChange {
-  const _$_NavigatorMediaDevicesChangeImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_NavigatorMediaDevicesChange()';
+    return '_ConnectivityResultChanged(result: $result)';
   }
+}
+
+/// Adds pattern-matching-related methods to [_ConnectivityResultChanged].
+extension _ConnectivityResultChangedPatterns on _ConnectivityResultChanged {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(__ConnectivityResultChanged value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __ConnectivityResultChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(__ConnectivityResultChanged value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __ConnectivityResultChanged():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(__ConnectivityResultChanged value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __ConnectivityResultChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(ConnectivityResult result)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __ConnectivityResultChanged() when $default != null:
+        return $default(_that.result);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(ConnectivityResult result) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __ConnectivityResultChanged():
+        return $default(_that.result);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(ConnectivityResult result)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __ConnectivityResultChanged() when $default != null:
+        return $default(_that.result);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class __ConnectivityResultChanged
+    with DiagnosticableTreeMixin
+    implements _ConnectivityResultChanged {
+  const __ConnectivityResultChanged(this.result);
+
+  @override
+  final ConnectivityResult result;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_ConnectivityResultChanged'))
+      ..add(DiagnosticsProperty('result', result));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is __ConnectivityResultChanged &&
+            (identical(other.result, result) || other.result == result));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, result);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_ConnectivityResultChanged(result: $result)';
+  }
+}
+
+/// @nodoc
+mixin _$NavigatorMediaDevicesChange implements DiagnosticableTreeMixin {
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
       ..add(DiagnosticsProperty('type', '_NavigatorMediaDevicesChange'));
   }
@@ -137,42 +462,210 @@ class _$_NavigatorMediaDevicesChangeImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_NavigatorMediaDevicesChangeImpl);
+            other is _NavigatorMediaDevicesChange);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
-}
-
-abstract class __NavigatorMediaDevicesChange
-    implements _NavigatorMediaDevicesChange {
-  const factory __NavigatorMediaDevicesChange() =
-      _$_NavigatorMediaDevicesChangeImpl;
-}
-
-/// @nodoc
-mixin _$RegistrationChange {
-  Registration get registration => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$_RegistrationChangeImpl
-    with DiagnosticableTreeMixin
-    implements __RegistrationChange {
-  const _$_RegistrationChangeImpl({required this.registration});
-
-  @override
-  final Registration registration;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_RegistrationChange(registration: $registration)';
+    return '_NavigatorMediaDevicesChange()';
   }
+}
+
+/// Adds pattern-matching-related methods to [_NavigatorMediaDevicesChange].
+extension _NavigatorMediaDevicesChangePatterns on _NavigatorMediaDevicesChange {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(__NavigatorMediaDevicesChange value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __NavigatorMediaDevicesChange() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(__NavigatorMediaDevicesChange value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __NavigatorMediaDevicesChange():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(__NavigatorMediaDevicesChange value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __NavigatorMediaDevicesChange() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function()? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __NavigatorMediaDevicesChange() when $default != null:
+        return $default();
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function() $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __NavigatorMediaDevicesChange():
+        return $default();
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function()? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __NavigatorMediaDevicesChange() when $default != null:
+        return $default();
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class __NavigatorMediaDevicesChange
+    with DiagnosticableTreeMixin
+    implements _NavigatorMediaDevicesChange {
+  const __NavigatorMediaDevicesChange();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', '_NavigatorMediaDevicesChange'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is __NavigatorMediaDevicesChange);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_NavigatorMediaDevicesChange()';
+  }
+}
+
+/// @nodoc
+mixin _$RegistrationChange implements DiagnosticableTreeMixin {
+  Registration get registration;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
       ..add(DiagnosticsProperty('type', '_RegistrationChange'))
       ..add(DiagnosticsProperty('registration', registration));
@@ -182,81 +675,419 @@ class _$_RegistrationChangeImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RegistrationChangeImpl &&
+            other is _RegistrationChange &&
             (identical(other.registration, registration) ||
                 other.registration == registration));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, registration);
-}
-
-abstract class __RegistrationChange implements _RegistrationChange {
-  const factory __RegistrationChange(
-      {required final Registration registration}) = _$_RegistrationChangeImpl;
 
   @override
-  Registration get registration;
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_RegistrationChange(registration: $registration)';
+  }
+}
+
+/// Adds pattern-matching-related methods to [_RegistrationChange].
+extension _RegistrationChangePatterns on _RegistrationChange {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(__RegistrationChange value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __RegistrationChange() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(__RegistrationChange value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __RegistrationChange():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(__RegistrationChange value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __RegistrationChange() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(Registration registration)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __RegistrationChange() when $default != null:
+        return $default(_that.registration);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(Registration registration) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __RegistrationChange():
+        return $default(_that.registration);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(Registration registration)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __RegistrationChange() when $default != null:
+        return $default(_that.registration);
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
-mixin _$ResetStateEvent {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() completeCalls,
-    required TResult Function(String callId) completeCall,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? completeCalls,
-    TResult? Function(String callId)? completeCall,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? completeCalls,
-    TResult Function(String callId)? completeCall,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_ResetStateEventCompleteCalls value)
-        completeCalls,
-    required TResult Function(_ResetStateEventCompleteCall value) completeCall,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_ResetStateEventCompleteCalls value)? completeCalls,
-    TResult? Function(_ResetStateEventCompleteCall value)? completeCall,
-  }) =>
-      throw _privateConstructorUsedError;
+
+class __RegistrationChange
+    with DiagnosticableTreeMixin
+    implements _RegistrationChange {
+  const __RegistrationChange({required this.registration});
+
+  @override
+  final Registration registration;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', '_RegistrationChange'))
+      ..add(DiagnosticsProperty('registration', registration));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is __RegistrationChange &&
+            (identical(other.registration, registration) ||
+                other.registration == registration));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, registration);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_RegistrationChange(registration: $registration)';
+  }
+}
+
+/// @nodoc
+mixin _$ResetStateEvent implements DiagnosticableTreeMixin {
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties..add(DiagnosticsProperty('type', '_ResetStateEvent'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _ResetStateEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_ResetStateEvent()';
+  }
+}
+
+/// Adds pattern-matching-related methods to [_ResetStateEvent].
+extension _ResetStateEventPatterns on _ResetStateEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_ResetStateEventCompleteCalls value)? completeCalls,
     TResult Function(_ResetStateEventCompleteCall value)? completeCall,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ResetStateEventCompleteCalls() when completeCalls != null:
+        return completeCalls(_that);
+      case _ResetStateEventCompleteCall() when completeCall != null:
+        return completeCall(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_ResetStateEventCompleteCalls value)
+        completeCalls,
+    required TResult Function(_ResetStateEventCompleteCall value) completeCall,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ResetStateEventCompleteCalls():
+        return completeCalls(_that);
+      case _ResetStateEventCompleteCall():
+        return completeCall(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_ResetStateEventCompleteCalls value)? completeCalls,
+    TResult? Function(_ResetStateEventCompleteCall value)? completeCall,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ResetStateEventCompleteCalls() when completeCalls != null:
+        return completeCalls(_that);
+      case _ResetStateEventCompleteCall() when completeCall != null:
+        return completeCall(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? completeCalls,
+    TResult Function(String callId)? completeCall,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ResetStateEventCompleteCalls() when completeCalls != null:
+        return completeCalls();
+      case _ResetStateEventCompleteCall() when completeCall != null:
+        return completeCall(_that.callId);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() completeCalls,
+    required TResult Function(String callId) completeCall,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ResetStateEventCompleteCalls():
+        return completeCalls();
+      case _ResetStateEventCompleteCall():
+        return completeCall(_that.callId);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? completeCalls,
+    TResult? Function(String callId)? completeCall,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ResetStateEventCompleteCalls() when completeCalls != null:
+        return completeCalls();
+      case _ResetStateEventCompleteCall() when completeCall != null:
+        return completeCall(_that.callId);
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$ResetStateEventCompleteCallsImpl
+class _ResetStateEventCompleteCalls
     with DiagnosticableTreeMixin
-    implements _ResetStateEventCompleteCalls {
-  const _$ResetStateEventCompleteCallsImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_ResetStateEvent.completeCalls()';
-  }
+    implements _ResetStateEvent {
+  const _ResetStateEventCompleteCalls();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_ResetStateEvent.completeCalls'));
   }
@@ -265,99 +1096,29 @@ class _$ResetStateEventCompleteCallsImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ResetStateEventCompleteCallsImpl);
+            other is _ResetStateEventCompleteCalls);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() completeCalls,
-    required TResult Function(String callId) completeCall,
-  }) {
-    return completeCalls();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_ResetStateEvent.completeCalls()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? completeCalls,
-    TResult? Function(String callId)? completeCall,
-  }) {
-    return completeCalls?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? completeCalls,
-    TResult Function(String callId)? completeCall,
-    required TResult orElse(),
-  }) {
-    if (completeCalls != null) {
-      return completeCalls();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_ResetStateEventCompleteCalls value)
-        completeCalls,
-    required TResult Function(_ResetStateEventCompleteCall value) completeCall,
-  }) {
-    return completeCalls(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_ResetStateEventCompleteCalls value)? completeCalls,
-    TResult? Function(_ResetStateEventCompleteCall value)? completeCall,
-  }) {
-    return completeCalls?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_ResetStateEventCompleteCalls value)? completeCalls,
-    TResult Function(_ResetStateEventCompleteCall value)? completeCall,
-    required TResult orElse(),
-  }) {
-    if (completeCalls != null) {
-      return completeCalls(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _ResetStateEventCompleteCalls implements _ResetStateEvent {
-  const factory _ResetStateEventCompleteCalls() =
-      _$ResetStateEventCompleteCallsImpl;
 }
 
 /// @nodoc
 
-class _$ResetStateEventCompleteCallImpl
+class _ResetStateEventCompleteCall
     with DiagnosticableTreeMixin
-    implements _ResetStateEventCompleteCall {
-  const _$ResetStateEventCompleteCallImpl(this.callId);
+    implements _ResetStateEvent {
+  const _ResetStateEventCompleteCall(this.callId);
 
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_ResetStateEvent.completeCall(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_ResetStateEvent.completeCall'))
       ..add(DiagnosticsProperty('callId', callId));
@@ -367,7 +1128,7 @@ class _$ResetStateEventCompleteCallImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ResetStateEventCompleteCallImpl &&
+            other is _ResetStateEventCompleteCall &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -375,119 +1136,47 @@ class _$ResetStateEventCompleteCallImpl
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() completeCalls,
-    required TResult Function(String callId) completeCall,
-  }) {
-    return completeCall(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_ResetStateEvent.completeCall(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? completeCalls,
-    TResult? Function(String callId)? completeCall,
-  }) {
-    return completeCall?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? completeCalls,
-    TResult Function(String callId)? completeCall,
-    required TResult orElse(),
-  }) {
-    if (completeCall != null) {
-      return completeCall(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_ResetStateEventCompleteCalls value)
-        completeCalls,
-    required TResult Function(_ResetStateEventCompleteCall value) completeCall,
-  }) {
-    return completeCall(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_ResetStateEventCompleteCalls value)? completeCalls,
-    TResult? Function(_ResetStateEventCompleteCall value)? completeCall,
-  }) {
-    return completeCall?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_ResetStateEventCompleteCalls value)? completeCalls,
-    TResult Function(_ResetStateEventCompleteCall value)? completeCall,
-    required TResult orElse(),
-  }) {
-    if (completeCall != null) {
-      return completeCall(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _ResetStateEventCompleteCall implements _ResetStateEvent {
-  const factory _ResetStateEventCompleteCall(final String callId) =
-      _$ResetStateEventCompleteCallImpl;
-
-  String get callId;
 }
 
 /// @nodoc
-mixin _$SignalingClientEvent {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() connectInitiated,
-    required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason) disconnected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? connectInitiated,
-    TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason)? disconnected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? connectInitiated,
-    TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_SignalingClientEventConnectInitiated value)
-        connectInitiated,
-    required TResult Function(_SignalingClientEventDisconnectInitiated value)
-        disconnectInitiated,
-    required TResult Function(_SignalingClientEventDisconnected value)
-        disconnected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
-    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
-  }) =>
-      throw _privateConstructorUsedError;
+mixin _$SignalingClientEvent implements DiagnosticableTreeMixin {
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties..add(DiagnosticsProperty('type', '_SignalingClientEvent'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _SignalingClientEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_SignalingClientEvent()';
+  }
+}
+
+/// Adds pattern-matching-related methods to [_SignalingClientEvent].
+extension _SignalingClientEventPatterns on _SignalingClientEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_SignalingClientEventConnectInitiated value)?
@@ -496,25 +1185,201 @@ mixin _$SignalingClientEvent {
         disconnectInitiated,
     TResult Function(_SignalingClientEventDisconnected value)? disconnected,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SignalingClientEventConnectInitiated()
+          when connectInitiated != null:
+        return connectInitiated(_that);
+      case _SignalingClientEventDisconnectInitiated()
+          when disconnectInitiated != null:
+        return disconnectInitiated(_that);
+      case _SignalingClientEventDisconnected() when disconnected != null:
+        return disconnected(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_SignalingClientEventConnectInitiated value)
+        connectInitiated,
+    required TResult Function(_SignalingClientEventDisconnectInitiated value)
+        disconnectInitiated,
+    required TResult Function(_SignalingClientEventDisconnected value)
+        disconnected,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SignalingClientEventConnectInitiated():
+        return connectInitiated(_that);
+      case _SignalingClientEventDisconnectInitiated():
+        return disconnectInitiated(_that);
+      case _SignalingClientEventDisconnected():
+        return disconnected(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_SignalingClientEventConnectInitiated value)?
+        connectInitiated,
+    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
+        disconnectInitiated,
+    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SignalingClientEventConnectInitiated()
+          when connectInitiated != null:
+        return connectInitiated(_that);
+      case _SignalingClientEventDisconnectInitiated()
+          when disconnectInitiated != null:
+        return disconnectInitiated(_that);
+      case _SignalingClientEventDisconnected() when disconnected != null:
+        return disconnected(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? connectInitiated,
+    TResult Function()? disconnectInitiated,
+    TResult Function(int? code, String? reason)? disconnected,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SignalingClientEventConnectInitiated()
+          when connectInitiated != null:
+        return connectInitiated();
+      case _SignalingClientEventDisconnectInitiated()
+          when disconnectInitiated != null:
+        return disconnectInitiated();
+      case _SignalingClientEventDisconnected() when disconnected != null:
+        return disconnected(_that.code, _that.reason);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() connectInitiated,
+    required TResult Function() disconnectInitiated,
+    required TResult Function(int? code, String? reason) disconnected,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SignalingClientEventConnectInitiated():
+        return connectInitiated();
+      case _SignalingClientEventDisconnectInitiated():
+        return disconnectInitiated();
+      case _SignalingClientEventDisconnected():
+        return disconnected(_that.code, _that.reason);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? connectInitiated,
+    TResult? Function()? disconnectInitiated,
+    TResult? Function(int? code, String? reason)? disconnected,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SignalingClientEventConnectInitiated()
+          when connectInitiated != null:
+        return connectInitiated();
+      case _SignalingClientEventDisconnectInitiated()
+          when disconnectInitiated != null:
+        return disconnectInitiated();
+      case _SignalingClientEventDisconnected() when disconnected != null:
+        return disconnected(_that.code, _that.reason);
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$SignalingClientEventConnectInitiatedImpl
+class _SignalingClientEventConnectInitiated
     with DiagnosticableTreeMixin
-    implements _SignalingClientEventConnectInitiated {
-  const _$SignalingClientEventConnectInitiatedImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.connectInitiated()';
-  }
+    implements _SignalingClientEvent {
+  const _SignalingClientEventConnectInitiated();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', '_SignalingClientEvent.connectInitiated'));
@@ -524,109 +1389,27 @@ class _$SignalingClientEventConnectInitiatedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventConnectInitiatedImpl);
+            other is _SignalingClientEventConnectInitiated);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() connectInitiated,
-    required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason) disconnected,
-  }) {
-    return connectInitiated();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_SignalingClientEvent.connectInitiated()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? connectInitiated,
-    TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason)? disconnected,
-  }) {
-    return connectInitiated?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? connectInitiated,
-    TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
-    required TResult orElse(),
-  }) {
-    if (connectInitiated != null) {
-      return connectInitiated();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_SignalingClientEventConnectInitiated value)
-        connectInitiated,
-    required TResult Function(_SignalingClientEventDisconnectInitiated value)
-        disconnectInitiated,
-    required TResult Function(_SignalingClientEventDisconnected value)
-        disconnected,
-  }) {
-    return connectInitiated(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
-    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
-  }) {
-    return connectInitiated?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
-    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
-    required TResult orElse(),
-  }) {
-    if (connectInitiated != null) {
-      return connectInitiated(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _SignalingClientEventConnectInitiated
-    implements _SignalingClientEvent {
-  const factory _SignalingClientEventConnectInitiated() =
-      _$SignalingClientEventConnectInitiatedImpl;
 }
 
 /// @nodoc
 
-class _$SignalingClientEventDisconnectInitiatedImpl
+class _SignalingClientEventDisconnectInitiated
     with DiagnosticableTreeMixin
-    implements _SignalingClientEventDisconnectInitiated {
-  const _$SignalingClientEventDisconnectInitiatedImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.disconnectInitiated()';
-  }
+    implements _SignalingClientEvent {
+  const _SignalingClientEventDisconnectInitiated();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', '_SignalingClientEvent.disconnectInitiated'));
@@ -636,114 +1419,30 @@ class _$SignalingClientEventDisconnectInitiatedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventDisconnectInitiatedImpl);
+            other is _SignalingClientEventDisconnectInitiated);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() connectInitiated,
-    required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason) disconnected,
-  }) {
-    return disconnectInitiated();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_SignalingClientEvent.disconnectInitiated()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? connectInitiated,
-    TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason)? disconnected,
-  }) {
-    return disconnectInitiated?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? connectInitiated,
-    TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
-    required TResult orElse(),
-  }) {
-    if (disconnectInitiated != null) {
-      return disconnectInitiated();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_SignalingClientEventConnectInitiated value)
-        connectInitiated,
-    required TResult Function(_SignalingClientEventDisconnectInitiated value)
-        disconnectInitiated,
-    required TResult Function(_SignalingClientEventDisconnected value)
-        disconnected,
-  }) {
-    return disconnectInitiated(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
-    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
-  }) {
-    return disconnectInitiated?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
-    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
-    required TResult orElse(),
-  }) {
-    if (disconnectInitiated != null) {
-      return disconnectInitiated(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _SignalingClientEventDisconnectInitiated
-    implements _SignalingClientEvent {
-  const factory _SignalingClientEventDisconnectInitiated() =
-      _$SignalingClientEventDisconnectInitiatedImpl;
 }
 
 /// @nodoc
 
-class _$SignalingClientEventDisconnectedImpl
+class _SignalingClientEventDisconnected
     with DiagnosticableTreeMixin
-    implements _SignalingClientEventDisconnected {
-  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason);
+    implements _SignalingClientEvent {
+  const _SignalingClientEventDisconnected(this.code, this.reason);
 
-  @override
   final int? code;
-  @override
   final String? reason;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_SignalingClientEvent.disconnected'))
       ..add(DiagnosticsProperty('code', code))
@@ -754,7 +1453,7 @@ class _$SignalingClientEventDisconnectedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventDisconnectedImpl &&
+            other is _SignalingClientEventDisconnected &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.reason, reason) || other.reason == reason));
   }
@@ -763,152 +1462,20 @@ class _$SignalingClientEventDisconnectedImpl
   int get hashCode => Object.hash(runtimeType, code, reason);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() connectInitiated,
-    required TResult Function() disconnectInitiated,
-    required TResult Function(int? code, String? reason) disconnected,
-  }) {
-    return disconnected(code, reason);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? connectInitiated,
-    TResult? Function()? disconnectInitiated,
-    TResult? Function(int? code, String? reason)? disconnected,
-  }) {
-    return disconnected?.call(code, reason);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? connectInitiated,
-    TResult Function()? disconnectInitiated,
-    TResult Function(int? code, String? reason)? disconnected,
-    required TResult orElse(),
-  }) {
-    if (disconnected != null) {
-      return disconnected(code, reason);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_SignalingClientEventConnectInitiated value)
-        connectInitiated,
-    required TResult Function(_SignalingClientEventDisconnectInitiated value)
-        disconnectInitiated,
-    required TResult Function(_SignalingClientEventDisconnected value)
-        disconnected,
-  }) {
-    return disconnected(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult? Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
-    TResult? Function(_SignalingClientEventDisconnected value)? disconnected,
-  }) {
-    return disconnected?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_SignalingClientEventConnectInitiated value)?
-        connectInitiated,
-    TResult Function(_SignalingClientEventDisconnectInitiated value)?
-        disconnectInitiated,
-    TResult Function(_SignalingClientEventDisconnected value)? disconnected,
-    required TResult orElse(),
-  }) {
-    if (disconnected != null) {
-      return disconnected(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _SignalingClientEventDisconnected
-    implements _SignalingClientEvent {
-  const factory _SignalingClientEventDisconnected(
-          final int? code, final String? reason) =
-      _$SignalingClientEventDisconnectedImpl;
-
-  int? get code;
-  String? get reason;
-}
-
-/// @nodoc
-mixin _$HandshakeSignalingEvent {
-  Registration get registration => throw _privateConstructorUsedError;
-  int get linesCount => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(Registration registration, int linesCount) state,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Registration registration, int linesCount)? state,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Registration registration, int linesCount)? state,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_HandshakeSignalingEventState value) state,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_HandshakeSignalingEventState value)? state,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_HandshakeSignalingEventState value)? state,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$HandshakeSignalingEventStateImpl
-    with DiagnosticableTreeMixin
-    implements _HandshakeSignalingEventState {
-  const _$HandshakeSignalingEventStateImpl(
-      {required this.registration, required this.linesCount});
-
-  @override
-  final Registration registration;
-  @override
-  final int linesCount;
-
-  @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_HandshakeSignalingEvent.state(registration: $registration, linesCount: $linesCount)';
+    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason)';
   }
+}
+
+/// @nodoc
+mixin _$HandshakeSignalingEvent implements DiagnosticableTreeMixin {
+  Registration get registration;
+  int get linesCount;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', '_HandshakeSignalingEvent.state'))
+      ..add(DiagnosticsProperty('type', '_HandshakeSignalingEvent'))
       ..add(DiagnosticsProperty('registration', registration))
       ..add(DiagnosticsProperty('linesCount', linesCount));
   }
@@ -917,7 +1484,7 @@ class _$HandshakeSignalingEventStateImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$HandshakeSignalingEventStateImpl &&
+            other is _HandshakeSignalingEvent &&
             (identical(other.registration, registration) ||
                 other.registration == registration) &&
             (identical(other.linesCount, linesCount) ||
@@ -928,76 +1495,613 @@ class _$HandshakeSignalingEventStateImpl
   int get hashCode => Object.hash(runtimeType, registration, linesCount);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(Registration registration, int linesCount) state,
-  }) {
-    return state(registration, linesCount);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_HandshakeSignalingEvent(registration: $registration, linesCount: $linesCount)';
   }
+}
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Registration registration, int linesCount)? state,
-  }) {
-    return state?.call(registration, linesCount);
-  }
+/// Adds pattern-matching-related methods to [_HandshakeSignalingEvent].
+extension _HandshakeSignalingEventPatterns on _HandshakeSignalingEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Registration registration, int linesCount)? state,
-    required TResult orElse(),
-  }) {
-    if (state != null) {
-      return state(registration, linesCount);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_HandshakeSignalingEventState value) state,
-  }) {
-    return state(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_HandshakeSignalingEventState value)? state,
-  }) {
-    return state?.call(this);
-  }
-
-  @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_HandshakeSignalingEventState value)? state,
     required TResult orElse(),
   }) {
-    if (state != null) {
-      return state(this);
+    final _that = this;
+    switch (_that) {
+      case _HandshakeSignalingEventState() when state != null:
+        return state(_that);
+      case _:
+        return orElse();
     }
-    return orElse();
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_HandshakeSignalingEventState value) state,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _HandshakeSignalingEventState():
+        return state(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_HandshakeSignalingEventState value)? state,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _HandshakeSignalingEventState() when state != null:
+        return state(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Registration registration, int linesCount)? state,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _HandshakeSignalingEventState() when state != null:
+        return state(_that.registration, _that.linesCount);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Registration registration, int linesCount) state,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _HandshakeSignalingEventState():
+        return state(_that.registration, _that.linesCount);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Registration registration, int linesCount)? state,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _HandshakeSignalingEventState() when state != null:
+        return state(_that.registration, _that.linesCount);
+      case _:
+        return null;
+    }
   }
 }
 
-abstract class _HandshakeSignalingEventState
+/// @nodoc
+
+class _HandshakeSignalingEventState
+    with DiagnosticableTreeMixin
     implements _HandshakeSignalingEvent {
-  const factory _HandshakeSignalingEventState(
-      {required final Registration registration,
-      required final int linesCount}) = _$HandshakeSignalingEventStateImpl;
+  const _HandshakeSignalingEventState(
+      {required this.registration, required this.linesCount});
 
   @override
-  Registration get registration;
+  final Registration registration;
   @override
-  int get linesCount;
+  final int linesCount;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', '_HandshakeSignalingEvent.state'))
+      ..add(DiagnosticsProperty('registration', registration))
+      ..add(DiagnosticsProperty('linesCount', linesCount));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _HandshakeSignalingEventState &&
+            (identical(other.registration, registration) ||
+                other.registration == registration) &&
+            (identical(other.linesCount, linesCount) ||
+                other.linesCount == linesCount));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, registration, linesCount);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_HandshakeSignalingEvent.state(registration: $registration, linesCount: $linesCount)';
+  }
 }
 
 /// @nodoc
-mixin _$CallSignalingEvent {
+mixin _$CallSignalingEvent implements DiagnosticableTreeMixin {
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties..add(DiagnosticsProperty('type', '_CallSignalingEvent'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _CallSignalingEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent()';
+  }
+}
+
+/// Adds pattern-matching-related methods to [_CallSignalingEvent].
+extension _CallSignalingEventPatterns on _CallSignalingEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallSignalingEventIncoming value)? incoming,
+    TResult Function(_CallSignalingEventRinging value)? ringing,
+    TResult Function(_CallSignalingEventProgress value)? progress,
+    TResult Function(_CallSignalingEventAccepted value)? accepted,
+    TResult Function(_CallSignalingEventHangup value)? hangup,
+    TResult Function(_CallSignalingEventUpdating value)? updating,
+    TResult Function(_CallSignalingEventUpdated value)? updated,
+    TResult Function(_CallSignalingEventTransfer value)? transfer,
+    TResult Function(_CallSignalingEventTransferring value)? transferring,
+    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
+    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
+    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
+    TResult Function(_CallSignalingEventRegistering value)? registering,
+    TResult Function(_CallSignalingEventRegistered value)? registered,
+    TResult Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallSignalingEventIncoming() when incoming != null:
+        return incoming(_that);
+      case _CallSignalingEventRinging() when ringing != null:
+        return ringing(_that);
+      case _CallSignalingEventProgress() when progress != null:
+        return progress(_that);
+      case _CallSignalingEventAccepted() when accepted != null:
+        return accepted(_that);
+      case _CallSignalingEventHangup() when hangup != null:
+        return hangup(_that);
+      case _CallSignalingEventUpdating() when updating != null:
+        return updating(_that);
+      case _CallSignalingEventUpdated() when updated != null:
+        return updated(_that);
+      case _CallSignalingEventTransfer() when transfer != null:
+        return transfer(_that);
+      case _CallSignalingEventTransferring() when transferring != null:
+        return transferring(_that);
+      case _CallSignalingEventNotifyDialog() when notifyDialog != null:
+        return notifyDialog(_that);
+      case _CallSignalingEventNotifyRefer() when notifyRefer != null:
+        return notifyRefer(_that);
+      case _CallSignalingEventNotifyUnknown() when notifyUnknown != null:
+        return notifyUnknown(_that);
+      case _CallSignalingEventRegistering() when registering != null:
+        return registering(_that);
+      case _CallSignalingEventRegistered() when registered != null:
+        return registered(_that);
+      case _CallSignalingEventRegisterationFailed()
+          when registrationFailed != null:
+        return registrationFailed(_that);
+      case _CallSignalingEventUnregistering() when unregistering != null:
+        return unregistering(_that);
+      case _CallSignalingEventUnregistered() when unregistered != null:
+        return unregistered(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallSignalingEventIncoming value) incoming,
+    required TResult Function(_CallSignalingEventRinging value) ringing,
+    required TResult Function(_CallSignalingEventProgress value) progress,
+    required TResult Function(_CallSignalingEventAccepted value) accepted,
+    required TResult Function(_CallSignalingEventHangup value) hangup,
+    required TResult Function(_CallSignalingEventUpdating value) updating,
+    required TResult Function(_CallSignalingEventUpdated value) updated,
+    required TResult Function(_CallSignalingEventTransfer value) transfer,
+    required TResult Function(_CallSignalingEventTransferring value)
+        transferring,
+    required TResult Function(_CallSignalingEventNotifyDialog value)
+        notifyDialog,
+    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
+    required TResult Function(_CallSignalingEventNotifyUnknown value)
+        notifyUnknown,
+    required TResult Function(_CallSignalingEventRegistering value) registering,
+    required TResult Function(_CallSignalingEventRegistered value) registered,
+    required TResult Function(_CallSignalingEventRegisterationFailed value)
+        registrationFailed,
+    required TResult Function(_CallSignalingEventUnregistering value)
+        unregistering,
+    required TResult Function(_CallSignalingEventUnregistered value)
+        unregistered,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallSignalingEventIncoming():
+        return incoming(_that);
+      case _CallSignalingEventRinging():
+        return ringing(_that);
+      case _CallSignalingEventProgress():
+        return progress(_that);
+      case _CallSignalingEventAccepted():
+        return accepted(_that);
+      case _CallSignalingEventHangup():
+        return hangup(_that);
+      case _CallSignalingEventUpdating():
+        return updating(_that);
+      case _CallSignalingEventUpdated():
+        return updated(_that);
+      case _CallSignalingEventTransfer():
+        return transfer(_that);
+      case _CallSignalingEventTransferring():
+        return transferring(_that);
+      case _CallSignalingEventNotifyDialog():
+        return notifyDialog(_that);
+      case _CallSignalingEventNotifyRefer():
+        return notifyRefer(_that);
+      case _CallSignalingEventNotifyUnknown():
+        return notifyUnknown(_that);
+      case _CallSignalingEventRegistering():
+        return registering(_that);
+      case _CallSignalingEventRegistered():
+        return registered(_that);
+      case _CallSignalingEventRegisterationFailed():
+        return registrationFailed(_that);
+      case _CallSignalingEventUnregistering():
+        return unregistering(_that);
+      case _CallSignalingEventUnregistered():
+        return unregistered(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallSignalingEventIncoming value)? incoming,
+    TResult? Function(_CallSignalingEventRinging value)? ringing,
+    TResult? Function(_CallSignalingEventProgress value)? progress,
+    TResult? Function(_CallSignalingEventAccepted value)? accepted,
+    TResult? Function(_CallSignalingEventHangup value)? hangup,
+    TResult? Function(_CallSignalingEventUpdating value)? updating,
+    TResult? Function(_CallSignalingEventUpdated value)? updated,
+    TResult? Function(_CallSignalingEventTransfer value)? transfer,
+    TResult? Function(_CallSignalingEventTransferring value)? transferring,
+    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
+    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
+    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
+    TResult? Function(_CallSignalingEventRegistering value)? registering,
+    TResult? Function(_CallSignalingEventRegistered value)? registered,
+    TResult? Function(_CallSignalingEventRegisterationFailed value)?
+        registrationFailed,
+    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
+    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallSignalingEventIncoming() when incoming != null:
+        return incoming(_that);
+      case _CallSignalingEventRinging() when ringing != null:
+        return ringing(_that);
+      case _CallSignalingEventProgress() when progress != null:
+        return progress(_that);
+      case _CallSignalingEventAccepted() when accepted != null:
+        return accepted(_that);
+      case _CallSignalingEventHangup() when hangup != null:
+        return hangup(_that);
+      case _CallSignalingEventUpdating() when updating != null:
+        return updating(_that);
+      case _CallSignalingEventUpdated() when updated != null:
+        return updated(_that);
+      case _CallSignalingEventTransfer() when transfer != null:
+        return transfer(_that);
+      case _CallSignalingEventTransferring() when transferring != null:
+        return transferring(_that);
+      case _CallSignalingEventNotifyDialog() when notifyDialog != null:
+        return notifyDialog(_that);
+      case _CallSignalingEventNotifyRefer() when notifyRefer != null:
+        return notifyRefer(_that);
+      case _CallSignalingEventNotifyUnknown() when notifyUnknown != null:
+        return notifyUnknown(_that);
+      case _CallSignalingEventRegistering() when registering != null:
+        return registering(_that);
+      case _CallSignalingEventRegistered() when registered != null:
+        return registered(_that);
+      case _CallSignalingEventRegisterationFailed()
+          when registrationFailed != null:
+        return registrationFailed(_that);
+      case _CallSignalingEventUnregistering() when unregistering != null:
+        return unregistering(_that);
+      case _CallSignalingEventUnregistered() when unregistered != null:
+        return unregistered(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int? line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        incoming,
+    TResult Function(int? line, String callId)? ringing,
+    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
+        progress,
+    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
+        accepted,
+    TResult Function(int? line, String callId, int code, String reason)? hangup,
+    TResult Function(
+            int? line,
+            String callId,
+            String callee,
+            String caller,
+            String? callerDisplayName,
+            String? referredBy,
+            String? replaceCallId,
+            bool? isFocus,
+            JsepValue? jsep)?
+        updating,
+    TResult Function(int? line, String callId)? updated,
+    TResult Function(int? line, String referId, String referTo,
+            String? referredBy, String? replaceCallId)?
+        transfer,
+    TResult Function(int? line, String callId)? transferring,
+    TResult Function(
+            int? line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            List<UserActiveCall> userActiveCalls)?
+        notifyDialog,
+    TResult Function(int? line, String callId, String? notify,
+            SubscriptionState? subscriptionState, ReferNotifyState state)?
+        notifyRefer,
+    TResult Function(
+            int? line,
+            String callId,
+            String? notify,
+            SubscriptionState? subscriptionState,
+            String? contentType,
+            String content)?
+        notifyUnknown,
+    TResult Function()? registering,
+    TResult Function()? registered,
+    TResult Function(int code, String reason)? registrationFailed,
+    TResult Function()? unregistering,
+    TResult Function()? unregistered,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallSignalingEventIncoming() when incoming != null:
+        return incoming(
+            _that.line,
+            _that.callId,
+            _that.callee,
+            _that.caller,
+            _that.callerDisplayName,
+            _that.referredBy,
+            _that.replaceCallId,
+            _that.isFocus,
+            _that.jsep);
+      case _CallSignalingEventRinging() when ringing != null:
+        return ringing(_that.line, _that.callId);
+      case _CallSignalingEventProgress() when progress != null:
+        return progress(_that.line, _that.callId, _that.callee, _that.jsep);
+      case _CallSignalingEventAccepted() when accepted != null:
+        return accepted(_that.line, _that.callId, _that.callee, _that.jsep);
+      case _CallSignalingEventHangup() when hangup != null:
+        return hangup(_that.line, _that.callId, _that.code, _that.reason);
+      case _CallSignalingEventUpdating() when updating != null:
+        return updating(
+            _that.line,
+            _that.callId,
+            _that.callee,
+            _that.caller,
+            _that.callerDisplayName,
+            _that.referredBy,
+            _that.replaceCallId,
+            _that.isFocus,
+            _that.jsep);
+      case _CallSignalingEventUpdated() when updated != null:
+        return updated(_that.line, _that.callId);
+      case _CallSignalingEventTransfer() when transfer != null:
+        return transfer(_that.line, _that.referId, _that.referTo,
+            _that.referredBy, _that.replaceCallId);
+      case _CallSignalingEventTransferring() when transferring != null:
+        return transferring(_that.line, _that.callId);
+      case _CallSignalingEventNotifyDialog() when notifyDialog != null:
+        return notifyDialog(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.userActiveCalls);
+      case _CallSignalingEventNotifyRefer() when notifyRefer != null:
+        return notifyRefer(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.state);
+      case _CallSignalingEventNotifyUnknown() when notifyUnknown != null:
+        return notifyUnknown(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.contentType, _that.content);
+      case _CallSignalingEventRegistering() when registering != null:
+        return registering();
+      case _CallSignalingEventRegistered() when registered != null:
+        return registered();
+      case _CallSignalingEventRegisterationFailed()
+          when registrationFailed != null:
+        return registrationFailed(_that.code, _that.reason);
+      case _CallSignalingEventUnregistering() when unregistering != null:
+        return unregistering();
+      case _CallSignalingEventUnregistered() when unregistered != null:
+        return unregistered();
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -1059,8 +2163,82 @@ mixin _$CallSignalingEvent {
     required TResult Function(int code, String reason) registrationFailed,
     required TResult Function() unregistering,
     required TResult Function() unregistered,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallSignalingEventIncoming():
+        return incoming(
+            _that.line,
+            _that.callId,
+            _that.callee,
+            _that.caller,
+            _that.callerDisplayName,
+            _that.referredBy,
+            _that.replaceCallId,
+            _that.isFocus,
+            _that.jsep);
+      case _CallSignalingEventRinging():
+        return ringing(_that.line, _that.callId);
+      case _CallSignalingEventProgress():
+        return progress(_that.line, _that.callId, _that.callee, _that.jsep);
+      case _CallSignalingEventAccepted():
+        return accepted(_that.line, _that.callId, _that.callee, _that.jsep);
+      case _CallSignalingEventHangup():
+        return hangup(_that.line, _that.callId, _that.code, _that.reason);
+      case _CallSignalingEventUpdating():
+        return updating(
+            _that.line,
+            _that.callId,
+            _that.callee,
+            _that.caller,
+            _that.callerDisplayName,
+            _that.referredBy,
+            _that.replaceCallId,
+            _that.isFocus,
+            _that.jsep);
+      case _CallSignalingEventUpdated():
+        return updated(_that.line, _that.callId);
+      case _CallSignalingEventTransfer():
+        return transfer(_that.line, _that.referId, _that.referTo,
+            _that.referredBy, _that.replaceCallId);
+      case _CallSignalingEventTransferring():
+        return transferring(_that.line, _that.callId);
+      case _CallSignalingEventNotifyDialog():
+        return notifyDialog(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.userActiveCalls);
+      case _CallSignalingEventNotifyRefer():
+        return notifyRefer(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.state);
+      case _CallSignalingEventNotifyUnknown():
+        return notifyUnknown(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.contentType, _that.content);
+      case _CallSignalingEventRegistering():
+        return registering();
+      case _CallSignalingEventRegistered():
+        return registered();
+      case _CallSignalingEventRegisterationFailed():
+        return registrationFailed(_that.code, _that.reason);
+      case _CallSignalingEventUnregistering():
+        return unregistering();
+      case _CallSignalingEventUnregistered():
+        return unregistered();
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
@@ -1121,149 +2299,78 @@ mixin _$CallSignalingEvent {
     TResult? Function(int code, String reason)? registrationFailed,
     TResult? Function()? unregistering,
     TResult? Function()? unregistered,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallSignalingEventIncoming() when incoming != null:
+        return incoming(
+            _that.line,
+            _that.callId,
+            _that.callee,
+            _that.caller,
+            _that.callerDisplayName,
+            _that.referredBy,
+            _that.replaceCallId,
+            _that.isFocus,
+            _that.jsep);
+      case _CallSignalingEventRinging() when ringing != null:
+        return ringing(_that.line, _that.callId);
+      case _CallSignalingEventProgress() when progress != null:
+        return progress(_that.line, _that.callId, _that.callee, _that.jsep);
+      case _CallSignalingEventAccepted() when accepted != null:
+        return accepted(_that.line, _that.callId, _that.callee, _that.jsep);
+      case _CallSignalingEventHangup() when hangup != null:
+        return hangup(_that.line, _that.callId, _that.code, _that.reason);
+      case _CallSignalingEventUpdating() when updating != null:
+        return updating(
+            _that.line,
+            _that.callId,
+            _that.callee,
+            _that.caller,
+            _that.callerDisplayName,
+            _that.referredBy,
+            _that.replaceCallId,
+            _that.isFocus,
+            _that.jsep);
+      case _CallSignalingEventUpdated() when updated != null:
+        return updated(_that.line, _that.callId);
+      case _CallSignalingEventTransfer() when transfer != null:
+        return transfer(_that.line, _that.referId, _that.referTo,
+            _that.referredBy, _that.replaceCallId);
+      case _CallSignalingEventTransferring() when transferring != null:
+        return transferring(_that.line, _that.callId);
+      case _CallSignalingEventNotifyDialog() when notifyDialog != null:
+        return notifyDialog(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.userActiveCalls);
+      case _CallSignalingEventNotifyRefer() when notifyRefer != null:
+        return notifyRefer(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.state);
+      case _CallSignalingEventNotifyUnknown() when notifyUnknown != null:
+        return notifyUnknown(_that.line, _that.callId, _that.notify,
+            _that.subscriptionState, _that.contentType, _that.content);
+      case _CallSignalingEventRegistering() when registering != null:
+        return registering();
+      case _CallSignalingEventRegistered() when registered != null:
+        return registered();
+      case _CallSignalingEventRegisterationFailed()
+          when registrationFailed != null:
+        return registrationFailed(_that.code, _that.reason);
+      case _CallSignalingEventUnregistering() when unregistering != null:
+        return unregistering();
+      case _CallSignalingEventUnregistered() when unregistered != null:
+        return unregistered();
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$CallSignalingEventIncomingImpl
+class _CallSignalingEventIncoming
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventIncoming {
-  const _$CallSignalingEventIncomingImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventIncoming(
       {required this.line,
       required this.callId,
       required this.callee,
@@ -1274,33 +2381,18 @@ class _$CallSignalingEventIncomingImpl
       this.isFocus,
       this.jsep});
 
-  @override
   final int? line;
-  @override
   final String callId;
-  @override
   final String callee;
-  @override
   final String caller;
-  @override
   final String? callerDisplayName;
-  @override
   final String? referredBy;
-  @override
   final String? replaceCallId;
-  @override
   final bool? isFocus;
-  @override
   final JsepValue? jsep;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.incoming(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.incoming'))
       ..add(DiagnosticsProperty('line', line))
@@ -1318,7 +2410,7 @@ class _$CallSignalingEventIncomingImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventIncomingImpl &&
+            other is _CallSignalingEventIncoming &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
@@ -1338,335 +2430,23 @@ class _$CallSignalingEventIncomingImpl
       callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return incoming(line, callId, callee, caller, callerDisplayName, referredBy,
-        replaceCallId, isFocus, jsep);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.incoming(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return incoming?.call(line, callId, callee, caller, callerDisplayName,
-        referredBy, replaceCallId, isFocus, jsep);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (incoming != null) {
-      return incoming(line, callId, callee, caller, callerDisplayName,
-          referredBy, replaceCallId, isFocus, jsep);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return incoming(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return incoming?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (incoming != null) {
-      return incoming(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
-  const factory _CallSignalingEventIncoming(
-      {required final int? line,
-      required final String callId,
-      required final String callee,
-      required final String caller,
-      final String? callerDisplayName,
-      final String? referredBy,
-      final String? replaceCallId,
-      final bool? isFocus,
-      final JsepValue? jsep}) = _$CallSignalingEventIncomingImpl;
-
-  int? get line;
-  String get callId;
-  String get callee;
-  String get caller;
-  String? get callerDisplayName;
-  String? get referredBy;
-  String? get replaceCallId;
-  bool? get isFocus;
-  JsepValue? get jsep;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventRingingImpl
+class _CallSignalingEventRinging
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventRinging {
-  const _$CallSignalingEventRingingImpl(
-      {required this.line, required this.callId});
+    implements _CallSignalingEvent {
+  const _CallSignalingEventRinging({required this.line, required this.callId});
 
-  @override
   final int? line;
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.ringing(line: $line, callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.ringing'))
       ..add(DiagnosticsProperty('line', line))
@@ -1677,7 +2457,7 @@ class _$CallSignalingEventRingingImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRingingImpl &&
+            other is _CallSignalingEventRinging &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId));
   }
@@ -1686,325 +2466,29 @@ class _$CallSignalingEventRingingImpl
   int get hashCode => Object.hash(runtimeType, line, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return ringing(line, callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.ringing(line: $line, callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return ringing?.call(line, callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (ringing != null) {
-      return ringing(line, callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return ringing(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return ringing?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (ringing != null) {
-      return ringing(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
-  const factory _CallSignalingEventRinging(
-      {required final int? line,
-      required final String callId}) = _$CallSignalingEventRingingImpl;
-
-  int? get line;
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventProgressImpl
+class _CallSignalingEventProgress
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventProgress {
-  const _$CallSignalingEventProgressImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventProgress(
       {required this.line,
       required this.callId,
       required this.callee,
       this.jsep});
 
-  @override
   final int? line;
-  @override
   final String callId;
-  @override
   final String callee;
-  @override
   final JsepValue? jsep;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.progress(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.progress'))
       ..add(DiagnosticsProperty('line', line))
@@ -2017,7 +2501,7 @@ class _$CallSignalingEventProgressImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventProgressImpl &&
+            other is _CallSignalingEventProgress &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
@@ -2028,326 +2512,26 @@ class _$CallSignalingEventProgressImpl
   int get hashCode => Object.hash(runtimeType, line, callId, callee, jsep);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return progress(line, callId, callee, jsep);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.progress(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return progress?.call(line, callId, callee, jsep);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (progress != null) {
-      return progress(line, callId, callee, jsep);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return progress(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return progress?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (progress != null) {
-      return progress(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
-  const factory _CallSignalingEventProgress(
-      {required final int? line,
-      required final String callId,
-      required final String callee,
-      final JsepValue? jsep}) = _$CallSignalingEventProgressImpl;
-
-  int? get line;
-  String get callId;
-  String get callee;
-  JsepValue? get jsep;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventAcceptedImpl
+class _CallSignalingEventAccepted
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventAccepted {
-  const _$CallSignalingEventAcceptedImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventAccepted(
       {required this.line, required this.callId, this.callee, this.jsep});
 
-  @override
   final int? line;
-  @override
   final String callId;
-  @override
   final String? callee;
-  @override
   final JsepValue? jsep;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.accepted(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.accepted'))
       ..add(DiagnosticsProperty('line', line))
@@ -2360,7 +2544,7 @@ class _$CallSignalingEventAcceptedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventAcceptedImpl &&
+            other is _CallSignalingEventAccepted &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
@@ -2371,329 +2555,29 @@ class _$CallSignalingEventAcceptedImpl
   int get hashCode => Object.hash(runtimeType, line, callId, callee, jsep);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return accepted(line, callId, callee, jsep);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.accepted(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return accepted?.call(line, callId, callee, jsep);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (accepted != null) {
-      return accepted(line, callId, callee, jsep);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return accepted(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return accepted?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (accepted != null) {
-      return accepted(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
-  const factory _CallSignalingEventAccepted(
-      {required final int? line,
-      required final String callId,
-      final String? callee,
-      final JsepValue? jsep}) = _$CallSignalingEventAcceptedImpl;
-
-  int? get line;
-  String get callId;
-  String? get callee;
-  JsepValue? get jsep;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventHangupImpl
+class _CallSignalingEventHangup
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventHangup {
-  const _$CallSignalingEventHangupImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventHangup(
       {required this.line,
       required this.callId,
       required this.code,
       required this.reason});
 
-  @override
   final int? line;
-  @override
   final String callId;
-  @override
   final int code;
-  @override
   final String reason;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.hangup(line: $line, callId: $callId, code: $code, reason: $reason)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.hangup'))
       ..add(DiagnosticsProperty('line', line))
@@ -2706,7 +2590,7 @@ class _$CallSignalingEventHangupImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventHangupImpl &&
+            other is _CallSignalingEventHangup &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.code, code) || other.code == code) &&
@@ -2717,307 +2601,17 @@ class _$CallSignalingEventHangupImpl
   int get hashCode => Object.hash(runtimeType, line, callId, code, reason);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return hangup(line, callId, code, reason);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.hangup(line: $line, callId: $callId, code: $code, reason: $reason)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return hangup?.call(line, callId, code, reason);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (hangup != null) {
-      return hangup(line, callId, code, reason);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return hangup(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return hangup?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (hangup != null) {
-      return hangup(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
-  const factory _CallSignalingEventHangup(
-      {required final int? line,
-      required final String callId,
-      required final int code,
-      required final String reason}) = _$CallSignalingEventHangupImpl;
-
-  int? get line;
-  String get callId;
-  int get code;
-  String get reason;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventUpdatingImpl
+class _CallSignalingEventUpdating
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventUpdating {
-  const _$CallSignalingEventUpdatingImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventUpdating(
       {required this.line,
       required this.callId,
       required this.callee,
@@ -3028,33 +2622,18 @@ class _$CallSignalingEventUpdatingImpl
       this.isFocus,
       this.jsep});
 
-  @override
   final int? line;
-  @override
   final String callId;
-  @override
   final String callee;
-  @override
   final String caller;
-  @override
   final String? callerDisplayName;
-  @override
   final String? referredBy;
-  @override
   final String? replaceCallId;
-  @override
   final bool? isFocus;
-  @override
   final JsepValue? jsep;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.updating(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.updating'))
       ..add(DiagnosticsProperty('line', line))
@@ -3072,7 +2651,7 @@ class _$CallSignalingEventUpdatingImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUpdatingImpl &&
+            other is _CallSignalingEventUpdating &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.callee, callee) || other.callee == callee) &&
@@ -3092,335 +2671,23 @@ class _$CallSignalingEventUpdatingImpl
       callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return updating(line, callId, callee, caller, callerDisplayName, referredBy,
-        replaceCallId, isFocus, jsep);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.updating(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return updating?.call(line, callId, callee, caller, callerDisplayName,
-        referredBy, replaceCallId, isFocus, jsep);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (updating != null) {
-      return updating(line, callId, callee, caller, callerDisplayName,
-          referredBy, replaceCallId, isFocus, jsep);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return updating(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return updating?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (updating != null) {
-      return updating(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
-  const factory _CallSignalingEventUpdating(
-      {required final int? line,
-      required final String callId,
-      required final String callee,
-      required final String caller,
-      final String? callerDisplayName,
-      final String? referredBy,
-      final String? replaceCallId,
-      final bool? isFocus,
-      final JsepValue? jsep}) = _$CallSignalingEventUpdatingImpl;
-
-  int? get line;
-  String get callId;
-  String get callee;
-  String get caller;
-  String? get callerDisplayName;
-  String? get referredBy;
-  String? get replaceCallId;
-  bool? get isFocus;
-  JsepValue? get jsep;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventUpdatedImpl
+class _CallSignalingEventUpdated
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventUpdated {
-  const _$CallSignalingEventUpdatedImpl(
-      {required this.line, required this.callId});
+    implements _CallSignalingEvent {
+  const _CallSignalingEventUpdated({required this.line, required this.callId});
 
-  @override
   final int? line;
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.updated(line: $line, callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.updated'))
       ..add(DiagnosticsProperty('line', line))
@@ -3431,7 +2698,7 @@ class _$CallSignalingEventUpdatedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUpdatedImpl &&
+            other is _CallSignalingEventUpdated &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId));
   }
@@ -3440,328 +2707,31 @@ class _$CallSignalingEventUpdatedImpl
   int get hashCode => Object.hash(runtimeType, line, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return updated(line, callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.updated(line: $line, callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return updated?.call(line, callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (updated != null) {
-      return updated(line, callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return updated(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return updated?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (updated != null) {
-      return updated(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
-  const factory _CallSignalingEventUpdated(
-      {required final int? line,
-      required final String callId}) = _$CallSignalingEventUpdatedImpl;
-
-  int? get line;
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventTransferImpl
+class _CallSignalingEventTransfer
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventTransfer {
-  const _$CallSignalingEventTransferImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventTransfer(
       {required this.line,
       required this.referId,
       required this.referTo,
       required this.referredBy,
       required this.replaceCallId});
 
-  @override
   final int? line;
-  @override
   final String referId;
-  @override
   final String referTo;
-  @override
   final String? referredBy;
-  @override
   final String? replaceCallId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.transfer(line: $line, referId: $referId, referTo: $referTo, referredBy: $referredBy, replaceCallId: $replaceCallId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.transfer'))
       ..add(DiagnosticsProperty('line', line))
@@ -3775,7 +2745,7 @@ class _$CallSignalingEventTransferImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventTransferImpl &&
+            other is _CallSignalingEventTransfer &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.referId, referId) || other.referId == referId) &&
             (identical(other.referTo, referTo) || other.referTo == referTo) &&
@@ -3790,324 +2760,24 @@ class _$CallSignalingEventTransferImpl
       runtimeType, line, referId, referTo, referredBy, replaceCallId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return transfer(line, referId, referTo, referredBy, replaceCallId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.transfer(line: $line, referId: $referId, referTo: $referTo, referredBy: $referredBy, replaceCallId: $replaceCallId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return transfer?.call(line, referId, referTo, referredBy, replaceCallId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (transfer != null) {
-      return transfer(line, referId, referTo, referredBy, replaceCallId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return transfer(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return transfer?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (transfer != null) {
-      return transfer(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventTransfer implements _CallSignalingEvent {
-  const factory _CallSignalingEventTransfer(
-      {required final int? line,
-      required final String referId,
-      required final String referTo,
-      required final String? referredBy,
-      required final String? replaceCallId}) = _$CallSignalingEventTransferImpl;
-
-  int? get line;
-  String get referId;
-  String get referTo;
-  String? get referredBy;
-  String? get replaceCallId;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventTransferringImpl
+class _CallSignalingEventTransferring
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventTransferring {
-  const _$CallSignalingEventTransferringImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventTransferring(
       {required this.line, required this.callId});
 
-  @override
   final int? line;
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.transferring(line: $line, callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.transferring'))
       ..add(DiagnosticsProperty('line', line))
@@ -4118,7 +2788,7 @@ class _$CallSignalingEventTransferringImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventTransferringImpl &&
+            other is _CallSignalingEventTransferring &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId));
   }
@@ -4127,303 +2797,17 @@ class _$CallSignalingEventTransferringImpl
   int get hashCode => Object.hash(runtimeType, line, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return transferring(line, callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.transferring(line: $line, callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return transferring?.call(line, callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (transferring != null) {
-      return transferring(line, callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return transferring(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return transferring?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (transferring != null) {
-      return transferring(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventTransferring implements _CallSignalingEvent {
-  const factory _CallSignalingEventTransferring(
-      {required final int? line,
-      required final String callId}) = _$CallSignalingEventTransferringImpl;
-
-  int? get line;
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventNotifyDialogImpl
+class _CallSignalingEventNotifyDialog
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventNotifyDialog {
-  const _$CallSignalingEventNotifyDialogImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventNotifyDialog(
       {required this.line,
       required this.callId,
       required this.notify,
@@ -4431,16 +2815,11 @@ class _$CallSignalingEventNotifyDialogImpl
       required final List<UserActiveCall> userActiveCalls})
       : _userActiveCalls = userActiveCalls;
 
-  @override
   final int? line;
-  @override
   final String callId;
-  @override
   final String? notify;
-  @override
   final SubscriptionState? subscriptionState;
   final List<UserActiveCall> _userActiveCalls;
-  @override
   List<UserActiveCall> get userActiveCalls {
     if (_userActiveCalls is EqualUnmodifiableListView) return _userActiveCalls;
     // ignore: implicit_dynamic_type
@@ -4448,13 +2827,7 @@ class _$CallSignalingEventNotifyDialogImpl
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.notifyDialog(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, userActiveCalls: $userActiveCalls)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.notifyDialog'))
       ..add(DiagnosticsProperty('line', line))
@@ -4468,7 +2841,7 @@ class _$CallSignalingEventNotifyDialogImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventNotifyDialogImpl &&
+            other is _CallSignalingEventNotifyDialog &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.notify, notify) || other.notify == notify) &&
@@ -4483,338 +2856,31 @@ class _$CallSignalingEventNotifyDialogImpl
       subscriptionState, const DeepCollectionEquality().hash(_userActiveCalls));
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return notifyDialog(
-        line, callId, notify, subscriptionState, userActiveCalls);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.notifyDialog(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, userActiveCalls: $userActiveCalls)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return notifyDialog?.call(
-        line, callId, notify, subscriptionState, userActiveCalls);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (notifyDialog != null) {
-      return notifyDialog(
-          line, callId, notify, subscriptionState, userActiveCalls);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return notifyDialog(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return notifyDialog?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (notifyDialog != null) {
-      return notifyDialog(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventNotifyDialog implements _CallSignalingEvent {
-  const factory _CallSignalingEventNotifyDialog(
-          {required final int? line,
-          required final String callId,
-          required final String? notify,
-          required final SubscriptionState? subscriptionState,
-          required final List<UserActiveCall> userActiveCalls}) =
-      _$CallSignalingEventNotifyDialogImpl;
-
-  int? get line;
-  String get callId;
-  String? get notify;
-  SubscriptionState? get subscriptionState;
-  List<UserActiveCall> get userActiveCalls;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventNotifyReferImpl
+class _CallSignalingEventNotifyRefer
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventNotifyRefer {
-  const _$CallSignalingEventNotifyReferImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventNotifyRefer(
       {required this.line,
       required this.callId,
       required this.notify,
       required this.subscriptionState,
       required this.state});
 
-  @override
   final int? line;
-  @override
   final String callId;
-  @override
   final String? notify;
-  @override
   final SubscriptionState? subscriptionState;
-  @override
   final ReferNotifyState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.notifyRefer(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, state: $state)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.notifyRefer'))
       ..add(DiagnosticsProperty('line', line))
@@ -4828,7 +2894,7 @@ class _$CallSignalingEventNotifyReferImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventNotifyReferImpl &&
+            other is _CallSignalingEventNotifyRefer &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.notify, notify) || other.notify == notify) &&
@@ -4842,310 +2908,17 @@ class _$CallSignalingEventNotifyReferImpl
       Object.hash(runtimeType, line, callId, notify, subscriptionState, state);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return notifyRefer(line, callId, notify, subscriptionState, state);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.notifyRefer(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, state: $state)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return notifyRefer?.call(line, callId, notify, subscriptionState, state);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (notifyRefer != null) {
-      return notifyRefer(line, callId, notify, subscriptionState, state);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return notifyRefer(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return notifyRefer?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (notifyRefer != null) {
-      return notifyRefer(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventNotifyRefer implements _CallSignalingEvent {
-  const factory _CallSignalingEventNotifyRefer(
-          {required final int? line,
-          required final String callId,
-          required final String? notify,
-          required final SubscriptionState? subscriptionState,
-          required final ReferNotifyState state}) =
-      _$CallSignalingEventNotifyReferImpl;
-
-  int? get line;
-  String get callId;
-  String? get notify;
-  SubscriptionState? get subscriptionState;
-  ReferNotifyState get state;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventNotifyUnknownImpl
+class _CallSignalingEventNotifyUnknown
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventNotifyUnknown {
-  const _$CallSignalingEventNotifyUnknownImpl(
+    implements _CallSignalingEvent {
+  const _CallSignalingEventNotifyUnknown(
       {required this.line,
       required this.callId,
       required this.notify,
@@ -5153,27 +2926,15 @@ class _$CallSignalingEventNotifyUnknownImpl
       required this.contentType,
       required this.content});
 
-  @override
   final int? line;
-  @override
   final String callId;
-  @override
   final String? notify;
-  @override
   final SubscriptionState? subscriptionState;
-  @override
   final String? contentType;
-  @override
   final String content;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.notifyUnknown(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, contentType: $contentType, content: $content)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.notifyUnknown'))
       ..add(DiagnosticsProperty('line', line))
@@ -5188,7 +2949,7 @@ class _$CallSignalingEventNotifyUnknownImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventNotifyUnknownImpl &&
+            other is _CallSignalingEventNotifyUnknown &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.notify, notify) || other.notify == notify) &&
@@ -5204,323 +2965,20 @@ class _$CallSignalingEventNotifyUnknownImpl
       subscriptionState, contentType, content);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return notifyUnknown(
-        line, callId, notify, subscriptionState, contentType, content);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.notifyUnknown(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, contentType: $contentType, content: $content)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return notifyUnknown?.call(
-        line, callId, notify, subscriptionState, contentType, content);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (notifyUnknown != null) {
-      return notifyUnknown(
-          line, callId, notify, subscriptionState, contentType, content);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return notifyUnknown(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return notifyUnknown?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (notifyUnknown != null) {
-      return notifyUnknown(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventNotifyUnknown implements _CallSignalingEvent {
-  const factory _CallSignalingEventNotifyUnknown(
-      {required final int? line,
-      required final String callId,
-      required final String? notify,
-      required final SubscriptionState? subscriptionState,
-      required final String? contentType,
-      required final String content}) = _$CallSignalingEventNotifyUnknownImpl;
-
-  int? get line;
-  String get callId;
-  String? get notify;
-  SubscriptionState? get subscriptionState;
-  String? get contentType;
-  String get content;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventRegisteringImpl
+class _CallSignalingEventRegistering
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventRegistering {
-  const _$CallSignalingEventRegisteringImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.registering()';
-  }
+    implements _CallSignalingEvent {
+  const _CallSignalingEventRegistering();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.registering'));
   }
@@ -5529,315 +2987,27 @@ class _$CallSignalingEventRegisteringImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisteringImpl);
+            other is _CallSignalingEventRegistering);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return registering();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.registering()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return registering?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (registering != null) {
-      return registering();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return registering(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return registering?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (registering != null) {
-      return registering(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventRegistering implements _CallSignalingEvent {
-  const factory _CallSignalingEventRegistering() =
-      _$CallSignalingEventRegisteringImpl;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventRegisteredImpl
+class _CallSignalingEventRegistered
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventRegistered {
-  const _$CallSignalingEventRegisteredImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.registered()';
-  }
+    implements _CallSignalingEvent {
+  const _CallSignalingEventRegistered();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.registered'));
   }
@@ -5846,320 +3016,30 @@ class _$CallSignalingEventRegisteredImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisteredImpl);
+            other is _CallSignalingEventRegistered);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return registered();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.registered()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return registered?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (registered != null) {
-      return registered();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return registered(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return registered?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (registered != null) {
-      return registered(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventRegistered implements _CallSignalingEvent {
-  const factory _CallSignalingEventRegistered() =
-      _$CallSignalingEventRegisteredImpl;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventRegisterationFailedImpl
+class _CallSignalingEventRegisterationFailed
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventRegisterationFailed {
-  const _$CallSignalingEventRegisterationFailedImpl(this.code, this.reason);
+    implements _CallSignalingEvent {
+  const _CallSignalingEventRegisterationFailed(this.code, this.reason);
 
-  @override
   final int code;
-  @override
   final String reason;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.registrationFailed(code: $code, reason: $reason)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(
           DiagnosticsProperty('type', '_CallSignalingEvent.registrationFailed'))
@@ -6171,7 +3051,7 @@ class _$CallSignalingEventRegisterationFailedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisterationFailedImpl &&
+            other is _CallSignalingEventRegisterationFailed &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.reason, reason) || other.reason == reason));
   }
@@ -6180,313 +3060,20 @@ class _$CallSignalingEventRegisterationFailedImpl
   int get hashCode => Object.hash(runtimeType, code, reason);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return registrationFailed(code, reason);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.registrationFailed(code: $code, reason: $reason)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return registrationFailed?.call(code, reason);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (registrationFailed != null) {
-      return registrationFailed(code, reason);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return registrationFailed(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return registrationFailed?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (registrationFailed != null) {
-      return registrationFailed(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventRegisterationFailed
-    implements _CallSignalingEvent {
-  const factory _CallSignalingEventRegisterationFailed(
-          final int code, final String reason) =
-      _$CallSignalingEventRegisterationFailedImpl;
-
-  int get code;
-  String get reason;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventUnregisteringImpl
+class _CallSignalingEventUnregistering
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventUnregistering {
-  const _$CallSignalingEventUnregisteringImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.unregistering()';
-  }
+    implements _CallSignalingEvent {
+  const _CallSignalingEventUnregistering();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistering'));
   }
@@ -6495,315 +3082,27 @@ class _$CallSignalingEventUnregisteringImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUnregisteringImpl);
+            other is _CallSignalingEventUnregistering);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return unregistering();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.unregistering()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return unregistering?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (unregistering != null) {
-      return unregistering();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return unregistering(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return unregistering?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (unregistering != null) {
-      return unregistering(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventUnregistering implements _CallSignalingEvent {
-  const factory _CallSignalingEventUnregistering() =
-      _$CallSignalingEventUnregisteringImpl;
 }
 
 /// @nodoc
 
-class _$CallSignalingEventUnregisteredImpl
+class _CallSignalingEventUnregistered
     with DiagnosticableTreeMixin
-    implements _CallSignalingEventUnregistered {
-  const _$CallSignalingEventUnregisteredImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallSignalingEvent.unregistered()';
-  }
+    implements _CallSignalingEvent {
+  const _CallSignalingEventUnregistered();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistered'));
   }
@@ -6812,353 +3111,232 @@ class _$CallSignalingEventUnregisteredImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUnregisteredImpl);
+            other is _CallSignalingEventUnregistered);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        incoming,
-    required TResult Function(int? line, String callId) ringing,
-    required TResult Function(
-            int? line, String callId, String callee, JsepValue? jsep)
-        progress,
-    required TResult Function(
-            int? line, String callId, String? callee, JsepValue? jsep)
-        accepted,
-    required TResult Function(int? line, String callId, int code, String reason)
-        hangup,
-    required TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)
-        updating,
-    required TResult Function(int? line, String callId) updated,
-    required TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)
-        transfer,
-    required TResult Function(int? line, String callId) transferring,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)
-        notifyDialog,
-    required TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)
-        notifyRefer,
-    required TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)
-        notifyUnknown,
-    required TResult Function() registering,
-    required TResult Function() registered,
-    required TResult Function(int code, String reason) registrationFailed,
-    required TResult Function() unregistering,
-    required TResult Function() unregistered,
-  }) {
-    return unregistered();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallSignalingEvent.unregistered()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult? Function(int? line, String callId)? ringing,
-    TResult? Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult? Function(
-            int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult? Function(int? line, String callId, int code, String reason)?
-        hangup,
-    TResult? Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult? Function(int? line, String callId)? updated,
-    TResult? Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult? Function(int? line, String callId)? transferring,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult? Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult? Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult? Function()? registering,
-    TResult? Function()? registered,
-    TResult? Function(int code, String reason)? registrationFailed,
-    TResult? Function()? unregistering,
-    TResult? Function()? unregistered,
-  }) {
-    return unregistered?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        incoming,
-    TResult Function(int? line, String callId)? ringing,
-    TResult Function(int? line, String callId, String callee, JsepValue? jsep)?
-        progress,
-    TResult Function(int? line, String callId, String? callee, JsepValue? jsep)?
-        accepted,
-    TResult Function(int? line, String callId, int code, String reason)? hangup,
-    TResult Function(
-            int? line,
-            String callId,
-            String callee,
-            String caller,
-            String? callerDisplayName,
-            String? referredBy,
-            String? replaceCallId,
-            bool? isFocus,
-            JsepValue? jsep)?
-        updating,
-    TResult Function(int? line, String callId)? updated,
-    TResult Function(int? line, String referId, String referTo,
-            String? referredBy, String? replaceCallId)?
-        transfer,
-    TResult Function(int? line, String callId)? transferring,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            List<UserActiveCall> userActiveCalls)?
-        notifyDialog,
-    TResult Function(int? line, String callId, String? notify,
-            SubscriptionState? subscriptionState, ReferNotifyState state)?
-        notifyRefer,
-    TResult Function(
-            int? line,
-            String callId,
-            String? notify,
-            SubscriptionState? subscriptionState,
-            String? contentType,
-            String content)?
-        notifyUnknown,
-    TResult Function()? registering,
-    TResult Function()? registered,
-    TResult Function(int code, String reason)? registrationFailed,
-    TResult Function()? unregistering,
-    TResult Function()? unregistered,
-    required TResult orElse(),
-  }) {
-    if (unregistered != null) {
-      return unregistered();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallSignalingEventIncoming value) incoming,
-    required TResult Function(_CallSignalingEventRinging value) ringing,
-    required TResult Function(_CallSignalingEventProgress value) progress,
-    required TResult Function(_CallSignalingEventAccepted value) accepted,
-    required TResult Function(_CallSignalingEventHangup value) hangup,
-    required TResult Function(_CallSignalingEventUpdating value) updating,
-    required TResult Function(_CallSignalingEventUpdated value) updated,
-    required TResult Function(_CallSignalingEventTransfer value) transfer,
-    required TResult Function(_CallSignalingEventTransferring value)
-        transferring,
-    required TResult Function(_CallSignalingEventNotifyDialog value)
-        notifyDialog,
-    required TResult Function(_CallSignalingEventNotifyRefer value) notifyRefer,
-    required TResult Function(_CallSignalingEventNotifyUnknown value)
-        notifyUnknown,
-    required TResult Function(_CallSignalingEventRegistering value) registering,
-    required TResult Function(_CallSignalingEventRegistered value) registered,
-    required TResult Function(_CallSignalingEventRegisterationFailed value)
-        registrationFailed,
-    required TResult Function(_CallSignalingEventUnregistering value)
-        unregistering,
-    required TResult Function(_CallSignalingEventUnregistered value)
-        unregistered,
-  }) {
-    return unregistered(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallSignalingEventIncoming value)? incoming,
-    TResult? Function(_CallSignalingEventRinging value)? ringing,
-    TResult? Function(_CallSignalingEventProgress value)? progress,
-    TResult? Function(_CallSignalingEventAccepted value)? accepted,
-    TResult? Function(_CallSignalingEventHangup value)? hangup,
-    TResult? Function(_CallSignalingEventUpdating value)? updating,
-    TResult? Function(_CallSignalingEventUpdated value)? updated,
-    TResult? Function(_CallSignalingEventTransfer value)? transfer,
-    TResult? Function(_CallSignalingEventTransferring value)? transferring,
-    TResult? Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult? Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult? Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult? Function(_CallSignalingEventRegistering value)? registering,
-    TResult? Function(_CallSignalingEventRegistered value)? registered,
-    TResult? Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult? Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult? Function(_CallSignalingEventUnregistered value)? unregistered,
-  }) {
-    return unregistered?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallSignalingEventIncoming value)? incoming,
-    TResult Function(_CallSignalingEventRinging value)? ringing,
-    TResult Function(_CallSignalingEventProgress value)? progress,
-    TResult Function(_CallSignalingEventAccepted value)? accepted,
-    TResult Function(_CallSignalingEventHangup value)? hangup,
-    TResult Function(_CallSignalingEventUpdating value)? updating,
-    TResult Function(_CallSignalingEventUpdated value)? updated,
-    TResult Function(_CallSignalingEventTransfer value)? transfer,
-    TResult Function(_CallSignalingEventTransferring value)? transferring,
-    TResult Function(_CallSignalingEventNotifyDialog value)? notifyDialog,
-    TResult Function(_CallSignalingEventNotifyRefer value)? notifyRefer,
-    TResult Function(_CallSignalingEventNotifyUnknown value)? notifyUnknown,
-    TResult Function(_CallSignalingEventRegistering value)? registering,
-    TResult Function(_CallSignalingEventRegistered value)? registered,
-    TResult Function(_CallSignalingEventRegisterationFailed value)?
-        registrationFailed,
-    TResult Function(_CallSignalingEventUnregistering value)? unregistering,
-    TResult Function(_CallSignalingEventUnregistered value)? unregistered,
-    required TResult orElse(),
-  }) {
-    if (unregistered != null) {
-      return unregistered(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallSignalingEventUnregistered implements _CallSignalingEvent {
-  const factory _CallSignalingEventUnregistered() =
-      _$CallSignalingEventUnregisteredImpl;
 }
 
 /// @nodoc
-mixin _$CallPushEvent {
-  String get callId => throw _privateConstructorUsedError;
-  CallkeepHandle get handle => throw _privateConstructorUsedError;
-  String? get displayName => throw _privateConstructorUsedError;
-  bool get video => throw _privateConstructorUsedError;
-  CallkeepIncomingCallError? get error => throw _privateConstructorUsedError;
+mixin _$CallPushEvent implements DiagnosticableTreeMixin {
+  String get callId;
+  CallkeepHandle get handle;
+  String? get displayName;
+  bool get video;
+  CallkeepIncomingCallError? get error;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', '_CallPushEvent'))
+      ..add(DiagnosticsProperty('callId', callId))
+      ..add(DiagnosticsProperty('handle', handle))
+      ..add(DiagnosticsProperty('displayName', displayName))
+      ..add(DiagnosticsProperty('video', video))
+      ..add(DiagnosticsProperty('error', error));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _CallPushEvent &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.handle, handle) || other.handle == handle) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.video, video) || other.video == video) &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, callId, handle, displayName, video, error);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPushEvent(callId: $callId, handle: $handle, displayName: $displayName, video: $video, error: $error)';
+  }
+}
+
+/// Adds pattern-matching-related methods to [_CallPushEvent].
+extension _CallPushEventPatterns on _CallPushEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video, CallkeepIncomingCallError? error)
-        incoming,
-  }) =>
-      throw _privateConstructorUsedError;
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallPushEventIncoming value)? incoming,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPushEventIncoming() when incoming != null:
+        return incoming(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
-        incoming,
-  }) =>
-      throw _privateConstructorUsedError;
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallPushEventIncoming value) incoming,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPushEventIncoming():
+        return incoming(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallPushEventIncoming value)? incoming,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPushEventIncoming() when incoming != null:
+        return incoming(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String callId, CallkeepHandle handle, String? displayName,
             bool video, CallkeepIncomingCallError? error)?
         incoming,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPushEventIncoming() when incoming != null:
+        return incoming(_that.callId, _that.handle, _that.displayName,
+            _that.video, _that.error);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPushEventIncoming value) incoming,
-  }) =>
-      throw _privateConstructorUsedError;
+  TResult when<TResult extends Object?>({
+    required TResult Function(String callId, CallkeepHandle handle,
+            String? displayName, bool video, CallkeepIncomingCallError? error)
+        incoming,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPushEventIncoming():
+        return incoming(_that.callId, _that.handle, _that.displayName,
+            _that.video, _that.error);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPushEventIncoming value)? incoming,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPushEventIncoming value)? incoming,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
+            bool video, CallkeepIncomingCallError? error)?
+        incoming,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPushEventIncoming() when incoming != null:
+        return incoming(_that.callId, _that.handle, _that.displayName,
+            _that.video, _that.error);
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$CallPushEventIncomingImpl
+class _CallPushEventIncoming
     with DiagnosticableTreeMixin
-    implements _CallPushEventIncoming {
-  const _$CallPushEventIncomingImpl(
+    implements _CallPushEvent {
+  const _CallPushEventIncoming(
       {required this.callId,
       required this.handle,
       this.displayName,
@@ -7177,13 +3355,7 @@ class _$CallPushEventIncomingImpl
   final CallkeepIncomingCallError? error;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPushEvent.incoming(callId: $callId, handle: $handle, displayName: $displayName, video: $video, error: $error)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPushEvent.incoming'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -7197,7 +3369,7 @@ class _$CallPushEventIncomingImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPushEventIncomingImpl &&
+            other is _CallPushEventIncoming &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
@@ -7211,90 +3383,382 @@ class _$CallPushEventIncomingImpl
       Object.hash(runtimeType, callId, handle, displayName, video, error);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video, CallkeepIncomingCallError? error)
-        incoming,
-  }) {
-    return incoming(callId, handle, displayName, video, error);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPushEvent.incoming(callId: $callId, handle: $handle, displayName: $displayName, video: $video, error: $error)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
-        incoming,
-  }) {
-    return incoming?.call(callId, handle, displayName, video, error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
-        incoming,
-    required TResult orElse(),
-  }) {
-    if (incoming != null) {
-      return incoming(callId, handle, displayName, video, error);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPushEventIncoming value) incoming,
-  }) {
-    return incoming(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPushEventIncoming value)? incoming,
-  }) {
-    return incoming?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPushEventIncoming value)? incoming,
-    required TResult orElse(),
-  }) {
-    if (incoming != null) {
-      return incoming(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPushEventIncoming implements _CallPushEvent {
-  const factory _CallPushEventIncoming(
-      {required final String callId,
-      required final CallkeepHandle handle,
-      final String? displayName,
-      required final bool video,
-      final CallkeepIncomingCallError? error}) = _$CallPushEventIncomingImpl;
-
-  @override
-  String get callId;
-  @override
-  CallkeepHandle get handle;
-  @override
-  String? get displayName;
-  @override
-  bool get video;
-  @override
-  CallkeepIncomingCallError? get error;
 }
 
 /// @nodoc
-mixin _$CallControlEvent {
+mixin _$CallControlEvent implements DiagnosticableTreeMixin {
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties..add(DiagnosticsProperty('type', 'CallControlEvent'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is CallControlEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent()';
+  }
+}
+
+/// Adds pattern-matching-related methods to [CallControlEvent].
+extension CallControlEventPatterns on CallControlEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallControlEventStarted value)? started,
+    TResult Function(_CallControlEventAnswered value)? answered,
+    TResult Function(_CallControlEventEnded value)? ended,
+    TResult Function(_CallControlEventSetHeld value)? setHeld,
+    TResult Function(_CallControlEventSetMuted value)? setMuted,
+    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult Function(_CallControlEventBlindTransferInitiated value)?
+        blindTransferInitiated,
+    TResult Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
+    TResult Function(_CallControlEventBlindTransferSubmitted value)?
+        blindTransferSubmitted,
+    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
+        attendedTransferSubmitted,
+    TResult Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallControlEventStarted() when started != null:
+        return started(_that);
+      case _CallControlEventAnswered() when answered != null:
+        return answered(_that);
+      case _CallControlEventEnded() when ended != null:
+        return ended(_that);
+      case _CallControlEventSetHeld() when setHeld != null:
+        return setHeld(_that);
+      case _CallControlEventSetMuted() when setMuted != null:
+        return setMuted(_that);
+      case _CallControlEventSentDTMF() when sentDTMF != null:
+        return sentDTMF(_that);
+      case _CallControlEventCameraSwitched() when cameraSwitched != null:
+        return cameraSwitched(_that);
+      case _CallControlEventCameraEnabled() when cameraEnabled != null:
+        return cameraEnabled(_that);
+      case _CallControlEventAudioDeviceSet() when audioDeviceSet != null:
+        return audioDeviceSet(_that);
+      case _CallControlEventFailureApproved() when failureApproved != null:
+        return failureApproved(_that);
+      case _CallControlEventBlindTransferInitiated()
+          when blindTransferInitiated != null:
+        return blindTransferInitiated(_that);
+      case _CallControlEventAttendedTransferInitiated()
+          when attendedTransferInitiated != null:
+        return attendedTransferInitiated(_that);
+      case _CallControlEventBlindTransferSubmitted()
+          when blindTransferSubmitted != null:
+        return blindTransferSubmitted(_that);
+      case _CallControlEventAttendedTransferSubmitted()
+          when attendedTransferSubmitted != null:
+        return attendedTransferSubmitted(_that);
+      case _CallControlEventAttendedRequestDeclined()
+          when attendedRequestDeclined != null:
+        return attendedRequestDeclined(_that);
+      case _CallControlEventAttendedRequestApproved()
+          when attendedRequestApproved != null:
+        return attendedRequestApproved(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallControlEventStarted value) started,
+    required TResult Function(_CallControlEventAnswered value) answered,
+    required TResult Function(_CallControlEventEnded value) ended,
+    required TResult Function(_CallControlEventSetHeld value) setHeld,
+    required TResult Function(_CallControlEventSetMuted value) setMuted,
+    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallControlEventCameraSwitched value)
+        cameraSwitched,
+    required TResult Function(_CallControlEventCameraEnabled value)
+        cameraEnabled,
+    required TResult Function(_CallControlEventAudioDeviceSet value)
+        audioDeviceSet,
+    required TResult Function(_CallControlEventFailureApproved value)
+        failureApproved,
+    required TResult Function(_CallControlEventBlindTransferInitiated value)
+        blindTransferInitiated,
+    required TResult Function(_CallControlEventAttendedTransferInitiated value)
+        attendedTransferInitiated,
+    required TResult Function(_CallControlEventBlindTransferSubmitted value)
+        blindTransferSubmitted,
+    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
+        attendedTransferSubmitted,
+    required TResult Function(_CallControlEventAttendedRequestDeclined value)
+        attendedRequestDeclined,
+    required TResult Function(_CallControlEventAttendedRequestApproved value)
+        attendedRequestApproved,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallControlEventStarted():
+        return started(_that);
+      case _CallControlEventAnswered():
+        return answered(_that);
+      case _CallControlEventEnded():
+        return ended(_that);
+      case _CallControlEventSetHeld():
+        return setHeld(_that);
+      case _CallControlEventSetMuted():
+        return setMuted(_that);
+      case _CallControlEventSentDTMF():
+        return sentDTMF(_that);
+      case _CallControlEventCameraSwitched():
+        return cameraSwitched(_that);
+      case _CallControlEventCameraEnabled():
+        return cameraEnabled(_that);
+      case _CallControlEventAudioDeviceSet():
+        return audioDeviceSet(_that);
+      case _CallControlEventFailureApproved():
+        return failureApproved(_that);
+      case _CallControlEventBlindTransferInitiated():
+        return blindTransferInitiated(_that);
+      case _CallControlEventAttendedTransferInitiated():
+        return attendedTransferInitiated(_that);
+      case _CallControlEventBlindTransferSubmitted():
+        return blindTransferSubmitted(_that);
+      case _CallControlEventAttendedTransferSubmitted():
+        return attendedTransferSubmitted(_that);
+      case _CallControlEventAttendedRequestDeclined():
+        return attendedRequestDeclined(_that);
+      case _CallControlEventAttendedRequestApproved():
+        return attendedRequestApproved(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallControlEventStarted value)? started,
+    TResult? Function(_CallControlEventAnswered value)? answered,
+    TResult? Function(_CallControlEventEnded value)? ended,
+    TResult? Function(_CallControlEventSetHeld value)? setHeld,
+    TResult? Function(_CallControlEventSetMuted value)? setMuted,
+    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
+    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
+    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
+    TResult? Function(_CallControlEventBlindTransferInitiated value)?
+        blindTransferInitiated,
+    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
+        attendedTransferInitiated,
+    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
+        blindTransferSubmitted,
+    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
+        attendedTransferSubmitted,
+    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
+        attendedRequestDeclined,
+    TResult? Function(_CallControlEventAttendedRequestApproved value)?
+        attendedRequestApproved,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallControlEventStarted() when started != null:
+        return started(_that);
+      case _CallControlEventAnswered() when answered != null:
+        return answered(_that);
+      case _CallControlEventEnded() when ended != null:
+        return ended(_that);
+      case _CallControlEventSetHeld() when setHeld != null:
+        return setHeld(_that);
+      case _CallControlEventSetMuted() when setMuted != null:
+        return setMuted(_that);
+      case _CallControlEventSentDTMF() when sentDTMF != null:
+        return sentDTMF(_that);
+      case _CallControlEventCameraSwitched() when cameraSwitched != null:
+        return cameraSwitched(_that);
+      case _CallControlEventCameraEnabled() when cameraEnabled != null:
+        return cameraEnabled(_that);
+      case _CallControlEventAudioDeviceSet() when audioDeviceSet != null:
+        return audioDeviceSet(_that);
+      case _CallControlEventFailureApproved() when failureApproved != null:
+        return failureApproved(_that);
+      case _CallControlEventBlindTransferInitiated()
+          when blindTransferInitiated != null:
+        return blindTransferInitiated(_that);
+      case _CallControlEventAttendedTransferInitiated()
+          when attendedTransferInitiated != null:
+        return attendedTransferInitiated(_that);
+      case _CallControlEventBlindTransferSubmitted()
+          when blindTransferSubmitted != null:
+        return blindTransferSubmitted(_that);
+      case _CallControlEventAttendedTransferSubmitted()
+          when attendedTransferSubmitted != null:
+        return attendedTransferSubmitted(_that);
+      case _CallControlEventAttendedRequestDeclined()
+          when attendedRequestDeclined != null:
+        return attendedRequestDeclined(_that);
+      case _CallControlEventAttendedRequestApproved()
+          when attendedRequestApproved != null:
+        return attendedRequestApproved(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int? line,
+            String? generic,
+            String? number,
+            String? email,
+            String? displayName,
+            String? replaces,
+            String? fromNumber,
+            bool video)?
+        started,
+    TResult Function(String callId)? answered,
+    TResult Function(String callId)? ended,
+    TResult Function(String callId, bool onHold)? setHeld,
+    TResult Function(String callId, bool muted)? setMuted,
+    TResult Function(String callId, String key)? sentDTMF,
+    TResult Function(String callId)? cameraSwitched,
+    TResult Function(String callId, bool enabled)? cameraEnabled,
+    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult Function(String callId)? failureApproved,
+    TResult Function(String callId)? blindTransferInitiated,
+    TResult Function(String callId)? attendedTransferInitiated,
+    TResult Function(String number)? blindTransferSubmitted,
+    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
+        attendedTransferSubmitted,
+    TResult Function(String callId, String referId)? attendedRequestDeclined,
+    TResult Function(String referId, String referTo)? attendedRequestApproved,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallControlEventStarted() when started != null:
+        return started(_that.line, _that.generic, _that.number, _that.email,
+            _that.displayName, _that.replaces, _that.fromNumber, _that.video);
+      case _CallControlEventAnswered() when answered != null:
+        return answered(_that.callId);
+      case _CallControlEventEnded() when ended != null:
+        return ended(_that.callId);
+      case _CallControlEventSetHeld() when setHeld != null:
+        return setHeld(_that.callId, _that.onHold);
+      case _CallControlEventSetMuted() when setMuted != null:
+        return setMuted(_that.callId, _that.muted);
+      case _CallControlEventSentDTMF() when sentDTMF != null:
+        return sentDTMF(_that.callId, _that.key);
+      case _CallControlEventCameraSwitched() when cameraSwitched != null:
+        return cameraSwitched(_that.callId);
+      case _CallControlEventCameraEnabled() when cameraEnabled != null:
+        return cameraEnabled(_that.callId, _that.enabled);
+      case _CallControlEventAudioDeviceSet() when audioDeviceSet != null:
+        return audioDeviceSet(_that.callId, _that.device);
+      case _CallControlEventFailureApproved() when failureApproved != null:
+        return failureApproved(_that.callId);
+      case _CallControlEventBlindTransferInitiated()
+          when blindTransferInitiated != null:
+        return blindTransferInitiated(_that.callId);
+      case _CallControlEventAttendedTransferInitiated()
+          when attendedTransferInitiated != null:
+        return attendedTransferInitiated(_that.callId);
+      case _CallControlEventBlindTransferSubmitted()
+          when blindTransferSubmitted != null:
+        return blindTransferSubmitted(_that.number);
+      case _CallControlEventAttendedTransferSubmitted()
+          when attendedTransferSubmitted != null:
+        return attendedTransferSubmitted(_that.referorCall, _that.replaceCall);
+      case _CallControlEventAttendedRequestDeclined()
+          when attendedRequestDeclined != null:
+        return attendedRequestDeclined(_that.callId, _that.referId);
+      case _CallControlEventAttendedRequestApproved()
+          when attendedRequestApproved != null:
+        return attendedRequestApproved(_that.referId, _that.referTo);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -7326,8 +3790,59 @@ mixin _$CallControlEvent {
         attendedRequestDeclined,
     required TResult Function(String referId, String referTo)
         attendedRequestApproved,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallControlEventStarted():
+        return started(_that.line, _that.generic, _that.number, _that.email,
+            _that.displayName, _that.replaces, _that.fromNumber, _that.video);
+      case _CallControlEventAnswered():
+        return answered(_that.callId);
+      case _CallControlEventEnded():
+        return ended(_that.callId);
+      case _CallControlEventSetHeld():
+        return setHeld(_that.callId, _that.onHold);
+      case _CallControlEventSetMuted():
+        return setMuted(_that.callId, _that.muted);
+      case _CallControlEventSentDTMF():
+        return sentDTMF(_that.callId, _that.key);
+      case _CallControlEventCameraSwitched():
+        return cameraSwitched(_that.callId);
+      case _CallControlEventCameraEnabled():
+        return cameraEnabled(_that.callId, _that.enabled);
+      case _CallControlEventAudioDeviceSet():
+        return audioDeviceSet(_that.callId, _that.device);
+      case _CallControlEventFailureApproved():
+        return failureApproved(_that.callId);
+      case _CallControlEventBlindTransferInitiated():
+        return blindTransferInitiated(_that.callId);
+      case _CallControlEventAttendedTransferInitiated():
+        return attendedTransferInitiated(_that.callId);
+      case _CallControlEventBlindTransferSubmitted():
+        return blindTransferSubmitted(_that.number);
+      case _CallControlEventAttendedTransferSubmitted():
+        return attendedTransferSubmitted(_that.referorCall, _that.replaceCall);
+      case _CallControlEventAttendedRequestDeclined():
+        return attendedRequestDeclined(_that.callId, _that.referId);
+      case _CallControlEventAttendedRequestApproved():
+        return attendedRequestApproved(_that.referId, _that.referTo);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
@@ -7356,130 +3871,60 @@ mixin _$CallControlEvent {
         attendedTransferSubmitted,
     TResult? Function(String callId, String referId)? attendedRequestDeclined,
     TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallControlEventStarted() when started != null:
+        return started(_that.line, _that.generic, _that.number, _that.email,
+            _that.displayName, _that.replaces, _that.fromNumber, _that.video);
+      case _CallControlEventAnswered() when answered != null:
+        return answered(_that.callId);
+      case _CallControlEventEnded() when ended != null:
+        return ended(_that.callId);
+      case _CallControlEventSetHeld() when setHeld != null:
+        return setHeld(_that.callId, _that.onHold);
+      case _CallControlEventSetMuted() when setMuted != null:
+        return setMuted(_that.callId, _that.muted);
+      case _CallControlEventSentDTMF() when sentDTMF != null:
+        return sentDTMF(_that.callId, _that.key);
+      case _CallControlEventCameraSwitched() when cameraSwitched != null:
+        return cameraSwitched(_that.callId);
+      case _CallControlEventCameraEnabled() when cameraEnabled != null:
+        return cameraEnabled(_that.callId, _that.enabled);
+      case _CallControlEventAudioDeviceSet() when audioDeviceSet != null:
+        return audioDeviceSet(_that.callId, _that.device);
+      case _CallControlEventFailureApproved() when failureApproved != null:
+        return failureApproved(_that.callId);
+      case _CallControlEventBlindTransferInitiated()
+          when blindTransferInitiated != null:
+        return blindTransferInitiated(_that.callId);
+      case _CallControlEventAttendedTransferInitiated()
+          when attendedTransferInitiated != null:
+        return attendedTransferInitiated(_that.callId);
+      case _CallControlEventBlindTransferSubmitted()
+          when blindTransferSubmitted != null:
+        return blindTransferSubmitted(_that.number);
+      case _CallControlEventAttendedTransferSubmitted()
+          when attendedTransferSubmitted != null:
+        return attendedTransferSubmitted(_that.referorCall, _that.replaceCall);
+      case _CallControlEventAttendedRequestDeclined()
+          when attendedRequestDeclined != null:
+        return attendedRequestDeclined(_that.callId, _that.referId);
+      case _CallControlEventAttendedRequestApproved()
+          when attendedRequestApproved != null:
+        return attendedRequestApproved(_that.referId, _that.referTo);
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$CallControlEventStartedImpl
+class _CallControlEventStarted
     with DiagnosticableTreeMixin, CallControlEventStartedMixin
-    implements _CallControlEventStarted {
-  const _$CallControlEventStartedImpl(
+    implements CallControlEvent {
+  const _CallControlEventStarted(
       {this.line,
       this.generic,
       this.number,
@@ -7496,31 +3941,17 @@ class _$CallControlEventStartedImpl
                 (generic == null && number == null && email != null),
             'only one of generic, number or email parameters must be assign');
 
-  @override
   final int? line;
-  @override
   final String? generic;
-  @override
   final String? number;
-  @override
   final String? email;
-  @override
   final String? displayName;
-  @override
   final String? replaces;
-  @override
   final String? fromNumber;
-  @override
   final bool video;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, replaces: $replaces, fromNumber: $fromNumber, video: $video)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.started'))
       ..add(DiagnosticsProperty('line', line))
@@ -7537,7 +3968,7 @@ class _$CallControlEventStartedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventStartedImpl &&
+            other is _CallControlEventStarted &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.generic, generic) || other.generic == generic) &&
             (identical(other.number, number) || other.number == number) &&
@@ -7556,250 +3987,22 @@ class _$CallControlEventStartedImpl
       displayName, replaces, fromNumber, video);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return started(
-        line, generic, number, email, displayName, replaces, fromNumber, video);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, replaces: $replaces, fromNumber: $fromNumber, video: $video)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return started?.call(
-        line, generic, number, email, displayName, replaces, fromNumber, video);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (started != null) {
-      return started(line, generic, number, email, displayName, replaces,
-          fromNumber, video);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return started(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return started?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (started != null) {
-      return started(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventStarted
-    implements CallControlEvent, CallControlEventStartedMixin {
-  const factory _CallControlEventStarted(
-      {final int? line,
-      final String? generic,
-      final String? number,
-      final String? email,
-      final String? displayName,
-      final String? replaces,
-      final String? fromNumber,
-      required final bool video}) = _$CallControlEventStartedImpl;
-
-  int? get line;
-  String? get generic;
-  String? get number;
-  String? get email;
-  String? get displayName;
-  String? get replaces;
-  String? get fromNumber;
-  bool get video;
 }
 
 /// @nodoc
 
-class _$CallControlEventAnsweredImpl
+class _CallControlEventAnswered
     with DiagnosticableTreeMixin
-    implements _CallControlEventAnswered {
-  const _$CallControlEventAnsweredImpl(this.callId);
+    implements CallControlEvent {
+  const _CallControlEventAnswered(this.callId);
 
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.answered(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.answered'))
       ..add(DiagnosticsProperty('callId', callId));
@@ -7809,7 +4012,7 @@ class _$CallControlEventAnsweredImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAnsweredImpl &&
+            other is _CallControlEventAnswered &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -7817,232 +4020,22 @@ class _$CallControlEventAnsweredImpl
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return answered(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.answered(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return answered?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (answered != null) {
-      return answered(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return answered(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return answered?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (answered != null) {
-      return answered(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventAnswered implements CallControlEvent {
-  const factory _CallControlEventAnswered(final String callId) =
-      _$CallControlEventAnsweredImpl;
-
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventEndedImpl
+class _CallControlEventEnded
     with DiagnosticableTreeMixin
-    implements _CallControlEventEnded {
-  const _$CallControlEventEndedImpl(this.callId);
+    implements CallControlEvent {
+  const _CallControlEventEnded(this.callId);
 
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.ended(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.ended'))
       ..add(DiagnosticsProperty('callId', callId));
@@ -8052,7 +4045,7 @@ class _$CallControlEventEndedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventEndedImpl &&
+            other is _CallControlEventEnded &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -8060,234 +4053,23 @@ class _$CallControlEventEndedImpl
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return ended(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.ended(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return ended?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (ended != null) {
-      return ended(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return ended(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return ended?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (ended != null) {
-      return ended(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventEnded implements CallControlEvent {
-  const factory _CallControlEventEnded(final String callId) =
-      _$CallControlEventEndedImpl;
-
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventSetHeldImpl
+class _CallControlEventSetHeld
     with DiagnosticableTreeMixin
-    implements _CallControlEventSetHeld {
-  const _$CallControlEventSetHeldImpl(this.callId, this.onHold);
+    implements CallControlEvent {
+  const _CallControlEventSetHeld(this.callId, this.onHold);
 
-  @override
   final String callId;
-  @override
   final bool onHold;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.setHeld(callId: $callId, onHold: $onHold)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.setHeld'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -8298,7 +4080,7 @@ class _$CallControlEventSetHeldImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventSetHeldImpl &&
+            other is _CallControlEventSetHeld &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.onHold, onHold) || other.onHold == onHold));
   }
@@ -8307,235 +4089,23 @@ class _$CallControlEventSetHeldImpl
   int get hashCode => Object.hash(runtimeType, callId, onHold);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return setHeld(callId, onHold);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.setHeld(callId: $callId, onHold: $onHold)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return setHeld?.call(callId, onHold);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (setHeld != null) {
-      return setHeld(callId, onHold);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return setHeld(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return setHeld?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (setHeld != null) {
-      return setHeld(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventSetHeld implements CallControlEvent {
-  const factory _CallControlEventSetHeld(
-      final String callId, final bool onHold) = _$CallControlEventSetHeldImpl;
-
-  String get callId;
-  bool get onHold;
 }
 
 /// @nodoc
 
-class _$CallControlEventSetMutedImpl
+class _CallControlEventSetMuted
     with DiagnosticableTreeMixin
-    implements _CallControlEventSetMuted {
-  const _$CallControlEventSetMutedImpl(this.callId, this.muted);
+    implements CallControlEvent {
+  const _CallControlEventSetMuted(this.callId, this.muted);
 
-  @override
   final String callId;
-  @override
   final bool muted;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.setMuted(callId: $callId, muted: $muted)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.setMuted'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -8546,7 +4116,7 @@ class _$CallControlEventSetMutedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventSetMutedImpl &&
+            other is _CallControlEventSetMuted &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.muted, muted) || other.muted == muted));
   }
@@ -8555,235 +4125,23 @@ class _$CallControlEventSetMutedImpl
   int get hashCode => Object.hash(runtimeType, callId, muted);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return setMuted(callId, muted);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.setMuted(callId: $callId, muted: $muted)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return setMuted?.call(callId, muted);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (setMuted != null) {
-      return setMuted(callId, muted);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return setMuted(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return setMuted?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (setMuted != null) {
-      return setMuted(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventSetMuted implements CallControlEvent {
-  const factory _CallControlEventSetMuted(
-      final String callId, final bool muted) = _$CallControlEventSetMutedImpl;
-
-  String get callId;
-  bool get muted;
 }
 
 /// @nodoc
 
-class _$CallControlEventSentDTMFImpl
+class _CallControlEventSentDTMF
     with DiagnosticableTreeMixin
-    implements _CallControlEventSentDTMF {
-  const _$CallControlEventSentDTMFImpl(this.callId, this.key);
+    implements CallControlEvent {
+  const _CallControlEventSentDTMF(this.callId, this.key);
 
-  @override
   final String callId;
-  @override
   final String key;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.sentDTMF(callId: $callId, key: $key)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.sentDTMF'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -8794,7 +4152,7 @@ class _$CallControlEventSentDTMFImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventSentDTMFImpl &&
+            other is _CallControlEventSentDTMF &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.key, key) || other.key == key));
   }
@@ -8803,233 +4161,22 @@ class _$CallControlEventSentDTMFImpl
   int get hashCode => Object.hash(runtimeType, callId, key);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return sentDTMF(callId, key);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.sentDTMF(callId: $callId, key: $key)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return sentDTMF?.call(callId, key);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (sentDTMF != null) {
-      return sentDTMF(callId, key);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return sentDTMF(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return sentDTMF?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (sentDTMF != null) {
-      return sentDTMF(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventSentDTMF implements CallControlEvent {
-  const factory _CallControlEventSentDTMF(
-      final String callId, final String key) = _$CallControlEventSentDTMFImpl;
-
-  String get callId;
-  String get key;
 }
 
 /// @nodoc
 
-class _$CallControlEventCameraSwitchedImpl
+class _CallControlEventCameraSwitched
     with DiagnosticableTreeMixin
-    implements _CallControlEventCameraSwitched {
-  const _$CallControlEventCameraSwitchedImpl(this.callId);
+    implements CallControlEvent {
+  const _CallControlEventCameraSwitched(this.callId);
 
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.cameraSwitched(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.cameraSwitched'))
       ..add(DiagnosticsProperty('callId', callId));
@@ -9039,7 +4186,7 @@ class _$CallControlEventCameraSwitchedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventCameraSwitchedImpl &&
+            other is _CallControlEventCameraSwitched &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -9047,234 +4194,23 @@ class _$CallControlEventCameraSwitchedImpl
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return cameraSwitched(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.cameraSwitched(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return cameraSwitched?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (cameraSwitched != null) {
-      return cameraSwitched(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return cameraSwitched(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return cameraSwitched?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (cameraSwitched != null) {
-      return cameraSwitched(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventCameraSwitched implements CallControlEvent {
-  const factory _CallControlEventCameraSwitched(final String callId) =
-      _$CallControlEventCameraSwitchedImpl;
-
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventCameraEnabledImpl
+class _CallControlEventCameraEnabled
     with DiagnosticableTreeMixin
-    implements _CallControlEventCameraEnabled {
-  const _$CallControlEventCameraEnabledImpl(this.callId, this.enabled);
+    implements CallControlEvent {
+  const _CallControlEventCameraEnabled(this.callId, this.enabled);
 
-  @override
   final String callId;
-  @override
   final bool enabled;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.cameraEnabled(callId: $callId, enabled: $enabled)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.cameraEnabled'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -9285,7 +4221,7 @@ class _$CallControlEventCameraEnabledImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventCameraEnabledImpl &&
+            other is _CallControlEventCameraEnabled &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.enabled, enabled) || other.enabled == enabled));
   }
@@ -9294,236 +4230,23 @@ class _$CallControlEventCameraEnabledImpl
   int get hashCode => Object.hash(runtimeType, callId, enabled);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return cameraEnabled(callId, enabled);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.cameraEnabled(callId: $callId, enabled: $enabled)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return cameraEnabled?.call(callId, enabled);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (cameraEnabled != null) {
-      return cameraEnabled(callId, enabled);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return cameraEnabled(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return cameraEnabled?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (cameraEnabled != null) {
-      return cameraEnabled(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventCameraEnabled implements CallControlEvent {
-  const factory _CallControlEventCameraEnabled(
-          final String callId, final bool enabled) =
-      _$CallControlEventCameraEnabledImpl;
-
-  String get callId;
-  bool get enabled;
 }
 
 /// @nodoc
 
-class _$CallControlEventAudioDeviceSetImpl
+class _CallControlEventAudioDeviceSet
     with DiagnosticableTreeMixin
-    implements _CallControlEventAudioDeviceSet {
-  const _$CallControlEventAudioDeviceSetImpl(this.callId, this.device);
+    implements CallControlEvent {
+  const _CallControlEventAudioDeviceSet(this.callId, this.device);
 
-  @override
   final String callId;
-  @override
   final CallAudioDevice device;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.audioDeviceSet(callId: $callId, device: $device)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.audioDeviceSet'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -9534,7 +4257,7 @@ class _$CallControlEventAudioDeviceSetImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAudioDeviceSetImpl &&
+            other is _CallControlEventAudioDeviceSet &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.device, device) || other.device == device));
   }
@@ -9543,234 +4266,22 @@ class _$CallControlEventAudioDeviceSetImpl
   int get hashCode => Object.hash(runtimeType, callId, device);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return audioDeviceSet(callId, device);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.audioDeviceSet(callId: $callId, device: $device)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return audioDeviceSet?.call(callId, device);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (audioDeviceSet != null) {
-      return audioDeviceSet(callId, device);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return audioDeviceSet(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return audioDeviceSet?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (audioDeviceSet != null) {
-      return audioDeviceSet(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventAudioDeviceSet implements CallControlEvent {
-  const factory _CallControlEventAudioDeviceSet(
-          final String callId, final CallAudioDevice device) =
-      _$CallControlEventAudioDeviceSetImpl;
-
-  String get callId;
-  CallAudioDevice get device;
 }
 
 /// @nodoc
 
-class _$CallControlEventFailureApprovedImpl
+class _CallControlEventFailureApproved
     with DiagnosticableTreeMixin
-    implements _CallControlEventFailureApproved {
-  const _$CallControlEventFailureApprovedImpl(this.callId);
+    implements CallControlEvent {
+  const _CallControlEventFailureApproved(this.callId);
 
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.failureApproved(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallControlEvent.failureApproved'))
       ..add(DiagnosticsProperty('callId', callId));
@@ -9780,7 +4291,7 @@ class _$CallControlEventFailureApprovedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventFailureApprovedImpl &&
+            other is _CallControlEventFailureApproved &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -9788,232 +4299,22 @@ class _$CallControlEventFailureApprovedImpl
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return failureApproved(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.failureApproved(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return failureApproved?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (failureApproved != null) {
-      return failureApproved(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return failureApproved(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return failureApproved?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (failureApproved != null) {
-      return failureApproved(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventFailureApproved implements CallControlEvent {
-  const factory _CallControlEventFailureApproved(final String callId) =
-      _$CallControlEventFailureApprovedImpl;
-
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventBlindTransferInitiatedImpl
+class _CallControlEventBlindTransferInitiated
     with DiagnosticableTreeMixin
-    implements _CallControlEventBlindTransferInitiated {
-  const _$CallControlEventBlindTransferInitiatedImpl(this.callId);
+    implements CallControlEvent {
+  const _CallControlEventBlindTransferInitiated(this.callId);
 
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.blindTransferInitiated(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', 'CallControlEvent.blindTransferInitiated'))
@@ -10024,7 +4325,7 @@ class _$CallControlEventBlindTransferInitiatedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventBlindTransferInitiatedImpl &&
+            other is _CallControlEventBlindTransferInitiated &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -10032,233 +4333,22 @@ class _$CallControlEventBlindTransferInitiatedImpl
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return blindTransferInitiated(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.blindTransferInitiated(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return blindTransferInitiated?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (blindTransferInitiated != null) {
-      return blindTransferInitiated(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return blindTransferInitiated(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return blindTransferInitiated?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (blindTransferInitiated != null) {
-      return blindTransferInitiated(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventBlindTransferInitiated
-    implements CallControlEvent {
-  const factory _CallControlEventBlindTransferInitiated(final String callId) =
-      _$CallControlEventBlindTransferInitiatedImpl;
-
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventAttendedTransferInitiatedImpl
+class _CallControlEventAttendedTransferInitiated
     with DiagnosticableTreeMixin
-    implements _CallControlEventAttendedTransferInitiated {
-  const _$CallControlEventAttendedTransferInitiatedImpl(this.callId);
+    implements CallControlEvent {
+  const _CallControlEventAttendedTransferInitiated(this.callId);
 
-  @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.attendedTransferInitiated(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', 'CallControlEvent.attendedTransferInitiated'))
@@ -10269,7 +4359,7 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAttendedTransferInitiatedImpl &&
+            other is _CallControlEventAttendedTransferInitiated &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -10277,233 +4367,22 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return attendedTransferInitiated(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.attendedTransferInitiated(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return attendedTransferInitiated?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (attendedTransferInitiated != null) {
-      return attendedTransferInitiated(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return attendedTransferInitiated(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return attendedTransferInitiated?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (attendedTransferInitiated != null) {
-      return attendedTransferInitiated(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventAttendedTransferInitiated
-    implements CallControlEvent {
-  const factory _CallControlEventAttendedTransferInitiated(
-      final String callId) = _$CallControlEventAttendedTransferInitiatedImpl;
-
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventBlindTransferSubmittedImpl
+class _CallControlEventBlindTransferSubmitted
     with DiagnosticableTreeMixin
-    implements _CallControlEventBlindTransferSubmitted {
-  const _$CallControlEventBlindTransferSubmittedImpl({required this.number});
+    implements CallControlEvent {
+  const _CallControlEventBlindTransferSubmitted({required this.number});
 
-  @override
   final String number;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.blindTransferSubmitted(number: $number)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', 'CallControlEvent.blindTransferSubmitted'))
@@ -10514,7 +4393,7 @@ class _$CallControlEventBlindTransferSubmittedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventBlindTransferSubmittedImpl &&
+            other is _CallControlEventBlindTransferSubmitted &&
             (identical(other.number, number) || other.number == number));
   }
 
@@ -10522,237 +4401,24 @@ class _$CallControlEventBlindTransferSubmittedImpl
   int get hashCode => Object.hash(runtimeType, number);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return blindTransferSubmitted(number);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.blindTransferSubmitted(number: $number)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return blindTransferSubmitted?.call(number);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (blindTransferSubmitted != null) {
-      return blindTransferSubmitted(number);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return blindTransferSubmitted(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return blindTransferSubmitted?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (blindTransferSubmitted != null) {
-      return blindTransferSubmitted(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventBlindTransferSubmitted
-    implements CallControlEvent {
-  const factory _CallControlEventBlindTransferSubmitted(
-          {required final String number}) =
-      _$CallControlEventBlindTransferSubmittedImpl;
-
-  String get number;
 }
 
 /// @nodoc
 
-class _$CallControlEventAttendedTransferSubmittedImpl
+class _CallControlEventAttendedTransferSubmitted
     with DiagnosticableTreeMixin
-    implements _CallControlEventAttendedTransferSubmitted {
-  const _$CallControlEventAttendedTransferSubmittedImpl(
+    implements CallControlEvent {
+  const _CallControlEventAttendedTransferSubmitted(
       {required this.referorCall, required this.replaceCall});
 
-  @override
   final ActiveCall referorCall;
-  @override
   final ActiveCall replaceCall;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.attendedTransferSubmitted(referorCall: $referorCall, replaceCall: $replaceCall)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', 'CallControlEvent.attendedTransferSubmitted'))
@@ -10764,7 +4430,7 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAttendedTransferSubmittedImpl &&
+            other is _CallControlEventAttendedTransferSubmitted &&
             (identical(other.referorCall, referorCall) ||
                 other.referorCall == referorCall) &&
             (identical(other.replaceCall, replaceCall) ||
@@ -10775,239 +4441,24 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   int get hashCode => Object.hash(runtimeType, referorCall, replaceCall);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return attendedTransferSubmitted(referorCall, replaceCall);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.attendedTransferSubmitted(referorCall: $referorCall, replaceCall: $replaceCall)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return attendedTransferSubmitted?.call(referorCall, replaceCall);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (attendedTransferSubmitted != null) {
-      return attendedTransferSubmitted(referorCall, replaceCall);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return attendedTransferSubmitted(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return attendedTransferSubmitted?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (attendedTransferSubmitted != null) {
-      return attendedTransferSubmitted(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventAttendedTransferSubmitted
-    implements CallControlEvent {
-  const factory _CallControlEventAttendedTransferSubmitted(
-          {required final ActiveCall referorCall,
-          required final ActiveCall replaceCall}) =
-      _$CallControlEventAttendedTransferSubmittedImpl;
-
-  ActiveCall get referorCall;
-  ActiveCall get replaceCall;
 }
 
 /// @nodoc
 
-class _$CallControlEventAttendedRequestDeclinedImpl
+class _CallControlEventAttendedRequestDeclined
     with DiagnosticableTreeMixin
-    implements _CallControlEventAttendedRequestDeclined {
-  const _$CallControlEventAttendedRequestDeclinedImpl(
+    implements CallControlEvent {
+  const _CallControlEventAttendedRequestDeclined(
       {required this.callId, required this.referId});
 
-  @override
   final String callId;
-  @override
   final String referId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.attendedRequestDeclined(callId: $callId, referId: $referId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', 'CallControlEvent.attendedRequestDeclined'))
@@ -11019,7 +4470,7 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAttendedRequestDeclinedImpl &&
+            other is _CallControlEventAttendedRequestDeclined &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.referId, referId) || other.referId == referId));
   }
@@ -11028,238 +4479,24 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   int get hashCode => Object.hash(runtimeType, callId, referId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return attendedRequestDeclined(callId, referId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.attendedRequestDeclined(callId: $callId, referId: $referId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return attendedRequestDeclined?.call(callId, referId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (attendedRequestDeclined != null) {
-      return attendedRequestDeclined(callId, referId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return attendedRequestDeclined(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return attendedRequestDeclined?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (attendedRequestDeclined != null) {
-      return attendedRequestDeclined(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventAttendedRequestDeclined
-    implements CallControlEvent {
-  const factory _CallControlEventAttendedRequestDeclined(
-          {required final String callId, required final String referId}) =
-      _$CallControlEventAttendedRequestDeclinedImpl;
-
-  String get callId;
-  String get referId;
 }
 
 /// @nodoc
 
-class _$CallControlEventAttendedRequestApprovedImpl
+class _CallControlEventAttendedRequestApproved
     with DiagnosticableTreeMixin
-    implements _CallControlEventAttendedRequestApproved {
-  const _$CallControlEventAttendedRequestApprovedImpl(
+    implements CallControlEvent {
+  const _CallControlEventAttendedRequestApproved(
       {required this.referId, required this.referTo});
 
-  @override
   final String referId;
-  @override
   final String referTo;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallControlEvent.attendedRequestApproved(referId: $referId, referTo: $referTo)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', 'CallControlEvent.attendedRequestApproved'))
@@ -11271,7 +4508,7 @@ class _$CallControlEventAttendedRequestApprovedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAttendedRequestApprovedImpl &&
+            other is _CallControlEventAttendedRequestApproved &&
             (identical(other.referId, referId) || other.referId == referId) &&
             (identical(other.referTo, referTo) || other.referTo == referTo));
   }
@@ -11280,251 +4517,204 @@ class _$CallControlEventAttendedRequestApprovedImpl
   int get hashCode => Object.hash(runtimeType, referId, referTo);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId) cameraSwitched,
-    required TResult Function(String callId, bool enabled) cameraEnabled,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId) failureApproved,
-    required TResult Function(String callId) blindTransferInitiated,
-    required TResult Function(String callId) attendedTransferInitiated,
-    required TResult Function(String number) blindTransferSubmitted,
-    required TResult Function(ActiveCall referorCall, ActiveCall replaceCall)
-        attendedTransferSubmitted,
-    required TResult Function(String callId, String referId)
-        attendedRequestDeclined,
-    required TResult Function(String referId, String referTo)
-        attendedRequestApproved,
-  }) {
-    return attendedRequestApproved(referId, referTo);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallControlEvent.attendedRequestApproved(referId: $referId, referTo: $referTo)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId)? cameraSwitched,
-    TResult? Function(String callId, bool enabled)? cameraEnabled,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId)? failureApproved,
-    TResult? Function(String callId)? blindTransferInitiated,
-    TResult? Function(String callId)? attendedTransferInitiated,
-    TResult? Function(String number)? blindTransferSubmitted,
-    TResult? Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult? Function(String callId, String referId)? attendedRequestDeclined,
-    TResult? Function(String referId, String referTo)? attendedRequestApproved,
-  }) {
-    return attendedRequestApproved?.call(referId, referTo);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            int? line,
-            String? generic,
-            String? number,
-            String? email,
-            String? displayName,
-            String? replaces,
-            String? fromNumber,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId)? cameraSwitched,
-    TResult Function(String callId, bool enabled)? cameraEnabled,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId)? failureApproved,
-    TResult Function(String callId)? blindTransferInitiated,
-    TResult Function(String callId)? attendedTransferInitiated,
-    TResult Function(String number)? blindTransferSubmitted,
-    TResult Function(ActiveCall referorCall, ActiveCall replaceCall)?
-        attendedTransferSubmitted,
-    TResult Function(String callId, String referId)? attendedRequestDeclined,
-    TResult Function(String referId, String referTo)? attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (attendedRequestApproved != null) {
-      return attendedRequestApproved(referId, referTo);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallControlEventStarted value) started,
-    required TResult Function(_CallControlEventAnswered value) answered,
-    required TResult Function(_CallControlEventEnded value) ended,
-    required TResult Function(_CallControlEventSetHeld value) setHeld,
-    required TResult Function(_CallControlEventSetMuted value) setMuted,
-    required TResult Function(_CallControlEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallControlEventCameraSwitched value)
-        cameraSwitched,
-    required TResult Function(_CallControlEventCameraEnabled value)
-        cameraEnabled,
-    required TResult Function(_CallControlEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallControlEventFailureApproved value)
-        failureApproved,
-    required TResult Function(_CallControlEventBlindTransferInitiated value)
-        blindTransferInitiated,
-    required TResult Function(_CallControlEventAttendedTransferInitiated value)
-        attendedTransferInitiated,
-    required TResult Function(_CallControlEventBlindTransferSubmitted value)
-        blindTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedTransferSubmitted value)
-        attendedTransferSubmitted,
-    required TResult Function(_CallControlEventAttendedRequestDeclined value)
-        attendedRequestDeclined,
-    required TResult Function(_CallControlEventAttendedRequestApproved value)
-        attendedRequestApproved,
-  }) {
-    return attendedRequestApproved(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallControlEventStarted value)? started,
-    TResult? Function(_CallControlEventAnswered value)? answered,
-    TResult? Function(_CallControlEventEnded value)? ended,
-    TResult? Function(_CallControlEventSetHeld value)? setHeld,
-    TResult? Function(_CallControlEventSetMuted value)? setMuted,
-    TResult? Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult? Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult? Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult? Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult? Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult? Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult? Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult? Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-  }) {
-    return attendedRequestApproved?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallControlEventStarted value)? started,
-    TResult Function(_CallControlEventAnswered value)? answered,
-    TResult Function(_CallControlEventEnded value)? ended,
-    TResult Function(_CallControlEventSetHeld value)? setHeld,
-    TResult Function(_CallControlEventSetMuted value)? setMuted,
-    TResult Function(_CallControlEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallControlEventCameraSwitched value)? cameraSwitched,
-    TResult Function(_CallControlEventCameraEnabled value)? cameraEnabled,
-    TResult Function(_CallControlEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallControlEventFailureApproved value)? failureApproved,
-    TResult Function(_CallControlEventBlindTransferInitiated value)?
-        blindTransferInitiated,
-    TResult Function(_CallControlEventAttendedTransferInitiated value)?
-        attendedTransferInitiated,
-    TResult Function(_CallControlEventBlindTransferSubmitted value)?
-        blindTransferSubmitted,
-    TResult Function(_CallControlEventAttendedTransferSubmitted value)?
-        attendedTransferSubmitted,
-    TResult Function(_CallControlEventAttendedRequestDeclined value)?
-        attendedRequestDeclined,
-    TResult Function(_CallControlEventAttendedRequestApproved value)?
-        attendedRequestApproved,
-    required TResult orElse(),
-  }) {
-    if (attendedRequestApproved != null) {
-      return attendedRequestApproved(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallControlEventAttendedRequestApproved
-    implements CallControlEvent {
-  const factory _CallControlEventAttendedRequestApproved(
-          {required final String referId, required final String referTo}) =
-      _$CallControlEventAttendedRequestApprovedImpl;
-
-  String get referId;
-  String get referTo;
 }
 
 /// @nodoc
-mixin _$CallPerformEvent {
-  String get callId => throw _privateConstructorUsedError;
+mixin _$CallPerformEvent implements DiagnosticableTreeMixin {
+  dynamic get _performCompleter;
+  String get callId;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', '_CallPerformEvent'))
+      ..add(DiagnosticsProperty('_performCompleter', _performCompleter))
+      ..add(DiagnosticsProperty('callId', callId));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _CallPerformEvent &&
+            const DeepCollectionEquality()
+                .equals(other._performCompleter, _performCompleter) &&
+            (identical(other.callId, callId) || other.callId == callId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_performCompleter), callId);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent(_performCompleter: $_performCompleter, callId: $callId)';
+  }
+}
+
+/// Adds pattern-matching-related methods to [_CallPerformEvent].
+extension _CallPerformEventPatterns on _CallPerformEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CallPerformEventStarted value)? started,
+    TResult Function(_CallPerformEventAnswered value)? answered,
+    TResult Function(_CallPerformEventEnded value)? ended,
+    TResult Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
+        audioDevicesUpdate,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPerformEventStarted() when started != null:
+        return started(_that);
+      case _CallPerformEventAnswered() when answered != null:
+        return answered(_that);
+      case _CallPerformEventEnded() when ended != null:
+        return ended(_that);
+      case _CallPerformEventSetHeld() when setHeld != null:
+        return setHeld(_that);
+      case _CallPerformEventSetMuted() when setMuted != null:
+        return setMuted(_that);
+      case _CallPerformEventSentDTMF() when sentDTMF != null:
+        return sentDTMF(_that);
+      case _CallPerformEventAudioDeviceSet() when audioDeviceSet != null:
+        return audioDeviceSet(_that);
+      case _CallPerformEventAudioDevicesUpdate()
+          when audioDevicesUpdate != null:
+        return audioDevicesUpdate(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallPerformEventStarted value) started,
+    required TResult Function(_CallPerformEventAnswered value) answered,
+    required TResult Function(_CallPerformEventEnded value) ended,
+    required TResult Function(_CallPerformEventSetHeld value) setHeld,
+    required TResult Function(_CallPerformEventSetMuted value) setMuted,
+    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
+    required TResult Function(_CallPerformEventAudioDeviceSet value)
         audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
+    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
         audioDevicesUpdate,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPerformEventStarted():
+        return started(_that);
+      case _CallPerformEventAnswered():
+        return answered(_that);
+      case _CallPerformEventEnded():
+        return ended(_that);
+      case _CallPerformEventSetHeld():
+        return setHeld(_that);
+      case _CallPerformEventSetMuted():
+        return setMuted(_that);
+      case _CallPerformEventSentDTMF():
+        return sentDTMF(_that);
+      case _CallPerformEventAudioDeviceSet():
+        return audioDeviceSet(_that);
+      case _CallPerformEventAudioDevicesUpdate():
+        return audioDevicesUpdate(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallPerformEventStarted value)? started,
+    TResult? Function(_CallPerformEventAnswered value)? answered,
+    TResult? Function(_CallPerformEventEnded value)? ended,
+    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
+    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
+    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
+    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
+    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
         audioDevicesUpdate,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPerformEventStarted() when started != null:
+        return started(_that);
+      case _CallPerformEventAnswered() when answered != null:
+        return answered(_that);
+      case _CallPerformEventEnded() when ended != null:
+        return ended(_that);
+      case _CallPerformEventSetHeld() when setHeld != null:
+        return setHeld(_that);
+      case _CallPerformEventSetMuted() when setMuted != null:
+        return setMuted(_that);
+      case _CallPerformEventSentDTMF() when sentDTMF != null:
+        return sentDTMF(_that);
+      case _CallPerformEventAudioDeviceSet() when audioDeviceSet != null:
+        return audioDeviceSet(_that);
+      case _CallPerformEventAudioDevicesUpdate()
+          when audioDevicesUpdate != null:
+        return audioDevicesUpdate(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String callId, CallkeepHandle handle, String? displayName,
@@ -11539,76 +4729,152 @@ mixin _$CallPerformEvent {
     TResult Function(String callId, List<CallAudioDevice> devices)?
         audioDevicesUpdate,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPerformEventStarted() when started != null:
+        return started(
+            _that.callId, _that.handle, _that.displayName, _that.video);
+      case _CallPerformEventAnswered() when answered != null:
+        return answered(_that.callId);
+      case _CallPerformEventEnded() when ended != null:
+        return ended(_that.callId);
+      case _CallPerformEventSetHeld() when setHeld != null:
+        return setHeld(_that.callId, _that.onHold);
+      case _CallPerformEventSetMuted() when setMuted != null:
+        return setMuted(_that.callId, _that.muted);
+      case _CallPerformEventSentDTMF() when sentDTMF != null:
+        return sentDTMF(_that.callId, _that.key);
+      case _CallPerformEventAudioDeviceSet() when audioDeviceSet != null:
+        return audioDeviceSet(_that.callId, _that.device);
+      case _CallPerformEventAudioDevicesUpdate()
+          when audioDevicesUpdate != null:
+        return audioDevicesUpdate(_that.callId, _that.devices);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
+  TResult when<TResult extends Object?>({
+    required TResult Function(String callId, CallkeepHandle handle,
+            String? displayName, bool video)
+        started,
+    required TResult Function(String callId) answered,
+    required TResult Function(String callId) ended,
+    required TResult Function(String callId, bool onHold) setHeld,
+    required TResult Function(String callId, bool muted) setMuted,
+    required TResult Function(String callId, String key) sentDTMF,
+    required TResult Function(String callId, CallAudioDevice device)
         audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
+    required TResult Function(String callId, List<CallAudioDevice> devices)
         audioDevicesUpdate,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPerformEventStarted():
+        return started(
+            _that.callId, _that.handle, _that.displayName, _that.video);
+      case _CallPerformEventAnswered():
+        return answered(_that.callId);
+      case _CallPerformEventEnded():
+        return ended(_that.callId);
+      case _CallPerformEventSetHeld():
+        return setHeld(_that.callId, _that.onHold);
+      case _CallPerformEventSetMuted():
+        return setMuted(_that.callId, _that.muted);
+      case _CallPerformEventSentDTMF():
+        return sentDTMF(_that.callId, _that.key);
+      case _CallPerformEventAudioDeviceSet():
+        return audioDeviceSet(_that.callId, _that.device);
+      case _CallPerformEventAudioDevicesUpdate():
+        return audioDevicesUpdate(_that.callId, _that.devices);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
+            bool video)?
+        started,
+    TResult? Function(String callId)? answered,
+    TResult? Function(String callId)? ended,
+    TResult? Function(String callId, bool onHold)? setHeld,
+    TResult? Function(String callId, bool muted)? setMuted,
+    TResult? Function(String callId, String key)? sentDTMF,
+    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
+    TResult? Function(String callId, List<CallAudioDevice> devices)?
         audioDevicesUpdate,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallPerformEventStarted() when started != null:
+        return started(
+            _that.callId, _that.handle, _that.displayName, _that.video);
+      case _CallPerformEventAnswered() when answered != null:
+        return answered(_that.callId);
+      case _CallPerformEventEnded() when ended != null:
+        return ended(_that.callId);
+      case _CallPerformEventSetHeld() when setHeld != null:
+        return setHeld(_that.callId, _that.onHold);
+      case _CallPerformEventSetMuted() when setMuted != null:
+        return setMuted(_that.callId, _that.muted);
+      case _CallPerformEventSentDTMF() when sentDTMF != null:
+        return sentDTMF(_that.callId, _that.key);
+      case _CallPerformEventAudioDeviceSet() when audioDeviceSet != null:
+        return audioDeviceSet(_that.callId, _that.device);
+      case _CallPerformEventAudioDevicesUpdate()
+          when audioDevicesUpdate != null:
+        return audioDevicesUpdate(_that.callId, _that.devices);
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
+class _CallPerformEventStarted extends _CallPerformEvent
     with DiagnosticableTreeMixin {
-  _$CallPerformEventStartedImpl(this.callId,
+  _CallPerformEventStarted(this.callId,
       {required this.handle, this.displayName, required this.video})
       : super._();
 
   @override
   final String callId;
-  @override
   final CallkeepHandle handle;
-  @override
   final String? displayName;
-  @override
   final bool video;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.started(callId: $callId, handle: $handle, displayName: $displayName, video: $video)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.started'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -11621,7 +4887,7 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventStartedImpl &&
+            other is _CallPerformEventStarted &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
@@ -11634,149 +4900,22 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
       Object.hash(runtimeType, callId, handle, displayName, video);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
-        audioDevicesUpdate,
-  }) {
-    return started(callId, handle, displayName, video);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.started(callId: $callId, handle: $handle, displayName: $displayName, video: $video)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-  }) {
-    return started?.call(callId, handle, displayName, video);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (started != null) {
-      return started(callId, handle, displayName, video);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
-        audioDevicesUpdate,
-  }) {
-    return started(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-  }) {
-    return started?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (started != null) {
-      return started(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPerformEventStarted extends _CallPerformEvent {
-  factory _CallPerformEventStarted(final String callId,
-      {required final CallkeepHandle handle,
-      final String? displayName,
-      required final bool video}) = _$CallPerformEventStartedImpl;
-  _CallPerformEventStarted._() : super._();
-
-  @override
-  String get callId;
-  CallkeepHandle get handle;
-  String? get displayName;
-  bool get video;
 }
 
 /// @nodoc
 
-class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
+class _CallPerformEventAnswered extends _CallPerformEvent
     with DiagnosticableTreeMixin {
-  _$CallPerformEventAnsweredImpl(this.callId) : super._();
+  _CallPerformEventAnswered(this.callId) : super._();
 
   @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.answered(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.answered'))
       ..add(DiagnosticsProperty('callId', callId));
@@ -11786,7 +4925,7 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventAnsweredImpl &&
+            other is _CallPerformEventAnswered &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -11794,144 +4933,22 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
-        audioDevicesUpdate,
-  }) {
-    return answered(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.answered(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-  }) {
-    return answered?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (answered != null) {
-      return answered(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
-        audioDevicesUpdate,
-  }) {
-    return answered(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-  }) {
-    return answered?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (answered != null) {
-      return answered(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPerformEventAnswered extends _CallPerformEvent {
-  factory _CallPerformEventAnswered(final String callId) =
-      _$CallPerformEventAnsweredImpl;
-  _CallPerformEventAnswered._() : super._();
-
-  @override
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
+class _CallPerformEventEnded extends _CallPerformEvent
     with DiagnosticableTreeMixin {
-  _$CallPerformEventEndedImpl(this.callId) : super._();
+  _CallPerformEventEnded(this.callId) : super._();
 
   @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.ended(callId: $callId)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.ended'))
       ..add(DiagnosticsProperty('callId', callId));
@@ -11941,7 +4958,7 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventEndedImpl &&
+            other is _CallPerformEventEnded &&
             (identical(other.callId, callId) || other.callId == callId));
   }
 
@@ -11949,146 +4966,23 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
   int get hashCode => Object.hash(runtimeType, callId);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
-        audioDevicesUpdate,
-  }) {
-    return ended(callId);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.ended(callId: $callId)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-  }) {
-    return ended?.call(callId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (ended != null) {
-      return ended(callId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
-        audioDevicesUpdate,
-  }) {
-    return ended(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-  }) {
-    return ended?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (ended != null) {
-      return ended(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPerformEventEnded extends _CallPerformEvent {
-  factory _CallPerformEventEnded(final String callId) =
-      _$CallPerformEventEndedImpl;
-  _CallPerformEventEnded._() : super._();
-
-  @override
-  String get callId;
 }
 
 /// @nodoc
 
-class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
+class _CallPerformEventSetHeld extends _CallPerformEvent
     with DiagnosticableTreeMixin {
-  _$CallPerformEventSetHeldImpl(this.callId, this.onHold) : super._();
+  _CallPerformEventSetHeld(this.callId, this.onHold) : super._();
 
   @override
   final String callId;
-  @override
   final bool onHold;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.setHeld(callId: $callId, onHold: $onHold)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.setHeld'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -12099,7 +4993,7 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventSetHeldImpl &&
+            other is _CallPerformEventSetHeld &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.onHold, onHold) || other.onHold == onHold));
   }
@@ -12108,147 +5002,23 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
   int get hashCode => Object.hash(runtimeType, callId, onHold);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
-        audioDevicesUpdate,
-  }) {
-    return setHeld(callId, onHold);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.setHeld(callId: $callId, onHold: $onHold)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-  }) {
-    return setHeld?.call(callId, onHold);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (setHeld != null) {
-      return setHeld(callId, onHold);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
-        audioDevicesUpdate,
-  }) {
-    return setHeld(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-  }) {
-    return setHeld?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (setHeld != null) {
-      return setHeld(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
-  factory _CallPerformEventSetHeld(final String callId, final bool onHold) =
-      _$CallPerformEventSetHeldImpl;
-  _CallPerformEventSetHeld._() : super._();
-
-  @override
-  String get callId;
-  bool get onHold;
 }
 
 /// @nodoc
 
-class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
+class _CallPerformEventSetMuted extends _CallPerformEvent
     with DiagnosticableTreeMixin {
-  _$CallPerformEventSetMutedImpl(this.callId, this.muted) : super._();
+  _CallPerformEventSetMuted(this.callId, this.muted) : super._();
 
   @override
   final String callId;
-  @override
   final bool muted;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.setMuted(callId: $callId, muted: $muted)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.setMuted'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -12259,7 +5029,7 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventSetMutedImpl &&
+            other is _CallPerformEventSetMuted &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.muted, muted) || other.muted == muted));
   }
@@ -12268,147 +5038,23 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
   int get hashCode => Object.hash(runtimeType, callId, muted);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
-        audioDevicesUpdate,
-  }) {
-    return setMuted(callId, muted);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.setMuted(callId: $callId, muted: $muted)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-  }) {
-    return setMuted?.call(callId, muted);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (setMuted != null) {
-      return setMuted(callId, muted);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
-        audioDevicesUpdate,
-  }) {
-    return setMuted(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-  }) {
-    return setMuted?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (setMuted != null) {
-      return setMuted(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
-  factory _CallPerformEventSetMuted(final String callId, final bool muted) =
-      _$CallPerformEventSetMutedImpl;
-  _CallPerformEventSetMuted._() : super._();
-
-  @override
-  String get callId;
-  bool get muted;
 }
 
 /// @nodoc
 
-class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
+class _CallPerformEventSentDTMF extends _CallPerformEvent
     with DiagnosticableTreeMixin {
-  _$CallPerformEventSentDTMFImpl(this.callId, this.key) : super._();
+  _CallPerformEventSentDTMF(this.callId, this.key) : super._();
 
   @override
   final String callId;
-  @override
   final String key;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.sentDTMF(callId: $callId, key: $key)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.sentDTMF'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -12419,7 +5065,7 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventSentDTMFImpl &&
+            other is _CallPerformEventSentDTMF &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.key, key) || other.key == key));
   }
@@ -12428,147 +5074,23 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
   int get hashCode => Object.hash(runtimeType, callId, key);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
-        audioDevicesUpdate,
-  }) {
-    return sentDTMF(callId, key);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.sentDTMF(callId: $callId, key: $key)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-  }) {
-    return sentDTMF?.call(callId, key);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (sentDTMF != null) {
-      return sentDTMF(callId, key);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
-        audioDevicesUpdate,
-  }) {
-    return sentDTMF(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-  }) {
-    return sentDTMF?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (sentDTMF != null) {
-      return sentDTMF(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
-  factory _CallPerformEventSentDTMF(final String callId, final String key) =
-      _$CallPerformEventSentDTMFImpl;
-  _CallPerformEventSentDTMF._() : super._();
-
-  @override
-  String get callId;
-  String get key;
 }
 
 /// @nodoc
 
-class _$CallPerformEventAudioDeviceSetImpl
-    extends _CallPerformEventAudioDeviceSet with DiagnosticableTreeMixin {
-  _$CallPerformEventAudioDeviceSetImpl(this.callId, this.device) : super._();
+class _CallPerformEventAudioDeviceSet extends _CallPerformEvent
+    with DiagnosticableTreeMixin {
+  _CallPerformEventAudioDeviceSet(this.callId, this.device) : super._();
 
   @override
   final String callId;
-  @override
   final CallAudioDevice device;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.audioDeviceSet(callId: $callId, device: $device)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.audioDeviceSet'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -12579,7 +5101,7 @@ class _$CallPerformEventAudioDeviceSetImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventAudioDeviceSetImpl &&
+            other is _CallPerformEventAudioDeviceSet &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.device, device) || other.device == device));
   }
@@ -12588,134 +5110,16 @@ class _$CallPerformEventAudioDeviceSetImpl
   int get hashCode => Object.hash(runtimeType, callId, device);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
-        audioDevicesUpdate,
-  }) {
-    return audioDeviceSet(callId, device);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.audioDeviceSet(callId: $callId, device: $device)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-  }) {
-    return audioDeviceSet?.call(callId, device);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (audioDeviceSet != null) {
-      return audioDeviceSet(callId, device);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
-        audioDevicesUpdate,
-  }) {
-    return audioDeviceSet(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-  }) {
-    return audioDeviceSet?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (audioDeviceSet != null) {
-      return audioDeviceSet(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
-  factory _CallPerformEventAudioDeviceSet(
-          final String callId, final CallAudioDevice device) =
-      _$CallPerformEventAudioDeviceSetImpl;
-  _CallPerformEventAudioDeviceSet._() : super._();
-
-  @override
-  String get callId;
-  CallAudioDevice get device;
 }
 
 /// @nodoc
 
-class _$CallPerformEventAudioDevicesUpdateImpl
-    extends _CallPerformEventAudioDevicesUpdate with DiagnosticableTreeMixin {
-  _$CallPerformEventAudioDevicesUpdateImpl(
+class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent
+    with DiagnosticableTreeMixin {
+  _CallPerformEventAudioDevicesUpdate(
       this.callId, final List<CallAudioDevice> devices)
       : _devices = devices,
         super._();
@@ -12723,7 +5127,6 @@ class _$CallPerformEventAudioDevicesUpdateImpl
   @override
   final String callId;
   final List<CallAudioDevice> _devices;
-  @override
   List<CallAudioDevice> get devices {
     if (_devices is EqualUnmodifiableListView) return _devices;
     // ignore: implicit_dynamic_type
@@ -12731,13 +5134,7 @@ class _$CallPerformEventAudioDevicesUpdateImpl
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPerformEvent.audioDevicesUpdate(callId: $callId, devices: $devices)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_CallPerformEvent.audioDevicesUpdate'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -12748,7 +5145,7 @@ class _$CallPerformEventAudioDevicesUpdateImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventAudioDevicesUpdateImpl &&
+            other is _CallPerformEventAudioDevicesUpdate &&
             (identical(other.callId, callId) || other.callId == callId) &&
             const DeepCollectionEquality().equals(other._devices, _devices));
   }
@@ -12758,181 +5155,108 @@ class _$CallPerformEventAudioDevicesUpdateImpl
       runtimeType, callId, const DeepCollectionEquality().hash(_devices));
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video)
-        started,
-    required TResult Function(String callId) answered,
-    required TResult Function(String callId) ended,
-    required TResult Function(String callId, bool onHold) setHeld,
-    required TResult Function(String callId, bool muted) setMuted,
-    required TResult Function(String callId, String key) sentDTMF,
-    required TResult Function(String callId, CallAudioDevice device)
-        audioDeviceSet,
-    required TResult Function(String callId, List<CallAudioDevice> devices)
-        audioDevicesUpdate,
-  }) {
-    return audioDevicesUpdate(callId, devices);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_CallPerformEvent.audioDevicesUpdate(callId: $callId, devices: $devices)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult? Function(String callId)? answered,
-    TResult? Function(String callId)? ended,
-    TResult? Function(String callId, bool onHold)? setHeld,
-    TResult? Function(String callId, bool muted)? setMuted,
-    TResult? Function(String callId, String key)? sentDTMF,
-    TResult? Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult? Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-  }) {
-    return audioDevicesUpdate?.call(callId, devices);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video)?
-        started,
-    TResult Function(String callId)? answered,
-    TResult Function(String callId)? ended,
-    TResult Function(String callId, bool onHold)? setHeld,
-    TResult Function(String callId, bool muted)? setMuted,
-    TResult Function(String callId, String key)? sentDTMF,
-    TResult Function(String callId, CallAudioDevice device)? audioDeviceSet,
-    TResult Function(String callId, List<CallAudioDevice> devices)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (audioDevicesUpdate != null) {
-      return audioDevicesUpdate(callId, devices);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPerformEventStarted value) started,
-    required TResult Function(_CallPerformEventAnswered value) answered,
-    required TResult Function(_CallPerformEventEnded value) ended,
-    required TResult Function(_CallPerformEventSetHeld value) setHeld,
-    required TResult Function(_CallPerformEventSetMuted value) setMuted,
-    required TResult Function(_CallPerformEventSentDTMF value) sentDTMF,
-    required TResult Function(_CallPerformEventAudioDeviceSet value)
-        audioDeviceSet,
-    required TResult Function(_CallPerformEventAudioDevicesUpdate value)
-        audioDevicesUpdate,
-  }) {
-    return audioDevicesUpdate(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPerformEventStarted value)? started,
-    TResult? Function(_CallPerformEventAnswered value)? answered,
-    TResult? Function(_CallPerformEventEnded value)? ended,
-    TResult? Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult? Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult? Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult? Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult? Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-  }) {
-    return audioDevicesUpdate?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPerformEventStarted value)? started,
-    TResult Function(_CallPerformEventAnswered value)? answered,
-    TResult Function(_CallPerformEventEnded value)? ended,
-    TResult Function(_CallPerformEventSetHeld value)? setHeld,
-    TResult Function(_CallPerformEventSetMuted value)? setMuted,
-    TResult Function(_CallPerformEventSentDTMF value)? sentDTMF,
-    TResult Function(_CallPerformEventAudioDeviceSet value)? audioDeviceSet,
-    TResult Function(_CallPerformEventAudioDevicesUpdate value)?
-        audioDevicesUpdate,
-    required TResult orElse(),
-  }) {
-    if (audioDevicesUpdate != null) {
-      return audioDevicesUpdate(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
-  factory _CallPerformEventAudioDevicesUpdate(
-          final String callId, final List<CallAudioDevice> devices) =
-      _$CallPerformEventAudioDevicesUpdateImpl;
-  _CallPerformEventAudioDevicesUpdate._() : super._();
-
-  @override
-  String get callId;
-  List<CallAudioDevice> get devices;
 }
 
 /// @nodoc
-mixin _$PeerConnectionEvent {
-  String get callId => throw _privateConstructorUsedError;
+mixin _$PeerConnectionEvent implements DiagnosticableTreeMixin {
+  String get callId;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', '_PeerConnectionEvent'))
+      ..add(DiagnosticsProperty('callId', callId));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _PeerConnectionEvent &&
+            (identical(other.callId, callId) || other.callId == callId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, callId);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent(callId: $callId)';
+  }
+}
+
+/// Adds pattern-matching-related methods to [_PeerConnectionEvent].
+extension _PeerConnectionEventPatterns on _PeerConnectionEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
         signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
+    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
         connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
+    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
         iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
+    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
         iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
+    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
         iceCandidateIdentified,
-    required TResult Function(String callId, MediaStream stream) streamAdded,
-    required TResult Function(String callId, MediaStream stream) streamRemoved,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult? Function(String callId, MediaStream stream)? streamAdded,
-    TResult? Function(String callId, MediaStream stream)? streamRemoved,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult Function(String callId, MediaStream stream)? streamAdded,
-    TResult Function(String callId, MediaStream stream)? streamRemoved,
+    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
+    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _PeerConnectionEventSignalingStateChanged()
+          when signalingStateChanged != null:
+        return signalingStateChanged(_that);
+      case _PeerConnectionEventConnectionStateChanged()
+          when connectionStateChanged != null:
+        return connectionStateChanged(_that);
+      case _PeerConnectionEventIceGatheringStateChanged()
+          when iceGatheringStateChanged != null:
+        return iceGatheringStateChanged(_that);
+      case _PeerConnectionEventIceConnectionStateChanged()
+          when iceConnectionStateChanged != null:
+        return iceConnectionStateChanged(_that);
+      case _PeerConnectionEventIceCandidateIdentified()
+          when iceCandidateIdentified != null:
+        return iceCandidateIdentified(_that);
+      case _PeerConnectionEventStreamAdded() when streamAdded != null:
+        return streamAdded(_that);
+      case _PeerConnectionEventStreamRemoved() when streamRemoved != null:
+        return streamRemoved(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_PeerConnectionEventSignalingStateChanged value)
@@ -12951,8 +5275,40 @@ mixin _$PeerConnectionEvent {
         streamAdded,
     required TResult Function(_PeerConnectionEventStreamRemoved value)
         streamRemoved,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _PeerConnectionEventSignalingStateChanged():
+        return signalingStateChanged(_that);
+      case _PeerConnectionEventConnectionStateChanged():
+        return connectionStateChanged(_that);
+      case _PeerConnectionEventIceGatheringStateChanged():
+        return iceGatheringStateChanged(_that);
+      case _PeerConnectionEventIceConnectionStateChanged():
+        return iceConnectionStateChanged(_that);
+      case _PeerConnectionEventIceCandidateIdentified():
+        return iceCandidateIdentified(_that);
+      case _PeerConnectionEventStreamAdded():
+        return streamAdded(_that);
+      case _PeerConnectionEventStreamRemoved():
+        return streamRemoved(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
@@ -12967,47 +5323,203 @@ mixin _$PeerConnectionEvent {
         iceCandidateIdentified,
     TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
     TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _PeerConnectionEventSignalingStateChanged()
+          when signalingStateChanged != null:
+        return signalingStateChanged(_that);
+      case _PeerConnectionEventConnectionStateChanged()
+          when connectionStateChanged != null:
+        return connectionStateChanged(_that);
+      case _PeerConnectionEventIceGatheringStateChanged()
+          when iceGatheringStateChanged != null:
+        return iceGatheringStateChanged(_that);
+      case _PeerConnectionEventIceConnectionStateChanged()
+          when iceConnectionStateChanged != null:
+        return iceConnectionStateChanged(_that);
+      case _PeerConnectionEventIceCandidateIdentified()
+          when iceCandidateIdentified != null:
+        return iceCandidateIdentified(_that);
+      case _PeerConnectionEventStreamAdded() when streamAdded != null:
+        return streamAdded(_that);
+      case _PeerConnectionEventStreamRemoved() when streamRemoved != null:
+        return streamRemoved(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String callId, RTCSignalingState state)?
         signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
+    TResult Function(String callId, RTCPeerConnectionState state)?
         connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
+    TResult Function(String callId, RTCIceGatheringState state)?
         iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
+    TResult Function(String callId, RTCIceConnectionState state)?
         iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
+    TResult Function(String callId, RTCIceCandidate candidate)?
         iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
+    TResult Function(String callId, MediaStream stream)? streamAdded,
+    TResult Function(String callId, MediaStream stream)? streamRemoved,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _PeerConnectionEventSignalingStateChanged()
+          when signalingStateChanged != null:
+        return signalingStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventConnectionStateChanged()
+          when connectionStateChanged != null:
+        return connectionStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceGatheringStateChanged()
+          when iceGatheringStateChanged != null:
+        return iceGatheringStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceConnectionStateChanged()
+          when iceConnectionStateChanged != null:
+        return iceConnectionStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceCandidateIdentified()
+          when iceCandidateIdentified != null:
+        return iceCandidateIdentified(_that.callId, _that.candidate);
+      case _PeerConnectionEventStreamAdded() when streamAdded != null:
+        return streamAdded(_that.callId, _that.stream);
+      case _PeerConnectionEventStreamRemoved() when streamRemoved != null:
+        return streamRemoved(_that.callId, _that.stream);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String callId, RTCSignalingState state)
+        signalingStateChanged,
+    required TResult Function(String callId, RTCPeerConnectionState state)
+        connectionStateChanged,
+    required TResult Function(String callId, RTCIceGatheringState state)
+        iceGatheringStateChanged,
+    required TResult Function(String callId, RTCIceConnectionState state)
+        iceConnectionStateChanged,
+    required TResult Function(String callId, RTCIceCandidate candidate)
+        iceCandidateIdentified,
+    required TResult Function(String callId, MediaStream stream) streamAdded,
+    required TResult Function(String callId, MediaStream stream) streamRemoved,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _PeerConnectionEventSignalingStateChanged():
+        return signalingStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventConnectionStateChanged():
+        return connectionStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceGatheringStateChanged():
+        return iceGatheringStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceConnectionStateChanged():
+        return iceConnectionStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceCandidateIdentified():
+        return iceCandidateIdentified(_that.callId, _that.candidate);
+      case _PeerConnectionEventStreamAdded():
+        return streamAdded(_that.callId, _that.stream);
+      case _PeerConnectionEventStreamRemoved():
+        return streamRemoved(_that.callId, _that.stream);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String callId, RTCSignalingState state)?
+        signalingStateChanged,
+    TResult? Function(String callId, RTCPeerConnectionState state)?
+        connectionStateChanged,
+    TResult? Function(String callId, RTCIceGatheringState state)?
+        iceGatheringStateChanged,
+    TResult? Function(String callId, RTCIceConnectionState state)?
+        iceConnectionStateChanged,
+    TResult? Function(String callId, RTCIceCandidate candidate)?
+        iceCandidateIdentified,
+    TResult? Function(String callId, MediaStream stream)? streamAdded,
+    TResult? Function(String callId, MediaStream stream)? streamRemoved,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _PeerConnectionEventSignalingStateChanged()
+          when signalingStateChanged != null:
+        return signalingStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventConnectionStateChanged()
+          when connectionStateChanged != null:
+        return connectionStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceGatheringStateChanged()
+          when iceGatheringStateChanged != null:
+        return iceGatheringStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceConnectionStateChanged()
+          when iceConnectionStateChanged != null:
+        return iceConnectionStateChanged(_that.callId, _that.state);
+      case _PeerConnectionEventIceCandidateIdentified()
+          when iceCandidateIdentified != null:
+        return iceCandidateIdentified(_that.callId, _that.candidate);
+      case _PeerConnectionEventStreamAdded() when streamAdded != null:
+        return streamAdded(_that.callId, _that.stream);
+      case _PeerConnectionEventStreamRemoved() when streamRemoved != null:
+        return streamRemoved(_that.callId, _that.stream);
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$PeerConnectionEventSignalingStateChangedImpl
+class _PeerConnectionEventSignalingStateChanged
     with DiagnosticableTreeMixin
-    implements _PeerConnectionEventSignalingStateChanged {
-  const _$PeerConnectionEventSignalingStateChangedImpl(this.callId, this.state);
+    implements _PeerConnectionEvent {
+  const _PeerConnectionEventSignalingStateChanged(this.callId, this.state);
 
   @override
   final String callId;
-  @override
   final RTCSignalingState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_PeerConnectionEvent.signalingStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', '_PeerConnectionEvent.signalingStateChanged'))
@@ -13019,7 +5531,7 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventSignalingStateChangedImpl &&
+            other is _PeerConnectionEventSignalingStateChanged &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.state, state) || other.state == state));
   }
@@ -13028,164 +5540,24 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   int get hashCode => Object.hash(runtimeType, callId, state);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
-    required TResult Function(String callId, MediaStream stream) streamAdded,
-    required TResult Function(String callId, MediaStream stream) streamRemoved,
-  }) {
-    return signalingStateChanged(callId, state);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.signalingStateChanged(callId: $callId, state: $state)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult? Function(String callId, MediaStream stream)? streamAdded,
-    TResult? Function(String callId, MediaStream stream)? streamRemoved,
-  }) {
-    return signalingStateChanged?.call(callId, state);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult Function(String callId, MediaStream stream)? streamAdded,
-    TResult Function(String callId, MediaStream stream)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (signalingStateChanged != null) {
-      return signalingStateChanged(callId, state);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
-  }) {
-    return signalingStateChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-  }) {
-    return signalingStateChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (signalingStateChanged != null) {
-      return signalingStateChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _PeerConnectionEventSignalingStateChanged
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventSignalingStateChanged(
-          final String callId, final RTCSignalingState state) =
-      _$PeerConnectionEventSignalingStateChangedImpl;
-
-  @override
-  String get callId;
-  RTCSignalingState get state;
 }
 
 /// @nodoc
 
-class _$PeerConnectionEventConnectionStateChangedImpl
+class _PeerConnectionEventConnectionStateChanged
     with DiagnosticableTreeMixin
-    implements _PeerConnectionEventConnectionStateChanged {
-  const _$PeerConnectionEventConnectionStateChangedImpl(
-      this.callId, this.state);
+    implements _PeerConnectionEvent {
+  const _PeerConnectionEventConnectionStateChanged(this.callId, this.state);
 
   @override
   final String callId;
-  @override
   final RTCPeerConnectionState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_PeerConnectionEvent.connectionStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', '_PeerConnectionEvent.connectionStateChanged'))
@@ -13197,7 +5569,7 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventConnectionStateChangedImpl &&
+            other is _PeerConnectionEventConnectionStateChanged &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.state, state) || other.state == state));
   }
@@ -13206,164 +5578,24 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   int get hashCode => Object.hash(runtimeType, callId, state);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
-    required TResult Function(String callId, MediaStream stream) streamAdded,
-    required TResult Function(String callId, MediaStream stream) streamRemoved,
-  }) {
-    return connectionStateChanged(callId, state);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.connectionStateChanged(callId: $callId, state: $state)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult? Function(String callId, MediaStream stream)? streamAdded,
-    TResult? Function(String callId, MediaStream stream)? streamRemoved,
-  }) {
-    return connectionStateChanged?.call(callId, state);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult Function(String callId, MediaStream stream)? streamAdded,
-    TResult Function(String callId, MediaStream stream)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (connectionStateChanged != null) {
-      return connectionStateChanged(callId, state);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
-  }) {
-    return connectionStateChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-  }) {
-    return connectionStateChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (connectionStateChanged != null) {
-      return connectionStateChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _PeerConnectionEventConnectionStateChanged
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventConnectionStateChanged(
-          final String callId, final RTCPeerConnectionState state) =
-      _$PeerConnectionEventConnectionStateChangedImpl;
-
-  @override
-  String get callId;
-  RTCPeerConnectionState get state;
 }
 
 /// @nodoc
 
-class _$PeerConnectionEventIceGatheringStateChangedImpl
+class _PeerConnectionEventIceGatheringStateChanged
     with DiagnosticableTreeMixin
-    implements _PeerConnectionEventIceGatheringStateChanged {
-  const _$PeerConnectionEventIceGatheringStateChangedImpl(
-      this.callId, this.state);
+    implements _PeerConnectionEvent {
+  const _PeerConnectionEventIceGatheringStateChanged(this.callId, this.state);
 
   @override
   final String callId;
-  @override
   final RTCIceGatheringState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_PeerConnectionEvent.iceGatheringStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', '_PeerConnectionEvent.iceGatheringStateChanged'))
@@ -13375,7 +5607,7 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventIceGatheringStateChangedImpl &&
+            other is _PeerConnectionEventIceGatheringStateChanged &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.state, state) || other.state == state));
   }
@@ -13384,164 +5616,24 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   int get hashCode => Object.hash(runtimeType, callId, state);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
-    required TResult Function(String callId, MediaStream stream) streamAdded,
-    required TResult Function(String callId, MediaStream stream) streamRemoved,
-  }) {
-    return iceGatheringStateChanged(callId, state);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.iceGatheringStateChanged(callId: $callId, state: $state)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult? Function(String callId, MediaStream stream)? streamAdded,
-    TResult? Function(String callId, MediaStream stream)? streamRemoved,
-  }) {
-    return iceGatheringStateChanged?.call(callId, state);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult Function(String callId, MediaStream stream)? streamAdded,
-    TResult Function(String callId, MediaStream stream)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (iceGatheringStateChanged != null) {
-      return iceGatheringStateChanged(callId, state);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
-  }) {
-    return iceGatheringStateChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-  }) {
-    return iceGatheringStateChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (iceGatheringStateChanged != null) {
-      return iceGatheringStateChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _PeerConnectionEventIceGatheringStateChanged
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventIceGatheringStateChanged(
-          final String callId, final RTCIceGatheringState state) =
-      _$PeerConnectionEventIceGatheringStateChangedImpl;
-
-  @override
-  String get callId;
-  RTCIceGatheringState get state;
 }
 
 /// @nodoc
 
-class _$PeerConnectionEventIceConnectionStateChangedImpl
+class _PeerConnectionEventIceConnectionStateChanged
     with DiagnosticableTreeMixin
-    implements _PeerConnectionEventIceConnectionStateChanged {
-  const _$PeerConnectionEventIceConnectionStateChangedImpl(
-      this.callId, this.state);
+    implements _PeerConnectionEvent {
+  const _PeerConnectionEventIceConnectionStateChanged(this.callId, this.state);
 
   @override
   final String callId;
-  @override
   final RTCIceConnectionState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_PeerConnectionEvent.iceConnectionStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', '_PeerConnectionEvent.iceConnectionStateChanged'))
@@ -13553,7 +5645,7 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventIceConnectionStateChangedImpl &&
+            other is _PeerConnectionEventIceConnectionStateChanged &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.state, state) || other.state == state));
   }
@@ -13562,164 +5654,24 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   int get hashCode => Object.hash(runtimeType, callId, state);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
-    required TResult Function(String callId, MediaStream stream) streamAdded,
-    required TResult Function(String callId, MediaStream stream) streamRemoved,
-  }) {
-    return iceConnectionStateChanged(callId, state);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.iceConnectionStateChanged(callId: $callId, state: $state)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult? Function(String callId, MediaStream stream)? streamAdded,
-    TResult? Function(String callId, MediaStream stream)? streamRemoved,
-  }) {
-    return iceConnectionStateChanged?.call(callId, state);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult Function(String callId, MediaStream stream)? streamAdded,
-    TResult Function(String callId, MediaStream stream)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (iceConnectionStateChanged != null) {
-      return iceConnectionStateChanged(callId, state);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
-  }) {
-    return iceConnectionStateChanged(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-  }) {
-    return iceConnectionStateChanged?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (iceConnectionStateChanged != null) {
-      return iceConnectionStateChanged(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _PeerConnectionEventIceConnectionStateChanged
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventIceConnectionStateChanged(
-          final String callId, final RTCIceConnectionState state) =
-      _$PeerConnectionEventIceConnectionStateChangedImpl;
-
-  @override
-  String get callId;
-  RTCIceConnectionState get state;
 }
 
 /// @nodoc
 
-class _$PeerConnectionEventIceCandidateIdentifiedImpl
+class _PeerConnectionEventIceCandidateIdentified
     with DiagnosticableTreeMixin
-    implements _PeerConnectionEventIceCandidateIdentified {
-  const _$PeerConnectionEventIceCandidateIdentifiedImpl(
-      this.callId, this.candidate);
+    implements _PeerConnectionEvent {
+  const _PeerConnectionEventIceCandidateIdentified(this.callId, this.candidate);
 
   @override
   final String callId;
-  @override
   final RTCIceCandidate candidate;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_PeerConnectionEvent.iceCandidateIdentified(callId: $callId, candidate: $candidate)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty(
           'type', '_PeerConnectionEvent.iceCandidateIdentified'))
@@ -13731,7 +5683,7 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventIceCandidateIdentifiedImpl &&
+            other is _PeerConnectionEventIceCandidateIdentified &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.candidate, candidate) ||
                 other.candidate == candidate));
@@ -13741,163 +5693,24 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   int get hashCode => Object.hash(runtimeType, callId, candidate);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
-    required TResult Function(String callId, MediaStream stream) streamAdded,
-    required TResult Function(String callId, MediaStream stream) streamRemoved,
-  }) {
-    return iceCandidateIdentified(callId, candidate);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.iceCandidateIdentified(callId: $callId, candidate: $candidate)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult? Function(String callId, MediaStream stream)? streamAdded,
-    TResult? Function(String callId, MediaStream stream)? streamRemoved,
-  }) {
-    return iceCandidateIdentified?.call(callId, candidate);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult Function(String callId, MediaStream stream)? streamAdded,
-    TResult Function(String callId, MediaStream stream)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (iceCandidateIdentified != null) {
-      return iceCandidateIdentified(callId, candidate);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
-  }) {
-    return iceCandidateIdentified(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-  }) {
-    return iceCandidateIdentified?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (iceCandidateIdentified != null) {
-      return iceCandidateIdentified(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _PeerConnectionEventIceCandidateIdentified
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventIceCandidateIdentified(
-          final String callId, final RTCIceCandidate candidate) =
-      _$PeerConnectionEventIceCandidateIdentifiedImpl;
-
-  @override
-  String get callId;
-  RTCIceCandidate get candidate;
 }
 
 /// @nodoc
 
-class _$PeerConnectionEventStreamAddedImpl
+class _PeerConnectionEventStreamAdded
     with DiagnosticableTreeMixin
-    implements _PeerConnectionEventStreamAdded {
-  const _$PeerConnectionEventStreamAddedImpl(this.callId, this.stream);
+    implements _PeerConnectionEvent {
+  const _PeerConnectionEventStreamAdded(this.callId, this.stream);
 
   @override
   final String callId;
-  @override
   final MediaStream stream;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_PeerConnectionEvent.streamAdded(callId: $callId, stream: $stream)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.streamAdded'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -13908,7 +5721,7 @@ class _$PeerConnectionEventStreamAddedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventStreamAddedImpl &&
+            other is _PeerConnectionEventStreamAdded &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.stream, stream) || other.stream == stream));
   }
@@ -13917,162 +5730,24 @@ class _$PeerConnectionEventStreamAddedImpl
   int get hashCode => Object.hash(runtimeType, callId, stream);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
-    required TResult Function(String callId, MediaStream stream) streamAdded,
-    required TResult Function(String callId, MediaStream stream) streamRemoved,
-  }) {
-    return streamAdded(callId, stream);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.streamAdded(callId: $callId, stream: $stream)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult? Function(String callId, MediaStream stream)? streamAdded,
-    TResult? Function(String callId, MediaStream stream)? streamRemoved,
-  }) {
-    return streamAdded?.call(callId, stream);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult Function(String callId, MediaStream stream)? streamAdded,
-    TResult Function(String callId, MediaStream stream)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (streamAdded != null) {
-      return streamAdded(callId, stream);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
-  }) {
-    return streamAdded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-  }) {
-    return streamAdded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (streamAdded != null) {
-      return streamAdded(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventStreamAdded(
-          final String callId, final MediaStream stream) =
-      _$PeerConnectionEventStreamAddedImpl;
-
-  @override
-  String get callId;
-  MediaStream get stream;
 }
 
 /// @nodoc
 
-class _$PeerConnectionEventStreamRemovedImpl
+class _PeerConnectionEventStreamRemoved
     with DiagnosticableTreeMixin
-    implements _PeerConnectionEventStreamRemoved {
-  const _$PeerConnectionEventStreamRemovedImpl(this.callId, this.stream);
+    implements _PeerConnectionEvent {
+  const _PeerConnectionEventStreamRemoved(this.callId, this.stream);
 
   @override
   final String callId;
-  @override
   final MediaStream stream;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_PeerConnectionEvent.streamRemoved(callId: $callId, stream: $stream)';
-  }
-
-  @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.streamRemoved'))
       ..add(DiagnosticsProperty('callId', callId))
@@ -14083,7 +5758,7 @@ class _$PeerConnectionEventStreamRemovedImpl
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventStreamRemovedImpl &&
+            other is _PeerConnectionEventStreamRemoved &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.stream, stream) || other.stream == stream));
   }
@@ -14092,399 +5767,344 @@ class _$PeerConnectionEventStreamRemovedImpl
   int get hashCode => Object.hash(runtimeType, callId, stream);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, RTCSignalingState state)
-        signalingStateChanged,
-    required TResult Function(String callId, RTCPeerConnectionState state)
-        connectionStateChanged,
-    required TResult Function(String callId, RTCIceGatheringState state)
-        iceGatheringStateChanged,
-    required TResult Function(String callId, RTCIceConnectionState state)
-        iceConnectionStateChanged,
-    required TResult Function(String callId, RTCIceCandidate candidate)
-        iceCandidateIdentified,
-    required TResult Function(String callId, MediaStream stream) streamAdded,
-    required TResult Function(String callId, MediaStream stream) streamRemoved,
-  }) {
-    return streamRemoved(callId, stream);
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '_PeerConnectionEvent.streamRemoved(callId: $callId, stream: $stream)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult? Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult? Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult? Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult? Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult? Function(String callId, MediaStream stream)? streamAdded,
-    TResult? Function(String callId, MediaStream stream)? streamRemoved,
-  }) {
-    return streamRemoved?.call(callId, stream);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, RTCSignalingState state)?
-        signalingStateChanged,
-    TResult Function(String callId, RTCPeerConnectionState state)?
-        connectionStateChanged,
-    TResult Function(String callId, RTCIceGatheringState state)?
-        iceGatheringStateChanged,
-    TResult Function(String callId, RTCIceConnectionState state)?
-        iceConnectionStateChanged,
-    TResult Function(String callId, RTCIceCandidate candidate)?
-        iceCandidateIdentified,
-    TResult Function(String callId, MediaStream stream)? streamAdded,
-    TResult Function(String callId, MediaStream stream)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (streamRemoved != null) {
-      return streamRemoved(callId, stream);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PeerConnectionEventSignalingStateChanged value)
-        signalingStateChanged,
-    required TResult Function(_PeerConnectionEventConnectionStateChanged value)
-        connectionStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceGatheringStateChanged value)
-        iceGatheringStateChanged,
-    required TResult Function(
-            _PeerConnectionEventIceConnectionStateChanged value)
-        iceConnectionStateChanged,
-    required TResult Function(_PeerConnectionEventIceCandidateIdentified value)
-        iceCandidateIdentified,
-    required TResult Function(_PeerConnectionEventStreamAdded value)
-        streamAdded,
-    required TResult Function(_PeerConnectionEventStreamRemoved value)
-        streamRemoved,
-  }) {
-    return streamRemoved(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult? Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult? Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult? Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult? Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult? Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-  }) {
-    return streamRemoved?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PeerConnectionEventSignalingStateChanged value)?
-        signalingStateChanged,
-    TResult Function(_PeerConnectionEventConnectionStateChanged value)?
-        connectionStateChanged,
-    TResult Function(_PeerConnectionEventIceGatheringStateChanged value)?
-        iceGatheringStateChanged,
-    TResult Function(_PeerConnectionEventIceConnectionStateChanged value)?
-        iceConnectionStateChanged,
-    TResult Function(_PeerConnectionEventIceCandidateIdentified value)?
-        iceCandidateIdentified,
-    TResult Function(_PeerConnectionEventStreamAdded value)? streamAdded,
-    TResult Function(_PeerConnectionEventStreamRemoved value)? streamRemoved,
-    required TResult orElse(),
-  }) {
-    if (streamRemoved != null) {
-      return streamRemoved(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _PeerConnectionEventStreamRemoved
-    implements _PeerConnectionEvent {
-  const factory _PeerConnectionEventStreamRemoved(
-          final String callId, final MediaStream stream) =
-      _$PeerConnectionEventStreamRemovedImpl;
-
-  @override
-  String get callId;
-  MediaStream get stream;
 }
 
 /// @nodoc
-mixin _$CallScreenEvent {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() didPush,
-    required TResult Function() didPop,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? didPush,
-    TResult? Function()? didPop,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? didPush,
-    TResult Function()? didPop,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallScreenEventDidPush value) didPush,
-    required TResult Function(_CallScreenEventDidPop value) didPop,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallScreenEventDidPush value)? didPush,
-    TResult? Function(_CallScreenEventDidPop value)? didPop,
-  }) =>
-      throw _privateConstructorUsedError;
+mixin _$CallScreenEvent implements DiagnosticableTreeMixin {
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties..add(DiagnosticsProperty('type', 'CallScreenEvent'));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is CallScreenEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallScreenEvent()';
+  }
+}
+
+/// Adds pattern-matching-related methods to [CallScreenEvent].
+extension CallScreenEventPatterns on CallScreenEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_CallScreenEventDidPush value)? didPush,
     TResult Function(_CallScreenEventDidPop value)? didPop,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallScreenEventDidPush() when didPush != null:
+        return didPush(_that);
+      case _CallScreenEventDidPop() when didPop != null:
+        return didPop(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CallScreenEventDidPush value) didPush,
+    required TResult Function(_CallScreenEventDidPop value) didPop,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallScreenEventDidPush():
+        return didPush(_that);
+      case _CallScreenEventDidPop():
+        return didPop(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CallScreenEventDidPush value)? didPush,
+    TResult? Function(_CallScreenEventDidPop value)? didPop,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallScreenEventDidPush() when didPush != null:
+        return didPush(_that);
+      case _CallScreenEventDidPop() when didPop != null:
+        return didPop(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? didPush,
+    TResult Function()? didPop,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallScreenEventDidPush() when didPush != null:
+        return didPush();
+      case _CallScreenEventDidPop() when didPop != null:
+        return didPop();
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() didPush,
+    required TResult Function() didPop,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallScreenEventDidPush():
+        return didPush();
+      case _CallScreenEventDidPop():
+        return didPop();
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? didPush,
+    TResult? Function()? didPop,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallScreenEventDidPush() when didPush != null:
+        return didPush();
+      case _CallScreenEventDidPop() when didPop != null:
+        return didPop();
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$CallScreenEventDidPushImpl
+class _CallScreenEventDidPush
     with DiagnosticableTreeMixin
-    implements _CallScreenEventDidPush {
-  _$CallScreenEventDidPushImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallScreenEvent.didPush()';
-  }
+    implements CallScreenEvent {
+  _CallScreenEventDidPush();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties..add(DiagnosticsProperty('type', 'CallScreenEvent.didPush'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallScreenEventDidPushImpl);
+        (other.runtimeType == runtimeType && other is _CallScreenEventDidPush);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() didPush,
-    required TResult Function() didPop,
-  }) {
-    return didPush();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallScreenEvent.didPush()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? didPush,
-    TResult? Function()? didPop,
-  }) {
-    return didPush?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? didPush,
-    TResult Function()? didPop,
-    required TResult orElse(),
-  }) {
-    if (didPush != null) {
-      return didPush();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallScreenEventDidPush value) didPush,
-    required TResult Function(_CallScreenEventDidPop value) didPop,
-  }) {
-    return didPush(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallScreenEventDidPush value)? didPush,
-    TResult? Function(_CallScreenEventDidPop value)? didPop,
-  }) {
-    return didPush?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallScreenEventDidPush value)? didPush,
-    TResult Function(_CallScreenEventDidPop value)? didPop,
-    required TResult orElse(),
-  }) {
-    if (didPush != null) {
-      return didPush(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallScreenEventDidPush implements CallScreenEvent {
-  factory _CallScreenEventDidPush() = _$CallScreenEventDidPushImpl;
 }
 
 /// @nodoc
 
-class _$CallScreenEventDidPopImpl
+class _CallScreenEventDidPop
     with DiagnosticableTreeMixin
-    implements _CallScreenEventDidPop {
-  _$CallScreenEventDidPopImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallScreenEvent.didPop()';
-  }
+    implements CallScreenEvent {
+  _CallScreenEventDidPop();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties..add(DiagnosticsProperty('type', 'CallScreenEvent.didPop'));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallScreenEventDidPopImpl);
+        (other.runtimeType == runtimeType && other is _CallScreenEventDidPop);
   }
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() didPush,
-    required TResult Function() didPop,
-  }) {
-    return didPop();
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallScreenEvent.didPop()';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? didPush,
-    TResult? Function()? didPop,
-  }) {
-    return didPop?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? didPush,
-    TResult Function()? didPop,
-    required TResult orElse(),
-  }) {
-    if (didPop != null) {
-      return didPop();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallScreenEventDidPush value) didPush,
-    required TResult Function(_CallScreenEventDidPop value) didPop,
-  }) {
-    return didPop(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallScreenEventDidPush value)? didPush,
-    TResult? Function(_CallScreenEventDidPop value)? didPop,
-  }) {
-    return didPop?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallScreenEventDidPush value)? didPush,
-    TResult Function(_CallScreenEventDidPop value)? didPop,
-    required TResult orElse(),
-  }) {
-    if (didPop != null) {
-      return didPop(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallScreenEventDidPop implements CallScreenEvent {
-  factory _CallScreenEventDidPop() = _$CallScreenEventDidPopImpl;
 }
 
 /// @nodoc
-mixin _$CallState {
-  CallServiceState get callServiceState => throw _privateConstructorUsedError;
-  AppLifecycleState? get currentAppLifecycleState =>
-      throw _privateConstructorUsedError;
-  int get linesCount => throw _privateConstructorUsedError;
-  List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
-  bool? get minimized => throw _privateConstructorUsedError;
-  bool? get speakerOnBeforeMinimize => throw _privateConstructorUsedError;
-  CallAudioDevice? get audioDevice => throw _privateConstructorUsedError;
-  List<CallAudioDevice> get availableAudioDevices =>
-      throw _privateConstructorUsedError;
+mixin _$CallState implements DiagnosticableTreeMixin {
+  CallServiceState get callServiceState;
+  AppLifecycleState? get currentAppLifecycleState;
+  int get linesCount;
+  List<ActiveCall> get activeCalls;
+  bool? get minimized;
+  bool? get speakerOnBeforeMinimize;
+  CallAudioDevice? get audioDevice;
+  List<CallAudioDevice> get availableAudioDevices;
 
   /// Create a copy of CallState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $CallStateCopyWith<CallState> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$CallStateCopyWithImpl<CallState>(this as CallState, _$identity);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', 'CallState'))
+      ..add(DiagnosticsProperty('callServiceState', callServiceState))
+      ..add(DiagnosticsProperty(
+          'currentAppLifecycleState', currentAppLifecycleState))
+      ..add(DiagnosticsProperty('linesCount', linesCount))
+      ..add(DiagnosticsProperty('activeCalls', activeCalls))
+      ..add(DiagnosticsProperty('minimized', minimized))
+      ..add(DiagnosticsProperty(
+          'speakerOnBeforeMinimize', speakerOnBeforeMinimize))
+      ..add(DiagnosticsProperty('audioDevice', audioDevice))
+      ..add(
+          DiagnosticsProperty('availableAudioDevices', availableAudioDevices));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is CallState &&
+            (identical(other.callServiceState, callServiceState) ||
+                other.callServiceState == callServiceState) &&
+            (identical(
+                    other.currentAppLifecycleState, currentAppLifecycleState) ||
+                other.currentAppLifecycleState == currentAppLifecycleState) &&
+            (identical(other.linesCount, linesCount) ||
+                other.linesCount == linesCount) &&
+            const DeepCollectionEquality()
+                .equals(other.activeCalls, activeCalls) &&
+            (identical(other.minimized, minimized) ||
+                other.minimized == minimized) &&
+            (identical(
+                    other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) ||
+                other.speakerOnBeforeMinimize == speakerOnBeforeMinimize) &&
+            (identical(other.audioDevice, audioDevice) ||
+                other.audioDevice == audioDevice) &&
+            const DeepCollectionEquality()
+                .equals(other.availableAudioDevices, availableAudioDevices));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      callServiceState,
+      currentAppLifecycleState,
+      linesCount,
+      const DeepCollectionEquality().hash(activeCalls),
+      minimized,
+      speakerOnBeforeMinimize,
+      audioDevice,
+      const DeepCollectionEquality().hash(availableAudioDevices));
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallState(callServiceState: $callServiceState, currentAppLifecycleState: $currentAppLifecycleState, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, audioDevice: $audioDevice, availableAudioDevices: $availableAudioDevices)';
+  }
 }
 
 /// @nodoc
-abstract class $CallStateCopyWith<$Res> {
-  factory $CallStateCopyWith(CallState value, $Res Function(CallState) then) =
-      _$CallStateCopyWithImpl<$Res, CallState>;
+abstract mixin class $CallStateCopyWith<$Res> {
+  factory $CallStateCopyWith(CallState value, $Res Function(CallState) _then) =
+      _$CallStateCopyWithImpl;
   @useResult
   $Res call(
       {CallServiceState callServiceState,
@@ -14501,14 +6121,11 @@ abstract class $CallStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
-    implements $CallStateCopyWith<$Res> {
-  _$CallStateCopyWithImpl(this._value, this._then);
+class _$CallStateCopyWithImpl<$Res> implements $CallStateCopyWith<$Res> {
+  _$CallStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final CallState _self;
+  final $Res Function(CallState) _then;
 
   /// Create a copy of CallState
   /// with the given fields replaced by the non-null parameter values.
@@ -14524,40 +6141,40 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
     Object? audioDevice = freezed,
     Object? availableAudioDevices = null,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       callServiceState: null == callServiceState
-          ? _value.callServiceState
+          ? _self.callServiceState
           : callServiceState // ignore: cast_nullable_to_non_nullable
               as CallServiceState,
       currentAppLifecycleState: freezed == currentAppLifecycleState
-          ? _value.currentAppLifecycleState
+          ? _self.currentAppLifecycleState
           : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
               as AppLifecycleState?,
       linesCount: null == linesCount
-          ? _value.linesCount
+          ? _self.linesCount
           : linesCount // ignore: cast_nullable_to_non_nullable
               as int,
       activeCalls: null == activeCalls
-          ? _value.activeCalls
+          ? _self.activeCalls
           : activeCalls // ignore: cast_nullable_to_non_nullable
               as List<ActiveCall>,
       minimized: freezed == minimized
-          ? _value.minimized
+          ? _self.minimized
           : minimized // ignore: cast_nullable_to_non_nullable
               as bool?,
       speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
-          ? _value.speakerOnBeforeMinimize
+          ? _self.speakerOnBeforeMinimize
           : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
               as bool?,
       audioDevice: freezed == audioDevice
-          ? _value.audioDevice
+          ? _self.audioDevice
           : audioDevice // ignore: cast_nullable_to_non_nullable
               as CallAudioDevice?,
       availableAudioDevices: null == availableAudioDevices
-          ? _value.availableAudioDevices
+          ? _self.availableAudioDevices
           : availableAudioDevices // ignore: cast_nullable_to_non_nullable
               as List<CallAudioDevice>,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of CallState
@@ -14565,8 +6182,8 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   @override
   @pragma('vm:prefer-inline')
   $CallServiceStateCopyWith<$Res> get callServiceState {
-    return $CallServiceStateCopyWith<$Res>(_value.callServiceState, (value) {
-      return _then(_value.copyWith(callServiceState: value) as $Val);
+    return $CallServiceStateCopyWith<$Res>(_self.callServiceState, (value) {
+      return _then(_self.copyWith(callServiceState: value));
     });
   }
 
@@ -14575,103 +6192,228 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
   @override
   @pragma('vm:prefer-inline')
   $CallAudioDeviceCopyWith<$Res>? get audioDevice {
-    if (_value.audioDevice == null) {
+    if (_self.audioDevice == null) {
       return null;
     }
 
-    return $CallAudioDeviceCopyWith<$Res>(_value.audioDevice!, (value) {
-      return _then(_value.copyWith(audioDevice: value) as $Val);
+    return $CallAudioDeviceCopyWith<$Res>(_self.audioDevice!, (value) {
+      return _then(_self.copyWith(audioDevice: value));
     });
   }
 }
 
-/// @nodoc
-abstract class _$$CallStateImplCopyWith<$Res>
-    implements $CallStateCopyWith<$Res> {
-  factory _$$CallStateImplCopyWith(
-          _$CallStateImpl value, $Res Function(_$CallStateImpl) then) =
-      __$$CallStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {CallServiceState callServiceState,
-      AppLifecycleState? currentAppLifecycleState,
-      int linesCount,
-      List<ActiveCall> activeCalls,
-      bool? minimized,
-      bool? speakerOnBeforeMinimize,
-      CallAudioDevice? audioDevice,
-      List<CallAudioDevice> availableAudioDevices});
+/// Adds pattern-matching-related methods to [CallState].
+extension CallStatePatterns on CallState {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
-  @override
-  $CallServiceStateCopyWith<$Res> get callServiceState;
-  @override
-  $CallAudioDeviceCopyWith<$Res>? get audioDevice;
-}
-
-/// @nodoc
-class __$$CallStateImplCopyWithImpl<$Res>
-    extends _$CallStateCopyWithImpl<$Res, _$CallStateImpl>
-    implements _$$CallStateImplCopyWith<$Res> {
-  __$$CallStateImplCopyWithImpl(
-      _$CallStateImpl _value, $Res Function(_$CallStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of CallState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? callServiceState = null,
-    Object? currentAppLifecycleState = freezed,
-    Object? linesCount = null,
-    Object? activeCalls = null,
-    Object? minimized = freezed,
-    Object? speakerOnBeforeMinimize = freezed,
-    Object? audioDevice = freezed,
-    Object? availableAudioDevices = null,
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_CallState value)? $default, {
+    required TResult orElse(),
   }) {
-    return _then(_$CallStateImpl(
-      callServiceState: null == callServiceState
-          ? _value.callServiceState
-          : callServiceState // ignore: cast_nullable_to_non_nullable
-              as CallServiceState,
-      currentAppLifecycleState: freezed == currentAppLifecycleState
-          ? _value.currentAppLifecycleState
-          : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
-              as AppLifecycleState?,
-      linesCount: null == linesCount
-          ? _value.linesCount
-          : linesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      activeCalls: null == activeCalls
-          ? _value._activeCalls
-          : activeCalls // ignore: cast_nullable_to_non_nullable
-              as List<ActiveCall>,
-      minimized: freezed == minimized
-          ? _value.minimized
-          : minimized // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
-          ? _value.speakerOnBeforeMinimize
-          : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      audioDevice: freezed == audioDevice
-          ? _value.audioDevice
-          : audioDevice // ignore: cast_nullable_to_non_nullable
-              as CallAudioDevice?,
-      availableAudioDevices: null == availableAudioDevices
-          ? _value._availableAudioDevices
-          : availableAudioDevices // ignore: cast_nullable_to_non_nullable
-              as List<CallAudioDevice>,
-    ));
+    final _that = this;
+    switch (_that) {
+      case _CallState() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_CallState value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallState():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_CallState value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallState() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            CallServiceState callServiceState,
+            AppLifecycleState? currentAppLifecycleState,
+            int linesCount,
+            List<ActiveCall> activeCalls,
+            bool? minimized,
+            bool? speakerOnBeforeMinimize,
+            CallAudioDevice? audioDevice,
+            List<CallAudioDevice> availableAudioDevices)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallState() when $default != null:
+        return $default(
+            _that.callServiceState,
+            _that.currentAppLifecycleState,
+            _that.linesCount,
+            _that.activeCalls,
+            _that.minimized,
+            _that.speakerOnBeforeMinimize,
+            _that.audioDevice,
+            _that.availableAudioDevices);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            CallServiceState callServiceState,
+            AppLifecycleState? currentAppLifecycleState,
+            int linesCount,
+            List<ActiveCall> activeCalls,
+            bool? minimized,
+            bool? speakerOnBeforeMinimize,
+            CallAudioDevice? audioDevice,
+            List<CallAudioDevice> availableAudioDevices)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallState():
+        return $default(
+            _that.callServiceState,
+            _that.currentAppLifecycleState,
+            _that.linesCount,
+            _that.activeCalls,
+            _that.minimized,
+            _that.speakerOnBeforeMinimize,
+            _that.audioDevice,
+            _that.availableAudioDevices);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            CallServiceState callServiceState,
+            AppLifecycleState? currentAppLifecycleState,
+            int linesCount,
+            List<ActiveCall> activeCalls,
+            bool? minimized,
+            bool? speakerOnBeforeMinimize,
+            CallAudioDevice? audioDevice,
+            List<CallAudioDevice> availableAudioDevices)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallState() when $default != null:
+        return $default(
+            _that.callServiceState,
+            _that.currentAppLifecycleState,
+            _that.linesCount,
+            _that.activeCalls,
+            _that.minimized,
+            _that.speakerOnBeforeMinimize,
+            _that.audioDevice,
+            _that.availableAudioDevices);
+      case _:
+        return null;
+    }
   }
 }
 
 /// @nodoc
 
-class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
-  const _$CallStateImpl(
+class _CallState extends CallState with DiagnosticableTreeMixin {
+  const _CallState(
       {this.callServiceState = const CallServiceState(),
       this.currentAppLifecycleState,
       this.linesCount = 0,
@@ -14717,14 +6459,16 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
     return EqualUnmodifiableListView(_availableAudioDevices);
   }
 
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallState(callServiceState: $callServiceState, currentAppLifecycleState: $currentAppLifecycleState, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, audioDevice: $audioDevice, availableAudioDevices: $availableAudioDevices)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$CallStateCopyWith<_CallState> get copyWith =>
+      __$CallStateCopyWithImpl<_CallState>(this, _$identity);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallState'))
       ..add(DiagnosticsProperty('callServiceState', callServiceState))
@@ -14744,7 +6488,7 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallStateImpl &&
+            other is _CallState &&
             (identical(other.callServiceState, callServiceState) ||
                 other.callServiceState == callServiceState) &&
             (identical(
@@ -14777,90 +6521,260 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
       audioDevice,
       const DeepCollectionEquality().hash(_availableAudioDevices));
 
-  /// Create a copy of CallState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
-      __$$CallStateImplCopyWithImpl<_$CallStateImpl>(this, _$identity);
-}
-
-abstract class _CallState extends CallState {
-  const factory _CallState(
-      {final CallServiceState callServiceState,
-      final AppLifecycleState? currentAppLifecycleState,
-      final int linesCount,
-      final List<ActiveCall> activeCalls,
-      final bool? minimized,
-      final bool? speakerOnBeforeMinimize,
-      final CallAudioDevice? audioDevice,
-      final List<CallAudioDevice> availableAudioDevices}) = _$CallStateImpl;
-  const _CallState._() : super._();
-
-  @override
-  CallServiceState get callServiceState;
-  @override
-  AppLifecycleState? get currentAppLifecycleState;
-  @override
-  int get linesCount;
-  @override
-  List<ActiveCall> get activeCalls;
-  @override
-  bool? get minimized;
-  @override
-  bool? get speakerOnBeforeMinimize;
-  @override
-  CallAudioDevice? get audioDevice;
-  @override
-  List<CallAudioDevice> get availableAudioDevices;
-
-  /// Create a copy of CallState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallState(callServiceState: $callServiceState, currentAppLifecycleState: $currentAppLifecycleState, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, audioDevice: $audioDevice, availableAudioDevices: $availableAudioDevices)';
+  }
 }
 
 /// @nodoc
-mixin _$ActiveCall {
-  CallDirection get direction => throw _privateConstructorUsedError;
-  int? get line => throw _privateConstructorUsedError;
-  String get callId => throw _privateConstructorUsedError;
-  CallkeepHandle get handle => throw _privateConstructorUsedError;
-  DateTime get createdTime => throw _privateConstructorUsedError;
-  bool get video => throw _privateConstructorUsedError;
-  CallProcessingStatus get processingStatus =>
-      throw _privateConstructorUsedError;
-  bool? get frontCamera => throw _privateConstructorUsedError;
-  bool get held => throw _privateConstructorUsedError;
-  bool get muted => throw _privateConstructorUsedError;
-  bool get updating => throw _privateConstructorUsedError;
-  JsepValue? get incomingOffer => throw _privateConstructorUsedError;
-  String? get displayName => throw _privateConstructorUsedError;
-  String? get fromReferId => throw _privateConstructorUsedError;
-  String? get fromReplaces => throw _privateConstructorUsedError;
-  String? get fromNumber => throw _privateConstructorUsedError;
-  DateTime? get acceptedTime => throw _privateConstructorUsedError;
-  DateTime? get hungUpTime => throw _privateConstructorUsedError;
-  Transfer? get transfer => throw _privateConstructorUsedError;
-  Object? get failure => throw _privateConstructorUsedError;
-  MediaStream? get localStream => throw _privateConstructorUsedError;
-  MediaStream? get remoteStream => throw _privateConstructorUsedError;
+abstract mixin class _$CallStateCopyWith<$Res>
+    implements $CallStateCopyWith<$Res> {
+  factory _$CallStateCopyWith(
+          _CallState value, $Res Function(_CallState) _then) =
+      __$CallStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {CallServiceState callServiceState,
+      AppLifecycleState? currentAppLifecycleState,
+      int linesCount,
+      List<ActiveCall> activeCalls,
+      bool? minimized,
+      bool? speakerOnBeforeMinimize,
+      CallAudioDevice? audioDevice,
+      List<CallAudioDevice> availableAudioDevices});
+
+  @override
+  $CallServiceStateCopyWith<$Res> get callServiceState;
+  @override
+  $CallAudioDeviceCopyWith<$Res>? get audioDevice;
+}
+
+/// @nodoc
+class __$CallStateCopyWithImpl<$Res> implements _$CallStateCopyWith<$Res> {
+  __$CallStateCopyWithImpl(this._self, this._then);
+
+  final _CallState _self;
+  final $Res Function(_CallState) _then;
+
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? callServiceState = null,
+    Object? currentAppLifecycleState = freezed,
+    Object? linesCount = null,
+    Object? activeCalls = null,
+    Object? minimized = freezed,
+    Object? speakerOnBeforeMinimize = freezed,
+    Object? audioDevice = freezed,
+    Object? availableAudioDevices = null,
+  }) {
+    return _then(_CallState(
+      callServiceState: null == callServiceState
+          ? _self.callServiceState
+          : callServiceState // ignore: cast_nullable_to_non_nullable
+              as CallServiceState,
+      currentAppLifecycleState: freezed == currentAppLifecycleState
+          ? _self.currentAppLifecycleState
+          : currentAppLifecycleState // ignore: cast_nullable_to_non_nullable
+              as AppLifecycleState?,
+      linesCount: null == linesCount
+          ? _self.linesCount
+          : linesCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      activeCalls: null == activeCalls
+          ? _self._activeCalls
+          : activeCalls // ignore: cast_nullable_to_non_nullable
+              as List<ActiveCall>,
+      minimized: freezed == minimized
+          ? _self.minimized
+          : minimized // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize
+          ? _self.speakerOnBeforeMinimize
+          : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      audioDevice: freezed == audioDevice
+          ? _self.audioDevice
+          : audioDevice // ignore: cast_nullable_to_non_nullable
+              as CallAudioDevice?,
+      availableAudioDevices: null == availableAudioDevices
+          ? _self._availableAudioDevices
+          : availableAudioDevices // ignore: cast_nullable_to_non_nullable
+              as List<CallAudioDevice>,
+    ));
+  }
+
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CallServiceStateCopyWith<$Res> get callServiceState {
+    return $CallServiceStateCopyWith<$Res>(_self.callServiceState, (value) {
+      return _then(_self.copyWith(callServiceState: value));
+    });
+  }
+
+  /// Create a copy of CallState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CallAudioDeviceCopyWith<$Res>? get audioDevice {
+    if (_self.audioDevice == null) {
+      return null;
+    }
+
+    return $CallAudioDeviceCopyWith<$Res>(_self.audioDevice!, (value) {
+      return _then(_self.copyWith(audioDevice: value));
+    });
+  }
+}
+
+/// @nodoc
+mixin _$ActiveCall implements DiagnosticableTreeMixin {
+  CallDirection get direction;
+  int? get line;
+  String get callId;
+  CallkeepHandle get handle;
+  DateTime get createdTime;
+  bool get video;
+  CallProcessingStatus get processingStatus;
+  bool? get frontCamera;
+  bool get held;
+  bool get muted;
+  bool get updating;
+  JsepValue? get incomingOffer;
+  String? get displayName;
+  String? get fromReferId;
+  String? get fromReplaces;
+  String? get fromNumber;
+  DateTime? get acceptedTime;
+  DateTime? get hungUpTime;
+  Transfer? get transfer;
+  Object? get failure;
+  MediaStream? get localStream;
+  MediaStream? get remoteStream;
 
   /// Create a copy of ActiveCall
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $ActiveCallCopyWith<ActiveCall> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$ActiveCallCopyWithImpl<ActiveCall>(this as ActiveCall, _$identity);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', 'ActiveCall'))
+      ..add(DiagnosticsProperty('direction', direction))
+      ..add(DiagnosticsProperty('line', line))
+      ..add(DiagnosticsProperty('callId', callId))
+      ..add(DiagnosticsProperty('handle', handle))
+      ..add(DiagnosticsProperty('createdTime', createdTime))
+      ..add(DiagnosticsProperty('video', video))
+      ..add(DiagnosticsProperty('processingStatus', processingStatus))
+      ..add(DiagnosticsProperty('frontCamera', frontCamera))
+      ..add(DiagnosticsProperty('held', held))
+      ..add(DiagnosticsProperty('muted', muted))
+      ..add(DiagnosticsProperty('updating', updating))
+      ..add(DiagnosticsProperty('incomingOffer', incomingOffer))
+      ..add(DiagnosticsProperty('displayName', displayName))
+      ..add(DiagnosticsProperty('fromReferId', fromReferId))
+      ..add(DiagnosticsProperty('fromReplaces', fromReplaces))
+      ..add(DiagnosticsProperty('fromNumber', fromNumber))
+      ..add(DiagnosticsProperty('acceptedTime', acceptedTime))
+      ..add(DiagnosticsProperty('hungUpTime', hungUpTime))
+      ..add(DiagnosticsProperty('transfer', transfer))
+      ..add(DiagnosticsProperty('failure', failure))
+      ..add(DiagnosticsProperty('localStream', localStream))
+      ..add(DiagnosticsProperty('remoteStream', remoteStream));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ActiveCall &&
+            (identical(other.direction, direction) ||
+                other.direction == direction) &&
+            (identical(other.line, line) || other.line == line) &&
+            (identical(other.callId, callId) || other.callId == callId) &&
+            (identical(other.handle, handle) || other.handle == handle) &&
+            (identical(other.createdTime, createdTime) ||
+                other.createdTime == createdTime) &&
+            (identical(other.video, video) || other.video == video) &&
+            (identical(other.processingStatus, processingStatus) ||
+                other.processingStatus == processingStatus) &&
+            (identical(other.frontCamera, frontCamera) ||
+                other.frontCamera == frontCamera) &&
+            (identical(other.held, held) || other.held == held) &&
+            (identical(other.muted, muted) || other.muted == muted) &&
+            (identical(other.updating, updating) ||
+                other.updating == updating) &&
+            (identical(other.incomingOffer, incomingOffer) ||
+                other.incomingOffer == incomingOffer) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.fromReferId, fromReferId) ||
+                other.fromReferId == fromReferId) &&
+            (identical(other.fromReplaces, fromReplaces) ||
+                other.fromReplaces == fromReplaces) &&
+            (identical(other.fromNumber, fromNumber) ||
+                other.fromNumber == fromNumber) &&
+            (identical(other.acceptedTime, acceptedTime) ||
+                other.acceptedTime == acceptedTime) &&
+            (identical(other.hungUpTime, hungUpTime) ||
+                other.hungUpTime == hungUpTime) &&
+            (identical(other.transfer, transfer) ||
+                other.transfer == transfer) &&
+            const DeepCollectionEquality().equals(other.failure, failure) &&
+            (identical(other.localStream, localStream) ||
+                other.localStream == localStream) &&
+            (identical(other.remoteStream, remoteStream) ||
+                other.remoteStream == remoteStream));
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        direction,
+        line,
+        callId,
+        handle,
+        createdTime,
+        video,
+        processingStatus,
+        frontCamera,
+        held,
+        muted,
+        updating,
+        incomingOffer,
+        displayName,
+        fromReferId,
+        fromReplaces,
+        fromNumber,
+        acceptedTime,
+        hungUpTime,
+        transfer,
+        const DeepCollectionEquality().hash(failure),
+        localStream,
+        remoteStream
+      ]);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromReplaces: $fromReplaces, fromNumber: $fromNumber, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
+  }
 }
 
 /// @nodoc
-abstract class $ActiveCallCopyWith<$Res> {
+abstract mixin class $ActiveCallCopyWith<$Res> {
   factory $ActiveCallCopyWith(
-          ActiveCall value, $Res Function(ActiveCall) then) =
-      _$ActiveCallCopyWithImpl<$Res, ActiveCall>;
+          ActiveCall value, $Res Function(ActiveCall) _then) =
+      _$ActiveCallCopyWithImpl;
   @useResult
   $Res call(
       {CallDirection direction,
@@ -14890,14 +6804,11 @@ abstract class $ActiveCallCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
-    implements $ActiveCallCopyWith<$Res> {
-  _$ActiveCallCopyWithImpl(this._value, this._then);
+class _$ActiveCallCopyWithImpl<$Res> implements $ActiveCallCopyWith<$Res> {
+  _$ActiveCallCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final ActiveCall _self;
+  final $Res Function(ActiveCall) _then;
 
   /// Create a copy of ActiveCall
   /// with the given fields replaced by the non-null parameter values.
@@ -14927,93 +6838,93 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
     Object? localStream = freezed,
     Object? remoteStream = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       direction: null == direction
-          ? _value.direction
+          ? _self.direction
           : direction // ignore: cast_nullable_to_non_nullable
               as CallDirection,
       line: freezed == line
-          ? _value.line
+          ? _self.line
           : line // ignore: cast_nullable_to_non_nullable
               as int?,
       callId: null == callId
-          ? _value.callId
+          ? _self.callId
           : callId // ignore: cast_nullable_to_non_nullable
               as String,
       handle: null == handle
-          ? _value.handle
+          ? _self.handle
           : handle // ignore: cast_nullable_to_non_nullable
               as CallkeepHandle,
       createdTime: null == createdTime
-          ? _value.createdTime
+          ? _self.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
       video: null == video
-          ? _value.video
+          ? _self.video
           : video // ignore: cast_nullable_to_non_nullable
               as bool,
       processingStatus: null == processingStatus
-          ? _value.processingStatus
+          ? _self.processingStatus
           : processingStatus // ignore: cast_nullable_to_non_nullable
               as CallProcessingStatus,
       frontCamera: freezed == frontCamera
-          ? _value.frontCamera
+          ? _self.frontCamera
           : frontCamera // ignore: cast_nullable_to_non_nullable
               as bool?,
       held: null == held
-          ? _value.held
+          ? _self.held
           : held // ignore: cast_nullable_to_non_nullable
               as bool,
       muted: null == muted
-          ? _value.muted
+          ? _self.muted
           : muted // ignore: cast_nullable_to_non_nullable
               as bool,
       updating: null == updating
-          ? _value.updating
+          ? _self.updating
           : updating // ignore: cast_nullable_to_non_nullable
               as bool,
       incomingOffer: freezed == incomingOffer
-          ? _value.incomingOffer
+          ? _self.incomingOffer
           : incomingOffer // ignore: cast_nullable_to_non_nullable
               as JsepValue?,
       displayName: freezed == displayName
-          ? _value.displayName
+          ? _self.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
       fromReferId: freezed == fromReferId
-          ? _value.fromReferId
+          ? _self.fromReferId
           : fromReferId // ignore: cast_nullable_to_non_nullable
               as String?,
       fromReplaces: freezed == fromReplaces
-          ? _value.fromReplaces
+          ? _self.fromReplaces
           : fromReplaces // ignore: cast_nullable_to_non_nullable
               as String?,
       fromNumber: freezed == fromNumber
-          ? _value.fromNumber
+          ? _self.fromNumber
           : fromNumber // ignore: cast_nullable_to_non_nullable
               as String?,
       acceptedTime: freezed == acceptedTime
-          ? _value.acceptedTime
+          ? _self.acceptedTime
           : acceptedTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       hungUpTime: freezed == hungUpTime
-          ? _value.hungUpTime
+          ? _self.hungUpTime
           : hungUpTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       transfer: freezed == transfer
-          ? _value.transfer
+          ? _self.transfer
           : transfer // ignore: cast_nullable_to_non_nullable
               as Transfer?,
-      failure: freezed == failure ? _value.failure : failure,
+      failure: freezed == failure ? _self.failure : failure,
       localStream: freezed == localStream
-          ? _value.localStream
+          ? _self.localStream
           : localStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
       remoteStream: freezed == remoteStream
-          ? _value.remoteStream
+          ? _self.remoteStream
           : remoteStream // ignore: cast_nullable_to_non_nullable
               as MediaStream?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of ActiveCall
@@ -15021,182 +6932,312 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
   @override
   @pragma('vm:prefer-inline')
   $TransferCopyWith<$Res>? get transfer {
-    if (_value.transfer == null) {
+    if (_self.transfer == null) {
       return null;
     }
 
-    return $TransferCopyWith<$Res>(_value.transfer!, (value) {
-      return _then(_value.copyWith(transfer: value) as $Val);
+    return $TransferCopyWith<$Res>(_self.transfer!, (value) {
+      return _then(_self.copyWith(transfer: value));
     });
   }
 }
 
-/// @nodoc
-abstract class _$$ActiveCallImplCopyWith<$Res>
-    implements $ActiveCallCopyWith<$Res> {
-  factory _$$ActiveCallImplCopyWith(
-          _$ActiveCallImpl value, $Res Function(_$ActiveCallImpl) then) =
-      __$$ActiveCallImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {CallDirection direction,
-      int? line,
-      String callId,
-      CallkeepHandle handle,
-      DateTime createdTime,
-      bool video,
-      CallProcessingStatus processingStatus,
-      bool? frontCamera,
-      bool held,
-      bool muted,
-      bool updating,
-      JsepValue? incomingOffer,
-      String? displayName,
-      String? fromReferId,
-      String? fromReplaces,
-      String? fromNumber,
-      DateTime? acceptedTime,
-      DateTime? hungUpTime,
-      Transfer? transfer,
-      Object? failure,
-      MediaStream? localStream,
-      MediaStream? remoteStream});
+/// Adds pattern-matching-related methods to [ActiveCall].
+extension ActiveCallPatterns on ActiveCall {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
-  @override
-  $TransferCopyWith<$Res>? get transfer;
-}
-
-/// @nodoc
-class __$$ActiveCallImplCopyWithImpl<$Res>
-    extends _$ActiveCallCopyWithImpl<$Res, _$ActiveCallImpl>
-    implements _$$ActiveCallImplCopyWith<$Res> {
-  __$$ActiveCallImplCopyWithImpl(
-      _$ActiveCallImpl _value, $Res Function(_$ActiveCallImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ActiveCall
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? direction = null,
-    Object? line = freezed,
-    Object? callId = null,
-    Object? handle = null,
-    Object? createdTime = null,
-    Object? video = null,
-    Object? processingStatus = null,
-    Object? frontCamera = freezed,
-    Object? held = null,
-    Object? muted = null,
-    Object? updating = null,
-    Object? incomingOffer = freezed,
-    Object? displayName = freezed,
-    Object? fromReferId = freezed,
-    Object? fromReplaces = freezed,
-    Object? fromNumber = freezed,
-    Object? acceptedTime = freezed,
-    Object? hungUpTime = freezed,
-    Object? transfer = freezed,
-    Object? failure = freezed,
-    Object? localStream = freezed,
-    Object? remoteStream = freezed,
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_ActiveCall value)? $default, {
+    required TResult orElse(),
   }) {
-    return _then(_$ActiveCallImpl(
-      direction: null == direction
-          ? _value.direction
-          : direction // ignore: cast_nullable_to_non_nullable
-              as CallDirection,
-      line: freezed == line
-          ? _value.line
-          : line // ignore: cast_nullable_to_non_nullable
-              as int?,
-      callId: null == callId
-          ? _value.callId
-          : callId // ignore: cast_nullable_to_non_nullable
-              as String,
-      handle: null == handle
-          ? _value.handle
-          : handle // ignore: cast_nullable_to_non_nullable
-              as CallkeepHandle,
-      createdTime: null == createdTime
-          ? _value.createdTime
-          : createdTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      video: null == video
-          ? _value.video
-          : video // ignore: cast_nullable_to_non_nullable
-              as bool,
-      processingStatus: null == processingStatus
-          ? _value.processingStatus
-          : processingStatus // ignore: cast_nullable_to_non_nullable
-              as CallProcessingStatus,
-      frontCamera: freezed == frontCamera
-          ? _value.frontCamera
-          : frontCamera // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      held: null == held
-          ? _value.held
-          : held // ignore: cast_nullable_to_non_nullable
-              as bool,
-      muted: null == muted
-          ? _value.muted
-          : muted // ignore: cast_nullable_to_non_nullable
-              as bool,
-      updating: null == updating
-          ? _value.updating
-          : updating // ignore: cast_nullable_to_non_nullable
-              as bool,
-      incomingOffer: freezed == incomingOffer
-          ? _value.incomingOffer
-          : incomingOffer // ignore: cast_nullable_to_non_nullable
-              as JsepValue?,
-      displayName: freezed == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      fromReferId: freezed == fromReferId
-          ? _value.fromReferId
-          : fromReferId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      fromReplaces: freezed == fromReplaces
-          ? _value.fromReplaces
-          : fromReplaces // ignore: cast_nullable_to_non_nullable
-              as String?,
-      fromNumber: freezed == fromNumber
-          ? _value.fromNumber
-          : fromNumber // ignore: cast_nullable_to_non_nullable
-              as String?,
-      acceptedTime: freezed == acceptedTime
-          ? _value.acceptedTime
-          : acceptedTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      hungUpTime: freezed == hungUpTime
-          ? _value.hungUpTime
-          : hungUpTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      transfer: freezed == transfer
-          ? _value.transfer
-          : transfer // ignore: cast_nullable_to_non_nullable
-              as Transfer?,
-      failure: freezed == failure ? _value.failure : failure,
-      localStream: freezed == localStream
-          ? _value.localStream
-          : localStream // ignore: cast_nullable_to_non_nullable
-              as MediaStream?,
-      remoteStream: freezed == remoteStream
-          ? _value.remoteStream
-          : remoteStream // ignore: cast_nullable_to_non_nullable
-              as MediaStream?,
-    ));
+    final _that = this;
+    switch (_that) {
+      case _ActiveCall() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_ActiveCall value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ActiveCall():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_ActiveCall value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ActiveCall() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            CallDirection direction,
+            int? line,
+            String callId,
+            CallkeepHandle handle,
+            DateTime createdTime,
+            bool video,
+            CallProcessingStatus processingStatus,
+            bool? frontCamera,
+            bool held,
+            bool muted,
+            bool updating,
+            JsepValue? incomingOffer,
+            String? displayName,
+            String? fromReferId,
+            String? fromReplaces,
+            String? fromNumber,
+            DateTime? acceptedTime,
+            DateTime? hungUpTime,
+            Transfer? transfer,
+            Object? failure,
+            MediaStream? localStream,
+            MediaStream? remoteStream)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _ActiveCall() when $default != null:
+        return $default(
+            _that.direction,
+            _that.line,
+            _that.callId,
+            _that.handle,
+            _that.createdTime,
+            _that.video,
+            _that.processingStatus,
+            _that.frontCamera,
+            _that.held,
+            _that.muted,
+            _that.updating,
+            _that.incomingOffer,
+            _that.displayName,
+            _that.fromReferId,
+            _that.fromReplaces,
+            _that.fromNumber,
+            _that.acceptedTime,
+            _that.hungUpTime,
+            _that.transfer,
+            _that.failure,
+            _that.localStream,
+            _that.remoteStream);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            CallDirection direction,
+            int? line,
+            String callId,
+            CallkeepHandle handle,
+            DateTime createdTime,
+            bool video,
+            CallProcessingStatus processingStatus,
+            bool? frontCamera,
+            bool held,
+            bool muted,
+            bool updating,
+            JsepValue? incomingOffer,
+            String? displayName,
+            String? fromReferId,
+            String? fromReplaces,
+            String? fromNumber,
+            DateTime? acceptedTime,
+            DateTime? hungUpTime,
+            Transfer? transfer,
+            Object? failure,
+            MediaStream? localStream,
+            MediaStream? remoteStream)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ActiveCall():
+        return $default(
+            _that.direction,
+            _that.line,
+            _that.callId,
+            _that.handle,
+            _that.createdTime,
+            _that.video,
+            _that.processingStatus,
+            _that.frontCamera,
+            _that.held,
+            _that.muted,
+            _that.updating,
+            _that.incomingOffer,
+            _that.displayName,
+            _that.fromReferId,
+            _that.fromReplaces,
+            _that.fromNumber,
+            _that.acceptedTime,
+            _that.hungUpTime,
+            _that.transfer,
+            _that.failure,
+            _that.localStream,
+            _that.remoteStream);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            CallDirection direction,
+            int? line,
+            String callId,
+            CallkeepHandle handle,
+            DateTime createdTime,
+            bool video,
+            CallProcessingStatus processingStatus,
+            bool? frontCamera,
+            bool held,
+            bool muted,
+            bool updating,
+            JsepValue? incomingOffer,
+            String? displayName,
+            String? fromReferId,
+            String? fromReplaces,
+            String? fromNumber,
+            DateTime? acceptedTime,
+            DateTime? hungUpTime,
+            Transfer? transfer,
+            Object? failure,
+            MediaStream? localStream,
+            MediaStream? remoteStream)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _ActiveCall() when $default != null:
+        return $default(
+            _that.direction,
+            _that.line,
+            _that.callId,
+            _that.handle,
+            _that.createdTime,
+            _that.video,
+            _that.processingStatus,
+            _that.frontCamera,
+            _that.held,
+            _that.muted,
+            _that.updating,
+            _that.incomingOffer,
+            _that.displayName,
+            _that.fromReferId,
+            _that.fromReplaces,
+            _that.fromNumber,
+            _that.acceptedTime,
+            _that.hungUpTime,
+            _that.transfer,
+            _that.failure,
+            _that.localStream,
+            _that.remoteStream);
+      case _:
+        return null;
+    }
   }
 }
 
 /// @nodoc
 
-class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
-  _$ActiveCallImpl(
+class _ActiveCall extends ActiveCall with DiagnosticableTreeMixin {
+  _ActiveCall(
       {required this.direction,
       required this.line,
       required this.callId,
@@ -15270,14 +7311,16 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   @override
   final MediaStream? remoteStream;
 
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromReplaces: $fromReplaces, fromNumber: $fromNumber, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$ActiveCallCopyWith<_ActiveCall> get copyWith =>
+      __$ActiveCallCopyWithImpl<_ActiveCall>(this, _$identity);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'ActiveCall'))
       ..add(DiagnosticsProperty('direction', direction))
@@ -15308,7 +7351,7 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ActiveCallImpl &&
+            other is _ActiveCall &&
             (identical(other.direction, direction) ||
                 other.direction == direction) &&
             (identical(other.line, line) || other.line == line) &&
@@ -15375,218 +7418,203 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
         remoteStream
       ]);
 
-  /// Create a copy of ActiveCall
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
-      __$$ActiveCallImplCopyWithImpl<_$ActiveCallImpl>(this, _$identity);
-}
-
-abstract class _ActiveCall extends ActiveCall {
-  factory _ActiveCall(
-      {required final CallDirection direction,
-      required final int? line,
-      required final String callId,
-      required final CallkeepHandle handle,
-      required final DateTime createdTime,
-      required final bool video,
-      required final CallProcessingStatus processingStatus,
-      final bool? frontCamera,
-      final bool held,
-      final bool muted,
-      final bool updating,
-      final JsepValue? incomingOffer,
-      final String? displayName,
-      final String? fromReferId,
-      final String? fromReplaces,
-      final String? fromNumber,
-      final DateTime? acceptedTime,
-      final DateTime? hungUpTime,
-      final Transfer? transfer,
-      final Object? failure,
-      final MediaStream? localStream,
-      final MediaStream? remoteStream}) = _$ActiveCallImpl;
-  _ActiveCall._() : super._();
-
-  @override
-  CallDirection get direction;
-  @override
-  int? get line;
-  @override
-  String get callId;
-  @override
-  CallkeepHandle get handle;
-  @override
-  DateTime get createdTime;
-  @override
-  bool get video;
-  @override
-  CallProcessingStatus get processingStatus;
-  @override
-  bool? get frontCamera;
-  @override
-  bool get held;
-  @override
-  bool get muted;
-  @override
-  bool get updating;
-  @override
-  JsepValue? get incomingOffer;
-  @override
-  String? get displayName;
-  @override
-  String? get fromReferId;
-  @override
-  String? get fromReplaces;
-  @override
-  String? get fromNumber;
-  @override
-  DateTime? get acceptedTime;
-  @override
-  DateTime? get hungUpTime;
-  @override
-  Transfer? get transfer;
-  @override
-  Object? get failure;
-  @override
-  MediaStream? get localStream;
-  @override
-  MediaStream? get remoteStream;
-
-  /// Create a copy of ActiveCall
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-mixin _$CallAudioDevice {
-  CallAudioDeviceType get type => throw _privateConstructorUsedError;
-  String? get id => throw _privateConstructorUsedError;
-  String? get name => throw _privateConstructorUsedError;
-
-  /// Create a copy of CallAudioDevice
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $CallAudioDeviceCopyWith<CallAudioDevice> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CallAudioDeviceCopyWith<$Res> {
-  factory $CallAudioDeviceCopyWith(
-          CallAudioDevice value, $Res Function(CallAudioDevice) then) =
-      _$CallAudioDeviceCopyWithImpl<$Res, CallAudioDevice>;
-  @useResult
-  $Res call({CallAudioDeviceType type, String? id, String? name});
-}
-
-/// @nodoc
-class _$CallAudioDeviceCopyWithImpl<$Res, $Val extends CallAudioDevice>
-    implements $CallAudioDeviceCopyWith<$Res> {
-  _$CallAudioDeviceCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of CallAudioDevice
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? type = null,
-    Object? id = freezed,
-    Object? name = freezed,
-  }) {
-    return _then(_value.copyWith(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as CallAudioDeviceType,
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$CallAudioDeviceImplCopyWith<$Res>
-    implements $CallAudioDeviceCopyWith<$Res> {
-  factory _$$CallAudioDeviceImplCopyWith(_$CallAudioDeviceImpl value,
-          $Res Function(_$CallAudioDeviceImpl) then) =
-      __$$CallAudioDeviceImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({CallAudioDeviceType type, String? id, String? name});
-}
-
-/// @nodoc
-class __$$CallAudioDeviceImplCopyWithImpl<$Res>
-    extends _$CallAudioDeviceCopyWithImpl<$Res, _$CallAudioDeviceImpl>
-    implements _$$CallAudioDeviceImplCopyWith<$Res> {
-  __$$CallAudioDeviceImplCopyWithImpl(
-      _$CallAudioDeviceImpl _value, $Res Function(_$CallAudioDeviceImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of CallAudioDevice
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? type = null,
-    Object? id = freezed,
-    Object? name = freezed,
-  }) {
-    return _then(_$CallAudioDeviceImpl(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as CallAudioDeviceType,
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$CallAudioDeviceImpl extends _CallAudioDevice
-    with DiagnosticableTreeMixin {
-  _$CallAudioDeviceImpl({required this.type, this.id, this.name}) : super._();
-
-  @override
-  final CallAudioDeviceType type;
-  @override
-  final String? id;
-  @override
-  final String? name;
-
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CallAudioDevice(type: $type, id: $id, name: $name)';
+    return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromReplaces: $fromReplaces, fromNumber: $fromNumber, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
   }
+}
+
+/// @nodoc
+abstract mixin class _$ActiveCallCopyWith<$Res>
+    implements $ActiveCallCopyWith<$Res> {
+  factory _$ActiveCallCopyWith(
+          _ActiveCall value, $Res Function(_ActiveCall) _then) =
+      __$ActiveCallCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {CallDirection direction,
+      int? line,
+      String callId,
+      CallkeepHandle handle,
+      DateTime createdTime,
+      bool video,
+      CallProcessingStatus processingStatus,
+      bool? frontCamera,
+      bool held,
+      bool muted,
+      bool updating,
+      JsepValue? incomingOffer,
+      String? displayName,
+      String? fromReferId,
+      String? fromReplaces,
+      String? fromNumber,
+      DateTime? acceptedTime,
+      DateTime? hungUpTime,
+      Transfer? transfer,
+      Object? failure,
+      MediaStream? localStream,
+      MediaStream? remoteStream});
+
+  @override
+  $TransferCopyWith<$Res>? get transfer;
+}
+
+/// @nodoc
+class __$ActiveCallCopyWithImpl<$Res> implements _$ActiveCallCopyWith<$Res> {
+  __$ActiveCallCopyWithImpl(this._self, this._then);
+
+  final _ActiveCall _self;
+  final $Res Function(_ActiveCall) _then;
+
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? direction = null,
+    Object? line = freezed,
+    Object? callId = null,
+    Object? handle = null,
+    Object? createdTime = null,
+    Object? video = null,
+    Object? processingStatus = null,
+    Object? frontCamera = freezed,
+    Object? held = null,
+    Object? muted = null,
+    Object? updating = null,
+    Object? incomingOffer = freezed,
+    Object? displayName = freezed,
+    Object? fromReferId = freezed,
+    Object? fromReplaces = freezed,
+    Object? fromNumber = freezed,
+    Object? acceptedTime = freezed,
+    Object? hungUpTime = freezed,
+    Object? transfer = freezed,
+    Object? failure = freezed,
+    Object? localStream = freezed,
+    Object? remoteStream = freezed,
+  }) {
+    return _then(_ActiveCall(
+      direction: null == direction
+          ? _self.direction
+          : direction // ignore: cast_nullable_to_non_nullable
+              as CallDirection,
+      line: freezed == line
+          ? _self.line
+          : line // ignore: cast_nullable_to_non_nullable
+              as int?,
+      callId: null == callId
+          ? _self.callId
+          : callId // ignore: cast_nullable_to_non_nullable
+              as String,
+      handle: null == handle
+          ? _self.handle
+          : handle // ignore: cast_nullable_to_non_nullable
+              as CallkeepHandle,
+      createdTime: null == createdTime
+          ? _self.createdTime
+          : createdTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      video: null == video
+          ? _self.video
+          : video // ignore: cast_nullable_to_non_nullable
+              as bool,
+      processingStatus: null == processingStatus
+          ? _self.processingStatus
+          : processingStatus // ignore: cast_nullable_to_non_nullable
+              as CallProcessingStatus,
+      frontCamera: freezed == frontCamera
+          ? _self.frontCamera
+          : frontCamera // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      held: null == held
+          ? _self.held
+          : held // ignore: cast_nullable_to_non_nullable
+              as bool,
+      muted: null == muted
+          ? _self.muted
+          : muted // ignore: cast_nullable_to_non_nullable
+              as bool,
+      updating: null == updating
+          ? _self.updating
+          : updating // ignore: cast_nullable_to_non_nullable
+              as bool,
+      incomingOffer: freezed == incomingOffer
+          ? _self.incomingOffer
+          : incomingOffer // ignore: cast_nullable_to_non_nullable
+              as JsepValue?,
+      displayName: freezed == displayName
+          ? _self.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fromReferId: freezed == fromReferId
+          ? _self.fromReferId
+          : fromReferId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fromReplaces: freezed == fromReplaces
+          ? _self.fromReplaces
+          : fromReplaces // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fromNumber: freezed == fromNumber
+          ? _self.fromNumber
+          : fromNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      acceptedTime: freezed == acceptedTime
+          ? _self.acceptedTime
+          : acceptedTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      hungUpTime: freezed == hungUpTime
+          ? _self.hungUpTime
+          : hungUpTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      transfer: freezed == transfer
+          ? _self.transfer
+          : transfer // ignore: cast_nullable_to_non_nullable
+              as Transfer?,
+      failure: freezed == failure ? _self.failure : failure,
+      localStream: freezed == localStream
+          ? _self.localStream
+          : localStream // ignore: cast_nullable_to_non_nullable
+              as MediaStream?,
+      remoteStream: freezed == remoteStream
+          ? _self.remoteStream
+          : remoteStream // ignore: cast_nullable_to_non_nullable
+              as MediaStream?,
+    ));
+  }
+
+  /// Create a copy of ActiveCall
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransferCopyWith<$Res>? get transfer {
+    if (_self.transfer == null) {
+      return null;
+    }
+
+    return $TransferCopyWith<$Res>(_self.transfer!, (value) {
+      return _then(_self.copyWith(transfer: value));
+    });
+  }
+}
+
+/// @nodoc
+mixin _$CallAudioDevice implements DiagnosticableTreeMixin {
+  CallAudioDeviceType get type;
+  String? get id;
+  String? get name;
+
+  /// Create a copy of CallAudioDevice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $CallAudioDeviceCopyWith<CallAudioDevice> get copyWith =>
+      _$CallAudioDeviceCopyWithImpl<CallAudioDevice>(
+          this as CallAudioDevice, _$identity);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CallAudioDevice'))
       ..add(DiagnosticsProperty('type', type))
@@ -15598,7 +7626,7 @@ class _$CallAudioDeviceImpl extends _CallAudioDevice
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CallAudioDeviceImpl &&
+            other is CallAudioDevice &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name));
@@ -15607,34 +7635,306 @@ class _$CallAudioDeviceImpl extends _CallAudioDevice
   @override
   int get hashCode => Object.hash(runtimeType, type, id, name);
 
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallAudioDevice(type: $type, id: $id, name: $name)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $CallAudioDeviceCopyWith<$Res> {
+  factory $CallAudioDeviceCopyWith(
+          CallAudioDevice value, $Res Function(CallAudioDevice) _then) =
+      _$CallAudioDeviceCopyWithImpl;
+  @useResult
+  $Res call({CallAudioDeviceType type, String? id, String? name});
+}
+
+/// @nodoc
+class _$CallAudioDeviceCopyWithImpl<$Res>
+    implements $CallAudioDeviceCopyWith<$Res> {
+  _$CallAudioDeviceCopyWithImpl(this._self, this._then);
+
+  final CallAudioDevice _self;
+  final $Res Function(CallAudioDevice) _then;
+
   /// Create a copy of CallAudioDevice
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? type = null,
+    Object? id = freezed,
+    Object? name = freezed,
+  }) {
+    return _then(_self.copyWith(
+      type: null == type
+          ? _self.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CallAudioDeviceType,
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [CallAudioDevice].
+extension CallAudioDevicePatterns on CallAudioDevice {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_CallAudioDevice value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallAudioDevice() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_CallAudioDevice value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallAudioDevice():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_CallAudioDevice value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallAudioDevice() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(CallAudioDeviceType type, String? id, String? name)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _CallAudioDevice() when $default != null:
+        return $default(_that.type, _that.id, _that.name);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(CallAudioDeviceType type, String? id, String? name)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallAudioDevice():
+        return $default(_that.type, _that.id, _that.name);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(CallAudioDeviceType type, String? id, String? name)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _CallAudioDevice() when $default != null:
+        return $default(_that.type, _that.id, _that.name);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class _CallAudioDevice extends CallAudioDevice with DiagnosticableTreeMixin {
+  _CallAudioDevice({required this.type, this.id, this.name}) : super._();
+
+  @override
+  final CallAudioDeviceType type;
+  @override
+  final String? id;
+  @override
+  final String? name;
+
+  /// Create a copy of CallAudioDevice
+  /// with the given fields replaced by the non-null parameter values.
+  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$CallAudioDeviceCopyWith<_CallAudioDevice> get copyWith =>
+      __$CallAudioDeviceCopyWithImpl<_CallAudioDevice>(this, _$identity);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('type', 'CallAudioDevice'))
+      ..add(DiagnosticsProperty('type', type))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('name', name));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _CallAudioDevice &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, type, id, name);
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'CallAudioDevice(type: $type, id: $id, name: $name)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$CallAudioDeviceCopyWith<$Res>
+    implements $CallAudioDeviceCopyWith<$Res> {
+  factory _$CallAudioDeviceCopyWith(
+          _CallAudioDevice value, $Res Function(_CallAudioDevice) _then) =
+      __$CallAudioDeviceCopyWithImpl;
+  @override
+  @useResult
+  $Res call({CallAudioDeviceType type, String? id, String? name});
+}
+
+/// @nodoc
+class __$CallAudioDeviceCopyWithImpl<$Res>
+    implements _$CallAudioDeviceCopyWith<$Res> {
+  __$CallAudioDeviceCopyWithImpl(this._self, this._then);
+
+  final _CallAudioDevice _self;
+  final $Res Function(_CallAudioDevice) _then;
+
+  /// Create a copy of CallAudioDevice
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  _$$CallAudioDeviceImplCopyWith<_$CallAudioDeviceImpl> get copyWith =>
-      __$$CallAudioDeviceImplCopyWithImpl<_$CallAudioDeviceImpl>(
-          this, _$identity);
+  $Res call({
+    Object? type = null,
+    Object? id = freezed,
+    Object? name = freezed,
+  }) {
+    return _then(_CallAudioDevice(
+      type: null == type
+          ? _self.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CallAudioDeviceType,
+      id: freezed == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
 }
 
-abstract class _CallAudioDevice extends CallAudioDevice {
-  factory _CallAudioDevice(
-      {required final CallAudioDeviceType type,
-      final String? id,
-      final String? name}) = _$CallAudioDeviceImpl;
-  _CallAudioDevice._() : super._();
-
-  @override
-  CallAudioDeviceType get type;
-  @override
-  String? get id;
-  @override
-  String? get name;
-
-  /// Create a copy of CallAudioDevice
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CallAudioDeviceImplCopyWith<_$CallAudioDeviceImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

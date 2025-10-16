@@ -10,7 +10,7 @@ part 'raw_http_request.g.dart';
 /// This model is intended for use cases where the request must be defined
 /// independently of internal API clients or repositories.
 @freezed
-class RawHttpRequest with _$RawHttpRequest {
+abstract class RawHttpRequest with _$RawHttpRequest {
   const factory RawHttpRequest({
     required String method,
     required String url,

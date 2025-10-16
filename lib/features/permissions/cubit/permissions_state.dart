@@ -1,7 +1,7 @@
 part of 'permissions_cubit.dart';
 
 @freezed
-class PermissionsState with _$PermissionsState {
+abstract class PermissionsState with _$PermissionsState {
   const PermissionsState._();
 
   const factory PermissionsState({
@@ -23,7 +23,7 @@ class PermissionsState with _$PermissionsState {
 }
 
 @freezed
-class ManufacturerTip with _$ManufacturerTip {
+abstract class ManufacturerTip with _$ManufacturerTip {
   const factory ManufacturerTip({
     required Manufacturer manufacturer,
     @Default(false) bool shown,

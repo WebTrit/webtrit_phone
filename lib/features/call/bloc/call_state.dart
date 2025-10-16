@@ -1,7 +1,7 @@
 part of 'call_bloc.dart';
 
 @freezed
-class CallState with _$CallState {
+abstract class CallState with _$CallState {
   const CallState._();
 
   const factory CallState({
@@ -97,7 +97,7 @@ class CallState with _$CallState {
 }
 
 @freezed
-class ActiveCall with _$ActiveCall implements CallEntry {
+abstract class ActiveCall with _$ActiveCall implements CallEntry {
   ActiveCall._();
 
   factory ActiveCall({
@@ -155,7 +155,7 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
 enum CallAudioDeviceType { earpiece, speaker, bluetooth, wiredHeadset, streaming, unknown }
 
 @freezed
-class CallAudioDevice with _$CallAudioDevice {
+abstract class CallAudioDevice with _$CallAudioDevice {
   const CallAudioDevice._();
 
   factory CallAudioDevice({

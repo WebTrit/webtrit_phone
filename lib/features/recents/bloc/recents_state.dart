@@ -1,7 +1,7 @@
 part of 'recents_bloc.dart';
 
 @freezed
-class RecentsState with _$RecentsState {
+abstract class RecentsState with _$RecentsState {
   const RecentsState._();
 
   const factory RecentsState({

@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,326 +9,1059 @@ part of 'app_bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$SessionUpdated {
-  Session? get session => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$_SessionUpdatedImpl implements __SessionUpdated {
-  const _$_SessionUpdatedImpl(this.session);
-
-  @override
-  final Session? session;
-
-  @override
-  String toString() {
-    return '_SessionUpdated(session: $session)';
-  }
+  Session? get session;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SessionUpdatedImpl &&
+            other is _SessionUpdated &&
             (identical(other.session, session) || other.session == session));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, session);
-}
-
-abstract class __SessionUpdated implements _SessionUpdated {
-  const factory __SessionUpdated(final Session? session) =
-      _$_SessionUpdatedImpl;
 
   @override
-  Session? get session;
+  String toString() {
+    return '_SessionUpdated(session: $session)';
+  }
+}
+
+/// Adds pattern-matching-related methods to [_SessionUpdated].
+extension _SessionUpdatedPatterns on _SessionUpdated {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(__SessionUpdated value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __SessionUpdated() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(__SessionUpdated value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __SessionUpdated():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(__SessionUpdated value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __SessionUpdated() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(Session? session)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case __SessionUpdated() when $default != null:
+        return $default(_that.session);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(Session? session) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __SessionUpdated():
+        return $default(_that.session);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(Session? session)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case __SessionUpdated() when $default != null:
+        return $default(_that.session);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class __SessionUpdated implements _SessionUpdated {
+  const __SessionUpdated(this.session);
+
+  @override
+  final Session? session;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is __SessionUpdated &&
+            (identical(other.session, session) || other.session == session));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, session);
+
+  @override
+  String toString() {
+    return '_SessionUpdated(session: $session)';
+  }
 }
 
 /// @nodoc
 mixin _$AppThemeSettingsChanged {
-  ThemeSettings get value => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$AppThemeSettingsChangedImpl implements _AppThemeSettingsChanged {
-  const _$AppThemeSettingsChangedImpl(this.value);
+  ThemeSettings get value;
 
   @override
-  final ThemeSettings value;
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AppThemeSettingsChanged &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, value);
 
   @override
   String toString() {
     return 'AppThemeSettingsChanged(value: $value)';
   }
+}
+
+/// Adds pattern-matching-related methods to [AppThemeSettingsChanged].
+extension AppThemeSettingsChangedPatterns on AppThemeSettingsChanged {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_AppThemeSettingsChanged value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeSettingsChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_AppThemeSettingsChanged value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeSettingsChanged():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_AppThemeSettingsChanged value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeSettingsChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(ThemeSettings value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeSettingsChanged() when $default != null:
+        return $default(_that.value);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(ThemeSettings value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeSettingsChanged():
+        return $default(_that.value);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(ThemeSettings value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeSettingsChanged() when $default != null:
+        return $default(_that.value);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class _AppThemeSettingsChanged implements AppThemeSettingsChanged {
+  const _AppThemeSettingsChanged(this.value);
+
+  @override
+  final ThemeSettings value;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppThemeSettingsChangedImpl &&
+            other is _AppThemeSettingsChanged &&
             (identical(other.value, value) || other.value == value));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, value);
-}
-
-abstract class _AppThemeSettingsChanged implements AppThemeSettingsChanged {
-  const factory _AppThemeSettingsChanged(final ThemeSettings value) =
-      _$AppThemeSettingsChangedImpl;
 
   @override
-  ThemeSettings get value;
+  String toString() {
+    return 'AppThemeSettingsChanged(value: $value)';
+  }
 }
 
 /// @nodoc
 mixin _$AppThemeModeChanged {
-  ThemeMode get value => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$AppThemeModeChangedImpl implements _AppThemeModeChanged {
-  const _$AppThemeModeChangedImpl(this.value);
+  ThemeMode get value;
 
   @override
-  final ThemeMode value;
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AppThemeModeChanged &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, value);
 
   @override
   String toString() {
     return 'AppThemeModeChanged(value: $value)';
   }
+}
+
+/// Adds pattern-matching-related methods to [AppThemeModeChanged].
+extension AppThemeModeChangedPatterns on AppThemeModeChanged {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_AppThemeModeChanged value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeModeChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_AppThemeModeChanged value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeModeChanged():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_AppThemeModeChanged value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeModeChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(ThemeMode value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeModeChanged() when $default != null:
+        return $default(_that.value);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(ThemeMode value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeModeChanged():
+        return $default(_that.value);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(ThemeMode value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppThemeModeChanged() when $default != null:
+        return $default(_that.value);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class _AppThemeModeChanged implements AppThemeModeChanged {
+  const _AppThemeModeChanged(this.value);
+
+  @override
+  final ThemeMode value;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppThemeModeChangedImpl &&
+            other is _AppThemeModeChanged &&
             (identical(other.value, value) || other.value == value));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, value);
-}
-
-abstract class _AppThemeModeChanged implements AppThemeModeChanged {
-  const factory _AppThemeModeChanged(final ThemeMode value) =
-      _$AppThemeModeChangedImpl;
 
   @override
-  ThemeMode get value;
+  String toString() {
+    return 'AppThemeModeChanged(value: $value)';
+  }
 }
 
 /// @nodoc
 mixin _$AppLocaleChanged {
-  Locale get value => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$AppLocaleChangedImpl implements _AppLocaleChanged {
-  const _$AppLocaleChangedImpl(this.value);
+  Locale get value;
 
   @override
-  final Locale value;
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AppLocaleChanged &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, value);
 
   @override
   String toString() {
     return 'AppLocaleChanged(value: $value)';
   }
+}
+
+/// Adds pattern-matching-related methods to [AppLocaleChanged].
+extension AppLocaleChangedPatterns on AppLocaleChanged {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_AppLocaleChanged value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _AppLocaleChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_AppLocaleChanged value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppLocaleChanged():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_AppLocaleChanged value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppLocaleChanged() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(Locale value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _AppLocaleChanged() when $default != null:
+        return $default(_that.value);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(Locale value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppLocaleChanged():
+        return $default(_that.value);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(Locale value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppLocaleChanged() when $default != null:
+        return $default(_that.value);
+      case _:
+        return null;
+    }
+  }
+}
+
+/// @nodoc
+
+class _AppLocaleChanged implements AppLocaleChanged {
+  const _AppLocaleChanged(this.value);
+
+  @override
+  final Locale value;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppLocaleChangedImpl &&
+            other is _AppLocaleChanged &&
             (identical(other.value, value) || other.value == value));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, value);
-}
-
-abstract class _AppLocaleChanged implements AppLocaleChanged {
-  const factory _AppLocaleChanged(final Locale value) = _$AppLocaleChangedImpl;
 
   @override
-  Locale get value;
+  String toString() {
+    return 'AppLocaleChanged(value: $value)';
+  }
 }
 
 /// @nodoc
 mixin _$AppAgreementAccepted {
-  AgreementStatus get status => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(AgreementStatus status) updateUserAgreement,
-    required TResult Function(AgreementStatus status) updateContactsAgreement,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(AgreementStatus status)? updateUserAgreement,
-    TResult? Function(AgreementStatus status)? updateContactsAgreement,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(AgreementStatus status)? updateUserAgreement,
-    TResult Function(AgreementStatus status)? updateContactsAgreement,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_UserAppAgreementUpdate value)
-        updateUserAgreement,
-    required TResult Function(_ContactsAppAgreementUpdate value)
-        updateContactsAgreement,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_UserAppAgreementUpdate value)? updateUserAgreement,
-    TResult? Function(_ContactsAppAgreementUpdate value)?
-        updateContactsAgreement,
-  }) =>
-      throw _privateConstructorUsedError;
+  AgreementStatus get status;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AppAgreementAccepted &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, status);
+
+  @override
+  String toString() {
+    return 'AppAgreementAccepted(status: $status)';
+  }
+}
+
+/// Adds pattern-matching-related methods to [AppAgreementAccepted].
+extension AppAgreementAcceptedPatterns on AppAgreementAccepted {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_UserAppAgreementUpdate value)? updateUserAgreement,
     TResult Function(_ContactsAppAgreementUpdate value)?
         updateContactsAgreement,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _UserAppAgreementUpdate() when updateUserAgreement != null:
+        return updateUserAgreement(_that);
+      case _ContactsAppAgreementUpdate() when updateContactsAgreement != null:
+        return updateContactsAgreement(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_UserAppAgreementUpdate value)
+        updateUserAgreement,
+    required TResult Function(_ContactsAppAgreementUpdate value)
+        updateContactsAgreement,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _UserAppAgreementUpdate():
+        return updateUserAgreement(_that);
+      case _ContactsAppAgreementUpdate():
+        return updateContactsAgreement(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_UserAppAgreementUpdate value)? updateUserAgreement,
+    TResult? Function(_ContactsAppAgreementUpdate value)?
+        updateContactsAgreement,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _UserAppAgreementUpdate() when updateUserAgreement != null:
+        return updateUserAgreement(_that);
+      case _ContactsAppAgreementUpdate() when updateContactsAgreement != null:
+        return updateContactsAgreement(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(AgreementStatus status)? updateUserAgreement,
+    TResult Function(AgreementStatus status)? updateContactsAgreement,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _UserAppAgreementUpdate() when updateUserAgreement != null:
+        return updateUserAgreement(_that.status);
+      case _ContactsAppAgreementUpdate() when updateContactsAgreement != null:
+        return updateContactsAgreement(_that.status);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(AgreementStatus status) updateUserAgreement,
+    required TResult Function(AgreementStatus status) updateContactsAgreement,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _UserAppAgreementUpdate():
+        return updateUserAgreement(_that.status);
+      case _ContactsAppAgreementUpdate():
+        return updateContactsAgreement(_that.status);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(AgreementStatus status)? updateUserAgreement,
+    TResult? Function(AgreementStatus status)? updateContactsAgreement,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _UserAppAgreementUpdate() when updateUserAgreement != null:
+        return updateUserAgreement(_that.status);
+      case _ContactsAppAgreementUpdate() when updateContactsAgreement != null:
+        return updateContactsAgreement(_that.status);
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
 
-class _$UserAppAgreementUpdateImpl implements _UserAppAgreementUpdate {
-  const _$UserAppAgreementUpdateImpl(this.status);
+class _UserAppAgreementUpdate implements AppAgreementAccepted {
+  const _UserAppAgreementUpdate(this.status);
 
   @override
   final AgreementStatus status;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _UserAppAgreementUpdate &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, status);
 
   @override
   String toString() {
     return 'AppAgreementAccepted.updateUserAgreement(status: $status)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UserAppAgreementUpdateImpl &&
-            (identical(other.status, status) || other.status == status));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, status);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(AgreementStatus status) updateUserAgreement,
-    required TResult Function(AgreementStatus status) updateContactsAgreement,
-  }) {
-    return updateUserAgreement(status);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(AgreementStatus status)? updateUserAgreement,
-    TResult? Function(AgreementStatus status)? updateContactsAgreement,
-  }) {
-    return updateUserAgreement?.call(status);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(AgreementStatus status)? updateUserAgreement,
-    TResult Function(AgreementStatus status)? updateContactsAgreement,
-    required TResult orElse(),
-  }) {
-    if (updateUserAgreement != null) {
-      return updateUserAgreement(status);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_UserAppAgreementUpdate value)
-        updateUserAgreement,
-    required TResult Function(_ContactsAppAgreementUpdate value)
-        updateContactsAgreement,
-  }) {
-    return updateUserAgreement(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_UserAppAgreementUpdate value)? updateUserAgreement,
-    TResult? Function(_ContactsAppAgreementUpdate value)?
-        updateContactsAgreement,
-  }) {
-    return updateUserAgreement?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_UserAppAgreementUpdate value)? updateUserAgreement,
-    TResult Function(_ContactsAppAgreementUpdate value)?
-        updateContactsAgreement,
-    required TResult orElse(),
-  }) {
-    if (updateUserAgreement != null) {
-      return updateUserAgreement(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _UserAppAgreementUpdate implements AppAgreementAccepted {
-  const factory _UserAppAgreementUpdate(final AgreementStatus status) =
-      _$UserAppAgreementUpdateImpl;
-
-  @override
-  AgreementStatus get status;
 }
 
 /// @nodoc
 
-class _$ContactsAppAgreementUpdateImpl implements _ContactsAppAgreementUpdate {
-  const _$ContactsAppAgreementUpdateImpl(this.status);
+class _ContactsAppAgreementUpdate implements AppAgreementAccepted {
+  const _ContactsAppAgreementUpdate(this.status);
 
   @override
   final AgreementStatus status;
 
   @override
-  String toString() {
-    return 'AppAgreementAccepted.updateContactsAgreement(status: $status)';
-  }
-
-  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ContactsAppAgreementUpdateImpl &&
+            other is _ContactsAppAgreementUpdate &&
             (identical(other.status, status) || other.status == status));
   }
 
@@ -336,101 +1069,59 @@ class _$ContactsAppAgreementUpdateImpl implements _ContactsAppAgreementUpdate {
   int get hashCode => Object.hash(runtimeType, status);
 
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(AgreementStatus status) updateUserAgreement,
-    required TResult Function(AgreementStatus status) updateContactsAgreement,
-  }) {
-    return updateContactsAgreement(status);
+  String toString() {
+    return 'AppAgreementAccepted.updateContactsAgreement(status: $status)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(AgreementStatus status)? updateUserAgreement,
-    TResult? Function(AgreementStatus status)? updateContactsAgreement,
-  }) {
-    return updateContactsAgreement?.call(status);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(AgreementStatus status)? updateUserAgreement,
-    TResult Function(AgreementStatus status)? updateContactsAgreement,
-    required TResult orElse(),
-  }) {
-    if (updateContactsAgreement != null) {
-      return updateContactsAgreement(status);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_UserAppAgreementUpdate value)
-        updateUserAgreement,
-    required TResult Function(_ContactsAppAgreementUpdate value)
-        updateContactsAgreement,
-  }) {
-    return updateContactsAgreement(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_UserAppAgreementUpdate value)? updateUserAgreement,
-    TResult? Function(_ContactsAppAgreementUpdate value)?
-        updateContactsAgreement,
-  }) {
-    return updateContactsAgreement?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_UserAppAgreementUpdate value)? updateUserAgreement,
-    TResult Function(_ContactsAppAgreementUpdate value)?
-        updateContactsAgreement,
-    required TResult orElse(),
-  }) {
-    if (updateContactsAgreement != null) {
-      return updateContactsAgreement(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _ContactsAppAgreementUpdate implements AppAgreementAccepted {
-  const factory _ContactsAppAgreementUpdate(final AgreementStatus status) =
-      _$ContactsAppAgreementUpdateImpl;
-
-  @override
-  AgreementStatus get status;
 }
 
 /// @nodoc
 mixin _$AppState {
-  Session get session => throw _privateConstructorUsedError;
-  ThemeSettings get themeSettings => throw _privateConstructorUsedError;
-  ThemeMode get themeMode => throw _privateConstructorUsedError;
-  Locale get locale => throw _privateConstructorUsedError;
-  AgreementStatus get userAgreementStatus => throw _privateConstructorUsedError;
-  AgreementStatus get contactsAgreementStatus =>
-      throw _privateConstructorUsedError;
+  Session get session;
+  ThemeSettings get themeSettings;
+  ThemeMode get themeMode;
+  Locale get locale;
+  AgreementStatus get userAgreementStatus;
+  AgreementStatus get contactsAgreementStatus;
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $AppStateCopyWith<AppState> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$AppStateCopyWithImpl<AppState>(this as AppState, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AppState &&
+            (identical(other.session, session) || other.session == session) &&
+            (identical(other.themeSettings, themeSettings) ||
+                other.themeSettings == themeSettings) &&
+            (identical(other.themeMode, themeMode) ||
+                other.themeMode == themeMode) &&
+            (identical(other.locale, locale) || other.locale == locale) &&
+            (identical(other.userAgreementStatus, userAgreementStatus) ||
+                other.userAgreementStatus == userAgreementStatus) &&
+            (identical(
+                    other.contactsAgreementStatus, contactsAgreementStatus) ||
+                other.contactsAgreementStatus == contactsAgreementStatus));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, session, themeSettings,
+      themeMode, locale, userAgreementStatus, contactsAgreementStatus);
+
+  @override
+  String toString() {
+    return 'AppState(session: $session, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementStatus: $userAgreementStatus, contactsAgreementStatus: $contactsAgreementStatus)';
+  }
 }
 
 /// @nodoc
-abstract class $AppStateCopyWith<$Res> {
-  factory $AppStateCopyWith(AppState value, $Res Function(AppState) then) =
-      _$AppStateCopyWithImpl<$Res, AppState>;
+abstract mixin class $AppStateCopyWith<$Res> {
+  factory $AppStateCopyWith(AppState value, $Res Function(AppState) _then) =
+      _$AppStateCopyWithImpl;
   @useResult
   $Res call(
       {Session session,
@@ -445,14 +1136,11 @@ abstract class $AppStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
-    implements $AppStateCopyWith<$Res> {
-  _$AppStateCopyWithImpl(this._value, this._then);
+class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
+  _$AppStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final AppState _self;
+  final $Res Function(AppState) _then;
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
@@ -466,32 +1154,32 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? userAgreementStatus = null,
     Object? contactsAgreementStatus = null,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       session: null == session
-          ? _value.session
+          ? _self.session
           : session // ignore: cast_nullable_to_non_nullable
               as Session,
       themeSettings: null == themeSettings
-          ? _value.themeSettings
+          ? _self.themeSettings
           : themeSettings // ignore: cast_nullable_to_non_nullable
               as ThemeSettings,
       themeMode: null == themeMode
-          ? _value.themeMode
+          ? _self.themeMode
           : themeMode // ignore: cast_nullable_to_non_nullable
               as ThemeMode,
       locale: null == locale
-          ? _value.locale
+          ? _self.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale,
       userAgreementStatus: null == userAgreementStatus
-          ? _value.userAgreementStatus
+          ? _self.userAgreementStatus
           : userAgreementStatus // ignore: cast_nullable_to_non_nullable
               as AgreementStatus,
       contactsAgreementStatus: null == contactsAgreementStatus
-          ? _value.contactsAgreementStatus
+          ? _self.contactsAgreementStatus
           : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
               as AgreementStatus,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of AppState
@@ -499,8 +1187,8 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   @override
   @pragma('vm:prefer-inline')
   $SessionCopyWith<$Res> get session {
-    return $SessionCopyWith<$Res>(_value.session, (value) {
-      return _then(_value.copyWith(session: value) as $Val);
+    return $SessionCopyWith<$Res>(_self.session, (value) {
+      return _then(_self.copyWith(session: value));
     });
   }
 
@@ -509,87 +1197,212 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   @override
   @pragma('vm:prefer-inline')
   $ThemeSettingsCopyWith<$Res> get themeSettings {
-    return $ThemeSettingsCopyWith<$Res>(_value.themeSettings, (value) {
-      return _then(_value.copyWith(themeSettings: value) as $Val);
+    return $ThemeSettingsCopyWith<$Res>(_self.themeSettings, (value) {
+      return _then(_self.copyWith(themeSettings: value));
     });
   }
 }
 
-/// @nodoc
-abstract class _$$AppStateImplCopyWith<$Res>
-    implements $AppStateCopyWith<$Res> {
-  factory _$$AppStateImplCopyWith(
-          _$AppStateImpl value, $Res Function(_$AppStateImpl) then) =
-      __$$AppStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {Session session,
-      ThemeSettings themeSettings,
-      ThemeMode themeMode,
-      Locale locale,
-      AgreementStatus userAgreementStatus,
-      AgreementStatus contactsAgreementStatus});
+/// Adds pattern-matching-related methods to [AppState].
+extension AppStatePatterns on AppState {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
-  @override
-  $SessionCopyWith<$Res> get session;
-  @override
-  $ThemeSettingsCopyWith<$Res> get themeSettings;
-}
-
-/// @nodoc
-class __$$AppStateImplCopyWithImpl<$Res>
-    extends _$AppStateCopyWithImpl<$Res, _$AppStateImpl>
-    implements _$$AppStateImplCopyWith<$Res> {
-  __$$AppStateImplCopyWithImpl(
-      _$AppStateImpl _value, $Res Function(_$AppStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of AppState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? session = null,
-    Object? themeSettings = null,
-    Object? themeMode = null,
-    Object? locale = null,
-    Object? userAgreementStatus = null,
-    Object? contactsAgreementStatus = null,
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_AppState value)? $default, {
+    required TResult orElse(),
   }) {
-    return _then(_$AppStateImpl(
-      session: null == session
-          ? _value.session
-          : session // ignore: cast_nullable_to_non_nullable
-              as Session,
-      themeSettings: null == themeSettings
-          ? _value.themeSettings
-          : themeSettings // ignore: cast_nullable_to_non_nullable
-              as ThemeSettings,
-      themeMode: null == themeMode
-          ? _value.themeMode
-          : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode,
-      locale: null == locale
-          ? _value.locale
-          : locale // ignore: cast_nullable_to_non_nullable
-              as Locale,
-      userAgreementStatus: null == userAgreementStatus
-          ? _value.userAgreementStatus
-          : userAgreementStatus // ignore: cast_nullable_to_non_nullable
-              as AgreementStatus,
-      contactsAgreementStatus: null == contactsAgreementStatus
-          ? _value.contactsAgreementStatus
-          : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
-              as AgreementStatus,
-    ));
+    final _that = this;
+    switch (_that) {
+      case _AppState() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_AppState value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppState():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_AppState value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppState() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            Session session,
+            ThemeSettings themeSettings,
+            ThemeMode themeMode,
+            Locale locale,
+            AgreementStatus userAgreementStatus,
+            AgreementStatus contactsAgreementStatus)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _AppState() when $default != null:
+        return $default(
+            _that.session,
+            _that.themeSettings,
+            _that.themeMode,
+            _that.locale,
+            _that.userAgreementStatus,
+            _that.contactsAgreementStatus);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            Session session,
+            ThemeSettings themeSettings,
+            ThemeMode themeMode,
+            Locale locale,
+            AgreementStatus userAgreementStatus,
+            AgreementStatus contactsAgreementStatus)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppState():
+        return $default(
+            _that.session,
+            _that.themeSettings,
+            _that.themeMode,
+            _that.locale,
+            _that.userAgreementStatus,
+            _that.contactsAgreementStatus);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            Session session,
+            ThemeSettings themeSettings,
+            ThemeMode themeMode,
+            Locale locale,
+            AgreementStatus userAgreementStatus,
+            AgreementStatus contactsAgreementStatus)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _AppState() when $default != null:
+        return $default(
+            _that.session,
+            _that.themeSettings,
+            _that.themeMode,
+            _that.locale,
+            _that.userAgreementStatus,
+            _that.contactsAgreementStatus);
+      case _:
+        return null;
+    }
   }
 }
 
 /// @nodoc
 
-class _$AppStateImpl extends _AppState {
-  const _$AppStateImpl(
+class _AppState extends AppState {
+  const _AppState(
       {this.session = const Session(),
       required this.themeSettings,
       required this.themeMode,
@@ -612,16 +1425,19 @@ class _$AppStateImpl extends _AppState {
   @override
   final AgreementStatus contactsAgreementStatus;
 
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'AppState(session: $session, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementStatus: $userAgreementStatus, contactsAgreementStatus: $contactsAgreementStatus)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$AppStateCopyWith<_AppState> get copyWith =>
+      __$AppStateCopyWithImpl<_AppState>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppStateImpl &&
+            other is _AppState &&
             (identical(other.session, session) || other.session == session) &&
             (identical(other.themeSettings, themeSettings) ||
                 other.themeSettings == themeSettings) &&
@@ -639,42 +1455,99 @@ class _$AppStateImpl extends _AppState {
   int get hashCode => Object.hash(runtimeType, session, themeSettings,
       themeMode, locale, userAgreementStatus, contactsAgreementStatus);
 
+  @override
+  String toString() {
+    return 'AppState(session: $session, themeSettings: $themeSettings, themeMode: $themeMode, locale: $locale, userAgreementStatus: $userAgreementStatus, contactsAgreementStatus: $contactsAgreementStatus)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$AppStateCopyWith<$Res>
+    implements $AppStateCopyWith<$Res> {
+  factory _$AppStateCopyWith(_AppState value, $Res Function(_AppState) _then) =
+      __$AppStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {Session session,
+      ThemeSettings themeSettings,
+      ThemeMode themeMode,
+      Locale locale,
+      AgreementStatus userAgreementStatus,
+      AgreementStatus contactsAgreementStatus});
+
+  @override
+  $SessionCopyWith<$Res> get session;
+  @override
+  $ThemeSettingsCopyWith<$Res> get themeSettings;
+}
+
+/// @nodoc
+class __$AppStateCopyWithImpl<$Res> implements _$AppStateCopyWith<$Res> {
+  __$AppStateCopyWithImpl(this._self, this._then);
+
+  final _AppState _self;
+  final $Res Function(_AppState) _then;
+
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>
-      __$$AppStateImplCopyWithImpl<_$AppStateImpl>(this, _$identity);
-}
-
-abstract class _AppState extends AppState {
-  const factory _AppState(
-      {final Session session,
-      required final ThemeSettings themeSettings,
-      required final ThemeMode themeMode,
-      required final Locale locale,
-      required final AgreementStatus userAgreementStatus,
-      required final AgreementStatus contactsAgreementStatus}) = _$AppStateImpl;
-  const _AppState._() : super._();
-
-  @override
-  Session get session;
-  @override
-  ThemeSettings get themeSettings;
-  @override
-  ThemeMode get themeMode;
-  @override
-  Locale get locale;
-  @override
-  AgreementStatus get userAgreementStatus;
-  @override
-  AgreementStatus get contactsAgreementStatus;
+  $Res call({
+    Object? session = null,
+    Object? themeSettings = null,
+    Object? themeMode = null,
+    Object? locale = null,
+    Object? userAgreementStatus = null,
+    Object? contactsAgreementStatus = null,
+  }) {
+    return _then(_AppState(
+      session: null == session
+          ? _self.session
+          : session // ignore: cast_nullable_to_non_nullable
+              as Session,
+      themeSettings: null == themeSettings
+          ? _self.themeSettings
+          : themeSettings // ignore: cast_nullable_to_non_nullable
+              as ThemeSettings,
+      themeMode: null == themeMode
+          ? _self.themeMode
+          : themeMode // ignore: cast_nullable_to_non_nullable
+              as ThemeMode,
+      locale: null == locale
+          ? _self.locale
+          : locale // ignore: cast_nullable_to_non_nullable
+              as Locale,
+      userAgreementStatus: null == userAgreementStatus
+          ? _self.userAgreementStatus
+          : userAgreementStatus // ignore: cast_nullable_to_non_nullable
+              as AgreementStatus,
+      contactsAgreementStatus: null == contactsAgreementStatus
+          ? _self.contactsAgreementStatus
+          : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
+              as AgreementStatus,
+    ));
+  }
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $SessionCopyWith<$Res> get session {
+    return $SessionCopyWith<$Res>(_self.session, (value) {
+      return _then(_self.copyWith(session: value));
+    });
+  }
+
+  /// Create a copy of AppState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ThemeSettingsCopyWith<$Res> get themeSettings {
+    return $ThemeSettingsCopyWith<$Res>(_self.themeSettings, (value) {
+      return _then(_self.copyWith(themeSettings: value));
+    });
+  }
 }
+
+// dart format on

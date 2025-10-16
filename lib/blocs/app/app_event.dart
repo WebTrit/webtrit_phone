@@ -5,27 +5,27 @@ abstract class AppEvent {
 }
 
 @Freezed(copyWith: false)
-class _SessionUpdated with _$SessionUpdated implements AppEvent {
+abstract class _SessionUpdated with _$SessionUpdated implements AppEvent {
   const factory _SessionUpdated(Session? session) = __SessionUpdated;
 }
 
 @Freezed(copyWith: false)
-class AppThemeSettingsChanged with _$AppThemeSettingsChanged implements AppEvent {
+abstract class AppThemeSettingsChanged with _$AppThemeSettingsChanged implements AppEvent {
   const factory AppThemeSettingsChanged(ThemeSettings value) = _AppThemeSettingsChanged;
 }
 
 @Freezed(copyWith: false)
-class AppThemeModeChanged with _$AppThemeModeChanged implements AppEvent {
+abstract class AppThemeModeChanged with _$AppThemeModeChanged implements AppEvent {
   const factory AppThemeModeChanged(ThemeMode value) = _AppThemeModeChanged;
 }
 
 @Freezed(copyWith: false)
-class AppLocaleChanged with _$AppLocaleChanged implements AppEvent {
+abstract class AppLocaleChanged with _$AppLocaleChanged implements AppEvent {
   const factory AppLocaleChanged(Locale value) = _AppLocaleChanged;
 }
 
 @Freezed(copyWith: false)
-class AppAgreementAccepted with _$AppAgreementAccepted implements AppEvent {
+abstract class AppAgreementAccepted with _$AppAgreementAccepted implements AppEvent {
   const factory AppAgreementAccepted.updateUserAgreement(AgreementStatus status) = _UserAppAgreementUpdate;
 
   const factory AppAgreementAccepted.updateContactsAgreement(AgreementStatus status) = _ContactsAppAgreementUpdate;

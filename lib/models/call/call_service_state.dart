@@ -16,7 +16,7 @@ enum NetworkStatus {
 }
 
 @freezed
-class CallServiceState with _$CallServiceState {
+abstract class CallServiceState with _$CallServiceState {
   const CallServiceState._();
 
   const factory CallServiceState({

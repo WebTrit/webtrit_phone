@@ -5,7 +5,7 @@ abstract class ContactsLocalTabEvent {
 }
 
 @Freezed(copyWith: false)
-class ContactsLocalTabStarted with _$ContactsLocalTabStarted implements ContactsLocalTabEvent {
+abstract class ContactsLocalTabStarted with _$ContactsLocalTabStarted implements ContactsLocalTabEvent {
   const factory ContactsLocalTabStarted({required String search}) = _ContactsLocalTabStarted;
 }
 

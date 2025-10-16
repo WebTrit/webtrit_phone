@@ -9,24 +9,24 @@ class CallStarted extends CallEvent {
 }
 
 @Freezed(copyWith: false)
-class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
+abstract class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
   const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
 }
 
 @Freezed(copyWith: false)
-class _ConnectivityResultChanged with _$ConnectivityResultChanged implements CallEvent {
+abstract class _ConnectivityResultChanged with _$ConnectivityResultChanged implements CallEvent {
   const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
 }
 
 @Freezed(copyWith: false)
-class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements CallEvent {
+abstract class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements CallEvent {
   const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
 }
 
 // registration event change
 
 @Freezed(copyWith: false)
-class _RegistrationChange with _$RegistrationChange implements CallEvent {
+abstract class _RegistrationChange with _$RegistrationChange implements CallEvent {
   const factory _RegistrationChange({
     required Registration registration,
   }) = __RegistrationChange;
@@ -35,7 +35,7 @@ class _RegistrationChange with _$RegistrationChange implements CallEvent {
 // handle app state
 
 @Freezed(copyWith: false)
-class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
+abstract class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
   const factory _ResetStateEvent.completeCalls() = _ResetStateEventCompleteCalls;
 
   const factory _ResetStateEvent.completeCall(String callId) = _ResetStateEventCompleteCall;
@@ -44,7 +44,7 @@ class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
 // signaling client events
 
 @Freezed(copyWith: false)
-class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
+abstract class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
   const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
@@ -55,7 +55,7 @@ class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
 // handshake signaling events
 
 @Freezed(copyWith: false)
-class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
+abstract class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
   const factory _HandshakeSignalingEvent.state({
     required Registration registration,
     required int linesCount,
@@ -65,7 +65,7 @@ class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEve
 // call signaling events
 
 @Freezed(copyWith: false)
-class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
+abstract class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.incoming({
     required int? line,
     required String callId,
@@ -176,7 +176,7 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
 // call push events
 
 @Freezed(copyWith: false)
-class _CallPushEvent with _$CallPushEvent implements CallEvent {
+abstract class _CallPushEvent with _$CallPushEvent implements CallEvent {
   const factory _CallPushEvent.incoming({
     required String callId,
     required CallkeepHandle handle,
@@ -189,7 +189,7 @@ class _CallPushEvent with _$CallPushEvent implements CallEvent {
 // call control events
 
 @Freezed(copyWith: false)
-class CallControlEvent with _$CallControlEvent implements CallEvent {
+abstract class CallControlEvent with _$CallControlEvent implements CallEvent {
   @Assert('!(generic == null && number == null && email == null)',
       'one of generic, number or email parameters must be assign')
   @Assert(
@@ -275,7 +275,7 @@ mixin CallControlEventStartedMixin {
 // call perform events
 
 @Freezed(copyWith: false)
-class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
+abstract class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
 
   factory _CallPerformEvent.started(
@@ -312,7 +312,7 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
 // peer connection events
 
 @Freezed(copyWith: false)
-class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+abstract class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
   const factory _PeerConnectionEvent.signalingStateChanged(String callId, RTCSignalingState state) =
       _PeerConnectionEventSignalingStateChanged;
 
@@ -337,7 +337,7 @@ class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
 // call screen events
 
 @Freezed(copyWith: false)
-class CallScreenEvent with _$CallScreenEvent implements CallEvent {
+abstract class CallScreenEvent with _$CallScreenEvent implements CallEvent {
   factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
 
   factory CallScreenEvent.didPop() = _CallScreenEventDidPop;

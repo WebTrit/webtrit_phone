@@ -5,7 +5,7 @@ enum EmbeddedIntents {
 }
 
 @freezed
-class EmbeddedState with _$EmbeddedState {
+abstract class EmbeddedState with _$EmbeddedState {
   const EmbeddedState._();
 
   const factory EmbeddedState({

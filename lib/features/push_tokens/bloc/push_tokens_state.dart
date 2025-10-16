@@ -1,7 +1,7 @@
 part of 'push_tokens_bloc.dart';
 
 @freezed
-class PushTokensState with _$PushTokensState {
+abstract class PushTokensState with _$PushTokensState {
   const factory PushTokensState({
     String? pushToken,
     String? errorMessage,
