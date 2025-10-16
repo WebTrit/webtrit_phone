@@ -36,8 +36,8 @@ extension StringExtension on String {
   }
 
   String? get extractNumber {
-    final regex = RegExp(numbersExtractRegex);
-    final extracted = replaceAll(regex, '');
-    return extracted.isNotEmpty ? extracted : null;
+    final matches = RegExp(numbersExtractRegex).allMatches(this);
+    if (matches.isEmpty) return null;
+    return matches.first.group(0);
   }
 }
