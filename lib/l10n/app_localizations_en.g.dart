@@ -1215,6 +1215,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get numberActions_copyNumber => 'Copy number';
 
   @override
+  String get numberActions_copyCallId => 'Copy call ID';
+
+  @override
   String get numberActions_delete => 'Delete';
 
   @override

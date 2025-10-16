@@ -13,6 +13,7 @@ class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
 
   Future<List<CdrRecordData>> getHistory({
     String? number,
+    String? destination,
     DateTime? from,
     DateTime? to,
     int? limit,
@@ -22,7 +23,8 @@ class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
     final query = select(cdrTable);
     query.orderBy([(t) => OrderingTerm.desc(t.connectTimeUsec)]);
 
-    if (number != null) query.where((tbl) => tbl.caller.equals(number) | tbl.callee.equals(number));
+    if (number != null) query.where((tbl) => tbl.callerNumber.equals(number) | tbl.calleeNumber.equals(number));
+    if (destination != null) query.where((tbl) => tbl.caller.equals(destination) | tbl.callee.equals(destination));
     if (status != null) query.where((tbl) => tbl.status.equals(status.name));
     if (direction != null) query.where((tbl) => tbl.direction.equals(direction.name));
     if (from != null) query.where((tbl) => tbl.connectTimeUsec.isSmallerThanValue(from.microsecondsSinceEpoch));

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/utils/regexes.dart';
 
 enum CdrStatus { accepted, declined, missed, error }
 
@@ -10,7 +9,9 @@ class CdrRecord extends Equatable {
   final CallDirection direction;
   final CdrStatus status;
   final String callee;
+  final String? calleeNumber;
   final String caller;
+  final String? callerNumber;
   final DateTime connectTime;
   final DateTime disconnectTime;
   final String disconnectReason;
@@ -22,7 +23,9 @@ class CdrRecord extends Equatable {
     required this.direction,
     required this.status,
     required this.callee,
+    required this.calleeNumber,
     required this.caller,
+    required this.callerNumber,
     required this.connectTime,
     required this.disconnectTime,
     required this.disconnectReason,
@@ -33,17 +36,27 @@ class CdrRecord extends Equatable {
   /// The other party in the call, depending on the call direction
   late final String participant = direction == CallDirection.outgoing ? callee : caller;
 
-  /// Normalized participant number (only digits and leading +)
-  /// E.g. "+1234567890" or "1234567890" if caller info has additional characters like "123 (John Doe)"
-  late final String participantNumber = participant.replaceAll(RegExp(numbersExtractRegex), '');
+  /// The other party's number in the call, depending on the call direction
+  late final String? participantNumber = direction == CallDirection.outgoing ? calleeNumber : callerNumber;
 
   @override
-  List<Object?> get props =>
-      [callId, direction, status, callee, caller, connectTime, disconnectTime, disconnectReason, duration, recordingId];
-
+  List<Object?> get props => [
+        callId,
+        direction,
+        status,
+        callee,
+        calleeNumber,
+        caller,
+        callerNumber,
+        connectTime,
+        disconnectTime,
+        disconnectReason,
+        duration,
+        recordingId,
+      ];
   @override
   String toString() =>
-      'CdrRecord(callId: $callId, direction: $direction, status: $status, callee: $callee, caller: $caller, connectTime: $connectTime, disconnectTime: $disconnectTime, disconnectReason: $disconnectReason, duration: $duration, recordingId: $recordingId)';
+      'CdrRecord(callId: $callId, direction: $direction, status: $status, callee: $callee, calleeNumber: $calleeNumber, caller: $caller, callerNumber: $callerNumber, connectTime: $connectTime, disconnectTime: $disconnectTime, disconnectReason: $disconnectReason, duration: $duration, recordingId: $recordingId)';
 }
 
 extension CdrRecordIterableExtension on Iterable<CdrRecord> {

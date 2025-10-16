@@ -74,7 +74,7 @@ class NumberCdrsLogCubit extends Cubit<NumberCdrsLogState> {
           }
           await _cdrsLocalRepository.upsertCdrs(scanPage, silent: true);
           oldestSynced = scanPage.last.connectTime;
-          final numberCdrs = scanPage.where((cdr) => cdr.caller == number || cdr.callee == number);
+          final numberCdrs = scanPage.where((cdr) => cdr.callerNumber == number || cdr.calleeNumber == number);
           _logger.info('Found number CDRs: ${numberCdrs.length} in ${scanPage.length} scanned');
 
           numberScanResult.addAll(numberCdrs);
@@ -98,7 +98,7 @@ class NumberCdrsLogCubit extends Cubit<NumberCdrsLogState> {
   }
 
   void _handleEvent(CdrRecordsEvent event) {
-    if (event is CdrRecordUpserted && (event.cdr.caller == number || event.cdr.callee == number)) {
+    if (event is CdrRecordUpserted && (event.cdr.callerNumber == number || event.cdr.calleeNumber == number)) {
       final recentCdrs = state.records.mergeWithUpdate(event.cdr).toList();
       emit(state.copyWith(records: recentCdrs));
     }

@@ -18,6 +18,7 @@ abstract class CdrsLocalRepository {
   /// [limit] - Optional parameter to limit the number of records returned.
   Future<List<CdrRecord>> getHistory({
     String? number,
+    String? destination,
     CdrStatus? status,
     CallDirection? direction,
     DateTime? from,
@@ -63,6 +64,7 @@ class CdrsLocalRepositoryDriftImpl with CdrDriftMapper implements CdrsLocalRepos
   @override
   Future<List<CdrRecord>> getHistory({
     String? number,
+    String? destination,
     CdrStatus? status,
     CallDirection? direction,
     DateTime? from,
@@ -71,6 +73,7 @@ class CdrsLocalRepositoryDriftImpl with CdrDriftMapper implements CdrsLocalRepos
   }) async {
     final driftCdrs = await _dao.getHistory(
       number: number,
+      destination: destination,
       from: from,
       to: to,
       limit: limit,

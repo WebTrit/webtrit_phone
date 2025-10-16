@@ -1,4 +1,5 @@
 import 'package:webtrit_api/webtrit_api.dart' as api;
+import 'package:webtrit_phone/extensions/string.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 
@@ -9,7 +10,9 @@ mixin CdrApiMapper {
       direction: CallDirection.values.byName(cdrRecord.direction),
       status: CdrStatus.values.byName(cdrRecord.status),
       callee: cdrRecord.callee,
+      calleeNumber: cdrRecord.callee.extractNumber,
       caller: cdrRecord.caller,
+      callerNumber: cdrRecord.caller.extractNumber,
       connectTime: cdrRecord.connectTime,
       disconnectTime: cdrRecord.disconnectTime,
       disconnectReason: cdrRecord.disconnectReason,

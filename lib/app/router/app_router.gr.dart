@@ -29,7 +29,8 @@ class AboutScreenPageRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [AppShell]
 class AppShellRoute extends PageRouteInfo<void> {
-  const AppShellRoute({List<PageRouteInfo>? children}) : super(AppShellRoute.name, initialChildren: children);
+  const AppShellRoute({List<PageRouteInfo>? children})
+      : super(AppShellRoute.name, initialChildren: children);
 
   static const String name = 'AppShellRoute';
 
@@ -43,7 +44,8 @@ class AppShellRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [AutoprovisionScreenPage]
-class AutoprovisionScreenPageRoute extends PageRouteInfo<AutoprovisionScreenPageRouteArgs> {
+class AutoprovisionScreenPageRoute
+    extends PageRouteInfo<AutoprovisionScreenPageRouteArgs> {
   AutoprovisionScreenPageRoute({
     String? configToken,
     String? tenantId,
@@ -108,11 +110,14 @@ class AutoprovisionScreenPageRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! AutoprovisionScreenPageRouteArgs) return false;
-    return configToken == other.configToken && tenantId == other.tenantId && coreUrl == other.coreUrl;
+    return configToken == other.configToken &&
+        tenantId == other.tenantId &&
+        coreUrl == other.coreUrl;
   }
 
   @override
-  int get hashCode => configToken.hashCode ^ tenantId.hashCode ^ coreUrl.hashCode;
+  int get hashCode =>
+      configToken.hashCode ^ tenantId.hashCode ^ coreUrl.hashCode;
 }
 
 /// generated route for
@@ -135,7 +140,8 @@ class CallLogScreenPageRoute extends PageRouteInfo<CallLogScreenPageRouteArgs> {
     builder: (data) {
       final pathParams = data.inheritedPathParams;
       final args = data.argsAs<CallLogScreenPageRouteArgs>(
-        orElse: () => CallLogScreenPageRouteArgs(number: pathParams.getString('number')),
+        orElse: () =>
+            CallLogScreenPageRouteArgs(number: pathParams.getString('number')),
       );
       return CallLogScreenPage(args.number);
     },
@@ -181,7 +187,8 @@ class CallScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [CallToActionsWebPage]
-class CallToActionsWebPageRoute extends PageRouteInfo<CallToActionsWebPageRouteArgs> {
+class CallToActionsWebPageRoute
+    extends PageRouteInfo<CallToActionsWebPageRouteArgs> {
   CallToActionsWebPageRoute({
     required Uri initialUrl,
     List<PageRouteInfo>? children,
@@ -241,7 +248,8 @@ class CallerIdSettingsScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ChatConversationScreenPage]
-class ChatConversationScreenPageRoute extends PageRouteInfo<ChatConversationScreenPageRouteArgs> {
+class ChatConversationScreenPageRoute
+    extends PageRouteInfo<ChatConversationScreenPageRouteArgs> {
   ChatConversationScreenPageRoute({
     String? participantId,
     int? chatId,
@@ -378,7 +386,8 @@ class ContactsRouterPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ContactsScreenPage]
-class ContactsScreenPageRoute extends PageRouteInfo<ContactsScreenPageRouteArgs> {
+class ContactsScreenPageRoute
+    extends PageRouteInfo<ContactsScreenPageRouteArgs> {
   ContactsScreenPageRoute({
     required List<ContactSourceType> sourceTypes,
     List<PageRouteInfo>? children,
@@ -454,7 +463,8 @@ class DiagnosticScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [EmbeddedScreenPage]
-class EmbeddedScreenPageRoute extends PageRouteInfo<EmbeddedScreenPageRouteArgs> {
+class EmbeddedScreenPageRoute
+    extends PageRouteInfo<EmbeddedScreenPageRouteArgs> {
   EmbeddedScreenPageRoute({
     required EmbeddedData data,
     List<PageRouteInfo>? children,
@@ -544,7 +554,8 @@ class EmbeddedTabPageRouteArgs {
 
 /// generated route for
 /// [ErrorDetailsScreenPage]
-class ErrorDetailsScreenPageRoute extends PageRouteInfo<ErrorDetailsScreenPageRouteArgs> {
+class ErrorDetailsScreenPageRoute
+    extends PageRouteInfo<ErrorDetailsScreenPageRouteArgs> {
   ErrorDetailsScreenPageRoute({
     required String title,
     required List<ErrorFieldModel> fields,
@@ -585,7 +596,8 @@ class ErrorDetailsScreenPageRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! ErrorDetailsScreenPageRouteArgs) return false;
-    return title == other.title && const ListEquality().equals(fields, other.fields);
+    return title == other.title &&
+        const ListEquality().equals(fields, other.fields);
   }
 
   @override
@@ -728,7 +740,8 @@ class LogRecordsConsoleScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginCoreUrlAssignScreenPage]
 class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
   const LoginCoreUrlAssignScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LoginCoreUrlAssignScreenPageRoute.name, initialChildren: children);
+      : super(LoginCoreUrlAssignScreenPageRoute.name,
+            initialChildren: children);
 
   static const String name = 'LoginCoreUrlAssignScreenPageRoute';
 
@@ -814,7 +827,8 @@ class LoginOtpSigninVerifyScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginPasswordSigninScreenPage]
 class LoginPasswordSigninScreenPageRoute extends PageRouteInfo<void> {
   const LoginPasswordSigninScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LoginPasswordSigninScreenPageRoute.name, initialChildren: children);
+      : super(LoginPasswordSigninScreenPageRoute.name,
+            initialChildren: children);
 
   static const String name = 'LoginPasswordSigninScreenPageRoute';
 
@@ -834,7 +848,8 @@ class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
     List<PageRouteInfo>? children,
   }) : super(
           LoginRouterPageRoute.name,
-          args: LoginRouterPageRouteArgs(launchEmbeddedData: launchEmbeddedData),
+          args:
+              LoginRouterPageRouteArgs(launchEmbeddedData: launchEmbeddedData),
           initialChildren: children,
         );
 
@@ -874,7 +889,8 @@ class LoginRouterPageRouteArgs {
 
 /// generated route for
 /// [LoginSignupEmbeddedRequestScreenPage]
-class LoginSignupEmbeddedRequestScreenPageRoute extends PageRouteInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs> {
+class LoginSignupEmbeddedRequestScreenPageRoute
+    extends PageRouteInfo<LoginSignupEmbeddedRequestScreenPageRouteArgs> {
   LoginSignupEmbeddedRequestScreenPageRoute({
     required EmbeddedData embeddedData,
     List<PageRouteInfo>? children,
@@ -924,7 +940,8 @@ class LoginSignupEmbeddedRequestScreenPageRouteArgs {
 /// [LoginSignupRequestScreenPage]
 class LoginSignupRequestScreenPageRoute extends PageRouteInfo<void> {
   const LoginSignupRequestScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LoginSignupRequestScreenPageRoute.name, initialChildren: children);
+      : super(LoginSignupRequestScreenPageRoute.name,
+            initialChildren: children);
 
   static const String name = 'LoginSignupRequestScreenPageRoute';
 
@@ -954,7 +971,8 @@ class LoginSignupRouterPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LoginSignupVerifyScreenPage]
-class LoginSignupVerifyScreenPageRoute extends PageRouteInfo<LoginSignupVerifyScreenPageRouteArgs> {
+class LoginSignupVerifyScreenPageRoute
+    extends PageRouteInfo<LoginSignupVerifyScreenPageRouteArgs> {
   LoginSignupVerifyScreenPageRoute({
     required Set<SafeAreaSide> bodySafeAreaSides,
     List<PageRouteInfo>? children,
@@ -1005,7 +1023,8 @@ class LoginSignupVerifyScreenPageRouteArgs {
 
 /// generated route for
 /// [LoginSwitchScreenPage]
-class LoginSwitchScreenPageRoute extends PageRouteInfo<LoginSwitchScreenPageRouteArgs> {
+class LoginSwitchScreenPageRoute
+    extends PageRouteInfo<LoginSwitchScreenPageRouteArgs> {
   LoginSwitchScreenPageRoute({
     required Set<SafeAreaSide> bodySafeAreaSides,
     List<LoginType>? forceLoginTypes,
@@ -1100,7 +1119,8 @@ class MainScreenPageRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [MainShell]
 class MainShellRoute extends PageRouteInfo<void> {
-  const MainShellRoute({List<PageRouteInfo>? children}) : super(MainShellRoute.name, initialChildren: children);
+  const MainShellRoute({List<PageRouteInfo>? children})
+      : super(MainShellRoute.name, initialChildren: children);
 
   static const String name = 'MainShellRoute';
 
@@ -1146,7 +1166,8 @@ class NetworkScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [NumberCdrsScreenPage]
-class NumberCdrsScreenPageRoute extends PageRouteInfo<NumberCdrsScreenPageRouteArgs> {
+class NumberCdrsScreenPageRoute
+    extends PageRouteInfo<NumberCdrsScreenPageRouteArgs> {
   NumberCdrsScreenPageRoute({
     required String number,
     List<PageRouteInfo>? children,
@@ -1276,7 +1297,8 @@ class RecentsScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SelfConfigScreenPage]
-class SelfConfigScreenPageRoute extends PageRouteInfo<SelfConfigScreenPageRouteArgs> {
+class SelfConfigScreenPageRoute
+    extends PageRouteInfo<SelfConfigScreenPageRouteArgs> {
   SelfConfigScreenPageRoute({required Uri url, List<PageRouteInfo>? children})
       : super(
           SelfConfigScreenPageRoute.name,
@@ -1350,7 +1372,8 @@ class SettingsScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SmsConversationScreenPage]
-class SmsConversationScreenPageRoute extends PageRouteInfo<SmsConversationScreenPageRouteArgs> {
+class SmsConversationScreenPageRoute
+    extends PageRouteInfo<SmsConversationScreenPageRouteArgs> {
   SmsConversationScreenPageRoute({
     required String firstNumber,
     required String secondNumber,
@@ -1403,11 +1426,14 @@ class SmsConversationScreenPageRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! SmsConversationScreenPageRouteArgs) return false;
-    return firstNumber == other.firstNumber && secondNumber == other.secondNumber && recipientId == other.recipientId;
+    return firstNumber == other.firstNumber &&
+        secondNumber == other.secondNumber &&
+        recipientId == other.recipientId;
   }
 
   @override
-  int get hashCode => firstNumber.hashCode ^ secondNumber.hashCode ^ recipientId.hashCode;
+  int get hashCode =>
+      firstNumber.hashCode ^ secondNumber.hashCode ^ recipientId.hashCode;
 }
 
 /// generated route for
@@ -1428,7 +1454,8 @@ class SystemNotificationsPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [TermsConditionsScreenPage]
-class TermsConditionsScreenPageRoute extends PageRouteInfo<TermsConditionsScreenPageRouteArgs> {
+class TermsConditionsScreenPageRoute
+    extends PageRouteInfo<TermsConditionsScreenPageRouteArgs> {
   TermsConditionsScreenPageRoute({
     String? initialUriQueryParam,
     List<PageRouteInfo>? children,
@@ -1498,7 +1525,8 @@ class ThemeModeScreenPageRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [UndefinedScreenPage]
-class UndefinedScreenPageRoute extends PageRouteInfo<UndefinedScreenPageRouteArgs> {
+class UndefinedScreenPageRoute
+    extends PageRouteInfo<UndefinedScreenPageRouteArgs> {
   UndefinedScreenPageRoute({
     required UndefinedType undefinedType,
     List<PageRouteInfo>? children,
