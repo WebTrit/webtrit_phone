@@ -73,6 +73,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                   const Spacer(),
                   OnboardingPictureLogo(
                     text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
+                    style: localStyle?.onboardingPictureLogoStyle,
                   ),
                   const Spacer(),
                   const Spacer(),

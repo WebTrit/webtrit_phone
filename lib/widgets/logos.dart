@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
+// TODO: Create a common image widget to centralize scaling, alignment, padding, and related properties.
 class WebTritPhonePictureLogo extends StatelessWidget {
   const WebTritPhonePictureLogo({
     super.key,
@@ -14,6 +14,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
     this.logoAlignment = Alignment.center,
     this.dividerHeight,
     required this.titleStyle,
+    this.padding = EdgeInsets.zero,
   });
 
   final ThemeSvgAsset? asset;
@@ -24,6 +25,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
   final AlignmentGeometry logoAlignment;
   final double? dividerHeight;
   final TextStyle titleStyle;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class WebTritPhonePictureLogo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (svg != null) svg,
+        if (svg != null) Padding(padding: padding, child: svg),
         const SizedBox(),
         if (text != null) ...[
           SizedBox(
@@ -46,30 +48,6 @@ class WebTritPhonePictureLogo extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-      ],
-    );
-  }
-}
-
-class WebTritPhoneTextLogo extends StatelessWidget {
-  const WebTritPhoneTextLogo({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          EnvironmentConfig.APP_NAME,
-          style: themeData.textTheme.displayMedium,
-        ),
-        Text(
-          'Phone',
-          style: themeData.textTheme.headlineMedium,
-        ),
       ],
     );
   }

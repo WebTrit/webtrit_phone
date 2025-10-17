@@ -26,8 +26,6 @@ class ThemeStyleFactoryProvider {
 
     // Widget images config
     final imageAssetsConfig = widgetConfig.imageAssets;
-    final primaryOnboardingLogo = imageAssetsConfig.primaryOnboardingLogo;
-    final secondaryOnboardingLogo = imageAssetsConfig.secondaryOnboardingLogo;
 
     // Other widgets config
     final appIconConfig = imageAssetsConfig.appIcon;
@@ -57,30 +55,27 @@ class ThemeStyleFactoryProvider {
     // ignore: deprecated_member_use_from_same_package
     final callActionsStyleFactory = CallActionsStyleFactory(colorScheme, callActions);
     final linkifyStyleFactory = LinkifyStyleFactory(colorScheme, linkify);
-    final logoAssetStyleFactory = LogoAssetsFactory(imageAssetsConfig);
     final outlinedButtonStyleFactory = OutlinedButtonStyleFactory(colorScheme);
     final registrationStatusStyleFactory = RegisteredStatusStyleFactory(colorScheme, registrationStatuses);
     final snackBarStyleFactory = SnackBarStyleFactory(colorScheme, snackBar);
     final groupTitleListStyleFactory = GroupTitleListStyleFactory(groupTitleListTile);
-    final onPictureLogoStyleFactory =
-    OnboardingPictureLogoStyleFactory(colorScheme, primaryOnboardingLogo, loginPageScheme);
-    final onLogoStyleFactory = OnboardingLogoStyleFactory(colorScheme, secondaryOnboardingLogo, loginPageScheme);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
 
-    final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect);
+    final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect, colorScheme);
     final leadingAvatarStyleFactory =
-    LeadingAvatarStyleFactory(colorScheme, widgetConfig.imageAssets.leadingAvatarStyle);
+        LeadingAvatarStyleFactory(colorScheme, widgetConfig.imageAssets.leadingAvatarStyle);
     final keypadStyleFactory = KeypadStyleFactory(colorScheme, config: null, textTheme: createTextTheme());
 
     // Screen-specific styles
-    final aboutScreenStyleFactory = AboutScreenStyleFactory(loginPageScheme);
+    final aboutScreenStyleFactory = AboutScreenStyleFactory(pageConfig.about);
     final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, callActions);
     final keypadScreenStyleFactory =
-    KeypadScreenStyleFactory(colorScheme, config: pageConfig.keypad, textTheme: createTextTheme());
+        KeypadScreenStyleFactory(colorScheme, config: pageConfig.keypad, textTheme: createTextTheme());
     final loginOtpSigninVerifyScreenStyleFactory =
-    LoginOtpSigninVerifyScreenStyleFactory(colorScheme, loginPageScheme.otpSigninVerify);
+        LoginOtpSigninVerifyScreenStyleFactory(colorScheme, loginPageScheme.otpSigninVerify);
     final loginSignupVerifyScreenStyleFactory =
-    LoginSignupVerifyScreenStyleFactory(colorScheme, loginPageScheme.signupVerify);
+        LoginSignupVerifyScreenStyleFactory(colorScheme, loginPageScheme.signupVerify);
+    final loginSwitchScreenStyleFactory = LoginSwitchScreenStyleFactory(loginPageScheme.switchPage, colorScheme);
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -93,13 +88,10 @@ class ThemeStyleFactoryProvider {
       textButtonStyleFactory.create(),
       callActionsStyleFactory.create(),
       linkifyStyleFactory.create(),
-      logoAssetStyleFactory.create(),
       outlinedButtonStyleFactory.create(),
       registrationStatusStyleFactory.create(),
       snackBarStyleFactory.create(),
       groupTitleListStyleFactory.create(),
-      onPictureLogoStyleFactory.create(),
-      onLogoStyleFactory.create(),
       gradientsStyleFactory.create(),
 
       loginModeSelectStyleFactory.create(),
@@ -112,6 +104,7 @@ class ThemeStyleFactoryProvider {
       callScreenStyleFactory.create(),
       loginOtpSigninVerifyScreenStyleFactory.create(),
       loginSignupVerifyScreenStyleFactory.create(),
+      loginSwitchScreenStyleFactory.create()
     ].nonNulls.toList();
   }
 
