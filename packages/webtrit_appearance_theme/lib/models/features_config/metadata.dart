@@ -30,15 +30,17 @@ class Metadata with _$Metadata {
   /// Retrieves an integer value associated with the given [key].
   bool? getBool(String key) => attributes[key] as bool?;
 
-  /// Creates a new `Metadata` instance with an updated key-value pair in `attributes`.
+  /// Retrieves an integer value associated with the given [key].
+  double? getDouble(String key) => attributes[key] as double?;
+
+  /// Retrieves a map value associated with the given [key].
   ///
-  /// This method does not mutate the existing object but instead returns a modified copy.
-  ///
-  /// [key] - The attribute key to update or add.
-  /// [value] - The new value to assign to the key.
-  Metadata copyWithKey(String key, dynamic value) {
-    final updatedAttributes = Map<String, dynamic>.from(attributes);
-    updatedAttributes[key] = value;
-    return copyWith(attributes: updatedAttributes);
+  /// Returns a copy of the map or `null` if the key does not exist or the value is not a map.
+  Map<String, dynamic>? getMap(String key) {
+    final value = attributes[key];
+    if (value is Map) {
+      return Map<String, dynamic>.from(value);
+    }
+    return null;
   }
 }
