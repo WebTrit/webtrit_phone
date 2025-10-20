@@ -293,25 +293,12 @@ LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LoginPageConfig {
-  /// Structured image source for the picture/logo.
-  ImageSource? get imageSource => throw _privateConstructorUsedError;
-
-  /// Path or URL to the picture/logo displayed on the login page.
-  @Deprecated('Use structured ImageSource instead')
-  String? get picture => throw _privateConstructorUsedError;
-
-  /// Scaling factor for the displayed picture/logo.
-  double? get scale => throw _privateConstructorUsedError;
-
-  /// Color value for labels, defined as a HEX string (e.g. `#FF0000`).
-  String? get labelColor => throw _privateConstructorUsedError;
-
   /// Configuration for the **mode selection** screen.
   LoginModeSelectPageConfig get modeSelect =>
       throw _privateConstructorUsedError;
 
-  /// Metadata section with additional information such as links, version, etc.
-  Metadata get metadata => throw _privateConstructorUsedError;
+  /// Configuration for the **switch mode** screen.
+  LoginSwitchPageConfig get switchPage => throw _privateConstructorUsedError;
 
   /// Configuration for the OTP sign-in verification screen.
   LoginOtpSigninVerifyScreenPageConfig get otpSigninVerify =>
@@ -338,18 +325,13 @@ abstract class $LoginPageConfigCopyWith<$Res> {
       _$LoginPageConfigCopyWithImpl<$Res, LoginPageConfig>;
   @useResult
   $Res call(
-      {ImageSource? imageSource,
-      @Deprecated('Use structured ImageSource instead') String? picture,
-      double? scale,
-      String? labelColor,
-      LoginModeSelectPageConfig modeSelect,
-      Metadata metadata,
+      {LoginModeSelectPageConfig modeSelect,
+      LoginSwitchPageConfig switchPage,
       LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
       LoginSignupVerifyScreenPageConfig signupVerify});
 
-  $ImageSourceCopyWith<$Res>? get imageSource;
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
-  $MetadataCopyWith<$Res> get metadata;
+  $LoginSwitchPageConfigCopyWith<$Res> get switchPage;
   $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> get otpSigninVerify;
   $LoginSignupVerifyScreenPageConfigCopyWith<$Res> get signupVerify;
 }
@@ -369,40 +351,20 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? imageSource = freezed,
-    Object? picture = freezed,
-    Object? scale = freezed,
-    Object? labelColor = freezed,
     Object? modeSelect = null,
-    Object? metadata = null,
+    Object? switchPage = null,
     Object? otpSigninVerify = null,
     Object? signupVerify = null,
   }) {
     return _then(_value.copyWith(
-      imageSource: freezed == imageSource
-          ? _value.imageSource
-          : imageSource // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      picture: freezed == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String?,
-      scale: freezed == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double?,
-      labelColor: freezed == labelColor
-          ? _value.labelColor
-          : labelColor // ignore: cast_nullable_to_non_nullable
-              as String?,
       modeSelect: null == modeSelect
           ? _value.modeSelect
           : modeSelect // ignore: cast_nullable_to_non_nullable
               as LoginModeSelectPageConfig,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
+      switchPage: null == switchPage
+          ? _value.switchPage
+          : switchPage // ignore: cast_nullable_to_non_nullable
+              as LoginSwitchPageConfig,
       otpSigninVerify: null == otpSigninVerify
           ? _value.otpSigninVerify
           : otpSigninVerify // ignore: cast_nullable_to_non_nullable
@@ -412,20 +374,6 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
           : signupVerify // ignore: cast_nullable_to_non_nullable
               as LoginSignupVerifyScreenPageConfig,
     ) as $Val);
-  }
-
-  /// Create a copy of LoginPageConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ImageSourceCopyWith<$Res>? get imageSource {
-    if (_value.imageSource == null) {
-      return null;
-    }
-
-    return $ImageSourceCopyWith<$Res>(_value.imageSource!, (value) {
-      return _then(_value.copyWith(imageSource: value) as $Val);
-    });
   }
 
   /// Create a copy of LoginPageConfig
@@ -442,9 +390,9 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $MetadataCopyWith<$Res> get metadata {
-    return $MetadataCopyWith<$Res>(_value.metadata, (value) {
-      return _then(_value.copyWith(metadata: value) as $Val);
+  $LoginSwitchPageConfigCopyWith<$Res> get switchPage {
+    return $LoginSwitchPageConfigCopyWith<$Res>(_value.switchPage, (value) {
+      return _then(_value.copyWith(switchPage: value) as $Val);
     });
   }
 
@@ -480,21 +428,15 @@ abstract class _$$LoginPageConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {ImageSource? imageSource,
-      @Deprecated('Use structured ImageSource instead') String? picture,
-      double? scale,
-      String? labelColor,
-      LoginModeSelectPageConfig modeSelect,
-      Metadata metadata,
+      {LoginModeSelectPageConfig modeSelect,
+      LoginSwitchPageConfig switchPage,
       LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
       LoginSignupVerifyScreenPageConfig signupVerify});
 
   @override
-  $ImageSourceCopyWith<$Res>? get imageSource;
-  @override
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
   @override
-  $MetadataCopyWith<$Res> get metadata;
+  $LoginSwitchPageConfigCopyWith<$Res> get switchPage;
   @override
   $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> get otpSigninVerify;
   @override
@@ -514,40 +456,20 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? imageSource = freezed,
-    Object? picture = freezed,
-    Object? scale = freezed,
-    Object? labelColor = freezed,
     Object? modeSelect = null,
-    Object? metadata = null,
+    Object? switchPage = null,
     Object? otpSigninVerify = null,
     Object? signupVerify = null,
   }) {
     return _then(_$LoginPageConfigImpl(
-      imageSource: freezed == imageSource
-          ? _value.imageSource
-          : imageSource // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      picture: freezed == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String?,
-      scale: freezed == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double?,
-      labelColor: freezed == labelColor
-          ? _value.labelColor
-          : labelColor // ignore: cast_nullable_to_non_nullable
-              as String?,
       modeSelect: null == modeSelect
           ? _value.modeSelect
           : modeSelect // ignore: cast_nullable_to_non_nullable
               as LoginModeSelectPageConfig,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
+      switchPage: null == switchPage
+          ? _value.switchPage
+          : switchPage // ignore: cast_nullable_to_non_nullable
+              as LoginSwitchPageConfig,
       otpSigninVerify: null == otpSigninVerify
           ? _value.otpSigninVerify
           : otpSigninVerify // ignore: cast_nullable_to_non_nullable
@@ -565,44 +487,23 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$LoginPageConfigImpl implements _LoginPageConfig {
   const _$LoginPageConfigImpl(
-      {this.imageSource,
-      @Deprecated('Use structured ImageSource instead') this.picture,
-      this.scale,
-      this.labelColor,
-      this.modeSelect = const LoginModeSelectPageConfig(),
-      this.metadata = const Metadata(),
+      {this.modeSelect = const LoginModeSelectPageConfig(),
+      this.switchPage = const LoginSwitchPageConfig(),
       this.otpSigninVerify = const LoginOtpSigninVerifyScreenPageConfig(),
       this.signupVerify = const LoginSignupVerifyScreenPageConfig()});
 
   factory _$LoginPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginPageConfigImplFromJson(json);
 
-  /// Structured image source for the picture/logo.
-  @override
-  final ImageSource? imageSource;
-
-  /// Path or URL to the picture/logo displayed on the login page.
-  @override
-  @Deprecated('Use structured ImageSource instead')
-  final String? picture;
-
-  /// Scaling factor for the displayed picture/logo.
-  @override
-  final double? scale;
-
-  /// Color value for labels, defined as a HEX string (e.g. `#FF0000`).
-  @override
-  final String? labelColor;
-
   /// Configuration for the **mode selection** screen.
   @override
   @JsonKey()
   final LoginModeSelectPageConfig modeSelect;
 
-  /// Metadata section with additional information such as links, version, etc.
+  /// Configuration for the **switch mode** screen.
   @override
   @JsonKey()
-  final Metadata metadata;
+  final LoginSwitchPageConfig switchPage;
 
   /// Configuration for the OTP sign-in verification screen.
   @override
@@ -616,7 +517,7 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
 
   @override
   String toString() {
-    return 'LoginPageConfig(imageSource: $imageSource, picture: $picture, scale: $scale, labelColor: $labelColor, modeSelect: $modeSelect, metadata: $metadata, otpSigninVerify: $otpSigninVerify, signupVerify: $signupVerify)';
+    return 'LoginPageConfig(modeSelect: $modeSelect, switchPage: $switchPage, otpSigninVerify: $otpSigninVerify, signupVerify: $signupVerify)';
   }
 
   @override
@@ -624,16 +525,10 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginPageConfigImpl &&
-            (identical(other.imageSource, imageSource) ||
-                other.imageSource == imageSource) &&
-            (identical(other.picture, picture) || other.picture == picture) &&
-            (identical(other.scale, scale) || other.scale == scale) &&
-            (identical(other.labelColor, labelColor) ||
-                other.labelColor == labelColor) &&
             (identical(other.modeSelect, modeSelect) ||
                 other.modeSelect == modeSelect) &&
-            (identical(other.metadata, metadata) ||
-                other.metadata == metadata) &&
+            (identical(other.switchPage, switchPage) ||
+                other.switchPage == switchPage) &&
             (identical(other.otpSigninVerify, otpSigninVerify) ||
                 other.otpSigninVerify == otpSigninVerify) &&
             (identical(other.signupVerify, signupVerify) ||
@@ -642,8 +537,8 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, imageSource, picture, scale,
-      labelColor, modeSelect, metadata, otpSigninVerify, signupVerify);
+  int get hashCode => Object.hash(
+      runtimeType, modeSelect, switchPage, otpSigninVerify, signupVerify);
 
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -664,43 +559,22 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
 
 abstract class _LoginPageConfig implements LoginPageConfig {
   const factory _LoginPageConfig(
-      {final ImageSource? imageSource,
-      @Deprecated('Use structured ImageSource instead') final String? picture,
-      final double? scale,
-      final String? labelColor,
-      final LoginModeSelectPageConfig modeSelect,
-      final Metadata metadata,
-      final LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
-      final LoginSignupVerifyScreenPageConfig
-          signupVerify}) = _$LoginPageConfigImpl;
+          {final LoginModeSelectPageConfig modeSelect,
+          final LoginSwitchPageConfig switchPage,
+          final LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+          final LoginSignupVerifyScreenPageConfig signupVerify}) =
+      _$LoginPageConfigImpl;
 
   factory _LoginPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginPageConfigImpl.fromJson;
-
-  /// Structured image source for the picture/logo.
-  @override
-  ImageSource? get imageSource;
-
-  /// Path or URL to the picture/logo displayed on the login page.
-  @override
-  @Deprecated('Use structured ImageSource instead')
-  String? get picture;
-
-  /// Scaling factor for the displayed picture/logo.
-  @override
-  double? get scale;
-
-  /// Color value for labels, defined as a HEX string (e.g. `#FF0000`).
-  @override
-  String? get labelColor;
 
   /// Configuration for the **mode selection** screen.
   @override
   LoginModeSelectPageConfig get modeSelect;
 
-  /// Metadata section with additional information such as links, version, etc.
+  /// Configuration for the **switch mode** screen.
   @override
-  Metadata get metadata;
+  LoginSwitchPageConfig get switchPage;
 
   /// Configuration for the OTP sign-in verification screen.
   @override
@@ -1082,6 +956,7 @@ LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
 mixin _$LoginModeSelectPageConfig {
   OverlayStyleModel? get systemUiOverlayStyle =>
       throw _privateConstructorUsedError;
+  ImageSource? get mainLogo => throw _privateConstructorUsedError;
   ElevatedButtonStyleType get buttonLoginStyleType =>
       throw _privateConstructorUsedError;
   ElevatedButtonStyleType get buttonSignupStyleType =>
@@ -1105,10 +980,12 @@ abstract class $LoginModeSelectPageConfigCopyWith<$Res> {
   @useResult
   $Res call(
       {OverlayStyleModel? systemUiOverlayStyle,
+      ImageSource? mainLogo,
       ElevatedButtonStyleType buttonLoginStyleType,
       ElevatedButtonStyleType buttonSignupStyleType});
 
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
+  $ImageSourceCopyWith<$Res>? get mainLogo;
 }
 
 /// @nodoc
@@ -1128,6 +1005,7 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
   @override
   $Res call({
     Object? systemUiOverlayStyle = freezed,
+    Object? mainLogo = freezed,
     Object? buttonLoginStyleType = null,
     Object? buttonSignupStyleType = null,
   }) {
@@ -1136,6 +1014,10 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
           ? _value.systemUiOverlayStyle
           : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
               as OverlayStyleModel?,
+      mainLogo: freezed == mainLogo
+          ? _value.mainLogo
+          : mainLogo // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
       buttonLoginStyleType: null == buttonLoginStyleType
           ? _value.buttonLoginStyleType
           : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
@@ -1161,6 +1043,20 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
       return _then(_value.copyWith(systemUiOverlayStyle: value) as $Val);
     });
   }
+
+  /// Create a copy of LoginModeSelectPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ImageSourceCopyWith<$Res>? get mainLogo {
+    if (_value.mainLogo == null) {
+      return null;
+    }
+
+    return $ImageSourceCopyWith<$Res>(_value.mainLogo!, (value) {
+      return _then(_value.copyWith(mainLogo: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1174,11 +1070,14 @@ abstract class _$$LoginModeSelectPageConfigImplCopyWith<$Res>
   @useResult
   $Res call(
       {OverlayStyleModel? systemUiOverlayStyle,
+      ImageSource? mainLogo,
       ElevatedButtonStyleType buttonLoginStyleType,
       ElevatedButtonStyleType buttonSignupStyleType});
 
   @override
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
+  @override
+  $ImageSourceCopyWith<$Res>? get mainLogo;
 }
 
 /// @nodoc
@@ -1197,6 +1096,7 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? systemUiOverlayStyle = freezed,
+    Object? mainLogo = freezed,
     Object? buttonLoginStyleType = null,
     Object? buttonSignupStyleType = null,
   }) {
@@ -1205,6 +1105,10 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
           ? _value.systemUiOverlayStyle
           : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
               as OverlayStyleModel?,
+      mainLogo: freezed == mainLogo
+          ? _value.mainLogo
+          : mainLogo // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
       buttonLoginStyleType: null == buttonLoginStyleType
           ? _value.buttonLoginStyleType
           : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
@@ -1223,6 +1127,7 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
 class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
   const _$LoginModeSelectPageConfigImpl(
       {this.systemUiOverlayStyle,
+      this.mainLogo,
       this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
       this.buttonSignupStyleType = ElevatedButtonStyleType.primary});
 
@@ -1232,6 +1137,8 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
   @override
+  final ImageSource? mainLogo;
+  @override
   @JsonKey()
   final ElevatedButtonStyleType buttonLoginStyleType;
   @override
@@ -1240,7 +1147,7 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
   @override
   String toString() {
-    return 'LoginModeSelectPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType)';
+    return 'LoginModeSelectPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, mainLogo: $mainLogo, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType)';
   }
 
   @override
@@ -1250,6 +1157,8 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
             other is _$LoginModeSelectPageConfigImpl &&
             (identical(other.systemUiOverlayStyle, systemUiOverlayStyle) ||
                 other.systemUiOverlayStyle == systemUiOverlayStyle) &&
+            (identical(other.mainLogo, mainLogo) ||
+                other.mainLogo == mainLogo) &&
             (identical(other.buttonLoginStyleType, buttonLoginStyleType) ||
                 other.buttonLoginStyleType == buttonLoginStyleType) &&
             (identical(other.buttonSignupStyleType, buttonSignupStyleType) ||
@@ -1258,7 +1167,7 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, systemUiOverlayStyle,
+  int get hashCode => Object.hash(runtimeType, systemUiOverlayStyle, mainLogo,
       buttonLoginStyleType, buttonSignupStyleType);
 
   /// Create a copy of LoginModeSelectPageConfig
@@ -1281,6 +1190,7 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
   const factory _LoginModeSelectPageConfig(
           {final OverlayStyleModel? systemUiOverlayStyle,
+          final ImageSource? mainLogo,
           final ElevatedButtonStyleType buttonLoginStyleType,
           final ElevatedButtonStyleType buttonSignupStyleType}) =
       _$LoginModeSelectPageConfigImpl;
@@ -1290,6 +1200,8 @@ abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
 
   @override
   OverlayStyleModel? get systemUiOverlayStyle;
+  @override
+  ImageSource? get mainLogo;
   @override
   ElevatedButtonStyleType get buttonLoginStyleType;
   @override
@@ -1303,6 +1215,182 @@ abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
       get copyWith => throw _privateConstructorUsedError;
 }
 
+LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(
+    Map<String, dynamic> json) {
+  return _LoginSwitchPageConfig.fromJson(json);
+}
+
+/// @nodoc
+mixin _$LoginSwitchPageConfig {
+  ImageSource? get mainLogo => throw _privateConstructorUsedError;
+
+  /// Serializes this LoginSwitchPageConfig to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of LoginSwitchPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $LoginSwitchPageConfigCopyWith<LoginSwitchPageConfig> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LoginSwitchPageConfigCopyWith<$Res> {
+  factory $LoginSwitchPageConfigCopyWith(LoginSwitchPageConfig value,
+          $Res Function(LoginSwitchPageConfig) then) =
+      _$LoginSwitchPageConfigCopyWithImpl<$Res, LoginSwitchPageConfig>;
+  @useResult
+  $Res call({ImageSource? mainLogo});
+
+  $ImageSourceCopyWith<$Res>? get mainLogo;
+}
+
+/// @nodoc
+class _$LoginSwitchPageConfigCopyWithImpl<$Res,
+        $Val extends LoginSwitchPageConfig>
+    implements $LoginSwitchPageConfigCopyWith<$Res> {
+  _$LoginSwitchPageConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of LoginSwitchPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? mainLogo = freezed,
+  }) {
+    return _then(_value.copyWith(
+      mainLogo: freezed == mainLogo
+          ? _value.mainLogo
+          : mainLogo // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
+    ) as $Val);
+  }
+
+  /// Create a copy of LoginSwitchPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ImageSourceCopyWith<$Res>? get mainLogo {
+    if (_value.mainLogo == null) {
+      return null;
+    }
+
+    return $ImageSourceCopyWith<$Res>(_value.mainLogo!, (value) {
+      return _then(_value.copyWith(mainLogo: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$LoginSwitchPageConfigImplCopyWith<$Res>
+    implements $LoginSwitchPageConfigCopyWith<$Res> {
+  factory _$$LoginSwitchPageConfigImplCopyWith(
+          _$LoginSwitchPageConfigImpl value,
+          $Res Function(_$LoginSwitchPageConfigImpl) then) =
+      __$$LoginSwitchPageConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({ImageSource? mainLogo});
+
+  @override
+  $ImageSourceCopyWith<$Res>? get mainLogo;
+}
+
+/// @nodoc
+class __$$LoginSwitchPageConfigImplCopyWithImpl<$Res>
+    extends _$LoginSwitchPageConfigCopyWithImpl<$Res,
+        _$LoginSwitchPageConfigImpl>
+    implements _$$LoginSwitchPageConfigImplCopyWith<$Res> {
+  __$$LoginSwitchPageConfigImplCopyWithImpl(_$LoginSwitchPageConfigImpl _value,
+      $Res Function(_$LoginSwitchPageConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of LoginSwitchPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? mainLogo = freezed,
+  }) {
+    return _then(_$LoginSwitchPageConfigImpl(
+      mainLogo: freezed == mainLogo
+          ? _value.mainLogo
+          : mainLogo // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$LoginSwitchPageConfigImpl implements _LoginSwitchPageConfig {
+  const _$LoginSwitchPageConfigImpl({this.mainLogo});
+
+  factory _$LoginSwitchPageConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LoginSwitchPageConfigImplFromJson(json);
+
+  @override
+  final ImageSource? mainLogo;
+
+  @override
+  String toString() {
+    return 'LoginSwitchPageConfig(mainLogo: $mainLogo)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoginSwitchPageConfigImpl &&
+            (identical(other.mainLogo, mainLogo) ||
+                other.mainLogo == mainLogo));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, mainLogo);
+
+  /// Create a copy of LoginSwitchPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoginSwitchPageConfigImplCopyWith<_$LoginSwitchPageConfigImpl>
+      get copyWith => __$$LoginSwitchPageConfigImplCopyWithImpl<
+          _$LoginSwitchPageConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LoginSwitchPageConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _LoginSwitchPageConfig implements LoginSwitchPageConfig {
+  const factory _LoginSwitchPageConfig({final ImageSource? mainLogo}) =
+      _$LoginSwitchPageConfigImpl;
+
+  factory _LoginSwitchPageConfig.fromJson(Map<String, dynamic> json) =
+      _$LoginSwitchPageConfigImpl.fromJson;
+
+  @override
+  ImageSource? get mainLogo;
+
+  /// Create a copy of LoginSwitchPageConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoginSwitchPageConfigImplCopyWith<_$LoginSwitchPageConfigImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) {
   return _AboutPageConfig.fromJson(json);
 }
@@ -1310,11 +1398,7 @@ AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AboutPageConfig {
   /// Structured image source for the picture/logo.
-  ImageSource? get imageSource => throw _privateConstructorUsedError;
-
-  /// Path or URL to the picture/logo displayed on the About page.
-  @Deprecated('Use structured ImageSource instead')
-  String? get picture => throw _privateConstructorUsedError;
+  ImageSource? get mainLogo => throw _privateConstructorUsedError;
 
   /// Metadata section with additional information such as version, build number, etc.
   Metadata get metadata => throw _privateConstructorUsedError;
@@ -1335,12 +1419,9 @@ abstract class $AboutPageConfigCopyWith<$Res> {
           AboutPageConfig value, $Res Function(AboutPageConfig) then) =
       _$AboutPageConfigCopyWithImpl<$Res, AboutPageConfig>;
   @useResult
-  $Res call(
-      {ImageSource? imageSource,
-      @Deprecated('Use structured ImageSource instead') String? picture,
-      Metadata metadata});
+  $Res call({ImageSource? mainLogo, Metadata metadata});
 
-  $ImageSourceCopyWith<$Res>? get imageSource;
+  $ImageSourceCopyWith<$Res>? get mainLogo;
   $MetadataCopyWith<$Res> get metadata;
 }
 
@@ -1359,19 +1440,14 @@ class _$AboutPageConfigCopyWithImpl<$Res, $Val extends AboutPageConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? imageSource = freezed,
-    Object? picture = freezed,
+    Object? mainLogo = freezed,
     Object? metadata = null,
   }) {
     return _then(_value.copyWith(
-      imageSource: freezed == imageSource
-          ? _value.imageSource
-          : imageSource // ignore: cast_nullable_to_non_nullable
+      mainLogo: freezed == mainLogo
+          ? _value.mainLogo
+          : mainLogo // ignore: cast_nullable_to_non_nullable
               as ImageSource?,
-      picture: freezed == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String?,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -1383,13 +1459,13 @@ class _$AboutPageConfigCopyWithImpl<$Res, $Val extends AboutPageConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ImageSourceCopyWith<$Res>? get imageSource {
-    if (_value.imageSource == null) {
+  $ImageSourceCopyWith<$Res>? get mainLogo {
+    if (_value.mainLogo == null) {
       return null;
     }
 
-    return $ImageSourceCopyWith<$Res>(_value.imageSource!, (value) {
-      return _then(_value.copyWith(imageSource: value) as $Val);
+    return $ImageSourceCopyWith<$Res>(_value.mainLogo!, (value) {
+      return _then(_value.copyWith(mainLogo: value) as $Val);
     });
   }
 
@@ -1412,13 +1488,10 @@ abstract class _$$AboutPageConfigImplCopyWith<$Res>
       __$$AboutPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {ImageSource? imageSource,
-      @Deprecated('Use structured ImageSource instead') String? picture,
-      Metadata metadata});
+  $Res call({ImageSource? mainLogo, Metadata metadata});
 
   @override
-  $ImageSourceCopyWith<$Res>? get imageSource;
+  $ImageSourceCopyWith<$Res>? get mainLogo;
   @override
   $MetadataCopyWith<$Res> get metadata;
 }
@@ -1436,19 +1509,14 @@ class __$$AboutPageConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? imageSource = freezed,
-    Object? picture = freezed,
+    Object? mainLogo = freezed,
     Object? metadata = null,
   }) {
     return _then(_$AboutPageConfigImpl(
-      imageSource: freezed == imageSource
-          ? _value.imageSource
-          : imageSource // ignore: cast_nullable_to_non_nullable
+      mainLogo: freezed == mainLogo
+          ? _value.mainLogo
+          : mainLogo // ignore: cast_nullable_to_non_nullable
               as ImageSource?,
-      picture: freezed == picture
-          ? _value.picture
-          : picture // ignore: cast_nullable_to_non_nullable
-              as String?,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -1462,21 +1530,14 @@ class __$$AboutPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$AboutPageConfigImpl implements _AboutPageConfig {
   const _$AboutPageConfigImpl(
-      {this.imageSource,
-      @Deprecated('Use structured ImageSource instead') this.picture,
-      this.metadata = const Metadata()});
+      {this.mainLogo, this.metadata = const Metadata()});
 
   factory _$AboutPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AboutPageConfigImplFromJson(json);
 
   /// Structured image source for the picture/logo.
   @override
-  final ImageSource? imageSource;
-
-  /// Path or URL to the picture/logo displayed on the About page.
-  @override
-  @Deprecated('Use structured ImageSource instead')
-  final String? picture;
+  final ImageSource? mainLogo;
 
   /// Metadata section with additional information such as version, build number, etc.
   @override
@@ -1485,7 +1546,7 @@ class _$AboutPageConfigImpl implements _AboutPageConfig {
 
   @override
   String toString() {
-    return 'AboutPageConfig(imageSource: $imageSource, picture: $picture, metadata: $metadata)';
+    return 'AboutPageConfig(mainLogo: $mainLogo, metadata: $metadata)';
   }
 
   @override
@@ -1493,16 +1554,15 @@ class _$AboutPageConfigImpl implements _AboutPageConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AboutPageConfigImpl &&
-            (identical(other.imageSource, imageSource) ||
-                other.imageSource == imageSource) &&
-            (identical(other.picture, picture) || other.picture == picture) &&
+            (identical(other.mainLogo, mainLogo) ||
+                other.mainLogo == mainLogo) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, imageSource, picture, metadata);
+  int get hashCode => Object.hash(runtimeType, mainLogo, metadata);
 
   /// Create a copy of AboutPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1523,8 +1583,7 @@ class _$AboutPageConfigImpl implements _AboutPageConfig {
 
 abstract class _AboutPageConfig implements AboutPageConfig {
   const factory _AboutPageConfig(
-      {final ImageSource? imageSource,
-      @Deprecated('Use structured ImageSource instead') final String? picture,
+      {final ImageSource? mainLogo,
       final Metadata metadata}) = _$AboutPageConfigImpl;
 
   factory _AboutPageConfig.fromJson(Map<String, dynamic> json) =
@@ -1532,12 +1591,7 @@ abstract class _AboutPageConfig implements AboutPageConfig {
 
   /// Structured image source for the picture/logo.
   @override
-  ImageSource? get imageSource;
-
-  /// Path or URL to the picture/logo displayed on the About page.
-  @override
-  @Deprecated('Use structured ImageSource instead')
-  String? get picture;
+  ImageSource? get mainLogo;
 
   /// Metadata section with additional information such as version, build number, etc.
   @override

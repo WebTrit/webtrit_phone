@@ -533,7 +533,7 @@ mixin _$AppConfigModeSelectAction {
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
 
-  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// TODO: Migration workaround - accepts both int and string IDs.
   /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @IntToStringOptionalConverter()
   String? get embeddedId => throw _privateConstructorUsedError;
@@ -709,7 +709,7 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   @override
   final String titleL10n;
 
-  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// TODO: Migration workaround - accepts both int and string IDs.
   /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
   @IntToStringOptionalConverter()
@@ -785,7 +785,7 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   @override
   String get titleL10n;
 
-  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// TODO: Migration workaround - accepts both int and string IDs.
   /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
   @IntToStringOptionalConverter()
@@ -4873,7 +4873,7 @@ mixin _$AppConfigSettingsItem {
   String get type => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
 
-  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// TODO: Migration workaround - accepts both int and string IDs.
   /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @IntToStringOptionalConverter()
   String? get embeddedResourceId => throw _privateConstructorUsedError;
@@ -5036,7 +5036,7 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
   @override
   final String icon;
 
-  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// TODO: Migration workaround - accepts both int and string IDs.
   /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
   @IntToStringOptionalConverter()
@@ -5105,7 +5105,7 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   @override
   String get icon;
 
-  /// TODO: Migration workaround — accepts both int and string IDs.
+  /// TODO: Migration workaround - accepts both int and string IDs.
   /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
   @IntToStringOptionalConverter()

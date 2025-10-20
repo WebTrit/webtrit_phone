@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'onboarding_logo_style.dart';
-import 'onboarding_logo_styles.dart';
 
 export 'onboarding_logo_style.dart';
-export 'onboarding_logo_styles.dart';
 
 class OnboardingLogo extends StatelessWidget {
   const OnboardingLogo({
@@ -20,18 +18,15 @@ class OnboardingLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     final themeData = Theme.of(context);
-    final localStyle = style ?? themeData.extension<OnboardingLogoStyles>()?.primary;
-    final titleStyle = themeData.textTheme.headlineSmall!.merge(localStyle?.textStyle);
-    // TODO(Serdun): Add  heightFactor directly to the style
-    final scale = mediaQueryData.size.height * (localStyle?.widthFactor ?? 1.0);
-    return SizedBox(
-      height: scale,
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: WebTritPhonePictureLogo(
-          asset: localStyle?.picture,
-          titleStyle: titleStyle,
-        ),
+    final titleStyle = themeData.textTheme.headlineSmall!.merge(style?.textStyle);
+    final scale = mediaQueryData.size.width * (style?.widthFactor ?? 0.2);
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: WebTritPhonePictureLogo(
+        asset: style?.picture,
+        logoWidth: scale,
+        titleStyle: titleStyle,
+        padding: style?.padding ?? EdgeInsets.zero,
       ),
     );
   }

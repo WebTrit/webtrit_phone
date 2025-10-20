@@ -35,19 +35,14 @@ Map<String, dynamic> _$$ThemePageConfigImplToJson(
 _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$LoginPageConfigImpl(
-      imageSource: json['imageSource'] == null
-          ? null
-          : ImageSource.fromJson(json['imageSource'] as Map<String, dynamic>),
-      picture: json['picture'] as String?,
-      scale: (json['scale'] as num?)?.toDouble(),
-      labelColor: json['labelColor'] as String?,
       modeSelect: json['modeSelect'] == null
           ? const LoginModeSelectPageConfig()
           : LoginModeSelectPageConfig.fromJson(
               json['modeSelect'] as Map<String, dynamic>),
-      metadata: json['metadata'] == null
-          ? const Metadata()
-          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+      switchPage: json['switchPage'] == null
+          ? const LoginSwitchPageConfig()
+          : LoginSwitchPageConfig.fromJson(
+              json['switchPage'] as Map<String, dynamic>),
       otpSigninVerify: json['otpSigninVerify'] == null
           ? const LoginOtpSigninVerifyScreenPageConfig()
           : LoginOtpSigninVerifyScreenPageConfig.fromJson(
@@ -61,12 +56,8 @@ _$LoginPageConfigImpl _$$LoginPageConfigImplFromJson(
 Map<String, dynamic> _$$LoginPageConfigImplToJson(
         _$LoginPageConfigImpl instance) =>
     <String, dynamic>{
-      'imageSource': instance.imageSource?.toJson(),
-      'picture': instance.picture,
-      'scale': instance.scale,
-      'labelColor': instance.labelColor,
       'modeSelect': instance.modeSelect.toJson(),
-      'metadata': instance.metadata.toJson(),
+      'switchPage': instance.switchPage.toJson(),
       'otpSigninVerify': instance.otpSigninVerify.toJson(),
       'signupVerify': instance.signupVerify.toJson(),
     };
@@ -106,6 +97,9 @@ _$LoginModeSelectPageConfigImpl _$$LoginModeSelectPageConfigImplFromJson(
           ? null
           : OverlayStyleModel.fromJson(
               json['systemUiOverlayStyle'] as Map<String, dynamic>),
+      mainLogo: json['mainLogo'] == null
+          ? null
+          : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
       buttonLoginStyleType: $enumDecodeNullable(
               _$ElevatedButtonStyleTypeEnumMap, json['buttonLoginStyleType']) ??
           ElevatedButtonStyleType.primary,
@@ -119,6 +113,7 @@ Map<String, dynamic> _$$LoginModeSelectPageConfigImplToJson(
         _$LoginModeSelectPageConfigImpl instance) =>
     <String, dynamic>{
       'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
+      'mainLogo': instance.mainLogo?.toJson(),
       'buttonLoginStyleType':
           _$ElevatedButtonStyleTypeEnumMap[instance.buttonLoginStyleType]!,
       'buttonSignupStyleType':
@@ -132,13 +127,26 @@ const _$ElevatedButtonStyleTypeEnumMap = {
   ElevatedButtonStyleType.neutralOnDark: 'neutralOnDark',
 };
 
+_$LoginSwitchPageConfigImpl _$$LoginSwitchPageConfigImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LoginSwitchPageConfigImpl(
+      mainLogo: json['mainLogo'] == null
+          ? null
+          : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$LoginSwitchPageConfigImplToJson(
+        _$LoginSwitchPageConfigImpl instance) =>
+    <String, dynamic>{
+      'mainLogo': instance.mainLogo?.toJson(),
+    };
+
 _$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$AboutPageConfigImpl(
-      imageSource: json['imageSource'] == null
+      mainLogo: json['mainLogo'] == null
           ? null
-          : ImageSource.fromJson(json['imageSource'] as Map<String, dynamic>),
-      picture: json['picture'] as String?,
+          : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
       metadata: json['metadata'] == null
           ? const Metadata()
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
@@ -147,8 +155,7 @@ _$AboutPageConfigImpl _$$AboutPageConfigImplFromJson(
 Map<String, dynamic> _$$AboutPageConfigImplToJson(
         _$AboutPageConfigImpl instance) =>
     <String, dynamic>{
-      'imageSource': instance.imageSource?.toJson(),
-      'picture': instance.picture,
+      'mainLogo': instance.mainLogo?.toJson(),
       'metadata': instance.metadata.toJson(),
     };
 

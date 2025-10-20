@@ -22,6 +22,10 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
 
+    // TODO: Add separate style for this screen
+    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
+
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => whenLoginCoreUrlAssignScreenPageActive(current),
       builder: (context, state) {
@@ -41,7 +45,7 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
             top: false,
             child: Column(
               children: [
-                const OnboardingLogo(),
+                OnboardingLogo(style: localStyle?.onboardingLogoStyle),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),

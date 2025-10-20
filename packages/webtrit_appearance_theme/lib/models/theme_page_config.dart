@@ -45,23 +45,11 @@ class ThemePageConfig with _$ThemePageConfig {
 class LoginPageConfig with _$LoginPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory LoginPageConfig({
-    /// Structured image source for the picture/logo.
-    ImageSource? imageSource,
-
-    /// Path or URL to the picture/logo displayed on the login page.
-    @Deprecated('Use structured ImageSource instead') String? picture,
-
-    /// Scaling factor for the displayed picture/logo.
-    double? scale,
-
-    /// Color value for labels, defined as a HEX string (e.g. `#FF0000`).
-    String? labelColor,
-
     /// Configuration for the **mode selection** screen.
     @Default(LoginModeSelectPageConfig()) LoginModeSelectPageConfig modeSelect,
 
-    /// Metadata section with additional information such as links, version, etc.
-    @Default(Metadata()) Metadata metadata,
+    /// Configuration for the **switch mode** screen.
+    @Default(LoginSwitchPageConfig()) LoginSwitchPageConfig switchPage,
 
     /// Configuration for the OTP sign-in verification screen.
     @Default(LoginOtpSigninVerifyScreenPageConfig()) LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
@@ -108,11 +96,22 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory LoginModeSelectPageConfig({
     OverlayStyleModel? systemUiOverlayStyle,
+    ImageSource? mainLogo,
     @Default(ElevatedButtonStyleType.primary) ElevatedButtonStyleType buttonLoginStyleType,
     @Default(ElevatedButtonStyleType.primary) ElevatedButtonStyleType buttonSignupStyleType,
   }) = _LoginModeSelectPageConfig;
 
   factory LoginModeSelectPageConfig.fromJson(Map<String, dynamic> json) => _$LoginModeSelectPageConfigFromJson(json);
+}
+
+@Freezed()
+class LoginSwitchPageConfig with _$LoginSwitchPageConfig {
+  @JsonSerializable(explicitToJson: true)
+  const factory LoginSwitchPageConfig({
+    ImageSource? mainLogo,
+  }) = _LoginSwitchPageConfig;
+
+  factory LoginSwitchPageConfig.fromJson(Map<String, dynamic> json) => _$LoginSwitchPageConfigFromJson(json);
 }
 
 /// Declarative configuration for the **About Page**.
@@ -132,10 +131,7 @@ class AboutPageConfig with _$AboutPageConfig {
   @JsonSerializable(explicitToJson: true)
   const factory AboutPageConfig({
     /// Structured image source for the picture/logo.
-    ImageSource? imageSource,
-
-    /// Path or URL to the picture/logo displayed on the About page.
-    @Deprecated('Use structured ImageSource instead') String? picture,
+    ImageSource? mainLogo,
 
     /// Metadata section with additional information such as version, build number, etc.
     @Default(Metadata()) Metadata metadata,
