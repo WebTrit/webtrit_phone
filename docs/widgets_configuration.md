@@ -143,63 +143,10 @@ Defines navigation bars:
 
 ```json
 {
-  "primaryOnboardingLogo": "asset://assets/primary_onboarding_logo.svg",
-  "secondaryOnboardingLogo": "asset://assets/secondary_onboarding_logo.svg",
-  "onboardingPictureLogo": {},
-  "onboardingLogo": {},
   "appIcon": {},
   "leadingAvatarStyle": {}
 }
 ```
-
----
-
-#### Primary / Secondary Onboarding Logo
-
-- **primaryOnboardingLogo** — Path to the primary onboarding logo.
-- **secondaryOnboardingLogo** — Path to the secondary onboarding logo.  
-  Supports local (`asset://`) or remote (`https://`) resources.
-
----
-
-#### Onboarding Picture Logo
-
-Configurable properties:
-
-- **scale** — Scaling factor for the image.
-- **labelColor** — Label color (hex format).
-
-**Example:**
-
-```json
-{
-  "onboardingPictureLogo": {
-    "scale": "#ffffff",
-    "labelColor": "#ffffff"
-  }
-}
-```
-
----
-
-#### Onboarding Logo
-
-Configurable properties:
-
-- **scale** — Scaling factor for the logo.
-- **labelColor** — Label color (hex format).
-
-**Example:**
-
-```json
-{
-  "onboardingLogo": {
-    "scale": "#ffffff",
-    "labelColor": "#ffffff"
-  }
-}
-```
-
 ---
 
 #### App Icon
