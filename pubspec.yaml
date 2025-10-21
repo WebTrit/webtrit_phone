@@ -136,7 +136,7 @@ flutter:
 
   assets:
     - pubspec.yaml
-    - assets/
+    - assets/images/
     - assets/callkeep/
     - assets/login/
     - assets/ringtones/
