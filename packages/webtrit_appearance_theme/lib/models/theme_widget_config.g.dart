@@ -247,6 +247,10 @@ Map<String, dynamic> _$$CallActionsWidgetConfigImplToJson(
 _$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ImageAssetsConfigImpl(
+      defaultPlaceholderImage: json['defaultPlaceholderImage'] == null
+          ? null
+          : ImageSource.fromJson(
+              json['defaultPlaceholderImage'] as Map<String, dynamic>),
       appIcon: json['appIcon'] == null
           ? const AppIconWidgetConfig()
           : AppIconWidgetConfig.fromJson(
@@ -260,6 +264,7 @@ _$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
 Map<String, dynamic> _$$ImageAssetsConfigImplToJson(
         _$ImageAssetsConfigImpl instance) =>
     <String, dynamic>{
+      'defaultPlaceholderImage': instance.defaultPlaceholderImage?.toJson(),
       'appIcon': instance.appIcon.toJson(),
       'leadingAvatarStyle': instance.leadingAvatarStyle.toJson(),
     };

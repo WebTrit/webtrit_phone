@@ -2684,6 +2684,8 @@ ImageAssetsConfig _$ImageAssetsConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ImageAssetsConfig {
+  ImageSource? get defaultPlaceholderImage =>
+      throw _privateConstructorUsedError;
   AppIconWidgetConfig get appIcon => throw _privateConstructorUsedError;
   LeadingAvatarStyleConfig get leadingAvatarStyle =>
       throw _privateConstructorUsedError;
@@ -2705,9 +2707,11 @@ abstract class $ImageAssetsConfigCopyWith<$Res> {
       _$ImageAssetsConfigCopyWithImpl<$Res, ImageAssetsConfig>;
   @useResult
   $Res call(
-      {AppIconWidgetConfig appIcon,
+      {ImageSource? defaultPlaceholderImage,
+      AppIconWidgetConfig appIcon,
       LeadingAvatarStyleConfig leadingAvatarStyle});
 
+  $ImageSourceCopyWith<$Res>? get defaultPlaceholderImage;
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
   $LeadingAvatarStyleConfigCopyWith<$Res> get leadingAvatarStyle;
 }
@@ -2727,10 +2731,15 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? defaultPlaceholderImage = freezed,
     Object? appIcon = null,
     Object? leadingAvatarStyle = null,
   }) {
     return _then(_value.copyWith(
+      defaultPlaceholderImage: freezed == defaultPlaceholderImage
+          ? _value.defaultPlaceholderImage
+          : defaultPlaceholderImage // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
       appIcon: null == appIcon
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
@@ -2740,6 +2749,20 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
           : leadingAvatarStyle // ignore: cast_nullable_to_non_nullable
               as LeadingAvatarStyleConfig,
     ) as $Val);
+  }
+
+  /// Create a copy of ImageAssetsConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ImageSourceCopyWith<$Res>? get defaultPlaceholderImage {
+    if (_value.defaultPlaceholderImage == null) {
+      return null;
+    }
+
+    return $ImageSourceCopyWith<$Res>(_value.defaultPlaceholderImage!, (value) {
+      return _then(_value.copyWith(defaultPlaceholderImage: value) as $Val);
+    });
   }
 
   /// Create a copy of ImageAssetsConfig
@@ -2773,9 +2796,12 @@ abstract class _$$ImageAssetsConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {AppIconWidgetConfig appIcon,
+      {ImageSource? defaultPlaceholderImage,
+      AppIconWidgetConfig appIcon,
       LeadingAvatarStyleConfig leadingAvatarStyle});
 
+  @override
+  $ImageSourceCopyWith<$Res>? get defaultPlaceholderImage;
   @override
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
   @override
@@ -2795,10 +2821,15 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? defaultPlaceholderImage = freezed,
     Object? appIcon = null,
     Object? leadingAvatarStyle = null,
   }) {
     return _then(_$ImageAssetsConfigImpl(
+      defaultPlaceholderImage: freezed == defaultPlaceholderImage
+          ? _value.defaultPlaceholderImage
+          : defaultPlaceholderImage // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
       appIcon: null == appIcon
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
@@ -2816,12 +2847,15 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
   const _$ImageAssetsConfigImpl(
-      {this.appIcon = const AppIconWidgetConfig(),
+      {this.defaultPlaceholderImage,
+      this.appIcon = const AppIconWidgetConfig(),
       this.leadingAvatarStyle = const LeadingAvatarStyleConfig()});
 
   factory _$ImageAssetsConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ImageAssetsConfigImplFromJson(json);
 
+  @override
+  final ImageSource? defaultPlaceholderImage;
   @override
   @JsonKey()
   final AppIconWidgetConfig appIcon;
@@ -2831,7 +2865,7 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
 
   @override
   String toString() {
-    return 'ImageAssetsConfig(appIcon: $appIcon, leadingAvatarStyle: $leadingAvatarStyle)';
+    return 'ImageAssetsConfig(defaultPlaceholderImage: $defaultPlaceholderImage, appIcon: $appIcon, leadingAvatarStyle: $leadingAvatarStyle)';
   }
 
   @override
@@ -2839,6 +2873,9 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ImageAssetsConfigImpl &&
+            (identical(
+                    other.defaultPlaceholderImage, defaultPlaceholderImage) ||
+                other.defaultPlaceholderImage == defaultPlaceholderImage) &&
             (identical(other.appIcon, appIcon) || other.appIcon == appIcon) &&
             (identical(other.leadingAvatarStyle, leadingAvatarStyle) ||
                 other.leadingAvatarStyle == leadingAvatarStyle));
@@ -2846,7 +2883,8 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, appIcon, leadingAvatarStyle);
+  int get hashCode => Object.hash(
+      runtimeType, defaultPlaceholderImage, appIcon, leadingAvatarStyle);
 
   /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2867,13 +2905,16 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
 
 abstract class _ImageAssetsConfig implements ImageAssetsConfig {
   const factory _ImageAssetsConfig(
-          {final AppIconWidgetConfig appIcon,
+          {final ImageSource? defaultPlaceholderImage,
+          final AppIconWidgetConfig appIcon,
           final LeadingAvatarStyleConfig leadingAvatarStyle}) =
       _$ImageAssetsConfigImpl;
 
   factory _ImageAssetsConfig.fromJson(Map<String, dynamic> json) =
       _$ImageAssetsConfigImpl.fromJson;
 
+  @override
+  ImageSource? get defaultPlaceholderImage;
   @override
   AppIconWidgetConfig get appIcon;
   @override
