@@ -30,6 +30,31 @@ class AppConfigLogin with _$AppConfigLogin {
 
   @JsonSerializable(explicitToJson: true)
   const factory AppConfigLogin({
+    @Default(AppConfigLoginCommon()) AppConfigLoginCommon common,
+    @Default(AppConfigLoginModeSelect()) AppConfigLoginModeSelect modeSelect,
+  }) = _AppConfigLogin;
+
+  factory AppConfigLogin.fromJson(Map<String, dynamic> json) => _$AppConfigLoginFromJson(json);
+}
+
+@freezed
+class AppConfigLoginCommon with _$AppConfigLoginCommon {
+  const AppConfigLoginCommon._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigLoginCommon({
+    String? fullScreenLaunchEmbeddedResourceId,
+  }) = _AppConfigLoginCommon;
+
+  factory AppConfigLoginCommon.fromJson(Map<String, dynamic> json) => _$AppConfigLoginCommonFromJson(json);
+}
+
+@freezed
+class AppConfigLoginModeSelect with _$AppConfigLoginModeSelect {
+  const AppConfigLoginModeSelect._();
+
+  @JsonSerializable(explicitToJson: true)
+  const factory AppConfigLoginModeSelect({
     String? greetingL10n,
     @Default([
       AppConfigModeSelectAction(
@@ -38,10 +63,10 @@ class AppConfigLogin with _$AppConfigLogin {
         titleL10n: 'login_Button_signUpToDemoInstance',
       )
     ])
-    List<AppConfigModeSelectAction> modeSelectActions,
-  }) = _AppConfigLogin;
+    List<AppConfigModeSelectAction> actions,
+  }) = _AppConfigLoginModeSelect;
 
-  factory AppConfigLogin.fromJson(Map<String, dynamic> json) => _$AppConfigLoginFromJson(json);
+  factory AppConfigLoginModeSelect.fromJson(Map<String, dynamic> json) => _$AppConfigLoginModeSelectFromJson(json);
 }
 
 @freezed
@@ -53,12 +78,7 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
     required bool enabled,
     required String type,
     required String titleL10n,
-
-    /// TODO: Migration workaround - accepts both int and string IDs.
-    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
-    @IntToStringOptionalConverter() String? embeddedId,
-    @Default(false) bool isLaunchButtonVisible,
-    @Default(false) bool isLaunchScreen,
+    String? embeddedId,
   }) = _AppConfigModeSelectAction;
 
   factory AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) => _$AppConfigModeSelectActionFromJson(json);

@@ -333,9 +333,8 @@ AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AppConfigLogin {
-  String? get greetingL10n => throw _privateConstructorUsedError;
-  List<AppConfigModeSelectAction> get modeSelectActions =>
-      throw _privateConstructorUsedError;
+  AppConfigLoginCommon get common => throw _privateConstructorUsedError;
+  AppConfigLoginModeSelect get modeSelect => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigLogin to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -353,9 +352,10 @@ abstract class $AppConfigLoginCopyWith<$Res> {
           AppConfigLogin value, $Res Function(AppConfigLogin) then) =
       _$AppConfigLoginCopyWithImpl<$Res, AppConfigLogin>;
   @useResult
-  $Res call(
-      {String? greetingL10n,
-      List<AppConfigModeSelectAction> modeSelectActions});
+  $Res call({AppConfigLoginCommon common, AppConfigLoginModeSelect modeSelect});
+
+  $AppConfigLoginCommonCopyWith<$Res> get common;
+  $AppConfigLoginModeSelectCopyWith<$Res> get modeSelect;
 }
 
 /// @nodoc
@@ -373,19 +373,39 @@ class _$AppConfigLoginCopyWithImpl<$Res, $Val extends AppConfigLogin>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? greetingL10n = freezed,
-    Object? modeSelectActions = null,
+    Object? common = null,
+    Object? modeSelect = null,
   }) {
     return _then(_value.copyWith(
-      greetingL10n: freezed == greetingL10n
-          ? _value.greetingL10n
-          : greetingL10n // ignore: cast_nullable_to_non_nullable
-              as String?,
-      modeSelectActions: null == modeSelectActions
-          ? _value.modeSelectActions
-          : modeSelectActions // ignore: cast_nullable_to_non_nullable
-              as List<AppConfigModeSelectAction>,
+      common: null == common
+          ? _value.common
+          : common // ignore: cast_nullable_to_non_nullable
+              as AppConfigLoginCommon,
+      modeSelect: null == modeSelect
+          ? _value.modeSelect
+          : modeSelect // ignore: cast_nullable_to_non_nullable
+              as AppConfigLoginModeSelect,
     ) as $Val);
+  }
+
+  /// Create a copy of AppConfigLogin
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigLoginCommonCopyWith<$Res> get common {
+    return $AppConfigLoginCommonCopyWith<$Res>(_value.common, (value) {
+      return _then(_value.copyWith(common: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AppConfigLogin
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppConfigLoginModeSelectCopyWith<$Res> get modeSelect {
+    return $AppConfigLoginModeSelectCopyWith<$Res>(_value.modeSelect, (value) {
+      return _then(_value.copyWith(modeSelect: value) as $Val);
+    });
   }
 }
 
@@ -397,9 +417,12 @@ abstract class _$$AppConfigLoginImplCopyWith<$Res>
       __$$AppConfigLoginImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? greetingL10n,
-      List<AppConfigModeSelectAction> modeSelectActions});
+  $Res call({AppConfigLoginCommon common, AppConfigLoginModeSelect modeSelect});
+
+  @override
+  $AppConfigLoginCommonCopyWith<$Res> get common;
+  @override
+  $AppConfigLoginModeSelectCopyWith<$Res> get modeSelect;
 }
 
 /// @nodoc
@@ -415,18 +438,18 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? greetingL10n = freezed,
-    Object? modeSelectActions = null,
+    Object? common = null,
+    Object? modeSelect = null,
   }) {
     return _then(_$AppConfigLoginImpl(
-      greetingL10n: freezed == greetingL10n
-          ? _value.greetingL10n
-          : greetingL10n // ignore: cast_nullable_to_non_nullable
-              as String?,
-      modeSelectActions: null == modeSelectActions
-          ? _value._modeSelectActions
-          : modeSelectActions // ignore: cast_nullable_to_non_nullable
-              as List<AppConfigModeSelectAction>,
+      common: null == common
+          ? _value.common
+          : common // ignore: cast_nullable_to_non_nullable
+              as AppConfigLoginCommon,
+      modeSelect: null == modeSelect
+          ? _value.modeSelect
+          : modeSelect // ignore: cast_nullable_to_non_nullable
+              as AppConfigLoginModeSelect,
     ));
   }
 }
@@ -436,34 +459,23 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigLoginImpl extends _AppConfigLogin {
   const _$AppConfigLoginImpl(
-      {this.greetingL10n,
-      final List<AppConfigModeSelectAction> modeSelectActions = const [
-        AppConfigModeSelectAction(
-            enabled: true,
-            type: 'login',
-            titleL10n: 'login_Button_signUpToDemoInstance')
-      ]})
-      : _modeSelectActions = modeSelectActions,
-        super._();
+      {this.common = const AppConfigLoginCommon(),
+      this.modeSelect = const AppConfigLoginModeSelect()})
+      : super._();
 
   factory _$AppConfigLoginImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigLoginImplFromJson(json);
 
   @override
-  final String? greetingL10n;
-  final List<AppConfigModeSelectAction> _modeSelectActions;
+  @JsonKey()
+  final AppConfigLoginCommon common;
   @override
   @JsonKey()
-  List<AppConfigModeSelectAction> get modeSelectActions {
-    if (_modeSelectActions is EqualUnmodifiableListView)
-      return _modeSelectActions;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_modeSelectActions);
-  }
+  final AppConfigLoginModeSelect modeSelect;
 
   @override
   String toString() {
-    return 'AppConfigLogin(greetingL10n: $greetingL10n, modeSelectActions: $modeSelectActions)';
+    return 'AppConfigLogin(common: $common, modeSelect: $modeSelect)';
   }
 
   @override
@@ -471,16 +483,14 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppConfigLoginImpl &&
-            (identical(other.greetingL10n, greetingL10n) ||
-                other.greetingL10n == greetingL10n) &&
-            const DeepCollectionEquality()
-                .equals(other._modeSelectActions, _modeSelectActions));
+            (identical(other.common, common) || other.common == common) &&
+            (identical(other.modeSelect, modeSelect) ||
+                other.modeSelect == modeSelect));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, greetingL10n,
-      const DeepCollectionEquality().hash(_modeSelectActions));
+  int get hashCode => Object.hash(runtimeType, common, modeSelect);
 
   /// Create a copy of AppConfigLogin
   /// with the given fields replaced by the non-null parameter values.
@@ -501,18 +511,17 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
 
 abstract class _AppConfigLogin extends AppConfigLogin {
   const factory _AppConfigLogin(
-          {final String? greetingL10n,
-          final List<AppConfigModeSelectAction> modeSelectActions}) =
-      _$AppConfigLoginImpl;
+      {final AppConfigLoginCommon common,
+      final AppConfigLoginModeSelect modeSelect}) = _$AppConfigLoginImpl;
   const _AppConfigLogin._() : super._();
 
   factory _AppConfigLogin.fromJson(Map<String, dynamic> json) =
       _$AppConfigLoginImpl.fromJson;
 
   @override
-  String? get greetingL10n;
+  AppConfigLoginCommon get common;
   @override
-  List<AppConfigModeSelectAction> get modeSelectActions;
+  AppConfigLoginModeSelect get modeSelect;
 
   /// Create a copy of AppConfigLogin
   /// with the given fields replaced by the non-null parameter values.
@@ -520,6 +529,364 @@ abstract class _AppConfigLogin extends AppConfigLogin {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigLoginImplCopyWith<_$AppConfigLoginImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+AppConfigLoginCommon _$AppConfigLoginCommonFromJson(Map<String, dynamic> json) {
+  return _AppConfigLoginCommon.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigLoginCommon {
+  String? get fullScreenLaunchEmbeddedResourceId =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigLoginCommon to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigLoginCommon
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigLoginCommonCopyWith<AppConfigLoginCommon> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigLoginCommonCopyWith<$Res> {
+  factory $AppConfigLoginCommonCopyWith(AppConfigLoginCommon value,
+          $Res Function(AppConfigLoginCommon) then) =
+      _$AppConfigLoginCommonCopyWithImpl<$Res, AppConfigLoginCommon>;
+  @useResult
+  $Res call({String? fullScreenLaunchEmbeddedResourceId});
+}
+
+/// @nodoc
+class _$AppConfigLoginCommonCopyWithImpl<$Res,
+        $Val extends AppConfigLoginCommon>
+    implements $AppConfigLoginCommonCopyWith<$Res> {
+  _$AppConfigLoginCommonCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigLoginCommon
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? fullScreenLaunchEmbeddedResourceId = freezed,
+  }) {
+    return _then(_value.copyWith(
+      fullScreenLaunchEmbeddedResourceId: freezed ==
+              fullScreenLaunchEmbeddedResourceId
+          ? _value.fullScreenLaunchEmbeddedResourceId
+          : fullScreenLaunchEmbeddedResourceId // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigLoginCommonImplCopyWith<$Res>
+    implements $AppConfigLoginCommonCopyWith<$Res> {
+  factory _$$AppConfigLoginCommonImplCopyWith(_$AppConfigLoginCommonImpl value,
+          $Res Function(_$AppConfigLoginCommonImpl) then) =
+      __$$AppConfigLoginCommonImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? fullScreenLaunchEmbeddedResourceId});
+}
+
+/// @nodoc
+class __$$AppConfigLoginCommonImplCopyWithImpl<$Res>
+    extends _$AppConfigLoginCommonCopyWithImpl<$Res, _$AppConfigLoginCommonImpl>
+    implements _$$AppConfigLoginCommonImplCopyWith<$Res> {
+  __$$AppConfigLoginCommonImplCopyWithImpl(_$AppConfigLoginCommonImpl _value,
+      $Res Function(_$AppConfigLoginCommonImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigLoginCommon
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? fullScreenLaunchEmbeddedResourceId = freezed,
+  }) {
+    return _then(_$AppConfigLoginCommonImpl(
+      fullScreenLaunchEmbeddedResourceId: freezed ==
+              fullScreenLaunchEmbeddedResourceId
+          ? _value.fullScreenLaunchEmbeddedResourceId
+          : fullScreenLaunchEmbeddedResourceId // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$AppConfigLoginCommonImpl extends _AppConfigLoginCommon {
+  const _$AppConfigLoginCommonImpl({this.fullScreenLaunchEmbeddedResourceId})
+      : super._();
+
+  factory _$AppConfigLoginCommonImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigLoginCommonImplFromJson(json);
+
+  @override
+  final String? fullScreenLaunchEmbeddedResourceId;
+
+  @override
+  String toString() {
+    return 'AppConfigLoginCommon(fullScreenLaunchEmbeddedResourceId: $fullScreenLaunchEmbeddedResourceId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigLoginCommonImpl &&
+            (identical(other.fullScreenLaunchEmbeddedResourceId,
+                    fullScreenLaunchEmbeddedResourceId) ||
+                other.fullScreenLaunchEmbeddedResourceId ==
+                    fullScreenLaunchEmbeddedResourceId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, fullScreenLaunchEmbeddedResourceId);
+
+  /// Create a copy of AppConfigLoginCommon
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigLoginCommonImplCopyWith<_$AppConfigLoginCommonImpl>
+      get copyWith =>
+          __$$AppConfigLoginCommonImplCopyWithImpl<_$AppConfigLoginCommonImpl>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigLoginCommonImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigLoginCommon extends AppConfigLoginCommon {
+  const factory _AppConfigLoginCommon(
+          {final String? fullScreenLaunchEmbeddedResourceId}) =
+      _$AppConfigLoginCommonImpl;
+  const _AppConfigLoginCommon._() : super._();
+
+  factory _AppConfigLoginCommon.fromJson(Map<String, dynamic> json) =
+      _$AppConfigLoginCommonImpl.fromJson;
+
+  @override
+  String? get fullScreenLaunchEmbeddedResourceId;
+
+  /// Create a copy of AppConfigLoginCommon
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigLoginCommonImplCopyWith<_$AppConfigLoginCommonImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+AppConfigLoginModeSelect _$AppConfigLoginModeSelectFromJson(
+    Map<String, dynamic> json) {
+  return _AppConfigLoginModeSelect.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AppConfigLoginModeSelect {
+  String? get greetingL10n => throw _privateConstructorUsedError;
+  List<AppConfigModeSelectAction> get actions =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this AppConfigLoginModeSelect to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AppConfigLoginModeSelect
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AppConfigLoginModeSelectCopyWith<AppConfigLoginModeSelect> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppConfigLoginModeSelectCopyWith<$Res> {
+  factory $AppConfigLoginModeSelectCopyWith(AppConfigLoginModeSelect value,
+          $Res Function(AppConfigLoginModeSelect) then) =
+      _$AppConfigLoginModeSelectCopyWithImpl<$Res, AppConfigLoginModeSelect>;
+  @useResult
+  $Res call({String? greetingL10n, List<AppConfigModeSelectAction> actions});
+}
+
+/// @nodoc
+class _$AppConfigLoginModeSelectCopyWithImpl<$Res,
+        $Val extends AppConfigLoginModeSelect>
+    implements $AppConfigLoginModeSelectCopyWith<$Res> {
+  _$AppConfigLoginModeSelectCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AppConfigLoginModeSelect
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? greetingL10n = freezed,
+    Object? actions = null,
+  }) {
+    return _then(_value.copyWith(
+      greetingL10n: freezed == greetingL10n
+          ? _value.greetingL10n
+          : greetingL10n // ignore: cast_nullable_to_non_nullable
+              as String?,
+      actions: null == actions
+          ? _value.actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as List<AppConfigModeSelectAction>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AppConfigLoginModeSelectImplCopyWith<$Res>
+    implements $AppConfigLoginModeSelectCopyWith<$Res> {
+  factory _$$AppConfigLoginModeSelectImplCopyWith(
+          _$AppConfigLoginModeSelectImpl value,
+          $Res Function(_$AppConfigLoginModeSelectImpl) then) =
+      __$$AppConfigLoginModeSelectImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? greetingL10n, List<AppConfigModeSelectAction> actions});
+}
+
+/// @nodoc
+class __$$AppConfigLoginModeSelectImplCopyWithImpl<$Res>
+    extends _$AppConfigLoginModeSelectCopyWithImpl<$Res,
+        _$AppConfigLoginModeSelectImpl>
+    implements _$$AppConfigLoginModeSelectImplCopyWith<$Res> {
+  __$$AppConfigLoginModeSelectImplCopyWithImpl(
+      _$AppConfigLoginModeSelectImpl _value,
+      $Res Function(_$AppConfigLoginModeSelectImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AppConfigLoginModeSelect
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? greetingL10n = freezed,
+    Object? actions = null,
+  }) {
+    return _then(_$AppConfigLoginModeSelectImpl(
+      greetingL10n: freezed == greetingL10n
+          ? _value.greetingL10n
+          : greetingL10n // ignore: cast_nullable_to_non_nullable
+              as String?,
+      actions: null == actions
+          ? _value._actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as List<AppConfigModeSelectAction>,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$AppConfigLoginModeSelectImpl extends _AppConfigLoginModeSelect {
+  const _$AppConfigLoginModeSelectImpl(
+      {this.greetingL10n,
+      final List<AppConfigModeSelectAction> actions = const [
+        AppConfigModeSelectAction(
+            enabled: true,
+            type: 'login',
+            titleL10n: 'login_Button_signUpToDemoInstance')
+      ]})
+      : _actions = actions,
+        super._();
+
+  factory _$AppConfigLoginModeSelectImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppConfigLoginModeSelectImplFromJson(json);
+
+  @override
+  final String? greetingL10n;
+  final List<AppConfigModeSelectAction> _actions;
+  @override
+  @JsonKey()
+  List<AppConfigModeSelectAction> get actions {
+    if (_actions is EqualUnmodifiableListView) return _actions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_actions);
+  }
+
+  @override
+  String toString() {
+    return 'AppConfigLoginModeSelect(greetingL10n: $greetingL10n, actions: $actions)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppConfigLoginModeSelectImpl &&
+            (identical(other.greetingL10n, greetingL10n) ||
+                other.greetingL10n == greetingL10n) &&
+            const DeepCollectionEquality().equals(other._actions, _actions));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, greetingL10n, const DeepCollectionEquality().hash(_actions));
+
+  /// Create a copy of AppConfigLoginModeSelect
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppConfigLoginModeSelectImplCopyWith<_$AppConfigLoginModeSelectImpl>
+      get copyWith => __$$AppConfigLoginModeSelectImplCopyWithImpl<
+          _$AppConfigLoginModeSelectImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppConfigLoginModeSelectImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AppConfigLoginModeSelect extends AppConfigLoginModeSelect {
+  const factory _AppConfigLoginModeSelect(
+          {final String? greetingL10n,
+          final List<AppConfigModeSelectAction> actions}) =
+      _$AppConfigLoginModeSelectImpl;
+  const _AppConfigLoginModeSelect._() : super._();
+
+  factory _AppConfigLoginModeSelect.fromJson(Map<String, dynamic> json) =
+      _$AppConfigLoginModeSelectImpl.fromJson;
+
+  @override
+  String? get greetingL10n;
+  @override
+  List<AppConfigModeSelectAction> get actions;
+
+  /// Create a copy of AppConfigLoginModeSelect
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AppConfigLoginModeSelectImplCopyWith<_$AppConfigLoginModeSelectImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 AppConfigModeSelectAction _$AppConfigModeSelectActionFromJson(
@@ -532,13 +899,7 @@ mixin _$AppConfigModeSelectAction {
   bool get enabled => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get titleL10n => throw _privateConstructorUsedError;
-
-  /// TODO: Migration workaround - accepts both int and string IDs.
-  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
-  @IntToStringOptionalConverter()
   String? get embeddedId => throw _privateConstructorUsedError;
-  bool get isLaunchButtonVisible => throw _privateConstructorUsedError;
-  bool get isLaunchScreen => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigModeSelectAction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -556,13 +917,7 @@ abstract class $AppConfigModeSelectActionCopyWith<$Res> {
           $Res Function(AppConfigModeSelectAction) then) =
       _$AppConfigModeSelectActionCopyWithImpl<$Res, AppConfigModeSelectAction>;
   @useResult
-  $Res call(
-      {bool enabled,
-      String type,
-      String titleL10n,
-      @IntToStringOptionalConverter() String? embeddedId,
-      bool isLaunchButtonVisible,
-      bool isLaunchScreen});
+  $Res call({bool enabled, String type, String titleL10n, String? embeddedId});
 }
 
 /// @nodoc
@@ -585,8 +940,6 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
     Object? type = null,
     Object? titleL10n = null,
     Object? embeddedId = freezed,
-    Object? isLaunchButtonVisible = null,
-    Object? isLaunchScreen = null,
   }) {
     return _then(_value.copyWith(
       enabled: null == enabled
@@ -605,14 +958,6 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
           ? _value.embeddedId
           : embeddedId // ignore: cast_nullable_to_non_nullable
               as String?,
-      isLaunchButtonVisible: null == isLaunchButtonVisible
-          ? _value.isLaunchButtonVisible
-          : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLaunchScreen: null == isLaunchScreen
-          ? _value.isLaunchScreen
-          : isLaunchScreen // ignore: cast_nullable_to_non_nullable
-              as bool,
     ) as $Val);
   }
 }
@@ -626,13 +971,7 @@ abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
       __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool enabled,
-      String type,
-      String titleL10n,
-      @IntToStringOptionalConverter() String? embeddedId,
-      bool isLaunchButtonVisible,
-      bool isLaunchScreen});
+  $Res call({bool enabled, String type, String titleL10n, String? embeddedId});
 }
 
 /// @nodoc
@@ -654,8 +993,6 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
     Object? type = null,
     Object? titleL10n = null,
     Object? embeddedId = freezed,
-    Object? isLaunchButtonVisible = null,
-    Object? isLaunchScreen = null,
   }) {
     return _then(_$AppConfigModeSelectActionImpl(
       enabled: null == enabled
@@ -674,14 +1011,6 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
           ? _value.embeddedId
           : embeddedId // ignore: cast_nullable_to_non_nullable
               as String?,
-      isLaunchButtonVisible: null == isLaunchButtonVisible
-          ? _value.isLaunchButtonVisible
-          : isLaunchButtonVisible // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLaunchScreen: null == isLaunchScreen
-          ? _value.isLaunchScreen
-          : isLaunchScreen // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -694,9 +1023,7 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
       {required this.enabled,
       required this.type,
       required this.titleL10n,
-      @IntToStringOptionalConverter() this.embeddedId,
-      this.isLaunchButtonVisible = false,
-      this.isLaunchScreen = false})
+      this.embeddedId})
       : super._();
 
   factory _$AppConfigModeSelectActionImpl.fromJson(Map<String, dynamic> json) =>
@@ -708,22 +1035,12 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   final String type;
   @override
   final String titleL10n;
-
-  /// TODO: Migration workaround - accepts both int and string IDs.
-  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  @IntToStringOptionalConverter()
   final String? embeddedId;
-  @override
-  @JsonKey()
-  final bool isLaunchButtonVisible;
-  @override
-  @JsonKey()
-  final bool isLaunchScreen;
 
   @override
   String toString() {
-    return 'AppConfigModeSelectAction(enabled: $enabled, type: $type, titleL10n: $titleL10n, embeddedId: $embeddedId, isLaunchButtonVisible: $isLaunchButtonVisible, isLaunchScreen: $isLaunchScreen)';
+    return 'AppConfigModeSelectAction(enabled: $enabled, type: $type, titleL10n: $titleL10n, embeddedId: $embeddedId)';
   }
 
   @override
@@ -736,17 +1053,13 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
             (identical(other.embeddedId, embeddedId) ||
-                other.embeddedId == embeddedId) &&
-            (identical(other.isLaunchButtonVisible, isLaunchButtonVisible) ||
-                other.isLaunchButtonVisible == isLaunchButtonVisible) &&
-            (identical(other.isLaunchScreen, isLaunchScreen) ||
-                other.isLaunchScreen == isLaunchScreen));
+                other.embeddedId == embeddedId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, enabled, type, titleL10n,
-      embeddedId, isLaunchButtonVisible, isLaunchScreen);
+  int get hashCode =>
+      Object.hash(runtimeType, enabled, type, titleL10n, embeddedId);
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -770,9 +1083,7 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
       {required final bool enabled,
       required final String type,
       required final String titleL10n,
-      @IntToStringOptionalConverter() final String? embeddedId,
-      final bool isLaunchButtonVisible,
-      final bool isLaunchScreen}) = _$AppConfigModeSelectActionImpl;
+      final String? embeddedId}) = _$AppConfigModeSelectActionImpl;
   const _AppConfigModeSelectAction._() : super._();
 
   factory _AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) =
@@ -784,16 +1095,8 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   String get type;
   @override
   String get titleL10n;
-
-  /// TODO: Migration workaround - accepts both int and string IDs.
-  /// Remove [IntToStringConverter] once all JSONs use string IDs only.
   @override
-  @IntToStringOptionalConverter()
   String? get embeddedId;
-  @override
-  bool get isLaunchButtonVisible;
-  @override
-  bool get isLaunchScreen;
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
