@@ -156,6 +156,7 @@ class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
 class ImageAssetsConfig with _$ImageAssetsConfig {
   @JsonSerializable(explicitToJson: true)
   const factory ImageAssetsConfig({
+    ImageSource? defaultPlaceholderImage,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
     @Default(LeadingAvatarStyleConfig()) LeadingAvatarStyleConfig leadingAvatarStyle,
   }) = _ImageAssetsConfig;
