@@ -65,6 +65,7 @@ class ThemeStyleFactoryProvider {
     final leadingAvatarStyleFactory =
         LeadingAvatarStyleFactory(colorScheme, widgetConfig.imageAssets.leadingAvatarStyle);
     final keypadStyleFactory = KeypadStyleFactory(colorScheme, config: null, textTheme: createTextTheme());
+    final embeddedRequestErrorDialogFactory = EmbeddedRequestErrorDialogFactory(imageAssetsConfig);
 
     // Screen-specific styles
     final aboutScreenStyleFactory = AboutScreenStyleFactory(pageConfig.about);
@@ -97,6 +98,7 @@ class ThemeStyleFactoryProvider {
       loginModeSelectStyleFactory.create(),
       leadingAvatarStyleFactory.create(),
       keypadStyleFactory.create(),
+      embeddedRequestErrorDialogFactory.create(),
 
       /// Screen-specific styles
       keypadScreenStyleFactory.create(),

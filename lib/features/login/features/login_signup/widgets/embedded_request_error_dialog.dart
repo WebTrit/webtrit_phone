@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+
+import 'embedded_request_error_style.dart';
+import 'embedded_request_error_styles.dart';
+
+export 'embedded_request_error_style.dart';
+export 'embedded_request_error_styles.dart';
 
 class EmbeddedRequestErrorDialog extends StatelessWidget {
   const EmbeddedRequestErrorDialog({
@@ -22,13 +27,16 @@ class EmbeddedRequestErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final EmbeddedRequestErrorStyle? logo = theme
+        .extension<EmbeddedRequestErrorStyles>()
+        ?.primary;
 
     final appBar = onBack != null
         ? AppBar(
-            automaticallyImplyLeading: onBack != null,
-            leading: BackButton(onPressed: onBack),
-            elevation: 0,
-          )
+      automaticallyImplyLeading: onBack != null,
+      leading: BackButton(onPressed: onBack),
+      elevation: 0,
+    )
         : null;
 
     return PopScope(
@@ -41,12 +49,7 @@ class EmbeddedRequestErrorDialog extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Assets.primaryOnboardinLogo.svg(
-                  fit: BoxFit.contain,
-                  width: 120,
-                  height: 120,
-                ),
-                const SizedBox(height: kMinInteractiveDimension),
+                if (logo?.picture != null) logo!.picture!.svg(),
                 Text(
                   title,
                   style: theme.textTheme.headlineSmall?.copyWith(

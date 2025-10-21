@@ -10,3 +10,4 @@ export 'login_signup_verify_screen_screenshot.dart';
 export 'main_screen_screenshot.dart';
 export 'privacy_screen_screenshot.dart';
 export 'setting_screen_screenshot.dart';
+export 'embedded_error_dialog_screenshot.dart';
