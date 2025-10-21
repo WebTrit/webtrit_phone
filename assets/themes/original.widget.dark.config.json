@@ -3,6 +3,9 @@
     "fontFamily": "Montserrat"
   },
   "imageAssets": {
+    "defaultPlaceholderImage": {
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg"
+    },
     "leadingAvatarStyle": {
       "backgroundColor": "#EEF3F6",
       "radius": 20.0,
