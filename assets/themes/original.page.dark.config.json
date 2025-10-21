@@ -8,7 +8,7 @@
         "systemNavigationBarIconBrightness": "light"
       },
       "mainLogo": {
-        "uri": "asset://assets/images/primary_onboardin_logo.svg",
+        "uri": "asset://assets/images/primary_onboarding_logo.svg",
         "render": {
           "scale": 0.42,
           "padding": {
@@ -24,7 +24,7 @@
     },
     "switchPage": {
       "mainLogo": {
-        "uri": "asset://assets/images/secondary_onboardin_logo.svg",
+        "uri": "asset://assets/images/secondary_onboarding_logo.svg",
         "render": {
           "scale": 0.25,
           "padding": {
@@ -174,7 +174,7 @@
   },
   "about": {
     "mainLogo": {
-      "uri": "asset://assets/images/secondary_onboardin_logo.svg",
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg",
       "render": {
         "scale": 0.25,
         "padding": {

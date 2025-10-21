@@ -4,7 +4,7 @@
   },
   "imageAssets": {
     "defaultPlaceholderImage": {
-      "uri": "asset://assets/images/secondary_onboardin_logo.svg"
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg"
     },
     "leadingAvatarStyle": {
       "backgroundColor": "#EEF3F6",
