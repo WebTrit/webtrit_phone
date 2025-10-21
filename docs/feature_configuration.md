@@ -15,64 +15,61 @@
 
 ---
 
-## Login Screen Configuration
+## Login Configuration
 
-**Configuration Key:** `mode-select-actions`
-
-For more details, refer to the [Embedded Resources](#embedded-resources) section.
-
-Settings for selecting the login mode, such as native login, custom embedded screens, or fully
-web-driven onboarding.
-
-**Fields:**
-
-- `enabled`: Determines if the action is active.
-- `embeddedResourceId`: ID of the resource for the embedded page (if applicable).
-- `type`: Action type (`login` or `embedded`).
-- `titleL10n`: Localized title of the button.
-- `isLaunchButtonVisible`: *(bool)* Whether this configuration should be shown as a button on the
-  native welcome screen.
-- `isLaunchScreen`: *(bool, embedded only)* Whether this embedded configuration should be launched
-  directly as the welcome screen, bypassing the native one.
-
-If `embeddedResourceId` is provided, the section is enabled, and the type is `embedded`, it will
-display a custom login
-page for this button on the welcome screen.
-
-If `isLaunchScreen` is `true`, and the type is `embedded`, the native welcome screen is skipped and
-the embedded page is shown as the entry point.
-This embedded screen is responsible for user onboarding and must communicate with Flutter through
-JSChannel and use the `/api/signup` endpoint to pass collected data to the adapter.
-
-**Example Configuration for Custom Login with Launch Button:
+The `loginConfig` section defines the app’s login screen behavior and embedded onboarding logic.
 
 ```json
 {
   "loginConfig": {
-    "greetingL10n": "WebTrit",
-    "modeSelectActions": [
-      {
-        "enabled": true,
-        "embeddedResourceId": 1,
-        "type": "embedded",
-        "titleL10n": "login_Button_signIn",
-        "isLaunchButtonVisible": true,
-        "isLaunchScreen": false
-      }
-    ]
-  },
-  "embeddedResources": [
-    {
-      "id": 1,
-      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
-      "toolbar": {
-        "showToolbar": true,
-        "titleL10n": "login_requestCredentials_title"
-      }
+    "common": {
+      "fullScreenLaunchEmbeddedResourceId": "1"
+    },
+    "modeSelect": {
+      "greetingL10n": "WebTrit",
+      "actions": [
+        {
+          "enabled": true,
+          "type": "login",
+          "titleL10n": "login_Button_signUpToDemoInstance"
+        },
+        {
+          "enabled": true,
+          "type": "embedded",
+          "titleL10n": "login_Button_signIn",
+          "embeddedId": "1"
+        }
+      ]
     }
-  ]
+  }
 }
 ```
+
+### Login Common
+
+| Field                                | Type      | Description                                                                 |
+|--------------------------------------|-----------|-----------------------------------------------------------------------------|
+| `fullScreenLaunchEmbeddedResourceId` | `string?` | Optional ID of an embedded resource to launch directly as the login screen. |
+
+### Login Mode Select
+
+Defines how login modes appear on the welcome screen.
+
+| Field          | Type                              | Default            | Description                                           |
+|----------------|-----------------------------------|--------------------|-------------------------------------------------------|
+| `greetingL10n` | `string?`                         | —                  | Greeting text key.                                    |
+| `actions`      | `List<AppConfigModeSelectAction>` | one default action | List of available login actions (native or embedded). |
+
+Each `AppConfigModeSelectAction` includes:
+
+| Field        | Type      | Description                                      |
+|--------------|-----------|--------------------------------------------------|
+| `enabled`    | `bool`    | Whether the action button is visible.            |
+| `type`       | `string`  | Defines the action type (`login` or `embedded`). |
+| `titleL10n`  | `string`  | Localized title of the button.                   |
+| `embeddedId` | `string?` | Optional ID referencing an embedded resource.    |
+
+---
 
 # Setup Main Configuration
 
