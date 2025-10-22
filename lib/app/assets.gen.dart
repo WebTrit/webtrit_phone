@@ -94,15 +94,15 @@ class $AssetsThemesGen {
 
   /// List of all assets
   List<String> get values => [
-        appConfig,
-        customSignup,
-        originalColorSchemeDarkConfig,
-        originalColorSchemeLightConfig,
-        originalPageDarkConfig,
-        originalPageLightConfig,
-        originalWidgetDarkConfig,
-        originalWidgetLightConfig
-      ];
+    appConfig,
+    customSignup,
+    originalColorSchemeDarkConfig,
+    originalColorSchemeLightConfig,
+    originalPageDarkConfig,
+    originalPageLightConfig,
+    originalWidgetDarkConfig,
+    originalWidgetLightConfig,
+  ];
 }
 
 class Assets {
@@ -111,17 +111,22 @@ class Assets {
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
   static const $AssetsCertificatesGen certificates = $AssetsCertificatesGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
-  static const SvgGenImage primaryOnboardinLogo =
-      SvgGenImage('assets/primary_onboardin_logo.svg');
+  static const SvgGenImage primaryOnboardinLogo = SvgGenImage(
+    'assets/primary_onboardin_logo.svg',
+  );
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
-  static const SvgGenImage secondaryOnboardinLogo =
-      SvgGenImage('assets/secondary_onboardin_logo.svg');
+  static const SvgGenImage secondaryOnboardinLogo = SvgGenImage(
+    'assets/secondary_onboardin_logo.svg',
+  );
   static const $AssetsThemesGen themes = $AssetsThemesGen();
   static const String pubspec = 'pubspec.yaml';
 
   /// List of all assets
-  static List<dynamic> get values =>
-      [primaryOnboardinLogo, secondaryOnboardinLogo, pubspec];
+  static List<dynamic> get values => [
+    primaryOnboardinLogo,
+    secondaryOnboardinLogo,
+    pubspec,
+  ];
 }
 
 class AssetGenImage {
@@ -191,15 +196,8 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;
@@ -220,17 +218,11 @@ class AssetGenImageAnimation {
 }
 
 class SvgGenImage {
-  const SvgGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  }) : _isVecFormat = false;
+  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = false;
 
-  const SvgGenImage.vec(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  }) : _isVecFormat = true;
+  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = true;
 
   final String _assetName;
   final Size? size;
@@ -286,7 +278,8 @@ class SvgGenImage {
       placeholderBuilder: placeholderBuilder,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
-      colorFilter: colorFilter ??
+      colorFilter:
+          colorFilter ??
           (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,

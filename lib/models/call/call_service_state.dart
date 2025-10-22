@@ -16,17 +16,30 @@ enum NetworkStatus {
 }
 
 @freezed
-abstract class CallServiceState with _$CallServiceState {
-  const CallServiceState._();
+class CallServiceState with _$CallServiceState {
+  // const CallServiceState._();
 
-  const factory CallServiceState({
-    @Default(SignalingClientStatus.connecting) SignalingClientStatus signalingClientStatus,
-    @Default(Registration(status: RegistrationStatus.registering)) Registration registration,
-    @Default(null) NetworkStatus? networkStatus,
-    Object? lastSignalingClientConnectError,
-    Object? lastSignalingClientDisconnectError,
-    int? lastSignalingDisconnectCode,
-  }) = _CallServiceState;
+  const CallServiceState({
+    this.signalingClientStatus = SignalingClientStatus.connecting,
+    this.registration = const Registration(status: RegistrationStatus.registering),
+    this.networkStatus,
+    this.lastSignalingClientConnectError,
+    this.lastSignalingClientDisconnectError,
+    this.lastSignalingDisconnectCode,
+  });
+
+  @override
+  final SignalingClientStatus signalingClientStatus;
+  @override
+  final Registration registration;
+  @override
+  final NetworkStatus? networkStatus;
+  @override
+  final Object? lastSignalingClientConnectError;
+  @override
+  final Object? lastSignalingClientDisconnectError;
+  @override
+  final int? lastSignalingDisconnectCode;
 
   CallStatus get status {
     final lastSignalingDisconnectCode = this.lastSignalingDisconnectCode;

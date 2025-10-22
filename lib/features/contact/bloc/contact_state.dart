@@ -1,9 +1,14 @@
 part of 'contact_bloc.dart';
 
 @freezed
-abstract class ContactState with _$ContactState {
-  const factory ContactState({
-    Contact? contact,
-    @Default(false) bool deleted,
-  }) = _ContactState;
+class ContactState with _$ContactState {
+  const ContactState({
+    this.contact,
+    this.deleted = false,
+  });
+
+  @override
+  final Contact? contact;
+  @override
+  final bool deleted;
 }

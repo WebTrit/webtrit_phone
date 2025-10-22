@@ -8,12 +8,12 @@ sealed class SelfConfig {
       SelfConfigSupported(url: url, expiresAt: expiresAt);
 }
 
-final class SelfConfigUnsupported extends SelfConfig {
+class SelfConfigUnsupported extends SelfConfig {
   const SelfConfigUnsupported();
 }
 
-final class SelfConfigSupported extends SelfConfig with EquatableMixin {
-  SelfConfigSupported({
+class SelfConfigSupported extends SelfConfig with EquatableMixin {
+  const SelfConfigSupported({
     required this.url,
     required this.expiresAt,
   });

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' hide Notification;
 
 import 'package:bloc/bloc.dart';
@@ -796,13 +795,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPushEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      incoming: (event) => __onCallPushEventIncoming(event, emit),
-    );
+    return __onCallPushEventIncoming(event, emit);
   }
 
   Future<void> __onCallPushEventIncoming(
-    _CallPushEventIncoming event,
+    _CallPushEvent event,
     Emitter<CallState> emit,
   ) async {
     final eventError = event.error;
@@ -847,13 +844,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _HandshakeSignalingEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      state: (event) => __onHandshakeSignalingEventState(event, emit),
-    );
+    return __onHandshakeSignalingEventState(event, emit);
   }
 
   Future<void> __onHandshakeSignalingEventState(
-    _HandshakeSignalingEventState event,
+    _HandshakeSignalingEvent event,
     Emitter<CallState> emit,
   ) async {
     emit(state.copyWith(linesCount: event.linesCount));
@@ -2398,7 +2393,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // WebtritSignalingClient listen handlers
 
   void _onSignalingStateHandshake(StateHandshake stateHandshake) async {
-    add(_HandshakeSignalingEvent.state(
+    add(_HandshakeSignalingEvent(
       registration: stateHandshake.registration,
       linesCount: stateHandshake.lines.length,
     ));
@@ -2659,7 +2654,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine(() => 'didPushIncomingCall handle: $handle displayName: $displayName video: $video'
         ' callId: $callId error: $error');
 
-    add(_CallPushEvent.incoming(
+    add(_CallPushEvent(
       callId: callId,
       handle: handle,
       displayName: displayName,

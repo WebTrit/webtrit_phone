@@ -17,7 +17,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   SessionStatusCubit({
     required PushTokensBloc pushTokensBloc,
     required CallBloc callBloc,
-  }) : super(const SessionStatusState.initial()) {
+  }) : super(const SessionStatusState()) {
     _pushTokensSubscription = pushTokensBloc.stream.listen(_onPushTokensChanged);
     _callSubscription = callBloc.stream.listen(_onCallChanged);
 

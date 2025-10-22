@@ -11,787 +11,486 @@ part of 'about_bloc.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$AboutStarted {
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is AboutStarted);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString() {
-    return 'AboutStarted()';
-  }
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AboutStarted);
 }
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AboutStarted()';
+}
+
+
+}
+
+
+
 
 /// Adds pattern-matching-related methods to [AboutStarted].
 extension AboutStartedPatterns on AboutStarted {
-  /// A variant of `map` that fallback to returning `orElse`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_AboutStarted value)? $default, {
-    required TResult orElse(),
-  }) {
-    final _that = this;
-    switch (_that) {
-      case _AboutStarted() when $default != null:
-        return $default(_that);
-      case _:
-        return orElse();
-    }
-  }
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _AboutStarted value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _AboutStarted() when $default != null:
+return $default(_that);case _:
+  return orElse();
 
-  /// A `switch`-like method, using callbacks.
-  ///
-  /// Callbacks receives the raw object, upcasted.
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case final Subclass2 value:
-  ///     return ...;
-  /// }
-  /// ```
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_AboutStarted value) $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _AboutStarted():
-        return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
-    }
-  }
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _AboutStarted value)  $default,){
+final _that = this;
+switch (_that) {
+case _AboutStarted():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
 
-  /// A variant of `map` that fallback to returning `null`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return null;
-  /// }
-  /// ```
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_AboutStarted value)? $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _AboutStarted() when $default != null:
-        return $default(_that);
-      case _:
-        return null;
-    }
-  }
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _AboutStarted value)?  $default,){
+final _that = this;
+switch (_that) {
+case _AboutStarted() when $default != null:
+return $default(_that);case _:
+  return null;
 
-  /// A variant of `when` that fallback to an `orElse` callback.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function()? $default, {
-    required TResult orElse(),
-  }) {
-    final _that = this;
-    switch (_that) {
-      case _AboutStarted() when $default != null:
-        return $default();
-      case _:
-        return orElse();
-    }
-  }
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function()?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _AboutStarted() when $default != null:
+return $default();case _:
+  return orElse();
 
-  /// A `switch`-like method, using callbacks.
-  ///
-  /// As opposed to `map`, this offers destructuring.
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case Subclass2(:final field2):
-  ///     return ...;
-  /// }
-  /// ```
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function() $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _AboutStarted():
-        return $default();
-      case _:
-        throw StateError('Unexpected subclass');
-    }
-  }
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function()  $default,) {final _that = this;
+switch (_that) {
+case _AboutStarted():
+return $default();case _:
+  throw StateError('Unexpected subclass');
 
-  /// A variant of `when` that fallback to returning `null`
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case _:
-  ///     return null;
-  /// }
-  /// ```
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function()? $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _AboutStarted() when $default != null:
-        return $default();
-      case _:
-        return null;
-    }
-  }
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function()?  $default,) {final _that = this;
+switch (_that) {
+case _AboutStarted() when $default != null:
+return $default();case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
+
 
 class _AboutStarted implements AboutStarted {
   const _AboutStarted();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _AboutStarted);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString() {
-    return 'AboutStarted()';
-  }
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AboutStarted);
 }
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AboutStarted()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 mixin _$AboutState {
-  bool get progress;
-  List<String> get embeddedLinks;
-  String get appName;
-  String get packageName;
-  String get storeBuildVersion;
-  String get storeBuildNumber;
-  String get appVersion;
-  String get appIdentifier;
-  Uri get coreUrl;
-  String? get fcmPushToken;
-  Version? get coreVersion;
 
-  /// Create a copy of AboutState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $AboutStateCopyWith<AboutState> get copyWith =>
-      _$AboutStateCopyWithImpl<AboutState>(this as AboutState, _$identity);
+ bool get progress; List<String> get embeddedLinks; String get appName; String get packageName; String get storeBuildVersion; String get storeBuildNumber; String get appVersion; String get appIdentifier; Uri get coreUrl; String? get fcmPushToken; Version? get coreVersion;
+/// Create a copy of AboutState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AboutStateCopyWith<AboutState> get copyWith => _$AboutStateCopyWithImpl<AboutState>(this as AboutState, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is AboutState &&
-            (identical(other.progress, progress) ||
-                other.progress == progress) &&
-            const DeepCollectionEquality()
-                .equals(other.embeddedLinks, embeddedLinks) &&
-            (identical(other.appName, appName) || other.appName == appName) &&
-            (identical(other.packageName, packageName) ||
-                other.packageName == packageName) &&
-            (identical(other.storeBuildVersion, storeBuildVersion) ||
-                other.storeBuildVersion == storeBuildVersion) &&
-            (identical(other.storeBuildNumber, storeBuildNumber) ||
-                other.storeBuildNumber == storeBuildNumber) &&
-            (identical(other.appVersion, appVersion) ||
-                other.appVersion == appVersion) &&
-            (identical(other.appIdentifier, appIdentifier) ||
-                other.appIdentifier == appIdentifier) &&
-            (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
-            (identical(other.fcmPushToken, fcmPushToken) ||
-                other.fcmPushToken == fcmPushToken) &&
-            (identical(other.coreVersion, coreVersion) ||
-                other.coreVersion == coreVersion));
-  }
 
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      progress,
-      const DeepCollectionEquality().hash(embeddedLinks),
-      appName,
-      packageName,
-      storeBuildVersion,
-      storeBuildNumber,
-      appVersion,
-      appIdentifier,
-      coreUrl,
-      fcmPushToken,
-      coreVersion);
 
-  @override
-  String toString() {
-    return 'AboutState(progress: $progress, embeddedLinks: $embeddedLinks, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, appIdentifier: $appIdentifier, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AboutState&&(identical(other.progress, progress) || other.progress == progress)&&const DeepCollectionEquality().equals(other.embeddedLinks, embeddedLinks)&&(identical(other.appName, appName) || other.appName == appName)&&(identical(other.packageName, packageName) || other.packageName == packageName)&&(identical(other.storeBuildVersion, storeBuildVersion) || other.storeBuildVersion == storeBuildVersion)&&(identical(other.storeBuildNumber, storeBuildNumber) || other.storeBuildNumber == storeBuildNumber)&&(identical(other.appVersion, appVersion) || other.appVersion == appVersion)&&(identical(other.appIdentifier, appIdentifier) || other.appIdentifier == appIdentifier)&&(identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl)&&(identical(other.fcmPushToken, fcmPushToken) || other.fcmPushToken == fcmPushToken)&&(identical(other.coreVersion, coreVersion) || other.coreVersion == coreVersion));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,progress,const DeepCollectionEquality().hash(embeddedLinks),appName,packageName,storeBuildVersion,storeBuildNumber,appVersion,appIdentifier,coreUrl,fcmPushToken,coreVersion);
+
+@override
+String toString() {
+  return 'AboutState(progress: $progress, embeddedLinks: $embeddedLinks, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, appIdentifier: $appIdentifier, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class $AboutStateCopyWith<$Res> {
-  factory $AboutStateCopyWith(
-          AboutState value, $Res Function(AboutState) _then) =
-      _$AboutStateCopyWithImpl;
-  @useResult
-  $Res call(
-      {bool progress,
-      List<String> embeddedLinks,
-      String appName,
-      String packageName,
-      String storeBuildVersion,
-      String storeBuildNumber,
-      String appVersion,
-      String appIdentifier,
-      Uri coreUrl,
-      String? fcmPushToken,
-      Version? coreVersion});
-}
+abstract mixin class $AboutStateCopyWith<$Res>  {
+  factory $AboutStateCopyWith(AboutState value, $Res Function(AboutState) _then) = _$AboutStateCopyWithImpl;
+@useResult
+$Res call({
+ bool progress, List<String> embeddedLinks, String appName, String packageName, String storeBuildVersion, String storeBuildNumber, String appVersion, String appIdentifier, Uri coreUrl, String? fcmPushToken, Version? coreVersion
+});
 
+
+
+
+}
 /// @nodoc
-class _$AboutStateCopyWithImpl<$Res> implements $AboutStateCopyWith<$Res> {
+class _$AboutStateCopyWithImpl<$Res>
+    implements $AboutStateCopyWith<$Res> {
   _$AboutStateCopyWithImpl(this._self, this._then);
 
   final AboutState _self;
   final $Res Function(AboutState) _then;
 
-  /// Create a copy of AboutState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? progress = null,
-    Object? embeddedLinks = null,
-    Object? appName = null,
-    Object? packageName = null,
-    Object? storeBuildVersion = null,
-    Object? storeBuildNumber = null,
-    Object? appVersion = null,
-    Object? appIdentifier = null,
-    Object? coreUrl = null,
-    Object? fcmPushToken = freezed,
-    Object? coreVersion = freezed,
-  }) {
-    return _then(_self.copyWith(
-      progress: null == progress
-          ? _self.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as bool,
-      embeddedLinks: null == embeddedLinks
-          ? _self.embeddedLinks
-          : embeddedLinks // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      appName: null == appName
-          ? _self.appName
-          : appName // ignore: cast_nullable_to_non_nullable
-              as String,
-      packageName: null == packageName
-          ? _self.packageName
-          : packageName // ignore: cast_nullable_to_non_nullable
-              as String,
-      storeBuildVersion: null == storeBuildVersion
-          ? _self.storeBuildVersion
-          : storeBuildVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      storeBuildNumber: null == storeBuildNumber
-          ? _self.storeBuildNumber
-          : storeBuildNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      appVersion: null == appVersion
-          ? _self.appVersion
-          : appVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      appIdentifier: null == appIdentifier
-          ? _self.appIdentifier
-          : appIdentifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      coreUrl: null == coreUrl
-          ? _self.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
-      fcmPushToken: freezed == fcmPushToken
-          ? _self.fcmPushToken
-          : fcmPushToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-      coreVersion: freezed == coreVersion
-          ? _self.coreVersion
-          : coreVersion // ignore: cast_nullable_to_non_nullable
-              as Version?,
-    ));
-  }
+/// Create a copy of AboutState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? embeddedLinks = null,Object? appName = null,Object? packageName = null,Object? storeBuildVersion = null,Object? storeBuildNumber = null,Object? appVersion = null,Object? appIdentifier = null,Object? coreUrl = null,Object? fcmPushToken = freezed,Object? coreVersion = freezed,}) {
+  return _then(_self.copyWith(
+progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
+as bool,embeddedLinks: null == embeddedLinks ? _self.embeddedLinks : embeddedLinks // ignore: cast_nullable_to_non_nullable
+as List<String>,appName: null == appName ? _self.appName : appName // ignore: cast_nullable_to_non_nullable
+as String,packageName: null == packageName ? _self.packageName : packageName // ignore: cast_nullable_to_non_nullable
+as String,storeBuildVersion: null == storeBuildVersion ? _self.storeBuildVersion : storeBuildVersion // ignore: cast_nullable_to_non_nullable
+as String,storeBuildNumber: null == storeBuildNumber ? _self.storeBuildNumber : storeBuildNumber // ignore: cast_nullable_to_non_nullable
+as String,appVersion: null == appVersion ? _self.appVersion : appVersion // ignore: cast_nullable_to_non_nullable
+as String,appIdentifier: null == appIdentifier ? _self.appIdentifier : appIdentifier // ignore: cast_nullable_to_non_nullable
+as String,coreUrl: null == coreUrl ? _self.coreUrl : coreUrl // ignore: cast_nullable_to_non_nullable
+as Uri,fcmPushToken: freezed == fcmPushToken ? _self.fcmPushToken : fcmPushToken // ignore: cast_nullable_to_non_nullable
+as String?,coreVersion: freezed == coreVersion ? _self.coreVersion : coreVersion // ignore: cast_nullable_to_non_nullable
+as Version?,
+  ));
 }
+
+}
+
 
 /// Adds pattern-matching-related methods to [AboutState].
 extension AboutStatePatterns on AboutState {
-  /// A variant of `map` that fallback to returning `orElse`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_AboutState value)? $default, {
-    required TResult orElse(),
-  }) {
-    final _that = this;
-    switch (_that) {
-      case _AboutState() when $default != null:
-        return $default(_that);
-      case _:
-        return orElse();
-    }
-  }
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _AboutState value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _AboutState() when $default != null:
+return $default(_that);case _:
+  return orElse();
 
-  /// A `switch`-like method, using callbacks.
-  ///
-  /// Callbacks receives the raw object, upcasted.
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case final Subclass2 value:
-  ///     return ...;
-  /// }
-  /// ```
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_AboutState value) $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _AboutState():
-        return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
-    }
-  }
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _AboutState value)  $default,){
+final _that = this;
+switch (_that) {
+case _AboutState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
 
-  /// A variant of `map` that fallback to returning `null`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return null;
-  /// }
-  /// ```
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_AboutState value)? $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _AboutState() when $default != null:
-        return $default(_that);
-      case _:
-        return null;
-    }
-  }
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _AboutState value)?  $default,){
+final _that = this;
+switch (_that) {
+case _AboutState() when $default != null:
+return $default(_that);case _:
+  return null;
 
-  /// A variant of `when` that fallback to an `orElse` callback.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            bool progress,
-            List<String> embeddedLinks,
-            String appName,
-            String packageName,
-            String storeBuildVersion,
-            String storeBuildNumber,
-            String appVersion,
-            String appIdentifier,
-            Uri coreUrl,
-            String? fcmPushToken,
-            Version? coreVersion)?
-        $default, {
-    required TResult orElse(),
-  }) {
-    final _that = this;
-    switch (_that) {
-      case _AboutState() when $default != null:
-        return $default(
-            _that.progress,
-            _that.embeddedLinks,
-            _that.appName,
-            _that.packageName,
-            _that.storeBuildVersion,
-            _that.storeBuildNumber,
-            _that.appVersion,
-            _that.appIdentifier,
-            _that.coreUrl,
-            _that.fcmPushToken,
-            _that.coreVersion);
-      case _:
-        return orElse();
-    }
-  }
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool progress,  List<String> embeddedLinks,  String appName,  String packageName,  String storeBuildVersion,  String storeBuildNumber,  String appVersion,  String appIdentifier,  Uri coreUrl,  String? fcmPushToken,  Version? coreVersion)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _AboutState() when $default != null:
+return $default(_that.progress,_that.embeddedLinks,_that.appName,_that.packageName,_that.storeBuildVersion,_that.storeBuildNumber,_that.appVersion,_that.appIdentifier,_that.coreUrl,_that.fcmPushToken,_that.coreVersion);case _:
+  return orElse();
 
-  /// A `switch`-like method, using callbacks.
-  ///
-  /// As opposed to `map`, this offers destructuring.
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case Subclass2(:final field2):
-  ///     return ...;
-  /// }
-  /// ```
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            bool progress,
-            List<String> embeddedLinks,
-            String appName,
-            String packageName,
-            String storeBuildVersion,
-            String storeBuildNumber,
-            String appVersion,
-            String appIdentifier,
-            Uri coreUrl,
-            String? fcmPushToken,
-            Version? coreVersion)
-        $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _AboutState():
-        return $default(
-            _that.progress,
-            _that.embeddedLinks,
-            _that.appName,
-            _that.packageName,
-            _that.storeBuildVersion,
-            _that.storeBuildNumber,
-            _that.appVersion,
-            _that.appIdentifier,
-            _that.coreUrl,
-            _that.fcmPushToken,
-            _that.coreVersion);
-      case _:
-        throw StateError('Unexpected subclass');
-    }
-  }
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool progress,  List<String> embeddedLinks,  String appName,  String packageName,  String storeBuildVersion,  String storeBuildNumber,  String appVersion,  String appIdentifier,  Uri coreUrl,  String? fcmPushToken,  Version? coreVersion)  $default,) {final _that = this;
+switch (_that) {
+case _AboutState():
+return $default(_that.progress,_that.embeddedLinks,_that.appName,_that.packageName,_that.storeBuildVersion,_that.storeBuildNumber,_that.appVersion,_that.appIdentifier,_that.coreUrl,_that.fcmPushToken,_that.coreVersion);case _:
+  throw StateError('Unexpected subclass');
 
-  /// A variant of `when` that fallback to returning `null`
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case _:
-  ///     return null;
-  /// }
-  /// ```
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            bool progress,
-            List<String> embeddedLinks,
-            String appName,
-            String packageName,
-            String storeBuildVersion,
-            String storeBuildNumber,
-            String appVersion,
-            String appIdentifier,
-            Uri coreUrl,
-            String? fcmPushToken,
-            Version? coreVersion)?
-        $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _AboutState() when $default != null:
-        return $default(
-            _that.progress,
-            _that.embeddedLinks,
-            _that.appName,
-            _that.packageName,
-            _that.storeBuildVersion,
-            _that.storeBuildNumber,
-            _that.appVersion,
-            _that.appIdentifier,
-            _that.coreUrl,
-            _that.fcmPushToken,
-            _that.coreVersion);
-      case _:
-        return null;
-    }
-  }
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool progress,  List<String> embeddedLinks,  String appName,  String packageName,  String storeBuildVersion,  String storeBuildNumber,  String appVersion,  String appIdentifier,  Uri coreUrl,  String? fcmPushToken,  Version? coreVersion)?  $default,) {final _that = this;
+switch (_that) {
+case _AboutState() when $default != null:
+return $default(_that.progress,_that.embeddedLinks,_that.appName,_that.packageName,_that.storeBuildVersion,_that.storeBuildNumber,_that.appVersion,_that.appIdentifier,_that.coreUrl,_that.fcmPushToken,_that.coreVersion);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
+
 
 class _AboutState extends AboutState {
-  const _AboutState(
-      {this.progress = false,
-      final List<String> embeddedLinks = const [],
-      required this.appName,
-      required this.packageName,
-      required this.storeBuildVersion,
-      required this.storeBuildNumber,
-      required this.appVersion,
-      required this.appIdentifier,
-      required this.coreUrl,
-      this.fcmPushToken,
-      this.coreVersion})
-      : _embeddedLinks = embeddedLinks,
-        super._();
+  const _AboutState({this.progress = false, final  List<String> embeddedLinks = const [], required this.appName, required this.packageName, required this.storeBuildVersion, required this.storeBuildNumber, required this.appVersion, required this.appIdentifier, required this.coreUrl, this.fcmPushToken, this.coreVersion}): _embeddedLinks = embeddedLinks,super._();
+  
 
-  @override
-  @JsonKey()
-  final bool progress;
-  final List<String> _embeddedLinks;
-  @override
-  @JsonKey()
-  List<String> get embeddedLinks {
-    if (_embeddedLinks is EqualUnmodifiableListView) return _embeddedLinks;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_embeddedLinks);
-  }
+@override@JsonKey() final  bool progress;
+ final  List<String> _embeddedLinks;
+@override@JsonKey() List<String> get embeddedLinks {
+  if (_embeddedLinks is EqualUnmodifiableListView) return _embeddedLinks;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_embeddedLinks);
+}
 
-  @override
-  final String appName;
-  @override
-  final String packageName;
-  @override
-  final String storeBuildVersion;
-  @override
-  final String storeBuildNumber;
-  @override
-  final String appVersion;
-  @override
-  final String appIdentifier;
-  @override
-  final Uri coreUrl;
-  @override
-  final String? fcmPushToken;
-  @override
-  final Version? coreVersion;
+@override final  String appName;
+@override final  String packageName;
+@override final  String storeBuildVersion;
+@override final  String storeBuildNumber;
+@override final  String appVersion;
+@override final  String appIdentifier;
+@override final  Uri coreUrl;
+@override final  String? fcmPushToken;
+@override final  Version? coreVersion;
 
-  /// Create a copy of AboutState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$AboutStateCopyWith<_AboutState> get copyWith =>
-      __$AboutStateCopyWithImpl<_AboutState>(this, _$identity);
+/// Create a copy of AboutState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$AboutStateCopyWith<_AboutState> get copyWith => __$AboutStateCopyWithImpl<_AboutState>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _AboutState &&
-            (identical(other.progress, progress) ||
-                other.progress == progress) &&
-            const DeepCollectionEquality()
-                .equals(other._embeddedLinks, _embeddedLinks) &&
-            (identical(other.appName, appName) || other.appName == appName) &&
-            (identical(other.packageName, packageName) ||
-                other.packageName == packageName) &&
-            (identical(other.storeBuildVersion, storeBuildVersion) ||
-                other.storeBuildVersion == storeBuildVersion) &&
-            (identical(other.storeBuildNumber, storeBuildNumber) ||
-                other.storeBuildNumber == storeBuildNumber) &&
-            (identical(other.appVersion, appVersion) ||
-                other.appVersion == appVersion) &&
-            (identical(other.appIdentifier, appIdentifier) ||
-                other.appIdentifier == appIdentifier) &&
-            (identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl) &&
-            (identical(other.fcmPushToken, fcmPushToken) ||
-                other.fcmPushToken == fcmPushToken) &&
-            (identical(other.coreVersion, coreVersion) ||
-                other.coreVersion == coreVersion));
-  }
 
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      progress,
-      const DeepCollectionEquality().hash(_embeddedLinks),
-      appName,
-      packageName,
-      storeBuildVersion,
-      storeBuildNumber,
-      appVersion,
-      appIdentifier,
-      coreUrl,
-      fcmPushToken,
-      coreVersion);
 
-  @override
-  String toString() {
-    return 'AboutState(progress: $progress, embeddedLinks: $embeddedLinks, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, appIdentifier: $appIdentifier, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AboutState&&(identical(other.progress, progress) || other.progress == progress)&&const DeepCollectionEquality().equals(other._embeddedLinks, _embeddedLinks)&&(identical(other.appName, appName) || other.appName == appName)&&(identical(other.packageName, packageName) || other.packageName == packageName)&&(identical(other.storeBuildVersion, storeBuildVersion) || other.storeBuildVersion == storeBuildVersion)&&(identical(other.storeBuildNumber, storeBuildNumber) || other.storeBuildNumber == storeBuildNumber)&&(identical(other.appVersion, appVersion) || other.appVersion == appVersion)&&(identical(other.appIdentifier, appIdentifier) || other.appIdentifier == appIdentifier)&&(identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl)&&(identical(other.fcmPushToken, fcmPushToken) || other.fcmPushToken == fcmPushToken)&&(identical(other.coreVersion, coreVersion) || other.coreVersion == coreVersion));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,progress,const DeepCollectionEquality().hash(_embeddedLinks),appName,packageName,storeBuildVersion,storeBuildNumber,appVersion,appIdentifier,coreUrl,fcmPushToken,coreVersion);
+
+@override
+String toString() {
+  return 'AboutState(progress: $progress, embeddedLinks: $embeddedLinks, appName: $appName, packageName: $packageName, storeBuildVersion: $storeBuildVersion, storeBuildNumber: $storeBuildNumber, appVersion: $appVersion, appIdentifier: $appIdentifier, coreUrl: $coreUrl, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class _$AboutStateCopyWith<$Res>
-    implements $AboutStateCopyWith<$Res> {
-  factory _$AboutStateCopyWith(
-          _AboutState value, $Res Function(_AboutState) _then) =
-      __$AboutStateCopyWithImpl;
-  @override
-  @useResult
-  $Res call(
-      {bool progress,
-      List<String> embeddedLinks,
-      String appName,
-      String packageName,
-      String storeBuildVersion,
-      String storeBuildNumber,
-      String appVersion,
-      String appIdentifier,
-      Uri coreUrl,
-      String? fcmPushToken,
-      Version? coreVersion});
-}
+abstract mixin class _$AboutStateCopyWith<$Res> implements $AboutStateCopyWith<$Res> {
+  factory _$AboutStateCopyWith(_AboutState value, $Res Function(_AboutState) _then) = __$AboutStateCopyWithImpl;
+@override @useResult
+$Res call({
+ bool progress, List<String> embeddedLinks, String appName, String packageName, String storeBuildVersion, String storeBuildNumber, String appVersion, String appIdentifier, Uri coreUrl, String? fcmPushToken, Version? coreVersion
+});
 
+
+
+
+}
 /// @nodoc
-class __$AboutStateCopyWithImpl<$Res> implements _$AboutStateCopyWith<$Res> {
+class __$AboutStateCopyWithImpl<$Res>
+    implements _$AboutStateCopyWith<$Res> {
   __$AboutStateCopyWithImpl(this._self, this._then);
 
   final _AboutState _self;
   final $Res Function(_AboutState) _then;
 
-  /// Create a copy of AboutState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? progress = null,
-    Object? embeddedLinks = null,
-    Object? appName = null,
-    Object? packageName = null,
-    Object? storeBuildVersion = null,
-    Object? storeBuildNumber = null,
-    Object? appVersion = null,
-    Object? appIdentifier = null,
-    Object? coreUrl = null,
-    Object? fcmPushToken = freezed,
-    Object? coreVersion = freezed,
-  }) {
-    return _then(_AboutState(
-      progress: null == progress
-          ? _self.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as bool,
-      embeddedLinks: null == embeddedLinks
-          ? _self._embeddedLinks
-          : embeddedLinks // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      appName: null == appName
-          ? _self.appName
-          : appName // ignore: cast_nullable_to_non_nullable
-              as String,
-      packageName: null == packageName
-          ? _self.packageName
-          : packageName // ignore: cast_nullable_to_non_nullable
-              as String,
-      storeBuildVersion: null == storeBuildVersion
-          ? _self.storeBuildVersion
-          : storeBuildVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      storeBuildNumber: null == storeBuildNumber
-          ? _self.storeBuildNumber
-          : storeBuildNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      appVersion: null == appVersion
-          ? _self.appVersion
-          : appVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      appIdentifier: null == appIdentifier
-          ? _self.appIdentifier
-          : appIdentifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      coreUrl: null == coreUrl
-          ? _self.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
-      fcmPushToken: freezed == fcmPushToken
-          ? _self.fcmPushToken
-          : fcmPushToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-      coreVersion: freezed == coreVersion
-          ? _self.coreVersion
-          : coreVersion // ignore: cast_nullable_to_non_nullable
-              as Version?,
-    ));
-  }
+/// Create a copy of AboutState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? progress = null,Object? embeddedLinks = null,Object? appName = null,Object? packageName = null,Object? storeBuildVersion = null,Object? storeBuildNumber = null,Object? appVersion = null,Object? appIdentifier = null,Object? coreUrl = null,Object? fcmPushToken = freezed,Object? coreVersion = freezed,}) {
+  return _then(_AboutState(
+progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
+as bool,embeddedLinks: null == embeddedLinks ? _self._embeddedLinks : embeddedLinks // ignore: cast_nullable_to_non_nullable
+as List<String>,appName: null == appName ? _self.appName : appName // ignore: cast_nullable_to_non_nullable
+as String,packageName: null == packageName ? _self.packageName : packageName // ignore: cast_nullable_to_non_nullable
+as String,storeBuildVersion: null == storeBuildVersion ? _self.storeBuildVersion : storeBuildVersion // ignore: cast_nullable_to_non_nullable
+as String,storeBuildNumber: null == storeBuildNumber ? _self.storeBuildNumber : storeBuildNumber // ignore: cast_nullable_to_non_nullable
+as String,appVersion: null == appVersion ? _self.appVersion : appVersion // ignore: cast_nullable_to_non_nullable
+as String,appIdentifier: null == appIdentifier ? _self.appIdentifier : appIdentifier // ignore: cast_nullable_to_non_nullable
+as String,coreUrl: null == coreUrl ? _self.coreUrl : coreUrl // ignore: cast_nullable_to_non_nullable
+as Uri,fcmPushToken: freezed == fcmPushToken ? _self.fcmPushToken : fcmPushToken // ignore: cast_nullable_to_non_nullable
+as String?,coreVersion: freezed == coreVersion ? _self.coreVersion : coreVersion // ignore: cast_nullable_to_non_nullable
+as Version?,
+  ));
+}
+
+
 }
 
 // dart format on

@@ -13,8 +13,8 @@ sealed class SystemNotificationEvent {
       SystemNotificationOutboxRemove(id, actionType);
 }
 
-final class SystemNotificationUpdate extends SystemNotificationEvent with EquatableMixin {
-  SystemNotificationUpdate(this.notification, {this.initialData = false});
+class SystemNotificationUpdate extends SystemNotificationEvent with EquatableMixin {
+  const SystemNotificationUpdate(this.notification, {this.initialData = false});
   final SystemNotification notification;
   final bool initialData;
 
@@ -27,8 +27,8 @@ final class SystemNotificationUpdate extends SystemNotificationEvent with Equata
   bool get stringify => true;
 }
 
-final class SystemNotificationRemove extends SystemNotificationEvent with EquatableMixin {
-  SystemNotificationRemove(this.id);
+class SystemNotificationRemove extends SystemNotificationEvent with EquatableMixin {
+  const SystemNotificationRemove(this.id);
   final int id;
 
   @override
@@ -38,8 +38,8 @@ final class SystemNotificationRemove extends SystemNotificationEvent with Equata
   bool get stringify => true;
 }
 
-final class SystemNotificationOutboxUpdate extends SystemNotificationEvent with EquatableMixin {
-  SystemNotificationOutboxUpdate(this.entry);
+class SystemNotificationOutboxUpdate extends SystemNotificationEvent with EquatableMixin {
+  const SystemNotificationOutboxUpdate(this.entry);
   final SystemNotificationOutboxEntry entry;
   int get id => entry.notificationId;
 
@@ -50,8 +50,8 @@ final class SystemNotificationOutboxUpdate extends SystemNotificationEvent with 
   bool get stringify => true;
 }
 
-final class SystemNotificationOutboxRemove extends SystemNotificationEvent with EquatableMixin {
-  SystemNotificationOutboxRemove(this.id, this.actionType);
+class SystemNotificationOutboxRemove extends SystemNotificationEvent with EquatableMixin {
+  const SystemNotificationOutboxRemove(this.id, this.actionType);
   final int id;
   final SnOutboxActionType actionType;
 

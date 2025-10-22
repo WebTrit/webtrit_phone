@@ -1,19 +1,34 @@
 part of 'call_bloc.dart';
 
 @freezed
-abstract class CallState with _$CallState {
-  const CallState._();
+class CallState with _$CallState {
+  const CallState({
+    this.callServiceState = const CallServiceState(),
+    this.currentAppLifecycleState,
+    this.linesCount = 0,
+    this.activeCalls = const [],
+    this.minimized,
+    this.speakerOnBeforeMinimize,
+    this.audioDevice,
+    this.availableAudioDevices = const [],
+  });
 
-  const factory CallState({
-    @Default(CallServiceState()) CallServiceState callServiceState,
-    AppLifecycleState? currentAppLifecycleState,
-    @Default(0) int linesCount,
-    @Default([]) List<ActiveCall> activeCalls,
-    bool? minimized,
-    bool? speakerOnBeforeMinimize,
-    CallAudioDevice? audioDevice,
-    @Default([]) List<CallAudioDevice> availableAudioDevices,
-  }) = _CallState;
+  @override
+  final CallServiceState callServiceState;
+  @override
+  final AppLifecycleState? currentAppLifecycleState;
+  @override
+  final int linesCount;
+  @override
+  final List<ActiveCall> activeCalls;
+  @override
+  final bool? minimized;
+  @override
+  final bool? speakerOnBeforeMinimize;
+  @override
+  final CallAudioDevice? audioDevice;
+  @override
+  final List<CallAudioDevice> availableAudioDevices;
 
   CallStatus get status => callServiceState.status;
 
@@ -97,33 +112,76 @@ abstract class CallState with _$CallState {
 }
 
 @freezed
-abstract class ActiveCall with _$ActiveCall implements CallEntry {
-  ActiveCall._();
+class ActiveCall with _$ActiveCall implements CallEntry {
+  ActiveCall({
+    required this.direction,
+    required this.line,
+    required this.callId,
+    required this.handle,
+    required this.createdTime,
+    required this.video,
+    required this.processingStatus,
+    this.frontCamera = true,
+    this.held = false,
+    this.muted = false,
+    this.updating = false,
+    this.incomingOffer,
+    this.displayName,
+    this.fromReferId,
+    this.fromReplaces,
+    this.fromNumber,
+    this.acceptedTime,
+    this.hungUpTime,
+    this.transfer,
+    this.failure,
+    this.localStream,
+    this.remoteStream,
+  });
 
-  factory ActiveCall({
-    required CallDirection direction,
-    required int? line,
-    required String callId,
-    required CallkeepHandle handle,
-    required DateTime createdTime,
-    required bool video,
-    required CallProcessingStatus processingStatus,
-    @Default(true) bool? frontCamera,
-    @Default(false) bool held,
-    @Default(false) bool muted,
-    @Default(false) bool updating,
-    JsepValue? incomingOffer,
-    String? displayName,
-    String? fromReferId,
-    String? fromReplaces,
-    String? fromNumber,
-    DateTime? acceptedTime,
-    DateTime? hungUpTime,
-    Transfer? transfer,
-    Object? failure,
-    MediaStream? localStream,
-    MediaStream? remoteStream,
-  }) = _ActiveCall;
+  @override
+  final CallDirection direction;
+  @override
+  final int? line;
+  @override
+  final String callId;
+  @override
+  final CallkeepHandle handle;
+  @override
+  final DateTime createdTime;
+  @override
+  final bool video;
+  @override
+  final CallProcessingStatus processingStatus;
+  @override
+  final bool? frontCamera;
+  @override
+  final bool held;
+  @override
+  final bool muted;
+  @override
+  final bool updating;
+  @override
+  final JsepValue? incomingOffer;
+  @override
+  final String? displayName;
+  @override
+  final String? fromReferId;
+  @override
+  final String? fromReplaces;
+  @override
+  final String? fromNumber;
+  @override
+  final DateTime? acceptedTime;
+  @override
+  final DateTime? hungUpTime;
+  @override
+  final Transfer? transfer;
+  @override
+  final Object? failure;
+  @override
+  final MediaStream? localStream;
+  @override
+  final MediaStream? remoteStream;
 
   @override
   bool get isIncoming => direction == CallDirection.incoming;
@@ -155,14 +213,19 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
 enum CallAudioDeviceType { earpiece, speaker, bluetooth, wiredHeadset, streaming, unknown }
 
 @freezed
-abstract class CallAudioDevice with _$CallAudioDevice {
-  const CallAudioDevice._();
+class CallAudioDevice with _$CallAudioDevice {
+  CallAudioDevice({
+    required this.type,
+    this.id,
+    this.name,
+  });
 
-  factory CallAudioDevice({
-    required CallAudioDeviceType type,
-    String? id,
-    String? name,
-  }) = _CallAudioDevice;
+  @override
+  final CallAudioDeviceType type;
+  @override
+  final String? id;
+  @override
+  final String? name;
 
   factory CallAudioDevice.fromMediaInput(MediaDeviceInfo device) {
     return CallAudioDevice(

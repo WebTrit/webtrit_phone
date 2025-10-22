@@ -1,11 +1,14 @@
 part of 'settings_bloc.dart';
 
 @freezed
-abstract class SettingsState with _$SettingsState {
-  const SettingsState._();
+class SettingsState with _$SettingsState {
+  const SettingsState({
+    required this.progress,
+    this.unreadVoicemailCount = 0,
+  });
 
-  const factory SettingsState({
-    required bool progress,
-    @Default(0) int unreadVoicemailCount,
-  }) = _SettingsState;
+  @override
+  final bool progress;
+  @override
+  final int unreadVoicemailCount;
 }

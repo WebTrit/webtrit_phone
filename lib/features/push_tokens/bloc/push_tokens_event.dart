@@ -1,10 +1,22 @@
 part of 'push_tokens_bloc.dart';
 
-@freezed
-class PushTokensEvent with _$PushTokensEvent {
-  const factory PushTokensEvent.started() = PushTokensStarted;
+sealed class PushTokensEvent {
+  const PushTokensEvent();
+}
 
-  const factory PushTokensEvent.insertedOrUpdated(AppPushTokenType type, String value) = PushTokensInsertedOrUpdated;
+class PushTokensEventStarted extends PushTokensEvent {
+  const PushTokensEventStarted();
+}
 
-  const factory PushTokensEvent.error(String errorMessage) = _PushTokensError;
+class PushTokensEventInsertedOrUpdated extends PushTokensEvent {
+  const PushTokensEventInsertedOrUpdated(this.type, this.value);
+
+  final AppPushTokenType type;
+  final String value;
+}
+
+class PushTokensEventError extends PushTokensEvent {
+  const PushTokensEventError(this.errorMessage);
+
+  final String errorMessage;
 }

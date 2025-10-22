@@ -10,7 +10,7 @@ class MockSessionStatusCubit extends MockCubit<SessionStatusState> implements Se
     whenListen(
       mock,
       const Stream<SessionStatusState>.empty(),
-      initialState: const SessionStatusState.initial(),
+      initialState: const SessionStatusState(),
     );
     return mock;
   }

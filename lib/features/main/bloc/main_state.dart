@@ -18,11 +18,11 @@ class MainBlocState extends Equatable {
 
 sealed class CoreVersionState {}
 
-final class Unknown extends CoreVersionState {}
+class Unknown extends CoreVersionState {}
 
-final class Compatible extends CoreVersionState {}
+class Compatible extends CoreVersionState {}
 
-final class Incompatible extends CoreVersionState with EquatableMixin {
+class Incompatible extends CoreVersionState with EquatableMixin {
   final Version currentVersion;
   final VersionConstraint supportedConstraint;
   final Uri? updateStoreUrl;

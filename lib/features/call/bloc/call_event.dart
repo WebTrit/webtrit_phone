@@ -1,6 +1,6 @@
 part of 'call_bloc.dart';
 
-abstract class CallEvent {
+sealed class CallEvent {
   const CallEvent();
 }
 
@@ -8,34 +8,36 @@ class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-@Freezed(copyWith: false)
-abstract class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
-  const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
+class _AppLifecycleStateChanged extends CallEvent {
+  const _AppLifecycleStateChanged(this.state);
+
+  final AppLifecycleState state;
 }
 
-@Freezed(copyWith: false)
-abstract class _ConnectivityResultChanged with _$ConnectivityResultChanged implements CallEvent {
-  const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
+class _ConnectivityResultChanged extends CallEvent {
+  const _ConnectivityResultChanged(this.result);
+
+  final ConnectivityResult result;
 }
 
-@Freezed(copyWith: false)
-abstract class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements CallEvent {
-  const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
+class _NavigatorMediaDevicesChange extends CallEvent {
+  const _NavigatorMediaDevicesChange();
 }
 
 // registration event change
 
-@Freezed(copyWith: false)
-abstract class _RegistrationChange with _$RegistrationChange implements CallEvent {
-  const factory _RegistrationChange({
-    required Registration registration,
-  }) = __RegistrationChange;
+class _RegistrationChange extends CallEvent {
+  const _RegistrationChange({
+    required this.registration,
+  });
+
+  final Registration registration;
 }
 
 // handle app state
 
 @Freezed(copyWith: false)
-abstract class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
+class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
   const factory _ResetStateEvent.completeCalls() = _ResetStateEventCompleteCalls;
 
   const factory _ResetStateEvent.completeCall(String callId) = _ResetStateEventCompleteCall;
@@ -44,7 +46,7 @@ abstract class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
 // signaling client events
 
 @Freezed(copyWith: false)
-abstract class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
+class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
   const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
@@ -54,18 +56,20 @@ abstract class _SignalingClientEvent with _$SignalingClientEvent implements Call
 
 // handshake signaling events
 
-@Freezed(copyWith: false)
-abstract class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
-  const factory _HandshakeSignalingEvent.state({
-    required Registration registration,
-    required int linesCount,
-  }) = _HandshakeSignalingEventState;
+class _HandshakeSignalingEvent extends CallEvent {
+  const _HandshakeSignalingEvent({
+    required this.registration,
+    required this.linesCount,
+  });
+
+  final Registration registration;
+  final int linesCount;
 }
 
 // call signaling events
 
 @Freezed(copyWith: false)
-abstract class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
+class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.incoming({
     required int? line,
     required String callId,
@@ -175,21 +179,26 @@ abstract class _CallSignalingEvent with _$CallSignalingEvent implements CallEven
 
 // call push events
 
-@Freezed(copyWith: false)
-abstract class _CallPushEvent with _$CallPushEvent implements CallEvent {
-  const factory _CallPushEvent.incoming({
-    required String callId,
-    required CallkeepHandle handle,
-    String? displayName,
-    required bool video,
-    CallkeepIncomingCallError? error,
-  }) = _CallPushEventIncoming;
+class _CallPushEvent extends CallEvent {
+  const _CallPushEvent({
+    required this.callId,
+    required this.handle,
+    this.displayName,
+    required this.video,
+    this.error,
+  });
+
+  final String callId;
+  final CallkeepHandle handle;
+  final String? displayName;
+  final bool video;
+  final CallkeepIncomingCallError? error;
 }
 
 // call control events
 
 @Freezed(copyWith: false)
-abstract class CallControlEvent with _$CallControlEvent implements CallEvent {
+class CallControlEvent with _$CallControlEvent implements CallEvent {
   @Assert('!(generic == null && number == null && email == null)',
       'one of generic, number or email parameters must be assign')
   @Assert(
@@ -275,8 +284,8 @@ mixin CallControlEventStartedMixin {
 // call perform events
 
 @Freezed(copyWith: false)
-abstract class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
-  _CallPerformEvent._();
+class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
+  _CallPerformEvent._(this.callId);
 
   factory _CallPerformEvent.started(
     String callId, {
@@ -307,12 +316,17 @@ abstract class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   void fulfill() => _performCompleter.isCompleted ? null : _performCompleter.complete(true);
 
   void fail() => _performCompleter.isCompleted ? null : _performCompleter.complete(false);
+
+  @override
+  final String callId;
 }
 
 // peer connection events
 
 @Freezed(copyWith: false)
-abstract class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+  const _PeerConnectionEvent._(this.callId);
+
   const factory _PeerConnectionEvent.signalingStateChanged(String callId, RTCSignalingState state) =
       _PeerConnectionEventSignalingStateChanged;
 
@@ -332,12 +346,15 @@ abstract class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEv
 
   const factory _PeerConnectionEvent.streamRemoved(String callId, MediaStream stream) =
       _PeerConnectionEventStreamRemoved;
+
+  @override
+  final String callId;
 }
 
 // call screen events
 
 @Freezed(copyWith: false)
-abstract class CallScreenEvent with _$CallScreenEvent implements CallEvent {
+class CallScreenEvent with _$CallScreenEvent implements CallEvent {
   factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
 
   factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
