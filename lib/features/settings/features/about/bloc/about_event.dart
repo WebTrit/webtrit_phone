@@ -1,10 +1,9 @@
 part of 'about_bloc.dart';
 
-abstract class AboutEvent {
+sealed class AboutEvent {
   const AboutEvent();
 }
 
-@Freezed(copyWith: false)
-class AboutStarted with _$AboutStarted implements AboutEvent {
-  const factory AboutStarted() = _AboutStarted;
+class AboutStarted extends AboutEvent {
+  const AboutStarted();
 }
