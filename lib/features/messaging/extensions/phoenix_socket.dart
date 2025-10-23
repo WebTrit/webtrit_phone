@@ -6,6 +6,7 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/mappers/phoenix/phoenix.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/string_phone_utils.dart';
 
 // TODO(Vlad):
 // - create separate "MessagingClient" and all nessacery entities(channels, states, transactions)
