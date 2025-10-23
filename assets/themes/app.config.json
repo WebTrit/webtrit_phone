@@ -12,13 +12,13 @@
           "titleL10n": "login_Button_signUpToDemoInstance"
         },
         {
-          "enabled": true,
+          "enabled": false,
           "type": "embedded",
           "embeddedId": "example_embedded_login",
           "titleL10n": "login_Button_signUpToDemoInstance"
         },
         {
-          "enabled": true,
+          "enabled": false,
           "type": "embedded",
           "embeddedId": "example_embedded_media_query",
           "titleL10n": "login_Button_signInMediaQueryExample"
