@@ -4,6 +4,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/regexes.dart';
+import 'package:webtrit_phone/utils/string_phone_utils.dart';
 
 class ContactsRepository with ContactsDriftMapper {
   ContactsRepository({
@@ -59,6 +61,25 @@ class ContactsRepository with ContactsDriftMapper {
 
   Stream<Contact?> watchContactByPhoneNumber(String number) {
     return _appDatabase.contactsDao.watchContactByPhoneNumber(number).map((data) {
+      if (data == null) return null;
+      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
+    });
+  }
+
+  Stream<Contact?> watchContactByPhoneNumberMatch(String number) {
+    number = number.replaceAll(RegExp(numberSanitizeRegex), '');
+    if (number.isEmpty) return Stream.value(null);
+
+    // For short numbers(services numbers, extensions) do exact match only
+    // to avoid mismatches like matching "111" to "001234567111"
+    if (number.length <= 4) return watchContactByPhoneNumber(number);
+
+    // Try to get national format if possible to improve matching
+    // for cases when contact stored in national format "123456789" but
+    // remote system automaticaly appends country code "+00123456789" after calling
+    // so only way to find such contact is to search by extract national part
+    final nationalNumber = number.nationalPhoneIfValid;
+    return _appDatabase.contactsDao.watchContactByPhoneMatchedEnding(nationalNumber ?? number).map((data) {
       if (data == null) return null;
       return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
     });

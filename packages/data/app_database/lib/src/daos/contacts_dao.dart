@@ -92,6 +92,8 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return contactMap.values.toList();
   }
 
+  // TODO rename to _joinFullContactData
+  /// And favorites and something else in future
   JoinedSelectStatement _joinPhonesAndEmails(SimpleSelectStatement select) {
     return select.join([
       leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
@@ -130,6 +132,14 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       ..limit(1);
 
     return query.watch().map(_gatherSingleContact);
+  }
+
+  Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
+    final query = _joinPhonesAndEmails(select(contactsTable));
+    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.limit(1);
+
+    return query.watch().map((data) => _gatherMultipleContacts(data).firstOrNull);
   }
 
   Future<List<FullContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) async {

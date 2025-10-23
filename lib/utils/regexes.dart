@@ -10,3 +10,5 @@ const linkWoFilesRegex =
 const symbolsRegex = r'[^a-zA-Z\d\s\u0400-\u04FF]+';
 
 const numbersExtractRegex = r'\d+';
+
+const numberSanitizeRegex = r'\D';

@@ -5,6 +5,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/regexes.dart';
 
 import 'local_contacts_repository.dart';
 
@@ -83,7 +84,8 @@ class LocalContactsRepository implements ILocalContactsRepository {
               thumbnail: contact.thumbnail,
               phones: contact.phones
                   .map((phone) => LocalContactPhone(
-                        number: phone.number,
+                        // TODO: maybe store raw and sanitized versions together
+                        number: phone.number.replaceAll(RegExp(numberSanitizeRegex), ''),
                         label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.name,
                       ))
                   .toList(),
