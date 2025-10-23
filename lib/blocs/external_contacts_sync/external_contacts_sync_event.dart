@@ -1,7 +1,6 @@
 part of 'external_contacts_sync_bloc.dart';
 
-@immutable
-abstract class ExternalContactsSyncEvent extends Equatable {
+sealed class ExternalContactsSyncEvent extends Equatable {
   const ExternalContactsSyncEvent();
 
   @override

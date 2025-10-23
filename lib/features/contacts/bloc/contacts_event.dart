@@ -1,20 +1,23 @@
 part of 'contacts_bloc.dart';
 
-abstract class ContactsEvent {
+sealed class ContactsEvent {
   const ContactsEvent();
 }
 
-@Freezed(copyWith: false)
-class ContactsSourceTypeChanged with _$ContactsSourceTypeChanged implements ContactsEvent {
-  const factory ContactsSourceTypeChanged(ContactSourceType sourceType) = _ContactsSourceTypeChanged;
+class ContactsSourceTypeChanged extends ContactsEvent {
+  const ContactsSourceTypeChanged(this.sourceType);
+
+  final ContactSourceType sourceType;
 }
 
-@Freezed(copyWith: false)
-class ContactsSearchChanged with _$ContactsSearchChanged implements ContactsEvent {
-  const factory ContactsSearchChanged(String search) = _ContactsSearchChanged;
+class ContactsSearchChanged extends ContactsEvent {
+  const ContactsSearchChanged(this.search);
+
+  final String search;
 }
 
-@Freezed(copyWith: false)
-class ContactsSearchSubmitted with _$ContactsSearchSubmitted implements ContactsEvent {
-  const factory ContactsSearchSubmitted(String search) = _ContactsSearchSubmitted;
+class ContactsSearchSubmitted extends ContactsEvent {
+  const ContactsSearchSubmitted(this.search);
+
+  final String search;
 }

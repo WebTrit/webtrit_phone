@@ -1,27 +1,31 @@
 part of 'app_bloc.dart';
 
-abstract class AppEvent {
+sealed class AppEvent {
   const AppEvent();
 }
 
-@Freezed(copyWith: false)
-class _SessionUpdated with _$SessionUpdated implements AppEvent {
-  const factory _SessionUpdated(Session? session) = __SessionUpdated;
+class _SessionUpdated extends AppEvent {
+  const _SessionUpdated(this.session);
+
+  final Session? session;
 }
 
-@Freezed(copyWith: false)
-class AppThemeSettingsChanged with _$AppThemeSettingsChanged implements AppEvent {
-  const factory AppThemeSettingsChanged(ThemeSettings value) = _AppThemeSettingsChanged;
+class AppThemeSettingsChanged extends AppEvent {
+  const AppThemeSettingsChanged(this.value);
+
+  final ThemeSettings value;
 }
 
-@Freezed(copyWith: false)
-class AppThemeModeChanged with _$AppThemeModeChanged implements AppEvent {
-  const factory AppThemeModeChanged(ThemeMode value) = _AppThemeModeChanged;
+class AppThemeModeChanged extends AppEvent {
+  const AppThemeModeChanged(this.value);
+
+  final ThemeMode value;
 }
 
-@Freezed(copyWith: false)
-class AppLocaleChanged with _$AppLocaleChanged implements AppEvent {
-  const factory AppLocaleChanged(Locale value) = _AppLocaleChanged;
+class AppLocaleChanged extends AppEvent {
+  const AppLocaleChanged(this.value);
+
+  final Locale value;
 }
 
 @Freezed(copyWith: false)

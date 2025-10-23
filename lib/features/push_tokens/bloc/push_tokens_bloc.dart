@@ -31,13 +31,13 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     required this.callkeep,
   }) : super(PushTokensState.initial()) {
     _onTokenRefreshSubscription = firebaseMessaging.onTokenRefresh.listen((fcmToken) {
-      add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
+      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     });
     callkeep.setPushRegistryDelegate(this);
 
-    on<PushTokensStarted>(_onStarted);
-    on<PushTokensInsertedOrUpdated>(_onInsertedOrUpdated);
-    on<_PushTokensError>(_onError);
+    on<PushTokensEventStarted>(_onStarted);
+    on<PushTokensEventInsertedOrUpdated>(_onInsertedOrUpdated);
+    on<PushTokensEventError>(_onError);
   }
 
   final PushTokensRepository pushTokensRepository;
@@ -109,18 +109,18 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     const vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
 
     final fcmToken = await _backoffRetries.execute<String?>(
-      (attempt) async {
+          (attempt) async {
         _logger.fine('_retrieveAndStoreFcmToken attempt $attempt');
         return await firebaseMessaging.getToken(vapidKey: vapidKey);
       },
       shouldRetry: (e, attempt) {
-        add(PushTokensEvent.error('Failed to retrieve FCM token: $e at attempt $attempt'));
+        add(PushTokensEventError('Failed to retrieve FCM token: $e at attempt $attempt'));
         return true;
       },
     );
 
     if (fcmToken != null) {
-      add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
+      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     } else {
       _logger.severe('_retrieveAndStoreFcmToken failed after max attempts');
     }
@@ -128,27 +128,27 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   Future<void> _retrieveAndStoreApnsToken() async {
     final apnsToken = await _backoffRetries.execute<String?>(
-      (attempt) async {
+          (attempt) async {
         _logger.fine('_retrieveAndStoreApnsToken attempt $attempt');
         return await firebaseMessaging.getAPNSToken();
       },
       shouldRetry: (e, attempt) {
-        add(PushTokensEvent.error('Failed to retrieve APNS token: $e at attempt $attempt'));
+        add(PushTokensEventError('Failed to retrieve APNS token: $e at attempt $attempt'));
         return true;
       },
     );
 
     if (apnsToken != null) {
-      add(PushTokensInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
+      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
     } else {
       _logger.severe('_retrieveAndStoreApnsToken failed after max attempts');
     }
   }
 
-  void _onInsertedOrUpdated(PushTokensInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
+  void _onInsertedOrUpdated(PushTokensEventInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
     try {
       await _backoffRetries.execute<void>(
-        (attempt) async {
+            (attempt) async {
           _logger.fine('_onInsertedOrUpdated attempt $attempt');
           await pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
         },
@@ -170,14 +170,14 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     }
   }
 
-  void _onError(_PushTokensError event, Emitter<PushTokensState> emit) async {
+  void _onError(PushTokensEventError event, Emitter<PushTokensState> emit) async {
     emit(PushTokensState.uploadFailure(event.errorMessage));
   }
 
   @override
   void didUpdatePushTokenForPushTypeVoIP(String? token) {
     if (token != null) {
-      add(PushTokensInsertedOrUpdated(AppPushTokenType.apkvoip, token));
+      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.apkvoip, token));
     } else {
       // TODO: null mean that the system invalidated the push token for VoIP type
     }

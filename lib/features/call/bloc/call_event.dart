@@ -1,6 +1,6 @@
 part of 'call_bloc.dart';
 
-abstract class CallEvent {
+sealed class CallEvent {
   const CallEvent();
 }
 
@@ -8,28 +8,30 @@ class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-@Freezed(copyWith: false)
-class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
-  const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
+class _AppLifecycleStateChanged extends CallEvent {
+  const _AppLifecycleStateChanged(this.state);
+
+  final AppLifecycleState state;
 }
 
-@Freezed(copyWith: false)
-class _ConnectivityResultChanged with _$ConnectivityResultChanged implements CallEvent {
-  const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
+class _ConnectivityResultChanged extends CallEvent {
+  const _ConnectivityResultChanged(this.result);
+
+  final ConnectivityResult result;
 }
 
-@Freezed(copyWith: false)
-class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements CallEvent {
-  const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
+class _NavigatorMediaDevicesChange extends CallEvent {
+  const _NavigatorMediaDevicesChange();
 }
 
 // registration event change
 
-@Freezed(copyWith: false)
-class _RegistrationChange with _$RegistrationChange implements CallEvent {
-  const factory _RegistrationChange({
-    required Registration registration,
-  }) = __RegistrationChange;
+class _RegistrationChange extends CallEvent {
+  const _RegistrationChange({
+    required this.registration,
+  });
+
+  final Registration registration;
 }
 
 // handle app state
@@ -54,12 +56,14 @@ class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
 
 // handshake signaling events
 
-@Freezed(copyWith: false)
-class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
-  const factory _HandshakeSignalingEvent.state({
-    required Registration registration,
-    required int linesCount,
-  }) = _HandshakeSignalingEventState;
+class _HandshakeSignalingEventState extends CallEvent {
+  const _HandshakeSignalingEventState({
+    required this.registration,
+    required this.linesCount,
+  });
+
+  final Registration registration;
+  final int linesCount;
 }
 
 // call signaling events
@@ -164,9 +168,9 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;
 
   const factory _CallSignalingEvent.registrationFailed(
-    int code,
-    String reason,
-  ) = _CallSignalingEventRegisterationFailed;
+      int code,
+      String reason,
+      ) = _CallSignalingEventRegisterationFailed;
 
   const factory _CallSignalingEvent.unregistering() = _CallSignalingEventUnregistering;
 
@@ -175,15 +179,20 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
 
 // call push events
 
-@Freezed(copyWith: false)
-class _CallPushEvent with _$CallPushEvent implements CallEvent {
-  const factory _CallPushEvent.incoming({
-    required String callId,
-    required CallkeepHandle handle,
-    String? displayName,
-    required bool video,
-    CallkeepIncomingCallError? error,
-  }) = _CallPushEventIncoming;
+class _CallPushEventIncoming extends CallEvent {
+  const _CallPushEventIncoming({
+    required this.callId,
+    required this.handle,
+    this.displayName,
+    required this.video,
+    this.error,
+  });
+
+  final String callId;
+  final CallkeepHandle handle;
+  final String? displayName;
+  final bool video;
+  final CallkeepIncomingCallError? error;
 }
 
 // call control events
@@ -224,7 +233,7 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
   const factory CallControlEvent.cameraEnabled(String callId, bool enabled) = _CallControlEventCameraEnabled;
 
   const factory CallControlEvent.audioDeviceSet(String callId, CallAudioDevice device) =
-      _CallControlEventAudioDeviceSet;
+  _CallControlEventAudioDeviceSet;
 
   const factory CallControlEvent.failureApproved(String callId) = _CallControlEventFailureApproved;
 
@@ -277,13 +286,12 @@ mixin CallControlEventStartedMixin {
 @Freezed(copyWith: false)
 class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
-
   factory _CallPerformEvent.started(
-    String callId, {
-    required CallkeepHandle handle,
-    String? displayName,
-    required bool video,
-  }) = _CallPerformEventStarted;
+      String callId, {
+        required CallkeepHandle handle,
+        String? displayName,
+        required bool video,
+      }) = _CallPerformEventStarted;
 
   factory _CallPerformEvent.answered(String callId) = _CallPerformEventAnswered;
 
@@ -298,7 +306,7 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   factory _CallPerformEvent.audioDeviceSet(String callId, CallAudioDevice device) = _CallPerformEventAudioDeviceSet;
 
   factory _CallPerformEvent.audioDevicesUpdate(String callId, List<CallAudioDevice> devices) =
-      _CallPerformEventAudioDevicesUpdate;
+  _CallPerformEventAudioDevicesUpdate;
 
   final _performCompleter = Completer<bool>();
 
@@ -307,31 +315,34 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   void fulfill() => _performCompleter.isCompleted ? null : _performCompleter.complete(true);
 
   void fail() => _performCompleter.isCompleted ? null : _performCompleter.complete(false);
+
 }
 
 // peer connection events
 
 @Freezed(copyWith: false)
 class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+
   const factory _PeerConnectionEvent.signalingStateChanged(String callId, RTCSignalingState state) =
-      _PeerConnectionEventSignalingStateChanged;
+  _PeerConnectionEventSignalingStateChanged;
 
   const factory _PeerConnectionEvent.connectionStateChanged(String callId, RTCPeerConnectionState state) =
-      _PeerConnectionEventConnectionStateChanged;
+  _PeerConnectionEventConnectionStateChanged;
 
   const factory _PeerConnectionEvent.iceGatheringStateChanged(String callId, RTCIceGatheringState state) =
-      _PeerConnectionEventIceGatheringStateChanged;
+  _PeerConnectionEventIceGatheringStateChanged;
 
   const factory _PeerConnectionEvent.iceConnectionStateChanged(String callId, RTCIceConnectionState state) =
-      _PeerConnectionEventIceConnectionStateChanged;
+  _PeerConnectionEventIceConnectionStateChanged;
 
   const factory _PeerConnectionEvent.iceCandidateIdentified(String callId, RTCIceCandidate candidate) =
-      _PeerConnectionEventIceCandidateIdentified;
+  _PeerConnectionEventIceCandidateIdentified;
 
   const factory _PeerConnectionEvent.streamAdded(String callId, MediaStream stream) = _PeerConnectionEventStreamAdded;
 
   const factory _PeerConnectionEvent.streamRemoved(String callId, MediaStream stream) =
-      _PeerConnectionEventStreamRemoved;
+  _PeerConnectionEventStreamRemoved;
+
 }
 
 // call screen events

@@ -15,191 +15,6 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$AppLifecycleStateChanged {
-  AppLifecycleState get state => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$_AppLifecycleStateChangedImpl
-    with DiagnosticableTreeMixin
-    implements __AppLifecycleStateChanged {
-  const _$_AppLifecycleStateChangedImpl(this.state);
-
-  @override
-  final AppLifecycleState state;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_AppLifecycleStateChanged(state: $state)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_AppLifecycleStateChanged'))
-      ..add(DiagnosticsProperty('state', state));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_AppLifecycleStateChangedImpl &&
-            (identical(other.state, state) || other.state == state));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, state);
-}
-
-abstract class __AppLifecycleStateChanged implements _AppLifecycleStateChanged {
-  const factory __AppLifecycleStateChanged(final AppLifecycleState state) =
-      _$_AppLifecycleStateChangedImpl;
-
-  @override
-  AppLifecycleState get state;
-}
-
-/// @nodoc
-mixin _$ConnectivityResultChanged {
-  ConnectivityResult get result => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$_ConnectivityResultChangedImpl
-    with DiagnosticableTreeMixin
-    implements __ConnectivityResultChanged {
-  const _$_ConnectivityResultChangedImpl(this.result);
-
-  @override
-  final ConnectivityResult result;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_ConnectivityResultChanged(result: $result)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_ConnectivityResultChanged'))
-      ..add(DiagnosticsProperty('result', result));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_ConnectivityResultChangedImpl &&
-            (identical(other.result, result) || other.result == result));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, result);
-}
-
-abstract class __ConnectivityResultChanged
-    implements _ConnectivityResultChanged {
-  const factory __ConnectivityResultChanged(final ConnectivityResult result) =
-      _$_ConnectivityResultChangedImpl;
-
-  @override
-  ConnectivityResult get result;
-}
-
-/// @nodoc
-mixin _$NavigatorMediaDevicesChange {}
-
-/// @nodoc
-
-class _$_NavigatorMediaDevicesChangeImpl
-    with DiagnosticableTreeMixin
-    implements __NavigatorMediaDevicesChange {
-  const _$_NavigatorMediaDevicesChangeImpl();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_NavigatorMediaDevicesChange()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_NavigatorMediaDevicesChange'));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_NavigatorMediaDevicesChangeImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-}
-
-abstract class __NavigatorMediaDevicesChange
-    implements _NavigatorMediaDevicesChange {
-  const factory __NavigatorMediaDevicesChange() =
-      _$_NavigatorMediaDevicesChangeImpl;
-}
-
-/// @nodoc
-mixin _$RegistrationChange {
-  Registration get registration => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$_RegistrationChangeImpl
-    with DiagnosticableTreeMixin
-    implements __RegistrationChange {
-  const _$_RegistrationChangeImpl({required this.registration});
-
-  @override
-  final Registration registration;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_RegistrationChange(registration: $registration)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_RegistrationChange'))
-      ..add(DiagnosticsProperty('registration', registration));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_RegistrationChangeImpl &&
-            (identical(other.registration, registration) ||
-                other.registration == registration));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, registration);
-}
-
-abstract class __RegistrationChange implements _RegistrationChange {
-  const factory __RegistrationChange(
-      {required final Registration registration}) = _$_RegistrationChangeImpl;
-
-  @override
-  Registration get registration;
-}
-
-/// @nodoc
 mixin _$ResetStateEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -245,20 +60,12 @@ mixin _$ResetStateEvent {
 /// @nodoc
 
 class _$ResetStateEventCompleteCallsImpl
-    with DiagnosticableTreeMixin
     implements _ResetStateEventCompleteCalls {
   const _$ResetStateEventCompleteCallsImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_ResetStateEvent.completeCalls()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_ResetStateEvent.completeCalls'));
   }
 
   @override
@@ -343,7 +150,6 @@ abstract class _ResetStateEventCompleteCalls implements _ResetStateEvent {
 /// @nodoc
 
 class _$ResetStateEventCompleteCallImpl
-    with DiagnosticableTreeMixin
     implements _ResetStateEventCompleteCall {
   const _$ResetStateEventCompleteCallImpl(this.callId);
 
@@ -351,16 +157,8 @@ class _$ResetStateEventCompleteCallImpl
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_ResetStateEvent.completeCall(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_ResetStateEvent.completeCall'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -503,21 +301,12 @@ mixin _$SignalingClientEvent {
 /// @nodoc
 
 class _$SignalingClientEventConnectInitiatedImpl
-    with DiagnosticableTreeMixin
     implements _SignalingClientEventConnectInitiated {
   const _$SignalingClientEventConnectInitiatedImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_SignalingClientEvent.connectInitiated()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', '_SignalingClientEvent.connectInitiated'));
   }
 
   @override
@@ -615,21 +404,12 @@ abstract class _SignalingClientEventConnectInitiated
 /// @nodoc
 
 class _$SignalingClientEventDisconnectInitiatedImpl
-    with DiagnosticableTreeMixin
     implements _SignalingClientEventDisconnectInitiated {
   const _$SignalingClientEventDisconnectInitiatedImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_SignalingClientEvent.disconnectInitiated()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', '_SignalingClientEvent.disconnectInitiated'));
   }
 
   @override
@@ -727,7 +507,6 @@ abstract class _SignalingClientEventDisconnectInitiated
 /// @nodoc
 
 class _$SignalingClientEventDisconnectedImpl
-    with DiagnosticableTreeMixin
     implements _SignalingClientEventDisconnected {
   const _$SignalingClientEventDisconnectedImpl(this.code, this.reason);
 
@@ -737,17 +516,8 @@ class _$SignalingClientEventDisconnectedImpl
   final String? reason;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_SignalingClientEvent.disconnected(code: $code, reason: $reason)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_SignalingClientEvent.disconnected'))
-      ..add(DiagnosticsProperty('code', code))
-      ..add(DiagnosticsProperty('reason', reason));
   }
 
   @override
@@ -846,154 +616,6 @@ abstract class _SignalingClientEventDisconnected
 
   int? get code;
   String? get reason;
-}
-
-/// @nodoc
-mixin _$HandshakeSignalingEvent {
-  Registration get registration => throw _privateConstructorUsedError;
-  int get linesCount => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(Registration registration, int linesCount) state,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Registration registration, int linesCount)? state,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Registration registration, int linesCount)? state,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_HandshakeSignalingEventState value) state,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_HandshakeSignalingEventState value)? state,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_HandshakeSignalingEventState value)? state,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$HandshakeSignalingEventStateImpl
-    with DiagnosticableTreeMixin
-    implements _HandshakeSignalingEventState {
-  const _$HandshakeSignalingEventStateImpl(
-      {required this.registration, required this.linesCount});
-
-  @override
-  final Registration registration;
-  @override
-  final int linesCount;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_HandshakeSignalingEvent.state(registration: $registration, linesCount: $linesCount)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_HandshakeSignalingEvent.state'))
-      ..add(DiagnosticsProperty('registration', registration))
-      ..add(DiagnosticsProperty('linesCount', linesCount));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$HandshakeSignalingEventStateImpl &&
-            (identical(other.registration, registration) ||
-                other.registration == registration) &&
-            (identical(other.linesCount, linesCount) ||
-                other.linesCount == linesCount));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, registration, linesCount);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(Registration registration, int linesCount) state,
-  }) {
-    return state(registration, linesCount);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Registration registration, int linesCount)? state,
-  }) {
-    return state?.call(registration, linesCount);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Registration registration, int linesCount)? state,
-    required TResult orElse(),
-  }) {
-    if (state != null) {
-      return state(registration, linesCount);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_HandshakeSignalingEventState value) state,
-  }) {
-    return state(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_HandshakeSignalingEventState value)? state,
-  }) {
-    return state?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_HandshakeSignalingEventState value)? state,
-    required TResult orElse(),
-  }) {
-    if (state != null) {
-      return state(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _HandshakeSignalingEventState
-    implements _HandshakeSignalingEvent {
-  const factory _HandshakeSignalingEventState(
-      {required final Registration registration,
-      required final int linesCount}) = _$HandshakeSignalingEventStateImpl;
-
-  @override
-  Registration get registration;
-  @override
-  int get linesCount;
 }
 
 /// @nodoc
@@ -1260,9 +882,7 @@ mixin _$CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventIncomingImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventIncoming {
+class _$CallSignalingEventIncomingImpl implements _CallSignalingEventIncoming {
   const _$CallSignalingEventIncomingImpl(
       {required this.line,
       required this.callId,
@@ -1294,24 +914,8 @@ class _$CallSignalingEventIncomingImpl
   final JsepValue? jsep;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.incoming(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.incoming'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('callee', callee))
-      ..add(DiagnosticsProperty('caller', caller))
-      ..add(DiagnosticsProperty('callerDisplayName', callerDisplayName))
-      ..add(DiagnosticsProperty('referredBy', referredBy))
-      ..add(DiagnosticsProperty('replaceCallId', replaceCallId))
-      ..add(DiagnosticsProperty('isFocus', isFocus))
-      ..add(DiagnosticsProperty('jsep', jsep));
   }
 
   @override
@@ -1648,9 +1252,7 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventRingingImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventRinging {
+class _$CallSignalingEventRingingImpl implements _CallSignalingEventRinging {
   const _$CallSignalingEventRingingImpl(
       {required this.line, required this.callId});
 
@@ -1660,17 +1262,8 @@ class _$CallSignalingEventRingingImpl
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.ringing(line: $line, callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.ringing'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -1979,9 +1572,7 @@ abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventProgressImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventProgress {
+class _$CallSignalingEventProgressImpl implements _CallSignalingEventProgress {
   const _$CallSignalingEventProgressImpl(
       {required this.line,
       required this.callId,
@@ -1998,19 +1589,8 @@ class _$CallSignalingEventProgressImpl
   final JsepValue? jsep;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.progress(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.progress'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('callee', callee))
-      ..add(DiagnosticsProperty('jsep', jsep));
   }
 
   @override
@@ -2325,9 +1905,7 @@ abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventAcceptedImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventAccepted {
+class _$CallSignalingEventAcceptedImpl implements _CallSignalingEventAccepted {
   const _$CallSignalingEventAcceptedImpl(
       {required this.line, required this.callId, this.callee, this.jsep});
 
@@ -2341,19 +1919,8 @@ class _$CallSignalingEventAcceptedImpl
   final JsepValue? jsep;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.accepted(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.accepted'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('callee', callee))
-      ..add(DiagnosticsProperty('jsep', jsep));
   }
 
   @override
@@ -2668,9 +2235,7 @@ abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventHangupImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventHangup {
+class _$CallSignalingEventHangupImpl implements _CallSignalingEventHangup {
   const _$CallSignalingEventHangupImpl(
       {required this.line,
       required this.callId,
@@ -2687,19 +2252,8 @@ class _$CallSignalingEventHangupImpl
   final String reason;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.hangup(line: $line, callId: $callId, code: $code, reason: $reason)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.hangup'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('code', code))
-      ..add(DiagnosticsProperty('reason', reason));
   }
 
   @override
@@ -3014,9 +2568,7 @@ abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventUpdatingImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventUpdating {
+class _$CallSignalingEventUpdatingImpl implements _CallSignalingEventUpdating {
   const _$CallSignalingEventUpdatingImpl(
       {required this.line,
       required this.callId,
@@ -3048,24 +2600,8 @@ class _$CallSignalingEventUpdatingImpl
   final JsepValue? jsep;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.updating(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.updating'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('callee', callee))
-      ..add(DiagnosticsProperty('caller', caller))
-      ..add(DiagnosticsProperty('callerDisplayName', callerDisplayName))
-      ..add(DiagnosticsProperty('referredBy', referredBy))
-      ..add(DiagnosticsProperty('replaceCallId', replaceCallId))
-      ..add(DiagnosticsProperty('isFocus', isFocus))
-      ..add(DiagnosticsProperty('jsep', jsep));
   }
 
   @override
@@ -3402,9 +2938,7 @@ abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventUpdatedImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventUpdated {
+class _$CallSignalingEventUpdatedImpl implements _CallSignalingEventUpdated {
   const _$CallSignalingEventUpdatedImpl(
       {required this.line, required this.callId});
 
@@ -3414,17 +2948,8 @@ class _$CallSignalingEventUpdatedImpl
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.updated(line: $line, callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.updated'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -3733,9 +3258,7 @@ abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventTransferImpl
-    with DiagnosticableTreeMixin
-    implements _CallSignalingEventTransfer {
+class _$CallSignalingEventTransferImpl implements _CallSignalingEventTransfer {
   const _$CallSignalingEventTransferImpl(
       {required this.line,
       required this.referId,
@@ -3755,20 +3278,8 @@ class _$CallSignalingEventTransferImpl
   final String? replaceCallId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.transfer(line: $line, referId: $referId, referTo: $referTo, referredBy: $referredBy, replaceCallId: $replaceCallId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.transfer'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('referId', referId))
-      ..add(DiagnosticsProperty('referTo', referTo))
-      ..add(DiagnosticsProperty('referredBy', referredBy))
-      ..add(DiagnosticsProperty('replaceCallId', replaceCallId));
   }
 
   @override
@@ -4090,7 +3601,6 @@ abstract class _CallSignalingEventTransfer implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventTransferringImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventTransferring {
   const _$CallSignalingEventTransferringImpl(
       {required this.line, required this.callId});
@@ -4101,17 +3611,8 @@ class _$CallSignalingEventTransferringImpl
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.transferring(line: $line, callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.transferring'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -4421,7 +3922,6 @@ abstract class _CallSignalingEventTransferring implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventNotifyDialogImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventNotifyDialog {
   const _$CallSignalingEventNotifyDialogImpl(
       {required this.line,
@@ -4448,20 +3948,8 @@ class _$CallSignalingEventNotifyDialogImpl
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.notifyDialog(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, userActiveCalls: $userActiveCalls)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.notifyDialog'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('notify', notify))
-      ..add(DiagnosticsProperty('subscriptionState', subscriptionState))
-      ..add(DiagnosticsProperty('userActiveCalls', userActiveCalls));
   }
 
   @override
@@ -4787,7 +4275,6 @@ abstract class _CallSignalingEventNotifyDialog implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventNotifyReferImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventNotifyRefer {
   const _$CallSignalingEventNotifyReferImpl(
       {required this.line,
@@ -4808,20 +4295,8 @@ class _$CallSignalingEventNotifyReferImpl
   final ReferNotifyState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.notifyRefer(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, state: $state)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.notifyRefer'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('notify', notify))
-      ..add(DiagnosticsProperty('subscriptionState', subscriptionState))
-      ..add(DiagnosticsProperty('state', state));
   }
 
   @override
@@ -5143,7 +4618,6 @@ abstract class _CallSignalingEventNotifyRefer implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventNotifyUnknownImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventNotifyUnknown {
   const _$CallSignalingEventNotifyUnknownImpl(
       {required this.line,
@@ -5167,21 +4641,8 @@ class _$CallSignalingEventNotifyUnknownImpl
   final String content;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.notifyUnknown(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, contentType: $contentType, content: $content)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.notifyUnknown'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('notify', notify))
-      ..add(DiagnosticsProperty('subscriptionState', subscriptionState))
-      ..add(DiagnosticsProperty('contentType', contentType))
-      ..add(DiagnosticsProperty('content', content));
   }
 
   @override
@@ -5509,20 +4970,12 @@ abstract class _CallSignalingEventNotifyUnknown implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventRegisteringImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventRegistering {
   const _$CallSignalingEventRegisteringImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.registering()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.registering'));
   }
 
   @override
@@ -5826,20 +5279,12 @@ abstract class _CallSignalingEventRegistering implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventRegisteredImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventRegistered {
   const _$CallSignalingEventRegisteredImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.registered()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.registered'));
   }
 
   @override
@@ -6143,7 +5588,6 @@ abstract class _CallSignalingEventRegistered implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventRegisterationFailedImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventRegisterationFailed {
   const _$CallSignalingEventRegisterationFailedImpl(this.code, this.reason);
 
@@ -6153,18 +5597,8 @@ class _$CallSignalingEventRegisterationFailedImpl
   final String reason;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.registrationFailed(code: $code, reason: $reason)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(
-          DiagnosticsProperty('type', '_CallSignalingEvent.registrationFailed'))
-      ..add(DiagnosticsProperty('code', code))
-      ..add(DiagnosticsProperty('reason', reason));
   }
 
   @override
@@ -6475,20 +5909,12 @@ abstract class _CallSignalingEventRegisterationFailed
 /// @nodoc
 
 class _$CallSignalingEventUnregisteringImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventUnregistering {
   const _$CallSignalingEventUnregisteringImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.unregistering()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistering'));
   }
 
   @override
@@ -6792,20 +6218,12 @@ abstract class _CallSignalingEventUnregistering implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventUnregisteredImpl
-    with DiagnosticableTreeMixin
     implements _CallSignalingEventUnregistered {
   const _$CallSignalingEventUnregisteredImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallSignalingEvent.unregistered()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallSignalingEvent.unregistered'));
   }
 
   @override
@@ -7107,193 +6525,6 @@ abstract class _CallSignalingEventUnregistered implements _CallSignalingEvent {
 }
 
 /// @nodoc
-mixin _$CallPushEvent {
-  String get callId => throw _privateConstructorUsedError;
-  CallkeepHandle get handle => throw _privateConstructorUsedError;
-  String? get displayName => throw _privateConstructorUsedError;
-  bool get video => throw _privateConstructorUsedError;
-  CallkeepIncomingCallError? get error => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video, CallkeepIncomingCallError? error)
-        incoming,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
-        incoming,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
-        incoming,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPushEventIncoming value) incoming,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPushEventIncoming value)? incoming,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPushEventIncoming value)? incoming,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$CallPushEventIncomingImpl
-    with DiagnosticableTreeMixin
-    implements _CallPushEventIncoming {
-  const _$CallPushEventIncomingImpl(
-      {required this.callId,
-      required this.handle,
-      this.displayName,
-      required this.video,
-      this.error});
-
-  @override
-  final String callId;
-  @override
-  final CallkeepHandle handle;
-  @override
-  final String? displayName;
-  @override
-  final bool video;
-  @override
-  final CallkeepIncomingCallError? error;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '_CallPushEvent.incoming(callId: $callId, handle: $handle, displayName: $displayName, video: $video, error: $error)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPushEvent.incoming'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('handle', handle))
-      ..add(DiagnosticsProperty('displayName', displayName))
-      ..add(DiagnosticsProperty('video', video))
-      ..add(DiagnosticsProperty('error', error));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPushEventIncomingImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.handle, handle) || other.handle == handle) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.video, video) || other.video == video) &&
-            (identical(other.error, error) || other.error == error));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, callId, handle, displayName, video, error);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String callId, CallkeepHandle handle,
-            String? displayName, bool video, CallkeepIncomingCallError? error)
-        incoming,
-  }) {
-    return incoming(callId, handle, displayName, video, error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
-        incoming,
-  }) {
-    return incoming?.call(callId, handle, displayName, video, error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String callId, CallkeepHandle handle, String? displayName,
-            bool video, CallkeepIncomingCallError? error)?
-        incoming,
-    required TResult orElse(),
-  }) {
-    if (incoming != null) {
-      return incoming(callId, handle, displayName, video, error);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_CallPushEventIncoming value) incoming,
-  }) {
-    return incoming(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_CallPushEventIncoming value)? incoming,
-  }) {
-    return incoming?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_CallPushEventIncoming value)? incoming,
-    required TResult orElse(),
-  }) {
-    if (incoming != null) {
-      return incoming(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _CallPushEventIncoming implements _CallPushEvent {
-  const factory _CallPushEventIncoming(
-      {required final String callId,
-      required final CallkeepHandle handle,
-      final String? displayName,
-      required final bool video,
-      final CallkeepIncomingCallError? error}) = _$CallPushEventIncomingImpl;
-
-  @override
-  String get callId;
-  @override
-  CallkeepHandle get handle;
-  @override
-  String? get displayName;
-  @override
-  bool get video;
-  @override
-  CallkeepIncomingCallError? get error;
-}
-
-/// @nodoc
 mixin _$CallControlEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -7477,7 +6708,7 @@ mixin _$CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventStartedImpl
-    with DiagnosticableTreeMixin, CallControlEventStartedMixin
+    with CallControlEventStartedMixin
     implements _CallControlEventStarted {
   const _$CallControlEventStartedImpl(
       {this.line,
@@ -7514,23 +6745,8 @@ class _$CallControlEventStartedImpl
   final bool video;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, replaces: $replaces, fromNumber: $fromNumber, video: $video)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.started'))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('generic', generic))
-      ..add(DiagnosticsProperty('number', number))
-      ..add(DiagnosticsProperty('email', email))
-      ..add(DiagnosticsProperty('displayName', displayName))
-      ..add(DiagnosticsProperty('replaces', replaces))
-      ..add(DiagnosticsProperty('fromNumber', fromNumber))
-      ..add(DiagnosticsProperty('video', video));
   }
 
   @override
@@ -7784,25 +7000,15 @@ abstract class _CallControlEventStarted
 
 /// @nodoc
 
-class _$CallControlEventAnsweredImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventAnswered {
+class _$CallControlEventAnsweredImpl implements _CallControlEventAnswered {
   const _$CallControlEventAnsweredImpl(this.callId);
 
   @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.answered(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.answered'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -8027,25 +7233,15 @@ abstract class _CallControlEventAnswered implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventEndedImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventEnded {
+class _$CallControlEventEndedImpl implements _CallControlEventEnded {
   const _$CallControlEventEndedImpl(this.callId);
 
   @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.ended(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.ended'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -8270,9 +7466,7 @@ abstract class _CallControlEventEnded implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSetHeldImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventSetHeld {
+class _$CallControlEventSetHeldImpl implements _CallControlEventSetHeld {
   const _$CallControlEventSetHeldImpl(this.callId, this.onHold);
 
   @override
@@ -8281,17 +7475,8 @@ class _$CallControlEventSetHeldImpl
   final bool onHold;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.setHeld(callId: $callId, onHold: $onHold)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.setHeld'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('onHold', onHold));
   }
 
   @override
@@ -8518,9 +7703,7 @@ abstract class _CallControlEventSetHeld implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSetMutedImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventSetMuted {
+class _$CallControlEventSetMutedImpl implements _CallControlEventSetMuted {
   const _$CallControlEventSetMutedImpl(this.callId, this.muted);
 
   @override
@@ -8529,17 +7712,8 @@ class _$CallControlEventSetMutedImpl
   final bool muted;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.setMuted(callId: $callId, muted: $muted)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.setMuted'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('muted', muted));
   }
 
   @override
@@ -8766,9 +7940,7 @@ abstract class _CallControlEventSetMuted implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSentDTMFImpl
-    with DiagnosticableTreeMixin
-    implements _CallControlEventSentDTMF {
+class _$CallControlEventSentDTMFImpl implements _CallControlEventSentDTMF {
   const _$CallControlEventSentDTMFImpl(this.callId, this.key);
 
   @override
@@ -8777,17 +7949,8 @@ class _$CallControlEventSentDTMFImpl
   final String key;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.sentDTMF(callId: $callId, key: $key)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.sentDTMF'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('key', key));
   }
 
   @override
@@ -9015,7 +8178,6 @@ abstract class _CallControlEventSentDTMF implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventCameraSwitchedImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventCameraSwitched {
   const _$CallControlEventCameraSwitchedImpl(this.callId);
 
@@ -9023,16 +8185,8 @@ class _$CallControlEventCameraSwitchedImpl
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.cameraSwitched(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.cameraSwitched'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -9258,7 +8412,6 @@ abstract class _CallControlEventCameraSwitched implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventCameraEnabledImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventCameraEnabled {
   const _$CallControlEventCameraEnabledImpl(this.callId, this.enabled);
 
@@ -9268,17 +8421,8 @@ class _$CallControlEventCameraEnabledImpl
   final bool enabled;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.cameraEnabled(callId: $callId, enabled: $enabled)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.cameraEnabled'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('enabled', enabled));
   }
 
   @override
@@ -9507,7 +8651,6 @@ abstract class _CallControlEventCameraEnabled implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventAudioDeviceSetImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventAudioDeviceSet {
   const _$CallControlEventAudioDeviceSetImpl(this.callId, this.device);
 
@@ -9517,17 +8660,8 @@ class _$CallControlEventAudioDeviceSetImpl
   final CallAudioDevice device;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.audioDeviceSet(callId: $callId, device: $device)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.audioDeviceSet'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('device', device));
   }
 
   @override
@@ -9756,7 +8890,6 @@ abstract class _CallControlEventAudioDeviceSet implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventFailureApprovedImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventFailureApproved {
   const _$CallControlEventFailureApprovedImpl(this.callId);
 
@@ -9764,16 +8897,8 @@ class _$CallControlEventFailureApprovedImpl
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.failureApproved(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallControlEvent.failureApproved'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -9999,7 +9124,6 @@ abstract class _CallControlEventFailureApproved implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventBlindTransferInitiatedImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventBlindTransferInitiated {
   const _$CallControlEventBlindTransferInitiatedImpl(this.callId);
 
@@ -10007,17 +9131,8 @@ class _$CallControlEventBlindTransferInitiatedImpl
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.blindTransferInitiated(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', 'CallControlEvent.blindTransferInitiated'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -10244,7 +9359,6 @@ abstract class _CallControlEventBlindTransferInitiated
 /// @nodoc
 
 class _$CallControlEventAttendedTransferInitiatedImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventAttendedTransferInitiated {
   const _$CallControlEventAttendedTransferInitiatedImpl(this.callId);
 
@@ -10252,17 +9366,8 @@ class _$CallControlEventAttendedTransferInitiatedImpl
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.attendedTransferInitiated(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', 'CallControlEvent.attendedTransferInitiated'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -10489,7 +9594,6 @@ abstract class _CallControlEventAttendedTransferInitiated
 /// @nodoc
 
 class _$CallControlEventBlindTransferSubmittedImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventBlindTransferSubmitted {
   const _$CallControlEventBlindTransferSubmittedImpl({required this.number});
 
@@ -10497,17 +9601,8 @@ class _$CallControlEventBlindTransferSubmittedImpl
   final String number;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.blindTransferSubmitted(number: $number)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', 'CallControlEvent.blindTransferSubmitted'))
-      ..add(DiagnosticsProperty('number', number));
   }
 
   @override
@@ -10735,7 +9830,6 @@ abstract class _CallControlEventBlindTransferSubmitted
 /// @nodoc
 
 class _$CallControlEventAttendedTransferSubmittedImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventAttendedTransferSubmitted {
   const _$CallControlEventAttendedTransferSubmittedImpl(
       {required this.referorCall, required this.replaceCall});
@@ -10746,18 +9840,8 @@ class _$CallControlEventAttendedTransferSubmittedImpl
   final ActiveCall replaceCall;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.attendedTransferSubmitted(referorCall: $referorCall, replaceCall: $replaceCall)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', 'CallControlEvent.attendedTransferSubmitted'))
-      ..add(DiagnosticsProperty('referorCall', referorCall))
-      ..add(DiagnosticsProperty('replaceCall', replaceCall));
   }
 
   @override
@@ -10990,7 +10074,6 @@ abstract class _CallControlEventAttendedTransferSubmitted
 /// @nodoc
 
 class _$CallControlEventAttendedRequestDeclinedImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventAttendedRequestDeclined {
   const _$CallControlEventAttendedRequestDeclinedImpl(
       {required this.callId, required this.referId});
@@ -11001,18 +10084,8 @@ class _$CallControlEventAttendedRequestDeclinedImpl
   final String referId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.attendedRequestDeclined(callId: $callId, referId: $referId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', 'CallControlEvent.attendedRequestDeclined'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('referId', referId));
   }
 
   @override
@@ -11242,7 +10315,6 @@ abstract class _CallControlEventAttendedRequestDeclined
 /// @nodoc
 
 class _$CallControlEventAttendedRequestApprovedImpl
-    with DiagnosticableTreeMixin
     implements _CallControlEventAttendedRequestApproved {
   const _$CallControlEventAttendedRequestApprovedImpl(
       {required this.referId, required this.referTo});
@@ -11253,18 +10325,8 @@ class _$CallControlEventAttendedRequestApprovedImpl
   final String referTo;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallControlEvent.attendedRequestApproved(referId: $referId, referTo: $referTo)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', 'CallControlEvent.attendedRequestApproved'))
-      ..add(DiagnosticsProperty('referId', referId))
-      ..add(DiagnosticsProperty('referTo', referTo));
   }
 
   @override
@@ -11586,8 +10648,7 @@ mixin _$CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventStartedImpl extends _CallPerformEventStarted {
   _$CallPerformEventStartedImpl(this.callId,
       {required this.handle, this.displayName, required this.video})
       : super._();
@@ -11602,19 +10663,8 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted
   final bool video;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallPerformEvent.started(callId: $callId, handle: $handle, displayName: $displayName, video: $video)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.started'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('handle', handle))
-      ..add(DiagnosticsProperty('displayName', displayName))
-      ..add(DiagnosticsProperty('video', video));
   }
 
   @override
@@ -11762,24 +10812,15 @@ abstract class _CallPerformEventStarted extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered {
   _$CallPerformEventAnsweredImpl(this.callId) : super._();
 
   @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallPerformEvent.answered(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.answered'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -11917,24 +10958,15 @@ abstract class _CallPerformEventAnswered extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventEndedImpl extends _CallPerformEventEnded
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventEndedImpl extends _CallPerformEventEnded {
   _$CallPerformEventEndedImpl(this.callId) : super._();
 
   @override
   final String callId;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallPerformEvent.ended(callId: $callId)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.ended'))
-      ..add(DiagnosticsProperty('callId', callId));
   }
 
   @override
@@ -12072,8 +11104,7 @@ abstract class _CallPerformEventEnded extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld {
   _$CallPerformEventSetHeldImpl(this.callId, this.onHold) : super._();
 
   @override
@@ -12082,17 +11113,8 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld
   final bool onHold;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallPerformEvent.setHeld(callId: $callId, onHold: $onHold)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.setHeld'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('onHold', onHold));
   }
 
   @override
@@ -12232,8 +11254,7 @@ abstract class _CallPerformEventSetHeld extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted {
   _$CallPerformEventSetMutedImpl(this.callId, this.muted) : super._();
 
   @override
@@ -12242,17 +11263,8 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted
   final bool muted;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallPerformEvent.setMuted(callId: $callId, muted: $muted)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.setMuted'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('muted', muted));
   }
 
   @override
@@ -12392,8 +11404,7 @@ abstract class _CallPerformEventSetMuted extends _CallPerformEvent {
 
 /// @nodoc
 
-class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
-    with DiagnosticableTreeMixin {
+class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF {
   _$CallPerformEventSentDTMFImpl(this.callId, this.key) : super._();
 
   @override
@@ -12402,17 +11413,8 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF
   final String key;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallPerformEvent.sentDTMF(callId: $callId, key: $key)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.sentDTMF'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('key', key));
   }
 
   @override
@@ -12553,7 +11555,7 @@ abstract class _CallPerformEventSentDTMF extends _CallPerformEvent {
 /// @nodoc
 
 class _$CallPerformEventAudioDeviceSetImpl
-    extends _CallPerformEventAudioDeviceSet with DiagnosticableTreeMixin {
+    extends _CallPerformEventAudioDeviceSet {
   _$CallPerformEventAudioDeviceSetImpl(this.callId, this.device) : super._();
 
   @override
@@ -12562,17 +11564,8 @@ class _$CallPerformEventAudioDeviceSetImpl
   final CallAudioDevice device;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallPerformEvent.audioDeviceSet(callId: $callId, device: $device)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.audioDeviceSet'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('device', device));
   }
 
   @override
@@ -12714,7 +11707,7 @@ abstract class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
 /// @nodoc
 
 class _$CallPerformEventAudioDevicesUpdateImpl
-    extends _CallPerformEventAudioDevicesUpdate with DiagnosticableTreeMixin {
+    extends _CallPerformEventAudioDevicesUpdate {
   _$CallPerformEventAudioDevicesUpdateImpl(
       this.callId, final List<CallAudioDevice> devices)
       : _devices = devices,
@@ -12731,17 +11724,8 @@ class _$CallPerformEventAudioDevicesUpdateImpl
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_CallPerformEvent.audioDevicesUpdate(callId: $callId, devices: $devices)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_CallPerformEvent.audioDevicesUpdate'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('devices', devices));
   }
 
   @override
@@ -12991,7 +11975,6 @@ mixin _$PeerConnectionEvent {
 /// @nodoc
 
 class _$PeerConnectionEventSignalingStateChangedImpl
-    with DiagnosticableTreeMixin
     implements _PeerConnectionEventSignalingStateChanged {
   const _$PeerConnectionEventSignalingStateChangedImpl(this.callId, this.state);
 
@@ -13001,18 +11984,8 @@ class _$PeerConnectionEventSignalingStateChangedImpl
   final RTCSignalingState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_PeerConnectionEvent.signalingStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.signalingStateChanged'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('state', state));
   }
 
   @override
@@ -13168,7 +12141,6 @@ abstract class _PeerConnectionEventSignalingStateChanged
 /// @nodoc
 
 class _$PeerConnectionEventConnectionStateChangedImpl
-    with DiagnosticableTreeMixin
     implements _PeerConnectionEventConnectionStateChanged {
   const _$PeerConnectionEventConnectionStateChangedImpl(
       this.callId, this.state);
@@ -13179,18 +12151,8 @@ class _$PeerConnectionEventConnectionStateChangedImpl
   final RTCPeerConnectionState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_PeerConnectionEvent.connectionStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.connectionStateChanged'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('state', state));
   }
 
   @override
@@ -13346,7 +12308,6 @@ abstract class _PeerConnectionEventConnectionStateChanged
 /// @nodoc
 
 class _$PeerConnectionEventIceGatheringStateChangedImpl
-    with DiagnosticableTreeMixin
     implements _PeerConnectionEventIceGatheringStateChanged {
   const _$PeerConnectionEventIceGatheringStateChangedImpl(
       this.callId, this.state);
@@ -13357,18 +12318,8 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
   final RTCIceGatheringState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_PeerConnectionEvent.iceGatheringStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.iceGatheringStateChanged'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('state', state));
   }
 
   @override
@@ -13524,7 +12475,6 @@ abstract class _PeerConnectionEventIceGatheringStateChanged
 /// @nodoc
 
 class _$PeerConnectionEventIceConnectionStateChangedImpl
-    with DiagnosticableTreeMixin
     implements _PeerConnectionEventIceConnectionStateChanged {
   const _$PeerConnectionEventIceConnectionStateChangedImpl(
       this.callId, this.state);
@@ -13535,18 +12485,8 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
   final RTCIceConnectionState state;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_PeerConnectionEvent.iceConnectionStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.iceConnectionStateChanged'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('state', state));
   }
 
   @override
@@ -13702,7 +12642,6 @@ abstract class _PeerConnectionEventIceConnectionStateChanged
 /// @nodoc
 
 class _$PeerConnectionEventIceCandidateIdentifiedImpl
-    with DiagnosticableTreeMixin
     implements _PeerConnectionEventIceCandidateIdentified {
   const _$PeerConnectionEventIceCandidateIdentifiedImpl(
       this.callId, this.candidate);
@@ -13713,18 +12652,8 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
   final RTCIceCandidate candidate;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_PeerConnectionEvent.iceCandidateIdentified(callId: $callId, candidate: $candidate)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty(
-          'type', '_PeerConnectionEvent.iceCandidateIdentified'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('candidate', candidate));
   }
 
   @override
@@ -13881,7 +12810,6 @@ abstract class _PeerConnectionEventIceCandidateIdentified
 /// @nodoc
 
 class _$PeerConnectionEventStreamAddedImpl
-    with DiagnosticableTreeMixin
     implements _PeerConnectionEventStreamAdded {
   const _$PeerConnectionEventStreamAddedImpl(this.callId, this.stream);
 
@@ -13891,17 +12819,8 @@ class _$PeerConnectionEventStreamAddedImpl
   final MediaStream stream;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_PeerConnectionEvent.streamAdded(callId: $callId, stream: $stream)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.streamAdded'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('stream', stream));
   }
 
   @override
@@ -14056,7 +12975,6 @@ abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
 /// @nodoc
 
 class _$PeerConnectionEventStreamRemovedImpl
-    with DiagnosticableTreeMixin
     implements _PeerConnectionEventStreamRemoved {
   const _$PeerConnectionEventStreamRemovedImpl(this.callId, this.stream);
 
@@ -14066,17 +12984,8 @@ class _$PeerConnectionEventStreamRemovedImpl
   final MediaStream stream;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return '_PeerConnectionEvent.streamRemoved(callId: $callId, stream: $stream)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', '_PeerConnectionEvent.streamRemoved'))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('stream', stream));
   }
 
   @override
@@ -14273,20 +13182,12 @@ mixin _$CallScreenEvent {
 
 /// @nodoc
 
-class _$CallScreenEventDidPushImpl
-    with DiagnosticableTreeMixin
-    implements _CallScreenEventDidPush {
+class _$CallScreenEventDidPushImpl implements _CallScreenEventDidPush {
   _$CallScreenEventDidPushImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallScreenEvent.didPush()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties..add(DiagnosticsProperty('type', 'CallScreenEvent.didPush'));
   }
 
   @override
@@ -14368,20 +13269,12 @@ abstract class _CallScreenEventDidPush implements CallScreenEvent {
 
 /// @nodoc
 
-class _$CallScreenEventDidPopImpl
-    with DiagnosticableTreeMixin
-    implements _CallScreenEventDidPop {
+class _$CallScreenEventDidPopImpl implements _CallScreenEventDidPop {
   _$CallScreenEventDidPopImpl();
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallScreenEvent.didPop()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties..add(DiagnosticsProperty('type', 'CallScreenEvent.didPop'));
   }
 
   @override
@@ -14670,7 +13563,7 @@ class __$$CallStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
+class _$CallStateImpl extends _CallState {
   const _$CallStateImpl(
       {this.callServiceState = const CallServiceState(),
       this.currentAppLifecycleState,
@@ -14718,26 +13611,8 @@ class _$CallStateImpl extends _CallState with DiagnosticableTreeMixin {
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallState(callServiceState: $callServiceState, currentAppLifecycleState: $currentAppLifecycleState, linesCount: $linesCount, activeCalls: $activeCalls, minimized: $minimized, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, audioDevice: $audioDevice, availableAudioDevices: $availableAudioDevices)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallState'))
-      ..add(DiagnosticsProperty('callServiceState', callServiceState))
-      ..add(DiagnosticsProperty(
-          'currentAppLifecycleState', currentAppLifecycleState))
-      ..add(DiagnosticsProperty('linesCount', linesCount))
-      ..add(DiagnosticsProperty('activeCalls', activeCalls))
-      ..add(DiagnosticsProperty('minimized', minimized))
-      ..add(DiagnosticsProperty(
-          'speakerOnBeforeMinimize', speakerOnBeforeMinimize))
-      ..add(DiagnosticsProperty('audioDevice', audioDevice))
-      ..add(
-          DiagnosticsProperty('availableAudioDevices', availableAudioDevices));
   }
 
   @override
@@ -15195,7 +14070,7 @@ class __$$ActiveCallImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
+class _$ActiveCallImpl extends _ActiveCall {
   _$ActiveCallImpl(
       {required this.direction,
       required this.line,
@@ -15271,37 +14146,8 @@ class _$ActiveCallImpl extends _ActiveCall with DiagnosticableTreeMixin {
   final MediaStream? remoteStream;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromReplaces: $fromReplaces, fromNumber: $fromNumber, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'ActiveCall'))
-      ..add(DiagnosticsProperty('direction', direction))
-      ..add(DiagnosticsProperty('line', line))
-      ..add(DiagnosticsProperty('callId', callId))
-      ..add(DiagnosticsProperty('handle', handle))
-      ..add(DiagnosticsProperty('createdTime', createdTime))
-      ..add(DiagnosticsProperty('video', video))
-      ..add(DiagnosticsProperty('processingStatus', processingStatus))
-      ..add(DiagnosticsProperty('frontCamera', frontCamera))
-      ..add(DiagnosticsProperty('held', held))
-      ..add(DiagnosticsProperty('muted', muted))
-      ..add(DiagnosticsProperty('updating', updating))
-      ..add(DiagnosticsProperty('incomingOffer', incomingOffer))
-      ..add(DiagnosticsProperty('displayName', displayName))
-      ..add(DiagnosticsProperty('fromReferId', fromReferId))
-      ..add(DiagnosticsProperty('fromReplaces', fromReplaces))
-      ..add(DiagnosticsProperty('fromNumber', fromNumber))
-      ..add(DiagnosticsProperty('acceptedTime', acceptedTime))
-      ..add(DiagnosticsProperty('hungUpTime', hungUpTime))
-      ..add(DiagnosticsProperty('transfer', transfer))
-      ..add(DiagnosticsProperty('failure', failure))
-      ..add(DiagnosticsProperty('localStream', localStream))
-      ..add(DiagnosticsProperty('remoteStream', remoteStream));
   }
 
   @override
@@ -15568,8 +14414,7 @@ class __$$CallAudioDeviceImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CallAudioDeviceImpl extends _CallAudioDevice
-    with DiagnosticableTreeMixin {
+class _$CallAudioDeviceImpl extends _CallAudioDevice {
   _$CallAudioDeviceImpl({required this.type, this.id, this.name}) : super._();
 
   @override
@@ -15580,18 +14425,8 @@ class _$CallAudioDeviceImpl extends _CallAudioDevice
   final String? name;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'CallAudioDevice(type: $type, id: $id, name: $name)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'CallAudioDevice'))
-      ..add(DiagnosticsProperty('type', type))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('name', name));
   }
 
   @override

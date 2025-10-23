@@ -1,31 +1,31 @@
 part of 'favorites_bloc.dart';
 
-abstract class FavoritesEvent {
+sealed class FavoritesEvent {
   const FavoritesEvent();
 }
 
-@Freezed(copyWith: false)
-class FavoritesStarted with _$FavoritesStarted implements FavoritesEvent {
-  const factory FavoritesStarted() = _FavoritesStarted;
+class FavoritesStarted extends FavoritesEvent {
+  const FavoritesStarted();
 }
 
-@Freezed(copyWith: false)
-class FavoritesAddedByContactPhoneId with _$FavoritesAddedByContactPhoneId implements FavoritesEvent {
-  const factory FavoritesAddedByContactPhoneId({
-    required int contactPhoneId,
-  }) = _FavoritesAddedByContactPhoneId;
+class FavoritesAddedByContactPhoneId extends FavoritesEvent {
+  const FavoritesAddedByContactPhoneId({
+    required this.contactPhoneId,
+  });
+  final int contactPhoneId;
 }
 
-@Freezed(copyWith: false)
-class FavoritesRemovedByContactPhoneId with _$FavoritesRemovedByContactPhoneId implements FavoritesEvent {
-  const factory FavoritesRemovedByContactPhoneId({
-    required int contactPhoneId,
-  }) = _FavoritesRemovedByContactPhoneId;
+class FavoritesRemovedByContactPhoneId extends FavoritesEvent {
+  const FavoritesRemovedByContactPhoneId({
+    required this.contactPhoneId,
+  });
+  final int contactPhoneId;
 }
 
-@Freezed(copyWith: false)
-class FavoritesRemoved with _$FavoritesRemoved implements FavoritesEvent {
-  const factory FavoritesRemoved({
-    required Favorite favorite,
-  }) = _FavoritesRemoved;
+class FavoritesRemoved extends FavoritesEvent {
+  const FavoritesRemoved({
+    required this.favorite,
+  });
+
+  final Favorite favorite;
 }

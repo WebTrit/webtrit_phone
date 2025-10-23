@@ -15,45 +15,6 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$OrientationsChanged {
-  PreferredOrientation get orientation => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-
-class _$OrientationsChangedImpl implements _OrientationsChanged {
-  const _$OrientationsChangedImpl(this.orientation);
-
-  @override
-  final PreferredOrientation orientation;
-
-  @override
-  String toString() {
-    return 'OrientationsChanged(orientation: $orientation)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$OrientationsChangedImpl &&
-            (identical(other.orientation, orientation) ||
-                other.orientation == orientation));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, orientation);
-}
-
-abstract class _OrientationsChanged implements OrientationsChanged {
-  const factory _OrientationsChanged(final PreferredOrientation orientation) =
-      _$OrientationsChangedImpl;
-
-  @override
-  PreferredOrientation get orientation;
-}
-
-/// @nodoc
 mixin _$OrientationsState {
   PreferredOrientation? get lastOrientation =>
       throw _privateConstructorUsedError;
