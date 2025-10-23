@@ -30,4 +30,19 @@ extension PhoneUtilExtension on String {
       return false;
     }
   }
+
+  /// Returns the national significant number (NSN) part if the phone number is valid full phone number
+  /// ex: +001234567890 -> 1234567890, 001234567890 -> 1234567890, 123123 > null
+  String? get nationalPhoneIfValid {
+    final u = PhoneNumberUtil.instance;
+    try {
+      final parsed = u.parse(startsWith('+') ? this : '+$this', '');
+      if (u.isValidNumber(parsed)) {
+        // ignore: no_leading_underscores_for_local_identifiers
+        final _nationalNumber = parsed.nationalNumber.toString();
+        if (_nationalNumber != this) return _nationalNumber;
+      }
+    } on Exception catch (_) {}
+    return null;
+  }
 }
