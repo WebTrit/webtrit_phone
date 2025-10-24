@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:equatable/equatable.dart';
+
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
@@ -109,7 +110,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     const vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
 
     final fcmToken = await _backoffRetries.execute<String?>(
-          (attempt) async {
+      (attempt) async {
         _logger.fine('_retrieveAndStoreFcmToken attempt $attempt');
         return await firebaseMessaging.getToken(vapidKey: vapidKey);
       },
@@ -128,7 +129,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   Future<void> _retrieveAndStoreApnsToken() async {
     final apnsToken = await _backoffRetries.execute<String?>(
-          (attempt) async {
+      (attempt) async {
         _logger.fine('_retrieveAndStoreApnsToken attempt $attempt');
         return await firebaseMessaging.getAPNSToken();
       },
@@ -148,7 +149,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   void _onInsertedOrUpdated(PushTokensEventInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
     try {
       await _backoffRetries.execute<void>(
-            (attempt) async {
+        (attempt) async {
           _logger.fine('_onInsertedOrUpdated attempt $attempt');
           await pushTokensRepository.insertOrUpdatePushToken(event.type, event.value);
         },

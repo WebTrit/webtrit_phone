@@ -14,8 +14,8 @@ class NotificationsSubmitted extends NotificationsEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([notification], listPropToString),
-  ];
+        EquatablePropToString([notification], listPropToString),
+      ];
 }
 
 class NotificationsCleared extends NotificationsEvent {

@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:equatable/equatable.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -132,28 +133,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  Future<void> _onUserAgreementAccepted(
-    AppAgreementAccepted event,
-    Emitter<AppState> emit,
-  ) {
+  Future<void> _onUserAgreementAccepted(AppAgreementAccepted event, Emitter<AppState> emit) {
     return switch (event) {
       _UserAppAgreementUpdate() => __onUpdateUserAgreementStatus(event, emit),
       _ContactsAppAgreementUpdate() => __onContactsUserAgreementStatus(event, emit),
     };
   }
 
-  Future<void> __onUpdateUserAgreementStatus(
-    _UserAppAgreementUpdate event,
-    Emitter<AppState> emit,
-  ) async {
+  Future<void> __onUpdateUserAgreementStatus(_UserAppAgreementUpdate event, Emitter<AppState> emit) async {
     await appPreferences.setUserAgreementStatus(event.status);
     emit(state.copyWith(userAgreementStatus: event.status));
   }
 
-  Future<void> __onContactsUserAgreementStatus(
-    _ContactsAppAgreementUpdate event,
-    Emitter<AppState> emit,
-  ) async {
+  Future<void> __onContactsUserAgreementStatus(_ContactsAppAgreementUpdate event, Emitter<AppState> emit) async {
     await appPreferences.setContactsAgreementStatus(event.status);
     emit(state.copyWith(contactsAgreementStatus: event.status));
   }

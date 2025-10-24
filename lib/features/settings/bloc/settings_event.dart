@@ -22,6 +22,6 @@ class SettingsUnreadVoicemailCountChanged extends SettingsEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([count], listPropToString),
-  ];
+        EquatablePropToString([count], listPropToString),
+      ];
 }

@@ -8,7 +8,7 @@ import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/equatable_prop_to_string.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 // TODO:
 // -  maybe rename to "messaging connection bloc" and place /cubits and /bloc together
@@ -18,6 +18,7 @@ import 'package:webtrit_phone/utils/equatable_prop_to_string.dart';
 //    but for rare change (like customer paid montly for sms feature) it's fine
 
 part 'messaging_event.dart';
+
 part 'messaging_state.dart';
 
 final _logger = Logger('MessagingBloc');
@@ -50,6 +51,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       if (!isClosed) add(_ClientError(e));
     });
   }
+
   final String _userId;
   final PhoenixSocket _client;
   final MessagingFeature _messagingFeature;

@@ -18,8 +18,8 @@ class RecentsFiltered extends RecentsEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([filter], listPropToString),
-  ];
+        EquatablePropToString([filter], listPropToString),
+      ];
 }
 
 class RecentsDeleted extends RecentsEvent {
@@ -29,6 +29,6 @@ class RecentsDeleted extends RecentsEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([recent], listPropToString),
-  ];
+        EquatablePropToString([recent], listPropToString),
+      ];
 }

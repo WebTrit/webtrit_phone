@@ -537,10 +537,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     return systemInfo;
   }
 
-  Future<SessionOtpProvisional> _createSessionOtp(
-    WebtritApiClient webtritApiClient,
-    String userRef,
-  ) async {
+  Future<SessionOtpProvisional> _createSessionOtp(WebtritApiClient webtritApiClient, String userRef) async {
     return await webtritApiClient.createSessionOtp(SessionOtpCredential(
       bundleId: appBundleId,
       type: appType,
@@ -557,11 +554,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     return await webtritApiClient.verifySessionOtp(sessionOtpProvisional, code);
   }
 
-  Future<SessionToken> _createSessionRequest(
-    WebtritApiClient webtritApiClient,
-    String userRef,
-    String password,
-  ) async {
+  Future<SessionToken> _createSessionRequest(WebtritApiClient webtritApiClient, String userRef, String password) async {
     return await webtritApiClient.createSession(SessionLoginCredential(
       bundleId: appBundleId,
       type: appType,

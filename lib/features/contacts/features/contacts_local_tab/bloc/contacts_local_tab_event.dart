@@ -14,8 +14,8 @@ class ContactsLocalTabStarted extends ContactsLocalTabEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([search], listPropToString),
-  ];
+        EquatablePropToString([search], listPropToString),
+      ];
 }
 
 class ContactsLocalTabRefreshed extends ContactsLocalTabEvent {

@@ -18,8 +18,8 @@ class _AppLifecycleStateChanged extends CallEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([state], listPropToString),
-  ];
+        EquatablePropToString([state], listPropToString),
+      ];
 }
 
 class _ConnectivityResultChanged extends CallEvent {
@@ -29,8 +29,8 @@ class _ConnectivityResultChanged extends CallEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([result], listPropToString),
-  ];
+        EquatablePropToString([result], listPropToString),
+      ];
 }
 
 class _NavigatorMediaDevicesChange extends CallEvent {
@@ -48,8 +48,8 @@ class _RegistrationChange extends CallEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([registration], listPropToString),
-  ];
+        EquatablePropToString([registration], listPropToString),
+      ];
 }
 
 // handle app state
@@ -101,8 +101,8 @@ class _HandshakeSignalingEventState extends CallEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([registration, linesCount], listPropToString),
-  ];
+        EquatablePropToString([registration, linesCount], listPropToString),
+      ];
 }
 
 // call signaling events
@@ -209,9 +209,9 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;
 
   const factory _CallSignalingEvent.registrationFailed(
-      int code,
-      String reason,
-      ) = _CallSignalingEventRegisterationFailed;
+    int code,
+    String reason,
+  ) = _CallSignalingEventRegisterationFailed;
 
   const factory _CallSignalingEvent.unregistering() = _CallSignalingEventUnregistering;
 
@@ -243,8 +243,8 @@ class _CallPushEventIncoming extends CallEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([callId, handle, displayName, video, error], listPropToString),
-  ];
+        EquatablePropToString([callId, handle, displayName, video, error], listPropToString),
+      ];
 }
 
 // call control events
@@ -287,7 +287,7 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
   const factory CallControlEvent.cameraEnabled(String callId, bool enabled) = _CallControlEventCameraEnabled;
 
   const factory CallControlEvent.audioDeviceSet(String callId, CallAudioDevice device) =
-  _CallControlEventAudioDeviceSet;
+      _CallControlEventAudioDeviceSet;
 
   const factory CallControlEvent.failureApproved(String callId) = _CallControlEventFailureApproved;
 
@@ -348,11 +348,11 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
 
   factory _CallPerformEvent.started(
-      String callId, {
-        required CallkeepHandle handle,
-        String? displayName,
-        required bool video,
-      }) = _CallPerformEventStarted;
+    String callId, {
+    required CallkeepHandle handle,
+    String? displayName,
+    required bool video,
+  }) = _CallPerformEventStarted;
 
   factory _CallPerformEvent.answered(String callId) = _CallPerformEventAnswered;
 
@@ -367,7 +367,7 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   factory _CallPerformEvent.audioDeviceSet(String callId, CallAudioDevice device) = _CallPerformEventAudioDeviceSet;
 
   factory _CallPerformEvent.audioDevicesUpdate(String callId, List<CallAudioDevice> devices) =
-  _CallPerformEventAudioDevicesUpdate;
+      _CallPerformEventAudioDevicesUpdate;
 
   final _performCompleter = Completer<bool>();
 
@@ -382,7 +382,6 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
 
   @override
   bool? get stringify => false;
-
 }
 
 // peer connection events
@@ -392,24 +391,24 @@ class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
   const _PeerConnectionEvent._();
 
   const factory _PeerConnectionEvent.signalingStateChanged(String callId, RTCSignalingState state) =
-  _PeerConnectionEventSignalingStateChanged;
+      _PeerConnectionEventSignalingStateChanged;
 
   const factory _PeerConnectionEvent.connectionStateChanged(String callId, RTCPeerConnectionState state) =
-  _PeerConnectionEventConnectionStateChanged;
+      _PeerConnectionEventConnectionStateChanged;
 
   const factory _PeerConnectionEvent.iceGatheringStateChanged(String callId, RTCIceGatheringState state) =
-  _PeerConnectionEventIceGatheringStateChanged;
+      _PeerConnectionEventIceGatheringStateChanged;
 
   const factory _PeerConnectionEvent.iceConnectionStateChanged(String callId, RTCIceConnectionState state) =
-  _PeerConnectionEventIceConnectionStateChanged;
+      _PeerConnectionEventIceConnectionStateChanged;
 
   const factory _PeerConnectionEvent.iceCandidateIdentified(String callId, RTCIceCandidate candidate) =
-  _PeerConnectionEventIceCandidateIdentified;
+      _PeerConnectionEventIceCandidateIdentified;
 
   const factory _PeerConnectionEvent.streamAdded(String callId, MediaStream stream) = _PeerConnectionEventStreamAdded;
 
   const factory _PeerConnectionEvent.streamRemoved(String callId, MediaStream stream) =
-  _PeerConnectionEventStreamRemoved;
+      _PeerConnectionEventStreamRemoved;
 
   @override
   List<Object> get props => [];

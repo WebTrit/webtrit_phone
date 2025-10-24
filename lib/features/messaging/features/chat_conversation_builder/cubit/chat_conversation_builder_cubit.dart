@@ -29,6 +29,7 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
     /// Initialize the contacts subscription.
     _contactsSub = _contactsSubFactory;
   }
+
   final PhoenixSocket client;
   final ChatsRepository chatsRepository;
   final ContactsRepository contactsRepository;

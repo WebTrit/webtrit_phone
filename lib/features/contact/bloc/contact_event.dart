@@ -18,8 +18,8 @@ class ContactAddedToFavorites extends ContactEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([contactPhone], listPropToString),
-  ];
+        EquatablePropToString([contactPhone], listPropToString),
+      ];
 }
 
 class ContactRemovedFromFavorites extends ContactEvent {
@@ -29,8 +29,8 @@ class ContactRemovedFromFavorites extends ContactEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([contactPhone], listPropToString),
-  ];
+        EquatablePropToString([contactPhone], listPropToString),
+      ];
 }
 
 class ContactEmailSend extends ContactEvent {
@@ -40,6 +40,6 @@ class ContactEmailSend extends ContactEvent {
 
   @override
   List<Object> get props => [
-    EquatablePropToString([contactEmail], listPropToString),
-  ];
+        EquatablePropToString([contactEmail], listPropToString),
+      ];
 }
