@@ -1,23 +1,41 @@
 part of 'contacts_bloc.dart';
 
-sealed class ContactsEvent {
+sealed class ContactsEvent extends Equatable {
   const ContactsEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class ContactsSourceTypeChanged extends ContactsEvent {
   const ContactsSourceTypeChanged(this.sourceType);
 
   final ContactSourceType sourceType;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([sourceType], listPropToString),
+  ];
 }
 
 class ContactsSearchChanged extends ContactsEvent {
   const ContactsSearchChanged(this.search);
 
   final String search;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([search], listPropToString),
+  ];
 }
 
 class ContactsSearchSubmitted extends ContactsEvent {
   const ContactsSearchSubmitted(this.search);
 
   final String search;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([search], listPropToString),
+  ];
 }

@@ -1,7 +1,10 @@
 part of 'call_bloc.dart';
 
-sealed class CallEvent {
+sealed class CallEvent extends Equatable {
   const CallEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class CallStarted extends CallEvent {
@@ -12,12 +15,22 @@ class _AppLifecycleStateChanged extends CallEvent {
   const _AppLifecycleStateChanged(this.state);
 
   final AppLifecycleState state;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([state], listPropToString),
+  ];
 }
 
 class _ConnectivityResultChanged extends CallEvent {
   const _ConnectivityResultChanged(this.result);
 
   final ConnectivityResult result;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([result], listPropToString),
+  ];
 }
 
 class _NavigatorMediaDevicesChange extends CallEvent {
@@ -32,26 +45,47 @@ class _RegistrationChange extends CallEvent {
   });
 
   final Registration registration;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([registration], listPropToString),
+  ];
 }
 
 // handle app state
 
 @Freezed(copyWith: false)
 class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
+  const _ResetStateEvent._();
+
   const factory _ResetStateEvent.completeCalls() = _ResetStateEventCompleteCalls;
 
   const factory _ResetStateEvent.completeCall(String callId) = _ResetStateEventCompleteCall;
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool? get stringify => false;
 }
 
 // signaling client events
 
 @Freezed(copyWith: false)
 class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
+  const _SignalingClientEvent._();
+
   const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
 
   const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool? get stringify => false;
 }
 
 // handshake signaling events
@@ -64,12 +98,19 @@ class _HandshakeSignalingEventState extends CallEvent {
 
   final Registration registration;
   final int linesCount;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([registration, linesCount], listPropToString),
+  ];
 }
 
 // call signaling events
 
 @Freezed(copyWith: false)
 class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
+  const _CallSignalingEvent._();
+
   const factory _CallSignalingEvent.incoming({
     required int? line,
     required String callId,
@@ -175,6 +216,12 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.unregistering() = _CallSignalingEventUnregistering;
 
   const factory _CallSignalingEvent.unregistered() = _CallSignalingEventUnregistered;
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool? get stringify => false;
 }
 
 // call push events
@@ -193,12 +240,19 @@ class _CallPushEventIncoming extends CallEvent {
   final String? displayName;
   final bool video;
   final CallkeepIncomingCallError? error;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([callId, handle, displayName, video, error], listPropToString),
+  ];
 }
 
 // call control events
 
 @Freezed(copyWith: false)
 class CallControlEvent with _$CallControlEvent implements CallEvent {
+  const CallControlEvent._();
+
   @Assert('!(generic == null && number == null && email == null)',
       'one of generic, number or email parameters must be assign')
   @Assert(
@@ -259,6 +313,12 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
     required String referId,
     required String referTo,
   }) = _CallControlEventAttendedRequestApproved;
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool? get stringify => false;
 }
 
 mixin CallControlEventStartedMixin {
@@ -286,6 +346,7 @@ mixin CallControlEventStartedMixin {
 @Freezed(copyWith: false)
 class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
+
   factory _CallPerformEvent.started(
       String callId, {
         required CallkeepHandle handle,
@@ -316,12 +377,19 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
 
   void fail() => _performCompleter.isCompleted ? null : _performCompleter.complete(false);
 
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool? get stringify => false;
+
 }
 
 // peer connection events
 
 @Freezed(copyWith: false)
 class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+  const _PeerConnectionEvent._();
 
   const factory _PeerConnectionEvent.signalingStateChanged(String callId, RTCSignalingState state) =
   _PeerConnectionEventSignalingStateChanged;
@@ -343,13 +411,26 @@ class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
   const factory _PeerConnectionEvent.streamRemoved(String callId, MediaStream stream) =
   _PeerConnectionEventStreamRemoved;
 
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool? get stringify => false;
 }
 
 // call screen events
 
 @Freezed(copyWith: false)
 class CallScreenEvent with _$CallScreenEvent implements CallEvent {
+  const CallScreenEvent._();
+
   factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
 
   factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  bool? get stringify => false;
 }

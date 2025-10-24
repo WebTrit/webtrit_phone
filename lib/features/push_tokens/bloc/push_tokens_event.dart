@@ -1,7 +1,10 @@
 part of 'push_tokens_bloc.dart';
 
-sealed class PushTokensEvent {
+sealed class PushTokensEvent extends Equatable {
   const PushTokensEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class PushTokensEventStarted extends PushTokensEvent {
@@ -13,10 +16,20 @@ class PushTokensEventInsertedOrUpdated extends PushTokensEvent {
 
   final AppPushTokenType type;
   final String value;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([type, value], listPropToString),
+  ];
 }
 
 class PushTokensEventError extends PushTokensEvent {
   const PushTokensEventError(this.errorMessage);
 
   final String errorMessage;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([errorMessage], listPropToString),
+  ];
 }

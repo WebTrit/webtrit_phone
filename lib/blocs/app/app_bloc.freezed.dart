@@ -63,27 +63,11 @@ mixin _$AppAgreementAccepted {
 
 /// @nodoc
 
-class _$UserAppAgreementUpdateImpl implements _UserAppAgreementUpdate {
-  const _$UserAppAgreementUpdateImpl(this.status);
+class _$UserAppAgreementUpdateImpl extends _UserAppAgreementUpdate {
+  const _$UserAppAgreementUpdateImpl(this.status) : super._();
 
   @override
   final AgreementStatus status;
-
-  @override
-  String toString() {
-    return 'AppAgreementAccepted.updateUserAgreement(status: $status)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$UserAppAgreementUpdateImpl &&
-            (identical(other.status, status) || other.status == status));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, status);
 
   @override
   @optionalTypeArgs
@@ -152,9 +136,10 @@ class _$UserAppAgreementUpdateImpl implements _UserAppAgreementUpdate {
   }
 }
 
-abstract class _UserAppAgreementUpdate implements AppAgreementAccepted {
+abstract class _UserAppAgreementUpdate extends AppAgreementAccepted {
   const factory _UserAppAgreementUpdate(final AgreementStatus status) =
       _$UserAppAgreementUpdateImpl;
+  const _UserAppAgreementUpdate._() : super._();
 
   @override
   AgreementStatus get status;
@@ -162,27 +147,11 @@ abstract class _UserAppAgreementUpdate implements AppAgreementAccepted {
 
 /// @nodoc
 
-class _$ContactsAppAgreementUpdateImpl implements _ContactsAppAgreementUpdate {
-  const _$ContactsAppAgreementUpdateImpl(this.status);
+class _$ContactsAppAgreementUpdateImpl extends _ContactsAppAgreementUpdate {
+  const _$ContactsAppAgreementUpdateImpl(this.status) : super._();
 
   @override
   final AgreementStatus status;
-
-  @override
-  String toString() {
-    return 'AppAgreementAccepted.updateContactsAgreement(status: $status)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ContactsAppAgreementUpdateImpl &&
-            (identical(other.status, status) || other.status == status));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, status);
 
   @override
   @optionalTypeArgs
@@ -251,9 +220,10 @@ class _$ContactsAppAgreementUpdateImpl implements _ContactsAppAgreementUpdate {
   }
 }
 
-abstract class _ContactsAppAgreementUpdate implements AppAgreementAccepted {
+abstract class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
   const factory _ContactsAppAgreementUpdate(final AgreementStatus status) =
       _$ContactsAppAgreementUpdateImpl;
+  const _ContactsAppAgreementUpdate._() : super._();
 
   @override
   AgreementStatus get status;

@@ -1,7 +1,10 @@
 part of 'favorites_bloc.dart';
 
-sealed class FavoritesEvent {
+sealed class FavoritesEvent extends Equatable {
   const FavoritesEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class FavoritesStarted extends FavoritesEvent {
@@ -13,6 +16,11 @@ class FavoritesAddedByContactPhoneId extends FavoritesEvent {
     required this.contactPhoneId,
   });
   final int contactPhoneId;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([contactPhoneId], listPropToString),
+  ];
 }
 
 class FavoritesRemovedByContactPhoneId extends FavoritesEvent {
@@ -20,6 +28,11 @@ class FavoritesRemovedByContactPhoneId extends FavoritesEvent {
     required this.contactPhoneId,
   });
   final int contactPhoneId;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([contactPhoneId], listPropToString),
+  ];
 }
 
 class FavoritesRemoved extends FavoritesEvent {
@@ -28,4 +41,9 @@ class FavoritesRemoved extends FavoritesEvent {
   });
 
   final Favorite favorite;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([favorite], listPropToString),
+  ];
 }

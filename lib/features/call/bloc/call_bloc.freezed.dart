@@ -59,24 +59,8 @@ mixin _$ResetStateEvent {
 
 /// @nodoc
 
-class _$ResetStateEventCompleteCallsImpl
-    implements _ResetStateEventCompleteCalls {
-  const _$ResetStateEventCompleteCallsImpl();
-
-  @override
-  String toString() {
-    return '_ResetStateEvent.completeCalls()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ResetStateEventCompleteCallsImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+class _$ResetStateEventCompleteCallsImpl extends _ResetStateEventCompleteCalls {
+  const _$ResetStateEventCompleteCallsImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -142,35 +126,19 @@ class _$ResetStateEventCompleteCallsImpl
   }
 }
 
-abstract class _ResetStateEventCompleteCalls implements _ResetStateEvent {
+abstract class _ResetStateEventCompleteCalls extends _ResetStateEvent {
   const factory _ResetStateEventCompleteCalls() =
       _$ResetStateEventCompleteCallsImpl;
+  const _ResetStateEventCompleteCalls._() : super._();
 }
 
 /// @nodoc
 
-class _$ResetStateEventCompleteCallImpl
-    implements _ResetStateEventCompleteCall {
-  const _$ResetStateEventCompleteCallImpl(this.callId);
+class _$ResetStateEventCompleteCallImpl extends _ResetStateEventCompleteCall {
+  const _$ResetStateEventCompleteCallImpl(this.callId) : super._();
 
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return '_ResetStateEvent.completeCall(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ResetStateEventCompleteCallImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
 
   @override
   @optionalTypeArgs
@@ -236,9 +204,10 @@ class _$ResetStateEventCompleteCallImpl
   }
 }
 
-abstract class _ResetStateEventCompleteCall implements _ResetStateEvent {
+abstract class _ResetStateEventCompleteCall extends _ResetStateEvent {
   const factory _ResetStateEventCompleteCall(final String callId) =
       _$ResetStateEventCompleteCallImpl;
+  const _ResetStateEventCompleteCall._() : super._();
 
   String get callId;
 }
@@ -301,23 +270,8 @@ mixin _$SignalingClientEvent {
 /// @nodoc
 
 class _$SignalingClientEventConnectInitiatedImpl
-    implements _SignalingClientEventConnectInitiated {
-  const _$SignalingClientEventConnectInitiatedImpl();
-
-  @override
-  String toString() {
-    return '_SignalingClientEvent.connectInitiated()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventConnectInitiatedImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+    extends _SignalingClientEventConnectInitiated {
+  const _$SignalingClientEventConnectInitiatedImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -396,31 +350,17 @@ class _$SignalingClientEventConnectInitiatedImpl
 }
 
 abstract class _SignalingClientEventConnectInitiated
-    implements _SignalingClientEvent {
+    extends _SignalingClientEvent {
   const factory _SignalingClientEventConnectInitiated() =
       _$SignalingClientEventConnectInitiatedImpl;
+  const _SignalingClientEventConnectInitiated._() : super._();
 }
 
 /// @nodoc
 
 class _$SignalingClientEventDisconnectInitiatedImpl
-    implements _SignalingClientEventDisconnectInitiated {
-  const _$SignalingClientEventDisconnectInitiatedImpl();
-
-  @override
-  String toString() {
-    return '_SignalingClientEvent.disconnectInitiated()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventDisconnectInitiatedImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+    extends _SignalingClientEventDisconnectInitiated {
+  const _$SignalingClientEventDisconnectInitiatedImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -499,38 +439,23 @@ class _$SignalingClientEventDisconnectInitiatedImpl
 }
 
 abstract class _SignalingClientEventDisconnectInitiated
-    implements _SignalingClientEvent {
+    extends _SignalingClientEvent {
   const factory _SignalingClientEventDisconnectInitiated() =
       _$SignalingClientEventDisconnectInitiatedImpl;
+  const _SignalingClientEventDisconnectInitiated._() : super._();
 }
 
 /// @nodoc
 
 class _$SignalingClientEventDisconnectedImpl
-    implements _SignalingClientEventDisconnected {
-  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason);
+    extends _SignalingClientEventDisconnected {
+  const _$SignalingClientEventDisconnectedImpl(this.code, this.reason)
+      : super._();
 
   @override
   final int? code;
   @override
   final String? reason;
-
-  @override
-  String toString() {
-    return '_SignalingClientEvent.disconnected(code: $code, reason: $reason)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SignalingClientEventDisconnectedImpl &&
-            (identical(other.code, code) || other.code == code) &&
-            (identical(other.reason, reason) || other.reason == reason));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, code, reason);
 
   @override
   @optionalTypeArgs
@@ -608,11 +533,11 @@ class _$SignalingClientEventDisconnectedImpl
   }
 }
 
-abstract class _SignalingClientEventDisconnected
-    implements _SignalingClientEvent {
+abstract class _SignalingClientEventDisconnected extends _SignalingClientEvent {
   const factory _SignalingClientEventDisconnected(
           final int? code, final String? reason) =
       _$SignalingClientEventDisconnectedImpl;
+  const _SignalingClientEventDisconnected._() : super._();
 
   int? get code;
   String? get reason;
@@ -882,7 +807,7 @@ mixin _$CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventIncomingImpl implements _CallSignalingEventIncoming {
+class _$CallSignalingEventIncomingImpl extends _CallSignalingEventIncoming {
   const _$CallSignalingEventIncomingImpl(
       {required this.line,
       required this.callId,
@@ -892,7 +817,8 @@ class _$CallSignalingEventIncomingImpl implements _CallSignalingEventIncoming {
       this.referredBy,
       this.replaceCallId,
       this.isFocus,
-      this.jsep});
+      this.jsep})
+      : super._();
 
   @override
   final int? line;
@@ -912,34 +838,6 @@ class _$CallSignalingEventIncomingImpl implements _CallSignalingEventIncoming {
   final bool? isFocus;
   @override
   final JsepValue? jsep;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.incoming(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventIncomingImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.callee, callee) || other.callee == callee) &&
-            (identical(other.caller, caller) || other.caller == caller) &&
-            (identical(other.callerDisplayName, callerDisplayName) ||
-                other.callerDisplayName == callerDisplayName) &&
-            (identical(other.referredBy, referredBy) ||
-                other.referredBy == referredBy) &&
-            (identical(other.replaceCallId, replaceCallId) ||
-                other.replaceCallId == replaceCallId) &&
-            (identical(other.isFocus, isFocus) || other.isFocus == isFocus) &&
-            (identical(other.jsep, jsep) || other.jsep == jsep));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId, callee, caller,
-      callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
 
   @override
   @optionalTypeArgs
@@ -1227,7 +1125,7 @@ class _$CallSignalingEventIncomingImpl implements _CallSignalingEventIncoming {
   }
 }
 
-abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
+abstract class _CallSignalingEventIncoming extends _CallSignalingEvent {
   const factory _CallSignalingEventIncoming(
       {required final int? line,
       required final String callId,
@@ -1238,6 +1136,7 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
       final String? replaceCallId,
       final bool? isFocus,
       final JsepValue? jsep}) = _$CallSignalingEventIncomingImpl;
+  const _CallSignalingEventIncoming._() : super._();
 
   int? get line;
   String get callId;
@@ -1252,31 +1151,15 @@ abstract class _CallSignalingEventIncoming implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventRingingImpl implements _CallSignalingEventRinging {
+class _$CallSignalingEventRingingImpl extends _CallSignalingEventRinging {
   const _$CallSignalingEventRingingImpl(
-      {required this.line, required this.callId});
+      {required this.line, required this.callId})
+      : super._();
 
   @override
   final int? line;
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.ringing(line: $line, callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRingingImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId);
 
   @override
   @optionalTypeArgs
@@ -1561,10 +1444,11 @@ class _$CallSignalingEventRingingImpl implements _CallSignalingEventRinging {
   }
 }
 
-abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
+abstract class _CallSignalingEventRinging extends _CallSignalingEvent {
   const factory _CallSignalingEventRinging(
       {required final int? line,
       required final String callId}) = _$CallSignalingEventRingingImpl;
+  const _CallSignalingEventRinging._() : super._();
 
   int? get line;
   String get callId;
@@ -1572,12 +1456,13 @@ abstract class _CallSignalingEventRinging implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventProgressImpl implements _CallSignalingEventProgress {
+class _$CallSignalingEventProgressImpl extends _CallSignalingEventProgress {
   const _$CallSignalingEventProgressImpl(
       {required this.line,
       required this.callId,
       required this.callee,
-      this.jsep});
+      this.jsep})
+      : super._();
 
   @override
   final int? line;
@@ -1587,25 +1472,6 @@ class _$CallSignalingEventProgressImpl implements _CallSignalingEventProgress {
   final String callee;
   @override
   final JsepValue? jsep;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.progress(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventProgressImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.callee, callee) || other.callee == callee) &&
-            (identical(other.jsep, jsep) || other.jsep == jsep));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId, callee, jsep);
 
   @override
   @optionalTypeArgs
@@ -1890,12 +1756,13 @@ class _$CallSignalingEventProgressImpl implements _CallSignalingEventProgress {
   }
 }
 
-abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
+abstract class _CallSignalingEventProgress extends _CallSignalingEvent {
   const factory _CallSignalingEventProgress(
       {required final int? line,
       required final String callId,
       required final String callee,
       final JsepValue? jsep}) = _$CallSignalingEventProgressImpl;
+  const _CallSignalingEventProgress._() : super._();
 
   int? get line;
   String get callId;
@@ -1905,9 +1772,10 @@ abstract class _CallSignalingEventProgress implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventAcceptedImpl implements _CallSignalingEventAccepted {
+class _$CallSignalingEventAcceptedImpl extends _CallSignalingEventAccepted {
   const _$CallSignalingEventAcceptedImpl(
-      {required this.line, required this.callId, this.callee, this.jsep});
+      {required this.line, required this.callId, this.callee, this.jsep})
+      : super._();
 
   @override
   final int? line;
@@ -1917,25 +1785,6 @@ class _$CallSignalingEventAcceptedImpl implements _CallSignalingEventAccepted {
   final String? callee;
   @override
   final JsepValue? jsep;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.accepted(line: $line, callId: $callId, callee: $callee, jsep: $jsep)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventAcceptedImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.callee, callee) || other.callee == callee) &&
-            (identical(other.jsep, jsep) || other.jsep == jsep));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId, callee, jsep);
 
   @override
   @optionalTypeArgs
@@ -2220,12 +2069,13 @@ class _$CallSignalingEventAcceptedImpl implements _CallSignalingEventAccepted {
   }
 }
 
-abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
+abstract class _CallSignalingEventAccepted extends _CallSignalingEvent {
   const factory _CallSignalingEventAccepted(
       {required final int? line,
       required final String callId,
       final String? callee,
       final JsepValue? jsep}) = _$CallSignalingEventAcceptedImpl;
+  const _CallSignalingEventAccepted._() : super._();
 
   int? get line;
   String get callId;
@@ -2235,12 +2085,13 @@ abstract class _CallSignalingEventAccepted implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventHangupImpl implements _CallSignalingEventHangup {
+class _$CallSignalingEventHangupImpl extends _CallSignalingEventHangup {
   const _$CallSignalingEventHangupImpl(
       {required this.line,
       required this.callId,
       required this.code,
-      required this.reason});
+      required this.reason})
+      : super._();
 
   @override
   final int? line;
@@ -2250,25 +2101,6 @@ class _$CallSignalingEventHangupImpl implements _CallSignalingEventHangup {
   final int code;
   @override
   final String reason;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.hangup(line: $line, callId: $callId, code: $code, reason: $reason)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventHangupImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.code, code) || other.code == code) &&
-            (identical(other.reason, reason) || other.reason == reason));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId, code, reason);
 
   @override
   @optionalTypeArgs
@@ -2553,12 +2385,13 @@ class _$CallSignalingEventHangupImpl implements _CallSignalingEventHangup {
   }
 }
 
-abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
+abstract class _CallSignalingEventHangup extends _CallSignalingEvent {
   const factory _CallSignalingEventHangup(
       {required final int? line,
       required final String callId,
       required final int code,
       required final String reason}) = _$CallSignalingEventHangupImpl;
+  const _CallSignalingEventHangup._() : super._();
 
   int? get line;
   String get callId;
@@ -2568,7 +2401,7 @@ abstract class _CallSignalingEventHangup implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventUpdatingImpl implements _CallSignalingEventUpdating {
+class _$CallSignalingEventUpdatingImpl extends _CallSignalingEventUpdating {
   const _$CallSignalingEventUpdatingImpl(
       {required this.line,
       required this.callId,
@@ -2578,7 +2411,8 @@ class _$CallSignalingEventUpdatingImpl implements _CallSignalingEventUpdating {
       this.referredBy,
       this.replaceCallId,
       this.isFocus,
-      this.jsep});
+      this.jsep})
+      : super._();
 
   @override
   final int? line;
@@ -2598,34 +2432,6 @@ class _$CallSignalingEventUpdatingImpl implements _CallSignalingEventUpdating {
   final bool? isFocus;
   @override
   final JsepValue? jsep;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.updating(line: $line, callId: $callId, callee: $callee, caller: $caller, callerDisplayName: $callerDisplayName, referredBy: $referredBy, replaceCallId: $replaceCallId, isFocus: $isFocus, jsep: $jsep)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUpdatingImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.callee, callee) || other.callee == callee) &&
-            (identical(other.caller, caller) || other.caller == caller) &&
-            (identical(other.callerDisplayName, callerDisplayName) ||
-                other.callerDisplayName == callerDisplayName) &&
-            (identical(other.referredBy, referredBy) ||
-                other.referredBy == referredBy) &&
-            (identical(other.replaceCallId, replaceCallId) ||
-                other.replaceCallId == replaceCallId) &&
-            (identical(other.isFocus, isFocus) || other.isFocus == isFocus) &&
-            (identical(other.jsep, jsep) || other.jsep == jsep));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId, callee, caller,
-      callerDisplayName, referredBy, replaceCallId, isFocus, jsep);
 
   @override
   @optionalTypeArgs
@@ -2913,7 +2719,7 @@ class _$CallSignalingEventUpdatingImpl implements _CallSignalingEventUpdating {
   }
 }
 
-abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
+abstract class _CallSignalingEventUpdating extends _CallSignalingEvent {
   const factory _CallSignalingEventUpdating(
       {required final int? line,
       required final String callId,
@@ -2924,6 +2730,7 @@ abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
       final String? replaceCallId,
       final bool? isFocus,
       final JsepValue? jsep}) = _$CallSignalingEventUpdatingImpl;
+  const _CallSignalingEventUpdating._() : super._();
 
   int? get line;
   String get callId;
@@ -2938,31 +2745,15 @@ abstract class _CallSignalingEventUpdating implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventUpdatedImpl implements _CallSignalingEventUpdated {
+class _$CallSignalingEventUpdatedImpl extends _CallSignalingEventUpdated {
   const _$CallSignalingEventUpdatedImpl(
-      {required this.line, required this.callId});
+      {required this.line, required this.callId})
+      : super._();
 
   @override
   final int? line;
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.updated(line: $line, callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUpdatedImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId);
 
   @override
   @optionalTypeArgs
@@ -3247,10 +3038,11 @@ class _$CallSignalingEventUpdatedImpl implements _CallSignalingEventUpdated {
   }
 }
 
-abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
+abstract class _CallSignalingEventUpdated extends _CallSignalingEvent {
   const factory _CallSignalingEventUpdated(
       {required final int? line,
       required final String callId}) = _$CallSignalingEventUpdatedImpl;
+  const _CallSignalingEventUpdated._() : super._();
 
   int? get line;
   String get callId;
@@ -3258,13 +3050,14 @@ abstract class _CallSignalingEventUpdated implements _CallSignalingEvent {
 
 /// @nodoc
 
-class _$CallSignalingEventTransferImpl implements _CallSignalingEventTransfer {
+class _$CallSignalingEventTransferImpl extends _CallSignalingEventTransfer {
   const _$CallSignalingEventTransferImpl(
       {required this.line,
       required this.referId,
       required this.referTo,
       required this.referredBy,
-      required this.replaceCallId});
+      required this.replaceCallId})
+      : super._();
 
   @override
   final int? line;
@@ -3276,29 +3069,6 @@ class _$CallSignalingEventTransferImpl implements _CallSignalingEventTransfer {
   final String? referredBy;
   @override
   final String? replaceCallId;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.transfer(line: $line, referId: $referId, referTo: $referTo, referredBy: $referredBy, replaceCallId: $replaceCallId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventTransferImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.referId, referId) || other.referId == referId) &&
-            (identical(other.referTo, referTo) || other.referTo == referTo) &&
-            (identical(other.referredBy, referredBy) ||
-                other.referredBy == referredBy) &&
-            (identical(other.replaceCallId, replaceCallId) ||
-                other.replaceCallId == replaceCallId));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, line, referId, referTo, referredBy, replaceCallId);
 
   @override
   @optionalTypeArgs
@@ -3583,13 +3353,14 @@ class _$CallSignalingEventTransferImpl implements _CallSignalingEventTransfer {
   }
 }
 
-abstract class _CallSignalingEventTransfer implements _CallSignalingEvent {
+abstract class _CallSignalingEventTransfer extends _CallSignalingEvent {
   const factory _CallSignalingEventTransfer(
       {required final int? line,
       required final String referId,
       required final String referTo,
       required final String? referredBy,
       required final String? replaceCallId}) = _$CallSignalingEventTransferImpl;
+  const _CallSignalingEventTransfer._() : super._();
 
   int? get line;
   String get referId;
@@ -3601,31 +3372,15 @@ abstract class _CallSignalingEventTransfer implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventTransferringImpl
-    implements _CallSignalingEventTransferring {
+    extends _CallSignalingEventTransferring {
   const _$CallSignalingEventTransferringImpl(
-      {required this.line, required this.callId});
+      {required this.line, required this.callId})
+      : super._();
 
   @override
   final int? line;
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.transferring(line: $line, callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventTransferringImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId);
 
   @override
   @optionalTypeArgs
@@ -3910,10 +3665,11 @@ class _$CallSignalingEventTransferringImpl
   }
 }
 
-abstract class _CallSignalingEventTransferring implements _CallSignalingEvent {
+abstract class _CallSignalingEventTransferring extends _CallSignalingEvent {
   const factory _CallSignalingEventTransferring(
       {required final int? line,
       required final String callId}) = _$CallSignalingEventTransferringImpl;
+  const _CallSignalingEventTransferring._() : super._();
 
   int? get line;
   String get callId;
@@ -3922,14 +3678,15 @@ abstract class _CallSignalingEventTransferring implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventNotifyDialogImpl
-    implements _CallSignalingEventNotifyDialog {
+    extends _CallSignalingEventNotifyDialog {
   const _$CallSignalingEventNotifyDialogImpl(
       {required this.line,
       required this.callId,
       required this.notify,
       required this.subscriptionState,
       required final List<UserActiveCall> userActiveCalls})
-      : _userActiveCalls = userActiveCalls;
+      : _userActiveCalls = userActiveCalls,
+        super._();
 
   @override
   final int? line;
@@ -3946,29 +3703,6 @@ class _$CallSignalingEventNotifyDialogImpl
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_userActiveCalls);
   }
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.notifyDialog(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, userActiveCalls: $userActiveCalls)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventNotifyDialogImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.notify, notify) || other.notify == notify) &&
-            (identical(other.subscriptionState, subscriptionState) ||
-                other.subscriptionState == subscriptionState) &&
-            const DeepCollectionEquality()
-                .equals(other._userActiveCalls, _userActiveCalls));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId, notify,
-      subscriptionState, const DeepCollectionEquality().hash(_userActiveCalls));
 
   @override
   @optionalTypeArgs
@@ -4256,7 +3990,7 @@ class _$CallSignalingEventNotifyDialogImpl
   }
 }
 
-abstract class _CallSignalingEventNotifyDialog implements _CallSignalingEvent {
+abstract class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
   const factory _CallSignalingEventNotifyDialog(
           {required final int? line,
           required final String callId,
@@ -4264,6 +3998,7 @@ abstract class _CallSignalingEventNotifyDialog implements _CallSignalingEvent {
           required final SubscriptionState? subscriptionState,
           required final List<UserActiveCall> userActiveCalls}) =
       _$CallSignalingEventNotifyDialogImpl;
+  const _CallSignalingEventNotifyDialog._() : super._();
 
   int? get line;
   String get callId;
@@ -4275,13 +4010,14 @@ abstract class _CallSignalingEventNotifyDialog implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventNotifyReferImpl
-    implements _CallSignalingEventNotifyRefer {
+    extends _CallSignalingEventNotifyRefer {
   const _$CallSignalingEventNotifyReferImpl(
       {required this.line,
       required this.callId,
       required this.notify,
       required this.subscriptionState,
-      required this.state});
+      required this.state})
+      : super._();
 
   @override
   final int? line;
@@ -4293,28 +4029,6 @@ class _$CallSignalingEventNotifyReferImpl
   final SubscriptionState? subscriptionState;
   @override
   final ReferNotifyState state;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.notifyRefer(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, state: $state)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventNotifyReferImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.notify, notify) || other.notify == notify) &&
-            (identical(other.subscriptionState, subscriptionState) ||
-                other.subscriptionState == subscriptionState) &&
-            (identical(other.state, state) || other.state == state));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, line, callId, notify, subscriptionState, state);
 
   @override
   @optionalTypeArgs
@@ -4599,7 +4313,7 @@ class _$CallSignalingEventNotifyReferImpl
   }
 }
 
-abstract class _CallSignalingEventNotifyRefer implements _CallSignalingEvent {
+abstract class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
   const factory _CallSignalingEventNotifyRefer(
           {required final int? line,
           required final String callId,
@@ -4607,6 +4321,7 @@ abstract class _CallSignalingEventNotifyRefer implements _CallSignalingEvent {
           required final SubscriptionState? subscriptionState,
           required final ReferNotifyState state}) =
       _$CallSignalingEventNotifyReferImpl;
+  const _CallSignalingEventNotifyRefer._() : super._();
 
   int? get line;
   String get callId;
@@ -4618,14 +4333,15 @@ abstract class _CallSignalingEventNotifyRefer implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventNotifyUnknownImpl
-    implements _CallSignalingEventNotifyUnknown {
+    extends _CallSignalingEventNotifyUnknown {
   const _$CallSignalingEventNotifyUnknownImpl(
       {required this.line,
       required this.callId,
       required this.notify,
       required this.subscriptionState,
       required this.contentType,
-      required this.content});
+      required this.content})
+      : super._();
 
   @override
   final int? line;
@@ -4639,30 +4355,6 @@ class _$CallSignalingEventNotifyUnknownImpl
   final String? contentType;
   @override
   final String content;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.notifyUnknown(line: $line, callId: $callId, notify: $notify, subscriptionState: $subscriptionState, contentType: $contentType, content: $content)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventNotifyUnknownImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.notify, notify) || other.notify == notify) &&
-            (identical(other.subscriptionState, subscriptionState) ||
-                other.subscriptionState == subscriptionState) &&
-            (identical(other.contentType, contentType) ||
-                other.contentType == contentType) &&
-            (identical(other.content, content) || other.content == content));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, callId, notify,
-      subscriptionState, contentType, content);
 
   @override
   @optionalTypeArgs
@@ -4950,7 +4642,7 @@ class _$CallSignalingEventNotifyUnknownImpl
   }
 }
 
-abstract class _CallSignalingEventNotifyUnknown implements _CallSignalingEvent {
+abstract class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   const factory _CallSignalingEventNotifyUnknown(
       {required final int? line,
       required final String callId,
@@ -4958,6 +4650,7 @@ abstract class _CallSignalingEventNotifyUnknown implements _CallSignalingEvent {
       required final SubscriptionState? subscriptionState,
       required final String? contentType,
       required final String content}) = _$CallSignalingEventNotifyUnknownImpl;
+  const _CallSignalingEventNotifyUnknown._() : super._();
 
   int? get line;
   String get callId;
@@ -4970,23 +4663,8 @@ abstract class _CallSignalingEventNotifyUnknown implements _CallSignalingEvent {
 /// @nodoc
 
 class _$CallSignalingEventRegisteringImpl
-    implements _CallSignalingEventRegistering {
-  const _$CallSignalingEventRegisteringImpl();
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.registering()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisteringImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+    extends _CallSignalingEventRegistering {
+  const _$CallSignalingEventRegisteringImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -5271,31 +4949,16 @@ class _$CallSignalingEventRegisteringImpl
   }
 }
 
-abstract class _CallSignalingEventRegistering implements _CallSignalingEvent {
+abstract class _CallSignalingEventRegistering extends _CallSignalingEvent {
   const factory _CallSignalingEventRegistering() =
       _$CallSignalingEventRegisteringImpl;
+  const _CallSignalingEventRegistering._() : super._();
 }
 
 /// @nodoc
 
-class _$CallSignalingEventRegisteredImpl
-    implements _CallSignalingEventRegistered {
-  const _$CallSignalingEventRegisteredImpl();
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.registered()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisteredImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+class _$CallSignalingEventRegisteredImpl extends _CallSignalingEventRegistered {
+  const _$CallSignalingEventRegisteredImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -5580,38 +5243,23 @@ class _$CallSignalingEventRegisteredImpl
   }
 }
 
-abstract class _CallSignalingEventRegistered implements _CallSignalingEvent {
+abstract class _CallSignalingEventRegistered extends _CallSignalingEvent {
   const factory _CallSignalingEventRegistered() =
       _$CallSignalingEventRegisteredImpl;
+  const _CallSignalingEventRegistered._() : super._();
 }
 
 /// @nodoc
 
 class _$CallSignalingEventRegisterationFailedImpl
-    implements _CallSignalingEventRegisterationFailed {
-  const _$CallSignalingEventRegisterationFailedImpl(this.code, this.reason);
+    extends _CallSignalingEventRegisterationFailed {
+  const _$CallSignalingEventRegisterationFailedImpl(this.code, this.reason)
+      : super._();
 
   @override
   final int code;
   @override
   final String reason;
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.registrationFailed(code: $code, reason: $reason)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventRegisterationFailedImpl &&
-            (identical(other.code, code) || other.code == code) &&
-            (identical(other.reason, reason) || other.reason == reason));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, code, reason);
 
   @override
   @optionalTypeArgs
@@ -5897,10 +5545,11 @@ class _$CallSignalingEventRegisterationFailedImpl
 }
 
 abstract class _CallSignalingEventRegisterationFailed
-    implements _CallSignalingEvent {
+    extends _CallSignalingEvent {
   const factory _CallSignalingEventRegisterationFailed(
           final int code, final String reason) =
       _$CallSignalingEventRegisterationFailedImpl;
+  const _CallSignalingEventRegisterationFailed._() : super._();
 
   int get code;
   String get reason;
@@ -5909,23 +5558,8 @@ abstract class _CallSignalingEventRegisterationFailed
 /// @nodoc
 
 class _$CallSignalingEventUnregisteringImpl
-    implements _CallSignalingEventUnregistering {
-  const _$CallSignalingEventUnregisteringImpl();
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.unregistering()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUnregisteringImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+    extends _CallSignalingEventUnregistering {
+  const _$CallSignalingEventUnregisteringImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -6210,31 +5844,17 @@ class _$CallSignalingEventUnregisteringImpl
   }
 }
 
-abstract class _CallSignalingEventUnregistering implements _CallSignalingEvent {
+abstract class _CallSignalingEventUnregistering extends _CallSignalingEvent {
   const factory _CallSignalingEventUnregistering() =
       _$CallSignalingEventUnregisteringImpl;
+  const _CallSignalingEventUnregistering._() : super._();
 }
 
 /// @nodoc
 
 class _$CallSignalingEventUnregisteredImpl
-    implements _CallSignalingEventUnregistered {
-  const _$CallSignalingEventUnregisteredImpl();
-
-  @override
-  String toString() {
-    return '_CallSignalingEvent.unregistered()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallSignalingEventUnregisteredImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+    extends _CallSignalingEventUnregistered {
+  const _$CallSignalingEventUnregisteredImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -6519,9 +6139,10 @@ class _$CallSignalingEventUnregisteredImpl
   }
 }
 
-abstract class _CallSignalingEventUnregistered implements _CallSignalingEvent {
+abstract class _CallSignalingEventUnregistered extends _CallSignalingEvent {
   const factory _CallSignalingEventUnregistered() =
       _$CallSignalingEventUnregisteredImpl;
+  const _CallSignalingEventUnregistered._() : super._();
 }
 
 /// @nodoc
@@ -6707,9 +6328,8 @@ mixin _$CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventStartedImpl
-    with CallControlEventStartedMixin
-    implements _CallControlEventStarted {
+class _$CallControlEventStartedImpl extends _CallControlEventStarted
+    with CallControlEventStartedMixin {
   const _$CallControlEventStartedImpl(
       {this.line,
       this.generic,
@@ -6725,7 +6345,8 @@ class _$CallControlEventStartedImpl
             (generic != null && number == null && email == null) ||
                 (generic == null && number != null && email == null) ||
                 (generic == null && number == null && email != null),
-            'only one of generic, number or email parameters must be assign');
+            'only one of generic, number or email parameters must be assign'),
+        super._();
 
   @override
   final int? line;
@@ -6743,33 +6364,6 @@ class _$CallControlEventStartedImpl
   final String? fromNumber;
   @override
   final bool video;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.started(line: $line, generic: $generic, number: $number, email: $email, displayName: $displayName, replaces: $replaces, fromNumber: $fromNumber, video: $video)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventStartedImpl &&
-            (identical(other.line, line) || other.line == line) &&
-            (identical(other.generic, generic) || other.generic == generic) &&
-            (identical(other.number, number) || other.number == number) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.replaces, replaces) ||
-                other.replaces == replaces) &&
-            (identical(other.fromNumber, fromNumber) ||
-                other.fromNumber == fromNumber) &&
-            (identical(other.video, video) || other.video == video));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, line, generic, number, email,
-      displayName, replaces, fromNumber, video);
 
   @override
   @optionalTypeArgs
@@ -6976,8 +6570,8 @@ class _$CallControlEventStartedImpl
   }
 }
 
-abstract class _CallControlEventStarted
-    implements CallControlEvent, CallControlEventStartedMixin {
+abstract class _CallControlEventStarted extends CallControlEvent
+    implements CallControlEventStartedMixin {
   const factory _CallControlEventStarted(
       {final int? line,
       final String? generic,
@@ -6987,6 +6581,7 @@ abstract class _CallControlEventStarted
       final String? replaces,
       final String? fromNumber,
       required final bool video}) = _$CallControlEventStartedImpl;
+  const _CallControlEventStarted._() : super._();
 
   int? get line;
   String? get generic;
@@ -7000,27 +6595,11 @@ abstract class _CallControlEventStarted
 
 /// @nodoc
 
-class _$CallControlEventAnsweredImpl implements _CallControlEventAnswered {
-  const _$CallControlEventAnsweredImpl(this.callId);
+class _$CallControlEventAnsweredImpl extends _CallControlEventAnswered {
+  const _$CallControlEventAnsweredImpl(this.callId) : super._();
 
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.answered(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAnsweredImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
 
   @override
   @optionalTypeArgs
@@ -7224,36 +6803,21 @@ class _$CallControlEventAnsweredImpl implements _CallControlEventAnswered {
   }
 }
 
-abstract class _CallControlEventAnswered implements CallControlEvent {
+abstract class _CallControlEventAnswered extends CallControlEvent {
   const factory _CallControlEventAnswered(final String callId) =
       _$CallControlEventAnsweredImpl;
+  const _CallControlEventAnswered._() : super._();
 
   String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventEndedImpl implements _CallControlEventEnded {
-  const _$CallControlEventEndedImpl(this.callId);
+class _$CallControlEventEndedImpl extends _CallControlEventEnded {
+  const _$CallControlEventEndedImpl(this.callId) : super._();
 
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.ended(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventEndedImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
 
   @override
   @optionalTypeArgs
@@ -7457,39 +7021,23 @@ class _$CallControlEventEndedImpl implements _CallControlEventEnded {
   }
 }
 
-abstract class _CallControlEventEnded implements CallControlEvent {
+abstract class _CallControlEventEnded extends CallControlEvent {
   const factory _CallControlEventEnded(final String callId) =
       _$CallControlEventEndedImpl;
+  const _CallControlEventEnded._() : super._();
 
   String get callId;
 }
 
 /// @nodoc
 
-class _$CallControlEventSetHeldImpl implements _CallControlEventSetHeld {
-  const _$CallControlEventSetHeldImpl(this.callId, this.onHold);
+class _$CallControlEventSetHeldImpl extends _CallControlEventSetHeld {
+  const _$CallControlEventSetHeldImpl(this.callId, this.onHold) : super._();
 
   @override
   final String callId;
   @override
   final bool onHold;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.setHeld(callId: $callId, onHold: $onHold)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventSetHeldImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.onHold, onHold) || other.onHold == onHold));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, onHold);
 
   @override
   @optionalTypeArgs
@@ -7693,9 +7241,10 @@ class _$CallControlEventSetHeldImpl implements _CallControlEventSetHeld {
   }
 }
 
-abstract class _CallControlEventSetHeld implements CallControlEvent {
+abstract class _CallControlEventSetHeld extends CallControlEvent {
   const factory _CallControlEventSetHeld(
       final String callId, final bool onHold) = _$CallControlEventSetHeldImpl;
+  const _CallControlEventSetHeld._() : super._();
 
   String get callId;
   bool get onHold;
@@ -7703,30 +7252,13 @@ abstract class _CallControlEventSetHeld implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSetMutedImpl implements _CallControlEventSetMuted {
-  const _$CallControlEventSetMutedImpl(this.callId, this.muted);
+class _$CallControlEventSetMutedImpl extends _CallControlEventSetMuted {
+  const _$CallControlEventSetMutedImpl(this.callId, this.muted) : super._();
 
   @override
   final String callId;
   @override
   final bool muted;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.setMuted(callId: $callId, muted: $muted)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventSetMutedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.muted, muted) || other.muted == muted));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, muted);
 
   @override
   @optionalTypeArgs
@@ -7930,9 +7462,10 @@ class _$CallControlEventSetMutedImpl implements _CallControlEventSetMuted {
   }
 }
 
-abstract class _CallControlEventSetMuted implements CallControlEvent {
+abstract class _CallControlEventSetMuted extends CallControlEvent {
   const factory _CallControlEventSetMuted(
       final String callId, final bool muted) = _$CallControlEventSetMutedImpl;
+  const _CallControlEventSetMuted._() : super._();
 
   String get callId;
   bool get muted;
@@ -7940,30 +7473,13 @@ abstract class _CallControlEventSetMuted implements CallControlEvent {
 
 /// @nodoc
 
-class _$CallControlEventSentDTMFImpl implements _CallControlEventSentDTMF {
-  const _$CallControlEventSentDTMFImpl(this.callId, this.key);
+class _$CallControlEventSentDTMFImpl extends _CallControlEventSentDTMF {
+  const _$CallControlEventSentDTMFImpl(this.callId, this.key) : super._();
 
   @override
   final String callId;
   @override
   final String key;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.sentDTMF(callId: $callId, key: $key)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventSentDTMFImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.key, key) || other.key == key));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, key);
 
   @override
   @optionalTypeArgs
@@ -8167,9 +7683,10 @@ class _$CallControlEventSentDTMFImpl implements _CallControlEventSentDTMF {
   }
 }
 
-abstract class _CallControlEventSentDTMF implements CallControlEvent {
+abstract class _CallControlEventSentDTMF extends CallControlEvent {
   const factory _CallControlEventSentDTMF(
       final String callId, final String key) = _$CallControlEventSentDTMFImpl;
+  const _CallControlEventSentDTMF._() : super._();
 
   String get callId;
   String get key;
@@ -8178,27 +7695,11 @@ abstract class _CallControlEventSentDTMF implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventCameraSwitchedImpl
-    implements _CallControlEventCameraSwitched {
-  const _$CallControlEventCameraSwitchedImpl(this.callId);
+    extends _CallControlEventCameraSwitched {
+  const _$CallControlEventCameraSwitchedImpl(this.callId) : super._();
 
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.cameraSwitched(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventCameraSwitchedImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
 
   @override
   @optionalTypeArgs
@@ -8402,9 +7903,10 @@ class _$CallControlEventCameraSwitchedImpl
   }
 }
 
-abstract class _CallControlEventCameraSwitched implements CallControlEvent {
+abstract class _CallControlEventCameraSwitched extends CallControlEvent {
   const factory _CallControlEventCameraSwitched(final String callId) =
       _$CallControlEventCameraSwitchedImpl;
+  const _CallControlEventCameraSwitched._() : super._();
 
   String get callId;
 }
@@ -8412,30 +7914,14 @@ abstract class _CallControlEventCameraSwitched implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventCameraEnabledImpl
-    implements _CallControlEventCameraEnabled {
-  const _$CallControlEventCameraEnabledImpl(this.callId, this.enabled);
+    extends _CallControlEventCameraEnabled {
+  const _$CallControlEventCameraEnabledImpl(this.callId, this.enabled)
+      : super._();
 
   @override
   final String callId;
   @override
   final bool enabled;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.cameraEnabled(callId: $callId, enabled: $enabled)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventCameraEnabledImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.enabled, enabled) || other.enabled == enabled));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, enabled);
 
   @override
   @optionalTypeArgs
@@ -8639,10 +8125,11 @@ class _$CallControlEventCameraEnabledImpl
   }
 }
 
-abstract class _CallControlEventCameraEnabled implements CallControlEvent {
+abstract class _CallControlEventCameraEnabled extends CallControlEvent {
   const factory _CallControlEventCameraEnabled(
           final String callId, final bool enabled) =
       _$CallControlEventCameraEnabledImpl;
+  const _CallControlEventCameraEnabled._() : super._();
 
   String get callId;
   bool get enabled;
@@ -8651,30 +8138,14 @@ abstract class _CallControlEventCameraEnabled implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventAudioDeviceSetImpl
-    implements _CallControlEventAudioDeviceSet {
-  const _$CallControlEventAudioDeviceSetImpl(this.callId, this.device);
+    extends _CallControlEventAudioDeviceSet {
+  const _$CallControlEventAudioDeviceSetImpl(this.callId, this.device)
+      : super._();
 
   @override
   final String callId;
   @override
   final CallAudioDevice device;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.audioDeviceSet(callId: $callId, device: $device)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAudioDeviceSetImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.device, device) || other.device == device));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, device);
 
   @override
   @optionalTypeArgs
@@ -8878,10 +8349,11 @@ class _$CallControlEventAudioDeviceSetImpl
   }
 }
 
-abstract class _CallControlEventAudioDeviceSet implements CallControlEvent {
+abstract class _CallControlEventAudioDeviceSet extends CallControlEvent {
   const factory _CallControlEventAudioDeviceSet(
           final String callId, final CallAudioDevice device) =
       _$CallControlEventAudioDeviceSetImpl;
+  const _CallControlEventAudioDeviceSet._() : super._();
 
   String get callId;
   CallAudioDevice get device;
@@ -8890,27 +8362,11 @@ abstract class _CallControlEventAudioDeviceSet implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventFailureApprovedImpl
-    implements _CallControlEventFailureApproved {
-  const _$CallControlEventFailureApprovedImpl(this.callId);
+    extends _CallControlEventFailureApproved {
+  const _$CallControlEventFailureApprovedImpl(this.callId) : super._();
 
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.failureApproved(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventFailureApprovedImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
 
   @override
   @optionalTypeArgs
@@ -9114,9 +8570,10 @@ class _$CallControlEventFailureApprovedImpl
   }
 }
 
-abstract class _CallControlEventFailureApproved implements CallControlEvent {
+abstract class _CallControlEventFailureApproved extends CallControlEvent {
   const factory _CallControlEventFailureApproved(final String callId) =
       _$CallControlEventFailureApprovedImpl;
+  const _CallControlEventFailureApproved._() : super._();
 
   String get callId;
 }
@@ -9124,27 +8581,11 @@ abstract class _CallControlEventFailureApproved implements CallControlEvent {
 /// @nodoc
 
 class _$CallControlEventBlindTransferInitiatedImpl
-    implements _CallControlEventBlindTransferInitiated {
-  const _$CallControlEventBlindTransferInitiatedImpl(this.callId);
+    extends _CallControlEventBlindTransferInitiated {
+  const _$CallControlEventBlindTransferInitiatedImpl(this.callId) : super._();
 
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.blindTransferInitiated(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventBlindTransferInitiatedImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
 
   @override
   @optionalTypeArgs
@@ -9349,9 +8790,10 @@ class _$CallControlEventBlindTransferInitiatedImpl
 }
 
 abstract class _CallControlEventBlindTransferInitiated
-    implements CallControlEvent {
+    extends CallControlEvent {
   const factory _CallControlEventBlindTransferInitiated(final String callId) =
       _$CallControlEventBlindTransferInitiatedImpl;
+  const _CallControlEventBlindTransferInitiated._() : super._();
 
   String get callId;
 }
@@ -9359,27 +8801,12 @@ abstract class _CallControlEventBlindTransferInitiated
 /// @nodoc
 
 class _$CallControlEventAttendedTransferInitiatedImpl
-    implements _CallControlEventAttendedTransferInitiated {
-  const _$CallControlEventAttendedTransferInitiatedImpl(this.callId);
+    extends _CallControlEventAttendedTransferInitiated {
+  const _$CallControlEventAttendedTransferInitiatedImpl(this.callId)
+      : super._();
 
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.attendedTransferInitiated(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAttendedTransferInitiatedImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
 
   @override
   @optionalTypeArgs
@@ -9584,9 +9011,10 @@ class _$CallControlEventAttendedTransferInitiatedImpl
 }
 
 abstract class _CallControlEventAttendedTransferInitiated
-    implements CallControlEvent {
+    extends CallControlEvent {
   const factory _CallControlEventAttendedTransferInitiated(
       final String callId) = _$CallControlEventAttendedTransferInitiatedImpl;
+  const _CallControlEventAttendedTransferInitiated._() : super._();
 
   String get callId;
 }
@@ -9594,27 +9022,12 @@ abstract class _CallControlEventAttendedTransferInitiated
 /// @nodoc
 
 class _$CallControlEventBlindTransferSubmittedImpl
-    implements _CallControlEventBlindTransferSubmitted {
-  const _$CallControlEventBlindTransferSubmittedImpl({required this.number});
+    extends _CallControlEventBlindTransferSubmitted {
+  const _$CallControlEventBlindTransferSubmittedImpl({required this.number})
+      : super._();
 
   @override
   final String number;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.blindTransferSubmitted(number: $number)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventBlindTransferSubmittedImpl &&
-            (identical(other.number, number) || other.number == number));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, number);
 
   @override
   @optionalTypeArgs
@@ -9819,10 +9232,11 @@ class _$CallControlEventBlindTransferSubmittedImpl
 }
 
 abstract class _CallControlEventBlindTransferSubmitted
-    implements CallControlEvent {
+    extends CallControlEvent {
   const factory _CallControlEventBlindTransferSubmitted(
           {required final String number}) =
       _$CallControlEventBlindTransferSubmittedImpl;
+  const _CallControlEventBlindTransferSubmitted._() : super._();
 
   String get number;
 }
@@ -9830,33 +9244,15 @@ abstract class _CallControlEventBlindTransferSubmitted
 /// @nodoc
 
 class _$CallControlEventAttendedTransferSubmittedImpl
-    implements _CallControlEventAttendedTransferSubmitted {
+    extends _CallControlEventAttendedTransferSubmitted {
   const _$CallControlEventAttendedTransferSubmittedImpl(
-      {required this.referorCall, required this.replaceCall});
+      {required this.referorCall, required this.replaceCall})
+      : super._();
 
   @override
   final ActiveCall referorCall;
   @override
   final ActiveCall replaceCall;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.attendedTransferSubmitted(referorCall: $referorCall, replaceCall: $replaceCall)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAttendedTransferSubmittedImpl &&
-            (identical(other.referorCall, referorCall) ||
-                other.referorCall == referorCall) &&
-            (identical(other.replaceCall, replaceCall) ||
-                other.replaceCall == replaceCall));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, referorCall, replaceCall);
 
   @override
   @optionalTypeArgs
@@ -10061,11 +9457,12 @@ class _$CallControlEventAttendedTransferSubmittedImpl
 }
 
 abstract class _CallControlEventAttendedTransferSubmitted
-    implements CallControlEvent {
+    extends CallControlEvent {
   const factory _CallControlEventAttendedTransferSubmitted(
           {required final ActiveCall referorCall,
           required final ActiveCall replaceCall}) =
       _$CallControlEventAttendedTransferSubmittedImpl;
+  const _CallControlEventAttendedTransferSubmitted._() : super._();
 
   ActiveCall get referorCall;
   ActiveCall get replaceCall;
@@ -10074,31 +9471,15 @@ abstract class _CallControlEventAttendedTransferSubmitted
 /// @nodoc
 
 class _$CallControlEventAttendedRequestDeclinedImpl
-    implements _CallControlEventAttendedRequestDeclined {
+    extends _CallControlEventAttendedRequestDeclined {
   const _$CallControlEventAttendedRequestDeclinedImpl(
-      {required this.callId, required this.referId});
+      {required this.callId, required this.referId})
+      : super._();
 
   @override
   final String callId;
   @override
   final String referId;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.attendedRequestDeclined(callId: $callId, referId: $referId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAttendedRequestDeclinedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.referId, referId) || other.referId == referId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, referId);
 
   @override
   @optionalTypeArgs
@@ -10303,10 +9684,11 @@ class _$CallControlEventAttendedRequestDeclinedImpl
 }
 
 abstract class _CallControlEventAttendedRequestDeclined
-    implements CallControlEvent {
+    extends CallControlEvent {
   const factory _CallControlEventAttendedRequestDeclined(
           {required final String callId, required final String referId}) =
       _$CallControlEventAttendedRequestDeclinedImpl;
+  const _CallControlEventAttendedRequestDeclined._() : super._();
 
   String get callId;
   String get referId;
@@ -10315,31 +9697,15 @@ abstract class _CallControlEventAttendedRequestDeclined
 /// @nodoc
 
 class _$CallControlEventAttendedRequestApprovedImpl
-    implements _CallControlEventAttendedRequestApproved {
+    extends _CallControlEventAttendedRequestApproved {
   const _$CallControlEventAttendedRequestApprovedImpl(
-      {required this.referId, required this.referTo});
+      {required this.referId, required this.referTo})
+      : super._();
 
   @override
   final String referId;
   @override
   final String referTo;
-
-  @override
-  String toString() {
-    return 'CallControlEvent.attendedRequestApproved(referId: $referId, referTo: $referTo)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallControlEventAttendedRequestApprovedImpl &&
-            (identical(other.referId, referId) || other.referId == referId) &&
-            (identical(other.referTo, referTo) || other.referTo == referTo));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, referId, referTo);
 
   @override
   @optionalTypeArgs
@@ -10544,10 +9910,11 @@ class _$CallControlEventAttendedRequestApprovedImpl
 }
 
 abstract class _CallControlEventAttendedRequestApproved
-    implements CallControlEvent {
+    extends CallControlEvent {
   const factory _CallControlEventAttendedRequestApproved(
           {required final String referId, required final String referTo}) =
       _$CallControlEventAttendedRequestApprovedImpl;
+  const _CallControlEventAttendedRequestApproved._() : super._();
 
   String get referId;
   String get referTo;
@@ -10661,27 +10028,6 @@ class _$CallPerformEventStartedImpl extends _CallPerformEventStarted {
   final String? displayName;
   @override
   final bool video;
-
-  @override
-  String toString() {
-    return '_CallPerformEvent.started(callId: $callId, handle: $handle, displayName: $displayName, video: $video)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventStartedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.handle, handle) || other.handle == handle) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.video, video) || other.video == video));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, callId, handle, displayName, video);
 
   @override
   @optionalTypeArgs
@@ -10819,22 +10165,6 @@ class _$CallPerformEventAnsweredImpl extends _CallPerformEventAnswered {
   final String callId;
 
   @override
-  String toString() {
-    return '_CallPerformEvent.answered(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventAnsweredImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
-
-  @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String callId, CallkeepHandle handle,
@@ -10963,22 +10293,6 @@ class _$CallPerformEventEndedImpl extends _CallPerformEventEnded {
 
   @override
   final String callId;
-
-  @override
-  String toString() {
-    return '_CallPerformEvent.ended(callId: $callId)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventEndedImpl &&
-            (identical(other.callId, callId) || other.callId == callId));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId);
 
   @override
   @optionalTypeArgs
@@ -11111,23 +10425,6 @@ class _$CallPerformEventSetHeldImpl extends _CallPerformEventSetHeld {
   final String callId;
   @override
   final bool onHold;
-
-  @override
-  String toString() {
-    return '_CallPerformEvent.setHeld(callId: $callId, onHold: $onHold)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventSetHeldImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.onHold, onHold) || other.onHold == onHold));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, onHold);
 
   @override
   @optionalTypeArgs
@@ -11263,23 +10560,6 @@ class _$CallPerformEventSetMutedImpl extends _CallPerformEventSetMuted {
   final bool muted;
 
   @override
-  String toString() {
-    return '_CallPerformEvent.setMuted(callId: $callId, muted: $muted)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventSetMutedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.muted, muted) || other.muted == muted));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, muted);
-
-  @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String callId, CallkeepHandle handle,
@@ -11411,23 +10691,6 @@ class _$CallPerformEventSentDTMFImpl extends _CallPerformEventSentDTMF {
   final String callId;
   @override
   final String key;
-
-  @override
-  String toString() {
-    return '_CallPerformEvent.sentDTMF(callId: $callId, key: $key)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventSentDTMFImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.key, key) || other.key == key));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, key);
 
   @override
   @optionalTypeArgs
@@ -11562,23 +10825,6 @@ class _$CallPerformEventAudioDeviceSetImpl
   final String callId;
   @override
   final CallAudioDevice device;
-
-  @override
-  String toString() {
-    return '_CallPerformEvent.audioDeviceSet(callId: $callId, device: $device)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventAudioDeviceSetImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.device, device) || other.device == device));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, device);
 
   @override
   @optionalTypeArgs
@@ -11722,24 +10968,6 @@ class _$CallPerformEventAudioDevicesUpdateImpl
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_devices);
   }
-
-  @override
-  String toString() {
-    return '_CallPerformEvent.audioDevicesUpdate(callId: $callId, devices: $devices)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallPerformEventAudioDevicesUpdateImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            const DeepCollectionEquality().equals(other._devices, _devices));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, callId, const DeepCollectionEquality().hash(_devices));
 
   @override
   @optionalTypeArgs
@@ -11975,30 +11203,14 @@ mixin _$PeerConnectionEvent {
 /// @nodoc
 
 class _$PeerConnectionEventSignalingStateChangedImpl
-    implements _PeerConnectionEventSignalingStateChanged {
-  const _$PeerConnectionEventSignalingStateChangedImpl(this.callId, this.state);
+    extends _PeerConnectionEventSignalingStateChanged {
+  const _$PeerConnectionEventSignalingStateChangedImpl(this.callId, this.state)
+      : super._();
 
   @override
   final String callId;
   @override
   final RTCSignalingState state;
-
-  @override
-  String toString() {
-    return '_PeerConnectionEvent.signalingStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventSignalingStateChangedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.state, state) || other.state == state));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, state);
 
   @override
   @optionalTypeArgs
@@ -12128,10 +11340,11 @@ class _$PeerConnectionEventSignalingStateChangedImpl
 }
 
 abstract class _PeerConnectionEventSignalingStateChanged
-    implements _PeerConnectionEvent {
+    extends _PeerConnectionEvent {
   const factory _PeerConnectionEventSignalingStateChanged(
           final String callId, final RTCSignalingState state) =
       _$PeerConnectionEventSignalingStateChangedImpl;
+  const _PeerConnectionEventSignalingStateChanged._() : super._();
 
   @override
   String get callId;
@@ -12141,31 +11354,14 @@ abstract class _PeerConnectionEventSignalingStateChanged
 /// @nodoc
 
 class _$PeerConnectionEventConnectionStateChangedImpl
-    implements _PeerConnectionEventConnectionStateChanged {
-  const _$PeerConnectionEventConnectionStateChangedImpl(
-      this.callId, this.state);
+    extends _PeerConnectionEventConnectionStateChanged {
+  const _$PeerConnectionEventConnectionStateChangedImpl(this.callId, this.state)
+      : super._();
 
   @override
   final String callId;
   @override
   final RTCPeerConnectionState state;
-
-  @override
-  String toString() {
-    return '_PeerConnectionEvent.connectionStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventConnectionStateChangedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.state, state) || other.state == state));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, state);
 
   @override
   @optionalTypeArgs
@@ -12295,10 +11491,11 @@ class _$PeerConnectionEventConnectionStateChangedImpl
 }
 
 abstract class _PeerConnectionEventConnectionStateChanged
-    implements _PeerConnectionEvent {
+    extends _PeerConnectionEvent {
   const factory _PeerConnectionEventConnectionStateChanged(
           final String callId, final RTCPeerConnectionState state) =
       _$PeerConnectionEventConnectionStateChangedImpl;
+  const _PeerConnectionEventConnectionStateChanged._() : super._();
 
   @override
   String get callId;
@@ -12308,31 +11505,15 @@ abstract class _PeerConnectionEventConnectionStateChanged
 /// @nodoc
 
 class _$PeerConnectionEventIceGatheringStateChangedImpl
-    implements _PeerConnectionEventIceGatheringStateChanged {
+    extends _PeerConnectionEventIceGatheringStateChanged {
   const _$PeerConnectionEventIceGatheringStateChangedImpl(
-      this.callId, this.state);
+      this.callId, this.state)
+      : super._();
 
   @override
   final String callId;
   @override
   final RTCIceGatheringState state;
-
-  @override
-  String toString() {
-    return '_PeerConnectionEvent.iceGatheringStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventIceGatheringStateChangedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.state, state) || other.state == state));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, state);
 
   @override
   @optionalTypeArgs
@@ -12462,10 +11643,11 @@ class _$PeerConnectionEventIceGatheringStateChangedImpl
 }
 
 abstract class _PeerConnectionEventIceGatheringStateChanged
-    implements _PeerConnectionEvent {
+    extends _PeerConnectionEvent {
   const factory _PeerConnectionEventIceGatheringStateChanged(
           final String callId, final RTCIceGatheringState state) =
       _$PeerConnectionEventIceGatheringStateChangedImpl;
+  const _PeerConnectionEventIceGatheringStateChanged._() : super._();
 
   @override
   String get callId;
@@ -12475,31 +11657,15 @@ abstract class _PeerConnectionEventIceGatheringStateChanged
 /// @nodoc
 
 class _$PeerConnectionEventIceConnectionStateChangedImpl
-    implements _PeerConnectionEventIceConnectionStateChanged {
+    extends _PeerConnectionEventIceConnectionStateChanged {
   const _$PeerConnectionEventIceConnectionStateChangedImpl(
-      this.callId, this.state);
+      this.callId, this.state)
+      : super._();
 
   @override
   final String callId;
   @override
   final RTCIceConnectionState state;
-
-  @override
-  String toString() {
-    return '_PeerConnectionEvent.iceConnectionStateChanged(callId: $callId, state: $state)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventIceConnectionStateChangedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.state, state) || other.state == state));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, state);
 
   @override
   @optionalTypeArgs
@@ -12629,10 +11795,11 @@ class _$PeerConnectionEventIceConnectionStateChangedImpl
 }
 
 abstract class _PeerConnectionEventIceConnectionStateChanged
-    implements _PeerConnectionEvent {
+    extends _PeerConnectionEvent {
   const factory _PeerConnectionEventIceConnectionStateChanged(
           final String callId, final RTCIceConnectionState state) =
       _$PeerConnectionEventIceConnectionStateChangedImpl;
+  const _PeerConnectionEventIceConnectionStateChanged._() : super._();
 
   @override
   String get callId;
@@ -12642,32 +11809,15 @@ abstract class _PeerConnectionEventIceConnectionStateChanged
 /// @nodoc
 
 class _$PeerConnectionEventIceCandidateIdentifiedImpl
-    implements _PeerConnectionEventIceCandidateIdentified {
+    extends _PeerConnectionEventIceCandidateIdentified {
   const _$PeerConnectionEventIceCandidateIdentifiedImpl(
-      this.callId, this.candidate);
+      this.callId, this.candidate)
+      : super._();
 
   @override
   final String callId;
   @override
   final RTCIceCandidate candidate;
-
-  @override
-  String toString() {
-    return '_PeerConnectionEvent.iceCandidateIdentified(callId: $callId, candidate: $candidate)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventIceCandidateIdentifiedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.candidate, candidate) ||
-                other.candidate == candidate));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, candidate);
 
   @override
   @optionalTypeArgs
@@ -12797,10 +11947,11 @@ class _$PeerConnectionEventIceCandidateIdentifiedImpl
 }
 
 abstract class _PeerConnectionEventIceCandidateIdentified
-    implements _PeerConnectionEvent {
+    extends _PeerConnectionEvent {
   const factory _PeerConnectionEventIceCandidateIdentified(
           final String callId, final RTCIceCandidate candidate) =
       _$PeerConnectionEventIceCandidateIdentifiedImpl;
+  const _PeerConnectionEventIceCandidateIdentified._() : super._();
 
   @override
   String get callId;
@@ -12810,30 +11961,14 @@ abstract class _PeerConnectionEventIceCandidateIdentified
 /// @nodoc
 
 class _$PeerConnectionEventStreamAddedImpl
-    implements _PeerConnectionEventStreamAdded {
-  const _$PeerConnectionEventStreamAddedImpl(this.callId, this.stream);
+    extends _PeerConnectionEventStreamAdded {
+  const _$PeerConnectionEventStreamAddedImpl(this.callId, this.stream)
+      : super._();
 
   @override
   final String callId;
   @override
   final MediaStream stream;
-
-  @override
-  String toString() {
-    return '_PeerConnectionEvent.streamAdded(callId: $callId, stream: $stream)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventStreamAddedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.stream, stream) || other.stream == stream));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, stream);
 
   @override
   @optionalTypeArgs
@@ -12962,10 +12097,11 @@ class _$PeerConnectionEventStreamAddedImpl
   }
 }
 
-abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
+abstract class _PeerConnectionEventStreamAdded extends _PeerConnectionEvent {
   const factory _PeerConnectionEventStreamAdded(
           final String callId, final MediaStream stream) =
       _$PeerConnectionEventStreamAddedImpl;
+  const _PeerConnectionEventStreamAdded._() : super._();
 
   @override
   String get callId;
@@ -12975,30 +12111,14 @@ abstract class _PeerConnectionEventStreamAdded implements _PeerConnectionEvent {
 /// @nodoc
 
 class _$PeerConnectionEventStreamRemovedImpl
-    implements _PeerConnectionEventStreamRemoved {
-  const _$PeerConnectionEventStreamRemovedImpl(this.callId, this.stream);
+    extends _PeerConnectionEventStreamRemoved {
+  const _$PeerConnectionEventStreamRemovedImpl(this.callId, this.stream)
+      : super._();
 
   @override
   final String callId;
   @override
   final MediaStream stream;
-
-  @override
-  String toString() {
-    return '_PeerConnectionEvent.streamRemoved(callId: $callId, stream: $stream)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PeerConnectionEventStreamRemovedImpl &&
-            (identical(other.callId, callId) || other.callId == callId) &&
-            (identical(other.stream, stream) || other.stream == stream));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, callId, stream);
 
   @override
   @optionalTypeArgs
@@ -13127,11 +12247,11 @@ class _$PeerConnectionEventStreamRemovedImpl
   }
 }
 
-abstract class _PeerConnectionEventStreamRemoved
-    implements _PeerConnectionEvent {
+abstract class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
   const factory _PeerConnectionEventStreamRemoved(
           final String callId, final MediaStream stream) =
       _$PeerConnectionEventStreamRemovedImpl;
+  const _PeerConnectionEventStreamRemoved._() : super._();
 
   @override
   String get callId;
@@ -13182,23 +12302,8 @@ mixin _$CallScreenEvent {
 
 /// @nodoc
 
-class _$CallScreenEventDidPushImpl implements _CallScreenEventDidPush {
-  _$CallScreenEventDidPushImpl();
-
-  @override
-  String toString() {
-    return 'CallScreenEvent.didPush()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallScreenEventDidPushImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+class _$CallScreenEventDidPushImpl extends _CallScreenEventDidPush {
+  _$CallScreenEventDidPushImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -13263,29 +12368,15 @@ class _$CallScreenEventDidPushImpl implements _CallScreenEventDidPush {
   }
 }
 
-abstract class _CallScreenEventDidPush implements CallScreenEvent {
+abstract class _CallScreenEventDidPush extends CallScreenEvent {
   factory _CallScreenEventDidPush() = _$CallScreenEventDidPushImpl;
+  _CallScreenEventDidPush._() : super._();
 }
 
 /// @nodoc
 
-class _$CallScreenEventDidPopImpl implements _CallScreenEventDidPop {
-  _$CallScreenEventDidPopImpl();
-
-  @override
-  String toString() {
-    return 'CallScreenEvent.didPop()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CallScreenEventDidPopImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
+class _$CallScreenEventDidPopImpl extends _CallScreenEventDidPop {
+  _$CallScreenEventDidPopImpl() : super._();
 
   @override
   @optionalTypeArgs
@@ -13350,8 +12441,9 @@ class _$CallScreenEventDidPopImpl implements _CallScreenEventDidPop {
   }
 }
 
-abstract class _CallScreenEventDidPop implements CallScreenEvent {
+abstract class _CallScreenEventDidPop extends CallScreenEvent {
   factory _CallScreenEventDidPop() = _$CallScreenEventDidPopImpl;
+  _CallScreenEventDidPop._() : super._();
 }
 
 /// @nodoc

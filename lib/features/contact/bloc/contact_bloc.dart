@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/equatable_prop_to_string.dart';
 
 part 'contact_bloc.freezed.dart';
 

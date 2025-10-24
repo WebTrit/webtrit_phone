@@ -1,7 +1,10 @@
 part of 'recents_bloc.dart';
 
-sealed class RecentsEvent {
+sealed class RecentsEvent extends Equatable {
   const RecentsEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class RecentsStarted extends RecentsEvent {
@@ -12,10 +15,20 @@ class RecentsFiltered extends RecentsEvent {
   const RecentsFiltered(this.filter);
 
   final RecentsVisibilityFilter filter;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([filter], listPropToString),
+  ];
 }
 
 class RecentsDeleted extends RecentsEvent {
   const RecentsDeleted(this.recent);
 
   final Recent recent;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([recent], listPropToString),
+  ];
 }

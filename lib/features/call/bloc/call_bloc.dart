@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart' hide Notification;
 
 import 'package:bloc/bloc.dart';
