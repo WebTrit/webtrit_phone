@@ -136,10 +136,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     AppAgreementAccepted event,
     Emitter<AppState> emit,
   ) {
-    return event.map(
-      updateUserAgreement: (event) => __onUpdateUserAgreementStatus(event, emit),
-      updateContactsAgreement: (event) => __onContactsUserAgreementStatus(event, emit),
-    );
+    return switch (event) {
+      _UserAppAgreementUpdate() => __onUpdateUserAgreementStatus(event, emit),
+      _ContactsAppAgreementUpdate() => __onContactsUserAgreementStatus(event, emit),
+    };
   }
 
   Future<void> __onUpdateUserAgreementStatus(

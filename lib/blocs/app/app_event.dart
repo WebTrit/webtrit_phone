@@ -51,17 +51,32 @@ class AppLocaleChanged extends AppEvent {
   ];
 }
 
-@Freezed(copyWith: false)
-class AppAgreementAccepted with _$AppAgreementAccepted implements AppEvent {
-  const AppAgreementAccepted._();
+sealed class AppAgreementAccepted extends AppEvent {
+  const AppAgreementAccepted();
 
   const factory AppAgreementAccepted.updateUserAgreement(AgreementStatus status) = _UserAppAgreementUpdate;
 
   const factory AppAgreementAccepted.updateContactsAgreement(AgreementStatus status) = _ContactsAppAgreementUpdate;
+}
+
+class _UserAppAgreementUpdate extends AppAgreementAccepted {
+  const _UserAppAgreementUpdate(this.status);
+
+  final AgreementStatus status;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [
+    EquatablePropToString([status], listPropToString),
+  ];
+}
+
+class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
+  const _ContactsAppAgreementUpdate(this.status);
+
+  final AgreementStatus status;
 
   @override
-  bool? get stringify => false;
+  List<Object> get props => [
+    EquatablePropToString([status], listPropToString),
+  ];
 }

@@ -53,7 +53,7 @@ class _RegistrationChange extends CallEvent {
 }
 
 // handle app state
-
+// TODO: Migrate to sealed class
 @Freezed(copyWith: false)
 class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
   const _ResetStateEvent._();
@@ -70,7 +70,7 @@ class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
 }
 
 // signaling client events
-
+// TODO: Migrate to sealed class
 @Freezed(copyWith: false)
 class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
   const _SignalingClientEvent._();
@@ -106,7 +106,7 @@ class _HandshakeSignalingEventState extends CallEvent {
 }
 
 // call signaling events
-
+// TODO: Migrate to sealed class
 @Freezed(copyWith: false)
 class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const _CallSignalingEvent._();
@@ -248,7 +248,7 @@ class _CallPushEventIncoming extends CallEvent {
 }
 
 // call control events
-
+// TODO: Migrate to sealed class
 @Freezed(copyWith: false)
 class CallControlEvent with _$CallControlEvent implements CallEvent {
   const CallControlEvent._();
@@ -342,7 +342,7 @@ mixin CallControlEventStartedMixin {
 }
 
 // call perform events
-
+// TODO: Migrate to sealed class
 @Freezed(copyWith: false)
 class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   _CallPerformEvent._();
@@ -386,7 +386,7 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
 }
 
 // peer connection events
-
+// TODO: Migrate to sealed class
 @Freezed(copyWith: false)
 class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
   const _PeerConnectionEvent._();
@@ -419,7 +419,7 @@ class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
 }
 
 // call screen events
-
+// TODO: Migrate to sealed class
 @Freezed(copyWith: false)
 class CallScreenEvent with _$CallScreenEvent implements CallEvent {
   const CallScreenEvent._();
