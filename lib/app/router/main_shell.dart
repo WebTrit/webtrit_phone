@@ -317,7 +317,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             secureStorage: context.read<SecureStorage>(),
                             firebaseMessaging: FirebaseMessaging.instance,
                             callkeep: _callkeep,
-                          )..add(const PushTokensStarted());
+                          )..add(const PushTokensEventStarted());
                         },
                       ),
                       BlocProvider<RecentsBloc>(

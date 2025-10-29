@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -136,10 +137,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     AppAgreementAccepted event,
     Emitter<AppState> emit,
   ) {
-    return event.map(
-      updateUserAgreement: (event) => __onUpdateUserAgreementStatus(event, emit),
-      updateContactsAgreement: (event) => __onContactsUserAgreementStatus(event, emit),
-    );
+    return switch (event) {
+      _UserAppAgreementUpdate() => __onUpdateUserAgreementStatus(event, emit),
+      _ContactsAppAgreementUpdate() => __onContactsUserAgreementStatus(event, emit),
+    };
   }
 
   Future<void> __onUpdateUserAgreementStatus(

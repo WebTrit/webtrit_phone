@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' hide Notification;
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:clock/clock.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
@@ -132,16 +132,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _onSignalingClientEvent,
       transformer: restartable(),
     );
-    on<_HandshakeSignalingEvent>(
-      _onHandshakeSignalingEvent,
+    on<_HandshakeSignalingEventState>(
+      _onHandshakeSignalingEventState,
       transformer: sequential(),
     );
     on<_CallSignalingEvent>(
       _onCallSignalingEvent,
       transformer: sequential(),
     );
-    on<_CallPushEvent>(
-      _onCallPushEvent,
+    on<_CallPushEventIncoming>(
+      _onCallPushEventIncoming,
       transformer: sequential(),
     );
     on<CallControlEvent>(
@@ -792,22 +792,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // processing call push events
 
-  Future<void> _onCallPushEvent(
-    _CallPushEvent event,
-    Emitter<CallState> emit,
-  ) {
-    return event.map(
-      incoming: (event) => __onCallPushEventIncoming(event, emit),
-    );
-  }
-
-  Future<void> __onCallPushEventIncoming(
+  Future<void> _onCallPushEventIncoming(
     _CallPushEventIncoming event,
     Emitter<CallState> emit,
   ) async {
     final eventError = event.error;
     if (eventError != null) {
-      _logger.warning('__onCallPushEventIncoming event.error: $eventError');
+      _logger.warning('_onCallPushEventIncoming event.error: $eventError');
       // TODO: implement correct incoming call hangup (take into account that _signalingClient is disconnected)
       return;
     }
@@ -843,16 +834,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // processing handshake signaling events
 
-  Future<void> _onHandshakeSignalingEvent(
-    _HandshakeSignalingEvent event,
-    Emitter<CallState> emit,
-  ) {
-    return event.map(
-      state: (event) => __onHandshakeSignalingEventState(event, emit),
-    );
-  }
-
-  Future<void> __onHandshakeSignalingEventState(
+  Future<void> _onHandshakeSignalingEventState(
     _HandshakeSignalingEventState event,
     Emitter<CallState> emit,
   ) async {
@@ -2398,7 +2380,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // WebtritSignalingClient listen handlers
 
   void _onSignalingStateHandshake(StateHandshake stateHandshake) async {
-    add(_HandshakeSignalingEvent.state(
+    add(_HandshakeSignalingEventState(
       registration: stateHandshake.registration,
       linesCount: stateHandshake.lines.length,
     ));
@@ -2659,7 +2641,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine(() => 'didPushIncomingCall handle: $handle displayName: $displayName video: $video'
         ' callId: $callId error: $error');
 
-    add(_CallPushEvent.incoming(
+    add(_CallPushEventIncoming(
       callId: callId,
       handle: handle,
       displayName: displayName,

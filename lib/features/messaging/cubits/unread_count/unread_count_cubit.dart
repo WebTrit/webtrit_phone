@@ -76,6 +76,7 @@ class UnreadCountState with EquatableMixin {
   final int smsConversationsWithUnreadCount;
 
   int unreadCountForChatConversation(int id) => chatUnreadCounts[id] ?? 0;
+
   int unreadCountForSmsConversation(int id) => smsUnreadCounts[id] ?? 0;
 
   @override

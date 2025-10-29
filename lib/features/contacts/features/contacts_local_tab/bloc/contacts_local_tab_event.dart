@@ -1,15 +1,23 @@
 part of 'contacts_local_tab_bloc.dart';
 
-abstract class ContactsLocalTabEvent {
+sealed class ContactsLocalTabEvent extends Equatable {
   const ContactsLocalTabEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-@Freezed(copyWith: false)
-class ContactsLocalTabStarted with _$ContactsLocalTabStarted implements ContactsLocalTabEvent {
-  const factory ContactsLocalTabStarted({required String search}) = _ContactsLocalTabStarted;
+class ContactsLocalTabStarted extends ContactsLocalTabEvent {
+  const ContactsLocalTabStarted({required this.search});
+
+  final String search;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([search], listPropToString),
+      ];
 }
 
-@Freezed(copyWith: false)
-class ContactsLocalTabRefreshed with _$ContactsLocalTabRefreshed implements ContactsLocalTabEvent {
-  const factory ContactsLocalTabRefreshed() = _ContactsLocalTabRefreshed;
+class ContactsLocalTabRefreshed extends ContactsLocalTabEvent {
+  const ContactsLocalTabRefreshed();
 }
