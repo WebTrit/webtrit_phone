@@ -133,19 +133,28 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  Future<void> _onUserAgreementAccepted(AppAgreementAccepted event, Emitter<AppState> emit) {
+  Future<void> _onUserAgreementAccepted(
+    AppAgreementAccepted event,
+    Emitter<AppState> emit,
+  ) {
     return switch (event) {
       _UserAppAgreementUpdate() => __onUpdateUserAgreementStatus(event, emit),
       _ContactsAppAgreementUpdate() => __onContactsUserAgreementStatus(event, emit),
     };
   }
 
-  Future<void> __onUpdateUserAgreementStatus(_UserAppAgreementUpdate event, Emitter<AppState> emit) async {
+  Future<void> __onUpdateUserAgreementStatus(
+    _UserAppAgreementUpdate event,
+    Emitter<AppState> emit,
+  ) async {
     await appPreferences.setUserAgreementStatus(event.status);
     emit(state.copyWith(userAgreementStatus: event.status));
   }
 
-  Future<void> __onContactsUserAgreementStatus(_ContactsAppAgreementUpdate event, Emitter<AppState> emit) async {
+  Future<void> __onContactsUserAgreementStatus(
+    _ContactsAppAgreementUpdate event,
+    Emitter<AppState> emit,
+  ) async {
     await appPreferences.setContactsAgreementStatus(event.status);
     emit(state.copyWith(contactsAgreementStatus: event.status));
   }

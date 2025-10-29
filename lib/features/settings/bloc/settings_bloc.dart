@@ -49,7 +49,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     });
   }
 
-  FutureOr<void> _onVoicemailCountChanged(SettingsUnreadVoicemailCountChanged event, Emitter<SettingsState> emit) {
+  FutureOr<void> _onVoicemailCountChanged(
+    SettingsUnreadVoicemailCountChanged event,
+    Emitter<SettingsState> emit,
+  ) {
     _logger.fine('Voicemail count changed: ${event.count}');
     if (state.unreadVoicemailCount != event.count) emit(state.copyWith(unreadVoicemailCount: event.count));
   }
