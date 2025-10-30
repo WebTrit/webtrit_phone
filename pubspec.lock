@@ -1889,56 +1889,56 @@ packages:
       path: "../webtrit_callkeep/webtrit_callkeep"
       relative: true
     source: path
-    version: "0.3.5+0"
+    version: "0.1.2+0"
   webtrit_callkeep_android:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_android"
       relative: true
     source: path
-    version: "0.1.0+1"
+    version: "0.0.0+0"
   webtrit_callkeep_ios:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_ios"
       relative: true
     source: path
-    version: "0.1.0+1"
+    version: "0.0.0+0"
   webtrit_callkeep_linux:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_linux"
       relative: true
     source: path
-    version: "0.1.0+1"
+    version: "0.0.0+0"
   webtrit_callkeep_macos:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_macos"
       relative: true
     source: path
-    version: "0.1.0+1"
+    version: "0.0.0+0"
   webtrit_callkeep_platform_interface:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_platform_interface"
       relative: true
     source: path
-    version: "0.3.5+0"
+    version: "0.0.0+0"
   webtrit_callkeep_web:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_web"
       relative: true
     source: path
-    version: "0.1.0+1"
+    version: "0.0.0+0"
   webtrit_callkeep_windows:
     dependency: transitive
     description:
       path: "../webtrit_callkeep/webtrit_callkeep_windows"
       relative: true
     source: path
-    version: "0.1.0+1"
+    version: "0.0.0+0"
   webtrit_phone_number:
     dependency: "direct main"
     description:
