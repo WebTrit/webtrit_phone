@@ -29,10 +29,21 @@ class _CallShellState extends State<CallShell> {
 
   @override
   Widget build(BuildContext context) {
-    return displayListener(widget.child);
+    return MultiBlocListener(
+      listeners: [
+        callDisplayListener(),
+      ],
+      child: widget.child,
+    );
   }
 
-  Widget displayListener(Widget child) {
+  /// Listens to [CallState.display] changes and manages related UI transitions.
+  ///
+  /// Handles:
+  /// - Orientation updates via [OrientationsBloc].
+  /// - Navigation between main and call screens.
+  /// - Showing or removing the floating [ThumbnailAvatar] overlay.
+  BlocListener<CallBloc, CallState> callDisplayListener() {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
       listener: (context, state) async {
@@ -73,7 +84,6 @@ class _CallShellState extends State<CallShell> {
           _avatar = null;
         }
       },
-      child: child,
     );
   }
 
