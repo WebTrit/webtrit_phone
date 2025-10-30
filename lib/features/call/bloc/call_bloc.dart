@@ -563,10 +563,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _ResetStateEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      completeCalls: (event) => __onResetStateEventCompleteCalls(event, emit),
-      completeCall: (event) => __onResetStateEventCompleteCall(event, emit),
-    );
+    return switch (event) {
+      _ResetStateEventCompleteCalls() => __onResetStateEventCompleteCalls(event, emit),
+      _ResetStateEventCompleteCall() => __onResetStateEventCompleteCall(event, emit),
+    };
   }
 
   Future<void> __onResetStateEventCompleteCalls(
@@ -612,11 +612,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _SignalingClientEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      connectInitiated: (event) => __onSignalingClientEventConnectInitiated(event, emit),
-      disconnectInitiated: (event) => __onSignalingClientEventDisconnectInitiated(event, emit),
-      disconnected: (event) => __onSignalingClientEventDisconnected(event, emit),
-    );
+    return switch (event) {
+      _SignalingClientEventConnectInitiated() => __onSignalingClientEventConnectInitiated(event, emit),
+      _SignalingClientEventDisconnectInitiated() => __onSignalingClientEventDisconnectInitiated(event, emit),
+      _SignalingClientEventDisconnected() => __onSignalingClientEventDisconnected(event, emit),
+    };
   }
 
   Future<void> __onSignalingClientEventConnectInitiated(
@@ -849,25 +849,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallSignalingEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      incoming: (event) => __onCallSignalingEventIncoming(event, emit),
-      ringing: (event) => __onCallSignalingEventRinging(event, emit),
-      progress: (event) => __onCallSignalingEventProgress(event, emit),
-      accepted: (event) => __onCallSignalingEventAccepted(event, emit),
-      hangup: (event) => __onCallSignalingEventHangup(event, emit),
-      updating: (event) => __onCallSignalingEventUpdating(event, emit),
-      updated: (event) => __onCallSignalingEventUpdated(event, emit),
-      transfer: (value) => __onCallSignalingEventTransfer(value, emit),
-      transferring: (value) => __onCallSignalingEventTransfering(value, emit),
-      notifyDialog: (value) => __onCallSignalingEventNotifyDialog(value, emit),
-      notifyRefer: (value) => __onCallSignalingEventNotifyRefer(value, emit),
-      notifyUnknown: (value) => __onCallSignalingEventNotifyUnknown(value, emit),
-      registering: (event) => __onCallSignalingEventRegistering(event, emit),
-      registered: (event) => __onCallSignalingEventRegistered(event, emit),
-      registrationFailed: (event) => __onCallSignalingEventRegistrationFailed(event, emit),
-      unregistering: (event) => __onCallSignalingEventUnregistering(event, emit),
-      unregistered: (event) => __onCallSignalingEventUnregistered(event, emit),
-    );
+    return switch (event) {
+      _CallSignalingEventIncoming() => __onCallSignalingEventIncoming(event, emit),
+      _CallSignalingEventRinging() => __onCallSignalingEventRinging(event, emit),
+      _CallSignalingEventProgress() => __onCallSignalingEventProgress(event, emit),
+      _CallSignalingEventAccepted() => __onCallSignalingEventAccepted(event, emit),
+      _CallSignalingEventHangup() => __onCallSignalingEventHangup(event, emit),
+      _CallSignalingEventUpdating() => __onCallSignalingEventUpdating(event, emit),
+      _CallSignalingEventUpdated() => __onCallSignalingEventUpdated(event, emit),
+      _CallSignalingEventTransfer() => __onCallSignalingEventTransfer(event, emit),
+      _CallSignalingEventTransferring() => __onCallSignalingEventTransfering(event, emit),
+      _CallSignalingEventNotifyDialog() => __onCallSignalingEventNotifyDialog(event, emit),
+      _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
+      _CallSignalingEventNotifyUnknown() => __onCallSignalingEventNotifyUnknown(event, emit),
+      _CallSignalingEventRegistering() => __onCallSignalingEventRegistering(event, emit),
+      _CallSignalingEventRegistered() => __onCallSignalingEventRegistered(event, emit),
+      _CallSignalingEventRegisterationFailed() => __onCallSignalingEventRegistrationFailed(event, emit),
+      _CallSignalingEventUnregistering() => __onCallSignalingEventUnregistering(event, emit),
+      _CallSignalingEventUnregistered() => __onCallSignalingEventUnregistered(event, emit),
+    };
   }
 
   /// Handles incoming call offer.
@@ -1268,24 +1268,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     CallControlEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      started: (event) => __onCallControlEventStarted(event, emit),
-      answered: (event) => __onCallControlEventAnswered(event, emit),
-      ended: (event) => __onCallControlEventEnded(event, emit),
-      setHeld: (event) => __onCallControlEventSetHeld(event, emit),
-      setMuted: (event) => __onCallControlEventSetMuted(event, emit),
-      sentDTMF: (event) => __onCallControlEventSentDTMF(event, emit),
-      cameraSwitched: (event) => _onCallControlEventCameraSwitched(event, emit),
-      cameraEnabled: (event) => _onCallControlEventCameraEnabled(event, emit),
-      audioDeviceSet: (value) => _onCallControlEventAudioDeviceSet(value, emit),
-      failureApproved: (event) => _onCallControlEventFailureApproved(event, emit),
-      blindTransferInitiated: (event) => _onCallControlEventBlindTransferInitiated(event, emit),
-      attendedTransferInitiated: (event) => _onCallControlEventAttendedTransferInitiated(event, emit),
-      blindTransferSubmitted: (event) => _onCallControlEventBlindTransferSubmitted(event, emit),
-      attendedTransferSubmitted: (event) => _onCallControlEventAttendedTransferSubmitted(event, emit),
-      attendedRequestApproved: (value) => _onCallControlEventAttendedRequestApproved(value, emit),
-      attendedRequestDeclined: (value) => _onCallControlEventAttendedRequestDeclined(value, emit),
-    );
+    return switch (event) {
+      _CallControlEventStarted() => __onCallControlEventStarted(event, emit),
+      _CallControlEventAnswered() => __onCallControlEventAnswered(event, emit),
+      _CallControlEventEnded() => __onCallControlEventEnded(event, emit),
+      _CallControlEventSetHeld() => __onCallControlEventSetHeld(event, emit),
+      _CallControlEventSetMuted() => __onCallControlEventSetMuted(event, emit),
+      _CallControlEventSentDTMF() => __onCallControlEventSentDTMF(event, emit),
+      _CallControlEventCameraSwitched() => _onCallControlEventCameraSwitched(event, emit),
+      _CallControlEventCameraEnabled() => _onCallControlEventCameraEnabled(event, emit),
+      _CallControlEventAudioDeviceSet() => _onCallControlEventAudioDeviceSet(event, emit),
+      _CallControlEventFailureApproved() => _onCallControlEventFailureApproved(event, emit),
+      _CallControlEventBlindTransferInitiated() => _onCallControlEventBlindTransferInitiated(event, emit),
+      _CallControlEventAttendedTransferInitiated() => _onCallControlEventAttendedTransferInitiated(event, emit),
+      _CallControlEventBlindTransferSubmitted() => _onCallControlEventBlindTransferSubmitted(event, emit),
+      _CallControlEventAttendedTransferSubmitted() => _onCallControlEventAttendedTransferSubmitted(event, emit),
+      _CallControlEventAttendedRequestApproved() => _onCallControlEventAttendedRequestApproved(event, emit),
+      _CallControlEventAttendedRequestDeclined() => _onCallControlEventAttendedRequestDeclined(event, emit),
+    };
   }
 
   Future<void> __onCallControlEventStarted(
@@ -1753,16 +1753,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallPerformEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      started: (event) => __onCallPerformEventStarted(event, emit),
-      answered: (event) => __onCallPerformEventAnswered(event, emit),
-      ended: (event) => __onCallPerformEventEnded(event, emit),
-      setHeld: (event) => __onCallPerformEventSetHeld(event, emit),
-      setMuted: (event) => __onCallPerformEventSetMuted(event, emit),
-      sentDTMF: (event) => __onCallPerformEventSentDTMF(event, emit),
-      audioDeviceSet: (value) => __onCallPerformEventAudioDeviceSet(value, emit),
-      audioDevicesUpdate: (event) => __onCallPerformEventAudioDevicesUpdate(event, emit),
-    );
+    return switch (event) {
+      _CallPerformEventStarted() => __onCallPerformEventStarted(event, emit),
+      _CallPerformEventAnswered() => __onCallPerformEventAnswered(event, emit),
+      _CallPerformEventEnded() => __onCallPerformEventEnded(event, emit),
+      _CallPerformEventSetHeld() => __onCallPerformEventSetHeld(event, emit),
+      _CallPerformEventSetMuted() => __onCallPerformEventSetMuted(event, emit),
+      _CallPerformEventSentDTMF() => __onCallPerformEventSentDTMF(event, emit),
+      _CallPerformEventAudioDeviceSet() => __onCallPerformEventAudioDeviceSet(event, emit),
+      _CallPerformEventAudioDevicesUpdate() => __onCallPerformEventAudioDevicesUpdate(event, emit),
+    };
   }
 
   Future<void> __onCallPerformEventStarted(
@@ -2172,15 +2172,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      signalingStateChanged: (event) => __onPeerConnectionEventSignalingStateChanged(event, emit),
-      connectionStateChanged: (event) => __onPeerConnectionEventConnectionStateChanged(event, emit),
-      iceGatheringStateChanged: (event) => __onPeerConnectionEventIceGatheringStateChanged(event, emit),
-      iceConnectionStateChanged: (event) => __onPeerConnectionEventIceConnectionStateChanged(event, emit),
-      iceCandidateIdentified: (event) => __onPeerConnectionEventIceCandidateIdentified(event, emit),
-      streamAdded: (event) => __onPeerConnectionEventStreamAdded(event, emit),
-      streamRemoved: (event) => __onPeerConnectionEventStreamRemoved(event, emit),
-    );
+    return switch (event) {
+      _PeerConnectionEventSignalingStateChanged() => __onPeerConnectionEventSignalingStateChanged(event, emit),
+      _PeerConnectionEventConnectionStateChanged() => __onPeerConnectionEventConnectionStateChanged(event, emit),
+      _PeerConnectionEventIceGatheringStateChanged() => __onPeerConnectionEventIceGatheringStateChanged(event, emit),
+      _PeerConnectionEventIceConnectionStateChanged() => __onPeerConnectionEventIceConnectionStateChanged(event, emit),
+      _PeerConnectionEventIceCandidateIdentified() => __onPeerConnectionEventIceCandidateIdentified(event, emit),
+      _PeerConnectionEventStreamAdded() => __onPeerConnectionEventStreamAdded(event, emit),
+      _PeerConnectionEventStreamRemoved() => __onPeerConnectionEventStreamRemoved(event, emit),
+    };
   }
 
   Future<void> __onPeerConnectionEventSignalingStateChanged(
@@ -2315,10 +2315,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     CallScreenEvent event,
     Emitter<CallState> emit,
   ) {
-    return event.map(
-      didPush: (event) => __onCallScreenEventDidPush(event, emit),
-      didPop: (event) => __onCallScreenEventDidPop(event, emit),
-    );
+    return switch (event) {
+      _CallScreenEventDidPush() => __onCallScreenEventDidPush(event, emit),
+      _CallScreenEventDidPop() => __onCallScreenEventDidPop(event, emit),
+    };
   }
 
   Future<void> __onCallScreenEventDidPush(
