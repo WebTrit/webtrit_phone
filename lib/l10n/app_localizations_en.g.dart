@@ -859,6 +859,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConversationBuilders_createGroup => 'Create group';
 
   @override
+  String messaging_ConversationBuilders_contactExtension(String extension) {
+    return 'Ext: $extension';
+  }
+
+  @override
   String get messaging_ConversationBuilders_externalContacts_heading =>
       'Cloud PBX contacts';
 

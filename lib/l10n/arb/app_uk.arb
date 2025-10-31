@@ -667,6 +667,16 @@
   "@messaging_ConversationBuilders_create": {},
   "messaging_ConversationBuilders_createGroup": "Створити групу",
   "@messaging_ConversationBuilders_createGroup": {},
+  "messaging_ConversationBuilders_contactExtension": "Внутр: {extension}",
+  "@messaging_ConversationBuilders_contactExtension": {
+    "description": "Мітка для внутрішнього номера контакту у списку контактів.",
+    "placeholders": {
+      "extension": {
+        "type": "String",
+        "example": "101"
+      }
+    }
+  },
   "messaging_ConversationBuilders_externalContacts_heading": "Контакти Хмарної АТС",
   "@messaging_ConversationBuilders_externalContacts_heading": {},
   "messaging_ConversationBuilders_invalidNumber_message1": "Контакт має недійсний номер телефону. Він має бути у форматі ",
@@ -1215,7 +1225,7 @@
   "@settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps": {},
   "settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip": "Видалити статичні RTP map рядки для аудіо кодеків (наприклад, PCMU, PCMA) з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.",
   "@settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip": {},
-  "settings_encoding_Section_extra_sdp_mod_remapTE8": "Перепризначити код TE_8k на 101", 
+  "settings_encoding_Section_extra_sdp_mod_remapTE8": "Перепризначити код TE_8k на 101",
   "@settings_encoding_Section_extra_sdp_mod_remapTE8": {},
   "settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip": "Змінити тип навантаження TE8 на 101 в SDP для кращої сумісності з деякими SIP клієнтами.",
   "@settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip": {},
