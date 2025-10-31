@@ -416,7 +416,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       }
 
       // Applies login result and ensures tenant consistency.
-      _applyLoginResult(result, tenantId: tenantId);
+      _applyLoginResult(result, propagatedTenantId: tenantId);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
@@ -449,7 +449,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
       final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
 
-      _applyLoginResult(result, tenantId: state.tenantId);
+      _applyLoginResult(result, propagatedTenantId: state.tenantId);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
@@ -485,23 +485,25 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   /// Fallback order:
   ///   1. Explicit tenantId argument (propagated from POST /user request)
   ///   2. Tenant from the result object
-  ///   3. Current state tenantId
-  ///   4. Default tenant
+  ///   3. Default tenant
   ///
   /// This prevents OTP verification issues when the backend stores OTPs under
   /// a default tenant ("") if tenantId was not provided during creation.
-  void _applyLoginResult(SessionResult result, {String? tenantId}) {
+  void _applyLoginResult(SessionResult result, {String? propagatedTenantId}) {
     if (result is SessionOtpProvisional) {
       emit(state.copyWith(
         processing: false,
         signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
         // Uses the same tenant as POST /user when provided; falls back safely otherwise.
-        tenantId: tenantId ?? result.tenantId ?? state.tenantId ?? defaultTenantId,
+        tenantId: propagatedTenantId ?? result.tenantId ?? defaultTenantId,
       ));
     } else if (result is SessionToken) {
       // Maintain processing state during navigation
       emit(state.copyWith(
-        tenantId: result.tenantId ?? state.tenantId ?? defaultTenantId,
+        // For a successful session, the tenant from the result is the ultimate source of truth.
+        // It takes precedence because this token signifies the final authenticated state,
+        // and no higher-level entity links the requests.
+        tenantId: result.tenantId ?? propagatedTenantId ?? defaultTenantId,
         token: result.token,
         userId: result.userId ?? '', // Fallback for outdated core versions
       ));
