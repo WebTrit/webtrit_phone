@@ -19,7 +19,6 @@ mixin _$EmbeddedState {
   Map<String, dynamic> get payload => throw _privateConstructorUsedError;
   String get currentUrl => throw _privateConstructorUsedError;
   bool get canGoBack => throw _privateConstructorUsedError;
-  bool get payloadReady => throw _privateConstructorUsedError;
   EmbeddedIntents? get intent => throw _privateConstructorUsedError;
 
   /// Create a copy of EmbeddedState
@@ -39,7 +38,6 @@ abstract class $EmbeddedStateCopyWith<$Res> {
       {Map<String, dynamic> payload,
       String currentUrl,
       bool canGoBack,
-      bool payloadReady,
       EmbeddedIntents? intent});
 }
 
@@ -61,7 +59,6 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
     Object? payload = null,
     Object? currentUrl = null,
     Object? canGoBack = null,
-    Object? payloadReady = null,
     Object? intent = freezed,
   }) {
     return _then(_value.copyWith(
@@ -76,10 +73,6 @@ class _$EmbeddedStateCopyWithImpl<$Res, $Val extends EmbeddedState>
       canGoBack: null == canGoBack
           ? _value.canGoBack
           : canGoBack // ignore: cast_nullable_to_non_nullable
-              as bool,
-      payloadReady: null == payloadReady
-          ? _value.payloadReady
-          : payloadReady // ignore: cast_nullable_to_non_nullable
               as bool,
       intent: freezed == intent
           ? _value.intent
@@ -101,7 +94,6 @@ abstract class _$$InitialImplCopyWith<$Res>
       {Map<String, dynamic> payload,
       String currentUrl,
       bool canGoBack,
-      bool payloadReady,
       EmbeddedIntents? intent});
 }
 
@@ -121,7 +113,6 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? payload = null,
     Object? currentUrl = null,
     Object? canGoBack = null,
-    Object? payloadReady = null,
     Object? intent = freezed,
   }) {
     return _then(_$InitialImpl(
@@ -136,10 +127,6 @@ class __$$InitialImplCopyWithImpl<$Res>
       canGoBack: null == canGoBack
           ? _value.canGoBack
           : canGoBack // ignore: cast_nullable_to_non_nullable
-              as bool,
-      payloadReady: null == payloadReady
-          ? _value.payloadReady
-          : payloadReady // ignore: cast_nullable_to_non_nullable
               as bool,
       intent: freezed == intent
           ? _value.intent
@@ -156,7 +143,6 @@ class _$InitialImpl extends _Initial {
       {final Map<String, dynamic> payload = const {},
       this.currentUrl = '',
       this.canGoBack = false,
-      this.payloadReady = false,
       this.intent})
       : _payload = payload,
         super._();
@@ -177,14 +163,11 @@ class _$InitialImpl extends _Initial {
   @JsonKey()
   final bool canGoBack;
   @override
-  @JsonKey()
-  final bool payloadReady;
-  @override
   final EmbeddedIntents? intent;
 
   @override
   String toString() {
-    return 'EmbeddedState(payload: $payload, currentUrl: $currentUrl, canGoBack: $canGoBack, payloadReady: $payloadReady, intent: $intent)';
+    return 'EmbeddedState(payload: $payload, currentUrl: $currentUrl, canGoBack: $canGoBack, intent: $intent)';
   }
 
   @override
@@ -197,8 +180,6 @@ class _$InitialImpl extends _Initial {
                 other.currentUrl == currentUrl) &&
             (identical(other.canGoBack, canGoBack) ||
                 other.canGoBack == canGoBack) &&
-            (identical(other.payloadReady, payloadReady) ||
-                other.payloadReady == payloadReady) &&
             (identical(other.intent, intent) || other.intent == intent));
   }
 
@@ -208,7 +189,6 @@ class _$InitialImpl extends _Initial {
       const DeepCollectionEquality().hash(_payload),
       currentUrl,
       canGoBack,
-      payloadReady,
       intent);
 
   /// Create a copy of EmbeddedState
@@ -225,7 +205,6 @@ abstract class _Initial extends EmbeddedState {
       {final Map<String, dynamic> payload,
       final String currentUrl,
       final bool canGoBack,
-      final bool payloadReady,
       final EmbeddedIntents? intent}) = _$InitialImpl;
   const _Initial._() : super._();
 
@@ -235,8 +214,6 @@ abstract class _Initial extends EmbeddedState {
   String get currentUrl;
   @override
   bool get canGoBack;
-  @override
-  bool get payloadReady;
   @override
   EmbeddedIntents? get intent;
 

@@ -12,11 +12,10 @@ class EmbeddedState with _$EmbeddedState {
     @Default({}) Map<String, dynamic> payload,
     @Default('') String currentUrl,
     @Default(false) bool canGoBack,
-    @Default(false) bool payloadReady,
     EmbeddedIntents? intent,
   }) = _Initial;
 
-  bool get isReadyToInjectedScript => payloadReady;
+  bool get isReadyToInjectedScript => payload.isNotEmpty;
 
   bool get isReloadWebView => intent == EmbeddedIntents.reloadWebView;
 }

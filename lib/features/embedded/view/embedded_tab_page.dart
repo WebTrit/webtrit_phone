@@ -38,13 +38,14 @@ class EmbeddedTabPage extends StatelessWidget {
 
     final customPrivateGatewayRepository = context.read<PrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
+    final cubit = _createCubit(data.data!.payload, customPrivateGatewayRepository, secureStorage);
 
     final tabsRouter = AutoTabsRouter.of(context);
 
     final resource = ResourceLoader.fromUri(data.data!.uri.toString());
 
     return BlocProvider(
-      create: (context) => _createCubit(data.data!.payload, customPrivateGatewayRepository, secureStorage),
+      create: (context) => cubit,
       child: AnimatedBuilder(
         animation: tabsRouter,
         builder: (context, child) {
@@ -69,7 +70,7 @@ class EmbeddedTabPage extends StatelessWidget {
                         mediaQueryMetricsData: context.mediaQueryMetrics,
                         deviceInfoData: context.read<AppLabelsProvider>().build(),
                         appBar: _buildAppBar(context, data.titleL10n),
-                        pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
+                        pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                         connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
                         shouldForwardPop: tabActive,
                         // TODO: Use embedded configuration option to enable/disable log capture.
@@ -84,7 +85,7 @@ class EmbeddedTabPage extends StatelessWidget {
                         mediaQueryMetricsData: context.mediaQueryMetrics,
                         deviceInfoData: context.read<AppLabelsProvider>().build(),
                         appBar: _buildAppBar(context, data.titleL10n),
-                        pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
+                        pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                         connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
                         shouldForwardPop: tabActive,
                         // TODO: Use embedded configuration option to enable/disable log capture.
@@ -123,8 +124,8 @@ class EmbeddedTabPage extends StatelessWidget {
     );
   }
 
-  PageInjectionStrategy _defaultPageInjectionStrategy() {
-    return DefaultPayloadInjectionStrategy();
+  PageInjectionStrategy _defaultPageInjectionStrategy(Map<String, dynamic>? payload) {
+    return DefaultPayloadInjectionStrategy(initialPayload: payload);
   }
 
   ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {
