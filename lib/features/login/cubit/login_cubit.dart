@@ -400,10 +400,13 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
         emit(state.copyWith(systemInfo: systemInfo, processing: false));
       }
 
-      _handleLoginResult(
-        result,
-        embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null,
-      );
+      // Trigger follow-up request if needed
+      if (result is SessionToken) {
+        final postRequest = embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null;
+        await _executePostLoginHttpRequest(result, postRequest);
+      }
+
+      _applyLoginResult(result);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
@@ -428,17 +431,12 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
       final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
 
-      _handleLoginResult(result);
+      _applyLoginResult(result);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
       emit(state.copyWith(processing: false));
     }
-  }
-
-  void _handleLoginResult(SessionResult result, [RawHttpRequest? request]) {
-    _handleLoginSideEffects(result, request);
-    _applyLoginResult(result);
   }
 
   /// Triggers a follow-up request after session creation,
@@ -447,8 +445,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   /// Note: This logic is currently tied to the login flow,
   /// but may be reused in other contexts. If that happens,
   /// consider moving it to a separate feature/module and injecting it via the widget tree.
-  Future<void> _handleLoginSideEffects(SessionResult result, RawHttpRequest? request) async {
-    if (result is SessionToken && request != null) {
+  Future<void> _executePostLoginHttpRequest(SessionToken result, RawHttpRequest? request) async {
+    if (request != null) {
       try {
         await createHttpRequestExecutor().execute(
           method: request.method,
