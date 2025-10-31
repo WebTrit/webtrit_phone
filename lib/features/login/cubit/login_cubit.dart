@@ -375,6 +375,15 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     ));
   }
 
+  /// Performs a custom signup flow initiated from an embedded page.
+  ///
+  /// Derives the tenant once (from extras -> state -> default) and reuses it for:
+  ///   - `POST /user` request
+  ///   - systemInfo loading (if required)
+  ///   - OTP verification via `_applyLoginResult`
+  ///
+  /// Guarantees that all signup-related requests share the same tenant context.
+  /// This avoids OTP verification mismatches across tenants.
   Future<void> loginCustomSignupRequest(
     Map<String, dynamic>? extras,
     Map<String, dynamic>? embeddedCallbackData,
@@ -400,10 +409,14 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
         emit(state.copyWith(systemInfo: systemInfo, processing: false));
       }
 
-      _handleLoginResult(
-        result,
-        embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null,
-      );
+      // Executes optional post-login callback request if provided by embedded flow.
+      if (result is SessionToken) {
+        final postRequest = embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null;
+        await _executePostLoginHttpRequest(postRequest);
+      }
+
+      // Applies login result and ensures tenant consistency.
+      _applyLoginResult(result, propagatedTenantId: tenantId);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
@@ -415,6 +428,14 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(embeddedRequestError: null));
   }
 
+  /// Handles standard (non-embedded) signup flow.
+  ///
+  /// Ensures tenant consistency by reusing the tenant stored in `state` for:
+  /// - `POST /user`
+  /// - subsequent OTP verification (propagated via `_applyLoginResult`)
+  ///
+  /// Early-exits if already processing or email is invalid. Emits errors and
+  /// resets `processing` on failure.
   void loginSignupRequestSubmitted() async {
     if (state.processing || !state.signupEmailInput.isValid) {
       return;
@@ -428,17 +449,12 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       final client = createWebtritApiClient(state.coreUrl!, state.tenantId!);
       final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
 
-      _handleLoginResult(result);
+      _applyLoginResult(result, propagatedTenantId: state.tenantId);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
       emit(state.copyWith(processing: false));
     }
-  }
-
-  void _handleLoginResult(SessionResult result, [RawHttpRequest? request]) {
-    _handleLoginSideEffects(result, request);
-    _applyLoginResult(result);
   }
 
   /// Triggers a follow-up request after session creation,
@@ -447,32 +463,47 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   /// Note: This logic is currently tied to the login flow,
   /// but may be reused in other contexts. If that happens,
   /// consider moving it to a separate feature/module and injecting it via the widget tree.
-  Future<void> _handleLoginSideEffects(SessionResult result, RawHttpRequest? request) async {
-    if (result is SessionToken && request != null) {
-      try {
-        await createHttpRequestExecutor().execute(
-          method: request.method,
-          url: request.url,
-          headers: request.headers,
-          data: request.data,
-        );
-      } catch (e) {
-        _logger.warning(e);
-      }
+  Future<void> _executePostLoginHttpRequest(RawHttpRequest? request) async {
+    if (request == null) return;
+
+    try {
+      await createHttpRequestExecutor().execute(
+        method: request.method,
+        url: request.url,
+        headers: request.headers,
+        data: request.data,
+      );
+    } catch (e) {
+      _logger.warning(e);
     }
   }
 
-  void _applyLoginResult(SessionResult result) {
+  /// Applies the login result while maintaining tenant consistency across the OTP flow.
+  ///
+  /// Ensures that both `POST /user` and `otp-verify` use the same tenant context.
+  /// In embedded flows, the tenant may come from the embedded extras.
+  /// Fallback order:
+  ///   1. Explicit tenantId argument (propagated from POST /user request)
+  ///   2. Tenant from the result object
+  ///   3. Default tenant
+  ///
+  /// This prevents OTP verification issues when the backend stores OTPs under
+  /// a default tenant ("") if tenantId was not provided during creation.
+  void _applyLoginResult(SessionResult result, {String? propagatedTenantId}) {
     if (result is SessionOtpProvisional) {
       emit(state.copyWith(
         processing: false,
         signupSessionOtpProvisionalWithDateTime: (result, DateTime.now()),
-        tenantId: result.tenantId ?? state.tenantId ?? defaultTenantId,
+        // Uses the same tenant as POST /user when provided; falls back safely otherwise.
+        tenantId: propagatedTenantId ?? result.tenantId ?? defaultTenantId,
       ));
     } else if (result is SessionToken) {
       // Maintain processing state during navigation
       emit(state.copyWith(
-        tenantId: result.tenantId ?? state.tenantId ?? defaultTenantId,
+        // For a successful session, the tenant from the result is the ultimate source of truth.
+        // It takes precedence because this token signifies the final authenticated state,
+        // and no higher-level entity links the requests.
+        tenantId: result.tenantId ?? propagatedTenantId ?? defaultTenantId,
         token: result.token,
         userId: result.userId ?? '', // Fallback for outdated core versions
       ));
