@@ -1,24 +1,45 @@
 part of 'contact_bloc.dart';
 
-abstract class ContactEvent {
+sealed class ContactEvent extends Equatable {
   const ContactEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class ContactStarted extends ContactEvent {
   const ContactStarted();
 }
 
-@Freezed(copyWith: false)
-class ContactAddedToFavorites with _$ContactAddedToFavorites implements ContactEvent {
-  const factory ContactAddedToFavorites(ContactPhone contactPhone) = _ContactAddedToFavorites;
+class ContactAddedToFavorites extends ContactEvent {
+  const ContactAddedToFavorites(this.contactPhone);
+
+  final ContactPhone contactPhone;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([contactPhone], listPropToString),
+      ];
 }
 
-@Freezed(copyWith: false)
-class ContactRemovedFromFavorites with _$ContactRemovedFromFavorites implements ContactEvent {
-  const factory ContactRemovedFromFavorites(ContactPhone contactPhone) = _ContactRemovedFromFavorites;
+class ContactRemovedFromFavorites extends ContactEvent {
+  const ContactRemovedFromFavorites(this.contactPhone);
+
+  final ContactPhone contactPhone;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([contactPhone], listPropToString),
+      ];
 }
 
-@Freezed(copyWith: false)
-class ContactEmailSend with _$ContactEmailSend implements ContactEvent {
-  const factory ContactEmailSend(ContactEmail contactEmail) = _ContactEmailSend;
+class ContactEmailSend extends ContactEvent {
+  const ContactEmailSend(this.contactEmail);
+
+  final ContactEmail contactEmail;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([contactEmail], listPropToString),
+      ];
 }

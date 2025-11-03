@@ -667,6 +667,16 @@
   "@messaging_ConversationBuilders_create": {},
   "messaging_ConversationBuilders_createGroup": "Create group",
   "@messaging_ConversationBuilders_createGroup": {},
+  "messaging_ConversationBuilders_contactExtension": "Ext: {extension}",
+  "@messaging_ConversationBuilders_contactExtension": {
+    "description": "Label for a contact's extension number in the contact list.",
+    "placeholders": {
+      "extension": {
+        "type": "String",
+        "example": "101"
+      }
+    }
+  },
   "messaging_ConversationBuilders_externalContacts_heading": "Cloud PBX contacts",
   "@messaging_ConversationBuilders_externalContacts_heading": {},
   "messaging_ConversationBuilders_invalidNumber_message1": "The contact has an invalid phone number. It should be in the format ",

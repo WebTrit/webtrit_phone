@@ -1,7 +1,6 @@
 part of 'local_contacts_sync_bloc.dart';
 
-@immutable
-abstract class LocalContactsSyncEvent extends Equatable {
+sealed class LocalContactsSyncEvent extends Equatable {
   const LocalContactsSyncEvent();
 
   @override

@@ -269,7 +269,7 @@ class FeatureAccess {
   // Currently, modeSelectActions control both the launch screen and the buttons on the login_mode_select_screen,
   // which leads to unclear and tightly coupled logic.
   static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig, List<EmbeddedData> embeddedData) {
-    final rawButtons = appConfig.loginConfig.modeSelectActions.where((button) => button.enabled);
+    final rawButtons = appConfig.loginConfig.modeSelect.actions.where((button) => button.enabled);
     final buttons = <LoginModeAction>[];
 
     for (var actions in rawButtons) {
@@ -281,22 +281,20 @@ class FeatureAccess {
           titleL10n: actions.titleL10n,
           flavor: loginFlavor,
           customLoginFeature: loginEmbeddedData,
-          isLaunchButtonVisible: actions.isLaunchButtonVisible,
-          isLaunchScreen: actions.isLaunchScreen,
         ));
       } else if (loginFlavor == LoginFlavor.login) {
-        buttons.add(LoginModeAction(
+        buttons.add(LoginDefaultModeAction(
           titleL10n: actions.titleL10n,
           flavor: loginFlavor,
-          isLaunchButtonVisible: actions.isLaunchButtonVisible,
         ));
       }
     }
 
     return LoginFeature(
-      titleL10n: appConfig.loginConfig.greetingL10n,
+      titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
       actions: buttons,
-      launchLoginPage: embeddedData.firstWhereOrNull((embeddedScreen) => embeddedScreen.attributes['launch'] == true),
+      launchLoginPage: embeddedData
+          .firstWhereOrNull((it) => it.id == appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId),
     );
   }
 
@@ -438,12 +436,9 @@ class LoginFeature {
 
   List<LoginEmbeddedModeButton> get embeddedConfigurations => actions.whereType<LoginEmbeddedModeButton>().toList();
 
-  LoginEmbeddedModeButton? get embeddedLaunchConfiguration =>
-      embeddedConfigurations.firstWhereOrNull((action) => action.isLaunchScreen);
-
   bool get hasEmbeddedPage => embeddedConfigurations.isNotEmpty;
 
-  List<LoginModeAction> get launchButtons => actions.where((action) => action.isLaunchButtonVisible).toList();
+  List<LoginModeAction> get launchButtons => actions.toList();
 }
 
 class BottomMenuFeature {

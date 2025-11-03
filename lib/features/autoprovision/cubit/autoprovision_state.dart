@@ -5,8 +5,11 @@ abstract base class AutoprovisionState {
   const AutoprovisionState();
 
   factory AutoprovisionState.initial() => const Initial._();
+
   factory AutoprovisionState.error(Object error) => Error._(error);
+
   factory AutoprovisionState.processing() => const ProcessingToken._();
+
   factory AutoprovisionState.replaceConfirmationNeeded() => const ReplaceConfirmationNeeded._();
 
   factory AutoprovisionState.sessionCreated(

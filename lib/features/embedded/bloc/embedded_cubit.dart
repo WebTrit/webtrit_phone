@@ -69,7 +69,7 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
   void _updatePayload() {
     try {
       final payloadData = embeddedPayloadBuilder.build(payload);
-      emit(state.copyWith(payload: payloadData, payloadReady: true));
+      emit(state.copyWith(payload: payloadData));
     } on ExternalPageTokenUnavailableException catch (_) {
       _handleExternalPageTokenUnavailable();
     } catch (e, s) {

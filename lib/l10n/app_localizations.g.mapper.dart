@@ -1290,6 +1290,9 @@ class AppLocalizationsMapper {
           (actual, supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
                   actual, supportedConstraint),
+      'messaging_ConversationBuilders_contactExtension': (extension) =>
+          localizations
+              .messaging_ConversationBuilders_contactExtension(extension),
       'notifications_errorSnackBar_signalingDisconnectWithCodeName':
           (codeName) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithCodeName(

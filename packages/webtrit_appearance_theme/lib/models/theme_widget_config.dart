@@ -156,10 +156,7 @@ class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
 class ImageAssetsConfig with _$ImageAssetsConfig {
   @JsonSerializable(explicitToJson: true)
   const factory ImageAssetsConfig({
-    @Default(ImageAssetConfig(imageSource: ImageSource(uri: 'asset://assets/primary_onboardin_logo.svg')))
-    ImageAssetConfig primaryOnboardingLogo,
-    @Default(ImageAssetConfig(imageSource: ImageSource(uri: 'asset://assets/secondary_onboardin_logo.svg')))
-    ImageAssetConfig secondaryOnboardingLogo,
+    ImageSource? defaultPlaceholderImage,
     @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
     @Default(LeadingAvatarStyleConfig()) LeadingAvatarStyleConfig leadingAvatarStyle,
   }) = _ImageAssetsConfig;

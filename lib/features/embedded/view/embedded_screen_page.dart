@@ -37,6 +37,7 @@ class EmbeddedScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final selfConfigRepository = context.readOrNull<PrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
+    final cubit = _createCubit(selfConfigRepository, secureStorage);
 
     if (selfConfigRepository == null) {
       _logger.fine(
@@ -60,20 +61,20 @@ class EmbeddedScreenPage extends StatelessWidget {
           final content = snapshot.data!;
           return resource is NetworkResourceLoader
               ? BlocProvider(
-                  create: (_) => _createCubit(selfConfigRepository, secureStorage),
+                  create: (_) => cubit,
                   child: EmbeddedScreen(
                     initialUri: data.uri,
                     mediaQueryMetricsData: context.mediaQueryMetrics,
                     deviceInfoData: context.read<AppLabelsProvider>().build(),
                     appBar: _buildAppBar(context),
-                    pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
+                    pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                     connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
                     // TODO: Use embedded configuration option to enable/disable log capture.
                     enableLogCapture: true,
                   ),
                 )
               : BlocProvider(
-                  create: (_) => _createCubit(selfConfigRepository, secureStorage),
+                  create: (_) => cubit,
                   child: EmbeddedScreen(
                     initialUri: Uri.dataFromString(
                       content,
@@ -83,7 +84,7 @@ class EmbeddedScreenPage extends StatelessWidget {
                     mediaQueryMetricsData: context.mediaQueryMetrics,
                     deviceInfoData: context.read<AppLabelsProvider>().build(),
                     appBar: _buildAppBar(context),
-                    pageInjectionStrategyBuilder: _defaultPageInjectionStrategy,
+                    pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                     connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
                     // TODO: Use embedded configuration option to enable/disable log capture.
                     enableLogCapture: true,
@@ -117,8 +118,8 @@ class EmbeddedScreenPage extends StatelessWidget {
     );
   }
 
-  PageInjectionStrategy _defaultPageInjectionStrategy() {
-    return DefaultPayloadInjectionStrategy();
+  PageInjectionStrategy _defaultPageInjectionStrategy(Map<String, dynamic>? payload) {
+    return DefaultPayloadInjectionStrategy(initialPayload: payload);
   }
 
   ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {

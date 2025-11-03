@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../common/common.dart';
 import '../features_config/metadata.dart';
 
 part 'image_source.freezed.dart';
@@ -64,9 +65,13 @@ part 'image_source.g.dart';
 ///   "uri": "file:///Users/me/project/assets/logo.svg"
 /// }
 /// ```
+///
+// TODO: Rename ImageSource → ImageDescriptor to reflect that it now describes both source and rendering metadata, not just URI.
 @freezed
 class ImageSource with _$ImageSource {
   const ImageSource._();
+
+  static const _preserveRemoteKey = 'preserveRemote';
 
   const factory ImageSource({
     /// Backend asset ID (unique identifier in storage).
@@ -83,6 +88,7 @@ class ImageSource with _$ImageSource {
     /// Semantic type of reference (default = "asset").
     /// Can be extended in future (e.g., "cdn", "inline").
     @JsonKey(name: r'$ref') @Default('asset') String ref,
+    ImageRenderSpec? render,
 
     /// Freeform metadata for build tools / CLI / pipelines.
     /// Example: `{ "preserveRemote": true }`
@@ -93,5 +99,21 @@ class ImageSource with _$ImageSource {
 
   /// Whether the remote URI should be preserved
   /// (i.e., not downloaded and replaced with a local path).
-  bool get preserveRemote => metadata.getBool('preserveRemote') == true;
+  bool get preserveRemote => metadata.getBool(_preserveRemoteKey) == true;
+}
+
+/// Describes rendering options for an image resource.
+/// Currently includes only [scale], but can be extended later
+/// with fields such as `type`, `size`, or `fit`.
+@freezed
+class ImageRenderSpec with _$ImageRenderSpec {
+  const factory ImageRenderSpec({
+    /// The scale factor applied during rendering.
+    double? scale,
+
+    /// Optional padding around the image.
+    PaddingConfig? padding,
+  }) = _ImageRenderSpec;
+
+  factory ImageRenderSpec.fromJson(Map<String, dynamic> json) => _$ImageRenderSpecFromJson(json);
 }

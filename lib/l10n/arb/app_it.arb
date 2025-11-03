@@ -667,6 +667,16 @@
   "@messaging_ConversationBuilders_create": {},
   "messaging_ConversationBuilders_createGroup": "Crea gruppo",
   "@messaging_ConversationBuilders_createGroup": {},
+  "messaging_ConversationBuilders_contactExtension": "Int: {extension}",
+  "@messaging_ConversationBuilders_contactExtension": {
+    "description": "Etichetta per il numero di interno di un contatto nell'elenco contatti.",
+    "placeholders": {
+      "extension": {
+        "type": "String",
+        "example": "101"
+      }
+    }
+  },
   "messaging_ConversationBuilders_externalContacts_heading": "Contatti Cloud PBX",
   "@messaging_ConversationBuilders_externalContacts_heading": {},
   "messaging_ConversationBuilders_invalidNumber_message1": "Il tsontact ha un numero di telefono non valido. Dovrebbe essere nel formato ",
@@ -1215,7 +1225,7 @@
   "@settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps": {},
   "settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip": "Rimuovere le linee di mappa RTP statiche per i codec audio (ad es. PCMU, PCMA) dall'SDP, per ridurre la dimensione dell'SDP. Può aiutare con problemi di frammentazione MTU su alcuni endpoint SIP.",
   "@settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip": {},
-  "settings_encoding_Section_extra_sdp_mod_remapTE8": "Rimappare il codice TE_8k a 101", 
+  "settings_encoding_Section_extra_sdp_mod_remapTE8": "Rimappare il codice TE_8k a 101",
   "@settings_encoding_Section_extra_sdp_mod_remapTE8": {},
   "settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip": "Cambiare il tipo di payload TE8 a 101 nell'SDP per una migliore compatibilità con alcuni endpoint SIP.",
   "@settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip": {},

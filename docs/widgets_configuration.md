@@ -7,7 +7,6 @@
 - [Group Configuration](#group-configuration)
 - [Bar Configuration](#bar-configuration)
 - [Picture Configuration](#picture-configuration)
-    - [Leading Avatar Style Configuration](#leading-avatar-style-configuration)
 - [Input Configuration](#input-configuration)
 - [Text Configuration](#text-configuration)
 - [Dialog Configuration](#dialog-configuration)
@@ -143,10 +142,7 @@ Defines navigation bars:
 
 ```json
 {
-  "primaryOnboardingLogo": "asset://assets/primary_onboarding_logo.svg",
-  "secondaryOnboardingLogo": "asset://assets/secondary_onboarding_logo.svg",
-  "onboardingPictureLogo": {},
-  "onboardingLogo": {},
+  "defaultPlaceholderImage": {},
   "appIcon": {},
   "leadingAvatarStyle": {}
 }
@@ -154,51 +150,42 @@ Defines navigation bars:
 
 ---
 
-#### Primary / Secondary Onboarding Logo
+#### Default Placeholder Image
 
-- **primaryOnboardingLogo** — Path to the primary onboarding logo.
-- **secondaryOnboardingLogo** — Path to the secondary onboarding logo.  
-  Supports local (`asset://`) or remote (`https://`) resources.
+Defines the **default image** used across the application when an asset fails to load or is
+unavailable.  
+This configuration ensures visual consistency for all placeholder, error, or empty image states.
 
----
+**You can configure:**
 
-#### Onboarding Picture Logo
-
-Configurable properties:
-
-- **scale** — Scaling factor for the image.
-- **labelColor** — Label color (hex format).
-
-**Example:**
-
-```json
-{
-  "onboardingPictureLogo": {
-    "scale": "#ffffff",
-    "labelColor": "#ffffff"
-  }
-}
-```
-
----
-
-#### Onboarding Logo
-
-Configurable properties:
-
-- **scale** — Scaling factor for the logo.
-- **labelColor** — Label color (hex format).
+- **uri** — path or URL of the image resource.  
+  Supports formats like `asset://`, `network://`, or `remote://`.
+- **render** — optional rendering settings:
+    - **scale** — scaling factor to adjust image size.
+    - **padding** — defines extra spacing around the image (top, left, right, bottom).
 
 **Example:**
 
 ```json
 {
-  "onboardingLogo": {
-    "scale": "#ffffff",
-    "labelColor": "#ffffff"
+  "defaultPlaceholderImage": {
+    "uri": "asset://assets/secondary_onboardin_logo.svg",
+    "render": {
+      "scale": 0.25,
+      "padding": {
+        "left": 0.0,
+        "top": 128.0,
+        "right": 0.0,
+        "bottom": 0.0
+      }
+    }
   }
 }
 ```
+
+- Automatically used for all placeholder or fallback visuals (e.g., missing avatars, thumbnails, or
+  logos).
+- Helps maintain a unified appearance across different screens and loading states.
 
 ---
 

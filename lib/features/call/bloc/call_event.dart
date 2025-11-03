@@ -1,50 +1,87 @@
 part of 'call_bloc.dart';
 
-abstract class CallEvent {
+sealed class CallEvent extends Equatable {
   const CallEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-@Freezed(copyWith: false)
-class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
-  const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
+class _AppLifecycleStateChanged extends CallEvent {
+  const _AppLifecycleStateChanged(this.state);
+
+  final AppLifecycleState state;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([state], listPropToString),
+      ];
 }
 
-@Freezed(copyWith: false)
-class _ConnectivityResultChanged with _$ConnectivityResultChanged implements CallEvent {
-  const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
+class _ConnectivityResultChanged extends CallEvent {
+  const _ConnectivityResultChanged(this.result);
+
+  final ConnectivityResult result;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([result], listPropToString),
+      ];
 }
 
-@Freezed(copyWith: false)
-class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements CallEvent {
-  const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
+class _NavigatorMediaDevicesChange extends CallEvent {
+  const _NavigatorMediaDevicesChange();
 }
 
 // registration event change
 
-@Freezed(copyWith: false)
-class _RegistrationChange with _$RegistrationChange implements CallEvent {
-  const factory _RegistrationChange({
-    required Registration registration,
-  }) = __RegistrationChange;
+class _RegistrationChange extends CallEvent {
+  const _RegistrationChange({
+    required this.registration,
+  });
+
+  final Registration registration;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([registration], listPropToString),
+      ];
 }
 
 // handle app state
 
-@Freezed(copyWith: false)
-class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
+sealed class _ResetStateEvent extends CallEvent {
+  const _ResetStateEvent();
+
   const factory _ResetStateEvent.completeCalls() = _ResetStateEventCompleteCalls;
 
   const factory _ResetStateEvent.completeCall(String callId) = _ResetStateEventCompleteCall;
 }
 
+class _ResetStateEventCompleteCalls extends _ResetStateEvent {
+  const _ResetStateEventCompleteCalls();
+}
+
+class _ResetStateEventCompleteCall extends _ResetStateEvent {
+  const _ResetStateEventCompleteCall(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
 // signaling client events
 
-@Freezed(copyWith: false)
-class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
+sealed class _SignalingClientEvent extends CallEvent {
+  const _SignalingClientEvent();
+
   const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
@@ -52,20 +89,48 @@ class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
   const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
 }
 
+class _SignalingClientEventConnectInitiated extends _SignalingClientEvent {
+  const _SignalingClientEventConnectInitiated();
+}
+
+class _SignalingClientEventDisconnectInitiated extends _SignalingClientEvent {
+  const _SignalingClientEventDisconnectInitiated();
+}
+
+class _SignalingClientEventDisconnected extends _SignalingClientEvent {
+  const _SignalingClientEventDisconnected(this.code, this.reason);
+
+  final int? code;
+  final String? reason;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([code, reason], listPropToString),
+      ];
+}
+
 // handshake signaling events
 
-@Freezed(copyWith: false)
-class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
-  const factory _HandshakeSignalingEvent.state({
-    required Registration registration,
-    required int linesCount,
-  }) = _HandshakeSignalingEventState;
+class _HandshakeSignalingEventState extends CallEvent {
+  const _HandshakeSignalingEventState({
+    required this.registration,
+    required this.linesCount,
+  });
+
+  final Registration registration;
+  final int linesCount;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([registration, linesCount], listPropToString),
+      ];
 }
 
 // call signaling events
 
-@Freezed(copyWith: false)
-class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
+sealed class _CallSignalingEvent extends CallEvent {
+  const _CallSignalingEvent();
+
   const factory _CallSignalingEvent.incoming({
     required int? line,
     required String callId,
@@ -182,31 +247,315 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
   const factory _CallSignalingEvent.unregistered() = _CallSignalingEventUnregistered;
 }
 
+class _CallSignalingEventIncoming extends _CallSignalingEvent {
+  const _CallSignalingEventIncoming({
+    required this.line,
+    required this.callId,
+    required this.callee,
+    required this.caller,
+    this.callerDisplayName,
+    this.referredBy,
+    this.replaceCallId,
+    this.isFocus,
+    this.jsep,
+  });
+
+  final int? line;
+  final String callId;
+  final String callee;
+  final String caller;
+  final String? callerDisplayName;
+  final String? referredBy;
+  final String? replaceCallId;
+  final bool? isFocus;
+  final JsepValue? jsep;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString(
+            [line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep],
+            listPropToString),
+      ];
+}
+
+class _CallSignalingEventRinging extends _CallSignalingEvent {
+  const _CallSignalingEventRinging({
+    required this.line,
+    required this.callId,
+  });
+
+  final int? line;
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId], listPropToString),
+      ];
+}
+
+class _CallSignalingEventProgress extends _CallSignalingEvent {
+  const _CallSignalingEventProgress({
+    required this.line,
+    required this.callId,
+    required this.callee,
+    this.jsep,
+  });
+
+  final int? line;
+  final String callId;
+  final String callee;
+  final JsepValue? jsep;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId, callee, jsep], listPropToString),
+      ];
+}
+
+class _CallSignalingEventAccepted extends _CallSignalingEvent {
+  const _CallSignalingEventAccepted({
+    required this.line,
+    required this.callId,
+    this.callee,
+    this.jsep,
+  });
+
+  final int? line;
+  final String callId;
+  final String? callee;
+  final JsepValue? jsep;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId, callee, jsep], listPropToString),
+      ];
+}
+
+class _CallSignalingEventHangup extends _CallSignalingEvent {
+  const _CallSignalingEventHangup({
+    required this.line,
+    required this.callId,
+    required this.code,
+    required this.reason,
+  });
+
+  final int? line;
+  final String callId;
+  final int code;
+  final String reason;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId, code, reason], listPropToString),
+      ];
+}
+
+class _CallSignalingEventUpdating extends _CallSignalingEvent {
+  const _CallSignalingEventUpdating({
+    required this.line,
+    required this.callId,
+    required this.callee,
+    required this.caller,
+    this.callerDisplayName,
+    this.referredBy,
+    this.replaceCallId,
+    this.isFocus,
+    this.jsep,
+  });
+
+  final int? line;
+  final String callId;
+  final String callee;
+  final String caller;
+  final String? callerDisplayName;
+  final String? referredBy;
+  final String? replaceCallId;
+  final bool? isFocus;
+  final JsepValue? jsep;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString(
+            [line, callId, callee, caller, callerDisplayName, referredBy, replaceCallId, isFocus, jsep],
+            listPropToString),
+      ];
+}
+
+class _CallSignalingEventUpdated extends _CallSignalingEvent {
+  const _CallSignalingEventUpdated({
+    required this.line,
+    required this.callId,
+  });
+
+  final int? line;
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId], listPropToString),
+      ];
+}
+
+class _CallSignalingEventTransfer extends _CallSignalingEvent {
+  const _CallSignalingEventTransfer({
+    required this.line,
+    required this.referId,
+    required this.referTo,
+    required this.referredBy,
+    required this.replaceCallId,
+  });
+
+  final int? line;
+  final String referId;
+  final String referTo;
+  final String? referredBy;
+  final String? replaceCallId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, referId, referTo, referredBy, replaceCallId], listPropToString),
+      ];
+}
+
+class _CallSignalingEventTransferring extends _CallSignalingEvent {
+  const _CallSignalingEventTransferring({
+    required this.line,
+    required this.callId,
+  });
+
+  final int? line;
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId], listPropToString),
+      ];
+}
+
+class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyDialog({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.userActiveCalls,
+  });
+
+  final int? line;
+  final String callId;
+  final String? notify;
+  final SubscriptionState? subscriptionState;
+  final List<UserActiveCall> userActiveCalls;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId, notify, subscriptionState, userActiveCalls], listPropToString),
+      ];
+}
+
+class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyRefer({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.state,
+  });
+
+  final int? line;
+  final String callId;
+  final String? notify;
+  final SubscriptionState? subscriptionState;
+  final ReferNotifyState state;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId, notify, subscriptionState, state], listPropToString),
+      ];
+}
+
+class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyUnknown({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.contentType,
+    required this.content,
+  });
+
+  final int? line;
+  final String callId;
+  final String? notify;
+  final SubscriptionState? subscriptionState;
+  final String? contentType;
+  final String content;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId, notify, subscriptionState, contentType, content], listPropToString),
+      ];
+}
+
+class _CallSignalingEventRegistering extends _CallSignalingEvent {
+  const _CallSignalingEventRegistering();
+}
+
+class _CallSignalingEventRegistered extends _CallSignalingEvent {
+  const _CallSignalingEventRegistered();
+}
+
+class _CallSignalingEventRegisterationFailed extends _CallSignalingEvent {
+  const _CallSignalingEventRegisterationFailed(
+    this.code,
+    this.reason,
+  );
+
+  final int code;
+  final String reason;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([code, reason], listPropToString),
+      ];
+}
+
+class _CallSignalingEventUnregistering extends _CallSignalingEvent {
+  const _CallSignalingEventUnregistering();
+}
+
+class _CallSignalingEventUnregistered extends _CallSignalingEvent {
+  const _CallSignalingEventUnregistered();
+}
+
 // call push events
 
-@Freezed(copyWith: false)
-class _CallPushEvent with _$CallPushEvent implements CallEvent {
-  const factory _CallPushEvent.incoming({
-    required String callId,
-    required CallkeepHandle handle,
-    String? displayName,
-    required bool video,
-    CallkeepIncomingCallError? error,
-  }) = _CallPushEventIncoming;
+class _CallPushEventIncoming extends CallEvent {
+  const _CallPushEventIncoming({
+    required this.callId,
+    required this.handle,
+    this.displayName,
+    required this.video,
+    this.error,
+  });
+
+  final String callId;
+  final CallkeepHandle handle;
+  final String? displayName;
+  final bool video;
+  final CallkeepIncomingCallError? error;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, handle, displayName, video, error], listPropToString),
+      ];
 }
 
 // call control events
 
-@Freezed(copyWith: false)
-class CallControlEvent with _$CallControlEvent implements CallEvent {
-  @Assert('!(generic == null && number == null && email == null)',
-      'one of generic, number or email parameters must be assign')
-  @Assert(
-      '(generic != null && number == null && email == null) ||'
-          '(generic == null && number != null && email == null) ||'
-          '(generic == null && number == null && email != null)',
-      'only one of generic, number or email parameters must be assign')
-  @With<CallControlEventStartedMixin>()
+sealed class CallControlEvent extends CallEvent {
+  const CallControlEvent();
+
   const factory CallControlEvent.started({
     int? line,
     String? generic,
@@ -261,6 +610,221 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
   }) = _CallControlEventAttendedRequestApproved;
 }
 
+class _CallControlEventStarted extends CallControlEvent with CallControlEventStartedMixin {
+  const _CallControlEventStarted({
+    this.line,
+    this.generic,
+    this.number,
+    this.email,
+    this.displayName,
+    this.replaces,
+    this.fromNumber,
+    required this.video,
+  });
+
+  final int? line;
+  @override
+  final String? generic;
+  @override
+  final String? number;
+  @override
+  final String? email;
+  final String? displayName;
+  final String? replaces;
+  final String? fromNumber;
+  final bool video;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString(
+            [line, generic, number, email, displayName, replaces, fromNumber, video], listPropToString),
+      ];
+}
+
+class _CallControlEventAnswered extends CallControlEvent {
+  const _CallControlEventAnswered(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
+class _CallControlEventEnded extends CallControlEvent {
+  const _CallControlEventEnded(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
+class _CallControlEventSetHeld extends CallControlEvent {
+  const _CallControlEventSetHeld(this.callId, this.onHold);
+
+  final String callId;
+  final bool onHold;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, onHold], listPropToString),
+      ];
+}
+
+class _CallControlEventSetMuted extends CallControlEvent {
+  const _CallControlEventSetMuted(this.callId, this.muted);
+
+  final String callId;
+  final bool muted;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, muted], listPropToString),
+      ];
+}
+
+class _CallControlEventSentDTMF extends CallControlEvent {
+  const _CallControlEventSentDTMF(this.callId, this.key);
+
+  final String callId;
+  final String key;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, key], listPropToString),
+      ];
+}
+
+class _CallControlEventCameraSwitched extends CallControlEvent {
+  const _CallControlEventCameraSwitched(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
+class _CallControlEventCameraEnabled extends CallControlEvent {
+  const _CallControlEventCameraEnabled(this.callId, this.enabled);
+
+  final String callId;
+  final bool enabled;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, enabled], listPropToString),
+      ];
+}
+
+class _CallControlEventAudioDeviceSet extends CallControlEvent {
+  const _CallControlEventAudioDeviceSet(this.callId, this.device);
+
+  final String callId;
+  final CallAudioDevice device;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, device], listPropToString),
+      ];
+}
+
+class _CallControlEventFailureApproved extends CallControlEvent {
+  const _CallControlEventFailureApproved(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
+class _CallControlEventBlindTransferInitiated extends CallControlEvent {
+  const _CallControlEventBlindTransferInitiated(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
+class _CallControlEventAttendedTransferInitiated extends CallControlEvent {
+  const _CallControlEventAttendedTransferInitiated(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
+class _CallControlEventBlindTransferSubmitted extends CallControlEvent {
+  const _CallControlEventBlindTransferSubmitted({
+    required this.number,
+  });
+
+  final String number;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([number], listPropToString),
+      ];
+}
+
+class _CallControlEventAttendedTransferSubmitted extends CallControlEvent {
+  const _CallControlEventAttendedTransferSubmitted({
+    required this.referorCall,
+    required this.replaceCall,
+  });
+
+  final ActiveCall referorCall;
+  final ActiveCall replaceCall;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([referorCall, replaceCall], listPropToString),
+      ];
+}
+
+class _CallControlEventAttendedRequestDeclined extends CallControlEvent {
+  const _CallControlEventAttendedRequestDeclined({
+    required this.callId,
+    required this.referId,
+  });
+
+  final String callId;
+  final String referId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, referId], listPropToString),
+      ];
+}
+
+class _CallControlEventAttendedRequestApproved extends CallControlEvent {
+  const _CallControlEventAttendedRequestApproved({
+    required this.referId,
+    required this.referTo,
+  });
+
+  final String referId;
+  final String referTo;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([referId, referTo], listPropToString),
+      ];
+}
+
 mixin CallControlEventStartedMixin {
   String? get generic;
 
@@ -283,9 +847,8 @@ mixin CallControlEventStartedMixin {
 
 // call perform events
 
-@Freezed(copyWith: false)
-class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
-  _CallPerformEvent._();
+sealed class _CallPerformEvent extends CallEvent {
+  _CallPerformEvent();
 
   factory _CallPerformEvent.started(
     String callId, {
@@ -318,10 +881,112 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   void fail() => _performCompleter.isCompleted ? null : _performCompleter.complete(false);
 }
 
+class _CallPerformEventStarted extends _CallPerformEvent {
+  _CallPerformEventStarted(
+    this.callId, {
+    required this.handle,
+    this.displayName,
+    required this.video,
+  });
+
+  final String callId;
+  final CallkeepHandle handle;
+  final String? displayName;
+  final bool video;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, handle, displayName, video], listPropToString),
+      ];
+}
+
+class _CallPerformEventAnswered extends _CallPerformEvent {
+  _CallPerformEventAnswered(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
+class _CallPerformEventEnded extends _CallPerformEvent {
+  _CallPerformEventEnded(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId], listPropToString),
+      ];
+}
+
+class _CallPerformEventSetHeld extends _CallPerformEvent {
+  _CallPerformEventSetHeld(this.callId, this.onHold);
+
+  final String callId;
+  final bool onHold;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, onHold], listPropToString),
+      ];
+}
+
+class _CallPerformEventSetMuted extends _CallPerformEvent {
+  _CallPerformEventSetMuted(this.callId, this.muted);
+
+  final String callId;
+  final bool muted;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, muted], listPropToString),
+      ];
+}
+
+class _CallPerformEventSentDTMF extends _CallPerformEvent {
+  _CallPerformEventSentDTMF(this.callId, this.key);
+
+  final String callId;
+  final String key;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, key], listPropToString),
+      ];
+}
+
+class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
+  _CallPerformEventAudioDeviceSet(this.callId, this.device);
+
+  final String callId;
+  final CallAudioDevice device;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, device], listPropToString),
+      ];
+}
+
+class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
+  _CallPerformEventAudioDevicesUpdate(this.callId, this.devices);
+
+  final String callId;
+  final List<CallAudioDevice> devices;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, devices], listPropToString),
+      ];
+}
+
 // peer connection events
 
-@Freezed(copyWith: false)
-class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+sealed class _PeerConnectionEvent extends CallEvent {
+  const _PeerConnectionEvent();
+
   const factory _PeerConnectionEvent.signalingStateChanged(String callId, RTCSignalingState state) =
       _PeerConnectionEventSignalingStateChanged;
 
@@ -343,11 +1008,104 @@ class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
       _PeerConnectionEventStreamRemoved;
 }
 
+class _PeerConnectionEventSignalingStateChanged extends _PeerConnectionEvent {
+  const _PeerConnectionEventSignalingStateChanged(this.callId, this.state);
+
+  final String callId;
+  final RTCSignalingState state;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, state], listPropToString),
+      ];
+}
+
+class _PeerConnectionEventConnectionStateChanged extends _PeerConnectionEvent {
+  const _PeerConnectionEventConnectionStateChanged(this.callId, this.state);
+
+  final String callId;
+  final RTCPeerConnectionState state;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, state], listPropToString),
+      ];
+}
+
+class _PeerConnectionEventIceGatheringStateChanged extends _PeerConnectionEvent {
+  const _PeerConnectionEventIceGatheringStateChanged(this.callId, this.state);
+
+  final String callId;
+  final RTCIceGatheringState state;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, state], listPropToString),
+      ];
+}
+
+class _PeerConnectionEventIceConnectionStateChanged extends _PeerConnectionEvent {
+  const _PeerConnectionEventIceConnectionStateChanged(this.callId, this.state);
+
+  final String callId;
+  final RTCIceConnectionState state;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, state], listPropToString),
+      ];
+}
+
+class _PeerConnectionEventIceCandidateIdentified extends _PeerConnectionEvent {
+  const _PeerConnectionEventIceCandidateIdentified(this.callId, this.candidate);
+
+  final String callId;
+  final RTCIceCandidate candidate;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, candidate], listPropToString),
+      ];
+}
+
+class _PeerConnectionEventStreamAdded extends _PeerConnectionEvent {
+  const _PeerConnectionEventStreamAdded(this.callId, this.stream);
+
+  final String callId;
+  final MediaStream stream;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, stream], listPropToString),
+      ];
+}
+
+class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
+  const _PeerConnectionEventStreamRemoved(this.callId, this.stream);
+
+  final String callId;
+  final MediaStream stream;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([callId, stream], listPropToString),
+      ];
+}
+
 // call screen events
 
-@Freezed(copyWith: false)
-class CallScreenEvent with _$CallScreenEvent implements CallEvent {
-  factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
+sealed class CallScreenEvent extends CallEvent {
+  const CallScreenEvent();
 
-  factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
+  const factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
+
+  const factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
+}
+
+class _CallScreenEventDidPush extends CallScreenEvent {
+  const _CallScreenEventDidPush();
+}
+
+class _CallScreenEventDidPop extends CallScreenEvent {
+  const _CallScreenEventDidPop();
 }

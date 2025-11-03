@@ -40,8 +40,42 @@ Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
 
 _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
     _$AppConfigLoginImpl(
+      common: json['common'] == null
+          ? const AppConfigLoginCommon()
+          : AppConfigLoginCommon.fromJson(
+              json['common'] as Map<String, dynamic>),
+      modeSelect: json['modeSelect'] == null
+          ? const AppConfigLoginModeSelect()
+          : AppConfigLoginModeSelect.fromJson(
+              json['modeSelect'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$AppConfigLoginImplToJson(
+        _$AppConfigLoginImpl instance) =>
+    <String, dynamic>{
+      'common': instance.common.toJson(),
+      'modeSelect': instance.modeSelect.toJson(),
+    };
+
+_$AppConfigLoginCommonImpl _$$AppConfigLoginCommonImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppConfigLoginCommonImpl(
+      fullScreenLaunchEmbeddedResourceId:
+          json['fullScreenLaunchEmbeddedResourceId'] as String?,
+    );
+
+Map<String, dynamic> _$$AppConfigLoginCommonImplToJson(
+        _$AppConfigLoginCommonImpl instance) =>
+    <String, dynamic>{
+      'fullScreenLaunchEmbeddedResourceId':
+          instance.fullScreenLaunchEmbeddedResourceId,
+    };
+
+_$AppConfigLoginModeSelectImpl _$$AppConfigLoginModeSelectImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppConfigLoginModeSelectImpl(
       greetingL10n: json['greetingL10n'] as String?,
-      modeSelectActions: (json['modeSelectActions'] as List<dynamic>?)
+      actions: (json['actions'] as List<dynamic>?)
               ?.map((e) =>
                   AppConfigModeSelectAction.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -53,12 +87,11 @@ _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>
           ],
     );
 
-Map<String, dynamic> _$$AppConfigLoginImplToJson(
-        _$AppConfigLoginImpl instance) =>
+Map<String, dynamic> _$$AppConfigLoginModeSelectImplToJson(
+        _$AppConfigLoginModeSelectImpl instance) =>
     <String, dynamic>{
       'greetingL10n': instance.greetingL10n,
-      'modeSelectActions':
-          instance.modeSelectActions.map((e) => e.toJson()).toList(),
+      'actions': instance.actions.map((e) => e.toJson()).toList(),
     };
 
 _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
@@ -67,10 +100,7 @@ _$AppConfigModeSelectActionImpl _$$AppConfigModeSelectActionImplFromJson(
       enabled: json['enabled'] as bool,
       type: json['type'] as String,
       titleL10n: json['titleL10n'] as String,
-      embeddedId:
-          const IntToStringOptionalConverter().fromJson(json['embeddedId']),
-      isLaunchButtonVisible: json['isLaunchButtonVisible'] as bool? ?? false,
-      isLaunchScreen: json['isLaunchScreen'] as bool? ?? false,
+      embeddedId: json['embeddedId'] as String?,
     );
 
 Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
@@ -79,10 +109,7 @@ Map<String, dynamic> _$$AppConfigModeSelectActionImplToJson(
       'enabled': instance.enabled,
       'type': instance.type,
       'titleL10n': instance.titleL10n,
-      'embeddedId':
-          const IntToStringOptionalConverter().toJson(instance.embeddedId),
-      'isLaunchButtonVisible': instance.isLaunchButtonVisible,
-      'isLaunchScreen': instance.isLaunchScreen,
+      'embeddedId': instance.embeddedId,
     };
 
 _$AppConfigMainImpl _$$AppConfigMainImplFromJson(Map<String, dynamic> json) =>

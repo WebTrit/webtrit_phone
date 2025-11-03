@@ -69,7 +69,7 @@ Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureA
     // Configure Android CallKeep to process incoming SMS messages
     // - prefix: filters SMS messages by required prefix
     // - regexPattern: extracts callId, handle, displayName, and hasVideo from the SMS body
-    await AndroidCallkeepServices.smsReceptionConfig.configureReceivedSms(
+    await AndroidCallkeepUtils.smsReceptionConfig.configureReceivedSms(
       prefix: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_PREFIX,
       regexPattern: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN,
     );

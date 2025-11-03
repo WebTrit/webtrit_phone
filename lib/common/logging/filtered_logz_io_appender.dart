@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 // ignore: depend_on_referenced_packages
 import 'package:dio/dio.dart';
@@ -8,8 +7,8 @@ import 'package:logging/logging.dart';
 import 'package:logging_appenders/base_remote_appender.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
-final _logger = Logger('FilteredLogzIoAppender');
-
+// DO NOT USE Logger inside FilteredLogzIoAppender
+// to avoid logging cycles. Use debugPrint instead.
 class FilteredLogzIoAppender extends LogzIoApiAppender {
   FilteredLogzIoAppender({
     required LogRecordFormatter super.formatter,
@@ -22,6 +21,9 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
 
   final Level minLevel;
 
+  /// Tracks the connection state to avoid spamming "connection lost" messages.
+  bool _isConnectionLost = false;
+
   @override
   Future<void> sendLogEventsWithDio(
     List<LogEntry> entries,
@@ -30,15 +32,24 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
   ) async {
     try {
       await super.sendLogEventsWithDio(entries, userProperties, cancelToken);
+
+      if (_isConnectionLost) {
+        _isConnectionLost = false;
+        // Print the message *once* when the connection is back.
+        debugPrint('FilteredLogzIoAppender: Connection restored. Resuming remote logging.');
+      }
     } on DioException catch (e) {
       if (RemoteLogFilter._shouldIgnoreDioConnectionError(e, url)) {
-        // Ignore logging this error to prevent log spam
-        debugPrint('LogzIO DioException (ignored): $e');
+        // Print the message if this is the *first time* we`ve seen it.
+        if (!_isConnectionLost) {
+          _isConnectionLost = true;
+          debugPrint('FilteredLogzIoAppender: Connection lost. Pausing remote logging. Will retry silently.');
+        }
       } else {
-        _logger.warning('LogzIO DioException (not ignored): $e');
+        debugPrint('FilteredLogzIoAppender: Unhandled DioException: $e');
       }
-    } catch (e) {
-      _logger.warning('LogzIO Exception: $e');
+    } catch (e, stackTrace) {
+      debugPrint('FilteredLogzIoAppender: Unhandled Exception: $e\n$stackTrace');
     }
   }
 
@@ -67,19 +78,26 @@ class RemoteLogFilter {
     return !_shouldIgnoreDioConnectionError(dioError, url);
   }
 
+  /// Decides whether a [DioException] should be ignored.
+  /// We only ignore *connection* errors to the *logger's* own host,
+  /// derived from the provided [url].
   static bool _shouldIgnoreDioConnectionError(DioException dioError, String url) {
-    final ignoredHosts = {'listener.logz.io'};
+    final Uri? loggerUri = Uri.tryParse(url);
+    final String? loggerHost = loggerUri?.host;
 
-    Uri? uri = Uri.tryParse(url);
-    if (uri != null) ignoredHosts.add(uri.host);
+    if (loggerHost == null) {
+      return false;
+    }
 
-    // Skip adding spam logs to the buffer if there is no internet connection for the specified hosts
-    final errorHost = switch (dioError.error) {
-      SocketException se => se.address?.host,
-      HttpException he => he.uri?.host,
-      _ => null,
-    };
+    final String requestHost = dioError.requestOptions.uri.host;
 
-    return ignoredHosts.contains(errorHost);
+    if (requestHost == loggerHost) {
+      return switch (dioError.type) {
+        DioExceptionType.connectionError || DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout => true,
+        _ => false,
+      };
+    }
+
+    return false;
   }
 }

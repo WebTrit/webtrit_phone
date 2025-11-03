@@ -35,6 +35,7 @@ mixin _$ImageSource {
   /// Can be extended in future (e.g., "cdn", "inline").
   @JsonKey(name: r'$ref')
   String get ref => throw _privateConstructorUsedError;
+  ImageRenderSpec? get render => throw _privateConstructorUsedError;
 
   /// Freeform metadata for build tools / CLI / pipelines.
   /// Example: `{ "preserveRemote": true }`
@@ -60,8 +61,10 @@ abstract class $ImageSourceCopyWith<$Res> {
       {String? id,
       String? uri,
       @JsonKey(name: r'$ref') String ref,
+      ImageRenderSpec? render,
       Metadata metadata});
 
+  $ImageRenderSpecCopyWith<$Res>? get render;
   $MetadataCopyWith<$Res> get metadata;
 }
 
@@ -83,6 +86,7 @@ class _$ImageSourceCopyWithImpl<$Res, $Val extends ImageSource>
     Object? id = freezed,
     Object? uri = freezed,
     Object? ref = null,
+    Object? render = freezed,
     Object? metadata = null,
   }) {
     return _then(_value.copyWith(
@@ -98,11 +102,29 @@ class _$ImageSourceCopyWithImpl<$Res, $Val extends ImageSource>
           ? _value.ref
           : ref // ignore: cast_nullable_to_non_nullable
               as String,
+      render: freezed == render
+          ? _value.render
+          : render // ignore: cast_nullable_to_non_nullable
+              as ImageRenderSpec?,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as Metadata,
     ) as $Val);
+  }
+
+  /// Create a copy of ImageSource
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ImageRenderSpecCopyWith<$Res>? get render {
+    if (_value.render == null) {
+      return null;
+    }
+
+    return $ImageRenderSpecCopyWith<$Res>(_value.render!, (value) {
+      return _then(_value.copyWith(render: value) as $Val);
+    });
   }
 
   /// Create a copy of ImageSource
@@ -128,8 +150,11 @@ abstract class _$$ImageSourceImplCopyWith<$Res>
       {String? id,
       String? uri,
       @JsonKey(name: r'$ref') String ref,
+      ImageRenderSpec? render,
       Metadata metadata});
 
+  @override
+  $ImageRenderSpecCopyWith<$Res>? get render;
   @override
   $MetadataCopyWith<$Res> get metadata;
 }
@@ -150,6 +175,7 @@ class __$$ImageSourceImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? uri = freezed,
     Object? ref = null,
+    Object? render = freezed,
     Object? metadata = null,
   }) {
     return _then(_$ImageSourceImpl(
@@ -165,6 +191,10 @@ class __$$ImageSourceImplCopyWithImpl<$Res>
           ? _value.ref
           : ref // ignore: cast_nullable_to_non_nullable
               as String,
+      render: freezed == render
+          ? _value.render
+          : render // ignore: cast_nullable_to_non_nullable
+              as ImageRenderSpec?,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -180,6 +210,7 @@ class _$ImageSourceImpl extends _ImageSource {
       {this.id,
       this.uri,
       @JsonKey(name: r'$ref') this.ref = 'asset',
+      this.render,
       this.metadata = const Metadata()})
       : super._();
 
@@ -204,6 +235,8 @@ class _$ImageSourceImpl extends _ImageSource {
   @override
   @JsonKey(name: r'$ref')
   final String ref;
+  @override
+  final ImageRenderSpec? render;
 
   /// Freeform metadata for build tools / CLI / pipelines.
   /// Example: `{ "preserveRemote": true }`
@@ -213,7 +246,7 @@ class _$ImageSourceImpl extends _ImageSource {
 
   @override
   String toString() {
-    return 'ImageSource(id: $id, uri: $uri, ref: $ref, metadata: $metadata)';
+    return 'ImageSource(id: $id, uri: $uri, ref: $ref, render: $render, metadata: $metadata)';
   }
 
   @override
@@ -224,13 +257,14 @@ class _$ImageSourceImpl extends _ImageSource {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.uri, uri) || other.uri == uri) &&
             (identical(other.ref, ref) || other.ref == ref) &&
+            (identical(other.render, render) || other.render == render) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, uri, ref, metadata);
+  int get hashCode => Object.hash(runtimeType, id, uri, ref, render, metadata);
 
   /// Create a copy of ImageSource
   /// with the given fields replaced by the non-null parameter values.
@@ -253,6 +287,7 @@ abstract class _ImageSource extends ImageSource {
       {final String? id,
       final String? uri,
       @JsonKey(name: r'$ref') final String ref,
+      final ImageRenderSpec? render,
       final Metadata metadata}) = _$ImageSourceImpl;
   const _ImageSource._() : super._();
 
@@ -277,6 +312,8 @@ abstract class _ImageSource extends ImageSource {
   @override
   @JsonKey(name: r'$ref')
   String get ref;
+  @override
+  ImageRenderSpec? get render;
 
   /// Freeform metadata for build tools / CLI / pipelines.
   /// Example: `{ "preserveRemote": true }`
@@ -288,5 +325,201 @@ abstract class _ImageSource extends ImageSource {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ImageSourceImplCopyWith<_$ImageSourceImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ImageRenderSpec _$ImageRenderSpecFromJson(Map<String, dynamic> json) {
+  return _ImageRenderSpec.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ImageRenderSpec {
+  /// The scale factor applied during rendering.
+  double? get scale => throw _privateConstructorUsedError;
+
+  /// Optional padding around the image.
+  PaddingConfig? get padding => throw _privateConstructorUsedError;
+
+  /// Serializes this ImageRenderSpec to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ImageRenderSpec
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ImageRenderSpecCopyWith<ImageRenderSpec> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ImageRenderSpecCopyWith<$Res> {
+  factory $ImageRenderSpecCopyWith(
+          ImageRenderSpec value, $Res Function(ImageRenderSpec) then) =
+      _$ImageRenderSpecCopyWithImpl<$Res, ImageRenderSpec>;
+  @useResult
+  $Res call({double? scale, PaddingConfig? padding});
+
+  $PaddingConfigCopyWith<$Res>? get padding;
+}
+
+/// @nodoc
+class _$ImageRenderSpecCopyWithImpl<$Res, $Val extends ImageRenderSpec>
+    implements $ImageRenderSpecCopyWith<$Res> {
+  _$ImageRenderSpecCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ImageRenderSpec
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? scale = freezed,
+    Object? padding = freezed,
+  }) {
+    return _then(_value.copyWith(
+      scale: freezed == scale
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double?,
+      padding: freezed == padding
+          ? _value.padding
+          : padding // ignore: cast_nullable_to_non_nullable
+              as PaddingConfig?,
+    ) as $Val);
+  }
+
+  /// Create a copy of ImageRenderSpec
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PaddingConfigCopyWith<$Res>? get padding {
+    if (_value.padding == null) {
+      return null;
+    }
+
+    return $PaddingConfigCopyWith<$Res>(_value.padding!, (value) {
+      return _then(_value.copyWith(padding: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$ImageRenderSpecImplCopyWith<$Res>
+    implements $ImageRenderSpecCopyWith<$Res> {
+  factory _$$ImageRenderSpecImplCopyWith(_$ImageRenderSpecImpl value,
+          $Res Function(_$ImageRenderSpecImpl) then) =
+      __$$ImageRenderSpecImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({double? scale, PaddingConfig? padding});
+
+  @override
+  $PaddingConfigCopyWith<$Res>? get padding;
+}
+
+/// @nodoc
+class __$$ImageRenderSpecImplCopyWithImpl<$Res>
+    extends _$ImageRenderSpecCopyWithImpl<$Res, _$ImageRenderSpecImpl>
+    implements _$$ImageRenderSpecImplCopyWith<$Res> {
+  __$$ImageRenderSpecImplCopyWithImpl(
+      _$ImageRenderSpecImpl _value, $Res Function(_$ImageRenderSpecImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ImageRenderSpec
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? scale = freezed,
+    Object? padding = freezed,
+  }) {
+    return _then(_$ImageRenderSpecImpl(
+      scale: freezed == scale
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double?,
+      padding: freezed == padding
+          ? _value.padding
+          : padding // ignore: cast_nullable_to_non_nullable
+              as PaddingConfig?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ImageRenderSpecImpl implements _ImageRenderSpec {
+  const _$ImageRenderSpecImpl({this.scale, this.padding});
+
+  factory _$ImageRenderSpecImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ImageRenderSpecImplFromJson(json);
+
+  /// The scale factor applied during rendering.
+  @override
+  final double? scale;
+
+  /// Optional padding around the image.
+  @override
+  final PaddingConfig? padding;
+
+  @override
+  String toString() {
+    return 'ImageRenderSpec(scale: $scale, padding: $padding)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ImageRenderSpecImpl &&
+            (identical(other.scale, scale) || other.scale == scale) &&
+            (identical(other.padding, padding) || other.padding == padding));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, scale, padding);
+
+  /// Create a copy of ImageRenderSpec
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ImageRenderSpecImplCopyWith<_$ImageRenderSpecImpl> get copyWith =>
+      __$$ImageRenderSpecImplCopyWithImpl<_$ImageRenderSpecImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ImageRenderSpecImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ImageRenderSpec implements ImageRenderSpec {
+  const factory _ImageRenderSpec(
+      {final double? scale,
+      final PaddingConfig? padding}) = _$ImageRenderSpecImpl;
+
+  factory _ImageRenderSpec.fromJson(Map<String, dynamic> json) =
+      _$ImageRenderSpecImpl.fromJson;
+
+  /// The scale factor applied during rendering.
+  @override
+  double? get scale;
+
+  /// Optional padding around the image.
+  @override
+  PaddingConfig? get padding;
+
+  /// Create a copy of ImageRenderSpec
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ImageRenderSpecImplCopyWith<_$ImageRenderSpecImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

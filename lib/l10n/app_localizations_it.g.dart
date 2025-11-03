@@ -880,6 +880,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationBuilders_createGroup => 'Crea gruppo';
 
   @override
+  String messaging_ConversationBuilders_contactExtension(String extension) {
+    return 'Int: $extension';
+  }
+
+  @override
   String get messaging_ConversationBuilders_externalContacts_heading =>
       'Contatti Cloud PBX';
 

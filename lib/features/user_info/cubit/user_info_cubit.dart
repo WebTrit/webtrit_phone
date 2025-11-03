@@ -48,6 +48,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
 
 class UserInfoState extends Equatable {
   const UserInfoState({this.userInfo});
+
   final UserInfo? userInfo;
 
   @override

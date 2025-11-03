@@ -247,18 +247,10 @@ Map<String, dynamic> _$$CallActionsWidgetConfigImplToJson(
 _$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
         Map<String, dynamic> json) =>
     _$ImageAssetsConfigImpl(
-      primaryOnboardingLogo: json['primaryOnboardingLogo'] == null
-          ? const ImageAssetConfig(
-              imageSource:
-                  ImageSource(uri: 'asset://assets/primary_onboardin_logo.svg'))
-          : ImageAssetConfig.fromJson(
-              json['primaryOnboardingLogo'] as Map<String, dynamic>),
-      secondaryOnboardingLogo: json['secondaryOnboardingLogo'] == null
-          ? const ImageAssetConfig(
-              imageSource: ImageSource(
-                  uri: 'asset://assets/secondary_onboardin_logo.svg'))
-          : ImageAssetConfig.fromJson(
-              json['secondaryOnboardingLogo'] as Map<String, dynamic>),
+      defaultPlaceholderImage: json['defaultPlaceholderImage'] == null
+          ? null
+          : ImageSource.fromJson(
+              json['defaultPlaceholderImage'] as Map<String, dynamic>),
       appIcon: json['appIcon'] == null
           ? const AppIconWidgetConfig()
           : AppIconWidgetConfig.fromJson(
@@ -272,8 +264,7 @@ _$ImageAssetsConfigImpl _$$ImageAssetsConfigImplFromJson(
 Map<String, dynamic> _$$ImageAssetsConfigImplToJson(
         _$ImageAssetsConfigImpl instance) =>
     <String, dynamic>{
-      'primaryOnboardingLogo': instance.primaryOnboardingLogo.toJson(),
-      'secondaryOnboardingLogo': instance.secondaryOnboardingLogo.toJson(),
+      'defaultPlaceholderImage': instance.defaultPlaceholderImage?.toJson(),
       'appIcon': instance.appIcon.toJson(),
       'leadingAvatarStyle': instance.leadingAvatarStyle.toJson(),
     };

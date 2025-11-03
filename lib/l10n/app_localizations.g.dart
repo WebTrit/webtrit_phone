@@ -1585,6 +1585,12 @@ abstract class AppLocalizations {
   /// **'Create group'**
   String get messaging_ConversationBuilders_createGroup;
 
+  /// Label for a contact's extension number in the contact list.
+  ///
+  /// In en, this message translates to:
+  /// **'Ext: {extension}'**
+  String messaging_ConversationBuilders_contactExtension(String extension);
+
   /// No description provided for @messaging_ConversationBuilders_externalContacts_heading.
   ///
   /// In en, this message translates to:

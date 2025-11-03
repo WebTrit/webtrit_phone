@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -30,10 +32,22 @@ class _CallShellState extends State<CallShell> {
 
   @override
   Widget build(BuildContext context) {
-    return displayListener(widget.child);
+    return MultiBlocListener(
+      listeners: [
+        callDisplayListener(),
+        callScreenDisplayListener(),
+      ],
+      child: widget.child,
+    );
   }
 
-  Widget displayListener(Widget child) {
+  /// Listens to [CallState.display] changes and manages related UI transitions.
+  ///
+  /// Handles:
+  /// - Orientation updates via [OrientationsBloc].
+  /// - Navigation between main and call screens.
+  /// - Showing or removing the floating [ThumbnailAvatar] overlay.
+  BlocListener<CallBloc, CallState> callDisplayListener() {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
       listener: (context, state) async {
@@ -74,7 +88,34 @@ class _CallShellState extends State<CallShell> {
           _avatar = null;
         }
       },
-      child: child,
+    );
+  }
+
+  /// Listens for transitions to and from [CallDisplay.screen] to manage
+  /// activity visibility and lockscreen behavior dynamically.
+  ///
+  /// - When entering the call screen (`CallDisplay.screen`), it restores
+  ///   normal screen and lockscreen settings.
+  /// - When leaving the call screen, it enables showing the activity
+  ///   over the lock screen if needed.
+  BlocListener<CallBloc, CallState> callScreenDisplayListener() {
+    return BlocListener<CallBloc, CallState>(
+      listenWhen: (previous, current) =>
+          previous.display != current.display &&
+          (previous.display == CallDisplay.screen || current.display == CallDisplay.screen),
+      listener: (context, state) async {
+        final isCallScreen = state.display == CallDisplay.screen;
+
+        if (isCallScreen) {
+          // Entering call screen - restore normal flags
+          AndroidCallkeepUtils.activityControl.showOverLockscreen();
+          AndroidCallkeepUtils.activityControl.wakeScreenOnShow();
+        } else {
+          // Leaving call screen - keep visible over lock screen
+          AndroidCallkeepUtils.activityControl.showOverLockscreen(false);
+          AndroidCallkeepUtils.activityControl.wakeScreenOnShow(false);
+        }
+      },
     );
   }
 

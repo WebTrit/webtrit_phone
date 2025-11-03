@@ -141,13 +141,13 @@ void main() {
       );
     });
 
-    test('loginConfig & settingsConfig basic fields parsed', () {
+    test('loginConfig [modeSelect screen] & settingsConfig basic fields parsed', () {
       final config = AppConfig.fromJson(json);
 
-      expect(config.loginConfig.greetingL10n, 'WebTrit');
-      expect(config.loginConfig.modeSelectActions, isNotEmpty);
-      expect(config.loginConfig.modeSelectActions.first.enabled, isTrue);
-      expect(config.loginConfig.modeSelectActions.first.type, 'login');
+      expect(config.loginConfig.modeSelect.greetingL10n, 'WebTrit');
+      expect(config.loginConfig.modeSelect.actions, isNotEmpty);
+      expect(config.loginConfig.modeSelect.actions.first.enabled, isTrue);
+      expect(config.loginConfig.modeSelect.actions.first.type, 'login');
 
       final sections = config.settingsConfig.sections;
       expect(sections, isNotEmpty);

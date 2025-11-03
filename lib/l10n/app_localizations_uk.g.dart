@@ -875,6 +875,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationBuilders_createGroup => 'Створити групу';
 
   @override
+  String messaging_ConversationBuilders_contactExtension(String extension) {
+    return 'Внутр: $extension';
+  }
+
+  @override
   String get messaging_ConversationBuilders_externalContacts_heading =>
       'Контакти Хмарної АТС';
 

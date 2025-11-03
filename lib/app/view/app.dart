@@ -40,7 +40,7 @@ class _AppState extends State<App> {
     _appRouter = AppRouter(
       appBloc,
       context.read<AppPermissions>(),
-      featureAccess.loginFeature.embeddedLaunchConfiguration?.customLoginFeature,
+      featureAccess.loginFeature.launchLoginPage,
       featureAccess.bottomMenuFeature,
       featureAccess.toChecker(),
     );

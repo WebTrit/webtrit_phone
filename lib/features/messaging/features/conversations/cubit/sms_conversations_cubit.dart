@@ -20,6 +20,7 @@ class SmsConversationsCubit extends Cubit<SmsConversationsState> {
   ) : super(SmsConversationsState.initial()) {
     init();
   }
+
   final PhoenixSocket _client;
   final SmsRepository _repository;
   late final StreamSubscription _conversationsSub;

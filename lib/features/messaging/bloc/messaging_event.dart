@@ -1,7 +1,10 @@
 part of 'messaging_bloc.dart';
 
-abstract class MessagingEvent {
+sealed class MessagingEvent extends Equatable {
   const MessagingEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 class Connect extends MessagingEvent {
@@ -28,4 +31,9 @@ class _ClientError extends MessagingEvent {
   const _ClientError(this.error);
 
   final Object error;
+
+  @override
+  List<Object> get props => [
+    EquatablePropToString([error], listPropToString),
+  ];
 }

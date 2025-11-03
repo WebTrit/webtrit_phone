@@ -1,131 +1,111 @@
 # Page Configuration
 
-This document describes the **page-level appearance configuration** used by the app. It covers the
-Login, About, Call (Dialing), and Keypad pages, and explains how to structure JSON for each section,
-including color and typography options, and the new **Call Actions** area.
-
-> This file supersedes previous versions of `page_configuration.md`. It reflects the current DTOs in
-`theme_page_config.dart` (Freezed models).
+This document defines the **page-level appearance configuration** app reads from JSON: **Login
+**, **About**, **Call (Dialing)**, and **Keypad**. Every section is optional—missing fields fall
+back to sensible in-app defaults.
 
 ---
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Color format & alpha (ARGB)](#color-format--alpha-argb)
-- [ThemePageConfig](#themepageconfig)
-- [Login Page](#login-page)
-- [About Page](#about-page)
-- [Call Page (Dialing)](#call-page-dialing)
-    - [App Bar](#app-bar)
-    - [Call Info](#call-info)
-    - [Call Actions](#call-actions)
-    - [Light & Dark examples for `actions`](#light--dark-examples-for-actions)
-- [Keypad Page](#keypad-page)
+- [Color format](#color-format)
+- [Global structure](#global-structure)
+- [Login page](#login-page)
+- [About page](#about-page)
+- [Call page (Dialing)](#call-page-dialing)
+    - [App bar](#app-bar)
+    - [Call info](#call-info)
+    - [Call actions](#call-actions)
+    - [Light & dark action presets](#light--dark-action-presets)
+- [Keypad page](#keypad-page)
+- [Common object formats](#common-object-formats)
 
 ---
 
-## Overview
+## Color format
 
-Page configuration is declared via Freezed DTOs and serialized as JSON. Each section is optional;
-when a section (or its fields) is omitted, built-in defaults from the app theme are used. This makes
-it easy to ship a minimal configuration and progressively override styles as needed.
+Use HEX strings:
 
----
-
-## Color format & alpha (ARGB)
-
-All color fields accept a **HEX string**:
-
-- `#RRGGBB` — opaque color (alpha = `FF` is assumed).
-- `#AARRGGBB` — color **with explicit alpha** (recommended if you want glassy/translucent UI). For
-  example, `#66FFFFFF` is white at ~40% opacity.
-
-> The `toColor()` converter supports both formats. Use ARGB when you want semi-transparent call
-> action backgrounds that blend with gradients.
+- `#RRGGBB` — opaque
+- `#AARRGGBB` — with alpha (recommended for “glassy”/translucent looks, e.g. `#66FFFFFF` ≈ 40%
+  opacity)
 
 ---
 
-## ThemePageConfig
-
-Root DTO that aggregates per-page configs:
-
-```dart
-@Freezed()
-class ThemePageConfig {
-  const factory ThemePageConfig({
-    @Default(LoginPageConfig()) LoginPageConfig login,
-    @Default(AboutPageConfig()) AboutPageConfig about,
-    @Default(CallPageConfig()) CallPageConfig dialing,
-    @Default(KeypadPageConfig()) KeypadPageConfig keypad,
-  }) = _ThemePageConfig;
-}
-```
-
-JSON example (only the `dialing` page shown for brevity):
-
-```json
-{
-  "dialing": {
-  }
-}
-```
-
----
-
-## Login Page
-
-**DTO:** `LoginPageConfig`
-
-- `imageSource`: Structured image descriptor (preferred).
-- `picture` *(deprecated)*: Raw string path/URL for the logo/picture.
-- `scale`: Optional scale factor for the picture.
-- `labelColor`: HEX/ARGB color for labels.
-- `modeSelect`: `LoginModeSelectPageConfig`
-    - `systemUiOverlayStyle`: Status/navigation bars appearance.
-    - `buttonLoginStyleType`: Enum preset for the Login button.
-    - `buttonSignupStyleType`: Enum preset for the Signup button.
-- `otpSigninVerify`: `LoginOtpSigninVerifyScreenPageConfig`
-    - `countdownRepeatIntervalSeconds`: Integer. Countdown interval (in seconds) before the “Repeat”
-      button becomes active again.
-        - `0` → countdown disabled, button is always active.
-        - `>0` → countdown active, button enabled after interval.
-- `signupVerify`: `LoginSignupVerifyScreenPageConfig`
-    - `countdownRepeatIntervalSeconds`: Integer. Countdown interval (in seconds) before the “Repeat”
-      button becomes active again.
-        - `0` → countdown disabled, button is always active.
-        - `>0` → countdown active, button enabled after interval.
-- `metadata`: `Metadata` block with arbitrary structured info.
-
-**Minimal example (with countdown disabled for both OTP and Signup verify):**
+## Global structure
 
 ```json
 {
   "login": {
-    "imageSource": {
-      "asset": "assets/branding/logo.png"
-    },
-    "labelColor": "#30302F",
+    /* Login page config */
+  },
+  "about": {
+    /* About page config */
+  },
+  "dialing": {
+    /* Call page config */
+  },
+  "keypad": {
+    /* Keypad page config */
+  }
+}
+```
+
+All sections can be provided independently.
+
+---
+
+## Login page
+
+Top-level keys inside `"login"`:
+
+| Key               | Type   | Description                                              |
+|-------------------|--------|----------------------------------------------------------|
+| `modeSelect`      | object | Mode selection screen (buttons, system bars, main logo). |
+| `switchPage`      | object | “Switch mode” screen (main logo only).                   |
+| `otpSigninVerify` | object | OTP sign-in verification screen (repeat countdown).      |
+| `signupVerify`    | object | Sign-up verification screen (repeat countdown).          |
+
+### `login.modeSelect`
+
+```json
+{
+  "login": {
     "modeSelect": {
       "systemUiOverlayStyle": {
         "statusBarIconBrightness": "dark",
         "systemNavigationBarIconBrightness": "dark"
       },
+      "mainLogo": {
+        "asset": "assets/branding/logo.png"
+      },
       "buttonLoginStyleType": "primary",
       "buttonSignupStyleType": "primary"
-    },
-    "otpSigninVerify": {
-      "countdownRepeatIntervalSeconds": 0
-    },
-    "signupVerify": {
-      "countdownRepeatIntervalSeconds": 0
-    },
-    "metadata": {}
+    }
   }
 }
 ```
 
-**Example with custom countdown:**
+- `systemUiOverlayStyle` — status/navigation bar colors & icon brightness (see **Common object
+  formats**).
+- `mainLogo` — image descriptor for the primary logo (see **ImageSource**).
+- `buttonLoginStyleType`, `buttonSignupStyleType` — string enum style presets (e.g. `"primary"`).
+
+### `login.switchPage`
+
+```json
+{
+  "login": {
+    "switchPage": {
+      "mainLogo": {
+        "asset": "assets/branding/logo_switch.png"
+      }
+    }
+  }
+}
+```
+
+### `login.otpSigninVerify` / `login.signupVerify`
 
 ```json
 {
@@ -140,41 +120,71 @@ JSON example (only the `dialing` page shown for brevity):
 }
 ```
 
----
+- `countdownRepeatIntervalSeconds`:  
+  `0` → “Repeat” always enabled; `>0` → enabled after that many seconds.
 
-## About Page
-
-**DTO:** `AboutPageConfig`
-
-- `imageSource`: Structured image source (preferred).
-- `picture` *(deprecated)*: Raw string path/URL.
-- `metadata`: Arbitrary structured info (e.g., version/build).
-
-**Minimal example:**
+**Minimal login example:**
 
 ```json
 {
-  "about": {
-    "imageSource": {
-      "asset": "assets/branding/about.png"
+  "login": {
+    "modeSelect": {
+      "mainLogo": {
+        "asset": "assets/branding/logo.png"
+      }
     },
-    "metadata": {}
+    "otpSigninVerify": {
+      "countdownRepeatIntervalSeconds": 0
+    },
+    "signupVerify": {
+      "countdownRepeatIntervalSeconds": 0
+    }
   }
 }
 ```
 
 ---
 
-## Call Page (Dialing)
+## About page
 
-**DTO:** `CallPageConfig`
+Top-level keys inside `"about"`:
 
-- `systemUiOverlayStyle`: Controls status & navigation bars.
-- `appBarStyle`: See [App Bar](#app-bar).
-- `callInfo`: See [Call Info](#call-info).
-- `actions`: See [Call Actions](#call-actions).
+| Key        | Type   | Description                                            |
+|------------|--------|--------------------------------------------------------|
+| `mainLogo` | object | Image descriptor for a picture/logo.                   |
+| `metadata` | object | Arbitrary key–value store (e.g., version/build/links). |
 
-A compact example:
+**Example:**
+
+```json
+{
+  "about": {
+    "mainLogo": {
+      "asset": "assets/branding/about.png"
+    },
+    "metadata": {
+      "version": "1.8.2",
+      "build": 245,
+      "website": "https://example.com"
+    }
+  }
+}
+```
+
+---
+
+## Call page (Dialing)
+
+Top-level keys inside `"dialing"`:
+
+| Key                    | Type   | Description                                                  |
+|------------------------|--------|--------------------------------------------------------------|
+| `systemUiOverlayStyle` | object | Status/navigation bars styling.                              |
+| `appBarStyle`          | object | App bar styling (background/foreground/primary/back button). |
+| `callInfo`             | object | Text styles for username/number/status.                      |
+| `actions`              | object | Button styles for call controls.                             |
+
+**Compact example:**
 
 ```json
 {
@@ -223,96 +233,93 @@ A compact example:
         "color": "#EEF3F6"
       }
     },
-    "actions": {
+    "actions": {}
+  }
+}
+```
+
+### App bar
+
+`dialing.appBarStyle`:
+
+```json
+{
+  "dialing": {
+    "appBarStyle": {
+      "backgroundColor": "#123752",
+      "foregroundColor": "#FFFFFF",
+      "primary": true,
+      "showBackButton": true
     }
   }
 }
 ```
 
-### App Bar
+### Call info
 
-**DTO:** `AppBarStyleConfig`
-
-- `backgroundColor`: HEX/ARGB.
-- `foregroundColor`: HEX/ARGB.
-- `primary`: Whether the AppBar is “primary” (app-level) or page-overlay.
-- `showBackButton` *(if present in your build)*: Toggles the back chevron.
-
-### Call Info
-
-**DTO:** `CallPageInfoConfig`
-
-- `usernameTextStyle`: `TextStyleConfig` for the main name (e.g. *displaySmall*).
-- `numberTextStyle`: Secondary line for the phone number.
-- `callStatusTextStyle`: Status (e.g., duration / incoming).
-- `processingStatusTextStyle`: For ongoing operations (e.g., “Transferring…”).
-
-### Call Actions
-
-**IMPORTANT: Nesting & placement**  
-`actions` is **not** a top-level object. It is a child of the **Call Page** (Dialing) configuration:
-
-```
-ThemePageConfig.dialing.actions  // i.e. CallPageConfig.actions
-```
-
-**Correct JSON placement:**
+`dialing.callInfo`:
 
 ```json
 {
   "dialing": {
-    "actions": {
-      "callStart": {
+    "callInfo": {
+      "usernameTextStyle": {
+        "fontSize": 34,
+        "color": "#FFFFFF"
       },
-      "hangup": {
+      "numberTextStyle": {
+        "fontSize": 16,
+        "color": "#EEF3F6"
       },
-      "transfer": {
+      "callStatusTextStyle": {
+        "fontSize": 14,
+        "color": "#EEF3F6"
       },
-      "camera": {
-      },
-      "muted": {
-      },
-      "speaker": {
-      },
-      "held": {
-      },
-      "swap": {
-      },
-      "key": {
+      "processingStatusTextStyle": {
+        "fontSize": 14,
+        "color": "#EEF3F6"
       }
     }
   }
 }
 ```
 
-**DTOs:**
+### Call actions
 
-- `CallPageActionsConfig` contains those fields.
-- Each field is an `ElevatedButtonWidgetConfig` with:
-    - `backgroundColor`: Button fill (HEX/ARGB).
-    - `foregroundColor`: Icon/text tint for enabled state.
-    - `textColor`: Optional explicit text color (fallbacks to `foregroundColor`).
-    - `iconColor`: Icon tint for enabled state.
-    - `disabledIconColor`: Icon tint for disabled state.
-    - `disabledBackgroundColor`: Fill when disabled.
-    - `disabledForegroundColor`: Tint when disabled.
+`dialing.actions` groups all action button styles. Each field accepts an **ElevatedButton** style
+config (see **ElevatedButtonWidgetConfig**).
 
-> **State handling:** Toggle-like actions (camera/muted/speaker/held) can switch appearance when
-`MaterialState.selected` is active. In app code, this is wired via `MaterialStatesController` and
-`ButtonStyle` resolvers.
+Available action keys:
 
-#### Alpha-driven “glassy” look (recommended)
+- `callStart`, `hangup`, `transfer`, `camera`, `muted`, `speaker`, `held`, `swap`, `key`
 
-For semi-transparent circular buttons that blend with a gradient background, use ARGB:
+**Correct nesting:**
 
-- Normal state: e.g., `"#66FFFFFF"` (≈40% opacity).
-- Disabled: e.g., `"#26FFFFFF"` (≈15% opacity).
+```json
+{
+  "dialing": {
+    "actions": {
+      "callStart": {},
+      "hangup": {},
+      "transfer": {},
+      "camera": {},
+      "muted": {},
+      "speaker": {},
+      "held": {},
+      "swap": {},
+      "key": {}
+    }
+  }
+}
+```
 
-### Light & Dark examples for `actions`
+**Alpha (“glassy”) recommendation:**  
+Use semi-transparent backgrounds like `"#66FFFFFF"` for normal and `"#26FFFFFF"` for disabled to
+blend over gradients.
 
-> **Note:** both examples are shown **inside** `dialing` to emphasize the correct nesting.
+#### Light & dark action presets
 
-**Light theme example (glassy neutral actions):**
+**Light:**
 
 ```json
 {
@@ -395,7 +402,7 @@ For semi-transparent circular buttons that blend with a gradient background, use
 }
 ```
 
-**Dark theme example:**
+**Dark:**
 
 ```json
 {
@@ -480,15 +487,17 @@ For semi-transparent circular buttons that blend with a gradient background, use
 
 ---
 
-## Keypad Page
+## Keypad page
 
-**DTO:** `KeypadPageConfig`
+Top-level keys inside `"keypad"`:
 
-- `systemUiOverlayStyle`: Status/navigation bars appearance.
-- `textField`: `TextFieldConfig` for the number input at the top.
-- `contactName`: `TextFieldConfig` for resolved contact name.
-- `keypad`: `KeypadStyleConfig` (digits grid, spacing, paddings).
-- `actionpad`: `ActionPadWidgetConfig` (call buttons, backspace, etc.).
+| Key                    | Type   | Description                                       |
+|------------------------|--------|---------------------------------------------------|
+| `systemUiOverlayStyle` | object | Status/navigation bars styling.                   |
+| `textField`            | object | Number input field style (top of page).           |
+| `contactName`          | object | Resolved contact name style (under input).        |
+| `keypad`               | object | Numeric keypad layout (digits, spacing, padding). |
+| `actionpad`            | object | Action buttons (call, backspace, etc.).           |
 
 **Minimal example:**
 
@@ -520,11 +529,150 @@ For semi-transparent circular buttons that blend with a gradient background, use
 
 ---
 
+## Common object formats
+
+### ImageSource
+
+Provide one of the supported sources (keep to what your build supports). Common patterns:
+
+```json
+{
+  "asset": "assets/branding/logo.png"
+}
+```
+
+or
+
+```json
+{
+  "url": "https://cdn.example.com/logo.png",
+  "cache": true
+}
+```
+
+### System UI overlay style (`systemUiOverlayStyle`)
+
+```json
+{
+  "statusBarIconBrightness": "light|dark",
+  "statusBarBrightness": "light|dark",
+  "systemNavigationBarColor": "#AARRGGBB",
+  "systemNavigationBarIconBrightness": "light|dark"
+}
+```
+
+### App bar style (`appBarStyle`)
+
+```json
+{
+  "backgroundColor": "#AARRGGBB",
+  "foregroundColor": "#AARRGGBB",
+  "primary": true,
+  "showBackButton": true
+}
+```
+
+### Text style (`TextStyleConfig` shape)
+
+```json
+{
+  "color": "#AARRGGBB",
+  "fontSize": 16,
+  "fontWeight": {
+    "weight": 400
+  },
+  "letterSpacing": 0.0,
+  "fontFeatures": [
+    "tabularFigures"
+  ]
+}
+```
+
+### Text field (`TextFieldConfig` shape)
+
+```json
+{
+  "textStyle": {
+    "...": "see TextStyleConfig"
+  },
+  "hintStyle": {
+    "...": "see TextStyleConfig"
+  },
+  "cursorColor": "#AARRGGBB",
+  "padding": {
+    "left": 0,
+    "top": 0,
+    "right": 0,
+    "bottom": 0
+  }
+}
+```
+
+### Keypad (`KeypadStyleConfig` shape)
+
+```json
+{
+  "spacing": 16,
+  "padding": {
+    "left": 24,
+    "top": 12,
+    "right": 24,
+    "bottom": 24
+  },
+  "digitTextStyle": {
+    "fontSize": 28,
+    "color": "#FFFFFF"
+  },
+  "subTextStyle": {
+    "fontSize": 12,
+    "color": "#B3FFFFFF"
+  }
+}
+```
+
+### Action pad (`ActionPadWidgetConfig` shape)
+
+```json
+{
+  "spacing": 12,
+  "padding": {
+    "left": 16,
+    "top": 8,
+    "right": 16,
+    "bottom": 24
+  },
+  "callButton": {
+    /* ElevatedButtonWidgetConfig */
+  },
+  "backspaceButton": {
+    /* ElevatedButtonWidgetConfig */
+  }
+}
+```
+
+### Elevated button widget (`ElevatedButtonWidgetConfig` shape)
+
+```json
+{
+  "backgroundColor": "#AARRGGBB",
+  "foregroundColor": "#AARRGGBB",
+  "textColor": "#AARRGGBB",
+  "iconColor": "#AARRGGBB",
+  "disabledBackgroundColor": "#AARRGGBB",
+  "disabledForegroundColor": "#AARRGGBB",
+  "disabledIconColor": "#AARRGGBB",
+  "shape": "circle|stadium|rounded",
+  "elevation": 2
+}
+```
+
+---
+
 ### Notes & tips
 
-- `actions` must be nested under `dialing`. It is **not** a root-level section.
-- If `actions` are omitted for the Call page, the app falls back to theme defaults.
-- For toggle actions, ensure the widget sets `MaterialState.selected` (e.g., via
-  `MaterialStatesController`) so the `ButtonStyle` resolvers can switch backgrounds and icon colors.
-- Keep disabled styles high-contrast enough to meet a11y guidelines on both light and dark
-  backgrounds.
+- `dialing.actions` must live **inside** `"dialing"`, not at root.
+- If a section is omitted, in-app defaults apply.
+- For toggleable call actions (`muted`, `speaker`, `camera`, `held`), the UI can switch visuals when
+  the control is selected—ensure the widget sets the selected state so your
+  enabled/disabled/selected colors are respected.
+- Prefer ARGB with partial alpha for layered UIs (e.g., translucent buttons over gradients).

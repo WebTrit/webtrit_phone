@@ -1030,6 +1030,7 @@ class LoginSwitchScreenPageRoute
     List<LoginType>? forceLoginTypes,
     bool isLogoVisible = true,
     bool isAppBarVisible = true,
+    LoginSwitchScreenStyle? style,
     List<PageRouteInfo>? children,
   }) : super(
           LoginSwitchScreenPageRoute.name,
@@ -1038,6 +1039,7 @@ class LoginSwitchScreenPageRoute
             forceLoginTypes: forceLoginTypes,
             isLogoVisible: isLogoVisible,
             isAppBarVisible: isAppBarVisible,
+            style: style,
           ),
           initialChildren: children,
         );
@@ -1053,6 +1055,7 @@ class LoginSwitchScreenPageRoute
         forceLoginTypes: args.forceLoginTypes,
         isLogoVisible: args.isLogoVisible,
         isAppBarVisible: args.isAppBarVisible,
+        style: args.style,
       );
     },
   );
@@ -1064,6 +1067,7 @@ class LoginSwitchScreenPageRouteArgs {
     this.forceLoginTypes,
     this.isLogoVisible = true,
     this.isAppBarVisible = true,
+    this.style,
   });
 
   final Set<SafeAreaSide> bodySafeAreaSides;
@@ -1074,9 +1078,11 @@ class LoginSwitchScreenPageRouteArgs {
 
   final bool isAppBarVisible;
 
+  final LoginSwitchScreenStyle? style;
+
   @override
   String toString() {
-    return 'LoginSwitchScreenPageRouteArgs{bodySafeAreaSides: $bodySafeAreaSides, forceLoginTypes: $forceLoginTypes, isLogoVisible: $isLogoVisible, isAppBarVisible: $isAppBarVisible}';
+    return 'LoginSwitchScreenPageRouteArgs{bodySafeAreaSides: $bodySafeAreaSides, forceLoginTypes: $forceLoginTypes, isLogoVisible: $isLogoVisible, isAppBarVisible: $isAppBarVisible, style: $style}';
   }
 
   @override
@@ -1089,7 +1095,8 @@ class LoginSwitchScreenPageRouteArgs {
         ) &&
         const ListEquality().equals(forceLoginTypes, other.forceLoginTypes) &&
         isLogoVisible == other.isLogoVisible &&
-        isAppBarVisible == other.isAppBarVisible;
+        isAppBarVisible == other.isAppBarVisible &&
+        style == other.style;
   }
 
   @override
@@ -1097,7 +1104,8 @@ class LoginSwitchScreenPageRouteArgs {
       const SetEquality().hash(bodySafeAreaSides) ^
       const ListEquality().hash(forceLoginTypes) ^
       isLogoVisible.hashCode ^
-      isAppBarVisible.hashCode;
+      isAppBarVisible.hashCode ^
+      style.hashCode;
 }
 
 /// generated route for

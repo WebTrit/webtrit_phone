@@ -7,8 +7,34 @@
         "systemNavigationBarColor": "#000000",
         "systemNavigationBarIconBrightness": "light"
       },
+      "mainLogo": {
+        "uri": "asset://assets/images/primary_onboarding_logo.svg",
+        "render": {
+          "scale": 0.42,
+          "padding": {
+            "left": 0.0,
+            "top": 0.0,
+            "right": 0.0,
+            "bottom": 0.0
+          }
+        }
+      },
       "buttonLoginStyleType": "neutralOnDark",
       "buttonSignupStyleType": "neutralOnDark"
+    },
+    "switchPage": {
+      "mainLogo": {
+        "uri": "asset://assets/images/secondary_onboarding_logo.svg",
+        "render": {
+          "scale": 0.25,
+          "padding": {
+            "left": 0.0,
+            "top": 0.0,
+            "right": 0.0,
+            "bottom": 0.0
+          }
+        }
+      }
     },
     "otpSigninVerify": {
       "countdownRepeatIntervalSeconds": 30
@@ -143,6 +169,20 @@
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
         "disabledIconColor": "#848581"
+      }
+    }
+  },
+  "about": {
+    "mainLogo": {
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg",
+      "render": {
+        "scale": 0.25,
+        "padding": {
+          "left": 0.0,
+          "top": 48.0,
+          "right": 0.0,
+          "bottom": 0.0
+        }
       }
     }
   }

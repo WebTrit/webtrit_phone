@@ -2684,9 +2684,7 @@ ImageAssetsConfig _$ImageAssetsConfigFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ImageAssetsConfig {
-  ImageAssetConfig get primaryOnboardingLogo =>
-      throw _privateConstructorUsedError;
-  ImageAssetConfig get secondaryOnboardingLogo =>
+  ImageSource? get defaultPlaceholderImage =>
       throw _privateConstructorUsedError;
   AppIconWidgetConfig get appIcon => throw _privateConstructorUsedError;
   LeadingAvatarStyleConfig get leadingAvatarStyle =>
@@ -2709,13 +2707,11 @@ abstract class $ImageAssetsConfigCopyWith<$Res> {
       _$ImageAssetsConfigCopyWithImpl<$Res, ImageAssetsConfig>;
   @useResult
   $Res call(
-      {ImageAssetConfig primaryOnboardingLogo,
-      ImageAssetConfig secondaryOnboardingLogo,
+      {ImageSource? defaultPlaceholderImage,
       AppIconWidgetConfig appIcon,
       LeadingAvatarStyleConfig leadingAvatarStyle});
 
-  $ImageAssetConfigCopyWith<$Res> get primaryOnboardingLogo;
-  $ImageAssetConfigCopyWith<$Res> get secondaryOnboardingLogo;
+  $ImageSourceCopyWith<$Res>? get defaultPlaceholderImage;
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
   $LeadingAvatarStyleConfigCopyWith<$Res> get leadingAvatarStyle;
 }
@@ -2735,20 +2731,15 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? primaryOnboardingLogo = null,
-    Object? secondaryOnboardingLogo = null,
+    Object? defaultPlaceholderImage = freezed,
     Object? appIcon = null,
     Object? leadingAvatarStyle = null,
   }) {
     return _then(_value.copyWith(
-      primaryOnboardingLogo: null == primaryOnboardingLogo
-          ? _value.primaryOnboardingLogo
-          : primaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
-              as ImageAssetConfig,
-      secondaryOnboardingLogo: null == secondaryOnboardingLogo
-          ? _value.secondaryOnboardingLogo
-          : secondaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
-              as ImageAssetConfig,
+      defaultPlaceholderImage: freezed == defaultPlaceholderImage
+          ? _value.defaultPlaceholderImage
+          : defaultPlaceholderImage // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
       appIcon: null == appIcon
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
@@ -2764,21 +2755,13 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ImageAssetConfigCopyWith<$Res> get primaryOnboardingLogo {
-    return $ImageAssetConfigCopyWith<$Res>(_value.primaryOnboardingLogo,
-        (value) {
-      return _then(_value.copyWith(primaryOnboardingLogo: value) as $Val);
-    });
-  }
+  $ImageSourceCopyWith<$Res>? get defaultPlaceholderImage {
+    if (_value.defaultPlaceholderImage == null) {
+      return null;
+    }
 
-  /// Create a copy of ImageAssetsConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ImageAssetConfigCopyWith<$Res> get secondaryOnboardingLogo {
-    return $ImageAssetConfigCopyWith<$Res>(_value.secondaryOnboardingLogo,
-        (value) {
-      return _then(_value.copyWith(secondaryOnboardingLogo: value) as $Val);
+    return $ImageSourceCopyWith<$Res>(_value.defaultPlaceholderImage!, (value) {
+      return _then(_value.copyWith(defaultPlaceholderImage: value) as $Val);
     });
   }
 
@@ -2813,15 +2796,12 @@ abstract class _$$ImageAssetsConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {ImageAssetConfig primaryOnboardingLogo,
-      ImageAssetConfig secondaryOnboardingLogo,
+      {ImageSource? defaultPlaceholderImage,
       AppIconWidgetConfig appIcon,
       LeadingAvatarStyleConfig leadingAvatarStyle});
 
   @override
-  $ImageAssetConfigCopyWith<$Res> get primaryOnboardingLogo;
-  @override
-  $ImageAssetConfigCopyWith<$Res> get secondaryOnboardingLogo;
+  $ImageSourceCopyWith<$Res>? get defaultPlaceholderImage;
   @override
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
   @override
@@ -2841,20 +2821,15 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? primaryOnboardingLogo = null,
-    Object? secondaryOnboardingLogo = null,
+    Object? defaultPlaceholderImage = freezed,
     Object? appIcon = null,
     Object? leadingAvatarStyle = null,
   }) {
     return _then(_$ImageAssetsConfigImpl(
-      primaryOnboardingLogo: null == primaryOnboardingLogo
-          ? _value.primaryOnboardingLogo
-          : primaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
-              as ImageAssetConfig,
-      secondaryOnboardingLogo: null == secondaryOnboardingLogo
-          ? _value.secondaryOnboardingLogo
-          : secondaryOnboardingLogo // ignore: cast_nullable_to_non_nullable
-              as ImageAssetConfig,
+      defaultPlaceholderImage: freezed == defaultPlaceholderImage
+          ? _value.defaultPlaceholderImage
+          : defaultPlaceholderImage // ignore: cast_nullable_to_non_nullable
+              as ImageSource?,
       appIcon: null == appIcon
           ? _value.appIcon
           : appIcon // ignore: cast_nullable_to_non_nullable
@@ -2872,12 +2847,7 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
   const _$ImageAssetsConfigImpl(
-      {this.primaryOnboardingLogo = const ImageAssetConfig(
-          imageSource:
-              ImageSource(uri: 'asset://assets/primary_onboardin_logo.svg')),
-      this.secondaryOnboardingLogo = const ImageAssetConfig(
-          imageSource:
-              ImageSource(uri: 'asset://assets/secondary_onboardin_logo.svg')),
+      {this.defaultPlaceholderImage,
       this.appIcon = const AppIconWidgetConfig(),
       this.leadingAvatarStyle = const LeadingAvatarStyleConfig()});
 
@@ -2885,11 +2855,7 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
       _$$ImageAssetsConfigImplFromJson(json);
 
   @override
-  @JsonKey()
-  final ImageAssetConfig primaryOnboardingLogo;
-  @override
-  @JsonKey()
-  final ImageAssetConfig secondaryOnboardingLogo;
+  final ImageSource? defaultPlaceholderImage;
   @override
   @JsonKey()
   final AppIconWidgetConfig appIcon;
@@ -2899,7 +2865,7 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
 
   @override
   String toString() {
-    return 'ImageAssetsConfig(primaryOnboardingLogo: $primaryOnboardingLogo, secondaryOnboardingLogo: $secondaryOnboardingLogo, appIcon: $appIcon, leadingAvatarStyle: $leadingAvatarStyle)';
+    return 'ImageAssetsConfig(defaultPlaceholderImage: $defaultPlaceholderImage, appIcon: $appIcon, leadingAvatarStyle: $leadingAvatarStyle)';
   }
 
   @override
@@ -2907,11 +2873,9 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ImageAssetsConfigImpl &&
-            (identical(other.primaryOnboardingLogo, primaryOnboardingLogo) ||
-                other.primaryOnboardingLogo == primaryOnboardingLogo) &&
             (identical(
-                    other.secondaryOnboardingLogo, secondaryOnboardingLogo) ||
-                other.secondaryOnboardingLogo == secondaryOnboardingLogo) &&
+                    other.defaultPlaceholderImage, defaultPlaceholderImage) ||
+                other.defaultPlaceholderImage == defaultPlaceholderImage) &&
             (identical(other.appIcon, appIcon) || other.appIcon == appIcon) &&
             (identical(other.leadingAvatarStyle, leadingAvatarStyle) ||
                 other.leadingAvatarStyle == leadingAvatarStyle));
@@ -2919,8 +2883,8 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, primaryOnboardingLogo,
-      secondaryOnboardingLogo, appIcon, leadingAvatarStyle);
+  int get hashCode => Object.hash(
+      runtimeType, defaultPlaceholderImage, appIcon, leadingAvatarStyle);
 
   /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2941,8 +2905,7 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
 
 abstract class _ImageAssetsConfig implements ImageAssetsConfig {
   const factory _ImageAssetsConfig(
-          {final ImageAssetConfig primaryOnboardingLogo,
-          final ImageAssetConfig secondaryOnboardingLogo,
+          {final ImageSource? defaultPlaceholderImage,
           final AppIconWidgetConfig appIcon,
           final LeadingAvatarStyleConfig leadingAvatarStyle}) =
       _$ImageAssetsConfigImpl;
@@ -2951,9 +2914,7 @@ abstract class _ImageAssetsConfig implements ImageAssetsConfig {
       _$ImageAssetsConfigImpl.fromJson;
 
   @override
-  ImageAssetConfig get primaryOnboardingLogo;
-  @override
-  ImageAssetConfig get secondaryOnboardingLogo;
+  ImageSource? get defaultPlaceholderImage;
   @override
   AppIconWidgetConfig get appIcon;
   @override
