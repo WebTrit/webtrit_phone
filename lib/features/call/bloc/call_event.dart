@@ -474,6 +474,29 @@ class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
       ];
 }
 
+class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyPresence({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.number,
+    required this.presenceInfo,
+  });
+
+  final int? line;
+  final String callId;
+  final String? notify;
+  final SubscriptionState? subscriptionState;
+  final String number;
+  final List<SignalingPresenceInfo> presenceInfo;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId, notify, subscriptionState, number, presenceInfo], listPropToString),
+      ];
+}
+
 class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   const _CallSignalingEventNotifyUnknown({
     required this.line,
@@ -489,7 +512,7 @@ class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   final String? notify;
   final SubscriptionState? subscriptionState;
   final String? contentType;
-  final String content;
+  final String? content;
 
   @override
   List<Object> get props => [

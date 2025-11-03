@@ -17,23 +17,27 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CallState {
   CallServiceState get callServiceState => throw _privateConstructorUsedError;
-  AppLifecycleState? get currentAppLifecycleState => throw _privateConstructorUsedError;
+  AppLifecycleState? get currentAppLifecycleState =>
+      throw _privateConstructorUsedError;
   int get linesCount => throw _privateConstructorUsedError;
   List<ActiveCall> get activeCalls => throw _privateConstructorUsedError;
   bool? get minimized => throw _privateConstructorUsedError;
   bool? get speakerOnBeforeMinimize => throw _privateConstructorUsedError;
   CallAudioDevice? get audioDevice => throw _privateConstructorUsedError;
-  List<CallAudioDevice> get availableAudioDevices => throw _privateConstructorUsedError;
+  List<CallAudioDevice> get availableAudioDevices =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of CallState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CallStateCopyWith<CallState> get copyWith => throw _privateConstructorUsedError;
+  $CallStateCopyWith<CallState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CallStateCopyWith<$Res> {
-  factory $CallStateCopyWith(CallState value, $Res Function(CallState) then) = _$CallStateCopyWithImpl<$Res, CallState>;
+  factory $CallStateCopyWith(CallState value, $Res Function(CallState) then) =
+      _$CallStateCopyWithImpl<$Res, CallState>;
   @useResult
   $Res call(
       {CallServiceState callServiceState,
@@ -50,7 +54,8 @@ abstract class $CallStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CallStateCopyWithImpl<$Res, $Val extends CallState> implements $CallStateCopyWith<$Res> {
+class _$CallStateCopyWithImpl<$Res, $Val extends CallState>
+    implements $CallStateCopyWith<$Res> {
   _$CallStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -134,8 +139,10 @@ class _$CallStateCopyWithImpl<$Res, $Val extends CallState> implements $CallStat
 }
 
 /// @nodoc
-abstract class _$$CallStateImplCopyWith<$Res> implements $CallStateCopyWith<$Res> {
-  factory _$$CallStateImplCopyWith(_$CallStateImpl value, $Res Function(_$CallStateImpl) then) =
+abstract class _$$CallStateImplCopyWith<$Res>
+    implements $CallStateCopyWith<$Res> {
+  factory _$$CallStateImplCopyWith(
+          _$CallStateImpl value, $Res Function(_$CallStateImpl) then) =
       __$$CallStateImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -156,9 +163,12 @@ abstract class _$$CallStateImplCopyWith<$Res> implements $CallStateCopyWith<$Res
 }
 
 /// @nodoc
-class __$$CallStateImplCopyWithImpl<$Res> extends _$CallStateCopyWithImpl<$Res, _$CallStateImpl>
+class __$$CallStateImplCopyWithImpl<$Res>
+    extends _$CallStateCopyWithImpl<$Res, _$CallStateImpl>
     implements _$$CallStateImplCopyWith<$Res> {
-  __$$CallStateImplCopyWithImpl(_$CallStateImpl _value, $Res Function(_$CallStateImpl) _then) : super(_value, _then);
+  __$$CallStateImplCopyWithImpl(
+      _$CallStateImpl _value, $Res Function(_$CallStateImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of CallState
   /// with the given fields replaced by the non-null parameter values.
@@ -254,7 +264,8 @@ class _$CallStateImpl extends _CallState {
   @override
   @JsonKey()
   List<CallAudioDevice> get availableAudioDevices {
-    if (_availableAudioDevices is EqualUnmodifiableListView) return _availableAudioDevices;
+    if (_availableAudioDevices is EqualUnmodifiableListView)
+      return _availableAudioDevices;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_availableAudioDevices);
   }
@@ -269,16 +280,24 @@ class _$CallStateImpl extends _CallState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallStateImpl &&
-            (identical(other.callServiceState, callServiceState) || other.callServiceState == callServiceState) &&
-            (identical(other.currentAppLifecycleState, currentAppLifecycleState) ||
+            (identical(other.callServiceState, callServiceState) ||
+                other.callServiceState == callServiceState) &&
+            (identical(
+                    other.currentAppLifecycleState, currentAppLifecycleState) ||
                 other.currentAppLifecycleState == currentAppLifecycleState) &&
-            (identical(other.linesCount, linesCount) || other.linesCount == linesCount) &&
-            const DeepCollectionEquality().equals(other._activeCalls, _activeCalls) &&
-            (identical(other.minimized, minimized) || other.minimized == minimized) &&
-            (identical(other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) ||
+            (identical(other.linesCount, linesCount) ||
+                other.linesCount == linesCount) &&
+            const DeepCollectionEquality()
+                .equals(other._activeCalls, _activeCalls) &&
+            (identical(other.minimized, minimized) ||
+                other.minimized == minimized) &&
+            (identical(
+                    other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) ||
                 other.speakerOnBeforeMinimize == speakerOnBeforeMinimize) &&
-            (identical(other.audioDevice, audioDevice) || other.audioDevice == audioDevice) &&
-            const DeepCollectionEquality().equals(other._availableAudioDevices, _availableAudioDevices));
+            (identical(other.audioDevice, audioDevice) ||
+                other.audioDevice == audioDevice) &&
+            const DeepCollectionEquality()
+                .equals(other._availableAudioDevices, _availableAudioDevices));
   }
 
   @override
@@ -335,7 +354,8 @@ abstract class _CallState extends CallState {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith => throw _privateConstructorUsedError;
+  _$$CallStateImplCopyWith<_$CallStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -346,7 +366,8 @@ mixin _$ActiveCall {
   CallkeepHandle get handle => throw _privateConstructorUsedError;
   DateTime get createdTime => throw _privateConstructorUsedError;
   bool get video => throw _privateConstructorUsedError;
-  CallProcessingStatus get processingStatus => throw _privateConstructorUsedError;
+  CallProcessingStatus get processingStatus =>
+      throw _privateConstructorUsedError;
   bool? get frontCamera => throw _privateConstructorUsedError;
   bool get held => throw _privateConstructorUsedError;
   bool get muted => throw _privateConstructorUsedError;
@@ -366,12 +387,14 @@ mixin _$ActiveCall {
   /// Create a copy of ActiveCall
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $ActiveCallCopyWith<ActiveCall> get copyWith => throw _privateConstructorUsedError;
+  $ActiveCallCopyWith<ActiveCall> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ActiveCallCopyWith<$Res> {
-  factory $ActiveCallCopyWith(ActiveCall value, $Res Function(ActiveCall) then) =
+  factory $ActiveCallCopyWith(
+          ActiveCall value, $Res Function(ActiveCall) then) =
       _$ActiveCallCopyWithImpl<$Res, ActiveCall>;
   @useResult
   $Res call(
@@ -402,7 +425,8 @@ abstract class $ActiveCallCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall> implements $ActiveCallCopyWith<$Res> {
+class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall>
+    implements $ActiveCallCopyWith<$Res> {
   _$ActiveCallCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -543,8 +567,10 @@ class _$ActiveCallCopyWithImpl<$Res, $Val extends ActiveCall> implements $Active
 }
 
 /// @nodoc
-abstract class _$$ActiveCallImplCopyWith<$Res> implements $ActiveCallCopyWith<$Res> {
-  factory _$$ActiveCallImplCopyWith(_$ActiveCallImpl value, $Res Function(_$ActiveCallImpl) then) =
+abstract class _$$ActiveCallImplCopyWith<$Res>
+    implements $ActiveCallCopyWith<$Res> {
+  factory _$$ActiveCallImplCopyWith(
+          _$ActiveCallImpl value, $Res Function(_$ActiveCallImpl) then) =
       __$$ActiveCallImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -577,9 +603,12 @@ abstract class _$$ActiveCallImplCopyWith<$Res> implements $ActiveCallCopyWith<$R
 }
 
 /// @nodoc
-class __$$ActiveCallImplCopyWithImpl<$Res> extends _$ActiveCallCopyWithImpl<$Res, _$ActiveCallImpl>
+class __$$ActiveCallImplCopyWithImpl<$Res>
+    extends _$ActiveCallCopyWithImpl<$Res, _$ActiveCallImpl>
     implements _$$ActiveCallImplCopyWith<$Res> {
-  __$$ActiveCallImplCopyWithImpl(_$ActiveCallImpl _value, $Res Function(_$ActiveCallImpl) _then) : super(_value, _then);
+  __$$ActiveCallImplCopyWithImpl(
+      _$ActiveCallImpl _value, $Res Function(_$ActiveCallImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of ActiveCall
   /// with the given fields replaced by the non-null parameter values.
@@ -786,28 +815,43 @@ class _$ActiveCallImpl extends _ActiveCall {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ActiveCallImpl &&
-            (identical(other.direction, direction) || other.direction == direction) &&
+            (identical(other.direction, direction) ||
+                other.direction == direction) &&
             (identical(other.line, line) || other.line == line) &&
             (identical(other.callId, callId) || other.callId == callId) &&
             (identical(other.handle, handle) || other.handle == handle) &&
-            (identical(other.createdTime, createdTime) || other.createdTime == createdTime) &&
+            (identical(other.createdTime, createdTime) ||
+                other.createdTime == createdTime) &&
             (identical(other.video, video) || other.video == video) &&
-            (identical(other.processingStatus, processingStatus) || other.processingStatus == processingStatus) &&
-            (identical(other.frontCamera, frontCamera) || other.frontCamera == frontCamera) &&
+            (identical(other.processingStatus, processingStatus) ||
+                other.processingStatus == processingStatus) &&
+            (identical(other.frontCamera, frontCamera) ||
+                other.frontCamera == frontCamera) &&
             (identical(other.held, held) || other.held == held) &&
             (identical(other.muted, muted) || other.muted == muted) &&
-            (identical(other.updating, updating) || other.updating == updating) &&
-            (identical(other.incomingOffer, incomingOffer) || other.incomingOffer == incomingOffer) &&
-            (identical(other.displayName, displayName) || other.displayName == displayName) &&
-            (identical(other.fromReferId, fromReferId) || other.fromReferId == fromReferId) &&
-            (identical(other.fromReplaces, fromReplaces) || other.fromReplaces == fromReplaces) &&
-            (identical(other.fromNumber, fromNumber) || other.fromNumber == fromNumber) &&
-            (identical(other.acceptedTime, acceptedTime) || other.acceptedTime == acceptedTime) &&
-            (identical(other.hungUpTime, hungUpTime) || other.hungUpTime == hungUpTime) &&
-            (identical(other.transfer, transfer) || other.transfer == transfer) &&
+            (identical(other.updating, updating) ||
+                other.updating == updating) &&
+            (identical(other.incomingOffer, incomingOffer) ||
+                other.incomingOffer == incomingOffer) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.fromReferId, fromReferId) ||
+                other.fromReferId == fromReferId) &&
+            (identical(other.fromReplaces, fromReplaces) ||
+                other.fromReplaces == fromReplaces) &&
+            (identical(other.fromNumber, fromNumber) ||
+                other.fromNumber == fromNumber) &&
+            (identical(other.acceptedTime, acceptedTime) ||
+                other.acceptedTime == acceptedTime) &&
+            (identical(other.hungUpTime, hungUpTime) ||
+                other.hungUpTime == hungUpTime) &&
+            (identical(other.transfer, transfer) ||
+                other.transfer == transfer) &&
             const DeepCollectionEquality().equals(other.failure, failure) &&
-            (identical(other.localStream, localStream) || other.localStream == localStream) &&
-            (identical(other.remoteStream, remoteStream) || other.remoteStream == remoteStream));
+            (identical(other.localStream, localStream) ||
+                other.localStream == localStream) &&
+            (identical(other.remoteStream, remoteStream) ||
+                other.remoteStream == remoteStream));
   }
 
   @override
@@ -921,7 +965,8 @@ abstract class _ActiveCall extends ActiveCall {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith => throw _privateConstructorUsedError;
+  _$$ActiveCallImplCopyWith<_$ActiveCallImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -933,19 +978,22 @@ mixin _$CallAudioDevice {
   /// Create a copy of CallAudioDevice
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CallAudioDeviceCopyWith<CallAudioDevice> get copyWith => throw _privateConstructorUsedError;
+  $CallAudioDeviceCopyWith<CallAudioDevice> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CallAudioDeviceCopyWith<$Res> {
-  factory $CallAudioDeviceCopyWith(CallAudioDevice value, $Res Function(CallAudioDevice) then) =
+  factory $CallAudioDeviceCopyWith(
+          CallAudioDevice value, $Res Function(CallAudioDevice) then) =
       _$CallAudioDeviceCopyWithImpl<$Res, CallAudioDevice>;
   @useResult
   $Res call({CallAudioDeviceType type, String? id, String? name});
 }
 
 /// @nodoc
-class _$CallAudioDeviceCopyWithImpl<$Res, $Val extends CallAudioDevice> implements $CallAudioDeviceCopyWith<$Res> {
+class _$CallAudioDeviceCopyWithImpl<$Res, $Val extends CallAudioDevice>
+    implements $CallAudioDeviceCopyWith<$Res> {
   _$CallAudioDeviceCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -980,8 +1028,10 @@ class _$CallAudioDeviceCopyWithImpl<$Res, $Val extends CallAudioDevice> implemen
 }
 
 /// @nodoc
-abstract class _$$CallAudioDeviceImplCopyWith<$Res> implements $CallAudioDeviceCopyWith<$Res> {
-  factory _$$CallAudioDeviceImplCopyWith(_$CallAudioDeviceImpl value, $Res Function(_$CallAudioDeviceImpl) then) =
+abstract class _$$CallAudioDeviceImplCopyWith<$Res>
+    implements $CallAudioDeviceCopyWith<$Res> {
+  factory _$$CallAudioDeviceImplCopyWith(_$CallAudioDeviceImpl value,
+          $Res Function(_$CallAudioDeviceImpl) then) =
       __$$CallAudioDeviceImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -989,9 +1039,11 @@ abstract class _$$CallAudioDeviceImplCopyWith<$Res> implements $CallAudioDeviceC
 }
 
 /// @nodoc
-class __$$CallAudioDeviceImplCopyWithImpl<$Res> extends _$CallAudioDeviceCopyWithImpl<$Res, _$CallAudioDeviceImpl>
+class __$$CallAudioDeviceImplCopyWithImpl<$Res>
+    extends _$CallAudioDeviceCopyWithImpl<$Res, _$CallAudioDeviceImpl>
     implements _$$CallAudioDeviceImplCopyWith<$Res> {
-  __$$CallAudioDeviceImplCopyWithImpl(_$CallAudioDeviceImpl _value, $Res Function(_$CallAudioDeviceImpl) _then)
+  __$$CallAudioDeviceImplCopyWithImpl(
+      _$CallAudioDeviceImpl _value, $Res Function(_$CallAudioDeviceImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of CallAudioDevice
@@ -1056,12 +1108,15 @@ class _$CallAudioDeviceImpl extends _CallAudioDevice {
   @override
   @pragma('vm:prefer-inline')
   _$$CallAudioDeviceImplCopyWith<_$CallAudioDeviceImpl> get copyWith =>
-      __$$CallAudioDeviceImplCopyWithImpl<_$CallAudioDeviceImpl>(this, _$identity);
+      __$$CallAudioDeviceImplCopyWithImpl<_$CallAudioDeviceImpl>(
+          this, _$identity);
 }
 
 abstract class _CallAudioDevice extends CallAudioDevice {
-  factory _CallAudioDevice({required final CallAudioDeviceType type, final String? id, final String? name}) =
-      _$CallAudioDeviceImpl;
+  factory _CallAudioDevice(
+      {required final CallAudioDeviceType type,
+      final String? id,
+      final String? name}) = _$CallAudioDeviceImpl;
   _CallAudioDevice._() : super._();
 
   @override
@@ -1075,5 +1130,6 @@ abstract class _CallAudioDevice extends CallAudioDevice {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CallAudioDeviceImplCopyWith<_$CallAudioDeviceImpl> get copyWith => throw _privateConstructorUsedError;
+  _$$CallAudioDeviceImplCopyWith<_$CallAudioDeviceImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

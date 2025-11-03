@@ -875,6 +875,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventTransferring() => __onCallSignalingEventTransfering(event, emit),
       _CallSignalingEventNotifyDialog() => __onCallSignalingEventNotifyDialog(event, emit),
       _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
+      _CallSignalingEventNotifyPresence() => __onCallSignalingEventNotifyPresence(event, emit),
       _CallSignalingEventNotifyUnknown() => __onCallSignalingEventNotifyUnknown(event, emit),
       _CallSignalingEventRegistering() => __onCallSignalingEventRegistering(event, emit),
       _CallSignalingEventRegistered() => __onCallSignalingEventRegistered(event, emit),
