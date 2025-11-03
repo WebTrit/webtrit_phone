@@ -1,4 +1,4 @@
-# Setup App Features Scheme
+# Setup App Configuration
 
 ## Table of Contents
 
