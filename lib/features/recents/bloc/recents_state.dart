@@ -2,12 +2,15 @@ part of 'recents_bloc.dart';
 
 @freezed
 class RecentsState with _$RecentsState {
-  const RecentsState._();
+  const RecentsState({
+    this.recents,
+    required this.filter,
+  });
 
-  const factory RecentsState({
-    List<Recent>? recents,
-    required RecentsVisibilityFilter filter,
-  }) = _RecentsState;
+  @override
+  final List<Recent>? recents;
+  @override
+  final RecentsVisibilityFilter filter;
 
   List<Recent>? get recentsFiltered {
     return recents?.where((recent) {

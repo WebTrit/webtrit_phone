@@ -4,30 +4,75 @@ typedef SessionOtpProvisionalWithDateTime = (SessionOtpProvisional, DateTime);
 
 @freezed
 class LoginState with _$LoginState {
-  const factory LoginState({
-    @Default(false) bool processing,
-    LoginMode? mode,
-    String? coreUrl,
-    String? tenantId,
-    WebtritSystemInfo? systemInfo,
-    List<LoginType>? supportedLoginTypes,
-    SessionOtpProvisionalWithDateTime? otpSigninSessionOtpProvisionalWithDateTime,
-    @Default(true) bool passwordSigninPasswordInputObscureText,
-    SessionOtpProvisionalWithDateTime? signupSessionOtpProvisionalWithDateTime,
-    String? token,
-    String? userId,
+  const LoginState({
+    this.processing = false,
+    this.mode,
+    this.coreUrl,
+    this.tenantId,
+    this.systemInfo,
+    this.supportedLoginTypes,
+    this.otpSigninSessionOtpProvisionalWithDateTime,
+    this.passwordSigninPasswordInputObscureText = true,
+    this.signupSessionOtpProvisionalWithDateTime,
+    this.token,
+    this.userId,
     // Used to represent an embedded launch page or a login type within tabbed navigation
-    EmbeddedData? embedded,
+    this.embedded,
     // Extras and callback data that returned from the embedded page
-    Map<String, dynamic>? embeddedExtras,
-    Map<String, dynamic>? embeddedCallbackData,
-    Object? embeddedRequestError,
-    @Default(UrlInput.pure()) UrlInput coreUrlInput,
-    @Default(UserRefInput.pure()) UserRefInput otpSigninUserRefInput,
-    @Default(CodeInput.pure()) CodeInput otpSigninCodeInput,
-    @Default(UserRefInput.pure()) UserRefInput passwordSigninUserRefInput,
-    @Default(PasswordInput.pure()) PasswordInput passwordSigninPasswordInput,
-    @Default(EmailInput.pure()) EmailInput signupEmailInput,
-    @Default(CodeInput.pure()) CodeInput signupCodeInput,
-  }) = _LoginState;
+    this.embeddedExtras,
+    this.embeddedCallbackData,
+    this.embeddedRequestError,
+    this.coreUrlInput = const UrlInput.pure(),
+    this.otpSigninUserRefInput = const UserRefInput.pure(),
+    this.otpSigninCodeInput = const CodeInput.pure(),
+    this.passwordSigninUserRefInput = const UserRefInput.pure(),
+    this.passwordSigninPasswordInput = const PasswordInput.pure(),
+    this.signupEmailInput = const EmailInput.pure(),
+    this.signupCodeInput = const CodeInput.pure(),
+  });
+
+  @override
+  final bool processing;
+  @override
+  final LoginMode? mode;
+  @override
+  final String? coreUrl;
+  @override
+  final String? tenantId;
+  @override
+  final WebtritSystemInfo? systemInfo;
+  @override
+  final List<LoginType>? supportedLoginTypes;
+  @override
+  final SessionOtpProvisionalWithDateTime? otpSigninSessionOtpProvisionalWithDateTime;
+  @override
+  final bool passwordSigninPasswordInputObscureText;
+  @override
+  final SessionOtpProvisionalWithDateTime? signupSessionOtpProvisionalWithDateTime;
+  @override
+  final String? token;
+  @override
+  final String? userId;
+  @override
+  final EmbeddedData? embedded;
+  @override
+  final Map<String, dynamic>? embeddedExtras;
+  @override
+  final Map<String, dynamic>? embeddedCallbackData;
+  @override
+  final Object? embeddedRequestError;
+  @override
+  final UrlInput coreUrlInput;
+  @override
+  final UserRefInput otpSigninUserRefInput;
+  @override
+  final CodeInput otpSigninCodeInput;
+  @override
+  final UserRefInput passwordSigninUserRefInput;
+  @override
+  final PasswordInput passwordSigninPasswordInput;
+  @override
+  final EmailInput signupEmailInput;
+  @override
+  final CodeInput signupCodeInput;
 }

@@ -32,12 +32,12 @@ class CallScreen extends StatefulWidget {
 class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
   @override
   void didPush() {
-    context.read<CallBloc>().add(CallScreenEvent.didPush());
+    context.read<CallBloc>().add(const CallScreenEvent.didPush());
   }
 
   @override
   void didPop() {
-    context.read<CallBloc>().add(CallScreenEvent.didPop());
+    context.read<CallBloc>().add(const CallScreenEvent.didPop());
   }
 
   @override

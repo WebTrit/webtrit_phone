@@ -2,8 +2,13 @@ part of 'contacts_bloc.dart';
 
 @freezed
 class ContactsState with _$ContactsState {
-  const factory ContactsState({
-    @Default('') String search,
-    required ContactSourceType sourceType,
-  }) = _ContactsState;
+  const ContactsState({
+    this.search = '',
+    required this.sourceType,
+  });
+
+  @override
+  final String search;
+  @override
+  final ContactSourceType sourceType;
 }

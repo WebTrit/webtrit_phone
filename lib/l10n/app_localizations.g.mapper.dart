@@ -14,8 +14,11 @@ extension BuildContextExtension on BuildContext {
   Locale get locale => Localizations.localeOf(this);
   String? parseL10n(String translationKey, {List<Object>? arguments}) {
     final localizations = AppLocalizations.of(this)!;
-    return L10nHelper.parseL10n(localizations, translationKey,
-        arguments: arguments);
+    return L10nHelper.parseL10n(
+      localizations,
+      translationKey,
+      arguments: arguments,
+    );
   }
 }
 
@@ -26,8 +29,11 @@ extension AppLocalizationsExtension on AppLocalizations {
 }
 
 class L10nHelper {
-  static String parseL10n(AppLocalizations localizations, String translationKey,
-      {List<Object>? arguments}) {
+  static String parseL10n(
+    AppLocalizations localizations,
+    String translationKey, {
+    List<Object>? arguments,
+  }) {
     const mapper = AppLocalizationsMapper();
     final object = mapper.toLocalizationMap(localizations)[translationKey];
     if (object is String || object == null) return object;
@@ -1173,18 +1179,22 @@ class AppLocalizationsMapper {
           localizations.login_Button_otpSigninVerifyRepeatInterval(seconds),
       'login_Button_signupVerifyRepeatInterval': (seconds) =>
           localizations.login_Button_signupVerifyRepeatInterval(seconds),
-      'login_CoreVersionUnsupportedExceptionError': (actual,
-              supportedConstraint) =>
-          localizations.login_CoreVersionUnsupportedExceptionError(
-              actual, supportedConstraint),
+      'login_CoreVersionUnsupportedExceptionError':
+          (actual, supportedConstraint) =>
+              localizations.login_CoreVersionUnsupportedExceptionError(
+                actual,
+                supportedConstraint,
+              ),
       'login_Text_coreUrlAssignPostDescription': (email) =>
           localizations.login_Text_coreUrlAssignPostDescription(email),
       'login_Text_otpSigninVerifyPostDescriptionFromEmail': (email) =>
-          localizations
-              .login_Text_otpSigninVerifyPostDescriptionFromEmail(email),
+          localizations.login_Text_otpSigninVerifyPostDescriptionFromEmail(
+            email,
+          ),
       'login_Text_otpSigninVerifyPreDescriptionUserRef': (userRef) =>
-          localizations
-              .login_Text_otpSigninVerifyPreDescriptionUserRef(userRef),
+          localizations.login_Text_otpSigninVerifyPreDescriptionUserRef(
+            userRef,
+          ),
       'login_Text_signupVerifyPostDescriptionFromEmail': (email) =>
           localizations.login_Text_signupVerifyPostDescriptionFromEmail(email),
       'login_Text_signupVerifyPreDescriptionEmail': (email) =>
@@ -1192,19 +1202,24 @@ class AppLocalizationsMapper {
       'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError':
           (actual, supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-                  actual, supportedConstraint),
+                actual,
+                supportedConstraint,
+              ),
       'notifications_errorSnackBar_signalingDisconnectWithCodeName':
           (codeName) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithCodeName(
-                  codeName),
+                codeName,
+              ),
       'notifications_errorSnackBar_signalingDisconnectWithSystemReason':
           (reason) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-                  reason),
+                reason,
+              ),
       'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason':
           (reason) => localizations
               .notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-                  reason),
+                reason,
+              ),
       'numberActions_callFrom': (number) =>
           localizations.numberActions_callFrom(number),
       'recents_BodyCenter_empty': (filter) =>

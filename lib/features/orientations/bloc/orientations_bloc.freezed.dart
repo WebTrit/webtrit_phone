@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,139 +9,191 @@ part of 'orientations_bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$OrientationsState {
-  PreferredOrientation? get lastOrientation =>
-      throw _privateConstructorUsedError;
 
-  /// Create a copy of OrientationsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $OrientationsStateCopyWith<OrientationsState> get copyWith =>
-      throw _privateConstructorUsedError;
+ PreferredOrientation? get lastOrientation;
+/// Create a copy of OrientationsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$OrientationsStateCopyWith<OrientationsState> get copyWith => _$OrientationsStateCopyWithImpl<OrientationsState>(this as OrientationsState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrientationsState&&(identical(other.lastOrientation, lastOrientation) || other.lastOrientation == lastOrientation));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,lastOrientation);
+
+@override
+String toString() {
+  return 'OrientationsState(lastOrientation: $lastOrientation)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $OrientationsStateCopyWith<$Res> {
-  factory $OrientationsStateCopyWith(
-          OrientationsState value, $Res Function(OrientationsState) then) =
-      _$OrientationsStateCopyWithImpl<$Res, OrientationsState>;
-  @useResult
-  $Res call({PreferredOrientation? lastOrientation});
-}
+abstract mixin class $OrientationsStateCopyWith<$Res>  {
+  factory $OrientationsStateCopyWith(OrientationsState value, $Res Function(OrientationsState) _then) = _$OrientationsStateCopyWithImpl;
+@useResult
+$Res call({
+ PreferredOrientation? lastOrientation
+});
 
+
+
+
+}
 /// @nodoc
-class _$OrientationsStateCopyWithImpl<$Res, $Val extends OrientationsState>
+class _$OrientationsStateCopyWithImpl<$Res>
     implements $OrientationsStateCopyWith<$Res> {
-  _$OrientationsStateCopyWithImpl(this._value, this._then);
+  _$OrientationsStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final OrientationsState _self;
+  final $Res Function(OrientationsState) _then;
 
-  /// Create a copy of OrientationsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? lastOrientation = freezed,
-  }) {
-    return _then(_value.copyWith(
-      lastOrientation: freezed == lastOrientation
-          ? _value.lastOrientation
-          : lastOrientation // ignore: cast_nullable_to_non_nullable
-              as PreferredOrientation?,
-    ) as $Val);
-  }
+/// Create a copy of OrientationsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? lastOrientation = freezed,}) {
+  return _then(OrientationsState(
+lastOrientation: freezed == lastOrientation ? _self.lastOrientation : lastOrientation // ignore: cast_nullable_to_non_nullable
+as PreferredOrientation?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$OrientationsStateImplCopyWith<$Res>
-    implements $OrientationsStateCopyWith<$Res> {
-  factory _$$OrientationsStateImplCopyWith(_$OrientationsStateImpl value,
-          $Res Function(_$OrientationsStateImpl) then) =
-      __$$OrientationsStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({PreferredOrientation? lastOrientation});
 }
 
-/// @nodoc
-class __$$OrientationsStateImplCopyWithImpl<$Res>
-    extends _$OrientationsStateCopyWithImpl<$Res, _$OrientationsStateImpl>
-    implements _$$OrientationsStateImplCopyWith<$Res> {
-  __$$OrientationsStateImplCopyWithImpl(_$OrientationsStateImpl _value,
-      $Res Function(_$OrientationsStateImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of OrientationsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? lastOrientation = freezed,
-  }) {
-    return _then(_$OrientationsStateImpl(
-      freezed == lastOrientation
-          ? _value.lastOrientation
-          : lastOrientation // ignore: cast_nullable_to_non_nullable
-              as PreferredOrientation?,
-    ));
-  }
+/// Adds pattern-matching-related methods to [OrientationsState].
+extension OrientationsStatePatterns on OrientationsState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-
-class _$OrientationsStateImpl implements _OrientationsState {
-  const _$OrientationsStateImpl([this.lastOrientation]);
-
-  @override
-  final PreferredOrientation? lastOrientation;
-
-  @override
-  String toString() {
-    return 'OrientationsState(lastOrientation: $lastOrientation)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$OrientationsStateImpl &&
-            (identical(other.lastOrientation, lastOrientation) ||
-                other.lastOrientation == lastOrientation));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, lastOrientation);
-
-  /// Create a copy of OrientationsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$OrientationsStateImplCopyWith<_$OrientationsStateImpl> get copyWith =>
-      __$$OrientationsStateImplCopyWithImpl<_$OrientationsStateImpl>(
-          this, _$identity);
 }
 
-abstract class _OrientationsState implements OrientationsState {
-  const factory _OrientationsState(
-      [final PreferredOrientation? lastOrientation]) = _$OrientationsStateImpl;
-
-  @override
-  PreferredOrientation? get lastOrientation;
-
-  /// Create a copy of OrientationsState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$OrientationsStateImplCopyWith<_$OrientationsStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on
