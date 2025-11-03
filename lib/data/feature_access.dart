@@ -71,17 +71,17 @@ class FeatureAccess {
   final TermsFeature termsFeature;
   final SystemNotificationsFeature systemNotificationsFeature;
 
-  static FeatureAccess init(AppConfig appConfig, AppPreferences preferences) {
+  static FeatureAccess init(AppConfig appConfig, List<EmbeddedResource> embeddedResources, AppPreferences preferences) {
     try {
       final coreSupport = CoreSupport.fromPrefs(preferences);
 
-      final embeddedFeature = _tryConfigureEmbeddedFeature(appConfig);
+      final embeddedFeature = _tryConfigureEmbeddedFeature(embeddedResources);
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig, embeddedFeature.embeddedResources);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences, embeddedFeature);
-      final settingsFeature = _tryConfigureSettingsFeature(appConfig, coreSupport);
+      final settingsFeature = _tryConfigureSettingsFeature(appConfig, embeddedResources, coreSupport);
       final callFeature = _tryConfigureCallFeature(appConfig, preferences);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, coreSupport);
-      final termsFeature = _tryConfigureTermsFeature(appConfig);
+      final termsFeature = _tryConfigureTermsFeature(embeddedResources);
       final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(coreSupport, appConfig);
 
       _instance = FeatureAccess._(
@@ -180,6 +180,7 @@ class FeatureAccess {
 
   static SettingsFeature _tryConfigureSettingsFeature(
     AppConfig appConfig,
+    List<EmbeddedResource> embeddedResources,
     CoreSupport coreSupport,
   ) {
     final settingSections = <SettingsSection>[];
@@ -197,7 +198,7 @@ class FeatureAccess {
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
           icon: item.icon.toIconData(),
-          data: _getEmbeddedDataResource(appConfig, item, flavor),
+          data: _getEmbeddedDataResource(appConfig, embeddedResources, item, flavor),
           flavor: SettingsFlavor.values.byName(item.type),
         );
 
@@ -232,16 +233,16 @@ class FeatureAccess {
 
   static EmbeddedData? _getEmbeddedDataResource(
     AppConfig appConfig,
+    List<EmbeddedResource> embeddedResources,
     AppConfigSettingsItem item,
     SettingsFlavor flavor,
   ) {
     // Retrieve the embedded resource URL by matching the provided item ID.
-    var embeddedDataResource =
-        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId);
+    var embeddedDataResource = embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId);
 
     // If no direct match is found and the flavor is 'terms', attempt to fetch the privacy policy resource.
     if (embeddedDataResource?.uriOrNull == null && flavor == SettingsFlavor.terms) {
-      return _tryConfigureTermsFeature(appConfig).configData;
+      return _tryConfigureTermsFeature(embeddedResources).configData;
     }
 
     // If strategy is not provided, default to hard reload.
@@ -359,10 +360,9 @@ class FeatureAccess {
     );
   }
 
-  static TermsFeature _tryConfigureTermsFeature(AppConfig appConfig) {
+  static TermsFeature _tryConfigureTermsFeature(List<EmbeddedResource> embeddedResources) {
     // Attempt to find the terms resource from the embedded resources list.
-    final termsResource =
-        appConfig.embeddedResources.firstWhereOrNull((resource) => resource.type == EmbeddedResourceType.terms);
+    final termsResource = embeddedResources.firstWhereOrNull((resource) => resource.type == EmbeddedResourceType.terms);
 
     // TODO(Serdun): It would be better to add a separate privacy policy feature in AppConfig,
     // with a direct link to the embedded resource. Implement logic to check if the feature access
@@ -384,8 +384,8 @@ class FeatureAccess {
     ));
   }
 
-  static EmbeddedFeature _tryConfigureEmbeddedFeature(AppConfig appConfig) {
-    final embeddedResources = appConfig.embeddedResources.map((resource) {
+  static EmbeddedFeature _tryConfigureEmbeddedFeature(List<EmbeddedResource> embeddedResources) {
+    final embeddedData = embeddedResources.map((resource) {
       // If strategy is not provided, default to hard reload.
       final reconnectStrategy = resource.reconnectStrategy != null
           ? ReconnectStrategy.values.byName(resource.reconnectStrategy!)
@@ -399,7 +399,7 @@ class FeatureAccess {
       );
     }).toList();
 
-    return EmbeddedFeature(embeddedResources);
+    return EmbeddedFeature(embeddedData);
   }
 
   static SystemNotificationsFeature _tryConfigureSystemNotificationsFeature(
