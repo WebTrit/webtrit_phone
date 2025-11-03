@@ -1,3 +1,4 @@
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -15,18 +16,18 @@ class SignalingPresenceInfoMapper {
       activities: data.activities
           .map((activity) {
             return switch (activity) {
-              'away' => PresenceActivity.away,
-              'busy' => PresenceActivity.busy,
-              'sleeping' => PresenceActivity.sleeping,
-              'do-not-disturb' => PresenceActivity.doNotDisturb,
-              'permanent-absence' => PresenceActivity.permanentAbsence,
-              'on-the-phone' => PresenceActivity.onThePhone,
-              'meal' => PresenceActivity.meal,
-              'meeting' => PresenceActivity.meeting,
-              'appointment' => PresenceActivity.appointment,
-              'vacation' => PresenceActivity.vacation,
-              'travel' => PresenceActivity.travel,
-              'in-transit' => PresenceActivity.inTransit,
+              kPresenceActivityKeyAway => PresenceActivity.away,
+              kPresenceActivityKeyBusy => PresenceActivity.busy,
+              kPresenceActivityKeySleeping => PresenceActivity.sleeping,
+              kPresenceActivityKeyDoNotDisturb => PresenceActivity.doNotDisturb,
+              kPresenceActivityKeyPermanentAbsence => PresenceActivity.permanentAbsence,
+              kPresenceActivityKeyOnThePhone => PresenceActivity.onThePhone,
+              kPresenceActivityKeyMeal => PresenceActivity.meal,
+              kPresenceActivityKeyMeeting => PresenceActivity.meeting,
+              kPresenceActivityKeyAppointment => PresenceActivity.appointment,
+              kPresenceActivityKeyVacation => PresenceActivity.vacation,
+              kPresenceActivityKeyTravel => PresenceActivity.travel,
+              kPresenceActivityKeyInTransit => PresenceActivity.inTransit,
               _ => null,
             };
           })
