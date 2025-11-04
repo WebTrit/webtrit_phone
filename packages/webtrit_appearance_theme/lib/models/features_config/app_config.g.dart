@@ -22,10 +22,6 @@ _$AppConfigImpl _$$AppConfigImplFromJson(Map<String, dynamic> json) =>
       callConfig: json['callConfig'] == null
           ? const AppConfigCall()
           : AppConfigCall.fromJson(json['callConfig'] as Map<String, dynamic>),
-      embeddedResources: (json['embeddedResources'] as List<dynamic>?)
-              ?.map((e) => EmbeddedResource.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
     );
 
 Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
@@ -34,8 +30,6 @@ Map<String, dynamic> _$$AppConfigImplToJson(_$AppConfigImpl instance) =>
       'mainConfig': instance.mainConfig.toJson(),
       'settingsConfig': instance.settingsConfig.toJson(),
       'callConfig': instance.callConfig.toJson(),
-      'embeddedResources':
-          instance.embeddedResources.map((e) => e.toJson()).toList(),
     };
 
 _$AppConfigLoginImpl _$$AppConfigLoginImplFromJson(Map<String, dynamic> json) =>

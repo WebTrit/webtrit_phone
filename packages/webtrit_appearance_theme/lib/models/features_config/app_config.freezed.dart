@@ -24,8 +24,6 @@ mixin _$AppConfig {
   AppConfigMain get mainConfig => throw _privateConstructorUsedError;
   AppConfigSettings get settingsConfig => throw _privateConstructorUsedError;
   AppConfigCall get callConfig => throw _privateConstructorUsedError;
-  List<EmbeddedResource> get embeddedResources =>
-      throw _privateConstructorUsedError;
 
   /// Serializes this AppConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,8 +44,7 @@ abstract class $AppConfigCopyWith<$Res> {
       {AppConfigLogin loginConfig,
       AppConfigMain mainConfig,
       AppConfigSettings settingsConfig,
-      AppConfigCall callConfig,
-      List<EmbeddedResource> embeddedResources});
+      AppConfigCall callConfig});
 
   $AppConfigLoginCopyWith<$Res> get loginConfig;
   $AppConfigMainCopyWith<$Res> get mainConfig;
@@ -74,7 +71,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     Object? mainConfig = null,
     Object? settingsConfig = null,
     Object? callConfig = null,
-    Object? embeddedResources = null,
   }) {
     return _then(_value.copyWith(
       loginConfig: null == loginConfig
@@ -93,10 +89,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
           ? _value.callConfig
           : callConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigCall,
-      embeddedResources: null == embeddedResources
-          ? _value.embeddedResources
-          : embeddedResources // ignore: cast_nullable_to_non_nullable
-              as List<EmbeddedResource>,
     ) as $Val);
   }
 
@@ -153,8 +145,7 @@ abstract class _$$AppConfigImplCopyWith<$Res>
       {AppConfigLogin loginConfig,
       AppConfigMain mainConfig,
       AppConfigSettings settingsConfig,
-      AppConfigCall callConfig,
-      List<EmbeddedResource> embeddedResources});
+      AppConfigCall callConfig});
 
   @override
   $AppConfigLoginCopyWith<$Res> get loginConfig;
@@ -183,7 +174,6 @@ class __$$AppConfigImplCopyWithImpl<$Res>
     Object? mainConfig = null,
     Object? settingsConfig = null,
     Object? callConfig = null,
-    Object? embeddedResources = null,
   }) {
     return _then(_$AppConfigImpl(
       loginConfig: null == loginConfig
@@ -202,10 +192,6 @@ class __$$AppConfigImplCopyWithImpl<$Res>
           ? _value.callConfig
           : callConfig // ignore: cast_nullable_to_non_nullable
               as AppConfigCall,
-      embeddedResources: null == embeddedResources
-          ? _value._embeddedResources
-          : embeddedResources // ignore: cast_nullable_to_non_nullable
-              as List<EmbeddedResource>,
     ));
   }
 }
@@ -218,10 +204,8 @@ class _$AppConfigImpl extends _AppConfig {
       {this.loginConfig = const AppConfigLogin(),
       this.mainConfig = const AppConfigMain(),
       this.settingsConfig = const AppConfigSettings(),
-      this.callConfig = const AppConfigCall(),
-      final List<EmbeddedResource> embeddedResources = const []})
-      : _embeddedResources = embeddedResources,
-        super._();
+      this.callConfig = const AppConfigCall()})
+      : super._();
 
   factory _$AppConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigImplFromJson(json);
@@ -238,19 +222,10 @@ class _$AppConfigImpl extends _AppConfig {
   @override
   @JsonKey()
   final AppConfigCall callConfig;
-  final List<EmbeddedResource> _embeddedResources;
-  @override
-  @JsonKey()
-  List<EmbeddedResource> get embeddedResources {
-    if (_embeddedResources is EqualUnmodifiableListView)
-      return _embeddedResources;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_embeddedResources);
-  }
 
   @override
   String toString() {
-    return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig, embeddedResources: $embeddedResources)';
+    return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig)';
   }
 
   @override
@@ -265,20 +240,13 @@ class _$AppConfigImpl extends _AppConfig {
             (identical(other.settingsConfig, settingsConfig) ||
                 other.settingsConfig == settingsConfig) &&
             (identical(other.callConfig, callConfig) ||
-                other.callConfig == callConfig) &&
-            const DeepCollectionEquality()
-                .equals(other._embeddedResources, _embeddedResources));
+                other.callConfig == callConfig));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      loginConfig,
-      mainConfig,
-      settingsConfig,
-      callConfig,
-      const DeepCollectionEquality().hash(_embeddedResources));
+      runtimeType, loginConfig, mainConfig, settingsConfig, callConfig);
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -301,8 +269,7 @@ abstract class _AppConfig extends AppConfig {
       {final AppConfigLogin loginConfig,
       final AppConfigMain mainConfig,
       final AppConfigSettings settingsConfig,
-      final AppConfigCall callConfig,
-      final List<EmbeddedResource> embeddedResources}) = _$AppConfigImpl;
+      final AppConfigCall callConfig}) = _$AppConfigImpl;
   const _AppConfig._() : super._();
 
   factory _AppConfig.fromJson(Map<String, dynamic> json) =
@@ -316,8 +283,6 @@ abstract class _AppConfig extends AppConfig {
   AppConfigSettings get settingsConfig;
   @override
   AppConfigCall get callConfig;
-  @override
-  List<EmbeddedResource> get embeddedResources;
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.

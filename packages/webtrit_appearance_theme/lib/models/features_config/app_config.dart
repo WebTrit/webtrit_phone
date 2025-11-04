@@ -2,8 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_appearance_theme/converters/converters.dart';
 
-import 'embedded_resource.dart';
-
 part 'app_config.freezed.dart';
 
 part 'app_config.g.dart';
@@ -18,7 +16,6 @@ class AppConfig with _$AppConfig {
     @Default(AppConfigMain()) AppConfigMain mainConfig,
     @Default(AppConfigSettings()) AppConfigSettings settingsConfig,
     @Default(AppConfigCall()) AppConfigCall callConfig,
-    @Default([]) List<EmbeddedResource> embeddedResources,
   }) = _AppConfig;
 
   factory AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);

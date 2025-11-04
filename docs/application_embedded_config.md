@@ -1,56 +1,93 @@
-# Embedded Pages Integration
+# Embedded Resources
 
 ## Overview
 
 This documentation describes how to integrate embedded web pages into the **WebTrit Call App** using
 a WebView. These pages can extend the app with client-specific features. Embedded pages are
-configured via `app.config.json`, and can appear as a bottom menu tab or a settings item.
+configured via `app.embedded.config.json`, and can appear as a bottom menu tab, settings item or a login flow.
 
 ---
 
-## App Configuration
-
-Embedded pages are declared in the app configuration. A typical setup includes two parts.
-
-### 1) Reference in `mainConfig.bottomMenu.tabs` (or settings section)
+## Example Embedded Resources Definition
 
 ```json
 {
-  "bottomMenu": {
-    "cacheSelectedTab": true,
-    "tabs": [
-      {
-        "enabled": true,
-        "initial": false,
-        "type": "favorites",
-        "titleL10n": "main_BottomNavigationBarItemLabel_favorites",
-        "icon": "0xe5fd"
-      },
-      {
-        "enabled": true,
-        "initial": false,
-        "type": "embedded",
-        "titleL10n": "embedded_TabTitle",
-        "icon": "0xe2ce",
-        "embeddedResourceId": 2
+  "embeddedResources": [
+    {
+      "id": "example_embedded_login",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
+      "toolbar": {
+        "titleL10n": "login_requestCredentials_title"
       }
-    ]
-  }
+    },
+    {
+      "id": "example_embedded_payload_data",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_payload_data.html",
+      "payload": [
+        "coreToken"
+      ]
+    },
+    {
+      "id": "example_embedded_call",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_call.html"
+    },
+    {
+      "id": "privacy-policy-for-webtrit-app",
+      "uri": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/",
+      "type": "terms",
+      "toolbar": {
+        "titleL10n": "settings_ListViewTileTitle_termsConditions"
+      }
+    },
+    {
+      "id": "example_embedded_registration",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_registration.html",
+      "toolbar": {
+        "titleL10n": "login_requestCredentials_title"
+      }
+    },
+    {
+      "id": "example_embedded_statistics",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_statistics.html",
+      "toolbar": {
+        "titleL10n": "login_requestCredentials_title"
+      }
+    },
+    {
+      "id": "example_embedded_rating",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_rating.html",
+      "toolbar": {
+        "titleL10n": "login_requestCredentials_title"
+      }
+    },
+    {
+      "id": "example_embedded_media_query",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_media_query.html"
+    },
+    {
+      "id": "example_embedded_spa",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_spa.html",
+      "enableConsoleLogCapture": true,
+      "reconnectStrategy": "notifyOnly",
+      "payload": [
+        "coreToken"
+      ]
+    }
+  ]
 }
 ```
 
-### 2) Definition of the embedded page resource
+---
+
+## Definition of the Embedded Page Resource
 
 ```json
 {
-  "id": 2,
+  "id": "example_embedded_payload_data",
   "uri": "https://webtrit-app.web.app/example/example_embedded_payload_data.html",
   "payload": [
     "coreToken"
-  ],
-  "toolbar": {
-    "showToolbar": false
-  }
+  ]
 }
 ```
 
@@ -324,7 +361,6 @@ scheme handled by the app.
 
 - JavaScript is injected **only after** confirming that the WebView has successfully loaded (plus
   debounce).
-- The WebView hides the native toolbar if configured via `toolbar.showToolbar: false`.
 - Errors during load trigger the fallback UI with a reload option.
 
 ---
@@ -358,9 +394,6 @@ key to the embedded resource definition:
   "payload": [
     "coreToken"
   ],
-  "toolbar": {
-    "showToolbar": false
-  },
   "reconnectStrategy": "notifyOnly",
   "enableConsoleLogCapture": true
 }

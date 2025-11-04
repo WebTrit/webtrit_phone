@@ -39,7 +39,7 @@ Future<void> bootstrap() async {
   final appThemes = await AppThemes.init();
 
   final appPreferences = await AppPreferencesFactory.init();
-  final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
+  final featureAccess = FeatureAccess.init(appThemes.appConfig, appThemes.embeddedResources, appPreferences);
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();

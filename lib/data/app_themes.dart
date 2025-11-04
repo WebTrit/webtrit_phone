@@ -27,6 +27,7 @@ class AppThemes {
     final themePageDarkConfigJson = await _getJson(Assets.themes.originalPageDarkConfig);
 
     final appConfigJson = await _getJson(Assets.themes.appConfig);
+    final eppEmbeddedConfigJson = await _getJson(Assets.themes.appEmbeddedConfig);
 
     final themeColorSchemeLightConfig = ColorSchemeConfig.fromJson(themeColorSchemeLightConfigJson);
     final themeColorSchemeDarkConfig = ColorSchemeConfig.fromJson(themeColorSchemeDarkConfigJson);
@@ -38,6 +39,9 @@ class AppThemes {
     final themePageDarkConfig = ThemePageConfig.fromJson(themePageDarkConfigJson);
 
     final appConfig = AppConfig.fromJson(appConfigJson);
+    final embeddedResources = (eppEmbeddedConfigJson as List)
+        .map<EmbeddedResource>((e) => EmbeddedResource.fromJson(Map<String, dynamic>.from(e)))
+        .toList(growable: false);
 
     final settings = ThemeSettings(
       lightColorSchemeConfig: themeColorSchemeLightConfig,
@@ -52,7 +56,7 @@ class AppThemes {
 
     await _preloadFonts(themeWidgetLightConfig, themeWidgetDarkConfig);
 
-    _instance = AppThemes._(themes, appConfig);
+    _instance = AppThemes._(themes, appConfig, embeddedResources);
     return _instance;
   }
 
@@ -92,10 +96,11 @@ class AppThemes {
     return _instance;
   }
 
-  AppThemes._(this.values, this.appConfig);
+  AppThemes._(this.values, this.appConfig, this.embeddedResources);
 
   final List<AppTheme> values;
   final AppConfig appConfig;
+  final List<EmbeddedResource> embeddedResources;
 }
 
 class AppTheme extends Equatable {

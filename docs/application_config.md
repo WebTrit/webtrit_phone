@@ -1,4 +1,4 @@
-# Setup App Features Scheme
+# Setup App Configuration
 
 ## Table of Contents
 
@@ -10,8 +10,7 @@
 - [Setup Settings Configuration](#setup-settings-configuration)
 - [Settings Sections](#settings-sections)
 - [Settings Items](#settings-items)
-- [Embedded pages](#embedded-pages)
-- [Embedded Resources](#embedded-resources)
+- [Embedded Pages](#embedded-pages)
 
 ---
 
@@ -331,46 +330,10 @@ Each settings item includes:
 - `titleL10n`: Localized name
 - `icon`: Item icon
 
-## Embedded pages
+## Embedded Pages
 
 Embedded pages allow extending the WebTrit app with custom web content. These pages can be
 integrated either as a bottom
 menu tab or as a settings item.
-[Embedded configuration](embedded_pages.md)
-
-## Embedded Resources
-
-The `embeddedResources` section defines the resources that can be embedded within the application.
-Each resource can
-either be a local file or a URL to an external page. If using a local file, ensure it is placed in
-the `assets`
-directory and provide the correct path.
-
-```json
-{
-  "embeddedResources": [
-    {
-      "id": 1,
-      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
-      "toolbar": {
-        "showToolbar": true,
-        "titleL10n": "login_requestCredentials_title"
-      }
-    },
-    {
-      "id": 4,
-      "uri": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/",
-      "toolbar": {
-        "showToolbar": true,
-        "titleL10n": "settings_ListViewTileTitle_termsConditions"
-      }
-    }
-  ]
-}
-```
-
-- `id`: Unique resource identifier.
-- `uri`: URL or resource path.
-- `toolbar`: Toolbar settings for the embedded page.
-    - `showToolbar`: Boolean to show or hide the toolbar.
-    - `titleL10n`: Localized title for the toolbar.
+See [embedded_resources.md](application_embedded_config.md) for full details of the embedded web
+pages configuration.
