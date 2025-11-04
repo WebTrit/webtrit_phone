@@ -50,7 +50,7 @@ dependencies:
       url: https://github.com/WebTrit/flutter-webrtc.git
       ref: main_ext_rebase_03.11.25
   formz: ^0.7.0
-  freezed_annotation: ^2.4.1
+  freezed_annotation: ^3.1.0
   google_fonts: ^6.2.1
   intl: any
   json_annotation: ^4.9.0
@@ -119,12 +119,12 @@ dev_dependencies:
     sdk: flutter
 
   auto_route_generator: ^10.1.0
-  build_runner: ^2.4.15
+  build_runner: ^2.7.1
   flutter_gen_runner: ^5.10.0
   flutter_launcher_icons: ^0.14.3
   flutter_lints: ^4.0.0
   flutter_native_splash: ^2.4.5
-  freezed: ^2.5.2
+  freezed: ^3.2.3
   json_serializable: ^6.7.1
   patrol: ^3.15.1
   mocktail: ^1.0.4

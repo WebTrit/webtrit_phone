@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,181 +9,193 @@ part of 'self_config.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
-SelfConfigResponse _$SelfConfigResponseFromJson(Map<String, dynamic> json) {
-  return _SelfConfigResponse.fromJson(json);
-}
 
 /// @nodoc
 mixin _$SelfConfigResponse {
-  Uri get url => throw _privateConstructorUsedError;
-  DateTime get expiresAt => throw _privateConstructorUsedError;
 
-  /// Serializes this SelfConfigResponse to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+ Uri get url; DateTime get expiresAt;
+/// Create a copy of SelfConfigResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SelfConfigResponseCopyWith<SelfConfigResponse> get copyWith => _$SelfConfigResponseCopyWithImpl<SelfConfigResponse>(this as SelfConfigResponse, _$identity);
 
-  /// Create a copy of SelfConfigResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $SelfConfigResponseCopyWith<SelfConfigResponse> get copyWith =>
-      throw _privateConstructorUsedError;
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SelfConfigResponse&&(identical(other.url, url) || other.url == url)&&(identical(other.expiresAt, expiresAt) || other.expiresAt == expiresAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,url,expiresAt);
+
+@override
+String toString() {
+  return 'SelfConfigResponse(url: $url, expiresAt: $expiresAt)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $SelfConfigResponseCopyWith<$Res> {
-  factory $SelfConfigResponseCopyWith(
-    SelfConfigResponse value,
-    $Res Function(SelfConfigResponse) then,
-  ) = _$SelfConfigResponseCopyWithImpl<$Res, SelfConfigResponse>;
-  @useResult
-  $Res call({Uri url, DateTime expiresAt});
-}
+abstract mixin class $SelfConfigResponseCopyWith<$Res>  {
+  factory $SelfConfigResponseCopyWith(SelfConfigResponse value, $Res Function(SelfConfigResponse) _then) = _$SelfConfigResponseCopyWithImpl;
+@useResult
+$Res call({
+ Uri url, DateTime expiresAt
+});
 
+
+
+
+}
 /// @nodoc
-class _$SelfConfigResponseCopyWithImpl<$Res, $Val extends SelfConfigResponse>
+class _$SelfConfigResponseCopyWithImpl<$Res>
     implements $SelfConfigResponseCopyWith<$Res> {
-  _$SelfConfigResponseCopyWithImpl(this._value, this._then);
+  _$SelfConfigResponseCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final SelfConfigResponse _self;
+  final $Res Function(SelfConfigResponse) _then;
 
-  /// Create a copy of SelfConfigResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? url = null, Object? expiresAt = null}) {
-    return _then(
-      _value.copyWith(
-            url: null == url
-                ? _value.url
-                : url // ignore: cast_nullable_to_non_nullable
-                      as Uri,
-            expiresAt: null == expiresAt
-                ? _value.expiresAt
-                : expiresAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of SelfConfigResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? url = null,Object? expiresAt = null,}) {
+  return _then(SelfConfigResponse(
+url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as Uri,expiresAt: null == expiresAt ? _self.expiresAt : expiresAt // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
 }
 
-/// @nodoc
-abstract class _$$SelfConfigResponseImplCopyWith<$Res>
-    implements $SelfConfigResponseCopyWith<$Res> {
-  factory _$$SelfConfigResponseImplCopyWith(
-    _$SelfConfigResponseImpl value,
-    $Res Function(_$SelfConfigResponseImpl) then,
-  ) = __$$SelfConfigResponseImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({Uri url, DateTime expiresAt});
 }
 
-/// @nodoc
-class __$$SelfConfigResponseImplCopyWithImpl<$Res>
-    extends _$SelfConfigResponseCopyWithImpl<$Res, _$SelfConfigResponseImpl>
-    implements _$$SelfConfigResponseImplCopyWith<$Res> {
-  __$$SelfConfigResponseImplCopyWithImpl(
-    _$SelfConfigResponseImpl _value,
-    $Res Function(_$SelfConfigResponseImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of SelfConfigResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? url = null, Object? expiresAt = null}) {
-    return _then(
-      _$SelfConfigResponseImpl(
-        url: null == url
-            ? _value.url
-            : url // ignore: cast_nullable_to_non_nullable
-                  as Uri,
-        expiresAt: null == expiresAt
-            ? _value.expiresAt
-            : expiresAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [SelfConfigResponse].
+extension SelfConfigResponsePatterns on SelfConfigResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-class _$SelfConfigResponseImpl implements _SelfConfigResponse {
-  const _$SelfConfigResponseImpl({required this.url, required this.expiresAt});
-
-  factory _$SelfConfigResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$SelfConfigResponseImplFromJson(json);
-
-  @override
-  final Uri url;
-  @override
-  final DateTime expiresAt;
-
-  @override
-  String toString() {
-    return 'SelfConfigResponse(url: $url, expiresAt: $expiresAt)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SelfConfigResponseImpl &&
-            (identical(other.url, url) || other.url == url) &&
-            (identical(other.expiresAt, expiresAt) ||
-                other.expiresAt == expiresAt));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, url, expiresAt);
-
-  /// Create a copy of SelfConfigResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SelfConfigResponseImplCopyWith<_$SelfConfigResponseImpl> get copyWith =>
-      __$$SelfConfigResponseImplCopyWithImpl<_$SelfConfigResponseImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$SelfConfigResponseImplToJson(this);
-  }
 }
 
-abstract class _SelfConfigResponse implements SelfConfigResponse {
-  const factory _SelfConfigResponse({
-    required final Uri url,
-    required final DateTime expiresAt,
-  }) = _$SelfConfigResponseImpl;
-
-  factory _SelfConfigResponse.fromJson(Map<String, dynamic> json) =
-      _$SelfConfigResponseImpl.fromJson;
-
-  @override
-  Uri get url;
-  @override
-  DateTime get expiresAt;
-
-  /// Create a copy of SelfConfigResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SelfConfigResponseImplCopyWith<_$SelfConfigResponseImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

@@ -6,37 +6,37 @@ part of 'image_source.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ImageSourceImpl _$$ImageSourceImplFromJson(Map<String, dynamic> json) =>
-    _$ImageSourceImpl(
-      id: json['id'] as String?,
-      uri: json['uri'] as String?,
-      ref: json[r'$ref'] as String? ?? 'asset',
-      render: json['render'] == null
-          ? null
-          : ImageRenderSpec.fromJson(json['render'] as Map<String, dynamic>),
-      metadata: json['metadata'] == null
-          ? const Metadata()
-          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
-    );
+ImageSource _$ImageSourceFromJson(Map<String, dynamic> json) => ImageSource(
+  id: json['id'] as String?,
+  uri: json['uri'] as String?,
+  ref: json[r'$ref'] as String? ?? 'asset',
+  render: json['render'] == null
+      ? null
+      : ImageRenderSpec.fromJson(json['render'] as Map<String, dynamic>),
+  metadata: json['metadata'] == null
+      ? const Metadata()
+      : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$$ImageSourceImplToJson(_$ImageSourceImpl instance) =>
+Map<String, dynamic> _$ImageSourceToJson(ImageSource instance) =>
     <String, dynamic>{
       'id': instance.id,
       'uri': instance.uri,
       r'$ref': instance.ref,
-      'render': instance.render,
-      'metadata': instance.metadata,
+      'render': instance.render?.toJson(),
+      'metadata': instance.metadata.toJson(),
     };
 
-_$ImageRenderSpecImpl _$$ImageRenderSpecImplFromJson(
-  Map<String, dynamic> json,
-) => _$ImageRenderSpecImpl(
-  scale: (json['scale'] as num?)?.toDouble(),
-  padding: json['padding'] == null
-      ? null
-      : PaddingConfig.fromJson(json['padding'] as Map<String, dynamic>),
-);
+ImageRenderSpec _$ImageRenderSpecFromJson(Map<String, dynamic> json) =>
+    ImageRenderSpec(
+      scale: (json['scale'] as num?)?.toDouble(),
+      padding: json['padding'] == null
+          ? null
+          : PaddingConfig.fromJson(json['padding'] as Map<String, dynamic>),
+    );
 
-Map<String, dynamic> _$$ImageRenderSpecImplToJson(
-  _$ImageRenderSpecImpl instance,
-) => <String, dynamic>{'scale': instance.scale, 'padding': instance.padding};
+Map<String, dynamic> _$ImageRenderSpecToJson(ImageRenderSpec instance) =>
+    <String, dynamic>{
+      'scale': instance.scale,
+      'padding': instance.padding?.toJson(),
+    };

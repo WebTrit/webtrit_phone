@@ -6,8 +6,8 @@ part of 'error.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ErrorResponseImpl _$$ErrorResponseImplFromJson(Map<String, dynamic> json) =>
-    _$ErrorResponseImpl(
+ErrorResponse _$ErrorResponseFromJson(Map<String, dynamic> json) =>
+    ErrorResponse(
       code: json['code'] as String?,
       message: json['message'] as String?,
       details: json['details'] == null
@@ -15,18 +15,17 @@ _$ErrorResponseImpl _$$ErrorResponseImplFromJson(Map<String, dynamic> json) =>
           : ErrorDetail.fromJson(json['details'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$ErrorResponseImplToJson(_$ErrorResponseImpl instance) =>
+Map<String, dynamic> _$ErrorResponseToJson(ErrorResponse instance) =>
     <String, dynamic>{
       'code': instance.code,
       'message': instance.message,
-      'details': instance.details,
+      'details': instance.details?.toJson(),
     };
 
-_$ErrorDetailImpl _$$ErrorDetailImplFromJson(Map<String, dynamic> json) =>
-    _$ErrorDetailImpl(
-      path: json['path'] as String?,
-      reason: json['reason'] as String,
-    );
+ErrorDetail _$ErrorDetailFromJson(Map<String, dynamic> json) => ErrorDetail(
+  path: json['path'] as String?,
+  reason: json['reason'] as String,
+);
 
-Map<String, dynamic> _$$ErrorDetailImplToJson(_$ErrorDetailImpl instance) =>
+Map<String, dynamic> _$ErrorDetailToJson(ErrorDetail instance) =>
     <String, dynamic>{'path': instance.path, 'reason': instance.reason};

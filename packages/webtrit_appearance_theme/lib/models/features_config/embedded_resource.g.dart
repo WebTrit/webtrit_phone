@@ -6,9 +6,9 @@ part of 'embedded_resource.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$EmbeddedResourceImpl _$$EmbeddedResourceImplFromJson(
+EmbeddedResource _$EmbeddedResourceFromJson(
   Map<String, dynamic> json,
-) => _$EmbeddedResourceImpl(
+) => EmbeddedResource(
   id: const IntToStringConverter().fromJson(json['id']),
   uri: json['uri'] as String,
   type:
@@ -28,32 +28,31 @@ _$EmbeddedResourceImpl _$$EmbeddedResourceImplFromJson(
   reconnectStrategy: json['reconnectStrategy'] as String?,
 );
 
-Map<String, dynamic> _$$EmbeddedResourceImplToJson(
-  _$EmbeddedResourceImpl instance,
-) => <String, dynamic>{
-  'id': const IntToStringConverter().toJson(instance.id),
-  'uri': instance.uri,
-  'type': _$EmbeddedResourceTypeEnumMap[instance.type]!,
-  'attributes': instance.attributes,
-  'toolbar': instance.toolbar.toJson(),
-  'metadata': instance.metadata.toJson(),
-  'payload': instance.payload,
-  'enableConsoleLogCapture': instance.enableConsoleLogCapture,
-  'reconnectStrategy': instance.reconnectStrategy,
-};
+Map<String, dynamic> _$EmbeddedResourceToJson(EmbeddedResource instance) =>
+    <String, dynamic>{
+      'id': const IntToStringConverter().toJson(instance.id),
+      'uri': instance.uri,
+      'type': _$EmbeddedResourceTypeEnumMap[instance.type]!,
+      'attributes': instance.attributes,
+      'toolbar': instance.toolbar.toJson(),
+      'metadata': instance.metadata.toJson(),
+      'payload': instance.payload,
+      'enableConsoleLogCapture': instance.enableConsoleLogCapture,
+      'reconnectStrategy': instance.reconnectStrategy,
+    };
 
 const _$EmbeddedResourceTypeEnumMap = {
   EmbeddedResourceType.terms: 'terms',
   EmbeddedResourceType.unknown: 'unknown',
 };
 
-_$ToolbarConfigImpl _$$ToolbarConfigImplFromJson(Map<String, dynamic> json) =>
-    _$ToolbarConfigImpl(
+ToolbarConfig _$ToolbarConfigFromJson(Map<String, dynamic> json) =>
+    ToolbarConfig(
       titleL10n: json['titleL10n'] as String?,
       showToolbar: json['showToolbar'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$$ToolbarConfigImplToJson(_$ToolbarConfigImpl instance) =>
+Map<String, dynamic> _$ToolbarConfigToJson(ToolbarConfig instance) =>
     <String, dynamic>{
       'titleL10n': instance.titleL10n,
       'showToolbar': instance.showToolbar,

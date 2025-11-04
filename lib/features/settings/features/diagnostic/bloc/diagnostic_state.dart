@@ -2,13 +2,20 @@ part of 'diagnostic_cubit.dart';
 
 @freezed
 class DiagnosticState with _$DiagnosticState {
-  const DiagnosticState._();
+  const DiagnosticState({
+    this.permissions = const [],
+    this.pushTokenStatus = const PushTokenStatus(),
+    this.batteryMode = CallkeepAndroidBatteryMode.unknown,
+  });
 
-  const factory DiagnosticState({
-    @Default([]) List<PermissionWithStatus> permissions,
-    @Default(PushTokenStatus()) PushTokenStatus pushTokenStatus,
-    @Default(CallkeepAndroidBatteryMode.unknown) CallkeepAndroidBatteryMode batteryMode,
-  }) = _Initial;
+  @override
+  final List<PermissionWithStatus> permissions;
+
+  @override
+  final PushTokenStatus pushTokenStatus;
+  
+  @override
+  final CallkeepAndroidBatteryMode batteryMode;
 
   List<PermissionWithStatus> filterPermissionsByAgreement({List<Permission> exclude = const []}) {
     return permissions.where((permission) {

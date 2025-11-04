@@ -18,42 +18,80 @@ part 'embedded_resource.g.dart';
 /// - [metadata]: Optional metadata associated with the resource, which can store custom data relevant to the resource's context.
 /// - [payload]: An optional list of strings that can be used to pass additional data to the embedded resource, such as parameters or identifiers.
 /// - [enableConsoleLogCapture]: A boolean flag that enables capturing `console.*` logs from inside the WebView, useful for debugging or logging purposes. The default is `false`.
-/// - [reconnectStrategy]: An optional string that defines the strategy to apply when the network
+/// - [reconnectStrategy]: An optional string that defines the strategy to apply when the network reconnects.
 @freezed
+@JsonSerializable(explicitToJson: true)
 class EmbeddedResource with _$EmbeddedResource {
-  const EmbeddedResource._();
-
-  @JsonSerializable(explicitToJson: true)
-  const factory EmbeddedResource({
+  /// Creates an [EmbeddedResource].
+  const EmbeddedResource({
     /// TODO: Migration workaround — accepts both int and string IDs.
     /// Remove [IntToStringConverter] once all JSONs use string IDs only.
-    @IntToStringConverter() required String id,
-    required String uri,
-    @Default(EmbeddedResourceType.unknown) EmbeddedResourceType type,
-    @Default({}) Map<String, dynamic> attributes,
-    @Default(ToolbarConfig()) ToolbarConfig toolbar,
-    @Default(Metadata()) Metadata metadata,
+    @IntToStringConverter() required this.id,
+    required this.uri,
+    this.type = EmbeddedResourceType.unknown,
+    this.attributes = const {},
+    this.toolbar = const ToolbarConfig(),
+    this.metadata = const Metadata(),
 
     /// Optional payload that can be used to pass additional data to the embedded resource.
-    @Default([]) List<String> payload,
+    this.payload = const [],
 
     /// Enables capturing `console.*` logs from inside the WebView
-    @Default(false) bool enableConsoleLogCapture,
+    this.enableConsoleLogCapture = false,
 
     /// Strategy to apply when network reconnects
-    String? reconnectStrategy,
-  }) = _EmbeddedResource;
+    this.reconnectStrategy,
+  });
 
-  factory EmbeddedResource.fromJson(Map<String, dynamic> json) => _$EmbeddedResourceFromJson(json);
+  /// Unique identifier for this resource.
+  @override
+  @IntToStringConverter()
+  final String id;
 
-  /// Safely parses `resource` to a `uri`, returning `null` if invalid
+  /// The URI that points to the embedded resource.
+  @override
+  final String uri;
+
+  /// The type of the resource (e.g., web, file, etc.).
+  @override
+  final EmbeddedResourceType type;
+
+  /// Optional key–value attributes associated with the resource.
+  @override
+  final Map<String, dynamic> attributes;
+
+  /// Toolbar configuration for the resource.
+  @override
+  final ToolbarConfig toolbar;
+
+  /// Metadata attached to this resource.
+  @override
+  final Metadata metadata;
+
+  /// Optional payload data to pass to the embedded resource.
+  @override
+  final List<String> payload;
+
+  /// Whether to capture `console.*` logs from inside the WebView.
+  @override
+  final bool enableConsoleLogCapture;
+
+  /// Strategy applied when network reconnects.
+  @override
+  final String? reconnectStrategy;
+
+  /// Safely parses `resource` to a `uri`, returning `null` if invalid.
   Uri? get uriOrNull => Uri.tryParse(uri);
 
-  /// A globally consistent metadata key used to associate asset IDs
+  /// A globally consistent metadata key used to associate asset IDs.
   static const String metadataAssetId = 'id';
 
-  /// A globally consistent metadata key used to associate asset sources
+  /// A globally consistent metadata key used to associate asset sources.
   static const String metadataAssetSource = 'source';
+
+  factory EmbeddedResource.fromJson(Map<String, Object?> json) => _$EmbeddedResourceFromJson(json);
+
+  Map<String, Object?> toJson() => _$EmbeddedResourceToJson(this);
 }
 
 /// Configuration for the toolbar associated with an embedded resource.
@@ -61,12 +99,20 @@ class EmbeddedResource with _$EmbeddedResource {
 /// - [titleL10n]: The localized title for the toolbar. This field can be used to provide a dynamic or translated title.
 /// - [showToolbar]: A boolean flag that determines whether the toolbar should be visible. Defaults to `false`.
 @freezed
+@JsonSerializable(explicitToJson: true)
 class ToolbarConfig with _$ToolbarConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ToolbarConfig({
-    String? titleL10n,
-    @Default(false) bool showToolbar,
-  }) = _ToolbarConfig;
+  /// Creates a [ToolbarConfig].
+  const ToolbarConfig({this.titleL10n, this.showToolbar = false});
 
-  factory ToolbarConfig.fromJson(Map<String, dynamic> json) => _$ToolbarConfigFromJson(json);
+  /// The localized title for the toolbar.
+  @override
+  final String? titleL10n;
+
+  /// Whether the toolbar should be visible.
+  @override
+  final bool showToolbar;
+
+  factory ToolbarConfig.fromJson(Map<String, Object?> json) => _$ToolbarConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ToolbarConfigToJson(this);
 }

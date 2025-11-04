@@ -2,14 +2,24 @@ part of 'permissions_cubit.dart';
 
 @freezed
 class PermissionsState with _$PermissionsState {
-  const PermissionsState._();
+  const PermissionsState({
+    this.hasRequestedPermissions = false,
+    this.pendingSpecialPermissions = const [],
+    this.manufacturerTip,
+    this.failure,
+  });
 
-  const factory PermissionsState({
-    @Default(false) bool hasRequestedPermissions,
-    @Default([]) List<CallkeepSpecialPermissions> pendingSpecialPermissions,
-    ManufacturerTip? manufacturerTip,
-    Object? failure,
-  }) = _PermissionsState;
+  @override
+  final bool hasRequestedPermissions;
+
+  @override
+  final List<CallkeepSpecialPermissions> pendingSpecialPermissions;
+
+  @override
+  final ManufacturerTip? manufacturerTip;
+
+  @override
+  final Object? failure;
 
   bool get isInitial => !hasRequestedPermissions;
 
@@ -24,8 +34,14 @@ class PermissionsState with _$PermissionsState {
 
 @freezed
 class ManufacturerTip with _$ManufacturerTip {
-  const factory ManufacturerTip({
-    required Manufacturer manufacturer,
-    @Default(false) bool shown,
-  }) = _ManufacturerTip;
+  const ManufacturerTip({
+    required this.manufacturer,
+    this.shown = false,
+  });
+
+  @override
+  final Manufacturer manufacturer;
+  
+  @override
+  final bool shown;
 }

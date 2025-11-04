@@ -12,101 +12,200 @@ part 'leading_avatar_style_config.g.dart';
 /// All colors are hex strings (e.g., "#RRGGBB" or "#AARRGGBB").
 /// Nulls mean "use theme defaults" (e.g., ColorScheme.secondaryContainer).
 @freezed
+@JsonSerializable(explicitToJson: true)
 class LeadingAvatarStyleConfig with _$LeadingAvatarStyleConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory LeadingAvatarStyleConfig({
+  /// Creates a [LeadingAvatarStyleConfig].
+  const LeadingAvatarStyleConfig({
     /// Circle background color. Defaults to theme.secondaryContainer when null.
-    String? backgroundColor,
+    this.backgroundColor,
 
     /// Avatar radius (defaults to 20.0 in widget if null).
-    double? radius,
+    this.radius,
 
     /// Text style for initials fallback.
-    TextStyleConfig? initialsTextStyle,
+    this.initialsTextStyle,
 
     /// Placeholder icon when no username/thumbnail is available.
-    IconDataConfig? placeholderIcon,
+    this.placeholderIcon,
 
     /// Loading overlay appearance.
-    LoadingOverlayStyleConfig? loading,
+    this.loading,
 
     /// "Smart" badge indicator appearance.
-    SmartIndicatorStyleConfig? smartIndicator,
+    this.smartIndicator,
 
     /// Registered/unregistered badge appearance.
-    RegisteredBadgeStyleConfig? registeredBadge,
+    this.registeredBadge,
 
     /// Presence badge appearance.
-    PresenceBadgeStyleConfig? presenceBadge,
-  }) = _LeadingAvatarStyleConfig;
+    this.presenceBadge,
+  });
 
-  factory LeadingAvatarStyleConfig.fromJson(Map<String, dynamic> json) => _$LeadingAvatarStyleConfigFromJson(json);
+  /// Circle background color. Defaults to theme.secondaryContainer when null.
+  @override
+  final String? backgroundColor;
+
+  /// Avatar radius (defaults to 20.0 in widget if null).
+  @override
+  final double? radius;
+
+  /// Text style for initials fallback.
+  @override
+  final TextStyleConfig? initialsTextStyle;
+
+  /// Placeholder icon when no username/thumbnail is available.
+  @override
+  final IconDataConfig? placeholderIcon;
+
+  /// Loading overlay appearance.
+  @override
+  final LoadingOverlayStyleConfig? loading;
+
+  /// "Smart" badge indicator appearance.
+  @override
+  final SmartIndicatorStyleConfig? smartIndicator;
+
+  /// Registered/unregistered badge appearance.
+  @override
+  final RegisteredBadgeStyleConfig? registeredBadge;
+
+  /// Presence badge appearance.
+  @override
+  final PresenceBadgeStyleConfig? presenceBadge;
+
+  factory LeadingAvatarStyleConfig.fromJson(Map<String, Object?> json) => _$LeadingAvatarStyleConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LeadingAvatarStyleConfigToJson(this);
 }
 
 /// Loading overlay style shown while avatar data is unavailable.
 @freezed
+@JsonSerializable()
 class LoadingOverlayStyleConfig with _$LoadingOverlayStyleConfig {
-  const factory LoadingOverlayStyleConfig({
+  /// Creates a [LoadingOverlayStyleConfig].
+  const LoadingOverlayStyleConfig({
     /// Whether the overlay should be shown by default (widget may still override).
-    @Default(false) bool showByDefault,
+    this.showByDefault = false,
 
     /// Padding around the loading indicator.
-    @Default(PaddingConfig.default2) PaddingConfig padding,
+    this.padding = PaddingConfig.default2,
 
     /// CircularProgressIndicator stroke width (defaults to 1.0 in widget).
-    double? strokeWidth,
-  }) = _LoadingOverlayStyleConfig;
+    this.strokeWidth,
+  });
 
-  factory LoadingOverlayStyleConfig.fromJson(Map<String, dynamic> json) => _$LoadingOverlayStyleConfigFromJson(json);
+  /// Whether the overlay should be shown by default (widget may still override).
+  @override
+  final bool showByDefault;
+
+  /// Padding around the loading indicator.
+  @override
+  final PaddingConfig padding;
+
+  /// CircularProgressIndicator stroke width (defaults to 1.0 in widget).
+  @override
+  final double? strokeWidth;
+
+  factory LoadingOverlayStyleConfig.fromJson(Map<String, Object?> json) => _$LoadingOverlayStyleConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LoadingOverlayStyleConfigToJson(this);
 }
 
 /// Appearance of the "smart" indicator (top-left small circle with icon).
 @freezed
+@JsonSerializable()
 class SmartIndicatorStyleConfig with _$SmartIndicatorStyleConfig {
-  const factory SmartIndicatorStyleConfig({
+  /// Creates a [SmartIndicatorStyleConfig].
+  const SmartIndicatorStyleConfig({
     /// Background color of the smart indicator circle.
-    String? backgroundColor,
+    this.backgroundColor,
 
     /// Icon displayed inside the smart indicator.
-    IconDataConfig? icon,
+    this.icon,
 
     /// Size factor relative to avatar diameter (widget uses ~0.4 by default).
-    double? sizeFactor,
-  }) = _SmartIndicatorStyleConfig;
+    this.sizeFactor,
+  });
 
-  factory SmartIndicatorStyleConfig.fromJson(Map<String, dynamic> json) => _$SmartIndicatorStyleConfigFromJson(json);
+  /// Background color of the smart indicator circle.
+  @override
+  final String? backgroundColor;
+
+  /// Icon displayed inside the smart indicator.
+  @override
+  final IconDataConfig? icon;
+
+  /// Size factor relative to avatar diameter (widget uses ~0.4 by default).
+  @override
+  final double? sizeFactor;
+
+  factory SmartIndicatorStyleConfig.fromJson(Map<String, Object?> json) => _$SmartIndicatorStyleConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$SmartIndicatorStyleConfigToJson(this);
 }
 
 /// Appearance of the registered/unregistered status badge (bottom-right).
 @freezed
+@JsonSerializable()
 class RegisteredBadgeStyleConfig with _$RegisteredBadgeStyleConfig {
-  const factory RegisteredBadgeStyleConfig({
+  /// Creates a [RegisteredBadgeStyleConfig].
+  const RegisteredBadgeStyleConfig({
     /// Color used when `registered == true`.
-    String? registeredColor,
+    this.registeredColor,
 
     /// Color used when `registered == false`.
-    String? unregisteredColor,
+    this.unregisteredColor,
 
     /// Size factor relative to avatar diameter (widget uses ~0.2 by default).
-    double? sizeFactor,
-  }) = _RegisteredBadgeStyleConfig;
+    this.sizeFactor,
+  });
 
-  factory RegisteredBadgeStyleConfig.fromJson(Map<String, dynamic> json) => _$RegisteredBadgeStyleConfigFromJson(json);
+  /// Color used when `registered == true`.
+  @override
+  final String? registeredColor;
+
+  /// Color used when `registered == false`.
+  @override
+  final String? unregisteredColor;
+
+  /// Size factor relative to avatar diameter (widget uses ~0.2 by default).
+  @override
+  final double? sizeFactor;
+
+  factory RegisteredBadgeStyleConfig.fromJson(Map<String, Object?> json) => _$RegisteredBadgeStyleConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$RegisteredBadgeStyleConfigToJson(this);
 }
 
 /// Appearance of the presence status badge (bottom-right).
 @freezed
+@JsonSerializable()
 class PresenceBadgeStyleConfig with _$PresenceBadgeStyleConfig {
-  const factory PresenceBadgeStyleConfig({
+  /// Creates a [PresenceBadgeStyleConfig].
+  const PresenceBadgeStyleConfig({
     /// Color used when presence is "available" (e.g., online, idle).
-    String? availableColor,
+    this.availableColor,
 
     /// Color used when presence is "unavailable" (e.g., offline, busy).
-    String? unavailableColor,
+    this.unavailableColor,
 
     /// Size factor relative to avatar diameter (widget uses ~0.325 by default).
-    double? sizeFactor,
-  }) = _PresenceBadgeStyleConfig;
+    this.sizeFactor,
+  });
 
-  factory PresenceBadgeStyleConfig.fromJson(Map<String, dynamic> json) => _$PresenceBadgeStyleConfigFromJson(json);
+  /// Color used when presence is "available" (e.g., online, idle).
+  @override
+  final String? availableColor;
+
+  /// Color used when presence is "unavailable" (e.g., offline, busy).
+  @override
+  final String? unavailableColor;
+
+  /// Size factor relative to avatar diameter (widget uses ~0.325 by default).
+  @override
+  final double? sizeFactor;
+
+  factory PresenceBadgeStyleConfig.fromJson(Map<String, Object?> json) => _$PresenceBadgeStyleConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$PresenceBadgeStyleConfigToJson(this);
 }

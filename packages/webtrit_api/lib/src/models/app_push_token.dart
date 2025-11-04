@@ -9,12 +9,17 @@ part 'app_push_token.freezed.dart';
 part 'app_push_token.g.dart';
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class AppPushToken with _$AppPushToken {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory AppPushToken({
-    required AppPushTokenType type,
-    required String value,
-  }) = _AppPushToken;
+  const AppPushToken({required this.type, required this.value});
+
+  @override
+  final AppPushTokenType type;
+
+  @override
+  final String value;
 
   factory AppPushToken.fromJson(Map<String, dynamic> json) => _$AppPushTokenFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AppPushTokenToJson(this);
 }

@@ -16,31 +16,60 @@ part 'text_field_config.g.dart';
 ///
 /// It can be loaded from JSON and applied dynamically in themes or screens.
 @freezed
+@JsonSerializable(explicitToJson: true)
 class TextFieldConfig with _$TextFieldConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory TextFieldConfig({
+  /// Creates a [TextFieldConfig].
+  const TextFieldConfig({
     /// Input decoration (borders, hints, labels, etc.).
     ///
     /// Use `border.type = "none"` (or `enabledBorder/focusedBorder/... = "none"`)
     /// to completely remove the underline/outline.
-    InputDecorationConfig? decoration,
+    this.decoration,
 
     /// Style for the text inside the field.
-    TextStyleConfig? style,
+    this.style,
 
     /// Text alignment inside the field.
     ///
     /// Supported values: `"left" | "right" | "center"`.
-    @Default('center') String textAlign,
+    this.textAlign = 'center',
 
     /// Whether the blinking cursor is visible.
-    @Default(true) bool showCursor,
+    this.showCursor = true,
 
     /// Keyboard type for this field.
     ///
     /// Supported values: `"none" | "number" | "text" | "phone" | "email" | "multiline"`.
-    @Default('none') String keyboardType,
-  }) = _TextFieldConfig;
+    this.keyboardType = 'none',
+  });
 
-  factory TextFieldConfig.fromJson(Map<String, dynamic> json) => _$TextFieldConfigFromJson(json);
+  /// Input decoration (borders, hints, labels, etc.).
+  @override
+  final InputDecorationConfig? decoration;
+
+  /// Style for the text inside the field.
+  @override
+  final TextStyleConfig? style;
+
+  /// Text alignment inside the field.
+  ///
+  /// Supported values: `"left" | "right" | "center"`.
+  @override
+  final String textAlign;
+
+  /// Whether the blinking cursor is visible.
+  @override
+  final bool showCursor;
+
+  /// Keyboard type for this field.
+  ///
+  /// Supported values: `"none" | "number" | "text" | "phone" | "email" | "multiline"`.
+  @override
+  final String keyboardType;
+
+  /// Deserializes a [TextFieldConfig] from JSON.
+  factory TextFieldConfig.fromJson(Map<String, Object?> json) => _$TextFieldConfigFromJson(json);
+
+  /// Serializes this [TextFieldConfig] to JSON.
+  Map<String, Object?> toJson() => _$TextFieldConfigToJson(this);
 }

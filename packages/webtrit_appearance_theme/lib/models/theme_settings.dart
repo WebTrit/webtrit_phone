@@ -9,18 +9,52 @@ part 'theme_settings.freezed.dart';
 part 'theme_settings.g.dart';
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class ThemeSettings with _$ThemeSettings {
-  const factory ThemeSettings({
+  /// Creates a [ThemeSettings] configuration that defines
+  /// light/dark color schemes, widget styles, and page-level theming.
+  const ThemeSettings({
     // Colors scheme
-    @Default(ColorSchemeConfig()) ColorSchemeConfig lightColorSchemeConfig,
-    @Default(ColorSchemeConfig()) ColorSchemeConfig darkColorSchemeConfig,
-    // Widgets config
-    @Default(ThemeWidgetConfig()) ThemeWidgetConfig themeWidgetLightConfig,
-    @Default(ThemeWidgetConfig()) ThemeWidgetConfig themeWidgetDarkConfig,
-    // Pages config
-    @Default(ThemePageConfig()) ThemePageConfig themePageLightConfig,
-    @Default(ThemePageConfig()) ThemePageConfig themePageDarkConfig,
-  }) = _ThemeSettings;
+    this.lightColorSchemeConfig = const ColorSchemeConfig(),
 
-  factory ThemeSettings.fromJson(Map<String, dynamic> json) => _$ThemeSettingsFromJson(json);
+    this.darkColorSchemeConfig = const ColorSchemeConfig(),
+
+    // Widgets config
+    this.themeWidgetLightConfig = const ThemeWidgetConfig(),
+
+    this.themeWidgetDarkConfig = const ThemeWidgetConfig(),
+
+    // Pages config
+    this.themePageLightConfig = const ThemePageConfig(),
+
+    this.themePageDarkConfig = const ThemePageConfig(),
+  });
+
+  /// Configuration for the light color scheme.
+  @override
+  final ColorSchemeConfig lightColorSchemeConfig;
+
+  /// Configuration for the dark color scheme.
+  @override
+  final ColorSchemeConfig darkColorSchemeConfig;
+
+  /// Widget-level configuration for the light theme.
+  @override
+  final ThemeWidgetConfig themeWidgetLightConfig;
+
+  /// Widget-level configuration for the dark theme.
+  @override
+  final ThemeWidgetConfig themeWidgetDarkConfig;
+
+  /// Page-level configuration for the light theme.
+  @override
+  final ThemePageConfig themePageLightConfig;
+
+  /// Page-level configuration for the dark theme.
+  @override
+  final ThemePageConfig themePageDarkConfig;
+
+  factory ThemeSettings.fromJson(Map<String, Object?> json) => _$ThemeSettingsFromJson(json);
+
+  Map<String, Object?> toJson() => _$ThemeSettingsToJson(this);
 }

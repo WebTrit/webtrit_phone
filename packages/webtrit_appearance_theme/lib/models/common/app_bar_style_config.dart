@@ -5,21 +5,35 @@ part 'app_bar_style_config.freezed.dart';
 part 'app_bar_style_config.g.dart';
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppBarStyleConfig with _$AppBarStyleConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory AppBarStyleConfig({
+  const AppBarStyleConfig({
     /// Background color for the AppBar (hex, e.g. "#FFFFFF")
-    String? backgroundColor,
+    this.backgroundColor,
 
     /// Foreground color for icons & text (hex)
-    String? foregroundColor,
+    this.foregroundColor,
 
     /// Whether the AppBar is considered primary
-    @Default(true) bool primary,
+    this.primary = true,
 
     /// Optional flag for showing back button
-    @Default(true) bool showBackButton,
-  }) = _AppBarStyleConfig;
+    this.showBackButton = true,
+  });
+
+  @override
+  final String? backgroundColor;
+
+  @override
+  final String? foregroundColor;
+
+  @override
+  final bool primary;
+
+  @override
+  final bool showBackButton;
 
   factory AppBarStyleConfig.fromJson(Map<String, dynamic> json) => _$AppBarStyleConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AppBarStyleConfigToJson(this);
 }

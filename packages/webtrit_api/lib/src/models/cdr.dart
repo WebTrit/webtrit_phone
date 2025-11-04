@@ -5,30 +5,65 @@ part 'cdr.freezed.dart';
 part 'cdr.g.dart';
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class CdrRecord with _$CdrRecord {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory CdrRecord({
-    required String callId,
-    required String callee,
-    required String caller,
-    required DateTime connectTime,
-    required String direction,
-    required String disconnectReason,
-    required DateTime disconnectTime,
-    required int duration,
-    // TODO: fix once backend side, sometimes it's int, sometimes it's string
-    dynamic recordingId,
-    required String status,
-  }) = _CdrRecord;
+  const CdrRecord({
+    required this.callId,
+    required this.callee,
+    required this.caller,
+    required this.connectTime,
+    required this.direction,
+    required this.disconnectReason,
+    required this.disconnectTime,
+    required this.duration,
+    this.recordingId,
+    required this.status,
+  });
+
+  @override
+  final String callId;
+
+  @override
+  final String callee;
+
+  @override
+  final String caller;
+
+  @override
+  final DateTime connectTime;
+
+  @override
+  final String direction;
+
+  @override
+  final String disconnectReason;
+
+  @override
+  final DateTime disconnectTime;
+
+  @override
+  final int duration;
+
+  @override
+  final dynamic recordingId;
+
+  @override
+  final String status;
 
   factory CdrRecord.fromJson(Map<String, Object?> json) => _$CdrRecordFromJson(json);
+
+  Map<String, Object?> toJson() => _$CdrRecordToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class CdrHistoryResponse with _$CdrHistoryResponse {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory CdrHistoryResponse({required List<CdrRecord> items}) = _CdrHistoryResponse;
+  const CdrHistoryResponse({required this.items});
+
+  @override
+  final List<CdrRecord> items;
+
   factory CdrHistoryResponse.fromJson(Map<String, Object?> json) => _$CdrHistoryResponseFromJson(json);
+
+  Map<String, Object?> toJson() => _$CdrHistoryResponseToJson(this);
 }

@@ -6,9 +6,9 @@ part of 'leading_avatar_style_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$LeadingAvatarStyleConfigImpl _$$LeadingAvatarStyleConfigImplFromJson(
+LeadingAvatarStyleConfig _$LeadingAvatarStyleConfigFromJson(
   Map<String, dynamic> json,
-) => _$LeadingAvatarStyleConfigImpl(
+) => LeadingAvatarStyleConfig(
   backgroundColor: json['backgroundColor'] as String?,
   radius: (json['radius'] as num?)?.toDouble(),
   initialsTextStyle: json['initialsTextStyle'] == null
@@ -43,8 +43,8 @@ _$LeadingAvatarStyleConfigImpl _$$LeadingAvatarStyleConfigImplFromJson(
         ),
 );
 
-Map<String, dynamic> _$$LeadingAvatarStyleConfigImplToJson(
-  _$LeadingAvatarStyleConfigImpl instance,
+Map<String, dynamic> _$LeadingAvatarStyleConfigToJson(
+  LeadingAvatarStyleConfig instance,
 ) => <String, dynamic>{
   'backgroundColor': instance.backgroundColor,
   'radius': instance.radius,
@@ -56,9 +56,9 @@ Map<String, dynamic> _$$LeadingAvatarStyleConfigImplToJson(
   'presenceBadge': instance.presenceBadge?.toJson(),
 };
 
-_$LoadingOverlayStyleConfigImpl _$$LoadingOverlayStyleConfigImplFromJson(
+LoadingOverlayStyleConfig _$LoadingOverlayStyleConfigFromJson(
   Map<String, dynamic> json,
-) => _$LoadingOverlayStyleConfigImpl(
+) => LoadingOverlayStyleConfig(
   showByDefault: json['showByDefault'] as bool? ?? false,
   padding: json['padding'] == null
       ? PaddingConfig.default2
@@ -66,17 +66,17 @@ _$LoadingOverlayStyleConfigImpl _$$LoadingOverlayStyleConfigImplFromJson(
   strokeWidth: (json['strokeWidth'] as num?)?.toDouble(),
 );
 
-Map<String, dynamic> _$$LoadingOverlayStyleConfigImplToJson(
-  _$LoadingOverlayStyleConfigImpl instance,
+Map<String, dynamic> _$LoadingOverlayStyleConfigToJson(
+  LoadingOverlayStyleConfig instance,
 ) => <String, dynamic>{
   'showByDefault': instance.showByDefault,
   'padding': instance.padding,
   'strokeWidth': instance.strokeWidth,
 };
 
-_$SmartIndicatorStyleConfigImpl _$$SmartIndicatorStyleConfigImplFromJson(
+SmartIndicatorStyleConfig _$SmartIndicatorStyleConfigFromJson(
   Map<String, dynamic> json,
-) => _$SmartIndicatorStyleConfigImpl(
+) => SmartIndicatorStyleConfig(
   backgroundColor: json['backgroundColor'] as String?,
   icon: json['icon'] == null
       ? null
@@ -84,40 +84,40 @@ _$SmartIndicatorStyleConfigImpl _$$SmartIndicatorStyleConfigImplFromJson(
   sizeFactor: (json['sizeFactor'] as num?)?.toDouble(),
 );
 
-Map<String, dynamic> _$$SmartIndicatorStyleConfigImplToJson(
-  _$SmartIndicatorStyleConfigImpl instance,
+Map<String, dynamic> _$SmartIndicatorStyleConfigToJson(
+  SmartIndicatorStyleConfig instance,
 ) => <String, dynamic>{
   'backgroundColor': instance.backgroundColor,
   'icon': instance.icon,
   'sizeFactor': instance.sizeFactor,
 };
 
-_$RegisteredBadgeStyleConfigImpl _$$RegisteredBadgeStyleConfigImplFromJson(
+RegisteredBadgeStyleConfig _$RegisteredBadgeStyleConfigFromJson(
   Map<String, dynamic> json,
-) => _$RegisteredBadgeStyleConfigImpl(
+) => RegisteredBadgeStyleConfig(
   registeredColor: json['registeredColor'] as String?,
   unregisteredColor: json['unregisteredColor'] as String?,
   sizeFactor: (json['sizeFactor'] as num?)?.toDouble(),
 );
 
-Map<String, dynamic> _$$RegisteredBadgeStyleConfigImplToJson(
-  _$RegisteredBadgeStyleConfigImpl instance,
+Map<String, dynamic> _$RegisteredBadgeStyleConfigToJson(
+  RegisteredBadgeStyleConfig instance,
 ) => <String, dynamic>{
   'registeredColor': instance.registeredColor,
   'unregisteredColor': instance.unregisteredColor,
   'sizeFactor': instance.sizeFactor,
 };
 
-_$PresenceBadgeStyleConfigImpl _$$PresenceBadgeStyleConfigImplFromJson(
+PresenceBadgeStyleConfig _$PresenceBadgeStyleConfigFromJson(
   Map<String, dynamic> json,
-) => _$PresenceBadgeStyleConfigImpl(
+) => PresenceBadgeStyleConfig(
   availableColor: json['availableColor'] as String?,
   unavailableColor: json['unavailableColor'] as String?,
   sizeFactor: (json['sizeFactor'] as num?)?.toDouble(),
 );
 
-Map<String, dynamic> _$$PresenceBadgeStyleConfigImplToJson(
-  _$PresenceBadgeStyleConfigImpl instance,
+Map<String, dynamic> _$PresenceBadgeStyleConfigToJson(
+  PresenceBadgeStyleConfig instance,
 ) => <String, dynamic>{
   'availableColor': instance.availableColor,
   'unavailableColor': instance.unavailableColor,

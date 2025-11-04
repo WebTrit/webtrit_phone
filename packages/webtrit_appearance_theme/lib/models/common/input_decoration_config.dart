@@ -15,89 +15,162 @@ part 'input_decoration_config.g.dart';
 /// See also:
 /// - [Google Material Design – Text fields](https://m3.material.io/components/text-fields/overview)
 @freezed
+@JsonSerializable(explicitToJson: true)
 class InputDecorationConfig with _$InputDecorationConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory InputDecorationConfig({
+  const InputDecorationConfig({
     /// Text that suggests what sort of input the field accepts.
-    String? hintText,
+    this.hintText,
 
     /// Style to use for [hintText].
-    TextStyleConfig? hintStyle,
+    this.hintStyle,
 
     /// Optional label text displayed above the field when focused or filled.
-    String? labelText,
+    this.labelText,
 
     /// Style to use for [labelText].
-    TextStyleConfig? labelStyle,
+    this.labelStyle,
 
     /// Additional text displayed below the field (e.g. usage hints).
-    String? helperText,
+    this.helperText,
 
     /// Style to use for [helperText].
-    TextStyleConfig? helperStyle,
+    this.helperStyle,
 
     /// Style for validation error messages.
-    TextStyleConfig? errorStyle,
+    this.errorStyle,
 
     /// Optional fixed text placed before the input.
-    String? prefixText,
+    this.prefixText,
 
     /// Style for [prefixText].
-    TextStyleConfig? prefixStyle,
+    this.prefixStyle,
 
     /// Optional fixed text placed after the input.
-    String? suffixText,
+    this.suffixText,
 
     /// Style for [suffixText].
-    TextStyleConfig? suffixStyle,
+    this.suffixStyle,
 
     /// Background fill color (hex string, e.g. `#FFFFFF`).
-    String? fillColor,
+    this.fillColor,
 
     /// Whether the field should be filled with [fillColor].
-    bool? filled,
+    this.filled,
 
     /// Default border configuration for the field.
-    BorderConfig? border,
+    this.border,
 
     /// Border configuration when the field is enabled but unfocused.
-    BorderConfig? enabledBorder,
+    this.enabledBorder,
 
     /// Border configuration when the field is focused.
-    BorderConfig? focusedBorder,
+    this.focusedBorder,
 
     /// Border configuration when the field has an error.
-    BorderConfig? errorBorder,
+    this.errorBorder,
 
     /// Border configuration when focused and in error state.
-    BorderConfig? focusedErrorBorder,
+    this.focusedErrorBorder,
 
     /// Border configuration when the field is disabled.
-    BorderConfig? disabledBorder,
-  }) = _InputDecorationConfig;
+    this.disabledBorder,
+  });
+
+  @override
+  final String? hintText;
+
+  @override
+  final TextStyleConfig? hintStyle;
+
+  @override
+  final String? labelText;
+
+  @override
+  final TextStyleConfig? labelStyle;
+
+  @override
+  final String? helperText;
+
+  @override
+  final TextStyleConfig? helperStyle;
+
+  @override
+  final TextStyleConfig? errorStyle;
+
+  @override
+  final String? prefixText;
+
+  @override
+  final TextStyleConfig? prefixStyle;
+
+  @override
+  final String? suffixText;
+
+  @override
+  final TextStyleConfig? suffixStyle;
+
+  @override
+  final String? fillColor;
+
+  @override
+  final bool? filled;
+
+  @override
+  final BorderConfig? border;
+
+  @override
+  final BorderConfig? enabledBorder;
+
+  @override
+  final BorderConfig? focusedBorder;
+
+  @override
+  final BorderConfig? errorBorder;
+
+  @override
+  final BorderConfig? focusedErrorBorder;
+
+  @override
+  final BorderConfig? disabledBorder;
 
   factory InputDecorationConfig.fromJson(Map<String, dynamic> json) => _$InputDecorationConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$InputDecorationConfigToJson(this);
 }
 
 /// Declarative configuration for input borders.
 ///
 /// Mirrors Flutter’s [InputBorder] types such as [UnderlineInputBorder] and [OutlineInputBorder].
 @freezed
+@JsonSerializable(explicitToJson: true)
 class BorderConfig with _$BorderConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory BorderConfig({
+  const BorderConfig({
     /// Border type: `'underline' | 'outline' | 'none'`.
-    @Default('underline') String type,
+    this.type = 'underline',
 
     /// Corner radius for outline borders.
-    double? borderRadius,
+    this.borderRadius,
 
     /// Border color (hex string, e.g. `#000000`).
-    String? borderColor,
+    this.borderColor,
 
     /// Stroke width of the border.
-    double? borderWidth,
-  }) = _BorderConfig;
+    this.borderWidth,
+  });
+
+  @override
+  final String type;
+
+  @override
+  final double? borderRadius;
+
+  @override
+  final String? borderColor;
+
+  @override
+  final double? borderWidth;
 
   factory BorderConfig.fromJson(Map<String, dynamic> json) => _$BorderConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BorderConfigToJson(this);
 }

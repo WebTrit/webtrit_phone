@@ -6,27 +6,25 @@ part of 'color_scheme.config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ColorSchemeConfigImpl _$$ColorSchemeConfigImplFromJson(
-  Map<String, dynamic> json,
-) => _$ColorSchemeConfigImpl(
-  seedColor: json['seedColor'] as String? ?? '#F95A14',
-  colorSchemeOverride: json['colorSchemeOverride'] == null
-      ? const ColorSchemeOverride()
-      : ColorSchemeOverride.fromJson(
-          json['colorSchemeOverride'] as Map<String, dynamic>,
-        ),
-);
+ColorSchemeConfig _$ColorSchemeConfigFromJson(Map<String, dynamic> json) =>
+    ColorSchemeConfig(
+      seedColor: json['seedColor'] as String? ?? '#F95A14',
+      colorSchemeOverride: json['colorSchemeOverride'] == null
+          ? const ColorSchemeOverride()
+          : ColorSchemeOverride.fromJson(
+              json['colorSchemeOverride'] as Map<String, dynamic>,
+            ),
+    );
 
-Map<String, dynamic> _$$ColorSchemeConfigImplToJson(
-  _$ColorSchemeConfigImpl instance,
-) => <String, dynamic>{
-  'seedColor': instance.seedColor,
-  'colorSchemeOverride': instance.colorSchemeOverride.toJson(),
-};
+Map<String, dynamic> _$ColorSchemeConfigToJson(ColorSchemeConfig instance) =>
+    <String, dynamic>{
+      'seedColor': instance.seedColor,
+      'colorSchemeOverride': instance.colorSchemeOverride.toJson(),
+    };
 
-_$ColorSchemeOverrideImpl _$$ColorSchemeOverrideImplFromJson(
+ColorSchemeOverride _$ColorSchemeOverrideFromJson(
   Map<String, dynamic> json,
-) => _$ColorSchemeOverrideImpl(
+) => ColorSchemeOverride(
   primary: json['primary'] as String? ?? '#5CACE3',
   onPrimary: json['onPrimary'] as String? ?? '#FFFFFF',
   primaryContainer: json['primaryContainer'] as String? ?? '#B9E3F9',
@@ -79,8 +77,8 @@ _$ColorSchemeOverrideImpl _$$ColorSchemeOverrideImplFromJson(
   surfaceTint: json['surfaceTint'] as String? ?? '#F95A14',
 );
 
-Map<String, dynamic> _$$ColorSchemeOverrideImplToJson(
-  _$ColorSchemeOverrideImpl instance,
+Map<String, dynamic> _$ColorSchemeOverrideToJson(
+  ColorSchemeOverride instance,
 ) => <String, dynamic>{
   'primary': instance.primary,
   'onPrimary': instance.onPrimary,

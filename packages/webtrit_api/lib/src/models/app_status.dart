@@ -7,11 +7,14 @@ part 'app_status.freezed.dart';
 part 'app_status.g.dart';
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class AppStatus with _$AppStatus {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory AppStatus({
-    required bool register,
-  }) = _AppStatus;
+  const AppStatus({required this.register});
+
+  @override
+  final bool register;
 
   factory AppStatus.fromJson(Map<String, dynamic> json) => _$AppStatusFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AppStatusToJson(this);
 }

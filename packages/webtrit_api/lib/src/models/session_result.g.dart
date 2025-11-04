@@ -6,9 +6,9 @@ part of 'session_result.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SessionOtpProvisionalImpl _$$SessionOtpProvisionalImplFromJson(
+SessionOtpProvisional _$SessionOtpProvisionalFromJson(
   Map<String, dynamic> json,
-) => _$SessionOtpProvisionalImpl(
+) => SessionOtpProvisional(
   otpId: json['otp_id'] as String,
   notificationType: $enumDecodeNullable(
     _$OtpNotificationTypeEnumMap,
@@ -19,8 +19,8 @@ _$SessionOtpProvisionalImpl _$$SessionOtpProvisionalImplFromJson(
   $type: json['runtimeType'] as String?,
 );
 
-Map<String, dynamic> _$$SessionOtpProvisionalImplToJson(
-  _$SessionOtpProvisionalImpl instance,
+Map<String, dynamic> _$SessionOtpProvisionalToJson(
+  SessionOtpProvisional instance,
 ) => <String, dynamic>{
   'otp_id': instance.otpId,
   'notification_type': _$OtpNotificationTypeEnumMap[instance.notificationType],
@@ -31,15 +31,14 @@ Map<String, dynamic> _$$SessionOtpProvisionalImplToJson(
 
 const _$OtpNotificationTypeEnumMap = {OtpNotificationType.email: 'email'};
 
-_$SessionTokenImpl _$$SessionTokenImplFromJson(Map<String, dynamic> json) =>
-    _$SessionTokenImpl(
-      token: json['token'] as String,
-      userId: json['user_id'] as String?,
-      tenantId: json['tenant_id'] as String?,
-      $type: json['runtimeType'] as String?,
-    );
+SessionToken _$SessionTokenFromJson(Map<String, dynamic> json) => SessionToken(
+  token: json['token'] as String,
+  userId: json['user_id'] as String?,
+  tenantId: json['tenant_id'] as String?,
+  $type: json['runtimeType'] as String?,
+);
 
-Map<String, dynamic> _$$SessionTokenImplToJson(_$SessionTokenImpl instance) =>
+Map<String, dynamic> _$SessionTokenToJson(SessionToken instance) =>
     <String, dynamic>{
       'token': instance.token,
       'user_id': instance.userId,
@@ -47,11 +46,10 @@ Map<String, dynamic> _$$SessionTokenImplToJson(_$SessionTokenImpl instance) =>
       'runtimeType': instance.$type,
     };
 
-_$SessionDataImpl _$$SessionDataImplFromJson(Map<String, dynamic> json) =>
-    _$SessionDataImpl(
-      data: json['data'] as Map<String, dynamic>,
-      $type: json['runtimeType'] as String?,
-    );
+SessionData _$SessionDataFromJson(Map<String, dynamic> json) => SessionData(
+  data: json['data'] as Map<String, dynamic>,
+  $type: json['runtimeType'] as String?,
+);
 
-Map<String, dynamic> _$$SessionDataImplToJson(_$SessionDataImpl instance) =>
+Map<String, dynamic> _$SessionDataToJson(SessionData instance) =>
     <String, dynamic>{'data': instance.data, 'runtimeType': instance.$type};

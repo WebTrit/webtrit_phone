@@ -4,68 +4,217 @@ part 'color_scheme.config.freezed.dart';
 
 part 'color_scheme.config.g.dart';
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ColorSchemeConfig with _$ColorSchemeConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ColorSchemeConfig({
-    @Default('#F95A14') String seedColor,
-    @Default(ColorSchemeOverride()) ColorSchemeOverride colorSchemeOverride,
-  }) = _ColorSchemeConfig;
+  /// Creates a [ColorSchemeConfig].
+  const ColorSchemeConfig({this.seedColor = '#F95A14', this.colorSchemeOverride = const ColorSchemeOverride()});
 
-  factory ColorSchemeConfig.fromJson(Map<String, dynamic> json) => _$ColorSchemeConfigFromJson(json);
+  /// The seed color used to generate tonal palettes for the theme.
+  @override
+  final String seedColor;
+
+  /// Explicit overrides for the generated color scheme.
+  @override
+  final ColorSchemeOverride colorSchemeOverride;
+
+  factory ColorSchemeConfig.fromJson(Map<String, Object?> json) => _$ColorSchemeConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ColorSchemeConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ColorSchemeOverride with _$ColorSchemeOverride {
-  @JsonSerializable(explicitToJson: true)
-  const factory ColorSchemeOverride({
-    @Default('#5CACE3') String primary,
-    @Default('#FFFFFF') String onPrimary,
-    @Default('#B9E3F9') String primaryContainer,
-    @Default('#123752') String onPrimaryContainer,
-    @Default('#A5C6E4') String primaryFixed,
-    @Default('#75A1C5') String primaryFixedDim,
-    @Default('#092D4A') String onPrimaryFixed,
-    @Default('#A5C6E4') String onPrimaryFixedVariant,
-    @Default('#123752') String secondary,
-    @Default('#FFFFFF') String onSecondary,
-    @Default('#EEF3F6') String secondaryContainer,
-    @Default('#1F618F') String onSecondaryContainer,
-    @Default('#848581') String secondaryFixed,
-    @Default('#4C4D4A') String secondaryFixedDim,
-    @Default('#30302F') String onSecondaryFixed,
-    @Default('#848581') String onSecondaryFixedVariant,
-    @Default('#75B943') String tertiary,
-    @Default('#FFFFFF') String onTertiary,
-    @Default('#E1F7C1') String tertiaryContainer,
-    @Default('#2E5200') String onTertiaryContainer,
-    @Default('#B8E078') String tertiaryFixed,
-    @Default('#8CC14E') String tertiaryFixedDim,
-    @Default('#224400') String onTertiaryFixed,
-    @Default('#B8E078') String onTertiaryFixedVariant,
-    @Default('#E74C3C') String error,
-    @Default('#FFFFFF') String onError,
-    @Default('#F5B7B1') String errorContainer,
-    @Default('#8B1E13') String onErrorContainer,
-    @Default('#4C4D4A') String outline,
-    @Default('#CDCFC9') String outlineVariant,
-    @Default('#EEF3F6') String surface,
-    @Default('#30302F') String onSurface,
-    @Default('#DDE0E3') String surfaceDim,
-    @Default('#FFFFFF') String surfaceBright,
-    @Default('#F8FBFD') String surfaceContainerLowest,
-    @Default('#F0F3F5') String surfaceContainerLow,
-    @Default('#EEF3F6') String surfaceContainer,
-    @Default('#E2E6E9') String surfaceContainerHigh,
-    @Default('#DDE0E3') String surfaceContainerHighest,
-    @Default('#848581') String onSurfaceVariant,
-    @Default('#30302F') String inverseSurface,
-    @Default('#EEF3F6') String onInverseSurface,
-    @Default('#1F618F') String inversePrimary,
-    @Default('#000000') String shadow,
-    @Default('#000000') String scrim,
-    @Default('#F95A14') String surfaceTint,
-  }) = _ColorSchemeOverride;
+  /// Creates a [ColorSchemeOverride] that defines all color roles for the app theme.
+  const ColorSchemeOverride({
+    this.primary = '#5CACE3',
+    this.onPrimary = '#FFFFFF',
+    this.primaryContainer = '#B9E3F9',
+    this.onPrimaryContainer = '#123752',
+    this.primaryFixed = '#A5C6E4',
+    this.primaryFixedDim = '#75A1C5',
+    this.onPrimaryFixed = '#092D4A',
+    this.onPrimaryFixedVariant = '#A5C6E4',
+    this.secondary = '#123752',
+    this.onSecondary = '#FFFFFF',
+    this.secondaryContainer = '#EEF3F6',
+    this.onSecondaryContainer = '#1F618F',
+    this.secondaryFixed = '#848581',
+    this.secondaryFixedDim = '#4C4D4A',
+    this.onSecondaryFixed = '#30302F',
+    this.onSecondaryFixedVariant = '#848581',
+    this.tertiary = '#75B943',
+    this.onTertiary = '#FFFFFF',
+    this.tertiaryContainer = '#E1F7C1',
+    this.onTertiaryContainer = '#2E5200',
+    this.tertiaryFixed = '#B8E078',
+    this.tertiaryFixedDim = '#8CC14E',
+    this.onTertiaryFixed = '#224400',
+    this.onTertiaryFixedVariant = '#B8E078',
+    this.error = '#E74C3C',
+    this.onError = '#FFFFFF',
+    this.errorContainer = '#F5B7B1',
+    this.onErrorContainer = '#8B1E13',
+    this.outline = '#4C4D4A',
+    this.outlineVariant = '#CDCFC9',
+    this.surface = '#EEF3F6',
+    this.onSurface = '#30302F',
+    this.surfaceDim = '#DDE0E3',
+    this.surfaceBright = '#FFFFFF',
+    this.surfaceContainerLowest = '#F8FBFD',
+    this.surfaceContainerLow = '#F0F3F5',
+    this.surfaceContainer = '#EEF3F6',
+    this.surfaceContainerHigh = '#E2E6E9',
+    this.surfaceContainerHighest = '#DDE0E3',
+    this.onSurfaceVariant = '#848581',
+    this.inverseSurface = '#30302F',
+    this.onInverseSurface = '#EEF3F6',
+    this.inversePrimary = '#1F618F',
+    this.shadow = '#000000',
+    this.scrim = '#000000',
+    this.surfaceTint = '#F95A14',
+  });
 
-  factory ColorSchemeOverride.fromJson(Map<String, dynamic> json) => _$ColorSchemeOverrideFromJson(json);
+  @override
+  final String primary;
+
+  @override
+  final String onPrimary;
+
+  @override
+  final String primaryContainer;
+
+  @override
+  final String onPrimaryContainer;
+
+  @override
+  final String primaryFixed;
+
+  @override
+  final String primaryFixedDim;
+
+  @override
+  final String onPrimaryFixed;
+
+  @override
+  final String onPrimaryFixedVariant;
+
+  @override
+  final String secondary;
+
+  @override
+  final String onSecondary;
+
+  @override
+  final String secondaryContainer;
+
+  @override
+  final String onSecondaryContainer;
+
+  @override
+  final String secondaryFixed;
+
+  @override
+  final String secondaryFixedDim;
+
+  @override
+  final String onSecondaryFixed;
+
+  @override
+  final String onSecondaryFixedVariant;
+
+  @override
+  final String tertiary;
+
+  @override
+  final String onTertiary;
+
+  @override
+  final String tertiaryContainer;
+
+  @override
+  final String onTertiaryContainer;
+
+  @override
+  final String tertiaryFixed;
+
+  @override
+  final String tertiaryFixedDim;
+
+  @override
+  final String onTertiaryFixed;
+
+  @override
+  final String onTertiaryFixedVariant;
+
+  @override
+  final String error;
+
+  @override
+  final String onError;
+
+  @override
+  final String errorContainer;
+
+  @override
+  final String onErrorContainer;
+
+  @override
+  final String outline;
+
+  @override
+  final String outlineVariant;
+
+  @override
+  final String surface;
+
+  @override
+  final String onSurface;
+
+  @override
+  final String surfaceDim;
+
+  @override
+  final String surfaceBright;
+
+  @override
+  final String surfaceContainerLowest;
+
+  @override
+  final String surfaceContainerLow;
+
+  @override
+  final String surfaceContainer;
+
+  @override
+  final String surfaceContainerHigh;
+
+  @override
+  final String surfaceContainerHighest;
+
+  @override
+  final String onSurfaceVariant;
+
+  @override
+  final String inverseSurface;
+
+  @override
+  final String onInverseSurface;
+
+  @override
+  final String inversePrimary;
+
+  @override
+  final String shadow;
+
+  @override
+  final String scrim;
+
+  @override
+  final String surfaceTint;
+
+  factory ColorSchemeOverride.fromJson(Map<String, Object?> json) => _$ColorSchemeOverrideFromJson(json);
+
+  Map<String, Object?> toJson() => _$ColorSchemeOverrideToJson(this);
 }

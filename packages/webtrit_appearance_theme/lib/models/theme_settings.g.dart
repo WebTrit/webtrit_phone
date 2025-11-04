@@ -6,8 +6,8 @@ part of 'theme_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ThemeSettingsImpl _$$ThemeSettingsImplFromJson(Map<String, dynamic> json) =>
-    _$ThemeSettingsImpl(
+ThemeSettings _$ThemeSettingsFromJson(Map<String, dynamic> json) =>
+    ThemeSettings(
       lightColorSchemeConfig: json['lightColorSchemeConfig'] == null
           ? const ColorSchemeConfig()
           : ColorSchemeConfig.fromJson(
@@ -40,12 +40,12 @@ _$ThemeSettingsImpl _$$ThemeSettingsImplFromJson(Map<String, dynamic> json) =>
             ),
     );
 
-Map<String, dynamic> _$$ThemeSettingsImplToJson(_$ThemeSettingsImpl instance) =>
+Map<String, dynamic> _$ThemeSettingsToJson(ThemeSettings instance) =>
     <String, dynamic>{
-      'lightColorSchemeConfig': instance.lightColorSchemeConfig,
-      'darkColorSchemeConfig': instance.darkColorSchemeConfig,
-      'themeWidgetLightConfig': instance.themeWidgetLightConfig,
-      'themeWidgetDarkConfig': instance.themeWidgetDarkConfig,
-      'themePageLightConfig': instance.themePageLightConfig,
-      'themePageDarkConfig': instance.themePageDarkConfig,
+      'lightColorSchemeConfig': instance.lightColorSchemeConfig.toJson(),
+      'darkColorSchemeConfig': instance.darkColorSchemeConfig.toJson(),
+      'themeWidgetLightConfig': instance.themeWidgetLightConfig.toJson(),
+      'themeWidgetDarkConfig': instance.themeWidgetDarkConfig.toJson(),
+      'themePageLightConfig': instance.themePageLightConfig.toJson(),
+      'themePageDarkConfig': instance.themePageDarkConfig.toJson(),
     };
