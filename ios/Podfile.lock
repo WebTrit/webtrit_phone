@@ -8,6 +8,8 @@ PODS:
     - Flutter
   - device_region (0.0.1):
     - Flutter
+  - emoji_picker_flutter (0.0.1):
+    - Flutter
   - Firebase/Analytics (11.13.0):
     - Firebase/Core
   - Firebase/Core (11.13.0):
@@ -109,7 +111,7 @@ PODS:
     - FirebaseSharedSwift (~> 11.0)
     - GoogleUtilities/Environment (~> 8.1)
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
-  - FirebaseRemoteConfigInterop (11.14.0)
+  - FirebaseRemoteConfigInterop (11.15.0)
   - FirebaseSessions (11.13.0):
     - FirebaseCore (~> 11.13.0)
     - FirebaseCoreExtension (~> 11.13.0)
@@ -119,7 +121,7 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 8.1)
     - nanopb (~> 3.30910.0)
     - PromisesSwift (~> 2.1)
-  - FirebaseSharedSwift (11.14.0)
+  - FirebaseSharedSwift (11.15.0)
   - Flutter (1.0.0)
   - flutter_contacts (0.0.1):
     - Flutter
@@ -129,9 +131,9 @@ PODS:
     - Flutter
   - flutter_secure_storage (6.0.0):
     - Flutter
-  - flutter_webrtc (0.12.6):
+  - flutter_webrtc (1.2.0):
     - Flutter
-    - WebRTC-SDK (= 125.6422.06)
+    - WebRTC-SDK (= 137.7151.04)
   - GoogleAppMeasurement (11.13.0):
     - GoogleAppMeasurement/AdIdSupport (= 11.13.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
@@ -211,18 +213,18 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - sqlite3 (3.50.1):
-    - sqlite3/common (= 3.50.1)
-  - sqlite3/common (3.50.1)
-  - sqlite3/dbstatvtab (3.50.1):
+  - sqlite3 (3.50.4):
+    - sqlite3/common (= 3.50.4)
+  - sqlite3/common (3.50.4)
+  - sqlite3/dbstatvtab (3.50.4):
     - sqlite3/common
-  - sqlite3/fts5 (3.50.1):
+  - sqlite3/fts5 (3.50.4):
     - sqlite3/common
-  - sqlite3/math (3.50.1):
+  - sqlite3/math (3.50.4):
     - sqlite3/common
-  - sqlite3/perf-threadsafe (3.50.1):
+  - sqlite3/perf-threadsafe (3.50.4):
     - sqlite3/common
-  - sqlite3/rtree (3.50.1):
+  - sqlite3/rtree (3.50.4):
     - sqlite3/common
   - sqlite3_flutter_libs (0.0.1):
     - Flutter
@@ -235,13 +237,13 @@ PODS:
     - sqlite3/rtree
   - url_launcher_ios (0.0.1):
     - Flutter
-  - WebRTC-SDK (125.6422.06)
+  - WebRTC-SDK (137.7151.04)
   - webtrit_callkeep_ios (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
-  - workmanager (0.0.1):
+  - workmanager_apple (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -249,6 +251,7 @@ DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - device_region (from `.symlinks/plugins/device_region/ios`)
+  - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_app_installations (from `.symlinks/plugins/firebase_app_installations/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -273,7 +276,7 @@ DEPENDENCIES:
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - webtrit_callkeep_ios (from `.symlinks/plugins/webtrit_callkeep_ios/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
-  - workmanager (from `.symlinks/plugins/workmanager/ios`)
+  - workmanager_apple (from `.symlinks/plugins/workmanager_apple/ios`)
 
 SPEC REPOS:
   trunk:
@@ -309,6 +312,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/device_info_plus/ios"
   device_region:
     :path: ".symlinks/plugins/device_region/ios"
+  emoji_picker_flutter:
+    :path: ".symlinks/plugins/emoji_picker_flutter/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_app_installations:
@@ -357,8 +362,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webtrit_callkeep_ios/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
-  workmanager:
-    :path: ".symlinks/plugins/workmanager/ios"
+  workmanager_apple:
+    :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
   audio_session: 9bb7f6c970f21241b19f5a3658097ae459681ba0
@@ -366,6 +371,7 @@ SPEC CHECKSUMS:
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
   device_region: ba5fcd31baab2323f50b73a33850490df4d082a8
+  emoji_picker_flutter: ece213fc274bdddefb77d502d33080dc54e616cc
   Firebase: 3435bc66b4d494c2f22c79fd3aae4c1db6662327
   firebase_analytics: 4af7b20cf0c2da4e0473117e01a69507db8d7c16
   firebase_app_installations: d9b7f6198e38922bea96dae35f9249a604024887
@@ -382,15 +388,15 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 0ee9074f2c1e86561ace168ee1470dc67aabaf02
   FirebaseMessaging: 195bbdb73e6ca1dbc76cd46e73f3552c084ef6e4
   FirebaseRemoteConfig: 518ca257cdb2ccbc2b781ef2f2104f1104c7488f
-  FirebaseRemoteConfigInterop: 7b74ceaa54e28863ed17fa39da8951692725eced
+  FirebaseRemoteConfigInterop: 1c6135e8a094cc6368949f5faeeca7ee8948b8aa
   FirebaseSessions: eaa8ec037e7793769defe4201c20bd4d976f9677
-  FirebaseSharedSwift: bdd5c8674c4712a98e70287c936bc5cca5d640f6
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  FirebaseSharedSwift: e17c654ef1f1a616b0b33054e663ad1035c8fd40
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_contacts: 5383945387e7ca37cf963d4be57c21f2fc15ca9f
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
   flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
-  flutter_webrtc: 57f32415b8744e806f9c2a96ccdb60c6a627ba33
+  flutter_webrtc: c3e21fc0dcd9d8eb246ae4d5256fcbeb2f5ecd22
   GoogleAppMeasurement: 0dfca1a4b534d123de3945e28f77869d10d0d600
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
@@ -405,14 +411,14 @@ SPEC CHECKSUMS:
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
-  sqlite3: 1d85290c3321153511f6e900ede7a1608718bbd5
+  sqlite3: 73513155ec6979715d3904ef53a8d68892d4032b
   sqlite3_flutter_libs: e7fc8c9ea2200ff3271f08f127842131746b70e2
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
-  WebRTC-SDK: 79942c006ea64f6fb48d7da8a4786dfc820bc1db
+  WebRTC-SDK: 40d4f5ba05cadff14e4db5614aec402a633f007e
   webtrit_callkeep_ios: b6e52a357f27f00596927407b1aff2dc5f9c9b14
   webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
-  workmanager: 01be2de7f184bd15de93a1812936a2b7f42ef07e
+  workmanager_apple: 904529ae31e97fc5be632cf628507652294a0778
 
-PODFILE CHECKSUM: c241efdc2ea6f1d5c15a6cde2b8e92e0c3d38823
+PODFILE CHECKSUM: b8d07cf766dbdb661413445d13f8339ce780b397
 
 COCOAPODS: 1.16.2
