@@ -9,372 +9,678 @@ part 'theme_widget_config.freezed.dart';
 
 part 'theme_widget_config.g.dart';
 
-@Freezed(equal: true)
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ThemeWidgetConfig with _$ThemeWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ThemeWidgetConfig({
-    @Default(FontsConfig()) FontsConfig fonts,
-    @Default(ButtonWidgetConfig()) ButtonWidgetConfig button,
-    @Default(GroupWidgetConfig()) GroupWidgetConfig? group,
-    @Default(BarWidgetConfig()) BarWidgetConfig bar,
-    @Default(ImageAssetsConfig()) ImageAssetsConfig imageAssets,
-    @Default(InputWidgetConfig()) InputWidgetConfig input,
-    @Default(TextWidgetConfig()) TextWidgetConfig text,
-    @Default(DialogWidgetConfig()) DialogWidgetConfig dialog,
-    @Default(ActionPadWidgetConfig()) ActionPadWidgetConfig actionPad,
-    @Default(StatusesWidgetConfig()) StatusesWidgetConfig statuses,
-    @Default(DecorationConfig()) DecorationConfig decorationConfig,
-  }) = _ThemeWidgetConfig;
+  const ThemeWidgetConfig({
+    this.fonts = const FontsConfig(),
+    this.button = const ButtonWidgetConfig(),
+    this.group = const GroupWidgetConfig(),
+    this.bar = const BarWidgetConfig(),
+    this.imageAssets = const ImageAssetsConfig(),
+    this.input = const InputWidgetConfig(),
+    this.text = const TextWidgetConfig(),
+    this.dialog = const DialogWidgetConfig(),
+    this.actionPad = const ActionPadWidgetConfig(),
+    this.statuses = const StatusesWidgetConfig(),
+    this.decorationConfig = const DecorationConfig(),
+  });
 
-  factory ThemeWidgetConfig.fromJson(Map<String, dynamic> json) => _$ThemeWidgetConfigFromJson(json);
+  @override
+  final FontsConfig fonts;
+
+  @override
+  final ButtonWidgetConfig button;
+
+  @override
+  final GroupWidgetConfig? group;
+
+  @override
+  final BarWidgetConfig bar;
+
+  @override
+  final ImageAssetsConfig imageAssets;
+
+  @override
+  final InputWidgetConfig input;
+
+  @override
+  final TextWidgetConfig text;
+
+  @override
+  final DialogWidgetConfig dialog;
+
+  @override
+  final ActionPadWidgetConfig actionPad;
+
+  @override
+  final StatusesWidgetConfig statuses;
+
+  @override
+  final DecorationConfig decorationConfig;
+
+  factory ThemeWidgetConfig.fromJson(Map<String, Object?> json) => _$ThemeWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ThemeWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class FontsConfig with _$FontsConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory FontsConfig({
-    String? fontFamily,
-  }) = _FontsConfig;
+  const FontsConfig({this.fontFamily});
 
-  factory FontsConfig.fromJson(Map<String, dynamic> json) => _$FontsConfigFromJson(json);
+  @override
+  final String? fontFamily;
+
+  factory FontsConfig.fromJson(Map<String, Object?> json) => _$FontsConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$FontsConfigToJson(this);
 }
 
-@Freezed(equal: true)
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ButtonWidgetConfig with _$ButtonWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ButtonWidgetConfig({
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig primaryElevatedButton,
-  }) = _ButtonWidgetConfig;
+  const ButtonWidgetConfig({this.primaryElevatedButton = const ElevatedButtonWidgetConfig()});
 
-  factory ButtonWidgetConfig.fromJson(Map<String, dynamic> json) => _$ButtonWidgetConfigFromJson(json);
+  @override
+  final ElevatedButtonWidgetConfig primaryElevatedButton;
+
+  factory ButtonWidgetConfig.fromJson(Map<String, Object?> json) => _$ButtonWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ButtonWidgetConfigToJson(this);
 }
 
-@Freezed(equal: true)
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ElevatedButtonWidgetConfig with _$ElevatedButtonWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ElevatedButtonWidgetConfig({
-    String? backgroundColor,
-    String? foregroundColor,
-    String? textColor,
-    String? iconColor,
-    String? disabledIconColor,
-    String? disabledBackgroundColor,
-    String? disabledForegroundColor,
-  }) = _ElevatedButtonWidgetConfig;
+  const ElevatedButtonWidgetConfig({
+    this.backgroundColor,
+    this.foregroundColor,
+    this.textColor,
+    this.iconColor,
+    this.disabledIconColor,
+    this.disabledBackgroundColor,
+    this.disabledForegroundColor,
+  });
 
-  factory ElevatedButtonWidgetConfig.fromJson(Map<String, dynamic> json) => _$ElevatedButtonWidgetConfigFromJson(json);
+  @override
+  final String? backgroundColor;
+
+  @override
+  final String? foregroundColor;
+
+  @override
+  final String? textColor;
+
+  @override
+  final String? iconColor;
+
+  @override
+  final String? disabledIconColor;
+
+  @override
+  final String? disabledBackgroundColor;
+
+  @override
+  final String? disabledForegroundColor;
+
+  factory ElevatedButtonWidgetConfig.fromJson(Map<String, Object?> json) => _$ElevatedButtonWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ElevatedButtonWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class GroupWidgetConfig with _$GroupWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory GroupWidgetConfig({
-    @Default(GroupTitleListTileWidgetConfig()) GroupTitleListTileWidgetConfig groupTitleListTile,
+  const GroupWidgetConfig({
+    this.groupTitleListTile = const GroupTitleListTileWidgetConfig(),
     // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
     // ignore: deprecated_member_use_from_same_package
-    @Default(CallActionsWidgetConfig()) CallActionsWidgetConfig callActions,
-  }) = _GroupWidgetConfig;
+    this.callActions = const CallActionsWidgetConfig(),
+  });
 
-  factory GroupWidgetConfig.fromJson(Map<String, dynamic> json) => _$GroupWidgetConfigFromJson(json);
+  @override
+  final GroupTitleListTileWidgetConfig groupTitleListTile;
+
+  @override
+  @Deprecated('Use CallPageActionsConfig instead')
+  final CallActionsWidgetConfig callActions;
+
+  factory GroupWidgetConfig.fromJson(Map<String, Object?> json) => _$GroupWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$GroupWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class BarWidgetConfig with _$BarWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory BarWidgetConfig({
-    @Default(BottomNavigationBarWidgetConfig()) BottomNavigationBarWidgetConfig bottomNavigationBar,
-    @Default(ExtTabBarWidgetConfig()) ExtTabBarWidgetConfig extTabBar,
-  }) = _BarWidgetConfig;
+  const BarWidgetConfig({
+    this.bottomNavigationBar = const BottomNavigationBarWidgetConfig(),
+    this.extTabBar = const ExtTabBarWidgetConfig(),
+  });
 
-  factory BarWidgetConfig.fromJson(Map<String, dynamic> json) => _$BarWidgetConfigFromJson(json);
+  @override
+  final BottomNavigationBarWidgetConfig bottomNavigationBar;
+
+  @override
+  final ExtTabBarWidgetConfig extTabBar;
+
+  factory BarWidgetConfig.fromJson(Map<String, Object?> json) => _$BarWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$BarWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class BottomNavigationBarWidgetConfig with _$BottomNavigationBarWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory BottomNavigationBarWidgetConfig({
-    String? backgroundColor,
-    String? selectedItemColor,
-    String? unSelectedItemColor,
-  }) = _BottomNavigationBarWidgetConfig;
+  const BottomNavigationBarWidgetConfig({this.backgroundColor, this.selectedItemColor, this.unSelectedItemColor});
 
-  factory BottomNavigationBarWidgetConfig.fromJson(Map<String, dynamic> json) =>
+  @override
+  final String? backgroundColor;
+
+  @override
+  final String? selectedItemColor;
+
+  @override
+  final String? unSelectedItemColor;
+
+  factory BottomNavigationBarWidgetConfig.fromJson(Map<String, Object?> json) =>
       _$BottomNavigationBarWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$BottomNavigationBarWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ExtTabBarWidgetConfig with _$ExtTabBarWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ExtTabBarWidgetConfig({
-    String? foregroundColor,
-    String? backgroundColor,
-    String? selectedItemColor,
-    String? unSelectedItemColor,
-  }) = _ExtTabBarWidgetConfig;
+  const ExtTabBarWidgetConfig({
+    this.foregroundColor,
+    this.backgroundColor,
+    this.selectedItemColor,
+    this.unSelectedItemColor,
+  });
 
-  factory ExtTabBarWidgetConfig.fromJson(Map<String, dynamic> json) => _$ExtTabBarWidgetConfigFromJson(json);
+  @override
+  final String? foregroundColor;
+
+  @override
+  final String? backgroundColor;
+
+  @override
+  final String? selectedItemColor;
+
+  @override
+  final String? unSelectedItemColor;
+
+  factory ExtTabBarWidgetConfig.fromJson(Map<String, Object?> json) => _$ExtTabBarWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ExtTabBarWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory GroupTitleListTileWidgetConfig({
-    String? backgroundColor,
-    String? textColor,
-  }) = _GroupTitleListTileWidgetConfig;
+  const GroupTitleListTileWidgetConfig({this.backgroundColor, this.textColor});
 
-  factory GroupTitleListTileWidgetConfig.fromJson(Map<String, dynamic> json) =>
+  @override
+  final String? backgroundColor;
+
+  @override
+  final String? textColor;
+
+  factory GroupTitleListTileWidgetConfig.fromJson(Map<String, Object?> json) =>
       _$GroupTitleListTileWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$GroupTitleListTileWidgetConfigToJson(this);
 }
 
 @Deprecated('Use CallPageActionsConfig instead')
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory CallActionsWidgetConfig({
-    String? callStartBackgroundColor,
-    String? hangupBackgroundColor,
-    String? transferBackgroundColor,
-    String? cameraBackgroundColor,
-    String? cameraActiveBackgroundColor,
-    String? mutedBackgroundColor,
-    String? mutedActiveBackgroundColor,
-    String? speakerBackgroundColor,
-    String? speakerActiveBackgroundColor,
-    String? heldBackgroundColor,
-    String? heldActiveBackgroundColor,
-    String? swapBackgroundColor,
-    String? keyBackgroundColor,
-    String? keypadBackgroundColor,
-    String? keypadActiveBackgroundColor,
-  }) = _CallActionsWidgetConfig;
+  const CallActionsWidgetConfig({
+    this.callStartBackgroundColor,
+    this.hangupBackgroundColor,
+    this.transferBackgroundColor,
+    this.cameraBackgroundColor,
+    this.cameraActiveBackgroundColor,
+    this.mutedBackgroundColor,
+    this.mutedActiveBackgroundColor,
+    this.speakerBackgroundColor,
+    this.speakerActiveBackgroundColor,
+    this.heldBackgroundColor,
+    this.heldActiveBackgroundColor,
+    this.swapBackgroundColor,
+    this.keyBackgroundColor,
+    this.keypadBackgroundColor,
+    this.keypadActiveBackgroundColor,
+  });
 
-  factory CallActionsWidgetConfig.fromJson(Map<String, dynamic> json) => _$CallActionsWidgetConfigFromJson(json);
+  @override
+  final String? callStartBackgroundColor;
+
+  @override
+  final String? hangupBackgroundColor;
+
+  @override
+  final String? transferBackgroundColor;
+
+  @override
+  final String? cameraBackgroundColor;
+
+  @override
+  final String? cameraActiveBackgroundColor;
+
+  @override
+  final String? mutedBackgroundColor;
+
+  @override
+  final String? mutedActiveBackgroundColor;
+
+  @override
+  final String? speakerBackgroundColor;
+
+  @override
+  final String? speakerActiveBackgroundColor;
+
+  @override
+  final String? heldBackgroundColor;
+
+  @override
+  final String? heldActiveBackgroundColor;
+
+  @override
+  final String? swapBackgroundColor;
+
+  @override
+  final String? keyBackgroundColor;
+
+  @override
+  final String? keypadBackgroundColor;
+
+  @override
+  final String? keypadActiveBackgroundColor;
+
+  factory CallActionsWidgetConfig.fromJson(Map<String, Object?> json) => _$CallActionsWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$CallActionsWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ImageAssetsConfig with _$ImageAssetsConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ImageAssetsConfig({
-    ImageSource? defaultPlaceholderImage,
-    @Default(AppIconWidgetConfig()) AppIconWidgetConfig appIcon,
-    @Default(LeadingAvatarStyleConfig()) LeadingAvatarStyleConfig leadingAvatarStyle,
-  }) = _ImageAssetsConfig;
+  const ImageAssetsConfig({
+    this.defaultPlaceholderImage,
+    this.appIcon = const AppIconWidgetConfig(),
+    this.leadingAvatarStyle = const LeadingAvatarStyleConfig(),
+  });
 
-  factory ImageAssetsConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetsConfigFromJson(json);
+  @override
+  final ImageSource? defaultPlaceholderImage;
 
-  /// A globally consistent metadata key used to associate additional resources
+  @override
+  final AppIconWidgetConfig appIcon;
+
+  @override
+  final LeadingAvatarStyleConfig leadingAvatarStyle;
+
   static const String metadataPrimaryOnboardingLogoUrl = 'primaryOnboardingLogoUrl';
 
-  /// A globally consistent metadata key used to associate additional resources
   static const String metadataSecondaryOnboardingLogoUrl = 'secondaryOnboardingLogoUrl';
+
+  factory ImageAssetsConfig.fromJson(Map<String, Object?> json) => _$ImageAssetsConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ImageAssetsConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ImageAssetConfig with _$ImageAssetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ImageAssetConfig({
-    ImageSource? imageSource,
-    @Default(1.0) double widthFactor,
-    @Default('#FFFFFF') String labelColor,
-    @Default(Metadata()) Metadata metadata,
-    @Deprecated('Use source.uri instead') String? uri,
-  }) = _ImageAssetConfig;
+  const ImageAssetConfig({
+    this.imageSource,
+    this.widthFactor = 1.0,
+    this.labelColor = '#FFFFFF',
+    this.metadata = const Metadata(),
+    @Deprecated('Use source.uri instead') this.uri,
+  });
 
-  factory ImageAssetConfig.fromJson(Map<String, dynamic> json) => _$ImageAssetConfigFromJson(json);
+  @override
+  final ImageSource? imageSource;
+
+  @override
+  final double widthFactor;
+
+  @override
+  final String labelColor;
+
+  @override
+  final Metadata metadata;
+
+  @override
+  @Deprecated('Use source.uri instead')
+  final String? uri;
+
+  factory ImageAssetConfig.fromJson(Map<String, Object?> json) => _$ImageAssetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ImageAssetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class AppIconWidgetConfig with _$AppIconWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory AppIconWidgetConfig({
-    String? color,
-  }) = _AppIconWidgetConfig;
+  const AppIconWidgetConfig({this.color});
 
-  factory AppIconWidgetConfig.fromJson(Map<String, dynamic> json) => _$AppIconWidgetConfigFromJson(json);
+  @override
+  final String? color;
+
+  factory AppIconWidgetConfig.fromJson(Map<String, Object?> json) => _$AppIconWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppIconWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class InputWidgetConfig with _$InputWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory InputWidgetConfig({
-    @Default(TextFormFieldWidgetConfig()) TextFormFieldWidgetConfig primary,
-  }) = _InputWidgetConfig;
+  const InputWidgetConfig({this.primary = const TextFormFieldWidgetConfig()});
 
-  factory InputWidgetConfig.fromJson(Map<String, dynamic> json) => _$InputWidgetConfigFromJson(json);
+  @override
+  final TextFormFieldWidgetConfig primary;
+
+  factory InputWidgetConfig.fromJson(Map<String, Object?> json) => _$InputWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$InputWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class TextFormFieldWidgetConfig with _$TextFormFieldWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory TextFormFieldWidgetConfig({
-    String? labelColor,
-    @Default(InputBorderWidgetConfig()) InputBorderWidgetConfig border,
-  }) = _TextFormFieldWidgetConfig;
+  const TextFormFieldWidgetConfig({this.labelColor, this.border = const InputBorderWidgetConfig()});
 
-  factory TextFormFieldWidgetConfig.fromJson(Map<String, dynamic> json) => _$TextFormFieldWidgetConfigFromJson(json);
+  @override
+  final String? labelColor;
+
+  @override
+  final InputBorderWidgetConfig border;
+
+  factory TextFormFieldWidgetConfig.fromJson(Map<String, Object?> json) => _$TextFormFieldWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$TextFormFieldWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class InputBorderWidgetConfig with _$InputBorderWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory InputBorderWidgetConfig({
-    @Default(BorderWidgetConfig()) BorderWidgetConfig disabled,
-    @Default(BorderWidgetConfig()) BorderWidgetConfig focused,
-    @Default(BorderWidgetConfig()) BorderWidgetConfig any,
-  }) = _InputBorderWidgetConfig;
+  const InputBorderWidgetConfig({
+    this.disabled = const BorderWidgetConfig(),
+    this.focused = const BorderWidgetConfig(),
+    this.any = const BorderWidgetConfig(),
+  });
 
-  factory InputBorderWidgetConfig.fromJson(Map<String, dynamic> json) => _$InputBorderWidgetConfigFromJson(json);
+  @override
+  final BorderWidgetConfig disabled;
+
+  @override
+  final BorderWidgetConfig focused;
+
+  @override
+  final BorderWidgetConfig any;
+
+  factory InputBorderWidgetConfig.fromJson(Map<String, Object?> json) => _$InputBorderWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$InputBorderWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class BorderWidgetConfig with _$BorderWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory BorderWidgetConfig({
-    String? typicalColor,
-    String? errorColor,
-  }) = _BorderWidgetConfig;
+  const BorderWidgetConfig({this.typicalColor, this.errorColor});
 
-  factory BorderWidgetConfig.fromJson(Map<String, dynamic> json) => _$BorderWidgetConfigFromJson(json);
+  @override
+  final String? typicalColor;
+
+  @override
+  final String? errorColor;
+
+  factory BorderWidgetConfig.fromJson(Map<String, Object?> json) => _$BorderWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$BorderWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class TextWidgetConfig with _$TextWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory TextWidgetConfig({
-    @Default(TextSelectionWidgetConfig()) TextSelectionWidgetConfig selection,
-    @Default(LinkifyWidgetConfig()) LinkifyWidgetConfig linkify,
-  }) = _TextWidgetConfig;
+  const TextWidgetConfig({
+    this.selection = const TextSelectionWidgetConfig(),
+    this.linkify = const LinkifyWidgetConfig(),
+  });
 
-  factory TextWidgetConfig.fromJson(Map<String, dynamic> json) => _$TextWidgetConfigFromJson(json);
+  @override
+  final TextSelectionWidgetConfig selection;
+
+  @override
+  final LinkifyWidgetConfig linkify;
+
+  factory TextWidgetConfig.fromJson(Map<String, Object?> json) => _$TextWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$TextWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class TextSelectionWidgetConfig with _$TextSelectionWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory TextSelectionWidgetConfig({
-    String? cursorColor,
-    String? selectionColor,
-    String? selectionHandleColor,
-  }) = _TextSelectionWidgetConfig;
+  const TextSelectionWidgetConfig({this.cursorColor, this.selectionColor, this.selectionHandleColor});
 
-  factory TextSelectionWidgetConfig.fromJson(Map<String, dynamic> json) => _$TextSelectionWidgetConfigFromJson(json);
+  @override
+  final String? cursorColor;
+
+  @override
+  final String? selectionColor;
+
+  @override
+  final String? selectionHandleColor;
+
+  factory TextSelectionWidgetConfig.fromJson(Map<String, Object?> json) => _$TextSelectionWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$TextSelectionWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class LinkifyWidgetConfig with _$LinkifyWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory LinkifyWidgetConfig({
-    String? styleColor,
-    String? linkifyStyleColor,
-  }) = _LinkifyWidgetConfig;
+  const LinkifyWidgetConfig({this.styleColor, this.linkifyStyleColor});
 
-  factory LinkifyWidgetConfig.fromJson(Map<String, dynamic> json) => _$LinkifyWidgetConfigFromJson(json);
+  @override
+  final String? styleColor;
+
+  @override
+  final String? linkifyStyleColor;
+
+  factory LinkifyWidgetConfig.fromJson(Map<String, Object?> json) => _$LinkifyWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LinkifyWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class DialogWidgetConfig with _$DialogWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory DialogWidgetConfig({
-    @Default(ConfirmDialogWidgetConfig()) ConfirmDialogWidgetConfig confirmDialog,
-    @Default(SnackBarWidgetConfig()) SnackBarWidgetConfig snackBar,
-  }) = _DialogWidgetConfig;
+  const DialogWidgetConfig({
+    this.confirmDialog = const ConfirmDialogWidgetConfig(),
+    this.snackBar = const SnackBarWidgetConfig(),
+  });
 
-  factory DialogWidgetConfig.fromJson(Map<String, dynamic> json) => _$DialogWidgetConfigFromJson(json);
+  @override
+  final ConfirmDialogWidgetConfig confirmDialog;
+
+  @override
+  final SnackBarWidgetConfig snackBar;
+
+  factory DialogWidgetConfig.fromJson(Map<String, Object?> json) => _$DialogWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$DialogWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ConfirmDialogWidgetConfig({
-    String? activeButtonColor1,
-    String? activeButtonColor2,
-    String? defaultButtonColor,
-  }) = _ConfirmDialogWidgetConfig;
+  const ConfirmDialogWidgetConfig({this.activeButtonColor1, this.activeButtonColor2, this.defaultButtonColor});
 
-  factory ConfirmDialogWidgetConfig.fromJson(Map<String, dynamic> json) => _$ConfirmDialogWidgetConfigFromJson(json);
+  @override
+  final String? activeButtonColor1;
+
+  @override
+  final String? activeButtonColor2;
+
+  @override
+  final String? defaultButtonColor;
+
+  factory ConfirmDialogWidgetConfig.fromJson(Map<String, Object?> json) => _$ConfirmDialogWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ConfirmDialogWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class SnackBarWidgetConfig with _$SnackBarWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory SnackBarWidgetConfig({
-    @Default('#75B943') String successBackgroundColor,
-    @Default('#E74C3C') String errorBackgroundColor,
-    @Default('#494949') String infoBackgroundColor,
-    @Default('#F95A14') String warningBackgroundColor,
-  }) = _SnackBarWidgetConfig;
+  const SnackBarWidgetConfig({
+    this.successBackgroundColor = '#75B943',
+    this.errorBackgroundColor = '#E74C3C',
+    this.infoBackgroundColor = '#494949',
+    this.warningBackgroundColor = '#F95A14',
+  });
 
-  factory SnackBarWidgetConfig.fromJson(Map<String, dynamic> json) => _$SnackBarWidgetConfigFromJson(json);
+  @override
+  final String successBackgroundColor;
+
+  @override
+  final String errorBackgroundColor;
+
+  @override
+  final String infoBackgroundColor;
+
+  @override
+  final String warningBackgroundColor;
+
+  factory SnackBarWidgetConfig.fromJson(Map<String, Object?> json) => _$SnackBarWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$SnackBarWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory ActionPadWidgetConfig({
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig callStart,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig callTransfer,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig backspacePressed,
-  }) = _ActionPadWidgetConfig;
+  const ActionPadWidgetConfig({
+    this.callStart = const ElevatedButtonWidgetConfig(),
+    this.callTransfer = const ElevatedButtonWidgetConfig(),
+    this.backspacePressed = const ElevatedButtonWidgetConfig(),
+  });
 
-  factory ActionPadWidgetConfig.fromJson(Map<String, dynamic> json) => _$ActionPadWidgetConfigFromJson(json);
+  @override
+  final ElevatedButtonWidgetConfig callStart;
+
+  @override
+  final ElevatedButtonWidgetConfig callTransfer;
+
+  @override
+  final ElevatedButtonWidgetConfig backspacePressed;
+
+  factory ActionPadWidgetConfig.fromJson(Map<String, Object?> json) => _$ActionPadWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ActionPadWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class StatusesWidgetConfig with _$StatusesWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory StatusesWidgetConfig({
-    @Default(RegistrationStatusesWidgetConfig()) RegistrationStatusesWidgetConfig registrationStatuses,
-    @Default(CallStatusesWidgetConfig()) CallStatusesWidgetConfig callStatuses,
-  }) = _StatusesWidgetConfig;
+  const StatusesWidgetConfig({
+    this.registrationStatuses = const RegistrationStatusesWidgetConfig(),
+    this.callStatuses = const CallStatusesWidgetConfig(),
+  });
 
-  factory StatusesWidgetConfig.fromJson(Map<String, dynamic> json) => _$StatusesWidgetConfigFromJson(json);
+  @override
+  final RegistrationStatusesWidgetConfig registrationStatuses;
+
+  @override
+  final CallStatusesWidgetConfig callStatuses;
+
+  factory StatusesWidgetConfig.fromJson(Map<String, Object?> json) => _$StatusesWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$StatusesWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class RegistrationStatusesWidgetConfig with _$RegistrationStatusesWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory RegistrationStatusesWidgetConfig({
-    @Default('#75B943') String online,
-    @Default('#EEF3F6') String offline,
-  }) = _RegistrationStatusesWidgetConfig;
+  const RegistrationStatusesWidgetConfig({this.online = '#75B943', this.offline = '#EEF3F6'});
 
-  factory RegistrationStatusesWidgetConfig.fromJson(Map<String, dynamic> json) =>
+  @override
+  final String online;
+
+  @override
+  final String offline;
+
+  factory RegistrationStatusesWidgetConfig.fromJson(Map<String, Object?> json) =>
       _$RegistrationStatusesWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$RegistrationStatusesWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class CallStatusesWidgetConfig with _$CallStatusesWidgetConfig {
-  @JsonSerializable(explicitToJson: true)
-  // ignore: invalid_annotation_target
-  const factory CallStatusesWidgetConfig({
-    @Default('#E74C3C') String connectivityNone,
-    @Default('#E74C3C') String connectError,
-    @Default('#494949') String appUnregistered,
-    @Default('#E74C3C') String connectIssue,
-    @Default('#123752') String inProgress,
-    @Default('#75B943') String ready,
-  }) = _CallStatusesWidgetConfig;
+  const CallStatusesWidgetConfig({
+    this.connectivityNone = '#E74C3C',
+    this.connectError = '#E74C3C',
+    this.appUnregistered = '#494949',
+    this.connectIssue = '#E74C3C',
+    this.inProgress = '#123752',
+    this.ready = '#75B943',
+  });
 
-  factory CallStatusesWidgetConfig.fromJson(Map<String, dynamic> json) => _$CallStatusesWidgetConfigFromJson(json);
+  @override
+  final String connectivityNone;
+
+  @override
+  final String connectError;
+
+  @override
+  final String appUnregistered;
+
+  @override
+  final String connectIssue;
+
+  @override
+  final String inProgress;
+
+  @override
+  final String ready;
+
+  factory CallStatusesWidgetConfig.fromJson(Map<String, Object?> json) => _$CallStatusesWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$CallStatusesWidgetConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class DecorationConfig with _$DecorationConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory DecorationConfig({
-    @Default(GradientColorsConfig()) GradientColorsConfig primaryGradientColorsConfig,
-  }) = _DecorationConfig;
+  const DecorationConfig({this.primaryGradientColorsConfig = const GradientColorsConfig()});
 
-  factory DecorationConfig.fromJson(Map<String, dynamic> json) => _$DecorationConfigFromJson(json);
+  @override
+  final GradientColorsConfig primaryGradientColorsConfig;
+
+  factory DecorationConfig.fromJson(Map<String, Object?> json) => _$DecorationConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$DecorationConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class GradientColorsConfig with _$GradientColorsConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory GradientColorsConfig({
-    @Default([]) List<CustomColor> colors,
-  }) = _PrimaryGradientColorsConfig;
+  const GradientColorsConfig({this.colors = const []});
 
-  factory GradientColorsConfig.fromJson(Map<String, dynamic> json) => _$GradientColorsConfigFromJson(json);
+  @override
+  final List<CustomColor> colors;
+
+  factory GradientColorsConfig.fromJson(Map<String, Object?> json) => _$GradientColorsConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$GradientColorsConfigToJson(this);
 }

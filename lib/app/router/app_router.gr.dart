@@ -422,11 +422,14 @@ class ContactsScreenPageRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! ContactsScreenPageRouteArgs) return false;
-    return const ListEquality().equals(sourceTypes, other.sourceTypes);
+    return const ListEquality<ContactSourceType>().equals(
+      sourceTypes,
+      other.sourceTypes,
+    );
   }
 
   @override
-  int get hashCode => const ListEquality().hash(sourceTypes);
+  int get hashCode => const ListEquality<ContactSourceType>().hash(sourceTypes);
 }
 
 /// generated route for
@@ -597,11 +600,12 @@ class ErrorDetailsScreenPageRouteArgs {
     if (identical(this, other)) return true;
     if (other is! ErrorDetailsScreenPageRouteArgs) return false;
     return title == other.title &&
-        const ListEquality().equals(fields, other.fields);
+        const ListEquality<ErrorFieldModel>().equals(fields, other.fields);
   }
 
   @override
-  int get hashCode => title.hashCode ^ const ListEquality().hash(fields);
+  int get hashCode =>
+      title.hashCode ^ const ListEquality<ErrorFieldModel>().hash(fields);
 }
 
 /// generated route for
@@ -1007,14 +1011,14 @@ class LoginSignupVerifyScreenPageRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! LoginSignupVerifyScreenPageRouteArgs) return false;
-    return const SetEquality().equals(
+    return const SetEquality<SafeAreaSide>().equals(
       bodySafeAreaSides,
       other.bodySafeAreaSides,
     );
   }
 
   @override
-  int get hashCode => const SetEquality().hash(bodySafeAreaSides);
+  int get hashCode => const SetEquality<SafeAreaSide>().hash(bodySafeAreaSides);
 }
 
 /// generated route for
@@ -1085,11 +1089,14 @@ class LoginSwitchScreenPageRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! LoginSwitchScreenPageRouteArgs) return false;
-    return const SetEquality().equals(
+    return const SetEquality<SafeAreaSide>().equals(
           bodySafeAreaSides,
           other.bodySafeAreaSides,
         ) &&
-        const ListEquality().equals(forceLoginTypes, other.forceLoginTypes) &&
+        const ListEquality<LoginType>().equals(
+          forceLoginTypes,
+          other.forceLoginTypes,
+        ) &&
         isLogoVisible == other.isLogoVisible &&
         isAppBarVisible == other.isAppBarVisible &&
         style == other.style;
@@ -1097,8 +1104,8 @@ class LoginSwitchScreenPageRouteArgs {
 
   @override
   int get hashCode =>
-      const SetEquality().hash(bodySafeAreaSides) ^
-      const ListEquality().hash(forceLoginTypes) ^
+      const SetEquality<SafeAreaSide>().hash(bodySafeAreaSides) ^
+      const ListEquality<LoginType>().hash(forceLoginTypes) ^
       isLogoVisible.hashCode ^
       isAppBarVisible.hashCode ^
       style.hashCode;

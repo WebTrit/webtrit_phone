@@ -7,11 +7,7 @@ class FailureRetryView extends StatelessWidget {
   final DefaultErrorNotification errorNotification;
   final VoidCallback onRetry;
 
-  const FailureRetryView({
-    super.key,
-    required this.errorNotification,
-    required this.onRetry,
-  });
+  const FailureRetryView({super.key, required this.errorNotification, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +20,7 @@ class FailureRetryView extends StatelessWidget {
             child: Text(errorNotification.l10n(context), textAlign: TextAlign.center),
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onRetry,
-            child: Text(context.l10n.voicemail_Label_retry),
-          ),
+          ElevatedButton(onPressed: onRetry, child: Text(context.l10n.voicemail_Label_retry)),
         ],
       ),
     );

@@ -6,9 +6,9 @@ part of 'input_decoration_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$InputDecorationConfigImpl _$$InputDecorationConfigImplFromJson(
+InputDecorationConfig _$InputDecorationConfigFromJson(
   Map<String, dynamic> json,
-) => _$InputDecorationConfigImpl(
+) => InputDecorationConfig(
   hintText: json['hintText'] as String?,
   hintStyle: json['hintStyle'] == null
       ? null
@@ -56,8 +56,8 @@ _$InputDecorationConfigImpl _$$InputDecorationConfigImplFromJson(
       : BorderConfig.fromJson(json['disabledBorder'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$$InputDecorationConfigImplToJson(
-  _$InputDecorationConfigImpl instance,
+Map<String, dynamic> _$InputDecorationConfigToJson(
+  InputDecorationConfig instance,
 ) => <String, dynamic>{
   'hintText': instance.hintText,
   'hintStyle': instance.hintStyle?.toJson(),
@@ -80,15 +80,14 @@ Map<String, dynamic> _$$InputDecorationConfigImplToJson(
   'disabledBorder': instance.disabledBorder?.toJson(),
 };
 
-_$BorderConfigImpl _$$BorderConfigImplFromJson(Map<String, dynamic> json) =>
-    _$BorderConfigImpl(
-      type: json['type'] as String? ?? 'underline',
-      borderRadius: (json['borderRadius'] as num?)?.toDouble(),
-      borderColor: json['borderColor'] as String?,
-      borderWidth: (json['borderWidth'] as num?)?.toDouble(),
-    );
+BorderConfig _$BorderConfigFromJson(Map<String, dynamic> json) => BorderConfig(
+  type: json['type'] as String? ?? 'underline',
+  borderRadius: (json['borderRadius'] as num?)?.toDouble(),
+  borderColor: json['borderColor'] as String?,
+  borderWidth: (json['borderWidth'] as num?)?.toDouble(),
+);
 
-Map<String, dynamic> _$$BorderConfigImplToJson(_$BorderConfigImpl instance) =>
+Map<String, dynamic> _$BorderConfigToJson(BorderConfig instance) =>
     <String, dynamic>{
       'type': instance.type,
       'borderRadius': instance.borderRadius,

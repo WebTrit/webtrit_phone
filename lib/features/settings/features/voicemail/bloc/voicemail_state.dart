@@ -1,20 +1,22 @@
 part of 'voicemail_cubit.dart';
 
-enum VoicemailStatus {
-  loading,
-  loaded,
-  featureNotSupported,
-}
+enum VoicemailStatus { loading, loaded, featureNotSupported }
 
+// TODO(Serdun): DiagnosticableTreeMixin is required only because `foundation.dart`
+// is imported transitively through DefaultErrorNotification (via material.dart).
+// Remove this mixin once that indirect dependency is eliminated.
 @freezed
-class VoicemailState with _$VoicemailState {
-  const VoicemailState._();
+class VoicemailState with _$VoicemailState, DiagnosticableTreeMixin {
+  const VoicemailState({this.status = VoicemailStatus.loading, this.items = const [], this.error});
 
-  const factory VoicemailState({
-    @Default(VoicemailStatus.loading) VoicemailStatus status,
-    @Default([]) List<Voicemail> items,
-    DefaultErrorNotification? error,
-  }) = _VoicemailState;
+  @override
+  final VoicemailStatus status;
+
+  @override
+  final List<Voicemail> items;
+
+  @override
+  final DefaultErrorNotification? error;
 
   /// Status to show when the user is refreshing or updating the list of voicemails.
   bool get isRefreshing => status == VoicemailStatus.loading && items.isNotEmpty;

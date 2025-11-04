@@ -6,13 +6,13 @@ part of 'demo_call_to_actions_param.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DemoCallToActionsParamImpl _$$DemoCallToActionsParamImplFromJson(
+DemoCallToActionsParam _$DemoCallToActionsParamFromJson(
   Map<String, dynamic> json,
-) => _$DemoCallToActionsParamImpl(
+) => DemoCallToActionsParam(
   email: json['email'] as String,
   tab: json['tab'] as String,
 );
 
-Map<String, dynamic> _$$DemoCallToActionsParamImplToJson(
-  _$DemoCallToActionsParamImpl instance,
+Map<String, dynamic> _$DemoCallToActionsParamToJson(
+  DemoCallToActionsParam instance,
 ) => <String, dynamic>{'email': instance.email, 'tab': instance.tab};

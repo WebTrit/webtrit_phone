@@ -10,134 +10,151 @@ part 'theme_page_config.freezed.dart';
 
 part 'theme_page_config.g.dart';
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class ThemePageConfig with _$ThemePageConfig {
-  @JsonSerializable(explicitToJson: true)
-  // ignore: invalid_annotation_target
-  const factory ThemePageConfig({
-    @Default(LoginPageConfig()) LoginPageConfig login,
-    @Default(AboutPageConfig()) AboutPageConfig about,
-    @Default(CallPageConfig()) CallPageConfig dialing,
-    @Default(KeypadPageConfig()) KeypadPageConfig keypad,
-  }) = _ThemePageConfig;
+  const ThemePageConfig({
+    this.login = const LoginPageConfig(),
+    this.about = const AboutPageConfig(),
+    this.dialing = const CallPageConfig(),
+    this.keypad = const KeypadPageConfig(),
+  });
 
-  factory ThemePageConfig.fromJson(Map<String, dynamic> json) => _$ThemePageConfigFromJson(json);
+  @override
+  final LoginPageConfig login;
+
+  @override
+  final AboutPageConfig about;
+
+  @override
+  final CallPageConfig dialing;
+
+  @override
+  final KeypadPageConfig keypad;
+
+  factory ThemePageConfig.fromJson(Map<String, Object?> json) => _$ThemePageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ThemePageConfigToJson(this);
 }
 
-// TODO(Serdun): Decompose image properties into a separate class
-// TODO(Serdun): Split LoginPageConfig, as it currently mixes data from the Welcome Page and various login pages.
 /// Declarative configuration for the **Login Page**.
 ///
-/// This configuration defines appearance, layout, and metadata options
-/// for the [Login screen](https://github.com/WebTrit/webtrit_phone/tree/main/lib/features/login/view).
-///
-/// Typical use cases:
-/// - Displaying a **picture/branding logo** on the login page.
-/// - Adjusting **scaling** for different screen sizes.
-/// - Defining **label colors** for UI elements.
-/// - Configuring the **mode selection** page ([LoginModeSelectPageConfig]).
-/// - Providing **structured metadata** (see [Metadata]) such as additional
-///   resources, translations, or feature flags.
-///
-/// It also defines a globally consistent [metadataPictureUrl] key,
-/// which can be used to associate a picture URL in metadata.
-@Freezed()
+/// Defines appearance, layout, and metadata options
+/// for the login-related screens.
+@freezed
+@JsonSerializable(explicitToJson: true)
 class LoginPageConfig with _$LoginPageConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory LoginPageConfig({
-    /// Configuration for the **mode selection** screen.
-    @Default(LoginModeSelectPageConfig()) LoginModeSelectPageConfig modeSelect,
+  const LoginPageConfig({
+    this.modeSelect = const LoginModeSelectPageConfig(),
+    this.switchPage = const LoginSwitchPageConfig(),
+    this.otpSigninVerify = const LoginOtpSigninVerifyScreenPageConfig(),
+    this.signupVerify = const LoginSignupVerifyScreenPageConfig(),
+  });
 
-    /// Configuration for the **switch mode** screen.
-    @Default(LoginSwitchPageConfig()) LoginSwitchPageConfig switchPage,
+  @override
+  final LoginModeSelectPageConfig modeSelect;
 
-    /// Configuration for the OTP sign-in verification screen.
-    @Default(LoginOtpSigninVerifyScreenPageConfig()) LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+  @override
+  final LoginSwitchPageConfig switchPage;
 
-    /// Configuration for the Sign-Up verification screen.
-    @Default(LoginSignupVerifyScreenPageConfig()) LoginSignupVerifyScreenPageConfig signupVerify,
-  }) = _LoginPageConfig;
+  @override
+  final LoginOtpSigninVerifyScreenPageConfig otpSigninVerify;
 
-  factory LoginPageConfig.fromJson(Map<String, dynamic> json) => _$LoginPageConfigFromJson(json);
+  @override
+  final LoginSignupVerifyScreenPageConfig signupVerify;
+
+  factory LoginPageConfig.fromJson(Map<String, Object?> json) => _$LoginPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LoginPageConfigToJson(this);
 
   /// A globally consistent metadata key used to associate additional resources,
   /// specifically for the login page picture.
   static const String metadataPictureUrl = 'pictureUrl';
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class LoginOtpSigninVerifyScreenPageConfig with _$LoginOtpSigninVerifyScreenPageConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory LoginOtpSigninVerifyScreenPageConfig({
-    /// Countdown interval in seconds before the "Repeat" button
-    /// becomes active again. If 0 → countdown disabled, button active immediately.
-    @Default(30) int countdownRepeatIntervalSeconds,
-  }) = _LoginOtpSigninVerifyScreenPageConfig;
+  const LoginOtpSigninVerifyScreenPageConfig({this.countdownRepeatIntervalSeconds = 30});
 
-  factory LoginOtpSigninVerifyScreenPageConfig.fromJson(Map<String, dynamic> json) =>
+  @override
+  final int countdownRepeatIntervalSeconds;
+
+  factory LoginOtpSigninVerifyScreenPageConfig.fromJson(Map<String, Object?> json) =>
       _$LoginOtpSigninVerifyScreenPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LoginOtpSigninVerifyScreenPageConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class LoginSignupVerifyScreenPageConfig with _$LoginSignupVerifyScreenPageConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory LoginSignupVerifyScreenPageConfig({
-    /// Countdown interval in seconds before the "Repeat" button
-    /// becomes active again. If 0 → countdown disabled, button active immediately.
-    @Default(30) int countdownRepeatIntervalSeconds,
-  }) = _LoginSignupVerifyScreenPageConfig;
+  const LoginSignupVerifyScreenPageConfig({this.countdownRepeatIntervalSeconds = 30});
 
-  factory LoginSignupVerifyScreenPageConfig.fromJson(Map<String, dynamic> json) =>
+  @override
+  final int countdownRepeatIntervalSeconds;
+
+  factory LoginSignupVerifyScreenPageConfig.fromJson(Map<String, Object?> json) =>
       _$LoginSignupVerifyScreenPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LoginSignupVerifyScreenPageConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory LoginModeSelectPageConfig({
-    OverlayStyleModel? systemUiOverlayStyle,
-    ImageSource? mainLogo,
-    @Default(ElevatedButtonStyleType.primary) ElevatedButtonStyleType buttonLoginStyleType,
-    @Default(ElevatedButtonStyleType.primary) ElevatedButtonStyleType buttonSignupStyleType,
-  }) = _LoginModeSelectPageConfig;
+  const LoginModeSelectPageConfig({
+    this.systemUiOverlayStyle,
+    this.mainLogo,
+    this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
+    this.buttonSignupStyleType = ElevatedButtonStyleType.primary,
+  });
 
-  factory LoginModeSelectPageConfig.fromJson(Map<String, dynamic> json) => _$LoginModeSelectPageConfigFromJson(json);
+  @override
+  final OverlayStyleModel? systemUiOverlayStyle;
+
+  @override
+  final ImageSource? mainLogo;
+
+  @override
+  final ElevatedButtonStyleType buttonLoginStyleType;
+
+  @override
+  final ElevatedButtonStyleType buttonSignupStyleType;
+
+  factory LoginModeSelectPageConfig.fromJson(Map<String, Object?> json) => _$LoginModeSelectPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LoginModeSelectPageConfigToJson(this);
 }
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class LoginSwitchPageConfig with _$LoginSwitchPageConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory LoginSwitchPageConfig({
-    ImageSource? mainLogo,
-  }) = _LoginSwitchPageConfig;
+  const LoginSwitchPageConfig({this.mainLogo});
 
-  factory LoginSwitchPageConfig.fromJson(Map<String, dynamic> json) => _$LoginSwitchPageConfigFromJson(json);
+  @override
+  final ImageSource? mainLogo;
+
+  factory LoginSwitchPageConfig.fromJson(Map<String, Object?> json) => _$LoginSwitchPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LoginSwitchPageConfigToJson(this);
 }
 
 /// Declarative configuration for the **About Page**.
-///
-/// This configuration defines appearance and metadata options
-/// for the [About screen](https://github.com/WebTrit/webtrit_phone/tree/main/lib/features/settings/features/about).
-///
-/// Typical use cases:
-/// - Displaying a **picture/logo** on the About page.
-/// - Providing **structured metadata** (see [Metadata]) such as app version,
-///   build number, or links to external resources.
-///
-/// It also defines a globally consistent [metadataPictureUrl] key,
-/// which can be used to associate a picture URL in metadata.
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class AboutPageConfig with _$AboutPageConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory AboutPageConfig({
-    /// Structured image source for the picture/logo.
-    ImageSource? mainLogo,
+  const AboutPageConfig({this.mainLogo, this.metadata = const Metadata()});
 
-    /// Metadata section with additional information such as version, build number, etc.
-    @Default(Metadata()) Metadata metadata,
-  }) = _AboutPageConfig;
+  @override
+  final ImageSource? mainLogo;
 
-  factory AboutPageConfig.fromJson(Map<String, dynamic> json) => _$AboutPageConfigFromJson(json);
+  @override
+  final Metadata metadata;
+
+  factory AboutPageConfig.fromJson(Map<String, Object?> json) => _$AboutPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$AboutPageConfigToJson(this);
 
   /// A globally consistent metadata key used to associate additional resources,
   /// specifically for the About page picture.
@@ -145,121 +162,125 @@ class AboutPageConfig with _$AboutPageConfig {
 }
 
 /// Declarative configuration for the **Call Screen**.
-///
-/// This configuration defines high-level appearance and behavior options
-/// for the [Call screen views](https://github.com/WebTrit/webtrit_phone/tree/main/lib/features/call/view).
-///
-/// It provides a structured way to theme and customize:
-/// - `systemUiOverlayStyle` — controls the **status bar / navigation bar**
-///   colors and brightness for the call screen.
-/// - `appBarStyle` — configuration for the **top AppBar** (icons, title, background).
-/// - `callInfo` — configuration for the **call information block**
-///   (see [CallPageInfoConfig] for username, number, and status styling).
-///
-/// This model is intended to be used in **theme definitions** and mapped
-/// into [ThemeExtension]s for consistent UI across the app.
-@Freezed()
-class CallPageConfig with _$CallPageConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory CallPageConfig({
-    /// System UI overlay style (status bar, navigation bar).
-    OverlayStyleModel? systemUiOverlayStyle,
-
-    /// Style configuration for the app bar (title, icons, background).
-    AppBarStyleConfig? appBarStyle,
-
-    /// Style configuration for the call information area (username, number, status).
-    CallPageInfoConfig? callInfo,
-
-    /// Style configuration for the action buttons area (call, hangup, mute, etc).
-    CallPageActionsConfig? actions,
-  }) = _CallPageConfig;
-
-  factory CallPageConfig.fromJson(Map<String, dynamic> json) => _$CallPageConfigFromJson(json);
-}
-
-@Freezed()
-class CallPageActionsConfig with _$CallPageActionsConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory CallPageActionsConfig({
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig callStart,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig hangup,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig transfer,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig camera,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig muted,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig speaker,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig held,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig swap,
-    @Default(ElevatedButtonWidgetConfig()) ElevatedButtonWidgetConfig key,
-  }) = _CallPageActionsConfig;
-
-  factory CallPageActionsConfig.fromJson(Map<String, dynamic> json) => _$CallPageActionsConfigFromJson(json);
-}
-
-/// Declarative configuration for the **Call Info section** on the call screen.
-///
-/// This model defines text styles for different parts of the call information
-/// displayed in the [CallInfo widget](https://github.com/WebTrit/webtrit_phone/blob/main/lib/features/call/widgets/call_info.dart).
-///
-/// Typical usage:
-/// - `usernameTextStyle` — large text for the main contact name (e.g. `displaySmall`).
-/// - `numberTextStyle` — smaller text for the phone number (used when username is shown).
-/// - `callStatusTextStyle` — status message style (e.g. “00:45” duration or “Incoming call”).
-/// - `processingStatusTextStyle` — status of an active operation (e.g. “Transfer in progress”).
-///
-/// These configurations allow theming the **Call Info area** consistently across
-/// the app without modifying widget code directly.
 @freezed
+@JsonSerializable(explicitToJson: true)
+class CallPageConfig with _$CallPageConfig {
+  const CallPageConfig({this.systemUiOverlayStyle, this.appBarStyle, this.callInfo, this.actions});
+
+  @override
+  final OverlayStyleModel? systemUiOverlayStyle;
+
+  @override
+  final AppBarStyleConfig? appBarStyle;
+
+  @override
+  final CallPageInfoConfig? callInfo;
+
+  @override
+  final CallPageActionsConfig? actions;
+
+  factory CallPageConfig.fromJson(Map<String, Object?> json) => _$CallPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$CallPageConfigToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class CallPageActionsConfig with _$CallPageActionsConfig {
+  const CallPageActionsConfig({
+    this.callStart = const ElevatedButtonWidgetConfig(),
+    this.hangup = const ElevatedButtonWidgetConfig(),
+    this.transfer = const ElevatedButtonWidgetConfig(),
+    this.camera = const ElevatedButtonWidgetConfig(),
+    this.muted = const ElevatedButtonWidgetConfig(),
+    this.speaker = const ElevatedButtonWidgetConfig(),
+    this.held = const ElevatedButtonWidgetConfig(),
+    this.swap = const ElevatedButtonWidgetConfig(),
+    this.key = const ElevatedButtonWidgetConfig(),
+  });
+
+  @override
+  final ElevatedButtonWidgetConfig callStart;
+
+  @override
+  final ElevatedButtonWidgetConfig hangup;
+
+  @override
+  final ElevatedButtonWidgetConfig transfer;
+
+  @override
+  final ElevatedButtonWidgetConfig camera;
+
+  @override
+  final ElevatedButtonWidgetConfig muted;
+
+  @override
+  final ElevatedButtonWidgetConfig speaker;
+
+  @override
+  final ElevatedButtonWidgetConfig held;
+
+  @override
+  final ElevatedButtonWidgetConfig swap;
+
+  @override
+  final ElevatedButtonWidgetConfig key;
+
+  factory CallPageActionsConfig.fromJson(Map<String, Object?> json) => _$CallPageActionsConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$CallPageActionsConfigToJson(this);
+}
+
+/// Declarative configuration for the **Call Info section**.
+@freezed
+@JsonSerializable(explicitToJson: true)
 class CallPageInfoConfig with _$CallPageInfoConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory CallPageInfoConfig({
-    /// Style for the main username (displayed with `displaySmall`).
-    TextStyleConfig? usernameTextStyle,
+  const CallPageInfoConfig({
+    this.usernameTextStyle,
+    this.numberTextStyle,
+    this.callStatusTextStyle,
+    this.processingStatusTextStyle,
+  });
 
-    /// Style for the phone number if username is present (bodyLarge or displaySmall).
-    TextStyleConfig? numberTextStyle,
+  @override
+  final TextStyleConfig? usernameTextStyle;
 
-    /// Style for the call status message (e.g. duration or “incoming”).
-    TextStyleConfig? callStatusTextStyle,
+  @override
+  final TextStyleConfig? numberTextStyle;
 
-    /// Style for the processing status message (e.g. “Transfer in progress”).
-    TextStyleConfig? processingStatusTextStyle,
-  }) = _CallPageInfoConfig;
+  @override
+  final TextStyleConfig? callStatusTextStyle;
 
-  factory CallPageInfoConfig.fromJson(Map<String, dynamic> json) => _$CallPageInfoConfigFromJson(json);
+  @override
+  final TextStyleConfig? processingStatusTextStyle;
+
+  factory CallPageInfoConfig.fromJson(Map<String, Object?> json) => _$CallPageInfoConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$CallPageInfoConfigToJson(this);
 }
 
 /// Declarative configuration for the **Keypad Screen**.
-///
-/// This model defines the visual and behavioral settings for the
-/// [Keypad screen](https://github.com/WebTrit/webtrit_phone/tree/main/lib/features/keypad/view),
-/// including the system UI overlay, input fields, keypad, and action pad.
-///
-/// Typical usage:
-/// - `systemUiOverlayStyle` — controls the status bar and system navigation colors.
-/// - `textField` — style configuration for the input field where the dialed number is shown.
-/// - `contactName` — style configuration for displaying the resolved contact name below the input field.
-/// - `keypad` — configuration of the numeric keypad (digits, subtexts, spacing, padding).
-/// - `actionpad` — configuration of the action buttons (call, transfer, backspace, etc).
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class KeypadPageConfig with _$KeypadPageConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory KeypadPageConfig({
-    /// System UI overlay configuration (status bar, navigation bar).
-    OverlayStyleModel? systemUiOverlayStyle,
+  const KeypadPageConfig({this.systemUiOverlayStyle, this.textField, this.contactName, this.keypad, this.actionpad});
 
-    /// Style for the number input field at the top of the keypad screen.
-    TextFieldConfig? textField,
+  @override
+  final OverlayStyleModel? systemUiOverlayStyle;
 
-    /// Style for the contact name displayed under the number input.
-    TextFieldConfig? contactName,
+  @override
+  final TextFieldConfig? textField;
 
-    /// Style configuration for the numeric keypad widget.
-    KeypadStyleConfig? keypad,
+  @override
+  final TextFieldConfig? contactName;
 
-    /// Style configuration for the action pad (call buttons, backspace, etc).
-    ActionPadWidgetConfig? actionpad,
-  }) = _KeypadPageConfig;
+  @override
+  final KeypadStyleConfig? keypad;
 
-  factory KeypadPageConfig.fromJson(Map<String, dynamic> json) => _$KeypadPageConfigFromJson(json);
+  @override
+  final ActionPadWidgetConfig? actionpad;
+
+  factory KeypadPageConfig.fromJson(Map<String, Object?> json) => _$KeypadPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$KeypadPageConfigToJson(this);
 }

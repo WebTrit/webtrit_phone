@@ -7,12 +7,17 @@ part 'app_contact.freezed.dart';
 part 'app_contact.g.dart';
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class AppContact with _$AppContact {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory AppContact({
-    required String identifier,
-    required List<String> phones,
-  }) = _AppContact;
+  const AppContact({required this.identifier, required this.phones});
+
+  @override
+  final String identifier;
+
+  @override
+  final List<String> phones;
 
   factory AppContact.fromJson(Map<String, dynamic> json) => _$AppContactFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AppContactToJson(this);
 }

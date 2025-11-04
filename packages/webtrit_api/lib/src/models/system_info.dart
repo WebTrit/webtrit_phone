@@ -8,120 +8,159 @@ part 'system_info.freezed.dart';
 part 'system_info.g.dart';
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class SystemInfo with _$SystemInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory SystemInfo({
-    required CoreInfo core,
-    required PostgresInfo postgres,
-    AdapterInfo? adapter,
-    JanusInfo? janus,
-    GorushInfo? gorush,
-  }) = _SystemInfo;
+  const SystemInfo({required this.core, required this.postgres, this.adapter, this.janus, this.gorush});
+
+  @override
+  final CoreInfo core;
+
+  @override
+  final PostgresInfo postgres;
+
+  @override
+  final AdapterInfo? adapter;
+
+  @override
+  final JanusInfo? janus;
+
+  @override
+  final GorushInfo? gorush;
 
   factory SystemInfo.fromJson(Map<String, Object?> json) => _$SystemInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$SystemInfoToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class CoreInfo with _$CoreInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory CoreInfo({
-    @VersionConverter() required Version version,
-  }) = _CoreInfo;
+  const CoreInfo({@VersionConverter() required this.version});
+
+  @override
+  @VersionConverter()
+  final Version version;
 
   factory CoreInfo.fromJson(Map<String, Object?> json) => _$CoreInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$CoreInfoToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class PostgresInfo with _$PostgresInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory PostgresInfo({
-    String? version,
-  }) = _PostgresInfo;
+  const PostgresInfo({this.version});
+
+  @override
+  final String? version;
 
   factory PostgresInfo.fromJson(Map<String, Object?> json) => _$PostgresInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$PostgresInfoToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class AdapterInfo with _$AdapterInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory AdapterInfo({
-    String? name,
-    String? version,
-    List<String>? supported,
-    Map<String, dynamic>? custom,
-  }) = _AdapterInfo;
+  const AdapterInfo({this.name, this.version, this.supported, this.custom});
+
+  @override
+  final String? name;
+
+  @override
+  final String? version;
+
+  @override
+  final List<String>? supported;
+
+  @override
+  final Map<String, dynamic>? custom;
 
   factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$AdapterInfoToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class JanusInfo with _$JanusInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory JanusInfo({
-    Plugins? plugins,
-    Transports? transports,
-    String? version,
-  }) = _JanusInfo;
+  const JanusInfo({this.plugins, this.transports, this.version});
+
+  @override
+  final Plugins? plugins;
+
+  @override
+  final Transports? transports;
+
+  @override
+  final String? version;
 
   factory JanusInfo.fromJson(Map<String, Object?> json) => _$JanusInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$JanusInfoToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class GorushInfo with _$GorushInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory GorushInfo({
-    String? version,
-  }) = _GorushInfo;
+  const GorushInfo({this.version});
+
+  @override
+  final String? version;
 
   factory GorushInfo.fromJson(Map<String, Object?> json) => _$GorushInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$GorushInfoToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Transports with _$Transports {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory Transports({
-    Websocket? websocket,
-  }) = _Transports;
+  const Transports({this.websocket});
+
+  @override
+  final Websocket? websocket;
 
   factory Transports.fromJson(Map<String, Object?> json) => _$TransportsFromJson(json);
+
+  Map<String, Object?> toJson() => _$TransportsToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Websocket with _$Websocket {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory Websocket({
-    String? version,
-  }) = _Websocket;
+  const Websocket({this.version});
+
+  @override
+  final String? version;
 
   factory Websocket.fromJson(Map<String, Object?> json) => _$WebsocketFromJson(json);
+
+  Map<String, Object?> toJson() => _$WebsocketToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Plugins with _$Plugins {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory Plugins({
-    SipVersion? sip,
-  }) = _Plugins;
+  const Plugins({this.sip});
+
+  @override
+  final SipVersion? sip;
 
   factory Plugins.fromJson(Map<String, Object?> json) => _$PluginsFromJson(json);
+
+  Map<String, Object?> toJson() => _$PluginsToJson(this);
 }
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class SipVersion with _$SipVersion {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory SipVersion({
-    String? version,
-  }) = _SipVersion;
+  const SipVersion({this.version});
+
+  @override
+  final String? version;
 
   factory SipVersion.fromJson(Map<String, Object?> json) => _$SipVersionFromJson(json);
+
+  Map<String, Object?> toJson() => _$SipVersionToJson(this);
 }

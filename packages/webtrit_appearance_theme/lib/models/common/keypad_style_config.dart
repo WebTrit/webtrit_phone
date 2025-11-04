@@ -18,21 +18,35 @@ part 'keypad_style_config.g.dart';
 ///  - `spacing` defines the gap between keypad buttons (in logical pixels).
 ///  - `padding` defines the inner padding of each keypad button (in logical pixels).
 @freezed
+@JsonSerializable(explicitToJson: true)
 class KeypadStyleConfig with _$KeypadStyleConfig {
-  @JsonSerializable(explicitToJson: true)
-  const factory KeypadStyleConfig({
+  const KeypadStyleConfig({
     /// Text style for the primary digit label on each key.
-    TextStyleConfig? textStyle,
+    this.textStyle,
 
     /// Text style for the secondary/subtext label under the digit.
-    TextStyleConfig? subtextStyle,
+    this.subtextStyle,
 
     /// Spacing between keys, in logical pixels (dp).
-    double? spacing,
+    this.spacing,
 
     /// Inner padding applied to each key, in logical pixels (dp).
-    double? padding,
-  }) = _KeypadStyleConfig;
+    this.padding,
+  });
+
+  @override
+  final TextStyleConfig? textStyle;
+
+  @override
+  final TextStyleConfig? subtextStyle;
+
+  @override
+  final double? spacing;
+
+  @override
+  final double? padding;
 
   factory KeypadStyleConfig.fromJson(Map<String, dynamic> json) => _$KeypadStyleConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$KeypadStyleConfigToJson(this);
 }

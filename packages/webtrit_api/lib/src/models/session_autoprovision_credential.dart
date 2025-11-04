@@ -9,15 +9,29 @@ part 'session_autoprovision_credential.freezed.dart';
 part 'session_autoprovision_credential.g.dart';
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class SessionAutoProvisionCredential with _$SessionAutoProvisionCredential {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory SessionAutoProvisionCredential({
-    String? bundleId,
-    required AppType type,
-    required String identifier,
-    required String configToken,
-  }) = _SessionAutoProvisionCredential;
+  const SessionAutoProvisionCredential({
+    this.bundleId,
+    required this.type,
+    required this.identifier,
+    required this.configToken,
+  });
+
+  @override
+  final String? bundleId;
+
+  @override
+  final AppType type;
+
+  @override
+  final String identifier;
+
+  @override
+  final String configToken;
 
   factory SessionAutoProvisionCredential.fromJson(Map<String, dynamic> json) =>
       _$SessionAutoProvisionCredentialFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SessionAutoProvisionCredentialToJson(this);
 }

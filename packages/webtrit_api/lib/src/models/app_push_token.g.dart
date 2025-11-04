@@ -6,13 +6,12 @@ part of 'app_push_token.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AppPushTokenImpl _$$AppPushTokenImplFromJson(Map<String, dynamic> json) =>
-    _$AppPushTokenImpl(
-      type: $enumDecode(_$AppPushTokenTypeEnumMap, json['type']),
-      value: json['value'] as String,
-    );
+AppPushToken _$AppPushTokenFromJson(Map<String, dynamic> json) => AppPushToken(
+  type: $enumDecode(_$AppPushTokenTypeEnumMap, json['type']),
+  value: json['value'] as String,
+);
 
-Map<String, dynamic> _$$AppPushTokenImplToJson(_$AppPushTokenImpl instance) =>
+Map<String, dynamic> _$AppPushTokenToJson(AppPushToken instance) =>
     <String, dynamic>{
       'type': _$AppPushTokenTypeEnumMap[instance.type]!,
       'value': instance.value,
