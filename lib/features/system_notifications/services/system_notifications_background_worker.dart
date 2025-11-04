@@ -76,7 +76,7 @@ class SystemNotificationBackgroundWorker {
       kSystemNotificationsTask,
       constraints: Constraints(networkType: NetworkType.connected),
       backoffPolicy: BackoffPolicy.linear,
-      existingWorkPolicy: ExistingWorkPolicy.replace,
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
       initialDelay: const Duration(minutes: 1),
     );
     _taskRegistered = true;
