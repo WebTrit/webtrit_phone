@@ -16,6 +16,7 @@ export 'linkify.dart';
 export 'logos.dart';
 export 'main_app_bar.dart';
 export 'no_data_placeholder.dart';
+export 'presence_info_builder.dart';
 export 'progress_overlay.dart';
 export 'safe_network_image.dart';
 export 'scroll_to_bottom.dart';

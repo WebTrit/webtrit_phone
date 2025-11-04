@@ -22,3 +22,4 @@ export 'webtrit_api_client.dart';
 export 'webtrit_http_executor.dart';
 export 'webtrit_signaling_client.dart';
 export 'webtrit_signaling_utils.dart';
+export 'view_params/view_params.dart';

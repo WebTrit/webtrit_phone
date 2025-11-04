@@ -38,6 +38,7 @@ class ContactsExternalTab extends StatelessWidget {
               itemCount: state.contacts.length,
               itemBuilder: (context, index) {
                 final contact = state.contacts[index];
+
                 return ContactTile(
                   key: contactsExtContactTileKey,
                   displayName: contact.displayTitle,
@@ -45,6 +46,7 @@ class ContactsExternalTab extends StatelessWidget {
                   thumbnailUrl: contact.thumbnailUrl,
                   registered: contact.registered,
                   onTap: () => routeToContactScreen(contact.id),
+                  presenceInfo: contact.presenceInfo,
                 );
               },
             ),

@@ -21,6 +21,9 @@ abstract class CoreSupport {
   /// Check if the system push notifications feature is supported by remote system.
   bool get supportsSystemPushNotifications;
 
+  /// Check if the SIP presence feature is supported by remote system.
+  bool get supportsSipPresence;
+
   /// Factory for real implementation backed by [AppPreferences].
   factory CoreSupport.fromPrefs(AppPreferences prefs) {
     final flags = {...?prefs.getSystemInfo()?.adapter?.supported};
@@ -54,4 +57,7 @@ class _CoreSupportImpl implements CoreSupport {
 
   @override
   bool get supportsSystemPushNotifications => has(kSystemNotificationsPushFeatureFlag);
+
+  @override
+  bool get supportsSipPresence => has(kSipPresenceFeatureFlag);
 }

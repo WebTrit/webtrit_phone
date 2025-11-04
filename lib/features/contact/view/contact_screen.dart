@@ -11,7 +11,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
-import 'package:webtrit_phone/models/contact_phone.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -86,6 +86,7 @@ class _ContactScreenState extends State<ContactScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
+    final presenceSource = PresenceViewParams.of(context).viewSource;
 
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       builder: (context, userInfoState) {
@@ -133,7 +134,6 @@ class _ContactScreenState extends State<ContactScreen> {
                               username: contact.displayTitle,
                               thumbnail: contact.thumbnail,
                               thumbnailUrl: contact.thumbnailUrl ?? gravatarThumbnailUrl(email),
-                              registered: contact.registered,
                               radius: 50,
                             ),
                           ),
@@ -210,7 +210,12 @@ class _ContactScreenState extends State<ContactScreen> {
                               onEmailPressed: () {
                                 context.read<ContactBloc>().add(ContactEmailSend(contactEmail));
                               },
-                            )
+                            ),
+                          if (presenceSource == PresenceViewSource.sipPresence &&
+                              contact.sourceType == ContactSourceType.external) ...[
+                            const Divider(),
+                            PresenceInfoView(presenceInfo: contact.presenceInfo),
+                          ]
                         ],
                       ),
                     );

@@ -5,5 +5,6 @@ class ContactState with _$ContactState {
   const factory ContactState({
     Contact? contact,
     @Default(false) bool deleted,
+    @Default([]) List<PresenceInfo> presenceInfo,
   }) = _ContactState;
 }

@@ -10,4 +10,6 @@ mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactEmailsTableTable get contactEmailsTable =>
       attachedDatabase.contactEmailsTable;
   $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
+  $PresenceInfoTableTable get presenceInfoTable =>
+      attachedDatabase.presenceInfoTable;
 }

@@ -9,7 +9,6 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -65,29 +64,4 @@ class MainAppBar extends AppBar {
             ),
           ],
         );
-}
-
-class AppBarParams extends InheritedWidget {
-  const AppBarParams({
-    required this.systemNotificationsEnabled,
-    required this.pullableCalls,
-    required super.child,
-    super.key,
-  });
-
-  final bool systemNotificationsEnabled;
-  final List<PullableCall> pullableCalls;
-  static AppBarParams of(BuildContext context) {
-    final result = context.dependOnInheritedWidgetOfExactType<AppBarParams>();
-    if (result == null) {
-      throw Exception('AppBarParams not found in context');
-    }
-    return result;
-  }
-
-  @override
-  bool updateShouldNotify(AppBarParams oldWidget) {
-    return systemNotificationsEnabled != oldWidget.systemNotificationsEnabled ||
-        pullableCalls != oldWidget.pullableCalls;
-  }
 }

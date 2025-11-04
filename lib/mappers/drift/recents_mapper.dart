@@ -14,6 +14,7 @@ mixin RecentsDriftMapper on CallLogsDriftMapper, ContactsDriftMapper {
         data.contactData!,
         phones: data.contactPhones.toList(),
         emails: data.contactEmails.toList(),
+        presenceInfo: data.presenceInfo.toList(),
       );
     }
 

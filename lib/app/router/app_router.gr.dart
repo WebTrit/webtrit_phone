@@ -1240,6 +1240,22 @@ class PermissionsScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [PresenceSettingsScreenPage]
+class PresenceSettingsScreenPageRoute extends PageRouteInfo<void> {
+  const PresenceSettingsScreenPageRoute({List<PageRouteInfo>? children})
+      : super(PresenceSettingsScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'PresenceSettingsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return PresenceSettingsScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [RecentCdrsRouterPage]
 class RecentCdrsRouterPageRoute extends PageRouteInfo<void> {
   const RecentCdrsRouterPageRoute({List<PageRouteInfo>? children})

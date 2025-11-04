@@ -10,4 +10,5 @@ enum SettingsFlavor {
   mediaSettings,
   voicemail,
   callerId,
+  presence,
 }

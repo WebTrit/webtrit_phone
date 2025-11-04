@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/favorite.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class FavoriteTile extends StatefulWidget {
@@ -121,6 +122,10 @@ class _FavoriteTileState extends State<FavoriteTile> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final presenceSource = PresenceViewParams.of(context).viewSource;
+
+    final contact = widget.favorite.contact;
+    final name = widget.favorite.name;
 
     return Dismissible(
       key: ObjectKey(widget.favorite),
@@ -145,12 +150,16 @@ class _FavoriteTileState extends State<FavoriteTile> {
         key: tileKey,
         contentPadding: const EdgeInsets.only(left: 16.0),
         leading: LeadingAvatar(
-          username: widget.favorite.name,
-          thumbnail: widget.favorite.contact.thumbnail,
-          thumbnailUrl: widget.favorite.contact.thumbnailUrl,
-          registered: widget.favorite.contact.registered,
+          username: name,
+          thumbnail: contact.thumbnail,
+          thumbnailUrl: contact.thumbnailUrl,
+          registered: contact.registered,
+          presenceInfo: contact.presenceInfo,
         ),
-        title: Text(widget.favorite.name),
+        title: switch (presenceSource) {
+          PresenceViewSource.sipPresence => Text('$name ${contact.presenceInfo.primaryStatusIcon ?? ''}'),
+          PresenceViewSource.contactInfo => Text(name),
+        },
         subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
         onTap: widget.onTap,
         onLongPress: onLongPress,

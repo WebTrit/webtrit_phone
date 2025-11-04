@@ -8961,6 +8961,495 @@ class SystemNotificationOutboxEntryDataCompanion
   }
 }
 
+class $PresenceInfoTableTable extends PresenceInfoTable
+    with TableInfo<$PresenceInfoTableTable, PresenceInfoData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PresenceInfoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
+  @override
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+      'id_key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+      'number', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _availableMeta =
+      const VerificationMeta('available');
+  @override
+  late final GeneratedColumn<bool> available = GeneratedColumn<bool>(
+      'available', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("available" IN (0, 1))'));
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+      'note', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _statusIconMeta =
+      const VerificationMeta('statusIcon');
+  @override
+  late final GeneratedColumn<String> statusIcon = GeneratedColumn<String>(
+      'status_icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _deviceMeta = const VerificationMeta('device');
+  @override
+  late final GeneratedColumn<String> device = GeneratedColumn<String>(
+      'device', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _timeOffsetMinMeta =
+      const VerificationMeta('timeOffsetMin');
+  @override
+  late final GeneratedColumn<int> timeOffsetMin = GeneratedColumn<int>(
+      'time_offset_min', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _timestampUsecMeta =
+      const VerificationMeta('timestampUsec');
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+      'timestamp_usec', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _activitiesJsonMeta =
+      const VerificationMeta('activitiesJson');
+  @override
+  late final GeneratedColumn<String> activitiesJson = GeneratedColumn<String>(
+      'activities_json', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        idKey,
+        number,
+        available,
+        note,
+        statusIcon,
+        device,
+        timeOffsetMin,
+        timestampUsec,
+        activitiesJson
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'presence_info';
+  @override
+  VerificationContext validateIntegrity(Insertable<PresenceInfoData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id_key')) {
+      context.handle(
+          _idKeyMeta, idKey.isAcceptableOrUnknown(data['id_key']!, _idKeyMeta));
+    } else if (isInserting) {
+      context.missing(_idKeyMeta);
+    }
+    if (data.containsKey('number')) {
+      context.handle(_numberMeta,
+          number.isAcceptableOrUnknown(data['number']!, _numberMeta));
+    } else if (isInserting) {
+      context.missing(_numberMeta);
+    }
+    if (data.containsKey('available')) {
+      context.handle(_availableMeta,
+          available.isAcceptableOrUnknown(data['available']!, _availableMeta));
+    } else if (isInserting) {
+      context.missing(_availableMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+    } else if (isInserting) {
+      context.missing(_noteMeta);
+    }
+    if (data.containsKey('status_icon')) {
+      context.handle(
+          _statusIconMeta,
+          statusIcon.isAcceptableOrUnknown(
+              data['status_icon']!, _statusIconMeta));
+    }
+    if (data.containsKey('device')) {
+      context.handle(_deviceMeta,
+          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
+    }
+    if (data.containsKey('time_offset_min')) {
+      context.handle(
+          _timeOffsetMinMeta,
+          timeOffsetMin.isAcceptableOrUnknown(
+              data['time_offset_min']!, _timeOffsetMinMeta));
+    }
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+          _timestampUsecMeta,
+          timestampUsec.isAcceptableOrUnknown(
+              data['timestamp_usec']!, _timestampUsecMeta));
+    }
+    if (data.containsKey('activities_json')) {
+      context.handle(
+          _activitiesJsonMeta,
+          activitiesJson.isAcceptableOrUnknown(
+              data['activities_json']!, _activitiesJsonMeta));
+    } else if (isInserting) {
+      context.missing(_activitiesJsonMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {idKey};
+  @override
+  PresenceInfoData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PresenceInfoData(
+      idKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id_key'])!,
+      number: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}number'])!,
+      available: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}available'])!,
+      note: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}note'])!,
+      statusIcon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status_icon']),
+      device: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}device']),
+      timeOffsetMin: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}time_offset_min']),
+      timestampUsec: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}timestamp_usec']),
+      activitiesJson: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}activities_json'])!,
+    );
+  }
+
+  @override
+  $PresenceInfoTableTable createAlias(String alias) {
+    return $PresenceInfoTableTable(attachedDatabase, alias);
+  }
+}
+
+class PresenceInfoData extends DataClass
+    implements Insertable<PresenceInfoData> {
+  final String idKey;
+  final String number;
+  final bool available;
+  final String note;
+  final String? statusIcon;
+  final String? device;
+  final int? timeOffsetMin;
+  final int? timestampUsec;
+  final String activitiesJson;
+  const PresenceInfoData(
+      {required this.idKey,
+      required this.number,
+      required this.available,
+      required this.note,
+      this.statusIcon,
+      this.device,
+      this.timeOffsetMin,
+      this.timestampUsec,
+      required this.activitiesJson});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id_key'] = Variable<String>(idKey);
+    map['number'] = Variable<String>(number);
+    map['available'] = Variable<bool>(available);
+    map['note'] = Variable<String>(note);
+    if (!nullToAbsent || statusIcon != null) {
+      map['status_icon'] = Variable<String>(statusIcon);
+    }
+    if (!nullToAbsent || device != null) {
+      map['device'] = Variable<String>(device);
+    }
+    if (!nullToAbsent || timeOffsetMin != null) {
+      map['time_offset_min'] = Variable<int>(timeOffsetMin);
+    }
+    if (!nullToAbsent || timestampUsec != null) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec);
+    }
+    map['activities_json'] = Variable<String>(activitiesJson);
+    return map;
+  }
+
+  PresenceInfoDataCompanion toCompanion(bool nullToAbsent) {
+    return PresenceInfoDataCompanion(
+      idKey: Value(idKey),
+      number: Value(number),
+      available: Value(available),
+      note: Value(note),
+      statusIcon: statusIcon == null && nullToAbsent
+          ? const Value.absent()
+          : Value(statusIcon),
+      device:
+          device == null && nullToAbsent ? const Value.absent() : Value(device),
+      timeOffsetMin: timeOffsetMin == null && nullToAbsent
+          ? const Value.absent()
+          : Value(timeOffsetMin),
+      timestampUsec: timestampUsec == null && nullToAbsent
+          ? const Value.absent()
+          : Value(timestampUsec),
+      activitiesJson: Value(activitiesJson),
+    );
+  }
+
+  factory PresenceInfoData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PresenceInfoData(
+      idKey: serializer.fromJson<String>(json['idKey']),
+      number: serializer.fromJson<String>(json['number']),
+      available: serializer.fromJson<bool>(json['available']),
+      note: serializer.fromJson<String>(json['note']),
+      statusIcon: serializer.fromJson<String?>(json['statusIcon']),
+      device: serializer.fromJson<String?>(json['device']),
+      timeOffsetMin: serializer.fromJson<int?>(json['timeOffsetMin']),
+      timestampUsec: serializer.fromJson<int?>(json['timestampUsec']),
+      activitiesJson: serializer.fromJson<String>(json['activitiesJson']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'idKey': serializer.toJson<String>(idKey),
+      'number': serializer.toJson<String>(number),
+      'available': serializer.toJson<bool>(available),
+      'note': serializer.toJson<String>(note),
+      'statusIcon': serializer.toJson<String?>(statusIcon),
+      'device': serializer.toJson<String?>(device),
+      'timeOffsetMin': serializer.toJson<int?>(timeOffsetMin),
+      'timestampUsec': serializer.toJson<int?>(timestampUsec),
+      'activitiesJson': serializer.toJson<String>(activitiesJson),
+    };
+  }
+
+  PresenceInfoData copyWith(
+          {String? idKey,
+          String? number,
+          bool? available,
+          String? note,
+          Value<String?> statusIcon = const Value.absent(),
+          Value<String?> device = const Value.absent(),
+          Value<int?> timeOffsetMin = const Value.absent(),
+          Value<int?> timestampUsec = const Value.absent(),
+          String? activitiesJson}) =>
+      PresenceInfoData(
+        idKey: idKey ?? this.idKey,
+        number: number ?? this.number,
+        available: available ?? this.available,
+        note: note ?? this.note,
+        statusIcon: statusIcon.present ? statusIcon.value : this.statusIcon,
+        device: device.present ? device.value : this.device,
+        timeOffsetMin:
+            timeOffsetMin.present ? timeOffsetMin.value : this.timeOffsetMin,
+        timestampUsec:
+            timestampUsec.present ? timestampUsec.value : this.timestampUsec,
+        activitiesJson: activitiesJson ?? this.activitiesJson,
+      );
+  PresenceInfoData copyWithCompanion(PresenceInfoDataCompanion data) {
+    return PresenceInfoData(
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      number: data.number.present ? data.number.value : this.number,
+      available: data.available.present ? data.available.value : this.available,
+      note: data.note.present ? data.note.value : this.note,
+      statusIcon:
+          data.statusIcon.present ? data.statusIcon.value : this.statusIcon,
+      device: data.device.present ? data.device.value : this.device,
+      timeOffsetMin: data.timeOffsetMin.present
+          ? data.timeOffsetMin.value
+          : this.timeOffsetMin,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+      activitiesJson: data.activitiesJson.present
+          ? data.activitiesJson.value
+          : this.activitiesJson,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PresenceInfoData(')
+          ..write('idKey: $idKey, ')
+          ..write('number: $number, ')
+          ..write('available: $available, ')
+          ..write('note: $note, ')
+          ..write('statusIcon: $statusIcon, ')
+          ..write('device: $device, ')
+          ..write('timeOffsetMin: $timeOffsetMin, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('activitiesJson: $activitiesJson')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(idKey, number, available, note, statusIcon,
+      device, timeOffsetMin, timestampUsec, activitiesJson);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PresenceInfoData &&
+          other.idKey == this.idKey &&
+          other.number == this.number &&
+          other.available == this.available &&
+          other.note == this.note &&
+          other.statusIcon == this.statusIcon &&
+          other.device == this.device &&
+          other.timeOffsetMin == this.timeOffsetMin &&
+          other.timestampUsec == this.timestampUsec &&
+          other.activitiesJson == this.activitiesJson);
+}
+
+class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
+  final Value<String> idKey;
+  final Value<String> number;
+  final Value<bool> available;
+  final Value<String> note;
+  final Value<String?> statusIcon;
+  final Value<String?> device;
+  final Value<int?> timeOffsetMin;
+  final Value<int?> timestampUsec;
+  final Value<String> activitiesJson;
+  final Value<int> rowid;
+  const PresenceInfoDataCompanion({
+    this.idKey = const Value.absent(),
+    this.number = const Value.absent(),
+    this.available = const Value.absent(),
+    this.note = const Value.absent(),
+    this.statusIcon = const Value.absent(),
+    this.device = const Value.absent(),
+    this.timeOffsetMin = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.activitiesJson = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PresenceInfoDataCompanion.insert({
+    required String idKey,
+    required String number,
+    required bool available,
+    required String note,
+    this.statusIcon = const Value.absent(),
+    this.device = const Value.absent(),
+    this.timeOffsetMin = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    required String activitiesJson,
+    this.rowid = const Value.absent(),
+  })  : idKey = Value(idKey),
+        number = Value(number),
+        available = Value(available),
+        note = Value(note),
+        activitiesJson = Value(activitiesJson);
+  static Insertable<PresenceInfoData> custom({
+    Expression<String>? idKey,
+    Expression<String>? number,
+    Expression<bool>? available,
+    Expression<String>? note,
+    Expression<String>? statusIcon,
+    Expression<String>? device,
+    Expression<int>? timeOffsetMin,
+    Expression<int>? timestampUsec,
+    Expression<String>? activitiesJson,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (idKey != null) 'id_key': idKey,
+      if (number != null) 'number': number,
+      if (available != null) 'available': available,
+      if (note != null) 'note': note,
+      if (statusIcon != null) 'status_icon': statusIcon,
+      if (device != null) 'device': device,
+      if (timeOffsetMin != null) 'time_offset_min': timeOffsetMin,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (activitiesJson != null) 'activities_json': activitiesJson,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PresenceInfoDataCompanion copyWith(
+      {Value<String>? idKey,
+      Value<String>? number,
+      Value<bool>? available,
+      Value<String>? note,
+      Value<String?>? statusIcon,
+      Value<String?>? device,
+      Value<int?>? timeOffsetMin,
+      Value<int?>? timestampUsec,
+      Value<String>? activitiesJson,
+      Value<int>? rowid}) {
+    return PresenceInfoDataCompanion(
+      idKey: idKey ?? this.idKey,
+      number: number ?? this.number,
+      available: available ?? this.available,
+      note: note ?? this.note,
+      statusIcon: statusIcon ?? this.statusIcon,
+      device: device ?? this.device,
+      timeOffsetMin: timeOffsetMin ?? this.timeOffsetMin,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      activitiesJson: activitiesJson ?? this.activitiesJson,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (idKey.present) {
+      map['id_key'] = Variable<String>(idKey.value);
+    }
+    if (number.present) {
+      map['number'] = Variable<String>(number.value);
+    }
+    if (available.present) {
+      map['available'] = Variable<bool>(available.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (statusIcon.present) {
+      map['status_icon'] = Variable<String>(statusIcon.value);
+    }
+    if (device.present) {
+      map['device'] = Variable<String>(device.value);
+    }
+    if (timeOffsetMin.present) {
+      map['time_offset_min'] = Variable<int>(timeOffsetMin.value);
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (activitiesJson.present) {
+      map['activities_json'] = Variable<String>(activitiesJson.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PresenceInfoDataCompanion(')
+          ..write('idKey: $idKey, ')
+          ..write('number: $number, ')
+          ..write('available: $available, ')
+          ..write('note: $note, ')
+          ..write('statusIcon: $statusIcon, ')
+          ..write('device: $device, ')
+          ..write('timeOffsetMin: $timeOffsetMin, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('activitiesJson: $activitiesJson, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $CdrTableTable extends CdrTable
     with TableInfo<$CdrTableTable, CdrRecordData> {
   @override
@@ -9645,6 +10134,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SystemNotificationsOutboxTableTable
       systemNotificationsOutboxTable =
       $SystemNotificationsOutboxTableTable(this);
+  late final $PresenceInfoTableTable presenceInfoTable =
+      $PresenceInfoTableTable(this);
   late final $CdrTableTable cdrTable = $CdrTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao =
@@ -9661,6 +10152,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final VoicemailDao voicemailDao = VoicemailDao(this as AppDatabase);
   late final SystemNotificationsDao systemNotificationsDao =
       SystemNotificationsDao(this as AppDatabase);
+  late final PresenceInfoDao presenceInfoDao =
+      PresenceInfoDao(this as AppDatabase);
   late final CdrsDao cdrsDao = CdrsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -9693,6 +10186,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         voicemailTable,
         systemNotificationsTable,
         systemNotificationsOutboxTable,
+        presenceInfoTable,
         cdrTable
       ];
   @override
@@ -17764,6 +18258,245 @@ typedef $$SystemNotificationsOutboxTableTableProcessedTableManager
         ),
         SystemNotificationOutboxEntryData,
         PrefetchHooks Function({bool notificationId})>;
+typedef $$PresenceInfoTableTableCreateCompanionBuilder
+    = PresenceInfoDataCompanion Function({
+  required String idKey,
+  required String number,
+  required bool available,
+  required String note,
+  Value<String?> statusIcon,
+  Value<String?> device,
+  Value<int?> timeOffsetMin,
+  Value<int?> timestampUsec,
+  required String activitiesJson,
+  Value<int> rowid,
+});
+typedef $$PresenceInfoTableTableUpdateCompanionBuilder
+    = PresenceInfoDataCompanion Function({
+  Value<String> idKey,
+  Value<String> number,
+  Value<bool> available,
+  Value<String> note,
+  Value<String?> statusIcon,
+  Value<String?> device,
+  Value<int?> timeOffsetMin,
+  Value<int?> timestampUsec,
+  Value<String> activitiesJson,
+  Value<int> rowid,
+});
+
+class $$PresenceInfoTableTableFilterComposer
+    extends Composer<_$AppDatabase, $PresenceInfoTableTable> {
+  $$PresenceInfoTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get number => $composableBuilder(
+      column: $table.number, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get available => $composableBuilder(
+      column: $table.available, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get statusIcon => $composableBuilder(
+      column: $table.statusIcon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get device => $composableBuilder(
+      column: $table.device, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timeOffsetMin => $composableBuilder(
+      column: $table.timeOffsetMin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get activitiesJson => $composableBuilder(
+      column: $table.activitiesJson,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$PresenceInfoTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $PresenceInfoTableTable> {
+  $$PresenceInfoTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get idKey => $composableBuilder(
+      column: $table.idKey, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get number => $composableBuilder(
+      column: $table.number, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get available => $composableBuilder(
+      column: $table.available, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get statusIcon => $composableBuilder(
+      column: $table.statusIcon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get device => $composableBuilder(
+      column: $table.device, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get timeOffsetMin => $composableBuilder(
+      column: $table.timeOffsetMin,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get activitiesJson => $composableBuilder(
+      column: $table.activitiesJson,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$PresenceInfoTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PresenceInfoTableTable> {
+  $$PresenceInfoTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<bool> get available =>
+      $composableBuilder(column: $table.available, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<String> get statusIcon => $composableBuilder(
+      column: $table.statusIcon, builder: (column) => column);
+
+  GeneratedColumn<String> get device =>
+      $composableBuilder(column: $table.device, builder: (column) => column);
+
+  GeneratedColumn<int> get timeOffsetMin => $composableBuilder(
+      column: $table.timeOffsetMin, builder: (column) => column);
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+      column: $table.timestampUsec, builder: (column) => column);
+
+  GeneratedColumn<String> get activitiesJson => $composableBuilder(
+      column: $table.activitiesJson, builder: (column) => column);
+}
+
+class $$PresenceInfoTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $PresenceInfoTableTable,
+    PresenceInfoData,
+    $$PresenceInfoTableTableFilterComposer,
+    $$PresenceInfoTableTableOrderingComposer,
+    $$PresenceInfoTableTableAnnotationComposer,
+    $$PresenceInfoTableTableCreateCompanionBuilder,
+    $$PresenceInfoTableTableUpdateCompanionBuilder,
+    (
+      PresenceInfoData,
+      BaseReferences<_$AppDatabase, $PresenceInfoTableTable, PresenceInfoData>
+    ),
+    PresenceInfoData,
+    PrefetchHooks Function()> {
+  $$PresenceInfoTableTableTableManager(
+      _$AppDatabase db, $PresenceInfoTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PresenceInfoTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PresenceInfoTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PresenceInfoTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> idKey = const Value.absent(),
+            Value<String> number = const Value.absent(),
+            Value<bool> available = const Value.absent(),
+            Value<String> note = const Value.absent(),
+            Value<String?> statusIcon = const Value.absent(),
+            Value<String?> device = const Value.absent(),
+            Value<int?> timeOffsetMin = const Value.absent(),
+            Value<int?> timestampUsec = const Value.absent(),
+            Value<String> activitiesJson = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PresenceInfoDataCompanion(
+            idKey: idKey,
+            number: number,
+            available: available,
+            note: note,
+            statusIcon: statusIcon,
+            device: device,
+            timeOffsetMin: timeOffsetMin,
+            timestampUsec: timestampUsec,
+            activitiesJson: activitiesJson,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String idKey,
+            required String number,
+            required bool available,
+            required String note,
+            Value<String?> statusIcon = const Value.absent(),
+            Value<String?> device = const Value.absent(),
+            Value<int?> timeOffsetMin = const Value.absent(),
+            Value<int?> timestampUsec = const Value.absent(),
+            required String activitiesJson,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PresenceInfoDataCompanion.insert(
+            idKey: idKey,
+            number: number,
+            available: available,
+            note: note,
+            statusIcon: statusIcon,
+            device: device,
+            timeOffsetMin: timeOffsetMin,
+            timestampUsec: timestampUsec,
+            activitiesJson: activitiesJson,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PresenceInfoTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $PresenceInfoTableTable,
+    PresenceInfoData,
+    $$PresenceInfoTableTableFilterComposer,
+    $$PresenceInfoTableTableOrderingComposer,
+    $$PresenceInfoTableTableAnnotationComposer,
+    $$PresenceInfoTableTableCreateCompanionBuilder,
+    $$PresenceInfoTableTableUpdateCompanionBuilder,
+    (
+      PresenceInfoData,
+      BaseReferences<_$AppDatabase, $PresenceInfoTableTable, PresenceInfoData>
+    ),
+    PresenceInfoData,
+    PrefetchHooks Function()>;
 typedef $$CdrTableTableCreateCompanionBuilder = CdrRecordDataCompanion
     Function({
   required String callId,
@@ -18134,6 +18867,8 @@ class $AppDatabaseManager {
       get systemNotificationsOutboxTable =>
           $$SystemNotificationsOutboxTableTableTableManager(
               _db, _db.systemNotificationsOutboxTable);
+  $$PresenceInfoTableTableTableManager get presenceInfoTable =>
+      $$PresenceInfoTableTableTableManager(_db, _db.presenceInfoTable);
   $$CdrTableTableTableManager get cdrTable =>
       $$CdrTableTableTableManager(_db, _db.cdrTable);
 }

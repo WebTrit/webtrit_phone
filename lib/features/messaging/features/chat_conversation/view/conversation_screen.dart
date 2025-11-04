@@ -10,6 +10,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ChatConversationScreen extends StatefulWidget {
@@ -154,32 +155,47 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
     return ContactInfoBuilder(
       source: ContactSourceId(ContactSourceType.external, participant),
       builder: (context, contact) {
-        if (contact != null) {
-          final online = contact.registered == true;
+        final presenceSource = PresenceViewParams.of(context).viewSource;
+        const nameTextStyle = TextStyle(fontSize: 20);
 
-          return Column(
-            children: [
-              Text(
-                contact.displayTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 20),
-              ),
-              if (online)
+        return switch ((presenceSource, contact)) {
+          (_, null) => Text(
+              context.l10n.messaging_ParticipantName_unknown,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: nameTextStyle,
+            ),
+          (PresenceViewSource.contactInfo, Contact contact) => Column(
+              children: [
                 Text(
-                  context.l10n.messaging_ConversationScreen_titleAvailable,
-                  style: const TextStyle(fontSize: 12),
+                  contact.displayTitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: nameTextStyle,
                 ),
-            ],
-          );
-        } else {
-          return Text(
-            '${context.l10n.messaging_ConversationScreen_titlePrefix} $participant',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 20),
-          );
-        }
+                if (contact.registered == true)
+                  Text(
+                    context.l10n.messaging_ConversationScreen_titleAvailable,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+              ],
+            ),
+          (PresenceViewSource.sipPresence, Contact contact) => Column(
+              children: [
+                Text(
+                  '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: nameTextStyle,
+                ),
+                if (contact.presenceInfo.anyAvailable == true)
+                  Text(
+                    context.l10n.messaging_ConversationScreen_titleAvailable,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+              ],
+            ),
+        };
       },
     );
   }

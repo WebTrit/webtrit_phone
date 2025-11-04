@@ -8,6 +8,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class ChatConversationsTile extends StatefulWidget {
@@ -68,68 +69,82 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             child: const Icon(Icons.delete_forever, color: Colors.white),
           ),
           confirmDismiss: onDismiss,
-          child: ListTile(
-            leading: leading(),
-            title: title(),
-            subtitle: subtitle(),
-            onTap: onTap,
-          ),
+          child: switch (widget.conversation.type) {
+            ChatType.direct => directContent(),
+            ChatType.group => groupContent(),
+          },
         ),
       ),
     );
   }
 
-  Widget leading() {
-    if (widget.conversation.type == ChatType.direct) {
-      final userId = widget.userId;
-      final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
-      return ContactInfoBuilder(
-        source: ContactSourceId(ContactSourceType.external, participant.userId),
-        builder: (context, contact) {
-          return LeadingAvatar(
+  Widget directContent() {
+    final userId = widget.userId;
+    final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
+    final lastMessage = widget.lastMessage;
+
+    return ContactInfoBuilder(
+      source: ContactSourceId(ContactSourceType.external, participant.userId),
+      builder: (context, contact) {
+        final presenceSource = PresenceViewParams.of(context).viewSource;
+        final text = switch (contact) {
+          null => context.l10n.messaging_ParticipantName_unknown,
+          _ => switch (presenceSource) {
+              PresenceViewSource.contactInfo => contact.displayTitle,
+              PresenceViewSource.sipPresence =>
+                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+            }
+        };
+        return ListTile(
+          leading: LeadingAvatar(
             username: contact?.displayTitle,
             thumbnail: contact?.thumbnail,
             thumbnailUrl: contact?.thumbnailUrl,
+            radius: 24,
             registered: contact?.registered,
-            radius: 20,
-          );
-        },
-      );
-    } else {
-      var text = widget.conversation.name ?? widget.conversation.id.toString();
-      return GroupAvatar(name: text, size: 20);
-    }
+            presenceInfo: contact?.presenceInfo,
+          ),
+          title: Row(
+            children: [
+              Expanded(child: Text(text, style: const TextStyle(overflow: TextOverflow.ellipsis))),
+              const SizedBox(width: 4),
+              if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
+            ],
+          ),
+          subtitle: subtitle(),
+          onTap: onTap,
+        );
+      },
+    );
   }
 
-  Widget title() {
+  Widget groupContent() {
     final lastMessage = widget.lastMessage;
-
-    if (widget.conversation.type == ChatType.direct) {
-      final userId = widget.userId;
-      final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);
-      return Row(
+    return ListTile(
+      leading: GroupAvatar(name: widget.conversation.name ?? widget.conversation.id.toString()),
+      title: Row(
         children: [
           Expanded(
-            child: ParticipantName(
-              senderId: participant.userId,
-              userId: userId,
-              style: const TextStyle(overflow: TextOverflow.ellipsis),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    widget.conversation.name ?? 'Chat ${widget.conversation.id}',
+                    style: const TextStyle(overflow: TextOverflow.ellipsis),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                usersCount(),
+              ],
             ),
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: 8),
           if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
         ],
-      );
-    } else {
-      final name = widget.conversation.name ?? 'Chat ${widget.conversation.id}';
-      return Row(
-        children: [
-          Expanded(child: Text(name, style: const TextStyle(overflow: TextOverflow.ellipsis))),
-          const SizedBox(width: 4),
-          if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
-        ],
-      );
-    }
+      ),
+      subtitle: subtitle(),
+      onTap: onTap,
+    );
   }
 
   Widget usersCount() {
@@ -162,17 +177,9 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
                   textMap: (name) => '$name:',
                 ),
                 if (lastMessage.deletedAt != null)
-                  Text(
-                    context.l10n.messaging_MessageView_deleted,
-                    style: textStyle,
-                    overflow: TextOverflow.ellipsis,
-                  )
+                  Text(context.l10n.messaging_MessageView_deleted, style: textStyle, overflow: TextOverflow.ellipsis)
                 else
-                  Text(
-                    lastMessage.content,
-                    style: textStyle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(lastMessage.content, style: textStyle, overflow: TextOverflow.ellipsis),
               ],
             ),
           )

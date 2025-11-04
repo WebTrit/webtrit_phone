@@ -26,6 +26,8 @@ sealed class NotifyEvent extends CallEvent {
     switch (notifyValue) {
       case DialogNotifyEvent.notifyValue:
         return DialogNotifyEvent.fromJson(json);
+      case PresenceNotifyEvent.notifyValue:
+        return PresenceNotifyEvent.fromJson(json);
       case ReferNotifyEvent.notifyValue:
         return ReferNotifyEvent.fromJson(json);
       default:
@@ -131,6 +133,90 @@ class UserActiveCall extends Equatable {
   }
 }
 
+class PresenceNotifyEvent extends NotifyEvent with EquatableMixin {
+  const PresenceNotifyEvent({
+    super.transaction,
+    required super.line,
+    required super.callId,
+    super.notify,
+    super.subscriptionState,
+    required this.number,
+    required this.presenceInfo,
+  });
+
+  static const notifyValue = 'presence';
+  final String number;
+  final List<SignalingPresenceInfo> presenceInfo;
+
+  @override
+  factory PresenceNotifyEvent.fromJson(Map<String, dynamic> json) {
+    return PresenceNotifyEvent(
+      transaction: json['transaction'],
+      line: json['line'],
+      callId: json['call_id'],
+      notify: json['notify'],
+      subscriptionState:
+          json['subscription_state'] != null ? SubscriptionState.values.byName(json['subscription_state']) : null,
+      number: json['number'],
+      presenceInfo:
+          (json['presence_info'] as List<dynamic>).map((item) => SignalingPresenceInfo.fromJson(item)).toList(),
+    );
+  }
+
+  @override
+  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, number, presenceInfo];
+
+  @override
+  String toString() {
+    return 'PresenceNotifyEvent{transaction: $transaction, line: $line, callId: $callId, notify: $notify, '
+        'subscriptionState: $subscriptionState, number: $number, presenceInfo: $presenceInfo}';
+  }
+}
+
+class SignalingPresenceInfo extends Equatable {
+  const SignalingPresenceInfo({
+    required this.id,
+    required this.available,
+    required this.note,
+    required this.statusIcon,
+    required this.device,
+    required this.timeOffsetMin,
+    required this.timestamp,
+    required this.activities,
+  });
+  final String id;
+  final bool available;
+  final String note;
+  final String? statusIcon;
+  final String? device;
+  final int? timeOffsetMin;
+  final String? timestamp;
+  final List<String> activities;
+
+  @override
+  factory SignalingPresenceInfo.fromJson(Map<String, dynamic> json) {
+    return SignalingPresenceInfo(
+      id: json['id'],
+      available: json['available'],
+      note: json['note'],
+      statusIcon: json['status_icon'],
+      device: json['device'],
+      timeOffsetMin: json['time_offset_min'],
+      timestamp: json['timestamp'],
+      activities: (json['activities'] as List<dynamic>).map((e) => e as String).toList(),
+    );
+  }
+
+  @override
+  List<Object?> get props => [id, available, note, statusIcon, device, timeOffsetMin, timestamp, activities];
+
+  @override
+  String toString() {
+    return 'SignalingPresenceInfo{id: $id, available: $available, note: $note, statusIcon: $statusIcon, device: $device, '
+        'timeOffsetMin: $timeOffsetMin, timestamp: $timestamp, activities: $activities}';
+  }
+}
+
 enum ReferNotifyState { trying, ok, unknown }
 
 class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
@@ -187,7 +273,7 @@ class UnknownNotifyEvent extends NotifyEvent with EquatableMixin {
     this.contentType,
   });
 
-  final String content;
+  final String? content;
   final String? contentType;
 
   @override

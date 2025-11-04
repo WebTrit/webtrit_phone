@@ -921,6 +921,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs':
           localizations.settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_presence':
+          localizations.settings_ListViewTileTitle_presence,
       'settings_ListViewTileTitle_callerId':
           localizations.settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_encoding':
@@ -1165,6 +1167,101 @@ class AppLocalizationsMapper {
           localizations.webview_sslError_details_type,
       'webview_sslError_details_url':
           localizations.webview_sslError_details_url,
+      'presence_preset_available_name':
+          localizations.presence_preset_available_name,
+      'presence_preset_unavailable_name':
+          localizations.presence_preset_unavailable_name,
+      'presence_preset_away_name': localizations.presence_preset_away_name,
+      'presence_preset_away_note': localizations.presence_preset_away_note,
+      'presence_preset_dnd_name': localizations.presence_preset_dnd_name,
+      'presence_preset_dnd_note': localizations.presence_preset_dnd_note,
+      'presence_preset_sleeping_name':
+          localizations.presence_preset_sleeping_name,
+      'presence_preset_sleeping_note':
+          localizations.presence_preset_sleeping_note,
+      'presence_preset_absent_name': localizations.presence_preset_absent_name,
+      'presence_preset_absent_note': localizations.presence_preset_absent_note,
+      'presence_preset_meal_name': localizations.presence_preset_meal_name,
+      'presence_preset_meal_note': localizations.presence_preset_meal_note,
+      'presence_preset_inTransit_name':
+          localizations.presence_preset_inTransit_name,
+      'presence_preset_inTransit_note':
+          localizations.presence_preset_inTransit_note,
+      'presence_preset_meeting_name':
+          localizations.presence_preset_meeting_name,
+      'presence_preset_meeting_note':
+          localizations.presence_preset_meeting_note,
+      'presence_preset_vacation_name':
+          localizations.presence_preset_vacation_name,
+      'presence_preset_vacation_note':
+          localizations.presence_preset_vacation_note,
+      'presence_preset_travel_name': localizations.presence_preset_travel_name,
+      'presence_preset_travel_note': localizations.presence_preset_travel_note,
+      'presence_preset_appointment_name':
+          localizations.presence_preset_appointment_name,
+      'presence_preset_appointment_note':
+          localizations.presence_preset_appointment_note,
+      'presence_activity_none_name': localizations.presence_activity_none_name,
+      'presence_activity_away_name': localizations.presence_activity_away_name,
+      'presence_activity_busy_name': localizations.presence_activity_busy_name,
+      'presence_activity_doNotDisturb_name':
+          localizations.presence_activity_doNotDisturb_name,
+      'presence_activity_sleeping_name':
+          localizations.presence_activity_sleeping_name,
+      'presence_activity_permanentAbsence_name':
+          localizations.presence_activity_permanentAbsence_name,
+      'presence_activity_onThePhone_name':
+          localizations.presence_activity_onThePhone_name,
+      'presence_activity_meal_name': localizations.presence_activity_meal_name,
+      'presence_activity_meeting_name':
+          localizations.presence_activity_meeting_name,
+      'presence_activity_appointment_name':
+          localizations.presence_activity_appointment_name,
+      'presence_activity_vacation_name':
+          localizations.presence_activity_vacation_name,
+      'presence_activity_travel_name':
+          localizations.presence_activity_travel_name,
+      'presence_activity_inTransit_name':
+          localizations.presence_activity_inTransit_name,
+      'presence_settings_presets_title':
+          localizations.presence_settings_presets_title,
+      'presence_settings_presets_label':
+          localizations.presence_settings_presets_label,
+      'presence_settings_config_title':
+          localizations.presence_settings_config_title,
+      'presence_settings_availability_title':
+          localizations.presence_settings_availability_title,
+      'presence_settings_availability_tooltip':
+          localizations.presence_settings_availability_tooltip,
+      'presence_settings_note_label':
+          localizations.presence_settings_note_label,
+      'presence_settings_note_tooltip':
+          localizations.presence_settings_note_tooltip,
+      'presence_settings_activity_label':
+          localizations.presence_settings_activity_label,
+      'presence_settings_activity_tooltip':
+          localizations.presence_settings_activity_tooltip,
+      'presence_settings_dnd_title': localizations.presence_settings_dnd_title,
+      'presence_settings_dnd_tooltip':
+          localizations.presence_settings_dnd_tooltip,
+      'presence_settings_statusIcon_title':
+          localizations.presence_settings_statusIcon_title,
+      'presence_settings_statusIcon_none':
+          localizations.presence_settings_statusIcon_none,
+      'presence_infoView_title': localizations.presence_infoView_title,
+      'presence_infoView_device': localizations.presence_infoView_device,
+      'presence_infoView_available': localizations.presence_infoView_available,
+      'presence_infoView_available_true':
+          localizations.presence_infoView_available_true,
+      'presence_infoView_available_false':
+          localizations.presence_infoView_available_false,
+      'presence_infoView_note': localizations.presence_infoView_note,
+      'presence_infoView_activity': localizations.presence_infoView_activity,
+      'presence_infoView_statusIcon':
+          localizations.presence_infoView_statusIcon,
+      'presence_infoView_timeZone': localizations.presence_infoView_timeZone,
+      'presence_infoView_updated': localizations.presence_infoView_updated,
+      'presence_infoView_client': localizations.presence_infoView_client,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>

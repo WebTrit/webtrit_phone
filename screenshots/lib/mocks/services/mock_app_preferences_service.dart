@@ -38,6 +38,23 @@ class MockAppPreferencesService implements AppPreferences {
   }
 
   @override
+  String? getString(String key) {
+    return _mockData[key] as String?;
+  }
+
+  @override
+  Future<bool> setString(String key, String value) {
+    _mockData[key] = value;
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> removeKey(String key) async {
+    _mockData.remove(key);
+    return true;
+  }
+
+  @override
   bool getRegisterStatus() => true;
 
   @override

@@ -14,6 +14,7 @@ export 'lines_state/lines_state_repository.dart';
 export 'local_contacts/local_contacts_repository.dart';
 export 'log_records/log_records_repository.dart';
 export 'messaging/messaging.dart';
+export 'presence/presence_repository.dart';
 export 'private_gateway_repository/private_gateway_repository.dart';
 export 'push_notifications/local_push_repository.dart';
 export 'push_notifications/remote_push_repository.dart';

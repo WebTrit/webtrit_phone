@@ -1736,6 +1736,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
+  String get settings_ListViewTileTitle_presence => 'SIP Присутність';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'Ідентифікатор абонента';
 
   @override
@@ -2229,4 +2232,185 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webview_sslError_details_url => 'URL';
+
+  @override
+  String get presence_preset_available_name => 'Доступний';
+
+  @override
+  String get presence_preset_unavailable_name => 'Недоступний';
+
+  @override
+  String get presence_preset_away_name => 'Відійшов';
+
+  @override
+  String get presence_preset_away_note => 'Відійшов';
+
+  @override
+  String get presence_preset_dnd_name => 'Не турбувати';
+
+  @override
+  String get presence_preset_dnd_note => 'Не турбувати';
+
+  @override
+  String get presence_preset_sleeping_name => 'Спить';
+
+  @override
+  String get presence_preset_sleeping_note => 'Спить';
+
+  @override
+  String get presence_preset_absent_name => 'Відсутній';
+
+  @override
+  String get presence_preset_absent_note => 'Відсутній';
+
+  @override
+  String get presence_preset_meal_name => 'Їжа';
+
+  @override
+  String get presence_preset_meal_note => 'На їжі';
+
+  @override
+  String get presence_preset_inTransit_name => 'Транзит';
+
+  @override
+  String get presence_preset_inTransit_note => 'У транзиті';
+
+  @override
+  String get presence_preset_meeting_name => 'Зустріч';
+
+  @override
+  String get presence_preset_meeting_note => 'На зустрічі';
+
+  @override
+  String get presence_preset_vacation_name => 'Відпустка';
+
+  @override
+  String get presence_preset_vacation_note => 'У відпустці';
+
+  @override
+  String get presence_preset_travel_name => 'В подорожі';
+
+  @override
+  String get presence_preset_travel_note => 'В подорожі';
+
+  @override
+  String get presence_preset_appointment_name => 'Запланована зустріч';
+
+  @override
+  String get presence_preset_appointment_note => 'На запланованій зустрічі';
+
+  @override
+  String get presence_activity_none_name => 'Не вказано';
+
+  @override
+  String get presence_activity_away_name => 'Відійшов';
+
+  @override
+  String get presence_activity_busy_name => 'Зайнятий';
+
+  @override
+  String get presence_activity_doNotDisturb_name => 'Не турбувати';
+
+  @override
+  String get presence_activity_sleeping_name => 'Спить';
+
+  @override
+  String get presence_activity_permanentAbsence_name => 'Відсутній';
+
+  @override
+  String get presence_activity_onThePhone_name => 'На дроті';
+
+  @override
+  String get presence_activity_meal_name => 'На їжі';
+
+  @override
+  String get presence_activity_meeting_name => 'На конференції';
+
+  @override
+  String get presence_activity_appointment_name => 'На зустрічі';
+
+  @override
+  String get presence_activity_vacation_name => 'У відпустці';
+
+  @override
+  String get presence_activity_travel_name => 'В подорожі';
+
+  @override
+  String get presence_activity_inTransit_name => 'У транзиті';
+
+  @override
+  String get presence_settings_presets_title => 'Пресети:';
+
+  @override
+  String get presence_settings_presets_label => 'Виберіть пресет';
+
+  @override
+  String get presence_settings_config_title => 'Конфігурація:';
+
+  @override
+  String get presence_settings_availability_title => 'Доступність:';
+
+  @override
+  String get presence_settings_availability_tooltip =>
+      'Відображає загальну доступність для спілкування в службі SIP. Використовує елемент SIP \"Status\" у вмісті pidf зі значеннями \"open/closed\" (див. RFC 3863)';
+
+  @override
+  String get presence_settings_note_label => 'Примітка';
+
+  @override
+  String get presence_settings_note_tooltip =>
+      'Короткий текстовий опис поточного стану. Використовує елемент SIP \"note\" у вмісті pidf (див. RFC 3863)';
+
+  @override
+  String get presence_settings_activity_label => 'Активність';
+
+  @override
+  String get presence_settings_activity_tooltip =>
+      'Детально описує поточну активність. Використовує елемент \"activities\" розширення SIP \"RPID\" у вмісті pidf (див. RFC 4480)';
+
+  @override
+  String get presence_settings_dnd_title => 'Відхиляти дзвінки (DND)';
+
+  @override
+  String get presence_settings_dnd_tooltip =>
+      'Коли увімкнено, всі вхідні дзвінки будуть автоматично відхилені сервером з відповіддю \"603 Declined\".';
+
+  @override
+  String get presence_settings_statusIcon_title => 'Іконка статусу:';
+
+  @override
+  String get presence_settings_statusIcon_none => 'Немає';
+
+  @override
+  String get presence_infoView_title => 'Інформація про присутність:';
+
+  @override
+  String get presence_infoView_device => 'Пристрій:';
+
+  @override
+  String get presence_infoView_available => 'Доступний:';
+
+  @override
+  String get presence_infoView_available_true => 'Так';
+
+  @override
+  String get presence_infoView_available_false => 'Ні';
+
+  @override
+  String get presence_infoView_note => 'Примітка:';
+
+  @override
+  String get presence_infoView_activity => 'Активність:';
+
+  @override
+  String get presence_infoView_statusIcon => 'Іконка статусу:';
+
+  @override
+  String get presence_infoView_timeZone => 'Часовий пояс:';
+
+  @override
+  String get presence_infoView_updated => 'Оновлено:';
+
+  @override
+  String get presence_infoView_client => 'Клієнт:';
 }

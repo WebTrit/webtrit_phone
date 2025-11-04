@@ -215,13 +215,22 @@ sealed class _CallSignalingEvent extends CallEvent {
     required ReferNotifyState state,
   }) = _CallSignalingEventNotifyRefer;
 
+  const factory _CallSignalingEvent.notifyPresence({
+    required int? line,
+    required String callId,
+    required String? notify,
+    required SubscriptionState? subscriptionState,
+    required String number,
+    required List<SignalingPresenceInfo> presenceInfo,
+  }) = _CallSignalingEventNotifyPresence;
+
   const factory _CallSignalingEvent.notifyUnknown({
     required int? line,
     required String callId,
     required String? notify,
     required SubscriptionState? subscriptionState,
     required String? contentType,
-    required String content,
+    required String? content,
   }) = _CallSignalingEventNotifyUnknown;
 
   const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
@@ -465,6 +474,29 @@ class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
       ];
 }
 
+class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyPresence({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.number,
+    required this.presenceInfo,
+  });
+
+  final int? line;
+  final String callId;
+  final String? notify;
+  final SubscriptionState? subscriptionState;
+  final String number;
+  final List<SignalingPresenceInfo> presenceInfo;
+
+  @override
+  List<Object> get props => [
+        EquatablePropToString([line, callId, notify, subscriptionState, number, presenceInfo], listPropToString),
+      ];
+}
+
 class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   const _CallSignalingEventNotifyUnknown({
     required this.line,
@@ -480,7 +512,7 @@ class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   final String? notify;
   final SubscriptionState? subscriptionState;
   final String? contentType;
-  final String content;
+  final String? content;
 
   @override
   List<Object> get props => [

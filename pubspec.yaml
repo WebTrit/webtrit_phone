@@ -93,6 +93,8 @@ dependencies:
       url: https://github.com/aldisa546/flutter_workmanager.git
       ref: upgrade/flutter-3.29
   country_code_picker: ^3.3.0
+  icon_decoration: ^2.1.0
+  emoji_picker_flutter: ^4.3.0
 
   webtrit_api:
     path: ./packages/webtrit_api

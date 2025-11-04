@@ -60,6 +60,7 @@ class FeatureAccess {
     this.messagingFeature,
     this.termsFeature,
     this.systemNotificationsFeature,
+    this.sipPresenceFeature,
   );
 
   final EmbeddedFeature embeddedFeature;
@@ -70,6 +71,7 @@ class FeatureAccess {
   final MessagingFeature messagingFeature;
   final TermsFeature termsFeature;
   final SystemNotificationsFeature systemNotificationsFeature;
+  final SipPresenceFeature sipPresenceFeature;
 
   static FeatureAccess init(AppConfig appConfig, List<EmbeddedResource> embeddedResources, AppPreferences preferences) {
     try {
@@ -83,6 +85,7 @@ class FeatureAccess {
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, coreSupport);
       final termsFeature = _tryConfigureTermsFeature(embeddedResources);
       final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(coreSupport, appConfig);
+      final sipPresenceFeature = _tryConfigureSipPresenceFeature(coreSupport, appConfig);
 
       _instance = FeatureAccess._(
         embeddedFeature,
@@ -93,6 +96,7 @@ class FeatureAccess {
         messagingFeature,
         termsFeature,
         systemNotificationsFeature,
+        sipPresenceFeature,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -409,6 +413,14 @@ class FeatureAccess {
     final enabled = appConfig.mainConfig.systemNotificationsEnabled;
     return SystemNotificationsFeature(coreSupport, enabled);
   }
+
+  static SipPresenceFeature _tryConfigureSipPresenceFeature(
+    CoreSupport coreSupport,
+    AppConfig appConfig,
+  ) {
+    final enabled = appConfig.mainConfig.sipPresenceEnabled;
+    return SipPresenceFeature(coreSupport, enabled);
+  }
 }
 
 class LoginFeature {
@@ -576,6 +588,16 @@ class SystemNotificationsFeature {
 
   /// Check if the system notifications push feature is enabled and supported by the remote system.
   bool get systemNotificationsPushSupport => enabled && coreSystemPushSupport;
+}
+
+class SipPresenceFeature {
+  SipPresenceFeature(this._coreSupport, this.enabled);
+
+  final CoreSupport _coreSupport;
+  final bool enabled;
+
+  /// Check if the SIP presence feature is enabled and supported by the remote system.
+  bool get sipPresenceSupport => enabled && _coreSupport.supportsSipPresence;
 }
 
 /// Provides a centralized way to check whether specific [FeatureFlag]s are enabled.

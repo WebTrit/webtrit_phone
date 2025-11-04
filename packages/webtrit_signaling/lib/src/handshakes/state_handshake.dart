@@ -114,6 +114,7 @@ class StateHandshake extends Handshake {
     required this.registration,
     required this.lines,
     required this.userActiveCalls,
+    required this.contactsPresenceInfo,
     required this.guestLine,
   }) : super();
 
@@ -122,6 +123,7 @@ class StateHandshake extends Handshake {
   final Registration registration;
   final List<Line?> lines;
   final List<UserActiveCall> userActiveCalls;
+  final Map<String, List<SignalingPresenceInfo>> contactsPresenceInfo;
   final Line? guestLine;
 
   @override
@@ -131,6 +133,7 @@ class StateHandshake extends Handshake {
         registration,
         lines,
         userActiveCalls,
+        contactsPresenceInfo,
         guestLine,
       ];
 
@@ -195,6 +198,13 @@ class StateHandshake extends Handshake {
     final userActiveCallsJson = json['user_active_calls'] as List<dynamic>? ?? <dynamic>[];
     final userActiveCalls = userActiveCallsJson.map((e) => UserActiveCall.fromJson(e)).toList();
 
+    final contactsPresenceInfoJson = json['presence_contacts_info'] as Map<String, dynamic>?;
+    final contactsPresenceInfo = contactsPresenceInfoJson?.map((key, value) {
+          final presenceInfoList = (value as List<dynamic>).map((e) => SignalingPresenceInfo.fromJson(e)).toList();
+          return MapEntry(key, presenceInfoList);
+        }) ??
+        <String, List<SignalingPresenceInfo>>{};
+
     final guestLineJson = json['guest_line'];
     Line? guestLine;
     if (guestLineJson != null) {
@@ -228,6 +238,7 @@ class StateHandshake extends Handshake {
       registration: registration,
       lines: lines,
       userActiveCalls: userActiveCalls,
+      contactsPresenceInfo: contactsPresenceInfo,
       guestLine: guestLine,
     );
   }

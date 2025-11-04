@@ -33,6 +33,7 @@ export 'messaging/messaging.dart';
 export 'metrics/metrics.dart';
 export 'negotiation_settings.dart';
 export 'peer_connection_settings.dart';
+export 'presence/presence.dart';
 export 'pullable_call.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';

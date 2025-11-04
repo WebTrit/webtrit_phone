@@ -200,8 +200,9 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                     username: contact?.displayTitle,
                     thumbnail: contact?.thumbnail,
                     thumbnailUrl: contact?.thumbnailUrl,
-                    registered: contact?.registered,
                     radius: 20,
+                    registered: contact?.registered,
+                    presenceInfo: contact?.presenceInfo,
                   );
                 },
               ),

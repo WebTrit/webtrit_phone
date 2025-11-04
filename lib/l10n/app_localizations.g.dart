@@ -3029,6 +3029,12 @@ abstract class AppLocalizations {
   /// **'Call codecs'**
   String get settings_ListViewTileTitle_call_codecs;
 
+  /// No description provided for @settings_ListViewTileTitle_presence.
+  ///
+  /// In en, this message translates to:
+  /// **'SIP Presence'**
+  String get settings_ListViewTileTitle_presence;
+
   /// No description provided for @settings_ListViewTileTitle_callerId.
   ///
   /// In en, this message translates to:
@@ -3844,6 +3850,360 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'URL'**
   String get webview_sslError_details_url;
+
+  /// No description provided for @presence_preset_available_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get presence_preset_available_name;
+
+  /// No description provided for @presence_preset_unavailable_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get presence_preset_unavailable_name;
+
+  /// No description provided for @presence_preset_away_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Away'**
+  String get presence_preset_away_name;
+
+  /// No description provided for @presence_preset_away_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Away'**
+  String get presence_preset_away_note;
+
+  /// No description provided for @presence_preset_dnd_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not disturb'**
+  String get presence_preset_dnd_name;
+
+  /// No description provided for @presence_preset_dnd_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not disturb'**
+  String get presence_preset_dnd_note;
+
+  /// No description provided for @presence_preset_sleeping_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleeping'**
+  String get presence_preset_sleeping_name;
+
+  /// No description provided for @presence_preset_sleeping_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleeping'**
+  String get presence_preset_sleeping_note;
+
+  /// No description provided for @presence_preset_absent_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent'**
+  String get presence_preset_absent_name;
+
+  /// No description provided for @presence_preset_absent_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent'**
+  String get presence_preset_absent_note;
+
+  /// No description provided for @presence_preset_meal_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal'**
+  String get presence_preset_meal_name;
+
+  /// No description provided for @presence_preset_meal_note.
+  ///
+  /// In en, this message translates to:
+  /// **'At meal'**
+  String get presence_preset_meal_note;
+
+  /// No description provided for @presence_preset_inTransit_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Transit'**
+  String get presence_preset_inTransit_name;
+
+  /// No description provided for @presence_preset_inTransit_note.
+  ///
+  /// In en, this message translates to:
+  /// **'In transit'**
+  String get presence_preset_inTransit_note;
+
+  /// No description provided for @presence_preset_meeting_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting'**
+  String get presence_preset_meeting_name;
+
+  /// No description provided for @presence_preset_meeting_note.
+  ///
+  /// In en, this message translates to:
+  /// **'In a meeting'**
+  String get presence_preset_meeting_note;
+
+  /// No description provided for @presence_preset_vacation_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Vacation'**
+  String get presence_preset_vacation_name;
+
+  /// No description provided for @presence_preset_vacation_note.
+  ///
+  /// In en, this message translates to:
+  /// **'On vacation'**
+  String get presence_preset_vacation_note;
+
+  /// No description provided for @presence_preset_travel_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Traveling'**
+  String get presence_preset_travel_name;
+
+  /// No description provided for @presence_preset_travel_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Traveling'**
+  String get presence_preset_travel_note;
+
+  /// No description provided for @presence_preset_appointment_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment'**
+  String get presence_preset_appointment_name;
+
+  /// No description provided for @presence_preset_appointment_note.
+  ///
+  /// In en, this message translates to:
+  /// **'On appointment'**
+  String get presence_preset_appointment_note;
+
+  /// No description provided for @presence_activity_none_name.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get presence_activity_none_name;
+
+  /// No description provided for @presence_activity_away_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Away'**
+  String get presence_activity_away_name;
+
+  /// No description provided for @presence_activity_busy_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Busy'**
+  String get presence_activity_busy_name;
+
+  /// No description provided for @presence_activity_doNotDisturb_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not disturb'**
+  String get presence_activity_doNotDisturb_name;
+
+  /// No description provided for @presence_activity_sleeping_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleeping'**
+  String get presence_activity_sleeping_name;
+
+  /// No description provided for @presence_activity_permanentAbsence_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent absence'**
+  String get presence_activity_permanentAbsence_name;
+
+  /// No description provided for @presence_activity_onThePhone_name.
+  ///
+  /// In en, this message translates to:
+  /// **'On the phone'**
+  String get presence_activity_onThePhone_name;
+
+  /// No description provided for @presence_activity_meal_name.
+  ///
+  /// In en, this message translates to:
+  /// **'At meal'**
+  String get presence_activity_meal_name;
+
+  /// No description provided for @presence_activity_meeting_name.
+  ///
+  /// In en, this message translates to:
+  /// **'In a meeting'**
+  String get presence_activity_meeting_name;
+
+  /// No description provided for @presence_activity_appointment_name.
+  ///
+  /// In en, this message translates to:
+  /// **'At an appointment'**
+  String get presence_activity_appointment_name;
+
+  /// No description provided for @presence_activity_vacation_name.
+  ///
+  /// In en, this message translates to:
+  /// **'On vacation'**
+  String get presence_activity_vacation_name;
+
+  /// No description provided for @presence_activity_travel_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Traveling'**
+  String get presence_activity_travel_name;
+
+  /// No description provided for @presence_activity_inTransit_name.
+  ///
+  /// In en, this message translates to:
+  /// **'In transit'**
+  String get presence_activity_inTransit_name;
+
+  /// No description provided for @presence_settings_presets_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Presets:'**
+  String get presence_settings_presets_title;
+
+  /// No description provided for @presence_settings_presets_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose preset'**
+  String get presence_settings_presets_label;
+
+  /// No description provided for @presence_settings_config_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration:'**
+  String get presence_settings_config_title;
+
+  /// No description provided for @presence_settings_availability_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Availability:'**
+  String get presence_settings_availability_title;
+
+  /// No description provided for @presence_settings_availability_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Represents general availability for communications within SIP service. Uses  SIP \"Status\" element in pidf content with \"open/closed\" values (see RFC 3863)'**
+  String get presence_settings_availability_tooltip;
+
+  /// No description provided for @presence_settings_note_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get presence_settings_note_label;
+
+  /// No description provided for @presence_settings_note_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'A short text note describing current status in details. Uses SIP \"note\" element in pidf content (see RFC 3863)'**
+  String get presence_settings_note_tooltip;
+
+  /// No description provided for @presence_settings_activity_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get presence_settings_activity_label;
+
+  /// No description provided for @presence_settings_activity_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Describes current activity in more details. Uses SIP \"RPID\" extension \"activities\" element in pidf content (see RFC 4480)'**
+  String get presence_settings_activity_tooltip;
+
+  /// No description provided for @presence_settings_dnd_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject calls (DND)'**
+  String get presence_settings_dnd_title;
+
+  /// No description provided for @presence_settings_dnd_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'When enabled, all incoming calls will be automatically rejected by the server with \"603 Declined\" response.'**
+  String get presence_settings_dnd_tooltip;
+
+  /// No description provided for @presence_settings_statusIcon_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Status Icon:'**
+  String get presence_settings_statusIcon_title;
+
+  /// No description provided for @presence_settings_statusIcon_none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get presence_settings_statusIcon_none;
+
+  /// No description provided for @presence_infoView_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Presence Information:'**
+  String get presence_infoView_title;
+
+  /// No description provided for @presence_infoView_device.
+  ///
+  /// In en, this message translates to:
+  /// **'Device:'**
+  String get presence_infoView_device;
+
+  /// No description provided for @presence_infoView_available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available:'**
+  String get presence_infoView_available;
+
+  /// No description provided for @presence_infoView_available_true.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get presence_infoView_available_true;
+
+  /// No description provided for @presence_infoView_available_false.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get presence_infoView_available_false;
+
+  /// No description provided for @presence_infoView_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note:'**
+  String get presence_infoView_note;
+
+  /// No description provided for @presence_infoView_activity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity:'**
+  String get presence_infoView_activity;
+
+  /// No description provided for @presence_infoView_statusIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Status Icon:'**
+  String get presence_infoView_statusIcon;
+
+  /// No description provided for @presence_infoView_timeZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Zone:'**
+  String get presence_infoView_timeZone;
+
+  /// No description provided for @presence_infoView_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated:'**
+  String get presence_infoView_updated;
+
+  /// No description provided for @presence_infoView_client.
+  ///
+  /// In en, this message translates to:
+  /// **'Client:'**
+  String get presence_infoView_client;
 }
 
 class _AppLocalizationsDelegate

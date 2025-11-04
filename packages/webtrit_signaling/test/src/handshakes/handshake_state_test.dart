@@ -61,6 +61,7 @@ void main() {
       null,
     ],
     userActiveCalls: [],
+    contactsPresenceInfo: {},
     guestLine: null,
   );
 

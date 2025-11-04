@@ -1079,6 +1079,7 @@ AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) {
 mixin _$AppConfigMain {
   AppConfigBottomMenu get bottomMenu => throw _privateConstructorUsedError;
   bool get systemNotificationsEnabled => throw _privateConstructorUsedError;
+  bool get sipPresenceEnabled => throw _privateConstructorUsedError;
 
   /// Serializes this AppConfigMain to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1096,7 +1097,10 @@ abstract class $AppConfigMainCopyWith<$Res> {
           AppConfigMain value, $Res Function(AppConfigMain) then) =
       _$AppConfigMainCopyWithImpl<$Res, AppConfigMain>;
   @useResult
-  $Res call({AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled});
+  $Res call(
+      {AppConfigBottomMenu bottomMenu,
+      bool systemNotificationsEnabled,
+      bool sipPresenceEnabled});
 
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu;
 }
@@ -1118,6 +1122,7 @@ class _$AppConfigMainCopyWithImpl<$Res, $Val extends AppConfigMain>
   $Res call({
     Object? bottomMenu = null,
     Object? systemNotificationsEnabled = null,
+    Object? sipPresenceEnabled = null,
   }) {
     return _then(_value.copyWith(
       bottomMenu: null == bottomMenu
@@ -1127,6 +1132,10 @@ class _$AppConfigMainCopyWithImpl<$Res, $Val extends AppConfigMain>
       systemNotificationsEnabled: null == systemNotificationsEnabled
           ? _value.systemNotificationsEnabled
           : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      sipPresenceEnabled: null == sipPresenceEnabled
+          ? _value.sipPresenceEnabled
+          : sipPresenceEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -1150,7 +1159,10 @@ abstract class _$$AppConfigMainImplCopyWith<$Res>
       __$$AppConfigMainImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled});
+  $Res call(
+      {AppConfigBottomMenu bottomMenu,
+      bool systemNotificationsEnabled,
+      bool sipPresenceEnabled});
 
   @override
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu;
@@ -1171,6 +1183,7 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
   $Res call({
     Object? bottomMenu = null,
     Object? systemNotificationsEnabled = null,
+    Object? sipPresenceEnabled = null,
   }) {
     return _then(_$AppConfigMainImpl(
       bottomMenu: null == bottomMenu
@@ -1180,6 +1193,10 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
       systemNotificationsEnabled: null == systemNotificationsEnabled
           ? _value.systemNotificationsEnabled
           : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      sipPresenceEnabled: null == sipPresenceEnabled
+          ? _value.sipPresenceEnabled
+          : sipPresenceEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -1220,7 +1237,8 @@ class _$AppConfigMainImpl extends _AppConfigMain {
             titleL10n: 'main_BottomNavigationBarItemLabel_chats',
             icon: '0xe155')
       ]),
-      this.systemNotificationsEnabled = true})
+      this.systemNotificationsEnabled = true,
+      this.sipPresenceEnabled = false})
       : super._();
 
   factory _$AppConfigMainImpl.fromJson(Map<String, dynamic> json) =>
@@ -1232,10 +1250,13 @@ class _$AppConfigMainImpl extends _AppConfigMain {
   @override
   @JsonKey()
   final bool systemNotificationsEnabled;
+  @override
+  @JsonKey()
+  final bool sipPresenceEnabled;
 
   @override
   String toString() {
-    return 'AppConfigMain(bottomMenu: $bottomMenu, systemNotificationsEnabled: $systemNotificationsEnabled)';
+    return 'AppConfigMain(bottomMenu: $bottomMenu, systemNotificationsEnabled: $systemNotificationsEnabled, sipPresenceEnabled: $sipPresenceEnabled)';
   }
 
   @override
@@ -1248,13 +1269,15 @@ class _$AppConfigMainImpl extends _AppConfigMain {
             (identical(other.systemNotificationsEnabled,
                     systemNotificationsEnabled) ||
                 other.systemNotificationsEnabled ==
-                    systemNotificationsEnabled));
+                    systemNotificationsEnabled) &&
+            (identical(other.sipPresenceEnabled, sipPresenceEnabled) ||
+                other.sipPresenceEnabled == sipPresenceEnabled));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, bottomMenu, systemNotificationsEnabled);
+  int get hashCode => Object.hash(
+      runtimeType, bottomMenu, systemNotificationsEnabled, sipPresenceEnabled);
 
   /// Create a copy of AppConfigMain
   /// with the given fields replaced by the non-null parameter values.
@@ -1275,7 +1298,8 @@ class _$AppConfigMainImpl extends _AppConfigMain {
 abstract class _AppConfigMain extends AppConfigMain {
   const factory _AppConfigMain(
       {final AppConfigBottomMenu bottomMenu,
-      final bool systemNotificationsEnabled}) = _$AppConfigMainImpl;
+      final bool systemNotificationsEnabled,
+      final bool sipPresenceEnabled}) = _$AppConfigMainImpl;
   const _AppConfigMain._() : super._();
 
   factory _AppConfigMain.fromJson(Map<String, dynamic> json) =
@@ -1285,6 +1309,8 @@ abstract class _AppConfigMain extends AppConfigMain {
   AppConfigBottomMenu get bottomMenu;
   @override
   bool get systemNotificationsEnabled;
+  @override
+  bool get sipPresenceEnabled;
 
   /// Create a copy of AppConfigMain
   /// with the given fields replaced by the non-null parameter values.

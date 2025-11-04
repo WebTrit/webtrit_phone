@@ -1,4 +1,6 @@
 import 'package:drift/drift.dart';
+
+// needed for db generator
 // ignore: unused_import
 import 'contacts_table.dart';
 

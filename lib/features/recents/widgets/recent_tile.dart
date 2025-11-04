@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../recents.dart';
@@ -131,6 +132,7 @@ class _RecentTileState extends State<RecentTile> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final presenceSource = PresenceViewParams.of(context).viewSource;
 
     return Dismissible(
       key: ObjectKey(widget.recent),
@@ -157,13 +159,17 @@ class _RecentTileState extends State<RecentTile> {
           thumbnail: contact?.thumbnail,
           thumbnailUrl: contact?.thumbnailUrl,
           registered: contact?.registered,
+          presenceInfo: contact?.presenceInfo,
         ),
         trailing: Text(
           dateFormat.format(callLogEntry.createdTime),
           style: themeData.textTheme.bodySmall,
         ),
         title: Text(
-          widget.recent.name,
+          switch (presenceSource) {
+            PresenceViewSource.sipPresence => '${widget.recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
+            PresenceViewSource.contactInfo => widget.recent.name,
+          },
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
