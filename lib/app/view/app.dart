@@ -23,8 +23,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   late final AppBloc appBloc;
-
-  late final _appRouter;
+  late final AppRouter appRouter;
 
   @override
   void initState() {
@@ -37,7 +36,7 @@ class _AppState extends State<App> {
       sessionRepository: context.read<SessionRepository>(),
       appInfo: context.read<AppInfo>(),
     );
-    _appRouter = AppRouter(
+    appRouter = AppRouter(
       appBloc,
       context.read<AppPermissions>(),
       featureAccess.loginFeature.launchLoginPage,
@@ -78,8 +77,8 @@ class _AppState extends State<App> {
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
-                routerConfig: _appRouter.config(
-                  deepLinkBuilder: isDeepLinkEnabled ? _appRouter.deepLinkBuilder : null,
+                routerConfig: appRouter.config(
+                  deepLinkBuilder: isDeepLinkEnabled ? appRouter.deepLinkBuilder : null,
                   navigatorObservers: () => [
                     AppRouterObserver(),
                     context.read<AppAnalyticsRepository>().createObserver(),
