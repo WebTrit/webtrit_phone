@@ -12,7 +12,8 @@ part of 'app_bar_style_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 AppBarStyleConfig _$AppBarStyleConfigFromJson(Map<String, dynamic> json) {
   return _AppBarStyleConfig.fromJson(json);
@@ -45,14 +46,16 @@ mixin _$AppBarStyleConfig {
 /// @nodoc
 abstract class $AppBarStyleConfigCopyWith<$Res> {
   factory $AppBarStyleConfigCopyWith(
-          AppBarStyleConfig value, $Res Function(AppBarStyleConfig) then) =
-      _$AppBarStyleConfigCopyWithImpl<$Res, AppBarStyleConfig>;
+    AppBarStyleConfig value,
+    $Res Function(AppBarStyleConfig) then,
+  ) = _$AppBarStyleConfigCopyWithImpl<$Res, AppBarStyleConfig>;
   @useResult
-  $Res call(
-      {String? backgroundColor,
-      String? foregroundColor,
-      bool primary,
-      bool showBackButton});
+  $Res call({
+    String? backgroundColor,
+    String? foregroundColor,
+    bool primary,
+    bool showBackButton,
+  });
 }
 
 /// @nodoc
@@ -75,49 +78,55 @@ class _$AppBarStyleConfigCopyWithImpl<$Res, $Val extends AppBarStyleConfig>
     Object? primary = null,
     Object? showBackButton = null,
   }) {
-    return _then(_value.copyWith(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      foregroundColor: freezed == foregroundColor
-          ? _value.foregroundColor
-          : foregroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      primary: null == primary
-          ? _value.primary
-          : primary // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showBackButton: null == showBackButton
-          ? _value.showBackButton
-          : showBackButton // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            backgroundColor: freezed == backgroundColor
+                ? _value.backgroundColor
+                : backgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            foregroundColor: freezed == foregroundColor
+                ? _value.foregroundColor
+                : foregroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            primary: null == primary
+                ? _value.primary
+                : primary // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            showBackButton: null == showBackButton
+                ? _value.showBackButton
+                : showBackButton // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$AppBarStyleConfigImplCopyWith<$Res>
     implements $AppBarStyleConfigCopyWith<$Res> {
-  factory _$$AppBarStyleConfigImplCopyWith(_$AppBarStyleConfigImpl value,
-          $Res Function(_$AppBarStyleConfigImpl) then) =
-      __$$AppBarStyleConfigImplCopyWithImpl<$Res>;
+  factory _$$AppBarStyleConfigImplCopyWith(
+    _$AppBarStyleConfigImpl value,
+    $Res Function(_$AppBarStyleConfigImpl) then,
+  ) = __$$AppBarStyleConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? backgroundColor,
-      String? foregroundColor,
-      bool primary,
-      bool showBackButton});
+  $Res call({
+    String? backgroundColor,
+    String? foregroundColor,
+    bool primary,
+    bool showBackButton,
+  });
 }
 
 /// @nodoc
 class __$$AppBarStyleConfigImplCopyWithImpl<$Res>
     extends _$AppBarStyleConfigCopyWithImpl<$Res, _$AppBarStyleConfigImpl>
     implements _$$AppBarStyleConfigImplCopyWith<$Res> {
-  __$$AppBarStyleConfigImplCopyWithImpl(_$AppBarStyleConfigImpl _value,
-      $Res Function(_$AppBarStyleConfigImpl) _then)
-      : super(_value, _then);
+  __$$AppBarStyleConfigImplCopyWithImpl(
+    _$AppBarStyleConfigImpl _value,
+    $Res Function(_$AppBarStyleConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppBarStyleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -129,24 +138,26 @@ class __$$AppBarStyleConfigImplCopyWithImpl<$Res>
     Object? primary = null,
     Object? showBackButton = null,
   }) {
-    return _then(_$AppBarStyleConfigImpl(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      foregroundColor: freezed == foregroundColor
-          ? _value.foregroundColor
-          : foregroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      primary: null == primary
-          ? _value.primary
-          : primary // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showBackButton: null == showBackButton
-          ? _value.showBackButton
-          : showBackButton // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$AppBarStyleConfigImpl(
+        backgroundColor: freezed == backgroundColor
+            ? _value.backgroundColor
+            : backgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        foregroundColor: freezed == foregroundColor
+            ? _value.foregroundColor
+            : foregroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        primary: null == primary
+            ? _value.primary
+            : primary // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        showBackButton: null == showBackButton
+            ? _value.showBackButton
+            : showBackButton // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -154,11 +165,12 @@ class __$$AppBarStyleConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppBarStyleConfigImpl implements _AppBarStyleConfig {
-  const _$AppBarStyleConfigImpl(
-      {this.backgroundColor,
-      this.foregroundColor,
-      this.primary = true,
-      this.showBackButton = true});
+  const _$AppBarStyleConfigImpl({
+    this.backgroundColor,
+    this.foregroundColor,
+    this.primary = true,
+    this.showBackButton = true,
+  });
 
   factory _$AppBarStyleConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppBarStyleConfigImplFromJson(json);
@@ -203,7 +215,12 @@ class _$AppBarStyleConfigImpl implements _AppBarStyleConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, backgroundColor, foregroundColor, primary, showBackButton);
+    runtimeType,
+    backgroundColor,
+    foregroundColor,
+    primary,
+    showBackButton,
+  );
 
   /// Create a copy of AppBarStyleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -212,22 +229,23 @@ class _$AppBarStyleConfigImpl implements _AppBarStyleConfig {
   @pragma('vm:prefer-inline')
   _$$AppBarStyleConfigImplCopyWith<_$AppBarStyleConfigImpl> get copyWith =>
       __$$AppBarStyleConfigImplCopyWithImpl<_$AppBarStyleConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppBarStyleConfigImplToJson(
-      this,
-    );
+    return _$$AppBarStyleConfigImplToJson(this);
   }
 }
 
 abstract class _AppBarStyleConfig implements AppBarStyleConfig {
-  const factory _AppBarStyleConfig(
-      {final String? backgroundColor,
-      final String? foregroundColor,
-      final bool primary,
-      final bool showBackButton}) = _$AppBarStyleConfigImpl;
+  const factory _AppBarStyleConfig({
+    final String? backgroundColor,
+    final String? foregroundColor,
+    final bool primary,
+    final bool showBackButton,
+  }) = _$AppBarStyleConfigImpl;
 
   factory _AppBarStyleConfig.fromJson(Map<String, dynamic> json) =
       _$AppBarStyleConfigImpl.fromJson;

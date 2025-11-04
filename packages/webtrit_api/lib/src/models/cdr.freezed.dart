@@ -12,7 +12,8 @@ part of 'cdr.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 CdrRecord _$CdrRecordFromJson(Map<String, dynamic> json) {
   return _CdrRecord.fromJson(json);
@@ -47,17 +48,18 @@ abstract class $CdrRecordCopyWith<$Res> {
   factory $CdrRecordCopyWith(CdrRecord value, $Res Function(CdrRecord) then) =
       _$CdrRecordCopyWithImpl<$Res, CdrRecord>;
   @useResult
-  $Res call(
-      {String callId,
-      String callee,
-      String caller,
-      DateTime connectTime,
-      String direction,
-      String disconnectReason,
-      DateTime disconnectTime,
-      int duration,
-      dynamic recordingId,
-      String status});
+  $Res call({
+    String callId,
+    String callee,
+    String caller,
+    DateTime connectTime,
+    String direction,
+    String disconnectReason,
+    DateTime disconnectTime,
+    int duration,
+    dynamic recordingId,
+    String status,
+  });
 }
 
 /// @nodoc
@@ -86,48 +88,51 @@ class _$CdrRecordCopyWithImpl<$Res, $Val extends CdrRecord>
     Object? recordingId = freezed,
     Object? status = null,
   }) {
-    return _then(_value.copyWith(
-      callId: null == callId
-          ? _value.callId
-          : callId // ignore: cast_nullable_to_non_nullable
-              as String,
-      callee: null == callee
-          ? _value.callee
-          : callee // ignore: cast_nullable_to_non_nullable
-              as String,
-      caller: null == caller
-          ? _value.caller
-          : caller // ignore: cast_nullable_to_non_nullable
-              as String,
-      connectTime: null == connectTime
-          ? _value.connectTime
-          : connectTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      direction: null == direction
-          ? _value.direction
-          : direction // ignore: cast_nullable_to_non_nullable
-              as String,
-      disconnectReason: null == disconnectReason
-          ? _value.disconnectReason
-          : disconnectReason // ignore: cast_nullable_to_non_nullable
-              as String,
-      disconnectTime: null == disconnectTime
-          ? _value.disconnectTime
-          : disconnectTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      duration: null == duration
-          ? _value.duration
-          : duration // ignore: cast_nullable_to_non_nullable
-              as int,
-      recordingId: freezed == recordingId
-          ? _value.recordingId
-          : recordingId // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            callId: null == callId
+                ? _value.callId
+                : callId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            callee: null == callee
+                ? _value.callee
+                : callee // ignore: cast_nullable_to_non_nullable
+                      as String,
+            caller: null == caller
+                ? _value.caller
+                : caller // ignore: cast_nullable_to_non_nullable
+                      as String,
+            connectTime: null == connectTime
+                ? _value.connectTime
+                : connectTime // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            direction: null == direction
+                ? _value.direction
+                : direction // ignore: cast_nullable_to_non_nullable
+                      as String,
+            disconnectReason: null == disconnectReason
+                ? _value.disconnectReason
+                : disconnectReason // ignore: cast_nullable_to_non_nullable
+                      as String,
+            disconnectTime: null == disconnectTime
+                ? _value.disconnectTime
+                : disconnectTime // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            duration: null == duration
+                ? _value.duration
+                : duration // ignore: cast_nullable_to_non_nullable
+                      as int,
+            recordingId: freezed == recordingId
+                ? _value.recordingId
+                : recordingId // ignore: cast_nullable_to_non_nullable
+                      as dynamic,
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -135,21 +140,23 @@ class _$CdrRecordCopyWithImpl<$Res, $Val extends CdrRecord>
 abstract class _$$CdrRecordImplCopyWith<$Res>
     implements $CdrRecordCopyWith<$Res> {
   factory _$$CdrRecordImplCopyWith(
-          _$CdrRecordImpl value, $Res Function(_$CdrRecordImpl) then) =
-      __$$CdrRecordImplCopyWithImpl<$Res>;
+    _$CdrRecordImpl value,
+    $Res Function(_$CdrRecordImpl) then,
+  ) = __$$CdrRecordImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String callId,
-      String callee,
-      String caller,
-      DateTime connectTime,
-      String direction,
-      String disconnectReason,
-      DateTime disconnectTime,
-      int duration,
-      dynamic recordingId,
-      String status});
+  $Res call({
+    String callId,
+    String callee,
+    String caller,
+    DateTime connectTime,
+    String direction,
+    String disconnectReason,
+    DateTime disconnectTime,
+    int duration,
+    dynamic recordingId,
+    String status,
+  });
 }
 
 /// @nodoc
@@ -157,8 +164,9 @@ class __$$CdrRecordImplCopyWithImpl<$Res>
     extends _$CdrRecordCopyWithImpl<$Res, _$CdrRecordImpl>
     implements _$$CdrRecordImplCopyWith<$Res> {
   __$$CdrRecordImplCopyWithImpl(
-      _$CdrRecordImpl _value, $Res Function(_$CdrRecordImpl) _then)
-      : super(_value, _then);
+    _$CdrRecordImpl _value,
+    $Res Function(_$CdrRecordImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CdrRecord
   /// with the given fields replaced by the non-null parameter values.
@@ -176,48 +184,50 @@ class __$$CdrRecordImplCopyWithImpl<$Res>
     Object? recordingId = freezed,
     Object? status = null,
   }) {
-    return _then(_$CdrRecordImpl(
-      callId: null == callId
-          ? _value.callId
-          : callId // ignore: cast_nullable_to_non_nullable
-              as String,
-      callee: null == callee
-          ? _value.callee
-          : callee // ignore: cast_nullable_to_non_nullable
-              as String,
-      caller: null == caller
-          ? _value.caller
-          : caller // ignore: cast_nullable_to_non_nullable
-              as String,
-      connectTime: null == connectTime
-          ? _value.connectTime
-          : connectTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      direction: null == direction
-          ? _value.direction
-          : direction // ignore: cast_nullable_to_non_nullable
-              as String,
-      disconnectReason: null == disconnectReason
-          ? _value.disconnectReason
-          : disconnectReason // ignore: cast_nullable_to_non_nullable
-              as String,
-      disconnectTime: null == disconnectTime
-          ? _value.disconnectTime
-          : disconnectTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      duration: null == duration
-          ? _value.duration
-          : duration // ignore: cast_nullable_to_non_nullable
-              as int,
-      recordingId: freezed == recordingId
-          ? _value.recordingId
-          : recordingId // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$CdrRecordImpl(
+        callId: null == callId
+            ? _value.callId
+            : callId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        callee: null == callee
+            ? _value.callee
+            : callee // ignore: cast_nullable_to_non_nullable
+                  as String,
+        caller: null == caller
+            ? _value.caller
+            : caller // ignore: cast_nullable_to_non_nullable
+                  as String,
+        connectTime: null == connectTime
+            ? _value.connectTime
+            : connectTime // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        direction: null == direction
+            ? _value.direction
+            : direction // ignore: cast_nullable_to_non_nullable
+                  as String,
+        disconnectReason: null == disconnectReason
+            ? _value.disconnectReason
+            : disconnectReason // ignore: cast_nullable_to_non_nullable
+                  as String,
+        disconnectTime: null == disconnectTime
+            ? _value.disconnectTime
+            : disconnectTime // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        duration: null == duration
+            ? _value.duration
+            : duration // ignore: cast_nullable_to_non_nullable
+                  as int,
+        recordingId: freezed == recordingId
+            ? _value.recordingId
+            : recordingId // ignore: cast_nullable_to_non_nullable
+                  as dynamic,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -225,17 +235,18 @@ class __$$CdrRecordImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$CdrRecordImpl implements _CdrRecord {
-  const _$CdrRecordImpl(
-      {required this.callId,
-      required this.callee,
-      required this.caller,
-      required this.connectTime,
-      required this.direction,
-      required this.disconnectReason,
-      required this.disconnectTime,
-      required this.duration,
-      this.recordingId,
-      required this.status});
+  const _$CdrRecordImpl({
+    required this.callId,
+    required this.callee,
+    required this.caller,
+    required this.connectTime,
+    required this.direction,
+    required this.disconnectReason,
+    required this.disconnectTime,
+    required this.duration,
+    this.recordingId,
+    required this.status,
+  });
 
   factory _$CdrRecordImpl.fromJson(Map<String, dynamic> json) =>
       _$$CdrRecordImplFromJson(json);
@@ -256,7 +267,7 @@ class _$CdrRecordImpl implements _CdrRecord {
   final DateTime disconnectTime;
   @override
   final int duration;
-// TODO: fix once backend side, sometimes it's int, sometimes it's string
+  // TODO: fix once backend side, sometimes it's int, sometimes it's string
   @override
   final dynamic recordingId;
   @override
@@ -285,25 +296,28 @@ class _$CdrRecordImpl implements _CdrRecord {
                 other.disconnectTime == disconnectTime) &&
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
-            const DeepCollectionEquality()
-                .equals(other.recordingId, recordingId) &&
+            const DeepCollectionEquality().equals(
+              other.recordingId,
+              recordingId,
+            ) &&
             (identical(other.status, status) || other.status == status));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      callId,
-      callee,
-      caller,
-      connectTime,
-      direction,
-      disconnectReason,
-      disconnectTime,
-      duration,
-      const DeepCollectionEquality().hash(recordingId),
-      status);
+    runtimeType,
+    callId,
+    callee,
+    caller,
+    connectTime,
+    direction,
+    disconnectReason,
+    disconnectTime,
+    duration,
+    const DeepCollectionEquality().hash(recordingId),
+    status,
+  );
 
   /// Create a copy of CdrRecord
   /// with the given fields replaced by the non-null parameter values.
@@ -315,24 +329,23 @@ class _$CdrRecordImpl implements _CdrRecord {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CdrRecordImplToJson(
-      this,
-    );
+    return _$$CdrRecordImplToJson(this);
   }
 }
 
 abstract class _CdrRecord implements CdrRecord {
-  const factory _CdrRecord(
-      {required final String callId,
-      required final String callee,
-      required final String caller,
-      required final DateTime connectTime,
-      required final String direction,
-      required final String disconnectReason,
-      required final DateTime disconnectTime,
-      required final int duration,
-      final dynamic recordingId,
-      required final String status}) = _$CdrRecordImpl;
+  const factory _CdrRecord({
+    required final String callId,
+    required final String callee,
+    required final String caller,
+    required final DateTime connectTime,
+    required final String direction,
+    required final String disconnectReason,
+    required final DateTime disconnectTime,
+    required final int duration,
+    final dynamic recordingId,
+    required final String status,
+  }) = _$CdrRecordImpl;
 
   factory _CdrRecord.fromJson(Map<String, dynamic> json) =
       _$CdrRecordImpl.fromJson;
@@ -387,8 +400,9 @@ mixin _$CdrHistoryResponse {
 /// @nodoc
 abstract class $CdrHistoryResponseCopyWith<$Res> {
   factory $CdrHistoryResponseCopyWith(
-          CdrHistoryResponse value, $Res Function(CdrHistoryResponse) then) =
-      _$CdrHistoryResponseCopyWithImpl<$Res, CdrHistoryResponse>;
+    CdrHistoryResponse value,
+    $Res Function(CdrHistoryResponse) then,
+  ) = _$CdrHistoryResponseCopyWithImpl<$Res, CdrHistoryResponse>;
   @useResult
   $Res call({List<CdrRecord> items});
 }
@@ -407,24 +421,26 @@ class _$CdrHistoryResponseCopyWithImpl<$Res, $Val extends CdrHistoryResponse>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? items = null,
-  }) {
-    return _then(_value.copyWith(
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<CdrRecord>,
-    ) as $Val);
+  $Res call({Object? items = null}) {
+    return _then(
+      _value.copyWith(
+            items: null == items
+                ? _value.items
+                : items // ignore: cast_nullable_to_non_nullable
+                      as List<CdrRecord>,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$CdrHistoryResponseImplCopyWith<$Res>
     implements $CdrHistoryResponseCopyWith<$Res> {
-  factory _$$CdrHistoryResponseImplCopyWith(_$CdrHistoryResponseImpl value,
-          $Res Function(_$CdrHistoryResponseImpl) then) =
-      __$$CdrHistoryResponseImplCopyWithImpl<$Res>;
+  factory _$$CdrHistoryResponseImplCopyWith(
+    _$CdrHistoryResponseImpl value,
+    $Res Function(_$CdrHistoryResponseImpl) then,
+  ) = __$$CdrHistoryResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<CdrRecord> items});
@@ -434,23 +450,24 @@ abstract class _$$CdrHistoryResponseImplCopyWith<$Res>
 class __$$CdrHistoryResponseImplCopyWithImpl<$Res>
     extends _$CdrHistoryResponseCopyWithImpl<$Res, _$CdrHistoryResponseImpl>
     implements _$$CdrHistoryResponseImplCopyWith<$Res> {
-  __$$CdrHistoryResponseImplCopyWithImpl(_$CdrHistoryResponseImpl _value,
-      $Res Function(_$CdrHistoryResponseImpl) _then)
-      : super(_value, _then);
+  __$$CdrHistoryResponseImplCopyWithImpl(
+    _$CdrHistoryResponseImpl _value,
+    $Res Function(_$CdrHistoryResponseImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CdrHistoryResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? items = null,
-  }) {
-    return _then(_$CdrHistoryResponseImpl(
-      items: null == items
-          ? _value._items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<CdrRecord>,
-    ));
+  $Res call({Object? items = null}) {
+    return _then(
+      _$CdrHistoryResponseImpl(
+        items: null == items
+            ? _value._items
+            : items // ignore: cast_nullable_to_non_nullable
+                  as List<CdrRecord>,
+      ),
+    );
   }
 }
 
@@ -459,7 +476,7 @@ class __$$CdrHistoryResponseImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$CdrHistoryResponseImpl implements _CdrHistoryResponse {
   const _$CdrHistoryResponseImpl({required final List<CdrRecord> items})
-      : _items = items;
+    : _items = items;
 
   factory _$CdrHistoryResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$CdrHistoryResponseImplFromJson(json);
@@ -497,13 +514,13 @@ class _$CdrHistoryResponseImpl implements _CdrHistoryResponse {
   @pragma('vm:prefer-inline')
   _$$CdrHistoryResponseImplCopyWith<_$CdrHistoryResponseImpl> get copyWith =>
       __$$CdrHistoryResponseImplCopyWithImpl<_$CdrHistoryResponseImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CdrHistoryResponseImplToJson(
-      this,
-    );
+    return _$$CdrHistoryResponseImplToJson(this);
   }
 }
 

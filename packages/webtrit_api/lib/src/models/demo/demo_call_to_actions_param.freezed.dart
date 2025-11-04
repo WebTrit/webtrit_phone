@@ -12,10 +12,12 @@ part of 'demo_call_to_actions_param.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 DemoCallToActionsParam _$DemoCallToActionsParamFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _DemoCallToActionsParam.fromJson(json);
 }
 
@@ -36,16 +38,19 @@ mixin _$DemoCallToActionsParam {
 
 /// @nodoc
 abstract class $DemoCallToActionsParamCopyWith<$Res> {
-  factory $DemoCallToActionsParamCopyWith(DemoCallToActionsParam value,
-          $Res Function(DemoCallToActionsParam) then) =
-      _$DemoCallToActionsParamCopyWithImpl<$Res, DemoCallToActionsParam>;
+  factory $DemoCallToActionsParamCopyWith(
+    DemoCallToActionsParam value,
+    $Res Function(DemoCallToActionsParam) then,
+  ) = _$DemoCallToActionsParamCopyWithImpl<$Res, DemoCallToActionsParam>;
   @useResult
   $Res call({String email, String tab});
 }
 
 /// @nodoc
-class _$DemoCallToActionsParamCopyWithImpl<$Res,
-        $Val extends DemoCallToActionsParam>
+class _$DemoCallToActionsParamCopyWithImpl<
+  $Res,
+  $Val extends DemoCallToActionsParam
+>
     implements $DemoCallToActionsParamCopyWith<$Res> {
   _$DemoCallToActionsParamCopyWithImpl(this._value, this._then);
 
@@ -58,20 +63,20 @@ class _$DemoCallToActionsParamCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? email = null,
-    Object? tab = null,
-  }) {
-    return _then(_value.copyWith(
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      tab: null == tab
-          ? _value.tab
-          : tab // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? email = null, Object? tab = null}) {
+    return _then(
+      _value.copyWith(
+            email: null == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                      as String,
+            tab: null == tab
+                ? _value.tab
+                : tab // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -79,9 +84,9 @@ class _$DemoCallToActionsParamCopyWithImpl<$Res,
 abstract class _$$DemoCallToActionsParamImplCopyWith<$Res>
     implements $DemoCallToActionsParamCopyWith<$Res> {
   factory _$$DemoCallToActionsParamImplCopyWith(
-          _$DemoCallToActionsParamImpl value,
-          $Res Function(_$DemoCallToActionsParamImpl) then) =
-      __$$DemoCallToActionsParamImplCopyWithImpl<$Res>;
+    _$DemoCallToActionsParamImpl value,
+    $Res Function(_$DemoCallToActionsParamImpl) then,
+  ) = __$$DemoCallToActionsParamImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String email, String tab});
@@ -89,32 +94,31 @@ abstract class _$$DemoCallToActionsParamImplCopyWith<$Res>
 
 /// @nodoc
 class __$$DemoCallToActionsParamImplCopyWithImpl<$Res>
-    extends _$DemoCallToActionsParamCopyWithImpl<$Res,
-        _$DemoCallToActionsParamImpl>
+    extends
+        _$DemoCallToActionsParamCopyWithImpl<$Res, _$DemoCallToActionsParamImpl>
     implements _$$DemoCallToActionsParamImplCopyWith<$Res> {
   __$$DemoCallToActionsParamImplCopyWithImpl(
-      _$DemoCallToActionsParamImpl _value,
-      $Res Function(_$DemoCallToActionsParamImpl) _then)
-      : super(_value, _then);
+    _$DemoCallToActionsParamImpl _value,
+    $Res Function(_$DemoCallToActionsParamImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DemoCallToActionsParam
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? email = null,
-    Object? tab = null,
-  }) {
-    return _then(_$DemoCallToActionsParamImpl(
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      tab: null == tab
-          ? _value.tab
-          : tab // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? email = null, Object? tab = null}) {
+    return _then(
+      _$DemoCallToActionsParamImpl(
+        email: null == email
+            ? _value.email
+            : email // ignore: cast_nullable_to_non_nullable
+                  as String,
+        tab: null == tab
+            ? _value.tab
+            : tab // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -156,21 +160,23 @@ class _$DemoCallToActionsParamImpl implements _DemoCallToActionsParam {
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCallToActionsParamImplCopyWith<_$DemoCallToActionsParamImpl>
-      get copyWith => __$$DemoCallToActionsParamImplCopyWithImpl<
-          _$DemoCallToActionsParamImpl>(this, _$identity);
+  get copyWith =>
+      __$$DemoCallToActionsParamImplCopyWithImpl<_$DemoCallToActionsParamImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DemoCallToActionsParamImplToJson(
-      this,
-    );
+    return _$$DemoCallToActionsParamImplToJson(this);
   }
 }
 
 abstract class _DemoCallToActionsParam implements DemoCallToActionsParam {
-  factory _DemoCallToActionsParam(
-      {required final String email,
-      required final String tab}) = _$DemoCallToActionsParamImpl;
+  factory _DemoCallToActionsParam({
+    required final String email,
+    required final String tab,
+  }) = _$DemoCallToActionsParamImpl;
 
   factory _DemoCallToActionsParam.fromJson(Map<String, dynamic> json) =
       _$DemoCallToActionsParamImpl.fromJson;
@@ -185,5 +191,5 @@ abstract class _DemoCallToActionsParam implements DemoCallToActionsParam {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemoCallToActionsParamImplCopyWith<_$DemoCallToActionsParamImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

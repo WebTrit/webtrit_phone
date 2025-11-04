@@ -12,10 +12,12 @@ part of 'session_user_credential.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SessionUserCredential _$SessionUserCredentialFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _SessionUserCredential.fromJson(json);
 }
 
@@ -38,16 +40,19 @@ mixin _$SessionUserCredential {
 
 /// @nodoc
 abstract class $SessionUserCredentialCopyWith<$Res> {
-  factory $SessionUserCredentialCopyWith(SessionUserCredential value,
-          $Res Function(SessionUserCredential) then) =
-      _$SessionUserCredentialCopyWithImpl<$Res, SessionUserCredential>;
+  factory $SessionUserCredentialCopyWith(
+    SessionUserCredential value,
+    $Res Function(SessionUserCredential) then,
+  ) = _$SessionUserCredentialCopyWithImpl<$Res, SessionUserCredential>;
   @useResult
   $Res call({String? bundleId, AppType type, String identifier, String? email});
 }
 
 /// @nodoc
-class _$SessionUserCredentialCopyWithImpl<$Res,
-        $Val extends SessionUserCredential>
+class _$SessionUserCredentialCopyWithImpl<
+  $Res,
+  $Val extends SessionUserCredential
+>
     implements $SessionUserCredentialCopyWith<$Res> {
   _$SessionUserCredentialCopyWithImpl(this._value, this._then);
 
@@ -66,24 +71,27 @@ class _$SessionUserCredentialCopyWithImpl<$Res,
     Object? identifier = null,
     Object? email = freezed,
   }) {
-    return _then(_value.copyWith(
-      bundleId: freezed == bundleId
-          ? _value.bundleId
-          : bundleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppType,
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            bundleId: freezed == bundleId
+                ? _value.bundleId
+                : bundleId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as AppType,
+            identifier: null == identifier
+                ? _value.identifier
+                : identifier // ignore: cast_nullable_to_non_nullable
+                      as String,
+            email: freezed == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -91,9 +99,9 @@ class _$SessionUserCredentialCopyWithImpl<$Res,
 abstract class _$$SessionUserCredentialImplCopyWith<$Res>
     implements $SessionUserCredentialCopyWith<$Res> {
   factory _$$SessionUserCredentialImplCopyWith(
-          _$SessionUserCredentialImpl value,
-          $Res Function(_$SessionUserCredentialImpl) then) =
-      __$$SessionUserCredentialImplCopyWithImpl<$Res>;
+    _$SessionUserCredentialImpl value,
+    $Res Function(_$SessionUserCredentialImpl) then,
+  ) = __$$SessionUserCredentialImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? bundleId, AppType type, String identifier, String? email});
@@ -101,12 +109,13 @@ abstract class _$$SessionUserCredentialImplCopyWith<$Res>
 
 /// @nodoc
 class __$$SessionUserCredentialImplCopyWithImpl<$Res>
-    extends _$SessionUserCredentialCopyWithImpl<$Res,
-        _$SessionUserCredentialImpl>
+    extends
+        _$SessionUserCredentialCopyWithImpl<$Res, _$SessionUserCredentialImpl>
     implements _$$SessionUserCredentialImplCopyWith<$Res> {
-  __$$SessionUserCredentialImplCopyWithImpl(_$SessionUserCredentialImpl _value,
-      $Res Function(_$SessionUserCredentialImpl) _then)
-      : super(_value, _then);
+  __$$SessionUserCredentialImplCopyWithImpl(
+    _$SessionUserCredentialImpl _value,
+    $Res Function(_$SessionUserCredentialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SessionUserCredential
   /// with the given fields replaced by the non-null parameter values.
@@ -118,24 +127,26 @@ class __$$SessionUserCredentialImplCopyWithImpl<$Res>
     Object? identifier = null,
     Object? email = freezed,
   }) {
-    return _then(_$SessionUserCredentialImpl(
-      bundleId: freezed == bundleId
-          ? _value.bundleId
-          : bundleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppType,
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$SessionUserCredentialImpl(
+        bundleId: freezed == bundleId
+            ? _value.bundleId
+            : bundleId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as AppType,
+        identifier: null == identifier
+            ? _value.identifier
+            : identifier // ignore: cast_nullable_to_non_nullable
+                  as String,
+        email: freezed == email
+            ? _value.email
+            : email // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -143,11 +154,12 @@ class __$$SessionUserCredentialImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionUserCredentialImpl implements _SessionUserCredential {
-  const _$SessionUserCredentialImpl(
-      {this.bundleId,
-      required this.type,
-      required this.identifier,
-      this.email});
+  const _$SessionUserCredentialImpl({
+    this.bundleId,
+    required this.type,
+    required this.identifier,
+    this.email,
+  });
 
   factory _$SessionUserCredentialImpl.fromJson(Map<String, dynamic> json) =>
       _$$SessionUserCredentialImplFromJson(json);
@@ -190,23 +202,25 @@ class _$SessionUserCredentialImpl implements _SessionUserCredential {
   @override
   @pragma('vm:prefer-inline')
   _$$SessionUserCredentialImplCopyWith<_$SessionUserCredentialImpl>
-      get copyWith => __$$SessionUserCredentialImplCopyWithImpl<
-          _$SessionUserCredentialImpl>(this, _$identity);
+  get copyWith =>
+      __$$SessionUserCredentialImplCopyWithImpl<_$SessionUserCredentialImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SessionUserCredentialImplToJson(
-      this,
-    );
+    return _$$SessionUserCredentialImplToJson(this);
   }
 }
 
 abstract class _SessionUserCredential implements SessionUserCredential {
-  const factory _SessionUserCredential(
-      {final String? bundleId,
-      required final AppType type,
-      required final String identifier,
-      final String? email}) = _$SessionUserCredentialImpl;
+  const factory _SessionUserCredential({
+    final String? bundleId,
+    required final AppType type,
+    required final String identifier,
+    final String? email,
+  }) = _$SessionUserCredentialImpl;
 
   factory _SessionUserCredential.fromJson(Map<String, dynamic> json) =
       _$SessionUserCredentialImpl.fromJson;
@@ -225,5 +239,5 @@ abstract class _SessionUserCredential implements SessionUserCredential {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionUserCredentialImplCopyWith<_$SessionUserCredentialImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

@@ -12,7 +12,8 @@ part of 'notifications_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$NotificationsState {
@@ -28,8 +29,9 @@ mixin _$NotificationsState {
 /// @nodoc
 abstract class $NotificationsStateCopyWith<$Res> {
   factory $NotificationsStateCopyWith(
-          NotificationsState value, $Res Function(NotificationsState) then) =
-      _$NotificationsStateCopyWithImpl<$Res, NotificationsState>;
+    NotificationsState value,
+    $Res Function(NotificationsState) then,
+  ) = _$NotificationsStateCopyWithImpl<$Res, NotificationsState>;
   @useResult
   $Res call({Notification? lastNotification});
 }
@@ -48,24 +50,26 @@ class _$NotificationsStateCopyWithImpl<$Res, $Val extends NotificationsState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? lastNotification = freezed,
-  }) {
-    return _then(_value.copyWith(
-      lastNotification: freezed == lastNotification
-          ? _value.lastNotification
-          : lastNotification // ignore: cast_nullable_to_non_nullable
-              as Notification?,
-    ) as $Val);
+  $Res call({Object? lastNotification = freezed}) {
+    return _then(
+      _value.copyWith(
+            lastNotification: freezed == lastNotification
+                ? _value.lastNotification
+                : lastNotification // ignore: cast_nullable_to_non_nullable
+                      as Notification?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$NotificationsStateImplCopyWith<$Res>
     implements $NotificationsStateCopyWith<$Res> {
-  factory _$$NotificationsStateImplCopyWith(_$NotificationsStateImpl value,
-          $Res Function(_$NotificationsStateImpl) then) =
-      __$$NotificationsStateImplCopyWithImpl<$Res>;
+  factory _$$NotificationsStateImplCopyWith(
+    _$NotificationsStateImpl value,
+    $Res Function(_$NotificationsStateImpl) then,
+  ) = __$$NotificationsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Notification? lastNotification});
@@ -75,23 +79,24 @@ abstract class _$$NotificationsStateImplCopyWith<$Res>
 class __$$NotificationsStateImplCopyWithImpl<$Res>
     extends _$NotificationsStateCopyWithImpl<$Res, _$NotificationsStateImpl>
     implements _$$NotificationsStateImplCopyWith<$Res> {
-  __$$NotificationsStateImplCopyWithImpl(_$NotificationsStateImpl _value,
-      $Res Function(_$NotificationsStateImpl) _then)
-      : super(_value, _then);
+  __$$NotificationsStateImplCopyWithImpl(
+    _$NotificationsStateImpl _value,
+    $Res Function(_$NotificationsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NotificationsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? lastNotification = freezed,
-  }) {
-    return _then(_$NotificationsStateImpl(
-      freezed == lastNotification
-          ? _value.lastNotification
-          : lastNotification // ignore: cast_nullable_to_non_nullable
-              as Notification?,
-    ));
+  $Res call({Object? lastNotification = freezed}) {
+    return _then(
+      _$NotificationsStateImpl(
+        freezed == lastNotification
+            ? _value.lastNotification
+            : lastNotification // ignore: cast_nullable_to_non_nullable
+                  as Notification?,
+      ),
+    );
   }
 }
 
@@ -127,7 +132,9 @@ class _$NotificationsStateImpl implements _NotificationsState {
   @pragma('vm:prefer-inline')
   _$$NotificationsStateImplCopyWith<_$NotificationsStateImpl> get copyWith =>
       __$$NotificationsStateImplCopyWithImpl<_$NotificationsStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _NotificationsState implements NotificationsState {

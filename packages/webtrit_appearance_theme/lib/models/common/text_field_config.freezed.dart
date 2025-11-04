@@ -12,7 +12,8 @@ part of 'text_field_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 TextFieldConfig _$TextFieldConfigFromJson(Map<String, dynamic> json) {
   return _TextFieldConfig.fromJson(json);
@@ -55,15 +56,17 @@ mixin _$TextFieldConfig {
 /// @nodoc
 abstract class $TextFieldConfigCopyWith<$Res> {
   factory $TextFieldConfigCopyWith(
-          TextFieldConfig value, $Res Function(TextFieldConfig) then) =
-      _$TextFieldConfigCopyWithImpl<$Res, TextFieldConfig>;
+    TextFieldConfig value,
+    $Res Function(TextFieldConfig) then,
+  ) = _$TextFieldConfigCopyWithImpl<$Res, TextFieldConfig>;
   @useResult
-  $Res call(
-      {InputDecorationConfig? decoration,
-      TextStyleConfig? style,
-      String textAlign,
-      bool showCursor,
-      String keyboardType});
+  $Res call({
+    InputDecorationConfig? decoration,
+    TextStyleConfig? style,
+    String textAlign,
+    bool showCursor,
+    String keyboardType,
+  });
 
   $InputDecorationConfigCopyWith<$Res>? get decoration;
   $TextStyleConfigCopyWith<$Res>? get style;
@@ -90,28 +93,31 @@ class _$TextFieldConfigCopyWithImpl<$Res, $Val extends TextFieldConfig>
     Object? showCursor = null,
     Object? keyboardType = null,
   }) {
-    return _then(_value.copyWith(
-      decoration: freezed == decoration
-          ? _value.decoration
-          : decoration // ignore: cast_nullable_to_non_nullable
-              as InputDecorationConfig?,
-      style: freezed == style
-          ? _value.style
-          : style // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      textAlign: null == textAlign
-          ? _value.textAlign
-          : textAlign // ignore: cast_nullable_to_non_nullable
-              as String,
-      showCursor: null == showCursor
-          ? _value.showCursor
-          : showCursor // ignore: cast_nullable_to_non_nullable
-              as bool,
-      keyboardType: null == keyboardType
-          ? _value.keyboardType
-          : keyboardType // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            decoration: freezed == decoration
+                ? _value.decoration
+                : decoration // ignore: cast_nullable_to_non_nullable
+                      as InputDecorationConfig?,
+            style: freezed == style
+                ? _value.style
+                : style // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            textAlign: null == textAlign
+                ? _value.textAlign
+                : textAlign // ignore: cast_nullable_to_non_nullable
+                      as String,
+            showCursor: null == showCursor
+                ? _value.showCursor
+                : showCursor // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            keyboardType: null == keyboardType
+                ? _value.keyboardType
+                : keyboardType // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of TextFieldConfig
@@ -146,17 +152,19 @@ class _$TextFieldConfigCopyWithImpl<$Res, $Val extends TextFieldConfig>
 /// @nodoc
 abstract class _$$TextFieldConfigImplCopyWith<$Res>
     implements $TextFieldConfigCopyWith<$Res> {
-  factory _$$TextFieldConfigImplCopyWith(_$TextFieldConfigImpl value,
-          $Res Function(_$TextFieldConfigImpl) then) =
-      __$$TextFieldConfigImplCopyWithImpl<$Res>;
+  factory _$$TextFieldConfigImplCopyWith(
+    _$TextFieldConfigImpl value,
+    $Res Function(_$TextFieldConfigImpl) then,
+  ) = __$$TextFieldConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {InputDecorationConfig? decoration,
-      TextStyleConfig? style,
-      String textAlign,
-      bool showCursor,
-      String keyboardType});
+  $Res call({
+    InputDecorationConfig? decoration,
+    TextStyleConfig? style,
+    String textAlign,
+    bool showCursor,
+    String keyboardType,
+  });
 
   @override
   $InputDecorationConfigCopyWith<$Res>? get decoration;
@@ -169,8 +177,9 @@ class __$$TextFieldConfigImplCopyWithImpl<$Res>
     extends _$TextFieldConfigCopyWithImpl<$Res, _$TextFieldConfigImpl>
     implements _$$TextFieldConfigImplCopyWith<$Res> {
   __$$TextFieldConfigImplCopyWithImpl(
-      _$TextFieldConfigImpl _value, $Res Function(_$TextFieldConfigImpl) _then)
-      : super(_value, _then);
+    _$TextFieldConfigImpl _value,
+    $Res Function(_$TextFieldConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TextFieldConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -183,28 +192,30 @@ class __$$TextFieldConfigImplCopyWithImpl<$Res>
     Object? showCursor = null,
     Object? keyboardType = null,
   }) {
-    return _then(_$TextFieldConfigImpl(
-      decoration: freezed == decoration
-          ? _value.decoration
-          : decoration // ignore: cast_nullable_to_non_nullable
-              as InputDecorationConfig?,
-      style: freezed == style
-          ? _value.style
-          : style // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      textAlign: null == textAlign
-          ? _value.textAlign
-          : textAlign // ignore: cast_nullable_to_non_nullable
-              as String,
-      showCursor: null == showCursor
-          ? _value.showCursor
-          : showCursor // ignore: cast_nullable_to_non_nullable
-              as bool,
-      keyboardType: null == keyboardType
-          ? _value.keyboardType
-          : keyboardType // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$TextFieldConfigImpl(
+        decoration: freezed == decoration
+            ? _value.decoration
+            : decoration // ignore: cast_nullable_to_non_nullable
+                  as InputDecorationConfig?,
+        style: freezed == style
+            ? _value.style
+            : style // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        textAlign: null == textAlign
+            ? _value.textAlign
+            : textAlign // ignore: cast_nullable_to_non_nullable
+                  as String,
+        showCursor: null == showCursor
+            ? _value.showCursor
+            : showCursor // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        keyboardType: null == keyboardType
+            ? _value.keyboardType
+            : keyboardType // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -212,12 +223,13 @@ class __$$TextFieldConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$TextFieldConfigImpl implements _TextFieldConfig {
-  const _$TextFieldConfigImpl(
-      {this.decoration,
-      this.style,
-      this.textAlign = 'center',
-      this.showCursor = true,
-      this.keyboardType = 'none'});
+  const _$TextFieldConfigImpl({
+    this.decoration,
+    this.style,
+    this.textAlign = 'center',
+    this.showCursor = true,
+    this.keyboardType = 'none',
+  });
 
   factory _$TextFieldConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$TextFieldConfigImplFromJson(json);
@@ -276,7 +288,13 @@ class _$TextFieldConfigImpl implements _TextFieldConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, decoration, style, textAlign, showCursor, keyboardType);
+    runtimeType,
+    decoration,
+    style,
+    textAlign,
+    showCursor,
+    keyboardType,
+  );
 
   /// Create a copy of TextFieldConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -285,23 +303,24 @@ class _$TextFieldConfigImpl implements _TextFieldConfig {
   @pragma('vm:prefer-inline')
   _$$TextFieldConfigImplCopyWith<_$TextFieldConfigImpl> get copyWith =>
       __$$TextFieldConfigImplCopyWithImpl<_$TextFieldConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TextFieldConfigImplToJson(
-      this,
-    );
+    return _$$TextFieldConfigImplToJson(this);
   }
 }
 
 abstract class _TextFieldConfig implements TextFieldConfig {
-  const factory _TextFieldConfig(
-      {final InputDecorationConfig? decoration,
-      final TextStyleConfig? style,
-      final String textAlign,
-      final bool showCursor,
-      final String keyboardType}) = _$TextFieldConfigImpl;
+  const factory _TextFieldConfig({
+    final InputDecorationConfig? decoration,
+    final TextStyleConfig? style,
+    final String textAlign,
+    final bool showCursor,
+    final String keyboardType,
+  }) = _$TextFieldConfigImpl;
 
   factory _TextFieldConfig.fromJson(Map<String, dynamic> json) =
       _$TextFieldConfigImpl.fromJson;

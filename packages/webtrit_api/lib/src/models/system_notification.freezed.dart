@@ -12,7 +12,8 @@ part of 'system_notification.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SystemNotification _$SystemNotificationFromJson(Map<String, dynamic> json) {
   return _SystemNotification.fromJson(json);
@@ -42,18 +43,20 @@ mixin _$SystemNotification {
 /// @nodoc
 abstract class $SystemNotificationCopyWith<$Res> {
   factory $SystemNotificationCopyWith(
-          SystemNotification value, $Res Function(SystemNotification) then) =
-      _$SystemNotificationCopyWithImpl<$Res, SystemNotification>;
+    SystemNotification value,
+    $Res Function(SystemNotification) then,
+  ) = _$SystemNotificationCopyWithImpl<$Res, SystemNotification>;
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String content,
-      bool seen,
-      SystemNotificationType type,
-      DateTime createdAt,
-      DateTime updatedAt,
-      DateTime? readAt});
+  $Res call({
+    int id,
+    String title,
+    String content,
+    bool seen,
+    SystemNotificationType type,
+    DateTime createdAt,
+    DateTime updatedAt,
+    DateTime? readAt,
+  });
 }
 
 /// @nodoc
@@ -80,69 +83,75 @@ class _$SystemNotificationCopyWithImpl<$Res, $Val extends SystemNotification>
     Object? updatedAt = null,
     Object? readAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      seen: null == seen
-          ? _value.seen
-          : seen // ignore: cast_nullable_to_non_nullable
-              as bool,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as SystemNotificationType,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      readAt: freezed == readAt
-          ? _value.readAt
-          : readAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            content: null == content
+                ? _value.content
+                : content // ignore: cast_nullable_to_non_nullable
+                      as String,
+            seen: null == seen
+                ? _value.seen
+                : seen // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as SystemNotificationType,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            updatedAt: null == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            readAt: freezed == readAt
+                ? _value.readAt
+                : readAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SystemNotificationImplCopyWith<$Res>
     implements $SystemNotificationCopyWith<$Res> {
-  factory _$$SystemNotificationImplCopyWith(_$SystemNotificationImpl value,
-          $Res Function(_$SystemNotificationImpl) then) =
-      __$$SystemNotificationImplCopyWithImpl<$Res>;
+  factory _$$SystemNotificationImplCopyWith(
+    _$SystemNotificationImpl value,
+    $Res Function(_$SystemNotificationImpl) then,
+  ) = __$$SystemNotificationImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String content,
-      bool seen,
-      SystemNotificationType type,
-      DateTime createdAt,
-      DateTime updatedAt,
-      DateTime? readAt});
+  $Res call({
+    int id,
+    String title,
+    String content,
+    bool seen,
+    SystemNotificationType type,
+    DateTime createdAt,
+    DateTime updatedAt,
+    DateTime? readAt,
+  });
 }
 
 /// @nodoc
 class __$$SystemNotificationImplCopyWithImpl<$Res>
     extends _$SystemNotificationCopyWithImpl<$Res, _$SystemNotificationImpl>
     implements _$$SystemNotificationImplCopyWith<$Res> {
-  __$$SystemNotificationImplCopyWithImpl(_$SystemNotificationImpl _value,
-      $Res Function(_$SystemNotificationImpl) _then)
-      : super(_value, _then);
+  __$$SystemNotificationImplCopyWithImpl(
+    _$SystemNotificationImpl _value,
+    $Res Function(_$SystemNotificationImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SystemNotification
   /// with the given fields replaced by the non-null parameter values.
@@ -158,40 +167,42 @@ class __$$SystemNotificationImplCopyWithImpl<$Res>
     Object? updatedAt = null,
     Object? readAt = freezed,
   }) {
-    return _then(_$SystemNotificationImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      seen: null == seen
-          ? _value.seen
-          : seen // ignore: cast_nullable_to_non_nullable
-              as bool,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as SystemNotificationType,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      readAt: freezed == readAt
-          ? _value.readAt
-          : readAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$SystemNotificationImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        content: null == content
+            ? _value.content
+            : content // ignore: cast_nullable_to_non_nullable
+                  as String,
+        seen: null == seen
+            ? _value.seen
+            : seen // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as SystemNotificationType,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        readAt: freezed == readAt
+            ? _value.readAt
+            : readAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
@@ -199,15 +210,16 @@ class __$$SystemNotificationImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SystemNotificationImpl implements _SystemNotification {
-  const _$SystemNotificationImpl(
-      {required this.id,
-      required this.title,
-      required this.content,
-      required this.seen,
-      required this.type,
-      required this.createdAt,
-      required this.updatedAt,
-      this.readAt});
+  const _$SystemNotificationImpl({
+    required this.id,
+    required this.title,
+    required this.content,
+    required this.seen,
+    required this.type,
+    required this.createdAt,
+    required this.updatedAt,
+    this.readAt,
+  });
 
   factory _$SystemNotificationImpl.fromJson(Map<String, dynamic> json) =>
       _$$SystemNotificationImplFromJson(json);
@@ -253,8 +265,17 @@ class _$SystemNotificationImpl implements _SystemNotification {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, content, seen, type,
-      createdAt, updatedAt, readAt);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    title,
+    content,
+    seen,
+    type,
+    createdAt,
+    updatedAt,
+    readAt,
+  );
 
   /// Create a copy of SystemNotification
   /// with the given fields replaced by the non-null parameter values.
@@ -263,26 +284,27 @@ class _$SystemNotificationImpl implements _SystemNotification {
   @pragma('vm:prefer-inline')
   _$$SystemNotificationImplCopyWith<_$SystemNotificationImpl> get copyWith =>
       __$$SystemNotificationImplCopyWithImpl<_$SystemNotificationImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SystemNotificationImplToJson(
-      this,
-    );
+    return _$$SystemNotificationImplToJson(this);
   }
 }
 
 abstract class _SystemNotification implements SystemNotification {
-  const factory _SystemNotification(
-      {required final int id,
-      required final String title,
-      required final String content,
-      required final bool seen,
-      required final SystemNotificationType type,
-      required final DateTime createdAt,
-      required final DateTime updatedAt,
-      final DateTime? readAt}) = _$SystemNotificationImpl;
+  const factory _SystemNotification({
+    required final int id,
+    required final String title,
+    required final String content,
+    required final bool seen,
+    required final SystemNotificationType type,
+    required final DateTime createdAt,
+    required final DateTime updatedAt,
+    final DateTime? readAt,
+  }) = _$SystemNotificationImpl;
 
   factory _SystemNotification.fromJson(Map<String, dynamic> json) =
       _$SystemNotificationImpl.fromJson;
@@ -313,7 +335,8 @@ abstract class _SystemNotification implements SystemNotification {
 }
 
 SystemNotificationResponce _$SystemNotificationResponceFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _SystemNotificationResponce.fromJson(json);
 }
 
@@ -328,22 +351,28 @@ mixin _$SystemNotificationResponce {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $SystemNotificationResponceCopyWith<SystemNotificationResponce>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $SystemNotificationResponceCopyWith<$Res> {
-  factory $SystemNotificationResponceCopyWith(SystemNotificationResponce value,
-          $Res Function(SystemNotificationResponce) then) =
-      _$SystemNotificationResponceCopyWithImpl<$Res,
-          SystemNotificationResponce>;
+  factory $SystemNotificationResponceCopyWith(
+    SystemNotificationResponce value,
+    $Res Function(SystemNotificationResponce) then,
+  ) =
+      _$SystemNotificationResponceCopyWithImpl<
+        $Res,
+        SystemNotificationResponce
+      >;
   @useResult
   $Res call({List<SystemNotification> items});
 }
 
 /// @nodoc
-class _$SystemNotificationResponceCopyWithImpl<$Res,
-        $Val extends SystemNotificationResponce>
+class _$SystemNotificationResponceCopyWithImpl<
+  $Res,
+  $Val extends SystemNotificationResponce
+>
     implements $SystemNotificationResponceCopyWith<$Res> {
   _$SystemNotificationResponceCopyWithImpl(this._value, this._then);
 
@@ -356,15 +385,16 @@ class _$SystemNotificationResponceCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? items = null,
-  }) {
-    return _then(_value.copyWith(
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<SystemNotification>,
-    ) as $Val);
+  $Res call({Object? items = null}) {
+    return _then(
+      _value.copyWith(
+            items: null == items
+                ? _value.items
+                : items // ignore: cast_nullable_to_non_nullable
+                      as List<SystemNotification>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -372,9 +402,9 @@ class _$SystemNotificationResponceCopyWithImpl<$Res,
 abstract class _$$SystemNotificationResponceImplCopyWith<$Res>
     implements $SystemNotificationResponceCopyWith<$Res> {
   factory _$$SystemNotificationResponceImplCopyWith(
-          _$SystemNotificationResponceImpl value,
-          $Res Function(_$SystemNotificationResponceImpl) then) =
-      __$$SystemNotificationResponceImplCopyWithImpl<$Res>;
+    _$SystemNotificationResponceImpl value,
+    $Res Function(_$SystemNotificationResponceImpl) then,
+  ) = __$$SystemNotificationResponceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<SystemNotification> items});
@@ -382,27 +412,30 @@ abstract class _$$SystemNotificationResponceImplCopyWith<$Res>
 
 /// @nodoc
 class __$$SystemNotificationResponceImplCopyWithImpl<$Res>
-    extends _$SystemNotificationResponceCopyWithImpl<$Res,
-        _$SystemNotificationResponceImpl>
+    extends
+        _$SystemNotificationResponceCopyWithImpl<
+          $Res,
+          _$SystemNotificationResponceImpl
+        >
     implements _$$SystemNotificationResponceImplCopyWith<$Res> {
   __$$SystemNotificationResponceImplCopyWithImpl(
-      _$SystemNotificationResponceImpl _value,
-      $Res Function(_$SystemNotificationResponceImpl) _then)
-      : super(_value, _then);
+    _$SystemNotificationResponceImpl _value,
+    $Res Function(_$SystemNotificationResponceImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SystemNotificationResponce
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? items = null,
-  }) {
-    return _then(_$SystemNotificationResponceImpl(
-      items: null == items
-          ? _value._items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<SystemNotification>,
-    ));
+  $Res call({Object? items = null}) {
+    return _then(
+      _$SystemNotificationResponceImpl(
+        items: null == items
+            ? _value._items
+            : items // ignore: cast_nullable_to_non_nullable
+                  as List<SystemNotification>,
+      ),
+    );
   }
 }
 
@@ -410,13 +443,13 @@ class __$$SystemNotificationResponceImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
-  const _$SystemNotificationResponceImpl(
-      {required final List<SystemNotification> items})
-      : _items = items;
+  const _$SystemNotificationResponceImpl({
+    required final List<SystemNotification> items,
+  }) : _items = items;
 
   factory _$SystemNotificationResponceImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$SystemNotificationResponceImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$SystemNotificationResponceImplFromJson(json);
 
   final List<SystemNotification> _items;
   @override
@@ -450,22 +483,22 @@ class _$SystemNotificationResponceImpl implements _SystemNotificationResponce {
   @override
   @pragma('vm:prefer-inline')
   _$$SystemNotificationResponceImplCopyWith<_$SystemNotificationResponceImpl>
-      get copyWith => __$$SystemNotificationResponceImplCopyWithImpl<
-          _$SystemNotificationResponceImpl>(this, _$identity);
+  get copyWith =>
+      __$$SystemNotificationResponceImplCopyWithImpl<
+        _$SystemNotificationResponceImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SystemNotificationResponceImplToJson(
-      this,
-    );
+    return _$$SystemNotificationResponceImplToJson(this);
   }
 }
 
 abstract class _SystemNotificationResponce
     implements SystemNotificationResponce {
-  const factory _SystemNotificationResponce(
-          {required final List<SystemNotification> items}) =
-      _$SystemNotificationResponceImpl;
+  const factory _SystemNotificationResponce({
+    required final List<SystemNotification> items,
+  }) = _$SystemNotificationResponceImpl;
 
   factory _SystemNotificationResponce.fromJson(Map<String, dynamic> json) =
       _$SystemNotificationResponceImpl.fromJson;
@@ -478,5 +511,5 @@ abstract class _SystemNotificationResponce
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SystemNotificationResponceImplCopyWith<_$SystemNotificationResponceImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

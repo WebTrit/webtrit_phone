@@ -12,7 +12,8 @@ part of 'raw_http_request.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 RawHttpRequest _$RawHttpRequestFromJson(Map<String, dynamic> json) {
   return _RawHttpRequest.fromJson(json);
@@ -38,14 +39,16 @@ mixin _$RawHttpRequest {
 /// @nodoc
 abstract class $RawHttpRequestCopyWith<$Res> {
   factory $RawHttpRequestCopyWith(
-          RawHttpRequest value, $Res Function(RawHttpRequest) then) =
-      _$RawHttpRequestCopyWithImpl<$Res, RawHttpRequest>;
+    RawHttpRequest value,
+    $Res Function(RawHttpRequest) then,
+  ) = _$RawHttpRequestCopyWithImpl<$Res, RawHttpRequest>;
   @useResult
-  $Res call(
-      {String method,
-      String url,
-      Map<String, String>? headers,
-      Map<String, dynamic>? data});
+  $Res call({
+    String method,
+    String url,
+    Map<String, String>? headers,
+    Map<String, dynamic>? data,
+  });
 }
 
 /// @nodoc
@@ -68,40 +71,45 @@ class _$RawHttpRequestCopyWithImpl<$Res, $Val extends RawHttpRequest>
     Object? headers = freezed,
     Object? data = freezed,
   }) {
-    return _then(_value.copyWith(
-      method: null == method
-          ? _value.method
-          : method // ignore: cast_nullable_to_non_nullable
-              as String,
-      url: null == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      headers: freezed == headers
-          ? _value.headers
-          : headers // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>?,
-      data: freezed == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            method: null == method
+                ? _value.method
+                : method // ignore: cast_nullable_to_non_nullable
+                      as String,
+            url: null == url
+                ? _value.url
+                : url // ignore: cast_nullable_to_non_nullable
+                      as String,
+            headers: freezed == headers
+                ? _value.headers
+                : headers // ignore: cast_nullable_to_non_nullable
+                      as Map<String, String>?,
+            data: freezed == data
+                ? _value.data
+                : data // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$RawHttpRequestImplCopyWith<$Res>
     implements $RawHttpRequestCopyWith<$Res> {
-  factory _$$RawHttpRequestImplCopyWith(_$RawHttpRequestImpl value,
-          $Res Function(_$RawHttpRequestImpl) then) =
-      __$$RawHttpRequestImplCopyWithImpl<$Res>;
+  factory _$$RawHttpRequestImplCopyWith(
+    _$RawHttpRequestImpl value,
+    $Res Function(_$RawHttpRequestImpl) then,
+  ) = __$$RawHttpRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String method,
-      String url,
-      Map<String, String>? headers,
-      Map<String, dynamic>? data});
+  $Res call({
+    String method,
+    String url,
+    Map<String, String>? headers,
+    Map<String, dynamic>? data,
+  });
 }
 
 /// @nodoc
@@ -109,8 +117,9 @@ class __$$RawHttpRequestImplCopyWithImpl<$Res>
     extends _$RawHttpRequestCopyWithImpl<$Res, _$RawHttpRequestImpl>
     implements _$$RawHttpRequestImplCopyWith<$Res> {
   __$$RawHttpRequestImplCopyWithImpl(
-      _$RawHttpRequestImpl _value, $Res Function(_$RawHttpRequestImpl) _then)
-      : super(_value, _then);
+    _$RawHttpRequestImpl _value,
+    $Res Function(_$RawHttpRequestImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of RawHttpRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -122,37 +131,39 @@ class __$$RawHttpRequestImplCopyWithImpl<$Res>
     Object? headers = freezed,
     Object? data = freezed,
   }) {
-    return _then(_$RawHttpRequestImpl(
-      method: null == method
-          ? _value.method
-          : method // ignore: cast_nullable_to_non_nullable
-              as String,
-      url: null == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      headers: freezed == headers
-          ? _value._headers
-          : headers // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>?,
-      data: freezed == data
-          ? _value._data
-          : data // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-    ));
+    return _then(
+      _$RawHttpRequestImpl(
+        method: null == method
+            ? _value.method
+            : method // ignore: cast_nullable_to_non_nullable
+                  as String,
+        url: null == url
+            ? _value.url
+            : url // ignore: cast_nullable_to_non_nullable
+                  as String,
+        headers: freezed == headers
+            ? _value._headers
+            : headers // ignore: cast_nullable_to_non_nullable
+                  as Map<String, String>?,
+        data: freezed == data
+            ? _value._data
+            : data // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$RawHttpRequestImpl implements _RawHttpRequest {
-  const _$RawHttpRequestImpl(
-      {required this.method,
-      required this.url,
-      final Map<String, String>? headers,
-      final Map<String, dynamic>? data})
-      : _headers = headers,
-        _data = data;
+  const _$RawHttpRequestImpl({
+    required this.method,
+    required this.url,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? data,
+  }) : _headers = headers,
+       _data = data;
 
   factory _$RawHttpRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$RawHttpRequestImplFromJson(json);
@@ -200,11 +211,12 @@ class _$RawHttpRequestImpl implements _RawHttpRequest {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      method,
-      url,
-      const DeepCollectionEquality().hash(_headers),
-      const DeepCollectionEquality().hash(_data));
+    runtimeType,
+    method,
+    url,
+    const DeepCollectionEquality().hash(_headers),
+    const DeepCollectionEquality().hash(_data),
+  );
 
   /// Create a copy of RawHttpRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -213,22 +225,23 @@ class _$RawHttpRequestImpl implements _RawHttpRequest {
   @pragma('vm:prefer-inline')
   _$$RawHttpRequestImplCopyWith<_$RawHttpRequestImpl> get copyWith =>
       __$$RawHttpRequestImplCopyWithImpl<_$RawHttpRequestImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$RawHttpRequestImplToJson(
-      this,
-    );
+    return _$$RawHttpRequestImplToJson(this);
   }
 }
 
 abstract class _RawHttpRequest implements RawHttpRequest {
-  const factory _RawHttpRequest(
-      {required final String method,
-      required final String url,
-      final Map<String, String>? headers,
-      final Map<String, dynamic>? data}) = _$RawHttpRequestImpl;
+  const factory _RawHttpRequest({
+    required final String method,
+    required final String url,
+    final Map<String, String>? headers,
+    final Map<String, dynamic>? data,
+  }) = _$RawHttpRequestImpl;
 
   factory _RawHttpRequest.fromJson(Map<String, dynamic> json) =
       _$RawHttpRequestImpl.fromJson;

@@ -13,7 +13,4 @@ _$CustomColorImpl _$$CustomColorImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$CustomColorImplToJson(_$CustomColorImpl instance) =>
-    <String, dynamic>{
-      'color': instance.color,
-      'blend': instance.blend,
-    };
+    <String, dynamic>{'color': instance.color, 'blend': instance.blend};

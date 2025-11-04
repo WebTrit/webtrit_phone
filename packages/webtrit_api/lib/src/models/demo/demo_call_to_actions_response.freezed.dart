@@ -12,10 +12,12 @@ part of 'demo_call_to_actions_response.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 DemoCallToActionsResponse _$DemoCallToActionsResponseFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _DemoCallToActionsResponse.fromJson(json);
 }
 
@@ -36,16 +38,19 @@ mixin _$DemoCallToActionsResponse {
 
 /// @nodoc
 abstract class $DemoCallToActionsResponseCopyWith<$Res> {
-  factory $DemoCallToActionsResponseCopyWith(DemoCallToActionsResponse value,
-          $Res Function(DemoCallToActionsResponse) then) =
-      _$DemoCallToActionsResponseCopyWithImpl<$Res, DemoCallToActionsResponse>;
+  factory $DemoCallToActionsResponseCopyWith(
+    DemoCallToActionsResponse value,
+    $Res Function(DemoCallToActionsResponse) then,
+  ) = _$DemoCallToActionsResponseCopyWithImpl<$Res, DemoCallToActionsResponse>;
   @useResult
   $Res call({List<DemoCallToActionsResponseActions> actions});
 }
 
 /// @nodoc
-class _$DemoCallToActionsResponseCopyWithImpl<$Res,
-        $Val extends DemoCallToActionsResponse>
+class _$DemoCallToActionsResponseCopyWithImpl<
+  $Res,
+  $Val extends DemoCallToActionsResponse
+>
     implements $DemoCallToActionsResponseCopyWith<$Res> {
   _$DemoCallToActionsResponseCopyWithImpl(this._value, this._then);
 
@@ -58,15 +63,16 @@ class _$DemoCallToActionsResponseCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? actions = null,
-  }) {
-    return _then(_value.copyWith(
-      actions: null == actions
-          ? _value.actions
-          : actions // ignore: cast_nullable_to_non_nullable
-              as List<DemoCallToActionsResponseActions>,
-    ) as $Val);
+  $Res call({Object? actions = null}) {
+    return _then(
+      _value.copyWith(
+            actions: null == actions
+                ? _value.actions
+                : actions // ignore: cast_nullable_to_non_nullable
+                      as List<DemoCallToActionsResponseActions>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -74,9 +80,9 @@ class _$DemoCallToActionsResponseCopyWithImpl<$Res,
 abstract class _$$DemoCallToActionsResponseImplCopyWith<$Res>
     implements $DemoCallToActionsResponseCopyWith<$Res> {
   factory _$$DemoCallToActionsResponseImplCopyWith(
-          _$DemoCallToActionsResponseImpl value,
-          $Res Function(_$DemoCallToActionsResponseImpl) then) =
-      __$$DemoCallToActionsResponseImplCopyWithImpl<$Res>;
+    _$DemoCallToActionsResponseImpl value,
+    $Res Function(_$DemoCallToActionsResponseImpl) then,
+  ) = __$$DemoCallToActionsResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<DemoCallToActionsResponseActions> actions});
@@ -84,27 +90,30 @@ abstract class _$$DemoCallToActionsResponseImplCopyWith<$Res>
 
 /// @nodoc
 class __$$DemoCallToActionsResponseImplCopyWithImpl<$Res>
-    extends _$DemoCallToActionsResponseCopyWithImpl<$Res,
-        _$DemoCallToActionsResponseImpl>
+    extends
+        _$DemoCallToActionsResponseCopyWithImpl<
+          $Res,
+          _$DemoCallToActionsResponseImpl
+        >
     implements _$$DemoCallToActionsResponseImplCopyWith<$Res> {
   __$$DemoCallToActionsResponseImplCopyWithImpl(
-      _$DemoCallToActionsResponseImpl _value,
-      $Res Function(_$DemoCallToActionsResponseImpl) _then)
-      : super(_value, _then);
+    _$DemoCallToActionsResponseImpl _value,
+    $Res Function(_$DemoCallToActionsResponseImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DemoCallToActionsResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? actions = null,
-  }) {
-    return _then(_$DemoCallToActionsResponseImpl(
-      actions: null == actions
-          ? _value._actions
-          : actions // ignore: cast_nullable_to_non_nullable
-              as List<DemoCallToActionsResponseActions>,
-    ));
+  $Res call({Object? actions = null}) {
+    return _then(
+      _$DemoCallToActionsResponseImpl(
+        actions: null == actions
+            ? _value._actions
+            : actions // ignore: cast_nullable_to_non_nullable
+                  as List<DemoCallToActionsResponseActions>,
+      ),
+    );
   }
 }
 
@@ -112,9 +121,9 @@ class __$$DemoCallToActionsResponseImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$DemoCallToActionsResponseImpl implements _DemoCallToActionsResponse {
-  _$DemoCallToActionsResponseImpl(
-      {required final List<DemoCallToActionsResponseActions> actions})
-      : _actions = actions;
+  _$DemoCallToActionsResponseImpl({
+    required final List<DemoCallToActionsResponseActions> actions,
+  }) : _actions = actions;
 
   factory _$DemoCallToActionsResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$DemoCallToActionsResponseImplFromJson(json);
@@ -151,21 +160,21 @@ class _$DemoCallToActionsResponseImpl implements _DemoCallToActionsResponse {
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCallToActionsResponseImplCopyWith<_$DemoCallToActionsResponseImpl>
-      get copyWith => __$$DemoCallToActionsResponseImplCopyWithImpl<
-          _$DemoCallToActionsResponseImpl>(this, _$identity);
+  get copyWith =>
+      __$$DemoCallToActionsResponseImplCopyWithImpl<
+        _$DemoCallToActionsResponseImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DemoCallToActionsResponseImplToJson(
-      this,
-    );
+    return _$$DemoCallToActionsResponseImplToJson(this);
   }
 }
 
 abstract class _DemoCallToActionsResponse implements DemoCallToActionsResponse {
-  factory _DemoCallToActionsResponse(
-          {required final List<DemoCallToActionsResponseActions> actions}) =
-      _$DemoCallToActionsResponseImpl;
+  factory _DemoCallToActionsResponse({
+    required final List<DemoCallToActionsResponseActions> actions,
+  }) = _$DemoCallToActionsResponseImpl;
 
   factory _DemoCallToActionsResponse.fromJson(Map<String, dynamic> json) =
       _$DemoCallToActionsResponseImpl.fromJson;
@@ -178,11 +187,12 @@ abstract class _DemoCallToActionsResponse implements DemoCallToActionsResponse {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemoCallToActionsResponseImplCopyWith<_$DemoCallToActionsResponseImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 DemoCallToActionsResponseActions _$DemoCallToActionsResponseActionsFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _DemoCallToActionsResponseActions.fromJson(json);
 }
 
@@ -202,30 +212,36 @@ mixin _$DemoCallToActionsResponseActions {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $DemoCallToActionsResponseActionsCopyWith<DemoCallToActionsResponseActions>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $DemoCallToActionsResponseActionsCopyWith<$Res> {
   factory $DemoCallToActionsResponseActionsCopyWith(
-          DemoCallToActionsResponseActions value,
-          $Res Function(DemoCallToActionsResponseActions) then) =
-      _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
-          DemoCallToActionsResponseActions>;
+    DemoCallToActionsResponseActions value,
+    $Res Function(DemoCallToActionsResponseActions) then,
+  ) =
+      _$DemoCallToActionsResponseActionsCopyWithImpl<
+        $Res,
+        DemoCallToActionsResponseActions
+      >;
   @useResult
-  $Res call(
-      {String? title,
-      String? description,
-      String url,
-      @JsonKey(name: 'extra_data')
-      DemoCallToActionsResponseActionsExtraData extraData});
+  $Res call({
+    String? title,
+    String? description,
+    String url,
+    @JsonKey(name: 'extra_data')
+    DemoCallToActionsResponseActionsExtraData extraData,
+  });
 
   $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> get extraData;
 }
 
 /// @nodoc
-class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
-        $Val extends DemoCallToActionsResponseActions>
+class _$DemoCallToActionsResponseActionsCopyWithImpl<
+  $Res,
+  $Val extends DemoCallToActionsResponseActions
+>
     implements $DemoCallToActionsResponseActionsCopyWith<$Res> {
   _$DemoCallToActionsResponseActionsCopyWithImpl(this._value, this._then);
 
@@ -244,24 +260,27 @@ class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
     Object? url = null,
     Object? extraData = null,
   }) {
-    return _then(_value.copyWith(
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      url: null == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      extraData: null == extraData
-          ? _value.extraData
-          : extraData // ignore: cast_nullable_to_non_nullable
-              as DemoCallToActionsResponseActionsExtraData,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            title: freezed == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            description: freezed == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            url: null == url
+                ? _value.url
+                : url // ignore: cast_nullable_to_non_nullable
+                      as String,
+            extraData: null == extraData
+                ? _value.extraData
+                : extraData // ignore: cast_nullable_to_non_nullable
+                      as DemoCallToActionsResponseActionsExtraData,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of DemoCallToActionsResponseActions
@@ -270,9 +289,11 @@ class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> get extraData {
     return $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res>(
-        _value.extraData, (value) {
-      return _then(_value.copyWith(extraData: value) as $Val);
-    });
+      _value.extraData,
+      (value) {
+        return _then(_value.copyWith(extraData: value) as $Val);
+      },
+    );
   }
 }
 
@@ -280,17 +301,18 @@ class _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
 abstract class _$$DemoCallToActionsResponseActionsImplCopyWith<$Res>
     implements $DemoCallToActionsResponseActionsCopyWith<$Res> {
   factory _$$DemoCallToActionsResponseActionsImplCopyWith(
-          _$DemoCallToActionsResponseActionsImpl value,
-          $Res Function(_$DemoCallToActionsResponseActionsImpl) then) =
-      __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>;
+    _$DemoCallToActionsResponseActionsImpl value,
+    $Res Function(_$DemoCallToActionsResponseActionsImpl) then,
+  ) = __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? title,
-      String? description,
-      String url,
-      @JsonKey(name: 'extra_data')
-      DemoCallToActionsResponseActionsExtraData extraData});
+  $Res call({
+    String? title,
+    String? description,
+    String url,
+    @JsonKey(name: 'extra_data')
+    DemoCallToActionsResponseActionsExtraData extraData,
+  });
 
   @override
   $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> get extraData;
@@ -298,13 +320,16 @@ abstract class _$$DemoCallToActionsResponseActionsImplCopyWith<$Res>
 
 /// @nodoc
 class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
-    extends _$DemoCallToActionsResponseActionsCopyWithImpl<$Res,
-        _$DemoCallToActionsResponseActionsImpl>
+    extends
+        _$DemoCallToActionsResponseActionsCopyWithImpl<
+          $Res,
+          _$DemoCallToActionsResponseActionsImpl
+        >
     implements _$$DemoCallToActionsResponseActionsImplCopyWith<$Res> {
   __$$DemoCallToActionsResponseActionsImplCopyWithImpl(
-      _$DemoCallToActionsResponseActionsImpl _value,
-      $Res Function(_$DemoCallToActionsResponseActionsImpl) _then)
-      : super(_value, _then);
+    _$DemoCallToActionsResponseActionsImpl _value,
+    $Res Function(_$DemoCallToActionsResponseActionsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DemoCallToActionsResponseActions
   /// with the given fields replaced by the non-null parameter values.
@@ -316,24 +341,26 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
     Object? url = null,
     Object? extraData = null,
   }) {
-    return _then(_$DemoCallToActionsResponseActionsImpl(
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      url: null == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      extraData: null == extraData
-          ? _value.extraData
-          : extraData // ignore: cast_nullable_to_non_nullable
-              as DemoCallToActionsResponseActionsExtraData,
-    ));
+    return _then(
+      _$DemoCallToActionsResponseActionsImpl(
+        title: freezed == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        description: freezed == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        url: null == url
+            ? _value.url
+            : url // ignore: cast_nullable_to_non_nullable
+                  as String,
+        extraData: null == extraData
+            ? _value.extraData
+            : extraData // ignore: cast_nullable_to_non_nullable
+                  as DemoCallToActionsResponseActionsExtraData,
+      ),
+    );
   }
 }
 
@@ -342,15 +369,16 @@ class __$$DemoCallToActionsResponseActionsImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$DemoCallToActionsResponseActionsImpl
     implements _DemoCallToActionsResponseActions {
-  _$DemoCallToActionsResponseActionsImpl(
-      {this.title,
-      this.description,
-      required this.url,
-      @JsonKey(name: 'extra_data') required this.extraData});
+  _$DemoCallToActionsResponseActionsImpl({
+    this.title,
+    this.description,
+    required this.url,
+    @JsonKey(name: 'extra_data') required this.extraData,
+  });
 
   factory _$DemoCallToActionsResponseActionsImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$DemoCallToActionsResponseActionsImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$DemoCallToActionsResponseActionsImplFromJson(json);
 
   @override
   final String? title;
@@ -391,31 +419,32 @@ class _$DemoCallToActionsResponseActionsImpl
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCallToActionsResponseActionsImplCopyWith<
-          _$DemoCallToActionsResponseActionsImpl>
-      get copyWith => __$$DemoCallToActionsResponseActionsImplCopyWithImpl<
-          _$DemoCallToActionsResponseActionsImpl>(this, _$identity);
+    _$DemoCallToActionsResponseActionsImpl
+  >
+  get copyWith =>
+      __$$DemoCallToActionsResponseActionsImplCopyWithImpl<
+        _$DemoCallToActionsResponseActionsImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DemoCallToActionsResponseActionsImplToJson(
-      this,
-    );
+    return _$$DemoCallToActionsResponseActionsImplToJson(this);
   }
 }
 
 abstract class _DemoCallToActionsResponseActions
     implements DemoCallToActionsResponseActions {
-  factory _DemoCallToActionsResponseActions(
-          {final String? title,
-          final String? description,
-          required final String url,
-          @JsonKey(name: 'extra_data')
-          required final DemoCallToActionsResponseActionsExtraData extraData}) =
-      _$DemoCallToActionsResponseActionsImpl;
+  factory _DemoCallToActionsResponseActions({
+    final String? title,
+    final String? description,
+    required final String url,
+    @JsonKey(name: 'extra_data')
+    required final DemoCallToActionsResponseActionsExtraData extraData,
+  }) = _$DemoCallToActionsResponseActionsImpl;
 
   factory _DemoCallToActionsResponseActions.fromJson(
-          Map<String, dynamic> json) =
-      _$DemoCallToActionsResponseActionsImpl.fromJson;
+    Map<String, dynamic> json,
+  ) = _$DemoCallToActionsResponseActionsImpl.fromJson;
 
   @override
   String? get title;
@@ -432,13 +461,13 @@ abstract class _DemoCallToActionsResponseActions
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemoCallToActionsResponseActionsImplCopyWith<
-          _$DemoCallToActionsResponseActionsImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$DemoCallToActionsResponseActionsImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 DemoCallToActionsResponseActionsExtraData
-    _$DemoCallToActionsResponseActionsExtraDataFromJson(
-        Map<String, dynamic> json) {
+_$DemoCallToActionsResponseActionsExtraDataFromJson(Map<String, dynamic> json) {
   return _DemoCallToActionsResponseActionsExtraData.fromJson(json);
 }
 
@@ -456,29 +485,38 @@ mixin _$DemoCallToActionsResponseActionsExtraData {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $DemoCallToActionsResponseActionsExtraDataCopyWith<
-          DemoCallToActionsResponseActionsExtraData>
-      get copyWith => throw _privateConstructorUsedError;
+    DemoCallToActionsResponseActionsExtraData
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> {
   factory $DemoCallToActionsResponseActionsExtraDataCopyWith(
-          DemoCallToActionsResponseActionsExtraData value,
-          $Res Function(DemoCallToActionsResponseActionsExtraData) then) =
-      _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<$Res,
-          DemoCallToActionsResponseActionsExtraData>;
+    DemoCallToActionsResponseActionsExtraData value,
+    $Res Function(DemoCallToActionsResponseActionsExtraData) then,
+  ) =
+      _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<
+        $Res,
+        DemoCallToActionsResponseActionsExtraData
+      >;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'api_token') String apiToken,
-      @JsonKey(name: 'token_expires') String tokenExpires});
+  $Res call({
+    @JsonKey(name: 'api_token') String apiToken,
+    @JsonKey(name: 'token_expires') String tokenExpires,
+  });
 }
 
 /// @nodoc
-class _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<$Res,
-        $Val extends DemoCallToActionsResponseActionsExtraData>
+class _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<
+  $Res,
+  $Val extends DemoCallToActionsResponseActionsExtraData
+>
     implements $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> {
   _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl(
-      this._value, this._then);
+    this._value,
+    this._then,
+  );
 
   // ignore: unused_field
   final $Val _value;
@@ -489,20 +527,20 @@ class _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? apiToken = null,
-    Object? tokenExpires = null,
-  }) {
-    return _then(_value.copyWith(
-      apiToken: null == apiToken
-          ? _value.apiToken
-          : apiToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      tokenExpires: null == tokenExpires
-          ? _value.tokenExpires
-          : tokenExpires // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? apiToken = null, Object? tokenExpires = null}) {
+    return _then(
+      _value.copyWith(
+            apiToken: null == apiToken
+                ? _value.apiToken
+                : apiToken // ignore: cast_nullable_to_non_nullable
+                      as String,
+            tokenExpires: null == tokenExpires
+                ? _value.tokenExpires
+                : tokenExpires // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -510,44 +548,47 @@ class _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<$Res,
 abstract class _$$DemoCallToActionsResponseActionsExtraDataImplCopyWith<$Res>
     implements $DemoCallToActionsResponseActionsExtraDataCopyWith<$Res> {
   factory _$$DemoCallToActionsResponseActionsExtraDataImplCopyWith(
-          _$DemoCallToActionsResponseActionsExtraDataImpl value,
-          $Res Function(_$DemoCallToActionsResponseActionsExtraDataImpl) then) =
-      __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl<$Res>;
+    _$DemoCallToActionsResponseActionsExtraDataImpl value,
+    $Res Function(_$DemoCallToActionsResponseActionsExtraDataImpl) then,
+  ) = __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'api_token') String apiToken,
-      @JsonKey(name: 'token_expires') String tokenExpires});
+  $Res call({
+    @JsonKey(name: 'api_token') String apiToken,
+    @JsonKey(name: 'token_expires') String tokenExpires,
+  });
 }
 
 /// @nodoc
 class __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl<$Res>
-    extends _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<$Res,
-        _$DemoCallToActionsResponseActionsExtraDataImpl>
+    extends
+        _$DemoCallToActionsResponseActionsExtraDataCopyWithImpl<
+          $Res,
+          _$DemoCallToActionsResponseActionsExtraDataImpl
+        >
     implements _$$DemoCallToActionsResponseActionsExtraDataImplCopyWith<$Res> {
   __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl(
-      _$DemoCallToActionsResponseActionsExtraDataImpl _value,
-      $Res Function(_$DemoCallToActionsResponseActionsExtraDataImpl) _then)
-      : super(_value, _then);
+    _$DemoCallToActionsResponseActionsExtraDataImpl _value,
+    $Res Function(_$DemoCallToActionsResponseActionsExtraDataImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DemoCallToActionsResponseActionsExtraData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? apiToken = null,
-    Object? tokenExpires = null,
-  }) {
-    return _then(_$DemoCallToActionsResponseActionsExtraDataImpl(
-      apiToken: null == apiToken
-          ? _value.apiToken
-          : apiToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      tokenExpires: null == tokenExpires
-          ? _value.tokenExpires
-          : tokenExpires // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? apiToken = null, Object? tokenExpires = null}) {
+    return _then(
+      _$DemoCallToActionsResponseActionsExtraDataImpl(
+        apiToken: null == apiToken
+            ? _value.apiToken
+            : apiToken // ignore: cast_nullable_to_non_nullable
+                  as String,
+        tokenExpires: null == tokenExpires
+            ? _value.tokenExpires
+            : tokenExpires // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -556,13 +597,14 @@ class __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$DemoCallToActionsResponseActionsExtraDataImpl
     implements _DemoCallToActionsResponseActionsExtraData {
-  _$DemoCallToActionsResponseActionsExtraDataImpl(
-      {@JsonKey(name: 'api_token') required this.apiToken,
-      @JsonKey(name: 'token_expires') required this.tokenExpires});
+  _$DemoCallToActionsResponseActionsExtraDataImpl({
+    @JsonKey(name: 'api_token') required this.apiToken,
+    @JsonKey(name: 'token_expires') required this.tokenExpires,
+  });
 
   factory _$DemoCallToActionsResponseActionsExtraDataImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$DemoCallToActionsResponseActionsExtraDataImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$DemoCallToActionsResponseActionsExtraDataImplFromJson(json);
 
   @override
   @JsonKey(name: 'api_token')
@@ -597,30 +639,29 @@ class _$DemoCallToActionsResponseActionsExtraDataImpl
   @override
   @pragma('vm:prefer-inline')
   _$$DemoCallToActionsResponseActionsExtraDataImplCopyWith<
-          _$DemoCallToActionsResponseActionsExtraDataImpl>
-      get copyWith =>
-          __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl<
-                  _$DemoCallToActionsResponseActionsExtraDataImpl>(
-              this, _$identity);
+    _$DemoCallToActionsResponseActionsExtraDataImpl
+  >
+  get copyWith =>
+      __$$DemoCallToActionsResponseActionsExtraDataImplCopyWithImpl<
+        _$DemoCallToActionsResponseActionsExtraDataImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DemoCallToActionsResponseActionsExtraDataImplToJson(
-      this,
-    );
+    return _$$DemoCallToActionsResponseActionsExtraDataImplToJson(this);
   }
 }
 
 abstract class _DemoCallToActionsResponseActionsExtraData
     implements DemoCallToActionsResponseActionsExtraData {
-  factory _DemoCallToActionsResponseActionsExtraData(
-          {@JsonKey(name: 'api_token') required final String apiToken,
-          @JsonKey(name: 'token_expires') required final String tokenExpires}) =
-      _$DemoCallToActionsResponseActionsExtraDataImpl;
+  factory _DemoCallToActionsResponseActionsExtraData({
+    @JsonKey(name: 'api_token') required final String apiToken,
+    @JsonKey(name: 'token_expires') required final String tokenExpires,
+  }) = _$DemoCallToActionsResponseActionsExtraDataImpl;
 
   factory _DemoCallToActionsResponseActionsExtraData.fromJson(
-          Map<String, dynamic> json) =
-      _$DemoCallToActionsResponseActionsExtraDataImpl.fromJson;
+    Map<String, dynamic> json,
+  ) = _$DemoCallToActionsResponseActionsExtraDataImpl.fromJson;
 
   @override
   @JsonKey(name: 'api_token')
@@ -634,6 +675,7 @@ abstract class _DemoCallToActionsResponseActionsExtraData
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemoCallToActionsResponseActionsExtraDataImplCopyWith<
-          _$DemoCallToActionsResponseActionsExtraDataImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$DemoCallToActionsResponseActionsExtraDataImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }

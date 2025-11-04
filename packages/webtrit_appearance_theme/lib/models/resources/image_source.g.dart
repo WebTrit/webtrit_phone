@@ -29,17 +29,14 @@ Map<String, dynamic> _$$ImageSourceImplToJson(_$ImageSourceImpl instance) =>
     };
 
 _$ImageRenderSpecImpl _$$ImageRenderSpecImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ImageRenderSpecImpl(
-      scale: (json['scale'] as num?)?.toDouble(),
-      padding: json['padding'] == null
-          ? null
-          : PaddingConfig.fromJson(json['padding'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => _$ImageRenderSpecImpl(
+  scale: (json['scale'] as num?)?.toDouble(),
+  padding: json['padding'] == null
+      ? null
+      : PaddingConfig.fromJson(json['padding'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$$ImageRenderSpecImplToJson(
-        _$ImageRenderSpecImpl instance) =>
-    <String, dynamic>{
-      'scale': instance.scale,
-      'padding': instance.padding,
-    };
+  _$ImageRenderSpecImpl instance,
+) => <String, dynamic>{'scale': instance.scale, 'padding': instance.padding};

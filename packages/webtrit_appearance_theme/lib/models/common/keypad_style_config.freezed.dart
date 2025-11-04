@@ -12,7 +12,8 @@ part of 'keypad_style_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 KeypadStyleConfig _$KeypadStyleConfigFromJson(Map<String, dynamic> json) {
   return _KeypadStyleConfig.fromJson(json);
@@ -45,14 +46,16 @@ mixin _$KeypadStyleConfig {
 /// @nodoc
 abstract class $KeypadStyleConfigCopyWith<$Res> {
   factory $KeypadStyleConfigCopyWith(
-          KeypadStyleConfig value, $Res Function(KeypadStyleConfig) then) =
-      _$KeypadStyleConfigCopyWithImpl<$Res, KeypadStyleConfig>;
+    KeypadStyleConfig value,
+    $Res Function(KeypadStyleConfig) then,
+  ) = _$KeypadStyleConfigCopyWithImpl<$Res, KeypadStyleConfig>;
   @useResult
-  $Res call(
-      {TextStyleConfig? textStyle,
-      TextStyleConfig? subtextStyle,
-      double? spacing,
-      double? padding});
+  $Res call({
+    TextStyleConfig? textStyle,
+    TextStyleConfig? subtextStyle,
+    double? spacing,
+    double? padding,
+  });
 
   $TextStyleConfigCopyWith<$Res>? get textStyle;
   $TextStyleConfigCopyWith<$Res>? get subtextStyle;
@@ -78,24 +81,27 @@ class _$KeypadStyleConfigCopyWithImpl<$Res, $Val extends KeypadStyleConfig>
     Object? spacing = freezed,
     Object? padding = freezed,
   }) {
-    return _then(_value.copyWith(
-      textStyle: freezed == textStyle
-          ? _value.textStyle
-          : textStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      subtextStyle: freezed == subtextStyle
-          ? _value.subtextStyle
-          : subtextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      spacing: freezed == spacing
-          ? _value.spacing
-          : spacing // ignore: cast_nullable_to_non_nullable
-              as double?,
-      padding: freezed == padding
-          ? _value.padding
-          : padding // ignore: cast_nullable_to_non_nullable
-              as double?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            textStyle: freezed == textStyle
+                ? _value.textStyle
+                : textStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            subtextStyle: freezed == subtextStyle
+                ? _value.subtextStyle
+                : subtextStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            spacing: freezed == spacing
+                ? _value.spacing
+                : spacing // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            padding: freezed == padding
+                ? _value.padding
+                : padding // ignore: cast_nullable_to_non_nullable
+                      as double?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of KeypadStyleConfig
@@ -130,16 +136,18 @@ class _$KeypadStyleConfigCopyWithImpl<$Res, $Val extends KeypadStyleConfig>
 /// @nodoc
 abstract class _$$KeypadStyleConfigImplCopyWith<$Res>
     implements $KeypadStyleConfigCopyWith<$Res> {
-  factory _$$KeypadStyleConfigImplCopyWith(_$KeypadStyleConfigImpl value,
-          $Res Function(_$KeypadStyleConfigImpl) then) =
-      __$$KeypadStyleConfigImplCopyWithImpl<$Res>;
+  factory _$$KeypadStyleConfigImplCopyWith(
+    _$KeypadStyleConfigImpl value,
+    $Res Function(_$KeypadStyleConfigImpl) then,
+  ) = __$$KeypadStyleConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {TextStyleConfig? textStyle,
-      TextStyleConfig? subtextStyle,
-      double? spacing,
-      double? padding});
+  $Res call({
+    TextStyleConfig? textStyle,
+    TextStyleConfig? subtextStyle,
+    double? spacing,
+    double? padding,
+  });
 
   @override
   $TextStyleConfigCopyWith<$Res>? get textStyle;
@@ -151,9 +159,10 @@ abstract class _$$KeypadStyleConfigImplCopyWith<$Res>
 class __$$KeypadStyleConfigImplCopyWithImpl<$Res>
     extends _$KeypadStyleConfigCopyWithImpl<$Res, _$KeypadStyleConfigImpl>
     implements _$$KeypadStyleConfigImplCopyWith<$Res> {
-  __$$KeypadStyleConfigImplCopyWithImpl(_$KeypadStyleConfigImpl _value,
-      $Res Function(_$KeypadStyleConfigImpl) _then)
-      : super(_value, _then);
+  __$$KeypadStyleConfigImplCopyWithImpl(
+    _$KeypadStyleConfigImpl _value,
+    $Res Function(_$KeypadStyleConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of KeypadStyleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -165,24 +174,26 @@ class __$$KeypadStyleConfigImplCopyWithImpl<$Res>
     Object? spacing = freezed,
     Object? padding = freezed,
   }) {
-    return _then(_$KeypadStyleConfigImpl(
-      textStyle: freezed == textStyle
-          ? _value.textStyle
-          : textStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      subtextStyle: freezed == subtextStyle
-          ? _value.subtextStyle
-          : subtextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      spacing: freezed == spacing
-          ? _value.spacing
-          : spacing // ignore: cast_nullable_to_non_nullable
-              as double?,
-      padding: freezed == padding
-          ? _value.padding
-          : padding // ignore: cast_nullable_to_non_nullable
-              as double?,
-    ));
+    return _then(
+      _$KeypadStyleConfigImpl(
+        textStyle: freezed == textStyle
+            ? _value.textStyle
+            : textStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        subtextStyle: freezed == subtextStyle
+            ? _value.subtextStyle
+            : subtextStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        spacing: freezed == spacing
+            ? _value.spacing
+            : spacing // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        padding: freezed == padding
+            ? _value.padding
+            : padding // ignore: cast_nullable_to_non_nullable
+                  as double?,
+      ),
+    );
   }
 }
 
@@ -190,8 +201,12 @@ class __$$KeypadStyleConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$KeypadStyleConfigImpl implements _KeypadStyleConfig {
-  const _$KeypadStyleConfigImpl(
-      {this.textStyle, this.subtextStyle, this.spacing, this.padding});
+  const _$KeypadStyleConfigImpl({
+    this.textStyle,
+    this.subtextStyle,
+    this.spacing,
+    this.padding,
+  });
 
   factory _$KeypadStyleConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$KeypadStyleConfigImplFromJson(json);
@@ -242,22 +257,23 @@ class _$KeypadStyleConfigImpl implements _KeypadStyleConfig {
   @pragma('vm:prefer-inline')
   _$$KeypadStyleConfigImplCopyWith<_$KeypadStyleConfigImpl> get copyWith =>
       __$$KeypadStyleConfigImplCopyWithImpl<_$KeypadStyleConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$KeypadStyleConfigImplToJson(
-      this,
-    );
+    return _$$KeypadStyleConfigImplToJson(this);
   }
 }
 
 abstract class _KeypadStyleConfig implements KeypadStyleConfig {
-  const factory _KeypadStyleConfig(
-      {final TextStyleConfig? textStyle,
-      final TextStyleConfig? subtextStyle,
-      final double? spacing,
-      final double? padding}) = _$KeypadStyleConfigImpl;
+  const factory _KeypadStyleConfig({
+    final TextStyleConfig? textStyle,
+    final TextStyleConfig? subtextStyle,
+    final double? spacing,
+    final double? padding,
+  }) = _$KeypadStyleConfigImpl;
 
   factory _KeypadStyleConfig.fromJson(Map<String, dynamic> json) =
       _$KeypadStyleConfigImpl.fromJson;

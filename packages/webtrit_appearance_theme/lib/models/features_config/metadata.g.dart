@@ -12,6 +12,4 @@ _$MetadataImpl _$$MetadataImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$MetadataImplToJson(_$MetadataImpl instance) =>
-    <String, dynamic>{
-      'attributes': instance.attributes,
-    };
+    <String, dynamic>{'attributes': instance.attributes};

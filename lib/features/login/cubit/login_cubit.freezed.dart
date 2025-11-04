@@ -12,7 +12,8 @@ part of 'login_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$LoginState {
@@ -23,17 +24,13 @@ mixin _$LoginState {
   WebtritSystemInfo? get systemInfo => throw _privateConstructorUsedError;
   List<LoginType>? get supportedLoginTypes =>
       throw _privateConstructorUsedError;
-  (
-    SessionOtpProvisional,
-    DateTime
-  )? get otpSigninSessionOtpProvisionalWithDateTime =>
+  (SessionOtpProvisional, DateTime)?
+  get otpSigninSessionOtpProvisionalWithDateTime =>
       throw _privateConstructorUsedError;
   bool get passwordSigninPasswordInputObscureText =>
       throw _privateConstructorUsedError;
-  (
-    SessionOtpProvisional,
-    DateTime
-  )? get signupSessionOtpProvisionalWithDateTime =>
+  (SessionOtpProvisional, DateTime)?
+  get signupSessionOtpProvisionalWithDateTime =>
       throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   String? get userId =>
@@ -65,38 +62,35 @@ mixin _$LoginState {
 /// @nodoc
 abstract class $LoginStateCopyWith<$Res> {
   factory $LoginStateCopyWith(
-          LoginState value, $Res Function(LoginState) then) =
-      _$LoginStateCopyWithImpl<$Res, LoginState>;
+    LoginState value,
+    $Res Function(LoginState) then,
+  ) = _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
-  $Res call(
-      {bool processing,
-      LoginMode? mode,
-      String? coreUrl,
-      String? tenantId,
-      WebtritSystemInfo? systemInfo,
-      List<LoginType>? supportedLoginTypes,
-      (
-        SessionOtpProvisional,
-        DateTime
-      )? otpSigninSessionOtpProvisionalWithDateTime,
-      bool passwordSigninPasswordInputObscureText,
-      (
-        SessionOtpProvisional,
-        DateTime
-      )? signupSessionOtpProvisionalWithDateTime,
-      String? token,
-      String? userId,
-      EmbeddedData? embedded,
-      Map<String, dynamic>? embeddedExtras,
-      Map<String, dynamic>? embeddedCallbackData,
-      Object? embeddedRequestError,
-      UrlInput coreUrlInput,
-      UserRefInput otpSigninUserRefInput,
-      CodeInput otpSigninCodeInput,
-      UserRefInput passwordSigninUserRefInput,
-      PasswordInput passwordSigninPasswordInput,
-      EmailInput signupEmailInput,
-      CodeInput signupCodeInput});
+  $Res call({
+    bool processing,
+    LoginMode? mode,
+    String? coreUrl,
+    String? tenantId,
+    WebtritSystemInfo? systemInfo,
+    List<LoginType>? supportedLoginTypes,
+    (SessionOtpProvisional, DateTime)?
+    otpSigninSessionOtpProvisionalWithDateTime,
+    bool passwordSigninPasswordInputObscureText,
+    (SessionOtpProvisional, DateTime)? signupSessionOtpProvisionalWithDateTime,
+    String? token,
+    String? userId,
+    EmbeddedData? embedded,
+    Map<String, dynamic>? embeddedExtras,
+    Map<String, dynamic>? embeddedCallbackData,
+    Object? embeddedRequestError,
+    UrlInput coreUrlInput,
+    UserRefInput otpSigninUserRefInput,
+    CodeInput otpSigninCodeInput,
+    UserRefInput passwordSigninUserRefInput,
+    PasswordInput passwordSigninPasswordInput,
+    EmailInput signupEmailInput,
+    CodeInput signupCodeInput,
+  });
 }
 
 /// @nodoc
@@ -137,98 +131,101 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? signupEmailInput = null,
     Object? signupCodeInput = null,
   }) {
-    return _then(_value.copyWith(
-      processing: null == processing
-          ? _value.processing
-          : processing // ignore: cast_nullable_to_non_nullable
-              as bool,
-      mode: freezed == mode
-          ? _value.mode
-          : mode // ignore: cast_nullable_to_non_nullable
-              as LoginMode?,
-      coreUrl: freezed == coreUrl
-          ? _value.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tenantId: freezed == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      systemInfo: freezed == systemInfo
-          ? _value.systemInfo
-          : systemInfo // ignore: cast_nullable_to_non_nullable
-              as WebtritSystemInfo?,
-      supportedLoginTypes: freezed == supportedLoginTypes
-          ? _value.supportedLoginTypes
-          : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
-              as List<LoginType>?,
-      otpSigninSessionOtpProvisionalWithDateTime: freezed ==
-              otpSigninSessionOtpProvisionalWithDateTime
-          ? _value.otpSigninSessionOtpProvisionalWithDateTime
-          : otpSigninSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
-              as (SessionOtpProvisional, DateTime)?,
-      passwordSigninPasswordInputObscureText: null ==
-              passwordSigninPasswordInputObscureText
-          ? _value.passwordSigninPasswordInputObscureText
-          : passwordSigninPasswordInputObscureText // ignore: cast_nullable_to_non_nullable
-              as bool,
-      signupSessionOtpProvisionalWithDateTime: freezed ==
-              signupSessionOtpProvisionalWithDateTime
-          ? _value.signupSessionOtpProvisionalWithDateTime
-          : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
-              as (SessionOtpProvisional, DateTime)?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      embedded: freezed == embedded
-          ? _value.embedded
-          : embedded // ignore: cast_nullable_to_non_nullable
-              as EmbeddedData?,
-      embeddedExtras: freezed == embeddedExtras
-          ? _value.embeddedExtras
-          : embeddedExtras // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      embeddedCallbackData: freezed == embeddedCallbackData
-          ? _value.embeddedCallbackData
-          : embeddedCallbackData // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      embeddedRequestError: freezed == embeddedRequestError
-          ? _value.embeddedRequestError
-          : embeddedRequestError,
-      coreUrlInput: null == coreUrlInput
-          ? _value.coreUrlInput
-          : coreUrlInput // ignore: cast_nullable_to_non_nullable
-              as UrlInput,
-      otpSigninUserRefInput: null == otpSigninUserRefInput
-          ? _value.otpSigninUserRefInput
-          : otpSigninUserRefInput // ignore: cast_nullable_to_non_nullable
-              as UserRefInput,
-      otpSigninCodeInput: null == otpSigninCodeInput
-          ? _value.otpSigninCodeInput
-          : otpSigninCodeInput // ignore: cast_nullable_to_non_nullable
-              as CodeInput,
-      passwordSigninUserRefInput: null == passwordSigninUserRefInput
-          ? _value.passwordSigninUserRefInput
-          : passwordSigninUserRefInput // ignore: cast_nullable_to_non_nullable
-              as UserRefInput,
-      passwordSigninPasswordInput: null == passwordSigninPasswordInput
-          ? _value.passwordSigninPasswordInput
-          : passwordSigninPasswordInput // ignore: cast_nullable_to_non_nullable
-              as PasswordInput,
-      signupEmailInput: null == signupEmailInput
-          ? _value.signupEmailInput
-          : signupEmailInput // ignore: cast_nullable_to_non_nullable
-              as EmailInput,
-      signupCodeInput: null == signupCodeInput
-          ? _value.signupCodeInput
-          : signupCodeInput // ignore: cast_nullable_to_non_nullable
-              as CodeInput,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            processing: null == processing
+                ? _value.processing
+                : processing // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            mode: freezed == mode
+                ? _value.mode
+                : mode // ignore: cast_nullable_to_non_nullable
+                      as LoginMode?,
+            coreUrl: freezed == coreUrl
+                ? _value.coreUrl
+                : coreUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            tenantId: freezed == tenantId
+                ? _value.tenantId
+                : tenantId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            systemInfo: freezed == systemInfo
+                ? _value.systemInfo
+                : systemInfo // ignore: cast_nullable_to_non_nullable
+                      as WebtritSystemInfo?,
+            supportedLoginTypes: freezed == supportedLoginTypes
+                ? _value.supportedLoginTypes
+                : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
+                      as List<LoginType>?,
+            otpSigninSessionOtpProvisionalWithDateTime:
+                freezed == otpSigninSessionOtpProvisionalWithDateTime
+                ? _value.otpSigninSessionOtpProvisionalWithDateTime
+                : otpSigninSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+                      as (SessionOtpProvisional, DateTime)?,
+            passwordSigninPasswordInputObscureText:
+                null == passwordSigninPasswordInputObscureText
+                ? _value.passwordSigninPasswordInputObscureText
+                : passwordSigninPasswordInputObscureText // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            signupSessionOtpProvisionalWithDateTime:
+                freezed == signupSessionOtpProvisionalWithDateTime
+                ? _value.signupSessionOtpProvisionalWithDateTime
+                : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+                      as (SessionOtpProvisional, DateTime)?,
+            token: freezed == token
+                ? _value.token
+                : token // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            userId: freezed == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            embedded: freezed == embedded
+                ? _value.embedded
+                : embedded // ignore: cast_nullable_to_non_nullable
+                      as EmbeddedData?,
+            embeddedExtras: freezed == embeddedExtras
+                ? _value.embeddedExtras
+                : embeddedExtras // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>?,
+            embeddedCallbackData: freezed == embeddedCallbackData
+                ? _value.embeddedCallbackData
+                : embeddedCallbackData // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>?,
+            embeddedRequestError: freezed == embeddedRequestError
+                ? _value.embeddedRequestError
+                : embeddedRequestError,
+            coreUrlInput: null == coreUrlInput
+                ? _value.coreUrlInput
+                : coreUrlInput // ignore: cast_nullable_to_non_nullable
+                      as UrlInput,
+            otpSigninUserRefInput: null == otpSigninUserRefInput
+                ? _value.otpSigninUserRefInput
+                : otpSigninUserRefInput // ignore: cast_nullable_to_non_nullable
+                      as UserRefInput,
+            otpSigninCodeInput: null == otpSigninCodeInput
+                ? _value.otpSigninCodeInput
+                : otpSigninCodeInput // ignore: cast_nullable_to_non_nullable
+                      as CodeInput,
+            passwordSigninUserRefInput: null == passwordSigninUserRefInput
+                ? _value.passwordSigninUserRefInput
+                : passwordSigninUserRefInput // ignore: cast_nullable_to_non_nullable
+                      as UserRefInput,
+            passwordSigninPasswordInput: null == passwordSigninPasswordInput
+                ? _value.passwordSigninPasswordInput
+                : passwordSigninPasswordInput // ignore: cast_nullable_to_non_nullable
+                      as PasswordInput,
+            signupEmailInput: null == signupEmailInput
+                ? _value.signupEmailInput
+                : signupEmailInput // ignore: cast_nullable_to_non_nullable
+                      as EmailInput,
+            signupCodeInput: null == signupCodeInput
+                ? _value.signupCodeInput
+                : signupCodeInput // ignore: cast_nullable_to_non_nullable
+                      as CodeInput,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -236,39 +233,36 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
 abstract class _$$LoginStateImplCopyWith<$Res>
     implements $LoginStateCopyWith<$Res> {
   factory _$$LoginStateImplCopyWith(
-          _$LoginStateImpl value, $Res Function(_$LoginStateImpl) then) =
-      __$$LoginStateImplCopyWithImpl<$Res>;
+    _$LoginStateImpl value,
+    $Res Function(_$LoginStateImpl) then,
+  ) = __$$LoginStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool processing,
-      LoginMode? mode,
-      String? coreUrl,
-      String? tenantId,
-      WebtritSystemInfo? systemInfo,
-      List<LoginType>? supportedLoginTypes,
-      (
-        SessionOtpProvisional,
-        DateTime
-      )? otpSigninSessionOtpProvisionalWithDateTime,
-      bool passwordSigninPasswordInputObscureText,
-      (
-        SessionOtpProvisional,
-        DateTime
-      )? signupSessionOtpProvisionalWithDateTime,
-      String? token,
-      String? userId,
-      EmbeddedData? embedded,
-      Map<String, dynamic>? embeddedExtras,
-      Map<String, dynamic>? embeddedCallbackData,
-      Object? embeddedRequestError,
-      UrlInput coreUrlInput,
-      UserRefInput otpSigninUserRefInput,
-      CodeInput otpSigninCodeInput,
-      UserRefInput passwordSigninUserRefInput,
-      PasswordInput passwordSigninPasswordInput,
-      EmailInput signupEmailInput,
-      CodeInput signupCodeInput});
+  $Res call({
+    bool processing,
+    LoginMode? mode,
+    String? coreUrl,
+    String? tenantId,
+    WebtritSystemInfo? systemInfo,
+    List<LoginType>? supportedLoginTypes,
+    (SessionOtpProvisional, DateTime)?
+    otpSigninSessionOtpProvisionalWithDateTime,
+    bool passwordSigninPasswordInputObscureText,
+    (SessionOtpProvisional, DateTime)? signupSessionOtpProvisionalWithDateTime,
+    String? token,
+    String? userId,
+    EmbeddedData? embedded,
+    Map<String, dynamic>? embeddedExtras,
+    Map<String, dynamic>? embeddedCallbackData,
+    Object? embeddedRequestError,
+    UrlInput coreUrlInput,
+    UserRefInput otpSigninUserRefInput,
+    CodeInput otpSigninCodeInput,
+    UserRefInput passwordSigninUserRefInput,
+    PasswordInput passwordSigninPasswordInput,
+    EmailInput signupEmailInput,
+    CodeInput signupCodeInput,
+  });
 }
 
 /// @nodoc
@@ -276,8 +270,9 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     extends _$LoginStateCopyWithImpl<$Res, _$LoginStateImpl>
     implements _$$LoginStateImplCopyWith<$Res> {
   __$$LoginStateImplCopyWithImpl(
-      _$LoginStateImpl _value, $Res Function(_$LoginStateImpl) _then)
-      : super(_value, _then);
+    _$LoginStateImpl _value,
+    $Res Function(_$LoginStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LoginState
   /// with the given fields replaced by the non-null parameter values.
@@ -307,130 +302,132 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? signupEmailInput = null,
     Object? signupCodeInput = null,
   }) {
-    return _then(_$LoginStateImpl(
-      processing: null == processing
-          ? _value.processing
-          : processing // ignore: cast_nullable_to_non_nullable
-              as bool,
-      mode: freezed == mode
-          ? _value.mode
-          : mode // ignore: cast_nullable_to_non_nullable
-              as LoginMode?,
-      coreUrl: freezed == coreUrl
-          ? _value.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tenantId: freezed == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      systemInfo: freezed == systemInfo
-          ? _value.systemInfo
-          : systemInfo // ignore: cast_nullable_to_non_nullable
-              as WebtritSystemInfo?,
-      supportedLoginTypes: freezed == supportedLoginTypes
-          ? _value._supportedLoginTypes
-          : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
-              as List<LoginType>?,
-      otpSigninSessionOtpProvisionalWithDateTime: freezed ==
-              otpSigninSessionOtpProvisionalWithDateTime
-          ? _value.otpSigninSessionOtpProvisionalWithDateTime
-          : otpSigninSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
-              as (SessionOtpProvisional, DateTime)?,
-      passwordSigninPasswordInputObscureText: null ==
-              passwordSigninPasswordInputObscureText
-          ? _value.passwordSigninPasswordInputObscureText
-          : passwordSigninPasswordInputObscureText // ignore: cast_nullable_to_non_nullable
-              as bool,
-      signupSessionOtpProvisionalWithDateTime: freezed ==
-              signupSessionOtpProvisionalWithDateTime
-          ? _value.signupSessionOtpProvisionalWithDateTime
-          : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
-              as (SessionOtpProvisional, DateTime)?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      embedded: freezed == embedded
-          ? _value.embedded
-          : embedded // ignore: cast_nullable_to_non_nullable
-              as EmbeddedData?,
-      embeddedExtras: freezed == embeddedExtras
-          ? _value._embeddedExtras
-          : embeddedExtras // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      embeddedCallbackData: freezed == embeddedCallbackData
-          ? _value._embeddedCallbackData
-          : embeddedCallbackData // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      embeddedRequestError: freezed == embeddedRequestError
-          ? _value.embeddedRequestError
-          : embeddedRequestError,
-      coreUrlInput: null == coreUrlInput
-          ? _value.coreUrlInput
-          : coreUrlInput // ignore: cast_nullable_to_non_nullable
-              as UrlInput,
-      otpSigninUserRefInput: null == otpSigninUserRefInput
-          ? _value.otpSigninUserRefInput
-          : otpSigninUserRefInput // ignore: cast_nullable_to_non_nullable
-              as UserRefInput,
-      otpSigninCodeInput: null == otpSigninCodeInput
-          ? _value.otpSigninCodeInput
-          : otpSigninCodeInput // ignore: cast_nullable_to_non_nullable
-              as CodeInput,
-      passwordSigninUserRefInput: null == passwordSigninUserRefInput
-          ? _value.passwordSigninUserRefInput
-          : passwordSigninUserRefInput // ignore: cast_nullable_to_non_nullable
-              as UserRefInput,
-      passwordSigninPasswordInput: null == passwordSigninPasswordInput
-          ? _value.passwordSigninPasswordInput
-          : passwordSigninPasswordInput // ignore: cast_nullable_to_non_nullable
-              as PasswordInput,
-      signupEmailInput: null == signupEmailInput
-          ? _value.signupEmailInput
-          : signupEmailInput // ignore: cast_nullable_to_non_nullable
-              as EmailInput,
-      signupCodeInput: null == signupCodeInput
-          ? _value.signupCodeInput
-          : signupCodeInput // ignore: cast_nullable_to_non_nullable
-              as CodeInput,
-    ));
+    return _then(
+      _$LoginStateImpl(
+        processing: null == processing
+            ? _value.processing
+            : processing // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        mode: freezed == mode
+            ? _value.mode
+            : mode // ignore: cast_nullable_to_non_nullable
+                  as LoginMode?,
+        coreUrl: freezed == coreUrl
+            ? _value.coreUrl
+            : coreUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        tenantId: freezed == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        systemInfo: freezed == systemInfo
+            ? _value.systemInfo
+            : systemInfo // ignore: cast_nullable_to_non_nullable
+                  as WebtritSystemInfo?,
+        supportedLoginTypes: freezed == supportedLoginTypes
+            ? _value._supportedLoginTypes
+            : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
+                  as List<LoginType>?,
+        otpSigninSessionOtpProvisionalWithDateTime:
+            freezed == otpSigninSessionOtpProvisionalWithDateTime
+            ? _value.otpSigninSessionOtpProvisionalWithDateTime
+            : otpSigninSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+                  as (SessionOtpProvisional, DateTime)?,
+        passwordSigninPasswordInputObscureText:
+            null == passwordSigninPasswordInputObscureText
+            ? _value.passwordSigninPasswordInputObscureText
+            : passwordSigninPasswordInputObscureText // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        signupSessionOtpProvisionalWithDateTime:
+            freezed == signupSessionOtpProvisionalWithDateTime
+            ? _value.signupSessionOtpProvisionalWithDateTime
+            : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
+                  as (SessionOtpProvisional, DateTime)?,
+        token: freezed == token
+            ? _value.token
+            : token // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        userId: freezed == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        embedded: freezed == embedded
+            ? _value.embedded
+            : embedded // ignore: cast_nullable_to_non_nullable
+                  as EmbeddedData?,
+        embeddedExtras: freezed == embeddedExtras
+            ? _value._embeddedExtras
+            : embeddedExtras // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>?,
+        embeddedCallbackData: freezed == embeddedCallbackData
+            ? _value._embeddedCallbackData
+            : embeddedCallbackData // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>?,
+        embeddedRequestError: freezed == embeddedRequestError
+            ? _value.embeddedRequestError
+            : embeddedRequestError,
+        coreUrlInput: null == coreUrlInput
+            ? _value.coreUrlInput
+            : coreUrlInput // ignore: cast_nullable_to_non_nullable
+                  as UrlInput,
+        otpSigninUserRefInput: null == otpSigninUserRefInput
+            ? _value.otpSigninUserRefInput
+            : otpSigninUserRefInput // ignore: cast_nullable_to_non_nullable
+                  as UserRefInput,
+        otpSigninCodeInput: null == otpSigninCodeInput
+            ? _value.otpSigninCodeInput
+            : otpSigninCodeInput // ignore: cast_nullable_to_non_nullable
+                  as CodeInput,
+        passwordSigninUserRefInput: null == passwordSigninUserRefInput
+            ? _value.passwordSigninUserRefInput
+            : passwordSigninUserRefInput // ignore: cast_nullable_to_non_nullable
+                  as UserRefInput,
+        passwordSigninPasswordInput: null == passwordSigninPasswordInput
+            ? _value.passwordSigninPasswordInput
+            : passwordSigninPasswordInput // ignore: cast_nullable_to_non_nullable
+                  as PasswordInput,
+        signupEmailInput: null == signupEmailInput
+            ? _value.signupEmailInput
+            : signupEmailInput // ignore: cast_nullable_to_non_nullable
+                  as EmailInput,
+        signupCodeInput: null == signupCodeInput
+            ? _value.signupCodeInput
+            : signupCodeInput // ignore: cast_nullable_to_non_nullable
+                  as CodeInput,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$LoginStateImpl implements _LoginState {
-  const _$LoginStateImpl(
-      {this.processing = false,
-      this.mode,
-      this.coreUrl,
-      this.tenantId,
-      this.systemInfo,
-      final List<LoginType>? supportedLoginTypes,
-      this.otpSigninSessionOtpProvisionalWithDateTime,
-      this.passwordSigninPasswordInputObscureText = true,
-      this.signupSessionOtpProvisionalWithDateTime,
-      this.token,
-      this.userId,
-      this.embedded,
-      final Map<String, dynamic>? embeddedExtras,
-      final Map<String, dynamic>? embeddedCallbackData,
-      this.embeddedRequestError,
-      this.coreUrlInput = const UrlInput.pure(),
-      this.otpSigninUserRefInput = const UserRefInput.pure(),
-      this.otpSigninCodeInput = const CodeInput.pure(),
-      this.passwordSigninUserRefInput = const UserRefInput.pure(),
-      this.passwordSigninPasswordInput = const PasswordInput.pure(),
-      this.signupEmailInput = const EmailInput.pure(),
-      this.signupCodeInput = const CodeInput.pure()})
-      : _supportedLoginTypes = supportedLoginTypes,
-        _embeddedExtras = embeddedExtras,
-        _embeddedCallbackData = embeddedCallbackData;
+  const _$LoginStateImpl({
+    this.processing = false,
+    this.mode,
+    this.coreUrl,
+    this.tenantId,
+    this.systemInfo,
+    final List<LoginType>? supportedLoginTypes,
+    this.otpSigninSessionOtpProvisionalWithDateTime,
+    this.passwordSigninPasswordInputObscureText = true,
+    this.signupSessionOtpProvisionalWithDateTime,
+    this.token,
+    this.userId,
+    this.embedded,
+    final Map<String, dynamic>? embeddedExtras,
+    final Map<String, dynamic>? embeddedCallbackData,
+    this.embeddedRequestError,
+    this.coreUrlInput = const UrlInput.pure(),
+    this.otpSigninUserRefInput = const UserRefInput.pure(),
+    this.otpSigninCodeInput = const CodeInput.pure(),
+    this.passwordSigninUserRefInput = const UserRefInput.pure(),
+    this.passwordSigninPasswordInput = const PasswordInput.pure(),
+    this.signupEmailInput = const EmailInput.pure(),
+    this.signupCodeInput = const CodeInput.pure(),
+  }) : _supportedLoginTypes = supportedLoginTypes,
+       _embeddedExtras = embeddedExtras,
+       _embeddedCallbackData = embeddedCallbackData;
 
   @override
   @JsonKey()
@@ -455,28 +452,24 @@ class _$LoginStateImpl implements _LoginState {
   }
 
   @override
-  final (
-    SessionOtpProvisional,
-    DateTime
-  )? otpSigninSessionOtpProvisionalWithDateTime;
+  final (SessionOtpProvisional, DateTime)?
+  otpSigninSessionOtpProvisionalWithDateTime;
   @override
   @JsonKey()
   final bool passwordSigninPasswordInputObscureText;
   @override
-  final (
-    SessionOtpProvisional,
-    DateTime
-  )? signupSessionOtpProvisionalWithDateTime;
+  final (SessionOtpProvisional, DateTime)?
+  signupSessionOtpProvisionalWithDateTime;
   @override
   final String? token;
   @override
   final String? userId;
-// Used to represent an embedded launch page or a login type within tabbed navigation
+  // Used to represent an embedded launch page or a login type within tabbed navigation
   @override
   final EmbeddedData? embedded;
-// Extras and callback data that returned from the embedded page
+  // Extras and callback data that returned from the embedded page
   final Map<String, dynamic>? _embeddedExtras;
-// Extras and callback data that returned from the embedded page
+  // Extras and callback data that returned from the embedded page
   @override
   Map<String, dynamic>? get embeddedExtras {
     final value = _embeddedExtras;
@@ -539,38 +532,60 @@ class _$LoginStateImpl implements _LoginState {
                 other.tenantId == tenantId) &&
             (identical(other.systemInfo, systemInfo) ||
                 other.systemInfo == systemInfo) &&
-            const DeepCollectionEquality()
-                .equals(other._supportedLoginTypes, _supportedLoginTypes) &&
-            (identical(other.otpSigninSessionOtpProvisionalWithDateTime,
-                    otpSigninSessionOtpProvisionalWithDateTime) ||
+            const DeepCollectionEquality().equals(
+              other._supportedLoginTypes,
+              _supportedLoginTypes,
+            ) &&
+            (identical(
+                  other.otpSigninSessionOtpProvisionalWithDateTime,
+                  otpSigninSessionOtpProvisionalWithDateTime,
+                ) ||
                 other.otpSigninSessionOtpProvisionalWithDateTime ==
                     otpSigninSessionOtpProvisionalWithDateTime) &&
-            (identical(other.passwordSigninPasswordInputObscureText, passwordSigninPasswordInputObscureText) ||
+            (identical(
+                  other.passwordSigninPasswordInputObscureText,
+                  passwordSigninPasswordInputObscureText,
+                ) ||
                 other.passwordSigninPasswordInputObscureText ==
                     passwordSigninPasswordInputObscureText) &&
-            (identical(other.signupSessionOtpProvisionalWithDateTime, signupSessionOtpProvisionalWithDateTime) ||
+            (identical(
+                  other.signupSessionOtpProvisionalWithDateTime,
+                  signupSessionOtpProvisionalWithDateTime,
+                ) ||
                 other.signupSessionOtpProvisionalWithDateTime ==
                     signupSessionOtpProvisionalWithDateTime) &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.embedded, embedded) ||
                 other.embedded == embedded) &&
-            const DeepCollectionEquality()
-                .equals(other._embeddedExtras, _embeddedExtras) &&
-            const DeepCollectionEquality()
-                .equals(other._embeddedCallbackData, _embeddedCallbackData) &&
-            const DeepCollectionEquality()
-                .equals(other.embeddedRequestError, embeddedRequestError) &&
+            const DeepCollectionEquality().equals(
+              other._embeddedExtras,
+              _embeddedExtras,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._embeddedCallbackData,
+              _embeddedCallbackData,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other.embeddedRequestError,
+              embeddedRequestError,
+            ) &&
             (identical(other.coreUrlInput, coreUrlInput) ||
                 other.coreUrlInput == coreUrlInput) &&
             (identical(other.otpSigninUserRefInput, otpSigninUserRefInput) ||
                 other.otpSigninUserRefInput == otpSigninUserRefInput) &&
             (identical(other.otpSigninCodeInput, otpSigninCodeInput) ||
                 other.otpSigninCodeInput == otpSigninCodeInput) &&
-            (identical(other.passwordSigninUserRefInput, passwordSigninUserRefInput) ||
+            (identical(
+                  other.passwordSigninUserRefInput,
+                  passwordSigninUserRefInput,
+                ) ||
                 other.passwordSigninUserRefInput ==
                     passwordSigninUserRefInput) &&
-            (identical(other.passwordSigninPasswordInput, passwordSigninPasswordInput) ||
+            (identical(
+                  other.passwordSigninPasswordInput,
+                  passwordSigninPasswordInput,
+                ) ||
                 other.passwordSigninPasswordInput ==
                     passwordSigninPasswordInput) &&
             (identical(other.signupEmailInput, signupEmailInput) ||
@@ -581,30 +596,30 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   int get hashCode => Object.hashAll([
-        runtimeType,
-        processing,
-        mode,
-        coreUrl,
-        tenantId,
-        systemInfo,
-        const DeepCollectionEquality().hash(_supportedLoginTypes),
-        otpSigninSessionOtpProvisionalWithDateTime,
-        passwordSigninPasswordInputObscureText,
-        signupSessionOtpProvisionalWithDateTime,
-        token,
-        userId,
-        embedded,
-        const DeepCollectionEquality().hash(_embeddedExtras),
-        const DeepCollectionEquality().hash(_embeddedCallbackData),
-        const DeepCollectionEquality().hash(embeddedRequestError),
-        coreUrlInput,
-        otpSigninUserRefInput,
-        otpSigninCodeInput,
-        passwordSigninUserRefInput,
-        passwordSigninPasswordInput,
-        signupEmailInput,
-        signupCodeInput
-      ]);
+    runtimeType,
+    processing,
+    mode,
+    coreUrl,
+    tenantId,
+    systemInfo,
+    const DeepCollectionEquality().hash(_supportedLoginTypes),
+    otpSigninSessionOtpProvisionalWithDateTime,
+    passwordSigninPasswordInputObscureText,
+    signupSessionOtpProvisionalWithDateTime,
+    token,
+    userId,
+    embedded,
+    const DeepCollectionEquality().hash(_embeddedExtras),
+    const DeepCollectionEquality().hash(_embeddedCallbackData),
+    const DeepCollectionEquality().hash(embeddedRequestError),
+    coreUrlInput,
+    otpSigninUserRefInput,
+    otpSigninCodeInput,
+    passwordSigninUserRefInput,
+    passwordSigninPasswordInput,
+    signupEmailInput,
+    signupCodeInput,
+  ]);
 
   /// Create a copy of LoginState
   /// with the given fields replaced by the non-null parameter values.
@@ -616,35 +631,32 @@ class _$LoginStateImpl implements _LoginState {
 }
 
 abstract class _LoginState implements LoginState {
-  const factory _LoginState(
-      {final bool processing,
-      final LoginMode? mode,
-      final String? coreUrl,
-      final String? tenantId,
-      final WebtritSystemInfo? systemInfo,
-      final List<LoginType>? supportedLoginTypes,
-      final (
-        SessionOtpProvisional,
-        DateTime
-      )? otpSigninSessionOtpProvisionalWithDateTime,
-      final bool passwordSigninPasswordInputObscureText,
-      final (
-        SessionOtpProvisional,
-        DateTime
-      )? signupSessionOtpProvisionalWithDateTime,
-      final String? token,
-      final String? userId,
-      final EmbeddedData? embedded,
-      final Map<String, dynamic>? embeddedExtras,
-      final Map<String, dynamic>? embeddedCallbackData,
-      final Object? embeddedRequestError,
-      final UrlInput coreUrlInput,
-      final UserRefInput otpSigninUserRefInput,
-      final CodeInput otpSigninCodeInput,
-      final UserRefInput passwordSigninUserRefInput,
-      final PasswordInput passwordSigninPasswordInput,
-      final EmailInput signupEmailInput,
-      final CodeInput signupCodeInput}) = _$LoginStateImpl;
+  const factory _LoginState({
+    final bool processing,
+    final LoginMode? mode,
+    final String? coreUrl,
+    final String? tenantId,
+    final WebtritSystemInfo? systemInfo,
+    final List<LoginType>? supportedLoginTypes,
+    final (SessionOtpProvisional, DateTime)?
+    otpSigninSessionOtpProvisionalWithDateTime,
+    final bool passwordSigninPasswordInputObscureText,
+    final (SessionOtpProvisional, DateTime)?
+    signupSessionOtpProvisionalWithDateTime,
+    final String? token,
+    final String? userId,
+    final EmbeddedData? embedded,
+    final Map<String, dynamic>? embeddedExtras,
+    final Map<String, dynamic>? embeddedCallbackData,
+    final Object? embeddedRequestError,
+    final UrlInput coreUrlInput,
+    final UserRefInput otpSigninUserRefInput,
+    final CodeInput otpSigninCodeInput,
+    final UserRefInput passwordSigninUserRefInput,
+    final PasswordInput passwordSigninPasswordInput,
+    final EmailInput signupEmailInput,
+    final CodeInput signupCodeInput,
+  }) = _$LoginStateImpl;
 
   @override
   bool get processing;
@@ -660,20 +672,18 @@ abstract class _LoginState implements LoginState {
   List<LoginType>? get supportedLoginTypes;
   @override
   (SessionOtpProvisional, DateTime)?
-      get otpSigninSessionOtpProvisionalWithDateTime;
+  get otpSigninSessionOtpProvisionalWithDateTime;
   @override
   bool get passwordSigninPasswordInputObscureText;
   @override
   (SessionOtpProvisional, DateTime)?
-      get signupSessionOtpProvisionalWithDateTime;
+  get signupSessionOtpProvisionalWithDateTime;
   @override
   String? get token;
   @override
-  String?
-      get userId; // Used to represent an embedded launch page or a login type within tabbed navigation
+  String? get userId; // Used to represent an embedded launch page or a login type within tabbed navigation
   @override
-  EmbeddedData?
-      get embedded; // Extras and callback data that returned from the embedded page
+  EmbeddedData? get embedded; // Extras and callback data that returned from the embedded page
   @override
   Map<String, dynamic>? get embeddedExtras;
   @override

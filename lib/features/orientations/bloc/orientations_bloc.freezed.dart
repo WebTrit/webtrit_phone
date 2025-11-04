@@ -12,7 +12,8 @@ part of 'orientations_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$OrientationsState {
@@ -29,8 +30,9 @@ mixin _$OrientationsState {
 /// @nodoc
 abstract class $OrientationsStateCopyWith<$Res> {
   factory $OrientationsStateCopyWith(
-          OrientationsState value, $Res Function(OrientationsState) then) =
-      _$OrientationsStateCopyWithImpl<$Res, OrientationsState>;
+    OrientationsState value,
+    $Res Function(OrientationsState) then,
+  ) = _$OrientationsStateCopyWithImpl<$Res, OrientationsState>;
   @useResult
   $Res call({PreferredOrientation? lastOrientation});
 }
@@ -49,24 +51,26 @@ class _$OrientationsStateCopyWithImpl<$Res, $Val extends OrientationsState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? lastOrientation = freezed,
-  }) {
-    return _then(_value.copyWith(
-      lastOrientation: freezed == lastOrientation
-          ? _value.lastOrientation
-          : lastOrientation // ignore: cast_nullable_to_non_nullable
-              as PreferredOrientation?,
-    ) as $Val);
+  $Res call({Object? lastOrientation = freezed}) {
+    return _then(
+      _value.copyWith(
+            lastOrientation: freezed == lastOrientation
+                ? _value.lastOrientation
+                : lastOrientation // ignore: cast_nullable_to_non_nullable
+                      as PreferredOrientation?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$OrientationsStateImplCopyWith<$Res>
     implements $OrientationsStateCopyWith<$Res> {
-  factory _$$OrientationsStateImplCopyWith(_$OrientationsStateImpl value,
-          $Res Function(_$OrientationsStateImpl) then) =
-      __$$OrientationsStateImplCopyWithImpl<$Res>;
+  factory _$$OrientationsStateImplCopyWith(
+    _$OrientationsStateImpl value,
+    $Res Function(_$OrientationsStateImpl) then,
+  ) = __$$OrientationsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({PreferredOrientation? lastOrientation});
@@ -76,23 +80,24 @@ abstract class _$$OrientationsStateImplCopyWith<$Res>
 class __$$OrientationsStateImplCopyWithImpl<$Res>
     extends _$OrientationsStateCopyWithImpl<$Res, _$OrientationsStateImpl>
     implements _$$OrientationsStateImplCopyWith<$Res> {
-  __$$OrientationsStateImplCopyWithImpl(_$OrientationsStateImpl _value,
-      $Res Function(_$OrientationsStateImpl) _then)
-      : super(_value, _then);
+  __$$OrientationsStateImplCopyWithImpl(
+    _$OrientationsStateImpl _value,
+    $Res Function(_$OrientationsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of OrientationsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? lastOrientation = freezed,
-  }) {
-    return _then(_$OrientationsStateImpl(
-      freezed == lastOrientation
-          ? _value.lastOrientation
-          : lastOrientation // ignore: cast_nullable_to_non_nullable
-              as PreferredOrientation?,
-    ));
+  $Res call({Object? lastOrientation = freezed}) {
+    return _then(
+      _$OrientationsStateImpl(
+        freezed == lastOrientation
+            ? _value.lastOrientation
+            : lastOrientation // ignore: cast_nullable_to_non_nullable
+                  as PreferredOrientation?,
+      ),
+    );
   }
 }
 
@@ -128,12 +133,15 @@ class _$OrientationsStateImpl implements _OrientationsState {
   @pragma('vm:prefer-inline')
   _$$OrientationsStateImplCopyWith<_$OrientationsStateImpl> get copyWith =>
       __$$OrientationsStateImplCopyWithImpl<_$OrientationsStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _OrientationsState implements OrientationsState {
-  const factory _OrientationsState(
-      [final PreferredOrientation? lastOrientation]) = _$OrientationsStateImpl;
+  const factory _OrientationsState([
+    final PreferredOrientation? lastOrientation,
+  ]) = _$OrientationsStateImpl;
 
   @override
   PreferredOrientation? get lastOrientation;

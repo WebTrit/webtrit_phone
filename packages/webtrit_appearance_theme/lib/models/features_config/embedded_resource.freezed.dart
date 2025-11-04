@@ -12,7 +12,8 @@ part of 'embedded_resource.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 EmbeddedResource _$EmbeddedResourceFromJson(Map<String, dynamic> json) {
   return _EmbeddedResource.fromJson(json);
@@ -52,19 +53,21 @@ mixin _$EmbeddedResource {
 /// @nodoc
 abstract class $EmbeddedResourceCopyWith<$Res> {
   factory $EmbeddedResourceCopyWith(
-          EmbeddedResource value, $Res Function(EmbeddedResource) then) =
-      _$EmbeddedResourceCopyWithImpl<$Res, EmbeddedResource>;
+    EmbeddedResource value,
+    $Res Function(EmbeddedResource) then,
+  ) = _$EmbeddedResourceCopyWithImpl<$Res, EmbeddedResource>;
   @useResult
-  $Res call(
-      {@IntToStringConverter() String id,
-      String uri,
-      EmbeddedResourceType type,
-      Map<String, dynamic> attributes,
-      ToolbarConfig toolbar,
-      Metadata metadata,
-      List<String> payload,
-      bool enableConsoleLogCapture,
-      String? reconnectStrategy});
+  $Res call({
+    @IntToStringConverter() String id,
+    String uri,
+    EmbeddedResourceType type,
+    Map<String, dynamic> attributes,
+    ToolbarConfig toolbar,
+    Metadata metadata,
+    List<String> payload,
+    bool enableConsoleLogCapture,
+    String? reconnectStrategy,
+  });
 
   $ToolbarConfigCopyWith<$Res> get toolbar;
   $MetadataCopyWith<$Res> get metadata;
@@ -95,44 +98,47 @@ class _$EmbeddedResourceCopyWithImpl<$Res, $Val extends EmbeddedResource>
     Object? enableConsoleLogCapture = null,
     Object? reconnectStrategy = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      uri: null == uri
-          ? _value.uri
-          : uri // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as EmbeddedResourceType,
-      attributes: null == attributes
-          ? _value.attributes
-          : attributes // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-      toolbar: null == toolbar
-          ? _value.toolbar
-          : toolbar // ignore: cast_nullable_to_non_nullable
-              as ToolbarConfig,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-      payload: null == payload
-          ? _value.payload
-          : payload // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      enableConsoleLogCapture: null == enableConsoleLogCapture
-          ? _value.enableConsoleLogCapture
-          : enableConsoleLogCapture // ignore: cast_nullable_to_non_nullable
-              as bool,
-      reconnectStrategy: freezed == reconnectStrategy
-          ? _value.reconnectStrategy
-          : reconnectStrategy // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            uri: null == uri
+                ? _value.uri
+                : uri // ignore: cast_nullable_to_non_nullable
+                      as String,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as EmbeddedResourceType,
+            attributes: null == attributes
+                ? _value.attributes
+                : attributes // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>,
+            toolbar: null == toolbar
+                ? _value.toolbar
+                : toolbar // ignore: cast_nullable_to_non_nullable
+                      as ToolbarConfig,
+            metadata: null == metadata
+                ? _value.metadata
+                : metadata // ignore: cast_nullable_to_non_nullable
+                      as Metadata,
+            payload: null == payload
+                ? _value.payload
+                : payload // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            enableConsoleLogCapture: null == enableConsoleLogCapture
+                ? _value.enableConsoleLogCapture
+                : enableConsoleLogCapture // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            reconnectStrategy: freezed == reconnectStrategy
+                ? _value.reconnectStrategy
+                : reconnectStrategy // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of EmbeddedResource
@@ -159,21 +165,23 @@ class _$EmbeddedResourceCopyWithImpl<$Res, $Val extends EmbeddedResource>
 /// @nodoc
 abstract class _$$EmbeddedResourceImplCopyWith<$Res>
     implements $EmbeddedResourceCopyWith<$Res> {
-  factory _$$EmbeddedResourceImplCopyWith(_$EmbeddedResourceImpl value,
-          $Res Function(_$EmbeddedResourceImpl) then) =
-      __$$EmbeddedResourceImplCopyWithImpl<$Res>;
+  factory _$$EmbeddedResourceImplCopyWith(
+    _$EmbeddedResourceImpl value,
+    $Res Function(_$EmbeddedResourceImpl) then,
+  ) = __$$EmbeddedResourceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@IntToStringConverter() String id,
-      String uri,
-      EmbeddedResourceType type,
-      Map<String, dynamic> attributes,
-      ToolbarConfig toolbar,
-      Metadata metadata,
-      List<String> payload,
-      bool enableConsoleLogCapture,
-      String? reconnectStrategy});
+  $Res call({
+    @IntToStringConverter() String id,
+    String uri,
+    EmbeddedResourceType type,
+    Map<String, dynamic> attributes,
+    ToolbarConfig toolbar,
+    Metadata metadata,
+    List<String> payload,
+    bool enableConsoleLogCapture,
+    String? reconnectStrategy,
+  });
 
   @override
   $ToolbarConfigCopyWith<$Res> get toolbar;
@@ -185,9 +193,10 @@ abstract class _$$EmbeddedResourceImplCopyWith<$Res>
 class __$$EmbeddedResourceImplCopyWithImpl<$Res>
     extends _$EmbeddedResourceCopyWithImpl<$Res, _$EmbeddedResourceImpl>
     implements _$$EmbeddedResourceImplCopyWith<$Res> {
-  __$$EmbeddedResourceImplCopyWithImpl(_$EmbeddedResourceImpl _value,
-      $Res Function(_$EmbeddedResourceImpl) _then)
-      : super(_value, _then);
+  __$$EmbeddedResourceImplCopyWithImpl(
+    _$EmbeddedResourceImpl _value,
+    $Res Function(_$EmbeddedResourceImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
@@ -204,44 +213,46 @@ class __$$EmbeddedResourceImplCopyWithImpl<$Res>
     Object? enableConsoleLogCapture = null,
     Object? reconnectStrategy = freezed,
   }) {
-    return _then(_$EmbeddedResourceImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      uri: null == uri
-          ? _value.uri
-          : uri // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as EmbeddedResourceType,
-      attributes: null == attributes
-          ? _value._attributes
-          : attributes // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-      toolbar: null == toolbar
-          ? _value.toolbar
-          : toolbar // ignore: cast_nullable_to_non_nullable
-              as ToolbarConfig,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-      payload: null == payload
-          ? _value._payload
-          : payload // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      enableConsoleLogCapture: null == enableConsoleLogCapture
-          ? _value.enableConsoleLogCapture
-          : enableConsoleLogCapture // ignore: cast_nullable_to_non_nullable
-              as bool,
-      reconnectStrategy: freezed == reconnectStrategy
-          ? _value.reconnectStrategy
-          : reconnectStrategy // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$EmbeddedResourceImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        uri: null == uri
+            ? _value.uri
+            : uri // ignore: cast_nullable_to_non_nullable
+                  as String,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as EmbeddedResourceType,
+        attributes: null == attributes
+            ? _value._attributes
+            : attributes // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>,
+        toolbar: null == toolbar
+            ? _value.toolbar
+            : toolbar // ignore: cast_nullable_to_non_nullable
+                  as ToolbarConfig,
+        metadata: null == metadata
+            ? _value.metadata
+            : metadata // ignore: cast_nullable_to_non_nullable
+                  as Metadata,
+        payload: null == payload
+            ? _value._payload
+            : payload // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        enableConsoleLogCapture: null == enableConsoleLogCapture
+            ? _value.enableConsoleLogCapture
+            : enableConsoleLogCapture // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        reconnectStrategy: freezed == reconnectStrategy
+            ? _value.reconnectStrategy
+            : reconnectStrategy // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -249,19 +260,19 @@ class __$$EmbeddedResourceImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$EmbeddedResourceImpl extends _EmbeddedResource {
-  const _$EmbeddedResourceImpl(
-      {@IntToStringConverter() required this.id,
-      required this.uri,
-      this.type = EmbeddedResourceType.unknown,
-      final Map<String, dynamic> attributes = const {},
-      this.toolbar = const ToolbarConfig(),
-      this.metadata = const Metadata(),
-      final List<String> payload = const [],
-      this.enableConsoleLogCapture = false,
-      this.reconnectStrategy})
-      : _attributes = attributes,
-        _payload = payload,
-        super._();
+  const _$EmbeddedResourceImpl({
+    @IntToStringConverter() required this.id,
+    required this.uri,
+    this.type = EmbeddedResourceType.unknown,
+    final Map<String, dynamic> attributes = const {},
+    this.toolbar = const ToolbarConfig(),
+    this.metadata = const Metadata(),
+    final List<String> payload = const [],
+    this.enableConsoleLogCapture = false,
+    this.reconnectStrategy,
+  }) : _attributes = attributes,
+       _payload = payload,
+       super._();
 
   factory _$EmbeddedResourceImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmbeddedResourceImplFromJson(json);
@@ -326,14 +337,18 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.uri, uri) || other.uri == uri) &&
             (identical(other.type, type) || other.type == type) &&
-            const DeepCollectionEquality()
-                .equals(other._attributes, _attributes) &&
+            const DeepCollectionEquality().equals(
+              other._attributes,
+              _attributes,
+            ) &&
             (identical(other.toolbar, toolbar) || other.toolbar == toolbar) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata) &&
             const DeepCollectionEquality().equals(other._payload, _payload) &&
             (identical(
-                    other.enableConsoleLogCapture, enableConsoleLogCapture) ||
+                  other.enableConsoleLogCapture,
+                  enableConsoleLogCapture,
+                ) ||
                 other.enableConsoleLogCapture == enableConsoleLogCapture) &&
             (identical(other.reconnectStrategy, reconnectStrategy) ||
                 other.reconnectStrategy == reconnectStrategy));
@@ -342,16 +357,17 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      uri,
-      type,
-      const DeepCollectionEquality().hash(_attributes),
-      toolbar,
-      metadata,
-      const DeepCollectionEquality().hash(_payload),
-      enableConsoleLogCapture,
-      reconnectStrategy);
+    runtimeType,
+    id,
+    uri,
+    type,
+    const DeepCollectionEquality().hash(_attributes),
+    toolbar,
+    metadata,
+    const DeepCollectionEquality().hash(_payload),
+    enableConsoleLogCapture,
+    reconnectStrategy,
+  );
 
   /// Create a copy of EmbeddedResource
   /// with the given fields replaced by the non-null parameter values.
@@ -360,27 +376,28 @@ class _$EmbeddedResourceImpl extends _EmbeddedResource {
   @pragma('vm:prefer-inline')
   _$$EmbeddedResourceImplCopyWith<_$EmbeddedResourceImpl> get copyWith =>
       __$$EmbeddedResourceImplCopyWithImpl<_$EmbeddedResourceImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EmbeddedResourceImplToJson(
-      this,
-    );
+    return _$$EmbeddedResourceImplToJson(this);
   }
 }
 
 abstract class _EmbeddedResource extends EmbeddedResource {
-  const factory _EmbeddedResource(
-      {@IntToStringConverter() required final String id,
-      required final String uri,
-      final EmbeddedResourceType type,
-      final Map<String, dynamic> attributes,
-      final ToolbarConfig toolbar,
-      final Metadata metadata,
-      final List<String> payload,
-      final bool enableConsoleLogCapture,
-      final String? reconnectStrategy}) = _$EmbeddedResourceImpl;
+  const factory _EmbeddedResource({
+    @IntToStringConverter() required final String id,
+    required final String uri,
+    final EmbeddedResourceType type,
+    final Map<String, dynamic> attributes,
+    final ToolbarConfig toolbar,
+    final Metadata metadata,
+    final List<String> payload,
+    final bool enableConsoleLogCapture,
+    final String? reconnectStrategy,
+  }) = _$EmbeddedResourceImpl;
   const _EmbeddedResource._() : super._();
 
   factory _EmbeddedResource.fromJson(Map<String, dynamic> json) =
@@ -444,8 +461,9 @@ mixin _$ToolbarConfig {
 /// @nodoc
 abstract class $ToolbarConfigCopyWith<$Res> {
   factory $ToolbarConfigCopyWith(
-          ToolbarConfig value, $Res Function(ToolbarConfig) then) =
-      _$ToolbarConfigCopyWithImpl<$Res, ToolbarConfig>;
+    ToolbarConfig value,
+    $Res Function(ToolbarConfig) then,
+  ) = _$ToolbarConfigCopyWithImpl<$Res, ToolbarConfig>;
   @useResult
   $Res call({String? titleL10n, bool showToolbar});
 }
@@ -464,20 +482,20 @@ class _$ToolbarConfigCopyWithImpl<$Res, $Val extends ToolbarConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? titleL10n = freezed,
-    Object? showToolbar = null,
-  }) {
-    return _then(_value.copyWith(
-      titleL10n: freezed == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String?,
-      showToolbar: null == showToolbar
-          ? _value.showToolbar
-          : showToolbar // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  $Res call({Object? titleL10n = freezed, Object? showToolbar = null}) {
+    return _then(
+      _value.copyWith(
+            titleL10n: freezed == titleL10n
+                ? _value.titleL10n
+                : titleL10n // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            showToolbar: null == showToolbar
+                ? _value.showToolbar
+                : showToolbar // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -485,8 +503,9 @@ class _$ToolbarConfigCopyWithImpl<$Res, $Val extends ToolbarConfig>
 abstract class _$$ToolbarConfigImplCopyWith<$Res>
     implements $ToolbarConfigCopyWith<$Res> {
   factory _$$ToolbarConfigImplCopyWith(
-          _$ToolbarConfigImpl value, $Res Function(_$ToolbarConfigImpl) then) =
-      __$$ToolbarConfigImplCopyWithImpl<$Res>;
+    _$ToolbarConfigImpl value,
+    $Res Function(_$ToolbarConfigImpl) then,
+  ) = __$$ToolbarConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? titleL10n, bool showToolbar});
@@ -497,27 +516,27 @@ class __$$ToolbarConfigImplCopyWithImpl<$Res>
     extends _$ToolbarConfigCopyWithImpl<$Res, _$ToolbarConfigImpl>
     implements _$$ToolbarConfigImplCopyWith<$Res> {
   __$$ToolbarConfigImplCopyWithImpl(
-      _$ToolbarConfigImpl _value, $Res Function(_$ToolbarConfigImpl) _then)
-      : super(_value, _then);
+    _$ToolbarConfigImpl _value,
+    $Res Function(_$ToolbarConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ToolbarConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? titleL10n = freezed,
-    Object? showToolbar = null,
-  }) {
-    return _then(_$ToolbarConfigImpl(
-      titleL10n: freezed == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String?,
-      showToolbar: null == showToolbar
-          ? _value.showToolbar
-          : showToolbar // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+  $Res call({Object? titleL10n = freezed, Object? showToolbar = null}) {
+    return _then(
+      _$ToolbarConfigImpl(
+        titleL10n: freezed == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        showToolbar: null == showToolbar
+            ? _value.showToolbar
+            : showToolbar // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -566,15 +585,15 @@ class _$ToolbarConfigImpl implements _ToolbarConfig {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ToolbarConfigImplToJson(
-      this,
-    );
+    return _$$ToolbarConfigImplToJson(this);
   }
 }
 
 abstract class _ToolbarConfig implements ToolbarConfig {
-  const factory _ToolbarConfig(
-      {final String? titleL10n, final bool showToolbar}) = _$ToolbarConfigImpl;
+  const factory _ToolbarConfig({
+    final String? titleL10n,
+    final bool showToolbar,
+  }) = _$ToolbarConfigImpl;
 
   factory _ToolbarConfig.fromJson(Map<String, dynamic> json) =
       _$ToolbarConfigImpl.fromJson;

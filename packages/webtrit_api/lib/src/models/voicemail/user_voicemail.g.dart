@@ -17,8 +17,9 @@ _$UserVoicemailImpl _$$UserVoicemailImplFromJson(Map<String, dynamic> json) =>
       size: (json['size'] as num).toInt(),
       type: json['type'] as String,
       attachments: (json['attachments'] as List<dynamic>)
-          .map((e) =>
-              UserVoicemailAttachment.fromJson(e as Map<String, dynamic>))
+          .map(
+            (e) => UserVoicemailAttachment.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
     );
 
@@ -36,19 +37,19 @@ Map<String, dynamic> _$$UserVoicemailImplToJson(_$UserVoicemailImpl instance) =>
     };
 
 _$UserVoicemailAttachmentImpl _$$UserVoicemailAttachmentImplFromJson(
-        Map<String, dynamic> json) =>
-    _$UserVoicemailAttachmentImpl(
-      filename: json['filename'] as String,
-      size: (json['size'] as num).toInt(),
-      type: json['type'] as String,
-      subtype: json['subtype'] as String,
-    );
+  Map<String, dynamic> json,
+) => _$UserVoicemailAttachmentImpl(
+  filename: json['filename'] as String,
+  size: (json['size'] as num).toInt(),
+  type: json['type'] as String,
+  subtype: json['subtype'] as String,
+);
 
 Map<String, dynamic> _$$UserVoicemailAttachmentImplToJson(
-        _$UserVoicemailAttachmentImpl instance) =>
-    <String, dynamic>{
-      'filename': instance.filename,
-      'size': instance.size,
-      'type': instance.type,
-      'subtype': instance.subtype,
-    };
+  _$UserVoicemailAttachmentImpl instance,
+) => <String, dynamic>{
+  'filename': instance.filename,
+  'size': instance.size,
+  'type': instance.type,
+  'subtype': instance.subtype,
+};

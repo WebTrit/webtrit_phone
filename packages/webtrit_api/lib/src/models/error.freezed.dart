@@ -12,7 +12,8 @@ part of 'error.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ErrorResponse _$ErrorResponseFromJson(Map<String, dynamic> json) {
   return _ErrorResponse.fromJson(json);
@@ -37,8 +38,9 @@ mixin _$ErrorResponse {
 /// @nodoc
 abstract class $ErrorResponseCopyWith<$Res> {
   factory $ErrorResponseCopyWith(
-          ErrorResponse value, $Res Function(ErrorResponse) then) =
-      _$ErrorResponseCopyWithImpl<$Res, ErrorResponse>;
+    ErrorResponse value,
+    $Res Function(ErrorResponse) then,
+  ) = _$ErrorResponseCopyWithImpl<$Res, ErrorResponse>;
   @useResult
   $Res call({String? code, String? message, ErrorDetail? details});
 
@@ -64,20 +66,23 @@ class _$ErrorResponseCopyWithImpl<$Res, $Val extends ErrorResponse>
     Object? message = freezed,
     Object? details = freezed,
   }) {
-    return _then(_value.copyWith(
-      code: freezed == code
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      message: freezed == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String?,
-      details: freezed == details
-          ? _value.details
-          : details // ignore: cast_nullable_to_non_nullable
-              as ErrorDetail?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            code: freezed == code
+                ? _value.code
+                : code // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            message: freezed == message
+                ? _value.message
+                : message // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            details: freezed == details
+                ? _value.details
+                : details // ignore: cast_nullable_to_non_nullable
+                      as ErrorDetail?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ErrorResponse
@@ -99,8 +104,9 @@ class _$ErrorResponseCopyWithImpl<$Res, $Val extends ErrorResponse>
 abstract class _$$ErrorResponseImplCopyWith<$Res>
     implements $ErrorResponseCopyWith<$Res> {
   factory _$$ErrorResponseImplCopyWith(
-          _$ErrorResponseImpl value, $Res Function(_$ErrorResponseImpl) then) =
-      __$$ErrorResponseImplCopyWithImpl<$Res>;
+    _$ErrorResponseImpl value,
+    $Res Function(_$ErrorResponseImpl) then,
+  ) = __$$ErrorResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? code, String? message, ErrorDetail? details});
@@ -114,8 +120,9 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
     extends _$ErrorResponseCopyWithImpl<$Res, _$ErrorResponseImpl>
     implements _$$ErrorResponseImplCopyWith<$Res> {
   __$$ErrorResponseImplCopyWithImpl(
-      _$ErrorResponseImpl _value, $Res Function(_$ErrorResponseImpl) _then)
-      : super(_value, _then);
+    _$ErrorResponseImpl _value,
+    $Res Function(_$ErrorResponseImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ErrorResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -126,20 +133,22 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
     Object? message = freezed,
     Object? details = freezed,
   }) {
-    return _then(_$ErrorResponseImpl(
-      code: freezed == code
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      message: freezed == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String?,
-      details: freezed == details
-          ? _value.details
-          : details // ignore: cast_nullable_to_non_nullable
-              as ErrorDetail?,
-    ));
+    return _then(
+      _$ErrorResponseImpl(
+        code: freezed == code
+            ? _value.code
+            : code // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        message: freezed == message
+            ? _value.message
+            : message // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        details: freezed == details
+            ? _value.details
+            : details // ignore: cast_nullable_to_non_nullable
+                  as ErrorDetail?,
+      ),
+    );
   }
 }
 
@@ -188,17 +197,16 @@ class _$ErrorResponseImpl implements _ErrorResponse {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ErrorResponseImplToJson(
-      this,
-    );
+    return _$$ErrorResponseImplToJson(this);
   }
 }
 
 abstract class _ErrorResponse implements ErrorResponse {
-  const factory _ErrorResponse(
-      {final String? code,
-      final String? message,
-      final ErrorDetail? details}) = _$ErrorResponseImpl;
+  const factory _ErrorResponse({
+    final String? code,
+    final String? message,
+    final ErrorDetail? details,
+  }) = _$ErrorResponseImpl;
 
   factory _ErrorResponse.fromJson(Map<String, dynamic> json) =
       _$ErrorResponseImpl.fromJson;
@@ -240,8 +248,9 @@ mixin _$ErrorDetail {
 /// @nodoc
 abstract class $ErrorDetailCopyWith<$Res> {
   factory $ErrorDetailCopyWith(
-          ErrorDetail value, $Res Function(ErrorDetail) then) =
-      _$ErrorDetailCopyWithImpl<$Res, ErrorDetail>;
+    ErrorDetail value,
+    $Res Function(ErrorDetail) then,
+  ) = _$ErrorDetailCopyWithImpl<$Res, ErrorDetail>;
   @useResult
   $Res call({String? path, String reason});
 }
@@ -260,20 +269,20 @@ class _$ErrorDetailCopyWithImpl<$Res, $Val extends ErrorDetail>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? path = freezed,
-    Object? reason = null,
-  }) {
-    return _then(_value.copyWith(
-      path: freezed == path
-          ? _value.path
-          : path // ignore: cast_nullable_to_non_nullable
-              as String?,
-      reason: null == reason
-          ? _value.reason
-          : reason // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? path = freezed, Object? reason = null}) {
+    return _then(
+      _value.copyWith(
+            path: freezed == path
+                ? _value.path
+                : path // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            reason: null == reason
+                ? _value.reason
+                : reason // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -281,8 +290,9 @@ class _$ErrorDetailCopyWithImpl<$Res, $Val extends ErrorDetail>
 abstract class _$$ErrorDetailImplCopyWith<$Res>
     implements $ErrorDetailCopyWith<$Res> {
   factory _$$ErrorDetailImplCopyWith(
-          _$ErrorDetailImpl value, $Res Function(_$ErrorDetailImpl) then) =
-      __$$ErrorDetailImplCopyWithImpl<$Res>;
+    _$ErrorDetailImpl value,
+    $Res Function(_$ErrorDetailImpl) then,
+  ) = __$$ErrorDetailImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? path, String reason});
@@ -293,27 +303,27 @@ class __$$ErrorDetailImplCopyWithImpl<$Res>
     extends _$ErrorDetailCopyWithImpl<$Res, _$ErrorDetailImpl>
     implements _$$ErrorDetailImplCopyWith<$Res> {
   __$$ErrorDetailImplCopyWithImpl(
-      _$ErrorDetailImpl _value, $Res Function(_$ErrorDetailImpl) _then)
-      : super(_value, _then);
+    _$ErrorDetailImpl _value,
+    $Res Function(_$ErrorDetailImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ErrorDetail
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? path = freezed,
-    Object? reason = null,
-  }) {
-    return _then(_$ErrorDetailImpl(
-      path: freezed == path
-          ? _value.path
-          : path // ignore: cast_nullable_to_non_nullable
-              as String?,
-      reason: null == reason
-          ? _value.reason
-          : reason // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? path = freezed, Object? reason = null}) {
+    return _then(
+      _$ErrorDetailImpl(
+        path: freezed == path
+            ? _value.path
+            : path // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        reason: null == reason
+            ? _value.reason
+            : reason // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -359,15 +369,15 @@ class _$ErrorDetailImpl implements _ErrorDetail {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ErrorDetailImplToJson(
-      this,
-    );
+    return _$$ErrorDetailImplToJson(this);
   }
 }
 
 abstract class _ErrorDetail implements ErrorDetail {
-  const factory _ErrorDetail(
-      {final String? path, required final String reason}) = _$ErrorDetailImpl;
+  const factory _ErrorDetail({
+    final String? path,
+    required final String reason,
+  }) = _$ErrorDetailImpl;
 
   factory _ErrorDetail.fromJson(Map<String, dynamic> json) =
       _$ErrorDetailImpl.fromJson;

@@ -12,7 +12,8 @@ part of 'contact_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$ContactState {
@@ -30,8 +31,9 @@ mixin _$ContactState {
 /// @nodoc
 abstract class $ContactStateCopyWith<$Res> {
   factory $ContactStateCopyWith(
-          ContactState value, $Res Function(ContactState) then) =
-      _$ContactStateCopyWithImpl<$Res, ContactState>;
+    ContactState value,
+    $Res Function(ContactState) then,
+  ) = _$ContactStateCopyWithImpl<$Res, ContactState>;
   @useResult
   $Res call({Contact? contact, bool deleted, List<PresenceInfo> presenceInfo});
 }
@@ -55,20 +57,23 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
     Object? deleted = null,
     Object? presenceInfo = null,
   }) {
-    return _then(_value.copyWith(
-      contact: freezed == contact
-          ? _value.contact
-          : contact // ignore: cast_nullable_to_non_nullable
-              as Contact?,
-      deleted: null == deleted
-          ? _value.deleted
-          : deleted // ignore: cast_nullable_to_non_nullable
-              as bool,
-      presenceInfo: null == presenceInfo
-          ? _value.presenceInfo
-          : presenceInfo // ignore: cast_nullable_to_non_nullable
-              as List<PresenceInfo>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            contact: freezed == contact
+                ? _value.contact
+                : contact // ignore: cast_nullable_to_non_nullable
+                      as Contact?,
+            deleted: null == deleted
+                ? _value.deleted
+                : deleted // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            presenceInfo: null == presenceInfo
+                ? _value.presenceInfo
+                : presenceInfo // ignore: cast_nullable_to_non_nullable
+                      as List<PresenceInfo>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -76,8 +81,9 @@ class _$ContactStateCopyWithImpl<$Res, $Val extends ContactState>
 abstract class _$$ContactStateImplCopyWith<$Res>
     implements $ContactStateCopyWith<$Res> {
   factory _$$ContactStateImplCopyWith(
-          _$ContactStateImpl value, $Res Function(_$ContactStateImpl) then) =
-      __$$ContactStateImplCopyWithImpl<$Res>;
+    _$ContactStateImpl value,
+    $Res Function(_$ContactStateImpl) then,
+  ) = __$$ContactStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Contact? contact, bool deleted, List<PresenceInfo> presenceInfo});
@@ -88,8 +94,9 @@ class __$$ContactStateImplCopyWithImpl<$Res>
     extends _$ContactStateCopyWithImpl<$Res, _$ContactStateImpl>
     implements _$$ContactStateImplCopyWith<$Res> {
   __$$ContactStateImplCopyWithImpl(
-      _$ContactStateImpl _value, $Res Function(_$ContactStateImpl) _then)
-      : super(_value, _then);
+    _$ContactStateImpl _value,
+    $Res Function(_$ContactStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ContactState
   /// with the given fields replaced by the non-null parameter values.
@@ -100,31 +107,33 @@ class __$$ContactStateImplCopyWithImpl<$Res>
     Object? deleted = null,
     Object? presenceInfo = null,
   }) {
-    return _then(_$ContactStateImpl(
-      contact: freezed == contact
-          ? _value.contact
-          : contact // ignore: cast_nullable_to_non_nullable
-              as Contact?,
-      deleted: null == deleted
-          ? _value.deleted
-          : deleted // ignore: cast_nullable_to_non_nullable
-              as bool,
-      presenceInfo: null == presenceInfo
-          ? _value._presenceInfo
-          : presenceInfo // ignore: cast_nullable_to_non_nullable
-              as List<PresenceInfo>,
-    ));
+    return _then(
+      _$ContactStateImpl(
+        contact: freezed == contact
+            ? _value.contact
+            : contact // ignore: cast_nullable_to_non_nullable
+                  as Contact?,
+        deleted: null == deleted
+            ? _value.deleted
+            : deleted // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        presenceInfo: null == presenceInfo
+            ? _value._presenceInfo
+            : presenceInfo // ignore: cast_nullable_to_non_nullable
+                  as List<PresenceInfo>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ContactStateImpl implements _ContactState {
-  const _$ContactStateImpl(
-      {this.contact,
-      this.deleted = false,
-      final List<PresenceInfo> presenceInfo = const []})
-      : _presenceInfo = presenceInfo;
+  const _$ContactStateImpl({
+    this.contact,
+    this.deleted = false,
+    final List<PresenceInfo> presenceInfo = const [],
+  }) : _presenceInfo = presenceInfo;
 
   @override
   final Contact? contact;
@@ -152,13 +161,19 @@ class _$ContactStateImpl implements _ContactState {
             other is _$ContactStateImpl &&
             (identical(other.contact, contact) || other.contact == contact) &&
             (identical(other.deleted, deleted) || other.deleted == deleted) &&
-            const DeepCollectionEquality()
-                .equals(other._presenceInfo, _presenceInfo));
+            const DeepCollectionEquality().equals(
+              other._presenceInfo,
+              _presenceInfo,
+            ));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, contact, deleted,
-      const DeepCollectionEquality().hash(_presenceInfo));
+  int get hashCode => Object.hash(
+    runtimeType,
+    contact,
+    deleted,
+    const DeepCollectionEquality().hash(_presenceInfo),
+  );
 
   /// Create a copy of ContactState
   /// with the given fields replaced by the non-null parameter values.
@@ -170,10 +185,11 @@ class _$ContactStateImpl implements _ContactState {
 }
 
 abstract class _ContactState implements ContactState {
-  const factory _ContactState(
-      {final Contact? contact,
-      final bool deleted,
-      final List<PresenceInfo> presenceInfo}) = _$ContactStateImpl;
+  const factory _ContactState({
+    final Contact? contact,
+    final bool deleted,
+    final List<PresenceInfo> presenceInfo,
+  }) = _$ContactStateImpl;
 
   @override
   Contact? get contact;

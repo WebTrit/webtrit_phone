@@ -12,7 +12,8 @@ part of 'transfer.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$Transfer {
@@ -21,84 +22,78 @@ mixin _$Transfer {
     required TResult Function() blindTransferInitiated,
     required TResult Function(String toNumber) blindTransferTransferSubmitted,
     required TResult Function(String replaceCallId)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)
-        transfering,
+    transfering,
     required TResult Function(String referId, String referTo, String referredBy)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(String replaceCallId, String referredBy)
-        inviteToAttendedTransfer,
-  }) =>
-      throw _privateConstructorUsedError;
+    inviteToAttendedTransfer,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? blindTransferInitiated,
     TResult? Function(String toNumber)? blindTransferTransferSubmitted,
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult? Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
-  }) =>
-      throw _privateConstructorUsedError;
+    inviteToAttendedTransfer,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? blindTransferInitiated,
     TResult Function(String toNumber)? blindTransferTransferSubmitted,
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BlindTransferInitiated value)
-        blindTransferInitiated,
+    blindTransferInitiated,
     required TResult Function(BlindTransferTransferSubmitted value)
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     required TResult Function(AttendedTransferTransferSubmitted value)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(Transfering value) transfering,
     required TResult Function(AttendedTransferConfirmationRequested value)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(InviteToAttendedTransfer value)
-        inviteToAttendedTransfer,
-  }) =>
-      throw _privateConstructorUsedError;
+    inviteToAttendedTransfer,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult? Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult? Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult? Function(Transfering value)? transfering,
     TResult? Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult Function(Transfering value)? transfering,
     TResult Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -124,9 +119,9 @@ class _$TransferCopyWithImpl<$Res, $Val extends Transfer>
 /// @nodoc
 abstract class _$$BlindTransferInitiatedImplCopyWith<$Res> {
   factory _$$BlindTransferInitiatedImplCopyWith(
-          _$BlindTransferInitiatedImpl value,
-          $Res Function(_$BlindTransferInitiatedImpl) then) =
-      __$$BlindTransferInitiatedImplCopyWithImpl<$Res>;
+    _$BlindTransferInitiatedImpl value,
+    $Res Function(_$BlindTransferInitiatedImpl) then,
+  ) = __$$BlindTransferInitiatedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -134,9 +129,9 @@ class __$$BlindTransferInitiatedImplCopyWithImpl<$Res>
     extends _$TransferCopyWithImpl<$Res, _$BlindTransferInitiatedImpl>
     implements _$$BlindTransferInitiatedImplCopyWith<$Res> {
   __$$BlindTransferInitiatedImplCopyWithImpl(
-      _$BlindTransferInitiatedImpl _value,
-      $Res Function(_$BlindTransferInitiatedImpl) _then)
-      : super(_value, _then);
+    _$BlindTransferInitiatedImpl _value,
+    $Res Function(_$BlindTransferInitiatedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Transfer
   /// with the given fields replaced by the non-null parameter values.
@@ -168,13 +163,13 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
     required TResult Function() blindTransferInitiated,
     required TResult Function(String toNumber) blindTransferTransferSubmitted,
     required TResult Function(String replaceCallId)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)
-        transfering,
+    transfering,
     required TResult Function(String referId, String referTo, String referredBy)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(String replaceCallId, String referredBy)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return blindTransferInitiated();
   }
@@ -186,11 +181,11 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
     TResult? Function(String toNumber)? blindTransferTransferSubmitted,
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult? Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return blindTransferInitiated?.call();
   }
@@ -202,11 +197,11 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
     TResult Function(String toNumber)? blindTransferTransferSubmitted,
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
     if (blindTransferInitiated != null) {
@@ -219,16 +214,16 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BlindTransferInitiated value)
-        blindTransferInitiated,
+    blindTransferInitiated,
     required TResult Function(BlindTransferTransferSubmitted value)
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     required TResult Function(AttendedTransferTransferSubmitted value)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(Transfering value) transfering,
     required TResult Function(AttendedTransferConfirmationRequested value)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(InviteToAttendedTransfer value)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return blindTransferInitiated(this);
   }
@@ -238,12 +233,12 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult? Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult? Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult? Function(Transfering value)? transfering,
     TResult? Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
   }) {
     return blindTransferInitiated?.call(this);
@@ -254,12 +249,12 @@ class _$BlindTransferInitiatedImpl extends BlindTransferInitiated {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult Function(Transfering value)? transfering,
     TResult Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
@@ -278,9 +273,9 @@ abstract class BlindTransferInitiated extends Transfer {
 /// @nodoc
 abstract class _$$BlindTransferTransferSubmittedImplCopyWith<$Res> {
   factory _$$BlindTransferTransferSubmittedImplCopyWith(
-          _$BlindTransferTransferSubmittedImpl value,
-          $Res Function(_$BlindTransferTransferSubmittedImpl) then) =
-      __$$BlindTransferTransferSubmittedImplCopyWithImpl<$Res>;
+    _$BlindTransferTransferSubmittedImpl value,
+    $Res Function(_$BlindTransferTransferSubmittedImpl) then,
+  ) = __$$BlindTransferTransferSubmittedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String toNumber});
 }
@@ -290,23 +285,23 @@ class __$$BlindTransferTransferSubmittedImplCopyWithImpl<$Res>
     extends _$TransferCopyWithImpl<$Res, _$BlindTransferTransferSubmittedImpl>
     implements _$$BlindTransferTransferSubmittedImplCopyWith<$Res> {
   __$$BlindTransferTransferSubmittedImplCopyWithImpl(
-      _$BlindTransferTransferSubmittedImpl _value,
-      $Res Function(_$BlindTransferTransferSubmittedImpl) _then)
-      : super(_value, _then);
+    _$BlindTransferTransferSubmittedImpl _value,
+    $Res Function(_$BlindTransferTransferSubmittedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Transfer
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? toNumber = null,
-  }) {
-    return _then(_$BlindTransferTransferSubmittedImpl(
-      toNumber: null == toNumber
-          ? _value.toNumber
-          : toNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? toNumber = null}) {
+    return _then(
+      _$BlindTransferTransferSubmittedImpl(
+        toNumber: null == toNumber
+            ? _value.toNumber
+            : toNumber // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -315,7 +310,7 @@ class __$$BlindTransferTransferSubmittedImplCopyWithImpl<$Res>
 class _$BlindTransferTransferSubmittedImpl
     extends BlindTransferTransferSubmitted {
   const _$BlindTransferTransferSubmittedImpl({required this.toNumber})
-      : super._();
+    : super._();
 
   @override
   final String toNumber;
@@ -343,9 +338,12 @@ class _$BlindTransferTransferSubmittedImpl
   @override
   @pragma('vm:prefer-inline')
   _$$BlindTransferTransferSubmittedImplCopyWith<
-          _$BlindTransferTransferSubmittedImpl>
-      get copyWith => __$$BlindTransferTransferSubmittedImplCopyWithImpl<
-          _$BlindTransferTransferSubmittedImpl>(this, _$identity);
+    _$BlindTransferTransferSubmittedImpl
+  >
+  get copyWith =>
+      __$$BlindTransferTransferSubmittedImplCopyWithImpl<
+        _$BlindTransferTransferSubmittedImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -353,13 +351,13 @@ class _$BlindTransferTransferSubmittedImpl
     required TResult Function() blindTransferInitiated,
     required TResult Function(String toNumber) blindTransferTransferSubmitted,
     required TResult Function(String replaceCallId)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)
-        transfering,
+    transfering,
     required TResult Function(String referId, String referTo, String referredBy)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(String replaceCallId, String referredBy)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return blindTransferTransferSubmitted(toNumber);
   }
@@ -371,11 +369,11 @@ class _$BlindTransferTransferSubmittedImpl
     TResult? Function(String toNumber)? blindTransferTransferSubmitted,
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult? Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return blindTransferTransferSubmitted?.call(toNumber);
   }
@@ -387,11 +385,11 @@ class _$BlindTransferTransferSubmittedImpl
     TResult Function(String toNumber)? blindTransferTransferSubmitted,
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
     if (blindTransferTransferSubmitted != null) {
@@ -404,16 +402,16 @@ class _$BlindTransferTransferSubmittedImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BlindTransferInitiated value)
-        blindTransferInitiated,
+    blindTransferInitiated,
     required TResult Function(BlindTransferTransferSubmitted value)
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     required TResult Function(AttendedTransferTransferSubmitted value)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(Transfering value) transfering,
     required TResult Function(AttendedTransferConfirmationRequested value)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(InviteToAttendedTransfer value)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return blindTransferTransferSubmitted(this);
   }
@@ -423,12 +421,12 @@ class _$BlindTransferTransferSubmittedImpl
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult? Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult? Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult? Function(Transfering value)? transfering,
     TResult? Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
   }) {
     return blindTransferTransferSubmitted?.call(this);
@@ -439,12 +437,12 @@ class _$BlindTransferTransferSubmittedImpl
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult Function(Transfering value)? transfering,
     TResult Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
@@ -456,8 +454,9 @@ class _$BlindTransferTransferSubmittedImpl
 }
 
 abstract class BlindTransferTransferSubmitted extends Transfer {
-  const factory BlindTransferTransferSubmitted(
-      {required final String toNumber}) = _$BlindTransferTransferSubmittedImpl;
+  const factory BlindTransferTransferSubmitted({
+    required final String toNumber,
+  }) = _$BlindTransferTransferSubmittedImpl;
   const BlindTransferTransferSubmitted._() : super._();
 
   String get toNumber;
@@ -466,43 +465,44 @@ abstract class BlindTransferTransferSubmitted extends Transfer {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BlindTransferTransferSubmittedImplCopyWith<
-          _$BlindTransferTransferSubmittedImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$BlindTransferTransferSubmittedImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$AttendedTransferTransferSubmittedImplCopyWith<$Res> {
   factory _$$AttendedTransferTransferSubmittedImplCopyWith(
-          _$AttendedTransferTransferSubmittedImpl value,
-          $Res Function(_$AttendedTransferTransferSubmittedImpl) then) =
-      __$$AttendedTransferTransferSubmittedImplCopyWithImpl<$Res>;
+    _$AttendedTransferTransferSubmittedImpl value,
+    $Res Function(_$AttendedTransferTransferSubmittedImpl) then,
+  ) = __$$AttendedTransferTransferSubmittedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String replaceCallId});
 }
 
 /// @nodoc
 class __$$AttendedTransferTransferSubmittedImplCopyWithImpl<$Res>
-    extends _$TransferCopyWithImpl<$Res,
-        _$AttendedTransferTransferSubmittedImpl>
+    extends
+        _$TransferCopyWithImpl<$Res, _$AttendedTransferTransferSubmittedImpl>
     implements _$$AttendedTransferTransferSubmittedImplCopyWith<$Res> {
   __$$AttendedTransferTransferSubmittedImplCopyWithImpl(
-      _$AttendedTransferTransferSubmittedImpl _value,
-      $Res Function(_$AttendedTransferTransferSubmittedImpl) _then)
-      : super(_value, _then);
+    _$AttendedTransferTransferSubmittedImpl _value,
+    $Res Function(_$AttendedTransferTransferSubmittedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Transfer
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? replaceCallId = null,
-  }) {
-    return _then(_$AttendedTransferTransferSubmittedImpl(
-      replaceCallId: null == replaceCallId
-          ? _value.replaceCallId
-          : replaceCallId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? replaceCallId = null}) {
+    return _then(
+      _$AttendedTransferTransferSubmittedImpl(
+        replaceCallId: null == replaceCallId
+            ? _value.replaceCallId
+            : replaceCallId // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -511,7 +511,7 @@ class __$$AttendedTransferTransferSubmittedImplCopyWithImpl<$Res>
 class _$AttendedTransferTransferSubmittedImpl
     extends AttendedTransferTransferSubmitted {
   const _$AttendedTransferTransferSubmittedImpl({required this.replaceCallId})
-      : super._();
+    : super._();
 
   @override
   final String replaceCallId;
@@ -539,9 +539,12 @@ class _$AttendedTransferTransferSubmittedImpl
   @override
   @pragma('vm:prefer-inline')
   _$$AttendedTransferTransferSubmittedImplCopyWith<
-          _$AttendedTransferTransferSubmittedImpl>
-      get copyWith => __$$AttendedTransferTransferSubmittedImplCopyWithImpl<
-          _$AttendedTransferTransferSubmittedImpl>(this, _$identity);
+    _$AttendedTransferTransferSubmittedImpl
+  >
+  get copyWith =>
+      __$$AttendedTransferTransferSubmittedImplCopyWithImpl<
+        _$AttendedTransferTransferSubmittedImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -549,13 +552,13 @@ class _$AttendedTransferTransferSubmittedImpl
     required TResult Function() blindTransferInitiated,
     required TResult Function(String toNumber) blindTransferTransferSubmitted,
     required TResult Function(String replaceCallId)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)
-        transfering,
+    transfering,
     required TResult Function(String referId, String referTo, String referredBy)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(String replaceCallId, String referredBy)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return attendedTransferTransferSubmitted(replaceCallId);
   }
@@ -567,11 +570,11 @@ class _$AttendedTransferTransferSubmittedImpl
     TResult? Function(String toNumber)? blindTransferTransferSubmitted,
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult? Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return attendedTransferTransferSubmitted?.call(replaceCallId);
   }
@@ -583,11 +586,11 @@ class _$AttendedTransferTransferSubmittedImpl
     TResult Function(String toNumber)? blindTransferTransferSubmitted,
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
     if (attendedTransferTransferSubmitted != null) {
@@ -600,16 +603,16 @@ class _$AttendedTransferTransferSubmittedImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BlindTransferInitiated value)
-        blindTransferInitiated,
+    blindTransferInitiated,
     required TResult Function(BlindTransferTransferSubmitted value)
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     required TResult Function(AttendedTransferTransferSubmitted value)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(Transfering value) transfering,
     required TResult Function(AttendedTransferConfirmationRequested value)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(InviteToAttendedTransfer value)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return attendedTransferTransferSubmitted(this);
   }
@@ -619,12 +622,12 @@ class _$AttendedTransferTransferSubmittedImpl
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult? Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult? Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult? Function(Transfering value)? transfering,
     TResult? Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
   }) {
     return attendedTransferTransferSubmitted?.call(this);
@@ -635,12 +638,12 @@ class _$AttendedTransferTransferSubmittedImpl
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult Function(Transfering value)? transfering,
     TResult Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
@@ -652,9 +655,9 @@ class _$AttendedTransferTransferSubmittedImpl
 }
 
 abstract class AttendedTransferTransferSubmitted extends Transfer {
-  const factory AttendedTransferTransferSubmitted(
-          {required final String replaceCallId}) =
-      _$AttendedTransferTransferSubmittedImpl;
+  const factory AttendedTransferTransferSubmitted({
+    required final String replaceCallId,
+  }) = _$AttendedTransferTransferSubmittedImpl;
   const AttendedTransferTransferSubmitted._() : super._();
 
   String get replaceCallId;
@@ -663,15 +666,17 @@ abstract class AttendedTransferTransferSubmitted extends Transfer {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AttendedTransferTransferSubmittedImplCopyWith<
-          _$AttendedTransferTransferSubmittedImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$AttendedTransferTransferSubmittedImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$TransferingImplCopyWith<$Res> {
   factory _$$TransferingImplCopyWith(
-          _$TransferingImpl value, $Res Function(_$TransferingImpl) then) =
-      __$$TransferingImplCopyWithImpl<$Res>;
+    _$TransferingImpl value,
+    $Res Function(_$TransferingImpl) then,
+  ) = __$$TransferingImplCopyWithImpl<$Res>;
   @useResult
   $Res call({bool fromAttendedTransfer, bool fromBlindTransfer});
 }
@@ -681,8 +686,9 @@ class __$$TransferingImplCopyWithImpl<$Res>
     extends _$TransferCopyWithImpl<$Res, _$TransferingImpl>
     implements _$$TransferingImplCopyWith<$Res> {
   __$$TransferingImplCopyWithImpl(
-      _$TransferingImpl _value, $Res Function(_$TransferingImpl) _then)
-      : super(_value, _then);
+    _$TransferingImpl _value,
+    $Res Function(_$TransferingImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Transfer
   /// with the given fields replaced by the non-null parameter values.
@@ -692,25 +698,28 @@ class __$$TransferingImplCopyWithImpl<$Res>
     Object? fromAttendedTransfer = null,
     Object? fromBlindTransfer = null,
   }) {
-    return _then(_$TransferingImpl(
-      fromAttendedTransfer: null == fromAttendedTransfer
-          ? _value.fromAttendedTransfer
-          : fromAttendedTransfer // ignore: cast_nullable_to_non_nullable
-              as bool,
-      fromBlindTransfer: null == fromBlindTransfer
-          ? _value.fromBlindTransfer
-          : fromBlindTransfer // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$TransferingImpl(
+        fromAttendedTransfer: null == fromAttendedTransfer
+            ? _value.fromAttendedTransfer
+            : fromAttendedTransfer // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        fromBlindTransfer: null == fromBlindTransfer
+            ? _value.fromBlindTransfer
+            : fromBlindTransfer // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$TransferingImpl extends Transfering {
-  const _$TransferingImpl(
-      {required this.fromAttendedTransfer, required this.fromBlindTransfer})
-      : super._();
+  const _$TransferingImpl({
+    required this.fromAttendedTransfer,
+    required this.fromBlindTransfer,
+  }) : super._();
 
   @override
   final bool fromAttendedTransfer;
@@ -751,13 +760,13 @@ class _$TransferingImpl extends Transfering {
     required TResult Function() blindTransferInitiated,
     required TResult Function(String toNumber) blindTransferTransferSubmitted,
     required TResult Function(String replaceCallId)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)
-        transfering,
+    transfering,
     required TResult Function(String referId, String referTo, String referredBy)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(String replaceCallId, String referredBy)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return transfering(fromAttendedTransfer, fromBlindTransfer);
   }
@@ -769,11 +778,11 @@ class _$TransferingImpl extends Transfering {
     TResult? Function(String toNumber)? blindTransferTransferSubmitted,
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult? Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return transfering?.call(fromAttendedTransfer, fromBlindTransfer);
   }
@@ -785,11 +794,11 @@ class _$TransferingImpl extends Transfering {
     TResult Function(String toNumber)? blindTransferTransferSubmitted,
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
     if (transfering != null) {
@@ -802,16 +811,16 @@ class _$TransferingImpl extends Transfering {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BlindTransferInitiated value)
-        blindTransferInitiated,
+    blindTransferInitiated,
     required TResult Function(BlindTransferTransferSubmitted value)
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     required TResult Function(AttendedTransferTransferSubmitted value)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(Transfering value) transfering,
     required TResult Function(AttendedTransferConfirmationRequested value)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(InviteToAttendedTransfer value)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return transfering(this);
   }
@@ -821,12 +830,12 @@ class _$TransferingImpl extends Transfering {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult? Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult? Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult? Function(Transfering value)? transfering,
     TResult? Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
   }) {
     return transfering?.call(this);
@@ -837,12 +846,12 @@ class _$TransferingImpl extends Transfering {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult Function(Transfering value)? transfering,
     TResult Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
@@ -854,9 +863,10 @@ class _$TransferingImpl extends Transfering {
 }
 
 abstract class Transfering extends Transfer {
-  const factory Transfering(
-      {required final bool fromAttendedTransfer,
-      required final bool fromBlindTransfer}) = _$TransferingImpl;
+  const factory Transfering({
+    required final bool fromAttendedTransfer,
+    required final bool fromBlindTransfer,
+  }) = _$TransferingImpl;
   const Transfering._() : super._();
 
   bool get fromAttendedTransfer;
@@ -872,22 +882,25 @@ abstract class Transfering extends Transfer {
 /// @nodoc
 abstract class _$$AttendedTransferConfirmationRequestedImplCopyWith<$Res> {
   factory _$$AttendedTransferConfirmationRequestedImplCopyWith(
-          _$AttendedTransferConfirmationRequestedImpl value,
-          $Res Function(_$AttendedTransferConfirmationRequestedImpl) then) =
-      __$$AttendedTransferConfirmationRequestedImplCopyWithImpl<$Res>;
+    _$AttendedTransferConfirmationRequestedImpl value,
+    $Res Function(_$AttendedTransferConfirmationRequestedImpl) then,
+  ) = __$$AttendedTransferConfirmationRequestedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String referId, String referTo, String referredBy});
 }
 
 /// @nodoc
 class __$$AttendedTransferConfirmationRequestedImplCopyWithImpl<$Res>
-    extends _$TransferCopyWithImpl<$Res,
-        _$AttendedTransferConfirmationRequestedImpl>
+    extends
+        _$TransferCopyWithImpl<
+          $Res,
+          _$AttendedTransferConfirmationRequestedImpl
+        >
     implements _$$AttendedTransferConfirmationRequestedImplCopyWith<$Res> {
   __$$AttendedTransferConfirmationRequestedImplCopyWithImpl(
-      _$AttendedTransferConfirmationRequestedImpl _value,
-      $Res Function(_$AttendedTransferConfirmationRequestedImpl) _then)
-      : super(_value, _then);
+    _$AttendedTransferConfirmationRequestedImpl _value,
+    $Res Function(_$AttendedTransferConfirmationRequestedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Transfer
   /// with the given fields replaced by the non-null parameter values.
@@ -898,20 +911,22 @@ class __$$AttendedTransferConfirmationRequestedImplCopyWithImpl<$Res>
     Object? referTo = null,
     Object? referredBy = null,
   }) {
-    return _then(_$AttendedTransferConfirmationRequestedImpl(
-      referId: null == referId
-          ? _value.referId
-          : referId // ignore: cast_nullable_to_non_nullable
-              as String,
-      referTo: null == referTo
-          ? _value.referTo
-          : referTo // ignore: cast_nullable_to_non_nullable
-              as String,
-      referredBy: null == referredBy
-          ? _value.referredBy
-          : referredBy // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$AttendedTransferConfirmationRequestedImpl(
+        referId: null == referId
+            ? _value.referId
+            : referId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        referTo: null == referTo
+            ? _value.referTo
+            : referTo // ignore: cast_nullable_to_non_nullable
+                  as String,
+        referredBy: null == referredBy
+            ? _value.referredBy
+            : referredBy // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -919,9 +934,11 @@ class __$$AttendedTransferConfirmationRequestedImplCopyWithImpl<$Res>
 
 class _$AttendedTransferConfirmationRequestedImpl
     extends AttendedTransferConfirmationRequested {
-  const _$AttendedTransferConfirmationRequestedImpl(
-      {required this.referId, required this.referTo, required this.referredBy})
-      : super._();
+  const _$AttendedTransferConfirmationRequestedImpl({
+    required this.referId,
+    required this.referTo,
+    required this.referredBy,
+  }) : super._();
 
   @override
   final String referId;
@@ -955,9 +972,12 @@ class _$AttendedTransferConfirmationRequestedImpl
   @override
   @pragma('vm:prefer-inline')
   _$$AttendedTransferConfirmationRequestedImplCopyWith<
-          _$AttendedTransferConfirmationRequestedImpl>
-      get copyWith => __$$AttendedTransferConfirmationRequestedImplCopyWithImpl<
-          _$AttendedTransferConfirmationRequestedImpl>(this, _$identity);
+    _$AttendedTransferConfirmationRequestedImpl
+  >
+  get copyWith =>
+      __$$AttendedTransferConfirmationRequestedImplCopyWithImpl<
+        _$AttendedTransferConfirmationRequestedImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -965,13 +985,13 @@ class _$AttendedTransferConfirmationRequestedImpl
     required TResult Function() blindTransferInitiated,
     required TResult Function(String toNumber) blindTransferTransferSubmitted,
     required TResult Function(String replaceCallId)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)
-        transfering,
+    transfering,
     required TResult Function(String referId, String referTo, String referredBy)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(String replaceCallId, String referredBy)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return attendedTransferConfirmationRequested(referId, referTo, referredBy);
   }
@@ -983,14 +1003,17 @@ class _$AttendedTransferConfirmationRequestedImpl
     TResult? Function(String toNumber)? blindTransferTransferSubmitted,
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult? Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return attendedTransferConfirmationRequested?.call(
-        referId, referTo, referredBy);
+      referId,
+      referTo,
+      referredBy,
+    );
   }
 
   @override
@@ -1000,16 +1023,19 @@ class _$AttendedTransferConfirmationRequestedImpl
     TResult Function(String toNumber)? blindTransferTransferSubmitted,
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
     if (attendedTransferConfirmationRequested != null) {
       return attendedTransferConfirmationRequested(
-          referId, referTo, referredBy);
+        referId,
+        referTo,
+        referredBy,
+      );
     }
     return orElse();
   }
@@ -1018,16 +1044,16 @@ class _$AttendedTransferConfirmationRequestedImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BlindTransferInitiated value)
-        blindTransferInitiated,
+    blindTransferInitiated,
     required TResult Function(BlindTransferTransferSubmitted value)
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     required TResult Function(AttendedTransferTransferSubmitted value)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(Transfering value) transfering,
     required TResult Function(AttendedTransferConfirmationRequested value)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(InviteToAttendedTransfer value)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return attendedTransferConfirmationRequested(this);
   }
@@ -1037,12 +1063,12 @@ class _$AttendedTransferConfirmationRequestedImpl
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult? Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult? Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult? Function(Transfering value)? transfering,
     TResult? Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
   }) {
     return attendedTransferConfirmationRequested?.call(this);
@@ -1053,12 +1079,12 @@ class _$AttendedTransferConfirmationRequestedImpl
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult Function(Transfering value)? transfering,
     TResult Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
@@ -1070,11 +1096,11 @@ class _$AttendedTransferConfirmationRequestedImpl
 }
 
 abstract class AttendedTransferConfirmationRequested extends Transfer {
-  const factory AttendedTransferConfirmationRequested(
-          {required final String referId,
-          required final String referTo,
-          required final String referredBy}) =
-      _$AttendedTransferConfirmationRequestedImpl;
+  const factory AttendedTransferConfirmationRequested({
+    required final String referId,
+    required final String referTo,
+    required final String referredBy,
+  }) = _$AttendedTransferConfirmationRequestedImpl;
   const AttendedTransferConfirmationRequested._() : super._();
 
   String get referId;
@@ -1085,16 +1111,17 @@ abstract class AttendedTransferConfirmationRequested extends Transfer {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AttendedTransferConfirmationRequestedImplCopyWith<
-          _$AttendedTransferConfirmationRequestedImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$AttendedTransferConfirmationRequestedImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$InviteToAttendedTransferImplCopyWith<$Res> {
   factory _$$InviteToAttendedTransferImplCopyWith(
-          _$InviteToAttendedTransferImpl value,
-          $Res Function(_$InviteToAttendedTransferImpl) then) =
-      __$$InviteToAttendedTransferImplCopyWithImpl<$Res>;
+    _$InviteToAttendedTransferImpl value,
+    $Res Function(_$InviteToAttendedTransferImpl) then,
+  ) = __$$InviteToAttendedTransferImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String replaceCallId, String referredBy});
 }
@@ -1104,37 +1131,37 @@ class __$$InviteToAttendedTransferImplCopyWithImpl<$Res>
     extends _$TransferCopyWithImpl<$Res, _$InviteToAttendedTransferImpl>
     implements _$$InviteToAttendedTransferImplCopyWith<$Res> {
   __$$InviteToAttendedTransferImplCopyWithImpl(
-      _$InviteToAttendedTransferImpl _value,
-      $Res Function(_$InviteToAttendedTransferImpl) _then)
-      : super(_value, _then);
+    _$InviteToAttendedTransferImpl _value,
+    $Res Function(_$InviteToAttendedTransferImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Transfer
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? replaceCallId = null,
-    Object? referredBy = null,
-  }) {
-    return _then(_$InviteToAttendedTransferImpl(
-      replaceCallId: null == replaceCallId
-          ? _value.replaceCallId
-          : replaceCallId // ignore: cast_nullable_to_non_nullable
-              as String,
-      referredBy: null == referredBy
-          ? _value.referredBy
-          : referredBy // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? replaceCallId = null, Object? referredBy = null}) {
+    return _then(
+      _$InviteToAttendedTransferImpl(
+        replaceCallId: null == replaceCallId
+            ? _value.replaceCallId
+            : replaceCallId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        referredBy: null == referredBy
+            ? _value.referredBy
+            : referredBy // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
-  const _$InviteToAttendedTransferImpl(
-      {required this.replaceCallId, required this.referredBy})
-      : super._();
+  const _$InviteToAttendedTransferImpl({
+    required this.replaceCallId,
+    required this.referredBy,
+  }) : super._();
 
   @override
   final String replaceCallId;
@@ -1166,8 +1193,10 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
   @override
   @pragma('vm:prefer-inline')
   _$$InviteToAttendedTransferImplCopyWith<_$InviteToAttendedTransferImpl>
-      get copyWith => __$$InviteToAttendedTransferImplCopyWithImpl<
-          _$InviteToAttendedTransferImpl>(this, _$identity);
+  get copyWith =>
+      __$$InviteToAttendedTransferImplCopyWithImpl<
+        _$InviteToAttendedTransferImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1175,13 +1204,13 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
     required TResult Function() blindTransferInitiated,
     required TResult Function(String toNumber) blindTransferTransferSubmitted,
     required TResult Function(String replaceCallId)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)
-        transfering,
+    transfering,
     required TResult Function(String referId, String referTo, String referredBy)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(String replaceCallId, String referredBy)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return inviteToAttendedTransfer(replaceCallId, referredBy);
   }
@@ -1193,11 +1222,11 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
     TResult? Function(String toNumber)? blindTransferTransferSubmitted,
     TResult? Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult? Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult? Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return inviteToAttendedTransfer?.call(replaceCallId, referredBy);
   }
@@ -1209,11 +1238,11 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
     TResult Function(String toNumber)? blindTransferTransferSubmitted,
     TResult Function(String replaceCallId)? attendedTransferTransferSubmitted,
     TResult Function(bool fromAttendedTransfer, bool fromBlindTransfer)?
-        transfering,
+    transfering,
     TResult Function(String referId, String referTo, String referredBy)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(String replaceCallId, String referredBy)?
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
     if (inviteToAttendedTransfer != null) {
@@ -1226,16 +1255,16 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BlindTransferInitiated value)
-        blindTransferInitiated,
+    blindTransferInitiated,
     required TResult Function(BlindTransferTransferSubmitted value)
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     required TResult Function(AttendedTransferTransferSubmitted value)
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     required TResult Function(Transfering value) transfering,
     required TResult Function(AttendedTransferConfirmationRequested value)
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     required TResult Function(InviteToAttendedTransfer value)
-        inviteToAttendedTransfer,
+    inviteToAttendedTransfer,
   }) {
     return inviteToAttendedTransfer(this);
   }
@@ -1245,12 +1274,12 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult? Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult? Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult? Function(Transfering value)? transfering,
     TResult? Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult? Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
   }) {
     return inviteToAttendedTransfer?.call(this);
@@ -1261,12 +1290,12 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(BlindTransferInitiated value)? blindTransferInitiated,
     TResult Function(BlindTransferTransferSubmitted value)?
-        blindTransferTransferSubmitted,
+    blindTransferTransferSubmitted,
     TResult Function(AttendedTransferTransferSubmitted value)?
-        attendedTransferTransferSubmitted,
+    attendedTransferTransferSubmitted,
     TResult Function(Transfering value)? transfering,
     TResult Function(AttendedTransferConfirmationRequested value)?
-        attendedTransferConfirmationRequested,
+    attendedTransferConfirmationRequested,
     TResult Function(InviteToAttendedTransfer value)? inviteToAttendedTransfer,
     required TResult orElse(),
   }) {
@@ -1278,9 +1307,10 @@ class _$InviteToAttendedTransferImpl extends InviteToAttendedTransfer {
 }
 
 abstract class InviteToAttendedTransfer extends Transfer {
-  const factory InviteToAttendedTransfer(
-      {required final String replaceCallId,
-      required final String referredBy}) = _$InviteToAttendedTransferImpl;
+  const factory InviteToAttendedTransfer({
+    required final String replaceCallId,
+    required final String referredBy,
+  }) = _$InviteToAttendedTransferImpl;
   const InviteToAttendedTransfer._() : super._();
 
   String get replaceCallId;
@@ -1290,5 +1320,5 @@ abstract class InviteToAttendedTransfer extends Transfer {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InviteToAttendedTransferImplCopyWith<_$InviteToAttendedTransferImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

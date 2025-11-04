@@ -12,7 +12,8 @@ part of 'text_style_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 TextStyleConfig _$TextStyleConfigFromJson(Map<String, dynamic> json) {
   return _TextStyleConfig.fromJson(json);
@@ -63,20 +64,22 @@ mixin _$TextStyleConfig {
 /// @nodoc
 abstract class $TextStyleConfigCopyWith<$Res> {
   factory $TextStyleConfigCopyWith(
-          TextStyleConfig value, $Res Function(TextStyleConfig) then) =
-      _$TextStyleConfigCopyWithImpl<$Res, TextStyleConfig>;
+    TextStyleConfig value,
+    $Res Function(TextStyleConfig) then,
+  ) = _$TextStyleConfigCopyWithImpl<$Res, TextStyleConfig>;
   @useResult
-  $Res call(
-      {String? fontFamily,
-      double? fontSize,
-      FontWeightConfig? fontWeight,
-      FontStyleConfig? fontStyle,
-      String? color,
-      double? letterSpacing,
-      double? wordSpacing,
-      double? height,
-      TextDecorationConfig? decoration,
-      String? backgroundColor});
+  $Res call({
+    String? fontFamily,
+    double? fontSize,
+    FontWeightConfig? fontWeight,
+    FontStyleConfig? fontStyle,
+    String? color,
+    double? letterSpacing,
+    double? wordSpacing,
+    double? height,
+    TextDecorationConfig? decoration,
+    String? backgroundColor,
+  });
 
   $FontWeightConfigCopyWith<$Res>? get fontWeight;
   $FontStyleConfigCopyWith<$Res>? get fontStyle;
@@ -109,48 +112,51 @@ class _$TextStyleConfigCopyWithImpl<$Res, $Val extends TextStyleConfig>
     Object? decoration = freezed,
     Object? backgroundColor = freezed,
   }) {
-    return _then(_value.copyWith(
-      fontFamily: freezed == fontFamily
-          ? _value.fontFamily
-          : fontFamily // ignore: cast_nullable_to_non_nullable
-              as String?,
-      fontSize: freezed == fontSize
-          ? _value.fontSize
-          : fontSize // ignore: cast_nullable_to_non_nullable
-              as double?,
-      fontWeight: freezed == fontWeight
-          ? _value.fontWeight
-          : fontWeight // ignore: cast_nullable_to_non_nullable
-              as FontWeightConfig?,
-      fontStyle: freezed == fontStyle
-          ? _value.fontStyle
-          : fontStyle // ignore: cast_nullable_to_non_nullable
-              as FontStyleConfig?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
-      letterSpacing: freezed == letterSpacing
-          ? _value.letterSpacing
-          : letterSpacing // ignore: cast_nullable_to_non_nullable
-              as double?,
-      wordSpacing: freezed == wordSpacing
-          ? _value.wordSpacing
-          : wordSpacing // ignore: cast_nullable_to_non_nullable
-              as double?,
-      height: freezed == height
-          ? _value.height
-          : height // ignore: cast_nullable_to_non_nullable
-              as double?,
-      decoration: freezed == decoration
-          ? _value.decoration
-          : decoration // ignore: cast_nullable_to_non_nullable
-              as TextDecorationConfig?,
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            fontFamily: freezed == fontFamily
+                ? _value.fontFamily
+                : fontFamily // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            fontSize: freezed == fontSize
+                ? _value.fontSize
+                : fontSize // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            fontWeight: freezed == fontWeight
+                ? _value.fontWeight
+                : fontWeight // ignore: cast_nullable_to_non_nullable
+                      as FontWeightConfig?,
+            fontStyle: freezed == fontStyle
+                ? _value.fontStyle
+                : fontStyle // ignore: cast_nullable_to_non_nullable
+                      as FontStyleConfig?,
+            color: freezed == color
+                ? _value.color
+                : color // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            letterSpacing: freezed == letterSpacing
+                ? _value.letterSpacing
+                : letterSpacing // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            wordSpacing: freezed == wordSpacing
+                ? _value.wordSpacing
+                : wordSpacing // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            height: freezed == height
+                ? _value.height
+                : height // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            decoration: freezed == decoration
+                ? _value.decoration
+                : decoration // ignore: cast_nullable_to_non_nullable
+                      as TextDecorationConfig?,
+            backgroundColor: freezed == backgroundColor
+                ? _value.backgroundColor
+                : backgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of TextStyleConfig
@@ -199,22 +205,24 @@ class _$TextStyleConfigCopyWithImpl<$Res, $Val extends TextStyleConfig>
 /// @nodoc
 abstract class _$$TextStyleConfigImplCopyWith<$Res>
     implements $TextStyleConfigCopyWith<$Res> {
-  factory _$$TextStyleConfigImplCopyWith(_$TextStyleConfigImpl value,
-          $Res Function(_$TextStyleConfigImpl) then) =
-      __$$TextStyleConfigImplCopyWithImpl<$Res>;
+  factory _$$TextStyleConfigImplCopyWith(
+    _$TextStyleConfigImpl value,
+    $Res Function(_$TextStyleConfigImpl) then,
+  ) = __$$TextStyleConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? fontFamily,
-      double? fontSize,
-      FontWeightConfig? fontWeight,
-      FontStyleConfig? fontStyle,
-      String? color,
-      double? letterSpacing,
-      double? wordSpacing,
-      double? height,
-      TextDecorationConfig? decoration,
-      String? backgroundColor});
+  $Res call({
+    String? fontFamily,
+    double? fontSize,
+    FontWeightConfig? fontWeight,
+    FontStyleConfig? fontStyle,
+    String? color,
+    double? letterSpacing,
+    double? wordSpacing,
+    double? height,
+    TextDecorationConfig? decoration,
+    String? backgroundColor,
+  });
 
   @override
   $FontWeightConfigCopyWith<$Res>? get fontWeight;
@@ -229,8 +237,9 @@ class __$$TextStyleConfigImplCopyWithImpl<$Res>
     extends _$TextStyleConfigCopyWithImpl<$Res, _$TextStyleConfigImpl>
     implements _$$TextStyleConfigImplCopyWith<$Res> {
   __$$TextStyleConfigImplCopyWithImpl(
-      _$TextStyleConfigImpl _value, $Res Function(_$TextStyleConfigImpl) _then)
-      : super(_value, _then);
+    _$TextStyleConfigImpl _value,
+    $Res Function(_$TextStyleConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TextStyleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -248,48 +257,50 @@ class __$$TextStyleConfigImplCopyWithImpl<$Res>
     Object? decoration = freezed,
     Object? backgroundColor = freezed,
   }) {
-    return _then(_$TextStyleConfigImpl(
-      fontFamily: freezed == fontFamily
-          ? _value.fontFamily
-          : fontFamily // ignore: cast_nullable_to_non_nullable
-              as String?,
-      fontSize: freezed == fontSize
-          ? _value.fontSize
-          : fontSize // ignore: cast_nullable_to_non_nullable
-              as double?,
-      fontWeight: freezed == fontWeight
-          ? _value.fontWeight
-          : fontWeight // ignore: cast_nullable_to_non_nullable
-              as FontWeightConfig?,
-      fontStyle: freezed == fontStyle
-          ? _value.fontStyle
-          : fontStyle // ignore: cast_nullable_to_non_nullable
-              as FontStyleConfig?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
-      letterSpacing: freezed == letterSpacing
-          ? _value.letterSpacing
-          : letterSpacing // ignore: cast_nullable_to_non_nullable
-              as double?,
-      wordSpacing: freezed == wordSpacing
-          ? _value.wordSpacing
-          : wordSpacing // ignore: cast_nullable_to_non_nullable
-              as double?,
-      height: freezed == height
-          ? _value.height
-          : height // ignore: cast_nullable_to_non_nullable
-              as double?,
-      decoration: freezed == decoration
-          ? _value.decoration
-          : decoration // ignore: cast_nullable_to_non_nullable
-              as TextDecorationConfig?,
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$TextStyleConfigImpl(
+        fontFamily: freezed == fontFamily
+            ? _value.fontFamily
+            : fontFamily // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        fontSize: freezed == fontSize
+            ? _value.fontSize
+            : fontSize // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        fontWeight: freezed == fontWeight
+            ? _value.fontWeight
+            : fontWeight // ignore: cast_nullable_to_non_nullable
+                  as FontWeightConfig?,
+        fontStyle: freezed == fontStyle
+            ? _value.fontStyle
+            : fontStyle // ignore: cast_nullable_to_non_nullable
+                  as FontStyleConfig?,
+        color: freezed == color
+            ? _value.color
+            : color // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        letterSpacing: freezed == letterSpacing
+            ? _value.letterSpacing
+            : letterSpacing // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        wordSpacing: freezed == wordSpacing
+            ? _value.wordSpacing
+            : wordSpacing // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        height: freezed == height
+            ? _value.height
+            : height // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        decoration: freezed == decoration
+            ? _value.decoration
+            : decoration // ignore: cast_nullable_to_non_nullable
+                  as TextDecorationConfig?,
+        backgroundColor: freezed == backgroundColor
+            ? _value.backgroundColor
+            : backgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -297,17 +308,18 @@ class __$$TextStyleConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$TextStyleConfigImpl implements _TextStyleConfig {
-  const _$TextStyleConfigImpl(
-      {this.fontFamily,
-      this.fontSize,
-      this.fontWeight,
-      this.fontStyle,
-      this.color,
-      this.letterSpacing,
-      this.wordSpacing,
-      this.height,
-      this.decoration,
-      this.backgroundColor});
+  const _$TextStyleConfigImpl({
+    this.fontFamily,
+    this.fontSize,
+    this.fontWeight,
+    this.fontStyle,
+    this.color,
+    this.letterSpacing,
+    this.wordSpacing,
+    this.height,
+    this.decoration,
+    this.backgroundColor,
+  });
 
   factory _$TextStyleConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$TextStyleConfigImplFromJson(json);
@@ -385,17 +397,18 @@ class _$TextStyleConfigImpl implements _TextStyleConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      fontFamily,
-      fontSize,
-      fontWeight,
-      fontStyle,
-      color,
-      letterSpacing,
-      wordSpacing,
-      height,
-      decoration,
-      backgroundColor);
+    runtimeType,
+    fontFamily,
+    fontSize,
+    fontWeight,
+    fontStyle,
+    color,
+    letterSpacing,
+    wordSpacing,
+    height,
+    decoration,
+    backgroundColor,
+  );
 
   /// Create a copy of TextStyleConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -404,28 +417,29 @@ class _$TextStyleConfigImpl implements _TextStyleConfig {
   @pragma('vm:prefer-inline')
   _$$TextStyleConfigImplCopyWith<_$TextStyleConfigImpl> get copyWith =>
       __$$TextStyleConfigImplCopyWithImpl<_$TextStyleConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TextStyleConfigImplToJson(
-      this,
-    );
+    return _$$TextStyleConfigImplToJson(this);
   }
 }
 
 abstract class _TextStyleConfig implements TextStyleConfig {
-  const factory _TextStyleConfig(
-      {final String? fontFamily,
-      final double? fontSize,
-      final FontWeightConfig? fontWeight,
-      final FontStyleConfig? fontStyle,
-      final String? color,
-      final double? letterSpacing,
-      final double? wordSpacing,
-      final double? height,
-      final TextDecorationConfig? decoration,
-      final String? backgroundColor}) = _$TextStyleConfigImpl;
+  const factory _TextStyleConfig({
+    final String? fontFamily,
+    final double? fontSize,
+    final FontWeightConfig? fontWeight,
+    final FontStyleConfig? fontStyle,
+    final String? color,
+    final double? letterSpacing,
+    final double? wordSpacing,
+    final double? height,
+    final TextDecorationConfig? decoration,
+    final String? backgroundColor,
+  }) = _$TextStyleConfigImpl;
 
   factory _TextStyleConfig.fromJson(Map<String, dynamic> json) =
       _$TextStyleConfigImpl.fromJson;
@@ -499,8 +513,9 @@ mixin _$FontWeightConfig {
 /// @nodoc
 abstract class $FontWeightConfigCopyWith<$Res> {
   factory $FontWeightConfigCopyWith(
-          FontWeightConfig value, $Res Function(FontWeightConfig) then) =
-      _$FontWeightConfigCopyWithImpl<$Res, FontWeightConfig>;
+    FontWeightConfig value,
+    $Res Function(FontWeightConfig) then,
+  ) = _$FontWeightConfigCopyWithImpl<$Res, FontWeightConfig>;
   @useResult
   $Res call({int weight});
 }
@@ -519,24 +534,26 @@ class _$FontWeightConfigCopyWithImpl<$Res, $Val extends FontWeightConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? weight = null,
-  }) {
-    return _then(_value.copyWith(
-      weight: null == weight
-          ? _value.weight
-          : weight // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  $Res call({Object? weight = null}) {
+    return _then(
+      _value.copyWith(
+            weight: null == weight
+                ? _value.weight
+                : weight // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$FontWeightConfigImplCopyWith<$Res>
     implements $FontWeightConfigCopyWith<$Res> {
-  factory _$$FontWeightConfigImplCopyWith(_$FontWeightConfigImpl value,
-          $Res Function(_$FontWeightConfigImpl) then) =
-      __$$FontWeightConfigImplCopyWithImpl<$Res>;
+  factory _$$FontWeightConfigImplCopyWith(
+    _$FontWeightConfigImpl value,
+    $Res Function(_$FontWeightConfigImpl) then,
+  ) = __$$FontWeightConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int weight});
@@ -546,23 +563,24 @@ abstract class _$$FontWeightConfigImplCopyWith<$Res>
 class __$$FontWeightConfigImplCopyWithImpl<$Res>
     extends _$FontWeightConfigCopyWithImpl<$Res, _$FontWeightConfigImpl>
     implements _$$FontWeightConfigImplCopyWith<$Res> {
-  __$$FontWeightConfigImplCopyWithImpl(_$FontWeightConfigImpl _value,
-      $Res Function(_$FontWeightConfigImpl) _then)
-      : super(_value, _then);
+  __$$FontWeightConfigImplCopyWithImpl(
+    _$FontWeightConfigImpl _value,
+    $Res Function(_$FontWeightConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of FontWeightConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? weight = null,
-  }) {
-    return _then(_$FontWeightConfigImpl(
-      weight: null == weight
-          ? _value.weight
-          : weight // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+  $Res call({Object? weight = null}) {
+    return _then(
+      _$FontWeightConfigImpl(
+        weight: null == weight
+            ? _value.weight
+            : weight // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -601,13 +619,13 @@ class _$FontWeightConfigImpl implements _FontWeightConfig {
   @pragma('vm:prefer-inline')
   _$$FontWeightConfigImplCopyWith<_$FontWeightConfigImpl> get copyWith =>
       __$$FontWeightConfigImplCopyWithImpl<_$FontWeightConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$FontWeightConfigImplToJson(
-      this,
-    );
+    return _$$FontWeightConfigImplToJson(this);
   }
 }
 
@@ -650,8 +668,9 @@ mixin _$FontStyleConfig {
 /// @nodoc
 abstract class $FontStyleConfigCopyWith<$Res> {
   factory $FontStyleConfigCopyWith(
-          FontStyleConfig value, $Res Function(FontStyleConfig) then) =
-      _$FontStyleConfigCopyWithImpl<$Res, FontStyleConfig>;
+    FontStyleConfig value,
+    $Res Function(FontStyleConfig) then,
+  ) = _$FontStyleConfigCopyWithImpl<$Res, FontStyleConfig>;
   @useResult
   $Res call({String value});
 }
@@ -670,24 +689,26 @@ class _$FontStyleConfigCopyWithImpl<$Res, $Val extends FontStyleConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? value = null,
-  }) {
-    return _then(_value.copyWith(
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? value = null}) {
+    return _then(
+      _value.copyWith(
+            value: null == value
+                ? _value.value
+                : value // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$FontStyleConfigImplCopyWith<$Res>
     implements $FontStyleConfigCopyWith<$Res> {
-  factory _$$FontStyleConfigImplCopyWith(_$FontStyleConfigImpl value,
-          $Res Function(_$FontStyleConfigImpl) then) =
-      __$$FontStyleConfigImplCopyWithImpl<$Res>;
+  factory _$$FontStyleConfigImplCopyWith(
+    _$FontStyleConfigImpl value,
+    $Res Function(_$FontStyleConfigImpl) then,
+  ) = __$$FontStyleConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String value});
@@ -698,22 +719,23 @@ class __$$FontStyleConfigImplCopyWithImpl<$Res>
     extends _$FontStyleConfigCopyWithImpl<$Res, _$FontStyleConfigImpl>
     implements _$$FontStyleConfigImplCopyWith<$Res> {
   __$$FontStyleConfigImplCopyWithImpl(
-      _$FontStyleConfigImpl _value, $Res Function(_$FontStyleConfigImpl) _then)
-      : super(_value, _then);
+    _$FontStyleConfigImpl _value,
+    $Res Function(_$FontStyleConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of FontStyleConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? value = null,
-  }) {
-    return _then(_$FontStyleConfigImpl(
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? value = null}) {
+    return _then(
+      _$FontStyleConfigImpl(
+        value: null == value
+            ? _value.value
+            : value // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -753,13 +775,13 @@ class _$FontStyleConfigImpl implements _FontStyleConfig {
   @pragma('vm:prefer-inline')
   _$$FontStyleConfigImplCopyWith<_$FontStyleConfigImpl> get copyWith =>
       __$$FontStyleConfigImplCopyWithImpl<_$FontStyleConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$FontStyleConfigImplToJson(
-      this,
-    );
+    return _$$FontStyleConfigImplToJson(this);
   }
 }
 
@@ -800,16 +822,19 @@ mixin _$TextDecorationConfig {
 
 /// @nodoc
 abstract class $TextDecorationConfigCopyWith<$Res> {
-  factory $TextDecorationConfigCopyWith(TextDecorationConfig value,
-          $Res Function(TextDecorationConfig) then) =
-      _$TextDecorationConfigCopyWithImpl<$Res, TextDecorationConfig>;
+  factory $TextDecorationConfigCopyWith(
+    TextDecorationConfig value,
+    $Res Function(TextDecorationConfig) then,
+  ) = _$TextDecorationConfigCopyWithImpl<$Res, TextDecorationConfig>;
   @useResult
   $Res call({List<String> types});
 }
 
 /// @nodoc
-class _$TextDecorationConfigCopyWithImpl<$Res,
-        $Val extends TextDecorationConfig>
+class _$TextDecorationConfigCopyWithImpl<
+  $Res,
+  $Val extends TextDecorationConfig
+>
     implements $TextDecorationConfigCopyWith<$Res> {
   _$TextDecorationConfigCopyWithImpl(this._value, this._then);
 
@@ -822,24 +847,26 @@ class _$TextDecorationConfigCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? types = null,
-  }) {
-    return _then(_value.copyWith(
-      types: null == types
-          ? _value.types
-          : types // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ) as $Val);
+  $Res call({Object? types = null}) {
+    return _then(
+      _value.copyWith(
+            types: null == types
+                ? _value.types
+                : types // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$TextDecorationConfigImplCopyWith<$Res>
     implements $TextDecorationConfigCopyWith<$Res> {
-  factory _$$TextDecorationConfigImplCopyWith(_$TextDecorationConfigImpl value,
-          $Res Function(_$TextDecorationConfigImpl) then) =
-      __$$TextDecorationConfigImplCopyWithImpl<$Res>;
+  factory _$$TextDecorationConfigImplCopyWith(
+    _$TextDecorationConfigImpl value,
+    $Res Function(_$TextDecorationConfigImpl) then,
+  ) = __$$TextDecorationConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<String> types});
@@ -849,23 +876,24 @@ abstract class _$$TextDecorationConfigImplCopyWith<$Res>
 class __$$TextDecorationConfigImplCopyWithImpl<$Res>
     extends _$TextDecorationConfigCopyWithImpl<$Res, _$TextDecorationConfigImpl>
     implements _$$TextDecorationConfigImplCopyWith<$Res> {
-  __$$TextDecorationConfigImplCopyWithImpl(_$TextDecorationConfigImpl _value,
-      $Res Function(_$TextDecorationConfigImpl) _then)
-      : super(_value, _then);
+  __$$TextDecorationConfigImplCopyWithImpl(
+    _$TextDecorationConfigImpl _value,
+    $Res Function(_$TextDecorationConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TextDecorationConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? types = null,
-  }) {
-    return _then(_$TextDecorationConfigImpl(
-      types: null == types
-          ? _value._types
-          : types // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ));
+  $Res call({Object? types = null}) {
+    return _then(
+      _$TextDecorationConfigImpl(
+        types: null == types
+            ? _value._types
+            : types // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+      ),
+    );
   }
 }
 
@@ -873,7 +901,7 @@ class __$$TextDecorationConfigImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TextDecorationConfigImpl implements _TextDecorationConfig {
   const _$TextDecorationConfigImpl({final List<String> types = const []})
-      : _types = types;
+    : _types = types;
 
   factory _$TextDecorationConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$TextDecorationConfigImplFromJson(json);
@@ -911,15 +939,15 @@ class _$TextDecorationConfigImpl implements _TextDecorationConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$TextDecorationConfigImplCopyWith<_$TextDecorationConfigImpl>
-      get copyWith =>
-          __$$TextDecorationConfigImplCopyWithImpl<_$TextDecorationConfigImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$TextDecorationConfigImplCopyWithImpl<_$TextDecorationConfigImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TextDecorationConfigImplToJson(
-      this,
-    );
+    return _$$TextDecorationConfigImplToJson(this);
   }
 }
 
@@ -938,5 +966,5 @@ abstract class _TextDecorationConfig implements TextDecorationConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TextDecorationConfigImplCopyWith<_$TextDecorationConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

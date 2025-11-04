@@ -12,7 +12,8 @@ part of 'theme_page_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ThemePageConfig _$ThemePageConfigFromJson(Map<String, dynamic> json) {
   return _ThemePageConfig.fromJson(json);
@@ -38,14 +39,16 @@ mixin _$ThemePageConfig {
 /// @nodoc
 abstract class $ThemePageConfigCopyWith<$Res> {
   factory $ThemePageConfigCopyWith(
-          ThemePageConfig value, $Res Function(ThemePageConfig) then) =
-      _$ThemePageConfigCopyWithImpl<$Res, ThemePageConfig>;
+    ThemePageConfig value,
+    $Res Function(ThemePageConfig) then,
+  ) = _$ThemePageConfigCopyWithImpl<$Res, ThemePageConfig>;
   @useResult
-  $Res call(
-      {LoginPageConfig login,
-      AboutPageConfig about,
-      CallPageConfig dialing,
-      KeypadPageConfig keypad});
+  $Res call({
+    LoginPageConfig login,
+    AboutPageConfig about,
+    CallPageConfig dialing,
+    KeypadPageConfig keypad,
+  });
 
   $LoginPageConfigCopyWith<$Res> get login;
   $AboutPageConfigCopyWith<$Res> get about;
@@ -73,24 +76,27 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
     Object? dialing = null,
     Object? keypad = null,
   }) {
-    return _then(_value.copyWith(
-      login: null == login
-          ? _value.login
-          : login // ignore: cast_nullable_to_non_nullable
-              as LoginPageConfig,
-      about: null == about
-          ? _value.about
-          : about // ignore: cast_nullable_to_non_nullable
-              as AboutPageConfig,
-      dialing: null == dialing
-          ? _value.dialing
-          : dialing // ignore: cast_nullable_to_non_nullable
-              as CallPageConfig,
-      keypad: null == keypad
-          ? _value.keypad
-          : keypad // ignore: cast_nullable_to_non_nullable
-              as KeypadPageConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            login: null == login
+                ? _value.login
+                : login // ignore: cast_nullable_to_non_nullable
+                      as LoginPageConfig,
+            about: null == about
+                ? _value.about
+                : about // ignore: cast_nullable_to_non_nullable
+                      as AboutPageConfig,
+            dialing: null == dialing
+                ? _value.dialing
+                : dialing // ignore: cast_nullable_to_non_nullable
+                      as CallPageConfig,
+            keypad: null == keypad
+                ? _value.keypad
+                : keypad // ignore: cast_nullable_to_non_nullable
+                      as KeypadPageConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ThemePageConfig
@@ -137,16 +143,18 @@ class _$ThemePageConfigCopyWithImpl<$Res, $Val extends ThemePageConfig>
 /// @nodoc
 abstract class _$$ThemePageConfigImplCopyWith<$Res>
     implements $ThemePageConfigCopyWith<$Res> {
-  factory _$$ThemePageConfigImplCopyWith(_$ThemePageConfigImpl value,
-          $Res Function(_$ThemePageConfigImpl) then) =
-      __$$ThemePageConfigImplCopyWithImpl<$Res>;
+  factory _$$ThemePageConfigImplCopyWith(
+    _$ThemePageConfigImpl value,
+    $Res Function(_$ThemePageConfigImpl) then,
+  ) = __$$ThemePageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {LoginPageConfig login,
-      AboutPageConfig about,
-      CallPageConfig dialing,
-      KeypadPageConfig keypad});
+  $Res call({
+    LoginPageConfig login,
+    AboutPageConfig about,
+    CallPageConfig dialing,
+    KeypadPageConfig keypad,
+  });
 
   @override
   $LoginPageConfigCopyWith<$Res> get login;
@@ -163,8 +171,9 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
     extends _$ThemePageConfigCopyWithImpl<$Res, _$ThemePageConfigImpl>
     implements _$$ThemePageConfigImplCopyWith<$Res> {
   __$$ThemePageConfigImplCopyWithImpl(
-      _$ThemePageConfigImpl _value, $Res Function(_$ThemePageConfigImpl) _then)
-      : super(_value, _then);
+    _$ThemePageConfigImpl _value,
+    $Res Function(_$ThemePageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ThemePageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -176,24 +185,26 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
     Object? dialing = null,
     Object? keypad = null,
   }) {
-    return _then(_$ThemePageConfigImpl(
-      login: null == login
-          ? _value.login
-          : login // ignore: cast_nullable_to_non_nullable
-              as LoginPageConfig,
-      about: null == about
-          ? _value.about
-          : about // ignore: cast_nullable_to_non_nullable
-              as AboutPageConfig,
-      dialing: null == dialing
-          ? _value.dialing
-          : dialing // ignore: cast_nullable_to_non_nullable
-              as CallPageConfig,
-      keypad: null == keypad
-          ? _value.keypad
-          : keypad // ignore: cast_nullable_to_non_nullable
-              as KeypadPageConfig,
-    ));
+    return _then(
+      _$ThemePageConfigImpl(
+        login: null == login
+            ? _value.login
+            : login // ignore: cast_nullable_to_non_nullable
+                  as LoginPageConfig,
+        about: null == about
+            ? _value.about
+            : about // ignore: cast_nullable_to_non_nullable
+                  as AboutPageConfig,
+        dialing: null == dialing
+            ? _value.dialing
+            : dialing // ignore: cast_nullable_to_non_nullable
+                  as CallPageConfig,
+        keypad: null == keypad
+            ? _value.keypad
+            : keypad // ignore: cast_nullable_to_non_nullable
+                  as KeypadPageConfig,
+      ),
+    );
   }
 }
 
@@ -201,11 +212,12 @@ class __$$ThemePageConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ThemePageConfigImpl implements _ThemePageConfig {
-  const _$ThemePageConfigImpl(
-      {this.login = const LoginPageConfig(),
-      this.about = const AboutPageConfig(),
-      this.dialing = const CallPageConfig(),
-      this.keypad = const KeypadPageConfig()});
+  const _$ThemePageConfigImpl({
+    this.login = const LoginPageConfig(),
+    this.about = const AboutPageConfig(),
+    this.dialing = const CallPageConfig(),
+    this.keypad = const KeypadPageConfig(),
+  });
 
   factory _$ThemePageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemePageConfigImplFromJson(json);
@@ -250,22 +262,23 @@ class _$ThemePageConfigImpl implements _ThemePageConfig {
   @pragma('vm:prefer-inline')
   _$$ThemePageConfigImplCopyWith<_$ThemePageConfigImpl> get copyWith =>
       __$$ThemePageConfigImplCopyWithImpl<_$ThemePageConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ThemePageConfigImplToJson(
-      this,
-    );
+    return _$$ThemePageConfigImplToJson(this);
   }
 }
 
 abstract class _ThemePageConfig implements ThemePageConfig {
-  const factory _ThemePageConfig(
-      {final LoginPageConfig login,
-      final AboutPageConfig about,
-      final CallPageConfig dialing,
-      final KeypadPageConfig keypad}) = _$ThemePageConfigImpl;
+  const factory _ThemePageConfig({
+    final LoginPageConfig login,
+    final AboutPageConfig about,
+    final CallPageConfig dialing,
+    final KeypadPageConfig keypad,
+  }) = _$ThemePageConfigImpl;
 
   factory _ThemePageConfig.fromJson(Map<String, dynamic> json) =
       _$ThemePageConfigImpl.fromJson;
@@ -321,14 +334,16 @@ mixin _$LoginPageConfig {
 /// @nodoc
 abstract class $LoginPageConfigCopyWith<$Res> {
   factory $LoginPageConfigCopyWith(
-          LoginPageConfig value, $Res Function(LoginPageConfig) then) =
-      _$LoginPageConfigCopyWithImpl<$Res, LoginPageConfig>;
+    LoginPageConfig value,
+    $Res Function(LoginPageConfig) then,
+  ) = _$LoginPageConfigCopyWithImpl<$Res, LoginPageConfig>;
   @useResult
-  $Res call(
-      {LoginModeSelectPageConfig modeSelect,
-      LoginSwitchPageConfig switchPage,
-      LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
-      LoginSignupVerifyScreenPageConfig signupVerify});
+  $Res call({
+    LoginModeSelectPageConfig modeSelect,
+    LoginSwitchPageConfig switchPage,
+    LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+    LoginSignupVerifyScreenPageConfig signupVerify,
+  });
 
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
   $LoginSwitchPageConfigCopyWith<$Res> get switchPage;
@@ -356,24 +371,27 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
     Object? otpSigninVerify = null,
     Object? signupVerify = null,
   }) {
-    return _then(_value.copyWith(
-      modeSelect: null == modeSelect
-          ? _value.modeSelect
-          : modeSelect // ignore: cast_nullable_to_non_nullable
-              as LoginModeSelectPageConfig,
-      switchPage: null == switchPage
-          ? _value.switchPage
-          : switchPage // ignore: cast_nullable_to_non_nullable
-              as LoginSwitchPageConfig,
-      otpSigninVerify: null == otpSigninVerify
-          ? _value.otpSigninVerify
-          : otpSigninVerify // ignore: cast_nullable_to_non_nullable
-              as LoginOtpSigninVerifyScreenPageConfig,
-      signupVerify: null == signupVerify
-          ? _value.signupVerify
-          : signupVerify // ignore: cast_nullable_to_non_nullable
-              as LoginSignupVerifyScreenPageConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            modeSelect: null == modeSelect
+                ? _value.modeSelect
+                : modeSelect // ignore: cast_nullable_to_non_nullable
+                      as LoginModeSelectPageConfig,
+            switchPage: null == switchPage
+                ? _value.switchPage
+                : switchPage // ignore: cast_nullable_to_non_nullable
+                      as LoginSwitchPageConfig,
+            otpSigninVerify: null == otpSigninVerify
+                ? _value.otpSigninVerify
+                : otpSigninVerify // ignore: cast_nullable_to_non_nullable
+                      as LoginOtpSigninVerifyScreenPageConfig,
+            signupVerify: null == signupVerify
+                ? _value.signupVerify
+                : signupVerify // ignore: cast_nullable_to_non_nullable
+                      as LoginSignupVerifyScreenPageConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of LoginPageConfig
@@ -402,9 +420,11 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
   @pragma('vm:prefer-inline')
   $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> get otpSigninVerify {
     return $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res>(
-        _value.otpSigninVerify, (value) {
-      return _then(_value.copyWith(otpSigninVerify: value) as $Val);
-    });
+      _value.otpSigninVerify,
+      (value) {
+        return _then(_value.copyWith(otpSigninVerify: value) as $Val);
+      },
+    );
   }
 
   /// Create a copy of LoginPageConfig
@@ -412,26 +432,30 @@ class _$LoginPageConfigCopyWithImpl<$Res, $Val extends LoginPageConfig>
   @override
   @pragma('vm:prefer-inline')
   $LoginSignupVerifyScreenPageConfigCopyWith<$Res> get signupVerify {
-    return $LoginSignupVerifyScreenPageConfigCopyWith<$Res>(_value.signupVerify,
-        (value) {
-      return _then(_value.copyWith(signupVerify: value) as $Val);
-    });
+    return $LoginSignupVerifyScreenPageConfigCopyWith<$Res>(
+      _value.signupVerify,
+      (value) {
+        return _then(_value.copyWith(signupVerify: value) as $Val);
+      },
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$LoginPageConfigImplCopyWith<$Res>
     implements $LoginPageConfigCopyWith<$Res> {
-  factory _$$LoginPageConfigImplCopyWith(_$LoginPageConfigImpl value,
-          $Res Function(_$LoginPageConfigImpl) then) =
-      __$$LoginPageConfigImplCopyWithImpl<$Res>;
+  factory _$$LoginPageConfigImplCopyWith(
+    _$LoginPageConfigImpl value,
+    $Res Function(_$LoginPageConfigImpl) then,
+  ) = __$$LoginPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {LoginModeSelectPageConfig modeSelect,
-      LoginSwitchPageConfig switchPage,
-      LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
-      LoginSignupVerifyScreenPageConfig signupVerify});
+  $Res call({
+    LoginModeSelectPageConfig modeSelect,
+    LoginSwitchPageConfig switchPage,
+    LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+    LoginSignupVerifyScreenPageConfig signupVerify,
+  });
 
   @override
   $LoginModeSelectPageConfigCopyWith<$Res> get modeSelect;
@@ -448,8 +472,9 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
     extends _$LoginPageConfigCopyWithImpl<$Res, _$LoginPageConfigImpl>
     implements _$$LoginPageConfigImplCopyWith<$Res> {
   __$$LoginPageConfigImplCopyWithImpl(
-      _$LoginPageConfigImpl _value, $Res Function(_$LoginPageConfigImpl) _then)
-      : super(_value, _then);
+    _$LoginPageConfigImpl _value,
+    $Res Function(_$LoginPageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -461,24 +486,26 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
     Object? otpSigninVerify = null,
     Object? signupVerify = null,
   }) {
-    return _then(_$LoginPageConfigImpl(
-      modeSelect: null == modeSelect
-          ? _value.modeSelect
-          : modeSelect // ignore: cast_nullable_to_non_nullable
-              as LoginModeSelectPageConfig,
-      switchPage: null == switchPage
-          ? _value.switchPage
-          : switchPage // ignore: cast_nullable_to_non_nullable
-              as LoginSwitchPageConfig,
-      otpSigninVerify: null == otpSigninVerify
-          ? _value.otpSigninVerify
-          : otpSigninVerify // ignore: cast_nullable_to_non_nullable
-              as LoginOtpSigninVerifyScreenPageConfig,
-      signupVerify: null == signupVerify
-          ? _value.signupVerify
-          : signupVerify // ignore: cast_nullable_to_non_nullable
-              as LoginSignupVerifyScreenPageConfig,
-    ));
+    return _then(
+      _$LoginPageConfigImpl(
+        modeSelect: null == modeSelect
+            ? _value.modeSelect
+            : modeSelect // ignore: cast_nullable_to_non_nullable
+                  as LoginModeSelectPageConfig,
+        switchPage: null == switchPage
+            ? _value.switchPage
+            : switchPage // ignore: cast_nullable_to_non_nullable
+                  as LoginSwitchPageConfig,
+        otpSigninVerify: null == otpSigninVerify
+            ? _value.otpSigninVerify
+            : otpSigninVerify // ignore: cast_nullable_to_non_nullable
+                  as LoginOtpSigninVerifyScreenPageConfig,
+        signupVerify: null == signupVerify
+            ? _value.signupVerify
+            : signupVerify // ignore: cast_nullable_to_non_nullable
+                  as LoginSignupVerifyScreenPageConfig,
+      ),
+    );
   }
 }
 
@@ -486,11 +513,12 @@ class __$$LoginPageConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$LoginPageConfigImpl implements _LoginPageConfig {
-  const _$LoginPageConfigImpl(
-      {this.modeSelect = const LoginModeSelectPageConfig(),
-      this.switchPage = const LoginSwitchPageConfig(),
-      this.otpSigninVerify = const LoginOtpSigninVerifyScreenPageConfig(),
-      this.signupVerify = const LoginSignupVerifyScreenPageConfig()});
+  const _$LoginPageConfigImpl({
+    this.modeSelect = const LoginModeSelectPageConfig(),
+    this.switchPage = const LoginSwitchPageConfig(),
+    this.otpSigninVerify = const LoginOtpSigninVerifyScreenPageConfig(),
+    this.signupVerify = const LoginSignupVerifyScreenPageConfig(),
+  });
 
   factory _$LoginPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginPageConfigImplFromJson(json);
@@ -538,7 +566,12 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, modeSelect, switchPage, otpSigninVerify, signupVerify);
+    runtimeType,
+    modeSelect,
+    switchPage,
+    otpSigninVerify,
+    signupVerify,
+  );
 
   /// Create a copy of LoginPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -547,23 +580,23 @@ class _$LoginPageConfigImpl implements _LoginPageConfig {
   @pragma('vm:prefer-inline')
   _$$LoginPageConfigImplCopyWith<_$LoginPageConfigImpl> get copyWith =>
       __$$LoginPageConfigImplCopyWithImpl<_$LoginPageConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginPageConfigImplToJson(
-      this,
-    );
+    return _$$LoginPageConfigImplToJson(this);
   }
 }
 
 abstract class _LoginPageConfig implements LoginPageConfig {
-  const factory _LoginPageConfig(
-          {final LoginModeSelectPageConfig modeSelect,
-          final LoginSwitchPageConfig switchPage,
-          final LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
-          final LoginSignupVerifyScreenPageConfig signupVerify}) =
-      _$LoginPageConfigImpl;
+  const factory _LoginPageConfig({
+    final LoginModeSelectPageConfig modeSelect,
+    final LoginSwitchPageConfig switchPage,
+    final LoginOtpSigninVerifyScreenPageConfig otpSigninVerify,
+    final LoginSignupVerifyScreenPageConfig signupVerify,
+  }) = _$LoginPageConfigImpl;
 
   factory _LoginPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginPageConfigImpl.fromJson;
@@ -593,7 +626,7 @@ abstract class _LoginPageConfig implements LoginPageConfig {
 }
 
 LoginOtpSigninVerifyScreenPageConfig
-    _$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) {
+_$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) {
   return _LoginOtpSigninVerifyScreenPageConfig.fromJson(json);
 }
 
@@ -610,24 +643,30 @@ mixin _$LoginOtpSigninVerifyScreenPageConfig {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $LoginOtpSigninVerifyScreenPageConfigCopyWith<
-          LoginOtpSigninVerifyScreenPageConfig>
-      get copyWith => throw _privateConstructorUsedError;
+    LoginOtpSigninVerifyScreenPageConfig
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> {
   factory $LoginOtpSigninVerifyScreenPageConfigCopyWith(
-          LoginOtpSigninVerifyScreenPageConfig value,
-          $Res Function(LoginOtpSigninVerifyScreenPageConfig) then) =
-      _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<$Res,
-          LoginOtpSigninVerifyScreenPageConfig>;
+    LoginOtpSigninVerifyScreenPageConfig value,
+    $Res Function(LoginOtpSigninVerifyScreenPageConfig) then,
+  ) =
+      _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<
+        $Res,
+        LoginOtpSigninVerifyScreenPageConfig
+      >;
   @useResult
   $Res call({int countdownRepeatIntervalSeconds});
 }
 
 /// @nodoc
-class _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<$Res,
-        $Val extends LoginOtpSigninVerifyScreenPageConfig>
+class _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<
+  $Res,
+  $Val extends LoginOtpSigninVerifyScreenPageConfig
+>
     implements $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> {
   _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl(this._value, this._then);
 
@@ -640,15 +679,17 @@ class _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? countdownRepeatIntervalSeconds = null,
-  }) {
-    return _then(_value.copyWith(
-      countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
-          ? _value.countdownRepeatIntervalSeconds
-          : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  $Res call({Object? countdownRepeatIntervalSeconds = null}) {
+    return _then(
+      _value.copyWith(
+            countdownRepeatIntervalSeconds:
+                null == countdownRepeatIntervalSeconds
+                ? _value.countdownRepeatIntervalSeconds
+                : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -656,9 +697,9 @@ class _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<$Res,
 abstract class _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<$Res>
     implements $LoginOtpSigninVerifyScreenPageConfigCopyWith<$Res> {
   factory _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith(
-          _$LoginOtpSigninVerifyScreenPageConfigImpl value,
-          $Res Function(_$LoginOtpSigninVerifyScreenPageConfigImpl) then) =
-      __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<$Res>;
+    _$LoginOtpSigninVerifyScreenPageConfigImpl value,
+    $Res Function(_$LoginOtpSigninVerifyScreenPageConfigImpl) then,
+  ) = __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int countdownRepeatIntervalSeconds});
@@ -666,27 +707,30 @@ abstract class _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<$Res>
-    extends _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<$Res,
-        _$LoginOtpSigninVerifyScreenPageConfigImpl>
+    extends
+        _$LoginOtpSigninVerifyScreenPageConfigCopyWithImpl<
+          $Res,
+          _$LoginOtpSigninVerifyScreenPageConfigImpl
+        >
     implements _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<$Res> {
   __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl(
-      _$LoginOtpSigninVerifyScreenPageConfigImpl _value,
-      $Res Function(_$LoginOtpSigninVerifyScreenPageConfigImpl) _then)
-      : super(_value, _then);
+    _$LoginOtpSigninVerifyScreenPageConfigImpl _value,
+    $Res Function(_$LoginOtpSigninVerifyScreenPageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LoginOtpSigninVerifyScreenPageConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? countdownRepeatIntervalSeconds = null,
-  }) {
-    return _then(_$LoginOtpSigninVerifyScreenPageConfigImpl(
-      countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
-          ? _value.countdownRepeatIntervalSeconds
-          : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+  $Res call({Object? countdownRepeatIntervalSeconds = null}) {
+    return _then(
+      _$LoginOtpSigninVerifyScreenPageConfigImpl(
+        countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
+            ? _value.countdownRepeatIntervalSeconds
+            : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -695,12 +739,13 @@ class __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$LoginOtpSigninVerifyScreenPageConfigImpl
     implements _LoginOtpSigninVerifyScreenPageConfig {
-  const _$LoginOtpSigninVerifyScreenPageConfigImpl(
-      {this.countdownRepeatIntervalSeconds = 30});
+  const _$LoginOtpSigninVerifyScreenPageConfigImpl({
+    this.countdownRepeatIntervalSeconds = 30,
+  });
 
   factory _$LoginOtpSigninVerifyScreenPageConfigImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$LoginOtpSigninVerifyScreenPageConfigImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$LoginOtpSigninVerifyScreenPageConfigImplFromJson(json);
 
   /// Countdown interval in seconds before the "Repeat" button
   /// becomes active again. If 0 → countdown disabled, button active immediately.
@@ -718,8 +763,10 @@ class _$LoginOtpSigninVerifyScreenPageConfigImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginOtpSigninVerifyScreenPageConfigImpl &&
-            (identical(other.countdownRepeatIntervalSeconds,
-                    countdownRepeatIntervalSeconds) ||
+            (identical(
+                  other.countdownRepeatIntervalSeconds,
+                  countdownRepeatIntervalSeconds,
+                ) ||
                 other.countdownRepeatIntervalSeconds ==
                     countdownRepeatIntervalSeconds));
   }
@@ -734,27 +781,28 @@ class _$LoginOtpSigninVerifyScreenPageConfigImpl
   @override
   @pragma('vm:prefer-inline')
   _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<
-          _$LoginOtpSigninVerifyScreenPageConfigImpl>
-      get copyWith => __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<
-          _$LoginOtpSigninVerifyScreenPageConfigImpl>(this, _$identity);
+    _$LoginOtpSigninVerifyScreenPageConfigImpl
+  >
+  get copyWith =>
+      __$$LoginOtpSigninVerifyScreenPageConfigImplCopyWithImpl<
+        _$LoginOtpSigninVerifyScreenPageConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginOtpSigninVerifyScreenPageConfigImplToJson(
-      this,
-    );
+    return _$$LoginOtpSigninVerifyScreenPageConfigImplToJson(this);
   }
 }
 
 abstract class _LoginOtpSigninVerifyScreenPageConfig
     implements LoginOtpSigninVerifyScreenPageConfig {
-  const factory _LoginOtpSigninVerifyScreenPageConfig(
-          {final int countdownRepeatIntervalSeconds}) =
-      _$LoginOtpSigninVerifyScreenPageConfigImpl;
+  const factory _LoginOtpSigninVerifyScreenPageConfig({
+    final int countdownRepeatIntervalSeconds,
+  }) = _$LoginOtpSigninVerifyScreenPageConfigImpl;
 
   factory _LoginOtpSigninVerifyScreenPageConfig.fromJson(
-          Map<String, dynamic> json) =
-      _$LoginOtpSigninVerifyScreenPageConfigImpl.fromJson;
+    Map<String, dynamic> json,
+  ) = _$LoginOtpSigninVerifyScreenPageConfigImpl.fromJson;
 
   /// Countdown interval in seconds before the "Repeat" button
   /// becomes active again. If 0 → countdown disabled, button active immediately.
@@ -766,12 +814,14 @@ abstract class _LoginOtpSigninVerifyScreenPageConfig
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginOtpSigninVerifyScreenPageConfigImplCopyWith<
-          _$LoginOtpSigninVerifyScreenPageConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$LoginOtpSigninVerifyScreenPageConfigImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 LoginSignupVerifyScreenPageConfig _$LoginSignupVerifyScreenPageConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _LoginSignupVerifyScreenPageConfig.fromJson(json);
 }
 
@@ -788,23 +838,28 @@ mixin _$LoginSignupVerifyScreenPageConfig {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $LoginSignupVerifyScreenPageConfigCopyWith<LoginSignupVerifyScreenPageConfig>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $LoginSignupVerifyScreenPageConfigCopyWith<$Res> {
   factory $LoginSignupVerifyScreenPageConfigCopyWith(
-          LoginSignupVerifyScreenPageConfig value,
-          $Res Function(LoginSignupVerifyScreenPageConfig) then) =
-      _$LoginSignupVerifyScreenPageConfigCopyWithImpl<$Res,
-          LoginSignupVerifyScreenPageConfig>;
+    LoginSignupVerifyScreenPageConfig value,
+    $Res Function(LoginSignupVerifyScreenPageConfig) then,
+  ) =
+      _$LoginSignupVerifyScreenPageConfigCopyWithImpl<
+        $Res,
+        LoginSignupVerifyScreenPageConfig
+      >;
   @useResult
   $Res call({int countdownRepeatIntervalSeconds});
 }
 
 /// @nodoc
-class _$LoginSignupVerifyScreenPageConfigCopyWithImpl<$Res,
-        $Val extends LoginSignupVerifyScreenPageConfig>
+class _$LoginSignupVerifyScreenPageConfigCopyWithImpl<
+  $Res,
+  $Val extends LoginSignupVerifyScreenPageConfig
+>
     implements $LoginSignupVerifyScreenPageConfigCopyWith<$Res> {
   _$LoginSignupVerifyScreenPageConfigCopyWithImpl(this._value, this._then);
 
@@ -817,15 +872,17 @@ class _$LoginSignupVerifyScreenPageConfigCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? countdownRepeatIntervalSeconds = null,
-  }) {
-    return _then(_value.copyWith(
-      countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
-          ? _value.countdownRepeatIntervalSeconds
-          : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  $Res call({Object? countdownRepeatIntervalSeconds = null}) {
+    return _then(
+      _value.copyWith(
+            countdownRepeatIntervalSeconds:
+                null == countdownRepeatIntervalSeconds
+                ? _value.countdownRepeatIntervalSeconds
+                : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -833,9 +890,9 @@ class _$LoginSignupVerifyScreenPageConfigCopyWithImpl<$Res,
 abstract class _$$LoginSignupVerifyScreenPageConfigImplCopyWith<$Res>
     implements $LoginSignupVerifyScreenPageConfigCopyWith<$Res> {
   factory _$$LoginSignupVerifyScreenPageConfigImplCopyWith(
-          _$LoginSignupVerifyScreenPageConfigImpl value,
-          $Res Function(_$LoginSignupVerifyScreenPageConfigImpl) then) =
-      __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<$Res>;
+    _$LoginSignupVerifyScreenPageConfigImpl value,
+    $Res Function(_$LoginSignupVerifyScreenPageConfigImpl) then,
+  ) = __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int countdownRepeatIntervalSeconds});
@@ -843,27 +900,30 @@ abstract class _$$LoginSignupVerifyScreenPageConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<$Res>
-    extends _$LoginSignupVerifyScreenPageConfigCopyWithImpl<$Res,
-        _$LoginSignupVerifyScreenPageConfigImpl>
+    extends
+        _$LoginSignupVerifyScreenPageConfigCopyWithImpl<
+          $Res,
+          _$LoginSignupVerifyScreenPageConfigImpl
+        >
     implements _$$LoginSignupVerifyScreenPageConfigImplCopyWith<$Res> {
   __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl(
-      _$LoginSignupVerifyScreenPageConfigImpl _value,
-      $Res Function(_$LoginSignupVerifyScreenPageConfigImpl) _then)
-      : super(_value, _then);
+    _$LoginSignupVerifyScreenPageConfigImpl _value,
+    $Res Function(_$LoginSignupVerifyScreenPageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LoginSignupVerifyScreenPageConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? countdownRepeatIntervalSeconds = null,
-  }) {
-    return _then(_$LoginSignupVerifyScreenPageConfigImpl(
-      countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
-          ? _value.countdownRepeatIntervalSeconds
-          : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+  $Res call({Object? countdownRepeatIntervalSeconds = null}) {
+    return _then(
+      _$LoginSignupVerifyScreenPageConfigImpl(
+        countdownRepeatIntervalSeconds: null == countdownRepeatIntervalSeconds
+            ? _value.countdownRepeatIntervalSeconds
+            : countdownRepeatIntervalSeconds // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
@@ -872,12 +932,13 @@ class __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$LoginSignupVerifyScreenPageConfigImpl
     implements _LoginSignupVerifyScreenPageConfig {
-  const _$LoginSignupVerifyScreenPageConfigImpl(
-      {this.countdownRepeatIntervalSeconds = 30});
+  const _$LoginSignupVerifyScreenPageConfigImpl({
+    this.countdownRepeatIntervalSeconds = 30,
+  });
 
   factory _$LoginSignupVerifyScreenPageConfigImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$LoginSignupVerifyScreenPageConfigImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$LoginSignupVerifyScreenPageConfigImplFromJson(json);
 
   /// Countdown interval in seconds before the "Repeat" button
   /// becomes active again. If 0 → countdown disabled, button active immediately.
@@ -895,8 +956,10 @@ class _$LoginSignupVerifyScreenPageConfigImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginSignupVerifyScreenPageConfigImpl &&
-            (identical(other.countdownRepeatIntervalSeconds,
-                    countdownRepeatIntervalSeconds) ||
+            (identical(
+                  other.countdownRepeatIntervalSeconds,
+                  countdownRepeatIntervalSeconds,
+                ) ||
                 other.countdownRepeatIntervalSeconds ==
                     countdownRepeatIntervalSeconds));
   }
@@ -911,27 +974,28 @@ class _$LoginSignupVerifyScreenPageConfigImpl
   @override
   @pragma('vm:prefer-inline')
   _$$LoginSignupVerifyScreenPageConfigImplCopyWith<
-          _$LoginSignupVerifyScreenPageConfigImpl>
-      get copyWith => __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<
-          _$LoginSignupVerifyScreenPageConfigImpl>(this, _$identity);
+    _$LoginSignupVerifyScreenPageConfigImpl
+  >
+  get copyWith =>
+      __$$LoginSignupVerifyScreenPageConfigImplCopyWithImpl<
+        _$LoginSignupVerifyScreenPageConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginSignupVerifyScreenPageConfigImplToJson(
-      this,
-    );
+    return _$$LoginSignupVerifyScreenPageConfigImplToJson(this);
   }
 }
 
 abstract class _LoginSignupVerifyScreenPageConfig
     implements LoginSignupVerifyScreenPageConfig {
-  const factory _LoginSignupVerifyScreenPageConfig(
-          {final int countdownRepeatIntervalSeconds}) =
-      _$LoginSignupVerifyScreenPageConfigImpl;
+  const factory _LoginSignupVerifyScreenPageConfig({
+    final int countdownRepeatIntervalSeconds,
+  }) = _$LoginSignupVerifyScreenPageConfigImpl;
 
   factory _LoginSignupVerifyScreenPageConfig.fromJson(
-          Map<String, dynamic> json) =
-      _$LoginSignupVerifyScreenPageConfigImpl.fromJson;
+    Map<String, dynamic> json,
+  ) = _$LoginSignupVerifyScreenPageConfigImpl.fromJson;
 
   /// Countdown interval in seconds before the "Repeat" button
   /// becomes active again. If 0 → countdown disabled, button active immediately.
@@ -943,12 +1007,14 @@ abstract class _LoginSignupVerifyScreenPageConfig
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginSignupVerifyScreenPageConfigImplCopyWith<
-          _$LoginSignupVerifyScreenPageConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$LoginSignupVerifyScreenPageConfigImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _LoginModeSelectPageConfig.fromJson(json);
 }
 
@@ -974,23 +1040,27 @@ mixin _$LoginModeSelectPageConfig {
 
 /// @nodoc
 abstract class $LoginModeSelectPageConfigCopyWith<$Res> {
-  factory $LoginModeSelectPageConfigCopyWith(LoginModeSelectPageConfig value,
-          $Res Function(LoginModeSelectPageConfig) then) =
-      _$LoginModeSelectPageConfigCopyWithImpl<$Res, LoginModeSelectPageConfig>;
+  factory $LoginModeSelectPageConfigCopyWith(
+    LoginModeSelectPageConfig value,
+    $Res Function(LoginModeSelectPageConfig) then,
+  ) = _$LoginModeSelectPageConfigCopyWithImpl<$Res, LoginModeSelectPageConfig>;
   @useResult
-  $Res call(
-      {OverlayStyleModel? systemUiOverlayStyle,
-      ImageSource? mainLogo,
-      ElevatedButtonStyleType buttonLoginStyleType,
-      ElevatedButtonStyleType buttonSignupStyleType});
+  $Res call({
+    OverlayStyleModel? systemUiOverlayStyle,
+    ImageSource? mainLogo,
+    ElevatedButtonStyleType buttonLoginStyleType,
+    ElevatedButtonStyleType buttonSignupStyleType,
+  });
 
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
   $ImageSourceCopyWith<$Res>? get mainLogo;
 }
 
 /// @nodoc
-class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
-        $Val extends LoginModeSelectPageConfig>
+class _$LoginModeSelectPageConfigCopyWithImpl<
+  $Res,
+  $Val extends LoginModeSelectPageConfig
+>
     implements $LoginModeSelectPageConfigCopyWith<$Res> {
   _$LoginModeSelectPageConfigCopyWithImpl(this._value, this._then);
 
@@ -1009,24 +1079,27 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
     Object? buttonLoginStyleType = null,
     Object? buttonSignupStyleType = null,
   }) {
-    return _then(_value.copyWith(
-      systemUiOverlayStyle: freezed == systemUiOverlayStyle
-          ? _value.systemUiOverlayStyle
-          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
-              as OverlayStyleModel?,
-      mainLogo: freezed == mainLogo
-          ? _value.mainLogo
-          : mainLogo // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      buttonLoginStyleType: null == buttonLoginStyleType
-          ? _value.buttonLoginStyleType
-          : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonStyleType,
-      buttonSignupStyleType: null == buttonSignupStyleType
-          ? _value.buttonSignupStyleType
-          : buttonSignupStyleType // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonStyleType,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            systemUiOverlayStyle: freezed == systemUiOverlayStyle
+                ? _value.systemUiOverlayStyle
+                : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+                      as OverlayStyleModel?,
+            mainLogo: freezed == mainLogo
+                ? _value.mainLogo
+                : mainLogo // ignore: cast_nullable_to_non_nullable
+                      as ImageSource?,
+            buttonLoginStyleType: null == buttonLoginStyleType
+                ? _value.buttonLoginStyleType
+                : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonStyleType,
+            buttonSignupStyleType: null == buttonSignupStyleType
+                ? _value.buttonSignupStyleType
+                : buttonSignupStyleType // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonStyleType,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of LoginModeSelectPageConfig
@@ -1038,8 +1111,9 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
       return null;
     }
 
-    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!,
-        (value) {
+    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!, (
+      value,
+    ) {
       return _then(_value.copyWith(systemUiOverlayStyle: value) as $Val);
     });
   }
@@ -1063,16 +1137,17 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res,
 abstract class _$$LoginModeSelectPageConfigImplCopyWith<$Res>
     implements $LoginModeSelectPageConfigCopyWith<$Res> {
   factory _$$LoginModeSelectPageConfigImplCopyWith(
-          _$LoginModeSelectPageConfigImpl value,
-          $Res Function(_$LoginModeSelectPageConfigImpl) then) =
-      __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>;
+    _$LoginModeSelectPageConfigImpl value,
+    $Res Function(_$LoginModeSelectPageConfigImpl) then,
+  ) = __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {OverlayStyleModel? systemUiOverlayStyle,
-      ImageSource? mainLogo,
-      ElevatedButtonStyleType buttonLoginStyleType,
-      ElevatedButtonStyleType buttonSignupStyleType});
+  $Res call({
+    OverlayStyleModel? systemUiOverlayStyle,
+    ImageSource? mainLogo,
+    ElevatedButtonStyleType buttonLoginStyleType,
+    ElevatedButtonStyleType buttonSignupStyleType,
+  });
 
   @override
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
@@ -1082,13 +1157,16 @@ abstract class _$$LoginModeSelectPageConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
-    extends _$LoginModeSelectPageConfigCopyWithImpl<$Res,
-        _$LoginModeSelectPageConfigImpl>
+    extends
+        _$LoginModeSelectPageConfigCopyWithImpl<
+          $Res,
+          _$LoginModeSelectPageConfigImpl
+        >
     implements _$$LoginModeSelectPageConfigImplCopyWith<$Res> {
   __$$LoginModeSelectPageConfigImplCopyWithImpl(
-      _$LoginModeSelectPageConfigImpl _value,
-      $Res Function(_$LoginModeSelectPageConfigImpl) _then)
-      : super(_value, _then);
+    _$LoginModeSelectPageConfigImpl _value,
+    $Res Function(_$LoginModeSelectPageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LoginModeSelectPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1100,24 +1178,26 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
     Object? buttonLoginStyleType = null,
     Object? buttonSignupStyleType = null,
   }) {
-    return _then(_$LoginModeSelectPageConfigImpl(
-      systemUiOverlayStyle: freezed == systemUiOverlayStyle
-          ? _value.systemUiOverlayStyle
-          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
-              as OverlayStyleModel?,
-      mainLogo: freezed == mainLogo
-          ? _value.mainLogo
-          : mainLogo // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      buttonLoginStyleType: null == buttonLoginStyleType
-          ? _value.buttonLoginStyleType
-          : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonStyleType,
-      buttonSignupStyleType: null == buttonSignupStyleType
-          ? _value.buttonSignupStyleType
-          : buttonSignupStyleType // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonStyleType,
-    ));
+    return _then(
+      _$LoginModeSelectPageConfigImpl(
+        systemUiOverlayStyle: freezed == systemUiOverlayStyle
+            ? _value.systemUiOverlayStyle
+            : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+                  as OverlayStyleModel?,
+        mainLogo: freezed == mainLogo
+            ? _value.mainLogo
+            : mainLogo // ignore: cast_nullable_to_non_nullable
+                  as ImageSource?,
+        buttonLoginStyleType: null == buttonLoginStyleType
+            ? _value.buttonLoginStyleType
+            : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonStyleType,
+        buttonSignupStyleType: null == buttonSignupStyleType
+            ? _value.buttonSignupStyleType
+            : buttonSignupStyleType // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonStyleType,
+      ),
+    );
   }
 }
 
@@ -1125,11 +1205,12 @@ class __$$LoginModeSelectPageConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
-  const _$LoginModeSelectPageConfigImpl(
-      {this.systemUiOverlayStyle,
-      this.mainLogo,
-      this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
-      this.buttonSignupStyleType = ElevatedButtonStyleType.primary});
+  const _$LoginModeSelectPageConfigImpl({
+    this.systemUiOverlayStyle,
+    this.mainLogo,
+    this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
+    this.buttonSignupStyleType = ElevatedButtonStyleType.primary,
+  });
 
   factory _$LoginModeSelectPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginModeSelectPageConfigImplFromJson(json);
@@ -1167,8 +1248,13 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, systemUiOverlayStyle, mainLogo,
-      buttonLoginStyleType, buttonSignupStyleType);
+  int get hashCode => Object.hash(
+    runtimeType,
+    systemUiOverlayStyle,
+    mainLogo,
+    buttonLoginStyleType,
+    buttonSignupStyleType,
+  );
 
   /// Create a copy of LoginModeSelectPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1176,24 +1262,24 @@ class _$LoginModeSelectPageConfigImpl implements _LoginModeSelectPageConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$LoginModeSelectPageConfigImplCopyWith<_$LoginModeSelectPageConfigImpl>
-      get copyWith => __$$LoginModeSelectPageConfigImplCopyWithImpl<
-          _$LoginModeSelectPageConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$LoginModeSelectPageConfigImplCopyWithImpl<
+        _$LoginModeSelectPageConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginModeSelectPageConfigImplToJson(
-      this,
-    );
+    return _$$LoginModeSelectPageConfigImplToJson(this);
   }
 }
 
 abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
-  const factory _LoginModeSelectPageConfig(
-          {final OverlayStyleModel? systemUiOverlayStyle,
-          final ImageSource? mainLogo,
-          final ElevatedButtonStyleType buttonLoginStyleType,
-          final ElevatedButtonStyleType buttonSignupStyleType}) =
-      _$LoginModeSelectPageConfigImpl;
+  const factory _LoginModeSelectPageConfig({
+    final OverlayStyleModel? systemUiOverlayStyle,
+    final ImageSource? mainLogo,
+    final ElevatedButtonStyleType buttonLoginStyleType,
+    final ElevatedButtonStyleType buttonSignupStyleType,
+  }) = _$LoginModeSelectPageConfigImpl;
 
   factory _LoginModeSelectPageConfig.fromJson(Map<String, dynamic> json) =
       _$LoginModeSelectPageConfigImpl.fromJson;
@@ -1212,11 +1298,12 @@ abstract class _LoginModeSelectPageConfig implements LoginModeSelectPageConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginModeSelectPageConfigImplCopyWith<_$LoginModeSelectPageConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _LoginSwitchPageConfig.fromJson(json);
 }
 
@@ -1236,9 +1323,10 @@ mixin _$LoginSwitchPageConfig {
 
 /// @nodoc
 abstract class $LoginSwitchPageConfigCopyWith<$Res> {
-  factory $LoginSwitchPageConfigCopyWith(LoginSwitchPageConfig value,
-          $Res Function(LoginSwitchPageConfig) then) =
-      _$LoginSwitchPageConfigCopyWithImpl<$Res, LoginSwitchPageConfig>;
+  factory $LoginSwitchPageConfigCopyWith(
+    LoginSwitchPageConfig value,
+    $Res Function(LoginSwitchPageConfig) then,
+  ) = _$LoginSwitchPageConfigCopyWithImpl<$Res, LoginSwitchPageConfig>;
   @useResult
   $Res call({ImageSource? mainLogo});
 
@@ -1246,8 +1334,10 @@ abstract class $LoginSwitchPageConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LoginSwitchPageConfigCopyWithImpl<$Res,
-        $Val extends LoginSwitchPageConfig>
+class _$LoginSwitchPageConfigCopyWithImpl<
+  $Res,
+  $Val extends LoginSwitchPageConfig
+>
     implements $LoginSwitchPageConfigCopyWith<$Res> {
   _$LoginSwitchPageConfigCopyWithImpl(this._value, this._then);
 
@@ -1260,15 +1350,16 @@ class _$LoginSwitchPageConfigCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? mainLogo = freezed,
-  }) {
-    return _then(_value.copyWith(
-      mainLogo: freezed == mainLogo
-          ? _value.mainLogo
-          : mainLogo // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-    ) as $Val);
+  $Res call({Object? mainLogo = freezed}) {
+    return _then(
+      _value.copyWith(
+            mainLogo: freezed == mainLogo
+                ? _value.mainLogo
+                : mainLogo // ignore: cast_nullable_to_non_nullable
+                      as ImageSource?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of LoginSwitchPageConfig
@@ -1290,9 +1381,9 @@ class _$LoginSwitchPageConfigCopyWithImpl<$Res,
 abstract class _$$LoginSwitchPageConfigImplCopyWith<$Res>
     implements $LoginSwitchPageConfigCopyWith<$Res> {
   factory _$$LoginSwitchPageConfigImplCopyWith(
-          _$LoginSwitchPageConfigImpl value,
-          $Res Function(_$LoginSwitchPageConfigImpl) then) =
-      __$$LoginSwitchPageConfigImplCopyWithImpl<$Res>;
+    _$LoginSwitchPageConfigImpl value,
+    $Res Function(_$LoginSwitchPageConfigImpl) then,
+  ) = __$$LoginSwitchPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({ImageSource? mainLogo});
@@ -1303,26 +1394,27 @@ abstract class _$$LoginSwitchPageConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$LoginSwitchPageConfigImplCopyWithImpl<$Res>
-    extends _$LoginSwitchPageConfigCopyWithImpl<$Res,
-        _$LoginSwitchPageConfigImpl>
+    extends
+        _$LoginSwitchPageConfigCopyWithImpl<$Res, _$LoginSwitchPageConfigImpl>
     implements _$$LoginSwitchPageConfigImplCopyWith<$Res> {
-  __$$LoginSwitchPageConfigImplCopyWithImpl(_$LoginSwitchPageConfigImpl _value,
-      $Res Function(_$LoginSwitchPageConfigImpl) _then)
-      : super(_value, _then);
+  __$$LoginSwitchPageConfigImplCopyWithImpl(
+    _$LoginSwitchPageConfigImpl _value,
+    $Res Function(_$LoginSwitchPageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LoginSwitchPageConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? mainLogo = freezed,
-  }) {
-    return _then(_$LoginSwitchPageConfigImpl(
-      mainLogo: freezed == mainLogo
-          ? _value.mainLogo
-          : mainLogo // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-    ));
+  $Res call({Object? mainLogo = freezed}) {
+    return _then(
+      _$LoginSwitchPageConfigImpl(
+        mainLogo: freezed == mainLogo
+            ? _value.mainLogo
+            : mainLogo // ignore: cast_nullable_to_non_nullable
+                  as ImageSource?,
+      ),
+    );
   }
 }
 
@@ -1362,14 +1454,15 @@ class _$LoginSwitchPageConfigImpl implements _LoginSwitchPageConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$LoginSwitchPageConfigImplCopyWith<_$LoginSwitchPageConfigImpl>
-      get copyWith => __$$LoginSwitchPageConfigImplCopyWithImpl<
-          _$LoginSwitchPageConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$LoginSwitchPageConfigImplCopyWithImpl<_$LoginSwitchPageConfigImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LoginSwitchPageConfigImplToJson(
-      this,
-    );
+    return _$$LoginSwitchPageConfigImplToJson(this);
   }
 }
 
@@ -1388,7 +1481,7 @@ abstract class _LoginSwitchPageConfig implements LoginSwitchPageConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginSwitchPageConfigImplCopyWith<_$LoginSwitchPageConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) {
@@ -1416,8 +1509,9 @@ mixin _$AboutPageConfig {
 /// @nodoc
 abstract class $AboutPageConfigCopyWith<$Res> {
   factory $AboutPageConfigCopyWith(
-          AboutPageConfig value, $Res Function(AboutPageConfig) then) =
-      _$AboutPageConfigCopyWithImpl<$Res, AboutPageConfig>;
+    AboutPageConfig value,
+    $Res Function(AboutPageConfig) then,
+  ) = _$AboutPageConfigCopyWithImpl<$Res, AboutPageConfig>;
   @useResult
   $Res call({ImageSource? mainLogo, Metadata metadata});
 
@@ -1439,20 +1533,20 @@ class _$AboutPageConfigCopyWithImpl<$Res, $Val extends AboutPageConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? mainLogo = freezed,
-    Object? metadata = null,
-  }) {
-    return _then(_value.copyWith(
-      mainLogo: freezed == mainLogo
-          ? _value.mainLogo
-          : mainLogo // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-    ) as $Val);
+  $Res call({Object? mainLogo = freezed, Object? metadata = null}) {
+    return _then(
+      _value.copyWith(
+            mainLogo: freezed == mainLogo
+                ? _value.mainLogo
+                : mainLogo // ignore: cast_nullable_to_non_nullable
+                      as ImageSource?,
+            metadata: null == metadata
+                ? _value.metadata
+                : metadata // ignore: cast_nullable_to_non_nullable
+                      as Metadata,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AboutPageConfig
@@ -1483,9 +1577,10 @@ class _$AboutPageConfigCopyWithImpl<$Res, $Val extends AboutPageConfig>
 /// @nodoc
 abstract class _$$AboutPageConfigImplCopyWith<$Res>
     implements $AboutPageConfigCopyWith<$Res> {
-  factory _$$AboutPageConfigImplCopyWith(_$AboutPageConfigImpl value,
-          $Res Function(_$AboutPageConfigImpl) then) =
-      __$$AboutPageConfigImplCopyWithImpl<$Res>;
+  factory _$$AboutPageConfigImplCopyWith(
+    _$AboutPageConfigImpl value,
+    $Res Function(_$AboutPageConfigImpl) then,
+  ) = __$$AboutPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({ImageSource? mainLogo, Metadata metadata});
@@ -1501,27 +1596,27 @@ class __$$AboutPageConfigImplCopyWithImpl<$Res>
     extends _$AboutPageConfigCopyWithImpl<$Res, _$AboutPageConfigImpl>
     implements _$$AboutPageConfigImplCopyWith<$Res> {
   __$$AboutPageConfigImplCopyWithImpl(
-      _$AboutPageConfigImpl _value, $Res Function(_$AboutPageConfigImpl) _then)
-      : super(_value, _then);
+    _$AboutPageConfigImpl _value,
+    $Res Function(_$AboutPageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AboutPageConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? mainLogo = freezed,
-    Object? metadata = null,
-  }) {
-    return _then(_$AboutPageConfigImpl(
-      mainLogo: freezed == mainLogo
-          ? _value.mainLogo
-          : mainLogo // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-    ));
+  $Res call({Object? mainLogo = freezed, Object? metadata = null}) {
+    return _then(
+      _$AboutPageConfigImpl(
+        mainLogo: freezed == mainLogo
+            ? _value.mainLogo
+            : mainLogo // ignore: cast_nullable_to_non_nullable
+                  as ImageSource?,
+        metadata: null == metadata
+            ? _value.metadata
+            : metadata // ignore: cast_nullable_to_non_nullable
+                  as Metadata,
+      ),
+    );
   }
 }
 
@@ -1529,8 +1624,10 @@ class __$$AboutPageConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AboutPageConfigImpl implements _AboutPageConfig {
-  const _$AboutPageConfigImpl(
-      {this.mainLogo, this.metadata = const Metadata()});
+  const _$AboutPageConfigImpl({
+    this.mainLogo,
+    this.metadata = const Metadata(),
+  });
 
   factory _$AboutPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AboutPageConfigImplFromJson(json);
@@ -1571,20 +1668,21 @@ class _$AboutPageConfigImpl implements _AboutPageConfig {
   @pragma('vm:prefer-inline')
   _$$AboutPageConfigImplCopyWith<_$AboutPageConfigImpl> get copyWith =>
       __$$AboutPageConfigImplCopyWithImpl<_$AboutPageConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AboutPageConfigImplToJson(
-      this,
-    );
+    return _$$AboutPageConfigImplToJson(this);
   }
 }
 
 abstract class _AboutPageConfig implements AboutPageConfig {
-  const factory _AboutPageConfig(
-      {final ImageSource? mainLogo,
-      final Metadata metadata}) = _$AboutPageConfigImpl;
+  const factory _AboutPageConfig({
+    final ImageSource? mainLogo,
+    final Metadata metadata,
+  }) = _$AboutPageConfigImpl;
 
   factory _AboutPageConfig.fromJson(Map<String, dynamic> json) =
       _$AboutPageConfigImpl.fromJson;
@@ -1637,14 +1735,16 @@ mixin _$CallPageConfig {
 /// @nodoc
 abstract class $CallPageConfigCopyWith<$Res> {
   factory $CallPageConfigCopyWith(
-          CallPageConfig value, $Res Function(CallPageConfig) then) =
-      _$CallPageConfigCopyWithImpl<$Res, CallPageConfig>;
+    CallPageConfig value,
+    $Res Function(CallPageConfig) then,
+  ) = _$CallPageConfigCopyWithImpl<$Res, CallPageConfig>;
   @useResult
-  $Res call(
-      {OverlayStyleModel? systemUiOverlayStyle,
-      AppBarStyleConfig? appBarStyle,
-      CallPageInfoConfig? callInfo,
-      CallPageActionsConfig? actions});
+  $Res call({
+    OverlayStyleModel? systemUiOverlayStyle,
+    AppBarStyleConfig? appBarStyle,
+    CallPageInfoConfig? callInfo,
+    CallPageActionsConfig? actions,
+  });
 
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
   $AppBarStyleConfigCopyWith<$Res>? get appBarStyle;
@@ -1672,24 +1772,27 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
     Object? callInfo = freezed,
     Object? actions = freezed,
   }) {
-    return _then(_value.copyWith(
-      systemUiOverlayStyle: freezed == systemUiOverlayStyle
-          ? _value.systemUiOverlayStyle
-          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
-              as OverlayStyleModel?,
-      appBarStyle: freezed == appBarStyle
-          ? _value.appBarStyle
-          : appBarStyle // ignore: cast_nullable_to_non_nullable
-              as AppBarStyleConfig?,
-      callInfo: freezed == callInfo
-          ? _value.callInfo
-          : callInfo // ignore: cast_nullable_to_non_nullable
-              as CallPageInfoConfig?,
-      actions: freezed == actions
-          ? _value.actions
-          : actions // ignore: cast_nullable_to_non_nullable
-              as CallPageActionsConfig?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            systemUiOverlayStyle: freezed == systemUiOverlayStyle
+                ? _value.systemUiOverlayStyle
+                : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+                      as OverlayStyleModel?,
+            appBarStyle: freezed == appBarStyle
+                ? _value.appBarStyle
+                : appBarStyle // ignore: cast_nullable_to_non_nullable
+                      as AppBarStyleConfig?,
+            callInfo: freezed == callInfo
+                ? _value.callInfo
+                : callInfo // ignore: cast_nullable_to_non_nullable
+                      as CallPageInfoConfig?,
+            actions: freezed == actions
+                ? _value.actions
+                : actions // ignore: cast_nullable_to_non_nullable
+                      as CallPageActionsConfig?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of CallPageConfig
@@ -1701,8 +1804,9 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
       return null;
     }
 
-    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!,
-        (value) {
+    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!, (
+      value,
+    ) {
       return _then(_value.copyWith(systemUiOverlayStyle: value) as $Val);
     });
   }
@@ -1753,16 +1857,18 @@ class _$CallPageConfigCopyWithImpl<$Res, $Val extends CallPageConfig>
 /// @nodoc
 abstract class _$$CallPageConfigImplCopyWith<$Res>
     implements $CallPageConfigCopyWith<$Res> {
-  factory _$$CallPageConfigImplCopyWith(_$CallPageConfigImpl value,
-          $Res Function(_$CallPageConfigImpl) then) =
-      __$$CallPageConfigImplCopyWithImpl<$Res>;
+  factory _$$CallPageConfigImplCopyWith(
+    _$CallPageConfigImpl value,
+    $Res Function(_$CallPageConfigImpl) then,
+  ) = __$$CallPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {OverlayStyleModel? systemUiOverlayStyle,
-      AppBarStyleConfig? appBarStyle,
-      CallPageInfoConfig? callInfo,
-      CallPageActionsConfig? actions});
+  $Res call({
+    OverlayStyleModel? systemUiOverlayStyle,
+    AppBarStyleConfig? appBarStyle,
+    CallPageInfoConfig? callInfo,
+    CallPageActionsConfig? actions,
+  });
 
   @override
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
@@ -1779,8 +1885,9 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
     extends _$CallPageConfigCopyWithImpl<$Res, _$CallPageConfigImpl>
     implements _$$CallPageConfigImplCopyWith<$Res> {
   __$$CallPageConfigImplCopyWithImpl(
-      _$CallPageConfigImpl _value, $Res Function(_$CallPageConfigImpl) _then)
-      : super(_value, _then);
+    _$CallPageConfigImpl _value,
+    $Res Function(_$CallPageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CallPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1792,24 +1899,26 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
     Object? callInfo = freezed,
     Object? actions = freezed,
   }) {
-    return _then(_$CallPageConfigImpl(
-      systemUiOverlayStyle: freezed == systemUiOverlayStyle
-          ? _value.systemUiOverlayStyle
-          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
-              as OverlayStyleModel?,
-      appBarStyle: freezed == appBarStyle
-          ? _value.appBarStyle
-          : appBarStyle // ignore: cast_nullable_to_non_nullable
-              as AppBarStyleConfig?,
-      callInfo: freezed == callInfo
-          ? _value.callInfo
-          : callInfo // ignore: cast_nullable_to_non_nullable
-              as CallPageInfoConfig?,
-      actions: freezed == actions
-          ? _value.actions
-          : actions // ignore: cast_nullable_to_non_nullable
-              as CallPageActionsConfig?,
-    ));
+    return _then(
+      _$CallPageConfigImpl(
+        systemUiOverlayStyle: freezed == systemUiOverlayStyle
+            ? _value.systemUiOverlayStyle
+            : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+                  as OverlayStyleModel?,
+        appBarStyle: freezed == appBarStyle
+            ? _value.appBarStyle
+            : appBarStyle // ignore: cast_nullable_to_non_nullable
+                  as AppBarStyleConfig?,
+        callInfo: freezed == callInfo
+            ? _value.callInfo
+            : callInfo // ignore: cast_nullable_to_non_nullable
+                  as CallPageInfoConfig?,
+        actions: freezed == actions
+            ? _value.actions
+            : actions // ignore: cast_nullable_to_non_nullable
+                  as CallPageActionsConfig?,
+      ),
+    );
   }
 }
 
@@ -1817,11 +1926,12 @@ class __$$CallPageConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$CallPageConfigImpl implements _CallPageConfig {
-  const _$CallPageConfigImpl(
-      {this.systemUiOverlayStyle,
-      this.appBarStyle,
-      this.callInfo,
-      this.actions});
+  const _$CallPageConfigImpl({
+    this.systemUiOverlayStyle,
+    this.appBarStyle,
+    this.callInfo,
+    this.actions,
+  });
 
   factory _$CallPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallPageConfigImplFromJson(json);
@@ -1864,7 +1974,12 @@ class _$CallPageConfigImpl implements _CallPageConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, systemUiOverlayStyle, appBarStyle, callInfo, actions);
+    runtimeType,
+    systemUiOverlayStyle,
+    appBarStyle,
+    callInfo,
+    actions,
+  );
 
   /// Create a copy of CallPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1873,22 +1988,23 @@ class _$CallPageConfigImpl implements _CallPageConfig {
   @pragma('vm:prefer-inline')
   _$$CallPageConfigImplCopyWith<_$CallPageConfigImpl> get copyWith =>
       __$$CallPageConfigImplCopyWithImpl<_$CallPageConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CallPageConfigImplToJson(
-      this,
-    );
+    return _$$CallPageConfigImplToJson(this);
   }
 }
 
 abstract class _CallPageConfig implements CallPageConfig {
-  const factory _CallPageConfig(
-      {final OverlayStyleModel? systemUiOverlayStyle,
-      final AppBarStyleConfig? appBarStyle,
-      final CallPageInfoConfig? callInfo,
-      final CallPageActionsConfig? actions}) = _$CallPageConfigImpl;
+  const factory _CallPageConfig({
+    final OverlayStyleModel? systemUiOverlayStyle,
+    final AppBarStyleConfig? appBarStyle,
+    final CallPageInfoConfig? callInfo,
+    final CallPageActionsConfig? actions,
+  }) = _$CallPageConfigImpl;
 
   factory _CallPageConfig.fromJson(Map<String, dynamic> json) =
       _$CallPageConfigImpl.fromJson;
@@ -1918,7 +2034,8 @@ abstract class _CallPageConfig implements CallPageConfig {
 }
 
 CallPageActionsConfig _$CallPageActionsConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _CallPageActionsConfig.fromJson(json);
 }
 
@@ -1947,20 +2064,22 @@ mixin _$CallPageActionsConfig {
 
 /// @nodoc
 abstract class $CallPageActionsConfigCopyWith<$Res> {
-  factory $CallPageActionsConfigCopyWith(CallPageActionsConfig value,
-          $Res Function(CallPageActionsConfig) then) =
-      _$CallPageActionsConfigCopyWithImpl<$Res, CallPageActionsConfig>;
+  factory $CallPageActionsConfigCopyWith(
+    CallPageActionsConfig value,
+    $Res Function(CallPageActionsConfig) then,
+  ) = _$CallPageActionsConfigCopyWithImpl<$Res, CallPageActionsConfig>;
   @useResult
-  $Res call(
-      {ElevatedButtonWidgetConfig callStart,
-      ElevatedButtonWidgetConfig hangup,
-      ElevatedButtonWidgetConfig transfer,
-      ElevatedButtonWidgetConfig camera,
-      ElevatedButtonWidgetConfig muted,
-      ElevatedButtonWidgetConfig speaker,
-      ElevatedButtonWidgetConfig held,
-      ElevatedButtonWidgetConfig swap,
-      ElevatedButtonWidgetConfig key});
+  $Res call({
+    ElevatedButtonWidgetConfig callStart,
+    ElevatedButtonWidgetConfig hangup,
+    ElevatedButtonWidgetConfig transfer,
+    ElevatedButtonWidgetConfig camera,
+    ElevatedButtonWidgetConfig muted,
+    ElevatedButtonWidgetConfig speaker,
+    ElevatedButtonWidgetConfig held,
+    ElevatedButtonWidgetConfig swap,
+    ElevatedButtonWidgetConfig key,
+  });
 
   $ElevatedButtonWidgetConfigCopyWith<$Res> get callStart;
   $ElevatedButtonWidgetConfigCopyWith<$Res> get hangup;
@@ -1974,8 +2093,10 @@ abstract class $CallPageActionsConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CallPageActionsConfigCopyWithImpl<$Res,
-        $Val extends CallPageActionsConfig>
+class _$CallPageActionsConfigCopyWithImpl<
+  $Res,
+  $Val extends CallPageActionsConfig
+>
     implements $CallPageActionsConfigCopyWith<$Res> {
   _$CallPageActionsConfigCopyWithImpl(this._value, this._then);
 
@@ -1999,44 +2120,47 @@ class _$CallPageActionsConfigCopyWithImpl<$Res,
     Object? swap = null,
     Object? key = null,
   }) {
-    return _then(_value.copyWith(
-      callStart: null == callStart
-          ? _value.callStart
-          : callStart // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      hangup: null == hangup
-          ? _value.hangup
-          : hangup // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      transfer: null == transfer
-          ? _value.transfer
-          : transfer // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      camera: null == camera
-          ? _value.camera
-          : camera // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      muted: null == muted
-          ? _value.muted
-          : muted // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      speaker: null == speaker
-          ? _value.speaker
-          : speaker // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      held: null == held
-          ? _value.held
-          : held // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      swap: null == swap
-          ? _value.swap
-          : swap // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      key: null == key
-          ? _value.key
-          : key // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            callStart: null == callStart
+                ? _value.callStart
+                : callStart // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            hangup: null == hangup
+                ? _value.hangup
+                : hangup // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            transfer: null == transfer
+                ? _value.transfer
+                : transfer // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            camera: null == camera
+                ? _value.camera
+                : camera // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            muted: null == muted
+                ? _value.muted
+                : muted // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            speaker: null == speaker
+                ? _value.speaker
+                : speaker // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            held: null == held
+                ? _value.held
+                : held // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            swap: null == swap
+                ? _value.swap
+                : swap // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            key: null == key
+                ? _value.key
+                : key // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of CallPageActionsConfig
@@ -2134,21 +2258,22 @@ class _$CallPageActionsConfigCopyWithImpl<$Res,
 abstract class _$$CallPageActionsConfigImplCopyWith<$Res>
     implements $CallPageActionsConfigCopyWith<$Res> {
   factory _$$CallPageActionsConfigImplCopyWith(
-          _$CallPageActionsConfigImpl value,
-          $Res Function(_$CallPageActionsConfigImpl) then) =
-      __$$CallPageActionsConfigImplCopyWithImpl<$Res>;
+    _$CallPageActionsConfigImpl value,
+    $Res Function(_$CallPageActionsConfigImpl) then,
+  ) = __$$CallPageActionsConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {ElevatedButtonWidgetConfig callStart,
-      ElevatedButtonWidgetConfig hangup,
-      ElevatedButtonWidgetConfig transfer,
-      ElevatedButtonWidgetConfig camera,
-      ElevatedButtonWidgetConfig muted,
-      ElevatedButtonWidgetConfig speaker,
-      ElevatedButtonWidgetConfig held,
-      ElevatedButtonWidgetConfig swap,
-      ElevatedButtonWidgetConfig key});
+  $Res call({
+    ElevatedButtonWidgetConfig callStart,
+    ElevatedButtonWidgetConfig hangup,
+    ElevatedButtonWidgetConfig transfer,
+    ElevatedButtonWidgetConfig camera,
+    ElevatedButtonWidgetConfig muted,
+    ElevatedButtonWidgetConfig speaker,
+    ElevatedButtonWidgetConfig held,
+    ElevatedButtonWidgetConfig swap,
+    ElevatedButtonWidgetConfig key,
+  });
 
   @override
   $ElevatedButtonWidgetConfigCopyWith<$Res> get callStart;
@@ -2172,12 +2297,13 @@ abstract class _$$CallPageActionsConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$CallPageActionsConfigImplCopyWithImpl<$Res>
-    extends _$CallPageActionsConfigCopyWithImpl<$Res,
-        _$CallPageActionsConfigImpl>
+    extends
+        _$CallPageActionsConfigCopyWithImpl<$Res, _$CallPageActionsConfigImpl>
     implements _$$CallPageActionsConfigImplCopyWith<$Res> {
-  __$$CallPageActionsConfigImplCopyWithImpl(_$CallPageActionsConfigImpl _value,
-      $Res Function(_$CallPageActionsConfigImpl) _then)
-      : super(_value, _then);
+  __$$CallPageActionsConfigImplCopyWithImpl(
+    _$CallPageActionsConfigImpl _value,
+    $Res Function(_$CallPageActionsConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CallPageActionsConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2194,44 +2320,46 @@ class __$$CallPageActionsConfigImplCopyWithImpl<$Res>
     Object? swap = null,
     Object? key = null,
   }) {
-    return _then(_$CallPageActionsConfigImpl(
-      callStart: null == callStart
-          ? _value.callStart
-          : callStart // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      hangup: null == hangup
-          ? _value.hangup
-          : hangup // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      transfer: null == transfer
-          ? _value.transfer
-          : transfer // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      camera: null == camera
-          ? _value.camera
-          : camera // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      muted: null == muted
-          ? _value.muted
-          : muted // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      speaker: null == speaker
-          ? _value.speaker
-          : speaker // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      held: null == held
-          ? _value.held
-          : held // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      swap: null == swap
-          ? _value.swap
-          : swap // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      key: null == key
-          ? _value.key
-          : key // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-    ));
+    return _then(
+      _$CallPageActionsConfigImpl(
+        callStart: null == callStart
+            ? _value.callStart
+            : callStart // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        hangup: null == hangup
+            ? _value.hangup
+            : hangup // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        transfer: null == transfer
+            ? _value.transfer
+            : transfer // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        camera: null == camera
+            ? _value.camera
+            : camera // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        muted: null == muted
+            ? _value.muted
+            : muted // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        speaker: null == speaker
+            ? _value.speaker
+            : speaker // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        held: null == held
+            ? _value.held
+            : held // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        swap: null == swap
+            ? _value.swap
+            : swap // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        key: null == key
+            ? _value.key
+            : key // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -2239,16 +2367,17 @@ class __$$CallPageActionsConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$CallPageActionsConfigImpl implements _CallPageActionsConfig {
-  const _$CallPageActionsConfigImpl(
-      {this.callStart = const ElevatedButtonWidgetConfig(),
-      this.hangup = const ElevatedButtonWidgetConfig(),
-      this.transfer = const ElevatedButtonWidgetConfig(),
-      this.camera = const ElevatedButtonWidgetConfig(),
-      this.muted = const ElevatedButtonWidgetConfig(),
-      this.speaker = const ElevatedButtonWidgetConfig(),
-      this.held = const ElevatedButtonWidgetConfig(),
-      this.swap = const ElevatedButtonWidgetConfig(),
-      this.key = const ElevatedButtonWidgetConfig()});
+  const _$CallPageActionsConfigImpl({
+    this.callStart = const ElevatedButtonWidgetConfig(),
+    this.hangup = const ElevatedButtonWidgetConfig(),
+    this.transfer = const ElevatedButtonWidgetConfig(),
+    this.camera = const ElevatedButtonWidgetConfig(),
+    this.muted = const ElevatedButtonWidgetConfig(),
+    this.speaker = const ElevatedButtonWidgetConfig(),
+    this.held = const ElevatedButtonWidgetConfig(),
+    this.swap = const ElevatedButtonWidgetConfig(),
+    this.key = const ElevatedButtonWidgetConfig(),
+  });
 
   factory _$CallPageActionsConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallPageActionsConfigImplFromJson(json);
@@ -2306,8 +2435,18 @@ class _$CallPageActionsConfigImpl implements _CallPageActionsConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, callStart, hangup, transfer,
-      camera, muted, speaker, held, swap, key);
+  int get hashCode => Object.hash(
+    runtimeType,
+    callStart,
+    hangup,
+    transfer,
+    camera,
+    muted,
+    speaker,
+    held,
+    swap,
+    key,
+  );
 
   /// Create a copy of CallPageActionsConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2315,28 +2454,30 @@ class _$CallPageActionsConfigImpl implements _CallPageActionsConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$CallPageActionsConfigImplCopyWith<_$CallPageActionsConfigImpl>
-      get copyWith => __$$CallPageActionsConfigImplCopyWithImpl<
-          _$CallPageActionsConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$CallPageActionsConfigImplCopyWithImpl<_$CallPageActionsConfigImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CallPageActionsConfigImplToJson(
-      this,
-    );
+    return _$$CallPageActionsConfigImplToJson(this);
   }
 }
 
 abstract class _CallPageActionsConfig implements CallPageActionsConfig {
-  const factory _CallPageActionsConfig(
-      {final ElevatedButtonWidgetConfig callStart,
-      final ElevatedButtonWidgetConfig hangup,
-      final ElevatedButtonWidgetConfig transfer,
-      final ElevatedButtonWidgetConfig camera,
-      final ElevatedButtonWidgetConfig muted,
-      final ElevatedButtonWidgetConfig speaker,
-      final ElevatedButtonWidgetConfig held,
-      final ElevatedButtonWidgetConfig swap,
-      final ElevatedButtonWidgetConfig key}) = _$CallPageActionsConfigImpl;
+  const factory _CallPageActionsConfig({
+    final ElevatedButtonWidgetConfig callStart,
+    final ElevatedButtonWidgetConfig hangup,
+    final ElevatedButtonWidgetConfig transfer,
+    final ElevatedButtonWidgetConfig camera,
+    final ElevatedButtonWidgetConfig muted,
+    final ElevatedButtonWidgetConfig speaker,
+    final ElevatedButtonWidgetConfig held,
+    final ElevatedButtonWidgetConfig swap,
+    final ElevatedButtonWidgetConfig key,
+  }) = _$CallPageActionsConfigImpl;
 
   factory _CallPageActionsConfig.fromJson(Map<String, dynamic> json) =
       _$CallPageActionsConfigImpl.fromJson;
@@ -2365,7 +2506,7 @@ abstract class _CallPageActionsConfig implements CallPageActionsConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CallPageActionsConfigImplCopyWith<_$CallPageActionsConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 CallPageInfoConfig _$CallPageInfoConfigFromJson(Map<String, dynamic> json) {
@@ -2401,14 +2542,16 @@ mixin _$CallPageInfoConfig {
 /// @nodoc
 abstract class $CallPageInfoConfigCopyWith<$Res> {
   factory $CallPageInfoConfigCopyWith(
-          CallPageInfoConfig value, $Res Function(CallPageInfoConfig) then) =
-      _$CallPageInfoConfigCopyWithImpl<$Res, CallPageInfoConfig>;
+    CallPageInfoConfig value,
+    $Res Function(CallPageInfoConfig) then,
+  ) = _$CallPageInfoConfigCopyWithImpl<$Res, CallPageInfoConfig>;
   @useResult
-  $Res call(
-      {TextStyleConfig? usernameTextStyle,
-      TextStyleConfig? numberTextStyle,
-      TextStyleConfig? callStatusTextStyle,
-      TextStyleConfig? processingStatusTextStyle});
+  $Res call({
+    TextStyleConfig? usernameTextStyle,
+    TextStyleConfig? numberTextStyle,
+    TextStyleConfig? callStatusTextStyle,
+    TextStyleConfig? processingStatusTextStyle,
+  });
 
   $TextStyleConfigCopyWith<$Res>? get usernameTextStyle;
   $TextStyleConfigCopyWith<$Res>? get numberTextStyle;
@@ -2436,24 +2579,27 @@ class _$CallPageInfoConfigCopyWithImpl<$Res, $Val extends CallPageInfoConfig>
     Object? callStatusTextStyle = freezed,
     Object? processingStatusTextStyle = freezed,
   }) {
-    return _then(_value.copyWith(
-      usernameTextStyle: freezed == usernameTextStyle
-          ? _value.usernameTextStyle
-          : usernameTextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      numberTextStyle: freezed == numberTextStyle
-          ? _value.numberTextStyle
-          : numberTextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      callStatusTextStyle: freezed == callStatusTextStyle
-          ? _value.callStatusTextStyle
-          : callStatusTextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      processingStatusTextStyle: freezed == processingStatusTextStyle
-          ? _value.processingStatusTextStyle
-          : processingStatusTextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            usernameTextStyle: freezed == usernameTextStyle
+                ? _value.usernameTextStyle
+                : usernameTextStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            numberTextStyle: freezed == numberTextStyle
+                ? _value.numberTextStyle
+                : numberTextStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            callStatusTextStyle: freezed == callStatusTextStyle
+                ? _value.callStatusTextStyle
+                : callStatusTextStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            processingStatusTextStyle: freezed == processingStatusTextStyle
+                ? _value.processingStatusTextStyle
+                : processingStatusTextStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of CallPageInfoConfig
@@ -2507,8 +2653,9 @@ class _$CallPageInfoConfigCopyWithImpl<$Res, $Val extends CallPageInfoConfig>
       return null;
     }
 
-    return $TextStyleConfigCopyWith<$Res>(_value.processingStatusTextStyle!,
-        (value) {
+    return $TextStyleConfigCopyWith<$Res>(_value.processingStatusTextStyle!, (
+      value,
+    ) {
       return _then(_value.copyWith(processingStatusTextStyle: value) as $Val);
     });
   }
@@ -2517,16 +2664,18 @@ class _$CallPageInfoConfigCopyWithImpl<$Res, $Val extends CallPageInfoConfig>
 /// @nodoc
 abstract class _$$CallPageInfoConfigImplCopyWith<$Res>
     implements $CallPageInfoConfigCopyWith<$Res> {
-  factory _$$CallPageInfoConfigImplCopyWith(_$CallPageInfoConfigImpl value,
-          $Res Function(_$CallPageInfoConfigImpl) then) =
-      __$$CallPageInfoConfigImplCopyWithImpl<$Res>;
+  factory _$$CallPageInfoConfigImplCopyWith(
+    _$CallPageInfoConfigImpl value,
+    $Res Function(_$CallPageInfoConfigImpl) then,
+  ) = __$$CallPageInfoConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {TextStyleConfig? usernameTextStyle,
-      TextStyleConfig? numberTextStyle,
-      TextStyleConfig? callStatusTextStyle,
-      TextStyleConfig? processingStatusTextStyle});
+  $Res call({
+    TextStyleConfig? usernameTextStyle,
+    TextStyleConfig? numberTextStyle,
+    TextStyleConfig? callStatusTextStyle,
+    TextStyleConfig? processingStatusTextStyle,
+  });
 
   @override
   $TextStyleConfigCopyWith<$Res>? get usernameTextStyle;
@@ -2542,9 +2691,10 @@ abstract class _$$CallPageInfoConfigImplCopyWith<$Res>
 class __$$CallPageInfoConfigImplCopyWithImpl<$Res>
     extends _$CallPageInfoConfigCopyWithImpl<$Res, _$CallPageInfoConfigImpl>
     implements _$$CallPageInfoConfigImplCopyWith<$Res> {
-  __$$CallPageInfoConfigImplCopyWithImpl(_$CallPageInfoConfigImpl _value,
-      $Res Function(_$CallPageInfoConfigImpl) _then)
-      : super(_value, _then);
+  __$$CallPageInfoConfigImplCopyWithImpl(
+    _$CallPageInfoConfigImpl _value,
+    $Res Function(_$CallPageInfoConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CallPageInfoConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2556,24 +2706,26 @@ class __$$CallPageInfoConfigImplCopyWithImpl<$Res>
     Object? callStatusTextStyle = freezed,
     Object? processingStatusTextStyle = freezed,
   }) {
-    return _then(_$CallPageInfoConfigImpl(
-      usernameTextStyle: freezed == usernameTextStyle
-          ? _value.usernameTextStyle
-          : usernameTextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      numberTextStyle: freezed == numberTextStyle
-          ? _value.numberTextStyle
-          : numberTextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      callStatusTextStyle: freezed == callStatusTextStyle
-          ? _value.callStatusTextStyle
-          : callStatusTextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      processingStatusTextStyle: freezed == processingStatusTextStyle
-          ? _value.processingStatusTextStyle
-          : processingStatusTextStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-    ));
+    return _then(
+      _$CallPageInfoConfigImpl(
+        usernameTextStyle: freezed == usernameTextStyle
+            ? _value.usernameTextStyle
+            : usernameTextStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        numberTextStyle: freezed == numberTextStyle
+            ? _value.numberTextStyle
+            : numberTextStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        callStatusTextStyle: freezed == callStatusTextStyle
+            ? _value.callStatusTextStyle
+            : callStatusTextStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        processingStatusTextStyle: freezed == processingStatusTextStyle
+            ? _value.processingStatusTextStyle
+            : processingStatusTextStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+      ),
+    );
   }
 }
 
@@ -2581,11 +2733,12 @@ class __$$CallPageInfoConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$CallPageInfoConfigImpl implements _CallPageInfoConfig {
-  const _$CallPageInfoConfigImpl(
-      {this.usernameTextStyle,
-      this.numberTextStyle,
-      this.callStatusTextStyle,
-      this.processingStatusTextStyle});
+  const _$CallPageInfoConfigImpl({
+    this.usernameTextStyle,
+    this.numberTextStyle,
+    this.callStatusTextStyle,
+    this.processingStatusTextStyle,
+  });
 
   factory _$CallPageInfoConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallPageInfoConfigImplFromJson(json);
@@ -2622,15 +2775,22 @@ class _$CallPageInfoConfigImpl implements _CallPageInfoConfig {
                 other.numberTextStyle == numberTextStyle) &&
             (identical(other.callStatusTextStyle, callStatusTextStyle) ||
                 other.callStatusTextStyle == callStatusTextStyle) &&
-            (identical(other.processingStatusTextStyle,
-                    processingStatusTextStyle) ||
+            (identical(
+                  other.processingStatusTextStyle,
+                  processingStatusTextStyle,
+                ) ||
                 other.processingStatusTextStyle == processingStatusTextStyle));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, usernameTextStyle,
-      numberTextStyle, callStatusTextStyle, processingStatusTextStyle);
+  int get hashCode => Object.hash(
+    runtimeType,
+    usernameTextStyle,
+    numberTextStyle,
+    callStatusTextStyle,
+    processingStatusTextStyle,
+  );
 
   /// Create a copy of CallPageInfoConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2639,23 +2799,23 @@ class _$CallPageInfoConfigImpl implements _CallPageInfoConfig {
   @pragma('vm:prefer-inline')
   _$$CallPageInfoConfigImplCopyWith<_$CallPageInfoConfigImpl> get copyWith =>
       __$$CallPageInfoConfigImplCopyWithImpl<_$CallPageInfoConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CallPageInfoConfigImplToJson(
-      this,
-    );
+    return _$$CallPageInfoConfigImplToJson(this);
   }
 }
 
 abstract class _CallPageInfoConfig implements CallPageInfoConfig {
-  const factory _CallPageInfoConfig(
-          {final TextStyleConfig? usernameTextStyle,
-          final TextStyleConfig? numberTextStyle,
-          final TextStyleConfig? callStatusTextStyle,
-          final TextStyleConfig? processingStatusTextStyle}) =
-      _$CallPageInfoConfigImpl;
+  const factory _CallPageInfoConfig({
+    final TextStyleConfig? usernameTextStyle,
+    final TextStyleConfig? numberTextStyle,
+    final TextStyleConfig? callStatusTextStyle,
+    final TextStyleConfig? processingStatusTextStyle,
+  }) = _$CallPageInfoConfigImpl;
 
   factory _CallPageInfoConfig.fromJson(Map<String, dynamic> json) =
       _$CallPageInfoConfigImpl.fromJson;
@@ -2719,15 +2879,17 @@ mixin _$KeypadPageConfig {
 /// @nodoc
 abstract class $KeypadPageConfigCopyWith<$Res> {
   factory $KeypadPageConfigCopyWith(
-          KeypadPageConfig value, $Res Function(KeypadPageConfig) then) =
-      _$KeypadPageConfigCopyWithImpl<$Res, KeypadPageConfig>;
+    KeypadPageConfig value,
+    $Res Function(KeypadPageConfig) then,
+  ) = _$KeypadPageConfigCopyWithImpl<$Res, KeypadPageConfig>;
   @useResult
-  $Res call(
-      {OverlayStyleModel? systemUiOverlayStyle,
-      TextFieldConfig? textField,
-      TextFieldConfig? contactName,
-      KeypadStyleConfig? keypad,
-      ActionPadWidgetConfig? actionpad});
+  $Res call({
+    OverlayStyleModel? systemUiOverlayStyle,
+    TextFieldConfig? textField,
+    TextFieldConfig? contactName,
+    KeypadStyleConfig? keypad,
+    ActionPadWidgetConfig? actionpad,
+  });
 
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
   $TextFieldConfigCopyWith<$Res>? get textField;
@@ -2757,28 +2919,31 @@ class _$KeypadPageConfigCopyWithImpl<$Res, $Val extends KeypadPageConfig>
     Object? keypad = freezed,
     Object? actionpad = freezed,
   }) {
-    return _then(_value.copyWith(
-      systemUiOverlayStyle: freezed == systemUiOverlayStyle
-          ? _value.systemUiOverlayStyle
-          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
-              as OverlayStyleModel?,
-      textField: freezed == textField
-          ? _value.textField
-          : textField // ignore: cast_nullable_to_non_nullable
-              as TextFieldConfig?,
-      contactName: freezed == contactName
-          ? _value.contactName
-          : contactName // ignore: cast_nullable_to_non_nullable
-              as TextFieldConfig?,
-      keypad: freezed == keypad
-          ? _value.keypad
-          : keypad // ignore: cast_nullable_to_non_nullable
-              as KeypadStyleConfig?,
-      actionpad: freezed == actionpad
-          ? _value.actionpad
-          : actionpad // ignore: cast_nullable_to_non_nullable
-              as ActionPadWidgetConfig?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            systemUiOverlayStyle: freezed == systemUiOverlayStyle
+                ? _value.systemUiOverlayStyle
+                : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+                      as OverlayStyleModel?,
+            textField: freezed == textField
+                ? _value.textField
+                : textField // ignore: cast_nullable_to_non_nullable
+                      as TextFieldConfig?,
+            contactName: freezed == contactName
+                ? _value.contactName
+                : contactName // ignore: cast_nullable_to_non_nullable
+                      as TextFieldConfig?,
+            keypad: freezed == keypad
+                ? _value.keypad
+                : keypad // ignore: cast_nullable_to_non_nullable
+                      as KeypadStyleConfig?,
+            actionpad: freezed == actionpad
+                ? _value.actionpad
+                : actionpad // ignore: cast_nullable_to_non_nullable
+                      as ActionPadWidgetConfig?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of KeypadPageConfig
@@ -2790,8 +2955,9 @@ class _$KeypadPageConfigCopyWithImpl<$Res, $Val extends KeypadPageConfig>
       return null;
     }
 
-    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!,
-        (value) {
+    return $OverlayStyleModelCopyWith<$Res>(_value.systemUiOverlayStyle!, (
+      value,
+    ) {
       return _then(_value.copyWith(systemUiOverlayStyle: value) as $Val);
     });
   }
@@ -2856,17 +3022,19 @@ class _$KeypadPageConfigCopyWithImpl<$Res, $Val extends KeypadPageConfig>
 /// @nodoc
 abstract class _$$KeypadPageConfigImplCopyWith<$Res>
     implements $KeypadPageConfigCopyWith<$Res> {
-  factory _$$KeypadPageConfigImplCopyWith(_$KeypadPageConfigImpl value,
-          $Res Function(_$KeypadPageConfigImpl) then) =
-      __$$KeypadPageConfigImplCopyWithImpl<$Res>;
+  factory _$$KeypadPageConfigImplCopyWith(
+    _$KeypadPageConfigImpl value,
+    $Res Function(_$KeypadPageConfigImpl) then,
+  ) = __$$KeypadPageConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {OverlayStyleModel? systemUiOverlayStyle,
-      TextFieldConfig? textField,
-      TextFieldConfig? contactName,
-      KeypadStyleConfig? keypad,
-      ActionPadWidgetConfig? actionpad});
+  $Res call({
+    OverlayStyleModel? systemUiOverlayStyle,
+    TextFieldConfig? textField,
+    TextFieldConfig? contactName,
+    KeypadStyleConfig? keypad,
+    ActionPadWidgetConfig? actionpad,
+  });
 
   @override
   $OverlayStyleModelCopyWith<$Res>? get systemUiOverlayStyle;
@@ -2884,9 +3052,10 @@ abstract class _$$KeypadPageConfigImplCopyWith<$Res>
 class __$$KeypadPageConfigImplCopyWithImpl<$Res>
     extends _$KeypadPageConfigCopyWithImpl<$Res, _$KeypadPageConfigImpl>
     implements _$$KeypadPageConfigImplCopyWith<$Res> {
-  __$$KeypadPageConfigImplCopyWithImpl(_$KeypadPageConfigImpl _value,
-      $Res Function(_$KeypadPageConfigImpl) _then)
-      : super(_value, _then);
+  __$$KeypadPageConfigImplCopyWithImpl(
+    _$KeypadPageConfigImpl _value,
+    $Res Function(_$KeypadPageConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of KeypadPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2899,28 +3068,30 @@ class __$$KeypadPageConfigImplCopyWithImpl<$Res>
     Object? keypad = freezed,
     Object? actionpad = freezed,
   }) {
-    return _then(_$KeypadPageConfigImpl(
-      systemUiOverlayStyle: freezed == systemUiOverlayStyle
-          ? _value.systemUiOverlayStyle
-          : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
-              as OverlayStyleModel?,
-      textField: freezed == textField
-          ? _value.textField
-          : textField // ignore: cast_nullable_to_non_nullable
-              as TextFieldConfig?,
-      contactName: freezed == contactName
-          ? _value.contactName
-          : contactName // ignore: cast_nullable_to_non_nullable
-              as TextFieldConfig?,
-      keypad: freezed == keypad
-          ? _value.keypad
-          : keypad // ignore: cast_nullable_to_non_nullable
-              as KeypadStyleConfig?,
-      actionpad: freezed == actionpad
-          ? _value.actionpad
-          : actionpad // ignore: cast_nullable_to_non_nullable
-              as ActionPadWidgetConfig?,
-    ));
+    return _then(
+      _$KeypadPageConfigImpl(
+        systemUiOverlayStyle: freezed == systemUiOverlayStyle
+            ? _value.systemUiOverlayStyle
+            : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+                  as OverlayStyleModel?,
+        textField: freezed == textField
+            ? _value.textField
+            : textField // ignore: cast_nullable_to_non_nullable
+                  as TextFieldConfig?,
+        contactName: freezed == contactName
+            ? _value.contactName
+            : contactName // ignore: cast_nullable_to_non_nullable
+                  as TextFieldConfig?,
+        keypad: freezed == keypad
+            ? _value.keypad
+            : keypad // ignore: cast_nullable_to_non_nullable
+                  as KeypadStyleConfig?,
+        actionpad: freezed == actionpad
+            ? _value.actionpad
+            : actionpad // ignore: cast_nullable_to_non_nullable
+                  as ActionPadWidgetConfig?,
+      ),
+    );
   }
 }
 
@@ -2928,12 +3099,13 @@ class __$$KeypadPageConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$KeypadPageConfigImpl implements _KeypadPageConfig {
-  const _$KeypadPageConfigImpl(
-      {this.systemUiOverlayStyle,
-      this.textField,
-      this.contactName,
-      this.keypad,
-      this.actionpad});
+  const _$KeypadPageConfigImpl({
+    this.systemUiOverlayStyle,
+    this.textField,
+    this.contactName,
+    this.keypad,
+    this.actionpad,
+  });
 
   factory _$KeypadPageConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$KeypadPageConfigImplFromJson(json);
@@ -2981,8 +3153,14 @@ class _$KeypadPageConfigImpl implements _KeypadPageConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, systemUiOverlayStyle, textField,
-      contactName, keypad, actionpad);
+  int get hashCode => Object.hash(
+    runtimeType,
+    systemUiOverlayStyle,
+    textField,
+    contactName,
+    keypad,
+    actionpad,
+  );
 
   /// Create a copy of KeypadPageConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2991,23 +3169,24 @@ class _$KeypadPageConfigImpl implements _KeypadPageConfig {
   @pragma('vm:prefer-inline')
   _$$KeypadPageConfigImplCopyWith<_$KeypadPageConfigImpl> get copyWith =>
       __$$KeypadPageConfigImplCopyWithImpl<_$KeypadPageConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$KeypadPageConfigImplToJson(
-      this,
-    );
+    return _$$KeypadPageConfigImplToJson(this);
   }
 }
 
 abstract class _KeypadPageConfig implements KeypadPageConfig {
-  const factory _KeypadPageConfig(
-      {final OverlayStyleModel? systemUiOverlayStyle,
-      final TextFieldConfig? textField,
-      final TextFieldConfig? contactName,
-      final KeypadStyleConfig? keypad,
-      final ActionPadWidgetConfig? actionpad}) = _$KeypadPageConfigImpl;
+  const factory _KeypadPageConfig({
+    final OverlayStyleModel? systemUiOverlayStyle,
+    final TextFieldConfig? textField,
+    final TextFieldConfig? contactName,
+    final KeypadStyleConfig? keypad,
+    final ActionPadWidgetConfig? actionpad,
+  }) = _$KeypadPageConfigImpl;
 
   factory _KeypadPageConfig.fromJson(Map<String, dynamic> json) =
       _$KeypadPageConfigImpl.fromJson;

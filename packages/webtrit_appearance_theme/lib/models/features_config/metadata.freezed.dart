@@ -12,7 +12,8 @@ part of 'metadata.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Metadata _$MetadataFromJson(Map<String, dynamic> json) {
   return _Metadata.fromJson(json);
@@ -54,15 +55,16 @@ class _$MetadataCopyWithImpl<$Res, $Val extends Metadata>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? attributes = null,
-  }) {
-    return _then(_value.copyWith(
-      attributes: null == attributes
-          ? _value.attributes
-          : attributes // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-    ) as $Val);
+  $Res call({Object? attributes = null}) {
+    return _then(
+      _value.copyWith(
+            attributes: null == attributes
+                ? _value.attributes
+                : attributes // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -70,8 +72,9 @@ class _$MetadataCopyWithImpl<$Res, $Val extends Metadata>
 abstract class _$$MetadataImplCopyWith<$Res>
     implements $MetadataCopyWith<$Res> {
   factory _$$MetadataImplCopyWith(
-          _$MetadataImpl value, $Res Function(_$MetadataImpl) then) =
-      __$$MetadataImplCopyWithImpl<$Res>;
+    _$MetadataImpl value,
+    $Res Function(_$MetadataImpl) then,
+  ) = __$$MetadataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Map<String, dynamic> attributes});
@@ -82,22 +85,23 @@ class __$$MetadataImplCopyWithImpl<$Res>
     extends _$MetadataCopyWithImpl<$Res, _$MetadataImpl>
     implements _$$MetadataImplCopyWith<$Res> {
   __$$MetadataImplCopyWithImpl(
-      _$MetadataImpl _value, $Res Function(_$MetadataImpl) _then)
-      : super(_value, _then);
+    _$MetadataImpl _value,
+    $Res Function(_$MetadataImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Metadata
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? attributes = null,
-  }) {
-    return _then(_$MetadataImpl(
-      attributes: null == attributes
-          ? _value._attributes
-          : attributes // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-    ));
+  $Res call({Object? attributes = null}) {
+    return _then(
+      _$MetadataImpl(
+        attributes: null == attributes
+            ? _value._attributes
+            : attributes // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>,
+      ),
+    );
   }
 }
 
@@ -105,8 +109,8 @@ class __$$MetadataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MetadataImpl extends _Metadata {
   const _$MetadataImpl({final Map<String, dynamic> attributes = const {}})
-      : _attributes = attributes,
-        super._();
+    : _attributes = attributes,
+      super._();
 
   factory _$MetadataImpl.fromJson(Map<String, dynamic> json) =>
       _$$MetadataImplFromJson(json);
@@ -130,14 +134,18 @@ class _$MetadataImpl extends _Metadata {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MetadataImpl &&
-            const DeepCollectionEquality()
-                .equals(other._attributes, _attributes));
+            const DeepCollectionEquality().equals(
+              other._attributes,
+              _attributes,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_attributes));
+    runtimeType,
+    const DeepCollectionEquality().hash(_attributes),
+  );
 
   /// Create a copy of Metadata
   /// with the given fields replaced by the non-null parameter values.
@@ -149,9 +157,7 @@ class _$MetadataImpl extends _Metadata {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MetadataImplToJson(
-      this,
-    );
+    return _$$MetadataImplToJson(this);
   }
 }
 

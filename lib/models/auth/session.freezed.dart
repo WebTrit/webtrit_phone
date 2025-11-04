@@ -12,7 +12,8 @@ part of 'session.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Session _$SessionFromJson(Map<String, dynamic> json) {
   return _Session.fromJson(json);
@@ -62,32 +63,36 @@ class _$SessionCopyWithImpl<$Res, $Val extends Session>
     Object? tenantId = null,
     Object? userId = null,
   }) {
-    return _then(_value.copyWith(
-      coreUrl: freezed == coreUrl
-          ? _value.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            coreUrl: freezed == coreUrl
+                ? _value.coreUrl
+                : coreUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            token: freezed == token
+                ? _value.token
+                : token // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            tenantId: null == tenantId
+                ? _value.tenantId
+                : tenantId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            userId: null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SessionImplCopyWith<$Res> implements $SessionCopyWith<$Res> {
   factory _$$SessionImplCopyWith(
-          _$SessionImpl value, $Res Function(_$SessionImpl) then) =
-      __$$SessionImplCopyWithImpl<$Res>;
+    _$SessionImpl value,
+    $Res Function(_$SessionImpl) then,
+  ) = __$$SessionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? coreUrl, String? token, String tenantId, String userId});
@@ -98,8 +103,9 @@ class __$$SessionImplCopyWithImpl<$Res>
     extends _$SessionCopyWithImpl<$Res, _$SessionImpl>
     implements _$$SessionImplCopyWith<$Res> {
   __$$SessionImplCopyWithImpl(
-      _$SessionImpl _value, $Res Function(_$SessionImpl) _then)
-      : super(_value, _then);
+    _$SessionImpl _value,
+    $Res Function(_$SessionImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Session
   /// with the given fields replaced by the non-null parameter values.
@@ -111,33 +117,38 @@ class __$$SessionImplCopyWithImpl<$Res>
     Object? tenantId = null,
     Object? userId = null,
   }) {
-    return _then(_$SessionImpl(
-      coreUrl: freezed == coreUrl
-          ? _value.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tenantId: null == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$SessionImpl(
+        coreUrl: freezed == coreUrl
+            ? _value.coreUrl
+            : coreUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        token: freezed == token
+            ? _value.token
+            : token // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        tenantId: null == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$SessionImpl extends _Session {
-  const _$SessionImpl(
-      {this.coreUrl, this.token, this.tenantId = '', this.userId = ''})
-      : super._();
+  const _$SessionImpl({
+    this.coreUrl,
+    this.token,
+    this.tenantId = '',
+    this.userId = '',
+  }) : super._();
 
   factory _$SessionImpl.fromJson(Map<String, dynamic> json) =>
       _$$SessionImplFromJson(json);
@@ -185,18 +196,17 @@ class _$SessionImpl extends _Session {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SessionImplToJson(
-      this,
-    );
+    return _$$SessionImplToJson(this);
   }
 }
 
 abstract class _Session extends Session {
-  const factory _Session(
-      {final String? coreUrl,
-      final String? token,
-      final String tenantId,
-      final String userId}) = _$SessionImpl;
+  const factory _Session({
+    final String? coreUrl,
+    final String? token,
+    final String tenantId,
+    final String userId,
+  }) = _$SessionImpl;
   const _Session._() : super._();
 
   factory _Session.fromJson(Map<String, dynamic> json) = _$SessionImpl.fromJson;

@@ -12,7 +12,8 @@ part of 'contacts_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$ContactsState {
@@ -29,8 +30,9 @@ mixin _$ContactsState {
 /// @nodoc
 abstract class $ContactsStateCopyWith<$Res> {
   factory $ContactsStateCopyWith(
-          ContactsState value, $Res Function(ContactsState) then) =
-      _$ContactsStateCopyWithImpl<$Res, ContactsState>;
+    ContactsState value,
+    $Res Function(ContactsState) then,
+  ) = _$ContactsStateCopyWithImpl<$Res, ContactsState>;
   @useResult
   $Res call({String search, ContactSourceType sourceType});
 }
@@ -49,20 +51,20 @@ class _$ContactsStateCopyWithImpl<$Res, $Val extends ContactsState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? search = null,
-    Object? sourceType = null,
-  }) {
-    return _then(_value.copyWith(
-      search: null == search
-          ? _value.search
-          : search // ignore: cast_nullable_to_non_nullable
-              as String,
-      sourceType: null == sourceType
-          ? _value.sourceType
-          : sourceType // ignore: cast_nullable_to_non_nullable
-              as ContactSourceType,
-    ) as $Val);
+  $Res call({Object? search = null, Object? sourceType = null}) {
+    return _then(
+      _value.copyWith(
+            search: null == search
+                ? _value.search
+                : search // ignore: cast_nullable_to_non_nullable
+                      as String,
+            sourceType: null == sourceType
+                ? _value.sourceType
+                : sourceType // ignore: cast_nullable_to_non_nullable
+                      as ContactSourceType,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -70,8 +72,9 @@ class _$ContactsStateCopyWithImpl<$Res, $Val extends ContactsState>
 abstract class _$$ContactsStateImplCopyWith<$Res>
     implements $ContactsStateCopyWith<$Res> {
   factory _$$ContactsStateImplCopyWith(
-          _$ContactsStateImpl value, $Res Function(_$ContactsStateImpl) then) =
-      __$$ContactsStateImplCopyWithImpl<$Res>;
+    _$ContactsStateImpl value,
+    $Res Function(_$ContactsStateImpl) then,
+  ) = __$$ContactsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String search, ContactSourceType sourceType});
@@ -82,27 +85,27 @@ class __$$ContactsStateImplCopyWithImpl<$Res>
     extends _$ContactsStateCopyWithImpl<$Res, _$ContactsStateImpl>
     implements _$$ContactsStateImplCopyWith<$Res> {
   __$$ContactsStateImplCopyWithImpl(
-      _$ContactsStateImpl _value, $Res Function(_$ContactsStateImpl) _then)
-      : super(_value, _then);
+    _$ContactsStateImpl _value,
+    $Res Function(_$ContactsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ContactsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? search = null,
-    Object? sourceType = null,
-  }) {
-    return _then(_$ContactsStateImpl(
-      search: null == search
-          ? _value.search
-          : search // ignore: cast_nullable_to_non_nullable
-              as String,
-      sourceType: null == sourceType
-          ? _value.sourceType
-          : sourceType // ignore: cast_nullable_to_non_nullable
-              as ContactSourceType,
-    ));
+  $Res call({Object? search = null, Object? sourceType = null}) {
+    return _then(
+      _$ContactsStateImpl(
+        search: null == search
+            ? _value.search
+            : search // ignore: cast_nullable_to_non_nullable
+                  as String,
+        sourceType: null == sourceType
+            ? _value.sourceType
+            : sourceType // ignore: cast_nullable_to_non_nullable
+                  as ContactSourceType,
+      ),
+    );
   }
 }
 
@@ -145,9 +148,10 @@ class _$ContactsStateImpl implements _ContactsState {
 }
 
 abstract class _ContactsState implements ContactsState {
-  const factory _ContactsState(
-      {final String search,
-      required final ContactSourceType sourceType}) = _$ContactsStateImpl;
+  const factory _ContactsState({
+    final String search,
+    required final ContactSourceType sourceType,
+  }) = _$ContactsStateImpl;
 
   @override
   String get search;

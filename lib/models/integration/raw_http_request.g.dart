@@ -17,10 +17,10 @@ _$RawHttpRequestImpl _$$RawHttpRequestImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$RawHttpRequestImplToJson(
-        _$RawHttpRequestImpl instance) =>
-    <String, dynamic>{
-      'method': instance.method,
-      'url': instance.url,
-      'headers': instance.headers,
-      'data': instance.data,
-    };
+  _$RawHttpRequestImpl instance,
+) => <String, dynamic>{
+  'method': instance.method,
+  'url': instance.url,
+  'headers': instance.headers,
+  'data': instance.data,
+};

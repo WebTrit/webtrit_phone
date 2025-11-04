@@ -12,7 +12,8 @@ part of 'app_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 AppConfig _$AppConfigFromJson(Map<String, dynamic> json) {
   return _AppConfig.fromJson(json);
@@ -40,11 +41,12 @@ abstract class $AppConfigCopyWith<$Res> {
   factory $AppConfigCopyWith(AppConfig value, $Res Function(AppConfig) then) =
       _$AppConfigCopyWithImpl<$Res, AppConfig>;
   @useResult
-  $Res call(
-      {AppConfigLogin loginConfig,
-      AppConfigMain mainConfig,
-      AppConfigSettings settingsConfig,
-      AppConfigCall callConfig});
+  $Res call({
+    AppConfigLogin loginConfig,
+    AppConfigMain mainConfig,
+    AppConfigSettings settingsConfig,
+    AppConfigCall callConfig,
+  });
 
   $AppConfigLoginCopyWith<$Res> get loginConfig;
   $AppConfigMainCopyWith<$Res> get mainConfig;
@@ -72,24 +74,27 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     Object? settingsConfig = null,
     Object? callConfig = null,
   }) {
-    return _then(_value.copyWith(
-      loginConfig: null == loginConfig
-          ? _value.loginConfig
-          : loginConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigLogin,
-      mainConfig: null == mainConfig
-          ? _value.mainConfig
-          : mainConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigMain,
-      settingsConfig: null == settingsConfig
-          ? _value.settingsConfig
-          : settingsConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigSettings,
-      callConfig: null == callConfig
-          ? _value.callConfig
-          : callConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigCall,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            loginConfig: null == loginConfig
+                ? _value.loginConfig
+                : loginConfig // ignore: cast_nullable_to_non_nullable
+                      as AppConfigLogin,
+            mainConfig: null == mainConfig
+                ? _value.mainConfig
+                : mainConfig // ignore: cast_nullable_to_non_nullable
+                      as AppConfigMain,
+            settingsConfig: null == settingsConfig
+                ? _value.settingsConfig
+                : settingsConfig // ignore: cast_nullable_to_non_nullable
+                      as AppConfigSettings,
+            callConfig: null == callConfig
+                ? _value.callConfig
+                : callConfig // ignore: cast_nullable_to_non_nullable
+                      as AppConfigCall,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AppConfig
@@ -137,15 +142,17 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
 abstract class _$$AppConfigImplCopyWith<$Res>
     implements $AppConfigCopyWith<$Res> {
   factory _$$AppConfigImplCopyWith(
-          _$AppConfigImpl value, $Res Function(_$AppConfigImpl) then) =
-      __$$AppConfigImplCopyWithImpl<$Res>;
+    _$AppConfigImpl value,
+    $Res Function(_$AppConfigImpl) then,
+  ) = __$$AppConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {AppConfigLogin loginConfig,
-      AppConfigMain mainConfig,
-      AppConfigSettings settingsConfig,
-      AppConfigCall callConfig});
+  $Res call({
+    AppConfigLogin loginConfig,
+    AppConfigMain mainConfig,
+    AppConfigSettings settingsConfig,
+    AppConfigCall callConfig,
+  });
 
   @override
   $AppConfigLoginCopyWith<$Res> get loginConfig;
@@ -162,8 +169,9 @@ class __$$AppConfigImplCopyWithImpl<$Res>
     extends _$AppConfigCopyWithImpl<$Res, _$AppConfigImpl>
     implements _$$AppConfigImplCopyWith<$Res> {
   __$$AppConfigImplCopyWithImpl(
-      _$AppConfigImpl _value, $Res Function(_$AppConfigImpl) _then)
-      : super(_value, _then);
+    _$AppConfigImpl _value,
+    $Res Function(_$AppConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -175,24 +183,26 @@ class __$$AppConfigImplCopyWithImpl<$Res>
     Object? settingsConfig = null,
     Object? callConfig = null,
   }) {
-    return _then(_$AppConfigImpl(
-      loginConfig: null == loginConfig
-          ? _value.loginConfig
-          : loginConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigLogin,
-      mainConfig: null == mainConfig
-          ? _value.mainConfig
-          : mainConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigMain,
-      settingsConfig: null == settingsConfig
-          ? _value.settingsConfig
-          : settingsConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigSettings,
-      callConfig: null == callConfig
-          ? _value.callConfig
-          : callConfig // ignore: cast_nullable_to_non_nullable
-              as AppConfigCall,
-    ));
+    return _then(
+      _$AppConfigImpl(
+        loginConfig: null == loginConfig
+            ? _value.loginConfig
+            : loginConfig // ignore: cast_nullable_to_non_nullable
+                  as AppConfigLogin,
+        mainConfig: null == mainConfig
+            ? _value.mainConfig
+            : mainConfig // ignore: cast_nullable_to_non_nullable
+                  as AppConfigMain,
+        settingsConfig: null == settingsConfig
+            ? _value.settingsConfig
+            : settingsConfig // ignore: cast_nullable_to_non_nullable
+                  as AppConfigSettings,
+        callConfig: null == callConfig
+            ? _value.callConfig
+            : callConfig // ignore: cast_nullable_to_non_nullable
+                  as AppConfigCall,
+      ),
+    );
   }
 }
 
@@ -200,12 +210,12 @@ class __$$AppConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigImpl extends _AppConfig {
-  const _$AppConfigImpl(
-      {this.loginConfig = const AppConfigLogin(),
-      this.mainConfig = const AppConfigMain(),
-      this.settingsConfig = const AppConfigSettings(),
-      this.callConfig = const AppConfigCall()})
-      : super._();
+  const _$AppConfigImpl({
+    this.loginConfig = const AppConfigLogin(),
+    this.mainConfig = const AppConfigMain(),
+    this.settingsConfig = const AppConfigSettings(),
+    this.callConfig = const AppConfigCall(),
+  }) : super._();
 
   factory _$AppConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigImplFromJson(json);
@@ -246,7 +256,12 @@ class _$AppConfigImpl extends _AppConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, loginConfig, mainConfig, settingsConfig, callConfig);
+    runtimeType,
+    loginConfig,
+    mainConfig,
+    settingsConfig,
+    callConfig,
+  );
 
   /// Create a copy of AppConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -258,18 +273,17 @@ class _$AppConfigImpl extends _AppConfig {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigImplToJson(
-      this,
-    );
+    return _$$AppConfigImplToJson(this);
   }
 }
 
 abstract class _AppConfig extends AppConfig {
-  const factory _AppConfig(
-      {final AppConfigLogin loginConfig,
-      final AppConfigMain mainConfig,
-      final AppConfigSettings settingsConfig,
-      final AppConfigCall callConfig}) = _$AppConfigImpl;
+  const factory _AppConfig({
+    final AppConfigLogin loginConfig,
+    final AppConfigMain mainConfig,
+    final AppConfigSettings settingsConfig,
+    final AppConfigCall callConfig,
+  }) = _$AppConfigImpl;
   const _AppConfig._() : super._();
 
   factory _AppConfig.fromJson(Map<String, dynamic> json) =
@@ -314,8 +328,9 @@ mixin _$AppConfigLogin {
 /// @nodoc
 abstract class $AppConfigLoginCopyWith<$Res> {
   factory $AppConfigLoginCopyWith(
-          AppConfigLogin value, $Res Function(AppConfigLogin) then) =
-      _$AppConfigLoginCopyWithImpl<$Res, AppConfigLogin>;
+    AppConfigLogin value,
+    $Res Function(AppConfigLogin) then,
+  ) = _$AppConfigLoginCopyWithImpl<$Res, AppConfigLogin>;
   @useResult
   $Res call({AppConfigLoginCommon common, AppConfigLoginModeSelect modeSelect});
 
@@ -337,20 +352,20 @@ class _$AppConfigLoginCopyWithImpl<$Res, $Val extends AppConfigLogin>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? common = null,
-    Object? modeSelect = null,
-  }) {
-    return _then(_value.copyWith(
-      common: null == common
-          ? _value.common
-          : common // ignore: cast_nullable_to_non_nullable
-              as AppConfigLoginCommon,
-      modeSelect: null == modeSelect
-          ? _value.modeSelect
-          : modeSelect // ignore: cast_nullable_to_non_nullable
-              as AppConfigLoginModeSelect,
-    ) as $Val);
+  $Res call({Object? common = null, Object? modeSelect = null}) {
+    return _then(
+      _value.copyWith(
+            common: null == common
+                ? _value.common
+                : common // ignore: cast_nullable_to_non_nullable
+                      as AppConfigLoginCommon,
+            modeSelect: null == modeSelect
+                ? _value.modeSelect
+                : modeSelect // ignore: cast_nullable_to_non_nullable
+                      as AppConfigLoginModeSelect,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AppConfigLogin
@@ -377,9 +392,10 @@ class _$AppConfigLoginCopyWithImpl<$Res, $Val extends AppConfigLogin>
 /// @nodoc
 abstract class _$$AppConfigLoginImplCopyWith<$Res>
     implements $AppConfigLoginCopyWith<$Res> {
-  factory _$$AppConfigLoginImplCopyWith(_$AppConfigLoginImpl value,
-          $Res Function(_$AppConfigLoginImpl) then) =
-      __$$AppConfigLoginImplCopyWithImpl<$Res>;
+  factory _$$AppConfigLoginImplCopyWith(
+    _$AppConfigLoginImpl value,
+    $Res Function(_$AppConfigLoginImpl) then,
+  ) = __$$AppConfigLoginImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({AppConfigLoginCommon common, AppConfigLoginModeSelect modeSelect});
@@ -395,27 +411,27 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
     extends _$AppConfigLoginCopyWithImpl<$Res, _$AppConfigLoginImpl>
     implements _$$AppConfigLoginImplCopyWith<$Res> {
   __$$AppConfigLoginImplCopyWithImpl(
-      _$AppConfigLoginImpl _value, $Res Function(_$AppConfigLoginImpl) _then)
-      : super(_value, _then);
+    _$AppConfigLoginImpl _value,
+    $Res Function(_$AppConfigLoginImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigLogin
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? common = null,
-    Object? modeSelect = null,
-  }) {
-    return _then(_$AppConfigLoginImpl(
-      common: null == common
-          ? _value.common
-          : common // ignore: cast_nullable_to_non_nullable
-              as AppConfigLoginCommon,
-      modeSelect: null == modeSelect
-          ? _value.modeSelect
-          : modeSelect // ignore: cast_nullable_to_non_nullable
-              as AppConfigLoginModeSelect,
-    ));
+  $Res call({Object? common = null, Object? modeSelect = null}) {
+    return _then(
+      _$AppConfigLoginImpl(
+        common: null == common
+            ? _value.common
+            : common // ignore: cast_nullable_to_non_nullable
+                  as AppConfigLoginCommon,
+        modeSelect: null == modeSelect
+            ? _value.modeSelect
+            : modeSelect // ignore: cast_nullable_to_non_nullable
+                  as AppConfigLoginModeSelect,
+      ),
+    );
   }
 }
 
@@ -423,10 +439,10 @@ class __$$AppConfigLoginImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigLoginImpl extends _AppConfigLogin {
-  const _$AppConfigLoginImpl(
-      {this.common = const AppConfigLoginCommon(),
-      this.modeSelect = const AppConfigLoginModeSelect()})
-      : super._();
+  const _$AppConfigLoginImpl({
+    this.common = const AppConfigLoginCommon(),
+    this.modeSelect = const AppConfigLoginModeSelect(),
+  }) : super._();
 
   factory _$AppConfigLoginImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigLoginImplFromJson(json);
@@ -464,20 +480,21 @@ class _$AppConfigLoginImpl extends _AppConfigLogin {
   @pragma('vm:prefer-inline')
   _$$AppConfigLoginImplCopyWith<_$AppConfigLoginImpl> get copyWith =>
       __$$AppConfigLoginImplCopyWithImpl<_$AppConfigLoginImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigLoginImplToJson(
-      this,
-    );
+    return _$$AppConfigLoginImplToJson(this);
   }
 }
 
 abstract class _AppConfigLogin extends AppConfigLogin {
-  const factory _AppConfigLogin(
-      {final AppConfigLoginCommon common,
-      final AppConfigLoginModeSelect modeSelect}) = _$AppConfigLoginImpl;
+  const factory _AppConfigLogin({
+    final AppConfigLoginCommon common,
+    final AppConfigLoginModeSelect modeSelect,
+  }) = _$AppConfigLoginImpl;
   const _AppConfigLogin._() : super._();
 
   factory _AppConfigLogin.fromJson(Map<String, dynamic> json) =
@@ -517,16 +534,19 @@ mixin _$AppConfigLoginCommon {
 
 /// @nodoc
 abstract class $AppConfigLoginCommonCopyWith<$Res> {
-  factory $AppConfigLoginCommonCopyWith(AppConfigLoginCommon value,
-          $Res Function(AppConfigLoginCommon) then) =
-      _$AppConfigLoginCommonCopyWithImpl<$Res, AppConfigLoginCommon>;
+  factory $AppConfigLoginCommonCopyWith(
+    AppConfigLoginCommon value,
+    $Res Function(AppConfigLoginCommon) then,
+  ) = _$AppConfigLoginCommonCopyWithImpl<$Res, AppConfigLoginCommon>;
   @useResult
   $Res call({String? fullScreenLaunchEmbeddedResourceId});
 }
 
 /// @nodoc
-class _$AppConfigLoginCommonCopyWithImpl<$Res,
-        $Val extends AppConfigLoginCommon>
+class _$AppConfigLoginCommonCopyWithImpl<
+  $Res,
+  $Val extends AppConfigLoginCommon
+>
     implements $AppConfigLoginCommonCopyWith<$Res> {
   _$AppConfigLoginCommonCopyWithImpl(this._value, this._then);
 
@@ -539,25 +559,27 @@ class _$AppConfigLoginCommonCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? fullScreenLaunchEmbeddedResourceId = freezed,
-  }) {
-    return _then(_value.copyWith(
-      fullScreenLaunchEmbeddedResourceId: freezed ==
-              fullScreenLaunchEmbeddedResourceId
-          ? _value.fullScreenLaunchEmbeddedResourceId
-          : fullScreenLaunchEmbeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+  $Res call({Object? fullScreenLaunchEmbeddedResourceId = freezed}) {
+    return _then(
+      _value.copyWith(
+            fullScreenLaunchEmbeddedResourceId:
+                freezed == fullScreenLaunchEmbeddedResourceId
+                ? _value.fullScreenLaunchEmbeddedResourceId
+                : fullScreenLaunchEmbeddedResourceId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$AppConfigLoginCommonImplCopyWith<$Res>
     implements $AppConfigLoginCommonCopyWith<$Res> {
-  factory _$$AppConfigLoginCommonImplCopyWith(_$AppConfigLoginCommonImpl value,
-          $Res Function(_$AppConfigLoginCommonImpl) then) =
-      __$$AppConfigLoginCommonImplCopyWithImpl<$Res>;
+  factory _$$AppConfigLoginCommonImplCopyWith(
+    _$AppConfigLoginCommonImpl value,
+    $Res Function(_$AppConfigLoginCommonImpl) then,
+  ) = __$$AppConfigLoginCommonImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? fullScreenLaunchEmbeddedResourceId});
@@ -567,24 +589,25 @@ abstract class _$$AppConfigLoginCommonImplCopyWith<$Res>
 class __$$AppConfigLoginCommonImplCopyWithImpl<$Res>
     extends _$AppConfigLoginCommonCopyWithImpl<$Res, _$AppConfigLoginCommonImpl>
     implements _$$AppConfigLoginCommonImplCopyWith<$Res> {
-  __$$AppConfigLoginCommonImplCopyWithImpl(_$AppConfigLoginCommonImpl _value,
-      $Res Function(_$AppConfigLoginCommonImpl) _then)
-      : super(_value, _then);
+  __$$AppConfigLoginCommonImplCopyWithImpl(
+    _$AppConfigLoginCommonImpl _value,
+    $Res Function(_$AppConfigLoginCommonImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigLoginCommon
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? fullScreenLaunchEmbeddedResourceId = freezed,
-  }) {
-    return _then(_$AppConfigLoginCommonImpl(
-      fullScreenLaunchEmbeddedResourceId: freezed ==
-              fullScreenLaunchEmbeddedResourceId
-          ? _value.fullScreenLaunchEmbeddedResourceId
-          : fullScreenLaunchEmbeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+  $Res call({Object? fullScreenLaunchEmbeddedResourceId = freezed}) {
+    return _then(
+      _$AppConfigLoginCommonImpl(
+        fullScreenLaunchEmbeddedResourceId:
+            freezed == fullScreenLaunchEmbeddedResourceId
+            ? _value.fullScreenLaunchEmbeddedResourceId
+            : fullScreenLaunchEmbeddedResourceId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -593,7 +616,7 @@ class __$$AppConfigLoginCommonImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigLoginCommonImpl extends _AppConfigLoginCommon {
   const _$AppConfigLoginCommonImpl({this.fullScreenLaunchEmbeddedResourceId})
-      : super._();
+    : super._();
 
   factory _$AppConfigLoginCommonImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigLoginCommonImplFromJson(json);
@@ -611,8 +634,10 @@ class _$AppConfigLoginCommonImpl extends _AppConfigLoginCommon {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppConfigLoginCommonImpl &&
-            (identical(other.fullScreenLaunchEmbeddedResourceId,
-                    fullScreenLaunchEmbeddedResourceId) ||
+            (identical(
+                  other.fullScreenLaunchEmbeddedResourceId,
+                  fullScreenLaunchEmbeddedResourceId,
+                ) ||
                 other.fullScreenLaunchEmbeddedResourceId ==
                     fullScreenLaunchEmbeddedResourceId));
   }
@@ -628,22 +653,22 @@ class _$AppConfigLoginCommonImpl extends _AppConfigLoginCommon {
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigLoginCommonImplCopyWith<_$AppConfigLoginCommonImpl>
-      get copyWith =>
-          __$$AppConfigLoginCommonImplCopyWithImpl<_$AppConfigLoginCommonImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$AppConfigLoginCommonImplCopyWithImpl<_$AppConfigLoginCommonImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigLoginCommonImplToJson(
-      this,
-    );
+    return _$$AppConfigLoginCommonImplToJson(this);
   }
 }
 
 abstract class _AppConfigLoginCommon extends AppConfigLoginCommon {
-  const factory _AppConfigLoginCommon(
-          {final String? fullScreenLaunchEmbeddedResourceId}) =
-      _$AppConfigLoginCommonImpl;
+  const factory _AppConfigLoginCommon({
+    final String? fullScreenLaunchEmbeddedResourceId,
+  }) = _$AppConfigLoginCommonImpl;
   const _AppConfigLoginCommon._() : super._();
 
   factory _AppConfigLoginCommon.fromJson(Map<String, dynamic> json) =
@@ -657,11 +682,12 @@ abstract class _AppConfigLoginCommon extends AppConfigLoginCommon {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigLoginCommonImplCopyWith<_$AppConfigLoginCommonImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 AppConfigLoginModeSelect _$AppConfigLoginModeSelectFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _AppConfigLoginModeSelect.fromJson(json);
 }
 
@@ -683,16 +709,19 @@ mixin _$AppConfigLoginModeSelect {
 
 /// @nodoc
 abstract class $AppConfigLoginModeSelectCopyWith<$Res> {
-  factory $AppConfigLoginModeSelectCopyWith(AppConfigLoginModeSelect value,
-          $Res Function(AppConfigLoginModeSelect) then) =
-      _$AppConfigLoginModeSelectCopyWithImpl<$Res, AppConfigLoginModeSelect>;
+  factory $AppConfigLoginModeSelectCopyWith(
+    AppConfigLoginModeSelect value,
+    $Res Function(AppConfigLoginModeSelect) then,
+  ) = _$AppConfigLoginModeSelectCopyWithImpl<$Res, AppConfigLoginModeSelect>;
   @useResult
   $Res call({String? greetingL10n, List<AppConfigModeSelectAction> actions});
 }
 
 /// @nodoc
-class _$AppConfigLoginModeSelectCopyWithImpl<$Res,
-        $Val extends AppConfigLoginModeSelect>
+class _$AppConfigLoginModeSelectCopyWithImpl<
+  $Res,
+  $Val extends AppConfigLoginModeSelect
+>
     implements $AppConfigLoginModeSelectCopyWith<$Res> {
   _$AppConfigLoginModeSelectCopyWithImpl(this._value, this._then);
 
@@ -705,20 +734,20 @@ class _$AppConfigLoginModeSelectCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? greetingL10n = freezed,
-    Object? actions = null,
-  }) {
-    return _then(_value.copyWith(
-      greetingL10n: freezed == greetingL10n
-          ? _value.greetingL10n
-          : greetingL10n // ignore: cast_nullable_to_non_nullable
-              as String?,
-      actions: null == actions
-          ? _value.actions
-          : actions // ignore: cast_nullable_to_non_nullable
-              as List<AppConfigModeSelectAction>,
-    ) as $Val);
+  $Res call({Object? greetingL10n = freezed, Object? actions = null}) {
+    return _then(
+      _value.copyWith(
+            greetingL10n: freezed == greetingL10n
+                ? _value.greetingL10n
+                : greetingL10n // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            actions: null == actions
+                ? _value.actions
+                : actions // ignore: cast_nullable_to_non_nullable
+                      as List<AppConfigModeSelectAction>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -726,9 +755,9 @@ class _$AppConfigLoginModeSelectCopyWithImpl<$Res,
 abstract class _$$AppConfigLoginModeSelectImplCopyWith<$Res>
     implements $AppConfigLoginModeSelectCopyWith<$Res> {
   factory _$$AppConfigLoginModeSelectImplCopyWith(
-          _$AppConfigLoginModeSelectImpl value,
-          $Res Function(_$AppConfigLoginModeSelectImpl) then) =
-      __$$AppConfigLoginModeSelectImplCopyWithImpl<$Res>;
+    _$AppConfigLoginModeSelectImpl value,
+    $Res Function(_$AppConfigLoginModeSelectImpl) then,
+  ) = __$$AppConfigLoginModeSelectImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? greetingL10n, List<AppConfigModeSelectAction> actions});
@@ -736,32 +765,34 @@ abstract class _$$AppConfigLoginModeSelectImplCopyWith<$Res>
 
 /// @nodoc
 class __$$AppConfigLoginModeSelectImplCopyWithImpl<$Res>
-    extends _$AppConfigLoginModeSelectCopyWithImpl<$Res,
-        _$AppConfigLoginModeSelectImpl>
+    extends
+        _$AppConfigLoginModeSelectCopyWithImpl<
+          $Res,
+          _$AppConfigLoginModeSelectImpl
+        >
     implements _$$AppConfigLoginModeSelectImplCopyWith<$Res> {
   __$$AppConfigLoginModeSelectImplCopyWithImpl(
-      _$AppConfigLoginModeSelectImpl _value,
-      $Res Function(_$AppConfigLoginModeSelectImpl) _then)
-      : super(_value, _then);
+    _$AppConfigLoginModeSelectImpl _value,
+    $Res Function(_$AppConfigLoginModeSelectImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigLoginModeSelect
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? greetingL10n = freezed,
-    Object? actions = null,
-  }) {
-    return _then(_$AppConfigLoginModeSelectImpl(
-      greetingL10n: freezed == greetingL10n
-          ? _value.greetingL10n
-          : greetingL10n // ignore: cast_nullable_to_non_nullable
-              as String?,
-      actions: null == actions
-          ? _value._actions
-          : actions // ignore: cast_nullable_to_non_nullable
-              as List<AppConfigModeSelectAction>,
-    ));
+  $Res call({Object? greetingL10n = freezed, Object? actions = null}) {
+    return _then(
+      _$AppConfigLoginModeSelectImpl(
+        greetingL10n: freezed == greetingL10n
+            ? _value.greetingL10n
+            : greetingL10n // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        actions: null == actions
+            ? _value._actions
+            : actions // ignore: cast_nullable_to_non_nullable
+                  as List<AppConfigModeSelectAction>,
+      ),
+    );
   }
 }
 
@@ -769,16 +800,17 @@ class __$$AppConfigLoginModeSelectImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigLoginModeSelectImpl extends _AppConfigLoginModeSelect {
-  const _$AppConfigLoginModeSelectImpl(
-      {this.greetingL10n,
-      final List<AppConfigModeSelectAction> actions = const [
-        AppConfigModeSelectAction(
-            enabled: true,
-            type: 'login',
-            titleL10n: 'login_Button_signUpToDemoInstance')
-      ]})
-      : _actions = actions,
-        super._();
+  const _$AppConfigLoginModeSelectImpl({
+    this.greetingL10n,
+    final List<AppConfigModeSelectAction> actions = const [
+      AppConfigModeSelectAction(
+        enabled: true,
+        type: 'login',
+        titleL10n: 'login_Button_signUpToDemoInstance',
+      ),
+    ],
+  }) : _actions = actions,
+       super._();
 
   factory _$AppConfigLoginModeSelectImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigLoginModeSelectImplFromJson(json);
@@ -812,7 +844,10 @@ class _$AppConfigLoginModeSelectImpl extends _AppConfigLoginModeSelect {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, greetingL10n, const DeepCollectionEquality().hash(_actions));
+    runtimeType,
+    greetingL10n,
+    const DeepCollectionEquality().hash(_actions),
+  );
 
   /// Create a copy of AppConfigLoginModeSelect
   /// with the given fields replaced by the non-null parameter values.
@@ -820,22 +855,22 @@ class _$AppConfigLoginModeSelectImpl extends _AppConfigLoginModeSelect {
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigLoginModeSelectImplCopyWith<_$AppConfigLoginModeSelectImpl>
-      get copyWith => __$$AppConfigLoginModeSelectImplCopyWithImpl<
-          _$AppConfigLoginModeSelectImpl>(this, _$identity);
+  get copyWith =>
+      __$$AppConfigLoginModeSelectImplCopyWithImpl<
+        _$AppConfigLoginModeSelectImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigLoginModeSelectImplToJson(
-      this,
-    );
+    return _$$AppConfigLoginModeSelectImplToJson(this);
   }
 }
 
 abstract class _AppConfigLoginModeSelect extends AppConfigLoginModeSelect {
-  const factory _AppConfigLoginModeSelect(
-          {final String? greetingL10n,
-          final List<AppConfigModeSelectAction> actions}) =
-      _$AppConfigLoginModeSelectImpl;
+  const factory _AppConfigLoginModeSelect({
+    final String? greetingL10n,
+    final List<AppConfigModeSelectAction> actions,
+  }) = _$AppConfigLoginModeSelectImpl;
   const _AppConfigLoginModeSelect._() : super._();
 
   factory _AppConfigLoginModeSelect.fromJson(Map<String, dynamic> json) =
@@ -851,11 +886,12 @@ abstract class _AppConfigLoginModeSelect extends AppConfigLoginModeSelect {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigLoginModeSelectImplCopyWith<_$AppConfigLoginModeSelectImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 AppConfigModeSelectAction _$AppConfigModeSelectActionFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _AppConfigModeSelectAction.fromJson(json);
 }
 
@@ -878,16 +914,19 @@ mixin _$AppConfigModeSelectAction {
 
 /// @nodoc
 abstract class $AppConfigModeSelectActionCopyWith<$Res> {
-  factory $AppConfigModeSelectActionCopyWith(AppConfigModeSelectAction value,
-          $Res Function(AppConfigModeSelectAction) then) =
-      _$AppConfigModeSelectActionCopyWithImpl<$Res, AppConfigModeSelectAction>;
+  factory $AppConfigModeSelectActionCopyWith(
+    AppConfigModeSelectAction value,
+    $Res Function(AppConfigModeSelectAction) then,
+  ) = _$AppConfigModeSelectActionCopyWithImpl<$Res, AppConfigModeSelectAction>;
   @useResult
   $Res call({bool enabled, String type, String titleL10n, String? embeddedId});
 }
 
 /// @nodoc
-class _$AppConfigModeSelectActionCopyWithImpl<$Res,
-        $Val extends AppConfigModeSelectAction>
+class _$AppConfigModeSelectActionCopyWithImpl<
+  $Res,
+  $Val extends AppConfigModeSelectAction
+>
     implements $AppConfigModeSelectActionCopyWith<$Res> {
   _$AppConfigModeSelectActionCopyWithImpl(this._value, this._then);
 
@@ -906,24 +945,27 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
     Object? titleL10n = null,
     Object? embeddedId = freezed,
   }) {
-    return _then(_value.copyWith(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      embeddedId: freezed == embeddedId
-          ? _value.embeddedId
-          : embeddedId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            enabled: null == enabled
+                ? _value.enabled
+                : enabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as String,
+            titleL10n: null == titleL10n
+                ? _value.titleL10n
+                : titleL10n // ignore: cast_nullable_to_non_nullable
+                      as String,
+            embeddedId: freezed == embeddedId
+                ? _value.embeddedId
+                : embeddedId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -931,9 +973,9 @@ class _$AppConfigModeSelectActionCopyWithImpl<$Res,
 abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
     implements $AppConfigModeSelectActionCopyWith<$Res> {
   factory _$$AppConfigModeSelectActionImplCopyWith(
-          _$AppConfigModeSelectActionImpl value,
-          $Res Function(_$AppConfigModeSelectActionImpl) then) =
-      __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>;
+    _$AppConfigModeSelectActionImpl value,
+    $Res Function(_$AppConfigModeSelectActionImpl) then,
+  ) = __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool enabled, String type, String titleL10n, String? embeddedId});
@@ -941,13 +983,16 @@ abstract class _$$AppConfigModeSelectActionImplCopyWith<$Res>
 
 /// @nodoc
 class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
-    extends _$AppConfigModeSelectActionCopyWithImpl<$Res,
-        _$AppConfigModeSelectActionImpl>
+    extends
+        _$AppConfigModeSelectActionCopyWithImpl<
+          $Res,
+          _$AppConfigModeSelectActionImpl
+        >
     implements _$$AppConfigModeSelectActionImplCopyWith<$Res> {
   __$$AppConfigModeSelectActionImplCopyWithImpl(
-      _$AppConfigModeSelectActionImpl _value,
-      $Res Function(_$AppConfigModeSelectActionImpl) _then)
-      : super(_value, _then);
+    _$AppConfigModeSelectActionImpl _value,
+    $Res Function(_$AppConfigModeSelectActionImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigModeSelectAction
   /// with the given fields replaced by the non-null parameter values.
@@ -959,24 +1004,26 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
     Object? titleL10n = null,
     Object? embeddedId = freezed,
   }) {
-    return _then(_$AppConfigModeSelectActionImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      embeddedId: freezed == embeddedId
-          ? _value.embeddedId
-          : embeddedId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$AppConfigModeSelectActionImpl(
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as String,
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        embeddedId: freezed == embeddedId
+            ? _value.embeddedId
+            : embeddedId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -984,12 +1031,12 @@ class __$$AppConfigModeSelectActionImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
-  const _$AppConfigModeSelectActionImpl(
-      {required this.enabled,
-      required this.type,
-      required this.titleL10n,
-      this.embeddedId})
-      : super._();
+  const _$AppConfigModeSelectActionImpl({
+    required this.enabled,
+    required this.type,
+    required this.titleL10n,
+    this.embeddedId,
+  }) : super._();
 
   factory _$AppConfigModeSelectActionImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigModeSelectActionImplFromJson(json);
@@ -1032,23 +1079,24 @@ class _$AppConfigModeSelectActionImpl extends _AppConfigModeSelectAction {
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigModeSelectActionImplCopyWith<_$AppConfigModeSelectActionImpl>
-      get copyWith => __$$AppConfigModeSelectActionImplCopyWithImpl<
-          _$AppConfigModeSelectActionImpl>(this, _$identity);
+  get copyWith =>
+      __$$AppConfigModeSelectActionImplCopyWithImpl<
+        _$AppConfigModeSelectActionImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigModeSelectActionImplToJson(
-      this,
-    );
+    return _$$AppConfigModeSelectActionImplToJson(this);
   }
 }
 
 abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
-  const factory _AppConfigModeSelectAction(
-      {required final bool enabled,
-      required final String type,
-      required final String titleL10n,
-      final String? embeddedId}) = _$AppConfigModeSelectActionImpl;
+  const factory _AppConfigModeSelectAction({
+    required final bool enabled,
+    required final String type,
+    required final String titleL10n,
+    final String? embeddedId,
+  }) = _$AppConfigModeSelectActionImpl;
   const _AppConfigModeSelectAction._() : super._();
 
   factory _AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) =
@@ -1068,7 +1116,7 @@ abstract class _AppConfigModeSelectAction extends AppConfigModeSelectAction {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigModeSelectActionImplCopyWith<_$AppConfigModeSelectActionImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) {
@@ -1094,13 +1142,15 @@ mixin _$AppConfigMain {
 /// @nodoc
 abstract class $AppConfigMainCopyWith<$Res> {
   factory $AppConfigMainCopyWith(
-          AppConfigMain value, $Res Function(AppConfigMain) then) =
-      _$AppConfigMainCopyWithImpl<$Res, AppConfigMain>;
+    AppConfigMain value,
+    $Res Function(AppConfigMain) then,
+  ) = _$AppConfigMainCopyWithImpl<$Res, AppConfigMain>;
   @useResult
-  $Res call(
-      {AppConfigBottomMenu bottomMenu,
-      bool systemNotificationsEnabled,
-      bool sipPresenceEnabled});
+  $Res call({
+    AppConfigBottomMenu bottomMenu,
+    bool systemNotificationsEnabled,
+    bool sipPresenceEnabled,
+  });
 
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu;
 }
@@ -1124,20 +1174,23 @@ class _$AppConfigMainCopyWithImpl<$Res, $Val extends AppConfigMain>
     Object? systemNotificationsEnabled = null,
     Object? sipPresenceEnabled = null,
   }) {
-    return _then(_value.copyWith(
-      bottomMenu: null == bottomMenu
-          ? _value.bottomMenu
-          : bottomMenu // ignore: cast_nullable_to_non_nullable
-              as AppConfigBottomMenu,
-      systemNotificationsEnabled: null == systemNotificationsEnabled
-          ? _value.systemNotificationsEnabled
-          : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      sipPresenceEnabled: null == sipPresenceEnabled
-          ? _value.sipPresenceEnabled
-          : sipPresenceEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            bottomMenu: null == bottomMenu
+                ? _value.bottomMenu
+                : bottomMenu // ignore: cast_nullable_to_non_nullable
+                      as AppConfigBottomMenu,
+            systemNotificationsEnabled: null == systemNotificationsEnabled
+                ? _value.systemNotificationsEnabled
+                : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            sipPresenceEnabled: null == sipPresenceEnabled
+                ? _value.sipPresenceEnabled
+                : sipPresenceEnabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AppConfigMain
@@ -1155,14 +1208,16 @@ class _$AppConfigMainCopyWithImpl<$Res, $Val extends AppConfigMain>
 abstract class _$$AppConfigMainImplCopyWith<$Res>
     implements $AppConfigMainCopyWith<$Res> {
   factory _$$AppConfigMainImplCopyWith(
-          _$AppConfigMainImpl value, $Res Function(_$AppConfigMainImpl) then) =
-      __$$AppConfigMainImplCopyWithImpl<$Res>;
+    _$AppConfigMainImpl value,
+    $Res Function(_$AppConfigMainImpl) then,
+  ) = __$$AppConfigMainImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {AppConfigBottomMenu bottomMenu,
-      bool systemNotificationsEnabled,
-      bool sipPresenceEnabled});
+  $Res call({
+    AppConfigBottomMenu bottomMenu,
+    bool systemNotificationsEnabled,
+    bool sipPresenceEnabled,
+  });
 
   @override
   $AppConfigBottomMenuCopyWith<$Res> get bottomMenu;
@@ -1173,8 +1228,9 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
     extends _$AppConfigMainCopyWithImpl<$Res, _$AppConfigMainImpl>
     implements _$$AppConfigMainImplCopyWith<$Res> {
   __$$AppConfigMainImplCopyWithImpl(
-      _$AppConfigMainImpl _value, $Res Function(_$AppConfigMainImpl) _then)
-      : super(_value, _then);
+    _$AppConfigMainImpl _value,
+    $Res Function(_$AppConfigMainImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigMain
   /// with the given fields replaced by the non-null parameter values.
@@ -1185,20 +1241,22 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
     Object? systemNotificationsEnabled = null,
     Object? sipPresenceEnabled = null,
   }) {
-    return _then(_$AppConfigMainImpl(
-      bottomMenu: null == bottomMenu
-          ? _value.bottomMenu
-          : bottomMenu // ignore: cast_nullable_to_non_nullable
-              as AppConfigBottomMenu,
-      systemNotificationsEnabled: null == systemNotificationsEnabled
-          ? _value.systemNotificationsEnabled
-          : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      sipPresenceEnabled: null == sipPresenceEnabled
-          ? _value.sipPresenceEnabled
-          : sipPresenceEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$AppConfigMainImpl(
+        bottomMenu: null == bottomMenu
+            ? _value.bottomMenu
+            : bottomMenu // ignore: cast_nullable_to_non_nullable
+                  as AppConfigBottomMenu,
+        systemNotificationsEnabled: null == systemNotificationsEnabled
+            ? _value.systemNotificationsEnabled
+            : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        sipPresenceEnabled: null == sipPresenceEnabled
+            ? _value.sipPresenceEnabled
+            : sipPresenceEnabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -1206,40 +1264,47 @@ class __$$AppConfigMainImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigMainImpl extends _AppConfigMain {
-  const _$AppConfigMainImpl(
-      {this.bottomMenu =
-          const AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
+  const _$AppConfigMainImpl({
+    this.bottomMenu = const AppConfigBottomMenu(
+      cacheSelectedTab: true,
+      tabs: [
         FavoritesTabScheme(
-            enabled: true,
-            initial: false,
-            titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
-            icon: '0xe5fd'),
+          enabled: true,
+          initial: false,
+          titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
+          icon: '0xe5fd',
+        ),
         RecentsTabScheme(
-            enabled: false,
-            initial: false,
-            titleL10n: 'main_BottomNavigationBarItemLabel_recents',
-            icon: '0xe03a',
-            useCdrs: false),
+          enabled: false,
+          initial: false,
+          titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+          icon: '0xe03a',
+          useCdrs: false,
+        ),
         ContactsTabScheme(
-            enabled: true,
-            initial: false,
-            titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
-            icon: '0xee35',
-            contactSourceTypes: ['local', 'external']),
+          enabled: true,
+          initial: false,
+          titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+          icon: '0xee35',
+          contactSourceTypes: ['local', 'external'],
+        ),
         KeypadTabScheme(
-            enabled: true,
-            initial: true,
-            titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
-            icon: '0xe1ce'),
+          enabled: true,
+          initial: true,
+          titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
+          icon: '0xe1ce',
+        ),
         MessagingTabScheme(
-            enabled: false,
-            initial: false,
-            titleL10n: 'main_BottomNavigationBarItemLabel_chats',
-            icon: '0xe155')
-      ]),
-      this.systemNotificationsEnabled = true,
-      this.sipPresenceEnabled = false})
-      : super._();
+          enabled: false,
+          initial: false,
+          titleL10n: 'main_BottomNavigationBarItemLabel_chats',
+          icon: '0xe155',
+        ),
+      ],
+    ),
+    this.systemNotificationsEnabled = true,
+    this.sipPresenceEnabled = false,
+  }) : super._();
 
   factory _$AppConfigMainImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigMainImplFromJson(json);
@@ -1266,8 +1331,10 @@ class _$AppConfigMainImpl extends _AppConfigMain {
             other is _$AppConfigMainImpl &&
             (identical(other.bottomMenu, bottomMenu) ||
                 other.bottomMenu == bottomMenu) &&
-            (identical(other.systemNotificationsEnabled,
-                    systemNotificationsEnabled) ||
+            (identical(
+                  other.systemNotificationsEnabled,
+                  systemNotificationsEnabled,
+                ) ||
                 other.systemNotificationsEnabled ==
                     systemNotificationsEnabled) &&
             (identical(other.sipPresenceEnabled, sipPresenceEnabled) ||
@@ -1277,7 +1344,11 @@ class _$AppConfigMainImpl extends _AppConfigMain {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, bottomMenu, systemNotificationsEnabled, sipPresenceEnabled);
+    runtimeType,
+    bottomMenu,
+    systemNotificationsEnabled,
+    sipPresenceEnabled,
+  );
 
   /// Create a copy of AppConfigMain
   /// with the given fields replaced by the non-null parameter values.
@@ -1289,17 +1360,16 @@ class _$AppConfigMainImpl extends _AppConfigMain {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigMainImplToJson(
-      this,
-    );
+    return _$$AppConfigMainImplToJson(this);
   }
 }
 
 abstract class _AppConfigMain extends AppConfigMain {
-  const factory _AppConfigMain(
-      {final AppConfigBottomMenu bottomMenu,
-      final bool systemNotificationsEnabled,
-      final bool sipPresenceEnabled}) = _$AppConfigMainImpl;
+  const factory _AppConfigMain({
+    final AppConfigBottomMenu bottomMenu,
+    final bool systemNotificationsEnabled,
+    final bool sipPresenceEnabled,
+  }) = _$AppConfigMainImpl;
   const _AppConfigMain._() : super._();
 
   factory _AppConfigMain.fromJson(Map<String, dynamic> json) =
@@ -1342,8 +1412,9 @@ mixin _$AppConfigBottomMenu {
 /// @nodoc
 abstract class $AppConfigBottomMenuCopyWith<$Res> {
   factory $AppConfigBottomMenuCopyWith(
-          AppConfigBottomMenu value, $Res Function(AppConfigBottomMenu) then) =
-      _$AppConfigBottomMenuCopyWithImpl<$Res, AppConfigBottomMenu>;
+    AppConfigBottomMenu value,
+    $Res Function(AppConfigBottomMenu) then,
+  ) = _$AppConfigBottomMenuCopyWithImpl<$Res, AppConfigBottomMenu>;
   @useResult
   $Res call({bool cacheSelectedTab, List<BottomMenuTabScheme> tabs});
 }
@@ -1362,29 +1433,30 @@ class _$AppConfigBottomMenuCopyWithImpl<$Res, $Val extends AppConfigBottomMenu>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? cacheSelectedTab = null,
-    Object? tabs = null,
-  }) {
-    return _then(_value.copyWith(
-      cacheSelectedTab: null == cacheSelectedTab
-          ? _value.cacheSelectedTab
-          : cacheSelectedTab // ignore: cast_nullable_to_non_nullable
-              as bool,
-      tabs: null == tabs
-          ? _value.tabs
-          : tabs // ignore: cast_nullable_to_non_nullable
-              as List<BottomMenuTabScheme>,
-    ) as $Val);
+  $Res call({Object? cacheSelectedTab = null, Object? tabs = null}) {
+    return _then(
+      _value.copyWith(
+            cacheSelectedTab: null == cacheSelectedTab
+                ? _value.cacheSelectedTab
+                : cacheSelectedTab // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            tabs: null == tabs
+                ? _value.tabs
+                : tabs // ignore: cast_nullable_to_non_nullable
+                      as List<BottomMenuTabScheme>,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$AppConfigBottomMenuImplCopyWith<$Res>
     implements $AppConfigBottomMenuCopyWith<$Res> {
-  factory _$$AppConfigBottomMenuImplCopyWith(_$AppConfigBottomMenuImpl value,
-          $Res Function(_$AppConfigBottomMenuImpl) then) =
-      __$$AppConfigBottomMenuImplCopyWithImpl<$Res>;
+  factory _$$AppConfigBottomMenuImplCopyWith(
+    _$AppConfigBottomMenuImpl value,
+    $Res Function(_$AppConfigBottomMenuImpl) then,
+  ) = __$$AppConfigBottomMenuImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool cacheSelectedTab, List<BottomMenuTabScheme> tabs});
@@ -1394,28 +1466,28 @@ abstract class _$$AppConfigBottomMenuImplCopyWith<$Res>
 class __$$AppConfigBottomMenuImplCopyWithImpl<$Res>
     extends _$AppConfigBottomMenuCopyWithImpl<$Res, _$AppConfigBottomMenuImpl>
     implements _$$AppConfigBottomMenuImplCopyWith<$Res> {
-  __$$AppConfigBottomMenuImplCopyWithImpl(_$AppConfigBottomMenuImpl _value,
-      $Res Function(_$AppConfigBottomMenuImpl) _then)
-      : super(_value, _then);
+  __$$AppConfigBottomMenuImplCopyWithImpl(
+    _$AppConfigBottomMenuImpl _value,
+    $Res Function(_$AppConfigBottomMenuImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigBottomMenu
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? cacheSelectedTab = null,
-    Object? tabs = null,
-  }) {
-    return _then(_$AppConfigBottomMenuImpl(
-      cacheSelectedTab: null == cacheSelectedTab
-          ? _value.cacheSelectedTab
-          : cacheSelectedTab // ignore: cast_nullable_to_non_nullable
-              as bool,
-      tabs: null == tabs
-          ? _value._tabs
-          : tabs // ignore: cast_nullable_to_non_nullable
-              as List<BottomMenuTabScheme>,
-    ));
+  $Res call({Object? cacheSelectedTab = null, Object? tabs = null}) {
+    return _then(
+      _$AppConfigBottomMenuImpl(
+        cacheSelectedTab: null == cacheSelectedTab
+            ? _value.cacheSelectedTab
+            : cacheSelectedTab // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        tabs: null == tabs
+            ? _value._tabs
+            : tabs // ignore: cast_nullable_to_non_nullable
+                  as List<BottomMenuTabScheme>,
+      ),
+    );
   }
 }
 
@@ -1423,11 +1495,11 @@ class __$$AppConfigBottomMenuImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigBottomMenuImpl extends _AppConfigBottomMenu {
-  const _$AppConfigBottomMenuImpl(
-      {this.cacheSelectedTab = true,
-      final List<BottomMenuTabScheme> tabs = const []})
-      : _tabs = tabs,
-        super._();
+  const _$AppConfigBottomMenuImpl({
+    this.cacheSelectedTab = true,
+    final List<BottomMenuTabScheme> tabs = const [],
+  }) : _tabs = tabs,
+       super._();
 
   factory _$AppConfigBottomMenuImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigBottomMenuImplFromJson(json);
@@ -1461,8 +1533,11 @@ class _$AppConfigBottomMenuImpl extends _AppConfigBottomMenu {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, cacheSelectedTab,
-      const DeepCollectionEquality().hash(_tabs));
+  int get hashCode => Object.hash(
+    runtimeType,
+    cacheSelectedTab,
+    const DeepCollectionEquality().hash(_tabs),
+  );
 
   /// Create a copy of AppConfigBottomMenu
   /// with the given fields replaced by the non-null parameter values.
@@ -1471,20 +1546,21 @@ class _$AppConfigBottomMenuImpl extends _AppConfigBottomMenu {
   @pragma('vm:prefer-inline')
   _$$AppConfigBottomMenuImplCopyWith<_$AppConfigBottomMenuImpl> get copyWith =>
       __$$AppConfigBottomMenuImplCopyWithImpl<_$AppConfigBottomMenuImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigBottomMenuImplToJson(
-      this,
-    );
+    return _$$AppConfigBottomMenuImplToJson(this);
   }
 }
 
 abstract class _AppConfigBottomMenu extends AppConfigBottomMenu {
-  const factory _AppConfigBottomMenu(
-      {final bool cacheSelectedTab,
-      final List<BottomMenuTabScheme> tabs}) = _$AppConfigBottomMenuImpl;
+  const factory _AppConfigBottomMenu({
+    final bool cacheSelectedTab,
+    final List<BottomMenuTabScheme> tabs,
+  }) = _$AppConfigBottomMenuImpl;
   const _AppConfigBottomMenu._() : super._();
 
   factory _AppConfigBottomMenu.fromJson(Map<String, dynamic> json) =
@@ -1528,14 +1604,16 @@ mixin _$AppConfigCall {
 /// @nodoc
 abstract class $AppConfigCallCopyWith<$Res> {
   factory $AppConfigCallCopyWith(
-          AppConfigCall value, $Res Function(AppConfigCall) then) =
-      _$AppConfigCallCopyWithImpl<$Res, AppConfigCall>;
+    AppConfigCall value,
+    $Res Function(AppConfigCall) then,
+  ) = _$AppConfigCallCopyWithImpl<$Res, AppConfigCall>;
   @useResult
-  $Res call(
-      {bool videoEnabled,
-      AppConfigTransfer transfer,
-      AppConfigEncoding encoding,
-      AppConfigPeerConnection peerConnection});
+  $Res call({
+    bool videoEnabled,
+    AppConfigTransfer transfer,
+    AppConfigEncoding encoding,
+    AppConfigPeerConnection peerConnection,
+  });
 
   $AppConfigTransferCopyWith<$Res> get transfer;
   $AppConfigEncodingCopyWith<$Res> get encoding;
@@ -1562,24 +1640,27 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
     Object? encoding = null,
     Object? peerConnection = null,
   }) {
-    return _then(_value.copyWith(
-      videoEnabled: null == videoEnabled
-          ? _value.videoEnabled
-          : videoEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      transfer: null == transfer
-          ? _value.transfer
-          : transfer // ignore: cast_nullable_to_non_nullable
-              as AppConfigTransfer,
-      encoding: null == encoding
-          ? _value.encoding
-          : encoding // ignore: cast_nullable_to_non_nullable
-              as AppConfigEncoding,
-      peerConnection: null == peerConnection
-          ? _value.peerConnection
-          : peerConnection // ignore: cast_nullable_to_non_nullable
-              as AppConfigPeerConnection,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            videoEnabled: null == videoEnabled
+                ? _value.videoEnabled
+                : videoEnabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            transfer: null == transfer
+                ? _value.transfer
+                : transfer // ignore: cast_nullable_to_non_nullable
+                      as AppConfigTransfer,
+            encoding: null == encoding
+                ? _value.encoding
+                : encoding // ignore: cast_nullable_to_non_nullable
+                      as AppConfigEncoding,
+            peerConnection: null == peerConnection
+                ? _value.peerConnection
+                : peerConnection // ignore: cast_nullable_to_non_nullable
+                      as AppConfigPeerConnection,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AppConfigCall
@@ -1607,8 +1688,9 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
   @override
   @pragma('vm:prefer-inline')
   $AppConfigPeerConnectionCopyWith<$Res> get peerConnection {
-    return $AppConfigPeerConnectionCopyWith<$Res>(_value.peerConnection,
-        (value) {
+    return $AppConfigPeerConnectionCopyWith<$Res>(_value.peerConnection, (
+      value,
+    ) {
       return _then(_value.copyWith(peerConnection: value) as $Val);
     });
   }
@@ -1618,15 +1700,17 @@ class _$AppConfigCallCopyWithImpl<$Res, $Val extends AppConfigCall>
 abstract class _$$AppConfigCallImplCopyWith<$Res>
     implements $AppConfigCallCopyWith<$Res> {
   factory _$$AppConfigCallImplCopyWith(
-          _$AppConfigCallImpl value, $Res Function(_$AppConfigCallImpl) then) =
-      __$$AppConfigCallImplCopyWithImpl<$Res>;
+    _$AppConfigCallImpl value,
+    $Res Function(_$AppConfigCallImpl) then,
+  ) = __$$AppConfigCallImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool videoEnabled,
-      AppConfigTransfer transfer,
-      AppConfigEncoding encoding,
-      AppConfigPeerConnection peerConnection});
+  $Res call({
+    bool videoEnabled,
+    AppConfigTransfer transfer,
+    AppConfigEncoding encoding,
+    AppConfigPeerConnection peerConnection,
+  });
 
   @override
   $AppConfigTransferCopyWith<$Res> get transfer;
@@ -1641,8 +1725,9 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
     extends _$AppConfigCallCopyWithImpl<$Res, _$AppConfigCallImpl>
     implements _$$AppConfigCallImplCopyWith<$Res> {
   __$$AppConfigCallImplCopyWithImpl(
-      _$AppConfigCallImpl _value, $Res Function(_$AppConfigCallImpl) _then)
-      : super(_value, _then);
+    _$AppConfigCallImpl _value,
+    $Res Function(_$AppConfigCallImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -1654,24 +1739,26 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
     Object? encoding = null,
     Object? peerConnection = null,
   }) {
-    return _then(_$AppConfigCallImpl(
-      videoEnabled: null == videoEnabled
-          ? _value.videoEnabled
-          : videoEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      transfer: null == transfer
-          ? _value.transfer
-          : transfer // ignore: cast_nullable_to_non_nullable
-              as AppConfigTransfer,
-      encoding: null == encoding
-          ? _value.encoding
-          : encoding // ignore: cast_nullable_to_non_nullable
-              as AppConfigEncoding,
-      peerConnection: null == peerConnection
-          ? _value.peerConnection
-          : peerConnection // ignore: cast_nullable_to_non_nullable
-              as AppConfigPeerConnection,
-    ));
+    return _then(
+      _$AppConfigCallImpl(
+        videoEnabled: null == videoEnabled
+            ? _value.videoEnabled
+            : videoEnabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        transfer: null == transfer
+            ? _value.transfer
+            : transfer // ignore: cast_nullable_to_non_nullable
+                  as AppConfigTransfer,
+        encoding: null == encoding
+            ? _value.encoding
+            : encoding // ignore: cast_nullable_to_non_nullable
+                  as AppConfigEncoding,
+        peerConnection: null == peerConnection
+            ? _value.peerConnection
+            : peerConnection // ignore: cast_nullable_to_non_nullable
+                  as AppConfigPeerConnection,
+      ),
+    );
   }
 }
 
@@ -1679,13 +1766,15 @@ class __$$AppConfigCallImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigCallImpl extends _AppConfigCall {
-  const _$AppConfigCallImpl(
-      {this.videoEnabled = true,
-      this.transfer = const AppConfigTransfer(
-          enableBlindTransfer: true, enableAttendedTransfer: true),
-      this.encoding = const AppConfigEncoding(),
-      this.peerConnection = const AppConfigPeerConnection()})
-      : super._();
+  const _$AppConfigCallImpl({
+    this.videoEnabled = true,
+    this.transfer = const AppConfigTransfer(
+      enableBlindTransfer: true,
+      enableAttendedTransfer: true,
+    ),
+    this.encoding = const AppConfigEncoding(),
+    this.peerConnection = const AppConfigPeerConnection(),
+  }) : super._();
 
   factory _$AppConfigCallImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigCallImplFromJson(json);
@@ -1726,7 +1815,12 @@ class _$AppConfigCallImpl extends _AppConfigCall {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, videoEnabled, transfer, encoding, peerConnection);
+    runtimeType,
+    videoEnabled,
+    transfer,
+    encoding,
+    peerConnection,
+  );
 
   /// Create a copy of AppConfigCall
   /// with the given fields replaced by the non-null parameter values.
@@ -1738,18 +1832,17 @@ class _$AppConfigCallImpl extends _AppConfigCall {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigCallImplToJson(
-      this,
-    );
+    return _$$AppConfigCallImplToJson(this);
   }
 }
 
 abstract class _AppConfigCall extends AppConfigCall {
-  const factory _AppConfigCall(
-      {final bool videoEnabled,
-      final AppConfigTransfer transfer,
-      final AppConfigEncoding encoding,
-      final AppConfigPeerConnection peerConnection}) = _$AppConfigCallImpl;
+  const factory _AppConfigCall({
+    final bool videoEnabled,
+    final AppConfigTransfer transfer,
+    final AppConfigEncoding encoding,
+    final AppConfigPeerConnection peerConnection,
+  }) = _$AppConfigCallImpl;
   const _AppConfigCall._() : super._();
 
   factory _AppConfigCall.fromJson(Map<String, dynamic> json) =
@@ -1794,8 +1887,9 @@ mixin _$AppConfigTransfer {
 /// @nodoc
 abstract class $AppConfigTransferCopyWith<$Res> {
   factory $AppConfigTransferCopyWith(
-          AppConfigTransfer value, $Res Function(AppConfigTransfer) then) =
-      _$AppConfigTransferCopyWithImpl<$Res, AppConfigTransfer>;
+    AppConfigTransfer value,
+    $Res Function(AppConfigTransfer) then,
+  ) = _$AppConfigTransferCopyWithImpl<$Res, AppConfigTransfer>;
   @useResult
   $Res call({bool enableBlindTransfer, bool enableAttendedTransfer});
 }
@@ -1818,25 +1912,29 @@ class _$AppConfigTransferCopyWithImpl<$Res, $Val extends AppConfigTransfer>
     Object? enableBlindTransfer = null,
     Object? enableAttendedTransfer = null,
   }) {
-    return _then(_value.copyWith(
-      enableBlindTransfer: null == enableBlindTransfer
-          ? _value.enableBlindTransfer
-          : enableBlindTransfer // ignore: cast_nullable_to_non_nullable
-              as bool,
-      enableAttendedTransfer: null == enableAttendedTransfer
-          ? _value.enableAttendedTransfer
-          : enableAttendedTransfer // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            enableBlindTransfer: null == enableBlindTransfer
+                ? _value.enableBlindTransfer
+                : enableBlindTransfer // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            enableAttendedTransfer: null == enableAttendedTransfer
+                ? _value.enableAttendedTransfer
+                : enableAttendedTransfer // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$AppConfigTransferImplCopyWith<$Res>
     implements $AppConfigTransferCopyWith<$Res> {
-  factory _$$AppConfigTransferImplCopyWith(_$AppConfigTransferImpl value,
-          $Res Function(_$AppConfigTransferImpl) then) =
-      __$$AppConfigTransferImplCopyWithImpl<$Res>;
+  factory _$$AppConfigTransferImplCopyWith(
+    _$AppConfigTransferImpl value,
+    $Res Function(_$AppConfigTransferImpl) then,
+  ) = __$$AppConfigTransferImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool enableBlindTransfer, bool enableAttendedTransfer});
@@ -1846,9 +1944,10 @@ abstract class _$$AppConfigTransferImplCopyWith<$Res>
 class __$$AppConfigTransferImplCopyWithImpl<$Res>
     extends _$AppConfigTransferCopyWithImpl<$Res, _$AppConfigTransferImpl>
     implements _$$AppConfigTransferImplCopyWith<$Res> {
-  __$$AppConfigTransferImplCopyWithImpl(_$AppConfigTransferImpl _value,
-      $Res Function(_$AppConfigTransferImpl) _then)
-      : super(_value, _then);
+  __$$AppConfigTransferImplCopyWithImpl(
+    _$AppConfigTransferImpl _value,
+    $Res Function(_$AppConfigTransferImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigTransfer
   /// with the given fields replaced by the non-null parameter values.
@@ -1858,16 +1957,18 @@ class __$$AppConfigTransferImplCopyWithImpl<$Res>
     Object? enableBlindTransfer = null,
     Object? enableAttendedTransfer = null,
   }) {
-    return _then(_$AppConfigTransferImpl(
-      enableBlindTransfer: null == enableBlindTransfer
-          ? _value.enableBlindTransfer
-          : enableBlindTransfer // ignore: cast_nullable_to_non_nullable
-              as bool,
-      enableAttendedTransfer: null == enableAttendedTransfer
-          ? _value.enableAttendedTransfer
-          : enableAttendedTransfer // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$AppConfigTransferImpl(
+        enableBlindTransfer: null == enableBlindTransfer
+            ? _value.enableBlindTransfer
+            : enableBlindTransfer // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        enableAttendedTransfer: null == enableAttendedTransfer
+            ? _value.enableAttendedTransfer
+            : enableAttendedTransfer // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -1875,9 +1976,10 @@ class __$$AppConfigTransferImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigTransferImpl extends _AppConfigTransfer {
-  const _$AppConfigTransferImpl(
-      {this.enableBlindTransfer = true, this.enableAttendedTransfer = true})
-      : super._();
+  const _$AppConfigTransferImpl({
+    this.enableBlindTransfer = true,
+    this.enableAttendedTransfer = true,
+  }) : super._();
 
   factory _$AppConfigTransferImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigTransferImplFromJson(json);
@@ -1917,20 +2019,21 @@ class _$AppConfigTransferImpl extends _AppConfigTransfer {
   @pragma('vm:prefer-inline')
   _$$AppConfigTransferImplCopyWith<_$AppConfigTransferImpl> get copyWith =>
       __$$AppConfigTransferImplCopyWithImpl<_$AppConfigTransferImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigTransferImplToJson(
-      this,
-    );
+    return _$$AppConfigTransferImplToJson(this);
   }
 }
 
 abstract class _AppConfigTransfer extends AppConfigTransfer {
-  const factory _AppConfigTransfer(
-      {final bool enableBlindTransfer,
-      final bool enableAttendedTransfer}) = _$AppConfigTransferImpl;
+  const factory _AppConfigTransfer({
+    final bool enableBlindTransfer,
+    final bool enableAttendedTransfer,
+  }) = _$AppConfigTransferImpl;
   const _AppConfigTransfer._() : super._();
 
   factory _AppConfigTransfer.fromJson(Map<String, dynamic> json) =
@@ -1972,11 +2075,14 @@ mixin _$AppConfigEncoding {
 /// @nodoc
 abstract class $AppConfigEncodingCopyWith<$Res> {
   factory $AppConfigEncodingCopyWith(
-          AppConfigEncoding value, $Res Function(AppConfigEncoding) then) =
-      _$AppConfigEncodingCopyWithImpl<$Res, AppConfigEncoding>;
+    AppConfigEncoding value,
+    $Res Function(AppConfigEncoding) then,
+  ) = _$AppConfigEncodingCopyWithImpl<$Res, AppConfigEncoding>;
   @useResult
-  $Res call(
-      {bool bypassConfig, EncodingDefaultPresetOverride defaultPresetOverride});
+  $Res call({
+    bool bypassConfig,
+    EncodingDefaultPresetOverride defaultPresetOverride,
+  });
 
   $EncodingDefaultPresetOverrideCopyWith<$Res> get defaultPresetOverride;
 }
@@ -1999,16 +2105,19 @@ class _$AppConfigEncodingCopyWithImpl<$Res, $Val extends AppConfigEncoding>
     Object? bypassConfig = null,
     Object? defaultPresetOverride = null,
   }) {
-    return _then(_value.copyWith(
-      bypassConfig: null == bypassConfig
-          ? _value.bypassConfig
-          : bypassConfig // ignore: cast_nullable_to_non_nullable
-              as bool,
-      defaultPresetOverride: null == defaultPresetOverride
-          ? _value.defaultPresetOverride
-          : defaultPresetOverride // ignore: cast_nullable_to_non_nullable
-              as EncodingDefaultPresetOverride,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            bypassConfig: null == bypassConfig
+                ? _value.bypassConfig
+                : bypassConfig // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            defaultPresetOverride: null == defaultPresetOverride
+                ? _value.defaultPresetOverride
+                : defaultPresetOverride // ignore: cast_nullable_to_non_nullable
+                      as EncodingDefaultPresetOverride,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AppConfigEncoding
@@ -2017,22 +2126,27 @@ class _$AppConfigEncodingCopyWithImpl<$Res, $Val extends AppConfigEncoding>
   @pragma('vm:prefer-inline')
   $EncodingDefaultPresetOverrideCopyWith<$Res> get defaultPresetOverride {
     return $EncodingDefaultPresetOverrideCopyWith<$Res>(
-        _value.defaultPresetOverride, (value) {
-      return _then(_value.copyWith(defaultPresetOverride: value) as $Val);
-    });
+      _value.defaultPresetOverride,
+      (value) {
+        return _then(_value.copyWith(defaultPresetOverride: value) as $Val);
+      },
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$AppConfigEncodingImplCopyWith<$Res>
     implements $AppConfigEncodingCopyWith<$Res> {
-  factory _$$AppConfigEncodingImplCopyWith(_$AppConfigEncodingImpl value,
-          $Res Function(_$AppConfigEncodingImpl) then) =
-      __$$AppConfigEncodingImplCopyWithImpl<$Res>;
+  factory _$$AppConfigEncodingImplCopyWith(
+    _$AppConfigEncodingImpl value,
+    $Res Function(_$AppConfigEncodingImpl) then,
+  ) = __$$AppConfigEncodingImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool bypassConfig, EncodingDefaultPresetOverride defaultPresetOverride});
+  $Res call({
+    bool bypassConfig,
+    EncodingDefaultPresetOverride defaultPresetOverride,
+  });
 
   @override
   $EncodingDefaultPresetOverrideCopyWith<$Res> get defaultPresetOverride;
@@ -2042,9 +2156,10 @@ abstract class _$$AppConfigEncodingImplCopyWith<$Res>
 class __$$AppConfigEncodingImplCopyWithImpl<$Res>
     extends _$AppConfigEncodingCopyWithImpl<$Res, _$AppConfigEncodingImpl>
     implements _$$AppConfigEncodingImplCopyWith<$Res> {
-  __$$AppConfigEncodingImplCopyWithImpl(_$AppConfigEncodingImpl _value,
-      $Res Function(_$AppConfigEncodingImpl) _then)
-      : super(_value, _then);
+  __$$AppConfigEncodingImplCopyWithImpl(
+    _$AppConfigEncodingImpl _value,
+    $Res Function(_$AppConfigEncodingImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigEncoding
   /// with the given fields replaced by the non-null parameter values.
@@ -2054,16 +2169,18 @@ class __$$AppConfigEncodingImplCopyWithImpl<$Res>
     Object? bypassConfig = null,
     Object? defaultPresetOverride = null,
   }) {
-    return _then(_$AppConfigEncodingImpl(
-      bypassConfig: null == bypassConfig
-          ? _value.bypassConfig
-          : bypassConfig // ignore: cast_nullable_to_non_nullable
-              as bool,
-      defaultPresetOverride: null == defaultPresetOverride
-          ? _value.defaultPresetOverride
-          : defaultPresetOverride // ignore: cast_nullable_to_non_nullable
-              as EncodingDefaultPresetOverride,
-    ));
+    return _then(
+      _$AppConfigEncodingImpl(
+        bypassConfig: null == bypassConfig
+            ? _value.bypassConfig
+            : bypassConfig // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        defaultPresetOverride: null == defaultPresetOverride
+            ? _value.defaultPresetOverride
+            : defaultPresetOverride // ignore: cast_nullable_to_non_nullable
+                  as EncodingDefaultPresetOverride,
+      ),
+    );
   }
 }
 
@@ -2071,10 +2188,10 @@ class __$$AppConfigEncodingImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigEncodingImpl extends _AppConfigEncoding {
-  const _$AppConfigEncodingImpl(
-      {this.bypassConfig = false,
-      this.defaultPresetOverride = const EncodingDefaultPresetOverride()})
-      : super._();
+  const _$AppConfigEncodingImpl({
+    this.bypassConfig = false,
+    this.defaultPresetOverride = const EncodingDefaultPresetOverride(),
+  }) : super._();
 
   factory _$AppConfigEncodingImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigEncodingImplFromJson(json);
@@ -2114,21 +2231,21 @@ class _$AppConfigEncodingImpl extends _AppConfigEncoding {
   @pragma('vm:prefer-inline')
   _$$AppConfigEncodingImplCopyWith<_$AppConfigEncodingImpl> get copyWith =>
       __$$AppConfigEncodingImplCopyWithImpl<_$AppConfigEncodingImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigEncodingImplToJson(
-      this,
-    );
+    return _$$AppConfigEncodingImplToJson(this);
   }
 }
 
 abstract class _AppConfigEncoding extends AppConfigEncoding {
-  const factory _AppConfigEncoding(
-          {final bool bypassConfig,
-          final EncodingDefaultPresetOverride defaultPresetOverride}) =
-      _$AppConfigEncodingImpl;
+  const factory _AppConfigEncoding({
+    final bool bypassConfig,
+    final EncodingDefaultPresetOverride defaultPresetOverride,
+  }) = _$AppConfigEncodingImpl;
   const _AppConfigEncoding._() : super._();
 
   factory _AppConfigEncoding.fromJson(Map<String, dynamic> json) =
@@ -2148,7 +2265,8 @@ abstract class _AppConfigEncoding extends AppConfigEncoding {
 }
 
 AppConfigPeerConnection _$AppConfigPeerConnectionFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _AppConfigPeerConnection.fromJson(json);
 }
 
@@ -2169,9 +2287,10 @@ mixin _$AppConfigPeerConnection {
 
 /// @nodoc
 abstract class $AppConfigPeerConnectionCopyWith<$Res> {
-  factory $AppConfigPeerConnectionCopyWith(AppConfigPeerConnection value,
-          $Res Function(AppConfigPeerConnection) then) =
-      _$AppConfigPeerConnectionCopyWithImpl<$Res, AppConfigPeerConnection>;
+  factory $AppConfigPeerConnectionCopyWith(
+    AppConfigPeerConnection value,
+    $Res Function(AppConfigPeerConnection) then,
+  ) = _$AppConfigPeerConnectionCopyWithImpl<$Res, AppConfigPeerConnection>;
   @useResult
   $Res call({AppConfigNegotiationSettingsOverride negotiation});
 
@@ -2179,8 +2298,10 @@ abstract class $AppConfigPeerConnectionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AppConfigPeerConnectionCopyWithImpl<$Res,
-        $Val extends AppConfigPeerConnection>
+class _$AppConfigPeerConnectionCopyWithImpl<
+  $Res,
+  $Val extends AppConfigPeerConnection
+>
     implements $AppConfigPeerConnectionCopyWith<$Res> {
   _$AppConfigPeerConnectionCopyWithImpl(this._value, this._then);
 
@@ -2193,15 +2314,16 @@ class _$AppConfigPeerConnectionCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? negotiation = null,
-  }) {
-    return _then(_value.copyWith(
-      negotiation: null == negotiation
-          ? _value.negotiation
-          : negotiation // ignore: cast_nullable_to_non_nullable
-              as AppConfigNegotiationSettingsOverride,
-    ) as $Val);
+  $Res call({Object? negotiation = null}) {
+    return _then(
+      _value.copyWith(
+            negotiation: null == negotiation
+                ? _value.negotiation
+                : negotiation // ignore: cast_nullable_to_non_nullable
+                      as AppConfigNegotiationSettingsOverride,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AppConfigPeerConnection
@@ -2210,9 +2332,11 @@ class _$AppConfigPeerConnectionCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   $AppConfigNegotiationSettingsOverrideCopyWith<$Res> get negotiation {
     return $AppConfigNegotiationSettingsOverrideCopyWith<$Res>(
-        _value.negotiation, (value) {
-      return _then(_value.copyWith(negotiation: value) as $Val);
-    });
+      _value.negotiation,
+      (value) {
+        return _then(_value.copyWith(negotiation: value) as $Val);
+      },
+    );
   }
 }
 
@@ -2220,9 +2344,9 @@ class _$AppConfigPeerConnectionCopyWithImpl<$Res,
 abstract class _$$AppConfigPeerConnectionImplCopyWith<$Res>
     implements $AppConfigPeerConnectionCopyWith<$Res> {
   factory _$$AppConfigPeerConnectionImplCopyWith(
-          _$AppConfigPeerConnectionImpl value,
-          $Res Function(_$AppConfigPeerConnectionImpl) then) =
-      __$$AppConfigPeerConnectionImplCopyWithImpl<$Res>;
+    _$AppConfigPeerConnectionImpl value,
+    $Res Function(_$AppConfigPeerConnectionImpl) then,
+  ) = __$$AppConfigPeerConnectionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({AppConfigNegotiationSettingsOverride negotiation});
@@ -2233,27 +2357,30 @@ abstract class _$$AppConfigPeerConnectionImplCopyWith<$Res>
 
 /// @nodoc
 class __$$AppConfigPeerConnectionImplCopyWithImpl<$Res>
-    extends _$AppConfigPeerConnectionCopyWithImpl<$Res,
-        _$AppConfigPeerConnectionImpl>
+    extends
+        _$AppConfigPeerConnectionCopyWithImpl<
+          $Res,
+          _$AppConfigPeerConnectionImpl
+        >
     implements _$$AppConfigPeerConnectionImplCopyWith<$Res> {
   __$$AppConfigPeerConnectionImplCopyWithImpl(
-      _$AppConfigPeerConnectionImpl _value,
-      $Res Function(_$AppConfigPeerConnectionImpl) _then)
-      : super(_value, _then);
+    _$AppConfigPeerConnectionImpl _value,
+    $Res Function(_$AppConfigPeerConnectionImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigPeerConnection
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? negotiation = null,
-  }) {
-    return _then(_$AppConfigPeerConnectionImpl(
-      negotiation: null == negotiation
-          ? _value.negotiation
-          : negotiation // ignore: cast_nullable_to_non_nullable
-              as AppConfigNegotiationSettingsOverride,
-    ));
+  $Res call({Object? negotiation = null}) {
+    return _then(
+      _$AppConfigPeerConnectionImpl(
+        negotiation: null == negotiation
+            ? _value.negotiation
+            : negotiation // ignore: cast_nullable_to_non_nullable
+                  as AppConfigNegotiationSettingsOverride,
+      ),
+    );
   }
 }
 
@@ -2261,9 +2388,9 @@ class __$$AppConfigPeerConnectionImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigPeerConnectionImpl extends _AppConfigPeerConnection {
-  const _$AppConfigPeerConnectionImpl(
-      {this.negotiation = const AppConfigNegotiationSettingsOverride()})
-      : super._();
+  const _$AppConfigPeerConnectionImpl({
+    this.negotiation = const AppConfigNegotiationSettingsOverride(),
+  }) : super._();
 
   factory _$AppConfigPeerConnectionImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigPeerConnectionImplFromJson(json);
@@ -2296,21 +2423,21 @@ class _$AppConfigPeerConnectionImpl extends _AppConfigPeerConnection {
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigPeerConnectionImplCopyWith<_$AppConfigPeerConnectionImpl>
-      get copyWith => __$$AppConfigPeerConnectionImplCopyWithImpl<
-          _$AppConfigPeerConnectionImpl>(this, _$identity);
+  get copyWith =>
+      __$$AppConfigPeerConnectionImplCopyWithImpl<
+        _$AppConfigPeerConnectionImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigPeerConnectionImplToJson(
-      this,
-    );
+    return _$$AppConfigPeerConnectionImplToJson(this);
   }
 }
 
 abstract class _AppConfigPeerConnection extends AppConfigPeerConnection {
-  const factory _AppConfigPeerConnection(
-          {final AppConfigNegotiationSettingsOverride negotiation}) =
-      _$AppConfigPeerConnectionImpl;
+  const factory _AppConfigPeerConnection({
+    final AppConfigNegotiationSettingsOverride negotiation,
+  }) = _$AppConfigPeerConnectionImpl;
   const _AppConfigPeerConnection._() : super._();
 
   factory _AppConfigPeerConnection.fromJson(Map<String, dynamic> json) =
@@ -2324,11 +2451,11 @@ abstract class _AppConfigPeerConnection extends AppConfigPeerConnection {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigPeerConnectionImplCopyWith<_$AppConfigPeerConnectionImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 AppConfigNegotiationSettingsOverride
-    _$AppConfigNegotiationSettingsOverrideFromJson(Map<String, dynamic> json) {
+_$AppConfigNegotiationSettingsOverrideFromJson(Map<String, dynamic> json) {
   return _AppConfigNegotiationSettingsOverride.fromJson(json);
 }
 
@@ -2344,24 +2471,30 @@ mixin _$AppConfigNegotiationSettingsOverride {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $AppConfigNegotiationSettingsOverrideCopyWith<
-          AppConfigNegotiationSettingsOverride>
-      get copyWith => throw _privateConstructorUsedError;
+    AppConfigNegotiationSettingsOverride
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
   factory $AppConfigNegotiationSettingsOverrideCopyWith(
-          AppConfigNegotiationSettingsOverride value,
-          $Res Function(AppConfigNegotiationSettingsOverride) then) =
-      _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
-          AppConfigNegotiationSettingsOverride>;
+    AppConfigNegotiationSettingsOverride value,
+    $Res Function(AppConfigNegotiationSettingsOverride) then,
+  ) =
+      _$AppConfigNegotiationSettingsOverrideCopyWithImpl<
+        $Res,
+        AppConfigNegotiationSettingsOverride
+      >;
   @useResult
   $Res call({bool includeInactiveVideoInOfferAnswer});
 }
 
 /// @nodoc
-class _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
-        $Val extends AppConfigNegotiationSettingsOverride>
+class _$AppConfigNegotiationSettingsOverrideCopyWithImpl<
+  $Res,
+  $Val extends AppConfigNegotiationSettingsOverride
+>
     implements $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
   _$AppConfigNegotiationSettingsOverrideCopyWithImpl(this._value, this._then);
 
@@ -2374,16 +2507,17 @@ class _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? includeInactiveVideoInOfferAnswer = null,
-  }) {
-    return _then(_value.copyWith(
-      includeInactiveVideoInOfferAnswer: null ==
-              includeInactiveVideoInOfferAnswer
-          ? _value.includeInactiveVideoInOfferAnswer
-          : includeInactiveVideoInOfferAnswer // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  $Res call({Object? includeInactiveVideoInOfferAnswer = null}) {
+    return _then(
+      _value.copyWith(
+            includeInactiveVideoInOfferAnswer:
+                null == includeInactiveVideoInOfferAnswer
+                ? _value.includeInactiveVideoInOfferAnswer
+                : includeInactiveVideoInOfferAnswer // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -2391,9 +2525,9 @@ class _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
 abstract class _$$AppConfigNegotiationSettingsOverrideImplCopyWith<$Res>
     implements $AppConfigNegotiationSettingsOverrideCopyWith<$Res> {
   factory _$$AppConfigNegotiationSettingsOverrideImplCopyWith(
-          _$AppConfigNegotiationSettingsOverrideImpl value,
-          $Res Function(_$AppConfigNegotiationSettingsOverrideImpl) then) =
-      __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>;
+    _$AppConfigNegotiationSettingsOverrideImpl value,
+    $Res Function(_$AppConfigNegotiationSettingsOverrideImpl) then,
+  ) = __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool includeInactiveVideoInOfferAnswer});
@@ -2401,28 +2535,31 @@ abstract class _$$AppConfigNegotiationSettingsOverrideImplCopyWith<$Res>
 
 /// @nodoc
 class __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>
-    extends _$AppConfigNegotiationSettingsOverrideCopyWithImpl<$Res,
-        _$AppConfigNegotiationSettingsOverrideImpl>
+    extends
+        _$AppConfigNegotiationSettingsOverrideCopyWithImpl<
+          $Res,
+          _$AppConfigNegotiationSettingsOverrideImpl
+        >
     implements _$$AppConfigNegotiationSettingsOverrideImplCopyWith<$Res> {
   __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl(
-      _$AppConfigNegotiationSettingsOverrideImpl _value,
-      $Res Function(_$AppConfigNegotiationSettingsOverrideImpl) _then)
-      : super(_value, _then);
+    _$AppConfigNegotiationSettingsOverrideImpl _value,
+    $Res Function(_$AppConfigNegotiationSettingsOverrideImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigNegotiationSettingsOverride
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? includeInactiveVideoInOfferAnswer = null,
-  }) {
-    return _then(_$AppConfigNegotiationSettingsOverrideImpl(
-      includeInactiveVideoInOfferAnswer: null ==
-              includeInactiveVideoInOfferAnswer
-          ? _value.includeInactiveVideoInOfferAnswer
-          : includeInactiveVideoInOfferAnswer // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+  $Res call({Object? includeInactiveVideoInOfferAnswer = null}) {
+    return _then(
+      _$AppConfigNegotiationSettingsOverrideImpl(
+        includeInactiveVideoInOfferAnswer:
+            null == includeInactiveVideoInOfferAnswer
+            ? _value.includeInactiveVideoInOfferAnswer
+            : includeInactiveVideoInOfferAnswer // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -2431,13 +2568,13 @@ class __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigNegotiationSettingsOverrideImpl
     extends _AppConfigNegotiationSettingsOverride {
-  const _$AppConfigNegotiationSettingsOverrideImpl(
-      {this.includeInactiveVideoInOfferAnswer = false})
-      : super._();
+  const _$AppConfigNegotiationSettingsOverrideImpl({
+    this.includeInactiveVideoInOfferAnswer = false,
+  }) : super._();
 
   factory _$AppConfigNegotiationSettingsOverrideImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$AppConfigNegotiationSettingsOverrideImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$AppConfigNegotiationSettingsOverrideImplFromJson(json);
 
   @override
   @JsonKey()
@@ -2453,8 +2590,10 @@ class _$AppConfigNegotiationSettingsOverrideImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppConfigNegotiationSettingsOverrideImpl &&
-            (identical(other.includeInactiveVideoInOfferAnswer,
-                    includeInactiveVideoInOfferAnswer) ||
+            (identical(
+                  other.includeInactiveVideoInOfferAnswer,
+                  includeInactiveVideoInOfferAnswer,
+                ) ||
                 other.includeInactiveVideoInOfferAnswer ==
                     includeInactiveVideoInOfferAnswer));
   }
@@ -2470,28 +2609,29 @@ class _$AppConfigNegotiationSettingsOverrideImpl
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigNegotiationSettingsOverrideImplCopyWith<
-          _$AppConfigNegotiationSettingsOverrideImpl>
-      get copyWith => __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<
-          _$AppConfigNegotiationSettingsOverrideImpl>(this, _$identity);
+    _$AppConfigNegotiationSettingsOverrideImpl
+  >
+  get copyWith =>
+      __$$AppConfigNegotiationSettingsOverrideImplCopyWithImpl<
+        _$AppConfigNegotiationSettingsOverrideImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigNegotiationSettingsOverrideImplToJson(
-      this,
-    );
+    return _$$AppConfigNegotiationSettingsOverrideImplToJson(this);
   }
 }
 
 abstract class _AppConfigNegotiationSettingsOverride
     extends AppConfigNegotiationSettingsOverride {
-  const factory _AppConfigNegotiationSettingsOverride(
-          {final bool includeInactiveVideoInOfferAnswer}) =
-      _$AppConfigNegotiationSettingsOverrideImpl;
+  const factory _AppConfigNegotiationSettingsOverride({
+    final bool includeInactiveVideoInOfferAnswer,
+  }) = _$AppConfigNegotiationSettingsOverrideImpl;
   const _AppConfigNegotiationSettingsOverride._() : super._();
 
   factory _AppConfigNegotiationSettingsOverride.fromJson(
-          Map<String, dynamic> json) =
-      _$AppConfigNegotiationSettingsOverrideImpl.fromJson;
+    Map<String, dynamic> json,
+  ) = _$AppConfigNegotiationSettingsOverrideImpl.fromJson;
 
   @override
   bool get includeInactiveVideoInOfferAnswer;
@@ -2501,12 +2641,14 @@ abstract class _AppConfigNegotiationSettingsOverride
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigNegotiationSettingsOverrideImplCopyWith<
-          _$AppConfigNegotiationSettingsOverrideImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$AppConfigNegotiationSettingsOverrideImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 EncodingDefaultPresetOverride _$EncodingDefaultPresetOverrideFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _EncodingDefaultPresetOverride.fromJson(json);
 }
 
@@ -2531,34 +2673,40 @@ mixin _$EncodingDefaultPresetOverride {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $EncodingDefaultPresetOverrideCopyWith<EncodingDefaultPresetOverride>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $EncodingDefaultPresetOverrideCopyWith<$Res> {
   factory $EncodingDefaultPresetOverrideCopyWith(
-          EncodingDefaultPresetOverride value,
-          $Res Function(EncodingDefaultPresetOverride) then) =
-      _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
-          EncodingDefaultPresetOverride>;
+    EncodingDefaultPresetOverride value,
+    $Res Function(EncodingDefaultPresetOverride) then,
+  ) =
+      _$EncodingDefaultPresetOverrideCopyWithImpl<
+        $Res,
+        EncodingDefaultPresetOverride
+      >;
   @useResult
-  $Res call(
-      {int? audioBitrate,
-      int? videoBitrate,
-      int? ptime,
-      int? maxptime,
-      int? opusSamplingRate,
-      int? opusBitrate,
-      bool? opusStereo,
-      bool? opusDtx,
-      bool? removeExtmaps,
-      bool? removeStaticAudioRtpMaps,
-      bool? remapTE8payloadTo101});
+  $Res call({
+    int? audioBitrate,
+    int? videoBitrate,
+    int? ptime,
+    int? maxptime,
+    int? opusSamplingRate,
+    int? opusBitrate,
+    bool? opusStereo,
+    bool? opusDtx,
+    bool? removeExtmaps,
+    bool? removeStaticAudioRtpMaps,
+    bool? remapTE8payloadTo101,
+  });
 }
 
 /// @nodoc
-class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
-        $Val extends EncodingDefaultPresetOverride>
+class _$EncodingDefaultPresetOverrideCopyWithImpl<
+  $Res,
+  $Val extends EncodingDefaultPresetOverride
+>
     implements $EncodingDefaultPresetOverrideCopyWith<$Res> {
   _$EncodingDefaultPresetOverrideCopyWithImpl(this._value, this._then);
 
@@ -2584,52 +2732,55 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
     Object? removeStaticAudioRtpMaps = freezed,
     Object? remapTE8payloadTo101 = freezed,
   }) {
-    return _then(_value.copyWith(
-      audioBitrate: freezed == audioBitrate
-          ? _value.audioBitrate
-          : audioBitrate // ignore: cast_nullable_to_non_nullable
-              as int?,
-      videoBitrate: freezed == videoBitrate
-          ? _value.videoBitrate
-          : videoBitrate // ignore: cast_nullable_to_non_nullable
-              as int?,
-      ptime: freezed == ptime
-          ? _value.ptime
-          : ptime // ignore: cast_nullable_to_non_nullable
-              as int?,
-      maxptime: freezed == maxptime
-          ? _value.maxptime
-          : maxptime // ignore: cast_nullable_to_non_nullable
-              as int?,
-      opusSamplingRate: freezed == opusSamplingRate
-          ? _value.opusSamplingRate
-          : opusSamplingRate // ignore: cast_nullable_to_non_nullable
-              as int?,
-      opusBitrate: freezed == opusBitrate
-          ? _value.opusBitrate
-          : opusBitrate // ignore: cast_nullable_to_non_nullable
-              as int?,
-      opusStereo: freezed == opusStereo
-          ? _value.opusStereo
-          : opusStereo // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      opusDtx: freezed == opusDtx
-          ? _value.opusDtx
-          : opusDtx // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      removeExtmaps: freezed == removeExtmaps
-          ? _value.removeExtmaps
-          : removeExtmaps // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps
-          ? _value.removeStaticAudioRtpMaps
-          : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      remapTE8payloadTo101: freezed == remapTE8payloadTo101
-          ? _value.remapTE8payloadTo101
-          : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
-              as bool?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            audioBitrate: freezed == audioBitrate
+                ? _value.audioBitrate
+                : audioBitrate // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            videoBitrate: freezed == videoBitrate
+                ? _value.videoBitrate
+                : videoBitrate // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            ptime: freezed == ptime
+                ? _value.ptime
+                : ptime // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            maxptime: freezed == maxptime
+                ? _value.maxptime
+                : maxptime // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            opusSamplingRate: freezed == opusSamplingRate
+                ? _value.opusSamplingRate
+                : opusSamplingRate // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            opusBitrate: freezed == opusBitrate
+                ? _value.opusBitrate
+                : opusBitrate // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            opusStereo: freezed == opusStereo
+                ? _value.opusStereo
+                : opusStereo // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+            opusDtx: freezed == opusDtx
+                ? _value.opusDtx
+                : opusDtx // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+            removeExtmaps: freezed == removeExtmaps
+                ? _value.removeExtmaps
+                : removeExtmaps // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+            removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps
+                ? _value.removeStaticAudioRtpMaps
+                : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+            remapTE8payloadTo101: freezed == remapTE8payloadTo101
+                ? _value.remapTE8payloadTo101
+                : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -2637,34 +2788,38 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
 abstract class _$$EncodingDefaultPresetOverrideImplCopyWith<$Res>
     implements $EncodingDefaultPresetOverrideCopyWith<$Res> {
   factory _$$EncodingDefaultPresetOverrideImplCopyWith(
-          _$EncodingDefaultPresetOverrideImpl value,
-          $Res Function(_$EncodingDefaultPresetOverrideImpl) then) =
-      __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>;
+    _$EncodingDefaultPresetOverrideImpl value,
+    $Res Function(_$EncodingDefaultPresetOverrideImpl) then,
+  ) = __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int? audioBitrate,
-      int? videoBitrate,
-      int? ptime,
-      int? maxptime,
-      int? opusSamplingRate,
-      int? opusBitrate,
-      bool? opusStereo,
-      bool? opusDtx,
-      bool? removeExtmaps,
-      bool? removeStaticAudioRtpMaps,
-      bool? remapTE8payloadTo101});
+  $Res call({
+    int? audioBitrate,
+    int? videoBitrate,
+    int? ptime,
+    int? maxptime,
+    int? opusSamplingRate,
+    int? opusBitrate,
+    bool? opusStereo,
+    bool? opusDtx,
+    bool? removeExtmaps,
+    bool? removeStaticAudioRtpMaps,
+    bool? remapTE8payloadTo101,
+  });
 }
 
 /// @nodoc
 class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
-    extends _$EncodingDefaultPresetOverrideCopyWithImpl<$Res,
-        _$EncodingDefaultPresetOverrideImpl>
+    extends
+        _$EncodingDefaultPresetOverrideCopyWithImpl<
+          $Res,
+          _$EncodingDefaultPresetOverrideImpl
+        >
     implements _$$EncodingDefaultPresetOverrideImplCopyWith<$Res> {
   __$$EncodingDefaultPresetOverrideImplCopyWithImpl(
-      _$EncodingDefaultPresetOverrideImpl _value,
-      $Res Function(_$EncodingDefaultPresetOverrideImpl) _then)
-      : super(_value, _then);
+    _$EncodingDefaultPresetOverrideImpl _value,
+    $Res Function(_$EncodingDefaultPresetOverrideImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -2683,52 +2838,54 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
     Object? removeStaticAudioRtpMaps = freezed,
     Object? remapTE8payloadTo101 = freezed,
   }) {
-    return _then(_$EncodingDefaultPresetOverrideImpl(
-      audioBitrate: freezed == audioBitrate
-          ? _value.audioBitrate
-          : audioBitrate // ignore: cast_nullable_to_non_nullable
-              as int?,
-      videoBitrate: freezed == videoBitrate
-          ? _value.videoBitrate
-          : videoBitrate // ignore: cast_nullable_to_non_nullable
-              as int?,
-      ptime: freezed == ptime
-          ? _value.ptime
-          : ptime // ignore: cast_nullable_to_non_nullable
-              as int?,
-      maxptime: freezed == maxptime
-          ? _value.maxptime
-          : maxptime // ignore: cast_nullable_to_non_nullable
-              as int?,
-      opusSamplingRate: freezed == opusSamplingRate
-          ? _value.opusSamplingRate
-          : opusSamplingRate // ignore: cast_nullable_to_non_nullable
-              as int?,
-      opusBitrate: freezed == opusBitrate
-          ? _value.opusBitrate
-          : opusBitrate // ignore: cast_nullable_to_non_nullable
-              as int?,
-      opusStereo: freezed == opusStereo
-          ? _value.opusStereo
-          : opusStereo // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      opusDtx: freezed == opusDtx
-          ? _value.opusDtx
-          : opusDtx // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      removeExtmaps: freezed == removeExtmaps
-          ? _value.removeExtmaps
-          : removeExtmaps // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps
-          ? _value.removeStaticAudioRtpMaps
-          : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      remapTE8payloadTo101: freezed == remapTE8payloadTo101
-          ? _value.remapTE8payloadTo101
-          : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
-              as bool?,
-    ));
+    return _then(
+      _$EncodingDefaultPresetOverrideImpl(
+        audioBitrate: freezed == audioBitrate
+            ? _value.audioBitrate
+            : audioBitrate // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        videoBitrate: freezed == videoBitrate
+            ? _value.videoBitrate
+            : videoBitrate // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        ptime: freezed == ptime
+            ? _value.ptime
+            : ptime // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        maxptime: freezed == maxptime
+            ? _value.maxptime
+            : maxptime // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        opusSamplingRate: freezed == opusSamplingRate
+            ? _value.opusSamplingRate
+            : opusSamplingRate // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        opusBitrate: freezed == opusBitrate
+            ? _value.opusBitrate
+            : opusBitrate // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        opusStereo: freezed == opusStereo
+            ? _value.opusStereo
+            : opusStereo // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+        opusDtx: freezed == opusDtx
+            ? _value.opusDtx
+            : opusDtx // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+        removeExtmaps: freezed == removeExtmaps
+            ? _value.removeExtmaps
+            : removeExtmaps // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+        removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps
+            ? _value.removeStaticAudioRtpMaps
+            : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+        remapTE8payloadTo101: freezed == remapTE8payloadTo101
+            ? _value.remapTE8payloadTo101
+            : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+      ),
+    );
   }
 }
 
@@ -2737,23 +2894,23 @@ class __$$EncodingDefaultPresetOverrideImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$EncodingDefaultPresetOverrideImpl
     extends _EncodingDefaultPresetOverride {
-  const _$EncodingDefaultPresetOverrideImpl(
-      {this.audioBitrate,
-      this.videoBitrate,
-      this.ptime,
-      this.maxptime,
-      this.opusSamplingRate,
-      this.opusBitrate,
-      this.opusStereo,
-      this.opusDtx,
-      this.removeExtmaps,
-      this.removeStaticAudioRtpMaps,
-      this.remapTE8payloadTo101})
-      : super._();
+  const _$EncodingDefaultPresetOverrideImpl({
+    this.audioBitrate,
+    this.videoBitrate,
+    this.ptime,
+    this.maxptime,
+    this.opusSamplingRate,
+    this.opusBitrate,
+    this.opusStereo,
+    this.opusDtx,
+    this.removeExtmaps,
+    this.removeStaticAudioRtpMaps,
+    this.remapTE8payloadTo101,
+  }) : super._();
 
   factory _$EncodingDefaultPresetOverrideImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$EncodingDefaultPresetOverrideImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$EncodingDefaultPresetOverrideImplFromJson(json);
 
   @override
   final int? audioBitrate;
@@ -2805,7 +2962,9 @@ class _$EncodingDefaultPresetOverrideImpl
             (identical(other.removeExtmaps, removeExtmaps) ||
                 other.removeExtmaps == removeExtmaps) &&
             (identical(
-                    other.removeStaticAudioRtpMaps, removeStaticAudioRtpMaps) ||
+                  other.removeStaticAudioRtpMaps,
+                  removeStaticAudioRtpMaps,
+                ) ||
                 other.removeStaticAudioRtpMaps == removeStaticAudioRtpMaps) &&
             (identical(other.remapTE8payloadTo101, remapTE8payloadTo101) ||
                 other.remapTE8payloadTo101 == remapTE8payloadTo101));
@@ -2814,18 +2973,19 @@ class _$EncodingDefaultPresetOverrideImpl
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      audioBitrate,
-      videoBitrate,
-      ptime,
-      maxptime,
-      opusSamplingRate,
-      opusBitrate,
-      opusStereo,
-      opusDtx,
-      removeExtmaps,
-      removeStaticAudioRtpMaps,
-      remapTE8payloadTo101);
+    runtimeType,
+    audioBitrate,
+    videoBitrate,
+    ptime,
+    maxptime,
+    opusSamplingRate,
+    opusBitrate,
+    opusStereo,
+    opusDtx,
+    removeExtmaps,
+    removeStaticAudioRtpMaps,
+    remapTE8payloadTo101,
+  );
 
   /// Create a copy of EncodingDefaultPresetOverride
   /// with the given fields replaced by the non-null parameter values.
@@ -2833,32 +2993,34 @@ class _$EncodingDefaultPresetOverrideImpl
   @override
   @pragma('vm:prefer-inline')
   _$$EncodingDefaultPresetOverrideImplCopyWith<
-          _$EncodingDefaultPresetOverrideImpl>
-      get copyWith => __$$EncodingDefaultPresetOverrideImplCopyWithImpl<
-          _$EncodingDefaultPresetOverrideImpl>(this, _$identity);
+    _$EncodingDefaultPresetOverrideImpl
+  >
+  get copyWith =>
+      __$$EncodingDefaultPresetOverrideImplCopyWithImpl<
+        _$EncodingDefaultPresetOverrideImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EncodingDefaultPresetOverrideImplToJson(
-      this,
-    );
+    return _$$EncodingDefaultPresetOverrideImplToJson(this);
   }
 }
 
 abstract class _EncodingDefaultPresetOverride
     extends EncodingDefaultPresetOverride {
-  const factory _EncodingDefaultPresetOverride(
-      {final int? audioBitrate,
-      final int? videoBitrate,
-      final int? ptime,
-      final int? maxptime,
-      final int? opusSamplingRate,
-      final int? opusBitrate,
-      final bool? opusStereo,
-      final bool? opusDtx,
-      final bool? removeExtmaps,
-      final bool? removeStaticAudioRtpMaps,
-      final bool? remapTE8payloadTo101}) = _$EncodingDefaultPresetOverrideImpl;
+  const factory _EncodingDefaultPresetOverride({
+    final int? audioBitrate,
+    final int? videoBitrate,
+    final int? ptime,
+    final int? maxptime,
+    final int? opusSamplingRate,
+    final int? opusBitrate,
+    final bool? opusStereo,
+    final bool? opusDtx,
+    final bool? removeExtmaps,
+    final bool? removeStaticAudioRtpMaps,
+    final bool? remapTE8payloadTo101,
+  }) = _$EncodingDefaultPresetOverrideImpl;
   const _EncodingDefaultPresetOverride._() : super._();
 
   factory _EncodingDefaultPresetOverride.fromJson(Map<String, dynamic> json) =
@@ -2892,8 +3054,9 @@ abstract class _EncodingDefaultPresetOverride
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EncodingDefaultPresetOverrideImplCopyWith<
-          _$EncodingDefaultPresetOverrideImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$EncodingDefaultPresetOverrideImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 BottomMenuTabScheme _$BottomMenuTabSchemeFromJson(Map<String, dynamic> json) {
@@ -2912,8 +3075,12 @@ BottomMenuTabScheme _$BottomMenuTabSchemeFromJson(Map<String, dynamic> json) {
       return EmbeddedTabScheme.fromJson(json);
 
     default:
-      throw CheckedFromJsonException(json, 'type', 'BottomMenuTabScheme',
-          'Invalid union type "${json['type']}"!');
+      throw CheckedFromJsonException(
+        json,
+        'type',
+        'BottomMenuTabScheme',
+        'Invalid union type "${json['type']}"!',
+      );
   }
 }
 
@@ -2926,67 +3093,133 @@ mixin _$BottomMenuTabScheme {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        favorites,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, bool useCdrs)
-        recents,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, List<String> contactSourceTypes)
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    favorites,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )
+    recents,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        messaging,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, @IntToStringConverter() String embeddedResourceId)
-        embedded,
-  }) =>
-      throw _privateConstructorUsedError;
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )
+    contacts,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    keypad,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    messaging,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )
+    embedded,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    favorites,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
-  }) =>
-      throw _privateConstructorUsedError;
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    keypad,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    messaging,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+    favorites,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+    keypad,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+    messaging,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(FavoritesTabScheme value) favorites,
@@ -2995,8 +3228,7 @@ mixin _$BottomMenuTabScheme {
     required TResult Function(KeypadTabScheme value) keypad,
     required TResult Function(MessagingTabScheme value) messaging,
     required TResult Function(EmbeddedTabScheme value) embedded,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FavoritesTabScheme value)? favorites,
@@ -3005,8 +3237,7 @@ mixin _$BottomMenuTabScheme {
     TResult? Function(KeypadTabScheme value)? keypad,
     TResult? Function(MessagingTabScheme value)? messaging,
     TResult? Function(EmbeddedTabScheme value)? embedded,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FavoritesTabScheme value)? favorites,
@@ -3016,8 +3247,7 @@ mixin _$BottomMenuTabScheme {
     TResult Function(MessagingTabScheme value)? messaging,
     TResult Function(EmbeddedTabScheme value)? embedded,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 
   /// Serializes this BottomMenuTabScheme to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -3032,8 +3262,9 @@ mixin _$BottomMenuTabScheme {
 /// @nodoc
 abstract class $BottomMenuTabSchemeCopyWith<$Res> {
   factory $BottomMenuTabSchemeCopyWith(
-          BottomMenuTabScheme value, $Res Function(BottomMenuTabScheme) then) =
-      _$BottomMenuTabSchemeCopyWithImpl<$Res, BottomMenuTabScheme>;
+    BottomMenuTabScheme value,
+    $Res Function(BottomMenuTabScheme) then,
+  ) = _$BottomMenuTabSchemeCopyWithImpl<$Res, BottomMenuTabScheme>;
   @useResult
   $Res call({bool enabled, bool initial, String titleL10n, String icon});
 }
@@ -3058,33 +3289,37 @@ class _$BottomMenuTabSchemeCopyWithImpl<$Res, $Val extends BottomMenuTabScheme>
     Object? titleL10n = null,
     Object? icon = null,
   }) {
-    return _then(_value.copyWith(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      initial: null == initial
-          ? _value.initial
-          : initial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            enabled: null == enabled
+                ? _value.enabled
+                : enabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            initial: null == initial
+                ? _value.initial
+                : initial // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            titleL10n: null == titleL10n
+                ? _value.titleL10n
+                : titleL10n // ignore: cast_nullable_to_non_nullable
+                      as String,
+            icon: null == icon
+                ? _value.icon
+                : icon // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$FavoritesTabSchemeImplCopyWith<$Res>
     implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory _$$FavoritesTabSchemeImplCopyWith(_$FavoritesTabSchemeImpl value,
-          $Res Function(_$FavoritesTabSchemeImpl) then) =
-      __$$FavoritesTabSchemeImplCopyWithImpl<$Res>;
+  factory _$$FavoritesTabSchemeImplCopyWith(
+    _$FavoritesTabSchemeImpl value,
+    $Res Function(_$FavoritesTabSchemeImpl) then,
+  ) = __$$FavoritesTabSchemeImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool enabled, bool initial, String titleL10n, String icon});
@@ -3094,9 +3329,10 @@ abstract class _$$FavoritesTabSchemeImplCopyWith<$Res>
 class __$$FavoritesTabSchemeImplCopyWithImpl<$Res>
     extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$FavoritesTabSchemeImpl>
     implements _$$FavoritesTabSchemeImplCopyWith<$Res> {
-  __$$FavoritesTabSchemeImplCopyWithImpl(_$FavoritesTabSchemeImpl _value,
-      $Res Function(_$FavoritesTabSchemeImpl) _then)
-      : super(_value, _then);
+  __$$FavoritesTabSchemeImplCopyWithImpl(
+    _$FavoritesTabSchemeImpl _value,
+    $Res Function(_$FavoritesTabSchemeImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -3108,24 +3344,26 @@ class __$$FavoritesTabSchemeImplCopyWithImpl<$Res>
     Object? titleL10n = null,
     Object? icon = null,
   }) {
-    return _then(_$FavoritesTabSchemeImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      initial: null == initial
-          ? _value.initial
-          : initial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$FavoritesTabSchemeImpl(
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        initial: null == initial
+            ? _value.initial
+            : initial // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        icon: null == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -3133,14 +3371,14 @@ class __$$FavoritesTabSchemeImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$FavoritesTabSchemeImpl extends FavoritesTabScheme {
-  const _$FavoritesTabSchemeImpl(
-      {this.enabled = true,
-      this.initial = false,
-      required this.titleL10n,
-      required this.icon,
-      final String? $type})
-      : $type = $type ?? 'favorites',
-        super._();
+  const _$FavoritesTabSchemeImpl({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    final String? $type,
+  }) : $type = $type ?? 'favorites',
+       super._();
 
   factory _$FavoritesTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
       _$$FavoritesTabSchemeImplFromJson(json);
@@ -3188,29 +3426,58 @@ class _$FavoritesTabSchemeImpl extends FavoritesTabScheme {
   @pragma('vm:prefer-inline')
   _$$FavoritesTabSchemeImplCopyWith<_$FavoritesTabSchemeImpl> get copyWith =>
       __$$FavoritesTabSchemeImplCopyWithImpl<_$FavoritesTabSchemeImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        favorites,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, bool useCdrs)
-        recents,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, List<String> contactSourceTypes)
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    favorites,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )
+    recents,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        messaging,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, @IntToStringConverter() String embeddedResourceId)
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )
+    contacts,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    keypad,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    messaging,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )
+    embedded,
   }) {
     return favorites(enabled, initial, titleL10n, icon);
   }
@@ -3219,23 +3486,50 @@ class _$FavoritesTabSchemeImpl extends FavoritesTabScheme {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    favorites,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    keypad,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    messaging,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
   }) {
     return favorites?.call(enabled, initial, titleL10n, icon);
   }
@@ -3244,20 +3538,35 @@ class _$FavoritesTabSchemeImpl extends FavoritesTabScheme {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+    favorites,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+    keypad,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+    messaging,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
     required TResult orElse(),
   }) {
     if (favorites != null) {
@@ -3311,18 +3620,17 @@ class _$FavoritesTabSchemeImpl extends FavoritesTabScheme {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$FavoritesTabSchemeImplToJson(
-      this,
-    );
+    return _$$FavoritesTabSchemeImplToJson(this);
   }
 }
 
 abstract class FavoritesTabScheme extends BottomMenuTabScheme {
-  const factory FavoritesTabScheme(
-      {final bool enabled,
-      final bool initial,
-      required final String titleL10n,
-      required final String icon}) = _$FavoritesTabSchemeImpl;
+  const factory FavoritesTabScheme({
+    final bool enabled,
+    final bool initial,
+    required final String titleL10n,
+    required final String icon,
+  }) = _$FavoritesTabSchemeImpl;
   const FavoritesTabScheme._() : super._();
 
   factory FavoritesTabScheme.fromJson(Map<String, dynamic> json) =
@@ -3348,26 +3656,29 @@ abstract class FavoritesTabScheme extends BottomMenuTabScheme {
 /// @nodoc
 abstract class _$$RecentsTabSchemeImplCopyWith<$Res>
     implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory _$$RecentsTabSchemeImplCopyWith(_$RecentsTabSchemeImpl value,
-          $Res Function(_$RecentsTabSchemeImpl) then) =
-      __$$RecentsTabSchemeImplCopyWithImpl<$Res>;
+  factory _$$RecentsTabSchemeImplCopyWith(
+    _$RecentsTabSchemeImpl value,
+    $Res Function(_$RecentsTabSchemeImpl) then,
+  ) = __$$RecentsTabSchemeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool enabled,
-      bool initial,
-      String titleL10n,
-      String icon,
-      bool useCdrs});
+  $Res call({
+    bool enabled,
+    bool initial,
+    String titleL10n,
+    String icon,
+    bool useCdrs,
+  });
 }
 
 /// @nodoc
 class __$$RecentsTabSchemeImplCopyWithImpl<$Res>
     extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$RecentsTabSchemeImpl>
     implements _$$RecentsTabSchemeImplCopyWith<$Res> {
-  __$$RecentsTabSchemeImplCopyWithImpl(_$RecentsTabSchemeImpl _value,
-      $Res Function(_$RecentsTabSchemeImpl) _then)
-      : super(_value, _then);
+  __$$RecentsTabSchemeImplCopyWithImpl(
+    _$RecentsTabSchemeImpl _value,
+    $Res Function(_$RecentsTabSchemeImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -3380,28 +3691,30 @@ class __$$RecentsTabSchemeImplCopyWithImpl<$Res>
     Object? icon = null,
     Object? useCdrs = null,
   }) {
-    return _then(_$RecentsTabSchemeImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      initial: null == initial
-          ? _value.initial
-          : initial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-      useCdrs: null == useCdrs
-          ? _value.useCdrs
-          : useCdrs // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$RecentsTabSchemeImpl(
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        initial: null == initial
+            ? _value.initial
+            : initial // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        icon: null == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String,
+        useCdrs: null == useCdrs
+            ? _value.useCdrs
+            : useCdrs // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -3409,15 +3722,15 @@ class __$$RecentsTabSchemeImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$RecentsTabSchemeImpl extends RecentsTabScheme {
-  const _$RecentsTabSchemeImpl(
-      {this.enabled = true,
-      this.initial = false,
-      required this.titleL10n,
-      required this.icon,
-      this.useCdrs = false,
-      final String? $type})
-      : $type = $type ?? 'recents',
-        super._();
+  const _$RecentsTabSchemeImpl({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    this.useCdrs = false,
+    final String? $type,
+  }) : $type = $type ?? 'recents',
+       super._();
 
   factory _$RecentsTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
       _$$RecentsTabSchemeImplFromJson(json);
@@ -3469,29 +3782,58 @@ class _$RecentsTabSchemeImpl extends RecentsTabScheme {
   @pragma('vm:prefer-inline')
   _$$RecentsTabSchemeImplCopyWith<_$RecentsTabSchemeImpl> get copyWith =>
       __$$RecentsTabSchemeImplCopyWithImpl<_$RecentsTabSchemeImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        favorites,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, bool useCdrs)
-        recents,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, List<String> contactSourceTypes)
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    favorites,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )
+    recents,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        messaging,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, @IntToStringConverter() String embeddedResourceId)
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )
+    contacts,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    keypad,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    messaging,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )
+    embedded,
   }) {
     return recents(enabled, initial, titleL10n, icon, useCdrs);
   }
@@ -3500,23 +3842,50 @@ class _$RecentsTabSchemeImpl extends RecentsTabScheme {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    favorites,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    keypad,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    messaging,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
   }) {
     return recents?.call(enabled, initial, titleL10n, icon, useCdrs);
   }
@@ -3525,20 +3894,35 @@ class _$RecentsTabSchemeImpl extends RecentsTabScheme {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+    favorites,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+    keypad,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+    messaging,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
     required TResult orElse(),
   }) {
     if (recents != null) {
@@ -3592,19 +3976,18 @@ class _$RecentsTabSchemeImpl extends RecentsTabScheme {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$RecentsTabSchemeImplToJson(
-      this,
-    );
+    return _$$RecentsTabSchemeImplToJson(this);
   }
 }
 
 abstract class RecentsTabScheme extends BottomMenuTabScheme {
-  const factory RecentsTabScheme(
-      {final bool enabled,
-      final bool initial,
-      required final String titleL10n,
-      required final String icon,
-      final bool useCdrs}) = _$RecentsTabSchemeImpl;
+  const factory RecentsTabScheme({
+    final bool enabled,
+    final bool initial,
+    required final String titleL10n,
+    required final String icon,
+    final bool useCdrs,
+  }) = _$RecentsTabSchemeImpl;
   const RecentsTabScheme._() : super._();
 
   factory RecentsTabScheme.fromJson(Map<String, dynamic> json) =
@@ -3631,26 +4014,29 @@ abstract class RecentsTabScheme extends BottomMenuTabScheme {
 /// @nodoc
 abstract class _$$ContactsTabSchemeImplCopyWith<$Res>
     implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory _$$ContactsTabSchemeImplCopyWith(_$ContactsTabSchemeImpl value,
-          $Res Function(_$ContactsTabSchemeImpl) then) =
-      __$$ContactsTabSchemeImplCopyWithImpl<$Res>;
+  factory _$$ContactsTabSchemeImplCopyWith(
+    _$ContactsTabSchemeImpl value,
+    $Res Function(_$ContactsTabSchemeImpl) then,
+  ) = __$$ContactsTabSchemeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool enabled,
-      bool initial,
-      String titleL10n,
-      String icon,
-      List<String> contactSourceTypes});
+  $Res call({
+    bool enabled,
+    bool initial,
+    String titleL10n,
+    String icon,
+    List<String> contactSourceTypes,
+  });
 }
 
 /// @nodoc
 class __$$ContactsTabSchemeImplCopyWithImpl<$Res>
     extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$ContactsTabSchemeImpl>
     implements _$$ContactsTabSchemeImplCopyWith<$Res> {
-  __$$ContactsTabSchemeImplCopyWithImpl(_$ContactsTabSchemeImpl _value,
-      $Res Function(_$ContactsTabSchemeImpl) _then)
-      : super(_value, _then);
+  __$$ContactsTabSchemeImplCopyWithImpl(
+    _$ContactsTabSchemeImpl _value,
+    $Res Function(_$ContactsTabSchemeImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -3663,28 +4049,30 @@ class __$$ContactsTabSchemeImplCopyWithImpl<$Res>
     Object? icon = null,
     Object? contactSourceTypes = null,
   }) {
-    return _then(_$ContactsTabSchemeImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      initial: null == initial
-          ? _value.initial
-          : initial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-      contactSourceTypes: null == contactSourceTypes
-          ? _value._contactSourceTypes
-          : contactSourceTypes // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ));
+    return _then(
+      _$ContactsTabSchemeImpl(
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        initial: null == initial
+            ? _value.initial
+            : initial // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        icon: null == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String,
+        contactSourceTypes: null == contactSourceTypes
+            ? _value._contactSourceTypes
+            : contactSourceTypes // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+      ),
+    );
   }
 }
 
@@ -3692,16 +4080,16 @@ class __$$ContactsTabSchemeImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ContactsTabSchemeImpl extends ContactsTabScheme {
-  const _$ContactsTabSchemeImpl(
-      {this.enabled = true,
-      this.initial = false,
-      required this.titleL10n,
-      required this.icon,
-      final List<String> contactSourceTypes = const <String>[],
-      final String? $type})
-      : _contactSourceTypes = contactSourceTypes,
-        $type = $type ?? 'contacts',
-        super._();
+  const _$ContactsTabSchemeImpl({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    final List<String> contactSourceTypes = const <String>[],
+    final String? $type,
+  }) : _contactSourceTypes = contactSourceTypes,
+       $type = $type ?? 'contacts',
+       super._();
 
   factory _$ContactsTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
       _$$ContactsTabSchemeImplFromJson(json);
@@ -3744,14 +4132,22 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
             (identical(other.titleL10n, titleL10n) ||
                 other.titleL10n == titleL10n) &&
             (identical(other.icon, icon) || other.icon == icon) &&
-            const DeepCollectionEquality()
-                .equals(other._contactSourceTypes, _contactSourceTypes));
+            const DeepCollectionEquality().equals(
+              other._contactSourceTypes,
+              _contactSourceTypes,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, enabled, initial, titleL10n,
-      icon, const DeepCollectionEquality().hash(_contactSourceTypes));
+  int get hashCode => Object.hash(
+    runtimeType,
+    enabled,
+    initial,
+    titleL10n,
+    icon,
+    const DeepCollectionEquality().hash(_contactSourceTypes),
+  );
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -3760,29 +4156,58 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
   @pragma('vm:prefer-inline')
   _$$ContactsTabSchemeImplCopyWith<_$ContactsTabSchemeImpl> get copyWith =>
       __$$ContactsTabSchemeImplCopyWithImpl<_$ContactsTabSchemeImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        favorites,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, bool useCdrs)
-        recents,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, List<String> contactSourceTypes)
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    favorites,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )
+    recents,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        messaging,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, @IntToStringConverter() String embeddedResourceId)
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )
+    contacts,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    keypad,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    messaging,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )
+    embedded,
   }) {
     return contacts(enabled, initial, titleL10n, icon, contactSourceTypes);
   }
@@ -3791,46 +4216,93 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    favorites,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    keypad,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    messaging,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
   }) {
     return contacts?.call(
-        enabled, initial, titleL10n, icon, contactSourceTypes);
+      enabled,
+      initial,
+      titleL10n,
+      icon,
+      contactSourceTypes,
+    );
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+    favorites,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+    keypad,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+    messaging,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
     required TResult orElse(),
   }) {
     if (contacts != null) {
@@ -3884,19 +4356,18 @@ class _$ContactsTabSchemeImpl extends ContactsTabScheme {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ContactsTabSchemeImplToJson(
-      this,
-    );
+    return _$$ContactsTabSchemeImplToJson(this);
   }
 }
 
 abstract class ContactsTabScheme extends BottomMenuTabScheme {
-  const factory ContactsTabScheme(
-      {final bool enabled,
-      final bool initial,
-      required final String titleL10n,
-      required final String icon,
-      final List<String> contactSourceTypes}) = _$ContactsTabSchemeImpl;
+  const factory ContactsTabScheme({
+    final bool enabled,
+    final bool initial,
+    required final String titleL10n,
+    required final String icon,
+    final List<String> contactSourceTypes,
+  }) = _$ContactsTabSchemeImpl;
   const ContactsTabScheme._() : super._();
 
   factory ContactsTabScheme.fromJson(Map<String, dynamic> json) =
@@ -3923,9 +4394,10 @@ abstract class ContactsTabScheme extends BottomMenuTabScheme {
 /// @nodoc
 abstract class _$$KeypadTabSchemeImplCopyWith<$Res>
     implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory _$$KeypadTabSchemeImplCopyWith(_$KeypadTabSchemeImpl value,
-          $Res Function(_$KeypadTabSchemeImpl) then) =
-      __$$KeypadTabSchemeImplCopyWithImpl<$Res>;
+  factory _$$KeypadTabSchemeImplCopyWith(
+    _$KeypadTabSchemeImpl value,
+    $Res Function(_$KeypadTabSchemeImpl) then,
+  ) = __$$KeypadTabSchemeImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool enabled, bool initial, String titleL10n, String icon});
@@ -3936,8 +4408,9 @@ class __$$KeypadTabSchemeImplCopyWithImpl<$Res>
     extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$KeypadTabSchemeImpl>
     implements _$$KeypadTabSchemeImplCopyWith<$Res> {
   __$$KeypadTabSchemeImplCopyWithImpl(
-      _$KeypadTabSchemeImpl _value, $Res Function(_$KeypadTabSchemeImpl) _then)
-      : super(_value, _then);
+    _$KeypadTabSchemeImpl _value,
+    $Res Function(_$KeypadTabSchemeImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -3949,24 +4422,26 @@ class __$$KeypadTabSchemeImplCopyWithImpl<$Res>
     Object? titleL10n = null,
     Object? icon = null,
   }) {
-    return _then(_$KeypadTabSchemeImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      initial: null == initial
-          ? _value.initial
-          : initial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$KeypadTabSchemeImpl(
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        initial: null == initial
+            ? _value.initial
+            : initial // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        icon: null == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -3974,14 +4449,14 @@ class __$$KeypadTabSchemeImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$KeypadTabSchemeImpl extends KeypadTabScheme {
-  const _$KeypadTabSchemeImpl(
-      {this.enabled = true,
-      this.initial = false,
-      required this.titleL10n,
-      required this.icon,
-      final String? $type})
-      : $type = $type ?? 'keypad',
-        super._();
+  const _$KeypadTabSchemeImpl({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    final String? $type,
+  }) : $type = $type ?? 'keypad',
+       super._();
 
   factory _$KeypadTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
       _$$KeypadTabSchemeImplFromJson(json);
@@ -4029,29 +4504,58 @@ class _$KeypadTabSchemeImpl extends KeypadTabScheme {
   @pragma('vm:prefer-inline')
   _$$KeypadTabSchemeImplCopyWith<_$KeypadTabSchemeImpl> get copyWith =>
       __$$KeypadTabSchemeImplCopyWithImpl<_$KeypadTabSchemeImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        favorites,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, bool useCdrs)
-        recents,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, List<String> contactSourceTypes)
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    favorites,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )
+    recents,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        messaging,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, @IntToStringConverter() String embeddedResourceId)
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )
+    contacts,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    keypad,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    messaging,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )
+    embedded,
   }) {
     return keypad(enabled, initial, titleL10n, icon);
   }
@@ -4060,23 +4564,50 @@ class _$KeypadTabSchemeImpl extends KeypadTabScheme {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    favorites,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    keypad,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    messaging,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
   }) {
     return keypad?.call(enabled, initial, titleL10n, icon);
   }
@@ -4085,20 +4616,35 @@ class _$KeypadTabSchemeImpl extends KeypadTabScheme {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+    favorites,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+    keypad,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+    messaging,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
     required TResult orElse(),
   }) {
     if (keypad != null) {
@@ -4152,18 +4698,17 @@ class _$KeypadTabSchemeImpl extends KeypadTabScheme {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$KeypadTabSchemeImplToJson(
-      this,
-    );
+    return _$$KeypadTabSchemeImplToJson(this);
   }
 }
 
 abstract class KeypadTabScheme extends BottomMenuTabScheme {
-  const factory KeypadTabScheme(
-      {final bool enabled,
-      final bool initial,
-      required final String titleL10n,
-      required final String icon}) = _$KeypadTabSchemeImpl;
+  const factory KeypadTabScheme({
+    final bool enabled,
+    final bool initial,
+    required final String titleL10n,
+    required final String icon,
+  }) = _$KeypadTabSchemeImpl;
   const KeypadTabScheme._() : super._();
 
   factory KeypadTabScheme.fromJson(Map<String, dynamic> json) =
@@ -4189,9 +4734,10 @@ abstract class KeypadTabScheme extends BottomMenuTabScheme {
 /// @nodoc
 abstract class _$$MessagingTabSchemeImplCopyWith<$Res>
     implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory _$$MessagingTabSchemeImplCopyWith(_$MessagingTabSchemeImpl value,
-          $Res Function(_$MessagingTabSchemeImpl) then) =
-      __$$MessagingTabSchemeImplCopyWithImpl<$Res>;
+  factory _$$MessagingTabSchemeImplCopyWith(
+    _$MessagingTabSchemeImpl value,
+    $Res Function(_$MessagingTabSchemeImpl) then,
+  ) = __$$MessagingTabSchemeImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool enabled, bool initial, String titleL10n, String icon});
@@ -4201,9 +4747,10 @@ abstract class _$$MessagingTabSchemeImplCopyWith<$Res>
 class __$$MessagingTabSchemeImplCopyWithImpl<$Res>
     extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$MessagingTabSchemeImpl>
     implements _$$MessagingTabSchemeImplCopyWith<$Res> {
-  __$$MessagingTabSchemeImplCopyWithImpl(_$MessagingTabSchemeImpl _value,
-      $Res Function(_$MessagingTabSchemeImpl) _then)
-      : super(_value, _then);
+  __$$MessagingTabSchemeImplCopyWithImpl(
+    _$MessagingTabSchemeImpl _value,
+    $Res Function(_$MessagingTabSchemeImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -4215,24 +4762,26 @@ class __$$MessagingTabSchemeImplCopyWithImpl<$Res>
     Object? titleL10n = null,
     Object? icon = null,
   }) {
-    return _then(_$MessagingTabSchemeImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      initial: null == initial
-          ? _value.initial
-          : initial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$MessagingTabSchemeImpl(
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        initial: null == initial
+            ? _value.initial
+            : initial // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        icon: null == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -4240,14 +4789,14 @@ class __$$MessagingTabSchemeImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$MessagingTabSchemeImpl extends MessagingTabScheme {
-  const _$MessagingTabSchemeImpl(
-      {this.enabled = true,
-      this.initial = false,
-      required this.titleL10n,
-      required this.icon,
-      final String? $type})
-      : $type = $type ?? 'messaging',
-        super._();
+  const _$MessagingTabSchemeImpl({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    final String? $type,
+  }) : $type = $type ?? 'messaging',
+       super._();
 
   factory _$MessagingTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessagingTabSchemeImplFromJson(json);
@@ -4295,29 +4844,58 @@ class _$MessagingTabSchemeImpl extends MessagingTabScheme {
   @pragma('vm:prefer-inline')
   _$$MessagingTabSchemeImplCopyWith<_$MessagingTabSchemeImpl> get copyWith =>
       __$$MessagingTabSchemeImplCopyWithImpl<_$MessagingTabSchemeImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        favorites,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, bool useCdrs)
-        recents,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, List<String> contactSourceTypes)
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    favorites,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )
+    recents,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        messaging,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, @IntToStringConverter() String embeddedResourceId)
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )
+    contacts,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    keypad,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    messaging,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )
+    embedded,
   }) {
     return messaging(enabled, initial, titleL10n, icon);
   }
@@ -4326,23 +4904,50 @@ class _$MessagingTabSchemeImpl extends MessagingTabScheme {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    favorites,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    keypad,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    messaging,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
   }) {
     return messaging?.call(enabled, initial, titleL10n, icon);
   }
@@ -4351,20 +4956,35 @@ class _$MessagingTabSchemeImpl extends MessagingTabScheme {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+    favorites,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+    keypad,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+    messaging,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
     required TResult orElse(),
   }) {
     if (messaging != null) {
@@ -4418,18 +5038,17 @@ class _$MessagingTabSchemeImpl extends MessagingTabScheme {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MessagingTabSchemeImplToJson(
-      this,
-    );
+    return _$$MessagingTabSchemeImplToJson(this);
   }
 }
 
 abstract class MessagingTabScheme extends BottomMenuTabScheme {
-  const factory MessagingTabScheme(
-      {final bool enabled,
-      final bool initial,
-      required final String titleL10n,
-      required final String icon}) = _$MessagingTabSchemeImpl;
+  const factory MessagingTabScheme({
+    final bool enabled,
+    final bool initial,
+    required final String titleL10n,
+    required final String icon,
+  }) = _$MessagingTabSchemeImpl;
   const MessagingTabScheme._() : super._();
 
   factory MessagingTabScheme.fromJson(Map<String, dynamic> json) =
@@ -4455,26 +5074,29 @@ abstract class MessagingTabScheme extends BottomMenuTabScheme {
 /// @nodoc
 abstract class _$$EmbeddedTabSchemeImplCopyWith<$Res>
     implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory _$$EmbeddedTabSchemeImplCopyWith(_$EmbeddedTabSchemeImpl value,
-          $Res Function(_$EmbeddedTabSchemeImpl) then) =
-      __$$EmbeddedTabSchemeImplCopyWithImpl<$Res>;
+  factory _$$EmbeddedTabSchemeImplCopyWith(
+    _$EmbeddedTabSchemeImpl value,
+    $Res Function(_$EmbeddedTabSchemeImpl) then,
+  ) = __$$EmbeddedTabSchemeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool enabled,
-      bool initial,
-      String titleL10n,
-      String icon,
-      @IntToStringConverter() String embeddedResourceId});
+  $Res call({
+    bool enabled,
+    bool initial,
+    String titleL10n,
+    String icon,
+    @IntToStringConverter() String embeddedResourceId,
+  });
 }
 
 /// @nodoc
 class __$$EmbeddedTabSchemeImplCopyWithImpl<$Res>
     extends _$BottomMenuTabSchemeCopyWithImpl<$Res, _$EmbeddedTabSchemeImpl>
     implements _$$EmbeddedTabSchemeImplCopyWith<$Res> {
-  __$$EmbeddedTabSchemeImplCopyWithImpl(_$EmbeddedTabSchemeImpl _value,
-      $Res Function(_$EmbeddedTabSchemeImpl) _then)
-      : super(_value, _then);
+  __$$EmbeddedTabSchemeImplCopyWithImpl(
+    _$EmbeddedTabSchemeImpl _value,
+    $Res Function(_$EmbeddedTabSchemeImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -4487,28 +5109,30 @@ class __$$EmbeddedTabSchemeImplCopyWithImpl<$Res>
     Object? icon = null,
     Object? embeddedResourceId = null,
   }) {
-    return _then(_$EmbeddedTabSchemeImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      initial: null == initial
-          ? _value.initial
-          : initial // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-      embeddedResourceId: null == embeddedResourceId
-          ? _value.embeddedResourceId
-          : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$EmbeddedTabSchemeImpl(
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        initial: null == initial
+            ? _value.initial
+            : initial // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        icon: null == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String,
+        embeddedResourceId: null == embeddedResourceId
+            ? _value.embeddedResourceId
+            : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -4516,15 +5140,15 @@ class __$$EmbeddedTabSchemeImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$EmbeddedTabSchemeImpl extends EmbeddedTabScheme {
-  const _$EmbeddedTabSchemeImpl(
-      {this.enabled = true,
-      this.initial = false,
-      required this.titleL10n,
-      required this.icon,
-      @IntToStringConverter() required this.embeddedResourceId,
-      final String? $type})
-      : $type = $type ?? 'embedded',
-        super._();
+  const _$EmbeddedTabSchemeImpl({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    @IntToStringConverter() required this.embeddedResourceId,
+    final String? $type,
+  }) : $type = $type ?? 'embedded',
+       super._();
 
   factory _$EmbeddedTabSchemeImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmbeddedTabSchemeImplFromJson(json);
@@ -4568,7 +5192,13 @@ class _$EmbeddedTabSchemeImpl extends EmbeddedTabScheme {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, enabled, initial, titleL10n, icon, embeddedResourceId);
+    runtimeType,
+    enabled,
+    initial,
+    titleL10n,
+    icon,
+    embeddedResourceId,
+  );
 
   /// Create a copy of BottomMenuTabScheme
   /// with the given fields replaced by the non-null parameter values.
@@ -4577,29 +5207,58 @@ class _$EmbeddedTabSchemeImpl extends EmbeddedTabScheme {
   @pragma('vm:prefer-inline')
   _$$EmbeddedTabSchemeImplCopyWith<_$EmbeddedTabSchemeImpl> get copyWith =>
       __$$EmbeddedTabSchemeImplCopyWithImpl<_$EmbeddedTabSchemeImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        favorites,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, bool useCdrs)
-        recents,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, List<String> contactSourceTypes)
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    favorites,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )
+    recents,
     required TResult Function(
-            bool enabled, bool initial, String titleL10n, String icon)
-        messaging,
-    required TResult Function(bool enabled, bool initial, String titleL10n,
-            String icon, @IntToStringConverter() String embeddedResourceId)
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )
+    contacts,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    keypad,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )
+    messaging,
+    required TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )
+    embedded,
   }) {
     return embedded(enabled, initial, titleL10n, icon, embeddedResourceId);
   }
@@ -4608,46 +5267,93 @@ class _$EmbeddedTabSchemeImpl extends EmbeddedTabScheme {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    favorites,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
     TResult? Function(
-            bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult? Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    keypad,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+    )?
+    messaging,
+    TResult? Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
   }) {
     return embedded?.call(
-        enabled, initial, titleL10n, icon, embeddedResourceId);
+      enabled,
+      initial,
+      titleL10n,
+      icon,
+      embeddedResourceId,
+    );
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        favorites,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            bool useCdrs)?
-        recents,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            List<String> contactSourceTypes)?
-        contacts,
+    favorites,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      bool useCdrs,
+    )?
+    recents,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      List<String> contactSourceTypes,
+    )?
+    contacts,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        keypad,
+    keypad,
     TResult Function(bool enabled, bool initial, String titleL10n, String icon)?
-        messaging,
-    TResult Function(bool enabled, bool initial, String titleL10n, String icon,
-            @IntToStringConverter() String embeddedResourceId)?
-        embedded,
+    messaging,
+    TResult Function(
+      bool enabled,
+      bool initial,
+      String titleL10n,
+      String icon,
+      @IntToStringConverter() String embeddedResourceId,
+    )?
+    embedded,
     required TResult orElse(),
   }) {
     if (embedded != null) {
@@ -4701,20 +5407,18 @@ class _$EmbeddedTabSchemeImpl extends EmbeddedTabScheme {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EmbeddedTabSchemeImplToJson(
-      this,
-    );
+    return _$$EmbeddedTabSchemeImplToJson(this);
   }
 }
 
 abstract class EmbeddedTabScheme extends BottomMenuTabScheme {
-  const factory EmbeddedTabScheme(
-          {final bool enabled,
-          final bool initial,
-          required final String titleL10n,
-          required final String icon,
-          @IntToStringConverter() required final String embeddedResourceId}) =
-      _$EmbeddedTabSchemeImpl;
+  const factory EmbeddedTabScheme({
+    final bool enabled,
+    final bool initial,
+    required final String titleL10n,
+    required final String icon,
+    @IntToStringConverter() required final String embeddedResourceId,
+  }) = _$EmbeddedTabSchemeImpl;
   const EmbeddedTabScheme._() : super._();
 
   factory EmbeddedTabScheme.fromJson(Map<String, dynamic> json) =
@@ -4761,8 +5465,9 @@ mixin _$AppConfigSettings {
 /// @nodoc
 abstract class $AppConfigSettingsCopyWith<$Res> {
   factory $AppConfigSettingsCopyWith(
-          AppConfigSettings value, $Res Function(AppConfigSettings) then) =
-      _$AppConfigSettingsCopyWithImpl<$Res, AppConfigSettings>;
+    AppConfigSettings value,
+    $Res Function(AppConfigSettings) then,
+  ) = _$AppConfigSettingsCopyWithImpl<$Res, AppConfigSettings>;
   @useResult
   $Res call({List<AppConfigSettingsSection> sections});
 }
@@ -4781,24 +5486,26 @@ class _$AppConfigSettingsCopyWithImpl<$Res, $Val extends AppConfigSettings>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? sections = null,
-  }) {
-    return _then(_value.copyWith(
-      sections: null == sections
-          ? _value.sections
-          : sections // ignore: cast_nullable_to_non_nullable
-              as List<AppConfigSettingsSection>,
-    ) as $Val);
+  $Res call({Object? sections = null}) {
+    return _then(
+      _value.copyWith(
+            sections: null == sections
+                ? _value.sections
+                : sections // ignore: cast_nullable_to_non_nullable
+                      as List<AppConfigSettingsSection>,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$AppConfigSettingsImplCopyWith<$Res>
     implements $AppConfigSettingsCopyWith<$Res> {
-  factory _$$AppConfigSettingsImplCopyWith(_$AppConfigSettingsImpl value,
-          $Res Function(_$AppConfigSettingsImpl) then) =
-      __$$AppConfigSettingsImplCopyWithImpl<$Res>;
+  factory _$$AppConfigSettingsImplCopyWith(
+    _$AppConfigSettingsImpl value,
+    $Res Function(_$AppConfigSettingsImpl) then,
+  ) = __$$AppConfigSettingsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<AppConfigSettingsSection> sections});
@@ -4808,23 +5515,24 @@ abstract class _$$AppConfigSettingsImplCopyWith<$Res>
 class __$$AppConfigSettingsImplCopyWithImpl<$Res>
     extends _$AppConfigSettingsCopyWithImpl<$Res, _$AppConfigSettingsImpl>
     implements _$$AppConfigSettingsImplCopyWith<$Res> {
-  __$$AppConfigSettingsImplCopyWithImpl(_$AppConfigSettingsImpl _value,
-      $Res Function(_$AppConfigSettingsImpl) _then)
-      : super(_value, _then);
+  __$$AppConfigSettingsImplCopyWithImpl(
+    _$AppConfigSettingsImpl _value,
+    $Res Function(_$AppConfigSettingsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigSettings
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? sections = null,
-  }) {
-    return _then(_$AppConfigSettingsImpl(
-      sections: null == sections
-          ? _value._sections
-          : sections // ignore: cast_nullable_to_non_nullable
-              as List<AppConfigSettingsSection>,
-    ));
+  $Res call({Object? sections = null}) {
+    return _then(
+      _$AppConfigSettingsImpl(
+        sections: null == sections
+            ? _value._sections
+            : sections // ignore: cast_nullable_to_non_nullable
+                  as List<AppConfigSettingsSection>,
+      ),
+    );
   }
 }
 
@@ -4832,52 +5540,60 @@ class __$$AppConfigSettingsImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigSettingsImpl extends _AppConfigSettings {
-  const _$AppConfigSettingsImpl(
-      {final List<AppConfigSettingsSection> sections = const [
-        AppConfigSettingsSection(
-            titleL10n: 'settings_ListViewTileTitle_settings',
+  const _$AppConfigSettingsImpl({
+    final List<AppConfigSettingsSection> sections = const [
+      AppConfigSettingsSection(
+        titleL10n: 'settings_ListViewTileTitle_settings',
+        enabled: true,
+        items: [
+          AppConfigSettingsItem(
             enabled: true,
-            items: [
-              AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'network',
-                  titleL10n: 'settings_ListViewTileTitle_network',
-                  icon: '0xe424'),
-              AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'mediaSettings',
-                  titleL10n: 'settings_ListViewTileTitle_mediaSettings',
-                  icon: '0xf1cf'),
-              AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'language',
-                  titleL10n: 'settings_ListViewTileTitle_language',
-                  icon: '0xe366'),
-              AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'terms',
-                  titleL10n: 'settings_ListViewTileTitle_termsConditions',
-                  icon: '0xeedf',
-                  embeddedResourceId: '0'),
-              AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'about',
-                  titleL10n: 'settings_ListViewTileTitle_about',
-                  icon: '0xe140')
-            ]),
-        AppConfigSettingsSection(
-            titleL10n: 'settings_ListViewTileTitle_toolbox',
+            type: 'network',
+            titleL10n: 'settings_ListViewTileTitle_network',
+            icon: '0xe424',
+          ),
+          AppConfigSettingsItem(
             enabled: true,
-            items: [
-              AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'log',
-                  titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
-                  icon: '0xee79')
-            ])
-      ]})
-      : _sections = sections,
-        super._();
+            type: 'mediaSettings',
+            titleL10n: 'settings_ListViewTileTitle_mediaSettings',
+            icon: '0xf1cf',
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'language',
+            titleL10n: 'settings_ListViewTileTitle_language',
+            icon: '0xe366',
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'terms',
+            titleL10n: 'settings_ListViewTileTitle_termsConditions',
+            icon: '0xeedf',
+            embeddedResourceId: '0',
+          ),
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'about',
+            titleL10n: 'settings_ListViewTileTitle_about',
+            icon: '0xe140',
+          ),
+        ],
+      ),
+      AppConfigSettingsSection(
+        titleL10n: 'settings_ListViewTileTitle_toolbox',
+        enabled: true,
+        items: [
+          AppConfigSettingsItem(
+            enabled: true,
+            type: 'log',
+            titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
+            icon: '0xee79',
+          ),
+        ],
+      ),
+    ],
+  }) : _sections = sections,
+       super._();
 
   factory _$AppConfigSettingsImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigSettingsImplFromJson(json);
@@ -4916,20 +5632,20 @@ class _$AppConfigSettingsImpl extends _AppConfigSettings {
   @pragma('vm:prefer-inline')
   _$$AppConfigSettingsImplCopyWith<_$AppConfigSettingsImpl> get copyWith =>
       __$$AppConfigSettingsImplCopyWithImpl<_$AppConfigSettingsImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigSettingsImplToJson(
-      this,
-    );
+    return _$$AppConfigSettingsImplToJson(this);
   }
 }
 
 abstract class _AppConfigSettings extends AppConfigSettings {
-  const factory _AppConfigSettings(
-          {final List<AppConfigSettingsSection> sections}) =
-      _$AppConfigSettingsImpl;
+  const factory _AppConfigSettings({
+    final List<AppConfigSettingsSection> sections,
+  }) = _$AppConfigSettingsImpl;
   const _AppConfigSettings._() : super._();
 
   factory _AppConfigSettings.fromJson(Map<String, dynamic> json) =
@@ -4947,7 +5663,8 @@ abstract class _AppConfigSettings extends AppConfigSettings {
 }
 
 AppConfigSettingsSection _$AppConfigSettingsSectionFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _AppConfigSettingsSection.fromJson(json);
 }
 
@@ -4969,17 +5686,23 @@ mixin _$AppConfigSettingsSection {
 
 /// @nodoc
 abstract class $AppConfigSettingsSectionCopyWith<$Res> {
-  factory $AppConfigSettingsSectionCopyWith(AppConfigSettingsSection value,
-          $Res Function(AppConfigSettingsSection) then) =
-      _$AppConfigSettingsSectionCopyWithImpl<$Res, AppConfigSettingsSection>;
+  factory $AppConfigSettingsSectionCopyWith(
+    AppConfigSettingsSection value,
+    $Res Function(AppConfigSettingsSection) then,
+  ) = _$AppConfigSettingsSectionCopyWithImpl<$Res, AppConfigSettingsSection>;
   @useResult
-  $Res call(
-      {String titleL10n, bool enabled, List<AppConfigSettingsItem> items});
+  $Res call({
+    String titleL10n,
+    bool enabled,
+    List<AppConfigSettingsItem> items,
+  });
 }
 
 /// @nodoc
-class _$AppConfigSettingsSectionCopyWithImpl<$Res,
-        $Val extends AppConfigSettingsSection>
+class _$AppConfigSettingsSectionCopyWithImpl<
+  $Res,
+  $Val extends AppConfigSettingsSection
+>
     implements $AppConfigSettingsSectionCopyWith<$Res> {
   _$AppConfigSettingsSectionCopyWithImpl(this._value, this._then);
 
@@ -4997,20 +5720,23 @@ class _$AppConfigSettingsSectionCopyWithImpl<$Res,
     Object? enabled = null,
     Object? items = null,
   }) {
-    return _then(_value.copyWith(
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<AppConfigSettingsItem>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            titleL10n: null == titleL10n
+                ? _value.titleL10n
+                : titleL10n // ignore: cast_nullable_to_non_nullable
+                      as String,
+            enabled: null == enabled
+                ? _value.enabled
+                : enabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            items: null == items
+                ? _value.items
+                : items // ignore: cast_nullable_to_non_nullable
+                      as List<AppConfigSettingsItem>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -5018,24 +5744,30 @@ class _$AppConfigSettingsSectionCopyWithImpl<$Res,
 abstract class _$$AppConfigSettingsSectionImplCopyWith<$Res>
     implements $AppConfigSettingsSectionCopyWith<$Res> {
   factory _$$AppConfigSettingsSectionImplCopyWith(
-          _$AppConfigSettingsSectionImpl value,
-          $Res Function(_$AppConfigSettingsSectionImpl) then) =
-      __$$AppConfigSettingsSectionImplCopyWithImpl<$Res>;
+    _$AppConfigSettingsSectionImpl value,
+    $Res Function(_$AppConfigSettingsSectionImpl) then,
+  ) = __$$AppConfigSettingsSectionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String titleL10n, bool enabled, List<AppConfigSettingsItem> items});
+  $Res call({
+    String titleL10n,
+    bool enabled,
+    List<AppConfigSettingsItem> items,
+  });
 }
 
 /// @nodoc
 class __$$AppConfigSettingsSectionImplCopyWithImpl<$Res>
-    extends _$AppConfigSettingsSectionCopyWithImpl<$Res,
-        _$AppConfigSettingsSectionImpl>
+    extends
+        _$AppConfigSettingsSectionCopyWithImpl<
+          $Res,
+          _$AppConfigSettingsSectionImpl
+        >
     implements _$$AppConfigSettingsSectionImplCopyWith<$Res> {
   __$$AppConfigSettingsSectionImplCopyWithImpl(
-      _$AppConfigSettingsSectionImpl _value,
-      $Res Function(_$AppConfigSettingsSectionImpl) _then)
-      : super(_value, _then);
+    _$AppConfigSettingsSectionImpl _value,
+    $Res Function(_$AppConfigSettingsSectionImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigSettingsSection
   /// with the given fields replaced by the non-null parameter values.
@@ -5046,20 +5778,22 @@ class __$$AppConfigSettingsSectionImplCopyWithImpl<$Res>
     Object? enabled = null,
     Object? items = null,
   }) {
-    return _then(_$AppConfigSettingsSectionImpl(
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      items: null == items
-          ? _value._items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<AppConfigSettingsItem>,
-    ));
+    return _then(
+      _$AppConfigSettingsSectionImpl(
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        items: null == items
+            ? _value._items
+            : items // ignore: cast_nullable_to_non_nullable
+                  as List<AppConfigSettingsItem>,
+      ),
+    );
   }
 }
 
@@ -5067,12 +5801,12 @@ class __$$AppConfigSettingsSectionImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigSettingsSectionImpl extends _AppConfigSettingsSection {
-  const _$AppConfigSettingsSectionImpl(
-      {required this.titleL10n,
-      this.enabled = true,
-      final List<AppConfigSettingsItem> items = const []})
-      : _items = items,
-        super._();
+  const _$AppConfigSettingsSectionImpl({
+    required this.titleL10n,
+    this.enabled = true,
+    final List<AppConfigSettingsItem> items = const [],
+  }) : _items = items,
+       super._();
 
   factory _$AppConfigSettingsSectionImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigSettingsSectionImplFromJson(json);
@@ -5109,8 +5843,12 @@ class _$AppConfigSettingsSectionImpl extends _AppConfigSettingsSection {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, titleL10n, enabled,
-      const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+    runtimeType,
+    titleL10n,
+    enabled,
+    const DeepCollectionEquality().hash(_items),
+  );
 
   /// Create a copy of AppConfigSettingsSection
   /// with the given fields replaced by the non-null parameter values.
@@ -5118,23 +5856,23 @@ class _$AppConfigSettingsSectionImpl extends _AppConfigSettingsSection {
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigSettingsSectionImplCopyWith<_$AppConfigSettingsSectionImpl>
-      get copyWith => __$$AppConfigSettingsSectionImplCopyWithImpl<
-          _$AppConfigSettingsSectionImpl>(this, _$identity);
+  get copyWith =>
+      __$$AppConfigSettingsSectionImplCopyWithImpl<
+        _$AppConfigSettingsSectionImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigSettingsSectionImplToJson(
-      this,
-    );
+    return _$$AppConfigSettingsSectionImplToJson(this);
   }
 }
 
 abstract class _AppConfigSettingsSection extends AppConfigSettingsSection {
-  const factory _AppConfigSettingsSection(
-          {required final String titleL10n,
-          final bool enabled,
-          final List<AppConfigSettingsItem> items}) =
-      _$AppConfigSettingsSectionImpl;
+  const factory _AppConfigSettingsSection({
+    required final String titleL10n,
+    final bool enabled,
+    final List<AppConfigSettingsItem> items,
+  }) = _$AppConfigSettingsSectionImpl;
   const _AppConfigSettingsSection._() : super._();
 
   factory _AppConfigSettingsSection.fromJson(Map<String, dynamic> json) =
@@ -5152,11 +5890,12 @@ abstract class _AppConfigSettingsSection extends AppConfigSettingsSection {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigSettingsSectionImplCopyWith<_$AppConfigSettingsSectionImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 AppConfigSettingsItem _$AppConfigSettingsItemFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _AppConfigSettingsItem.fromJson(json);
 }
 
@@ -5184,21 +5923,25 @@ mixin _$AppConfigSettingsItem {
 
 /// @nodoc
 abstract class $AppConfigSettingsItemCopyWith<$Res> {
-  factory $AppConfigSettingsItemCopyWith(AppConfigSettingsItem value,
-          $Res Function(AppConfigSettingsItem) then) =
-      _$AppConfigSettingsItemCopyWithImpl<$Res, AppConfigSettingsItem>;
+  factory $AppConfigSettingsItemCopyWith(
+    AppConfigSettingsItem value,
+    $Res Function(AppConfigSettingsItem) then,
+  ) = _$AppConfigSettingsItemCopyWithImpl<$Res, AppConfigSettingsItem>;
   @useResult
-  $Res call(
-      {bool enabled,
-      String titleL10n,
-      String type,
-      String icon,
-      @IntToStringOptionalConverter() String? embeddedResourceId});
+  $Res call({
+    bool enabled,
+    String titleL10n,
+    String type,
+    String icon,
+    @IntToStringOptionalConverter() String? embeddedResourceId,
+  });
 }
 
 /// @nodoc
-class _$AppConfigSettingsItemCopyWithImpl<$Res,
-        $Val extends AppConfigSettingsItem>
+class _$AppConfigSettingsItemCopyWithImpl<
+  $Res,
+  $Val extends AppConfigSettingsItem
+>
     implements $AppConfigSettingsItemCopyWith<$Res> {
   _$AppConfigSettingsItemCopyWithImpl(this._value, this._then);
 
@@ -5218,28 +5961,31 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
     Object? icon = null,
     Object? embeddedResourceId = freezed,
   }) {
-    return _then(_value.copyWith(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-      embeddedResourceId: freezed == embeddedResourceId
-          ? _value.embeddedResourceId
-          : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            enabled: null == enabled
+                ? _value.enabled
+                : enabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            titleL10n: null == titleL10n
+                ? _value.titleL10n
+                : titleL10n // ignore: cast_nullable_to_non_nullable
+                      as String,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as String,
+            icon: null == icon
+                ? _value.icon
+                : icon // ignore: cast_nullable_to_non_nullable
+                      as String,
+            embeddedResourceId: freezed == embeddedResourceId
+                ? _value.embeddedResourceId
+                : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -5247,27 +5993,29 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res,
 abstract class _$$AppConfigSettingsItemImplCopyWith<$Res>
     implements $AppConfigSettingsItemCopyWith<$Res> {
   factory _$$AppConfigSettingsItemImplCopyWith(
-          _$AppConfigSettingsItemImpl value,
-          $Res Function(_$AppConfigSettingsItemImpl) then) =
-      __$$AppConfigSettingsItemImplCopyWithImpl<$Res>;
+    _$AppConfigSettingsItemImpl value,
+    $Res Function(_$AppConfigSettingsItemImpl) then,
+  ) = __$$AppConfigSettingsItemImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool enabled,
-      String titleL10n,
-      String type,
-      String icon,
-      @IntToStringOptionalConverter() String? embeddedResourceId});
+  $Res call({
+    bool enabled,
+    String titleL10n,
+    String type,
+    String icon,
+    @IntToStringOptionalConverter() String? embeddedResourceId,
+  });
 }
 
 /// @nodoc
 class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
-    extends _$AppConfigSettingsItemCopyWithImpl<$Res,
-        _$AppConfigSettingsItemImpl>
+    extends
+        _$AppConfigSettingsItemCopyWithImpl<$Res, _$AppConfigSettingsItemImpl>
     implements _$$AppConfigSettingsItemImplCopyWith<$Res> {
-  __$$AppConfigSettingsItemImplCopyWithImpl(_$AppConfigSettingsItemImpl _value,
-      $Res Function(_$AppConfigSettingsItemImpl) _then)
-      : super(_value, _then);
+  __$$AppConfigSettingsItemImplCopyWithImpl(
+    _$AppConfigSettingsItemImpl _value,
+    $Res Function(_$AppConfigSettingsItemImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppConfigSettingsItem
   /// with the given fields replaced by the non-null parameter values.
@@ -5280,28 +6028,30 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
     Object? icon = null,
     Object? embeddedResourceId = freezed,
   }) {
-    return _then(_$AppConfigSettingsItemImpl(
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      titleL10n: null == titleL10n
-          ? _value.titleL10n
-          : titleL10n // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String,
-      embeddedResourceId: freezed == embeddedResourceId
-          ? _value.embeddedResourceId
-          : embeddedResourceId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$AppConfigSettingsItemImpl(
+        enabled: null == enabled
+            ? _value.enabled
+            : enabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        titleL10n: null == titleL10n
+            ? _value.titleL10n
+            : titleL10n // ignore: cast_nullable_to_non_nullable
+                  as String,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as String,
+        icon: null == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String,
+        embeddedResourceId: freezed == embeddedResourceId
+            ? _value.embeddedResourceId
+            : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -5309,13 +6059,13 @@ class __$$AppConfigSettingsItemImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
-  const _$AppConfigSettingsItemImpl(
-      {this.enabled = true,
-      required this.titleL10n,
-      required this.type,
-      required this.icon,
-      @IntToStringOptionalConverter() this.embeddedResourceId})
-      : super._();
+  const _$AppConfigSettingsItemImpl({
+    this.enabled = true,
+    required this.titleL10n,
+    required this.type,
+    required this.icon,
+    @IntToStringOptionalConverter() this.embeddedResourceId,
+  }) : super._();
 
   factory _$AppConfigSettingsItemImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppConfigSettingsItemImplFromJson(json);
@@ -5358,7 +6108,13 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, enabled, titleL10n, type, icon, embeddedResourceId);
+    runtimeType,
+    enabled,
+    titleL10n,
+    type,
+    icon,
+    embeddedResourceId,
+  );
 
   /// Create a copy of AppConfigSettingsItem
   /// with the given fields replaced by the non-null parameter values.
@@ -5366,25 +6122,26 @@ class _$AppConfigSettingsItemImpl extends _AppConfigSettingsItem {
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigSettingsItemImplCopyWith<_$AppConfigSettingsItemImpl>
-      get copyWith => __$$AppConfigSettingsItemImplCopyWithImpl<
-          _$AppConfigSettingsItemImpl>(this, _$identity);
+  get copyWith =>
+      __$$AppConfigSettingsItemImplCopyWithImpl<_$AppConfigSettingsItemImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppConfigSettingsItemImplToJson(
-      this,
-    );
+    return _$$AppConfigSettingsItemImplToJson(this);
   }
 }
 
 abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
-  const factory _AppConfigSettingsItem(
-          {final bool enabled,
-          required final String titleL10n,
-          required final String type,
-          required final String icon,
-          @IntToStringOptionalConverter() final String? embeddedResourceId}) =
-      _$AppConfigSettingsItemImpl;
+  const factory _AppConfigSettingsItem({
+    final bool enabled,
+    required final String titleL10n,
+    required final String type,
+    required final String icon,
+    @IntToStringOptionalConverter() final String? embeddedResourceId,
+  }) = _$AppConfigSettingsItemImpl;
   const _AppConfigSettingsItem._() : super._();
 
   factory _AppConfigSettingsItem.fromJson(Map<String, dynamic> json) =
@@ -5410,5 +6167,5 @@ abstract class _AppConfigSettingsItem extends AppConfigSettingsItem {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigSettingsItemImplCopyWith<_$AppConfigSettingsItemImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

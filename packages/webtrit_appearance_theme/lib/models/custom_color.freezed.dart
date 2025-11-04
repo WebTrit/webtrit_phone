@@ -12,7 +12,8 @@ part of 'custom_color.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 CustomColor _$CustomColorFromJson(Map<String, dynamic> json) {
   return _CustomColor.fromJson(json);
@@ -36,8 +37,9 @@ mixin _$CustomColor {
 /// @nodoc
 abstract class $CustomColorCopyWith<$Res> {
   factory $CustomColorCopyWith(
-          CustomColor value, $Res Function(CustomColor) then) =
-      _$CustomColorCopyWithImpl<$Res, CustomColor>;
+    CustomColor value,
+    $Res Function(CustomColor) then,
+  ) = _$CustomColorCopyWithImpl<$Res, CustomColor>;
   @useResult
   $Res call({String color, bool blend});
 }
@@ -56,20 +58,20 @@ class _$CustomColorCopyWithImpl<$Res, $Val extends CustomColor>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? color = null,
-    Object? blend = null,
-  }) {
-    return _then(_value.copyWith(
-      color: null == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
-      blend: null == blend
-          ? _value.blend
-          : blend // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  $Res call({Object? color = null, Object? blend = null}) {
+    return _then(
+      _value.copyWith(
+            color: null == color
+                ? _value.color
+                : color // ignore: cast_nullable_to_non_nullable
+                      as String,
+            blend: null == blend
+                ? _value.blend
+                : blend // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -77,8 +79,9 @@ class _$CustomColorCopyWithImpl<$Res, $Val extends CustomColor>
 abstract class _$$CustomColorImplCopyWith<$Res>
     implements $CustomColorCopyWith<$Res> {
   factory _$$CustomColorImplCopyWith(
-          _$CustomColorImpl value, $Res Function(_$CustomColorImpl) then) =
-      __$$CustomColorImplCopyWithImpl<$Res>;
+    _$CustomColorImpl value,
+    $Res Function(_$CustomColorImpl) then,
+  ) = __$$CustomColorImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String color, bool blend});
@@ -89,27 +92,27 @@ class __$$CustomColorImplCopyWithImpl<$Res>
     extends _$CustomColorCopyWithImpl<$Res, _$CustomColorImpl>
     implements _$$CustomColorImplCopyWith<$Res> {
   __$$CustomColorImplCopyWithImpl(
-      _$CustomColorImpl _value, $Res Function(_$CustomColorImpl) _then)
-      : super(_value, _then);
+    _$CustomColorImpl _value,
+    $Res Function(_$CustomColorImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CustomColor
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? color = null,
-    Object? blend = null,
-  }) {
-    return _then(_$CustomColorImpl(
-      color: null == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
-      blend: null == blend
-          ? _value.blend
-          : blend // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+  $Res call({Object? color = null, Object? blend = null}) {
+    return _then(
+      _$CustomColorImpl(
+        color: null == color
+            ? _value.color
+            : color // ignore: cast_nullable_to_non_nullable
+                  as String,
+        blend: null == blend
+            ? _value.blend
+            : blend // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -155,9 +158,7 @@ class _$CustomColorImpl implements _CustomColor {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CustomColorImplToJson(
-      this,
-    );
+    return _$$CustomColorImplToJson(this);
   }
 }
 

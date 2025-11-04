@@ -12,10 +12,12 @@ part of 'session_autoprovision_credential.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SessionAutoProvisionCredential _$SessionAutoProvisionCredentialFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _SessionAutoProvisionCredential.fromJson(json);
 }
 
@@ -33,24 +35,33 @@ mixin _$SessionAutoProvisionCredential {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $SessionAutoProvisionCredentialCopyWith<SessionAutoProvisionCredential>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $SessionAutoProvisionCredentialCopyWith<$Res> {
   factory $SessionAutoProvisionCredentialCopyWith(
-          SessionAutoProvisionCredential value,
-          $Res Function(SessionAutoProvisionCredential) then) =
-      _$SessionAutoProvisionCredentialCopyWithImpl<$Res,
-          SessionAutoProvisionCredential>;
+    SessionAutoProvisionCredential value,
+    $Res Function(SessionAutoProvisionCredential) then,
+  ) =
+      _$SessionAutoProvisionCredentialCopyWithImpl<
+        $Res,
+        SessionAutoProvisionCredential
+      >;
   @useResult
-  $Res call(
-      {String? bundleId, AppType type, String identifier, String configToken});
+  $Res call({
+    String? bundleId,
+    AppType type,
+    String identifier,
+    String configToken,
+  });
 }
 
 /// @nodoc
-class _$SessionAutoProvisionCredentialCopyWithImpl<$Res,
-        $Val extends SessionAutoProvisionCredential>
+class _$SessionAutoProvisionCredentialCopyWithImpl<
+  $Res,
+  $Val extends SessionAutoProvisionCredential
+>
     implements $SessionAutoProvisionCredentialCopyWith<$Res> {
   _$SessionAutoProvisionCredentialCopyWithImpl(this._value, this._then);
 
@@ -69,24 +80,27 @@ class _$SessionAutoProvisionCredentialCopyWithImpl<$Res,
     Object? identifier = null,
     Object? configToken = null,
   }) {
-    return _then(_value.copyWith(
-      bundleId: freezed == bundleId
-          ? _value.bundleId
-          : bundleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppType,
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      configToken: null == configToken
-          ? _value.configToken
-          : configToken // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            bundleId: freezed == bundleId
+                ? _value.bundleId
+                : bundleId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as AppType,
+            identifier: null == identifier
+                ? _value.identifier
+                : identifier // ignore: cast_nullable_to_non_nullable
+                      as String,
+            configToken: null == configToken
+                ? _value.configToken
+                : configToken // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -94,24 +108,31 @@ class _$SessionAutoProvisionCredentialCopyWithImpl<$Res,
 abstract class _$$SessionAutoProvisionCredentialImplCopyWith<$Res>
     implements $SessionAutoProvisionCredentialCopyWith<$Res> {
   factory _$$SessionAutoProvisionCredentialImplCopyWith(
-          _$SessionAutoProvisionCredentialImpl value,
-          $Res Function(_$SessionAutoProvisionCredentialImpl) then) =
-      __$$SessionAutoProvisionCredentialImplCopyWithImpl<$Res>;
+    _$SessionAutoProvisionCredentialImpl value,
+    $Res Function(_$SessionAutoProvisionCredentialImpl) then,
+  ) = __$$SessionAutoProvisionCredentialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? bundleId, AppType type, String identifier, String configToken});
+  $Res call({
+    String? bundleId,
+    AppType type,
+    String identifier,
+    String configToken,
+  });
 }
 
 /// @nodoc
 class __$$SessionAutoProvisionCredentialImplCopyWithImpl<$Res>
-    extends _$SessionAutoProvisionCredentialCopyWithImpl<$Res,
-        _$SessionAutoProvisionCredentialImpl>
+    extends
+        _$SessionAutoProvisionCredentialCopyWithImpl<
+          $Res,
+          _$SessionAutoProvisionCredentialImpl
+        >
     implements _$$SessionAutoProvisionCredentialImplCopyWith<$Res> {
   __$$SessionAutoProvisionCredentialImplCopyWithImpl(
-      _$SessionAutoProvisionCredentialImpl _value,
-      $Res Function(_$SessionAutoProvisionCredentialImpl) _then)
-      : super(_value, _then);
+    _$SessionAutoProvisionCredentialImpl _value,
+    $Res Function(_$SessionAutoProvisionCredentialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SessionAutoProvisionCredential
   /// with the given fields replaced by the non-null parameter values.
@@ -123,24 +144,26 @@ class __$$SessionAutoProvisionCredentialImplCopyWithImpl<$Res>
     Object? identifier = null,
     Object? configToken = null,
   }) {
-    return _then(_$SessionAutoProvisionCredentialImpl(
-      bundleId: freezed == bundleId
-          ? _value.bundleId
-          : bundleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppType,
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      configToken: null == configToken
-          ? _value.configToken
-          : configToken // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$SessionAutoProvisionCredentialImpl(
+        bundleId: freezed == bundleId
+            ? _value.bundleId
+            : bundleId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as AppType,
+        identifier: null == identifier
+            ? _value.identifier
+            : identifier // ignore: cast_nullable_to_non_nullable
+                  as String,
+        configToken: null == configToken
+            ? _value.configToken
+            : configToken // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -149,15 +172,16 @@ class __$$SessionAutoProvisionCredentialImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionAutoProvisionCredentialImpl
     implements _SessionAutoProvisionCredential {
-  const _$SessionAutoProvisionCredentialImpl(
-      {this.bundleId,
-      required this.type,
-      required this.identifier,
-      required this.configToken});
+  const _$SessionAutoProvisionCredentialImpl({
+    this.bundleId,
+    required this.type,
+    required this.identifier,
+    required this.configToken,
+  });
 
   factory _$SessionAutoProvisionCredentialImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$SessionAutoProvisionCredentialImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$SessionAutoProvisionCredentialImplFromJson(json);
 
   @override
   final String? bundleId;
@@ -198,26 +222,27 @@ class _$SessionAutoProvisionCredentialImpl
   @override
   @pragma('vm:prefer-inline')
   _$$SessionAutoProvisionCredentialImplCopyWith<
-          _$SessionAutoProvisionCredentialImpl>
-      get copyWith => __$$SessionAutoProvisionCredentialImplCopyWithImpl<
-          _$SessionAutoProvisionCredentialImpl>(this, _$identity);
+    _$SessionAutoProvisionCredentialImpl
+  >
+  get copyWith =>
+      __$$SessionAutoProvisionCredentialImplCopyWithImpl<
+        _$SessionAutoProvisionCredentialImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SessionAutoProvisionCredentialImplToJson(
-      this,
-    );
+    return _$$SessionAutoProvisionCredentialImplToJson(this);
   }
 }
 
 abstract class _SessionAutoProvisionCredential
     implements SessionAutoProvisionCredential {
-  const factory _SessionAutoProvisionCredential(
-          {final String? bundleId,
-          required final AppType type,
-          required final String identifier,
-          required final String configToken}) =
-      _$SessionAutoProvisionCredentialImpl;
+  const factory _SessionAutoProvisionCredential({
+    final String? bundleId,
+    required final AppType type,
+    required final String identifier,
+    required final String configToken,
+  }) = _$SessionAutoProvisionCredentialImpl;
 
   factory _SessionAutoProvisionCredential.fromJson(Map<String, dynamic> json) =
       _$SessionAutoProvisionCredentialImpl.fromJson;
@@ -236,6 +261,7 @@ abstract class _SessionAutoProvisionCredential
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionAutoProvisionCredentialImplCopyWith<
-          _$SessionAutoProvisionCredentialImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$SessionAutoProvisionCredentialImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }

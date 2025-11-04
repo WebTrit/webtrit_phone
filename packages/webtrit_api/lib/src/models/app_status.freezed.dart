@@ -12,7 +12,8 @@ part of 'app_status.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 AppStatus _$AppStatusFromJson(Map<String, dynamic> json) {
   return _AppStatus.fromJson(json);
@@ -54,15 +55,16 @@ class _$AppStatusCopyWithImpl<$Res, $Val extends AppStatus>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? register = null,
-  }) {
-    return _then(_value.copyWith(
-      register: null == register
-          ? _value.register
-          : register // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  $Res call({Object? register = null}) {
+    return _then(
+      _value.copyWith(
+            register: null == register
+                ? _value.register
+                : register // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -70,8 +72,9 @@ class _$AppStatusCopyWithImpl<$Res, $Val extends AppStatus>
 abstract class _$$AppStatusImplCopyWith<$Res>
     implements $AppStatusCopyWith<$Res> {
   factory _$$AppStatusImplCopyWith(
-          _$AppStatusImpl value, $Res Function(_$AppStatusImpl) then) =
-      __$$AppStatusImplCopyWithImpl<$Res>;
+    _$AppStatusImpl value,
+    $Res Function(_$AppStatusImpl) then,
+  ) = __$$AppStatusImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool register});
@@ -82,22 +85,23 @@ class __$$AppStatusImplCopyWithImpl<$Res>
     extends _$AppStatusCopyWithImpl<$Res, _$AppStatusImpl>
     implements _$$AppStatusImplCopyWith<$Res> {
   __$$AppStatusImplCopyWithImpl(
-      _$AppStatusImpl _value, $Res Function(_$AppStatusImpl) _then)
-      : super(_value, _then);
+    _$AppStatusImpl _value,
+    $Res Function(_$AppStatusImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppStatus
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? register = null,
-  }) {
-    return _then(_$AppStatusImpl(
-      register: null == register
-          ? _value.register
-          : register // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+  $Res call({Object? register = null}) {
+    return _then(
+      _$AppStatusImpl(
+        register: null == register
+            ? _value.register
+            : register // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -141,9 +145,7 @@ class _$AppStatusImpl implements _AppStatus {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppStatusImplToJson(
-      this,
-    );
+    return _$$AppStatusImplToJson(this);
   }
 }
 

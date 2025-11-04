@@ -12,7 +12,8 @@ part of 'image_source.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ImageSource _$ImageSourceFromJson(Map<String, dynamic> json) {
   return _ImageSource.fromJson(json);
@@ -54,15 +55,17 @@ mixin _$ImageSource {
 /// @nodoc
 abstract class $ImageSourceCopyWith<$Res> {
   factory $ImageSourceCopyWith(
-          ImageSource value, $Res Function(ImageSource) then) =
-      _$ImageSourceCopyWithImpl<$Res, ImageSource>;
+    ImageSource value,
+    $Res Function(ImageSource) then,
+  ) = _$ImageSourceCopyWithImpl<$Res, ImageSource>;
   @useResult
-  $Res call(
-      {String? id,
-      String? uri,
-      @JsonKey(name: r'$ref') String ref,
-      ImageRenderSpec? render,
-      Metadata metadata});
+  $Res call({
+    String? id,
+    String? uri,
+    @JsonKey(name: r'$ref') String ref,
+    ImageRenderSpec? render,
+    Metadata metadata,
+  });
 
   $ImageRenderSpecCopyWith<$Res>? get render;
   $MetadataCopyWith<$Res> get metadata;
@@ -89,28 +92,31 @@ class _$ImageSourceCopyWithImpl<$Res, $Val extends ImageSource>
     Object? render = freezed,
     Object? metadata = null,
   }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      uri: freezed == uri
-          ? _value.uri
-          : uri // ignore: cast_nullable_to_non_nullable
-              as String?,
-      ref: null == ref
-          ? _value.ref
-          : ref // ignore: cast_nullable_to_non_nullable
-              as String,
-      render: freezed == render
-          ? _value.render
-          : render // ignore: cast_nullable_to_non_nullable
-              as ImageRenderSpec?,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            uri: freezed == uri
+                ? _value.uri
+                : uri // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            ref: null == ref
+                ? _value.ref
+                : ref // ignore: cast_nullable_to_non_nullable
+                      as String,
+            render: freezed == render
+                ? _value.render
+                : render // ignore: cast_nullable_to_non_nullable
+                      as ImageRenderSpec?,
+            metadata: null == metadata
+                ? _value.metadata
+                : metadata // ignore: cast_nullable_to_non_nullable
+                      as Metadata,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ImageSource
@@ -142,16 +148,18 @@ class _$ImageSourceCopyWithImpl<$Res, $Val extends ImageSource>
 abstract class _$$ImageSourceImplCopyWith<$Res>
     implements $ImageSourceCopyWith<$Res> {
   factory _$$ImageSourceImplCopyWith(
-          _$ImageSourceImpl value, $Res Function(_$ImageSourceImpl) then) =
-      __$$ImageSourceImplCopyWithImpl<$Res>;
+    _$ImageSourceImpl value,
+    $Res Function(_$ImageSourceImpl) then,
+  ) = __$$ImageSourceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? id,
-      String? uri,
-      @JsonKey(name: r'$ref') String ref,
-      ImageRenderSpec? render,
-      Metadata metadata});
+  $Res call({
+    String? id,
+    String? uri,
+    @JsonKey(name: r'$ref') String ref,
+    ImageRenderSpec? render,
+    Metadata metadata,
+  });
 
   @override
   $ImageRenderSpecCopyWith<$Res>? get render;
@@ -164,8 +172,9 @@ class __$$ImageSourceImplCopyWithImpl<$Res>
     extends _$ImageSourceCopyWithImpl<$Res, _$ImageSourceImpl>
     implements _$$ImageSourceImplCopyWith<$Res> {
   __$$ImageSourceImplCopyWithImpl(
-      _$ImageSourceImpl _value, $Res Function(_$ImageSourceImpl) _then)
-      : super(_value, _then);
+    _$ImageSourceImpl _value,
+    $Res Function(_$ImageSourceImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ImageSource
   /// with the given fields replaced by the non-null parameter values.
@@ -178,41 +187,43 @@ class __$$ImageSourceImplCopyWithImpl<$Res>
     Object? render = freezed,
     Object? metadata = null,
   }) {
-    return _then(_$ImageSourceImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      uri: freezed == uri
-          ? _value.uri
-          : uri // ignore: cast_nullable_to_non_nullable
-              as String?,
-      ref: null == ref
-          ? _value.ref
-          : ref // ignore: cast_nullable_to_non_nullable
-              as String,
-      render: freezed == render
-          ? _value.render
-          : render // ignore: cast_nullable_to_non_nullable
-              as ImageRenderSpec?,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-    ));
+    return _then(
+      _$ImageSourceImpl(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        uri: freezed == uri
+            ? _value.uri
+            : uri // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        ref: null == ref
+            ? _value.ref
+            : ref // ignore: cast_nullable_to_non_nullable
+                  as String,
+        render: freezed == render
+            ? _value.render
+            : render // ignore: cast_nullable_to_non_nullable
+                  as ImageRenderSpec?,
+        metadata: null == metadata
+            ? _value.metadata
+            : metadata // ignore: cast_nullable_to_non_nullable
+                  as Metadata,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ImageSourceImpl extends _ImageSource {
-  const _$ImageSourceImpl(
-      {this.id,
-      this.uri,
-      @JsonKey(name: r'$ref') this.ref = 'asset',
-      this.render,
-      this.metadata = const Metadata()})
-      : super._();
+  const _$ImageSourceImpl({
+    this.id,
+    this.uri,
+    @JsonKey(name: r'$ref') this.ref = 'asset',
+    this.render,
+    this.metadata = const Metadata(),
+  }) : super._();
 
   factory _$ImageSourceImpl.fromJson(Map<String, dynamic> json) =>
       _$$ImageSourceImplFromJson(json);
@@ -276,19 +287,18 @@ class _$ImageSourceImpl extends _ImageSource {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ImageSourceImplToJson(
-      this,
-    );
+    return _$$ImageSourceImplToJson(this);
   }
 }
 
 abstract class _ImageSource extends ImageSource {
-  const factory _ImageSource(
-      {final String? id,
-      final String? uri,
-      @JsonKey(name: r'$ref') final String ref,
-      final ImageRenderSpec? render,
-      final Metadata metadata}) = _$ImageSourceImpl;
+  const factory _ImageSource({
+    final String? id,
+    final String? uri,
+    @JsonKey(name: r'$ref') final String ref,
+    final ImageRenderSpec? render,
+    final Metadata metadata,
+  }) = _$ImageSourceImpl;
   const _ImageSource._() : super._();
 
   factory _ImageSource.fromJson(Map<String, dynamic> json) =
@@ -353,8 +363,9 @@ mixin _$ImageRenderSpec {
 /// @nodoc
 abstract class $ImageRenderSpecCopyWith<$Res> {
   factory $ImageRenderSpecCopyWith(
-          ImageRenderSpec value, $Res Function(ImageRenderSpec) then) =
-      _$ImageRenderSpecCopyWithImpl<$Res, ImageRenderSpec>;
+    ImageRenderSpec value,
+    $Res Function(ImageRenderSpec) then,
+  ) = _$ImageRenderSpecCopyWithImpl<$Res, ImageRenderSpec>;
   @useResult
   $Res call({double? scale, PaddingConfig? padding});
 
@@ -375,20 +386,20 @@ class _$ImageRenderSpecCopyWithImpl<$Res, $Val extends ImageRenderSpec>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? scale = freezed,
-    Object? padding = freezed,
-  }) {
-    return _then(_value.copyWith(
-      scale: freezed == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double?,
-      padding: freezed == padding
-          ? _value.padding
-          : padding // ignore: cast_nullable_to_non_nullable
-              as PaddingConfig?,
-    ) as $Val);
+  $Res call({Object? scale = freezed, Object? padding = freezed}) {
+    return _then(
+      _value.copyWith(
+            scale: freezed == scale
+                ? _value.scale
+                : scale // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            padding: freezed == padding
+                ? _value.padding
+                : padding // ignore: cast_nullable_to_non_nullable
+                      as PaddingConfig?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ImageRenderSpec
@@ -409,9 +420,10 @@ class _$ImageRenderSpecCopyWithImpl<$Res, $Val extends ImageRenderSpec>
 /// @nodoc
 abstract class _$$ImageRenderSpecImplCopyWith<$Res>
     implements $ImageRenderSpecCopyWith<$Res> {
-  factory _$$ImageRenderSpecImplCopyWith(_$ImageRenderSpecImpl value,
-          $Res Function(_$ImageRenderSpecImpl) then) =
-      __$$ImageRenderSpecImplCopyWithImpl<$Res>;
+  factory _$$ImageRenderSpecImplCopyWith(
+    _$ImageRenderSpecImpl value,
+    $Res Function(_$ImageRenderSpecImpl) then,
+  ) = __$$ImageRenderSpecImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({double? scale, PaddingConfig? padding});
@@ -425,27 +437,27 @@ class __$$ImageRenderSpecImplCopyWithImpl<$Res>
     extends _$ImageRenderSpecCopyWithImpl<$Res, _$ImageRenderSpecImpl>
     implements _$$ImageRenderSpecImplCopyWith<$Res> {
   __$$ImageRenderSpecImplCopyWithImpl(
-      _$ImageRenderSpecImpl _value, $Res Function(_$ImageRenderSpecImpl) _then)
-      : super(_value, _then);
+    _$ImageRenderSpecImpl _value,
+    $Res Function(_$ImageRenderSpecImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ImageRenderSpec
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? scale = freezed,
-    Object? padding = freezed,
-  }) {
-    return _then(_$ImageRenderSpecImpl(
-      scale: freezed == scale
-          ? _value.scale
-          : scale // ignore: cast_nullable_to_non_nullable
-              as double?,
-      padding: freezed == padding
-          ? _value.padding
-          : padding // ignore: cast_nullable_to_non_nullable
-              as PaddingConfig?,
-    ));
+  $Res call({Object? scale = freezed, Object? padding = freezed}) {
+    return _then(
+      _$ImageRenderSpecImpl(
+        scale: freezed == scale
+            ? _value.scale
+            : scale // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        padding: freezed == padding
+            ? _value.padding
+            : padding // ignore: cast_nullable_to_non_nullable
+                  as PaddingConfig?,
+      ),
+    );
   }
 }
 
@@ -490,20 +502,21 @@ class _$ImageRenderSpecImpl implements _ImageRenderSpec {
   @pragma('vm:prefer-inline')
   _$$ImageRenderSpecImplCopyWith<_$ImageRenderSpecImpl> get copyWith =>
       __$$ImageRenderSpecImplCopyWithImpl<_$ImageRenderSpecImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ImageRenderSpecImplToJson(
-      this,
-    );
+    return _$$ImageRenderSpecImplToJson(this);
   }
 }
 
 abstract class _ImageRenderSpec implements ImageRenderSpec {
-  const factory _ImageRenderSpec(
-      {final double? scale,
-      final PaddingConfig? padding}) = _$ImageRenderSpecImpl;
+  const factory _ImageRenderSpec({
+    final double? scale,
+    final PaddingConfig? padding,
+  }) = _$ImageRenderSpecImpl;
 
   factory _ImageRenderSpec.fromJson(Map<String, dynamic> json) =
       _$ImageRenderSpecImpl.fromJson;

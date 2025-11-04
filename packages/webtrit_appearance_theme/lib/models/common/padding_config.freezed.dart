@@ -12,7 +12,8 @@ part of 'padding_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 PaddingConfig _$PaddingConfigFromJson(Map<String, dynamic> json) {
   return _PaddingConfig.fromJson(json);
@@ -38,8 +39,9 @@ mixin _$PaddingConfig {
 /// @nodoc
 abstract class $PaddingConfigCopyWith<$Res> {
   factory $PaddingConfigCopyWith(
-          PaddingConfig value, $Res Function(PaddingConfig) then) =
-      _$PaddingConfigCopyWithImpl<$Res, PaddingConfig>;
+    PaddingConfig value,
+    $Res Function(PaddingConfig) then,
+  ) = _$PaddingConfigCopyWithImpl<$Res, PaddingConfig>;
   @useResult
   $Res call({double left, double top, double right, double bottom});
 }
@@ -64,24 +66,27 @@ class _$PaddingConfigCopyWithImpl<$Res, $Val extends PaddingConfig>
     Object? right = null,
     Object? bottom = null,
   }) {
-    return _then(_value.copyWith(
-      left: null == left
-          ? _value.left
-          : left // ignore: cast_nullable_to_non_nullable
-              as double,
-      top: null == top
-          ? _value.top
-          : top // ignore: cast_nullable_to_non_nullable
-              as double,
-      right: null == right
-          ? _value.right
-          : right // ignore: cast_nullable_to_non_nullable
-              as double,
-      bottom: null == bottom
-          ? _value.bottom
-          : bottom // ignore: cast_nullable_to_non_nullable
-              as double,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            left: null == left
+                ? _value.left
+                : left // ignore: cast_nullable_to_non_nullable
+                      as double,
+            top: null == top
+                ? _value.top
+                : top // ignore: cast_nullable_to_non_nullable
+                      as double,
+            right: null == right
+                ? _value.right
+                : right // ignore: cast_nullable_to_non_nullable
+                      as double,
+            bottom: null == bottom
+                ? _value.bottom
+                : bottom // ignore: cast_nullable_to_non_nullable
+                      as double,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -89,8 +94,9 @@ class _$PaddingConfigCopyWithImpl<$Res, $Val extends PaddingConfig>
 abstract class _$$PaddingConfigImplCopyWith<$Res>
     implements $PaddingConfigCopyWith<$Res> {
   factory _$$PaddingConfigImplCopyWith(
-          _$PaddingConfigImpl value, $Res Function(_$PaddingConfigImpl) then) =
-      __$$PaddingConfigImplCopyWithImpl<$Res>;
+    _$PaddingConfigImpl value,
+    $Res Function(_$PaddingConfigImpl) then,
+  ) = __$$PaddingConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({double left, double top, double right, double bottom});
@@ -101,8 +107,9 @@ class __$$PaddingConfigImplCopyWithImpl<$Res>
     extends _$PaddingConfigCopyWithImpl<$Res, _$PaddingConfigImpl>
     implements _$$PaddingConfigImplCopyWith<$Res> {
   __$$PaddingConfigImplCopyWithImpl(
-      _$PaddingConfigImpl _value, $Res Function(_$PaddingConfigImpl) _then)
-      : super(_value, _then);
+    _$PaddingConfigImpl _value,
+    $Res Function(_$PaddingConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PaddingConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -114,32 +121,38 @@ class __$$PaddingConfigImplCopyWithImpl<$Res>
     Object? right = null,
     Object? bottom = null,
   }) {
-    return _then(_$PaddingConfigImpl(
-      left: null == left
-          ? _value.left
-          : left // ignore: cast_nullable_to_non_nullable
-              as double,
-      top: null == top
-          ? _value.top
-          : top // ignore: cast_nullable_to_non_nullable
-              as double,
-      right: null == right
-          ? _value.right
-          : right // ignore: cast_nullable_to_non_nullable
-              as double,
-      bottom: null == bottom
-          ? _value.bottom
-          : bottom // ignore: cast_nullable_to_non_nullable
-              as double,
-    ));
+    return _then(
+      _$PaddingConfigImpl(
+        left: null == left
+            ? _value.left
+            : left // ignore: cast_nullable_to_non_nullable
+                  as double,
+        top: null == top
+            ? _value.top
+            : top // ignore: cast_nullable_to_non_nullable
+                  as double,
+        right: null == right
+            ? _value.right
+            : right // ignore: cast_nullable_to_non_nullable
+                  as double,
+        bottom: null == bottom
+            ? _value.bottom
+            : bottom // ignore: cast_nullable_to_non_nullable
+                  as double,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$PaddingConfigImpl implements _PaddingConfig {
-  const _$PaddingConfigImpl(
-      {this.left = 0.0, this.top = 0.0, this.right = 0.0, this.bottom = 0.0});
+  const _$PaddingConfigImpl({
+    this.left = 0.0,
+    this.top = 0.0,
+    this.right = 0.0,
+    this.bottom = 0.0,
+  });
 
   factory _$PaddingConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$PaddingConfigImplFromJson(json);
@@ -187,18 +200,17 @@ class _$PaddingConfigImpl implements _PaddingConfig {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PaddingConfigImplToJson(
-      this,
-    );
+    return _$$PaddingConfigImplToJson(this);
   }
 }
 
 abstract class _PaddingConfig implements PaddingConfig {
-  const factory _PaddingConfig(
-      {final double left,
-      final double top,
-      final double right,
-      final double bottom}) = _$PaddingConfigImpl;
+  const factory _PaddingConfig({
+    final double left,
+    final double top,
+    final double right,
+    final double bottom,
+  }) = _$PaddingConfigImpl;
 
   factory _PaddingConfig.fromJson(Map<String, dynamic> json) =
       _$PaddingConfigImpl.fromJson;

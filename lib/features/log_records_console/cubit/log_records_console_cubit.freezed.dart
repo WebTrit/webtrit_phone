@@ -12,7 +12,8 @@ part of 'log_records_console_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$LogRecordsConsoleState {
@@ -22,16 +23,14 @@ mixin _$LogRecordsConsoleState {
     required TResult Function() loading,
     required TResult Function(List<LogRecord> logRecords) success,
     required TResult Function(Object error) failure,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<LogRecord> logRecords)? success,
     TResult? Function(Object error)? failure,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
@@ -39,24 +38,21 @@ mixin _$LogRecordsConsoleState {
     TResult Function(List<LogRecord> logRecords)? success,
     TResult Function(Object error)? failure,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LogRecordsConsoleStateInitial value) initial,
     required TResult Function(LogRecordsConsoleStateLoading value) loading,
     required TResult Function(LogRecordsConsoleStateSuccess value) success,
     required TResult Function(LogRecordsConsoleStateFailure value) failure,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(LogRecordsConsoleStateInitial value)? initial,
     TResult? Function(LogRecordsConsoleStateLoading value)? loading,
     TResult? Function(LogRecordsConsoleStateSuccess value)? success,
     TResult? Function(LogRecordsConsoleStateFailure value)? failure,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LogRecordsConsoleStateInitial value)? initial,
@@ -64,20 +60,22 @@ mixin _$LogRecordsConsoleState {
     TResult Function(LogRecordsConsoleStateSuccess value)? success,
     TResult Function(LogRecordsConsoleStateFailure value)? failure,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $LogRecordsConsoleStateCopyWith<$Res> {
-  factory $LogRecordsConsoleStateCopyWith(LogRecordsConsoleState value,
-          $Res Function(LogRecordsConsoleState) then) =
-      _$LogRecordsConsoleStateCopyWithImpl<$Res, LogRecordsConsoleState>;
+  factory $LogRecordsConsoleStateCopyWith(
+    LogRecordsConsoleState value,
+    $Res Function(LogRecordsConsoleState) then,
+  ) = _$LogRecordsConsoleStateCopyWithImpl<$Res, LogRecordsConsoleState>;
 }
 
 /// @nodoc
-class _$LogRecordsConsoleStateCopyWithImpl<$Res,
-        $Val extends LogRecordsConsoleState>
+class _$LogRecordsConsoleStateCopyWithImpl<
+  $Res,
+  $Val extends LogRecordsConsoleState
+>
     implements $LogRecordsConsoleStateCopyWith<$Res> {
   _$LogRecordsConsoleStateCopyWithImpl(this._value, this._then);
 
@@ -93,20 +91,23 @@ class _$LogRecordsConsoleStateCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$LogRecordsConsoleStateInitialImplCopyWith<$Res> {
   factory _$$LogRecordsConsoleStateInitialImplCopyWith(
-          _$LogRecordsConsoleStateInitialImpl value,
-          $Res Function(_$LogRecordsConsoleStateInitialImpl) then) =
-      __$$LogRecordsConsoleStateInitialImplCopyWithImpl<$Res>;
+    _$LogRecordsConsoleStateInitialImpl value,
+    $Res Function(_$LogRecordsConsoleStateInitialImpl) then,
+  ) = __$$LogRecordsConsoleStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LogRecordsConsoleStateInitialImplCopyWithImpl<$Res>
-    extends _$LogRecordsConsoleStateCopyWithImpl<$Res,
-        _$LogRecordsConsoleStateInitialImpl>
+    extends
+        _$LogRecordsConsoleStateCopyWithImpl<
+          $Res,
+          _$LogRecordsConsoleStateInitialImpl
+        >
     implements _$$LogRecordsConsoleStateInitialImplCopyWith<$Res> {
   __$$LogRecordsConsoleStateInitialImplCopyWithImpl(
-      _$LogRecordsConsoleStateInitialImpl _value,
-      $Res Function(_$LogRecordsConsoleStateInitialImpl) _then)
-      : super(_value, _then);
+    _$LogRecordsConsoleStateInitialImpl _value,
+    $Res Function(_$LogRecordsConsoleStateInitialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LogRecordsConsoleState
   /// with the given fields replaced by the non-null parameter values.
@@ -216,20 +217,23 @@ abstract class LogRecordsConsoleStateInitial implements LogRecordsConsoleState {
 /// @nodoc
 abstract class _$$LogRecordsConsoleStateLoadingImplCopyWith<$Res> {
   factory _$$LogRecordsConsoleStateLoadingImplCopyWith(
-          _$LogRecordsConsoleStateLoadingImpl value,
-          $Res Function(_$LogRecordsConsoleStateLoadingImpl) then) =
-      __$$LogRecordsConsoleStateLoadingImplCopyWithImpl<$Res>;
+    _$LogRecordsConsoleStateLoadingImpl value,
+    $Res Function(_$LogRecordsConsoleStateLoadingImpl) then,
+  ) = __$$LogRecordsConsoleStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
 class __$$LogRecordsConsoleStateLoadingImplCopyWithImpl<$Res>
-    extends _$LogRecordsConsoleStateCopyWithImpl<$Res,
-        _$LogRecordsConsoleStateLoadingImpl>
+    extends
+        _$LogRecordsConsoleStateCopyWithImpl<
+          $Res,
+          _$LogRecordsConsoleStateLoadingImpl
+        >
     implements _$$LogRecordsConsoleStateLoadingImplCopyWith<$Res> {
   __$$LogRecordsConsoleStateLoadingImplCopyWithImpl(
-      _$LogRecordsConsoleStateLoadingImpl _value,
-      $Res Function(_$LogRecordsConsoleStateLoadingImpl) _then)
-      : super(_value, _then);
+    _$LogRecordsConsoleStateLoadingImpl _value,
+    $Res Function(_$LogRecordsConsoleStateLoadingImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LogRecordsConsoleState
   /// with the given fields replaced by the non-null parameter values.
@@ -339,36 +343,39 @@ abstract class LogRecordsConsoleStateLoading implements LogRecordsConsoleState {
 /// @nodoc
 abstract class _$$LogRecordsConsoleStateSuccessImplCopyWith<$Res> {
   factory _$$LogRecordsConsoleStateSuccessImplCopyWith(
-          _$LogRecordsConsoleStateSuccessImpl value,
-          $Res Function(_$LogRecordsConsoleStateSuccessImpl) then) =
-      __$$LogRecordsConsoleStateSuccessImplCopyWithImpl<$Res>;
+    _$LogRecordsConsoleStateSuccessImpl value,
+    $Res Function(_$LogRecordsConsoleStateSuccessImpl) then,
+  ) = __$$LogRecordsConsoleStateSuccessImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<LogRecord> logRecords});
 }
 
 /// @nodoc
 class __$$LogRecordsConsoleStateSuccessImplCopyWithImpl<$Res>
-    extends _$LogRecordsConsoleStateCopyWithImpl<$Res,
-        _$LogRecordsConsoleStateSuccessImpl>
+    extends
+        _$LogRecordsConsoleStateCopyWithImpl<
+          $Res,
+          _$LogRecordsConsoleStateSuccessImpl
+        >
     implements _$$LogRecordsConsoleStateSuccessImplCopyWith<$Res> {
   __$$LogRecordsConsoleStateSuccessImplCopyWithImpl(
-      _$LogRecordsConsoleStateSuccessImpl _value,
-      $Res Function(_$LogRecordsConsoleStateSuccessImpl) _then)
-      : super(_value, _then);
+    _$LogRecordsConsoleStateSuccessImpl _value,
+    $Res Function(_$LogRecordsConsoleStateSuccessImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LogRecordsConsoleState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? logRecords = null,
-  }) {
-    return _then(_$LogRecordsConsoleStateSuccessImpl(
-      null == logRecords
-          ? _value._logRecords
-          : logRecords // ignore: cast_nullable_to_non_nullable
-              as List<LogRecord>,
-    ));
+  $Res call({Object? logRecords = null}) {
+    return _then(
+      _$LogRecordsConsoleStateSuccessImpl(
+        null == logRecords
+            ? _value._logRecords
+            : logRecords // ignore: cast_nullable_to_non_nullable
+                  as List<LogRecord>,
+      ),
+    );
   }
 }
 
@@ -377,7 +384,7 @@ class __$$LogRecordsConsoleStateSuccessImplCopyWithImpl<$Res>
 class _$LogRecordsConsoleStateSuccessImpl
     implements LogRecordsConsoleStateSuccess {
   const _$LogRecordsConsoleStateSuccessImpl(final List<LogRecord> logRecords)
-      : _logRecords = logRecords;
+    : _logRecords = logRecords;
 
   final List<LogRecord> _logRecords;
   @override
@@ -397,13 +404,17 @@ class _$LogRecordsConsoleStateSuccessImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LogRecordsConsoleStateSuccessImpl &&
-            const DeepCollectionEquality()
-                .equals(other._logRecords, _logRecords));
+            const DeepCollectionEquality().equals(
+              other._logRecords,
+              _logRecords,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_logRecords));
+    runtimeType,
+    const DeepCollectionEquality().hash(_logRecords),
+  );
 
   /// Create a copy of LogRecordsConsoleState
   /// with the given fields replaced by the non-null parameter values.
@@ -411,9 +422,12 @@ class _$LogRecordsConsoleStateSuccessImpl
   @override
   @pragma('vm:prefer-inline')
   _$$LogRecordsConsoleStateSuccessImplCopyWith<
-          _$LogRecordsConsoleStateSuccessImpl>
-      get copyWith => __$$LogRecordsConsoleStateSuccessImplCopyWithImpl<
-          _$LogRecordsConsoleStateSuccessImpl>(this, _$identity);
+    _$LogRecordsConsoleStateSuccessImpl
+  >
+  get copyWith =>
+      __$$LogRecordsConsoleStateSuccessImplCopyWithImpl<
+        _$LogRecordsConsoleStateSuccessImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -492,7 +506,8 @@ class _$LogRecordsConsoleStateSuccessImpl
 
 abstract class LogRecordsConsoleStateSuccess implements LogRecordsConsoleState {
   const factory LogRecordsConsoleStateSuccess(
-      final List<LogRecord> logRecords) = _$LogRecordsConsoleStateSuccessImpl;
+    final List<LogRecord> logRecords,
+  ) = _$LogRecordsConsoleStateSuccessImpl;
 
   List<LogRecord> get logRecords;
 
@@ -500,40 +515,42 @@ abstract class LogRecordsConsoleStateSuccess implements LogRecordsConsoleState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LogRecordsConsoleStateSuccessImplCopyWith<
-          _$LogRecordsConsoleStateSuccessImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$LogRecordsConsoleStateSuccessImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$LogRecordsConsoleStateFailureImplCopyWith<$Res> {
   factory _$$LogRecordsConsoleStateFailureImplCopyWith(
-          _$LogRecordsConsoleStateFailureImpl value,
-          $Res Function(_$LogRecordsConsoleStateFailureImpl) then) =
-      __$$LogRecordsConsoleStateFailureImplCopyWithImpl<$Res>;
+    _$LogRecordsConsoleStateFailureImpl value,
+    $Res Function(_$LogRecordsConsoleStateFailureImpl) then,
+  ) = __$$LogRecordsConsoleStateFailureImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Object error});
 }
 
 /// @nodoc
 class __$$LogRecordsConsoleStateFailureImplCopyWithImpl<$Res>
-    extends _$LogRecordsConsoleStateCopyWithImpl<$Res,
-        _$LogRecordsConsoleStateFailureImpl>
+    extends
+        _$LogRecordsConsoleStateCopyWithImpl<
+          $Res,
+          _$LogRecordsConsoleStateFailureImpl
+        >
     implements _$$LogRecordsConsoleStateFailureImplCopyWith<$Res> {
   __$$LogRecordsConsoleStateFailureImplCopyWithImpl(
-      _$LogRecordsConsoleStateFailureImpl _value,
-      $Res Function(_$LogRecordsConsoleStateFailureImpl) _then)
-      : super(_value, _then);
+    _$LogRecordsConsoleStateFailureImpl _value,
+    $Res Function(_$LogRecordsConsoleStateFailureImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LogRecordsConsoleState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? error = null,
-  }) {
-    return _then(_$LogRecordsConsoleStateFailureImpl(
-      null == error ? _value.error : error,
-    ));
+  $Res call({Object? error = null}) {
+    return _then(
+      _$LogRecordsConsoleStateFailureImpl(null == error ? _value.error : error),
+    );
   }
 }
 
@@ -569,9 +586,12 @@ class _$LogRecordsConsoleStateFailureImpl
   @override
   @pragma('vm:prefer-inline')
   _$$LogRecordsConsoleStateFailureImplCopyWith<
-          _$LogRecordsConsoleStateFailureImpl>
-      get copyWith => __$$LogRecordsConsoleStateFailureImplCopyWithImpl<
-          _$LogRecordsConsoleStateFailureImpl>(this, _$identity);
+    _$LogRecordsConsoleStateFailureImpl
+  >
+  get copyWith =>
+      __$$LogRecordsConsoleStateFailureImplCopyWithImpl<
+        _$LogRecordsConsoleStateFailureImpl
+      >(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -658,6 +678,7 @@ abstract class LogRecordsConsoleStateFailure implements LogRecordsConsoleState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LogRecordsConsoleStateFailureImplCopyWith<
-          _$LogRecordsConsoleStateFailureImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$LogRecordsConsoleStateFailureImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }

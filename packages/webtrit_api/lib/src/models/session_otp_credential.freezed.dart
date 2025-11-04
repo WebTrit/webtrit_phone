@@ -12,7 +12,8 @@ part of 'session_otp_credential.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SessionOtpCredential _$SessionOtpCredentialFromJson(Map<String, dynamic> json) {
   return _SessionOtpCredential.fromJson(json);
@@ -37,17 +38,24 @@ mixin _$SessionOtpCredential {
 
 /// @nodoc
 abstract class $SessionOtpCredentialCopyWith<$Res> {
-  factory $SessionOtpCredentialCopyWith(SessionOtpCredential value,
-          $Res Function(SessionOtpCredential) then) =
-      _$SessionOtpCredentialCopyWithImpl<$Res, SessionOtpCredential>;
+  factory $SessionOtpCredentialCopyWith(
+    SessionOtpCredential value,
+    $Res Function(SessionOtpCredential) then,
+  ) = _$SessionOtpCredentialCopyWithImpl<$Res, SessionOtpCredential>;
   @useResult
-  $Res call(
-      {String? bundleId, AppType type, String identifier, String userRef});
+  $Res call({
+    String? bundleId,
+    AppType type,
+    String identifier,
+    String userRef,
+  });
 }
 
 /// @nodoc
-class _$SessionOtpCredentialCopyWithImpl<$Res,
-        $Val extends SessionOtpCredential>
+class _$SessionOtpCredentialCopyWithImpl<
+  $Res,
+  $Val extends SessionOtpCredential
+>
     implements $SessionOtpCredentialCopyWith<$Res> {
   _$SessionOtpCredentialCopyWithImpl(this._value, this._then);
 
@@ -66,46 +74,55 @@ class _$SessionOtpCredentialCopyWithImpl<$Res,
     Object? identifier = null,
     Object? userRef = null,
   }) {
-    return _then(_value.copyWith(
-      bundleId: freezed == bundleId
-          ? _value.bundleId
-          : bundleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppType,
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      userRef: null == userRef
-          ? _value.userRef
-          : userRef // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            bundleId: freezed == bundleId
+                ? _value.bundleId
+                : bundleId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as AppType,
+            identifier: null == identifier
+                ? _value.identifier
+                : identifier // ignore: cast_nullable_to_non_nullable
+                      as String,
+            userRef: null == userRef
+                ? _value.userRef
+                : userRef // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SessionOtpCredentialImplCopyWith<$Res>
     implements $SessionOtpCredentialCopyWith<$Res> {
-  factory _$$SessionOtpCredentialImplCopyWith(_$SessionOtpCredentialImpl value,
-          $Res Function(_$SessionOtpCredentialImpl) then) =
-      __$$SessionOtpCredentialImplCopyWithImpl<$Res>;
+  factory _$$SessionOtpCredentialImplCopyWith(
+    _$SessionOtpCredentialImpl value,
+    $Res Function(_$SessionOtpCredentialImpl) then,
+  ) = __$$SessionOtpCredentialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? bundleId, AppType type, String identifier, String userRef});
+  $Res call({
+    String? bundleId,
+    AppType type,
+    String identifier,
+    String userRef,
+  });
 }
 
 /// @nodoc
 class __$$SessionOtpCredentialImplCopyWithImpl<$Res>
     extends _$SessionOtpCredentialCopyWithImpl<$Res, _$SessionOtpCredentialImpl>
     implements _$$SessionOtpCredentialImplCopyWith<$Res> {
-  __$$SessionOtpCredentialImplCopyWithImpl(_$SessionOtpCredentialImpl _value,
-      $Res Function(_$SessionOtpCredentialImpl) _then)
-      : super(_value, _then);
+  __$$SessionOtpCredentialImplCopyWithImpl(
+    _$SessionOtpCredentialImpl _value,
+    $Res Function(_$SessionOtpCredentialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SessionOtpCredential
   /// with the given fields replaced by the non-null parameter values.
@@ -117,24 +134,26 @@ class __$$SessionOtpCredentialImplCopyWithImpl<$Res>
     Object? identifier = null,
     Object? userRef = null,
   }) {
-    return _then(_$SessionOtpCredentialImpl(
-      bundleId: freezed == bundleId
-          ? _value.bundleId
-          : bundleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppType,
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      userRef: null == userRef
-          ? _value.userRef
-          : userRef // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$SessionOtpCredentialImpl(
+        bundleId: freezed == bundleId
+            ? _value.bundleId
+            : bundleId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as AppType,
+        identifier: null == identifier
+            ? _value.identifier
+            : identifier // ignore: cast_nullable_to_non_nullable
+                  as String,
+        userRef: null == userRef
+            ? _value.userRef
+            : userRef // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -142,11 +161,12 @@ class __$$SessionOtpCredentialImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionOtpCredentialImpl implements _SessionOtpCredential {
-  const _$SessionOtpCredentialImpl(
-      {this.bundleId,
-      required this.type,
-      required this.identifier,
-      required this.userRef});
+  const _$SessionOtpCredentialImpl({
+    this.bundleId,
+    required this.type,
+    required this.identifier,
+    required this.userRef,
+  });
 
   factory _$SessionOtpCredentialImpl.fromJson(Map<String, dynamic> json) =>
       _$$SessionOtpCredentialImplFromJson(json);
@@ -189,24 +209,25 @@ class _$SessionOtpCredentialImpl implements _SessionOtpCredential {
   @override
   @pragma('vm:prefer-inline')
   _$$SessionOtpCredentialImplCopyWith<_$SessionOtpCredentialImpl>
-      get copyWith =>
-          __$$SessionOtpCredentialImplCopyWithImpl<_$SessionOtpCredentialImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$SessionOtpCredentialImplCopyWithImpl<_$SessionOtpCredentialImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SessionOtpCredentialImplToJson(
-      this,
-    );
+    return _$$SessionOtpCredentialImplToJson(this);
   }
 }
 
 abstract class _SessionOtpCredential implements SessionOtpCredential {
-  const factory _SessionOtpCredential(
-      {final String? bundleId,
-      required final AppType type,
-      required final String identifier,
-      required final String userRef}) = _$SessionOtpCredentialImpl;
+  const factory _SessionOtpCredential({
+    final String? bundleId,
+    required final AppType type,
+    required final String identifier,
+    required final String userRef,
+  }) = _$SessionOtpCredentialImpl;
 
   factory _SessionOtpCredential.fromJson(Map<String, dynamic> json) =
       _$SessionOtpCredentialImpl.fromJson;
@@ -225,5 +246,5 @@ abstract class _SessionOtpCredential implements SessionOtpCredential {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionOtpCredentialImplCopyWith<_$SessionOtpCredentialImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

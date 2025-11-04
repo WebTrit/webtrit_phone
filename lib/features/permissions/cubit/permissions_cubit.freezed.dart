@@ -12,7 +12,8 @@ part of 'permissions_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$PermissionsState {
@@ -32,14 +33,16 @@ mixin _$PermissionsState {
 /// @nodoc
 abstract class $PermissionsStateCopyWith<$Res> {
   factory $PermissionsStateCopyWith(
-          PermissionsState value, $Res Function(PermissionsState) then) =
-      _$PermissionsStateCopyWithImpl<$Res, PermissionsState>;
+    PermissionsState value,
+    $Res Function(PermissionsState) then,
+  ) = _$PermissionsStateCopyWithImpl<$Res, PermissionsState>;
   @useResult
-  $Res call(
-      {bool hasRequestedPermissions,
-      List<CallkeepSpecialPermissions> pendingSpecialPermissions,
-      ManufacturerTip? manufacturerTip,
-      Object? failure});
+  $Res call({
+    bool hasRequestedPermissions,
+    List<CallkeepSpecialPermissions> pendingSpecialPermissions,
+    ManufacturerTip? manufacturerTip,
+    Object? failure,
+  });
 
   $ManufacturerTipCopyWith<$Res>? get manufacturerTip;
 }
@@ -64,21 +67,24 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
     Object? manufacturerTip = freezed,
     Object? failure = freezed,
   }) {
-    return _then(_value.copyWith(
-      hasRequestedPermissions: null == hasRequestedPermissions
-          ? _value.hasRequestedPermissions
-          : hasRequestedPermissions // ignore: cast_nullable_to_non_nullable
-              as bool,
-      pendingSpecialPermissions: null == pendingSpecialPermissions
-          ? _value.pendingSpecialPermissions
-          : pendingSpecialPermissions // ignore: cast_nullable_to_non_nullable
-              as List<CallkeepSpecialPermissions>,
-      manufacturerTip: freezed == manufacturerTip
-          ? _value.manufacturerTip
-          : manufacturerTip // ignore: cast_nullable_to_non_nullable
-              as ManufacturerTip?,
-      failure: freezed == failure ? _value.failure : failure,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            hasRequestedPermissions: null == hasRequestedPermissions
+                ? _value.hasRequestedPermissions
+                : hasRequestedPermissions // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            pendingSpecialPermissions: null == pendingSpecialPermissions
+                ? _value.pendingSpecialPermissions
+                : pendingSpecialPermissions // ignore: cast_nullable_to_non_nullable
+                      as List<CallkeepSpecialPermissions>,
+            manufacturerTip: freezed == manufacturerTip
+                ? _value.manufacturerTip
+                : manufacturerTip // ignore: cast_nullable_to_non_nullable
+                      as ManufacturerTip?,
+            failure: freezed == failure ? _value.failure : failure,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of PermissionsState
@@ -99,16 +105,18 @@ class _$PermissionsStateCopyWithImpl<$Res, $Val extends PermissionsState>
 /// @nodoc
 abstract class _$$PermissionsStateImplCopyWith<$Res>
     implements $PermissionsStateCopyWith<$Res> {
-  factory _$$PermissionsStateImplCopyWith(_$PermissionsStateImpl value,
-          $Res Function(_$PermissionsStateImpl) then) =
-      __$$PermissionsStateImplCopyWithImpl<$Res>;
+  factory _$$PermissionsStateImplCopyWith(
+    _$PermissionsStateImpl value,
+    $Res Function(_$PermissionsStateImpl) then,
+  ) = __$$PermissionsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool hasRequestedPermissions,
-      List<CallkeepSpecialPermissions> pendingSpecialPermissions,
-      ManufacturerTip? manufacturerTip,
-      Object? failure});
+  $Res call({
+    bool hasRequestedPermissions,
+    List<CallkeepSpecialPermissions> pendingSpecialPermissions,
+    ManufacturerTip? manufacturerTip,
+    Object? failure,
+  });
 
   @override
   $ManufacturerTipCopyWith<$Res>? get manufacturerTip;
@@ -118,9 +126,10 @@ abstract class _$$PermissionsStateImplCopyWith<$Res>
 class __$$PermissionsStateImplCopyWithImpl<$Res>
     extends _$PermissionsStateCopyWithImpl<$Res, _$PermissionsStateImpl>
     implements _$$PermissionsStateImplCopyWith<$Res> {
-  __$$PermissionsStateImplCopyWithImpl(_$PermissionsStateImpl _value,
-      $Res Function(_$PermissionsStateImpl) _then)
-      : super(_value, _then);
+  __$$PermissionsStateImplCopyWithImpl(
+    _$PermissionsStateImpl _value,
+    $Res Function(_$PermissionsStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PermissionsState
   /// with the given fields replaced by the non-null parameter values.
@@ -132,35 +141,36 @@ class __$$PermissionsStateImplCopyWithImpl<$Res>
     Object? manufacturerTip = freezed,
     Object? failure = freezed,
   }) {
-    return _then(_$PermissionsStateImpl(
-      hasRequestedPermissions: null == hasRequestedPermissions
-          ? _value.hasRequestedPermissions
-          : hasRequestedPermissions // ignore: cast_nullable_to_non_nullable
-              as bool,
-      pendingSpecialPermissions: null == pendingSpecialPermissions
-          ? _value._pendingSpecialPermissions
-          : pendingSpecialPermissions // ignore: cast_nullable_to_non_nullable
-              as List<CallkeepSpecialPermissions>,
-      manufacturerTip: freezed == manufacturerTip
-          ? _value.manufacturerTip
-          : manufacturerTip // ignore: cast_nullable_to_non_nullable
-              as ManufacturerTip?,
-      failure: freezed == failure ? _value.failure : failure,
-    ));
+    return _then(
+      _$PermissionsStateImpl(
+        hasRequestedPermissions: null == hasRequestedPermissions
+            ? _value.hasRequestedPermissions
+            : hasRequestedPermissions // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        pendingSpecialPermissions: null == pendingSpecialPermissions
+            ? _value._pendingSpecialPermissions
+            : pendingSpecialPermissions // ignore: cast_nullable_to_non_nullable
+                  as List<CallkeepSpecialPermissions>,
+        manufacturerTip: freezed == manufacturerTip
+            ? _value.manufacturerTip
+            : manufacturerTip // ignore: cast_nullable_to_non_nullable
+                  as ManufacturerTip?,
+        failure: freezed == failure ? _value.failure : failure,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$PermissionsStateImpl extends _PermissionsState {
-  const _$PermissionsStateImpl(
-      {this.hasRequestedPermissions = false,
-      final List<CallkeepSpecialPermissions> pendingSpecialPermissions =
-          const [],
-      this.manufacturerTip,
-      this.failure})
-      : _pendingSpecialPermissions = pendingSpecialPermissions,
-        super._();
+  const _$PermissionsStateImpl({
+    this.hasRequestedPermissions = false,
+    final List<CallkeepSpecialPermissions> pendingSpecialPermissions = const [],
+    this.manufacturerTip,
+    this.failure,
+  }) : _pendingSpecialPermissions = pendingSpecialPermissions,
+       super._();
 
   @override
   @JsonKey()
@@ -191,10 +201,14 @@ class _$PermissionsStateImpl extends _PermissionsState {
         (other.runtimeType == runtimeType &&
             other is _$PermissionsStateImpl &&
             (identical(
-                    other.hasRequestedPermissions, hasRequestedPermissions) ||
+                  other.hasRequestedPermissions,
+                  hasRequestedPermissions,
+                ) ||
                 other.hasRequestedPermissions == hasRequestedPermissions) &&
             const DeepCollectionEquality().equals(
-                other._pendingSpecialPermissions, _pendingSpecialPermissions) &&
+              other._pendingSpecialPermissions,
+              _pendingSpecialPermissions,
+            ) &&
             (identical(other.manufacturerTip, manufacturerTip) ||
                 other.manufacturerTip == manufacturerTip) &&
             const DeepCollectionEquality().equals(other.failure, failure));
@@ -202,11 +216,12 @@ class _$PermissionsStateImpl extends _PermissionsState {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      hasRequestedPermissions,
-      const DeepCollectionEquality().hash(_pendingSpecialPermissions),
-      manufacturerTip,
-      const DeepCollectionEquality().hash(failure));
+    runtimeType,
+    hasRequestedPermissions,
+    const DeepCollectionEquality().hash(_pendingSpecialPermissions),
+    manufacturerTip,
+    const DeepCollectionEquality().hash(failure),
+  );
 
   /// Create a copy of PermissionsState
   /// with the given fields replaced by the non-null parameter values.
@@ -215,15 +230,18 @@ class _$PermissionsStateImpl extends _PermissionsState {
   @pragma('vm:prefer-inline')
   _$$PermissionsStateImplCopyWith<_$PermissionsStateImpl> get copyWith =>
       __$$PermissionsStateImplCopyWithImpl<_$PermissionsStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _PermissionsState extends PermissionsState {
-  const factory _PermissionsState(
-      {final bool hasRequestedPermissions,
-      final List<CallkeepSpecialPermissions> pendingSpecialPermissions,
-      final ManufacturerTip? manufacturerTip,
-      final Object? failure}) = _$PermissionsStateImpl;
+  const factory _PermissionsState({
+    final bool hasRequestedPermissions,
+    final List<CallkeepSpecialPermissions> pendingSpecialPermissions,
+    final ManufacturerTip? manufacturerTip,
+    final Object? failure,
+  }) = _$PermissionsStateImpl;
   const _PermissionsState._() : super._();
 
   @override
@@ -258,8 +276,9 @@ mixin _$ManufacturerTip {
 /// @nodoc
 abstract class $ManufacturerTipCopyWith<$Res> {
   factory $ManufacturerTipCopyWith(
-          ManufacturerTip value, $Res Function(ManufacturerTip) then) =
-      _$ManufacturerTipCopyWithImpl<$Res, ManufacturerTip>;
+    ManufacturerTip value,
+    $Res Function(ManufacturerTip) then,
+  ) = _$ManufacturerTipCopyWithImpl<$Res, ManufacturerTip>;
   @useResult
   $Res call({Manufacturer manufacturer, bool shown});
 }
@@ -278,29 +297,30 @@ class _$ManufacturerTipCopyWithImpl<$Res, $Val extends ManufacturerTip>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? manufacturer = null,
-    Object? shown = null,
-  }) {
-    return _then(_value.copyWith(
-      manufacturer: null == manufacturer
-          ? _value.manufacturer
-          : manufacturer // ignore: cast_nullable_to_non_nullable
-              as Manufacturer,
-      shown: null == shown
-          ? _value.shown
-          : shown // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  $Res call({Object? manufacturer = null, Object? shown = null}) {
+    return _then(
+      _value.copyWith(
+            manufacturer: null == manufacturer
+                ? _value.manufacturer
+                : manufacturer // ignore: cast_nullable_to_non_nullable
+                      as Manufacturer,
+            shown: null == shown
+                ? _value.shown
+                : shown // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$ManufacturerTipImplCopyWith<$Res>
     implements $ManufacturerTipCopyWith<$Res> {
-  factory _$$ManufacturerTipImplCopyWith(_$ManufacturerTipImpl value,
-          $Res Function(_$ManufacturerTipImpl) then) =
-      __$$ManufacturerTipImplCopyWithImpl<$Res>;
+  factory _$$ManufacturerTipImplCopyWith(
+    _$ManufacturerTipImpl value,
+    $Res Function(_$ManufacturerTipImpl) then,
+  ) = __$$ManufacturerTipImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Manufacturer manufacturer, bool shown});
@@ -311,27 +331,27 @@ class __$$ManufacturerTipImplCopyWithImpl<$Res>
     extends _$ManufacturerTipCopyWithImpl<$Res, _$ManufacturerTipImpl>
     implements _$$ManufacturerTipImplCopyWith<$Res> {
   __$$ManufacturerTipImplCopyWithImpl(
-      _$ManufacturerTipImpl _value, $Res Function(_$ManufacturerTipImpl) _then)
-      : super(_value, _then);
+    _$ManufacturerTipImpl _value,
+    $Res Function(_$ManufacturerTipImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ManufacturerTip
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? manufacturer = null,
-    Object? shown = null,
-  }) {
-    return _then(_$ManufacturerTipImpl(
-      manufacturer: null == manufacturer
-          ? _value.manufacturer
-          : manufacturer // ignore: cast_nullable_to_non_nullable
-              as Manufacturer,
-      shown: null == shown
-          ? _value.shown
-          : shown // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+  $Res call({Object? manufacturer = null, Object? shown = null}) {
+    return _then(
+      _$ManufacturerTipImpl(
+        manufacturer: null == manufacturer
+            ? _value.manufacturer
+            : manufacturer // ignore: cast_nullable_to_non_nullable
+                  as Manufacturer,
+        shown: null == shown
+            ? _value.shown
+            : shown // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
@@ -371,13 +391,16 @@ class _$ManufacturerTipImpl implements _ManufacturerTip {
   @pragma('vm:prefer-inline')
   _$$ManufacturerTipImplCopyWith<_$ManufacturerTipImpl> get copyWith =>
       __$$ManufacturerTipImplCopyWithImpl<_$ManufacturerTipImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _ManufacturerTip implements ManufacturerTip {
-  const factory _ManufacturerTip(
-      {required final Manufacturer manufacturer,
-      final bool shown}) = _$ManufacturerTipImpl;
+  const factory _ManufacturerTip({
+    required final Manufacturer manufacturer,
+    final bool shown,
+  }) = _$ManufacturerTipImpl;
 
   @override
   Manufacturer get manufacturer;

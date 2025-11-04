@@ -12,10 +12,12 @@ part of 'input_decoration_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 InputDecorationConfig _$InputDecorationConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _InputDecorationConfig.fromJson(json);
 }
 
@@ -90,30 +92,32 @@ mixin _$InputDecorationConfig {
 
 /// @nodoc
 abstract class $InputDecorationConfigCopyWith<$Res> {
-  factory $InputDecorationConfigCopyWith(InputDecorationConfig value,
-          $Res Function(InputDecorationConfig) then) =
-      _$InputDecorationConfigCopyWithImpl<$Res, InputDecorationConfig>;
+  factory $InputDecorationConfigCopyWith(
+    InputDecorationConfig value,
+    $Res Function(InputDecorationConfig) then,
+  ) = _$InputDecorationConfigCopyWithImpl<$Res, InputDecorationConfig>;
   @useResult
-  $Res call(
-      {String? hintText,
-      TextStyleConfig? hintStyle,
-      String? labelText,
-      TextStyleConfig? labelStyle,
-      String? helperText,
-      TextStyleConfig? helperStyle,
-      TextStyleConfig? errorStyle,
-      String? prefixText,
-      TextStyleConfig? prefixStyle,
-      String? suffixText,
-      TextStyleConfig? suffixStyle,
-      String? fillColor,
-      bool? filled,
-      BorderConfig? border,
-      BorderConfig? enabledBorder,
-      BorderConfig? focusedBorder,
-      BorderConfig? errorBorder,
-      BorderConfig? focusedErrorBorder,
-      BorderConfig? disabledBorder});
+  $Res call({
+    String? hintText,
+    TextStyleConfig? hintStyle,
+    String? labelText,
+    TextStyleConfig? labelStyle,
+    String? helperText,
+    TextStyleConfig? helperStyle,
+    TextStyleConfig? errorStyle,
+    String? prefixText,
+    TextStyleConfig? prefixStyle,
+    String? suffixText,
+    TextStyleConfig? suffixStyle,
+    String? fillColor,
+    bool? filled,
+    BorderConfig? border,
+    BorderConfig? enabledBorder,
+    BorderConfig? focusedBorder,
+    BorderConfig? errorBorder,
+    BorderConfig? focusedErrorBorder,
+    BorderConfig? disabledBorder,
+  });
 
   $TextStyleConfigCopyWith<$Res>? get hintStyle;
   $TextStyleConfigCopyWith<$Res>? get labelStyle;
@@ -130,8 +134,10 @@ abstract class $InputDecorationConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$InputDecorationConfigCopyWithImpl<$Res,
-        $Val extends InputDecorationConfig>
+class _$InputDecorationConfigCopyWithImpl<
+  $Res,
+  $Val extends InputDecorationConfig
+>
     implements $InputDecorationConfigCopyWith<$Res> {
   _$InputDecorationConfigCopyWithImpl(this._value, this._then);
 
@@ -165,84 +171,87 @@ class _$InputDecorationConfigCopyWithImpl<$Res,
     Object? focusedErrorBorder = freezed,
     Object? disabledBorder = freezed,
   }) {
-    return _then(_value.copyWith(
-      hintText: freezed == hintText
-          ? _value.hintText
-          : hintText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hintStyle: freezed == hintStyle
-          ? _value.hintStyle
-          : hintStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      labelText: freezed == labelText
-          ? _value.labelText
-          : labelText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      labelStyle: freezed == labelStyle
-          ? _value.labelStyle
-          : labelStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      helperText: freezed == helperText
-          ? _value.helperText
-          : helperText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      helperStyle: freezed == helperStyle
-          ? _value.helperStyle
-          : helperStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      errorStyle: freezed == errorStyle
-          ? _value.errorStyle
-          : errorStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      prefixText: freezed == prefixText
-          ? _value.prefixText
-          : prefixText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      prefixStyle: freezed == prefixStyle
-          ? _value.prefixStyle
-          : prefixStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      suffixText: freezed == suffixText
-          ? _value.suffixText
-          : suffixText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      suffixStyle: freezed == suffixStyle
-          ? _value.suffixStyle
-          : suffixStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      fillColor: freezed == fillColor
-          ? _value.fillColor
-          : fillColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      filled: freezed == filled
-          ? _value.filled
-          : filled // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      border: freezed == border
-          ? _value.border
-          : border // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      enabledBorder: freezed == enabledBorder
-          ? _value.enabledBorder
-          : enabledBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      focusedBorder: freezed == focusedBorder
-          ? _value.focusedBorder
-          : focusedBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      errorBorder: freezed == errorBorder
-          ? _value.errorBorder
-          : errorBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      focusedErrorBorder: freezed == focusedErrorBorder
-          ? _value.focusedErrorBorder
-          : focusedErrorBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      disabledBorder: freezed == disabledBorder
-          ? _value.disabledBorder
-          : disabledBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            hintText: freezed == hintText
+                ? _value.hintText
+                : hintText // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            hintStyle: freezed == hintStyle
+                ? _value.hintStyle
+                : hintStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            labelText: freezed == labelText
+                ? _value.labelText
+                : labelText // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            labelStyle: freezed == labelStyle
+                ? _value.labelStyle
+                : labelStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            helperText: freezed == helperText
+                ? _value.helperText
+                : helperText // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            helperStyle: freezed == helperStyle
+                ? _value.helperStyle
+                : helperStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            errorStyle: freezed == errorStyle
+                ? _value.errorStyle
+                : errorStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            prefixText: freezed == prefixText
+                ? _value.prefixText
+                : prefixText // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            prefixStyle: freezed == prefixStyle
+                ? _value.prefixStyle
+                : prefixStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            suffixText: freezed == suffixText
+                ? _value.suffixText
+                : suffixText // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            suffixStyle: freezed == suffixStyle
+                ? _value.suffixStyle
+                : suffixStyle // ignore: cast_nullable_to_non_nullable
+                      as TextStyleConfig?,
+            fillColor: freezed == fillColor
+                ? _value.fillColor
+                : fillColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            filled: freezed == filled
+                ? _value.filled
+                : filled // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+            border: freezed == border
+                ? _value.border
+                : border // ignore: cast_nullable_to_non_nullable
+                      as BorderConfig?,
+            enabledBorder: freezed == enabledBorder
+                ? _value.enabledBorder
+                : enabledBorder // ignore: cast_nullable_to_non_nullable
+                      as BorderConfig?,
+            focusedBorder: freezed == focusedBorder
+                ? _value.focusedBorder
+                : focusedBorder // ignore: cast_nullable_to_non_nullable
+                      as BorderConfig?,
+            errorBorder: freezed == errorBorder
+                ? _value.errorBorder
+                : errorBorder // ignore: cast_nullable_to_non_nullable
+                      as BorderConfig?,
+            focusedErrorBorder: freezed == focusedErrorBorder
+                ? _value.focusedErrorBorder
+                : focusedErrorBorder // ignore: cast_nullable_to_non_nullable
+                      as BorderConfig?,
+            disabledBorder: freezed == disabledBorder
+                ? _value.disabledBorder
+                : disabledBorder // ignore: cast_nullable_to_non_nullable
+                      as BorderConfig?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of InputDecorationConfig
@@ -418,31 +427,32 @@ class _$InputDecorationConfigCopyWithImpl<$Res,
 abstract class _$$InputDecorationConfigImplCopyWith<$Res>
     implements $InputDecorationConfigCopyWith<$Res> {
   factory _$$InputDecorationConfigImplCopyWith(
-          _$InputDecorationConfigImpl value,
-          $Res Function(_$InputDecorationConfigImpl) then) =
-      __$$InputDecorationConfigImplCopyWithImpl<$Res>;
+    _$InputDecorationConfigImpl value,
+    $Res Function(_$InputDecorationConfigImpl) then,
+  ) = __$$InputDecorationConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? hintText,
-      TextStyleConfig? hintStyle,
-      String? labelText,
-      TextStyleConfig? labelStyle,
-      String? helperText,
-      TextStyleConfig? helperStyle,
-      TextStyleConfig? errorStyle,
-      String? prefixText,
-      TextStyleConfig? prefixStyle,
-      String? suffixText,
-      TextStyleConfig? suffixStyle,
-      String? fillColor,
-      bool? filled,
-      BorderConfig? border,
-      BorderConfig? enabledBorder,
-      BorderConfig? focusedBorder,
-      BorderConfig? errorBorder,
-      BorderConfig? focusedErrorBorder,
-      BorderConfig? disabledBorder});
+  $Res call({
+    String? hintText,
+    TextStyleConfig? hintStyle,
+    String? labelText,
+    TextStyleConfig? labelStyle,
+    String? helperText,
+    TextStyleConfig? helperStyle,
+    TextStyleConfig? errorStyle,
+    String? prefixText,
+    TextStyleConfig? prefixStyle,
+    String? suffixText,
+    TextStyleConfig? suffixStyle,
+    String? fillColor,
+    bool? filled,
+    BorderConfig? border,
+    BorderConfig? enabledBorder,
+    BorderConfig? focusedBorder,
+    BorderConfig? errorBorder,
+    BorderConfig? focusedErrorBorder,
+    BorderConfig? disabledBorder,
+  });
 
   @override
   $TextStyleConfigCopyWith<$Res>? get hintStyle;
@@ -472,12 +482,13 @@ abstract class _$$InputDecorationConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$InputDecorationConfigImplCopyWithImpl<$Res>
-    extends _$InputDecorationConfigCopyWithImpl<$Res,
-        _$InputDecorationConfigImpl>
+    extends
+        _$InputDecorationConfigCopyWithImpl<$Res, _$InputDecorationConfigImpl>
     implements _$$InputDecorationConfigImplCopyWith<$Res> {
-  __$$InputDecorationConfigImplCopyWithImpl(_$InputDecorationConfigImpl _value,
-      $Res Function(_$InputDecorationConfigImpl) _then)
-      : super(_value, _then);
+  __$$InputDecorationConfigImplCopyWithImpl(
+    _$InputDecorationConfigImpl _value,
+    $Res Function(_$InputDecorationConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of InputDecorationConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -504,84 +515,86 @@ class __$$InputDecorationConfigImplCopyWithImpl<$Res>
     Object? focusedErrorBorder = freezed,
     Object? disabledBorder = freezed,
   }) {
-    return _then(_$InputDecorationConfigImpl(
-      hintText: freezed == hintText
-          ? _value.hintText
-          : hintText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hintStyle: freezed == hintStyle
-          ? _value.hintStyle
-          : hintStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      labelText: freezed == labelText
-          ? _value.labelText
-          : labelText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      labelStyle: freezed == labelStyle
-          ? _value.labelStyle
-          : labelStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      helperText: freezed == helperText
-          ? _value.helperText
-          : helperText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      helperStyle: freezed == helperStyle
-          ? _value.helperStyle
-          : helperStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      errorStyle: freezed == errorStyle
-          ? _value.errorStyle
-          : errorStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      prefixText: freezed == prefixText
-          ? _value.prefixText
-          : prefixText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      prefixStyle: freezed == prefixStyle
-          ? _value.prefixStyle
-          : prefixStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      suffixText: freezed == suffixText
-          ? _value.suffixText
-          : suffixText // ignore: cast_nullable_to_non_nullable
-              as String?,
-      suffixStyle: freezed == suffixStyle
-          ? _value.suffixStyle
-          : suffixStyle // ignore: cast_nullable_to_non_nullable
-              as TextStyleConfig?,
-      fillColor: freezed == fillColor
-          ? _value.fillColor
-          : fillColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      filled: freezed == filled
-          ? _value.filled
-          : filled // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      border: freezed == border
-          ? _value.border
-          : border // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      enabledBorder: freezed == enabledBorder
-          ? _value.enabledBorder
-          : enabledBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      focusedBorder: freezed == focusedBorder
-          ? _value.focusedBorder
-          : focusedBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      errorBorder: freezed == errorBorder
-          ? _value.errorBorder
-          : errorBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      focusedErrorBorder: freezed == focusedErrorBorder
-          ? _value.focusedErrorBorder
-          : focusedErrorBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-      disabledBorder: freezed == disabledBorder
-          ? _value.disabledBorder
-          : disabledBorder // ignore: cast_nullable_to_non_nullable
-              as BorderConfig?,
-    ));
+    return _then(
+      _$InputDecorationConfigImpl(
+        hintText: freezed == hintText
+            ? _value.hintText
+            : hintText // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        hintStyle: freezed == hintStyle
+            ? _value.hintStyle
+            : hintStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        labelText: freezed == labelText
+            ? _value.labelText
+            : labelText // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        labelStyle: freezed == labelStyle
+            ? _value.labelStyle
+            : labelStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        helperText: freezed == helperText
+            ? _value.helperText
+            : helperText // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        helperStyle: freezed == helperStyle
+            ? _value.helperStyle
+            : helperStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        errorStyle: freezed == errorStyle
+            ? _value.errorStyle
+            : errorStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        prefixText: freezed == prefixText
+            ? _value.prefixText
+            : prefixText // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        prefixStyle: freezed == prefixStyle
+            ? _value.prefixStyle
+            : prefixStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        suffixText: freezed == suffixText
+            ? _value.suffixText
+            : suffixText // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        suffixStyle: freezed == suffixStyle
+            ? _value.suffixStyle
+            : suffixStyle // ignore: cast_nullable_to_non_nullable
+                  as TextStyleConfig?,
+        fillColor: freezed == fillColor
+            ? _value.fillColor
+            : fillColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        filled: freezed == filled
+            ? _value.filled
+            : filled // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+        border: freezed == border
+            ? _value.border
+            : border // ignore: cast_nullable_to_non_nullable
+                  as BorderConfig?,
+        enabledBorder: freezed == enabledBorder
+            ? _value.enabledBorder
+            : enabledBorder // ignore: cast_nullable_to_non_nullable
+                  as BorderConfig?,
+        focusedBorder: freezed == focusedBorder
+            ? _value.focusedBorder
+            : focusedBorder // ignore: cast_nullable_to_non_nullable
+                  as BorderConfig?,
+        errorBorder: freezed == errorBorder
+            ? _value.errorBorder
+            : errorBorder // ignore: cast_nullable_to_non_nullable
+                  as BorderConfig?,
+        focusedErrorBorder: freezed == focusedErrorBorder
+            ? _value.focusedErrorBorder
+            : focusedErrorBorder // ignore: cast_nullable_to_non_nullable
+                  as BorderConfig?,
+        disabledBorder: freezed == disabledBorder
+            ? _value.disabledBorder
+            : disabledBorder // ignore: cast_nullable_to_non_nullable
+                  as BorderConfig?,
+      ),
+    );
   }
 }
 
@@ -589,26 +602,27 @@ class __$$InputDecorationConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$InputDecorationConfigImpl implements _InputDecorationConfig {
-  const _$InputDecorationConfigImpl(
-      {this.hintText,
-      this.hintStyle,
-      this.labelText,
-      this.labelStyle,
-      this.helperText,
-      this.helperStyle,
-      this.errorStyle,
-      this.prefixText,
-      this.prefixStyle,
-      this.suffixText,
-      this.suffixStyle,
-      this.fillColor,
-      this.filled,
-      this.border,
-      this.enabledBorder,
-      this.focusedBorder,
-      this.errorBorder,
-      this.focusedErrorBorder,
-      this.disabledBorder});
+  const _$InputDecorationConfigImpl({
+    this.hintText,
+    this.hintStyle,
+    this.labelText,
+    this.labelStyle,
+    this.helperText,
+    this.helperStyle,
+    this.errorStyle,
+    this.prefixText,
+    this.prefixStyle,
+    this.suffixText,
+    this.suffixStyle,
+    this.fillColor,
+    this.filled,
+    this.border,
+    this.enabledBorder,
+    this.focusedBorder,
+    this.errorBorder,
+    this.focusedErrorBorder,
+    this.disabledBorder,
+  });
 
   factory _$InputDecorationConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$InputDecorationConfigImplFromJson(json);
@@ -740,27 +754,27 @@ class _$InputDecorationConfigImpl implements _InputDecorationConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
-        runtimeType,
-        hintText,
-        hintStyle,
-        labelText,
-        labelStyle,
-        helperText,
-        helperStyle,
-        errorStyle,
-        prefixText,
-        prefixStyle,
-        suffixText,
-        suffixStyle,
-        fillColor,
-        filled,
-        border,
-        enabledBorder,
-        focusedBorder,
-        errorBorder,
-        focusedErrorBorder,
-        disabledBorder
-      ]);
+    runtimeType,
+    hintText,
+    hintStyle,
+    labelText,
+    labelStyle,
+    helperText,
+    helperStyle,
+    errorStyle,
+    prefixText,
+    prefixStyle,
+    suffixText,
+    suffixStyle,
+    fillColor,
+    filled,
+    border,
+    enabledBorder,
+    focusedBorder,
+    errorBorder,
+    focusedErrorBorder,
+    disabledBorder,
+  ]);
 
   /// Create a copy of InputDecorationConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -768,38 +782,40 @@ class _$InputDecorationConfigImpl implements _InputDecorationConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$InputDecorationConfigImplCopyWith<_$InputDecorationConfigImpl>
-      get copyWith => __$$InputDecorationConfigImplCopyWithImpl<
-          _$InputDecorationConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$InputDecorationConfigImplCopyWithImpl<_$InputDecorationConfigImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$InputDecorationConfigImplToJson(
-      this,
-    );
+    return _$$InputDecorationConfigImplToJson(this);
   }
 }
 
 abstract class _InputDecorationConfig implements InputDecorationConfig {
-  const factory _InputDecorationConfig(
-      {final String? hintText,
-      final TextStyleConfig? hintStyle,
-      final String? labelText,
-      final TextStyleConfig? labelStyle,
-      final String? helperText,
-      final TextStyleConfig? helperStyle,
-      final TextStyleConfig? errorStyle,
-      final String? prefixText,
-      final TextStyleConfig? prefixStyle,
-      final String? suffixText,
-      final TextStyleConfig? suffixStyle,
-      final String? fillColor,
-      final bool? filled,
-      final BorderConfig? border,
-      final BorderConfig? enabledBorder,
-      final BorderConfig? focusedBorder,
-      final BorderConfig? errorBorder,
-      final BorderConfig? focusedErrorBorder,
-      final BorderConfig? disabledBorder}) = _$InputDecorationConfigImpl;
+  const factory _InputDecorationConfig({
+    final String? hintText,
+    final TextStyleConfig? hintStyle,
+    final String? labelText,
+    final TextStyleConfig? labelStyle,
+    final String? helperText,
+    final TextStyleConfig? helperStyle,
+    final TextStyleConfig? errorStyle,
+    final String? prefixText,
+    final TextStyleConfig? prefixStyle,
+    final String? suffixText,
+    final TextStyleConfig? suffixStyle,
+    final String? fillColor,
+    final bool? filled,
+    final BorderConfig? border,
+    final BorderConfig? enabledBorder,
+    final BorderConfig? focusedBorder,
+    final BorderConfig? errorBorder,
+    final BorderConfig? focusedErrorBorder,
+    final BorderConfig? disabledBorder,
+  }) = _$InputDecorationConfigImpl;
 
   factory _InputDecorationConfig.fromJson(Map<String, dynamic> json) =
       _$InputDecorationConfigImpl.fromJson;
@@ -885,7 +901,7 @@ abstract class _InputDecorationConfig implements InputDecorationConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InputDecorationConfigImplCopyWith<_$InputDecorationConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 BorderConfig _$BorderConfigFromJson(Map<String, dynamic> json) {
@@ -919,14 +935,16 @@ mixin _$BorderConfig {
 /// @nodoc
 abstract class $BorderConfigCopyWith<$Res> {
   factory $BorderConfigCopyWith(
-          BorderConfig value, $Res Function(BorderConfig) then) =
-      _$BorderConfigCopyWithImpl<$Res, BorderConfig>;
+    BorderConfig value,
+    $Res Function(BorderConfig) then,
+  ) = _$BorderConfigCopyWithImpl<$Res, BorderConfig>;
   @useResult
-  $Res call(
-      {String type,
-      double? borderRadius,
-      String? borderColor,
-      double? borderWidth});
+  $Res call({
+    String type,
+    double? borderRadius,
+    String? borderColor,
+    double? borderWidth,
+  });
 }
 
 /// @nodoc
@@ -949,24 +967,27 @@ class _$BorderConfigCopyWithImpl<$Res, $Val extends BorderConfig>
     Object? borderColor = freezed,
     Object? borderWidth = freezed,
   }) {
-    return _then(_value.copyWith(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      borderRadius: freezed == borderRadius
-          ? _value.borderRadius
-          : borderRadius // ignore: cast_nullable_to_non_nullable
-              as double?,
-      borderColor: freezed == borderColor
-          ? _value.borderColor
-          : borderColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      borderWidth: freezed == borderWidth
-          ? _value.borderWidth
-          : borderWidth // ignore: cast_nullable_to_non_nullable
-              as double?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as String,
+            borderRadius: freezed == borderRadius
+                ? _value.borderRadius
+                : borderRadius // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            borderColor: freezed == borderColor
+                ? _value.borderColor
+                : borderColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            borderWidth: freezed == borderWidth
+                ? _value.borderWidth
+                : borderWidth // ignore: cast_nullable_to_non_nullable
+                      as double?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -974,15 +995,17 @@ class _$BorderConfigCopyWithImpl<$Res, $Val extends BorderConfig>
 abstract class _$$BorderConfigImplCopyWith<$Res>
     implements $BorderConfigCopyWith<$Res> {
   factory _$$BorderConfigImplCopyWith(
-          _$BorderConfigImpl value, $Res Function(_$BorderConfigImpl) then) =
-      __$$BorderConfigImplCopyWithImpl<$Res>;
+    _$BorderConfigImpl value,
+    $Res Function(_$BorderConfigImpl) then,
+  ) = __$$BorderConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String type,
-      double? borderRadius,
-      String? borderColor,
-      double? borderWidth});
+  $Res call({
+    String type,
+    double? borderRadius,
+    String? borderColor,
+    double? borderWidth,
+  });
 }
 
 /// @nodoc
@@ -990,8 +1013,9 @@ class __$$BorderConfigImplCopyWithImpl<$Res>
     extends _$BorderConfigCopyWithImpl<$Res, _$BorderConfigImpl>
     implements _$$BorderConfigImplCopyWith<$Res> {
   __$$BorderConfigImplCopyWithImpl(
-      _$BorderConfigImpl _value, $Res Function(_$BorderConfigImpl) _then)
-      : super(_value, _then);
+    _$BorderConfigImpl _value,
+    $Res Function(_$BorderConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BorderConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1003,24 +1027,26 @@ class __$$BorderConfigImplCopyWithImpl<$Res>
     Object? borderColor = freezed,
     Object? borderWidth = freezed,
   }) {
-    return _then(_$BorderConfigImpl(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      borderRadius: freezed == borderRadius
-          ? _value.borderRadius
-          : borderRadius // ignore: cast_nullable_to_non_nullable
-              as double?,
-      borderColor: freezed == borderColor
-          ? _value.borderColor
-          : borderColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      borderWidth: freezed == borderWidth
-          ? _value.borderWidth
-          : borderWidth // ignore: cast_nullable_to_non_nullable
-              as double?,
-    ));
+    return _then(
+      _$BorderConfigImpl(
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as String,
+        borderRadius: freezed == borderRadius
+            ? _value.borderRadius
+            : borderRadius // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        borderColor: freezed == borderColor
+            ? _value.borderColor
+            : borderColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        borderWidth: freezed == borderWidth
+            ? _value.borderWidth
+            : borderWidth // ignore: cast_nullable_to_non_nullable
+                  as double?,
+      ),
+    );
   }
 }
 
@@ -1028,11 +1054,12 @@ class __$$BorderConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$BorderConfigImpl implements _BorderConfig {
-  const _$BorderConfigImpl(
-      {this.type = 'underline',
-      this.borderRadius,
-      this.borderColor,
-      this.borderWidth});
+  const _$BorderConfigImpl({
+    this.type = 'underline',
+    this.borderRadius,
+    this.borderColor,
+    this.borderWidth,
+  });
 
   factory _$BorderConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$BorderConfigImplFromJson(json);
@@ -1088,18 +1115,17 @@ class _$BorderConfigImpl implements _BorderConfig {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BorderConfigImplToJson(
-      this,
-    );
+    return _$$BorderConfigImplToJson(this);
   }
 }
 
 abstract class _BorderConfig implements BorderConfig {
-  const factory _BorderConfig(
-      {final String type,
-      final double? borderRadius,
-      final String? borderColor,
-      final double? borderWidth}) = _$BorderConfigImpl;
+  const factory _BorderConfig({
+    final String type,
+    final double? borderRadius,
+    final String? borderColor,
+    final double? borderWidth,
+  }) = _$BorderConfigImpl;
 
   factory _BorderConfig.fromJson(Map<String, dynamic> json) =
       _$BorderConfigImpl.fromJson;

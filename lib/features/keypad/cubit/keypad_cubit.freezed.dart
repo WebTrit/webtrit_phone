@@ -12,7 +12,8 @@ part of 'keypad_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$KeypadState {
@@ -28,8 +29,9 @@ mixin _$KeypadState {
 /// @nodoc
 abstract class $KeypadStateCopyWith<$Res> {
   factory $KeypadStateCopyWith(
-          KeypadState value, $Res Function(KeypadState) then) =
-      _$KeypadStateCopyWithImpl<$Res, KeypadState>;
+    KeypadState value,
+    $Res Function(KeypadState) then,
+  ) = _$KeypadStateCopyWithImpl<$Res, KeypadState>;
   @useResult
   $Res call({Contact? contact});
 }
@@ -48,15 +50,16 @@ class _$KeypadStateCopyWithImpl<$Res, $Val extends KeypadState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? contact = freezed,
-  }) {
-    return _then(_value.copyWith(
-      contact: freezed == contact
-          ? _value.contact
-          : contact // ignore: cast_nullable_to_non_nullable
-              as Contact?,
-    ) as $Val);
+  $Res call({Object? contact = freezed}) {
+    return _then(
+      _value.copyWith(
+            contact: freezed == contact
+                ? _value.contact
+                : contact // ignore: cast_nullable_to_non_nullable
+                      as Contact?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -64,8 +67,9 @@ class _$KeypadStateCopyWithImpl<$Res, $Val extends KeypadState>
 abstract class _$$KeypadStateImplCopyWith<$Res>
     implements $KeypadStateCopyWith<$Res> {
   factory _$$KeypadStateImplCopyWith(
-          _$KeypadStateImpl value, $Res Function(_$KeypadStateImpl) then) =
-      __$$KeypadStateImplCopyWithImpl<$Res>;
+    _$KeypadStateImpl value,
+    $Res Function(_$KeypadStateImpl) then,
+  ) = __$$KeypadStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Contact? contact});
@@ -76,22 +80,23 @@ class __$$KeypadStateImplCopyWithImpl<$Res>
     extends _$KeypadStateCopyWithImpl<$Res, _$KeypadStateImpl>
     implements _$$KeypadStateImplCopyWith<$Res> {
   __$$KeypadStateImplCopyWithImpl(
-      _$KeypadStateImpl _value, $Res Function(_$KeypadStateImpl) _then)
-      : super(_value, _then);
+    _$KeypadStateImpl _value,
+    $Res Function(_$KeypadStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of KeypadState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? contact = freezed,
-  }) {
-    return _then(_$KeypadStateImpl(
-      contact: freezed == contact
-          ? _value.contact
-          : contact // ignore: cast_nullable_to_non_nullable
-              as Contact?,
-    ));
+  $Res call({Object? contact = freezed}) {
+    return _then(
+      _$KeypadStateImpl(
+        contact: freezed == contact
+            ? _value.contact
+            : contact // ignore: cast_nullable_to_non_nullable
+                  as Contact?,
+      ),
+    );
   }
 }
 

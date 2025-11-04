@@ -12,7 +12,8 @@ part of 'about_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$AboutState {
@@ -38,21 +39,23 @@ mixin _$AboutState {
 /// @nodoc
 abstract class $AboutStateCopyWith<$Res> {
   factory $AboutStateCopyWith(
-          AboutState value, $Res Function(AboutState) then) =
-      _$AboutStateCopyWithImpl<$Res, AboutState>;
+    AboutState value,
+    $Res Function(AboutState) then,
+  ) = _$AboutStateCopyWithImpl<$Res, AboutState>;
   @useResult
-  $Res call(
-      {bool progress,
-      List<String> embeddedLinks,
-      String appName,
-      String packageName,
-      String storeBuildVersion,
-      String storeBuildNumber,
-      String appVersion,
-      String appIdentifier,
-      Uri coreUrl,
-      String? fcmPushToken,
-      Version? coreVersion});
+  $Res call({
+    bool progress,
+    List<String> embeddedLinks,
+    String appName,
+    String packageName,
+    String storeBuildVersion,
+    String storeBuildNumber,
+    String appVersion,
+    String appIdentifier,
+    Uri coreUrl,
+    String? fcmPushToken,
+    Version? coreVersion,
+  });
 }
 
 /// @nodoc
@@ -82,52 +85,55 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
     Object? fcmPushToken = freezed,
     Object? coreVersion = freezed,
   }) {
-    return _then(_value.copyWith(
-      progress: null == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as bool,
-      embeddedLinks: null == embeddedLinks
-          ? _value.embeddedLinks
-          : embeddedLinks // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      appName: null == appName
-          ? _value.appName
-          : appName // ignore: cast_nullable_to_non_nullable
-              as String,
-      packageName: null == packageName
-          ? _value.packageName
-          : packageName // ignore: cast_nullable_to_non_nullable
-              as String,
-      storeBuildVersion: null == storeBuildVersion
-          ? _value.storeBuildVersion
-          : storeBuildVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      storeBuildNumber: null == storeBuildNumber
-          ? _value.storeBuildNumber
-          : storeBuildNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      appVersion: null == appVersion
-          ? _value.appVersion
-          : appVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      appIdentifier: null == appIdentifier
-          ? _value.appIdentifier
-          : appIdentifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      coreUrl: null == coreUrl
-          ? _value.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
-      fcmPushToken: freezed == fcmPushToken
-          ? _value.fcmPushToken
-          : fcmPushToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-      coreVersion: freezed == coreVersion
-          ? _value.coreVersion
-          : coreVersion // ignore: cast_nullable_to_non_nullable
-              as Version?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            progress: null == progress
+                ? _value.progress
+                : progress // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            embeddedLinks: null == embeddedLinks
+                ? _value.embeddedLinks
+                : embeddedLinks // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            appName: null == appName
+                ? _value.appName
+                : appName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            packageName: null == packageName
+                ? _value.packageName
+                : packageName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            storeBuildVersion: null == storeBuildVersion
+                ? _value.storeBuildVersion
+                : storeBuildVersion // ignore: cast_nullable_to_non_nullable
+                      as String,
+            storeBuildNumber: null == storeBuildNumber
+                ? _value.storeBuildNumber
+                : storeBuildNumber // ignore: cast_nullable_to_non_nullable
+                      as String,
+            appVersion: null == appVersion
+                ? _value.appVersion
+                : appVersion // ignore: cast_nullable_to_non_nullable
+                      as String,
+            appIdentifier: null == appIdentifier
+                ? _value.appIdentifier
+                : appIdentifier // ignore: cast_nullable_to_non_nullable
+                      as String,
+            coreUrl: null == coreUrl
+                ? _value.coreUrl
+                : coreUrl // ignore: cast_nullable_to_non_nullable
+                      as Uri,
+            fcmPushToken: freezed == fcmPushToken
+                ? _value.fcmPushToken
+                : fcmPushToken // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            coreVersion: freezed == coreVersion
+                ? _value.coreVersion
+                : coreVersion // ignore: cast_nullable_to_non_nullable
+                      as Version?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -135,22 +141,24 @@ class _$AboutStateCopyWithImpl<$Res, $Val extends AboutState>
 abstract class _$$AboutStateImplCopyWith<$Res>
     implements $AboutStateCopyWith<$Res> {
   factory _$$AboutStateImplCopyWith(
-          _$AboutStateImpl value, $Res Function(_$AboutStateImpl) then) =
-      __$$AboutStateImplCopyWithImpl<$Res>;
+    _$AboutStateImpl value,
+    $Res Function(_$AboutStateImpl) then,
+  ) = __$$AboutStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool progress,
-      List<String> embeddedLinks,
-      String appName,
-      String packageName,
-      String storeBuildVersion,
-      String storeBuildNumber,
-      String appVersion,
-      String appIdentifier,
-      Uri coreUrl,
-      String? fcmPushToken,
-      Version? coreVersion});
+  $Res call({
+    bool progress,
+    List<String> embeddedLinks,
+    String appName,
+    String packageName,
+    String storeBuildVersion,
+    String storeBuildNumber,
+    String appVersion,
+    String appIdentifier,
+    Uri coreUrl,
+    String? fcmPushToken,
+    Version? coreVersion,
+  });
 }
 
 /// @nodoc
@@ -158,8 +166,9 @@ class __$$AboutStateImplCopyWithImpl<$Res>
     extends _$AboutStateCopyWithImpl<$Res, _$AboutStateImpl>
     implements _$$AboutStateImplCopyWith<$Res> {
   __$$AboutStateImplCopyWithImpl(
-      _$AboutStateImpl _value, $Res Function(_$AboutStateImpl) _then)
-      : super(_value, _then);
+    _$AboutStateImpl _value,
+    $Res Function(_$AboutStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AboutState
   /// with the given fields replaced by the non-null parameter values.
@@ -178,72 +187,74 @@ class __$$AboutStateImplCopyWithImpl<$Res>
     Object? fcmPushToken = freezed,
     Object? coreVersion = freezed,
   }) {
-    return _then(_$AboutStateImpl(
-      progress: null == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as bool,
-      embeddedLinks: null == embeddedLinks
-          ? _value._embeddedLinks
-          : embeddedLinks // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      appName: null == appName
-          ? _value.appName
-          : appName // ignore: cast_nullable_to_non_nullable
-              as String,
-      packageName: null == packageName
-          ? _value.packageName
-          : packageName // ignore: cast_nullable_to_non_nullable
-              as String,
-      storeBuildVersion: null == storeBuildVersion
-          ? _value.storeBuildVersion
-          : storeBuildVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      storeBuildNumber: null == storeBuildNumber
-          ? _value.storeBuildNumber
-          : storeBuildNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      appVersion: null == appVersion
-          ? _value.appVersion
-          : appVersion // ignore: cast_nullable_to_non_nullable
-              as String,
-      appIdentifier: null == appIdentifier
-          ? _value.appIdentifier
-          : appIdentifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      coreUrl: null == coreUrl
-          ? _value.coreUrl
-          : coreUrl // ignore: cast_nullable_to_non_nullable
-              as Uri,
-      fcmPushToken: freezed == fcmPushToken
-          ? _value.fcmPushToken
-          : fcmPushToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-      coreVersion: freezed == coreVersion
-          ? _value.coreVersion
-          : coreVersion // ignore: cast_nullable_to_non_nullable
-              as Version?,
-    ));
+    return _then(
+      _$AboutStateImpl(
+        progress: null == progress
+            ? _value.progress
+            : progress // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        embeddedLinks: null == embeddedLinks
+            ? _value._embeddedLinks
+            : embeddedLinks // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        appName: null == appName
+            ? _value.appName
+            : appName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        packageName: null == packageName
+            ? _value.packageName
+            : packageName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        storeBuildVersion: null == storeBuildVersion
+            ? _value.storeBuildVersion
+            : storeBuildVersion // ignore: cast_nullable_to_non_nullable
+                  as String,
+        storeBuildNumber: null == storeBuildNumber
+            ? _value.storeBuildNumber
+            : storeBuildNumber // ignore: cast_nullable_to_non_nullable
+                  as String,
+        appVersion: null == appVersion
+            ? _value.appVersion
+            : appVersion // ignore: cast_nullable_to_non_nullable
+                  as String,
+        appIdentifier: null == appIdentifier
+            ? _value.appIdentifier
+            : appIdentifier // ignore: cast_nullable_to_non_nullable
+                  as String,
+        coreUrl: null == coreUrl
+            ? _value.coreUrl
+            : coreUrl // ignore: cast_nullable_to_non_nullable
+                  as Uri,
+        fcmPushToken: freezed == fcmPushToken
+            ? _value.fcmPushToken
+            : fcmPushToken // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        coreVersion: freezed == coreVersion
+            ? _value.coreVersion
+            : coreVersion // ignore: cast_nullable_to_non_nullable
+                  as Version?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$AboutStateImpl extends _AboutState {
-  const _$AboutStateImpl(
-      {this.progress = false,
-      final List<String> embeddedLinks = const [],
-      required this.appName,
-      required this.packageName,
-      required this.storeBuildVersion,
-      required this.storeBuildNumber,
-      required this.appVersion,
-      required this.appIdentifier,
-      required this.coreUrl,
-      this.fcmPushToken,
-      this.coreVersion})
-      : _embeddedLinks = embeddedLinks,
-        super._();
+  const _$AboutStateImpl({
+    this.progress = false,
+    final List<String> embeddedLinks = const [],
+    required this.appName,
+    required this.packageName,
+    required this.storeBuildVersion,
+    required this.storeBuildNumber,
+    required this.appVersion,
+    required this.appIdentifier,
+    required this.coreUrl,
+    this.fcmPushToken,
+    this.coreVersion,
+  }) : _embeddedLinks = embeddedLinks,
+       super._();
 
   @override
   @JsonKey()
@@ -288,8 +299,10 @@ class _$AboutStateImpl extends _AboutState {
             other is _$AboutStateImpl &&
             (identical(other.progress, progress) ||
                 other.progress == progress) &&
-            const DeepCollectionEquality()
-                .equals(other._embeddedLinks, _embeddedLinks) &&
+            const DeepCollectionEquality().equals(
+              other._embeddedLinks,
+              _embeddedLinks,
+            ) &&
             (identical(other.appName, appName) || other.appName == appName) &&
             (identical(other.packageName, packageName) ||
                 other.packageName == packageName) &&
@@ -310,18 +323,19 @@ class _$AboutStateImpl extends _AboutState {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      progress,
-      const DeepCollectionEquality().hash(_embeddedLinks),
-      appName,
-      packageName,
-      storeBuildVersion,
-      storeBuildNumber,
-      appVersion,
-      appIdentifier,
-      coreUrl,
-      fcmPushToken,
-      coreVersion);
+    runtimeType,
+    progress,
+    const DeepCollectionEquality().hash(_embeddedLinks),
+    appName,
+    packageName,
+    storeBuildVersion,
+    storeBuildNumber,
+    appVersion,
+    appIdentifier,
+    coreUrl,
+    fcmPushToken,
+    coreVersion,
+  );
 
   /// Create a copy of AboutState
   /// with the given fields replaced by the non-null parameter values.
@@ -333,18 +347,19 @@ class _$AboutStateImpl extends _AboutState {
 }
 
 abstract class _AboutState extends AboutState {
-  const factory _AboutState(
-      {final bool progress,
-      final List<String> embeddedLinks,
-      required final String appName,
-      required final String packageName,
-      required final String storeBuildVersion,
-      required final String storeBuildNumber,
-      required final String appVersion,
-      required final String appIdentifier,
-      required final Uri coreUrl,
-      final String? fcmPushToken,
-      final Version? coreVersion}) = _$AboutStateImpl;
+  const factory _AboutState({
+    final bool progress,
+    final List<String> embeddedLinks,
+    required final String appName,
+    required final String packageName,
+    required final String storeBuildVersion,
+    required final String storeBuildNumber,
+    required final String appVersion,
+    required final String appIdentifier,
+    required final Uri coreUrl,
+    final String? fcmPushToken,
+    final Version? coreVersion,
+  }) = _$AboutStateImpl;
   const _AboutState._() : super._();
 
   @override
