@@ -26,8 +26,10 @@ Map<String, dynamic> _$$NumbersImplToJson(_$NumbersImpl instance) =>
 
 _$BalanceImpl _$$BalanceImplFromJson(Map<String, dynamic> json) =>
     _$BalanceImpl(
-      balanceType:
-          $enumDecodeNullable(_$BalanceTypeEnumMap, json['balance_type']),
+      balanceType: $enumDecodeNullable(
+        _$BalanceTypeEnumMap,
+        json['balance_type'],
+      ),
       amount: (json['amount'] as num?)?.toDouble(),
       creditLimit: (json['credit_limit'] as num?)?.toDouble(),
       currency: json['currency'] as String?,

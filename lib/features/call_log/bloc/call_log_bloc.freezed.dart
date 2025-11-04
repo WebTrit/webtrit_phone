@@ -12,7 +12,8 @@ part of 'call_log_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$CallLogState {
@@ -30,8 +31,9 @@ mixin _$CallLogState {
 /// @nodoc
 abstract class $CallLogStateCopyWith<$Res> {
   factory $CallLogStateCopyWith(
-          CallLogState value, $Res Function(CallLogState) then) =
-      _$CallLogStateCopyWithImpl<$Res, CallLogState>;
+    CallLogState value,
+    $Res Function(CallLogState) then,
+  ) = _$CallLogStateCopyWithImpl<$Res, CallLogState>;
   @useResult
   $Res call({String number, Contact? contact, List<CallLogEntry>? callLog});
 }
@@ -55,20 +57,23 @@ class _$CallLogStateCopyWithImpl<$Res, $Val extends CallLogState>
     Object? contact = freezed,
     Object? callLog = freezed,
   }) {
-    return _then(_value.copyWith(
-      number: null == number
-          ? _value.number
-          : number // ignore: cast_nullable_to_non_nullable
-              as String,
-      contact: freezed == contact
-          ? _value.contact
-          : contact // ignore: cast_nullable_to_non_nullable
-              as Contact?,
-      callLog: freezed == callLog
-          ? _value.callLog
-          : callLog // ignore: cast_nullable_to_non_nullable
-              as List<CallLogEntry>?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            number: null == number
+                ? _value.number
+                : number // ignore: cast_nullable_to_non_nullable
+                      as String,
+            contact: freezed == contact
+                ? _value.contact
+                : contact // ignore: cast_nullable_to_non_nullable
+                      as Contact?,
+            callLog: freezed == callLog
+                ? _value.callLog
+                : callLog // ignore: cast_nullable_to_non_nullable
+                      as List<CallLogEntry>?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -76,8 +81,9 @@ class _$CallLogStateCopyWithImpl<$Res, $Val extends CallLogState>
 abstract class _$$CallLogStateImplCopyWith<$Res>
     implements $CallLogStateCopyWith<$Res> {
   factory _$$CallLogStateImplCopyWith(
-          _$CallLogStateImpl value, $Res Function(_$CallLogStateImpl) then) =
-      __$$CallLogStateImplCopyWithImpl<$Res>;
+    _$CallLogStateImpl value,
+    $Res Function(_$CallLogStateImpl) then,
+  ) = __$$CallLogStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String number, Contact? contact, List<CallLogEntry>? callLog});
@@ -88,8 +94,9 @@ class __$$CallLogStateImplCopyWithImpl<$Res>
     extends _$CallLogStateCopyWithImpl<$Res, _$CallLogStateImpl>
     implements _$$CallLogStateImplCopyWith<$Res> {
   __$$CallLogStateImplCopyWithImpl(
-      _$CallLogStateImpl _value, $Res Function(_$CallLogStateImpl) _then)
-      : super(_value, _then);
+    _$CallLogStateImpl _value,
+    $Res Function(_$CallLogStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
@@ -100,29 +107,33 @@ class __$$CallLogStateImplCopyWithImpl<$Res>
     Object? contact = freezed,
     Object? callLog = freezed,
   }) {
-    return _then(_$CallLogStateImpl(
-      number: null == number
-          ? _value.number
-          : number // ignore: cast_nullable_to_non_nullable
-              as String,
-      contact: freezed == contact
-          ? _value.contact
-          : contact // ignore: cast_nullable_to_non_nullable
-              as Contact?,
-      callLog: freezed == callLog
-          ? _value._callLog
-          : callLog // ignore: cast_nullable_to_non_nullable
-              as List<CallLogEntry>?,
-    ));
+    return _then(
+      _$CallLogStateImpl(
+        number: null == number
+            ? _value.number
+            : number // ignore: cast_nullable_to_non_nullable
+                  as String,
+        contact: freezed == contact
+            ? _value.contact
+            : contact // ignore: cast_nullable_to_non_nullable
+                  as Contact?,
+        callLog: freezed == callLog
+            ? _value._callLog
+            : callLog // ignore: cast_nullable_to_non_nullable
+                  as List<CallLogEntry>?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$CallLogStateImpl implements _CallLogState {
-  const _$CallLogStateImpl(
-      {required this.number, this.contact, final List<CallLogEntry>? callLog})
-      : _callLog = callLog;
+  const _$CallLogStateImpl({
+    required this.number,
+    this.contact,
+    final List<CallLogEntry>? callLog,
+  }) : _callLog = callLog;
 
   @override
   final String number;
@@ -149,8 +160,12 @@ class _$CallLogStateImpl implements _CallLogState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, number, contact,
-      const DeepCollectionEquality().hash(_callLog));
+  int get hashCode => Object.hash(
+    runtimeType,
+    number,
+    contact,
+    const DeepCollectionEquality().hash(_callLog),
+  );
 
   /// Create a copy of CallLogState
   /// with the given fields replaced by the non-null parameter values.
@@ -162,10 +177,11 @@ class _$CallLogStateImpl implements _CallLogState {
 }
 
 abstract class _CallLogState implements CallLogState {
-  const factory _CallLogState(
-      {required final String number,
-      final Contact? contact,
-      final List<CallLogEntry>? callLog}) = _$CallLogStateImpl;
+  const factory _CallLogState({
+    required final String number,
+    final Contact? contact,
+    final List<CallLogEntry>? callLog,
+  }) = _$CallLogStateImpl;
 
   @override
   String get number;

@@ -41,14 +41,10 @@ Map<String, dynamic> _$$CoreInfoImplToJson(_$CoreInfoImpl instance) =>
     };
 
 _$PostgresInfoImpl _$$PostgresInfoImplFromJson(Map<String, dynamic> json) =>
-    _$PostgresInfoImpl(
-      version: json['version'] as String?,
-    );
+    _$PostgresInfoImpl(version: json['version'] as String?);
 
 Map<String, dynamic> _$$PostgresInfoImplToJson(_$PostgresInfoImpl instance) =>
-    <String, dynamic>{
-      'version': instance.version,
-    };
+    <String, dynamic>{'version': instance.version};
 
 _$AdapterInfoImpl _$$AdapterInfoImplFromJson(Map<String, dynamic> json) =>
     _$AdapterInfoImpl(
@@ -87,14 +83,10 @@ Map<String, dynamic> _$$JanusInfoImplToJson(_$JanusInfoImpl instance) =>
     };
 
 _$GorushInfoImpl _$$GorushInfoImplFromJson(Map<String, dynamic> json) =>
-    _$GorushInfoImpl(
-      version: json['version'] as String?,
-    );
+    _$GorushInfoImpl(version: json['version'] as String?);
 
 Map<String, dynamic> _$$GorushInfoImplToJson(_$GorushInfoImpl instance) =>
-    <String, dynamic>{
-      'version': instance.version,
-    };
+    <String, dynamic>{'version': instance.version};
 
 _$TransportsImpl _$$TransportsImplFromJson(Map<String, dynamic> json) =>
     _$TransportsImpl(
@@ -104,19 +96,13 @@ _$TransportsImpl _$$TransportsImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$TransportsImplToJson(_$TransportsImpl instance) =>
-    <String, dynamic>{
-      'websocket': instance.websocket,
-    };
+    <String, dynamic>{'websocket': instance.websocket};
 
 _$WebsocketImpl _$$WebsocketImplFromJson(Map<String, dynamic> json) =>
-    _$WebsocketImpl(
-      version: json['version'] as String?,
-    );
+    _$WebsocketImpl(version: json['version'] as String?);
 
 Map<String, dynamic> _$$WebsocketImplToJson(_$WebsocketImpl instance) =>
-    <String, dynamic>{
-      'version': instance.version,
-    };
+    <String, dynamic>{'version': instance.version};
 
 _$PluginsImpl _$$PluginsImplFromJson(Map<String, dynamic> json) =>
     _$PluginsImpl(
@@ -126,16 +112,10 @@ _$PluginsImpl _$$PluginsImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$PluginsImplToJson(_$PluginsImpl instance) =>
-    <String, dynamic>{
-      'sip': instance.sip,
-    };
+    <String, dynamic>{'sip': instance.sip};
 
 _$SipVersionImpl _$$SipVersionImplFromJson(Map<String, dynamic> json) =>
-    _$SipVersionImpl(
-      version: json['version'] as String?,
-    );
+    _$SipVersionImpl(version: json['version'] as String?);
 
 Map<String, dynamic> _$$SipVersionImplToJson(_$SipVersionImpl instance) =>
-    <String, dynamic>{
-      'version': instance.version,
-    };
+    <String, dynamic>{'version': instance.version};

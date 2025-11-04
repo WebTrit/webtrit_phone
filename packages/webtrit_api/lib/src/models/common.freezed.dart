@@ -12,7 +12,8 @@ part of 'common.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Numbers _$NumbersFromJson(Map<String, dynamic> json) {
   return _Numbers.fromJson(json);
@@ -39,8 +40,12 @@ abstract class $NumbersCopyWith<$Res> {
   factory $NumbersCopyWith(Numbers value, $Res Function(Numbers) then) =
       _$NumbersCopyWithImpl<$Res, Numbers>;
   @useResult
-  $Res call(
-      {String main, String? ext, List<String>? additional, List<String>? sms});
+  $Res call({
+    String main,
+    String? ext,
+    List<String>? additional,
+    List<String>? sms,
+  });
 }
 
 /// @nodoc
@@ -63,36 +68,44 @@ class _$NumbersCopyWithImpl<$Res, $Val extends Numbers>
     Object? additional = freezed,
     Object? sms = freezed,
   }) {
-    return _then(_value.copyWith(
-      main: null == main
-          ? _value.main
-          : main // ignore: cast_nullable_to_non_nullable
-              as String,
-      ext: freezed == ext
-          ? _value.ext
-          : ext // ignore: cast_nullable_to_non_nullable
-              as String?,
-      additional: freezed == additional
-          ? _value.additional
-          : additional // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      sms: freezed == sms
-          ? _value.sms
-          : sms // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            main: null == main
+                ? _value.main
+                : main // ignore: cast_nullable_to_non_nullable
+                      as String,
+            ext: freezed == ext
+                ? _value.ext
+                : ext // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            additional: freezed == additional
+                ? _value.additional
+                : additional // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+            sms: freezed == sms
+                ? _value.sms
+                : sms // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$NumbersImplCopyWith<$Res> implements $NumbersCopyWith<$Res> {
   factory _$$NumbersImplCopyWith(
-          _$NumbersImpl value, $Res Function(_$NumbersImpl) then) =
-      __$$NumbersImplCopyWithImpl<$Res>;
+    _$NumbersImpl value,
+    $Res Function(_$NumbersImpl) then,
+  ) = __$$NumbersImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String main, String? ext, List<String>? additional, List<String>? sms});
+  $Res call({
+    String main,
+    String? ext,
+    List<String>? additional,
+    List<String>? sms,
+  });
 }
 
 /// @nodoc
@@ -100,8 +113,9 @@ class __$$NumbersImplCopyWithImpl<$Res>
     extends _$NumbersCopyWithImpl<$Res, _$NumbersImpl>
     implements _$$NumbersImplCopyWith<$Res> {
   __$$NumbersImplCopyWithImpl(
-      _$NumbersImpl _value, $Res Function(_$NumbersImpl) _then)
-      : super(_value, _then);
+    _$NumbersImpl _value,
+    $Res Function(_$NumbersImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Numbers
   /// with the given fields replaced by the non-null parameter values.
@@ -113,24 +127,26 @@ class __$$NumbersImplCopyWithImpl<$Res>
     Object? additional = freezed,
     Object? sms = freezed,
   }) {
-    return _then(_$NumbersImpl(
-      main: null == main
-          ? _value.main
-          : main // ignore: cast_nullable_to_non_nullable
-              as String,
-      ext: freezed == ext
-          ? _value.ext
-          : ext // ignore: cast_nullable_to_non_nullable
-              as String?,
-      additional: freezed == additional
-          ? _value._additional
-          : additional // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      sms: freezed == sms
-          ? _value._sms
-          : sms // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-    ));
+    return _then(
+      _$NumbersImpl(
+        main: null == main
+            ? _value.main
+            : main // ignore: cast_nullable_to_non_nullable
+                  as String,
+        ext: freezed == ext
+            ? _value.ext
+            : ext // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        additional: freezed == additional
+            ? _value._additional
+            : additional // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+        sms: freezed == sms
+            ? _value._sms
+            : sms // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+      ),
+    );
   }
 }
 
@@ -138,13 +154,13 @@ class __$$NumbersImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$NumbersImpl implements _Numbers {
-  const _$NumbersImpl(
-      {required this.main,
-      this.ext,
-      final List<String>? additional,
-      final List<String>? sms})
-      : _additional = additional,
-        _sms = sms;
+  const _$NumbersImpl({
+    required this.main,
+    this.ext,
+    final List<String>? additional,
+    final List<String>? sms,
+  }) : _additional = additional,
+       _sms = sms;
 
   factory _$NumbersImpl.fromJson(Map<String, dynamic> json) =>
       _$$NumbersImplFromJson(json);
@@ -185,19 +201,22 @@ class _$NumbersImpl implements _Numbers {
             other is _$NumbersImpl &&
             (identical(other.main, main) || other.main == main) &&
             (identical(other.ext, ext) || other.ext == ext) &&
-            const DeepCollectionEquality()
-                .equals(other._additional, _additional) &&
+            const DeepCollectionEquality().equals(
+              other._additional,
+              _additional,
+            ) &&
             const DeepCollectionEquality().equals(other._sms, _sms));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      main,
-      ext,
-      const DeepCollectionEquality().hash(_additional),
-      const DeepCollectionEquality().hash(_sms));
+    runtimeType,
+    main,
+    ext,
+    const DeepCollectionEquality().hash(_additional),
+    const DeepCollectionEquality().hash(_sms),
+  );
 
   /// Create a copy of Numbers
   /// with the given fields replaced by the non-null parameter values.
@@ -209,18 +228,17 @@ class _$NumbersImpl implements _Numbers {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$NumbersImplToJson(
-      this,
-    );
+    return _$$NumbersImplToJson(this);
   }
 }
 
 abstract class _Numbers implements Numbers {
-  const factory _Numbers(
-      {required final String main,
-      final String? ext,
-      final List<String>? additional,
-      final List<String>? sms}) = _$NumbersImpl;
+  const factory _Numbers({
+    required final String main,
+    final String? ext,
+    final List<String>? additional,
+    final List<String>? sms,
+  }) = _$NumbersImpl;
 
   factory _Numbers.fromJson(Map<String, dynamic> json) = _$NumbersImpl.fromJson;
 
@@ -266,11 +284,12 @@ abstract class $BalanceCopyWith<$Res> {
   factory $BalanceCopyWith(Balance value, $Res Function(Balance) then) =
       _$BalanceCopyWithImpl<$Res, Balance>;
   @useResult
-  $Res call(
-      {BalanceType? balanceType,
-      double? amount,
-      double? creditLimit,
-      String? currency});
+  $Res call({
+    BalanceType? balanceType,
+    double? amount,
+    double? creditLimit,
+    String? currency,
+  });
 }
 
 /// @nodoc
@@ -293,39 +312,44 @@ class _$BalanceCopyWithImpl<$Res, $Val extends Balance>
     Object? creditLimit = freezed,
     Object? currency = freezed,
   }) {
-    return _then(_value.copyWith(
-      balanceType: freezed == balanceType
-          ? _value.balanceType
-          : balanceType // ignore: cast_nullable_to_non_nullable
-              as BalanceType?,
-      amount: freezed == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as double?,
-      creditLimit: freezed == creditLimit
-          ? _value.creditLimit
-          : creditLimit // ignore: cast_nullable_to_non_nullable
-              as double?,
-      currency: freezed == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            balanceType: freezed == balanceType
+                ? _value.balanceType
+                : balanceType // ignore: cast_nullable_to_non_nullable
+                      as BalanceType?,
+            amount: freezed == amount
+                ? _value.amount
+                : amount // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            creditLimit: freezed == creditLimit
+                ? _value.creditLimit
+                : creditLimit // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            currency: freezed == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$BalanceImplCopyWith<$Res> implements $BalanceCopyWith<$Res> {
   factory _$$BalanceImplCopyWith(
-          _$BalanceImpl value, $Res Function(_$BalanceImpl) then) =
-      __$$BalanceImplCopyWithImpl<$Res>;
+    _$BalanceImpl value,
+    $Res Function(_$BalanceImpl) then,
+  ) = __$$BalanceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {BalanceType? balanceType,
-      double? amount,
-      double? creditLimit,
-      String? currency});
+  $Res call({
+    BalanceType? balanceType,
+    double? amount,
+    double? creditLimit,
+    String? currency,
+  });
 }
 
 /// @nodoc
@@ -333,8 +357,9 @@ class __$$BalanceImplCopyWithImpl<$Res>
     extends _$BalanceCopyWithImpl<$Res, _$BalanceImpl>
     implements _$$BalanceImplCopyWith<$Res> {
   __$$BalanceImplCopyWithImpl(
-      _$BalanceImpl _value, $Res Function(_$BalanceImpl) _then)
-      : super(_value, _then);
+    _$BalanceImpl _value,
+    $Res Function(_$BalanceImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Balance
   /// with the given fields replaced by the non-null parameter values.
@@ -346,24 +371,26 @@ class __$$BalanceImplCopyWithImpl<$Res>
     Object? creditLimit = freezed,
     Object? currency = freezed,
   }) {
-    return _then(_$BalanceImpl(
-      balanceType: freezed == balanceType
-          ? _value.balanceType
-          : balanceType // ignore: cast_nullable_to_non_nullable
-              as BalanceType?,
-      amount: freezed == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as double?,
-      creditLimit: freezed == creditLimit
-          ? _value.creditLimit
-          : creditLimit // ignore: cast_nullable_to_non_nullable
-              as double?,
-      currency: freezed == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$BalanceImpl(
+        balanceType: freezed == balanceType
+            ? _value.balanceType
+            : balanceType // ignore: cast_nullable_to_non_nullable
+                  as BalanceType?,
+        amount: freezed == amount
+            ? _value.amount
+            : amount // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        creditLimit: freezed == creditLimit
+            ? _value.creditLimit
+            : creditLimit // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        currency: freezed == currency
+            ? _value.currency
+            : currency // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -371,8 +398,12 @@ class __$$BalanceImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$BalanceImpl implements _Balance {
-  const _$BalanceImpl(
-      {this.balanceType, this.amount, this.creditLimit, this.currency});
+  const _$BalanceImpl({
+    this.balanceType,
+    this.amount,
+    this.creditLimit,
+    this.currency,
+  });
 
   factory _$BalanceImpl.fromJson(Map<String, dynamic> json) =>
       _$$BalanceImplFromJson(json);
@@ -420,18 +451,17 @@ class _$BalanceImpl implements _Balance {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BalanceImplToJson(
-      this,
-    );
+    return _$$BalanceImplToJson(this);
   }
 }
 
 abstract class _Balance implements Balance {
-  const factory _Balance(
-      {final BalanceType? balanceType,
-      final double? amount,
-      final double? creditLimit,
-      final String? currency}) = _$BalanceImpl;
+  const factory _Balance({
+    final BalanceType? balanceType,
+    final double? amount,
+    final double? creditLimit,
+    final String? currency,
+  }) = _$BalanceImpl;
 
   factory _Balance.fromJson(Map<String, dynamic> json) = _$BalanceImpl.fromJson;
 

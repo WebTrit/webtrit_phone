@@ -12,7 +12,8 @@ part of 'theme_widget_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ThemeWidgetConfig _$ThemeWidgetConfigFromJson(Map<String, dynamic> json) {
   return _ThemeWidgetConfig.fromJson(json);
@@ -45,21 +46,23 @@ mixin _$ThemeWidgetConfig {
 /// @nodoc
 abstract class $ThemeWidgetConfigCopyWith<$Res> {
   factory $ThemeWidgetConfigCopyWith(
-          ThemeWidgetConfig value, $Res Function(ThemeWidgetConfig) then) =
-      _$ThemeWidgetConfigCopyWithImpl<$Res, ThemeWidgetConfig>;
+    ThemeWidgetConfig value,
+    $Res Function(ThemeWidgetConfig) then,
+  ) = _$ThemeWidgetConfigCopyWithImpl<$Res, ThemeWidgetConfig>;
   @useResult
-  $Res call(
-      {FontsConfig fonts,
-      ButtonWidgetConfig button,
-      GroupWidgetConfig? group,
-      BarWidgetConfig bar,
-      ImageAssetsConfig imageAssets,
-      InputWidgetConfig input,
-      TextWidgetConfig text,
-      DialogWidgetConfig dialog,
-      ActionPadWidgetConfig actionPad,
-      StatusesWidgetConfig statuses,
-      DecorationConfig decorationConfig});
+  $Res call({
+    FontsConfig fonts,
+    ButtonWidgetConfig button,
+    GroupWidgetConfig? group,
+    BarWidgetConfig bar,
+    ImageAssetsConfig imageAssets,
+    InputWidgetConfig input,
+    TextWidgetConfig text,
+    DialogWidgetConfig dialog,
+    ActionPadWidgetConfig actionPad,
+    StatusesWidgetConfig statuses,
+    DecorationConfig decorationConfig,
+  });
 
   $FontsConfigCopyWith<$Res> get fonts;
   $ButtonWidgetConfigCopyWith<$Res> get button;
@@ -101,52 +104,55 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
     Object? statuses = null,
     Object? decorationConfig = null,
   }) {
-    return _then(_value.copyWith(
-      fonts: null == fonts
-          ? _value.fonts
-          : fonts // ignore: cast_nullable_to_non_nullable
-              as FontsConfig,
-      button: null == button
-          ? _value.button
-          : button // ignore: cast_nullable_to_non_nullable
-              as ButtonWidgetConfig,
-      group: freezed == group
-          ? _value.group
-          : group // ignore: cast_nullable_to_non_nullable
-              as GroupWidgetConfig?,
-      bar: null == bar
-          ? _value.bar
-          : bar // ignore: cast_nullable_to_non_nullable
-              as BarWidgetConfig,
-      imageAssets: null == imageAssets
-          ? _value.imageAssets
-          : imageAssets // ignore: cast_nullable_to_non_nullable
-              as ImageAssetsConfig,
-      input: null == input
-          ? _value.input
-          : input // ignore: cast_nullable_to_non_nullable
-              as InputWidgetConfig,
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as TextWidgetConfig,
-      dialog: null == dialog
-          ? _value.dialog
-          : dialog // ignore: cast_nullable_to_non_nullable
-              as DialogWidgetConfig,
-      actionPad: null == actionPad
-          ? _value.actionPad
-          : actionPad // ignore: cast_nullable_to_non_nullable
-              as ActionPadWidgetConfig,
-      statuses: null == statuses
-          ? _value.statuses
-          : statuses // ignore: cast_nullable_to_non_nullable
-              as StatusesWidgetConfig,
-      decorationConfig: null == decorationConfig
-          ? _value.decorationConfig
-          : decorationConfig // ignore: cast_nullable_to_non_nullable
-              as DecorationConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            fonts: null == fonts
+                ? _value.fonts
+                : fonts // ignore: cast_nullable_to_non_nullable
+                      as FontsConfig,
+            button: null == button
+                ? _value.button
+                : button // ignore: cast_nullable_to_non_nullable
+                      as ButtonWidgetConfig,
+            group: freezed == group
+                ? _value.group
+                : group // ignore: cast_nullable_to_non_nullable
+                      as GroupWidgetConfig?,
+            bar: null == bar
+                ? _value.bar
+                : bar // ignore: cast_nullable_to_non_nullable
+                      as BarWidgetConfig,
+            imageAssets: null == imageAssets
+                ? _value.imageAssets
+                : imageAssets // ignore: cast_nullable_to_non_nullable
+                      as ImageAssetsConfig,
+            input: null == input
+                ? _value.input
+                : input // ignore: cast_nullable_to_non_nullable
+                      as InputWidgetConfig,
+            text: null == text
+                ? _value.text
+                : text // ignore: cast_nullable_to_non_nullable
+                      as TextWidgetConfig,
+            dialog: null == dialog
+                ? _value.dialog
+                : dialog // ignore: cast_nullable_to_non_nullable
+                      as DialogWidgetConfig,
+            actionPad: null == actionPad
+                ? _value.actionPad
+                : actionPad // ignore: cast_nullable_to_non_nullable
+                      as ActionPadWidgetConfig,
+            statuses: null == statuses
+                ? _value.statuses
+                : statuses // ignore: cast_nullable_to_non_nullable
+                      as StatusesWidgetConfig,
+            decorationConfig: null == decorationConfig
+                ? _value.decorationConfig
+                : decorationConfig // ignore: cast_nullable_to_non_nullable
+                      as DecorationConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ThemeWidgetConfig
@@ -267,23 +273,25 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res, $Val extends ThemeWidgetConfig>
 /// @nodoc
 abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
     implements $ThemeWidgetConfigCopyWith<$Res> {
-  factory _$$ThemeWidgetConfigImplCopyWith(_$ThemeWidgetConfigImpl value,
-          $Res Function(_$ThemeWidgetConfigImpl) then) =
-      __$$ThemeWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$ThemeWidgetConfigImplCopyWith(
+    _$ThemeWidgetConfigImpl value,
+    $Res Function(_$ThemeWidgetConfigImpl) then,
+  ) = __$$ThemeWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {FontsConfig fonts,
-      ButtonWidgetConfig button,
-      GroupWidgetConfig? group,
-      BarWidgetConfig bar,
-      ImageAssetsConfig imageAssets,
-      InputWidgetConfig input,
-      TextWidgetConfig text,
-      DialogWidgetConfig dialog,
-      ActionPadWidgetConfig actionPad,
-      StatusesWidgetConfig statuses,
-      DecorationConfig decorationConfig});
+  $Res call({
+    FontsConfig fonts,
+    ButtonWidgetConfig button,
+    GroupWidgetConfig? group,
+    BarWidgetConfig bar,
+    ImageAssetsConfig imageAssets,
+    InputWidgetConfig input,
+    TextWidgetConfig text,
+    DialogWidgetConfig dialog,
+    ActionPadWidgetConfig actionPad,
+    StatusesWidgetConfig statuses,
+    DecorationConfig decorationConfig,
+  });
 
   @override
   $FontsConfigCopyWith<$Res> get fonts;
@@ -313,9 +321,10 @@ abstract class _$$ThemeWidgetConfigImplCopyWith<$Res>
 class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
     extends _$ThemeWidgetConfigCopyWithImpl<$Res, _$ThemeWidgetConfigImpl>
     implements _$$ThemeWidgetConfigImplCopyWith<$Res> {
-  __$$ThemeWidgetConfigImplCopyWithImpl(_$ThemeWidgetConfigImpl _value,
-      $Res Function(_$ThemeWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$ThemeWidgetConfigImplCopyWithImpl(
+    _$ThemeWidgetConfigImpl _value,
+    $Res Function(_$ThemeWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ThemeWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -334,52 +343,54 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
     Object? statuses = null,
     Object? decorationConfig = null,
   }) {
-    return _then(_$ThemeWidgetConfigImpl(
-      fonts: null == fonts
-          ? _value.fonts
-          : fonts // ignore: cast_nullable_to_non_nullable
-              as FontsConfig,
-      button: null == button
-          ? _value.button
-          : button // ignore: cast_nullable_to_non_nullable
-              as ButtonWidgetConfig,
-      group: freezed == group
-          ? _value.group
-          : group // ignore: cast_nullable_to_non_nullable
-              as GroupWidgetConfig?,
-      bar: null == bar
-          ? _value.bar
-          : bar // ignore: cast_nullable_to_non_nullable
-              as BarWidgetConfig,
-      imageAssets: null == imageAssets
-          ? _value.imageAssets
-          : imageAssets // ignore: cast_nullable_to_non_nullable
-              as ImageAssetsConfig,
-      input: null == input
-          ? _value.input
-          : input // ignore: cast_nullable_to_non_nullable
-              as InputWidgetConfig,
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as TextWidgetConfig,
-      dialog: null == dialog
-          ? _value.dialog
-          : dialog // ignore: cast_nullable_to_non_nullable
-              as DialogWidgetConfig,
-      actionPad: null == actionPad
-          ? _value.actionPad
-          : actionPad // ignore: cast_nullable_to_non_nullable
-              as ActionPadWidgetConfig,
-      statuses: null == statuses
-          ? _value.statuses
-          : statuses // ignore: cast_nullable_to_non_nullable
-              as StatusesWidgetConfig,
-      decorationConfig: null == decorationConfig
-          ? _value.decorationConfig
-          : decorationConfig // ignore: cast_nullable_to_non_nullable
-              as DecorationConfig,
-    ));
+    return _then(
+      _$ThemeWidgetConfigImpl(
+        fonts: null == fonts
+            ? _value.fonts
+            : fonts // ignore: cast_nullable_to_non_nullable
+                  as FontsConfig,
+        button: null == button
+            ? _value.button
+            : button // ignore: cast_nullable_to_non_nullable
+                  as ButtonWidgetConfig,
+        group: freezed == group
+            ? _value.group
+            : group // ignore: cast_nullable_to_non_nullable
+                  as GroupWidgetConfig?,
+        bar: null == bar
+            ? _value.bar
+            : bar // ignore: cast_nullable_to_non_nullable
+                  as BarWidgetConfig,
+        imageAssets: null == imageAssets
+            ? _value.imageAssets
+            : imageAssets // ignore: cast_nullable_to_non_nullable
+                  as ImageAssetsConfig,
+        input: null == input
+            ? _value.input
+            : input // ignore: cast_nullable_to_non_nullable
+                  as InputWidgetConfig,
+        text: null == text
+            ? _value.text
+            : text // ignore: cast_nullable_to_non_nullable
+                  as TextWidgetConfig,
+        dialog: null == dialog
+            ? _value.dialog
+            : dialog // ignore: cast_nullable_to_non_nullable
+                  as DialogWidgetConfig,
+        actionPad: null == actionPad
+            ? _value.actionPad
+            : actionPad // ignore: cast_nullable_to_non_nullable
+                  as ActionPadWidgetConfig,
+        statuses: null == statuses
+            ? _value.statuses
+            : statuses // ignore: cast_nullable_to_non_nullable
+                  as StatusesWidgetConfig,
+        decorationConfig: null == decorationConfig
+            ? _value.decorationConfig
+            : decorationConfig // ignore: cast_nullable_to_non_nullable
+                  as DecorationConfig,
+      ),
+    );
   }
 }
 
@@ -387,18 +398,19 @@ class __$$ThemeWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
-  const _$ThemeWidgetConfigImpl(
-      {this.fonts = const FontsConfig(),
-      this.button = const ButtonWidgetConfig(),
-      this.group = const GroupWidgetConfig(),
-      this.bar = const BarWidgetConfig(),
-      this.imageAssets = const ImageAssetsConfig(),
-      this.input = const InputWidgetConfig(),
-      this.text = const TextWidgetConfig(),
-      this.dialog = const DialogWidgetConfig(),
-      this.actionPad = const ActionPadWidgetConfig(),
-      this.statuses = const StatusesWidgetConfig(),
-      this.decorationConfig = const DecorationConfig()});
+  const _$ThemeWidgetConfigImpl({
+    this.fonts = const FontsConfig(),
+    this.button = const ButtonWidgetConfig(),
+    this.group = const GroupWidgetConfig(),
+    this.bar = const BarWidgetConfig(),
+    this.imageAssets = const ImageAssetsConfig(),
+    this.input = const InputWidgetConfig(),
+    this.text = const TextWidgetConfig(),
+    this.dialog = const DialogWidgetConfig(),
+    this.actionPad = const ActionPadWidgetConfig(),
+    this.statuses = const StatusesWidgetConfig(),
+    this.decorationConfig = const DecorationConfig(),
+  });
 
   factory _$ThemeWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemeWidgetConfigImplFromJson(json);
@@ -466,8 +478,20 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, fonts, button, group, bar,
-      imageAssets, input, text, dialog, actionPad, statuses, decorationConfig);
+  int get hashCode => Object.hash(
+    runtimeType,
+    fonts,
+    button,
+    group,
+    bar,
+    imageAssets,
+    input,
+    text,
+    dialog,
+    actionPad,
+    statuses,
+    decorationConfig,
+  );
 
   /// Create a copy of ThemeWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -476,29 +500,30 @@ class _$ThemeWidgetConfigImpl implements _ThemeWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$ThemeWidgetConfigImplCopyWith<_$ThemeWidgetConfigImpl> get copyWith =>
       __$$ThemeWidgetConfigImplCopyWithImpl<_$ThemeWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ThemeWidgetConfigImplToJson(
-      this,
-    );
+    return _$$ThemeWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _ThemeWidgetConfig implements ThemeWidgetConfig {
-  const factory _ThemeWidgetConfig(
-      {final FontsConfig fonts,
-      final ButtonWidgetConfig button,
-      final GroupWidgetConfig? group,
-      final BarWidgetConfig bar,
-      final ImageAssetsConfig imageAssets,
-      final InputWidgetConfig input,
-      final TextWidgetConfig text,
-      final DialogWidgetConfig dialog,
-      final ActionPadWidgetConfig actionPad,
-      final StatusesWidgetConfig statuses,
-      final DecorationConfig decorationConfig}) = _$ThemeWidgetConfigImpl;
+  const factory _ThemeWidgetConfig({
+    final FontsConfig fonts,
+    final ButtonWidgetConfig button,
+    final GroupWidgetConfig? group,
+    final BarWidgetConfig bar,
+    final ImageAssetsConfig imageAssets,
+    final InputWidgetConfig input,
+    final TextWidgetConfig text,
+    final DialogWidgetConfig dialog,
+    final ActionPadWidgetConfig actionPad,
+    final StatusesWidgetConfig statuses,
+    final DecorationConfig decorationConfig,
+  }) = _$ThemeWidgetConfigImpl;
 
   factory _ThemeWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ThemeWidgetConfigImpl.fromJson;
@@ -555,8 +580,9 @@ mixin _$FontsConfig {
 /// @nodoc
 abstract class $FontsConfigCopyWith<$Res> {
   factory $FontsConfigCopyWith(
-          FontsConfig value, $Res Function(FontsConfig) then) =
-      _$FontsConfigCopyWithImpl<$Res, FontsConfig>;
+    FontsConfig value,
+    $Res Function(FontsConfig) then,
+  ) = _$FontsConfigCopyWithImpl<$Res, FontsConfig>;
   @useResult
   $Res call({String? fontFamily});
 }
@@ -575,15 +601,16 @@ class _$FontsConfigCopyWithImpl<$Res, $Val extends FontsConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? fontFamily = freezed,
-  }) {
-    return _then(_value.copyWith(
-      fontFamily: freezed == fontFamily
-          ? _value.fontFamily
-          : fontFamily // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+  $Res call({Object? fontFamily = freezed}) {
+    return _then(
+      _value.copyWith(
+            fontFamily: freezed == fontFamily
+                ? _value.fontFamily
+                : fontFamily // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -591,8 +618,9 @@ class _$FontsConfigCopyWithImpl<$Res, $Val extends FontsConfig>
 abstract class _$$FontsConfigImplCopyWith<$Res>
     implements $FontsConfigCopyWith<$Res> {
   factory _$$FontsConfigImplCopyWith(
-          _$FontsConfigImpl value, $Res Function(_$FontsConfigImpl) then) =
-      __$$FontsConfigImplCopyWithImpl<$Res>;
+    _$FontsConfigImpl value,
+    $Res Function(_$FontsConfigImpl) then,
+  ) = __$$FontsConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? fontFamily});
@@ -603,22 +631,23 @@ class __$$FontsConfigImplCopyWithImpl<$Res>
     extends _$FontsConfigCopyWithImpl<$Res, _$FontsConfigImpl>
     implements _$$FontsConfigImplCopyWith<$Res> {
   __$$FontsConfigImplCopyWithImpl(
-      _$FontsConfigImpl _value, $Res Function(_$FontsConfigImpl) _then)
-      : super(_value, _then);
+    _$FontsConfigImpl _value,
+    $Res Function(_$FontsConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of FontsConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? fontFamily = freezed,
-  }) {
-    return _then(_$FontsConfigImpl(
-      fontFamily: freezed == fontFamily
-          ? _value.fontFamily
-          : fontFamily // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+  $Res call({Object? fontFamily = freezed}) {
+    return _then(
+      _$FontsConfigImpl(
+        fontFamily: freezed == fontFamily
+            ? _value.fontFamily
+            : fontFamily // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -662,9 +691,7 @@ class _$FontsConfigImpl implements _FontsConfig {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$FontsConfigImplToJson(
-      this,
-    );
+    return _$$FontsConfigImplToJson(this);
   }
 }
 
@@ -707,8 +734,9 @@ mixin _$ButtonWidgetConfig {
 /// @nodoc
 abstract class $ButtonWidgetConfigCopyWith<$Res> {
   factory $ButtonWidgetConfigCopyWith(
-          ButtonWidgetConfig value, $Res Function(ButtonWidgetConfig) then) =
-      _$ButtonWidgetConfigCopyWithImpl<$Res, ButtonWidgetConfig>;
+    ButtonWidgetConfig value,
+    $Res Function(ButtonWidgetConfig) then,
+  ) = _$ButtonWidgetConfigCopyWithImpl<$Res, ButtonWidgetConfig>;
   @useResult
   $Res call({ElevatedButtonWidgetConfig primaryElevatedButton});
 
@@ -729,15 +757,16 @@ class _$ButtonWidgetConfigCopyWithImpl<$Res, $Val extends ButtonWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? primaryElevatedButton = null,
-  }) {
-    return _then(_value.copyWith(
-      primaryElevatedButton: null == primaryElevatedButton
-          ? _value.primaryElevatedButton
-          : primaryElevatedButton // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-    ) as $Val);
+  $Res call({Object? primaryElevatedButton = null}) {
+    return _then(
+      _value.copyWith(
+            primaryElevatedButton: null == primaryElevatedButton
+                ? _value.primaryElevatedButton
+                : primaryElevatedButton // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ButtonWidgetConfig
@@ -746,18 +775,21 @@ class _$ButtonWidgetConfigCopyWithImpl<$Res, $Val extends ButtonWidgetConfig>
   @pragma('vm:prefer-inline')
   $ElevatedButtonWidgetConfigCopyWith<$Res> get primaryElevatedButton {
     return $ElevatedButtonWidgetConfigCopyWith<$Res>(
-        _value.primaryElevatedButton, (value) {
-      return _then(_value.copyWith(primaryElevatedButton: value) as $Val);
-    });
+      _value.primaryElevatedButton,
+      (value) {
+        return _then(_value.copyWith(primaryElevatedButton: value) as $Val);
+      },
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$ButtonWidgetConfigImplCopyWith<$Res>
     implements $ButtonWidgetConfigCopyWith<$Res> {
-  factory _$$ButtonWidgetConfigImplCopyWith(_$ButtonWidgetConfigImpl value,
-          $Res Function(_$ButtonWidgetConfigImpl) then) =
-      __$$ButtonWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$ButtonWidgetConfigImplCopyWith(
+    _$ButtonWidgetConfigImpl value,
+    $Res Function(_$ButtonWidgetConfigImpl) then,
+  ) = __$$ButtonWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({ElevatedButtonWidgetConfig primaryElevatedButton});
@@ -770,23 +802,24 @@ abstract class _$$ButtonWidgetConfigImplCopyWith<$Res>
 class __$$ButtonWidgetConfigImplCopyWithImpl<$Res>
     extends _$ButtonWidgetConfigCopyWithImpl<$Res, _$ButtonWidgetConfigImpl>
     implements _$$ButtonWidgetConfigImplCopyWith<$Res> {
-  __$$ButtonWidgetConfigImplCopyWithImpl(_$ButtonWidgetConfigImpl _value,
-      $Res Function(_$ButtonWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$ButtonWidgetConfigImplCopyWithImpl(
+    _$ButtonWidgetConfigImpl _value,
+    $Res Function(_$ButtonWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ButtonWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? primaryElevatedButton = null,
-  }) {
-    return _then(_$ButtonWidgetConfigImpl(
-      primaryElevatedButton: null == primaryElevatedButton
-          ? _value.primaryElevatedButton
-          : primaryElevatedButton // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-    ));
+  $Res call({Object? primaryElevatedButton = null}) {
+    return _then(
+      _$ButtonWidgetConfigImpl(
+        primaryElevatedButton: null == primaryElevatedButton
+            ? _value.primaryElevatedButton
+            : primaryElevatedButton // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -794,8 +827,9 @@ class __$$ButtonWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ButtonWidgetConfigImpl implements _ButtonWidgetConfig {
-  const _$ButtonWidgetConfigImpl(
-      {this.primaryElevatedButton = const ElevatedButtonWidgetConfig()});
+  const _$ButtonWidgetConfigImpl({
+    this.primaryElevatedButton = const ElevatedButtonWidgetConfig(),
+  });
 
   factory _$ButtonWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ButtonWidgetConfigImplFromJson(json);
@@ -829,20 +863,20 @@ class _$ButtonWidgetConfigImpl implements _ButtonWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$ButtonWidgetConfigImplCopyWith<_$ButtonWidgetConfigImpl> get copyWith =>
       __$$ButtonWidgetConfigImplCopyWithImpl<_$ButtonWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ButtonWidgetConfigImplToJson(
-      this,
-    );
+    return _$$ButtonWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _ButtonWidgetConfig implements ButtonWidgetConfig {
-  const factory _ButtonWidgetConfig(
-          {final ElevatedButtonWidgetConfig primaryElevatedButton}) =
-      _$ButtonWidgetConfigImpl;
+  const factory _ButtonWidgetConfig({
+    final ElevatedButtonWidgetConfig primaryElevatedButton,
+  }) = _$ButtonWidgetConfigImpl;
 
   factory _ButtonWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ButtonWidgetConfigImpl.fromJson;
@@ -859,7 +893,8 @@ abstract class _ButtonWidgetConfig implements ButtonWidgetConfig {
 }
 
 ElevatedButtonWidgetConfig _$ElevatedButtonWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _ElevatedButtonWidgetConfig.fromJson(json);
 }
 
@@ -880,29 +915,36 @@ mixin _$ElevatedButtonWidgetConfig {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $ElevatedButtonWidgetConfigCopyWith<ElevatedButtonWidgetConfig>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ElevatedButtonWidgetConfigCopyWith<$Res> {
-  factory $ElevatedButtonWidgetConfigCopyWith(ElevatedButtonWidgetConfig value,
-          $Res Function(ElevatedButtonWidgetConfig) then) =
-      _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
-          ElevatedButtonWidgetConfig>;
+  factory $ElevatedButtonWidgetConfigCopyWith(
+    ElevatedButtonWidgetConfig value,
+    $Res Function(ElevatedButtonWidgetConfig) then,
+  ) =
+      _$ElevatedButtonWidgetConfigCopyWithImpl<
+        $Res,
+        ElevatedButtonWidgetConfig
+      >;
   @useResult
-  $Res call(
-      {String? backgroundColor,
-      String? foregroundColor,
-      String? textColor,
-      String? iconColor,
-      String? disabledIconColor,
-      String? disabledBackgroundColor,
-      String? disabledForegroundColor});
+  $Res call({
+    String? backgroundColor,
+    String? foregroundColor,
+    String? textColor,
+    String? iconColor,
+    String? disabledIconColor,
+    String? disabledBackgroundColor,
+    String? disabledForegroundColor,
+  });
 }
 
 /// @nodoc
-class _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
-        $Val extends ElevatedButtonWidgetConfig>
+class _$ElevatedButtonWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends ElevatedButtonWidgetConfig
+>
     implements $ElevatedButtonWidgetConfigCopyWith<$Res> {
   _$ElevatedButtonWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -924,36 +966,39 @@ class _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
     Object? disabledBackgroundColor = freezed,
     Object? disabledForegroundColor = freezed,
   }) {
-    return _then(_value.copyWith(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      foregroundColor: freezed == foregroundColor
-          ? _value.foregroundColor
-          : foregroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      textColor: freezed == textColor
-          ? _value.textColor
-          : textColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      iconColor: freezed == iconColor
-          ? _value.iconColor
-          : iconColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      disabledIconColor: freezed == disabledIconColor
-          ? _value.disabledIconColor
-          : disabledIconColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      disabledBackgroundColor: freezed == disabledBackgroundColor
-          ? _value.disabledBackgroundColor
-          : disabledBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      disabledForegroundColor: freezed == disabledForegroundColor
-          ? _value.disabledForegroundColor
-          : disabledForegroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            backgroundColor: freezed == backgroundColor
+                ? _value.backgroundColor
+                : backgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            foregroundColor: freezed == foregroundColor
+                ? _value.foregroundColor
+                : foregroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            textColor: freezed == textColor
+                ? _value.textColor
+                : textColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            iconColor: freezed == iconColor
+                ? _value.iconColor
+                : iconColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            disabledIconColor: freezed == disabledIconColor
+                ? _value.disabledIconColor
+                : disabledIconColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            disabledBackgroundColor: freezed == disabledBackgroundColor
+                ? _value.disabledBackgroundColor
+                : disabledBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            disabledForegroundColor: freezed == disabledForegroundColor
+                ? _value.disabledForegroundColor
+                : disabledForegroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -961,30 +1006,34 @@ class _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
 abstract class _$$ElevatedButtonWidgetConfigImplCopyWith<$Res>
     implements $ElevatedButtonWidgetConfigCopyWith<$Res> {
   factory _$$ElevatedButtonWidgetConfigImplCopyWith(
-          _$ElevatedButtonWidgetConfigImpl value,
-          $Res Function(_$ElevatedButtonWidgetConfigImpl) then) =
-      __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>;
+    _$ElevatedButtonWidgetConfigImpl value,
+    $Res Function(_$ElevatedButtonWidgetConfigImpl) then,
+  ) = __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? backgroundColor,
-      String? foregroundColor,
-      String? textColor,
-      String? iconColor,
-      String? disabledIconColor,
-      String? disabledBackgroundColor,
-      String? disabledForegroundColor});
+  $Res call({
+    String? backgroundColor,
+    String? foregroundColor,
+    String? textColor,
+    String? iconColor,
+    String? disabledIconColor,
+    String? disabledBackgroundColor,
+    String? disabledForegroundColor,
+  });
 }
 
 /// @nodoc
 class __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>
-    extends _$ElevatedButtonWidgetConfigCopyWithImpl<$Res,
-        _$ElevatedButtonWidgetConfigImpl>
+    extends
+        _$ElevatedButtonWidgetConfigCopyWithImpl<
+          $Res,
+          _$ElevatedButtonWidgetConfigImpl
+        >
     implements _$$ElevatedButtonWidgetConfigImplCopyWith<$Res> {
   __$$ElevatedButtonWidgetConfigImplCopyWithImpl(
-      _$ElevatedButtonWidgetConfigImpl _value,
-      $Res Function(_$ElevatedButtonWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$ElevatedButtonWidgetConfigImpl _value,
+    $Res Function(_$ElevatedButtonWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ElevatedButtonWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -999,36 +1048,38 @@ class __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>
     Object? disabledBackgroundColor = freezed,
     Object? disabledForegroundColor = freezed,
   }) {
-    return _then(_$ElevatedButtonWidgetConfigImpl(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      foregroundColor: freezed == foregroundColor
-          ? _value.foregroundColor
-          : foregroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      textColor: freezed == textColor
-          ? _value.textColor
-          : textColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      iconColor: freezed == iconColor
-          ? _value.iconColor
-          : iconColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      disabledIconColor: freezed == disabledIconColor
-          ? _value.disabledIconColor
-          : disabledIconColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      disabledBackgroundColor: freezed == disabledBackgroundColor
-          ? _value.disabledBackgroundColor
-          : disabledBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      disabledForegroundColor: freezed == disabledForegroundColor
-          ? _value.disabledForegroundColor
-          : disabledForegroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ElevatedButtonWidgetConfigImpl(
+        backgroundColor: freezed == backgroundColor
+            ? _value.backgroundColor
+            : backgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        foregroundColor: freezed == foregroundColor
+            ? _value.foregroundColor
+            : foregroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        textColor: freezed == textColor
+            ? _value.textColor
+            : textColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        iconColor: freezed == iconColor
+            ? _value.iconColor
+            : iconColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        disabledIconColor: freezed == disabledIconColor
+            ? _value.disabledIconColor
+            : disabledIconColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        disabledBackgroundColor: freezed == disabledBackgroundColor
+            ? _value.disabledBackgroundColor
+            : disabledBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        disabledForegroundColor: freezed == disabledForegroundColor
+            ? _value.disabledForegroundColor
+            : disabledForegroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -1036,18 +1087,19 @@ class __$$ElevatedButtonWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
-  const _$ElevatedButtonWidgetConfigImpl(
-      {this.backgroundColor,
-      this.foregroundColor,
-      this.textColor,
-      this.iconColor,
-      this.disabledIconColor,
-      this.disabledBackgroundColor,
-      this.disabledForegroundColor});
+  const _$ElevatedButtonWidgetConfigImpl({
+    this.backgroundColor,
+    this.foregroundColor,
+    this.textColor,
+    this.iconColor,
+    this.disabledIconColor,
+    this.disabledBackgroundColor,
+    this.disabledForegroundColor,
+  });
 
   factory _$ElevatedButtonWidgetConfigImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$ElevatedButtonWidgetConfigImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$ElevatedButtonWidgetConfigImplFromJson(json);
 
   @override
   final String? backgroundColor;
@@ -1085,24 +1137,29 @@ class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
             (identical(other.disabledIconColor, disabledIconColor) ||
                 other.disabledIconColor == disabledIconColor) &&
             (identical(
-                    other.disabledBackgroundColor, disabledBackgroundColor) ||
+                  other.disabledBackgroundColor,
+                  disabledBackgroundColor,
+                ) ||
                 other.disabledBackgroundColor == disabledBackgroundColor) &&
             (identical(
-                    other.disabledForegroundColor, disabledForegroundColor) ||
+                  other.disabledForegroundColor,
+                  disabledForegroundColor,
+                ) ||
                 other.disabledForegroundColor == disabledForegroundColor));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      backgroundColor,
-      foregroundColor,
-      textColor,
-      iconColor,
-      disabledIconColor,
-      disabledBackgroundColor,
-      disabledForegroundColor);
+    runtimeType,
+    backgroundColor,
+    foregroundColor,
+    textColor,
+    iconColor,
+    disabledIconColor,
+    disabledBackgroundColor,
+    disabledForegroundColor,
+  );
 
   /// Create a copy of ElevatedButtonWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1110,28 +1167,28 @@ class _$ElevatedButtonWidgetConfigImpl implements _ElevatedButtonWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$ElevatedButtonWidgetConfigImplCopyWith<_$ElevatedButtonWidgetConfigImpl>
-      get copyWith => __$$ElevatedButtonWidgetConfigImplCopyWithImpl<
-          _$ElevatedButtonWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$ElevatedButtonWidgetConfigImplCopyWithImpl<
+        _$ElevatedButtonWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ElevatedButtonWidgetConfigImplToJson(
-      this,
-    );
+    return _$$ElevatedButtonWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _ElevatedButtonWidgetConfig
     implements ElevatedButtonWidgetConfig {
-  const factory _ElevatedButtonWidgetConfig(
-          {final String? backgroundColor,
-          final String? foregroundColor,
-          final String? textColor,
-          final String? iconColor,
-          final String? disabledIconColor,
-          final String? disabledBackgroundColor,
-          final String? disabledForegroundColor}) =
-      _$ElevatedButtonWidgetConfigImpl;
+  const factory _ElevatedButtonWidgetConfig({
+    final String? backgroundColor,
+    final String? foregroundColor,
+    final String? textColor,
+    final String? iconColor,
+    final String? disabledIconColor,
+    final String? disabledBackgroundColor,
+    final String? disabledForegroundColor,
+  }) = _$ElevatedButtonWidgetConfigImpl;
 
   factory _ElevatedButtonWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ElevatedButtonWidgetConfigImpl.fromJson;
@@ -1156,7 +1213,7 @@ abstract class _ElevatedButtonWidgetConfig
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ElevatedButtonWidgetConfigImplCopyWith<_$ElevatedButtonWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 GroupWidgetConfig _$GroupWidgetConfigFromJson(Map<String, dynamic> json) {
@@ -1167,7 +1224,7 @@ GroupWidgetConfig _$GroupWidgetConfigFromJson(Map<String, dynamic> json) {
 mixin _$GroupWidgetConfig {
   GroupTitleListTileWidgetConfig get groupTitleListTile =>
       throw _privateConstructorUsedError; // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-// ignore: deprecated_member_use_from_same_package
+  // ignore: deprecated_member_use_from_same_package
   CallActionsWidgetConfig get callActions => throw _privateConstructorUsedError;
 
   /// Serializes this GroupWidgetConfig to a JSON map.
@@ -1183,12 +1240,14 @@ mixin _$GroupWidgetConfig {
 /// @nodoc
 abstract class $GroupWidgetConfigCopyWith<$Res> {
   factory $GroupWidgetConfigCopyWith(
-          GroupWidgetConfig value, $Res Function(GroupWidgetConfig) then) =
-      _$GroupWidgetConfigCopyWithImpl<$Res, GroupWidgetConfig>;
+    GroupWidgetConfig value,
+    $Res Function(GroupWidgetConfig) then,
+  ) = _$GroupWidgetConfigCopyWithImpl<$Res, GroupWidgetConfig>;
   @useResult
-  $Res call(
-      {GroupTitleListTileWidgetConfig groupTitleListTile,
-      CallActionsWidgetConfig callActions});
+  $Res call({
+    GroupTitleListTileWidgetConfig groupTitleListTile,
+    CallActionsWidgetConfig callActions,
+  });
 
   $GroupTitleListTileWidgetConfigCopyWith<$Res> get groupTitleListTile;
   $CallActionsWidgetConfigCopyWith<$Res> get callActions;
@@ -1208,20 +1267,20 @@ class _$GroupWidgetConfigCopyWithImpl<$Res, $Val extends GroupWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? groupTitleListTile = null,
-    Object? callActions = null,
-  }) {
-    return _then(_value.copyWith(
-      groupTitleListTile: null == groupTitleListTile
-          ? _value.groupTitleListTile
-          : groupTitleListTile // ignore: cast_nullable_to_non_nullable
-              as GroupTitleListTileWidgetConfig,
-      callActions: null == callActions
-          ? _value.callActions
-          : callActions // ignore: cast_nullable_to_non_nullable
-              as CallActionsWidgetConfig,
-    ) as $Val);
+  $Res call({Object? groupTitleListTile = null, Object? callActions = null}) {
+    return _then(
+      _value.copyWith(
+            groupTitleListTile: null == groupTitleListTile
+                ? _value.groupTitleListTile
+                : groupTitleListTile // ignore: cast_nullable_to_non_nullable
+                      as GroupTitleListTileWidgetConfig,
+            callActions: null == callActions
+                ? _value.callActions
+                : callActions // ignore: cast_nullable_to_non_nullable
+                      as CallActionsWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of GroupWidgetConfig
@@ -1230,9 +1289,11 @@ class _$GroupWidgetConfigCopyWithImpl<$Res, $Val extends GroupWidgetConfig>
   @pragma('vm:prefer-inline')
   $GroupTitleListTileWidgetConfigCopyWith<$Res> get groupTitleListTile {
     return $GroupTitleListTileWidgetConfigCopyWith<$Res>(
-        _value.groupTitleListTile, (value) {
-      return _then(_value.copyWith(groupTitleListTile: value) as $Val);
-    });
+      _value.groupTitleListTile,
+      (value) {
+        return _then(_value.copyWith(groupTitleListTile: value) as $Val);
+      },
+    );
   }
 
   /// Create a copy of GroupWidgetConfig
@@ -1249,14 +1310,16 @@ class _$GroupWidgetConfigCopyWithImpl<$Res, $Val extends GroupWidgetConfig>
 /// @nodoc
 abstract class _$$GroupWidgetConfigImplCopyWith<$Res>
     implements $GroupWidgetConfigCopyWith<$Res> {
-  factory _$$GroupWidgetConfigImplCopyWith(_$GroupWidgetConfigImpl value,
-          $Res Function(_$GroupWidgetConfigImpl) then) =
-      __$$GroupWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$GroupWidgetConfigImplCopyWith(
+    _$GroupWidgetConfigImpl value,
+    $Res Function(_$GroupWidgetConfigImpl) then,
+  ) = __$$GroupWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {GroupTitleListTileWidgetConfig groupTitleListTile,
-      CallActionsWidgetConfig callActions});
+  $Res call({
+    GroupTitleListTileWidgetConfig groupTitleListTile,
+    CallActionsWidgetConfig callActions,
+  });
 
   @override
   $GroupTitleListTileWidgetConfigCopyWith<$Res> get groupTitleListTile;
@@ -1268,28 +1331,28 @@ abstract class _$$GroupWidgetConfigImplCopyWith<$Res>
 class __$$GroupWidgetConfigImplCopyWithImpl<$Res>
     extends _$GroupWidgetConfigCopyWithImpl<$Res, _$GroupWidgetConfigImpl>
     implements _$$GroupWidgetConfigImplCopyWith<$Res> {
-  __$$GroupWidgetConfigImplCopyWithImpl(_$GroupWidgetConfigImpl _value,
-      $Res Function(_$GroupWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$GroupWidgetConfigImplCopyWithImpl(
+    _$GroupWidgetConfigImpl _value,
+    $Res Function(_$GroupWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of GroupWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? groupTitleListTile = null,
-    Object? callActions = null,
-  }) {
-    return _then(_$GroupWidgetConfigImpl(
-      groupTitleListTile: null == groupTitleListTile
-          ? _value.groupTitleListTile
-          : groupTitleListTile // ignore: cast_nullable_to_non_nullable
-              as GroupTitleListTileWidgetConfig,
-      callActions: null == callActions
-          ? _value.callActions
-          : callActions // ignore: cast_nullable_to_non_nullable
-              as CallActionsWidgetConfig,
-    ));
+  $Res call({Object? groupTitleListTile = null, Object? callActions = null}) {
+    return _then(
+      _$GroupWidgetConfigImpl(
+        groupTitleListTile: null == groupTitleListTile
+            ? _value.groupTitleListTile
+            : groupTitleListTile // ignore: cast_nullable_to_non_nullable
+                  as GroupTitleListTileWidgetConfig,
+        callActions: null == callActions
+            ? _value.callActions
+            : callActions // ignore: cast_nullable_to_non_nullable
+                  as CallActionsWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -1297,9 +1360,10 @@ class __$$GroupWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$GroupWidgetConfigImpl implements _GroupWidgetConfig {
-  const _$GroupWidgetConfigImpl(
-      {this.groupTitleListTile = const GroupTitleListTileWidgetConfig(),
-      this.callActions = const CallActionsWidgetConfig()});
+  const _$GroupWidgetConfigImpl({
+    this.groupTitleListTile = const GroupTitleListTileWidgetConfig(),
+    this.callActions = const CallActionsWidgetConfig(),
+  });
 
   factory _$GroupWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$GroupWidgetConfigImplFromJson(json);
@@ -1307,8 +1371,8 @@ class _$GroupWidgetConfigImpl implements _GroupWidgetConfig {
   @override
   @JsonKey()
   final GroupTitleListTileWidgetConfig groupTitleListTile;
-// TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-// ignore: deprecated_member_use_from_same_package
+  // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
+  // ignore: deprecated_member_use_from_same_package
   @override
   @JsonKey()
   final CallActionsWidgetConfig callActions;
@@ -1340,28 +1404,28 @@ class _$GroupWidgetConfigImpl implements _GroupWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$GroupWidgetConfigImplCopyWith<_$GroupWidgetConfigImpl> get copyWith =>
       __$$GroupWidgetConfigImplCopyWithImpl<_$GroupWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GroupWidgetConfigImplToJson(
-      this,
-    );
+    return _$$GroupWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _GroupWidgetConfig implements GroupWidgetConfig {
-  const factory _GroupWidgetConfig(
-      {final GroupTitleListTileWidgetConfig groupTitleListTile,
-      final CallActionsWidgetConfig callActions}) = _$GroupWidgetConfigImpl;
+  const factory _GroupWidgetConfig({
+    final GroupTitleListTileWidgetConfig groupTitleListTile,
+    final CallActionsWidgetConfig callActions,
+  }) = _$GroupWidgetConfigImpl;
 
   factory _GroupWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$GroupWidgetConfigImpl.fromJson;
 
   @override
-  GroupTitleListTileWidgetConfig
-      get groupTitleListTile; // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-// ignore: deprecated_member_use_from_same_package
+  GroupTitleListTileWidgetConfig get groupTitleListTile; // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
+  // ignore: deprecated_member_use_from_same_package
   @override
   CallActionsWidgetConfig get callActions;
 
@@ -1396,12 +1460,14 @@ mixin _$BarWidgetConfig {
 /// @nodoc
 abstract class $BarWidgetConfigCopyWith<$Res> {
   factory $BarWidgetConfigCopyWith(
-          BarWidgetConfig value, $Res Function(BarWidgetConfig) then) =
-      _$BarWidgetConfigCopyWithImpl<$Res, BarWidgetConfig>;
+    BarWidgetConfig value,
+    $Res Function(BarWidgetConfig) then,
+  ) = _$BarWidgetConfigCopyWithImpl<$Res, BarWidgetConfig>;
   @useResult
-  $Res call(
-      {BottomNavigationBarWidgetConfig bottomNavigationBar,
-      ExtTabBarWidgetConfig extTabBar});
+  $Res call({
+    BottomNavigationBarWidgetConfig bottomNavigationBar,
+    ExtTabBarWidgetConfig extTabBar,
+  });
 
   $BottomNavigationBarWidgetConfigCopyWith<$Res> get bottomNavigationBar;
   $ExtTabBarWidgetConfigCopyWith<$Res> get extTabBar;
@@ -1421,20 +1487,20 @@ class _$BarWidgetConfigCopyWithImpl<$Res, $Val extends BarWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? bottomNavigationBar = null,
-    Object? extTabBar = null,
-  }) {
-    return _then(_value.copyWith(
-      bottomNavigationBar: null == bottomNavigationBar
-          ? _value.bottomNavigationBar
-          : bottomNavigationBar // ignore: cast_nullable_to_non_nullable
-              as BottomNavigationBarWidgetConfig,
-      extTabBar: null == extTabBar
-          ? _value.extTabBar
-          : extTabBar // ignore: cast_nullable_to_non_nullable
-              as ExtTabBarWidgetConfig,
-    ) as $Val);
+  $Res call({Object? bottomNavigationBar = null, Object? extTabBar = null}) {
+    return _then(
+      _value.copyWith(
+            bottomNavigationBar: null == bottomNavigationBar
+                ? _value.bottomNavigationBar
+                : bottomNavigationBar // ignore: cast_nullable_to_non_nullable
+                      as BottomNavigationBarWidgetConfig,
+            extTabBar: null == extTabBar
+                ? _value.extTabBar
+                : extTabBar // ignore: cast_nullable_to_non_nullable
+                      as ExtTabBarWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of BarWidgetConfig
@@ -1443,9 +1509,11 @@ class _$BarWidgetConfigCopyWithImpl<$Res, $Val extends BarWidgetConfig>
   @pragma('vm:prefer-inline')
   $BottomNavigationBarWidgetConfigCopyWith<$Res> get bottomNavigationBar {
     return $BottomNavigationBarWidgetConfigCopyWith<$Res>(
-        _value.bottomNavigationBar, (value) {
-      return _then(_value.copyWith(bottomNavigationBar: value) as $Val);
-    });
+      _value.bottomNavigationBar,
+      (value) {
+        return _then(_value.copyWith(bottomNavigationBar: value) as $Val);
+      },
+    );
   }
 
   /// Create a copy of BarWidgetConfig
@@ -1462,14 +1530,16 @@ class _$BarWidgetConfigCopyWithImpl<$Res, $Val extends BarWidgetConfig>
 /// @nodoc
 abstract class _$$BarWidgetConfigImplCopyWith<$Res>
     implements $BarWidgetConfigCopyWith<$Res> {
-  factory _$$BarWidgetConfigImplCopyWith(_$BarWidgetConfigImpl value,
-          $Res Function(_$BarWidgetConfigImpl) then) =
-      __$$BarWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$BarWidgetConfigImplCopyWith(
+    _$BarWidgetConfigImpl value,
+    $Res Function(_$BarWidgetConfigImpl) then,
+  ) = __$$BarWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {BottomNavigationBarWidgetConfig bottomNavigationBar,
-      ExtTabBarWidgetConfig extTabBar});
+  $Res call({
+    BottomNavigationBarWidgetConfig bottomNavigationBar,
+    ExtTabBarWidgetConfig extTabBar,
+  });
 
   @override
   $BottomNavigationBarWidgetConfigCopyWith<$Res> get bottomNavigationBar;
@@ -1482,27 +1552,27 @@ class __$$BarWidgetConfigImplCopyWithImpl<$Res>
     extends _$BarWidgetConfigCopyWithImpl<$Res, _$BarWidgetConfigImpl>
     implements _$$BarWidgetConfigImplCopyWith<$Res> {
   __$$BarWidgetConfigImplCopyWithImpl(
-      _$BarWidgetConfigImpl _value, $Res Function(_$BarWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$BarWidgetConfigImpl _value,
+    $Res Function(_$BarWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BarWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? bottomNavigationBar = null,
-    Object? extTabBar = null,
-  }) {
-    return _then(_$BarWidgetConfigImpl(
-      bottomNavigationBar: null == bottomNavigationBar
-          ? _value.bottomNavigationBar
-          : bottomNavigationBar // ignore: cast_nullable_to_non_nullable
-              as BottomNavigationBarWidgetConfig,
-      extTabBar: null == extTabBar
-          ? _value.extTabBar
-          : extTabBar // ignore: cast_nullable_to_non_nullable
-              as ExtTabBarWidgetConfig,
-    ));
+  $Res call({Object? bottomNavigationBar = null, Object? extTabBar = null}) {
+    return _then(
+      _$BarWidgetConfigImpl(
+        bottomNavigationBar: null == bottomNavigationBar
+            ? _value.bottomNavigationBar
+            : bottomNavigationBar // ignore: cast_nullable_to_non_nullable
+                  as BottomNavigationBarWidgetConfig,
+        extTabBar: null == extTabBar
+            ? _value.extTabBar
+            : extTabBar // ignore: cast_nullable_to_non_nullable
+                  as ExtTabBarWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -1510,9 +1580,10 @@ class __$$BarWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$BarWidgetConfigImpl implements _BarWidgetConfig {
-  const _$BarWidgetConfigImpl(
-      {this.bottomNavigationBar = const BottomNavigationBarWidgetConfig(),
-      this.extTabBar = const ExtTabBarWidgetConfig()});
+  const _$BarWidgetConfigImpl({
+    this.bottomNavigationBar = const BottomNavigationBarWidgetConfig(),
+    this.extTabBar = const ExtTabBarWidgetConfig(),
+  });
 
   factory _$BarWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$BarWidgetConfigImplFromJson(json);
@@ -1551,20 +1622,21 @@ class _$BarWidgetConfigImpl implements _BarWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$BarWidgetConfigImplCopyWith<_$BarWidgetConfigImpl> get copyWith =>
       __$$BarWidgetConfigImplCopyWithImpl<_$BarWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BarWidgetConfigImplToJson(
-      this,
-    );
+    return _$$BarWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _BarWidgetConfig implements BarWidgetConfig {
-  const factory _BarWidgetConfig(
-      {final BottomNavigationBarWidgetConfig bottomNavigationBar,
-      final ExtTabBarWidgetConfig extTabBar}) = _$BarWidgetConfigImpl;
+  const factory _BarWidgetConfig({
+    final BottomNavigationBarWidgetConfig bottomNavigationBar,
+    final ExtTabBarWidgetConfig extTabBar,
+  }) = _$BarWidgetConfigImpl;
 
   factory _BarWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$BarWidgetConfigImpl.fromJson;
@@ -1583,7 +1655,8 @@ abstract class _BarWidgetConfig implements BarWidgetConfig {
 }
 
 BottomNavigationBarWidgetConfig _$BottomNavigationBarWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _BottomNavigationBarWidgetConfig.fromJson(json);
 }
 
@@ -1600,26 +1673,32 @@ mixin _$BottomNavigationBarWidgetConfig {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $BottomNavigationBarWidgetConfigCopyWith<BottomNavigationBarWidgetConfig>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $BottomNavigationBarWidgetConfigCopyWith<$Res> {
   factory $BottomNavigationBarWidgetConfigCopyWith(
-          BottomNavigationBarWidgetConfig value,
-          $Res Function(BottomNavigationBarWidgetConfig) then) =
-      _$BottomNavigationBarWidgetConfigCopyWithImpl<$Res,
-          BottomNavigationBarWidgetConfig>;
+    BottomNavigationBarWidgetConfig value,
+    $Res Function(BottomNavigationBarWidgetConfig) then,
+  ) =
+      _$BottomNavigationBarWidgetConfigCopyWithImpl<
+        $Res,
+        BottomNavigationBarWidgetConfig
+      >;
   @useResult
-  $Res call(
-      {String? backgroundColor,
-      String? selectedItemColor,
-      String? unSelectedItemColor});
+  $Res call({
+    String? backgroundColor,
+    String? selectedItemColor,
+    String? unSelectedItemColor,
+  });
 }
 
 /// @nodoc
-class _$BottomNavigationBarWidgetConfigCopyWithImpl<$Res,
-        $Val extends BottomNavigationBarWidgetConfig>
+class _$BottomNavigationBarWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends BottomNavigationBarWidgetConfig
+>
     implements $BottomNavigationBarWidgetConfigCopyWith<$Res> {
   _$BottomNavigationBarWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -1637,20 +1716,23 @@ class _$BottomNavigationBarWidgetConfigCopyWithImpl<$Res,
     Object? selectedItemColor = freezed,
     Object? unSelectedItemColor = freezed,
   }) {
-    return _then(_value.copyWith(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectedItemColor: freezed == selectedItemColor
-          ? _value.selectedItemColor
-          : selectedItemColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      unSelectedItemColor: freezed == unSelectedItemColor
-          ? _value.unSelectedItemColor
-          : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            backgroundColor: freezed == backgroundColor
+                ? _value.backgroundColor
+                : backgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            selectedItemColor: freezed == selectedItemColor
+                ? _value.selectedItemColor
+                : selectedItemColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            unSelectedItemColor: freezed == unSelectedItemColor
+                ? _value.unSelectedItemColor
+                : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -1658,26 +1740,30 @@ class _$BottomNavigationBarWidgetConfigCopyWithImpl<$Res,
 abstract class _$$BottomNavigationBarWidgetConfigImplCopyWith<$Res>
     implements $BottomNavigationBarWidgetConfigCopyWith<$Res> {
   factory _$$BottomNavigationBarWidgetConfigImplCopyWith(
-          _$BottomNavigationBarWidgetConfigImpl value,
-          $Res Function(_$BottomNavigationBarWidgetConfigImpl) then) =
-      __$$BottomNavigationBarWidgetConfigImplCopyWithImpl<$Res>;
+    _$BottomNavigationBarWidgetConfigImpl value,
+    $Res Function(_$BottomNavigationBarWidgetConfigImpl) then,
+  ) = __$$BottomNavigationBarWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? backgroundColor,
-      String? selectedItemColor,
-      String? unSelectedItemColor});
+  $Res call({
+    String? backgroundColor,
+    String? selectedItemColor,
+    String? unSelectedItemColor,
+  });
 }
 
 /// @nodoc
 class __$$BottomNavigationBarWidgetConfigImplCopyWithImpl<$Res>
-    extends _$BottomNavigationBarWidgetConfigCopyWithImpl<$Res,
-        _$BottomNavigationBarWidgetConfigImpl>
+    extends
+        _$BottomNavigationBarWidgetConfigCopyWithImpl<
+          $Res,
+          _$BottomNavigationBarWidgetConfigImpl
+        >
     implements _$$BottomNavigationBarWidgetConfigImplCopyWith<$Res> {
   __$$BottomNavigationBarWidgetConfigImplCopyWithImpl(
-      _$BottomNavigationBarWidgetConfigImpl _value,
-      $Res Function(_$BottomNavigationBarWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$BottomNavigationBarWidgetConfigImpl _value,
+    $Res Function(_$BottomNavigationBarWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BottomNavigationBarWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1688,20 +1774,22 @@ class __$$BottomNavigationBarWidgetConfigImplCopyWithImpl<$Res>
     Object? selectedItemColor = freezed,
     Object? unSelectedItemColor = freezed,
   }) {
-    return _then(_$BottomNavigationBarWidgetConfigImpl(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectedItemColor: freezed == selectedItemColor
-          ? _value.selectedItemColor
-          : selectedItemColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      unSelectedItemColor: freezed == unSelectedItemColor
-          ? _value.unSelectedItemColor
-          : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$BottomNavigationBarWidgetConfigImpl(
+        backgroundColor: freezed == backgroundColor
+            ? _value.backgroundColor
+            : backgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        selectedItemColor: freezed == selectedItemColor
+            ? _value.selectedItemColor
+            : selectedItemColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        unSelectedItemColor: freezed == unSelectedItemColor
+            ? _value.unSelectedItemColor
+            : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -1710,12 +1798,15 @@ class __$$BottomNavigationBarWidgetConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$BottomNavigationBarWidgetConfigImpl
     implements _BottomNavigationBarWidgetConfig {
-  const _$BottomNavigationBarWidgetConfigImpl(
-      {this.backgroundColor, this.selectedItemColor, this.unSelectedItemColor});
+  const _$BottomNavigationBarWidgetConfigImpl({
+    this.backgroundColor,
+    this.selectedItemColor,
+    this.unSelectedItemColor,
+  });
 
   factory _$BottomNavigationBarWidgetConfigImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$BottomNavigationBarWidgetConfigImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$BottomNavigationBarWidgetConfigImplFromJson(json);
 
   @override
   final String? backgroundColor;
@@ -1745,7 +1836,11 @@ class _$BottomNavigationBarWidgetConfigImpl
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, backgroundColor, selectedItemColor, unSelectedItemColor);
+    runtimeType,
+    backgroundColor,
+    selectedItemColor,
+    unSelectedItemColor,
+  );
 
   /// Create a copy of BottomNavigationBarWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1753,25 +1848,26 @@ class _$BottomNavigationBarWidgetConfigImpl
   @override
   @pragma('vm:prefer-inline')
   _$$BottomNavigationBarWidgetConfigImplCopyWith<
-          _$BottomNavigationBarWidgetConfigImpl>
-      get copyWith => __$$BottomNavigationBarWidgetConfigImplCopyWithImpl<
-          _$BottomNavigationBarWidgetConfigImpl>(this, _$identity);
+    _$BottomNavigationBarWidgetConfigImpl
+  >
+  get copyWith =>
+      __$$BottomNavigationBarWidgetConfigImplCopyWithImpl<
+        _$BottomNavigationBarWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BottomNavigationBarWidgetConfigImplToJson(
-      this,
-    );
+    return _$$BottomNavigationBarWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _BottomNavigationBarWidgetConfig
     implements BottomNavigationBarWidgetConfig {
-  const factory _BottomNavigationBarWidgetConfig(
-          {final String? backgroundColor,
-          final String? selectedItemColor,
-          final String? unSelectedItemColor}) =
-      _$BottomNavigationBarWidgetConfigImpl;
+  const factory _BottomNavigationBarWidgetConfig({
+    final String? backgroundColor,
+    final String? selectedItemColor,
+    final String? unSelectedItemColor,
+  }) = _$BottomNavigationBarWidgetConfigImpl;
 
   factory _BottomNavigationBarWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$BottomNavigationBarWidgetConfigImpl.fromJson;
@@ -1788,12 +1884,14 @@ abstract class _BottomNavigationBarWidgetConfig
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BottomNavigationBarWidgetConfigImplCopyWith<
-          _$BottomNavigationBarWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$BottomNavigationBarWidgetConfigImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 ExtTabBarWidgetConfig _$ExtTabBarWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _ExtTabBarWidgetConfig.fromJson(json);
 }
 
@@ -1816,20 +1914,24 @@ mixin _$ExtTabBarWidgetConfig {
 
 /// @nodoc
 abstract class $ExtTabBarWidgetConfigCopyWith<$Res> {
-  factory $ExtTabBarWidgetConfigCopyWith(ExtTabBarWidgetConfig value,
-          $Res Function(ExtTabBarWidgetConfig) then) =
-      _$ExtTabBarWidgetConfigCopyWithImpl<$Res, ExtTabBarWidgetConfig>;
+  factory $ExtTabBarWidgetConfigCopyWith(
+    ExtTabBarWidgetConfig value,
+    $Res Function(ExtTabBarWidgetConfig) then,
+  ) = _$ExtTabBarWidgetConfigCopyWithImpl<$Res, ExtTabBarWidgetConfig>;
   @useResult
-  $Res call(
-      {String? foregroundColor,
-      String? backgroundColor,
-      String? selectedItemColor,
-      String? unSelectedItemColor});
+  $Res call({
+    String? foregroundColor,
+    String? backgroundColor,
+    String? selectedItemColor,
+    String? unSelectedItemColor,
+  });
 }
 
 /// @nodoc
-class _$ExtTabBarWidgetConfigCopyWithImpl<$Res,
-        $Val extends ExtTabBarWidgetConfig>
+class _$ExtTabBarWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends ExtTabBarWidgetConfig
+>
     implements $ExtTabBarWidgetConfigCopyWith<$Res> {
   _$ExtTabBarWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -1848,24 +1950,27 @@ class _$ExtTabBarWidgetConfigCopyWithImpl<$Res,
     Object? selectedItemColor = freezed,
     Object? unSelectedItemColor = freezed,
   }) {
-    return _then(_value.copyWith(
-      foregroundColor: freezed == foregroundColor
-          ? _value.foregroundColor
-          : foregroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectedItemColor: freezed == selectedItemColor
-          ? _value.selectedItemColor
-          : selectedItemColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      unSelectedItemColor: freezed == unSelectedItemColor
-          ? _value.unSelectedItemColor
-          : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            foregroundColor: freezed == foregroundColor
+                ? _value.foregroundColor
+                : foregroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            backgroundColor: freezed == backgroundColor
+                ? _value.backgroundColor
+                : backgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            selectedItemColor: freezed == selectedItemColor
+                ? _value.selectedItemColor
+                : selectedItemColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            unSelectedItemColor: freezed == unSelectedItemColor
+                ? _value.unSelectedItemColor
+                : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -1873,26 +1978,28 @@ class _$ExtTabBarWidgetConfigCopyWithImpl<$Res,
 abstract class _$$ExtTabBarWidgetConfigImplCopyWith<$Res>
     implements $ExtTabBarWidgetConfigCopyWith<$Res> {
   factory _$$ExtTabBarWidgetConfigImplCopyWith(
-          _$ExtTabBarWidgetConfigImpl value,
-          $Res Function(_$ExtTabBarWidgetConfigImpl) then) =
-      __$$ExtTabBarWidgetConfigImplCopyWithImpl<$Res>;
+    _$ExtTabBarWidgetConfigImpl value,
+    $Res Function(_$ExtTabBarWidgetConfigImpl) then,
+  ) = __$$ExtTabBarWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? foregroundColor,
-      String? backgroundColor,
-      String? selectedItemColor,
-      String? unSelectedItemColor});
+  $Res call({
+    String? foregroundColor,
+    String? backgroundColor,
+    String? selectedItemColor,
+    String? unSelectedItemColor,
+  });
 }
 
 /// @nodoc
 class __$$ExtTabBarWidgetConfigImplCopyWithImpl<$Res>
-    extends _$ExtTabBarWidgetConfigCopyWithImpl<$Res,
-        _$ExtTabBarWidgetConfigImpl>
+    extends
+        _$ExtTabBarWidgetConfigCopyWithImpl<$Res, _$ExtTabBarWidgetConfigImpl>
     implements _$$ExtTabBarWidgetConfigImplCopyWith<$Res> {
-  __$$ExtTabBarWidgetConfigImplCopyWithImpl(_$ExtTabBarWidgetConfigImpl _value,
-      $Res Function(_$ExtTabBarWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$ExtTabBarWidgetConfigImplCopyWithImpl(
+    _$ExtTabBarWidgetConfigImpl _value,
+    $Res Function(_$ExtTabBarWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ExtTabBarWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1904,24 +2011,26 @@ class __$$ExtTabBarWidgetConfigImplCopyWithImpl<$Res>
     Object? selectedItemColor = freezed,
     Object? unSelectedItemColor = freezed,
   }) {
-    return _then(_$ExtTabBarWidgetConfigImpl(
-      foregroundColor: freezed == foregroundColor
-          ? _value.foregroundColor
-          : foregroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectedItemColor: freezed == selectedItemColor
-          ? _value.selectedItemColor
-          : selectedItemColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      unSelectedItemColor: freezed == unSelectedItemColor
-          ? _value.unSelectedItemColor
-          : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ExtTabBarWidgetConfigImpl(
+        foregroundColor: freezed == foregroundColor
+            ? _value.foregroundColor
+            : foregroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        backgroundColor: freezed == backgroundColor
+            ? _value.backgroundColor
+            : backgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        selectedItemColor: freezed == selectedItemColor
+            ? _value.selectedItemColor
+            : selectedItemColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        unSelectedItemColor: freezed == unSelectedItemColor
+            ? _value.unSelectedItemColor
+            : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -1929,11 +2038,12 @@ class __$$ExtTabBarWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ExtTabBarWidgetConfigImpl implements _ExtTabBarWidgetConfig {
-  const _$ExtTabBarWidgetConfigImpl(
-      {this.foregroundColor,
-      this.backgroundColor,
-      this.selectedItemColor,
-      this.unSelectedItemColor});
+  const _$ExtTabBarWidgetConfigImpl({
+    this.foregroundColor,
+    this.backgroundColor,
+    this.selectedItemColor,
+    this.unSelectedItemColor,
+  });
 
   factory _$ExtTabBarWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ExtTabBarWidgetConfigImplFromJson(json);
@@ -1969,8 +2079,13 @@ class _$ExtTabBarWidgetConfigImpl implements _ExtTabBarWidgetConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, foregroundColor, backgroundColor,
-      selectedItemColor, unSelectedItemColor);
+  int get hashCode => Object.hash(
+    runtimeType,
+    foregroundColor,
+    backgroundColor,
+    selectedItemColor,
+    unSelectedItemColor,
+  );
 
   /// Create a copy of ExtTabBarWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -1978,23 +2093,25 @@ class _$ExtTabBarWidgetConfigImpl implements _ExtTabBarWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$ExtTabBarWidgetConfigImplCopyWith<_$ExtTabBarWidgetConfigImpl>
-      get copyWith => __$$ExtTabBarWidgetConfigImplCopyWithImpl<
-          _$ExtTabBarWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$ExtTabBarWidgetConfigImplCopyWithImpl<_$ExtTabBarWidgetConfigImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ExtTabBarWidgetConfigImplToJson(
-      this,
-    );
+    return _$$ExtTabBarWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _ExtTabBarWidgetConfig implements ExtTabBarWidgetConfig {
-  const factory _ExtTabBarWidgetConfig(
-      {final String? foregroundColor,
-      final String? backgroundColor,
-      final String? selectedItemColor,
-      final String? unSelectedItemColor}) = _$ExtTabBarWidgetConfigImpl;
+  const factory _ExtTabBarWidgetConfig({
+    final String? foregroundColor,
+    final String? backgroundColor,
+    final String? selectedItemColor,
+    final String? unSelectedItemColor,
+  }) = _$ExtTabBarWidgetConfigImpl;
 
   factory _ExtTabBarWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ExtTabBarWidgetConfigImpl.fromJson;
@@ -2013,11 +2130,12 @@ abstract class _ExtTabBarWidgetConfig implements ExtTabBarWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ExtTabBarWidgetConfigImplCopyWith<_$ExtTabBarWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 GroupTitleListTileWidgetConfig _$GroupTitleListTileWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _GroupTitleListTileWidgetConfig.fromJson(json);
 }
 
@@ -2033,23 +2151,28 @@ mixin _$GroupTitleListTileWidgetConfig {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $GroupTitleListTileWidgetConfigCopyWith<GroupTitleListTileWidgetConfig>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $GroupTitleListTileWidgetConfigCopyWith<$Res> {
   factory $GroupTitleListTileWidgetConfigCopyWith(
-          GroupTitleListTileWidgetConfig value,
-          $Res Function(GroupTitleListTileWidgetConfig) then) =
-      _$GroupTitleListTileWidgetConfigCopyWithImpl<$Res,
-          GroupTitleListTileWidgetConfig>;
+    GroupTitleListTileWidgetConfig value,
+    $Res Function(GroupTitleListTileWidgetConfig) then,
+  ) =
+      _$GroupTitleListTileWidgetConfigCopyWithImpl<
+        $Res,
+        GroupTitleListTileWidgetConfig
+      >;
   @useResult
   $Res call({String? backgroundColor, String? textColor});
 }
 
 /// @nodoc
-class _$GroupTitleListTileWidgetConfigCopyWithImpl<$Res,
-        $Val extends GroupTitleListTileWidgetConfig>
+class _$GroupTitleListTileWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends GroupTitleListTileWidgetConfig
+>
     implements $GroupTitleListTileWidgetConfigCopyWith<$Res> {
   _$GroupTitleListTileWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -2062,20 +2185,20 @@ class _$GroupTitleListTileWidgetConfigCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? backgroundColor = freezed,
-    Object? textColor = freezed,
-  }) {
-    return _then(_value.copyWith(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      textColor: freezed == textColor
-          ? _value.textColor
-          : textColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+  $Res call({Object? backgroundColor = freezed, Object? textColor = freezed}) {
+    return _then(
+      _value.copyWith(
+            backgroundColor: freezed == backgroundColor
+                ? _value.backgroundColor
+                : backgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            textColor: freezed == textColor
+                ? _value.textColor
+                : textColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -2083,9 +2206,9 @@ class _$GroupTitleListTileWidgetConfigCopyWithImpl<$Res,
 abstract class _$$GroupTitleListTileWidgetConfigImplCopyWith<$Res>
     implements $GroupTitleListTileWidgetConfigCopyWith<$Res> {
   factory _$$GroupTitleListTileWidgetConfigImplCopyWith(
-          _$GroupTitleListTileWidgetConfigImpl value,
-          $Res Function(_$GroupTitleListTileWidgetConfigImpl) then) =
-      __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<$Res>;
+    _$GroupTitleListTileWidgetConfigImpl value,
+    $Res Function(_$GroupTitleListTileWidgetConfigImpl) then,
+  ) = __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? backgroundColor, String? textColor});
@@ -2093,32 +2216,34 @@ abstract class _$$GroupTitleListTileWidgetConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<$Res>
-    extends _$GroupTitleListTileWidgetConfigCopyWithImpl<$Res,
-        _$GroupTitleListTileWidgetConfigImpl>
+    extends
+        _$GroupTitleListTileWidgetConfigCopyWithImpl<
+          $Res,
+          _$GroupTitleListTileWidgetConfigImpl
+        >
     implements _$$GroupTitleListTileWidgetConfigImplCopyWith<$Res> {
   __$$GroupTitleListTileWidgetConfigImplCopyWithImpl(
-      _$GroupTitleListTileWidgetConfigImpl _value,
-      $Res Function(_$GroupTitleListTileWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$GroupTitleListTileWidgetConfigImpl _value,
+    $Res Function(_$GroupTitleListTileWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of GroupTitleListTileWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? backgroundColor = freezed,
-    Object? textColor = freezed,
-  }) {
-    return _then(_$GroupTitleListTileWidgetConfigImpl(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      textColor: freezed == textColor
-          ? _value.textColor
-          : textColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+  $Res call({Object? backgroundColor = freezed, Object? textColor = freezed}) {
+    return _then(
+      _$GroupTitleListTileWidgetConfigImpl(
+        backgroundColor: freezed == backgroundColor
+            ? _value.backgroundColor
+            : backgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        textColor: freezed == textColor
+            ? _value.textColor
+            : textColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -2127,12 +2252,14 @@ class __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$GroupTitleListTileWidgetConfigImpl
     implements _GroupTitleListTileWidgetConfig {
-  const _$GroupTitleListTileWidgetConfigImpl(
-      {this.backgroundColor, this.textColor});
+  const _$GroupTitleListTileWidgetConfigImpl({
+    this.backgroundColor,
+    this.textColor,
+  });
 
   factory _$GroupTitleListTileWidgetConfigImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$GroupTitleListTileWidgetConfigImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$GroupTitleListTileWidgetConfigImplFromJson(json);
 
   @override
   final String? backgroundColor;
@@ -2165,23 +2292,25 @@ class _$GroupTitleListTileWidgetConfigImpl
   @override
   @pragma('vm:prefer-inline')
   _$$GroupTitleListTileWidgetConfigImplCopyWith<
-          _$GroupTitleListTileWidgetConfigImpl>
-      get copyWith => __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<
-          _$GroupTitleListTileWidgetConfigImpl>(this, _$identity);
+    _$GroupTitleListTileWidgetConfigImpl
+  >
+  get copyWith =>
+      __$$GroupTitleListTileWidgetConfigImplCopyWithImpl<
+        _$GroupTitleListTileWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GroupTitleListTileWidgetConfigImplToJson(
-      this,
-    );
+    return _$$GroupTitleListTileWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _GroupTitleListTileWidgetConfig
     implements GroupTitleListTileWidgetConfig {
-  const factory _GroupTitleListTileWidgetConfig(
-      {final String? backgroundColor,
-      final String? textColor}) = _$GroupTitleListTileWidgetConfigImpl;
+  const factory _GroupTitleListTileWidgetConfig({
+    final String? backgroundColor,
+    final String? textColor,
+  }) = _$GroupTitleListTileWidgetConfigImpl;
 
   factory _GroupTitleListTileWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$GroupTitleListTileWidgetConfigImpl.fromJson;
@@ -2196,12 +2325,14 @@ abstract class _GroupTitleListTileWidgetConfig
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GroupTitleListTileWidgetConfigImplCopyWith<
-          _$GroupTitleListTileWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$GroupTitleListTileWidgetConfigImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 CallActionsWidgetConfig _$CallActionsWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _CallActionsWidgetConfig.fromJson(json);
 }
 
@@ -2236,31 +2367,35 @@ mixin _$CallActionsWidgetConfig {
 
 /// @nodoc
 abstract class $CallActionsWidgetConfigCopyWith<$Res> {
-  factory $CallActionsWidgetConfigCopyWith(CallActionsWidgetConfig value,
-          $Res Function(CallActionsWidgetConfig) then) =
-      _$CallActionsWidgetConfigCopyWithImpl<$Res, CallActionsWidgetConfig>;
+  factory $CallActionsWidgetConfigCopyWith(
+    CallActionsWidgetConfig value,
+    $Res Function(CallActionsWidgetConfig) then,
+  ) = _$CallActionsWidgetConfigCopyWithImpl<$Res, CallActionsWidgetConfig>;
   @useResult
-  $Res call(
-      {String? callStartBackgroundColor,
-      String? hangupBackgroundColor,
-      String? transferBackgroundColor,
-      String? cameraBackgroundColor,
-      String? cameraActiveBackgroundColor,
-      String? mutedBackgroundColor,
-      String? mutedActiveBackgroundColor,
-      String? speakerBackgroundColor,
-      String? speakerActiveBackgroundColor,
-      String? heldBackgroundColor,
-      String? heldActiveBackgroundColor,
-      String? swapBackgroundColor,
-      String? keyBackgroundColor,
-      String? keypadBackgroundColor,
-      String? keypadActiveBackgroundColor});
+  $Res call({
+    String? callStartBackgroundColor,
+    String? hangupBackgroundColor,
+    String? transferBackgroundColor,
+    String? cameraBackgroundColor,
+    String? cameraActiveBackgroundColor,
+    String? mutedBackgroundColor,
+    String? mutedActiveBackgroundColor,
+    String? speakerBackgroundColor,
+    String? speakerActiveBackgroundColor,
+    String? heldBackgroundColor,
+    String? heldActiveBackgroundColor,
+    String? swapBackgroundColor,
+    String? keyBackgroundColor,
+    String? keypadBackgroundColor,
+    String? keypadActiveBackgroundColor,
+  });
 }
 
 /// @nodoc
-class _$CallActionsWidgetConfigCopyWithImpl<$Res,
-        $Val extends CallActionsWidgetConfig>
+class _$CallActionsWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends CallActionsWidgetConfig
+>
     implements $CallActionsWidgetConfigCopyWith<$Res> {
   _$CallActionsWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -2290,68 +2425,72 @@ class _$CallActionsWidgetConfigCopyWithImpl<$Res,
     Object? keypadBackgroundColor = freezed,
     Object? keypadActiveBackgroundColor = freezed,
   }) {
-    return _then(_value.copyWith(
-      callStartBackgroundColor: freezed == callStartBackgroundColor
-          ? _value.callStartBackgroundColor
-          : callStartBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hangupBackgroundColor: freezed == hangupBackgroundColor
-          ? _value.hangupBackgroundColor
-          : hangupBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      transferBackgroundColor: freezed == transferBackgroundColor
-          ? _value.transferBackgroundColor
-          : transferBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cameraBackgroundColor: freezed == cameraBackgroundColor
-          ? _value.cameraBackgroundColor
-          : cameraBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cameraActiveBackgroundColor: freezed == cameraActiveBackgroundColor
-          ? _value.cameraActiveBackgroundColor
-          : cameraActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      mutedBackgroundColor: freezed == mutedBackgroundColor
-          ? _value.mutedBackgroundColor
-          : mutedBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      mutedActiveBackgroundColor: freezed == mutedActiveBackgroundColor
-          ? _value.mutedActiveBackgroundColor
-          : mutedActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      speakerBackgroundColor: freezed == speakerBackgroundColor
-          ? _value.speakerBackgroundColor
-          : speakerBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      speakerActiveBackgroundColor: freezed == speakerActiveBackgroundColor
-          ? _value.speakerActiveBackgroundColor
-          : speakerActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      heldBackgroundColor: freezed == heldBackgroundColor
-          ? _value.heldBackgroundColor
-          : heldBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      heldActiveBackgroundColor: freezed == heldActiveBackgroundColor
-          ? _value.heldActiveBackgroundColor
-          : heldActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      swapBackgroundColor: freezed == swapBackgroundColor
-          ? _value.swapBackgroundColor
-          : swapBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      keyBackgroundColor: freezed == keyBackgroundColor
-          ? _value.keyBackgroundColor
-          : keyBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      keypadBackgroundColor: freezed == keypadBackgroundColor
-          ? _value.keypadBackgroundColor
-          : keypadBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      keypadActiveBackgroundColor: freezed == keypadActiveBackgroundColor
-          ? _value.keypadActiveBackgroundColor
-          : keypadActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            callStartBackgroundColor: freezed == callStartBackgroundColor
+                ? _value.callStartBackgroundColor
+                : callStartBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            hangupBackgroundColor: freezed == hangupBackgroundColor
+                ? _value.hangupBackgroundColor
+                : hangupBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            transferBackgroundColor: freezed == transferBackgroundColor
+                ? _value.transferBackgroundColor
+                : transferBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            cameraBackgroundColor: freezed == cameraBackgroundColor
+                ? _value.cameraBackgroundColor
+                : cameraBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            cameraActiveBackgroundColor: freezed == cameraActiveBackgroundColor
+                ? _value.cameraActiveBackgroundColor
+                : cameraActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            mutedBackgroundColor: freezed == mutedBackgroundColor
+                ? _value.mutedBackgroundColor
+                : mutedBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            mutedActiveBackgroundColor: freezed == mutedActiveBackgroundColor
+                ? _value.mutedActiveBackgroundColor
+                : mutedActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            speakerBackgroundColor: freezed == speakerBackgroundColor
+                ? _value.speakerBackgroundColor
+                : speakerBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            speakerActiveBackgroundColor:
+                freezed == speakerActiveBackgroundColor
+                ? _value.speakerActiveBackgroundColor
+                : speakerActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            heldBackgroundColor: freezed == heldBackgroundColor
+                ? _value.heldBackgroundColor
+                : heldBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            heldActiveBackgroundColor: freezed == heldActiveBackgroundColor
+                ? _value.heldActiveBackgroundColor
+                : heldActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            swapBackgroundColor: freezed == swapBackgroundColor
+                ? _value.swapBackgroundColor
+                : swapBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            keyBackgroundColor: freezed == keyBackgroundColor
+                ? _value.keyBackgroundColor
+                : keyBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            keypadBackgroundColor: freezed == keypadBackgroundColor
+                ? _value.keypadBackgroundColor
+                : keypadBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            keypadActiveBackgroundColor: freezed == keypadActiveBackgroundColor
+                ? _value.keypadActiveBackgroundColor
+                : keypadActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -2359,38 +2498,42 @@ class _$CallActionsWidgetConfigCopyWithImpl<$Res,
 abstract class _$$CallActionsWidgetConfigImplCopyWith<$Res>
     implements $CallActionsWidgetConfigCopyWith<$Res> {
   factory _$$CallActionsWidgetConfigImplCopyWith(
-          _$CallActionsWidgetConfigImpl value,
-          $Res Function(_$CallActionsWidgetConfigImpl) then) =
-      __$$CallActionsWidgetConfigImplCopyWithImpl<$Res>;
+    _$CallActionsWidgetConfigImpl value,
+    $Res Function(_$CallActionsWidgetConfigImpl) then,
+  ) = __$$CallActionsWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? callStartBackgroundColor,
-      String? hangupBackgroundColor,
-      String? transferBackgroundColor,
-      String? cameraBackgroundColor,
-      String? cameraActiveBackgroundColor,
-      String? mutedBackgroundColor,
-      String? mutedActiveBackgroundColor,
-      String? speakerBackgroundColor,
-      String? speakerActiveBackgroundColor,
-      String? heldBackgroundColor,
-      String? heldActiveBackgroundColor,
-      String? swapBackgroundColor,
-      String? keyBackgroundColor,
-      String? keypadBackgroundColor,
-      String? keypadActiveBackgroundColor});
+  $Res call({
+    String? callStartBackgroundColor,
+    String? hangupBackgroundColor,
+    String? transferBackgroundColor,
+    String? cameraBackgroundColor,
+    String? cameraActiveBackgroundColor,
+    String? mutedBackgroundColor,
+    String? mutedActiveBackgroundColor,
+    String? speakerBackgroundColor,
+    String? speakerActiveBackgroundColor,
+    String? heldBackgroundColor,
+    String? heldActiveBackgroundColor,
+    String? swapBackgroundColor,
+    String? keyBackgroundColor,
+    String? keypadBackgroundColor,
+    String? keypadActiveBackgroundColor,
+  });
 }
 
 /// @nodoc
 class __$$CallActionsWidgetConfigImplCopyWithImpl<$Res>
-    extends _$CallActionsWidgetConfigCopyWithImpl<$Res,
-        _$CallActionsWidgetConfigImpl>
+    extends
+        _$CallActionsWidgetConfigCopyWithImpl<
+          $Res,
+          _$CallActionsWidgetConfigImpl
+        >
     implements _$$CallActionsWidgetConfigImplCopyWith<$Res> {
   __$$CallActionsWidgetConfigImplCopyWithImpl(
-      _$CallActionsWidgetConfigImpl _value,
-      $Res Function(_$CallActionsWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$CallActionsWidgetConfigImpl _value,
+    $Res Function(_$CallActionsWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CallActionsWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2413,68 +2556,70 @@ class __$$CallActionsWidgetConfigImplCopyWithImpl<$Res>
     Object? keypadBackgroundColor = freezed,
     Object? keypadActiveBackgroundColor = freezed,
   }) {
-    return _then(_$CallActionsWidgetConfigImpl(
-      callStartBackgroundColor: freezed == callStartBackgroundColor
-          ? _value.callStartBackgroundColor
-          : callStartBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hangupBackgroundColor: freezed == hangupBackgroundColor
-          ? _value.hangupBackgroundColor
-          : hangupBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      transferBackgroundColor: freezed == transferBackgroundColor
-          ? _value.transferBackgroundColor
-          : transferBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cameraBackgroundColor: freezed == cameraBackgroundColor
-          ? _value.cameraBackgroundColor
-          : cameraBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cameraActiveBackgroundColor: freezed == cameraActiveBackgroundColor
-          ? _value.cameraActiveBackgroundColor
-          : cameraActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      mutedBackgroundColor: freezed == mutedBackgroundColor
-          ? _value.mutedBackgroundColor
-          : mutedBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      mutedActiveBackgroundColor: freezed == mutedActiveBackgroundColor
-          ? _value.mutedActiveBackgroundColor
-          : mutedActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      speakerBackgroundColor: freezed == speakerBackgroundColor
-          ? _value.speakerBackgroundColor
-          : speakerBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      speakerActiveBackgroundColor: freezed == speakerActiveBackgroundColor
-          ? _value.speakerActiveBackgroundColor
-          : speakerActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      heldBackgroundColor: freezed == heldBackgroundColor
-          ? _value.heldBackgroundColor
-          : heldBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      heldActiveBackgroundColor: freezed == heldActiveBackgroundColor
-          ? _value.heldActiveBackgroundColor
-          : heldActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      swapBackgroundColor: freezed == swapBackgroundColor
-          ? _value.swapBackgroundColor
-          : swapBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      keyBackgroundColor: freezed == keyBackgroundColor
-          ? _value.keyBackgroundColor
-          : keyBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      keypadBackgroundColor: freezed == keypadBackgroundColor
-          ? _value.keypadBackgroundColor
-          : keypadBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      keypadActiveBackgroundColor: freezed == keypadActiveBackgroundColor
-          ? _value.keypadActiveBackgroundColor
-          : keypadActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$CallActionsWidgetConfigImpl(
+        callStartBackgroundColor: freezed == callStartBackgroundColor
+            ? _value.callStartBackgroundColor
+            : callStartBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        hangupBackgroundColor: freezed == hangupBackgroundColor
+            ? _value.hangupBackgroundColor
+            : hangupBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        transferBackgroundColor: freezed == transferBackgroundColor
+            ? _value.transferBackgroundColor
+            : transferBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        cameraBackgroundColor: freezed == cameraBackgroundColor
+            ? _value.cameraBackgroundColor
+            : cameraBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        cameraActiveBackgroundColor: freezed == cameraActiveBackgroundColor
+            ? _value.cameraActiveBackgroundColor
+            : cameraActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        mutedBackgroundColor: freezed == mutedBackgroundColor
+            ? _value.mutedBackgroundColor
+            : mutedBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        mutedActiveBackgroundColor: freezed == mutedActiveBackgroundColor
+            ? _value.mutedActiveBackgroundColor
+            : mutedActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        speakerBackgroundColor: freezed == speakerBackgroundColor
+            ? _value.speakerBackgroundColor
+            : speakerBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        speakerActiveBackgroundColor: freezed == speakerActiveBackgroundColor
+            ? _value.speakerActiveBackgroundColor
+            : speakerActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        heldBackgroundColor: freezed == heldBackgroundColor
+            ? _value.heldBackgroundColor
+            : heldBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        heldActiveBackgroundColor: freezed == heldActiveBackgroundColor
+            ? _value.heldActiveBackgroundColor
+            : heldActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        swapBackgroundColor: freezed == swapBackgroundColor
+            ? _value.swapBackgroundColor
+            : swapBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        keyBackgroundColor: freezed == keyBackgroundColor
+            ? _value.keyBackgroundColor
+            : keyBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        keypadBackgroundColor: freezed == keypadBackgroundColor
+            ? _value.keypadBackgroundColor
+            : keypadBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        keypadActiveBackgroundColor: freezed == keypadActiveBackgroundColor
+            ? _value.keypadActiveBackgroundColor
+            : keypadActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -2482,22 +2627,23 @@ class __$$CallActionsWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$CallActionsWidgetConfigImpl implements _CallActionsWidgetConfig {
-  const _$CallActionsWidgetConfigImpl(
-      {this.callStartBackgroundColor,
-      this.hangupBackgroundColor,
-      this.transferBackgroundColor,
-      this.cameraBackgroundColor,
-      this.cameraActiveBackgroundColor,
-      this.mutedBackgroundColor,
-      this.mutedActiveBackgroundColor,
-      this.speakerBackgroundColor,
-      this.speakerActiveBackgroundColor,
-      this.heldBackgroundColor,
-      this.heldActiveBackgroundColor,
-      this.swapBackgroundColor,
-      this.keyBackgroundColor,
-      this.keypadBackgroundColor,
-      this.keypadActiveBackgroundColor});
+  const _$CallActionsWidgetConfigImpl({
+    this.callStartBackgroundColor,
+    this.hangupBackgroundColor,
+    this.transferBackgroundColor,
+    this.cameraBackgroundColor,
+    this.cameraActiveBackgroundColor,
+    this.mutedBackgroundColor,
+    this.mutedActiveBackgroundColor,
+    this.speakerBackgroundColor,
+    this.speakerActiveBackgroundColor,
+    this.heldBackgroundColor,
+    this.heldActiveBackgroundColor,
+    this.swapBackgroundColor,
+    this.keyBackgroundColor,
+    this.keypadBackgroundColor,
+    this.keypadActiveBackgroundColor,
+  });
 
   factory _$CallActionsWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallActionsWidgetConfigImplFromJson(json);
@@ -2543,31 +2689,48 @@ class _$CallActionsWidgetConfigImpl implements _CallActionsWidgetConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CallActionsWidgetConfigImpl &&
-            (identical(other.callStartBackgroundColor, callStartBackgroundColor) ||
+            (identical(
+                  other.callStartBackgroundColor,
+                  callStartBackgroundColor,
+                ) ||
                 other.callStartBackgroundColor == callStartBackgroundColor) &&
             (identical(other.hangupBackgroundColor, hangupBackgroundColor) ||
                 other.hangupBackgroundColor == hangupBackgroundColor) &&
-            (identical(other.transferBackgroundColor, transferBackgroundColor) ||
+            (identical(
+                  other.transferBackgroundColor,
+                  transferBackgroundColor,
+                ) ||
                 other.transferBackgroundColor == transferBackgroundColor) &&
             (identical(other.cameraBackgroundColor, cameraBackgroundColor) ||
                 other.cameraBackgroundColor == cameraBackgroundColor) &&
-            (identical(other.cameraActiveBackgroundColor, cameraActiveBackgroundColor) ||
+            (identical(
+                  other.cameraActiveBackgroundColor,
+                  cameraActiveBackgroundColor,
+                ) ||
                 other.cameraActiveBackgroundColor ==
                     cameraActiveBackgroundColor) &&
             (identical(other.mutedBackgroundColor, mutedBackgroundColor) ||
                 other.mutedBackgroundColor == mutedBackgroundColor) &&
-            (identical(other.mutedActiveBackgroundColor, mutedActiveBackgroundColor) ||
+            (identical(
+                  other.mutedActiveBackgroundColor,
+                  mutedActiveBackgroundColor,
+                ) ||
                 other.mutedActiveBackgroundColor ==
                     mutedActiveBackgroundColor) &&
             (identical(other.speakerBackgroundColor, speakerBackgroundColor) ||
                 other.speakerBackgroundColor == speakerBackgroundColor) &&
-            (identical(other.speakerActiveBackgroundColor,
-                    speakerActiveBackgroundColor) ||
+            (identical(
+                  other.speakerActiveBackgroundColor,
+                  speakerActiveBackgroundColor,
+                ) ||
                 other.speakerActiveBackgroundColor ==
                     speakerActiveBackgroundColor) &&
             (identical(other.heldBackgroundColor, heldBackgroundColor) ||
                 other.heldBackgroundColor == heldBackgroundColor) &&
-            (identical(other.heldActiveBackgroundColor, heldActiveBackgroundColor) ||
+            (identical(
+                  other.heldActiveBackgroundColor,
+                  heldActiveBackgroundColor,
+                ) ||
                 other.heldActiveBackgroundColor == heldActiveBackgroundColor) &&
             (identical(other.swapBackgroundColor, swapBackgroundColor) ||
                 other.swapBackgroundColor == swapBackgroundColor) &&
@@ -2575,7 +2738,10 @@ class _$CallActionsWidgetConfigImpl implements _CallActionsWidgetConfig {
                 other.keyBackgroundColor == keyBackgroundColor) &&
             (identical(other.keypadBackgroundColor, keypadBackgroundColor) ||
                 other.keypadBackgroundColor == keypadBackgroundColor) &&
-            (identical(other.keypadActiveBackgroundColor, keypadActiveBackgroundColor) ||
+            (identical(
+                  other.keypadActiveBackgroundColor,
+                  keypadActiveBackgroundColor,
+                ) ||
                 other.keypadActiveBackgroundColor ==
                     keypadActiveBackgroundColor));
   }
@@ -2583,22 +2749,23 @@ class _$CallActionsWidgetConfigImpl implements _CallActionsWidgetConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      callStartBackgroundColor,
-      hangupBackgroundColor,
-      transferBackgroundColor,
-      cameraBackgroundColor,
-      cameraActiveBackgroundColor,
-      mutedBackgroundColor,
-      mutedActiveBackgroundColor,
-      speakerBackgroundColor,
-      speakerActiveBackgroundColor,
-      heldBackgroundColor,
-      heldActiveBackgroundColor,
-      swapBackgroundColor,
-      keyBackgroundColor,
-      keypadBackgroundColor,
-      keypadActiveBackgroundColor);
+    runtimeType,
+    callStartBackgroundColor,
+    hangupBackgroundColor,
+    transferBackgroundColor,
+    cameraBackgroundColor,
+    cameraActiveBackgroundColor,
+    mutedBackgroundColor,
+    mutedActiveBackgroundColor,
+    speakerBackgroundColor,
+    speakerActiveBackgroundColor,
+    heldBackgroundColor,
+    heldActiveBackgroundColor,
+    swapBackgroundColor,
+    keyBackgroundColor,
+    keypadBackgroundColor,
+    keypadActiveBackgroundColor,
+  );
 
   /// Create a copy of CallActionsWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2606,35 +2773,35 @@ class _$CallActionsWidgetConfigImpl implements _CallActionsWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$CallActionsWidgetConfigImplCopyWith<_$CallActionsWidgetConfigImpl>
-      get copyWith => __$$CallActionsWidgetConfigImplCopyWithImpl<
-          _$CallActionsWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$CallActionsWidgetConfigImplCopyWithImpl<
+        _$CallActionsWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CallActionsWidgetConfigImplToJson(
-      this,
-    );
+    return _$$CallActionsWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _CallActionsWidgetConfig implements CallActionsWidgetConfig {
-  const factory _CallActionsWidgetConfig(
-          {final String? callStartBackgroundColor,
-          final String? hangupBackgroundColor,
-          final String? transferBackgroundColor,
-          final String? cameraBackgroundColor,
-          final String? cameraActiveBackgroundColor,
-          final String? mutedBackgroundColor,
-          final String? mutedActiveBackgroundColor,
-          final String? speakerBackgroundColor,
-          final String? speakerActiveBackgroundColor,
-          final String? heldBackgroundColor,
-          final String? heldActiveBackgroundColor,
-          final String? swapBackgroundColor,
-          final String? keyBackgroundColor,
-          final String? keypadBackgroundColor,
-          final String? keypadActiveBackgroundColor}) =
-      _$CallActionsWidgetConfigImpl;
+  const factory _CallActionsWidgetConfig({
+    final String? callStartBackgroundColor,
+    final String? hangupBackgroundColor,
+    final String? transferBackgroundColor,
+    final String? cameraBackgroundColor,
+    final String? cameraActiveBackgroundColor,
+    final String? mutedBackgroundColor,
+    final String? mutedActiveBackgroundColor,
+    final String? speakerBackgroundColor,
+    final String? speakerActiveBackgroundColor,
+    final String? heldBackgroundColor,
+    final String? heldActiveBackgroundColor,
+    final String? swapBackgroundColor,
+    final String? keyBackgroundColor,
+    final String? keypadBackgroundColor,
+    final String? keypadActiveBackgroundColor,
+  }) = _$CallActionsWidgetConfigImpl;
 
   factory _CallActionsWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$CallActionsWidgetConfigImpl.fromJson;
@@ -2675,7 +2842,7 @@ abstract class _CallActionsWidgetConfig implements CallActionsWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CallActionsWidgetConfigImplCopyWith<_$CallActionsWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 ImageAssetsConfig _$ImageAssetsConfigFromJson(Map<String, dynamic> json) {
@@ -2703,13 +2870,15 @@ mixin _$ImageAssetsConfig {
 /// @nodoc
 abstract class $ImageAssetsConfigCopyWith<$Res> {
   factory $ImageAssetsConfigCopyWith(
-          ImageAssetsConfig value, $Res Function(ImageAssetsConfig) then) =
-      _$ImageAssetsConfigCopyWithImpl<$Res, ImageAssetsConfig>;
+    ImageAssetsConfig value,
+    $Res Function(ImageAssetsConfig) then,
+  ) = _$ImageAssetsConfigCopyWithImpl<$Res, ImageAssetsConfig>;
   @useResult
-  $Res call(
-      {ImageSource? defaultPlaceholderImage,
-      AppIconWidgetConfig appIcon,
-      LeadingAvatarStyleConfig leadingAvatarStyle});
+  $Res call({
+    ImageSource? defaultPlaceholderImage,
+    AppIconWidgetConfig appIcon,
+    LeadingAvatarStyleConfig leadingAvatarStyle,
+  });
 
   $ImageSourceCopyWith<$Res>? get defaultPlaceholderImage;
   $AppIconWidgetConfigCopyWith<$Res> get appIcon;
@@ -2735,20 +2904,23 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
     Object? appIcon = null,
     Object? leadingAvatarStyle = null,
   }) {
-    return _then(_value.copyWith(
-      defaultPlaceholderImage: freezed == defaultPlaceholderImage
-          ? _value.defaultPlaceholderImage
-          : defaultPlaceholderImage // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      appIcon: null == appIcon
-          ? _value.appIcon
-          : appIcon // ignore: cast_nullable_to_non_nullable
-              as AppIconWidgetConfig,
-      leadingAvatarStyle: null == leadingAvatarStyle
-          ? _value.leadingAvatarStyle
-          : leadingAvatarStyle // ignore: cast_nullable_to_non_nullable
-              as LeadingAvatarStyleConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            defaultPlaceholderImage: freezed == defaultPlaceholderImage
+                ? _value.defaultPlaceholderImage
+                : defaultPlaceholderImage // ignore: cast_nullable_to_non_nullable
+                      as ImageSource?,
+            appIcon: null == appIcon
+                ? _value.appIcon
+                : appIcon // ignore: cast_nullable_to_non_nullable
+                      as AppIconWidgetConfig,
+            leadingAvatarStyle: null == leadingAvatarStyle
+                ? _value.leadingAvatarStyle
+                : leadingAvatarStyle // ignore: cast_nullable_to_non_nullable
+                      as LeadingAvatarStyleConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ImageAssetsConfig
@@ -2780,8 +2952,9 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
   @override
   @pragma('vm:prefer-inline')
   $LeadingAvatarStyleConfigCopyWith<$Res> get leadingAvatarStyle {
-    return $LeadingAvatarStyleConfigCopyWith<$Res>(_value.leadingAvatarStyle,
-        (value) {
+    return $LeadingAvatarStyleConfigCopyWith<$Res>(_value.leadingAvatarStyle, (
+      value,
+    ) {
       return _then(_value.copyWith(leadingAvatarStyle: value) as $Val);
     });
   }
@@ -2790,15 +2963,17 @@ class _$ImageAssetsConfigCopyWithImpl<$Res, $Val extends ImageAssetsConfig>
 /// @nodoc
 abstract class _$$ImageAssetsConfigImplCopyWith<$Res>
     implements $ImageAssetsConfigCopyWith<$Res> {
-  factory _$$ImageAssetsConfigImplCopyWith(_$ImageAssetsConfigImpl value,
-          $Res Function(_$ImageAssetsConfigImpl) then) =
-      __$$ImageAssetsConfigImplCopyWithImpl<$Res>;
+  factory _$$ImageAssetsConfigImplCopyWith(
+    _$ImageAssetsConfigImpl value,
+    $Res Function(_$ImageAssetsConfigImpl) then,
+  ) = __$$ImageAssetsConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {ImageSource? defaultPlaceholderImage,
-      AppIconWidgetConfig appIcon,
-      LeadingAvatarStyleConfig leadingAvatarStyle});
+  $Res call({
+    ImageSource? defaultPlaceholderImage,
+    AppIconWidgetConfig appIcon,
+    LeadingAvatarStyleConfig leadingAvatarStyle,
+  });
 
   @override
   $ImageSourceCopyWith<$Res>? get defaultPlaceholderImage;
@@ -2812,9 +2987,10 @@ abstract class _$$ImageAssetsConfigImplCopyWith<$Res>
 class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
     extends _$ImageAssetsConfigCopyWithImpl<$Res, _$ImageAssetsConfigImpl>
     implements _$$ImageAssetsConfigImplCopyWith<$Res> {
-  __$$ImageAssetsConfigImplCopyWithImpl(_$ImageAssetsConfigImpl _value,
-      $Res Function(_$ImageAssetsConfigImpl) _then)
-      : super(_value, _then);
+  __$$ImageAssetsConfigImplCopyWithImpl(
+    _$ImageAssetsConfigImpl _value,
+    $Res Function(_$ImageAssetsConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2825,20 +3001,22 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
     Object? appIcon = null,
     Object? leadingAvatarStyle = null,
   }) {
-    return _then(_$ImageAssetsConfigImpl(
-      defaultPlaceholderImage: freezed == defaultPlaceholderImage
-          ? _value.defaultPlaceholderImage
-          : defaultPlaceholderImage // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      appIcon: null == appIcon
-          ? _value.appIcon
-          : appIcon // ignore: cast_nullable_to_non_nullable
-              as AppIconWidgetConfig,
-      leadingAvatarStyle: null == leadingAvatarStyle
-          ? _value.leadingAvatarStyle
-          : leadingAvatarStyle // ignore: cast_nullable_to_non_nullable
-              as LeadingAvatarStyleConfig,
-    ));
+    return _then(
+      _$ImageAssetsConfigImpl(
+        defaultPlaceholderImage: freezed == defaultPlaceholderImage
+            ? _value.defaultPlaceholderImage
+            : defaultPlaceholderImage // ignore: cast_nullable_to_non_nullable
+                  as ImageSource?,
+        appIcon: null == appIcon
+            ? _value.appIcon
+            : appIcon // ignore: cast_nullable_to_non_nullable
+                  as AppIconWidgetConfig,
+        leadingAvatarStyle: null == leadingAvatarStyle
+            ? _value.leadingAvatarStyle
+            : leadingAvatarStyle // ignore: cast_nullable_to_non_nullable
+                  as LeadingAvatarStyleConfig,
+      ),
+    );
   }
 }
 
@@ -2846,10 +3024,11 @@ class __$$ImageAssetsConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
-  const _$ImageAssetsConfigImpl(
-      {this.defaultPlaceholderImage,
-      this.appIcon = const AppIconWidgetConfig(),
-      this.leadingAvatarStyle = const LeadingAvatarStyleConfig()});
+  const _$ImageAssetsConfigImpl({
+    this.defaultPlaceholderImage,
+    this.appIcon = const AppIconWidgetConfig(),
+    this.leadingAvatarStyle = const LeadingAvatarStyleConfig(),
+  });
 
   factory _$ImageAssetsConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ImageAssetsConfigImplFromJson(json);
@@ -2874,7 +3053,9 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
         (other.runtimeType == runtimeType &&
             other is _$ImageAssetsConfigImpl &&
             (identical(
-                    other.defaultPlaceholderImage, defaultPlaceholderImage) ||
+                  other.defaultPlaceholderImage,
+                  defaultPlaceholderImage,
+                ) ||
                 other.defaultPlaceholderImage == defaultPlaceholderImage) &&
             (identical(other.appIcon, appIcon) || other.appIcon == appIcon) &&
             (identical(other.leadingAvatarStyle, leadingAvatarStyle) ||
@@ -2884,7 +3065,11 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, defaultPlaceholderImage, appIcon, leadingAvatarStyle);
+    runtimeType,
+    defaultPlaceholderImage,
+    appIcon,
+    leadingAvatarStyle,
+  );
 
   /// Create a copy of ImageAssetsConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -2893,22 +3078,22 @@ class _$ImageAssetsConfigImpl implements _ImageAssetsConfig {
   @pragma('vm:prefer-inline')
   _$$ImageAssetsConfigImplCopyWith<_$ImageAssetsConfigImpl> get copyWith =>
       __$$ImageAssetsConfigImplCopyWithImpl<_$ImageAssetsConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ImageAssetsConfigImplToJson(
-      this,
-    );
+    return _$$ImageAssetsConfigImplToJson(this);
   }
 }
 
 abstract class _ImageAssetsConfig implements ImageAssetsConfig {
-  const factory _ImageAssetsConfig(
-          {final ImageSource? defaultPlaceholderImage,
-          final AppIconWidgetConfig appIcon,
-          final LeadingAvatarStyleConfig leadingAvatarStyle}) =
-      _$ImageAssetsConfigImpl;
+  const factory _ImageAssetsConfig({
+    final ImageSource? defaultPlaceholderImage,
+    final AppIconWidgetConfig appIcon,
+    final LeadingAvatarStyleConfig leadingAvatarStyle,
+  }) = _$ImageAssetsConfigImpl;
 
   factory _ImageAssetsConfig.fromJson(Map<String, dynamic> json) =
       _$ImageAssetsConfigImpl.fromJson;
@@ -2954,15 +3139,17 @@ mixin _$ImageAssetConfig {
 /// @nodoc
 abstract class $ImageAssetConfigCopyWith<$Res> {
   factory $ImageAssetConfigCopyWith(
-          ImageAssetConfig value, $Res Function(ImageAssetConfig) then) =
-      _$ImageAssetConfigCopyWithImpl<$Res, ImageAssetConfig>;
+    ImageAssetConfig value,
+    $Res Function(ImageAssetConfig) then,
+  ) = _$ImageAssetConfigCopyWithImpl<$Res, ImageAssetConfig>;
   @useResult
-  $Res call(
-      {ImageSource? imageSource,
-      double widthFactor,
-      String labelColor,
-      Metadata metadata,
-      @Deprecated('Use source.uri instead') String? uri});
+  $Res call({
+    ImageSource? imageSource,
+    double widthFactor,
+    String labelColor,
+    Metadata metadata,
+    @Deprecated('Use source.uri instead') String? uri,
+  });
 
   $ImageSourceCopyWith<$Res>? get imageSource;
   $MetadataCopyWith<$Res> get metadata;
@@ -2989,28 +3176,31 @@ class _$ImageAssetConfigCopyWithImpl<$Res, $Val extends ImageAssetConfig>
     Object? metadata = null,
     Object? uri = freezed,
   }) {
-    return _then(_value.copyWith(
-      imageSource: freezed == imageSource
-          ? _value.imageSource
-          : imageSource // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      widthFactor: null == widthFactor
-          ? _value.widthFactor
-          : widthFactor // ignore: cast_nullable_to_non_nullable
-              as double,
-      labelColor: null == labelColor
-          ? _value.labelColor
-          : labelColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-      uri: freezed == uri
-          ? _value.uri
-          : uri // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            imageSource: freezed == imageSource
+                ? _value.imageSource
+                : imageSource // ignore: cast_nullable_to_non_nullable
+                      as ImageSource?,
+            widthFactor: null == widthFactor
+                ? _value.widthFactor
+                : widthFactor // ignore: cast_nullable_to_non_nullable
+                      as double,
+            labelColor: null == labelColor
+                ? _value.labelColor
+                : labelColor // ignore: cast_nullable_to_non_nullable
+                      as String,
+            metadata: null == metadata
+                ? _value.metadata
+                : metadata // ignore: cast_nullable_to_non_nullable
+                      as Metadata,
+            uri: freezed == uri
+                ? _value.uri
+                : uri // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ImageAssetConfig
@@ -3041,17 +3231,19 @@ class _$ImageAssetConfigCopyWithImpl<$Res, $Val extends ImageAssetConfig>
 /// @nodoc
 abstract class _$$ImageAssetConfigImplCopyWith<$Res>
     implements $ImageAssetConfigCopyWith<$Res> {
-  factory _$$ImageAssetConfigImplCopyWith(_$ImageAssetConfigImpl value,
-          $Res Function(_$ImageAssetConfigImpl) then) =
-      __$$ImageAssetConfigImplCopyWithImpl<$Res>;
+  factory _$$ImageAssetConfigImplCopyWith(
+    _$ImageAssetConfigImpl value,
+    $Res Function(_$ImageAssetConfigImpl) then,
+  ) = __$$ImageAssetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {ImageSource? imageSource,
-      double widthFactor,
-      String labelColor,
-      Metadata metadata,
-      @Deprecated('Use source.uri instead') String? uri});
+  $Res call({
+    ImageSource? imageSource,
+    double widthFactor,
+    String labelColor,
+    Metadata metadata,
+    @Deprecated('Use source.uri instead') String? uri,
+  });
 
   @override
   $ImageSourceCopyWith<$Res>? get imageSource;
@@ -3063,9 +3255,10 @@ abstract class _$$ImageAssetConfigImplCopyWith<$Res>
 class __$$ImageAssetConfigImplCopyWithImpl<$Res>
     extends _$ImageAssetConfigCopyWithImpl<$Res, _$ImageAssetConfigImpl>
     implements _$$ImageAssetConfigImplCopyWith<$Res> {
-  __$$ImageAssetConfigImplCopyWithImpl(_$ImageAssetConfigImpl _value,
-      $Res Function(_$ImageAssetConfigImpl) _then)
-      : super(_value, _then);
+  __$$ImageAssetConfigImplCopyWithImpl(
+    _$ImageAssetConfigImpl _value,
+    $Res Function(_$ImageAssetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -3078,28 +3271,30 @@ class __$$ImageAssetConfigImplCopyWithImpl<$Res>
     Object? metadata = null,
     Object? uri = freezed,
   }) {
-    return _then(_$ImageAssetConfigImpl(
-      imageSource: freezed == imageSource
-          ? _value.imageSource
-          : imageSource // ignore: cast_nullable_to_non_nullable
-              as ImageSource?,
-      widthFactor: null == widthFactor
-          ? _value.widthFactor
-          : widthFactor // ignore: cast_nullable_to_non_nullable
-              as double,
-      labelColor: null == labelColor
-          ? _value.labelColor
-          : labelColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Metadata,
-      uri: freezed == uri
-          ? _value.uri
-          : uri // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ImageAssetConfigImpl(
+        imageSource: freezed == imageSource
+            ? _value.imageSource
+            : imageSource // ignore: cast_nullable_to_non_nullable
+                  as ImageSource?,
+        widthFactor: null == widthFactor
+            ? _value.widthFactor
+            : widthFactor // ignore: cast_nullable_to_non_nullable
+                  as double,
+        labelColor: null == labelColor
+            ? _value.labelColor
+            : labelColor // ignore: cast_nullable_to_non_nullable
+                  as String,
+        metadata: null == metadata
+            ? _value.metadata
+            : metadata // ignore: cast_nullable_to_non_nullable
+                  as Metadata,
+        uri: freezed == uri
+            ? _value.uri
+            : uri // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -3107,12 +3302,13 @@ class __$$ImageAssetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ImageAssetConfigImpl implements _ImageAssetConfig {
-  const _$ImageAssetConfigImpl(
-      {this.imageSource,
-      this.widthFactor = 1.0,
-      this.labelColor = '#FFFFFF',
-      this.metadata = const Metadata(),
-      @Deprecated('Use source.uri instead') this.uri});
+  const _$ImageAssetConfigImpl({
+    this.imageSource,
+    this.widthFactor = 1.0,
+    this.labelColor = '#FFFFFF',
+    this.metadata = const Metadata(),
+    @Deprecated('Use source.uri instead') this.uri,
+  });
 
   factory _$ImageAssetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ImageAssetConfigImplFromJson(json);
@@ -3156,7 +3352,13 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, imageSource, widthFactor, labelColor, metadata, uri);
+    runtimeType,
+    imageSource,
+    widthFactor,
+    labelColor,
+    metadata,
+    uri,
+  );
 
   /// Create a copy of ImageAssetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -3165,24 +3367,24 @@ class _$ImageAssetConfigImpl implements _ImageAssetConfig {
   @pragma('vm:prefer-inline')
   _$$ImageAssetConfigImplCopyWith<_$ImageAssetConfigImpl> get copyWith =>
       __$$ImageAssetConfigImplCopyWithImpl<_$ImageAssetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ImageAssetConfigImplToJson(
-      this,
-    );
+    return _$$ImageAssetConfigImplToJson(this);
   }
 }
 
 abstract class _ImageAssetConfig implements ImageAssetConfig {
-  const factory _ImageAssetConfig(
-          {final ImageSource? imageSource,
-          final double widthFactor,
-          final String labelColor,
-          final Metadata metadata,
-          @Deprecated('Use source.uri instead') final String? uri}) =
-      _$ImageAssetConfigImpl;
+  const factory _ImageAssetConfig({
+    final ImageSource? imageSource,
+    final double widthFactor,
+    final String labelColor,
+    final Metadata metadata,
+    @Deprecated('Use source.uri instead') final String? uri,
+  }) = _$ImageAssetConfigImpl;
 
   factory _ImageAssetConfig.fromJson(Map<String, dynamic> json) =
       _$ImageAssetConfigImpl.fromJson;
@@ -3228,8 +3430,9 @@ mixin _$AppIconWidgetConfig {
 /// @nodoc
 abstract class $AppIconWidgetConfigCopyWith<$Res> {
   factory $AppIconWidgetConfigCopyWith(
-          AppIconWidgetConfig value, $Res Function(AppIconWidgetConfig) then) =
-      _$AppIconWidgetConfigCopyWithImpl<$Res, AppIconWidgetConfig>;
+    AppIconWidgetConfig value,
+    $Res Function(AppIconWidgetConfig) then,
+  ) = _$AppIconWidgetConfigCopyWithImpl<$Res, AppIconWidgetConfig>;
   @useResult
   $Res call({String? color});
 }
@@ -3248,24 +3451,26 @@ class _$AppIconWidgetConfigCopyWithImpl<$Res, $Val extends AppIconWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? color = freezed,
-  }) {
-    return _then(_value.copyWith(
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+  $Res call({Object? color = freezed}) {
+    return _then(
+      _value.copyWith(
+            color: freezed == color
+                ? _value.color
+                : color // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$AppIconWidgetConfigImplCopyWith<$Res>
     implements $AppIconWidgetConfigCopyWith<$Res> {
-  factory _$$AppIconWidgetConfigImplCopyWith(_$AppIconWidgetConfigImpl value,
-          $Res Function(_$AppIconWidgetConfigImpl) then) =
-      __$$AppIconWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$AppIconWidgetConfigImplCopyWith(
+    _$AppIconWidgetConfigImpl value,
+    $Res Function(_$AppIconWidgetConfigImpl) then,
+  ) = __$$AppIconWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? color});
@@ -3275,23 +3480,24 @@ abstract class _$$AppIconWidgetConfigImplCopyWith<$Res>
 class __$$AppIconWidgetConfigImplCopyWithImpl<$Res>
     extends _$AppIconWidgetConfigCopyWithImpl<$Res, _$AppIconWidgetConfigImpl>
     implements _$$AppIconWidgetConfigImplCopyWith<$Res> {
-  __$$AppIconWidgetConfigImplCopyWithImpl(_$AppIconWidgetConfigImpl _value,
-      $Res Function(_$AppIconWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$AppIconWidgetConfigImplCopyWithImpl(
+    _$AppIconWidgetConfigImpl _value,
+    $Res Function(_$AppIconWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppIconWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? color = freezed,
-  }) {
-    return _then(_$AppIconWidgetConfigImpl(
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+  $Res call({Object? color = freezed}) {
+    return _then(
+      _$AppIconWidgetConfigImpl(
+        color: freezed == color
+            ? _value.color
+            : color // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -3331,13 +3537,13 @@ class _$AppIconWidgetConfigImpl implements _AppIconWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$AppIconWidgetConfigImplCopyWith<_$AppIconWidgetConfigImpl> get copyWith =>
       __$$AppIconWidgetConfigImplCopyWithImpl<_$AppIconWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppIconWidgetConfigImplToJson(
-      this,
-    );
+    return _$$AppIconWidgetConfigImplToJson(this);
   }
 }
 
@@ -3380,8 +3586,9 @@ mixin _$InputWidgetConfig {
 /// @nodoc
 abstract class $InputWidgetConfigCopyWith<$Res> {
   factory $InputWidgetConfigCopyWith(
-          InputWidgetConfig value, $Res Function(InputWidgetConfig) then) =
-      _$InputWidgetConfigCopyWithImpl<$Res, InputWidgetConfig>;
+    InputWidgetConfig value,
+    $Res Function(InputWidgetConfig) then,
+  ) = _$InputWidgetConfigCopyWithImpl<$Res, InputWidgetConfig>;
   @useResult
   $Res call({TextFormFieldWidgetConfig primary});
 
@@ -3402,15 +3609,16 @@ class _$InputWidgetConfigCopyWithImpl<$Res, $Val extends InputWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? primary = null,
-  }) {
-    return _then(_value.copyWith(
-      primary: null == primary
-          ? _value.primary
-          : primary // ignore: cast_nullable_to_non_nullable
-              as TextFormFieldWidgetConfig,
-    ) as $Val);
+  $Res call({Object? primary = null}) {
+    return _then(
+      _value.copyWith(
+            primary: null == primary
+                ? _value.primary
+                : primary // ignore: cast_nullable_to_non_nullable
+                      as TextFormFieldWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of InputWidgetConfig
@@ -3427,9 +3635,10 @@ class _$InputWidgetConfigCopyWithImpl<$Res, $Val extends InputWidgetConfig>
 /// @nodoc
 abstract class _$$InputWidgetConfigImplCopyWith<$Res>
     implements $InputWidgetConfigCopyWith<$Res> {
-  factory _$$InputWidgetConfigImplCopyWith(_$InputWidgetConfigImpl value,
-          $Res Function(_$InputWidgetConfigImpl) then) =
-      __$$InputWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$InputWidgetConfigImplCopyWith(
+    _$InputWidgetConfigImpl value,
+    $Res Function(_$InputWidgetConfigImpl) then,
+  ) = __$$InputWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({TextFormFieldWidgetConfig primary});
@@ -3442,23 +3651,24 @@ abstract class _$$InputWidgetConfigImplCopyWith<$Res>
 class __$$InputWidgetConfigImplCopyWithImpl<$Res>
     extends _$InputWidgetConfigCopyWithImpl<$Res, _$InputWidgetConfigImpl>
     implements _$$InputWidgetConfigImplCopyWith<$Res> {
-  __$$InputWidgetConfigImplCopyWithImpl(_$InputWidgetConfigImpl _value,
-      $Res Function(_$InputWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$InputWidgetConfigImplCopyWithImpl(
+    _$InputWidgetConfigImpl _value,
+    $Res Function(_$InputWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of InputWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? primary = null,
-  }) {
-    return _then(_$InputWidgetConfigImpl(
-      primary: null == primary
-          ? _value.primary
-          : primary // ignore: cast_nullable_to_non_nullable
-              as TextFormFieldWidgetConfig,
-    ));
+  $Res call({Object? primary = null}) {
+    return _then(
+      _$InputWidgetConfigImpl(
+        primary: null == primary
+            ? _value.primary
+            : primary // ignore: cast_nullable_to_non_nullable
+                  as TextFormFieldWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -3466,8 +3676,9 @@ class __$$InputWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$InputWidgetConfigImpl implements _InputWidgetConfig {
-  const _$InputWidgetConfigImpl(
-      {this.primary = const TextFormFieldWidgetConfig()});
+  const _$InputWidgetConfigImpl({
+    this.primary = const TextFormFieldWidgetConfig(),
+  });
 
   factory _$InputWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$InputWidgetConfigImplFromJson(json);
@@ -3500,13 +3711,13 @@ class _$InputWidgetConfigImpl implements _InputWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$InputWidgetConfigImplCopyWith<_$InputWidgetConfigImpl> get copyWith =>
       __$$InputWidgetConfigImplCopyWithImpl<_$InputWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$InputWidgetConfigImplToJson(
-      this,
-    );
+    return _$$InputWidgetConfigImplToJson(this);
   }
 }
 
@@ -3529,7 +3740,8 @@ abstract class _InputWidgetConfig implements InputWidgetConfig {
 }
 
 TextFormFieldWidgetConfig _$TextFormFieldWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _TextFormFieldWidgetConfig.fromJson(json);
 }
 
@@ -3550,9 +3762,10 @@ mixin _$TextFormFieldWidgetConfig {
 
 /// @nodoc
 abstract class $TextFormFieldWidgetConfigCopyWith<$Res> {
-  factory $TextFormFieldWidgetConfigCopyWith(TextFormFieldWidgetConfig value,
-          $Res Function(TextFormFieldWidgetConfig) then) =
-      _$TextFormFieldWidgetConfigCopyWithImpl<$Res, TextFormFieldWidgetConfig>;
+  factory $TextFormFieldWidgetConfigCopyWith(
+    TextFormFieldWidgetConfig value,
+    $Res Function(TextFormFieldWidgetConfig) then,
+  ) = _$TextFormFieldWidgetConfigCopyWithImpl<$Res, TextFormFieldWidgetConfig>;
   @useResult
   $Res call({String? labelColor, InputBorderWidgetConfig border});
 
@@ -3560,8 +3773,10 @@ abstract class $TextFormFieldWidgetConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TextFormFieldWidgetConfigCopyWithImpl<$Res,
-        $Val extends TextFormFieldWidgetConfig>
+class _$TextFormFieldWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends TextFormFieldWidgetConfig
+>
     implements $TextFormFieldWidgetConfigCopyWith<$Res> {
   _$TextFormFieldWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -3574,20 +3789,20 @@ class _$TextFormFieldWidgetConfigCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? labelColor = freezed,
-    Object? border = null,
-  }) {
-    return _then(_value.copyWith(
-      labelColor: freezed == labelColor
-          ? _value.labelColor
-          : labelColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      border: null == border
-          ? _value.border
-          : border // ignore: cast_nullable_to_non_nullable
-              as InputBorderWidgetConfig,
-    ) as $Val);
+  $Res call({Object? labelColor = freezed, Object? border = null}) {
+    return _then(
+      _value.copyWith(
+            labelColor: freezed == labelColor
+                ? _value.labelColor
+                : labelColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            border: null == border
+                ? _value.border
+                : border // ignore: cast_nullable_to_non_nullable
+                      as InputBorderWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of TextFormFieldWidgetConfig
@@ -3605,9 +3820,9 @@ class _$TextFormFieldWidgetConfigCopyWithImpl<$Res,
 abstract class _$$TextFormFieldWidgetConfigImplCopyWith<$Res>
     implements $TextFormFieldWidgetConfigCopyWith<$Res> {
   factory _$$TextFormFieldWidgetConfigImplCopyWith(
-          _$TextFormFieldWidgetConfigImpl value,
-          $Res Function(_$TextFormFieldWidgetConfigImpl) then) =
-      __$$TextFormFieldWidgetConfigImplCopyWithImpl<$Res>;
+    _$TextFormFieldWidgetConfigImpl value,
+    $Res Function(_$TextFormFieldWidgetConfigImpl) then,
+  ) = __$$TextFormFieldWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? labelColor, InputBorderWidgetConfig border});
@@ -3618,32 +3833,34 @@ abstract class _$$TextFormFieldWidgetConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$TextFormFieldWidgetConfigImplCopyWithImpl<$Res>
-    extends _$TextFormFieldWidgetConfigCopyWithImpl<$Res,
-        _$TextFormFieldWidgetConfigImpl>
+    extends
+        _$TextFormFieldWidgetConfigCopyWithImpl<
+          $Res,
+          _$TextFormFieldWidgetConfigImpl
+        >
     implements _$$TextFormFieldWidgetConfigImplCopyWith<$Res> {
   __$$TextFormFieldWidgetConfigImplCopyWithImpl(
-      _$TextFormFieldWidgetConfigImpl _value,
-      $Res Function(_$TextFormFieldWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$TextFormFieldWidgetConfigImpl _value,
+    $Res Function(_$TextFormFieldWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TextFormFieldWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? labelColor = freezed,
-    Object? border = null,
-  }) {
-    return _then(_$TextFormFieldWidgetConfigImpl(
-      labelColor: freezed == labelColor
-          ? _value.labelColor
-          : labelColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      border: null == border
-          ? _value.border
-          : border // ignore: cast_nullable_to_non_nullable
-              as InputBorderWidgetConfig,
-    ));
+  $Res call({Object? labelColor = freezed, Object? border = null}) {
+    return _then(
+      _$TextFormFieldWidgetConfigImpl(
+        labelColor: freezed == labelColor
+            ? _value.labelColor
+            : labelColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        border: null == border
+            ? _value.border
+            : border // ignore: cast_nullable_to_non_nullable
+                  as InputBorderWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -3651,8 +3868,10 @@ class __$$TextFormFieldWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$TextFormFieldWidgetConfigImpl implements _TextFormFieldWidgetConfig {
-  const _$TextFormFieldWidgetConfigImpl(
-      {this.labelColor, this.border = const InputBorderWidgetConfig()});
+  const _$TextFormFieldWidgetConfigImpl({
+    this.labelColor,
+    this.border = const InputBorderWidgetConfig(),
+  });
 
   factory _$TextFormFieldWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$TextFormFieldWidgetConfigImplFromJson(json);
@@ -3688,21 +3907,22 @@ class _$TextFormFieldWidgetConfigImpl implements _TextFormFieldWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$TextFormFieldWidgetConfigImplCopyWith<_$TextFormFieldWidgetConfigImpl>
-      get copyWith => __$$TextFormFieldWidgetConfigImplCopyWithImpl<
-          _$TextFormFieldWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$TextFormFieldWidgetConfigImplCopyWithImpl<
+        _$TextFormFieldWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TextFormFieldWidgetConfigImplToJson(
-      this,
-    );
+    return _$$TextFormFieldWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _TextFormFieldWidgetConfig implements TextFormFieldWidgetConfig {
-  const factory _TextFormFieldWidgetConfig(
-      {final String? labelColor,
-      final InputBorderWidgetConfig border}) = _$TextFormFieldWidgetConfigImpl;
+  const factory _TextFormFieldWidgetConfig({
+    final String? labelColor,
+    final InputBorderWidgetConfig border,
+  }) = _$TextFormFieldWidgetConfigImpl;
 
   factory _TextFormFieldWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$TextFormFieldWidgetConfigImpl.fromJson;
@@ -3717,11 +3937,12 @@ abstract class _TextFormFieldWidgetConfig implements TextFormFieldWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TextFormFieldWidgetConfigImplCopyWith<_$TextFormFieldWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 InputBorderWidgetConfig _$InputBorderWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _InputBorderWidgetConfig.fromJson(json);
 }
 
@@ -3743,14 +3964,16 @@ mixin _$InputBorderWidgetConfig {
 
 /// @nodoc
 abstract class $InputBorderWidgetConfigCopyWith<$Res> {
-  factory $InputBorderWidgetConfigCopyWith(InputBorderWidgetConfig value,
-          $Res Function(InputBorderWidgetConfig) then) =
-      _$InputBorderWidgetConfigCopyWithImpl<$Res, InputBorderWidgetConfig>;
+  factory $InputBorderWidgetConfigCopyWith(
+    InputBorderWidgetConfig value,
+    $Res Function(InputBorderWidgetConfig) then,
+  ) = _$InputBorderWidgetConfigCopyWithImpl<$Res, InputBorderWidgetConfig>;
   @useResult
-  $Res call(
-      {BorderWidgetConfig disabled,
-      BorderWidgetConfig focused,
-      BorderWidgetConfig any});
+  $Res call({
+    BorderWidgetConfig disabled,
+    BorderWidgetConfig focused,
+    BorderWidgetConfig any,
+  });
 
   $BorderWidgetConfigCopyWith<$Res> get disabled;
   $BorderWidgetConfigCopyWith<$Res> get focused;
@@ -3758,8 +3981,10 @@ abstract class $InputBorderWidgetConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$InputBorderWidgetConfigCopyWithImpl<$Res,
-        $Val extends InputBorderWidgetConfig>
+class _$InputBorderWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends InputBorderWidgetConfig
+>
     implements $InputBorderWidgetConfigCopyWith<$Res> {
   _$InputBorderWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -3777,20 +4002,23 @@ class _$InputBorderWidgetConfigCopyWithImpl<$Res,
     Object? focused = null,
     Object? any = null,
   }) {
-    return _then(_value.copyWith(
-      disabled: null == disabled
-          ? _value.disabled
-          : disabled // ignore: cast_nullable_to_non_nullable
-              as BorderWidgetConfig,
-      focused: null == focused
-          ? _value.focused
-          : focused // ignore: cast_nullable_to_non_nullable
-              as BorderWidgetConfig,
-      any: null == any
-          ? _value.any
-          : any // ignore: cast_nullable_to_non_nullable
-              as BorderWidgetConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            disabled: null == disabled
+                ? _value.disabled
+                : disabled // ignore: cast_nullable_to_non_nullable
+                      as BorderWidgetConfig,
+            focused: null == focused
+                ? _value.focused
+                : focused // ignore: cast_nullable_to_non_nullable
+                      as BorderWidgetConfig,
+            any: null == any
+                ? _value.any
+                : any // ignore: cast_nullable_to_non_nullable
+                      as BorderWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of InputBorderWidgetConfig
@@ -3828,15 +4056,16 @@ class _$InputBorderWidgetConfigCopyWithImpl<$Res,
 abstract class _$$InputBorderWidgetConfigImplCopyWith<$Res>
     implements $InputBorderWidgetConfigCopyWith<$Res> {
   factory _$$InputBorderWidgetConfigImplCopyWith(
-          _$InputBorderWidgetConfigImpl value,
-          $Res Function(_$InputBorderWidgetConfigImpl) then) =
-      __$$InputBorderWidgetConfigImplCopyWithImpl<$Res>;
+    _$InputBorderWidgetConfigImpl value,
+    $Res Function(_$InputBorderWidgetConfigImpl) then,
+  ) = __$$InputBorderWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {BorderWidgetConfig disabled,
-      BorderWidgetConfig focused,
-      BorderWidgetConfig any});
+  $Res call({
+    BorderWidgetConfig disabled,
+    BorderWidgetConfig focused,
+    BorderWidgetConfig any,
+  });
 
   @override
   $BorderWidgetConfigCopyWith<$Res> get disabled;
@@ -3848,13 +4077,16 @@ abstract class _$$InputBorderWidgetConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$InputBorderWidgetConfigImplCopyWithImpl<$Res>
-    extends _$InputBorderWidgetConfigCopyWithImpl<$Res,
-        _$InputBorderWidgetConfigImpl>
+    extends
+        _$InputBorderWidgetConfigCopyWithImpl<
+          $Res,
+          _$InputBorderWidgetConfigImpl
+        >
     implements _$$InputBorderWidgetConfigImplCopyWith<$Res> {
   __$$InputBorderWidgetConfigImplCopyWithImpl(
-      _$InputBorderWidgetConfigImpl _value,
-      $Res Function(_$InputBorderWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$InputBorderWidgetConfigImpl _value,
+    $Res Function(_$InputBorderWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of InputBorderWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -3865,20 +4097,22 @@ class __$$InputBorderWidgetConfigImplCopyWithImpl<$Res>
     Object? focused = null,
     Object? any = null,
   }) {
-    return _then(_$InputBorderWidgetConfigImpl(
-      disabled: null == disabled
-          ? _value.disabled
-          : disabled // ignore: cast_nullable_to_non_nullable
-              as BorderWidgetConfig,
-      focused: null == focused
-          ? _value.focused
-          : focused // ignore: cast_nullable_to_non_nullable
-              as BorderWidgetConfig,
-      any: null == any
-          ? _value.any
-          : any // ignore: cast_nullable_to_non_nullable
-              as BorderWidgetConfig,
-    ));
+    return _then(
+      _$InputBorderWidgetConfigImpl(
+        disabled: null == disabled
+            ? _value.disabled
+            : disabled // ignore: cast_nullable_to_non_nullable
+                  as BorderWidgetConfig,
+        focused: null == focused
+            ? _value.focused
+            : focused // ignore: cast_nullable_to_non_nullable
+                  as BorderWidgetConfig,
+        any: null == any
+            ? _value.any
+            : any // ignore: cast_nullable_to_non_nullable
+                  as BorderWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -3886,10 +4120,11 @@ class __$$InputBorderWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$InputBorderWidgetConfigImpl implements _InputBorderWidgetConfig {
-  const _$InputBorderWidgetConfigImpl(
-      {this.disabled = const BorderWidgetConfig(),
-      this.focused = const BorderWidgetConfig(),
-      this.any = const BorderWidgetConfig()});
+  const _$InputBorderWidgetConfigImpl({
+    this.disabled = const BorderWidgetConfig(),
+    this.focused = const BorderWidgetConfig(),
+    this.any = const BorderWidgetConfig(),
+  });
 
   factory _$InputBorderWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$InputBorderWidgetConfigImplFromJson(json);
@@ -3930,22 +4165,23 @@ class _$InputBorderWidgetConfigImpl implements _InputBorderWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$InputBorderWidgetConfigImplCopyWith<_$InputBorderWidgetConfigImpl>
-      get copyWith => __$$InputBorderWidgetConfigImplCopyWithImpl<
-          _$InputBorderWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$InputBorderWidgetConfigImplCopyWithImpl<
+        _$InputBorderWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$InputBorderWidgetConfigImplToJson(
-      this,
-    );
+    return _$$InputBorderWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _InputBorderWidgetConfig implements InputBorderWidgetConfig {
-  const factory _InputBorderWidgetConfig(
-      {final BorderWidgetConfig disabled,
-      final BorderWidgetConfig focused,
-      final BorderWidgetConfig any}) = _$InputBorderWidgetConfigImpl;
+  const factory _InputBorderWidgetConfig({
+    final BorderWidgetConfig disabled,
+    final BorderWidgetConfig focused,
+    final BorderWidgetConfig any,
+  }) = _$InputBorderWidgetConfigImpl;
 
   factory _InputBorderWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$InputBorderWidgetConfigImpl.fromJson;
@@ -3962,7 +4198,7 @@ abstract class _InputBorderWidgetConfig implements InputBorderWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InputBorderWidgetConfigImplCopyWith<_$InputBorderWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 BorderWidgetConfig _$BorderWidgetConfigFromJson(Map<String, dynamic> json) {
@@ -3987,8 +4223,9 @@ mixin _$BorderWidgetConfig {
 /// @nodoc
 abstract class $BorderWidgetConfigCopyWith<$Res> {
   factory $BorderWidgetConfigCopyWith(
-          BorderWidgetConfig value, $Res Function(BorderWidgetConfig) then) =
-      _$BorderWidgetConfigCopyWithImpl<$Res, BorderWidgetConfig>;
+    BorderWidgetConfig value,
+    $Res Function(BorderWidgetConfig) then,
+  ) = _$BorderWidgetConfigCopyWithImpl<$Res, BorderWidgetConfig>;
   @useResult
   $Res call({String? typicalColor, String? errorColor});
 }
@@ -4007,29 +4244,30 @@ class _$BorderWidgetConfigCopyWithImpl<$Res, $Val extends BorderWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? typicalColor = freezed,
-    Object? errorColor = freezed,
-  }) {
-    return _then(_value.copyWith(
-      typicalColor: freezed == typicalColor
-          ? _value.typicalColor
-          : typicalColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorColor: freezed == errorColor
-          ? _value.errorColor
-          : errorColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+  $Res call({Object? typicalColor = freezed, Object? errorColor = freezed}) {
+    return _then(
+      _value.copyWith(
+            typicalColor: freezed == typicalColor
+                ? _value.typicalColor
+                : typicalColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            errorColor: freezed == errorColor
+                ? _value.errorColor
+                : errorColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$BorderWidgetConfigImplCopyWith<$Res>
     implements $BorderWidgetConfigCopyWith<$Res> {
-  factory _$$BorderWidgetConfigImplCopyWith(_$BorderWidgetConfigImpl value,
-          $Res Function(_$BorderWidgetConfigImpl) then) =
-      __$$BorderWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$BorderWidgetConfigImplCopyWith(
+    _$BorderWidgetConfigImpl value,
+    $Res Function(_$BorderWidgetConfigImpl) then,
+  ) = __$$BorderWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? typicalColor, String? errorColor});
@@ -4039,28 +4277,28 @@ abstract class _$$BorderWidgetConfigImplCopyWith<$Res>
 class __$$BorderWidgetConfigImplCopyWithImpl<$Res>
     extends _$BorderWidgetConfigCopyWithImpl<$Res, _$BorderWidgetConfigImpl>
     implements _$$BorderWidgetConfigImplCopyWith<$Res> {
-  __$$BorderWidgetConfigImplCopyWithImpl(_$BorderWidgetConfigImpl _value,
-      $Res Function(_$BorderWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$BorderWidgetConfigImplCopyWithImpl(
+    _$BorderWidgetConfigImpl _value,
+    $Res Function(_$BorderWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of BorderWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? typicalColor = freezed,
-    Object? errorColor = freezed,
-  }) {
-    return _then(_$BorderWidgetConfigImpl(
-      typicalColor: freezed == typicalColor
-          ? _value.typicalColor
-          : typicalColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorColor: freezed == errorColor
-          ? _value.errorColor
-          : errorColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+  $Res call({Object? typicalColor = freezed, Object? errorColor = freezed}) {
+    return _then(
+      _$BorderWidgetConfigImpl(
+        typicalColor: freezed == typicalColor
+            ? _value.typicalColor
+            : typicalColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorColor: freezed == errorColor
+            ? _value.errorColor
+            : errorColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -4105,20 +4343,21 @@ class _$BorderWidgetConfigImpl implements _BorderWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$BorderWidgetConfigImplCopyWith<_$BorderWidgetConfigImpl> get copyWith =>
       __$$BorderWidgetConfigImplCopyWithImpl<_$BorderWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BorderWidgetConfigImplToJson(
-      this,
-    );
+    return _$$BorderWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _BorderWidgetConfig implements BorderWidgetConfig {
-  const factory _BorderWidgetConfig(
-      {final String? typicalColor,
-      final String? errorColor}) = _$BorderWidgetConfigImpl;
+  const factory _BorderWidgetConfig({
+    final String? typicalColor,
+    final String? errorColor,
+  }) = _$BorderWidgetConfigImpl;
 
   factory _BorderWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$BorderWidgetConfigImpl.fromJson;
@@ -4158,8 +4397,9 @@ mixin _$TextWidgetConfig {
 /// @nodoc
 abstract class $TextWidgetConfigCopyWith<$Res> {
   factory $TextWidgetConfigCopyWith(
-          TextWidgetConfig value, $Res Function(TextWidgetConfig) then) =
-      _$TextWidgetConfigCopyWithImpl<$Res, TextWidgetConfig>;
+    TextWidgetConfig value,
+    $Res Function(TextWidgetConfig) then,
+  ) = _$TextWidgetConfigCopyWithImpl<$Res, TextWidgetConfig>;
   @useResult
   $Res call({TextSelectionWidgetConfig selection, LinkifyWidgetConfig linkify});
 
@@ -4181,20 +4421,20 @@ class _$TextWidgetConfigCopyWithImpl<$Res, $Val extends TextWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? selection = null,
-    Object? linkify = null,
-  }) {
-    return _then(_value.copyWith(
-      selection: null == selection
-          ? _value.selection
-          : selection // ignore: cast_nullable_to_non_nullable
-              as TextSelectionWidgetConfig,
-      linkify: null == linkify
-          ? _value.linkify
-          : linkify // ignore: cast_nullable_to_non_nullable
-              as LinkifyWidgetConfig,
-    ) as $Val);
+  $Res call({Object? selection = null, Object? linkify = null}) {
+    return _then(
+      _value.copyWith(
+            selection: null == selection
+                ? _value.selection
+                : selection // ignore: cast_nullable_to_non_nullable
+                      as TextSelectionWidgetConfig,
+            linkify: null == linkify
+                ? _value.linkify
+                : linkify // ignore: cast_nullable_to_non_nullable
+                      as LinkifyWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of TextWidgetConfig
@@ -4221,9 +4461,10 @@ class _$TextWidgetConfigCopyWithImpl<$Res, $Val extends TextWidgetConfig>
 /// @nodoc
 abstract class _$$TextWidgetConfigImplCopyWith<$Res>
     implements $TextWidgetConfigCopyWith<$Res> {
-  factory _$$TextWidgetConfigImplCopyWith(_$TextWidgetConfigImpl value,
-          $Res Function(_$TextWidgetConfigImpl) then) =
-      __$$TextWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$TextWidgetConfigImplCopyWith(
+    _$TextWidgetConfigImpl value,
+    $Res Function(_$TextWidgetConfigImpl) then,
+  ) = __$$TextWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({TextSelectionWidgetConfig selection, LinkifyWidgetConfig linkify});
@@ -4238,28 +4479,28 @@ abstract class _$$TextWidgetConfigImplCopyWith<$Res>
 class __$$TextWidgetConfigImplCopyWithImpl<$Res>
     extends _$TextWidgetConfigCopyWithImpl<$Res, _$TextWidgetConfigImpl>
     implements _$$TextWidgetConfigImplCopyWith<$Res> {
-  __$$TextWidgetConfigImplCopyWithImpl(_$TextWidgetConfigImpl _value,
-      $Res Function(_$TextWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$TextWidgetConfigImplCopyWithImpl(
+    _$TextWidgetConfigImpl _value,
+    $Res Function(_$TextWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TextWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? selection = null,
-    Object? linkify = null,
-  }) {
-    return _then(_$TextWidgetConfigImpl(
-      selection: null == selection
-          ? _value.selection
-          : selection // ignore: cast_nullable_to_non_nullable
-              as TextSelectionWidgetConfig,
-      linkify: null == linkify
-          ? _value.linkify
-          : linkify // ignore: cast_nullable_to_non_nullable
-              as LinkifyWidgetConfig,
-    ));
+  $Res call({Object? selection = null, Object? linkify = null}) {
+    return _then(
+      _$TextWidgetConfigImpl(
+        selection: null == selection
+            ? _value.selection
+            : selection // ignore: cast_nullable_to_non_nullable
+                  as TextSelectionWidgetConfig,
+        linkify: null == linkify
+            ? _value.linkify
+            : linkify // ignore: cast_nullable_to_non_nullable
+                  as LinkifyWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -4267,9 +4508,10 @@ class __$$TextWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$TextWidgetConfigImpl implements _TextWidgetConfig {
-  const _$TextWidgetConfigImpl(
-      {this.selection = const TextSelectionWidgetConfig(),
-      this.linkify = const LinkifyWidgetConfig()});
+  const _$TextWidgetConfigImpl({
+    this.selection = const TextSelectionWidgetConfig(),
+    this.linkify = const LinkifyWidgetConfig(),
+  });
 
   factory _$TextWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$TextWidgetConfigImplFromJson(json);
@@ -4307,20 +4549,21 @@ class _$TextWidgetConfigImpl implements _TextWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$TextWidgetConfigImplCopyWith<_$TextWidgetConfigImpl> get copyWith =>
       __$$TextWidgetConfigImplCopyWithImpl<_$TextWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TextWidgetConfigImplToJson(
-      this,
-    );
+    return _$$TextWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _TextWidgetConfig implements TextWidgetConfig {
-  const factory _TextWidgetConfig(
-      {final TextSelectionWidgetConfig selection,
-      final LinkifyWidgetConfig linkify}) = _$TextWidgetConfigImpl;
+  const factory _TextWidgetConfig({
+    final TextSelectionWidgetConfig selection,
+    final LinkifyWidgetConfig linkify,
+  }) = _$TextWidgetConfigImpl;
 
   factory _TextWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$TextWidgetConfigImpl.fromJson;
@@ -4339,7 +4582,8 @@ abstract class _TextWidgetConfig implements TextWidgetConfig {
 }
 
 TextSelectionWidgetConfig _$TextSelectionWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _TextSelectionWidgetConfig.fromJson(json);
 }
 
@@ -4361,19 +4605,23 @@ mixin _$TextSelectionWidgetConfig {
 
 /// @nodoc
 abstract class $TextSelectionWidgetConfigCopyWith<$Res> {
-  factory $TextSelectionWidgetConfigCopyWith(TextSelectionWidgetConfig value,
-          $Res Function(TextSelectionWidgetConfig) then) =
-      _$TextSelectionWidgetConfigCopyWithImpl<$Res, TextSelectionWidgetConfig>;
+  factory $TextSelectionWidgetConfigCopyWith(
+    TextSelectionWidgetConfig value,
+    $Res Function(TextSelectionWidgetConfig) then,
+  ) = _$TextSelectionWidgetConfigCopyWithImpl<$Res, TextSelectionWidgetConfig>;
   @useResult
-  $Res call(
-      {String? cursorColor,
-      String? selectionColor,
-      String? selectionHandleColor});
+  $Res call({
+    String? cursorColor,
+    String? selectionColor,
+    String? selectionHandleColor,
+  });
 }
 
 /// @nodoc
-class _$TextSelectionWidgetConfigCopyWithImpl<$Res,
-        $Val extends TextSelectionWidgetConfig>
+class _$TextSelectionWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends TextSelectionWidgetConfig
+>
     implements $TextSelectionWidgetConfigCopyWith<$Res> {
   _$TextSelectionWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -4391,20 +4639,23 @@ class _$TextSelectionWidgetConfigCopyWithImpl<$Res,
     Object? selectionColor = freezed,
     Object? selectionHandleColor = freezed,
   }) {
-    return _then(_value.copyWith(
-      cursorColor: freezed == cursorColor
-          ? _value.cursorColor
-          : cursorColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectionColor: freezed == selectionColor
-          ? _value.selectionColor
-          : selectionColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectionHandleColor: freezed == selectionHandleColor
-          ? _value.selectionHandleColor
-          : selectionHandleColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            cursorColor: freezed == cursorColor
+                ? _value.cursorColor
+                : cursorColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            selectionColor: freezed == selectionColor
+                ? _value.selectionColor
+                : selectionColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            selectionHandleColor: freezed == selectionHandleColor
+                ? _value.selectionHandleColor
+                : selectionHandleColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -4412,26 +4663,30 @@ class _$TextSelectionWidgetConfigCopyWithImpl<$Res,
 abstract class _$$TextSelectionWidgetConfigImplCopyWith<$Res>
     implements $TextSelectionWidgetConfigCopyWith<$Res> {
   factory _$$TextSelectionWidgetConfigImplCopyWith(
-          _$TextSelectionWidgetConfigImpl value,
-          $Res Function(_$TextSelectionWidgetConfigImpl) then) =
-      __$$TextSelectionWidgetConfigImplCopyWithImpl<$Res>;
+    _$TextSelectionWidgetConfigImpl value,
+    $Res Function(_$TextSelectionWidgetConfigImpl) then,
+  ) = __$$TextSelectionWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? cursorColor,
-      String? selectionColor,
-      String? selectionHandleColor});
+  $Res call({
+    String? cursorColor,
+    String? selectionColor,
+    String? selectionHandleColor,
+  });
 }
 
 /// @nodoc
 class __$$TextSelectionWidgetConfigImplCopyWithImpl<$Res>
-    extends _$TextSelectionWidgetConfigCopyWithImpl<$Res,
-        _$TextSelectionWidgetConfigImpl>
+    extends
+        _$TextSelectionWidgetConfigCopyWithImpl<
+          $Res,
+          _$TextSelectionWidgetConfigImpl
+        >
     implements _$$TextSelectionWidgetConfigImplCopyWith<$Res> {
   __$$TextSelectionWidgetConfigImplCopyWithImpl(
-      _$TextSelectionWidgetConfigImpl _value,
-      $Res Function(_$TextSelectionWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$TextSelectionWidgetConfigImpl _value,
+    $Res Function(_$TextSelectionWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TextSelectionWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -4442,20 +4697,22 @@ class __$$TextSelectionWidgetConfigImplCopyWithImpl<$Res>
     Object? selectionColor = freezed,
     Object? selectionHandleColor = freezed,
   }) {
-    return _then(_$TextSelectionWidgetConfigImpl(
-      cursorColor: freezed == cursorColor
-          ? _value.cursorColor
-          : cursorColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectionColor: freezed == selectionColor
-          ? _value.selectionColor
-          : selectionColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectionHandleColor: freezed == selectionHandleColor
-          ? _value.selectionHandleColor
-          : selectionHandleColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$TextSelectionWidgetConfigImpl(
+        cursorColor: freezed == cursorColor
+            ? _value.cursorColor
+            : cursorColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        selectionColor: freezed == selectionColor
+            ? _value.selectionColor
+            : selectionColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        selectionHandleColor: freezed == selectionHandleColor
+            ? _value.selectionHandleColor
+            : selectionHandleColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -4463,8 +4720,11 @@ class __$$TextSelectionWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$TextSelectionWidgetConfigImpl implements _TextSelectionWidgetConfig {
-  const _$TextSelectionWidgetConfigImpl(
-      {this.cursorColor, this.selectionColor, this.selectionHandleColor});
+  const _$TextSelectionWidgetConfigImpl({
+    this.cursorColor,
+    this.selectionColor,
+    this.selectionHandleColor,
+  });
 
   factory _$TextSelectionWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$TextSelectionWidgetConfigImplFromJson(json);
@@ -4497,7 +4757,11 @@ class _$TextSelectionWidgetConfigImpl implements _TextSelectionWidgetConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, cursorColor, selectionColor, selectionHandleColor);
+    runtimeType,
+    cursorColor,
+    selectionColor,
+    selectionHandleColor,
+  );
 
   /// Create a copy of TextSelectionWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -4505,22 +4769,23 @@ class _$TextSelectionWidgetConfigImpl implements _TextSelectionWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$TextSelectionWidgetConfigImplCopyWith<_$TextSelectionWidgetConfigImpl>
-      get copyWith => __$$TextSelectionWidgetConfigImplCopyWithImpl<
-          _$TextSelectionWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$TextSelectionWidgetConfigImplCopyWithImpl<
+        _$TextSelectionWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TextSelectionWidgetConfigImplToJson(
-      this,
-    );
+    return _$$TextSelectionWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _TextSelectionWidgetConfig implements TextSelectionWidgetConfig {
-  const factory _TextSelectionWidgetConfig(
-      {final String? cursorColor,
-      final String? selectionColor,
-      final String? selectionHandleColor}) = _$TextSelectionWidgetConfigImpl;
+  const factory _TextSelectionWidgetConfig({
+    final String? cursorColor,
+    final String? selectionColor,
+    final String? selectionHandleColor,
+  }) = _$TextSelectionWidgetConfigImpl;
 
   factory _TextSelectionWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$TextSelectionWidgetConfigImpl.fromJson;
@@ -4537,7 +4802,7 @@ abstract class _TextSelectionWidgetConfig implements TextSelectionWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TextSelectionWidgetConfigImplCopyWith<_$TextSelectionWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 LinkifyWidgetConfig _$LinkifyWidgetConfigFromJson(Map<String, dynamic> json) {
@@ -4562,8 +4827,9 @@ mixin _$LinkifyWidgetConfig {
 /// @nodoc
 abstract class $LinkifyWidgetConfigCopyWith<$Res> {
   factory $LinkifyWidgetConfigCopyWith(
-          LinkifyWidgetConfig value, $Res Function(LinkifyWidgetConfig) then) =
-      _$LinkifyWidgetConfigCopyWithImpl<$Res, LinkifyWidgetConfig>;
+    LinkifyWidgetConfig value,
+    $Res Function(LinkifyWidgetConfig) then,
+  ) = _$LinkifyWidgetConfigCopyWithImpl<$Res, LinkifyWidgetConfig>;
   @useResult
   $Res call({String? styleColor, String? linkifyStyleColor});
 }
@@ -4586,25 +4852,29 @@ class _$LinkifyWidgetConfigCopyWithImpl<$Res, $Val extends LinkifyWidgetConfig>
     Object? styleColor = freezed,
     Object? linkifyStyleColor = freezed,
   }) {
-    return _then(_value.copyWith(
-      styleColor: freezed == styleColor
-          ? _value.styleColor
-          : styleColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      linkifyStyleColor: freezed == linkifyStyleColor
-          ? _value.linkifyStyleColor
-          : linkifyStyleColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            styleColor: freezed == styleColor
+                ? _value.styleColor
+                : styleColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            linkifyStyleColor: freezed == linkifyStyleColor
+                ? _value.linkifyStyleColor
+                : linkifyStyleColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$LinkifyWidgetConfigImplCopyWith<$Res>
     implements $LinkifyWidgetConfigCopyWith<$Res> {
-  factory _$$LinkifyWidgetConfigImplCopyWith(_$LinkifyWidgetConfigImpl value,
-          $Res Function(_$LinkifyWidgetConfigImpl) then) =
-      __$$LinkifyWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$LinkifyWidgetConfigImplCopyWith(
+    _$LinkifyWidgetConfigImpl value,
+    $Res Function(_$LinkifyWidgetConfigImpl) then,
+  ) = __$$LinkifyWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? styleColor, String? linkifyStyleColor});
@@ -4614,9 +4884,10 @@ abstract class _$$LinkifyWidgetConfigImplCopyWith<$Res>
 class __$$LinkifyWidgetConfigImplCopyWithImpl<$Res>
     extends _$LinkifyWidgetConfigCopyWithImpl<$Res, _$LinkifyWidgetConfigImpl>
     implements _$$LinkifyWidgetConfigImplCopyWith<$Res> {
-  __$$LinkifyWidgetConfigImplCopyWithImpl(_$LinkifyWidgetConfigImpl _value,
-      $Res Function(_$LinkifyWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$LinkifyWidgetConfigImplCopyWithImpl(
+    _$LinkifyWidgetConfigImpl _value,
+    $Res Function(_$LinkifyWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LinkifyWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -4626,16 +4897,18 @@ class __$$LinkifyWidgetConfigImplCopyWithImpl<$Res>
     Object? styleColor = freezed,
     Object? linkifyStyleColor = freezed,
   }) {
-    return _then(_$LinkifyWidgetConfigImpl(
-      styleColor: freezed == styleColor
-          ? _value.styleColor
-          : styleColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      linkifyStyleColor: freezed == linkifyStyleColor
-          ? _value.linkifyStyleColor
-          : linkifyStyleColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$LinkifyWidgetConfigImpl(
+        styleColor: freezed == styleColor
+            ? _value.styleColor
+            : styleColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        linkifyStyleColor: freezed == linkifyStyleColor
+            ? _value.linkifyStyleColor
+            : linkifyStyleColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -4680,20 +4953,21 @@ class _$LinkifyWidgetConfigImpl implements _LinkifyWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$LinkifyWidgetConfigImplCopyWith<_$LinkifyWidgetConfigImpl> get copyWith =>
       __$$LinkifyWidgetConfigImplCopyWithImpl<_$LinkifyWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LinkifyWidgetConfigImplToJson(
-      this,
-    );
+    return _$$LinkifyWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _LinkifyWidgetConfig implements LinkifyWidgetConfig {
-  const factory _LinkifyWidgetConfig(
-      {final String? styleColor,
-      final String? linkifyStyleColor}) = _$LinkifyWidgetConfigImpl;
+  const factory _LinkifyWidgetConfig({
+    final String? styleColor,
+    final String? linkifyStyleColor,
+  }) = _$LinkifyWidgetConfigImpl;
 
   factory _LinkifyWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$LinkifyWidgetConfigImpl.fromJson;
@@ -4734,11 +5008,14 @@ mixin _$DialogWidgetConfig {
 /// @nodoc
 abstract class $DialogWidgetConfigCopyWith<$Res> {
   factory $DialogWidgetConfigCopyWith(
-          DialogWidgetConfig value, $Res Function(DialogWidgetConfig) then) =
-      _$DialogWidgetConfigCopyWithImpl<$Res, DialogWidgetConfig>;
+    DialogWidgetConfig value,
+    $Res Function(DialogWidgetConfig) then,
+  ) = _$DialogWidgetConfigCopyWithImpl<$Res, DialogWidgetConfig>;
   @useResult
-  $Res call(
-      {ConfirmDialogWidgetConfig confirmDialog, SnackBarWidgetConfig snackBar});
+  $Res call({
+    ConfirmDialogWidgetConfig confirmDialog,
+    SnackBarWidgetConfig snackBar,
+  });
 
   $ConfirmDialogWidgetConfigCopyWith<$Res> get confirmDialog;
   $SnackBarWidgetConfigCopyWith<$Res> get snackBar;
@@ -4758,20 +5035,20 @@ class _$DialogWidgetConfigCopyWithImpl<$Res, $Val extends DialogWidgetConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? confirmDialog = null,
-    Object? snackBar = null,
-  }) {
-    return _then(_value.copyWith(
-      confirmDialog: null == confirmDialog
-          ? _value.confirmDialog
-          : confirmDialog // ignore: cast_nullable_to_non_nullable
-              as ConfirmDialogWidgetConfig,
-      snackBar: null == snackBar
-          ? _value.snackBar
-          : snackBar // ignore: cast_nullable_to_non_nullable
-              as SnackBarWidgetConfig,
-    ) as $Val);
+  $Res call({Object? confirmDialog = null, Object? snackBar = null}) {
+    return _then(
+      _value.copyWith(
+            confirmDialog: null == confirmDialog
+                ? _value.confirmDialog
+                : confirmDialog // ignore: cast_nullable_to_non_nullable
+                      as ConfirmDialogWidgetConfig,
+            snackBar: null == snackBar
+                ? _value.snackBar
+                : snackBar // ignore: cast_nullable_to_non_nullable
+                      as SnackBarWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of DialogWidgetConfig
@@ -4779,8 +5056,9 @@ class _$DialogWidgetConfigCopyWithImpl<$Res, $Val extends DialogWidgetConfig>
   @override
   @pragma('vm:prefer-inline')
   $ConfirmDialogWidgetConfigCopyWith<$Res> get confirmDialog {
-    return $ConfirmDialogWidgetConfigCopyWith<$Res>(_value.confirmDialog,
-        (value) {
+    return $ConfirmDialogWidgetConfigCopyWith<$Res>(_value.confirmDialog, (
+      value,
+    ) {
       return _then(_value.copyWith(confirmDialog: value) as $Val);
     });
   }
@@ -4799,13 +5077,16 @@ class _$DialogWidgetConfigCopyWithImpl<$Res, $Val extends DialogWidgetConfig>
 /// @nodoc
 abstract class _$$DialogWidgetConfigImplCopyWith<$Res>
     implements $DialogWidgetConfigCopyWith<$Res> {
-  factory _$$DialogWidgetConfigImplCopyWith(_$DialogWidgetConfigImpl value,
-          $Res Function(_$DialogWidgetConfigImpl) then) =
-      __$$DialogWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$DialogWidgetConfigImplCopyWith(
+    _$DialogWidgetConfigImpl value,
+    $Res Function(_$DialogWidgetConfigImpl) then,
+  ) = __$$DialogWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {ConfirmDialogWidgetConfig confirmDialog, SnackBarWidgetConfig snackBar});
+  $Res call({
+    ConfirmDialogWidgetConfig confirmDialog,
+    SnackBarWidgetConfig snackBar,
+  });
 
   @override
   $ConfirmDialogWidgetConfigCopyWith<$Res> get confirmDialog;
@@ -4817,28 +5098,28 @@ abstract class _$$DialogWidgetConfigImplCopyWith<$Res>
 class __$$DialogWidgetConfigImplCopyWithImpl<$Res>
     extends _$DialogWidgetConfigCopyWithImpl<$Res, _$DialogWidgetConfigImpl>
     implements _$$DialogWidgetConfigImplCopyWith<$Res> {
-  __$$DialogWidgetConfigImplCopyWithImpl(_$DialogWidgetConfigImpl _value,
-      $Res Function(_$DialogWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$DialogWidgetConfigImplCopyWithImpl(
+    _$DialogWidgetConfigImpl _value,
+    $Res Function(_$DialogWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DialogWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? confirmDialog = null,
-    Object? snackBar = null,
-  }) {
-    return _then(_$DialogWidgetConfigImpl(
-      confirmDialog: null == confirmDialog
-          ? _value.confirmDialog
-          : confirmDialog // ignore: cast_nullable_to_non_nullable
-              as ConfirmDialogWidgetConfig,
-      snackBar: null == snackBar
-          ? _value.snackBar
-          : snackBar // ignore: cast_nullable_to_non_nullable
-              as SnackBarWidgetConfig,
-    ));
+  $Res call({Object? confirmDialog = null, Object? snackBar = null}) {
+    return _then(
+      _$DialogWidgetConfigImpl(
+        confirmDialog: null == confirmDialog
+            ? _value.confirmDialog
+            : confirmDialog // ignore: cast_nullable_to_non_nullable
+                  as ConfirmDialogWidgetConfig,
+        snackBar: null == snackBar
+            ? _value.snackBar
+            : snackBar // ignore: cast_nullable_to_non_nullable
+                  as SnackBarWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -4846,9 +5127,10 @@ class __$$DialogWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$DialogWidgetConfigImpl implements _DialogWidgetConfig {
-  const _$DialogWidgetConfigImpl(
-      {this.confirmDialog = const ConfirmDialogWidgetConfig(),
-      this.snackBar = const SnackBarWidgetConfig()});
+  const _$DialogWidgetConfigImpl({
+    this.confirmDialog = const ConfirmDialogWidgetConfig(),
+    this.snackBar = const SnackBarWidgetConfig(),
+  });
 
   factory _$DialogWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$DialogWidgetConfigImplFromJson(json);
@@ -4887,20 +5169,21 @@ class _$DialogWidgetConfigImpl implements _DialogWidgetConfig {
   @pragma('vm:prefer-inline')
   _$$DialogWidgetConfigImplCopyWith<_$DialogWidgetConfigImpl> get copyWith =>
       __$$DialogWidgetConfigImplCopyWithImpl<_$DialogWidgetConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DialogWidgetConfigImplToJson(
-      this,
-    );
+    return _$$DialogWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _DialogWidgetConfig implements DialogWidgetConfig {
-  const factory _DialogWidgetConfig(
-      {final ConfirmDialogWidgetConfig confirmDialog,
-      final SnackBarWidgetConfig snackBar}) = _$DialogWidgetConfigImpl;
+  const factory _DialogWidgetConfig({
+    final ConfirmDialogWidgetConfig confirmDialog,
+    final SnackBarWidgetConfig snackBar,
+  }) = _$DialogWidgetConfigImpl;
 
   factory _DialogWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$DialogWidgetConfigImpl.fromJson;
@@ -4919,7 +5202,8 @@ abstract class _DialogWidgetConfig implements DialogWidgetConfig {
 }
 
 ConfirmDialogWidgetConfig _$ConfirmDialogWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _ConfirmDialogWidgetConfig.fromJson(json);
 }
 
@@ -4941,19 +5225,23 @@ mixin _$ConfirmDialogWidgetConfig {
 
 /// @nodoc
 abstract class $ConfirmDialogWidgetConfigCopyWith<$Res> {
-  factory $ConfirmDialogWidgetConfigCopyWith(ConfirmDialogWidgetConfig value,
-          $Res Function(ConfirmDialogWidgetConfig) then) =
-      _$ConfirmDialogWidgetConfigCopyWithImpl<$Res, ConfirmDialogWidgetConfig>;
+  factory $ConfirmDialogWidgetConfigCopyWith(
+    ConfirmDialogWidgetConfig value,
+    $Res Function(ConfirmDialogWidgetConfig) then,
+  ) = _$ConfirmDialogWidgetConfigCopyWithImpl<$Res, ConfirmDialogWidgetConfig>;
   @useResult
-  $Res call(
-      {String? activeButtonColor1,
-      String? activeButtonColor2,
-      String? defaultButtonColor});
+  $Res call({
+    String? activeButtonColor1,
+    String? activeButtonColor2,
+    String? defaultButtonColor,
+  });
 }
 
 /// @nodoc
-class _$ConfirmDialogWidgetConfigCopyWithImpl<$Res,
-        $Val extends ConfirmDialogWidgetConfig>
+class _$ConfirmDialogWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends ConfirmDialogWidgetConfig
+>
     implements $ConfirmDialogWidgetConfigCopyWith<$Res> {
   _$ConfirmDialogWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -4971,20 +5259,23 @@ class _$ConfirmDialogWidgetConfigCopyWithImpl<$Res,
     Object? activeButtonColor2 = freezed,
     Object? defaultButtonColor = freezed,
   }) {
-    return _then(_value.copyWith(
-      activeButtonColor1: freezed == activeButtonColor1
-          ? _value.activeButtonColor1
-          : activeButtonColor1 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      activeButtonColor2: freezed == activeButtonColor2
-          ? _value.activeButtonColor2
-          : activeButtonColor2 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      defaultButtonColor: freezed == defaultButtonColor
-          ? _value.defaultButtonColor
-          : defaultButtonColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            activeButtonColor1: freezed == activeButtonColor1
+                ? _value.activeButtonColor1
+                : activeButtonColor1 // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            activeButtonColor2: freezed == activeButtonColor2
+                ? _value.activeButtonColor2
+                : activeButtonColor2 // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            defaultButtonColor: freezed == defaultButtonColor
+                ? _value.defaultButtonColor
+                : defaultButtonColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -4992,26 +5283,30 @@ class _$ConfirmDialogWidgetConfigCopyWithImpl<$Res,
 abstract class _$$ConfirmDialogWidgetConfigImplCopyWith<$Res>
     implements $ConfirmDialogWidgetConfigCopyWith<$Res> {
   factory _$$ConfirmDialogWidgetConfigImplCopyWith(
-          _$ConfirmDialogWidgetConfigImpl value,
-          $Res Function(_$ConfirmDialogWidgetConfigImpl) then) =
-      __$$ConfirmDialogWidgetConfigImplCopyWithImpl<$Res>;
+    _$ConfirmDialogWidgetConfigImpl value,
+    $Res Function(_$ConfirmDialogWidgetConfigImpl) then,
+  ) = __$$ConfirmDialogWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? activeButtonColor1,
-      String? activeButtonColor2,
-      String? defaultButtonColor});
+  $Res call({
+    String? activeButtonColor1,
+    String? activeButtonColor2,
+    String? defaultButtonColor,
+  });
 }
 
 /// @nodoc
 class __$$ConfirmDialogWidgetConfigImplCopyWithImpl<$Res>
-    extends _$ConfirmDialogWidgetConfigCopyWithImpl<$Res,
-        _$ConfirmDialogWidgetConfigImpl>
+    extends
+        _$ConfirmDialogWidgetConfigCopyWithImpl<
+          $Res,
+          _$ConfirmDialogWidgetConfigImpl
+        >
     implements _$$ConfirmDialogWidgetConfigImplCopyWith<$Res> {
   __$$ConfirmDialogWidgetConfigImplCopyWithImpl(
-      _$ConfirmDialogWidgetConfigImpl _value,
-      $Res Function(_$ConfirmDialogWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$ConfirmDialogWidgetConfigImpl _value,
+    $Res Function(_$ConfirmDialogWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ConfirmDialogWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -5022,20 +5317,22 @@ class __$$ConfirmDialogWidgetConfigImplCopyWithImpl<$Res>
     Object? activeButtonColor2 = freezed,
     Object? defaultButtonColor = freezed,
   }) {
-    return _then(_$ConfirmDialogWidgetConfigImpl(
-      activeButtonColor1: freezed == activeButtonColor1
-          ? _value.activeButtonColor1
-          : activeButtonColor1 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      activeButtonColor2: freezed == activeButtonColor2
-          ? _value.activeButtonColor2
-          : activeButtonColor2 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      defaultButtonColor: freezed == defaultButtonColor
-          ? _value.defaultButtonColor
-          : defaultButtonColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ConfirmDialogWidgetConfigImpl(
+        activeButtonColor1: freezed == activeButtonColor1
+            ? _value.activeButtonColor1
+            : activeButtonColor1 // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        activeButtonColor2: freezed == activeButtonColor2
+            ? _value.activeButtonColor2
+            : activeButtonColor2 // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        defaultButtonColor: freezed == defaultButtonColor
+            ? _value.defaultButtonColor
+            : defaultButtonColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -5043,10 +5340,11 @@ class __$$ConfirmDialogWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ConfirmDialogWidgetConfigImpl implements _ConfirmDialogWidgetConfig {
-  const _$ConfirmDialogWidgetConfigImpl(
-      {this.activeButtonColor1,
-      this.activeButtonColor2,
-      this.defaultButtonColor});
+  const _$ConfirmDialogWidgetConfigImpl({
+    this.activeButtonColor1,
+    this.activeButtonColor2,
+    this.defaultButtonColor,
+  });
 
   factory _$ConfirmDialogWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ConfirmDialogWidgetConfigImplFromJson(json);
@@ -5079,7 +5377,11 @@ class _$ConfirmDialogWidgetConfigImpl implements _ConfirmDialogWidgetConfig {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, activeButtonColor1, activeButtonColor2, defaultButtonColor);
+    runtimeType,
+    activeButtonColor1,
+    activeButtonColor2,
+    defaultButtonColor,
+  );
 
   /// Create a copy of ConfirmDialogWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -5087,22 +5389,23 @@ class _$ConfirmDialogWidgetConfigImpl implements _ConfirmDialogWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$ConfirmDialogWidgetConfigImplCopyWith<_$ConfirmDialogWidgetConfigImpl>
-      get copyWith => __$$ConfirmDialogWidgetConfigImplCopyWithImpl<
-          _$ConfirmDialogWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$ConfirmDialogWidgetConfigImplCopyWithImpl<
+        _$ConfirmDialogWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ConfirmDialogWidgetConfigImplToJson(
-      this,
-    );
+    return _$$ConfirmDialogWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _ConfirmDialogWidgetConfig implements ConfirmDialogWidgetConfig {
-  const factory _ConfirmDialogWidgetConfig(
-      {final String? activeButtonColor1,
-      final String? activeButtonColor2,
-      final String? defaultButtonColor}) = _$ConfirmDialogWidgetConfigImpl;
+  const factory _ConfirmDialogWidgetConfig({
+    final String? activeButtonColor1,
+    final String? activeButtonColor2,
+    final String? defaultButtonColor,
+  }) = _$ConfirmDialogWidgetConfigImpl;
 
   factory _ConfirmDialogWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ConfirmDialogWidgetConfigImpl.fromJson;
@@ -5119,7 +5422,7 @@ abstract class _ConfirmDialogWidgetConfig implements ConfirmDialogWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ConfirmDialogWidgetConfigImplCopyWith<_$ConfirmDialogWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 SnackBarWidgetConfig _$SnackBarWidgetConfigFromJson(Map<String, dynamic> json) {
@@ -5145,20 +5448,24 @@ mixin _$SnackBarWidgetConfig {
 
 /// @nodoc
 abstract class $SnackBarWidgetConfigCopyWith<$Res> {
-  factory $SnackBarWidgetConfigCopyWith(SnackBarWidgetConfig value,
-          $Res Function(SnackBarWidgetConfig) then) =
-      _$SnackBarWidgetConfigCopyWithImpl<$Res, SnackBarWidgetConfig>;
+  factory $SnackBarWidgetConfigCopyWith(
+    SnackBarWidgetConfig value,
+    $Res Function(SnackBarWidgetConfig) then,
+  ) = _$SnackBarWidgetConfigCopyWithImpl<$Res, SnackBarWidgetConfig>;
   @useResult
-  $Res call(
-      {String successBackgroundColor,
-      String errorBackgroundColor,
-      String infoBackgroundColor,
-      String warningBackgroundColor});
+  $Res call({
+    String successBackgroundColor,
+    String errorBackgroundColor,
+    String infoBackgroundColor,
+    String warningBackgroundColor,
+  });
 }
 
 /// @nodoc
-class _$SnackBarWidgetConfigCopyWithImpl<$Res,
-        $Val extends SnackBarWidgetConfig>
+class _$SnackBarWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends SnackBarWidgetConfig
+>
     implements $SnackBarWidgetConfigCopyWith<$Res> {
   _$SnackBarWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -5177,49 +5484,55 @@ class _$SnackBarWidgetConfigCopyWithImpl<$Res,
     Object? infoBackgroundColor = null,
     Object? warningBackgroundColor = null,
   }) {
-    return _then(_value.copyWith(
-      successBackgroundColor: null == successBackgroundColor
-          ? _value.successBackgroundColor
-          : successBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      errorBackgroundColor: null == errorBackgroundColor
-          ? _value.errorBackgroundColor
-          : errorBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      infoBackgroundColor: null == infoBackgroundColor
-          ? _value.infoBackgroundColor
-          : infoBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      warningBackgroundColor: null == warningBackgroundColor
-          ? _value.warningBackgroundColor
-          : warningBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            successBackgroundColor: null == successBackgroundColor
+                ? _value.successBackgroundColor
+                : successBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String,
+            errorBackgroundColor: null == errorBackgroundColor
+                ? _value.errorBackgroundColor
+                : errorBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String,
+            infoBackgroundColor: null == infoBackgroundColor
+                ? _value.infoBackgroundColor
+                : infoBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String,
+            warningBackgroundColor: null == warningBackgroundColor
+                ? _value.warningBackgroundColor
+                : warningBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SnackBarWidgetConfigImplCopyWith<$Res>
     implements $SnackBarWidgetConfigCopyWith<$Res> {
-  factory _$$SnackBarWidgetConfigImplCopyWith(_$SnackBarWidgetConfigImpl value,
-          $Res Function(_$SnackBarWidgetConfigImpl) then) =
-      __$$SnackBarWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$SnackBarWidgetConfigImplCopyWith(
+    _$SnackBarWidgetConfigImpl value,
+    $Res Function(_$SnackBarWidgetConfigImpl) then,
+  ) = __$$SnackBarWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String successBackgroundColor,
-      String errorBackgroundColor,
-      String infoBackgroundColor,
-      String warningBackgroundColor});
+  $Res call({
+    String successBackgroundColor,
+    String errorBackgroundColor,
+    String infoBackgroundColor,
+    String warningBackgroundColor,
+  });
 }
 
 /// @nodoc
 class __$$SnackBarWidgetConfigImplCopyWithImpl<$Res>
     extends _$SnackBarWidgetConfigCopyWithImpl<$Res, _$SnackBarWidgetConfigImpl>
     implements _$$SnackBarWidgetConfigImplCopyWith<$Res> {
-  __$$SnackBarWidgetConfigImplCopyWithImpl(_$SnackBarWidgetConfigImpl _value,
-      $Res Function(_$SnackBarWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$SnackBarWidgetConfigImplCopyWithImpl(
+    _$SnackBarWidgetConfigImpl _value,
+    $Res Function(_$SnackBarWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SnackBarWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -5231,24 +5544,26 @@ class __$$SnackBarWidgetConfigImplCopyWithImpl<$Res>
     Object? infoBackgroundColor = null,
     Object? warningBackgroundColor = null,
   }) {
-    return _then(_$SnackBarWidgetConfigImpl(
-      successBackgroundColor: null == successBackgroundColor
-          ? _value.successBackgroundColor
-          : successBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      errorBackgroundColor: null == errorBackgroundColor
-          ? _value.errorBackgroundColor
-          : errorBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      infoBackgroundColor: null == infoBackgroundColor
-          ? _value.infoBackgroundColor
-          : infoBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      warningBackgroundColor: null == warningBackgroundColor
-          ? _value.warningBackgroundColor
-          : warningBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$SnackBarWidgetConfigImpl(
+        successBackgroundColor: null == successBackgroundColor
+            ? _value.successBackgroundColor
+            : successBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String,
+        errorBackgroundColor: null == errorBackgroundColor
+            ? _value.errorBackgroundColor
+            : errorBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String,
+        infoBackgroundColor: null == infoBackgroundColor
+            ? _value.infoBackgroundColor
+            : infoBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String,
+        warningBackgroundColor: null == warningBackgroundColor
+            ? _value.warningBackgroundColor
+            : warningBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -5256,11 +5571,12 @@ class __$$SnackBarWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$SnackBarWidgetConfigImpl implements _SnackBarWidgetConfig {
-  const _$SnackBarWidgetConfigImpl(
-      {this.successBackgroundColor = '#75B943',
-      this.errorBackgroundColor = '#E74C3C',
-      this.infoBackgroundColor = '#494949',
-      this.warningBackgroundColor = '#F95A14'});
+  const _$SnackBarWidgetConfigImpl({
+    this.successBackgroundColor = '#75B943',
+    this.errorBackgroundColor = '#E74C3C',
+    this.infoBackgroundColor = '#494949',
+    this.warningBackgroundColor = '#F95A14',
+  });
 
   factory _$SnackBarWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnackBarWidgetConfigImplFromJson(json);
@@ -5300,8 +5616,13 @@ class _$SnackBarWidgetConfigImpl implements _SnackBarWidgetConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, successBackgroundColor,
-      errorBackgroundColor, infoBackgroundColor, warningBackgroundColor);
+  int get hashCode => Object.hash(
+    runtimeType,
+    successBackgroundColor,
+    errorBackgroundColor,
+    infoBackgroundColor,
+    warningBackgroundColor,
+  );
 
   /// Create a copy of SnackBarWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -5309,24 +5630,25 @@ class _$SnackBarWidgetConfigImpl implements _SnackBarWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$SnackBarWidgetConfigImplCopyWith<_$SnackBarWidgetConfigImpl>
-      get copyWith =>
-          __$$SnackBarWidgetConfigImplCopyWithImpl<_$SnackBarWidgetConfigImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$SnackBarWidgetConfigImplCopyWithImpl<_$SnackBarWidgetConfigImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SnackBarWidgetConfigImplToJson(
-      this,
-    );
+    return _$$SnackBarWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _SnackBarWidgetConfig implements SnackBarWidgetConfig {
-  const factory _SnackBarWidgetConfig(
-      {final String successBackgroundColor,
-      final String errorBackgroundColor,
-      final String infoBackgroundColor,
-      final String warningBackgroundColor}) = _$SnackBarWidgetConfigImpl;
+  const factory _SnackBarWidgetConfig({
+    final String successBackgroundColor,
+    final String errorBackgroundColor,
+    final String infoBackgroundColor,
+    final String warningBackgroundColor,
+  }) = _$SnackBarWidgetConfigImpl;
 
   factory _SnackBarWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$SnackBarWidgetConfigImpl.fromJson;
@@ -5345,11 +5667,12 @@ abstract class _SnackBarWidgetConfig implements SnackBarWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SnackBarWidgetConfigImplCopyWith<_$SnackBarWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _ActionPadWidgetConfig.fromJson(json);
 }
 
@@ -5374,14 +5697,16 @@ mixin _$ActionPadWidgetConfig {
 
 /// @nodoc
 abstract class $ActionPadWidgetConfigCopyWith<$Res> {
-  factory $ActionPadWidgetConfigCopyWith(ActionPadWidgetConfig value,
-          $Res Function(ActionPadWidgetConfig) then) =
-      _$ActionPadWidgetConfigCopyWithImpl<$Res, ActionPadWidgetConfig>;
+  factory $ActionPadWidgetConfigCopyWith(
+    ActionPadWidgetConfig value,
+    $Res Function(ActionPadWidgetConfig) then,
+  ) = _$ActionPadWidgetConfigCopyWithImpl<$Res, ActionPadWidgetConfig>;
   @useResult
-  $Res call(
-      {ElevatedButtonWidgetConfig callStart,
-      ElevatedButtonWidgetConfig callTransfer,
-      ElevatedButtonWidgetConfig backspacePressed});
+  $Res call({
+    ElevatedButtonWidgetConfig callStart,
+    ElevatedButtonWidgetConfig callTransfer,
+    ElevatedButtonWidgetConfig backspacePressed,
+  });
 
   $ElevatedButtonWidgetConfigCopyWith<$Res> get callStart;
   $ElevatedButtonWidgetConfigCopyWith<$Res> get callTransfer;
@@ -5389,8 +5714,10 @@ abstract class $ActionPadWidgetConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ActionPadWidgetConfigCopyWithImpl<$Res,
-        $Val extends ActionPadWidgetConfig>
+class _$ActionPadWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends ActionPadWidgetConfig
+>
     implements $ActionPadWidgetConfigCopyWith<$Res> {
   _$ActionPadWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -5408,20 +5735,23 @@ class _$ActionPadWidgetConfigCopyWithImpl<$Res,
     Object? callTransfer = null,
     Object? backspacePressed = null,
   }) {
-    return _then(_value.copyWith(
-      callStart: null == callStart
-          ? _value.callStart
-          : callStart // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      callTransfer: null == callTransfer
-          ? _value.callTransfer
-          : callTransfer // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      backspacePressed: null == backspacePressed
-          ? _value.backspacePressed
-          : backspacePressed // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            callStart: null == callStart
+                ? _value.callStart
+                : callStart // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            callTransfer: null == callTransfer
+                ? _value.callTransfer
+                : callTransfer // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+            backspacePressed: null == backspacePressed
+                ? _value.backspacePressed
+                : backspacePressed // ignore: cast_nullable_to_non_nullable
+                      as ElevatedButtonWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ActionPadWidgetConfig
@@ -5439,8 +5769,9 @@ class _$ActionPadWidgetConfigCopyWithImpl<$Res,
   @override
   @pragma('vm:prefer-inline')
   $ElevatedButtonWidgetConfigCopyWith<$Res> get callTransfer {
-    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.callTransfer,
-        (value) {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.callTransfer, (
+      value,
+    ) {
       return _then(_value.copyWith(callTransfer: value) as $Val);
     });
   }
@@ -5450,8 +5781,9 @@ class _$ActionPadWidgetConfigCopyWithImpl<$Res,
   @override
   @pragma('vm:prefer-inline')
   $ElevatedButtonWidgetConfigCopyWith<$Res> get backspacePressed {
-    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.backspacePressed,
-        (value) {
+    return $ElevatedButtonWidgetConfigCopyWith<$Res>(_value.backspacePressed, (
+      value,
+    ) {
       return _then(_value.copyWith(backspacePressed: value) as $Val);
     });
   }
@@ -5461,15 +5793,16 @@ class _$ActionPadWidgetConfigCopyWithImpl<$Res,
 abstract class _$$ActionPadWidgetConfigImplCopyWith<$Res>
     implements $ActionPadWidgetConfigCopyWith<$Res> {
   factory _$$ActionPadWidgetConfigImplCopyWith(
-          _$ActionPadWidgetConfigImpl value,
-          $Res Function(_$ActionPadWidgetConfigImpl) then) =
-      __$$ActionPadWidgetConfigImplCopyWithImpl<$Res>;
+    _$ActionPadWidgetConfigImpl value,
+    $Res Function(_$ActionPadWidgetConfigImpl) then,
+  ) = __$$ActionPadWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {ElevatedButtonWidgetConfig callStart,
-      ElevatedButtonWidgetConfig callTransfer,
-      ElevatedButtonWidgetConfig backspacePressed});
+  $Res call({
+    ElevatedButtonWidgetConfig callStart,
+    ElevatedButtonWidgetConfig callTransfer,
+    ElevatedButtonWidgetConfig backspacePressed,
+  });
 
   @override
   $ElevatedButtonWidgetConfigCopyWith<$Res> get callStart;
@@ -5481,12 +5814,13 @@ abstract class _$$ActionPadWidgetConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$ActionPadWidgetConfigImplCopyWithImpl<$Res>
-    extends _$ActionPadWidgetConfigCopyWithImpl<$Res,
-        _$ActionPadWidgetConfigImpl>
+    extends
+        _$ActionPadWidgetConfigCopyWithImpl<$Res, _$ActionPadWidgetConfigImpl>
     implements _$$ActionPadWidgetConfigImplCopyWith<$Res> {
-  __$$ActionPadWidgetConfigImplCopyWithImpl(_$ActionPadWidgetConfigImpl _value,
-      $Res Function(_$ActionPadWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$ActionPadWidgetConfigImplCopyWithImpl(
+    _$ActionPadWidgetConfigImpl _value,
+    $Res Function(_$ActionPadWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ActionPadWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -5497,20 +5831,22 @@ class __$$ActionPadWidgetConfigImplCopyWithImpl<$Res>
     Object? callTransfer = null,
     Object? backspacePressed = null,
   }) {
-    return _then(_$ActionPadWidgetConfigImpl(
-      callStart: null == callStart
-          ? _value.callStart
-          : callStart // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      callTransfer: null == callTransfer
-          ? _value.callTransfer
-          : callTransfer // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-      backspacePressed: null == backspacePressed
-          ? _value.backspacePressed
-          : backspacePressed // ignore: cast_nullable_to_non_nullable
-              as ElevatedButtonWidgetConfig,
-    ));
+    return _then(
+      _$ActionPadWidgetConfigImpl(
+        callStart: null == callStart
+            ? _value.callStart
+            : callStart // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        callTransfer: null == callTransfer
+            ? _value.callTransfer
+            : callTransfer // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+        backspacePressed: null == backspacePressed
+            ? _value.backspacePressed
+            : backspacePressed // ignore: cast_nullable_to_non_nullable
+                  as ElevatedButtonWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -5518,10 +5854,11 @@ class __$$ActionPadWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ActionPadWidgetConfigImpl implements _ActionPadWidgetConfig {
-  const _$ActionPadWidgetConfigImpl(
-      {this.callStart = const ElevatedButtonWidgetConfig(),
-      this.callTransfer = const ElevatedButtonWidgetConfig(),
-      this.backspacePressed = const ElevatedButtonWidgetConfig()});
+  const _$ActionPadWidgetConfigImpl({
+    this.callStart = const ElevatedButtonWidgetConfig(),
+    this.callTransfer = const ElevatedButtonWidgetConfig(),
+    this.backspacePressed = const ElevatedButtonWidgetConfig(),
+  });
 
   factory _$ActionPadWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$ActionPadWidgetConfigImplFromJson(json);
@@ -5565,23 +5902,24 @@ class _$ActionPadWidgetConfigImpl implements _ActionPadWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$ActionPadWidgetConfigImplCopyWith<_$ActionPadWidgetConfigImpl>
-      get copyWith => __$$ActionPadWidgetConfigImplCopyWithImpl<
-          _$ActionPadWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$ActionPadWidgetConfigImplCopyWithImpl<_$ActionPadWidgetConfigImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ActionPadWidgetConfigImplToJson(
-      this,
-    );
+    return _$$ActionPadWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _ActionPadWidgetConfig implements ActionPadWidgetConfig {
-  const factory _ActionPadWidgetConfig(
-          {final ElevatedButtonWidgetConfig callStart,
-          final ElevatedButtonWidgetConfig callTransfer,
-          final ElevatedButtonWidgetConfig backspacePressed}) =
-      _$ActionPadWidgetConfigImpl;
+  const factory _ActionPadWidgetConfig({
+    final ElevatedButtonWidgetConfig callStart,
+    final ElevatedButtonWidgetConfig callTransfer,
+    final ElevatedButtonWidgetConfig backspacePressed,
+  }) = _$ActionPadWidgetConfigImpl;
 
   factory _ActionPadWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$ActionPadWidgetConfigImpl.fromJson;
@@ -5598,7 +5936,7 @@ abstract class _ActionPadWidgetConfig implements ActionPadWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ActionPadWidgetConfigImplCopyWith<_$ActionPadWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 StatusesWidgetConfig _$StatusesWidgetConfigFromJson(Map<String, dynamic> json) {
@@ -5624,21 +5962,25 @@ mixin _$StatusesWidgetConfig {
 
 /// @nodoc
 abstract class $StatusesWidgetConfigCopyWith<$Res> {
-  factory $StatusesWidgetConfigCopyWith(StatusesWidgetConfig value,
-          $Res Function(StatusesWidgetConfig) then) =
-      _$StatusesWidgetConfigCopyWithImpl<$Res, StatusesWidgetConfig>;
+  factory $StatusesWidgetConfigCopyWith(
+    StatusesWidgetConfig value,
+    $Res Function(StatusesWidgetConfig) then,
+  ) = _$StatusesWidgetConfigCopyWithImpl<$Res, StatusesWidgetConfig>;
   @useResult
-  $Res call(
-      {RegistrationStatusesWidgetConfig registrationStatuses,
-      CallStatusesWidgetConfig callStatuses});
+  $Res call({
+    RegistrationStatusesWidgetConfig registrationStatuses,
+    CallStatusesWidgetConfig callStatuses,
+  });
 
   $RegistrationStatusesWidgetConfigCopyWith<$Res> get registrationStatuses;
   $CallStatusesWidgetConfigCopyWith<$Res> get callStatuses;
 }
 
 /// @nodoc
-class _$StatusesWidgetConfigCopyWithImpl<$Res,
-        $Val extends StatusesWidgetConfig>
+class _$StatusesWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends StatusesWidgetConfig
+>
     implements $StatusesWidgetConfigCopyWith<$Res> {
   _$StatusesWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -5655,16 +5997,19 @@ class _$StatusesWidgetConfigCopyWithImpl<$Res,
     Object? registrationStatuses = null,
     Object? callStatuses = null,
   }) {
-    return _then(_value.copyWith(
-      registrationStatuses: null == registrationStatuses
-          ? _value.registrationStatuses
-          : registrationStatuses // ignore: cast_nullable_to_non_nullable
-              as RegistrationStatusesWidgetConfig,
-      callStatuses: null == callStatuses
-          ? _value.callStatuses
-          : callStatuses // ignore: cast_nullable_to_non_nullable
-              as CallStatusesWidgetConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            registrationStatuses: null == registrationStatuses
+                ? _value.registrationStatuses
+                : registrationStatuses // ignore: cast_nullable_to_non_nullable
+                      as RegistrationStatusesWidgetConfig,
+            callStatuses: null == callStatuses
+                ? _value.callStatuses
+                : callStatuses // ignore: cast_nullable_to_non_nullable
+                      as CallStatusesWidgetConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of StatusesWidgetConfig
@@ -5673,9 +6018,11 @@ class _$StatusesWidgetConfigCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   $RegistrationStatusesWidgetConfigCopyWith<$Res> get registrationStatuses {
     return $RegistrationStatusesWidgetConfigCopyWith<$Res>(
-        _value.registrationStatuses, (value) {
-      return _then(_value.copyWith(registrationStatuses: value) as $Val);
-    });
+      _value.registrationStatuses,
+      (value) {
+        return _then(_value.copyWith(registrationStatuses: value) as $Val);
+      },
+    );
   }
 
   /// Create a copy of StatusesWidgetConfig
@@ -5683,8 +6030,9 @@ class _$StatusesWidgetConfigCopyWithImpl<$Res,
   @override
   @pragma('vm:prefer-inline')
   $CallStatusesWidgetConfigCopyWith<$Res> get callStatuses {
-    return $CallStatusesWidgetConfigCopyWith<$Res>(_value.callStatuses,
-        (value) {
+    return $CallStatusesWidgetConfigCopyWith<$Res>(_value.callStatuses, (
+      value,
+    ) {
       return _then(_value.copyWith(callStatuses: value) as $Val);
     });
   }
@@ -5693,14 +6041,16 @@ class _$StatusesWidgetConfigCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$StatusesWidgetConfigImplCopyWith<$Res>
     implements $StatusesWidgetConfigCopyWith<$Res> {
-  factory _$$StatusesWidgetConfigImplCopyWith(_$StatusesWidgetConfigImpl value,
-          $Res Function(_$StatusesWidgetConfigImpl) then) =
-      __$$StatusesWidgetConfigImplCopyWithImpl<$Res>;
+  factory _$$StatusesWidgetConfigImplCopyWith(
+    _$StatusesWidgetConfigImpl value,
+    $Res Function(_$StatusesWidgetConfigImpl) then,
+  ) = __$$StatusesWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {RegistrationStatusesWidgetConfig registrationStatuses,
-      CallStatusesWidgetConfig callStatuses});
+  $Res call({
+    RegistrationStatusesWidgetConfig registrationStatuses,
+    CallStatusesWidgetConfig callStatuses,
+  });
 
   @override
   $RegistrationStatusesWidgetConfigCopyWith<$Res> get registrationStatuses;
@@ -5712,9 +6062,10 @@ abstract class _$$StatusesWidgetConfigImplCopyWith<$Res>
 class __$$StatusesWidgetConfigImplCopyWithImpl<$Res>
     extends _$StatusesWidgetConfigCopyWithImpl<$Res, _$StatusesWidgetConfigImpl>
     implements _$$StatusesWidgetConfigImplCopyWith<$Res> {
-  __$$StatusesWidgetConfigImplCopyWithImpl(_$StatusesWidgetConfigImpl _value,
-      $Res Function(_$StatusesWidgetConfigImpl) _then)
-      : super(_value, _then);
+  __$$StatusesWidgetConfigImplCopyWithImpl(
+    _$StatusesWidgetConfigImpl _value,
+    $Res Function(_$StatusesWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of StatusesWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -5724,16 +6075,18 @@ class __$$StatusesWidgetConfigImplCopyWithImpl<$Res>
     Object? registrationStatuses = null,
     Object? callStatuses = null,
   }) {
-    return _then(_$StatusesWidgetConfigImpl(
-      registrationStatuses: null == registrationStatuses
-          ? _value.registrationStatuses
-          : registrationStatuses // ignore: cast_nullable_to_non_nullable
-              as RegistrationStatusesWidgetConfig,
-      callStatuses: null == callStatuses
-          ? _value.callStatuses
-          : callStatuses // ignore: cast_nullable_to_non_nullable
-              as CallStatusesWidgetConfig,
-    ));
+    return _then(
+      _$StatusesWidgetConfigImpl(
+        registrationStatuses: null == registrationStatuses
+            ? _value.registrationStatuses
+            : registrationStatuses // ignore: cast_nullable_to_non_nullable
+                  as RegistrationStatusesWidgetConfig,
+        callStatuses: null == callStatuses
+            ? _value.callStatuses
+            : callStatuses // ignore: cast_nullable_to_non_nullable
+                  as CallStatusesWidgetConfig,
+      ),
+    );
   }
 }
 
@@ -5741,9 +6094,10 @@ class __$$StatusesWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$StatusesWidgetConfigImpl implements _StatusesWidgetConfig {
-  const _$StatusesWidgetConfigImpl(
-      {this.registrationStatuses = const RegistrationStatusesWidgetConfig(),
-      this.callStatuses = const CallStatusesWidgetConfig()});
+  const _$StatusesWidgetConfigImpl({
+    this.registrationStatuses = const RegistrationStatusesWidgetConfig(),
+    this.callStatuses = const CallStatusesWidgetConfig(),
+  });
 
   factory _$StatusesWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$StatusesWidgetConfigImplFromJson(json);
@@ -5782,23 +6136,23 @@ class _$StatusesWidgetConfigImpl implements _StatusesWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$StatusesWidgetConfigImplCopyWith<_$StatusesWidgetConfigImpl>
-      get copyWith =>
-          __$$StatusesWidgetConfigImplCopyWithImpl<_$StatusesWidgetConfigImpl>(
-              this, _$identity);
+  get copyWith =>
+      __$$StatusesWidgetConfigImplCopyWithImpl<_$StatusesWidgetConfigImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$StatusesWidgetConfigImplToJson(
-      this,
-    );
+    return _$$StatusesWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _StatusesWidgetConfig implements StatusesWidgetConfig {
-  const factory _StatusesWidgetConfig(
-          {final RegistrationStatusesWidgetConfig registrationStatuses,
-          final CallStatusesWidgetConfig callStatuses}) =
-      _$StatusesWidgetConfigImpl;
+  const factory _StatusesWidgetConfig({
+    final RegistrationStatusesWidgetConfig registrationStatuses,
+    final CallStatusesWidgetConfig callStatuses,
+  }) = _$StatusesWidgetConfigImpl;
 
   factory _StatusesWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$StatusesWidgetConfigImpl.fromJson;
@@ -5813,11 +6167,12 @@ abstract class _StatusesWidgetConfig implements StatusesWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$StatusesWidgetConfigImplCopyWith<_$StatusesWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 RegistrationStatusesWidgetConfig _$RegistrationStatusesWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _RegistrationStatusesWidgetConfig.fromJson(json);
 }
 
@@ -5833,23 +6188,28 @@ mixin _$RegistrationStatusesWidgetConfig {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   $RegistrationStatusesWidgetConfigCopyWith<RegistrationStatusesWidgetConfig>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $RegistrationStatusesWidgetConfigCopyWith<$Res> {
   factory $RegistrationStatusesWidgetConfigCopyWith(
-          RegistrationStatusesWidgetConfig value,
-          $Res Function(RegistrationStatusesWidgetConfig) then) =
-      _$RegistrationStatusesWidgetConfigCopyWithImpl<$Res,
-          RegistrationStatusesWidgetConfig>;
+    RegistrationStatusesWidgetConfig value,
+    $Res Function(RegistrationStatusesWidgetConfig) then,
+  ) =
+      _$RegistrationStatusesWidgetConfigCopyWithImpl<
+        $Res,
+        RegistrationStatusesWidgetConfig
+      >;
   @useResult
   $Res call({String online, String offline});
 }
 
 /// @nodoc
-class _$RegistrationStatusesWidgetConfigCopyWithImpl<$Res,
-        $Val extends RegistrationStatusesWidgetConfig>
+class _$RegistrationStatusesWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends RegistrationStatusesWidgetConfig
+>
     implements $RegistrationStatusesWidgetConfigCopyWith<$Res> {
   _$RegistrationStatusesWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -5862,20 +6222,20 @@ class _$RegistrationStatusesWidgetConfigCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? online = null,
-    Object? offline = null,
-  }) {
-    return _then(_value.copyWith(
-      online: null == online
-          ? _value.online
-          : online // ignore: cast_nullable_to_non_nullable
-              as String,
-      offline: null == offline
-          ? _value.offline
-          : offline // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? online = null, Object? offline = null}) {
+    return _then(
+      _value.copyWith(
+            online: null == online
+                ? _value.online
+                : online // ignore: cast_nullable_to_non_nullable
+                      as String,
+            offline: null == offline
+                ? _value.offline
+                : offline // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -5883,9 +6243,9 @@ class _$RegistrationStatusesWidgetConfigCopyWithImpl<$Res,
 abstract class _$$RegistrationStatusesWidgetConfigImplCopyWith<$Res>
     implements $RegistrationStatusesWidgetConfigCopyWith<$Res> {
   factory _$$RegistrationStatusesWidgetConfigImplCopyWith(
-          _$RegistrationStatusesWidgetConfigImpl value,
-          $Res Function(_$RegistrationStatusesWidgetConfigImpl) then) =
-      __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<$Res>;
+    _$RegistrationStatusesWidgetConfigImpl value,
+    $Res Function(_$RegistrationStatusesWidgetConfigImpl) then,
+  ) = __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String online, String offline});
@@ -5893,32 +6253,34 @@ abstract class _$$RegistrationStatusesWidgetConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<$Res>
-    extends _$RegistrationStatusesWidgetConfigCopyWithImpl<$Res,
-        _$RegistrationStatusesWidgetConfigImpl>
+    extends
+        _$RegistrationStatusesWidgetConfigCopyWithImpl<
+          $Res,
+          _$RegistrationStatusesWidgetConfigImpl
+        >
     implements _$$RegistrationStatusesWidgetConfigImplCopyWith<$Res> {
   __$$RegistrationStatusesWidgetConfigImplCopyWithImpl(
-      _$RegistrationStatusesWidgetConfigImpl _value,
-      $Res Function(_$RegistrationStatusesWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$RegistrationStatusesWidgetConfigImpl _value,
+    $Res Function(_$RegistrationStatusesWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of RegistrationStatusesWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? online = null,
-    Object? offline = null,
-  }) {
-    return _then(_$RegistrationStatusesWidgetConfigImpl(
-      online: null == online
-          ? _value.online
-          : online // ignore: cast_nullable_to_non_nullable
-              as String,
-      offline: null == offline
-          ? _value.offline
-          : offline // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? online = null, Object? offline = null}) {
+    return _then(
+      _$RegistrationStatusesWidgetConfigImpl(
+        online: null == online
+            ? _value.online
+            : online // ignore: cast_nullable_to_non_nullable
+                  as String,
+        offline: null == offline
+            ? _value.offline
+            : offline // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -5927,12 +6289,14 @@ class __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$RegistrationStatusesWidgetConfigImpl
     implements _RegistrationStatusesWidgetConfig {
-  const _$RegistrationStatusesWidgetConfigImpl(
-      {this.online = '#75B943', this.offline = '#EEF3F6'});
+  const _$RegistrationStatusesWidgetConfigImpl({
+    this.online = '#75B943',
+    this.offline = '#EEF3F6',
+  });
 
   factory _$RegistrationStatusesWidgetConfigImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$RegistrationStatusesWidgetConfigImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$RegistrationStatusesWidgetConfigImplFromJson(json);
 
   @override
   @JsonKey()
@@ -5965,27 +6329,29 @@ class _$RegistrationStatusesWidgetConfigImpl
   @override
   @pragma('vm:prefer-inline')
   _$$RegistrationStatusesWidgetConfigImplCopyWith<
-          _$RegistrationStatusesWidgetConfigImpl>
-      get copyWith => __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<
-          _$RegistrationStatusesWidgetConfigImpl>(this, _$identity);
+    _$RegistrationStatusesWidgetConfigImpl
+  >
+  get copyWith =>
+      __$$RegistrationStatusesWidgetConfigImplCopyWithImpl<
+        _$RegistrationStatusesWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$RegistrationStatusesWidgetConfigImplToJson(
-      this,
-    );
+    return _$$RegistrationStatusesWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _RegistrationStatusesWidgetConfig
     implements RegistrationStatusesWidgetConfig {
-  const factory _RegistrationStatusesWidgetConfig(
-      {final String online,
-      final String offline}) = _$RegistrationStatusesWidgetConfigImpl;
+  const factory _RegistrationStatusesWidgetConfig({
+    final String online,
+    final String offline,
+  }) = _$RegistrationStatusesWidgetConfigImpl;
 
   factory _RegistrationStatusesWidgetConfig.fromJson(
-          Map<String, dynamic> json) =
-      _$RegistrationStatusesWidgetConfigImpl.fromJson;
+    Map<String, dynamic> json,
+  ) = _$RegistrationStatusesWidgetConfigImpl.fromJson;
 
   @override
   String get online;
@@ -5997,12 +6363,14 @@ abstract class _RegistrationStatusesWidgetConfig
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RegistrationStatusesWidgetConfigImplCopyWith<
-          _$RegistrationStatusesWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+    _$RegistrationStatusesWidgetConfigImpl
+  >
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 CallStatusesWidgetConfig _$CallStatusesWidgetConfigFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _CallStatusesWidgetConfig.fromJson(json);
 }
 
@@ -6027,22 +6395,26 @@ mixin _$CallStatusesWidgetConfig {
 
 /// @nodoc
 abstract class $CallStatusesWidgetConfigCopyWith<$Res> {
-  factory $CallStatusesWidgetConfigCopyWith(CallStatusesWidgetConfig value,
-          $Res Function(CallStatusesWidgetConfig) then) =
-      _$CallStatusesWidgetConfigCopyWithImpl<$Res, CallStatusesWidgetConfig>;
+  factory $CallStatusesWidgetConfigCopyWith(
+    CallStatusesWidgetConfig value,
+    $Res Function(CallStatusesWidgetConfig) then,
+  ) = _$CallStatusesWidgetConfigCopyWithImpl<$Res, CallStatusesWidgetConfig>;
   @useResult
-  $Res call(
-      {String connectivityNone,
-      String connectError,
-      String appUnregistered,
-      String connectIssue,
-      String inProgress,
-      String ready});
+  $Res call({
+    String connectivityNone,
+    String connectError,
+    String appUnregistered,
+    String connectIssue,
+    String inProgress,
+    String ready,
+  });
 }
 
 /// @nodoc
-class _$CallStatusesWidgetConfigCopyWithImpl<$Res,
-        $Val extends CallStatusesWidgetConfig>
+class _$CallStatusesWidgetConfigCopyWithImpl<
+  $Res,
+  $Val extends CallStatusesWidgetConfig
+>
     implements $CallStatusesWidgetConfigCopyWith<$Res> {
   _$CallStatusesWidgetConfigCopyWithImpl(this._value, this._then);
 
@@ -6063,32 +6435,35 @@ class _$CallStatusesWidgetConfigCopyWithImpl<$Res,
     Object? inProgress = null,
     Object? ready = null,
   }) {
-    return _then(_value.copyWith(
-      connectivityNone: null == connectivityNone
-          ? _value.connectivityNone
-          : connectivityNone // ignore: cast_nullable_to_non_nullable
-              as String,
-      connectError: null == connectError
-          ? _value.connectError
-          : connectError // ignore: cast_nullable_to_non_nullable
-              as String,
-      appUnregistered: null == appUnregistered
-          ? _value.appUnregistered
-          : appUnregistered // ignore: cast_nullable_to_non_nullable
-              as String,
-      connectIssue: null == connectIssue
-          ? _value.connectIssue
-          : connectIssue // ignore: cast_nullable_to_non_nullable
-              as String,
-      inProgress: null == inProgress
-          ? _value.inProgress
-          : inProgress // ignore: cast_nullable_to_non_nullable
-              as String,
-      ready: null == ready
-          ? _value.ready
-          : ready // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            connectivityNone: null == connectivityNone
+                ? _value.connectivityNone
+                : connectivityNone // ignore: cast_nullable_to_non_nullable
+                      as String,
+            connectError: null == connectError
+                ? _value.connectError
+                : connectError // ignore: cast_nullable_to_non_nullable
+                      as String,
+            appUnregistered: null == appUnregistered
+                ? _value.appUnregistered
+                : appUnregistered // ignore: cast_nullable_to_non_nullable
+                      as String,
+            connectIssue: null == connectIssue
+                ? _value.connectIssue
+                : connectIssue // ignore: cast_nullable_to_non_nullable
+                      as String,
+            inProgress: null == inProgress
+                ? _value.inProgress
+                : inProgress // ignore: cast_nullable_to_non_nullable
+                      as String,
+            ready: null == ready
+                ? _value.ready
+                : ready // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -6096,29 +6471,33 @@ class _$CallStatusesWidgetConfigCopyWithImpl<$Res,
 abstract class _$$CallStatusesWidgetConfigImplCopyWith<$Res>
     implements $CallStatusesWidgetConfigCopyWith<$Res> {
   factory _$$CallStatusesWidgetConfigImplCopyWith(
-          _$CallStatusesWidgetConfigImpl value,
-          $Res Function(_$CallStatusesWidgetConfigImpl) then) =
-      __$$CallStatusesWidgetConfigImplCopyWithImpl<$Res>;
+    _$CallStatusesWidgetConfigImpl value,
+    $Res Function(_$CallStatusesWidgetConfigImpl) then,
+  ) = __$$CallStatusesWidgetConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String connectivityNone,
-      String connectError,
-      String appUnregistered,
-      String connectIssue,
-      String inProgress,
-      String ready});
+  $Res call({
+    String connectivityNone,
+    String connectError,
+    String appUnregistered,
+    String connectIssue,
+    String inProgress,
+    String ready,
+  });
 }
 
 /// @nodoc
 class __$$CallStatusesWidgetConfigImplCopyWithImpl<$Res>
-    extends _$CallStatusesWidgetConfigCopyWithImpl<$Res,
-        _$CallStatusesWidgetConfigImpl>
+    extends
+        _$CallStatusesWidgetConfigCopyWithImpl<
+          $Res,
+          _$CallStatusesWidgetConfigImpl
+        >
     implements _$$CallStatusesWidgetConfigImplCopyWith<$Res> {
   __$$CallStatusesWidgetConfigImplCopyWithImpl(
-      _$CallStatusesWidgetConfigImpl _value,
-      $Res Function(_$CallStatusesWidgetConfigImpl) _then)
-      : super(_value, _then);
+    _$CallStatusesWidgetConfigImpl _value,
+    $Res Function(_$CallStatusesWidgetConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CallStatusesWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -6132,32 +6511,34 @@ class __$$CallStatusesWidgetConfigImplCopyWithImpl<$Res>
     Object? inProgress = null,
     Object? ready = null,
   }) {
-    return _then(_$CallStatusesWidgetConfigImpl(
-      connectivityNone: null == connectivityNone
-          ? _value.connectivityNone
-          : connectivityNone // ignore: cast_nullable_to_non_nullable
-              as String,
-      connectError: null == connectError
-          ? _value.connectError
-          : connectError // ignore: cast_nullable_to_non_nullable
-              as String,
-      appUnregistered: null == appUnregistered
-          ? _value.appUnregistered
-          : appUnregistered // ignore: cast_nullable_to_non_nullable
-              as String,
-      connectIssue: null == connectIssue
-          ? _value.connectIssue
-          : connectIssue // ignore: cast_nullable_to_non_nullable
-              as String,
-      inProgress: null == inProgress
-          ? _value.inProgress
-          : inProgress // ignore: cast_nullable_to_non_nullable
-              as String,
-      ready: null == ready
-          ? _value.ready
-          : ready // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$CallStatusesWidgetConfigImpl(
+        connectivityNone: null == connectivityNone
+            ? _value.connectivityNone
+            : connectivityNone // ignore: cast_nullable_to_non_nullable
+                  as String,
+        connectError: null == connectError
+            ? _value.connectError
+            : connectError // ignore: cast_nullable_to_non_nullable
+                  as String,
+        appUnregistered: null == appUnregistered
+            ? _value.appUnregistered
+            : appUnregistered // ignore: cast_nullable_to_non_nullable
+                  as String,
+        connectIssue: null == connectIssue
+            ? _value.connectIssue
+            : connectIssue // ignore: cast_nullable_to_non_nullable
+                  as String,
+        inProgress: null == inProgress
+            ? _value.inProgress
+            : inProgress // ignore: cast_nullable_to_non_nullable
+                  as String,
+        ready: null == ready
+            ? _value.ready
+            : ready // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -6165,13 +6546,14 @@ class __$$CallStatusesWidgetConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$CallStatusesWidgetConfigImpl implements _CallStatusesWidgetConfig {
-  const _$CallStatusesWidgetConfigImpl(
-      {this.connectivityNone = '#E74C3C',
-      this.connectError = '#E74C3C',
-      this.appUnregistered = '#494949',
-      this.connectIssue = '#E74C3C',
-      this.inProgress = '#123752',
-      this.ready = '#75B943'});
+  const _$CallStatusesWidgetConfigImpl({
+    this.connectivityNone = '#E74C3C',
+    this.connectError = '#E74C3C',
+    this.appUnregistered = '#494949',
+    this.connectIssue = '#E74C3C',
+    this.inProgress = '#123752',
+    this.ready = '#75B943',
+  });
 
   factory _$CallStatusesWidgetConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$CallStatusesWidgetConfigImplFromJson(json);
@@ -6220,8 +6602,15 @@ class _$CallStatusesWidgetConfigImpl implements _CallStatusesWidgetConfig {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, connectivityNone, connectError,
-      appUnregistered, connectIssue, inProgress, ready);
+  int get hashCode => Object.hash(
+    runtimeType,
+    connectivityNone,
+    connectError,
+    appUnregistered,
+    connectIssue,
+    inProgress,
+    ready,
+  );
 
   /// Create a copy of CallStatusesWidgetConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -6229,25 +6618,26 @@ class _$CallStatusesWidgetConfigImpl implements _CallStatusesWidgetConfig {
   @override
   @pragma('vm:prefer-inline')
   _$$CallStatusesWidgetConfigImplCopyWith<_$CallStatusesWidgetConfigImpl>
-      get copyWith => __$$CallStatusesWidgetConfigImplCopyWithImpl<
-          _$CallStatusesWidgetConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$CallStatusesWidgetConfigImplCopyWithImpl<
+        _$CallStatusesWidgetConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CallStatusesWidgetConfigImplToJson(
-      this,
-    );
+    return _$$CallStatusesWidgetConfigImplToJson(this);
   }
 }
 
 abstract class _CallStatusesWidgetConfig implements CallStatusesWidgetConfig {
-  const factory _CallStatusesWidgetConfig(
-      {final String connectivityNone,
-      final String connectError,
-      final String appUnregistered,
-      final String connectIssue,
-      final String inProgress,
-      final String ready}) = _$CallStatusesWidgetConfigImpl;
+  const factory _CallStatusesWidgetConfig({
+    final String connectivityNone,
+    final String connectError,
+    final String appUnregistered,
+    final String connectIssue,
+    final String inProgress,
+    final String ready,
+  }) = _$CallStatusesWidgetConfigImpl;
 
   factory _CallStatusesWidgetConfig.fromJson(Map<String, dynamic> json) =
       _$CallStatusesWidgetConfigImpl.fromJson;
@@ -6270,7 +6660,7 @@ abstract class _CallStatusesWidgetConfig implements CallStatusesWidgetConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CallStatusesWidgetConfigImplCopyWith<_$CallStatusesWidgetConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 DecorationConfig _$DecorationConfigFromJson(Map<String, dynamic> json) {
@@ -6295,8 +6685,9 @@ mixin _$DecorationConfig {
 /// @nodoc
 abstract class $DecorationConfigCopyWith<$Res> {
   factory $DecorationConfigCopyWith(
-          DecorationConfig value, $Res Function(DecorationConfig) then) =
-      _$DecorationConfigCopyWithImpl<$Res, DecorationConfig>;
+    DecorationConfig value,
+    $Res Function(DecorationConfig) then,
+  ) = _$DecorationConfigCopyWithImpl<$Res, DecorationConfig>;
   @useResult
   $Res call({GradientColorsConfig primaryGradientColorsConfig});
 
@@ -6317,15 +6708,16 @@ class _$DecorationConfigCopyWithImpl<$Res, $Val extends DecorationConfig>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? primaryGradientColorsConfig = null,
-  }) {
-    return _then(_value.copyWith(
-      primaryGradientColorsConfig: null == primaryGradientColorsConfig
-          ? _value.primaryGradientColorsConfig
-          : primaryGradientColorsConfig // ignore: cast_nullable_to_non_nullable
-              as GradientColorsConfig,
-    ) as $Val);
+  $Res call({Object? primaryGradientColorsConfig = null}) {
+    return _then(
+      _value.copyWith(
+            primaryGradientColorsConfig: null == primaryGradientColorsConfig
+                ? _value.primaryGradientColorsConfig
+                : primaryGradientColorsConfig // ignore: cast_nullable_to_non_nullable
+                      as GradientColorsConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of DecorationConfig
@@ -6334,18 +6726,23 @@ class _$DecorationConfigCopyWithImpl<$Res, $Val extends DecorationConfig>
   @pragma('vm:prefer-inline')
   $GradientColorsConfigCopyWith<$Res> get primaryGradientColorsConfig {
     return $GradientColorsConfigCopyWith<$Res>(
-        _value.primaryGradientColorsConfig, (value) {
-      return _then(_value.copyWith(primaryGradientColorsConfig: value) as $Val);
-    });
+      _value.primaryGradientColorsConfig,
+      (value) {
+        return _then(
+          _value.copyWith(primaryGradientColorsConfig: value) as $Val,
+        );
+      },
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$DecorationConfigImplCopyWith<$Res>
     implements $DecorationConfigCopyWith<$Res> {
-  factory _$$DecorationConfigImplCopyWith(_$DecorationConfigImpl value,
-          $Res Function(_$DecorationConfigImpl) then) =
-      __$$DecorationConfigImplCopyWithImpl<$Res>;
+  factory _$$DecorationConfigImplCopyWith(
+    _$DecorationConfigImpl value,
+    $Res Function(_$DecorationConfigImpl) then,
+  ) = __$$DecorationConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({GradientColorsConfig primaryGradientColorsConfig});
@@ -6358,23 +6755,24 @@ abstract class _$$DecorationConfigImplCopyWith<$Res>
 class __$$DecorationConfigImplCopyWithImpl<$Res>
     extends _$DecorationConfigCopyWithImpl<$Res, _$DecorationConfigImpl>
     implements _$$DecorationConfigImplCopyWith<$Res> {
-  __$$DecorationConfigImplCopyWithImpl(_$DecorationConfigImpl _value,
-      $Res Function(_$DecorationConfigImpl) _then)
-      : super(_value, _then);
+  __$$DecorationConfigImplCopyWithImpl(
+    _$DecorationConfigImpl _value,
+    $Res Function(_$DecorationConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of DecorationConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? primaryGradientColorsConfig = null,
-  }) {
-    return _then(_$DecorationConfigImpl(
-      primaryGradientColorsConfig: null == primaryGradientColorsConfig
-          ? _value.primaryGradientColorsConfig
-          : primaryGradientColorsConfig // ignore: cast_nullable_to_non_nullable
-              as GradientColorsConfig,
-    ));
+  $Res call({Object? primaryGradientColorsConfig = null}) {
+    return _then(
+      _$DecorationConfigImpl(
+        primaryGradientColorsConfig: null == primaryGradientColorsConfig
+            ? _value.primaryGradientColorsConfig
+            : primaryGradientColorsConfig // ignore: cast_nullable_to_non_nullable
+                  as GradientColorsConfig,
+      ),
+    );
   }
 }
 
@@ -6382,8 +6780,9 @@ class __$$DecorationConfigImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$DecorationConfigImpl implements _DecorationConfig {
-  const _$DecorationConfigImpl(
-      {this.primaryGradientColorsConfig = const GradientColorsConfig()});
+  const _$DecorationConfigImpl({
+    this.primaryGradientColorsConfig = const GradientColorsConfig(),
+  });
 
   factory _$DecorationConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$DecorationConfigImplFromJson(json);
@@ -6402,8 +6801,10 @@ class _$DecorationConfigImpl implements _DecorationConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DecorationConfigImpl &&
-            (identical(other.primaryGradientColorsConfig,
-                    primaryGradientColorsConfig) ||
+            (identical(
+                  other.primaryGradientColorsConfig,
+                  primaryGradientColorsConfig,
+                ) ||
                 other.primaryGradientColorsConfig ==
                     primaryGradientColorsConfig));
   }
@@ -6419,20 +6820,20 @@ class _$DecorationConfigImpl implements _DecorationConfig {
   @pragma('vm:prefer-inline')
   _$$DecorationConfigImplCopyWith<_$DecorationConfigImpl> get copyWith =>
       __$$DecorationConfigImplCopyWithImpl<_$DecorationConfigImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DecorationConfigImplToJson(
-      this,
-    );
+    return _$$DecorationConfigImplToJson(this);
   }
 }
 
 abstract class _DecorationConfig implements DecorationConfig {
-  const factory _DecorationConfig(
-          {final GradientColorsConfig primaryGradientColorsConfig}) =
-      _$DecorationConfigImpl;
+  const factory _DecorationConfig({
+    final GradientColorsConfig primaryGradientColorsConfig,
+  }) = _$DecorationConfigImpl;
 
   factory _DecorationConfig.fromJson(Map<String, dynamic> json) =
       _$DecorationConfigImpl.fromJson;
@@ -6468,16 +6869,19 @@ mixin _$GradientColorsConfig {
 
 /// @nodoc
 abstract class $GradientColorsConfigCopyWith<$Res> {
-  factory $GradientColorsConfigCopyWith(GradientColorsConfig value,
-          $Res Function(GradientColorsConfig) then) =
-      _$GradientColorsConfigCopyWithImpl<$Res, GradientColorsConfig>;
+  factory $GradientColorsConfigCopyWith(
+    GradientColorsConfig value,
+    $Res Function(GradientColorsConfig) then,
+  ) = _$GradientColorsConfigCopyWithImpl<$Res, GradientColorsConfig>;
   @useResult
   $Res call({List<CustomColor> colors});
 }
 
 /// @nodoc
-class _$GradientColorsConfigCopyWithImpl<$Res,
-        $Val extends GradientColorsConfig>
+class _$GradientColorsConfigCopyWithImpl<
+  $Res,
+  $Val extends GradientColorsConfig
+>
     implements $GradientColorsConfigCopyWith<$Res> {
   _$GradientColorsConfigCopyWithImpl(this._value, this._then);
 
@@ -6490,15 +6894,16 @@ class _$GradientColorsConfigCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? colors = null,
-  }) {
-    return _then(_value.copyWith(
-      colors: null == colors
-          ? _value.colors
-          : colors // ignore: cast_nullable_to_non_nullable
-              as List<CustomColor>,
-    ) as $Val);
+  $Res call({Object? colors = null}) {
+    return _then(
+      _value.copyWith(
+            colors: null == colors
+                ? _value.colors
+                : colors // ignore: cast_nullable_to_non_nullable
+                      as List<CustomColor>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -6506,9 +6911,9 @@ class _$GradientColorsConfigCopyWithImpl<$Res,
 abstract class _$$PrimaryGradientColorsConfigImplCopyWith<$Res>
     implements $GradientColorsConfigCopyWith<$Res> {
   factory _$$PrimaryGradientColorsConfigImplCopyWith(
-          _$PrimaryGradientColorsConfigImpl value,
-          $Res Function(_$PrimaryGradientColorsConfigImpl) then) =
-      __$$PrimaryGradientColorsConfigImplCopyWithImpl<$Res>;
+    _$PrimaryGradientColorsConfigImpl value,
+    $Res Function(_$PrimaryGradientColorsConfigImpl) then,
+  ) = __$$PrimaryGradientColorsConfigImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<CustomColor> colors});
@@ -6516,27 +6921,30 @@ abstract class _$$PrimaryGradientColorsConfigImplCopyWith<$Res>
 
 /// @nodoc
 class __$$PrimaryGradientColorsConfigImplCopyWithImpl<$Res>
-    extends _$GradientColorsConfigCopyWithImpl<$Res,
-        _$PrimaryGradientColorsConfigImpl>
+    extends
+        _$GradientColorsConfigCopyWithImpl<
+          $Res,
+          _$PrimaryGradientColorsConfigImpl
+        >
     implements _$$PrimaryGradientColorsConfigImplCopyWith<$Res> {
   __$$PrimaryGradientColorsConfigImplCopyWithImpl(
-      _$PrimaryGradientColorsConfigImpl _value,
-      $Res Function(_$PrimaryGradientColorsConfigImpl) _then)
-      : super(_value, _then);
+    _$PrimaryGradientColorsConfigImpl _value,
+    $Res Function(_$PrimaryGradientColorsConfigImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of GradientColorsConfig
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? colors = null,
-  }) {
-    return _then(_$PrimaryGradientColorsConfigImpl(
-      colors: null == colors
-          ? _value._colors
-          : colors // ignore: cast_nullable_to_non_nullable
-              as List<CustomColor>,
-    ));
+  $Res call({Object? colors = null}) {
+    return _then(
+      _$PrimaryGradientColorsConfigImpl(
+        colors: null == colors
+            ? _value._colors
+            : colors // ignore: cast_nullable_to_non_nullable
+                  as List<CustomColor>,
+      ),
+    );
   }
 }
 
@@ -6545,13 +6953,13 @@ class __$$PrimaryGradientColorsConfigImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$PrimaryGradientColorsConfigImpl
     implements _PrimaryGradientColorsConfig {
-  const _$PrimaryGradientColorsConfigImpl(
-      {final List<CustomColor> colors = const []})
-      : _colors = colors;
+  const _$PrimaryGradientColorsConfigImpl({
+    final List<CustomColor> colors = const [],
+  }) : _colors = colors;
 
   factory _$PrimaryGradientColorsConfigImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$PrimaryGradientColorsConfigImplFromJson(json);
+    Map<String, dynamic> json,
+  ) => _$$PrimaryGradientColorsConfigImplFromJson(json);
 
   final List<CustomColor> _colors;
   @override
@@ -6586,14 +6994,14 @@ class _$PrimaryGradientColorsConfigImpl
   @override
   @pragma('vm:prefer-inline')
   _$$PrimaryGradientColorsConfigImplCopyWith<_$PrimaryGradientColorsConfigImpl>
-      get copyWith => __$$PrimaryGradientColorsConfigImplCopyWithImpl<
-          _$PrimaryGradientColorsConfigImpl>(this, _$identity);
+  get copyWith =>
+      __$$PrimaryGradientColorsConfigImplCopyWithImpl<
+        _$PrimaryGradientColorsConfigImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PrimaryGradientColorsConfigImplToJson(
-      this,
-    );
+    return _$$PrimaryGradientColorsConfigImplToJson(this);
   }
 }
 
@@ -6612,5 +7020,5 @@ abstract class _PrimaryGradientColorsConfig implements GradientColorsConfig {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PrimaryGradientColorsConfigImplCopyWith<_$PrimaryGradientColorsConfigImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

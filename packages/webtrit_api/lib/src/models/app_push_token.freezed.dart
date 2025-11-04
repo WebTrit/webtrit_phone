@@ -12,7 +12,8 @@ part of 'app_push_token.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 AppPushToken _$AppPushTokenFromJson(Map<String, dynamic> json) {
   return _AppPushToken.fromJson(json);
@@ -36,8 +37,9 @@ mixin _$AppPushToken {
 /// @nodoc
 abstract class $AppPushTokenCopyWith<$Res> {
   factory $AppPushTokenCopyWith(
-          AppPushToken value, $Res Function(AppPushToken) then) =
-      _$AppPushTokenCopyWithImpl<$Res, AppPushToken>;
+    AppPushToken value,
+    $Res Function(AppPushToken) then,
+  ) = _$AppPushTokenCopyWithImpl<$Res, AppPushToken>;
   @useResult
   $Res call({AppPushTokenType type, String value});
 }
@@ -56,20 +58,20 @@ class _$AppPushTokenCopyWithImpl<$Res, $Val extends AppPushToken>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? type = null,
-    Object? value = null,
-  }) {
-    return _then(_value.copyWith(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppPushTokenType,
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? type = null, Object? value = null}) {
+    return _then(
+      _value.copyWith(
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as AppPushTokenType,
+            value: null == value
+                ? _value.value
+                : value // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -77,8 +79,9 @@ class _$AppPushTokenCopyWithImpl<$Res, $Val extends AppPushToken>
 abstract class _$$AppPushTokenImplCopyWith<$Res>
     implements $AppPushTokenCopyWith<$Res> {
   factory _$$AppPushTokenImplCopyWith(
-          _$AppPushTokenImpl value, $Res Function(_$AppPushTokenImpl) then) =
-      __$$AppPushTokenImplCopyWithImpl<$Res>;
+    _$AppPushTokenImpl value,
+    $Res Function(_$AppPushTokenImpl) then,
+  ) = __$$AppPushTokenImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({AppPushTokenType type, String value});
@@ -89,27 +92,27 @@ class __$$AppPushTokenImplCopyWithImpl<$Res>
     extends _$AppPushTokenCopyWithImpl<$Res, _$AppPushTokenImpl>
     implements _$$AppPushTokenImplCopyWith<$Res> {
   __$$AppPushTokenImplCopyWithImpl(
-      _$AppPushTokenImpl _value, $Res Function(_$AppPushTokenImpl) _then)
-      : super(_value, _then);
+    _$AppPushTokenImpl _value,
+    $Res Function(_$AppPushTokenImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppPushToken
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? type = null,
-    Object? value = null,
-  }) {
-    return _then(_$AppPushTokenImpl(
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppPushTokenType,
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? type = null, Object? value = null}) {
+    return _then(
+      _$AppPushTokenImpl(
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as AppPushTokenType,
+        value: null == value
+            ? _value.value
+            : value // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -155,16 +158,15 @@ class _$AppPushTokenImpl implements _AppPushToken {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppPushTokenImplToJson(
-      this,
-    );
+    return _$$AppPushTokenImplToJson(this);
   }
 }
 
 abstract class _AppPushToken implements AppPushToken {
-  const factory _AppPushToken(
-      {required final AppPushTokenType type,
-      required final String value}) = _$AppPushTokenImpl;
+  const factory _AppPushToken({
+    required final AppPushTokenType type,
+    required final String value,
+  }) = _$AppPushTokenImpl;
 
   factory _AppPushToken.fromJson(Map<String, dynamic> json) =
       _$AppPushTokenImpl.fromJson;

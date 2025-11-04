@@ -12,7 +12,8 @@ part of 'self_config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SelfConfigResponse _$SelfConfigResponseFromJson(Map<String, dynamic> json) {
   return _SelfConfigResponse.fromJson(json);
@@ -36,8 +37,9 @@ mixin _$SelfConfigResponse {
 /// @nodoc
 abstract class $SelfConfigResponseCopyWith<$Res> {
   factory $SelfConfigResponseCopyWith(
-          SelfConfigResponse value, $Res Function(SelfConfigResponse) then) =
-      _$SelfConfigResponseCopyWithImpl<$Res, SelfConfigResponse>;
+    SelfConfigResponse value,
+    $Res Function(SelfConfigResponse) then,
+  ) = _$SelfConfigResponseCopyWithImpl<$Res, SelfConfigResponse>;
   @useResult
   $Res call({Uri url, DateTime expiresAt});
 }
@@ -56,29 +58,30 @@ class _$SelfConfigResponseCopyWithImpl<$Res, $Val extends SelfConfigResponse>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? url = null,
-    Object? expiresAt = null,
-  }) {
-    return _then(_value.copyWith(
-      url: null == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as Uri,
-      expiresAt: null == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+  $Res call({Object? url = null, Object? expiresAt = null}) {
+    return _then(
+      _value.copyWith(
+            url: null == url
+                ? _value.url
+                : url // ignore: cast_nullable_to_non_nullable
+                      as Uri,
+            expiresAt: null == expiresAt
+                ? _value.expiresAt
+                : expiresAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SelfConfigResponseImplCopyWith<$Res>
     implements $SelfConfigResponseCopyWith<$Res> {
-  factory _$$SelfConfigResponseImplCopyWith(_$SelfConfigResponseImpl value,
-          $Res Function(_$SelfConfigResponseImpl) then) =
-      __$$SelfConfigResponseImplCopyWithImpl<$Res>;
+  factory _$$SelfConfigResponseImplCopyWith(
+    _$SelfConfigResponseImpl value,
+    $Res Function(_$SelfConfigResponseImpl) then,
+  ) = __$$SelfConfigResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Uri url, DateTime expiresAt});
@@ -88,28 +91,28 @@ abstract class _$$SelfConfigResponseImplCopyWith<$Res>
 class __$$SelfConfigResponseImplCopyWithImpl<$Res>
     extends _$SelfConfigResponseCopyWithImpl<$Res, _$SelfConfigResponseImpl>
     implements _$$SelfConfigResponseImplCopyWith<$Res> {
-  __$$SelfConfigResponseImplCopyWithImpl(_$SelfConfigResponseImpl _value,
-      $Res Function(_$SelfConfigResponseImpl) _then)
-      : super(_value, _then);
+  __$$SelfConfigResponseImplCopyWithImpl(
+    _$SelfConfigResponseImpl _value,
+    $Res Function(_$SelfConfigResponseImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SelfConfigResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? url = null,
-    Object? expiresAt = null,
-  }) {
-    return _then(_$SelfConfigResponseImpl(
-      url: null == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
-              as Uri,
-      expiresAt: null == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
+  $Res call({Object? url = null, Object? expiresAt = null}) {
+    return _then(
+      _$SelfConfigResponseImpl(
+        url: null == url
+            ? _value.url
+            : url // ignore: cast_nullable_to_non_nullable
+                  as Uri,
+        expiresAt: null == expiresAt
+            ? _value.expiresAt
+            : expiresAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+      ),
+    );
   }
 }
 
@@ -153,20 +156,21 @@ class _$SelfConfigResponseImpl implements _SelfConfigResponse {
   @pragma('vm:prefer-inline')
   _$$SelfConfigResponseImplCopyWith<_$SelfConfigResponseImpl> get copyWith =>
       __$$SelfConfigResponseImplCopyWithImpl<_$SelfConfigResponseImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SelfConfigResponseImplToJson(
-      this,
-    );
+    return _$$SelfConfigResponseImplToJson(this);
   }
 }
 
 abstract class _SelfConfigResponse implements SelfConfigResponse {
-  const factory _SelfConfigResponse(
-      {required final Uri url,
-      required final DateTime expiresAt}) = _$SelfConfigResponseImpl;
+  const factory _SelfConfigResponse({
+    required final Uri url,
+    required final DateTime expiresAt,
+  }) = _$SelfConfigResponseImpl;
 
   factory _SelfConfigResponse.fromJson(Map<String, dynamic> json) =
       _$SelfConfigResponseImpl.fromJson;

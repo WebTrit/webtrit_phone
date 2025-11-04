@@ -12,10 +12,12 @@ part of 'external_page_access_token.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ExternalPageAccessToken _$ExternalPageAccessTokenFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _ExternalPageAccessToken.fromJson(json);
 }
 
@@ -40,19 +42,23 @@ mixin _$ExternalPageAccessToken {
 
 /// @nodoc
 abstract class $ExternalPageAccessTokenCopyWith<$Res> {
-  factory $ExternalPageAccessTokenCopyWith(ExternalPageAccessToken value,
-          $Res Function(ExternalPageAccessToken) then) =
-      _$ExternalPageAccessTokenCopyWithImpl<$Res, ExternalPageAccessToken>;
+  factory $ExternalPageAccessTokenCopyWith(
+    ExternalPageAccessToken value,
+    $Res Function(ExternalPageAccessToken) then,
+  ) = _$ExternalPageAccessTokenCopyWithImpl<$Res, ExternalPageAccessToken>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'access_token') String accessToken,
-      @JsonKey(name: 'refresh_token') String refreshToken,
-      @JsonKey(name: 'expires_at') DateTime expiresAt});
+  $Res call({
+    @JsonKey(name: 'access_token') String accessToken,
+    @JsonKey(name: 'refresh_token') String refreshToken,
+    @JsonKey(name: 'expires_at') DateTime expiresAt,
+  });
 }
 
 /// @nodoc
-class _$ExternalPageAccessTokenCopyWithImpl<$Res,
-        $Val extends ExternalPageAccessToken>
+class _$ExternalPageAccessTokenCopyWithImpl<
+  $Res,
+  $Val extends ExternalPageAccessToken
+>
     implements $ExternalPageAccessTokenCopyWith<$Res> {
   _$ExternalPageAccessTokenCopyWithImpl(this._value, this._then);
 
@@ -70,20 +76,23 @@ class _$ExternalPageAccessTokenCopyWithImpl<$Res,
     Object? refreshToken = null,
     Object? expiresAt = null,
   }) {
-    return _then(_value.copyWith(
-      accessToken: null == accessToken
-          ? _value.accessToken
-          : accessToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      refreshToken: null == refreshToken
-          ? _value.refreshToken
-          : refreshToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      expiresAt: null == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            accessToken: null == accessToken
+                ? _value.accessToken
+                : accessToken // ignore: cast_nullable_to_non_nullable
+                      as String,
+            refreshToken: null == refreshToken
+                ? _value.refreshToken
+                : refreshToken // ignore: cast_nullable_to_non_nullable
+                      as String,
+            expiresAt: null == expiresAt
+                ? _value.expiresAt
+                : expiresAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -91,26 +100,30 @@ class _$ExternalPageAccessTokenCopyWithImpl<$Res,
 abstract class _$$ExternalPageAccessTokenImplCopyWith<$Res>
     implements $ExternalPageAccessTokenCopyWith<$Res> {
   factory _$$ExternalPageAccessTokenImplCopyWith(
-          _$ExternalPageAccessTokenImpl value,
-          $Res Function(_$ExternalPageAccessTokenImpl) then) =
-      __$$ExternalPageAccessTokenImplCopyWithImpl<$Res>;
+    _$ExternalPageAccessTokenImpl value,
+    $Res Function(_$ExternalPageAccessTokenImpl) then,
+  ) = __$$ExternalPageAccessTokenImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'access_token') String accessToken,
-      @JsonKey(name: 'refresh_token') String refreshToken,
-      @JsonKey(name: 'expires_at') DateTime expiresAt});
+  $Res call({
+    @JsonKey(name: 'access_token') String accessToken,
+    @JsonKey(name: 'refresh_token') String refreshToken,
+    @JsonKey(name: 'expires_at') DateTime expiresAt,
+  });
 }
 
 /// @nodoc
 class __$$ExternalPageAccessTokenImplCopyWithImpl<$Res>
-    extends _$ExternalPageAccessTokenCopyWithImpl<$Res,
-        _$ExternalPageAccessTokenImpl>
+    extends
+        _$ExternalPageAccessTokenCopyWithImpl<
+          $Res,
+          _$ExternalPageAccessTokenImpl
+        >
     implements _$$ExternalPageAccessTokenImplCopyWith<$Res> {
   __$$ExternalPageAccessTokenImplCopyWithImpl(
-      _$ExternalPageAccessTokenImpl _value,
-      $Res Function(_$ExternalPageAccessTokenImpl) _then)
-      : super(_value, _then);
+    _$ExternalPageAccessTokenImpl _value,
+    $Res Function(_$ExternalPageAccessTokenImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ExternalPageAccessToken
   /// with the given fields replaced by the non-null parameter values.
@@ -121,20 +134,22 @@ class __$$ExternalPageAccessTokenImplCopyWithImpl<$Res>
     Object? refreshToken = null,
     Object? expiresAt = null,
   }) {
-    return _then(_$ExternalPageAccessTokenImpl(
-      accessToken: null == accessToken
-          ? _value.accessToken
-          : accessToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      refreshToken: null == refreshToken
-          ? _value.refreshToken
-          : refreshToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      expiresAt: null == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
+    return _then(
+      _$ExternalPageAccessTokenImpl(
+        accessToken: null == accessToken
+            ? _value.accessToken
+            : accessToken // ignore: cast_nullable_to_non_nullable
+                  as String,
+        refreshToken: null == refreshToken
+            ? _value.refreshToken
+            : refreshToken // ignore: cast_nullable_to_non_nullable
+                  as String,
+        expiresAt: null == expiresAt
+            ? _value.expiresAt
+            : expiresAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+      ),
+    );
   }
 }
 
@@ -142,10 +157,11 @@ class __$$ExternalPageAccessTokenImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$ExternalPageAccessTokenImpl implements _ExternalPageAccessToken {
-  const _$ExternalPageAccessTokenImpl(
-      {@JsonKey(name: 'access_token') required this.accessToken,
-      @JsonKey(name: 'refresh_token') required this.refreshToken,
-      @JsonKey(name: 'expires_at') required this.expiresAt});
+  const _$ExternalPageAccessTokenImpl({
+    @JsonKey(name: 'access_token') required this.accessToken,
+    @JsonKey(name: 'refresh_token') required this.refreshToken,
+    @JsonKey(name: 'expires_at') required this.expiresAt,
+  });
 
   factory _$ExternalPageAccessTokenImpl.fromJson(Map<String, dynamic> json) =>
       _$$ExternalPageAccessTokenImplFromJson(json);
@@ -189,23 +205,23 @@ class _$ExternalPageAccessTokenImpl implements _ExternalPageAccessToken {
   @override
   @pragma('vm:prefer-inline')
   _$$ExternalPageAccessTokenImplCopyWith<_$ExternalPageAccessTokenImpl>
-      get copyWith => __$$ExternalPageAccessTokenImplCopyWithImpl<
-          _$ExternalPageAccessTokenImpl>(this, _$identity);
+  get copyWith =>
+      __$$ExternalPageAccessTokenImplCopyWithImpl<
+        _$ExternalPageAccessTokenImpl
+      >(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ExternalPageAccessTokenImplToJson(
-      this,
-    );
+    return _$$ExternalPageAccessTokenImplToJson(this);
   }
 }
 
 abstract class _ExternalPageAccessToken implements ExternalPageAccessToken {
-  const factory _ExternalPageAccessToken(
-          {@JsonKey(name: 'access_token') required final String accessToken,
-          @JsonKey(name: 'refresh_token') required final String refreshToken,
-          @JsonKey(name: 'expires_at') required final DateTime expiresAt}) =
-      _$ExternalPageAccessTokenImpl;
+  const factory _ExternalPageAccessToken({
+    @JsonKey(name: 'access_token') required final String accessToken,
+    @JsonKey(name: 'refresh_token') required final String refreshToken,
+    @JsonKey(name: 'expires_at') required final DateTime expiresAt,
+  }) = _$ExternalPageAccessTokenImpl;
 
   factory _ExternalPageAccessToken.fromJson(Map<String, dynamic> json) =
       _$ExternalPageAccessTokenImpl.fromJson;
@@ -225,5 +241,5 @@ abstract class _ExternalPageAccessToken implements ExternalPageAccessToken {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ExternalPageAccessTokenImplCopyWith<_$ExternalPageAccessTokenImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

@@ -12,7 +12,8 @@ part of 'app_contact.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 AppContact _$AppContactFromJson(Map<String, dynamic> json) {
   return _AppContact.fromJson(json);
@@ -36,8 +37,9 @@ mixin _$AppContact {
 /// @nodoc
 abstract class $AppContactCopyWith<$Res> {
   factory $AppContactCopyWith(
-          AppContact value, $Res Function(AppContact) then) =
-      _$AppContactCopyWithImpl<$Res, AppContact>;
+    AppContact value,
+    $Res Function(AppContact) then,
+  ) = _$AppContactCopyWithImpl<$Res, AppContact>;
   @useResult
   $Res call({String identifier, List<String> phones});
 }
@@ -56,20 +58,20 @@ class _$AppContactCopyWithImpl<$Res, $Val extends AppContact>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? identifier = null,
-    Object? phones = null,
-  }) {
-    return _then(_value.copyWith(
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      phones: null == phones
-          ? _value.phones
-          : phones // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ) as $Val);
+  $Res call({Object? identifier = null, Object? phones = null}) {
+    return _then(
+      _value.copyWith(
+            identifier: null == identifier
+                ? _value.identifier
+                : identifier // ignore: cast_nullable_to_non_nullable
+                      as String,
+            phones: null == phones
+                ? _value.phones
+                : phones // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -77,8 +79,9 @@ class _$AppContactCopyWithImpl<$Res, $Val extends AppContact>
 abstract class _$$AppContactImplCopyWith<$Res>
     implements $AppContactCopyWith<$Res> {
   factory _$$AppContactImplCopyWith(
-          _$AppContactImpl value, $Res Function(_$AppContactImpl) then) =
-      __$$AppContactImplCopyWithImpl<$Res>;
+    _$AppContactImpl value,
+    $Res Function(_$AppContactImpl) then,
+  ) = __$$AppContactImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String identifier, List<String> phones});
@@ -89,27 +92,27 @@ class __$$AppContactImplCopyWithImpl<$Res>
     extends _$AppContactCopyWithImpl<$Res, _$AppContactImpl>
     implements _$$AppContactImplCopyWith<$Res> {
   __$$AppContactImplCopyWithImpl(
-      _$AppContactImpl _value, $Res Function(_$AppContactImpl) _then)
-      : super(_value, _then);
+    _$AppContactImpl _value,
+    $Res Function(_$AppContactImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppContact
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? identifier = null,
-    Object? phones = null,
-  }) {
-    return _then(_$AppContactImpl(
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      phones: null == phones
-          ? _value._phones
-          : phones // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-    ));
+  $Res call({Object? identifier = null, Object? phones = null}) {
+    return _then(
+      _$AppContactImpl(
+        identifier: null == identifier
+            ? _value.identifier
+            : identifier // ignore: cast_nullable_to_non_nullable
+                  as String,
+        phones: null == phones
+            ? _value._phones
+            : phones // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+      ),
+    );
   }
 }
 
@@ -117,9 +120,10 @@ class __$$AppContactImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$AppContactImpl implements _AppContact {
-  const _$AppContactImpl(
-      {required this.identifier, required final List<String> phones})
-      : _phones = phones;
+  const _$AppContactImpl({
+    required this.identifier,
+    required final List<String> phones,
+  }) : _phones = phones;
 
   factory _$AppContactImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppContactImplFromJson(json);
@@ -152,7 +156,10 @@ class _$AppContactImpl implements _AppContact {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, identifier, const DeepCollectionEquality().hash(_phones));
+    runtimeType,
+    identifier,
+    const DeepCollectionEquality().hash(_phones),
+  );
 
   /// Create a copy of AppContact
   /// with the given fields replaced by the non-null parameter values.
@@ -164,16 +171,15 @@ class _$AppContactImpl implements _AppContact {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppContactImplToJson(
-      this,
-    );
+    return _$$AppContactImplToJson(this);
   }
 }
 
 abstract class _AppContact implements AppContact {
-  const factory _AppContact(
-      {required final String identifier,
-      required final List<String> phones}) = _$AppContactImpl;
+  const factory _AppContact({
+    required final String identifier,
+    required final List<String> phones,
+  }) = _$AppContactImpl;
 
   factory _AppContact.fromJson(Map<String, dynamic> json) =
       _$AppContactImpl.fromJson;

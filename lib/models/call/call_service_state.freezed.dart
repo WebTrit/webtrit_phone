@@ -12,7 +12,8 @@ part of 'call_service_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$CallServiceState {
@@ -36,16 +37,18 @@ mixin _$CallServiceState {
 /// @nodoc
 abstract class $CallServiceStateCopyWith<$Res> {
   factory $CallServiceStateCopyWith(
-          CallServiceState value, $Res Function(CallServiceState) then) =
-      _$CallServiceStateCopyWithImpl<$Res, CallServiceState>;
+    CallServiceState value,
+    $Res Function(CallServiceState) then,
+  ) = _$CallServiceStateCopyWithImpl<$Res, CallServiceState>;
   @useResult
-  $Res call(
-      {SignalingClientStatus signalingClientStatus,
-      Registration registration,
-      NetworkStatus? networkStatus,
-      Object? lastSignalingClientConnectError,
-      Object? lastSignalingClientDisconnectError,
-      int? lastSignalingDisconnectCode});
+  $Res call({
+    SignalingClientStatus signalingClientStatus,
+    Registration registration,
+    NetworkStatus? networkStatus,
+    Object? lastSignalingClientConnectError,
+    Object? lastSignalingClientDisconnectError,
+    int? lastSignalingDisconnectCode,
+  });
 }
 
 /// @nodoc
@@ -70,59 +73,65 @@ class _$CallServiceStateCopyWithImpl<$Res, $Val extends CallServiceState>
     Object? lastSignalingClientDisconnectError = freezed,
     Object? lastSignalingDisconnectCode = freezed,
   }) {
-    return _then(_value.copyWith(
-      signalingClientStatus: null == signalingClientStatus
-          ? _value.signalingClientStatus
-          : signalingClientStatus // ignore: cast_nullable_to_non_nullable
-              as SignalingClientStatus,
-      registration: null == registration
-          ? _value.registration
-          : registration // ignore: cast_nullable_to_non_nullable
-              as Registration,
-      networkStatus: freezed == networkStatus
-          ? _value.networkStatus
-          : networkStatus // ignore: cast_nullable_to_non_nullable
-              as NetworkStatus?,
-      lastSignalingClientConnectError:
-          freezed == lastSignalingClientConnectError
-              ? _value.lastSignalingClientConnectError
-              : lastSignalingClientConnectError,
-      lastSignalingClientDisconnectError:
-          freezed == lastSignalingClientDisconnectError
-              ? _value.lastSignalingClientDisconnectError
-              : lastSignalingClientDisconnectError,
-      lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
-          ? _value.lastSignalingDisconnectCode
-          : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            signalingClientStatus: null == signalingClientStatus
+                ? _value.signalingClientStatus
+                : signalingClientStatus // ignore: cast_nullable_to_non_nullable
+                      as SignalingClientStatus,
+            registration: null == registration
+                ? _value.registration
+                : registration // ignore: cast_nullable_to_non_nullable
+                      as Registration,
+            networkStatus: freezed == networkStatus
+                ? _value.networkStatus
+                : networkStatus // ignore: cast_nullable_to_non_nullable
+                      as NetworkStatus?,
+            lastSignalingClientConnectError:
+                freezed == lastSignalingClientConnectError
+                ? _value.lastSignalingClientConnectError
+                : lastSignalingClientConnectError,
+            lastSignalingClientDisconnectError:
+                freezed == lastSignalingClientDisconnectError
+                ? _value.lastSignalingClientDisconnectError
+                : lastSignalingClientDisconnectError,
+            lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
+                ? _value.lastSignalingDisconnectCode
+                : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
+                      as int?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$CallServiceStateImplCopyWith<$Res>
     implements $CallServiceStateCopyWith<$Res> {
-  factory _$$CallServiceStateImplCopyWith(_$CallServiceStateImpl value,
-          $Res Function(_$CallServiceStateImpl) then) =
-      __$$CallServiceStateImplCopyWithImpl<$Res>;
+  factory _$$CallServiceStateImplCopyWith(
+    _$CallServiceStateImpl value,
+    $Res Function(_$CallServiceStateImpl) then,
+  ) = __$$CallServiceStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {SignalingClientStatus signalingClientStatus,
-      Registration registration,
-      NetworkStatus? networkStatus,
-      Object? lastSignalingClientConnectError,
-      Object? lastSignalingClientDisconnectError,
-      int? lastSignalingDisconnectCode});
+  $Res call({
+    SignalingClientStatus signalingClientStatus,
+    Registration registration,
+    NetworkStatus? networkStatus,
+    Object? lastSignalingClientConnectError,
+    Object? lastSignalingClientDisconnectError,
+    int? lastSignalingDisconnectCode,
+  });
 }
 
 /// @nodoc
 class __$$CallServiceStateImplCopyWithImpl<$Res>
     extends _$CallServiceStateCopyWithImpl<$Res, _$CallServiceStateImpl>
     implements _$$CallServiceStateImplCopyWith<$Res> {
-  __$$CallServiceStateImplCopyWithImpl(_$CallServiceStateImpl _value,
-      $Res Function(_$CallServiceStateImpl) _then)
-      : super(_value, _then);
+  __$$CallServiceStateImplCopyWithImpl(
+    _$CallServiceStateImpl _value,
+    $Res Function(_$CallServiceStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CallServiceState
   /// with the given fields replaced by the non-null parameter values.
@@ -136,47 +145,50 @@ class __$$CallServiceStateImplCopyWithImpl<$Res>
     Object? lastSignalingClientDisconnectError = freezed,
     Object? lastSignalingDisconnectCode = freezed,
   }) {
-    return _then(_$CallServiceStateImpl(
-      signalingClientStatus: null == signalingClientStatus
-          ? _value.signalingClientStatus
-          : signalingClientStatus // ignore: cast_nullable_to_non_nullable
-              as SignalingClientStatus,
-      registration: null == registration
-          ? _value.registration
-          : registration // ignore: cast_nullable_to_non_nullable
-              as Registration,
-      networkStatus: freezed == networkStatus
-          ? _value.networkStatus
-          : networkStatus // ignore: cast_nullable_to_non_nullable
-              as NetworkStatus?,
-      lastSignalingClientConnectError:
-          freezed == lastSignalingClientConnectError
-              ? _value.lastSignalingClientConnectError
-              : lastSignalingClientConnectError,
-      lastSignalingClientDisconnectError:
-          freezed == lastSignalingClientDisconnectError
-              ? _value.lastSignalingClientDisconnectError
-              : lastSignalingClientDisconnectError,
-      lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
-          ? _value.lastSignalingDisconnectCode
-          : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
+    return _then(
+      _$CallServiceStateImpl(
+        signalingClientStatus: null == signalingClientStatus
+            ? _value.signalingClientStatus
+            : signalingClientStatus // ignore: cast_nullable_to_non_nullable
+                  as SignalingClientStatus,
+        registration: null == registration
+            ? _value.registration
+            : registration // ignore: cast_nullable_to_non_nullable
+                  as Registration,
+        networkStatus: freezed == networkStatus
+            ? _value.networkStatus
+            : networkStatus // ignore: cast_nullable_to_non_nullable
+                  as NetworkStatus?,
+        lastSignalingClientConnectError:
+            freezed == lastSignalingClientConnectError
+            ? _value.lastSignalingClientConnectError
+            : lastSignalingClientConnectError,
+        lastSignalingClientDisconnectError:
+            freezed == lastSignalingClientDisconnectError
+            ? _value.lastSignalingClientDisconnectError
+            : lastSignalingClientDisconnectError,
+        lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode
+            ? _value.lastSignalingDisconnectCode
+            : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
+                  as int?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$CallServiceStateImpl extends _CallServiceState {
-  const _$CallServiceStateImpl(
-      {this.signalingClientStatus = SignalingClientStatus.connecting,
-      this.registration =
-          const Registration(status: RegistrationStatus.registering),
-      this.networkStatus = null,
-      this.lastSignalingClientConnectError,
-      this.lastSignalingClientDisconnectError,
-      this.lastSignalingDisconnectCode})
-      : super._();
+  const _$CallServiceStateImpl({
+    this.signalingClientStatus = SignalingClientStatus.connecting,
+    this.registration = const Registration(
+      status: RegistrationStatus.registering,
+    ),
+    this.networkStatus = null,
+    this.lastSignalingClientConnectError,
+    this.lastSignalingClientDisconnectError,
+    this.lastSignalingDisconnectCode,
+  }) : super._();
 
   @override
   @JsonKey()
@@ -211,26 +223,31 @@ class _$CallServiceStateImpl extends _CallServiceState {
             (identical(other.networkStatus, networkStatus) ||
                 other.networkStatus == networkStatus) &&
             const DeepCollectionEquality().equals(
-                other.lastSignalingClientConnectError,
-                lastSignalingClientConnectError) &&
+              other.lastSignalingClientConnectError,
+              lastSignalingClientConnectError,
+            ) &&
             const DeepCollectionEquality().equals(
-                other.lastSignalingClientDisconnectError,
-                lastSignalingClientDisconnectError) &&
-            (identical(other.lastSignalingDisconnectCode,
-                    lastSignalingDisconnectCode) ||
+              other.lastSignalingClientDisconnectError,
+              lastSignalingClientDisconnectError,
+            ) &&
+            (identical(
+                  other.lastSignalingDisconnectCode,
+                  lastSignalingDisconnectCode,
+                ) ||
                 other.lastSignalingDisconnectCode ==
                     lastSignalingDisconnectCode));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      signalingClientStatus,
-      registration,
-      networkStatus,
-      const DeepCollectionEquality().hash(lastSignalingClientConnectError),
-      const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
-      lastSignalingDisconnectCode);
+    runtimeType,
+    signalingClientStatus,
+    registration,
+    networkStatus,
+    const DeepCollectionEquality().hash(lastSignalingClientConnectError),
+    const DeepCollectionEquality().hash(lastSignalingClientDisconnectError),
+    lastSignalingDisconnectCode,
+  );
 
   /// Create a copy of CallServiceState
   /// with the given fields replaced by the non-null parameter values.
@@ -239,17 +256,20 @@ class _$CallServiceStateImpl extends _CallServiceState {
   @pragma('vm:prefer-inline')
   _$$CallServiceStateImplCopyWith<_$CallServiceStateImpl> get copyWith =>
       __$$CallServiceStateImplCopyWithImpl<_$CallServiceStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _CallServiceState extends CallServiceState {
-  const factory _CallServiceState(
-      {final SignalingClientStatus signalingClientStatus,
-      final Registration registration,
-      final NetworkStatus? networkStatus,
-      final Object? lastSignalingClientConnectError,
-      final Object? lastSignalingClientDisconnectError,
-      final int? lastSignalingDisconnectCode}) = _$CallServiceStateImpl;
+  const factory _CallServiceState({
+    final SignalingClientStatus signalingClientStatus,
+    final Registration registration,
+    final NetworkStatus? networkStatus,
+    final Object? lastSignalingClientConnectError,
+    final Object? lastSignalingClientDisconnectError,
+    final int? lastSignalingDisconnectCode,
+  }) = _$CallServiceStateImpl;
   const _CallServiceState._() : super._();
 
   @override

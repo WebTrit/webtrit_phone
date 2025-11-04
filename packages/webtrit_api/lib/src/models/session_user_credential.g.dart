@@ -7,22 +7,22 @@ part of 'session_user_credential.dart';
 // **************************************************************************
 
 _$SessionUserCredentialImpl _$$SessionUserCredentialImplFromJson(
-        Map<String, dynamic> json) =>
-    _$SessionUserCredentialImpl(
-      bundleId: json['bundle_id'] as String?,
-      type: $enumDecode(_$AppTypeEnumMap, json['type']),
-      identifier: json['identifier'] as String,
-      email: json['email'] as String?,
-    );
+  Map<String, dynamic> json,
+) => _$SessionUserCredentialImpl(
+  bundleId: json['bundle_id'] as String?,
+  type: $enumDecode(_$AppTypeEnumMap, json['type']),
+  identifier: json['identifier'] as String,
+  email: json['email'] as String?,
+);
 
 Map<String, dynamic> _$$SessionUserCredentialImplToJson(
-        _$SessionUserCredentialImpl instance) =>
-    <String, dynamic>{
-      'bundle_id': instance.bundleId,
-      'type': _$AppTypeEnumMap[instance.type]!,
-      'identifier': instance.identifier,
-      'email': instance.email,
-    };
+  _$SessionUserCredentialImpl instance,
+) => <String, dynamic>{
+  'bundle_id': instance.bundleId,
+  'type': _$AppTypeEnumMap[instance.type]!,
+  'identifier': instance.identifier,
+  'email': instance.email,
+};
 
 const _$AppTypeEnumMap = {
   AppType.smart: 'smart',

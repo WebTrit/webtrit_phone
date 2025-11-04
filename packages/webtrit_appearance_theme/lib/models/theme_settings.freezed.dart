@@ -12,7 +12,8 @@ part of 'theme_settings.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ThemeSettings _$ThemeSettingsFromJson(Map<String, dynamic> json) {
   return _ThemeSettings.fromJson(json);
@@ -20,7 +21,7 @@ ThemeSettings _$ThemeSettingsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ThemeSettings {
-// Colors scheme
+  // Colors scheme
   ColorSchemeConfig get lightColorSchemeConfig =>
       throw _privateConstructorUsedError;
   ColorSchemeConfig get darkColorSchemeConfig =>
@@ -46,16 +47,18 @@ mixin _$ThemeSettings {
 /// @nodoc
 abstract class $ThemeSettingsCopyWith<$Res> {
   factory $ThemeSettingsCopyWith(
-          ThemeSettings value, $Res Function(ThemeSettings) then) =
-      _$ThemeSettingsCopyWithImpl<$Res, ThemeSettings>;
+    ThemeSettings value,
+    $Res Function(ThemeSettings) then,
+  ) = _$ThemeSettingsCopyWithImpl<$Res, ThemeSettings>;
   @useResult
-  $Res call(
-      {ColorSchemeConfig lightColorSchemeConfig,
-      ColorSchemeConfig darkColorSchemeConfig,
-      ThemeWidgetConfig themeWidgetLightConfig,
-      ThemeWidgetConfig themeWidgetDarkConfig,
-      ThemePageConfig themePageLightConfig,
-      ThemePageConfig themePageDarkConfig});
+  $Res call({
+    ColorSchemeConfig lightColorSchemeConfig,
+    ColorSchemeConfig darkColorSchemeConfig,
+    ThemeWidgetConfig themeWidgetLightConfig,
+    ThemeWidgetConfig themeWidgetDarkConfig,
+    ThemePageConfig themePageLightConfig,
+    ThemePageConfig themePageDarkConfig,
+  });
 
   $ColorSchemeConfigCopyWith<$Res> get lightColorSchemeConfig;
   $ColorSchemeConfigCopyWith<$Res> get darkColorSchemeConfig;
@@ -87,32 +90,35 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
     Object? themePageLightConfig = null,
     Object? themePageDarkConfig = null,
   }) {
-    return _then(_value.copyWith(
-      lightColorSchemeConfig: null == lightColorSchemeConfig
-          ? _value.lightColorSchemeConfig
-          : lightColorSchemeConfig // ignore: cast_nullable_to_non_nullable
-              as ColorSchemeConfig,
-      darkColorSchemeConfig: null == darkColorSchemeConfig
-          ? _value.darkColorSchemeConfig
-          : darkColorSchemeConfig // ignore: cast_nullable_to_non_nullable
-              as ColorSchemeConfig,
-      themeWidgetLightConfig: null == themeWidgetLightConfig
-          ? _value.themeWidgetLightConfig
-          : themeWidgetLightConfig // ignore: cast_nullable_to_non_nullable
-              as ThemeWidgetConfig,
-      themeWidgetDarkConfig: null == themeWidgetDarkConfig
-          ? _value.themeWidgetDarkConfig
-          : themeWidgetDarkConfig // ignore: cast_nullable_to_non_nullable
-              as ThemeWidgetConfig,
-      themePageLightConfig: null == themePageLightConfig
-          ? _value.themePageLightConfig
-          : themePageLightConfig // ignore: cast_nullable_to_non_nullable
-              as ThemePageConfig,
-      themePageDarkConfig: null == themePageDarkConfig
-          ? _value.themePageDarkConfig
-          : themePageDarkConfig // ignore: cast_nullable_to_non_nullable
-              as ThemePageConfig,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            lightColorSchemeConfig: null == lightColorSchemeConfig
+                ? _value.lightColorSchemeConfig
+                : lightColorSchemeConfig // ignore: cast_nullable_to_non_nullable
+                      as ColorSchemeConfig,
+            darkColorSchemeConfig: null == darkColorSchemeConfig
+                ? _value.darkColorSchemeConfig
+                : darkColorSchemeConfig // ignore: cast_nullable_to_non_nullable
+                      as ColorSchemeConfig,
+            themeWidgetLightConfig: null == themeWidgetLightConfig
+                ? _value.themeWidgetLightConfig
+                : themeWidgetLightConfig // ignore: cast_nullable_to_non_nullable
+                      as ThemeWidgetConfig,
+            themeWidgetDarkConfig: null == themeWidgetDarkConfig
+                ? _value.themeWidgetDarkConfig
+                : themeWidgetDarkConfig // ignore: cast_nullable_to_non_nullable
+                      as ThemeWidgetConfig,
+            themePageLightConfig: null == themePageLightConfig
+                ? _value.themePageLightConfig
+                : themePageLightConfig // ignore: cast_nullable_to_non_nullable
+                      as ThemePageConfig,
+            themePageDarkConfig: null == themePageDarkConfig
+                ? _value.themePageDarkConfig
+                : themePageDarkConfig // ignore: cast_nullable_to_non_nullable
+                      as ThemePageConfig,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ThemeSettings
@@ -120,8 +126,9 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
   @override
   @pragma('vm:prefer-inline')
   $ColorSchemeConfigCopyWith<$Res> get lightColorSchemeConfig {
-    return $ColorSchemeConfigCopyWith<$Res>(_value.lightColorSchemeConfig,
-        (value) {
+    return $ColorSchemeConfigCopyWith<$Res>(_value.lightColorSchemeConfig, (
+      value,
+    ) {
       return _then(_value.copyWith(lightColorSchemeConfig: value) as $Val);
     });
   }
@@ -131,8 +138,9 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
   @override
   @pragma('vm:prefer-inline')
   $ColorSchemeConfigCopyWith<$Res> get darkColorSchemeConfig {
-    return $ColorSchemeConfigCopyWith<$Res>(_value.darkColorSchemeConfig,
-        (value) {
+    return $ColorSchemeConfigCopyWith<$Res>(_value.darkColorSchemeConfig, (
+      value,
+    ) {
       return _then(_value.copyWith(darkColorSchemeConfig: value) as $Val);
     });
   }
@@ -142,8 +150,9 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
   @override
   @pragma('vm:prefer-inline')
   $ThemeWidgetConfigCopyWith<$Res> get themeWidgetLightConfig {
-    return $ThemeWidgetConfigCopyWith<$Res>(_value.themeWidgetLightConfig,
-        (value) {
+    return $ThemeWidgetConfigCopyWith<$Res>(_value.themeWidgetLightConfig, (
+      value,
+    ) {
       return _then(_value.copyWith(themeWidgetLightConfig: value) as $Val);
     });
   }
@@ -153,8 +162,9 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
   @override
   @pragma('vm:prefer-inline')
   $ThemeWidgetConfigCopyWith<$Res> get themeWidgetDarkConfig {
-    return $ThemeWidgetConfigCopyWith<$Res>(_value.themeWidgetDarkConfig,
-        (value) {
+    return $ThemeWidgetConfigCopyWith<$Res>(_value.themeWidgetDarkConfig, (
+      value,
+    ) {
       return _then(_value.copyWith(themeWidgetDarkConfig: value) as $Val);
     });
   }
@@ -184,17 +194,19 @@ class _$ThemeSettingsCopyWithImpl<$Res, $Val extends ThemeSettings>
 abstract class _$$ThemeSettingsImplCopyWith<$Res>
     implements $ThemeSettingsCopyWith<$Res> {
   factory _$$ThemeSettingsImplCopyWith(
-          _$ThemeSettingsImpl value, $Res Function(_$ThemeSettingsImpl) then) =
-      __$$ThemeSettingsImplCopyWithImpl<$Res>;
+    _$ThemeSettingsImpl value,
+    $Res Function(_$ThemeSettingsImpl) then,
+  ) = __$$ThemeSettingsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {ColorSchemeConfig lightColorSchemeConfig,
-      ColorSchemeConfig darkColorSchemeConfig,
-      ThemeWidgetConfig themeWidgetLightConfig,
-      ThemeWidgetConfig themeWidgetDarkConfig,
-      ThemePageConfig themePageLightConfig,
-      ThemePageConfig themePageDarkConfig});
+  $Res call({
+    ColorSchemeConfig lightColorSchemeConfig,
+    ColorSchemeConfig darkColorSchemeConfig,
+    ThemeWidgetConfig themeWidgetLightConfig,
+    ThemeWidgetConfig themeWidgetDarkConfig,
+    ThemePageConfig themePageLightConfig,
+    ThemePageConfig themePageDarkConfig,
+  });
 
   @override
   $ColorSchemeConfigCopyWith<$Res> get lightColorSchemeConfig;
@@ -215,8 +227,9 @@ class __$$ThemeSettingsImplCopyWithImpl<$Res>
     extends _$ThemeSettingsCopyWithImpl<$Res, _$ThemeSettingsImpl>
     implements _$$ThemeSettingsImplCopyWith<$Res> {
   __$$ThemeSettingsImplCopyWithImpl(
-      _$ThemeSettingsImpl _value, $Res Function(_$ThemeSettingsImpl) _then)
-      : super(_value, _then);
+    _$ThemeSettingsImpl _value,
+    $Res Function(_$ThemeSettingsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ThemeSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -230,64 +243,67 @@ class __$$ThemeSettingsImplCopyWithImpl<$Res>
     Object? themePageLightConfig = null,
     Object? themePageDarkConfig = null,
   }) {
-    return _then(_$ThemeSettingsImpl(
-      lightColorSchemeConfig: null == lightColorSchemeConfig
-          ? _value.lightColorSchemeConfig
-          : lightColorSchemeConfig // ignore: cast_nullable_to_non_nullable
-              as ColorSchemeConfig,
-      darkColorSchemeConfig: null == darkColorSchemeConfig
-          ? _value.darkColorSchemeConfig
-          : darkColorSchemeConfig // ignore: cast_nullable_to_non_nullable
-              as ColorSchemeConfig,
-      themeWidgetLightConfig: null == themeWidgetLightConfig
-          ? _value.themeWidgetLightConfig
-          : themeWidgetLightConfig // ignore: cast_nullable_to_non_nullable
-              as ThemeWidgetConfig,
-      themeWidgetDarkConfig: null == themeWidgetDarkConfig
-          ? _value.themeWidgetDarkConfig
-          : themeWidgetDarkConfig // ignore: cast_nullable_to_non_nullable
-              as ThemeWidgetConfig,
-      themePageLightConfig: null == themePageLightConfig
-          ? _value.themePageLightConfig
-          : themePageLightConfig // ignore: cast_nullable_to_non_nullable
-              as ThemePageConfig,
-      themePageDarkConfig: null == themePageDarkConfig
-          ? _value.themePageDarkConfig
-          : themePageDarkConfig // ignore: cast_nullable_to_non_nullable
-              as ThemePageConfig,
-    ));
+    return _then(
+      _$ThemeSettingsImpl(
+        lightColorSchemeConfig: null == lightColorSchemeConfig
+            ? _value.lightColorSchemeConfig
+            : lightColorSchemeConfig // ignore: cast_nullable_to_non_nullable
+                  as ColorSchemeConfig,
+        darkColorSchemeConfig: null == darkColorSchemeConfig
+            ? _value.darkColorSchemeConfig
+            : darkColorSchemeConfig // ignore: cast_nullable_to_non_nullable
+                  as ColorSchemeConfig,
+        themeWidgetLightConfig: null == themeWidgetLightConfig
+            ? _value.themeWidgetLightConfig
+            : themeWidgetLightConfig // ignore: cast_nullable_to_non_nullable
+                  as ThemeWidgetConfig,
+        themeWidgetDarkConfig: null == themeWidgetDarkConfig
+            ? _value.themeWidgetDarkConfig
+            : themeWidgetDarkConfig // ignore: cast_nullable_to_non_nullable
+                  as ThemeWidgetConfig,
+        themePageLightConfig: null == themePageLightConfig
+            ? _value.themePageLightConfig
+            : themePageLightConfig // ignore: cast_nullable_to_non_nullable
+                  as ThemePageConfig,
+        themePageDarkConfig: null == themePageDarkConfig
+            ? _value.themePageDarkConfig
+            : themePageDarkConfig // ignore: cast_nullable_to_non_nullable
+                  as ThemePageConfig,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ThemeSettingsImpl implements _ThemeSettings {
-  const _$ThemeSettingsImpl(
-      {this.lightColorSchemeConfig = const ColorSchemeConfig(),
-      this.darkColorSchemeConfig = const ColorSchemeConfig(),
-      this.themeWidgetLightConfig = const ThemeWidgetConfig(),
-      this.themeWidgetDarkConfig = const ThemeWidgetConfig(),
-      this.themePageLightConfig = const ThemePageConfig(),
-      this.themePageDarkConfig = const ThemePageConfig()});
+  const _$ThemeSettingsImpl({
+    this.lightColorSchemeConfig = const ColorSchemeConfig(),
+    this.darkColorSchemeConfig = const ColorSchemeConfig(),
+    this.themeWidgetLightConfig = const ThemeWidgetConfig(),
+    this.themeWidgetDarkConfig = const ThemeWidgetConfig(),
+    this.themePageLightConfig = const ThemePageConfig(),
+    this.themePageDarkConfig = const ThemePageConfig(),
+  });
 
   factory _$ThemeSettingsImpl.fromJson(Map<String, dynamic> json) =>
       _$$ThemeSettingsImplFromJson(json);
 
-// Colors scheme
+  // Colors scheme
   @override
   @JsonKey()
   final ColorSchemeConfig lightColorSchemeConfig;
   @override
   @JsonKey()
   final ColorSchemeConfig darkColorSchemeConfig;
-// Widgets config
+  // Widgets config
   @override
   @JsonKey()
   final ThemeWidgetConfig themeWidgetLightConfig;
   @override
   @JsonKey()
   final ThemeWidgetConfig themeWidgetDarkConfig;
-// Pages config
+  // Pages config
   @override
   @JsonKey()
   final ThemePageConfig themePageLightConfig;
@@ -322,13 +338,14 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      lightColorSchemeConfig,
-      darkColorSchemeConfig,
-      themeWidgetLightConfig,
-      themeWidgetDarkConfig,
-      themePageLightConfig,
-      themePageDarkConfig);
+    runtimeType,
+    lightColorSchemeConfig,
+    darkColorSchemeConfig,
+    themeWidgetLightConfig,
+    themeWidgetDarkConfig,
+    themePageLightConfig,
+    themePageDarkConfig,
+  );
 
   /// Create a copy of ThemeSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -340,25 +357,24 @@ class _$ThemeSettingsImpl implements _ThemeSettings {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ThemeSettingsImplToJson(
-      this,
-    );
+    return _$$ThemeSettingsImplToJson(this);
   }
 }
 
 abstract class _ThemeSettings implements ThemeSettings {
-  const factory _ThemeSettings(
-      {final ColorSchemeConfig lightColorSchemeConfig,
-      final ColorSchemeConfig darkColorSchemeConfig,
-      final ThemeWidgetConfig themeWidgetLightConfig,
-      final ThemeWidgetConfig themeWidgetDarkConfig,
-      final ThemePageConfig themePageLightConfig,
-      final ThemePageConfig themePageDarkConfig}) = _$ThemeSettingsImpl;
+  const factory _ThemeSettings({
+    final ColorSchemeConfig lightColorSchemeConfig,
+    final ColorSchemeConfig darkColorSchemeConfig,
+    final ThemeWidgetConfig themeWidgetLightConfig,
+    final ThemeWidgetConfig themeWidgetDarkConfig,
+    final ThemePageConfig themePageLightConfig,
+    final ThemePageConfig themePageDarkConfig,
+  }) = _$ThemeSettingsImpl;
 
   factory _ThemeSettings.fromJson(Map<String, dynamic> json) =
       _$ThemeSettingsImpl.fromJson;
 
-// Colors scheme
+  // Colors scheme
   @override
   ColorSchemeConfig get lightColorSchemeConfig;
   @override

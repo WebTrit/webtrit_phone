@@ -12,7 +12,8 @@ part of 'voicemail_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$VoicemailState {
@@ -30,13 +31,15 @@ mixin _$VoicemailState {
 /// @nodoc
 abstract class $VoicemailStateCopyWith<$Res> {
   factory $VoicemailStateCopyWith(
-          VoicemailState value, $Res Function(VoicemailState) then) =
-      _$VoicemailStateCopyWithImpl<$Res, VoicemailState>;
+    VoicemailState value,
+    $Res Function(VoicemailState) then,
+  ) = _$VoicemailStateCopyWithImpl<$Res, VoicemailState>;
   @useResult
-  $Res call(
-      {VoicemailStatus status,
-      List<Voicemail> items,
-      DefaultErrorNotification? error});
+  $Res call({
+    VoicemailStatus status,
+    List<Voicemail> items,
+    DefaultErrorNotification? error,
+  });
 }
 
 /// @nodoc
@@ -58,35 +61,40 @@ class _$VoicemailStateCopyWithImpl<$Res, $Val extends VoicemailState>
     Object? items = null,
     Object? error = freezed,
   }) {
-    return _then(_value.copyWith(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as VoicemailStatus,
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<Voicemail>,
-      error: freezed == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as DefaultErrorNotification?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as VoicemailStatus,
+            items: null == items
+                ? _value.items
+                : items // ignore: cast_nullable_to_non_nullable
+                      as List<Voicemail>,
+            error: freezed == error
+                ? _value.error
+                : error // ignore: cast_nullable_to_non_nullable
+                      as DefaultErrorNotification?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$VoicemailStateImplCopyWith<$Res>
     implements $VoicemailStateCopyWith<$Res> {
-  factory _$$VoicemailStateImplCopyWith(_$VoicemailStateImpl value,
-          $Res Function(_$VoicemailStateImpl) then) =
-      __$$VoicemailStateImplCopyWithImpl<$Res>;
+  factory _$$VoicemailStateImplCopyWith(
+    _$VoicemailStateImpl value,
+    $Res Function(_$VoicemailStateImpl) then,
+  ) = __$$VoicemailStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {VoicemailStatus status,
-      List<Voicemail> items,
-      DefaultErrorNotification? error});
+  $Res call({
+    VoicemailStatus status,
+    List<Voicemail> items,
+    DefaultErrorNotification? error,
+  });
 }
 
 /// @nodoc
@@ -94,8 +102,9 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
     extends _$VoicemailStateCopyWithImpl<$Res, _$VoicemailStateImpl>
     implements _$$VoicemailStateImplCopyWith<$Res> {
   __$$VoicemailStateImplCopyWithImpl(
-      _$VoicemailStateImpl _value, $Res Function(_$VoicemailStateImpl) _then)
-      : super(_value, _then);
+    _$VoicemailStateImpl _value,
+    $Res Function(_$VoicemailStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of VoicemailState
   /// with the given fields replaced by the non-null parameter values.
@@ -106,20 +115,22 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
     Object? items = null,
     Object? error = freezed,
   }) {
-    return _then(_$VoicemailStateImpl(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as VoicemailStatus,
-      items: null == items
-          ? _value._items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<Voicemail>,
-      error: freezed == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as DefaultErrorNotification?,
-    ));
+    return _then(
+      _$VoicemailStateImpl(
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as VoicemailStatus,
+        items: null == items
+            ? _value._items
+            : items // ignore: cast_nullable_to_non_nullable
+                  as List<Voicemail>,
+        error: freezed == error
+            ? _value.error
+            : error // ignore: cast_nullable_to_non_nullable
+                  as DefaultErrorNotification?,
+      ),
+    );
   }
 }
 
@@ -127,12 +138,12 @@ class __$$VoicemailStateImplCopyWithImpl<$Res>
 
 class _$VoicemailStateImpl extends _VoicemailState
     with DiagnosticableTreeMixin {
-  const _$VoicemailStateImpl(
-      {this.status = VoicemailStatus.loading,
-      final List<Voicemail> items = const [],
-      this.error})
-      : _items = items,
-        super._();
+  const _$VoicemailStateImpl({
+    this.status = VoicemailStatus.loading,
+    final List<Voicemail> items = const [],
+    this.error,
+  }) : _items = items,
+       super._();
 
   @override
   @JsonKey()
@@ -176,7 +187,11 @@ class _$VoicemailStateImpl extends _VoicemailState
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, status, const DeepCollectionEquality().hash(_items), error);
+    runtimeType,
+    status,
+    const DeepCollectionEquality().hash(_items),
+    error,
+  );
 
   /// Create a copy of VoicemailState
   /// with the given fields replaced by the non-null parameter values.
@@ -185,14 +200,17 @@ class _$VoicemailStateImpl extends _VoicemailState
   @pragma('vm:prefer-inline')
   _$$VoicemailStateImplCopyWith<_$VoicemailStateImpl> get copyWith =>
       __$$VoicemailStateImplCopyWithImpl<_$VoicemailStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _VoicemailState extends VoicemailState {
-  const factory _VoicemailState(
-      {final VoicemailStatus status,
-      final List<Voicemail> items,
-      final DefaultErrorNotification? error}) = _$VoicemailStateImpl;
+  const factory _VoicemailState({
+    final VoicemailStatus status,
+    final List<Voicemail> items,
+    final DefaultErrorNotification? error,
+  }) = _$VoicemailStateImpl;
   const _VoicemailState._() : super._();
 
   @override

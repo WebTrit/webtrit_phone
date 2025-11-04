@@ -14,7 +14,7 @@ part of 'app_router.dart';
 /// [AboutScreenPage]
 class AboutScreenPageRoute extends PageRouteInfo<void> {
   const AboutScreenPageRoute({List<PageRouteInfo>? children})
-      : super(AboutScreenPageRoute.name, initialChildren: children);
+    : super(AboutScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'AboutScreenPageRoute';
 
@@ -30,7 +30,7 @@ class AboutScreenPageRoute extends PageRouteInfo<void> {
 /// [AppShell]
 class AppShellRoute extends PageRouteInfo<void> {
   const AppShellRoute({List<PageRouteInfo>? children})
-      : super(AppShellRoute.name, initialChildren: children);
+    : super(AppShellRoute.name, initialChildren: children);
 
   static const String name = 'AppShellRoute';
 
@@ -52,19 +52,19 @@ class AutoprovisionScreenPageRoute
     String? coreUrl,
     List<PageRouteInfo>? children,
   }) : super(
-          AutoprovisionScreenPageRoute.name,
-          args: AutoprovisionScreenPageRouteArgs(
-            configToken: configToken,
-            tenantId: tenantId,
-            coreUrl: coreUrl,
-          ),
-          rawQueryParams: {
-            'config_token': configToken,
-            'tenant_id': tenantId,
-            'core_url': coreUrl,
-          },
-          initialChildren: children,
-        );
+         AutoprovisionScreenPageRoute.name,
+         args: AutoprovisionScreenPageRouteArgs(
+           configToken: configToken,
+           tenantId: tenantId,
+           coreUrl: coreUrl,
+         ),
+         rawQueryParams: {
+           'config_token': configToken,
+           'tenant_id': tenantId,
+           'core_url': coreUrl,
+         },
+         initialChildren: children,
+       );
 
   static const String name = 'AutoprovisionScreenPageRoute';
 
@@ -127,11 +127,11 @@ class CallLogScreenPageRoute extends PageRouteInfo<CallLogScreenPageRouteArgs> {
     required String number,
     List<PageRouteInfo>? children,
   }) : super(
-          CallLogScreenPageRoute.name,
-          args: CallLogScreenPageRouteArgs(number: number),
-          rawPathParams: {'number': number},
-          initialChildren: children,
-        );
+         CallLogScreenPageRoute.name,
+         args: CallLogScreenPageRouteArgs(number: number),
+         rawPathParams: {'number': number},
+         initialChildren: children,
+       );
 
   static const String name = 'CallLogScreenPageRoute';
 
@@ -173,7 +173,7 @@ class CallLogScreenPageRouteArgs {
 /// [CallScreenPage]
 class CallScreenPageRoute extends PageRouteInfo<void> {
   const CallScreenPageRoute({List<PageRouteInfo>? children})
-      : super(CallScreenPageRoute.name, initialChildren: children);
+    : super(CallScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'CallScreenPageRoute';
 
@@ -193,10 +193,10 @@ class CallToActionsWebPageRoute
     required Uri initialUrl,
     List<PageRouteInfo>? children,
   }) : super(
-          CallToActionsWebPageRoute.name,
-          args: CallToActionsWebPageRouteArgs(initialUrl: initialUrl),
-          initialChildren: children,
-        );
+         CallToActionsWebPageRoute.name,
+         args: CallToActionsWebPageRouteArgs(initialUrl: initialUrl),
+         initialChildren: children,
+       );
 
   static const String name = 'CallToActionsWebPageRoute';
 
@@ -234,7 +234,7 @@ class CallToActionsWebPageRouteArgs {
 /// [CallerIdSettingsScreenPage]
 class CallerIdSettingsScreenPageRoute extends PageRouteInfo<void> {
   const CallerIdSettingsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(CallerIdSettingsScreenPageRoute.name, initialChildren: children);
+    : super(CallerIdSettingsScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'CallerIdSettingsScreenPageRoute';
 
@@ -255,13 +255,13 @@ class ChatConversationScreenPageRoute
     int? chatId,
     List<PageRouteInfo>? children,
   }) : super(
-          ChatConversationScreenPageRoute.name,
-          args: ChatConversationScreenPageRouteArgs(
-            participantId: participantId,
-            chatId: chatId,
-          ),
-          initialChildren: children,
-        );
+         ChatConversationScreenPageRoute.name,
+         args: ChatConversationScreenPageRouteArgs(
+           participantId: participantId,
+           chatId: chatId,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ChatConversationScreenPageRoute';
 
@@ -309,11 +309,11 @@ class ContactScreenPageRoute extends PageRouteInfo<ContactScreenPageRouteArgs> {
     required int contactId,
     List<PageRouteInfo>? children,
   }) : super(
-          ContactScreenPageRoute.name,
-          args: ContactScreenPageRouteArgs(contactId: contactId),
-          rawPathParams: {'contactId': contactId},
-          initialChildren: children,
-        );
+         ContactScreenPageRoute.name,
+         args: ContactScreenPageRouteArgs(contactId: contactId),
+         rawPathParams: {'contactId': contactId},
+         initialChildren: children,
+       );
 
   static const String name = 'ContactScreenPageRoute';
 
@@ -356,7 +356,7 @@ class ContactScreenPageRouteArgs {
 /// [ContactsAgreementScreenPage]
 class ContactsAgreementScreenPageRoute extends PageRouteInfo<void> {
   const ContactsAgreementScreenPageRoute({List<PageRouteInfo>? children})
-      : super(ContactsAgreementScreenPageRoute.name, initialChildren: children);
+    : super(ContactsAgreementScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'ContactsAgreementScreenPageRoute';
 
@@ -372,7 +372,7 @@ class ContactsAgreementScreenPageRoute extends PageRouteInfo<void> {
 /// [ContactsRouterPage]
 class ContactsRouterPageRoute extends PageRouteInfo<void> {
   const ContactsRouterPageRoute({List<PageRouteInfo>? children})
-      : super(ContactsRouterPageRoute.name, initialChildren: children);
+    : super(ContactsRouterPageRoute.name, initialChildren: children);
 
   static const String name = 'ContactsRouterPageRoute';
 
@@ -392,10 +392,10 @@ class ContactsScreenPageRoute
     required List<ContactSourceType> sourceTypes,
     List<PageRouteInfo>? children,
   }) : super(
-          ContactsScreenPageRoute.name,
-          args: ContactsScreenPageRouteArgs(sourceTypes: sourceTypes),
-          initialChildren: children,
-        );
+         ContactsScreenPageRoute.name,
+         args: ContactsScreenPageRouteArgs(sourceTypes: sourceTypes),
+         initialChildren: children,
+       );
 
   static const String name = 'ContactsScreenPageRoute';
 
@@ -433,7 +433,7 @@ class ContactsScreenPageRouteArgs {
 /// [ConversationsScreenPage]
 class ConversationsScreenPageRoute extends PageRouteInfo<void> {
   const ConversationsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(ConversationsScreenPageRoute.name, initialChildren: children);
+    : super(ConversationsScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'ConversationsScreenPageRoute';
 
@@ -449,7 +449,7 @@ class ConversationsScreenPageRoute extends PageRouteInfo<void> {
 /// [DiagnosticScreenPage]
 class DiagnosticScreenPageRoute extends PageRouteInfo<void> {
   const DiagnosticScreenPageRoute({List<PageRouteInfo>? children})
-      : super(DiagnosticScreenPageRoute.name, initialChildren: children);
+    : super(DiagnosticScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'DiagnosticScreenPageRoute';
 
@@ -469,10 +469,10 @@ class EmbeddedScreenPageRoute
     required EmbeddedData data,
     List<PageRouteInfo>? children,
   }) : super(
-          EmbeddedScreenPageRoute.name,
-          args: EmbeddedScreenPageRouteArgs(data: data),
-          initialChildren: children,
-        );
+         EmbeddedScreenPageRoute.name,
+         args: EmbeddedScreenPageRouteArgs(data: data),
+         initialChildren: children,
+       );
 
   static const String name = 'EmbeddedScreenPageRoute';
 
@@ -510,12 +510,12 @@ class EmbeddedScreenPageRouteArgs {
 /// [EmbeddedTabPage]
 class EmbeddedTabPageRoute extends PageRouteInfo<EmbeddedTabPageRouteArgs> {
   EmbeddedTabPageRoute({required String id, List<PageRouteInfo>? children})
-      : super(
-          EmbeddedTabPageRoute.name,
-          args: EmbeddedTabPageRouteArgs(id: id),
-          rawPathParams: {'id': id},
-          initialChildren: children,
-        );
+    : super(
+        EmbeddedTabPageRoute.name,
+        args: EmbeddedTabPageRouteArgs(id: id),
+        rawPathParams: {'id': id},
+        initialChildren: children,
+      );
 
   static const String name = 'EmbeddedTabPageRoute';
 
@@ -561,10 +561,10 @@ class ErrorDetailsScreenPageRoute
     required List<ErrorFieldModel> fields,
     List<PageRouteInfo>? children,
   }) : super(
-          ErrorDetailsScreenPageRoute.name,
-          args: ErrorDetailsScreenPageRouteArgs(title: title, fields: fields),
-          initialChildren: children,
-        );
+         ErrorDetailsScreenPageRoute.name,
+         args: ErrorDetailsScreenPageRouteArgs(title: title, fields: fields),
+         initialChildren: children,
+       );
 
   static const String name = 'ErrorDetailsScreenPageRoute';
 
@@ -608,7 +608,7 @@ class ErrorDetailsScreenPageRouteArgs {
 /// [FavoritesRouterPage]
 class FavoritesRouterPageRoute extends PageRouteInfo<void> {
   const FavoritesRouterPageRoute({List<PageRouteInfo>? children})
-      : super(FavoritesRouterPageRoute.name, initialChildren: children);
+    : super(FavoritesRouterPageRoute.name, initialChildren: children);
 
   static const String name = 'FavoritesRouterPageRoute';
 
@@ -624,7 +624,7 @@ class FavoritesRouterPageRoute extends PageRouteInfo<void> {
 /// [FavoritesScreenPage]
 class FavoritesScreenPageRoute extends PageRouteInfo<void> {
   const FavoritesScreenPageRoute({List<PageRouteInfo>? children})
-      : super(FavoritesScreenPageRoute.name, initialChildren: children);
+    : super(FavoritesScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'FavoritesScreenPageRoute';
 
@@ -643,13 +643,13 @@ class HelpScreenPageRoute extends PageRouteInfo<HelpScreenPageRouteArgs> {
     String? initialUriQueryParam,
     List<PageRouteInfo>? children,
   }) : super(
-          HelpScreenPageRoute.name,
-          args: HelpScreenPageRouteArgs(
-            initialUriQueryParam: initialUriQueryParam,
-          ),
-          rawQueryParams: {'initialUrl': initialUriQueryParam},
-          initialChildren: children,
-        );
+         HelpScreenPageRoute.name,
+         args: HelpScreenPageRouteArgs(
+           initialUriQueryParam: initialUriQueryParam,
+         ),
+         rawQueryParams: {'initialUrl': initialUriQueryParam},
+         initialChildren: children,
+       );
 
   static const String name = 'HelpScreenPageRoute';
 
@@ -692,7 +692,7 @@ class HelpScreenPageRouteArgs {
 /// [KeypadScreenPage]
 class KeypadScreenPageRoute extends PageRouteInfo<void> {
   const KeypadScreenPageRoute({List<PageRouteInfo>? children})
-      : super(KeypadScreenPageRoute.name, initialChildren: children);
+    : super(KeypadScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'KeypadScreenPageRoute';
 
@@ -708,7 +708,7 @@ class KeypadScreenPageRoute extends PageRouteInfo<void> {
 /// [LanguageScreenPage]
 class LanguageScreenPageRoute extends PageRouteInfo<void> {
   const LanguageScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LanguageScreenPageRoute.name, initialChildren: children);
+    : super(LanguageScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'LanguageScreenPageRoute';
 
@@ -724,7 +724,7 @@ class LanguageScreenPageRoute extends PageRouteInfo<void> {
 /// [LogRecordsConsoleScreenPage]
 class LogRecordsConsoleScreenPageRoute extends PageRouteInfo<void> {
   const LogRecordsConsoleScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LogRecordsConsoleScreenPageRoute.name, initialChildren: children);
+    : super(LogRecordsConsoleScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'LogRecordsConsoleScreenPageRoute';
 
@@ -740,8 +740,7 @@ class LogRecordsConsoleScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginCoreUrlAssignScreenPage]
 class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
   const LoginCoreUrlAssignScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LoginCoreUrlAssignScreenPageRoute.name,
-            initialChildren: children);
+    : super(LoginCoreUrlAssignScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'LoginCoreUrlAssignScreenPageRoute';
 
@@ -757,7 +756,7 @@ class LoginCoreUrlAssignScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginModeSelectScreenPage]
 class LoginModeSelectScreenPageRoute extends PageRouteInfo<void> {
   const LoginModeSelectScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LoginModeSelectScreenPageRoute.name, initialChildren: children);
+    : super(LoginModeSelectScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'LoginModeSelectScreenPageRoute';
 
@@ -773,10 +772,10 @@ class LoginModeSelectScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginOtpSigninRequestScreenPage]
 class LoginOtpSigninRequestScreenPageRoute extends PageRouteInfo<void> {
   const LoginOtpSigninRequestScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
-          LoginOtpSigninRequestScreenPageRoute.name,
-          initialChildren: children,
-        );
+    : super(
+        LoginOtpSigninRequestScreenPageRoute.name,
+        initialChildren: children,
+      );
 
   static const String name = 'LoginOtpSigninRequestScreenPageRoute';
 
@@ -792,7 +791,7 @@ class LoginOtpSigninRequestScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginOtpSigninRouterPage]
 class LoginOtpSigninRouterPageRoute extends PageRouteInfo<void> {
   const LoginOtpSigninRouterPageRoute({List<PageRouteInfo>? children})
-      : super(LoginOtpSigninRouterPageRoute.name, initialChildren: children);
+    : super(LoginOtpSigninRouterPageRoute.name, initialChildren: children);
 
   static const String name = 'LoginOtpSigninRouterPageRoute';
 
@@ -808,10 +807,10 @@ class LoginOtpSigninRouterPageRoute extends PageRouteInfo<void> {
 /// [LoginOtpSigninVerifyScreenPage]
 class LoginOtpSigninVerifyScreenPageRoute extends PageRouteInfo<void> {
   const LoginOtpSigninVerifyScreenPageRoute({List<PageRouteInfo>? children})
-      : super(
-          LoginOtpSigninVerifyScreenPageRoute.name,
-          initialChildren: children,
-        );
+    : super(
+        LoginOtpSigninVerifyScreenPageRoute.name,
+        initialChildren: children,
+      );
 
   static const String name = 'LoginOtpSigninVerifyScreenPageRoute';
 
@@ -827,8 +826,7 @@ class LoginOtpSigninVerifyScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginPasswordSigninScreenPage]
 class LoginPasswordSigninScreenPageRoute extends PageRouteInfo<void> {
   const LoginPasswordSigninScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LoginPasswordSigninScreenPageRoute.name,
-            initialChildren: children);
+    : super(LoginPasswordSigninScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'LoginPasswordSigninScreenPageRoute';
 
@@ -847,11 +845,10 @@ class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
     EmbeddedData? launchEmbeddedData,
     List<PageRouteInfo>? children,
   }) : super(
-          LoginRouterPageRoute.name,
-          args:
-              LoginRouterPageRouteArgs(launchEmbeddedData: launchEmbeddedData),
-          initialChildren: children,
-        );
+         LoginRouterPageRoute.name,
+         args: LoginRouterPageRouteArgs(launchEmbeddedData: launchEmbeddedData),
+         initialChildren: children,
+       );
 
   static const String name = 'LoginRouterPageRoute';
 
@@ -895,12 +892,12 @@ class LoginSignupEmbeddedRequestScreenPageRoute
     required EmbeddedData embeddedData,
     List<PageRouteInfo>? children,
   }) : super(
-          LoginSignupEmbeddedRequestScreenPageRoute.name,
-          args: LoginSignupEmbeddedRequestScreenPageRouteArgs(
-            embeddedData: embeddedData,
-          ),
-          initialChildren: children,
-        );
+         LoginSignupEmbeddedRequestScreenPageRoute.name,
+         args: LoginSignupEmbeddedRequestScreenPageRouteArgs(
+           embeddedData: embeddedData,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'LoginSignupEmbeddedRequestScreenPageRoute';
 
@@ -940,8 +937,7 @@ class LoginSignupEmbeddedRequestScreenPageRouteArgs {
 /// [LoginSignupRequestScreenPage]
 class LoginSignupRequestScreenPageRoute extends PageRouteInfo<void> {
   const LoginSignupRequestScreenPageRoute({List<PageRouteInfo>? children})
-      : super(LoginSignupRequestScreenPageRoute.name,
-            initialChildren: children);
+    : super(LoginSignupRequestScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'LoginSignupRequestScreenPageRoute';
 
@@ -957,7 +953,7 @@ class LoginSignupRequestScreenPageRoute extends PageRouteInfo<void> {
 /// [LoginSignupRouterPage]
 class LoginSignupRouterPageRoute extends PageRouteInfo<void> {
   const LoginSignupRouterPageRoute({List<PageRouteInfo>? children})
-      : super(LoginSignupRouterPageRoute.name, initialChildren: children);
+    : super(LoginSignupRouterPageRoute.name, initialChildren: children);
 
   static const String name = 'LoginSignupRouterPageRoute';
 
@@ -977,12 +973,12 @@ class LoginSignupVerifyScreenPageRoute
     required Set<SafeAreaSide> bodySafeAreaSides,
     List<PageRouteInfo>? children,
   }) : super(
-          LoginSignupVerifyScreenPageRoute.name,
-          args: LoginSignupVerifyScreenPageRouteArgs(
-            bodySafeAreaSides: bodySafeAreaSides,
-          ),
-          initialChildren: children,
-        );
+         LoginSignupVerifyScreenPageRoute.name,
+         args: LoginSignupVerifyScreenPageRouteArgs(
+           bodySafeAreaSides: bodySafeAreaSides,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'LoginSignupVerifyScreenPageRoute';
 
@@ -1033,16 +1029,16 @@ class LoginSwitchScreenPageRoute
     LoginSwitchScreenStyle? style,
     List<PageRouteInfo>? children,
   }) : super(
-          LoginSwitchScreenPageRoute.name,
-          args: LoginSwitchScreenPageRouteArgs(
-            bodySafeAreaSides: bodySafeAreaSides,
-            forceLoginTypes: forceLoginTypes,
-            isLogoVisible: isLogoVisible,
-            isAppBarVisible: isAppBarVisible,
-            style: style,
-          ),
-          initialChildren: children,
-        );
+         LoginSwitchScreenPageRoute.name,
+         args: LoginSwitchScreenPageRouteArgs(
+           bodySafeAreaSides: bodySafeAreaSides,
+           forceLoginTypes: forceLoginTypes,
+           isLogoVisible: isLogoVisible,
+           isAppBarVisible: isAppBarVisible,
+           style: style,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'LoginSwitchScreenPageRoute';
 
@@ -1112,7 +1108,7 @@ class LoginSwitchScreenPageRouteArgs {
 /// [MainScreenPage]
 class MainScreenPageRoute extends PageRouteInfo<void> {
   const MainScreenPageRoute({List<PageRouteInfo>? children})
-      : super(MainScreenPageRoute.name, initialChildren: children);
+    : super(MainScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'MainScreenPageRoute';
 
@@ -1128,7 +1124,7 @@ class MainScreenPageRoute extends PageRouteInfo<void> {
 /// [MainShell]
 class MainShellRoute extends PageRouteInfo<void> {
   const MainShellRoute({List<PageRouteInfo>? children})
-      : super(MainShellRoute.name, initialChildren: children);
+    : super(MainShellRoute.name, initialChildren: children);
 
   static const String name = 'MainShellRoute';
 
@@ -1144,7 +1140,7 @@ class MainShellRoute extends PageRouteInfo<void> {
 /// [MediaSettingsScreenPage]
 class MediaSettingsScreenPageRoute extends PageRouteInfo<void> {
   const MediaSettingsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(MediaSettingsScreenPageRoute.name, initialChildren: children);
+    : super(MediaSettingsScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'MediaSettingsScreenPageRoute';
 
@@ -1160,7 +1156,7 @@ class MediaSettingsScreenPageRoute extends PageRouteInfo<void> {
 /// [NetworkScreenPage]
 class NetworkScreenPageRoute extends PageRouteInfo<void> {
   const NetworkScreenPageRoute({List<PageRouteInfo>? children})
-      : super(NetworkScreenPageRoute.name, initialChildren: children);
+    : super(NetworkScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'NetworkScreenPageRoute';
 
@@ -1180,11 +1176,11 @@ class NumberCdrsScreenPageRoute
     required String number,
     List<PageRouteInfo>? children,
   }) : super(
-          NumberCdrsScreenPageRoute.name,
-          args: NumberCdrsScreenPageRouteArgs(number: number),
-          rawPathParams: {'number': number},
-          initialChildren: children,
-        );
+         NumberCdrsScreenPageRoute.name,
+         args: NumberCdrsScreenPageRouteArgs(number: number),
+         rawPathParams: {'number': number},
+         initialChildren: children,
+       );
 
   static const String name = 'NumberCdrsScreenPageRoute';
 
@@ -1227,7 +1223,7 @@ class NumberCdrsScreenPageRouteArgs {
 /// [PermissionsScreenPage]
 class PermissionsScreenPageRoute extends PageRouteInfo<void> {
   const PermissionsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(PermissionsScreenPageRoute.name, initialChildren: children);
+    : super(PermissionsScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'PermissionsScreenPageRoute';
 
@@ -1243,7 +1239,7 @@ class PermissionsScreenPageRoute extends PageRouteInfo<void> {
 /// [PresenceSettingsScreenPage]
 class PresenceSettingsScreenPageRoute extends PageRouteInfo<void> {
   const PresenceSettingsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(PresenceSettingsScreenPageRoute.name, initialChildren: children);
+    : super(PresenceSettingsScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'PresenceSettingsScreenPageRoute';
 
@@ -1259,7 +1255,7 @@ class PresenceSettingsScreenPageRoute extends PageRouteInfo<void> {
 /// [RecentCdrsRouterPage]
 class RecentCdrsRouterPageRoute extends PageRouteInfo<void> {
   const RecentCdrsRouterPageRoute({List<PageRouteInfo>? children})
-      : super(RecentCdrsRouterPageRoute.name, initialChildren: children);
+    : super(RecentCdrsRouterPageRoute.name, initialChildren: children);
 
   static const String name = 'RecentCdrsRouterPageRoute';
 
@@ -1275,7 +1271,7 @@ class RecentCdrsRouterPageRoute extends PageRouteInfo<void> {
 /// [RecentCdrsScreenPage]
 class RecentCdrsScreenPageRoute extends PageRouteInfo<void> {
   const RecentCdrsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(RecentCdrsScreenPageRoute.name, initialChildren: children);
+    : super(RecentCdrsScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'RecentCdrsScreenPageRoute';
 
@@ -1291,7 +1287,7 @@ class RecentCdrsScreenPageRoute extends PageRouteInfo<void> {
 /// [RecentsRouterPage]
 class RecentsRouterPageRoute extends PageRouteInfo<void> {
   const RecentsRouterPageRoute({List<PageRouteInfo>? children})
-      : super(RecentsRouterPageRoute.name, initialChildren: children);
+    : super(RecentsRouterPageRoute.name, initialChildren: children);
 
   static const String name = 'RecentsRouterPageRoute';
 
@@ -1307,7 +1303,7 @@ class RecentsRouterPageRoute extends PageRouteInfo<void> {
 /// [RecentsScreenPage]
 class RecentsScreenPageRoute extends PageRouteInfo<void> {
   const RecentsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(RecentsScreenPageRoute.name, initialChildren: children);
+    : super(RecentsScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'RecentsScreenPageRoute';
 
@@ -1324,11 +1320,11 @@ class RecentsScreenPageRoute extends PageRouteInfo<void> {
 class SelfConfigScreenPageRoute
     extends PageRouteInfo<SelfConfigScreenPageRouteArgs> {
   SelfConfigScreenPageRoute({required Uri url, List<PageRouteInfo>? children})
-      : super(
-          SelfConfigScreenPageRoute.name,
-          args: SelfConfigScreenPageRouteArgs(url: url),
-          initialChildren: children,
-        );
+    : super(
+        SelfConfigScreenPageRoute.name,
+        args: SelfConfigScreenPageRouteArgs(url: url),
+        initialChildren: children,
+      );
 
   static const String name = 'SelfConfigScreenPageRoute';
 
@@ -1366,7 +1362,7 @@ class SelfConfigScreenPageRouteArgs {
 /// [SettingsRouterPage]
 class SettingsRouterPageRoute extends PageRouteInfo<void> {
   const SettingsRouterPageRoute({List<PageRouteInfo>? children})
-      : super(SettingsRouterPageRoute.name, initialChildren: children);
+    : super(SettingsRouterPageRoute.name, initialChildren: children);
 
   static const String name = 'SettingsRouterPageRoute';
 
@@ -1382,7 +1378,7 @@ class SettingsRouterPageRoute extends PageRouteInfo<void> {
 /// [SettingsScreenPage]
 class SettingsScreenPageRoute extends PageRouteInfo<void> {
   const SettingsScreenPageRoute({List<PageRouteInfo>? children})
-      : super(SettingsScreenPageRoute.name, initialChildren: children);
+    : super(SettingsScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'SettingsScreenPageRoute';
 
@@ -1404,14 +1400,14 @@ class SmsConversationScreenPageRoute
     String? recipientId,
     List<PageRouteInfo>? children,
   }) : super(
-          SmsConversationScreenPageRoute.name,
-          args: SmsConversationScreenPageRouteArgs(
-            firstNumber: firstNumber,
-            secondNumber: secondNumber,
-            recipientId: recipientId,
-          ),
-          initialChildren: children,
-        );
+         SmsConversationScreenPageRoute.name,
+         args: SmsConversationScreenPageRouteArgs(
+           firstNumber: firstNumber,
+           secondNumber: secondNumber,
+           recipientId: recipientId,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'SmsConversationScreenPageRoute';
 
@@ -1464,7 +1460,7 @@ class SmsConversationScreenPageRouteArgs {
 /// [SystemNotificationsPage]
 class SystemNotificationsPageRoute extends PageRouteInfo<void> {
   const SystemNotificationsPageRoute({List<PageRouteInfo>? children})
-      : super(SystemNotificationsPageRoute.name, initialChildren: children);
+    : super(SystemNotificationsPageRoute.name, initialChildren: children);
 
   static const String name = 'SystemNotificationsPageRoute';
 
@@ -1484,13 +1480,13 @@ class TermsConditionsScreenPageRoute
     String? initialUriQueryParam,
     List<PageRouteInfo>? children,
   }) : super(
-          TermsConditionsScreenPageRoute.name,
-          args: TermsConditionsScreenPageRouteArgs(
-            initialUriQueryParam: initialUriQueryParam,
-          ),
-          rawQueryParams: {'initialUrl': initialUriQueryParam},
-          initialChildren: children,
-        );
+         TermsConditionsScreenPageRoute.name,
+         args: TermsConditionsScreenPageRouteArgs(
+           initialUriQueryParam: initialUriQueryParam,
+         ),
+         rawQueryParams: {'initialUrl': initialUriQueryParam},
+         initialChildren: children,
+       );
 
   static const String name = 'TermsConditionsScreenPageRoute';
 
@@ -1535,7 +1531,7 @@ class TermsConditionsScreenPageRouteArgs {
 /// [ThemeModeScreenPage]
 class ThemeModeScreenPageRoute extends PageRouteInfo<void> {
   const ThemeModeScreenPageRoute({List<PageRouteInfo>? children})
-      : super(ThemeModeScreenPageRoute.name, initialChildren: children);
+    : super(ThemeModeScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'ThemeModeScreenPageRoute';
 
@@ -1555,10 +1551,10 @@ class UndefinedScreenPageRoute
     required UndefinedType undefinedType,
     List<PageRouteInfo>? children,
   }) : super(
-          UndefinedScreenPageRoute.name,
-          args: UndefinedScreenPageRouteArgs(undefinedType: undefinedType),
-          initialChildren: children,
-        );
+         UndefinedScreenPageRoute.name,
+         args: UndefinedScreenPageRouteArgs(undefinedType: undefinedType),
+         initialChildren: children,
+       );
 
   static const String name = 'UndefinedScreenPageRoute';
 
@@ -1596,7 +1592,7 @@ class UndefinedScreenPageRouteArgs {
 /// [UserAgreementScreenPage]
 class UserAgreementScreenPageRoute extends PageRouteInfo<void> {
   const UserAgreementScreenPageRoute({List<PageRouteInfo>? children})
-      : super(UserAgreementScreenPageRoute.name, initialChildren: children);
+    : super(UserAgreementScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'UserAgreementScreenPageRoute';
 
@@ -1612,7 +1608,7 @@ class UserAgreementScreenPageRoute extends PageRouteInfo<void> {
 /// [VoicemailScreenPage]
 class VoicemailScreenPageRoute extends PageRouteInfo<void> {
   const VoicemailScreenPageRoute({List<PageRouteInfo>? children})
-      : super(VoicemailScreenPageRoute.name, initialChildren: children);
+    : super(VoicemailScreenPageRoute.name, initialChildren: children);
 
   static const String name = 'VoicemailScreenPageRoute';
 

@@ -12,7 +12,8 @@ part of 'overlay_style_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 OverlayStyleModel _$OverlayStyleModelFromJson(Map<String, dynamic> json) {
   return _OverlayStyleModel.fromJson(json);
@@ -39,14 +40,16 @@ mixin _$OverlayStyleModel {
 /// @nodoc
 abstract class $OverlayStyleModelCopyWith<$Res> {
   factory $OverlayStyleModelCopyWith(
-          OverlayStyleModel value, $Res Function(OverlayStyleModel) then) =
-      _$OverlayStyleModelCopyWithImpl<$Res, OverlayStyleModel>;
+    OverlayStyleModel value,
+    $Res Function(OverlayStyleModel) then,
+  ) = _$OverlayStyleModelCopyWithImpl<$Res, OverlayStyleModel>;
   @useResult
-  $Res call(
-      {String? systemNavigationBarColor,
-      String? systemNavigationBarIconBrightness,
-      String? statusBarIconBrightness,
-      String? statusBarBrightness});
+  $Res call({
+    String? systemNavigationBarColor,
+    String? systemNavigationBarIconBrightness,
+    String? statusBarIconBrightness,
+    String? statusBarBrightness,
+  });
 }
 
 /// @nodoc
@@ -69,50 +72,56 @@ class _$OverlayStyleModelCopyWithImpl<$Res, $Val extends OverlayStyleModel>
     Object? statusBarIconBrightness = freezed,
     Object? statusBarBrightness = freezed,
   }) {
-    return _then(_value.copyWith(
-      systemNavigationBarColor: freezed == systemNavigationBarColor
-          ? _value.systemNavigationBarColor
-          : systemNavigationBarColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      systemNavigationBarIconBrightness: freezed ==
-              systemNavigationBarIconBrightness
-          ? _value.systemNavigationBarIconBrightness
-          : systemNavigationBarIconBrightness // ignore: cast_nullable_to_non_nullable
-              as String?,
-      statusBarIconBrightness: freezed == statusBarIconBrightness
-          ? _value.statusBarIconBrightness
-          : statusBarIconBrightness // ignore: cast_nullable_to_non_nullable
-              as String?,
-      statusBarBrightness: freezed == statusBarBrightness
-          ? _value.statusBarBrightness
-          : statusBarBrightness // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            systemNavigationBarColor: freezed == systemNavigationBarColor
+                ? _value.systemNavigationBarColor
+                : systemNavigationBarColor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            systemNavigationBarIconBrightness:
+                freezed == systemNavigationBarIconBrightness
+                ? _value.systemNavigationBarIconBrightness
+                : systemNavigationBarIconBrightness // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            statusBarIconBrightness: freezed == statusBarIconBrightness
+                ? _value.statusBarIconBrightness
+                : statusBarIconBrightness // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            statusBarBrightness: freezed == statusBarBrightness
+                ? _value.statusBarBrightness
+                : statusBarBrightness // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$OverlayStyleModelImplCopyWith<$Res>
     implements $OverlayStyleModelCopyWith<$Res> {
-  factory _$$OverlayStyleModelImplCopyWith(_$OverlayStyleModelImpl value,
-          $Res Function(_$OverlayStyleModelImpl) then) =
-      __$$OverlayStyleModelImplCopyWithImpl<$Res>;
+  factory _$$OverlayStyleModelImplCopyWith(
+    _$OverlayStyleModelImpl value,
+    $Res Function(_$OverlayStyleModelImpl) then,
+  ) = __$$OverlayStyleModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? systemNavigationBarColor,
-      String? systemNavigationBarIconBrightness,
-      String? statusBarIconBrightness,
-      String? statusBarBrightness});
+  $Res call({
+    String? systemNavigationBarColor,
+    String? systemNavigationBarIconBrightness,
+    String? statusBarIconBrightness,
+    String? statusBarBrightness,
+  });
 }
 
 /// @nodoc
 class __$$OverlayStyleModelImplCopyWithImpl<$Res>
     extends _$OverlayStyleModelCopyWithImpl<$Res, _$OverlayStyleModelImpl>
     implements _$$OverlayStyleModelImplCopyWith<$Res> {
-  __$$OverlayStyleModelImplCopyWithImpl(_$OverlayStyleModelImpl _value,
-      $Res Function(_$OverlayStyleModelImpl) _then)
-      : super(_value, _then);
+  __$$OverlayStyleModelImplCopyWithImpl(
+    _$OverlayStyleModelImpl _value,
+    $Res Function(_$OverlayStyleModelImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of OverlayStyleModel
   /// with the given fields replaced by the non-null parameter values.
@@ -124,36 +133,39 @@ class __$$OverlayStyleModelImplCopyWithImpl<$Res>
     Object? statusBarIconBrightness = freezed,
     Object? statusBarBrightness = freezed,
   }) {
-    return _then(_$OverlayStyleModelImpl(
-      systemNavigationBarColor: freezed == systemNavigationBarColor
-          ? _value.systemNavigationBarColor
-          : systemNavigationBarColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      systemNavigationBarIconBrightness: freezed ==
-              systemNavigationBarIconBrightness
-          ? _value.systemNavigationBarIconBrightness
-          : systemNavigationBarIconBrightness // ignore: cast_nullable_to_non_nullable
-              as String?,
-      statusBarIconBrightness: freezed == statusBarIconBrightness
-          ? _value.statusBarIconBrightness
-          : statusBarIconBrightness // ignore: cast_nullable_to_non_nullable
-              as String?,
-      statusBarBrightness: freezed == statusBarBrightness
-          ? _value.statusBarBrightness
-          : statusBarBrightness // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$OverlayStyleModelImpl(
+        systemNavigationBarColor: freezed == systemNavigationBarColor
+            ? _value.systemNavigationBarColor
+            : systemNavigationBarColor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        systemNavigationBarIconBrightness:
+            freezed == systemNavigationBarIconBrightness
+            ? _value.systemNavigationBarIconBrightness
+            : systemNavigationBarIconBrightness // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        statusBarIconBrightness: freezed == statusBarIconBrightness
+            ? _value.statusBarIconBrightness
+            : statusBarIconBrightness // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        statusBarBrightness: freezed == statusBarBrightness
+            ? _value.statusBarBrightness
+            : statusBarBrightness // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$OverlayStyleModelImpl implements _OverlayStyleModel {
-  const _$OverlayStyleModelImpl(
-      {this.systemNavigationBarColor,
-      this.systemNavigationBarIconBrightness,
-      this.statusBarIconBrightness,
-      this.statusBarBrightness});
+  const _$OverlayStyleModelImpl({
+    this.systemNavigationBarColor,
+    this.systemNavigationBarIconBrightness,
+    this.statusBarIconBrightness,
+    this.statusBarBrightness,
+  });
 
   factory _$OverlayStyleModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$OverlayStyleModelImplFromJson(json);
@@ -178,14 +190,20 @@ class _$OverlayStyleModelImpl implements _OverlayStyleModel {
         (other.runtimeType == runtimeType &&
             other is _$OverlayStyleModelImpl &&
             (identical(
-                    other.systemNavigationBarColor, systemNavigationBarColor) ||
+                  other.systemNavigationBarColor,
+                  systemNavigationBarColor,
+                ) ||
                 other.systemNavigationBarColor == systemNavigationBarColor) &&
-            (identical(other.systemNavigationBarIconBrightness,
-                    systemNavigationBarIconBrightness) ||
+            (identical(
+                  other.systemNavigationBarIconBrightness,
+                  systemNavigationBarIconBrightness,
+                ) ||
                 other.systemNavigationBarIconBrightness ==
                     systemNavigationBarIconBrightness) &&
             (identical(
-                    other.statusBarIconBrightness, statusBarIconBrightness) ||
+                  other.statusBarIconBrightness,
+                  statusBarIconBrightness,
+                ) ||
                 other.statusBarIconBrightness == statusBarIconBrightness) &&
             (identical(other.statusBarBrightness, statusBarBrightness) ||
                 other.statusBarBrightness == statusBarBrightness));
@@ -194,11 +212,12 @@ class _$OverlayStyleModelImpl implements _OverlayStyleModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      systemNavigationBarColor,
-      systemNavigationBarIconBrightness,
-      statusBarIconBrightness,
-      statusBarBrightness);
+    runtimeType,
+    systemNavigationBarColor,
+    systemNavigationBarIconBrightness,
+    statusBarIconBrightness,
+    statusBarBrightness,
+  );
 
   /// Create a copy of OverlayStyleModel
   /// with the given fields replaced by the non-null parameter values.
@@ -207,22 +226,23 @@ class _$OverlayStyleModelImpl implements _OverlayStyleModel {
   @pragma('vm:prefer-inline')
   _$$OverlayStyleModelImplCopyWith<_$OverlayStyleModelImpl> get copyWith =>
       __$$OverlayStyleModelImplCopyWithImpl<_$OverlayStyleModelImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$OverlayStyleModelImplToJson(
-      this,
-    );
+    return _$$OverlayStyleModelImplToJson(this);
   }
 }
 
 abstract class _OverlayStyleModel implements OverlayStyleModel {
-  const factory _OverlayStyleModel(
-      {final String? systemNavigationBarColor,
-      final String? systemNavigationBarIconBrightness,
-      final String? statusBarIconBrightness,
-      final String? statusBarBrightness}) = _$OverlayStyleModelImpl;
+  const factory _OverlayStyleModel({
+    final String? systemNavigationBarColor,
+    final String? systemNavigationBarIconBrightness,
+    final String? statusBarIconBrightness,
+    final String? statusBarBrightness,
+  }) = _$OverlayStyleModelImpl;
 
   factory _OverlayStyleModel.fromJson(Map<String, dynamic> json) =
       _$OverlayStyleModelImpl.fromJson;

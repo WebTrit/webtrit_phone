@@ -12,7 +12,8 @@ part of 'push_tokens_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$PushTokensState {
@@ -29,8 +30,9 @@ mixin _$PushTokensState {
 /// @nodoc
 abstract class $PushTokensStateCopyWith<$Res> {
   factory $PushTokensStateCopyWith(
-          PushTokensState value, $Res Function(PushTokensState) then) =
-      _$PushTokensStateCopyWithImpl<$Res, PushTokensState>;
+    PushTokensState value,
+    $Res Function(PushTokensState) then,
+  ) = _$PushTokensStateCopyWithImpl<$Res, PushTokensState>;
   @useResult
   $Res call({String? pushToken, String? errorMessage});
 }
@@ -49,29 +51,30 @@ class _$PushTokensStateCopyWithImpl<$Res, $Val extends PushTokensState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? pushToken = freezed,
-    Object? errorMessage = freezed,
-  }) {
-    return _then(_value.copyWith(
-      pushToken: freezed == pushToken
-          ? _value.pushToken
-          : pushToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+  $Res call({Object? pushToken = freezed, Object? errorMessage = freezed}) {
+    return _then(
+      _value.copyWith(
+            pushToken: freezed == pushToken
+                ? _value.pushToken
+                : pushToken // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            errorMessage: freezed == errorMessage
+                ? _value.errorMessage
+                : errorMessage // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$PushTokensStateImplCopyWith<$Res>
     implements $PushTokensStateCopyWith<$Res> {
-  factory _$$PushTokensStateImplCopyWith(_$PushTokensStateImpl value,
-          $Res Function(_$PushTokensStateImpl) then) =
-      __$$PushTokensStateImplCopyWithImpl<$Res>;
+  factory _$$PushTokensStateImplCopyWith(
+    _$PushTokensStateImpl value,
+    $Res Function(_$PushTokensStateImpl) then,
+  ) = __$$PushTokensStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? pushToken, String? errorMessage});
@@ -82,27 +85,27 @@ class __$$PushTokensStateImplCopyWithImpl<$Res>
     extends _$PushTokensStateCopyWithImpl<$Res, _$PushTokensStateImpl>
     implements _$$PushTokensStateImplCopyWith<$Res> {
   __$$PushTokensStateImplCopyWithImpl(
-      _$PushTokensStateImpl _value, $Res Function(_$PushTokensStateImpl) _then)
-      : super(_value, _then);
+    _$PushTokensStateImpl _value,
+    $Res Function(_$PushTokensStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of PushTokensState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? pushToken = freezed,
-    Object? errorMessage = freezed,
-  }) {
-    return _then(_$PushTokensStateImpl(
-      pushToken: freezed == pushToken
-          ? _value.pushToken
-          : pushToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+  $Res call({Object? pushToken = freezed, Object? errorMessage = freezed}) {
+    return _then(
+      _$PushTokensStateImpl(
+        pushToken: freezed == pushToken
+            ? _value.pushToken
+            : pushToken // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        errorMessage: freezed == errorMessage
+            ? _value.errorMessage
+            : errorMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -142,13 +145,16 @@ class _$PushTokensStateImpl implements _PushTokensState {
   @pragma('vm:prefer-inline')
   _$$PushTokensStateImplCopyWith<_$PushTokensStateImpl> get copyWith =>
       __$$PushTokensStateImplCopyWithImpl<_$PushTokensStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _PushTokensState implements PushTokensState {
-  const factory _PushTokensState(
-      {final String? pushToken,
-      final String? errorMessage}) = _$PushTokensStateImpl;
+  const factory _PushTokensState({
+    final String? pushToken,
+    final String? errorMessage,
+  }) = _$PushTokensStateImpl;
 
   @override
   String? get pushToken;

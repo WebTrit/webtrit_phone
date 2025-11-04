@@ -12,7 +12,8 @@ part of 'session_status_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$SessionStatusState {
@@ -20,35 +21,29 @@ mixin _$SessionStatusState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(SessionStatus status) initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(SessionStatus status)? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(SessionStatus status)? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 
   /// Create a copy of SessionStatusState
   /// with the given fields replaced by the non-null parameter values.
@@ -60,8 +55,9 @@ mixin _$SessionStatusState {
 /// @nodoc
 abstract class $SessionStatusStateCopyWith<$Res> {
   factory $SessionStatusStateCopyWith(
-          SessionStatusState value, $Res Function(SessionStatusState) then) =
-      _$SessionStatusStateCopyWithImpl<$Res, SessionStatusState>;
+    SessionStatusState value,
+    $Res Function(SessionStatusState) then,
+  ) = _$SessionStatusStateCopyWithImpl<$Res, SessionStatusState>;
   @useResult
   $Res call({SessionStatus status});
 }
@@ -80,15 +76,16 @@ class _$SessionStatusStateCopyWithImpl<$Res, $Val extends SessionStatusState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? status = null,
-  }) {
-    return _then(_value.copyWith(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as SessionStatus,
-    ) as $Val);
+  $Res call({Object? status = null}) {
+    return _then(
+      _value.copyWith(
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as SessionStatus,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -96,8 +93,9 @@ class _$SessionStatusStateCopyWithImpl<$Res, $Val extends SessionStatusState>
 abstract class _$$InitialImplCopyWith<$Res>
     implements $SessionStatusStateCopyWith<$Res> {
   factory _$$InitialImplCopyWith(
-          _$InitialImpl value, $Res Function(_$InitialImpl) then) =
-      __$$InitialImplCopyWithImpl<$Res>;
+    _$InitialImpl value,
+    $Res Function(_$InitialImpl) then,
+  ) = __$$InitialImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({SessionStatus status});
@@ -108,22 +106,23 @@ class __$$InitialImplCopyWithImpl<$Res>
     extends _$SessionStatusStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
-      _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
-      : super(_value, _then);
+    _$InitialImpl _value,
+    $Res Function(_$InitialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SessionStatusState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? status = null,
-  }) {
-    return _then(_$InitialImpl(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as SessionStatus,
-    ));
+  $Res call({Object? status = null}) {
+    return _then(
+      _$InitialImpl(
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as SessionStatus,
+      ),
+    );
   }
 }
 

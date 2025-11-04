@@ -12,10 +12,12 @@ part of 'session_login_credential.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SessionLoginCredential _$SessionLoginCredentialFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _SessionLoginCredential.fromJson(json);
 }
 
@@ -39,21 +41,25 @@ mixin _$SessionLoginCredential {
 
 /// @nodoc
 abstract class $SessionLoginCredentialCopyWith<$Res> {
-  factory $SessionLoginCredentialCopyWith(SessionLoginCredential value,
-          $Res Function(SessionLoginCredential) then) =
-      _$SessionLoginCredentialCopyWithImpl<$Res, SessionLoginCredential>;
+  factory $SessionLoginCredentialCopyWith(
+    SessionLoginCredential value,
+    $Res Function(SessionLoginCredential) then,
+  ) = _$SessionLoginCredentialCopyWithImpl<$Res, SessionLoginCredential>;
   @useResult
-  $Res call(
-      {String? bundleId,
-      AppType type,
-      String identifier,
-      String login,
-      String password});
+  $Res call({
+    String? bundleId,
+    AppType type,
+    String identifier,
+    String login,
+    String password,
+  });
 }
 
 /// @nodoc
-class _$SessionLoginCredentialCopyWithImpl<$Res,
-        $Val extends SessionLoginCredential>
+class _$SessionLoginCredentialCopyWithImpl<
+  $Res,
+  $Val extends SessionLoginCredential
+>
     implements $SessionLoginCredentialCopyWith<$Res> {
   _$SessionLoginCredentialCopyWithImpl(this._value, this._then);
 
@@ -73,28 +79,31 @@ class _$SessionLoginCredentialCopyWithImpl<$Res,
     Object? login = null,
     Object? password = null,
   }) {
-    return _then(_value.copyWith(
-      bundleId: freezed == bundleId
-          ? _value.bundleId
-          : bundleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppType,
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      login: null == login
-          ? _value.login
-          : login // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            bundleId: freezed == bundleId
+                ? _value.bundleId
+                : bundleId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as AppType,
+            identifier: null == identifier
+                ? _value.identifier
+                : identifier // ignore: cast_nullable_to_non_nullable
+                      as String,
+            login: null == login
+                ? _value.login
+                : login // ignore: cast_nullable_to_non_nullable
+                      as String,
+            password: null == password
+                ? _value.password
+                : password // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -102,28 +111,29 @@ class _$SessionLoginCredentialCopyWithImpl<$Res,
 abstract class _$$SessionLoginCredentialImplCopyWith<$Res>
     implements $SessionLoginCredentialCopyWith<$Res> {
   factory _$$SessionLoginCredentialImplCopyWith(
-          _$SessionLoginCredentialImpl value,
-          $Res Function(_$SessionLoginCredentialImpl) then) =
-      __$$SessionLoginCredentialImplCopyWithImpl<$Res>;
+    _$SessionLoginCredentialImpl value,
+    $Res Function(_$SessionLoginCredentialImpl) then,
+  ) = __$$SessionLoginCredentialImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? bundleId,
-      AppType type,
-      String identifier,
-      String login,
-      String password});
+  $Res call({
+    String? bundleId,
+    AppType type,
+    String identifier,
+    String login,
+    String password,
+  });
 }
 
 /// @nodoc
 class __$$SessionLoginCredentialImplCopyWithImpl<$Res>
-    extends _$SessionLoginCredentialCopyWithImpl<$Res,
-        _$SessionLoginCredentialImpl>
+    extends
+        _$SessionLoginCredentialCopyWithImpl<$Res, _$SessionLoginCredentialImpl>
     implements _$$SessionLoginCredentialImplCopyWith<$Res> {
   __$$SessionLoginCredentialImplCopyWithImpl(
-      _$SessionLoginCredentialImpl _value,
-      $Res Function(_$SessionLoginCredentialImpl) _then)
-      : super(_value, _then);
+    _$SessionLoginCredentialImpl _value,
+    $Res Function(_$SessionLoginCredentialImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SessionLoginCredential
   /// with the given fields replaced by the non-null parameter values.
@@ -136,28 +146,30 @@ class __$$SessionLoginCredentialImplCopyWithImpl<$Res>
     Object? login = null,
     Object? password = null,
   }) {
-    return _then(_$SessionLoginCredentialImpl(
-      bundleId: freezed == bundleId
-          ? _value.bundleId
-          : bundleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AppType,
-      identifier: null == identifier
-          ? _value.identifier
-          : identifier // ignore: cast_nullable_to_non_nullable
-              as String,
-      login: null == login
-          ? _value.login
-          : login // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$SessionLoginCredentialImpl(
+        bundleId: freezed == bundleId
+            ? _value.bundleId
+            : bundleId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as AppType,
+        identifier: null == identifier
+            ? _value.identifier
+            : identifier // ignore: cast_nullable_to_non_nullable
+                  as String,
+        login: null == login
+            ? _value.login
+            : login // ignore: cast_nullable_to_non_nullable
+                  as String,
+        password: null == password
+            ? _value.password
+            : password // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
@@ -165,12 +177,13 @@ class __$$SessionLoginCredentialImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionLoginCredentialImpl implements _SessionLoginCredential {
-  const _$SessionLoginCredentialImpl(
-      {this.bundleId,
-      required this.type,
-      required this.identifier,
-      required this.login,
-      required this.password});
+  const _$SessionLoginCredentialImpl({
+    this.bundleId,
+    required this.type,
+    required this.identifier,
+    required this.login,
+    required this.password,
+  });
 
   factory _$SessionLoginCredentialImpl.fromJson(Map<String, dynamic> json) =>
       _$$SessionLoginCredentialImplFromJson(json);
@@ -217,24 +230,26 @@ class _$SessionLoginCredentialImpl implements _SessionLoginCredential {
   @override
   @pragma('vm:prefer-inline')
   _$$SessionLoginCredentialImplCopyWith<_$SessionLoginCredentialImpl>
-      get copyWith => __$$SessionLoginCredentialImplCopyWithImpl<
-          _$SessionLoginCredentialImpl>(this, _$identity);
+  get copyWith =>
+      __$$SessionLoginCredentialImplCopyWithImpl<_$SessionLoginCredentialImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SessionLoginCredentialImplToJson(
-      this,
-    );
+    return _$$SessionLoginCredentialImplToJson(this);
   }
 }
 
 abstract class _SessionLoginCredential implements SessionLoginCredential {
-  const factory _SessionLoginCredential(
-      {final String? bundleId,
-      required final AppType type,
-      required final String identifier,
-      required final String login,
-      required final String password}) = _$SessionLoginCredentialImpl;
+  const factory _SessionLoginCredential({
+    final String? bundleId,
+    required final AppType type,
+    required final String identifier,
+    required final String login,
+    required final String password,
+  }) = _$SessionLoginCredentialImpl;
 
   factory _SessionLoginCredential.fromJson(Map<String, dynamic> json) =
       _$SessionLoginCredentialImpl.fromJson;
@@ -255,5 +270,5 @@ abstract class _SessionLoginCredential implements SessionLoginCredential {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionLoginCredentialImplCopyWith<_$SessionLoginCredentialImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

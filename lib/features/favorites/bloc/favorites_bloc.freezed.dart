@@ -12,7 +12,8 @@ part of 'favorites_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$FavoritesState {
@@ -28,8 +29,9 @@ mixin _$FavoritesState {
 /// @nodoc
 abstract class $FavoritesStateCopyWith<$Res> {
   factory $FavoritesStateCopyWith(
-          FavoritesState value, $Res Function(FavoritesState) then) =
-      _$FavoritesStateCopyWithImpl<$Res, FavoritesState>;
+    FavoritesState value,
+    $Res Function(FavoritesState) then,
+  ) = _$FavoritesStateCopyWithImpl<$Res, FavoritesState>;
   @useResult
   $Res call({List<Favorite>? favorites});
 }
@@ -48,24 +50,26 @@ class _$FavoritesStateCopyWithImpl<$Res, $Val extends FavoritesState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? favorites = freezed,
-  }) {
-    return _then(_value.copyWith(
-      favorites: freezed == favorites
-          ? _value.favorites
-          : favorites // ignore: cast_nullable_to_non_nullable
-              as List<Favorite>?,
-    ) as $Val);
+  $Res call({Object? favorites = freezed}) {
+    return _then(
+      _value.copyWith(
+            favorites: freezed == favorites
+                ? _value.favorites
+                : favorites // ignore: cast_nullable_to_non_nullable
+                      as List<Favorite>?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$FavoritesStateImplCopyWith<$Res>
     implements $FavoritesStateCopyWith<$Res> {
-  factory _$$FavoritesStateImplCopyWith(_$FavoritesStateImpl value,
-          $Res Function(_$FavoritesStateImpl) then) =
-      __$$FavoritesStateImplCopyWithImpl<$Res>;
+  factory _$$FavoritesStateImplCopyWith(
+    _$FavoritesStateImpl value,
+    $Res Function(_$FavoritesStateImpl) then,
+  ) = __$$FavoritesStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Favorite>? favorites});
@@ -76,22 +80,23 @@ class __$$FavoritesStateImplCopyWithImpl<$Res>
     extends _$FavoritesStateCopyWithImpl<$Res, _$FavoritesStateImpl>
     implements _$$FavoritesStateImplCopyWith<$Res> {
   __$$FavoritesStateImplCopyWithImpl(
-      _$FavoritesStateImpl _value, $Res Function(_$FavoritesStateImpl) _then)
-      : super(_value, _then);
+    _$FavoritesStateImpl _value,
+    $Res Function(_$FavoritesStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of FavoritesState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? favorites = freezed,
-  }) {
-    return _then(_$FavoritesStateImpl(
-      favorites: freezed == favorites
-          ? _value._favorites
-          : favorites // ignore: cast_nullable_to_non_nullable
-              as List<Favorite>?,
-    ));
+  $Res call({Object? favorites = freezed}) {
+    return _then(
+      _$FavoritesStateImpl(
+        favorites: freezed == favorites
+            ? _value._favorites
+            : favorites // ignore: cast_nullable_to_non_nullable
+                  as List<Favorite>?,
+      ),
+    );
   }
 }
 
@@ -99,7 +104,7 @@ class __$$FavoritesStateImplCopyWithImpl<$Res>
 
 class _$FavoritesStateImpl implements _FavoritesState {
   const _$FavoritesStateImpl({final List<Favorite>? favorites})
-      : _favorites = favorites;
+    : _favorites = favorites;
 
   final List<Favorite>? _favorites;
   @override
@@ -121,8 +126,10 @@ class _$FavoritesStateImpl implements _FavoritesState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FavoritesStateImpl &&
-            const DeepCollectionEquality()
-                .equals(other._favorites, _favorites));
+            const DeepCollectionEquality().equals(
+              other._favorites,
+              _favorites,
+            ));
   }
 
   @override
@@ -136,7 +143,9 @@ class _$FavoritesStateImpl implements _FavoritesState {
   @pragma('vm:prefer-inline')
   _$$FavoritesStateImplCopyWith<_$FavoritesStateImpl> get copyWith =>
       __$$FavoritesStateImplCopyWithImpl<_$FavoritesStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _FavoritesState implements FavoritesState {

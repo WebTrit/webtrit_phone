@@ -29,7 +29,4 @@ _$ErrorDetailImpl _$$ErrorDetailImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$ErrorDetailImplToJson(_$ErrorDetailImpl instance) =>
-    <String, dynamic>{
-      'path': instance.path,
-      'reason': instance.reason,
-    };
+    <String, dynamic>{'path': instance.path, 'reason': instance.reason};

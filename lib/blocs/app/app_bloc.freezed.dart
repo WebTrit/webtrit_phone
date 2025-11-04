@@ -12,7 +12,8 @@ part of 'app_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$AppState {
@@ -36,13 +37,14 @@ abstract class $AppStateCopyWith<$Res> {
   factory $AppStateCopyWith(AppState value, $Res Function(AppState) then) =
       _$AppStateCopyWithImpl<$Res, AppState>;
   @useResult
-  $Res call(
-      {Session session,
-      ThemeSettings themeSettings,
-      ThemeMode themeMode,
-      Locale locale,
-      AgreementStatus userAgreementStatus,
-      AgreementStatus contactsAgreementStatus});
+  $Res call({
+    Session session,
+    ThemeSettings themeSettings,
+    ThemeMode themeMode,
+    Locale locale,
+    AgreementStatus userAgreementStatus,
+    AgreementStatus contactsAgreementStatus,
+  });
 
   $SessionCopyWith<$Res> get session;
   $ThemeSettingsCopyWith<$Res> get themeSettings;
@@ -70,32 +72,35 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? userAgreementStatus = null,
     Object? contactsAgreementStatus = null,
   }) {
-    return _then(_value.copyWith(
-      session: null == session
-          ? _value.session
-          : session // ignore: cast_nullable_to_non_nullable
-              as Session,
-      themeSettings: null == themeSettings
-          ? _value.themeSettings
-          : themeSettings // ignore: cast_nullable_to_non_nullable
-              as ThemeSettings,
-      themeMode: null == themeMode
-          ? _value.themeMode
-          : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode,
-      locale: null == locale
-          ? _value.locale
-          : locale // ignore: cast_nullable_to_non_nullable
-              as Locale,
-      userAgreementStatus: null == userAgreementStatus
-          ? _value.userAgreementStatus
-          : userAgreementStatus // ignore: cast_nullable_to_non_nullable
-              as AgreementStatus,
-      contactsAgreementStatus: null == contactsAgreementStatus
-          ? _value.contactsAgreementStatus
-          : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
-              as AgreementStatus,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            session: null == session
+                ? _value.session
+                : session // ignore: cast_nullable_to_non_nullable
+                      as Session,
+            themeSettings: null == themeSettings
+                ? _value.themeSettings
+                : themeSettings // ignore: cast_nullable_to_non_nullable
+                      as ThemeSettings,
+            themeMode: null == themeMode
+                ? _value.themeMode
+                : themeMode // ignore: cast_nullable_to_non_nullable
+                      as ThemeMode,
+            locale: null == locale
+                ? _value.locale
+                : locale // ignore: cast_nullable_to_non_nullable
+                      as Locale,
+            userAgreementStatus: null == userAgreementStatus
+                ? _value.userAgreementStatus
+                : userAgreementStatus // ignore: cast_nullable_to_non_nullable
+                      as AgreementStatus,
+            contactsAgreementStatus: null == contactsAgreementStatus
+                ? _value.contactsAgreementStatus
+                : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
+                      as AgreementStatus,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of AppState
@@ -123,17 +128,19 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
 abstract class _$$AppStateImplCopyWith<$Res>
     implements $AppStateCopyWith<$Res> {
   factory _$$AppStateImplCopyWith(
-          _$AppStateImpl value, $Res Function(_$AppStateImpl) then) =
-      __$$AppStateImplCopyWithImpl<$Res>;
+    _$AppStateImpl value,
+    $Res Function(_$AppStateImpl) then,
+  ) = __$$AppStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {Session session,
-      ThemeSettings themeSettings,
-      ThemeMode themeMode,
-      Locale locale,
-      AgreementStatus userAgreementStatus,
-      AgreementStatus contactsAgreementStatus});
+  $Res call({
+    Session session,
+    ThemeSettings themeSettings,
+    ThemeMode themeMode,
+    Locale locale,
+    AgreementStatus userAgreementStatus,
+    AgreementStatus contactsAgreementStatus,
+  });
 
   @override
   $SessionCopyWith<$Res> get session;
@@ -146,8 +153,9 @@ class __$$AppStateImplCopyWithImpl<$Res>
     extends _$AppStateCopyWithImpl<$Res, _$AppStateImpl>
     implements _$$AppStateImplCopyWith<$Res> {
   __$$AppStateImplCopyWithImpl(
-      _$AppStateImpl _value, $Res Function(_$AppStateImpl) _then)
-      : super(_value, _then);
+    _$AppStateImpl _value,
+    $Res Function(_$AppStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
@@ -161,46 +169,48 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? userAgreementStatus = null,
     Object? contactsAgreementStatus = null,
   }) {
-    return _then(_$AppStateImpl(
-      session: null == session
-          ? _value.session
-          : session // ignore: cast_nullable_to_non_nullable
-              as Session,
-      themeSettings: null == themeSettings
-          ? _value.themeSettings
-          : themeSettings // ignore: cast_nullable_to_non_nullable
-              as ThemeSettings,
-      themeMode: null == themeMode
-          ? _value.themeMode
-          : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode,
-      locale: null == locale
-          ? _value.locale
-          : locale // ignore: cast_nullable_to_non_nullable
-              as Locale,
-      userAgreementStatus: null == userAgreementStatus
-          ? _value.userAgreementStatus
-          : userAgreementStatus // ignore: cast_nullable_to_non_nullable
-              as AgreementStatus,
-      contactsAgreementStatus: null == contactsAgreementStatus
-          ? _value.contactsAgreementStatus
-          : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
-              as AgreementStatus,
-    ));
+    return _then(
+      _$AppStateImpl(
+        session: null == session
+            ? _value.session
+            : session // ignore: cast_nullable_to_non_nullable
+                  as Session,
+        themeSettings: null == themeSettings
+            ? _value.themeSettings
+            : themeSettings // ignore: cast_nullable_to_non_nullable
+                  as ThemeSettings,
+        themeMode: null == themeMode
+            ? _value.themeMode
+            : themeMode // ignore: cast_nullable_to_non_nullable
+                  as ThemeMode,
+        locale: null == locale
+            ? _value.locale
+            : locale // ignore: cast_nullable_to_non_nullable
+                  as Locale,
+        userAgreementStatus: null == userAgreementStatus
+            ? _value.userAgreementStatus
+            : userAgreementStatus // ignore: cast_nullable_to_non_nullable
+                  as AgreementStatus,
+        contactsAgreementStatus: null == contactsAgreementStatus
+            ? _value.contactsAgreementStatus
+            : contactsAgreementStatus // ignore: cast_nullable_to_non_nullable
+                  as AgreementStatus,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$AppStateImpl extends _AppState {
-  const _$AppStateImpl(
-      {this.session = const Session(),
-      required this.themeSettings,
-      required this.themeMode,
-      required this.locale,
-      required this.userAgreementStatus,
-      required this.contactsAgreementStatus})
-      : super._();
+  const _$AppStateImpl({
+    this.session = const Session(),
+    required this.themeSettings,
+    required this.themeMode,
+    required this.locale,
+    required this.userAgreementStatus,
+    required this.contactsAgreementStatus,
+  }) : super._();
 
   @override
   @JsonKey()
@@ -235,13 +245,22 @@ class _$AppStateImpl extends _AppState {
             (identical(other.userAgreementStatus, userAgreementStatus) ||
                 other.userAgreementStatus == userAgreementStatus) &&
             (identical(
-                    other.contactsAgreementStatus, contactsAgreementStatus) ||
+                  other.contactsAgreementStatus,
+                  contactsAgreementStatus,
+                ) ||
                 other.contactsAgreementStatus == contactsAgreementStatus));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, session, themeSettings,
-      themeMode, locale, userAgreementStatus, contactsAgreementStatus);
+  int get hashCode => Object.hash(
+    runtimeType,
+    session,
+    themeSettings,
+    themeMode,
+    locale,
+    userAgreementStatus,
+    contactsAgreementStatus,
+  );
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
@@ -253,13 +272,14 @@ class _$AppStateImpl extends _AppState {
 }
 
 abstract class _AppState extends AppState {
-  const factory _AppState(
-      {final Session session,
-      required final ThemeSettings themeSettings,
-      required final ThemeMode themeMode,
-      required final Locale locale,
-      required final AgreementStatus userAgreementStatus,
-      required final AgreementStatus contactsAgreementStatus}) = _$AppStateImpl;
+  const factory _AppState({
+    final Session session,
+    required final ThemeSettings themeSettings,
+    required final ThemeMode themeMode,
+    required final Locale locale,
+    required final AgreementStatus userAgreementStatus,
+    required final AgreementStatus contactsAgreementStatus,
+  }) = _$AppStateImpl;
   const _AppState._() : super._();
 
   @override

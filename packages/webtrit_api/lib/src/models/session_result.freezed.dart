@@ -12,7 +12,8 @@ part of 'session_result.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SessionResult _$SessionResultFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
@@ -24,8 +25,12 @@ SessionResult _$SessionResultFromJson(Map<String, dynamic> json) {
       return SessionData.fromJson(json);
 
     default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'SessionResult',
-          'Invalid union type "${json['runtimeType']}"!');
+      throw CheckedFromJsonException(
+        json,
+        'runtimeType',
+        'SessionResult',
+        'Invalid union type "${json['runtimeType']}"!',
+      );
   }
 }
 
@@ -34,64 +39,68 @@ mixin _$SessionResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String otpId,
-            OtpNotificationType? notificationType,
-            String? fromEmail,
-            String? tenantId)
-        otpProvisional,
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )
+    otpProvisional,
     required TResult Function(String token, String? userId, String? tenantId)
-        token,
+    token,
     required TResult Function(Map<String, dynamic> data) data,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String otpId, OtpNotificationType? notificationType,
-            String? fromEmail, String? tenantId)?
-        otpProvisional,
+    TResult? Function(
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )?
+    otpProvisional,
     TResult? Function(String token, String? userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String otpId, OtpNotificationType? notificationType,
-            String? fromEmail, String? tenantId)?
-        otpProvisional,
+    TResult Function(
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )?
+    otpProvisional,
     TResult Function(String token, String? userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SessionOtpProvisional value) otpProvisional,
     required TResult Function(SessionToken value) token,
     required TResult Function(SessionData value) data,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SessionOtpProvisional value)? otpProvisional,
     TResult? Function(SessionToken value)? token,
     TResult? Function(SessionData value)? data,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SessionOtpProvisional value)? otpProvisional,
     TResult Function(SessionToken value)? token,
     TResult Function(SessionData value)? data,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $SessionResultCopyWith<$Res> {
   factory $SessionResultCopyWith(
-          SessionResult value, $Res Function(SessionResult) then) =
-      _$SessionResultCopyWithImpl<$Res, SessionResult>;
+    SessionResult value,
+    $Res Function(SessionResult) then,
+  ) = _$SessionResultCopyWithImpl<$Res, SessionResult>;
 }
 
 /// @nodoc
@@ -111,24 +120,26 @@ class _$SessionResultCopyWithImpl<$Res, $Val extends SessionResult>
 /// @nodoc
 abstract class _$$SessionOtpProvisionalImplCopyWith<$Res> {
   factory _$$SessionOtpProvisionalImplCopyWith(
-          _$SessionOtpProvisionalImpl value,
-          $Res Function(_$SessionOtpProvisionalImpl) then) =
-      __$$SessionOtpProvisionalImplCopyWithImpl<$Res>;
+    _$SessionOtpProvisionalImpl value,
+    $Res Function(_$SessionOtpProvisionalImpl) then,
+  ) = __$$SessionOtpProvisionalImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {String otpId,
-      OtpNotificationType? notificationType,
-      String? fromEmail,
-      String? tenantId});
+  $Res call({
+    String otpId,
+    OtpNotificationType? notificationType,
+    String? fromEmail,
+    String? tenantId,
+  });
 }
 
 /// @nodoc
 class __$$SessionOtpProvisionalImplCopyWithImpl<$Res>
     extends _$SessionResultCopyWithImpl<$Res, _$SessionOtpProvisionalImpl>
     implements _$$SessionOtpProvisionalImplCopyWith<$Res> {
-  __$$SessionOtpProvisionalImplCopyWithImpl(_$SessionOtpProvisionalImpl _value,
-      $Res Function(_$SessionOtpProvisionalImpl) _then)
-      : super(_value, _then);
+  __$$SessionOtpProvisionalImplCopyWithImpl(
+    _$SessionOtpProvisionalImpl _value,
+    $Res Function(_$SessionOtpProvisionalImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SessionResult
   /// with the given fields replaced by the non-null parameter values.
@@ -140,24 +151,26 @@ class __$$SessionOtpProvisionalImplCopyWithImpl<$Res>
     Object? fromEmail = freezed,
     Object? tenantId = freezed,
   }) {
-    return _then(_$SessionOtpProvisionalImpl(
-      otpId: null == otpId
-          ? _value.otpId
-          : otpId // ignore: cast_nullable_to_non_nullable
-              as String,
-      notificationType: freezed == notificationType
-          ? _value.notificationType
-          : notificationType // ignore: cast_nullable_to_non_nullable
-              as OtpNotificationType?,
-      fromEmail: freezed == fromEmail
-          ? _value.fromEmail
-          : fromEmail // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tenantId: freezed == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$SessionOtpProvisionalImpl(
+        otpId: null == otpId
+            ? _value.otpId
+            : otpId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        notificationType: freezed == notificationType
+            ? _value.notificationType
+            : notificationType // ignore: cast_nullable_to_non_nullable
+                  as OtpNotificationType?,
+        fromEmail: freezed == fromEmail
+            ? _value.fromEmail
+            : fromEmail // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        tenantId: freezed == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -165,13 +178,13 @@ class __$$SessionOtpProvisionalImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
-  const _$SessionOtpProvisionalImpl(
-      {required this.otpId,
-      this.notificationType,
-      this.fromEmail,
-      this.tenantId,
-      final String? $type})
-      : $type = $type ?? 'otpProvisional';
+  const _$SessionOtpProvisionalImpl({
+    required this.otpId,
+    this.notificationType,
+    this.fromEmail,
+    this.tenantId,
+    final String? $type,
+  }) : $type = $type ?? 'otpProvisional';
 
   factory _$SessionOtpProvisionalImpl.fromJson(Map<String, dynamic> json) =>
       _$$SessionOtpProvisionalImplFromJson(json);
@@ -218,20 +231,24 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
   @override
   @pragma('vm:prefer-inline')
   _$$SessionOtpProvisionalImplCopyWith<_$SessionOtpProvisionalImpl>
-      get copyWith => __$$SessionOtpProvisionalImplCopyWithImpl<
-          _$SessionOtpProvisionalImpl>(this, _$identity);
+  get copyWith =>
+      __$$SessionOtpProvisionalImplCopyWithImpl<_$SessionOtpProvisionalImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String otpId,
-            OtpNotificationType? notificationType,
-            String? fromEmail,
-            String? tenantId)
-        otpProvisional,
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )
+    otpProvisional,
     required TResult Function(String token, String? userId, String? tenantId)
-        token,
+    token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
     return otpProvisional(otpId, notificationType, fromEmail, tenantId);
@@ -240,9 +257,13 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String otpId, OtpNotificationType? notificationType,
-            String? fromEmail, String? tenantId)?
-        otpProvisional,
+    TResult? Function(
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )?
+    otpProvisional,
     TResult? Function(String token, String? userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
@@ -252,9 +273,13 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String otpId, OtpNotificationType? notificationType,
-            String? fromEmail, String? tenantId)?
-        otpProvisional,
+    TResult Function(
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )?
+    otpProvisional,
     TResult Function(String token, String? userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
@@ -301,11 +326,12 @@ class _$SessionOtpProvisionalImpl implements SessionOtpProvisional {
 }
 
 abstract class SessionOtpProvisional implements SessionResult {
-  const factory SessionOtpProvisional(
-      {required final String otpId,
-      final OtpNotificationType? notificationType,
-      final String? fromEmail,
-      final String? tenantId}) = _$SessionOtpProvisionalImpl;
+  const factory SessionOtpProvisional({
+    required final String otpId,
+    final OtpNotificationType? notificationType,
+    final String? fromEmail,
+    final String? tenantId,
+  }) = _$SessionOtpProvisionalImpl;
 
   factory SessionOtpProvisional.fromJson(Map<String, dynamic> json) =
       _$SessionOtpProvisionalImpl.fromJson;
@@ -319,14 +345,15 @@ abstract class SessionOtpProvisional implements SessionResult {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SessionOtpProvisionalImplCopyWith<_$SessionOtpProvisionalImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$SessionTokenImplCopyWith<$Res> {
   factory _$$SessionTokenImplCopyWith(
-          _$SessionTokenImpl value, $Res Function(_$SessionTokenImpl) then) =
-      __$$SessionTokenImplCopyWithImpl<$Res>;
+    _$SessionTokenImpl value,
+    $Res Function(_$SessionTokenImpl) then,
+  ) = __$$SessionTokenImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String token, String? userId, String? tenantId});
 }
@@ -336,8 +363,9 @@ class __$$SessionTokenImplCopyWithImpl<$Res>
     extends _$SessionResultCopyWithImpl<$Res, _$SessionTokenImpl>
     implements _$$SessionTokenImplCopyWith<$Res> {
   __$$SessionTokenImplCopyWithImpl(
-      _$SessionTokenImpl _value, $Res Function(_$SessionTokenImpl) _then)
-      : super(_value, _then);
+    _$SessionTokenImpl _value,
+    $Res Function(_$SessionTokenImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SessionResult
   /// with the given fields replaced by the non-null parameter values.
@@ -348,20 +376,22 @@ class __$$SessionTokenImplCopyWithImpl<$Res>
     Object? userId = freezed,
     Object? tenantId = freezed,
   }) {
-    return _then(_$SessionTokenImpl(
-      token: null == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tenantId: freezed == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$SessionTokenImpl(
+        token: null == token
+            ? _value.token
+            : token // ignore: cast_nullable_to_non_nullable
+                  as String,
+        userId: freezed == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        tenantId: freezed == tenantId
+            ? _value.tenantId
+            : tenantId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -369,16 +399,19 @@ class __$$SessionTokenImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionTokenImpl implements SessionToken {
-  const _$SessionTokenImpl(
-      {required this.token, this.userId, this.tenantId, final String? $type})
-      : $type = $type ?? 'token';
+  const _$SessionTokenImpl({
+    required this.token,
+    this.userId,
+    this.tenantId,
+    final String? $type,
+  }) : $type = $type ?? 'token';
 
   factory _$SessionTokenImpl.fromJson(Map<String, dynamic> json) =>
       _$$SessionTokenImplFromJson(json);
 
   @override
   final String token;
-// Maintain backward compatibility by providing a default null value for userId, as older core versions do not utilize this field.
+  // Maintain backward compatibility by providing a default null value for userId, as older core versions do not utilize this field.
   @override
   final String? userId;
   @override
@@ -419,13 +452,14 @@ class _$SessionTokenImpl implements SessionToken {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String otpId,
-            OtpNotificationType? notificationType,
-            String? fromEmail,
-            String? tenantId)
-        otpProvisional,
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )
+    otpProvisional,
     required TResult Function(String token, String? userId, String? tenantId)
-        token,
+    token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
     return token(this.token, userId, tenantId);
@@ -434,9 +468,13 @@ class _$SessionTokenImpl implements SessionToken {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String otpId, OtpNotificationType? notificationType,
-            String? fromEmail, String? tenantId)?
-        otpProvisional,
+    TResult? Function(
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )?
+    otpProvisional,
     TResult? Function(String token, String? userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
@@ -446,9 +484,13 @@ class _$SessionTokenImpl implements SessionToken {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String otpId, OtpNotificationType? notificationType,
-            String? fromEmail, String? tenantId)?
-        otpProvisional,
+    TResult Function(
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )?
+    otpProvisional,
     TResult Function(String token, String? userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),
@@ -495,16 +537,17 @@ class _$SessionTokenImpl implements SessionToken {
 }
 
 abstract class SessionToken implements SessionResult {
-  const factory SessionToken(
-      {required final String token,
-      final String? userId,
-      final String? tenantId}) = _$SessionTokenImpl;
+  const factory SessionToken({
+    required final String token,
+    final String? userId,
+    final String? tenantId,
+  }) = _$SessionTokenImpl;
 
   factory SessionToken.fromJson(Map<String, dynamic> json) =
       _$SessionTokenImpl.fromJson;
 
   String
-      get token; // Maintain backward compatibility by providing a default null value for userId, as older core versions do not utilize this field.
+  get token; // Maintain backward compatibility by providing a default null value for userId, as older core versions do not utilize this field.
   String? get userId;
   String? get tenantId;
 
@@ -518,8 +561,9 @@ abstract class SessionToken implements SessionResult {
 /// @nodoc
 abstract class _$$SessionDataImplCopyWith<$Res> {
   factory _$$SessionDataImplCopyWith(
-          _$SessionDataImpl value, $Res Function(_$SessionDataImpl) then) =
-      __$$SessionDataImplCopyWithImpl<$Res>;
+    _$SessionDataImpl value,
+    $Res Function(_$SessionDataImpl) then,
+  ) = __$$SessionDataImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Map<String, dynamic> data});
 }
@@ -529,22 +573,23 @@ class __$$SessionDataImplCopyWithImpl<$Res>
     extends _$SessionResultCopyWithImpl<$Res, _$SessionDataImpl>
     implements _$$SessionDataImplCopyWith<$Res> {
   __$$SessionDataImplCopyWithImpl(
-      _$SessionDataImpl _value, $Res Function(_$SessionDataImpl) _then)
-      : super(_value, _then);
+    _$SessionDataImpl _value,
+    $Res Function(_$SessionDataImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of SessionResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_$SessionDataImpl(
-      data: null == data
-          ? _value._data
-          : data // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-    ));
+  $Res call({Object? data = null}) {
+    return _then(
+      _$SessionDataImpl(
+        data: null == data
+            ? _value._data
+            : data // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>,
+      ),
+    );
   }
 }
 
@@ -552,10 +597,11 @@ class __$$SessionDataImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$SessionDataImpl implements SessionData {
-  const _$SessionDataImpl(
-      {required final Map<String, dynamic> data, final String? $type})
-      : _data = data,
-        $type = $type ?? 'data';
+  const _$SessionDataImpl({
+    required final Map<String, dynamic> data,
+    final String? $type,
+  }) : _data = data,
+       $type = $type ?? 'data';
 
   factory _$SessionDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$SessionDataImplFromJson(json);
@@ -601,13 +647,14 @@ class _$SessionDataImpl implements SessionData {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String otpId,
-            OtpNotificationType? notificationType,
-            String? fromEmail,
-            String? tenantId)
-        otpProvisional,
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )
+    otpProvisional,
     required TResult Function(String token, String? userId, String? tenantId)
-        token,
+    token,
     required TResult Function(Map<String, dynamic> data) data,
   }) {
     return data(this.data);
@@ -616,9 +663,13 @@ class _$SessionDataImpl implements SessionData {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String otpId, OtpNotificationType? notificationType,
-            String? fromEmail, String? tenantId)?
-        otpProvisional,
+    TResult? Function(
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )?
+    otpProvisional,
     TResult? Function(String token, String? userId, String? tenantId)? token,
     TResult? Function(Map<String, dynamic> data)? data,
   }) {
@@ -628,9 +679,13 @@ class _$SessionDataImpl implements SessionData {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String otpId, OtpNotificationType? notificationType,
-            String? fromEmail, String? tenantId)?
-        otpProvisional,
+    TResult Function(
+      String otpId,
+      OtpNotificationType? notificationType,
+      String? fromEmail,
+      String? tenantId,
+    )?
+    otpProvisional,
     TResult Function(String token, String? userId, String? tenantId)? token,
     TResult Function(Map<String, dynamic> data)? data,
     required TResult orElse(),

@@ -12,7 +12,8 @@ part of 'network_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$NetworkState {
@@ -32,13 +33,15 @@ mixin _$NetworkState {
 /// @nodoc
 abstract class $NetworkStateCopyWith<$Res> {
   factory $NetworkStateCopyWith(
-          NetworkState value, $Res Function(NetworkState) then) =
-      _$NetworkStateCopyWithImpl<$Res, NetworkState>;
+    NetworkState value,
+    $Res Function(NetworkState) then,
+  ) = _$NetworkStateCopyWithImpl<$Res, NetworkState>;
   @useResult
-  $Res call(
-      {List<IncomingCallTypeModel> incomingCallTypeModels,
-      List<IncomingCallType> incomingCallTypesRemainder,
-      bool smsFallbackEnabled});
+  $Res call({
+    List<IncomingCallTypeModel> incomingCallTypeModels,
+    List<IncomingCallType> incomingCallTypesRemainder,
+    bool smsFallbackEnabled,
+  });
 }
 
 /// @nodoc
@@ -60,20 +63,23 @@ class _$NetworkStateCopyWithImpl<$Res, $Val extends NetworkState>
     Object? incomingCallTypesRemainder = null,
     Object? smsFallbackEnabled = null,
   }) {
-    return _then(_value.copyWith(
-      incomingCallTypeModels: null == incomingCallTypeModels
-          ? _value.incomingCallTypeModels
-          : incomingCallTypeModels // ignore: cast_nullable_to_non_nullable
-              as List<IncomingCallTypeModel>,
-      incomingCallTypesRemainder: null == incomingCallTypesRemainder
-          ? _value.incomingCallTypesRemainder
-          : incomingCallTypesRemainder // ignore: cast_nullable_to_non_nullable
-              as List<IncomingCallType>,
-      smsFallbackEnabled: null == smsFallbackEnabled
-          ? _value.smsFallbackEnabled
-          : smsFallbackEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            incomingCallTypeModels: null == incomingCallTypeModels
+                ? _value.incomingCallTypeModels
+                : incomingCallTypeModels // ignore: cast_nullable_to_non_nullable
+                      as List<IncomingCallTypeModel>,
+            incomingCallTypesRemainder: null == incomingCallTypesRemainder
+                ? _value.incomingCallTypesRemainder
+                : incomingCallTypesRemainder // ignore: cast_nullable_to_non_nullable
+                      as List<IncomingCallType>,
+            smsFallbackEnabled: null == smsFallbackEnabled
+                ? _value.smsFallbackEnabled
+                : smsFallbackEnabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -81,14 +87,16 @@ class _$NetworkStateCopyWithImpl<$Res, $Val extends NetworkState>
 abstract class _$$NetworkStateImplCopyWith<$Res>
     implements $NetworkStateCopyWith<$Res> {
   factory _$$NetworkStateImplCopyWith(
-          _$NetworkStateImpl value, $Res Function(_$NetworkStateImpl) then) =
-      __$$NetworkStateImplCopyWithImpl<$Res>;
+    _$NetworkStateImpl value,
+    $Res Function(_$NetworkStateImpl) then,
+  ) = __$$NetworkStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<IncomingCallTypeModel> incomingCallTypeModels,
-      List<IncomingCallType> incomingCallTypesRemainder,
-      bool smsFallbackEnabled});
+  $Res call({
+    List<IncomingCallTypeModel> incomingCallTypeModels,
+    List<IncomingCallType> incomingCallTypesRemainder,
+    bool smsFallbackEnabled,
+  });
 }
 
 /// @nodoc
@@ -96,8 +104,9 @@ class __$$NetworkStateImplCopyWithImpl<$Res>
     extends _$NetworkStateCopyWithImpl<$Res, _$NetworkStateImpl>
     implements _$$NetworkStateImplCopyWith<$Res> {
   __$$NetworkStateImplCopyWithImpl(
-      _$NetworkStateImpl _value, $Res Function(_$NetworkStateImpl) _then)
-      : super(_value, _then);
+    _$NetworkStateImpl _value,
+    $Res Function(_$NetworkStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of NetworkState
   /// with the given fields replaced by the non-null parameter values.
@@ -108,33 +117,35 @@ class __$$NetworkStateImplCopyWithImpl<$Res>
     Object? incomingCallTypesRemainder = null,
     Object? smsFallbackEnabled = null,
   }) {
-    return _then(_$NetworkStateImpl(
-      incomingCallTypeModels: null == incomingCallTypeModels
-          ? _value._incomingCallTypeModels
-          : incomingCallTypeModels // ignore: cast_nullable_to_non_nullable
-              as List<IncomingCallTypeModel>,
-      incomingCallTypesRemainder: null == incomingCallTypesRemainder
-          ? _value._incomingCallTypesRemainder
-          : incomingCallTypesRemainder // ignore: cast_nullable_to_non_nullable
-              as List<IncomingCallType>,
-      smsFallbackEnabled: null == smsFallbackEnabled
-          ? _value.smsFallbackEnabled
-          : smsFallbackEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$NetworkStateImpl(
+        incomingCallTypeModels: null == incomingCallTypeModels
+            ? _value._incomingCallTypeModels
+            : incomingCallTypeModels // ignore: cast_nullable_to_non_nullable
+                  as List<IncomingCallTypeModel>,
+        incomingCallTypesRemainder: null == incomingCallTypesRemainder
+            ? _value._incomingCallTypesRemainder
+            : incomingCallTypesRemainder // ignore: cast_nullable_to_non_nullable
+                  as List<IncomingCallType>,
+        smsFallbackEnabled: null == smsFallbackEnabled
+            ? _value.smsFallbackEnabled
+            : smsFallbackEnabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$NetworkStateImpl extends _NetworkState {
-  const _$NetworkStateImpl(
-      {final List<IncomingCallTypeModel> incomingCallTypeModels = const [],
-      final List<IncomingCallType> incomingCallTypesRemainder = const [],
-      this.smsFallbackEnabled = false})
-      : _incomingCallTypeModels = incomingCallTypeModels,
-        _incomingCallTypesRemainder = incomingCallTypesRemainder,
-        super._();
+  const _$NetworkStateImpl({
+    final List<IncomingCallTypeModel> incomingCallTypeModels = const [],
+    final List<IncomingCallType> incomingCallTypesRemainder = const [],
+    this.smsFallbackEnabled = false,
+  }) : _incomingCallTypeModels = incomingCallTypeModels,
+       _incomingCallTypesRemainder = incomingCallTypesRemainder,
+       super._();
 
   final List<IncomingCallTypeModel> _incomingCallTypeModels;
   @override
@@ -171,20 +182,24 @@ class _$NetworkStateImpl extends _NetworkState {
         (other.runtimeType == runtimeType &&
             other is _$NetworkStateImpl &&
             const DeepCollectionEquality().equals(
-                other._incomingCallTypeModels, _incomingCallTypeModels) &&
+              other._incomingCallTypeModels,
+              _incomingCallTypeModels,
+            ) &&
             const DeepCollectionEquality().equals(
-                other._incomingCallTypesRemainder,
-                _incomingCallTypesRemainder) &&
+              other._incomingCallTypesRemainder,
+              _incomingCallTypesRemainder,
+            ) &&
             (identical(other.smsFallbackEnabled, smsFallbackEnabled) ||
                 other.smsFallbackEnabled == smsFallbackEnabled));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_incomingCallTypeModels),
-      const DeepCollectionEquality().hash(_incomingCallTypesRemainder),
-      smsFallbackEnabled);
+    runtimeType,
+    const DeepCollectionEquality().hash(_incomingCallTypeModels),
+    const DeepCollectionEquality().hash(_incomingCallTypesRemainder),
+    smsFallbackEnabled,
+  );
 
   /// Create a copy of NetworkState
   /// with the given fields replaced by the non-null parameter values.
@@ -196,10 +211,11 @@ class _$NetworkStateImpl extends _NetworkState {
 }
 
 abstract class _NetworkState extends NetworkState {
-  const factory _NetworkState(
-      {final List<IncomingCallTypeModel> incomingCallTypeModels,
-      final List<IncomingCallType> incomingCallTypesRemainder,
-      final bool smsFallbackEnabled}) = _$NetworkStateImpl;
+  const factory _NetworkState({
+    final List<IncomingCallTypeModel> incomingCallTypeModels,
+    final List<IncomingCallType> incomingCallTypesRemainder,
+    final bool smsFallbackEnabled,
+  }) = _$NetworkStateImpl;
   const _NetworkState._() : super._();
 
   @override

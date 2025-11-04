@@ -12,7 +12,8 @@ part of 'user_info.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 UserInfo _$UserInfoFromJson(Map<String, dynamic> json) {
   return _UserInfo.fromJson(json);
@@ -45,16 +46,17 @@ abstract class $UserInfoCopyWith<$Res> {
   factory $UserInfoCopyWith(UserInfo value, $Res Function(UserInfo) then) =
       _$UserInfoCopyWithImpl<$Res, UserInfo>;
   @useResult
-  $Res call(
-      {UserInfoStatus? status,
-      Balance? balance,
-      Numbers numbers,
-      String? email,
-      String? firstName,
-      String? lastName,
-      String? aliasName,
-      String? companyName,
-      String? timeZone});
+  $Res call({
+    UserInfoStatus? status,
+    Balance? balance,
+    Numbers numbers,
+    String? email,
+    String? firstName,
+    String? lastName,
+    String? aliasName,
+    String? companyName,
+    String? timeZone,
+  });
 
   $BalanceCopyWith<$Res>? get balance;
   $NumbersCopyWith<$Res> get numbers;
@@ -85,44 +87,47 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
     Object? companyName = freezed,
     Object? timeZone = freezed,
   }) {
-    return _then(_value.copyWith(
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as UserInfoStatus?,
-      balance: freezed == balance
-          ? _value.balance
-          : balance // ignore: cast_nullable_to_non_nullable
-              as Balance?,
-      numbers: null == numbers
-          ? _value.numbers
-          : numbers // ignore: cast_nullable_to_non_nullable
-              as Numbers,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      firstName: freezed == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      lastName: freezed == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      aliasName: freezed == aliasName
-          ? _value.aliasName
-          : aliasName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      companyName: freezed == companyName
-          ? _value.companyName
-          : companyName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      timeZone: freezed == timeZone
-          ? _value.timeZone
-          : timeZone // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            status: freezed == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as UserInfoStatus?,
+            balance: freezed == balance
+                ? _value.balance
+                : balance // ignore: cast_nullable_to_non_nullable
+                      as Balance?,
+            numbers: null == numbers
+                ? _value.numbers
+                : numbers // ignore: cast_nullable_to_non_nullable
+                      as Numbers,
+            email: freezed == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            firstName: freezed == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            lastName: freezed == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            aliasName: freezed == aliasName
+                ? _value.aliasName
+                : aliasName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            companyName: freezed == companyName
+                ? _value.companyName
+                : companyName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            timeZone: freezed == timeZone
+                ? _value.timeZone
+                : timeZone // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of UserInfo
@@ -154,20 +159,22 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
 abstract class _$$UserInfoImplCopyWith<$Res>
     implements $UserInfoCopyWith<$Res> {
   factory _$$UserInfoImplCopyWith(
-          _$UserInfoImpl value, $Res Function(_$UserInfoImpl) then) =
-      __$$UserInfoImplCopyWithImpl<$Res>;
+    _$UserInfoImpl value,
+    $Res Function(_$UserInfoImpl) then,
+  ) = __$$UserInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {UserInfoStatus? status,
-      Balance? balance,
-      Numbers numbers,
-      String? email,
-      String? firstName,
-      String? lastName,
-      String? aliasName,
-      String? companyName,
-      String? timeZone});
+  $Res call({
+    UserInfoStatus? status,
+    Balance? balance,
+    Numbers numbers,
+    String? email,
+    String? firstName,
+    String? lastName,
+    String? aliasName,
+    String? companyName,
+    String? timeZone,
+  });
 
   @override
   $BalanceCopyWith<$Res>? get balance;
@@ -180,8 +187,9 @@ class __$$UserInfoImplCopyWithImpl<$Res>
     extends _$UserInfoCopyWithImpl<$Res, _$UserInfoImpl>
     implements _$$UserInfoImplCopyWith<$Res> {
   __$$UserInfoImplCopyWithImpl(
-      _$UserInfoImpl _value, $Res Function(_$UserInfoImpl) _then)
-      : super(_value, _then);
+    _$UserInfoImpl _value,
+    $Res Function(_$UserInfoImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of UserInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -198,44 +206,46 @@ class __$$UserInfoImplCopyWithImpl<$Res>
     Object? companyName = freezed,
     Object? timeZone = freezed,
   }) {
-    return _then(_$UserInfoImpl(
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as UserInfoStatus?,
-      balance: freezed == balance
-          ? _value.balance
-          : balance // ignore: cast_nullable_to_non_nullable
-              as Balance?,
-      numbers: null == numbers
-          ? _value.numbers
-          : numbers // ignore: cast_nullable_to_non_nullable
-              as Numbers,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      firstName: freezed == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      lastName: freezed == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      aliasName: freezed == aliasName
-          ? _value.aliasName
-          : aliasName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      companyName: freezed == companyName
-          ? _value.companyName
-          : companyName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      timeZone: freezed == timeZone
-          ? _value.timeZone
-          : timeZone // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$UserInfoImpl(
+        status: freezed == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as UserInfoStatus?,
+        balance: freezed == balance
+            ? _value.balance
+            : balance // ignore: cast_nullable_to_non_nullable
+                  as Balance?,
+        numbers: null == numbers
+            ? _value.numbers
+            : numbers // ignore: cast_nullable_to_non_nullable
+                  as Numbers,
+        email: freezed == email
+            ? _value.email
+            : email // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        firstName: freezed == firstName
+            ? _value.firstName
+            : firstName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        lastName: freezed == lastName
+            ? _value.lastName
+            : lastName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        aliasName: freezed == aliasName
+            ? _value.aliasName
+            : aliasName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        companyName: freezed == companyName
+            ? _value.companyName
+            : companyName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        timeZone: freezed == timeZone
+            ? _value.timeZone
+            : timeZone // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -243,16 +253,17 @@ class __$$UserInfoImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$UserInfoImpl implements _UserInfo {
-  const _$UserInfoImpl(
-      {this.status,
-      this.balance,
-      required this.numbers,
-      this.email,
-      this.firstName,
-      this.lastName,
-      this.aliasName,
-      this.companyName,
-      this.timeZone});
+  const _$UserInfoImpl({
+    this.status,
+    this.balance,
+    required this.numbers,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.aliasName,
+    this.companyName,
+    this.timeZone,
+  });
 
   factory _$UserInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserInfoImplFromJson(json);
@@ -304,8 +315,18 @@ class _$UserInfoImpl implements _UserInfo {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, status, balance, numbers, email,
-      firstName, lastName, aliasName, companyName, timeZone);
+  int get hashCode => Object.hash(
+    runtimeType,
+    status,
+    balance,
+    numbers,
+    email,
+    firstName,
+    lastName,
+    aliasName,
+    companyName,
+    timeZone,
+  );
 
   /// Create a copy of UserInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -317,23 +338,22 @@ class _$UserInfoImpl implements _UserInfo {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserInfoImplToJson(
-      this,
-    );
+    return _$$UserInfoImplToJson(this);
   }
 }
 
 abstract class _UserInfo implements UserInfo {
-  const factory _UserInfo(
-      {final UserInfoStatus? status,
-      final Balance? balance,
-      required final Numbers numbers,
-      final String? email,
-      final String? firstName,
-      final String? lastName,
-      final String? aliasName,
-      final String? companyName,
-      final String? timeZone}) = _$UserInfoImpl;
+  const factory _UserInfo({
+    final UserInfoStatus? status,
+    final Balance? balance,
+    required final Numbers numbers,
+    final String? email,
+    final String? firstName,
+    final String? lastName,
+    final String? aliasName,
+    final String? companyName,
+    final String? timeZone,
+  }) = _$UserInfoImpl;
 
   factory _UserInfo.fromJson(Map<String, dynamic> json) =
       _$UserInfoImpl.fromJson;

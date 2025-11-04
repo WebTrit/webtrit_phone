@@ -35,15 +35,13 @@ Map<String, dynamic> _$$CdrRecordImplToJson(_$CdrRecordImpl instance) =>
     };
 
 _$CdrHistoryResponseImpl _$$CdrHistoryResponseImplFromJson(
-        Map<String, dynamic> json) =>
-    _$CdrHistoryResponseImpl(
-      items: (json['items'] as List<dynamic>)
-          .map((e) => CdrRecord.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  Map<String, dynamic> json,
+) => _$CdrHistoryResponseImpl(
+  items: (json['items'] as List<dynamic>)
+      .map((e) => CdrRecord.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$$CdrHistoryResponseImplToJson(
-        _$CdrHistoryResponseImpl instance) =>
-    <String, dynamic>{
-      'items': instance.items,
-    };
+  _$CdrHistoryResponseImpl instance,
+) => <String, dynamic>{'items': instance.items};
