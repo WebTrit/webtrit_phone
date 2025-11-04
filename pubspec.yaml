@@ -68,7 +68,7 @@ dependencies:
   provider: ^6.1.5
   pub_semver: ^2.1.4
   sdp_transform: ^0.3.2
-  share_plus: ^10.0.3
+  share_plus: ^12.0.1
   shared_preferences: ^2.2.3
   stream_transform: ^2.1.0
   url_launcher: ^6.2.6
