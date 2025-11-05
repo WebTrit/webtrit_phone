@@ -898,7 +898,7 @@ class ChatConversationJoin extends UserChannelEvent with EquatableMixin {
   final int chatId;
 
   @override
-  List<Object> get props => [chatId];
+  List<Object?> get props => [chatId];
 
   @override
   bool get stringify => true;
@@ -909,7 +909,7 @@ class ChatConversationLeave extends UserChannelEvent with EquatableMixin {
   final int chatId;
 
   @override
-  List<Object> get props => [chatId];
+  List<Object?> get props => [chatId];
 
   @override
   bool get stringify => true;
@@ -920,7 +920,7 @@ class SmsConversationJoin extends UserChannelEvent with EquatableMixin {
   final int conversationId;
 
   @override
-  List<Object> get props => [conversationId];
+  List<Object?> get props => [conversationId];
 
   @override
   bool get stringify => true;
@@ -931,7 +931,7 @@ class SmsConversationLeave extends UserChannelEvent with EquatableMixin {
   final int conversationId;
 
   @override
-  List<Object> get props => [conversationId];
+  List<Object?> get props => [conversationId];
 
   @override
   bool get stringify => true;
@@ -967,7 +967,7 @@ class ChatChannelInfoUpdate extends ChatChannelEvent with EquatableMixin {
   final Chat chat;
 
   @override
-  List<Object> get props => [chat];
+  List<Object?> get props => [chat];
 
   @override
   bool get stringify => true;
@@ -978,7 +978,7 @@ class ChatChannelMessageUpdate extends ChatChannelEvent with EquatableMixin {
   final ChatMessage message;
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   bool get stringify => true;
@@ -989,7 +989,7 @@ class ChatChannelCursorSet extends ChatChannelEvent with EquatableMixin {
   final ChatMessageReadCursor cursor;
 
   @override
-  List<Object> get props => [cursor];
+  List<Object?> get props => [cursor];
 
   @override
   bool get stringify => true;
@@ -1000,7 +1000,7 @@ class ChatChannelTyping extends ChatChannelEvent with EquatableMixin {
   final String userId;
 
   @override
-  List<Object> get props => [userId];
+  List<Object?> get props => [userId];
 
   @override
   bool get stringify => true;
@@ -1040,7 +1040,7 @@ class SmsChannelInfoUpdate extends SmsChannelEvent with EquatableMixin {
   final SmsConversation conversation;
 
   @override
-  List<Object> get props => [conversation];
+  List<Object?> get props => [conversation];
 
   @override
   bool get stringify => true;
@@ -1051,7 +1051,7 @@ class SmsChannelMessageUpdate extends SmsChannelEvent with EquatableMixin {
   final SmsMessage message;
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   bool get stringify => true;
@@ -1062,7 +1062,7 @@ class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
   final SmsMessageReadCursor cursor;
 
   @override
-  List<Object> get props => [cursor];
+  List<Object?> get props => [cursor];
 
   @override
   bool get stringify => true;
@@ -1073,7 +1073,7 @@ class SmsChannelTyping extends ChatChannelEvent with EquatableMixin {
   final String number;
 
   @override
-  List<Object> get props => [number];
+  List<Object?> get props => [number];
 
   @override
   bool get stringify => true;
@@ -1108,7 +1108,7 @@ class MessagingSocketException with EquatableMixin implements Exception {
   String toString() => 'MessagingSocketException:\n$message\ntopic:$topic\ncode:$code';
 
   @override
-  List<Object> get props => [message, details, topic];
+  List<Object?> get props => [message, details, topic];
 }
 
 const kPhxChannelClosedCode = 'channel_closed';

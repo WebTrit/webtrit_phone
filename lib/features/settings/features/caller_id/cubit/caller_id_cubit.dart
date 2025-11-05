@@ -18,7 +18,7 @@ class CallerIdSettingsState extends Equatable {
   final List<String> additionalNumbers;
 
   @override
-  List<Object> get props => [settings, mainNumber, additionalNumbers];
+  List<Object?> get props => [settings, mainNumber, additionalNumbers];
 
   @override
   String toString() {

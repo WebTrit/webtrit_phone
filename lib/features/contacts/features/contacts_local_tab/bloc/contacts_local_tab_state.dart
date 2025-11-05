@@ -21,11 +21,7 @@ class ContactsLocalTabState extends Equatable {
   final bool searching;
 
   @override
-  List<Object> get props => [
-        status,
-        EquatablePropToString(contacts, listPropToString),
-        searching,
-      ];
+  List<Object?> get props => [status, EquatablePropToString.list(contacts), searching];
 
   ContactsLocalTabState copyWith({
     ContactsLocalTabStatus? status,

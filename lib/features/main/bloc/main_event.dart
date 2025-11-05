@@ -4,7 +4,7 @@ sealed class MainBlocEvent extends Equatable {
   const MainBlocEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class MainBlocInit extends MainBlocEvent {
@@ -13,20 +13,18 @@ class MainBlocInit extends MainBlocEvent {
 
 class MainBlocSystemInfoArrived extends MainBlocEvent {
   final WebtritSystemInfo systemInfo;
+
   const MainBlocSystemInfoArrived(this.systemInfo);
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([systemInfo], listPropToString),
-  ];
+  List<Object?> get props => [systemInfo];
 }
 
 class MainBlocAppUpdatePressed extends MainBlocEvent {
   final Uri storeUrl;
+
   const MainBlocAppUpdatePressed(this.storeUrl);
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([storeUrl], listPropToString),
-  ];
+  List<Object?> get props => [storeUrl];
 }

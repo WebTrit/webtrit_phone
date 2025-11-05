@@ -9,7 +9,7 @@ class SmsConversationsState with EquatableMixin {
   factory SmsConversationsState.initial() => SmsConversationsState([], true);
 
   @override
-  List<Object> get props => [conversations, initialising];
+  List<Object?> get props => [conversations, initialising];
 
   SmsConversationsState copyWith({List<(SmsConversation, SmsMessage?)>? conversations, bool? initialising}) {
     return SmsConversationsState(conversations ?? this.conversations, initialising ?? this.initialising);

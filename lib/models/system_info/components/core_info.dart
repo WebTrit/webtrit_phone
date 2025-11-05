@@ -9,7 +9,7 @@ class CoreInfo with EquatableMixin {
   final Version version;
 
   @override
-  List<Object> get props => [version];
+  List<Object?> get props => [version];
 
   @override
   bool get stringify => true;

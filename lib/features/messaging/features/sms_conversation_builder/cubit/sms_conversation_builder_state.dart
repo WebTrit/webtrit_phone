@@ -15,7 +15,7 @@ final class SmsCBInitializing extends SmsCBState {
   const SmsCBInitializing();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
   @override
   bool get stringify => true;
@@ -30,7 +30,7 @@ final class SmsCBInitializingError extends SmsCBState {
   final Object error;
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [error];
 
   @override
   bool get stringify => true;
@@ -89,7 +89,7 @@ class SmsCBCommon extends SmsCBState {
   }
 
   @override
-  List<Object> get props => [contacts, searchFilter, parsedNumber];
+  List<Object?> get props => [contacts, searchFilter, parsedNumber];
 
   @override
   bool get stringify => true;
@@ -110,7 +110,7 @@ final class SmsCBWrongNumberSelected extends SmsCBCommon {
   }
 
   @override
-  List<Object> get props => [recipientNumber, contacts, searchFilter, parsedNumber];
+  List<Object?> get props => [recipientNumber, contacts, searchFilter, parsedNumber];
 
   @override
   bool get stringify => true;
@@ -135,7 +135,7 @@ final class SmsCBUserNumberConfirmationNeeded extends SmsCBCommon {
   }
 
   @override
-  List<Object> get props => [recipientCreds, userNumbers, contacts, searchFilter, parsedNumber];
+  List<Object?> get props => [recipientCreds, userNumbers, contacts, searchFilter, parsedNumber];
 
   @override
   bool get stringify => true;
