@@ -68,7 +68,8 @@ class TextFieldConfig with _$TextFieldConfig {
   final String keyboardType;
 
   /// Deserializes a [TextFieldConfig] from JSON.
-  factory TextFieldConfig.fromJson(Map<String, Object?> json) => _$TextFieldConfigFromJson(json);
+  factory TextFieldConfig.fromJson(Map<String, Object?> json) =>
+      _$TextFieldConfigFromJson(json);
 
   /// Serializes this [TextFieldConfig] to JSON.
   Map<String, Object?> toJson() => _$TextFieldConfigToJson(this);

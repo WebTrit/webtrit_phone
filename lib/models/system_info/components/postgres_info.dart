@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class PostgresInfo with EquatableMixin {
-  PostgresInfo({
-    this.version,
-  });
+  PostgresInfo({this.version});
 
   final String? version;
 

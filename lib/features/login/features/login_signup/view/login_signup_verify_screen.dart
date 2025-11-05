@@ -13,10 +13,7 @@ export 'login_signup_verify_screen_style.dart';
 export 'login_signup_verify_screen_styles.dart';
 
 class LoginSignupVerifyScreen extends StatelessWidget {
-  const LoginSignupVerifyScreen({
-    super.key,
-    required this.bodySafeAreaSides,
-  });
+  const LoginSignupVerifyScreen({super.key, required this.bodySafeAreaSides});
 
   final Set<SafeAreaSide> bodySafeAreaSides;
 
@@ -37,12 +34,13 @@ class LoginSignupVerifyScreen extends StatelessWidget {
         final isOtpNotificationEmail = sessionOtpProvisional.notificationType?.isEmail ?? false;
         final otpFromEmail = sessionOtpProvisional.fromEmail;
 
-        final signupVerifyPreDescriptionText =
-            context.l10n.login_Text_signupVerifyPreDescriptionEmail(state.signupEmailInput.value);
+        final signupVerifyPreDescriptionText = context.l10n.login_Text_signupVerifyPreDescriptionEmail(
+          state.signupEmailInput.value,
+        );
         final signupVerifyPostDescriptionText = isOtpNotificationEmail
             ? otpFromEmail == null
-                ? context.l10n.login_Text_signupVerifyPostDescriptionGeneral
-                : context.l10n.login_Text_signupVerifyPostDescriptionFromEmail(otpFromEmail)
+                  ? context.l10n.login_Text_signupVerifyPostDescriptionGeneral
+                  : context.l10n.login_Text_signupVerifyPostDescriptionFromEmail(otpFromEmail)
             : '';
 
         return Container(
@@ -57,9 +55,7 @@ class LoginSignupVerifyScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (signupVerifyPreDescriptionText.isNotEmpty) ...[
-                  Description(
-                    text: signupVerifyPreDescriptionText,
-                  ),
+                  Description(text: signupVerifyPreDescriptionText),
                   const SizedBox(height: kInset / 2),
                 ],
                 TextFormField(
@@ -73,18 +69,13 @@ class LoginSignupVerifyScreen extends StatelessWidget {
                     errorMaxLines: 3,
                   ),
                   keyboardType: TextInputType.number,
-                  autofillHints: const [
-                    AutofillHints.oneTimeCode,
-                    AutofillHints.password,
-                  ],
+                  autofillHints: const [AutofillHints.oneTimeCode, AutofillHints.password],
                   onChanged: context.read<LoginCubit>().signupCodeInputChanged,
                   onFieldSubmitted: !state.signupCodeInput.isValid ? null : (_) => _onSubmitted(context),
                 ),
                 if (signupVerifyPostDescriptionText.isNotEmpty) ...[
                   const SizedBox(height: kInset / 8),
-                  Description(
-                    text: signupVerifyPostDescriptionText,
-                  ),
+                  Description(text: signupVerifyPostDescriptionText),
                 ],
                 const Spacer(),
                 const SizedBox(height: kInset),
@@ -113,8 +104,9 @@ class LoginSignupVerifyScreen extends StatelessWidget {
                     const SizedBox(height: kInset / 4),
                     ElevatedButton(
                       key: signupVerifyButtonKey,
-                      onPressed:
-                          state.processing || !state.signupCodeInput.isValid ? null : () => _onSubmitted(context),
+                      onPressed: state.processing || !state.signupCodeInput.isValid
+                          ? null
+                          : () => _onSubmitted(context),
                       style: elevatedButtonStyles?.primary,
                       child: !state.processing
                           ? Text(context.l10n.login_Button_signupVerifyProceed)

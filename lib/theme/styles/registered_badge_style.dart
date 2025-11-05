@@ -4,11 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class RegisteredBadgeStyle with Diagnosticable {
-  const RegisteredBadgeStyle({
-    this.registeredColor,
-    this.unregisteredColor,
-    this.sizeFactor,
-  });
+  const RegisteredBadgeStyle({this.registeredColor, this.unregisteredColor, this.sizeFactor});
 
   final Color? registeredColor;
   final Color? unregisteredColor;
@@ -27,11 +23,7 @@ class RegisteredBadgeStyle with Diagnosticable {
     );
   }
 
-  static RegisteredBadgeStyle? lerp(
-    RegisteredBadgeStyle? a,
-    RegisteredBadgeStyle? b,
-    double t,
-  ) {
+  static RegisteredBadgeStyle? lerp(RegisteredBadgeStyle? a, RegisteredBadgeStyle? b, double t) {
     if (identical(a, b)) return a;
     if (a == null && b == null) return null;
 

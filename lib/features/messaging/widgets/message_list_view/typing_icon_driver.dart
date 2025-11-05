@@ -27,10 +27,7 @@ class _TypingIconDriverState extends State<TypingIconDriver> with SingleTickerPr
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        return Transform.rotate(
-          angle: _controller.value * 2 * 3.14,
-          child: child,
-        );
+        return Transform.rotate(angle: _controller.value * 2 * 3.14, child: child);
       },
       child: const Icon(Icons.hdr_weak_sharp, size: 12, color: Colors.grey),
     );

@@ -81,7 +81,8 @@ class TextStyleConfig with _$TextStyleConfig {
   @override
   final String? backgroundColor;
 
-  factory TextStyleConfig.fromJson(Map<String, Object?> json) => _$TextStyleConfigFromJson(json);
+  factory TextStyleConfig.fromJson(Map<String, Object?> json) =>
+      _$TextStyleConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$TextStyleConfigToJson(this);
 }
@@ -98,7 +99,8 @@ class FontWeightConfig with _$FontWeightConfig {
   @override
   final int weight;
 
-  factory FontWeightConfig.fromJson(Map<String, Object?> json) => _$FontWeightConfigFromJson(json);
+  factory FontWeightConfig.fromJson(Map<String, Object?> json) =>
+      _$FontWeightConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$FontWeightConfigToJson(this);
 }
@@ -117,7 +119,8 @@ class FontStyleConfig with _$FontStyleConfig {
   @override
   final String value;
 
-  factory FontStyleConfig.fromJson(Map<String, Object?> json) => _$FontStyleConfigFromJson(json);
+  factory FontStyleConfig.fromJson(Map<String, Object?> json) =>
+      _$FontStyleConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$FontStyleConfigToJson(this);
 }
@@ -137,7 +140,8 @@ class TextDecorationConfig with _$TextDecorationConfig {
   @override
   final List<String> types;
 
-  factory TextDecorationConfig.fromJson(Map<String, Object?> json) => _$TextDecorationConfigFromJson(json);
+  factory TextDecorationConfig.fromJson(Map<String, Object?> json) =>
+      _$TextDecorationConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$TextDecorationConfigToJson(this);
 }

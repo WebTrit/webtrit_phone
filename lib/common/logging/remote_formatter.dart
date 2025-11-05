@@ -20,8 +20,10 @@ class RemoteFormatter extends LogRecordFormatter {
         sb.writeln();
         sb.write(stack);
       }
-      final causedBy =
-          DefaultLogRecordFormatter.causedByFetchers.map((e) => e(error)).where((x) => x != null).firstOrNull;
+      final causedBy = DefaultLogRecordFormatter.causedByFetchers
+          .map((e) => e(error))
+          .where((x) => x != null)
+          .firstOrNull;
       if (causedBy != null) {
         sb.write('### Caused by: ');
         formatErrorAndStackTrace(causedBy.error, causedBy.stack);

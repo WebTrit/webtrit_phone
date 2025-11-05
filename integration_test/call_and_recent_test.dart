@@ -20,41 +20,38 @@ main() {
   const callNumber = IntegrationTestEnvironmentConfig.CALL_NUMBER_A;
   const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
 
-  patrolTest(
-    'Should make simple call and verify recents',
-    ($) async {
-      await bootstrap();
-      await pumpRootAndWaitUntilVisible($);
+  patrolTest('Should make simple call and verify recents', ($) async {
+    await bootstrap();
+    await pumpRootAndWaitUntilVisible($);
 
-      // Login if not.
-      if ($(LoginModeSelectScreen).visible) {
-        await loginByMethod($, defaultLoginMethod);
-        // Wait some time for components loading and session establishment.
-        await pumpFor(const Duration(seconds: 5), $);
-      }
-
-      // Make a call and check if it is active.
-      await $(MainFlavor.keypad.toNavBarKey()).tap();
-      await enterKeypadNumber($, callNumber);
-      await $(actionPadStartKey).tap();
-      await $(CallActiveScaffold).waitUntilVisible();
+    // Login if not.
+    if ($(LoginModeSelectScreen).visible) {
+      await loginByMethod($, defaultLoginMethod);
+      // Wait some time for components loading and session establishment.
       await pumpFor(const Duration(seconds: 5), $);
-      expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active');
+    }
 
-      // Hangup call and check if it is done.
-      await $(callActionsHangupKey).tap();
-      await pumpFor(const Duration(seconds: 2), $);
-      expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended');
+    // Make a call and check if it is active.
+    await $(MainFlavor.keypad.toNavBarKey()).tap();
+    await enterKeypadNumber($, callNumber);
+    await $(actionPadStartKey).tap();
+    await $(CallActiveScaffold).waitUntilVisible();
+    await pumpFor(const Duration(seconds: 5), $);
+    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active');
 
-      // Check if the call is in the recents list.
-      await $(MainFlavor.recents.toNavBarKey()).tap();
-      await $.pumpAndTrySettle();
-      final recentNumbr = $(recentsTileKey).$(Row).$(callNumber);
-      expect(recentNumbr, findsOneWidget, reason: 'Should contain number in recents list');
-      final recentIcon = $(recentsTileKey).$(Row).$(Icons.call_made);
-      expect(recentIcon, findsOneWidget, reason: 'Should contain succesfull outgoing call icon');
+    // Hangup call and check if it is done.
+    await $(callActionsHangupKey).tap();
+    await pumpFor(const Duration(seconds: 2), $);
+    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended');
 
-      await Future.delayed(crossCallSleep);
-    },
-  );
+    // Check if the call is in the recents list.
+    await $(MainFlavor.recents.toNavBarKey()).tap();
+    await $.pumpAndTrySettle();
+    final recentNumbr = $(recentsTileKey).$(Row).$(callNumber);
+    expect(recentNumbr, findsOneWidget, reason: 'Should contain number in recents list');
+    final recentIcon = $(recentsTileKey).$(Row).$(Icons.call_made);
+    expect(recentIcon, findsOneWidget, reason: 'Should contain succesfull outgoing call icon');
+
+    await Future.delayed(crossCallSleep);
+  });
 }

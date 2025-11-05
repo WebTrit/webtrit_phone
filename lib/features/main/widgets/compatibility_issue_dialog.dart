@@ -41,10 +41,7 @@ class CompatibilityIssueDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        context.l10n.main_CompatibilityIssueDialog_title,
-        textAlign: TextAlign.center,
-      ),
+      title: Text(context.l10n.main_CompatibilityIssueDialog_title, textAlign: TextAlign.center),
       content: Text(
         context.l10n.main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
           currentVersion.toString(),
@@ -53,14 +50,8 @@ class CompatibilityIssueDialog extends StatelessWidget {
       ),
       actions: [
         if (onUpdatePressed != null)
-          TextButton(
-            onPressed: onUpdatePressed,
-            child: Text(context.l10n.main_CompatibilityIssueDialogActions_update),
-          ),
-        TextButton(
-          onPressed: onLogoutPressed,
-          child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout),
-        ),
+          TextButton(onPressed: onUpdatePressed, child: Text(context.l10n.main_CompatibilityIssueDialogActions_update)),
+        TextButton(onPressed: onLogoutPressed, child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout)),
       ],
     );
   }

@@ -10,7 +10,12 @@ part 'system_info.g.dart';
 @freezed
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class SystemInfo with _$SystemInfo {
-  const SystemInfo({required this.core, required this.postgres, this.adapter, this.janus, this.gorush});
+  const SystemInfo(
+      {required this.core,
+      required this.postgres,
+      this.adapter,
+      this.janus,
+      this.gorush});
 
   @override
   final CoreInfo core;
@@ -27,7 +32,8 @@ class SystemInfo with _$SystemInfo {
   @override
   final GorushInfo? gorush;
 
-  factory SystemInfo.fromJson(Map<String, Object?> json) => _$SystemInfoFromJson(json);
+  factory SystemInfo.fromJson(Map<String, Object?> json) =>
+      _$SystemInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$SystemInfoToJson(this);
 }
@@ -41,7 +47,8 @@ class CoreInfo with _$CoreInfo {
   @VersionConverter()
   final Version version;
 
-  factory CoreInfo.fromJson(Map<String, Object?> json) => _$CoreInfoFromJson(json);
+  factory CoreInfo.fromJson(Map<String, Object?> json) =>
+      _$CoreInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$CoreInfoToJson(this);
 }
@@ -54,7 +61,8 @@ class PostgresInfo with _$PostgresInfo {
   @override
   final String? version;
 
-  factory PostgresInfo.fromJson(Map<String, Object?> json) => _$PostgresInfoFromJson(json);
+  factory PostgresInfo.fromJson(Map<String, Object?> json) =>
+      _$PostgresInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$PostgresInfoToJson(this);
 }
@@ -76,7 +84,8 @@ class AdapterInfo with _$AdapterInfo {
   @override
   final Map<String, dynamic>? custom;
 
-  factory AdapterInfo.fromJson(Map<String, Object?> json) => _$AdapterInfoFromJson(json);
+  factory AdapterInfo.fromJson(Map<String, Object?> json) =>
+      _$AdapterInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$AdapterInfoToJson(this);
 }
@@ -95,7 +104,8 @@ class JanusInfo with _$JanusInfo {
   @override
   final String? version;
 
-  factory JanusInfo.fromJson(Map<String, Object?> json) => _$JanusInfoFromJson(json);
+  factory JanusInfo.fromJson(Map<String, Object?> json) =>
+      _$JanusInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$JanusInfoToJson(this);
 }
@@ -108,7 +118,8 @@ class GorushInfo with _$GorushInfo {
   @override
   final String? version;
 
-  factory GorushInfo.fromJson(Map<String, Object?> json) => _$GorushInfoFromJson(json);
+  factory GorushInfo.fromJson(Map<String, Object?> json) =>
+      _$GorushInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$GorushInfoToJson(this);
 }
@@ -121,7 +132,8 @@ class Transports with _$Transports {
   @override
   final Websocket? websocket;
 
-  factory Transports.fromJson(Map<String, Object?> json) => _$TransportsFromJson(json);
+  factory Transports.fromJson(Map<String, Object?> json) =>
+      _$TransportsFromJson(json);
 
   Map<String, Object?> toJson() => _$TransportsToJson(this);
 }
@@ -134,7 +146,8 @@ class Websocket with _$Websocket {
   @override
   final String? version;
 
-  factory Websocket.fromJson(Map<String, Object?> json) => _$WebsocketFromJson(json);
+  factory Websocket.fromJson(Map<String, Object?> json) =>
+      _$WebsocketFromJson(json);
 
   Map<String, Object?> toJson() => _$WebsocketToJson(this);
 }
@@ -147,7 +160,8 @@ class Plugins with _$Plugins {
   @override
   final SipVersion? sip;
 
-  factory Plugins.fromJson(Map<String, Object?> json) => _$PluginsFromJson(json);
+  factory Plugins.fromJson(Map<String, Object?> json) =>
+      _$PluginsFromJson(json);
 
   Map<String, Object?> toJson() => _$PluginsToJson(this);
 }
@@ -160,7 +174,8 @@ class SipVersion with _$SipVersion {
   @override
   final String? version;
 
-  factory SipVersion.fromJson(Map<String, Object?> json) => _$SipVersionFromJson(json);
+  factory SipVersion.fromJson(Map<String, Object?> json) =>
+      _$SipVersionFromJson(json);
 
   Map<String, Object?> toJson() => _$SipVersionToJson(this);
 }

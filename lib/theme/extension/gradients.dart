@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Gradients extends ThemeExtension<Gradients> {
-  const Gradients({
-    required this.tab,
-  });
+  const Gradients({required this.tab});
 
   final Gradient? tab;
 
   @override
-  ThemeExtension<Gradients> copyWith({
-    Gradient? tab,
-  }) {
-    return Gradients(
-      tab: tab ?? this.tab,
-    );
+  ThemeExtension<Gradients> copyWith({Gradient? tab}) {
+    return Gradients(tab: tab ?? this.tab);
   }
 
   @override
@@ -21,8 +15,6 @@ class Gradients extends ThemeExtension<Gradients> {
     if (other is! Gradients) {
       return this;
     }
-    return Gradients(
-      tab: Gradient.lerp(tab, other.tab, t),
-    );
+    return Gradients(tab: Gradient.lerp(tab, other.tab, t));
   }
 }

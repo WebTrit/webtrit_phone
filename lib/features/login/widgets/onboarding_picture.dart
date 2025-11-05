@@ -16,17 +16,10 @@ class OnboardingPicture extends StatelessWidget {
       height: mediaQueryData.size.height / 2.5,
       decoration: BoxDecoration(
         color: themeData.colorScheme.surface,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(20.0),
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
       ),
       child: Center(
-        child: loginOnboarding?.svg(
-              height: loginOnboardingHeight,
-            ) ??
-            SizedBox(
-              height: loginOnboardingHeight,
-            ),
+        child: loginOnboarding?.svg(height: loginOnboardingHeight) ?? SizedBox(height: loginOnboardingHeight),
       ),
     );
   }

@@ -22,12 +22,7 @@ class KeypadScreenPage extends StatelessWidget {
       videoEnabled: featureAccess.callFeature.callConfig.isVideoCallEnabled,
       transferEnabled: featureAccess.callFeature.callConfig.isBlindTransferEnabled,
     );
-    final provider = BlocProvider(
-      create: (context) => KeypadCubit(
-        context.read<ContactsRepository>(),
-      ),
-      child: widget,
-    );
+    final provider = BlocProvider(create: (context) => KeypadCubit(context.read<ContactsRepository>()), child: widget);
     return provider;
   }
 }

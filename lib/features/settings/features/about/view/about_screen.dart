@@ -17,10 +17,7 @@ export 'about_screen_style.dart';
 export 'about_screen_styles.dart';
 
 class AboutScreen extends StatefulWidget {
-  const AboutScreen({
-    super.key,
-    this.style,
-  });
+  const AboutScreen({super.key, this.style});
 
   final AboutScreenStyle? style;
 
@@ -52,56 +49,29 @@ class _AboutScreenState extends State<AboutScreen> {
         final logoHeight = themeData.textTheme.displayLarge!.fontSize! * 1.5;
         final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
         return Scaffold(
-          appBar: AppBar(
-            title: Text(context.l10n.settings_ListViewTileTitle_about),
-          ),
+          appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_about)),
           body: Padding(
             padding: const EdgeInsets.all(16),
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (logo != null)
-                    logo.svg(
-                      height: logoHeight,
-                    ),
-                  Text(
-                    state.appName,
-                    style: themeData.textTheme.displaySmall,
-                    textAlign: TextAlign.center,
-                  ),
+                  if (logo != null) logo.svg(height: logoHeight),
+                  Text(state.appName, style: themeData.textTheme.displaySmall, textAlign: TextAlign.center),
                   Text(state.packageName),
-                  SizedBox(
-                    height: delimiterHeight,
-                  ),
-                  Text(
-                    context.l10n.settings_AboutText_AppVersion,
-                  ),
+                  SizedBox(height: delimiterHeight),
+                  Text(context.l10n.settings_AboutText_AppVersion),
                   GestureDetector(
                     onTap: _multiTapLoggingTrigger.tap,
-                    child: Text(
-                      state.appVersion,
-                      style: themeData.textTheme.titleLarge,
-                    ),
+                    child: Text(state.appVersion, style: themeData.textTheme.titleLarge),
                   ),
-                  SizedBox(
-                    height: delimiterHeight,
-                  ),
-                  Text(
-                    context.l10n.settings_AboutText_StoreVersion,
-                  ),
-                  Text(
-                    state.storeVersion,
-                    style: themeData.textTheme.titleLarge,
-                  ),
-                  SizedBox(
-                    height: delimiterHeight,
-                  ),
+                  SizedBox(height: delimiterHeight),
+                  Text(context.l10n.settings_AboutText_StoreVersion),
+                  Text(state.storeVersion, style: themeData.textTheme.titleLarge),
+                  SizedBox(height: delimiterHeight),
                   CopyToClipboard(
                     data: state.appIdentifier,
-                    child: Text(
-                      context.l10n.settings_AboutText_AppSessionIdentifier,
-                    ),
+                    child: Text(context.l10n.settings_AboutText_AppSessionIdentifier),
                   ),
                   CopyToClipboard(
                     data: state.appIdentifier,
@@ -112,14 +82,10 @@ class _AboutScreenState extends State<AboutScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  SizedBox(
-                    height: delimiterHeight,
-                  ),
+                  SizedBox(height: delimiterHeight),
                   CopyToClipboard(
                     data: state.fcmPushToken,
-                    child: Text(
-                      context.l10n.settings_AboutText_FCMPushNotificationToken,
-                    ),
+                    child: Text(context.l10n.settings_AboutText_FCMPushNotificationToken),
                   ),
                   CopyToClipboard(
                     data: state.fcmPushToken,
@@ -130,15 +96,10 @@ class _AboutScreenState extends State<AboutScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  SizedBox(
-                    height: delimiterHeight,
-                  ),
+                  SizedBox(height: delimiterHeight),
                   CopyToClipboard(
                     data: state.coreUrl.toString(),
-                    child: Text(
-                      state.coreUrl.toString(),
-                      textAlign: TextAlign.center,
-                    ),
+                    child: Text(state.coreUrl.toString(), textAlign: TextAlign.center),
                   ),
                   TextButton.icon(
                     onPressed: () => _showEmbeddedLinksDialog(context, state.embeddedLinks),
@@ -158,10 +119,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         style: themeData.textTheme.bodyMedium,
                       ),
                       if (state.progress)
-                        SizedCircularProgressIndicator(
-                          size: themeData.textTheme.bodyMedium!.fontSize!,
-                          strokeWidth: 2,
-                        ),
+                        SizedCircularProgressIndicator(size: themeData.textTheme.bodyMedium!.fontSize!, strokeWidth: 2),
                     ],
                   ),
                 ],
@@ -187,18 +145,13 @@ class _AboutScreenState extends State<AboutScreen> {
               final url = links[index];
               return CopyToClipboard(
                 data: url,
-                child: ListTile(
-                  title: Text(url, style: Theme.of(context).textTheme.bodySmall),
-                ),
+                child: ListTile(title: Text(url, style: Theme.of(context).textTheme.bodySmall)),
               );
             },
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(context.l10n.alertDialogActions_ok),
-          ),
+          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(context.l10n.alertDialogActions_ok)),
         ],
       ),
     );

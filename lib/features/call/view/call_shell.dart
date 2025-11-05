@@ -32,13 +32,7 @@ class _CallShellState extends State<CallShell> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        callDisplayListener(),
-        callScreenDisplayListener(),
-      ],
-      child: widget.child,
-    );
+    return MultiBlocListener(listeners: [callDisplayListener(), callScreenDisplayListener()], child: widget.child);
   }
 
   /// Listens to [CallState.display] changes and manages related UI transitions.
@@ -144,10 +138,7 @@ class _CallShellState extends State<CallShell> {
       _removeThumbnailAvatar();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.call_ThumbnailAvatar_currentlyNoActiveCall),
-          backgroundColor: Colors.grey,
-        ),
+        SnackBar(content: Text(context.l10n.call_ThumbnailAvatar_currentlyNoActiveCall), backgroundColor: Colors.grey),
       );
     }
   }
@@ -173,10 +164,7 @@ class _CallShellState extends State<CallShell> {
 }
 
 class ThumbnailAvatar {
-  ThumbnailAvatar({
-    required this.stickyPadding,
-    this.onTap,
-  });
+  ThumbnailAvatar({required this.stickyPadding, this.onTap});
 
   final EdgeInsets stickyPadding;
   final GestureTapCallback? onTap;
@@ -201,9 +189,7 @@ class ThumbnailAvatar {
               _offset = offset;
             },
             onTap: onTap,
-            child: CallActiveThumbnail(
-              activeCall: activeCall,
-            ),
+            child: CallActiveThumbnail(activeCall: activeCall),
           ),
         );
       },

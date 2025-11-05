@@ -24,9 +24,9 @@ sealed class BottomMenuTab {
   ({String flavor, String? embeddedId}) get pathParts => (flavor: flavor.name, embeddedId: null);
 
   String get routePath => switch (pathParts) {
-        (flavor: final f, embeddedId: null) => f,
-        (flavor: final f, embeddedId: final id) => '$f/$id',
-      };
+    (flavor: final f, embeddedId: null) => f,
+    (flavor: final f, embeddedId: final id) => '$f/$id',
+  };
 
   @override
   bool operator ==(Object other) =>

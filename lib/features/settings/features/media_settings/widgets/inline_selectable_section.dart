@@ -42,7 +42,7 @@ class InlineSelectableSection<T> extends StatelessWidget {
                   margin: const EdgeInsets.all(16),
                   showDuration: const Duration(seconds: 10),
                   child: const Icon(Icons.info_outline),
-                )
+                ),
               ],
             ],
           ),

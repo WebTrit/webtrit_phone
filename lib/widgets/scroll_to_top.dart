@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ScrollToTopOverlay extends StatelessWidget {
-  const ScrollToTopOverlay({
-    required this.child,
-    required this.scrolledAway,
-    required this.onScrollToTop,
-    super.key,
-  });
+  const ScrollToTopOverlay({required this.child, required this.scrolledAway, required this.onScrollToTop, super.key});
 
   final bool scrolledAway;
   final VoidCallback onScrollToTop;
@@ -47,11 +42,7 @@ class ScrollToTopButton extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 4),
-                  ),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4, offset: const Offset(0, 4)),
                 ],
               ),
               margin: const EdgeInsets.all(8),

@@ -56,59 +56,34 @@ class _RecentTileState extends State<RecentTile> {
   late final callNumber = callLogEntry.number;
 
   List<PopupMenuEntry> get actions => [
-        if (widget.onAudioCallPressed != null)
-          PopupMenuItem(
-            onTap: widget.onAudioCallPressed,
-            child: Text(context.l10n.numberActions_audioCall),
-          ),
-        if (widget.onVideoCallPressed != null)
-          PopupMenuItem(
-            onTap: widget.onVideoCallPressed,
-            child: Text(context.l10n.numberActions_videoCall),
-          ),
-        if (widget.callNumbers.length > 1)
-          for (final number in widget.callNumbers)
-            PopupMenuItem(
-              onTap: () => widget.onCallFrom?.call(number),
-              child: Text(context.l10n.numberActions_callFrom(number)),
-            ),
-        if (widget.onTransferPressed != null)
-          PopupMenuItem(
-            onTap: widget.onTransferPressed,
-            child: Text(context.l10n.numberActions_transfer),
-          ),
-        if (widget.onChatPressed != null)
-          PopupMenuItem(
-            onTap: widget.onChatPressed,
-            child: Text(context.l10n.numberActions_chat),
-          ),
-        if (widget.onSendSmsPressed != null)
-          PopupMenuItem(
-            onTap: widget.onSendSmsPressed,
-            child: Text(context.l10n.numberActions_sendSms),
-          ),
-        if (widget.onViewContactPressed != null)
-          PopupMenuItem(
-            onTap: widget.onViewContactPressed,
-            child: Text(context.l10n.numberActions_viewContact),
-          ),
-        if (widget.onCallLogPressed != null)
-          PopupMenuItem(
-            onTap: widget.onCallLogPressed,
-            child: Text(context.l10n.numberActions_callLog),
-          ),
+    if (widget.onAudioCallPressed != null)
+      PopupMenuItem(onTap: widget.onAudioCallPressed, child: Text(context.l10n.numberActions_audioCall)),
+    if (widget.onVideoCallPressed != null)
+      PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
+    if (widget.callNumbers.length > 1)
+      for (final number in widget.callNumbers)
         PopupMenuItem(
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: callNumber));
-          },
-          child: Text(context.l10n.numberActions_copyNumber),
+          onTap: () => widget.onCallFrom?.call(number),
+          child: Text(context.l10n.numberActions_callFrom(number)),
         ),
-        if (widget.onDelete != null)
-          PopupMenuItem(
-            onTap: widget.onDelete,
-            child: Text(context.l10n.numberActions_delete),
-          ),
-      ];
+    if (widget.onTransferPressed != null)
+      PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
+    if (widget.onChatPressed != null)
+      PopupMenuItem(onTap: widget.onChatPressed, child: Text(context.l10n.numberActions_chat)),
+    if (widget.onSendSmsPressed != null)
+      PopupMenuItem(onTap: widget.onSendSmsPressed, child: Text(context.l10n.numberActions_sendSms)),
+    if (widget.onViewContactPressed != null)
+      PopupMenuItem(onTap: widget.onViewContactPressed, child: Text(context.l10n.numberActions_viewContact)),
+    if (widget.onCallLogPressed != null)
+      PopupMenuItem(onTap: widget.onCallLogPressed, child: Text(context.l10n.numberActions_callLog)),
+    PopupMenuItem(
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: callNumber));
+      },
+      child: Text(context.l10n.numberActions_copyNumber),
+    ),
+    if (widget.onDelete != null) PopupMenuItem(onTap: widget.onDelete, child: Text(context.l10n.numberActions_delete)),
+  ];
 
   void onLongPress() {
     final position = getPosition();
@@ -139,10 +114,7 @@ class _RecentTileState extends State<RecentTile> {
       background: Container(
         color: themeData.colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
-        child: const Align(
-          alignment: Alignment.centerRight,
-          child: Icon(Icons.delete_outline),
-        ),
+        child: const Align(alignment: Alignment.centerRight, child: Icon(Icons.delete_outline)),
       ),
       confirmDismiss: (direction) => ConfirmDialog.showDangerous(
         context,
@@ -161,10 +133,7 @@ class _RecentTileState extends State<RecentTile> {
           registered: contact?.registered,
           presenceInfo: contact?.presenceInfo,
         ),
-        trailing: Text(
-          dateFormat.format(callLogEntry.createdTime),
-          style: themeData.textTheme.bodySmall,
-        ),
+        trailing: Text(dateFormat.format(callLogEntry.createdTime), style: themeData.textTheme.bodySmall),
         title: Text(
           switch (presenceSource) {
             PresenceViewSource.sipPresence => '${widget.recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
@@ -183,19 +152,9 @@ class _RecentTileState extends State<RecentTile> {
                   : Colors.red,
             ),
             const Text(' '),
-            Icon(
-              callLogEntry.video ? Icons.videocam : Icons.call,
-              size: 16,
-              color: Colors.grey,
-            ),
+            Icon(callLogEntry.video ? Icons.videocam : Icons.call, size: 16, color: Colors.grey),
             const Text(' '),
-            Flexible(
-              child: Text(
-                callNumber,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
+            Flexible(child: Text(callNumber, maxLines: 1, overflow: TextOverflow.ellipsis)),
           ],
         ),
         onTap: widget.onTap,

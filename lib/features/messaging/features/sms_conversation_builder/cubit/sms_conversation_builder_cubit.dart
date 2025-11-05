@@ -50,7 +50,10 @@ class SmsConversationBuilderCubit extends Cubit<SmsCBState> {
   late final StreamSubscription _contactsSub;
 
   StreamSubscription get _contactsSubFactory {
-    return contactsRepository.watchContacts('').debounce(const Duration(milliseconds: 250)).listen(
+    return contactsRepository
+        .watchContacts('')
+        .debounce(const Duration(milliseconds: 250))
+        .listen(
           (contacts) => _contactsUpdateHandler(contacts),
           onError: (error) => emit(SmsCBState.initializingError(error)),
         );

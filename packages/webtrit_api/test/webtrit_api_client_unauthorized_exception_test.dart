@@ -63,7 +63,8 @@ void main() {
         throwsA(
           isA<UnauthorizedException>()
               .having((e) => e.statusCode, 'statusCode', 422)
-              .having((e) => e.error?.code, 'error.code', 'refresh_token_invalid'),
+              .having(
+                  (e) => e.error?.code, 'error.code', 'refresh_token_invalid'),
         ),
       );
 

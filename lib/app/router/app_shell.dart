@@ -10,22 +10,13 @@ import 'app_router.dart';
 
 @RoutePage()
 class AppShell extends StatelessWidget {
-  const AppShell({
-    super.key,
-  });
+  const AppShell({super.key});
 
   // Map scopes to their associated routes
   static const Map<NotificationScope, List<String>> _scopeRoutes = {
-    NotificationScope.login: [
-      LoginRouterPageRoute.name,
-    ],
-    NotificationScope.main: [
-      MainScreenPageRoute.name,
-      SettingsScreenPageRoute.name,
-    ],
-    NotificationScope.call: [
-      CallScreenPageRoute.name,
-    ],
+    NotificationScope.login: [LoginRouterPageRoute.name],
+    NotificationScope.main: [MainScreenPageRoute.name, SettingsScreenPageRoute.name],
+    NotificationScope.call: [CallScreenPageRoute.name],
   };
 
   @override
@@ -45,15 +36,9 @@ class AppShell extends StatelessWidget {
               if (isNotificationInScope) {
                 switch (lastNotification) {
                   case ErrorNotification():
-                    context.showErrorSnackBar(
-                      lastNotification.l10n(context),
-                      action: lastNotification.action(context),
-                    );
+                    context.showErrorSnackBar(lastNotification.l10n(context), action: lastNotification.action(context));
                   case MessageNotification():
-                    context.showSnackBar(
-                      lastNotification.l10n(context),
-                      action: lastNotification.action(context),
-                    );
+                    context.showSnackBar(lastNotification.l10n(context), action: lastNotification.action(context));
                   case SuccessNotification():
                     context.showSuccessSnackBar(
                       lastNotification.l10n(context),

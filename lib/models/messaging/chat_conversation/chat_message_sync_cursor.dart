@@ -7,11 +7,7 @@ class ChatMessageSyncCursor extends Equatable {
   final MessageSyncCursorType cursorType;
   final DateTime time;
 
-  const ChatMessageSyncCursor({
-    required this.chatId,
-    required this.cursorType,
-    required this.time,
-  });
+  const ChatMessageSyncCursor({required this.chatId, required this.cursorType, required this.time});
 
   @override
   List<Object?> get props => [chatId, cursorType, time];

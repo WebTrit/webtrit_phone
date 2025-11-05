@@ -10,9 +10,9 @@ class RecentsRepository with PresenceInfoDriftMapper, CallLogsDriftMapper, Conta
   final AppDatabase _appDatabase;
 
   Stream<List<Recent>> watchRecents() {
-    return _appDatabase.recentsDao
-        .watchLastRecents()
-        .map((callLogsExt) => callLogsExt.map(recentFromDrift).toList(growable: false));
+    return _appDatabase.recentsDao.watchLastRecents().map(
+      (callLogsExt) => callLogsExt.map(recentFromDrift).toList(growable: false),
+    );
   }
 
   Future<void> deleteByCallId(int id) async {

@@ -11,16 +11,8 @@ class InputDecorationStyleFactory implements ThemeStyleFactory<InputDecorations>
   @override
   InputDecorations create() {
     return const InputDecorations(
-      search: InputDecoration(
-        isDense: false,
-        filled: false,
-        isCollapsed: true,
-        border: InputBorder.none,
-      ),
-      keypad: InputDecoration(
-        filled: false,
-        border: InputBorder.none,
-      ),
+      search: InputDecoration(isDense: false, filled: false, isCollapsed: true, border: InputBorder.none),
+      keypad: InputDecoration(filled: false, border: InputBorder.none),
     );
   }
 }

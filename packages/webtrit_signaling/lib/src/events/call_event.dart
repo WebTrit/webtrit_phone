@@ -23,7 +23,8 @@ abstract class CallEvent extends LineEvent {
       if (eventTypeValue == ErrorEvent.typeValue) {
         throw ArgumentError('Incorrect error event');
       } else {
-        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown call event type');
+        throw ArgumentError.value(
+            eventTypeValue, Event.typeKey, 'Unknown call event type');
       }
     } else {
       return callEvent;
@@ -32,10 +33,12 @@ abstract class CallEvent extends LineEvent {
 
   static CallEvent? tryFromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
-    return _callEventFromJsonDecoders[eventTypeValue]?.call(json) ?? CallErrorEvent.tryFromJson(json);
+    return _callEventFromJsonDecoders[eventTypeValue]?.call(json) ??
+        CallErrorEvent.tryFromJson(json);
   }
 
-  static final Map<String, CallEvent Function(Map<String, dynamic>)> _callEventFromJsonDecoders = {
+  static final Map<String, CallEvent Function(Map<String, dynamic>)>
+      _callEventFromJsonDecoders = {
     AcceptedEvent.typeValue: AcceptedEvent.fromJson,
     AcceptingEvent.typeValue: AcceptingEvent.fromJson,
     CallingEvent.typeValue: CallingEvent.fromJson,

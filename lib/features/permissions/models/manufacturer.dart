@@ -1,3 +1,1 @@
-enum Manufacturer {
-  xiaomi,
-}
+enum Manufacturer { xiaomi }

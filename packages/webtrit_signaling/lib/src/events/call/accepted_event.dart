@@ -27,7 +27,8 @@ class AcceptedEvent extends CallEvent {
   factory AcceptedEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(
+          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return AcceptedEvent(
@@ -40,5 +41,6 @@ class AcceptedEvent extends CallEvent {
     );
   }
 
-  static MapEntry<String, CallEvent Function(Map<String, dynamic>)> d() => MapEntry(typeValue, AcceptedEvent.fromJson);
+  static MapEntry<String, CallEvent Function(Map<String, dynamic>)> d() =>
+      MapEntry(typeValue, AcceptedEvent.fromJson);
 }

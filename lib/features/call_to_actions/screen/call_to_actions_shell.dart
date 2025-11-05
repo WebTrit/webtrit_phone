@@ -11,10 +11,7 @@ import '../bloc/call_to_actions_cubit.dart';
 import '../widgets/widgets.dart';
 
 class CallToActionsShell extends StatefulWidget {
-  const CallToActionsShell({
-    super.key,
-    required this.child,
-  });
+  const CallToActionsShell({super.key, required this.child});
 
   final Widget child;
 

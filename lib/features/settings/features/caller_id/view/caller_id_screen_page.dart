@@ -15,10 +15,8 @@ class CallerIdSettingsScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CallerIdSettingsCubit(
-        context.read<AppPreferences>(),
-        context.read<UserRepository>(),
-      )..init(),
+      create: (context) =>
+          CallerIdSettingsCubit(context.read<AppPreferences>(), context.read<UserRepository>())..init(),
       child: const CallerIdSettingsScreen(),
     );
   }

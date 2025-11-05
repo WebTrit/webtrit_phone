@@ -20,8 +20,9 @@ mixin ChatsDriftMapper {
               id: e.id,
               chatId: e.chatId,
               userId: e.userId,
-              groupAuthorities:
-                  e.groupAuthorities != null ? GroupAuthorities.values.byName(e.groupAuthorities!.name) : null,
+              groupAuthorities: e.groupAuthorities != null
+                  ? GroupAuthorities.values.byName(e.groupAuthorities!.name)
+                  : null,
             ),
           )
           .toList(),
@@ -67,8 +68,9 @@ mixin ChatsDriftMapper {
       createdAt: DateTime.fromMicrosecondsSinceEpoch(data.createdAtRemoteUsec),
       updatedAt: DateTime.fromMicrosecondsSinceEpoch(data.updatedAtRemoteUsec),
       editedAt: data.editedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.editedAtRemoteUsec!) : null,
-      deletedAt:
-          data.deletedAtRemoteUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.deletedAtRemoteUsec!) : null,
+      deletedAt: data.deletedAtRemoteUsec != null
+          ? DateTime.fromMicrosecondsSinceEpoch(data.deletedAtRemoteUsec!)
+          : null,
     );
   }
 

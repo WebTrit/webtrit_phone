@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'trusted_certificates.dart';
 
-SecurityContext? initializeSecurityContext(TrustedCertificates trustedCertificates) {
+SecurityContext? initializeSecurityContext(
+    TrustedCertificates trustedCertificates) {
   if (!trustedCertificates.hasAvailableCertificates) return null;
 
   final securityContext = SecurityContext(withTrustedRoots: true);

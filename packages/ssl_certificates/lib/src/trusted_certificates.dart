@@ -1,5 +1,6 @@
 class TrustedCertificates {
-  static const TrustedCertificates empty = TrustedCertificates._internal(certificates: []);
+  static const TrustedCertificates empty =
+      TrustedCertificates._internal(certificates: []);
 
   const TrustedCertificates._internal({
     required this.certificates,

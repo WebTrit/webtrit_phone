@@ -8,21 +8,23 @@ part of 'session_otp_credential.dart';
 
 SessionOtpCredential _$SessionOtpCredentialFromJson(
   Map<String, dynamic> json,
-) => SessionOtpCredential(
-  bundleId: json['bundle_id'] as String?,
-  type: $enumDecode(_$AppTypeEnumMap, json['type']),
-  identifier: json['identifier'] as String,
-  userRef: json['user_ref'] as String,
-);
+) =>
+    SessionOtpCredential(
+      bundleId: json['bundle_id'] as String?,
+      type: $enumDecode(_$AppTypeEnumMap, json['type']),
+      identifier: json['identifier'] as String,
+      userRef: json['user_ref'] as String,
+    );
 
 Map<String, dynamic> _$SessionOtpCredentialToJson(
   SessionOtpCredential instance,
-) => <String, dynamic>{
-  'bundle_id': instance.bundleId,
-  'type': _$AppTypeEnumMap[instance.type]!,
-  'identifier': instance.identifier,
-  'user_ref': instance.userRef,
-};
+) =>
+    <String, dynamic>{
+      'bundle_id': instance.bundleId,
+      'type': _$AppTypeEnumMap[instance.type]!,
+      'identifier': instance.identifier,
+      'user_ref': instance.userRef,
+    };
 
 const _$AppTypeEnumMap = {
   AppType.smart: 'smart',

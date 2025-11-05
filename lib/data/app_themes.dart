@@ -64,10 +64,7 @@ class AppThemes {
   // to bundle the required TTF fonts into assets and update pubspec.yaml.
   // After that, set GoogleFonts.config.allowRuntimeFetching = false
   // permanently to avoid any network dependency.
-  static Future<void> _preloadFonts(
-    ThemeWidgetConfig lightConfig,
-    ThemeWidgetConfig darkConfig,
-  ) async {
+  static Future<void> _preloadFonts(ThemeWidgetConfig lightConfig, ThemeWidgetConfig darkConfig) async {
     GoogleFonts.config.allowRuntimeFetching = true;
 
     try {
@@ -78,11 +75,13 @@ class AppThemes {
 
       if (families.isEmpty) return;
 
-      await GoogleFonts.pendingFonts([for (final font in families) GoogleFonts.getFont(font)])
-          .timeout(_fontPreloadTimeout, onTimeout: () {
-        _logger.warning('Preloading Google Fonts timed out ($_fontPreloadTimeout)');
-        return const [];
-      });
+      await GoogleFonts.pendingFonts([for (final font in families) GoogleFonts.getFont(font)]).timeout(
+        _fontPreloadTimeout,
+        onTimeout: () {
+          _logger.warning('Preloading Google Fonts timed out ($_fontPreloadTimeout)');
+          return const [];
+        },
+      );
     } catch (e, st) {
       _logger.finest('Failed to preload Google Fonts: $e\n$st');
     }
@@ -104,9 +103,7 @@ class AppThemes {
 }
 
 class AppTheme extends Equatable {
-  const AppTheme({
-    required this.settings,
-  });
+  const AppTheme({required this.settings});
 
   final ThemeSettings settings;
 

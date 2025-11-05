@@ -20,7 +20,8 @@ abstract class SessionEvent extends Event {
       if (eventTypeValue == ErrorEvent.typeValue) {
         throw ArgumentError('Incorrect error event');
       } else {
-        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown session event type');
+        throw ArgumentError.value(
+            eventTypeValue, Event.typeKey, 'Unknown session event type');
       }
     } else {
       return sessionEvent;
@@ -34,7 +35,8 @@ abstract class SessionEvent extends Event {
         SessionErrorEvent.tryFromJson(json);
   }
 
-  static final Map<String, SessionEvent Function(Map<String, dynamic>)> _sessionEventFromJsonDecoders = {
+  static final Map<String, SessionEvent Function(Map<String, dynamic>)>
+      _sessionEventFromJsonDecoders = {
     RegisteredEvent.typeValue: RegisteredEvent.fromJson,
     RegisteringEvent.typeValue: RegisteringEvent.fromJson,
     RegistrationFailedEvent.typeValue: RegistrationFailedEvent.fromJson,

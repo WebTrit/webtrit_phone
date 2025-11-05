@@ -17,10 +17,7 @@ class UserAgreementScreenPage extends StatelessWidget {
     final appTermsAndConditionsUrl = context.read<FeatureAccess>().termsFeature.configData.uri;
 
     const appName = EnvironmentConfig.APP_NAME;
-    final screen = UserAgreementScreen(
-      appTermsAndConditionsUrl: appTermsAndConditionsUrl.toString(),
-      appName: appName,
-    );
+    final screen = UserAgreementScreen(appTermsAndConditionsUrl: appTermsAndConditionsUrl.toString(), appName: appName);
     return screen;
   }
 }

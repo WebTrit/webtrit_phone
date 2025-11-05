@@ -5,11 +5,7 @@ import 'package:webtrit_phone/extensions/build_context.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 class CopyToClipboard extends StatelessWidget {
-  const CopyToClipboard({
-    super.key,
-    this.data,
-    required this.child,
-  });
+  const CopyToClipboard({super.key, this.data, required this.child});
 
   final String? data;
   final Widget child;
@@ -26,18 +22,19 @@ class CopyToClipboard extends StatelessWidget {
           HapticFeedback.mediumImpact();
           final copy = await showMenu<bool>(
             context: context,
-            position: RelativeRect.fromLTRB(details.globalPosition.dx, details.globalPosition.dy,
-                details.globalPosition.dx, details.globalPosition.dy),
+            position: RelativeRect.fromLTRB(
+              details.globalPosition.dx,
+              details.globalPosition.dy,
+              details.globalPosition.dx,
+              details.globalPosition.dy,
+            ),
             items: [
               PopupMenuItem<bool>(
                 enabled: false,
                 labelTextStyle: WidgetStatePropertyAll(themeData.textTheme.bodyLarge),
                 child: Text(data),
               ),
-              PopupMenuItem<bool>(
-                value: true,
-                child: Text(context.l10n.copyToClipboard_popupMenuItem),
-              )
+              PopupMenuItem<bool>(value: true, child: Text(context.l10n.copyToClipboard_popupMenuItem)),
             ],
           );
           if (context.mounted && copy == true) {

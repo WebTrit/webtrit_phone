@@ -13,8 +13,6 @@ class UndefinedScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UndefinedScreen(
-      undefinedType: undefinedType,
-    );
+    return UndefinedScreen(undefinedType: undefinedType);
   }
 }

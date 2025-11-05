@@ -29,9 +29,7 @@ class LoginOtpSigninRequestScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (otpSigninRequestPreDescriptionText.isNotEmpty) ...[
-                Description(
-                  text: otpSigninRequestPreDescriptionText,
-                ),
+                Description(text: otpSigninRequestPreDescriptionText),
                 const SizedBox(height: kInset / 2),
               ],
               TextFormField(
@@ -45,25 +43,21 @@ class LoginOtpSigninRequestScreen extends StatelessWidget {
                   errorMaxLines: 3,
                 ),
                 keyboardType: TextInputType.emailAddress,
-                autofillHints: const [
-                  AutofillHints.email,
-                  AutofillHints.telephoneNumber,
-                ],
+                autofillHints: const [AutofillHints.email, AutofillHints.telephoneNumber],
                 onChanged: context.read<LoginCubit>().otpSigninUserRefInputChanged,
                 onFieldSubmitted: !state.otpSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
               ),
               if (otpSigninRequestPostDescriptionText.isNotEmpty) ...[
                 const SizedBox(height: kInset / 2),
-                Description(
-                  text: otpSigninRequestPostDescriptionText,
-                ),
+                Description(text: otpSigninRequestPostDescriptionText),
               ],
               const Spacer(),
               const SizedBox(height: kInset),
               ElevatedButton(
                 key: otpButtonKey,
-                onPressed:
-                    state.processing || !state.otpSigninUserRefInput.isValid ? null : () => _onSubmitted(context),
+                onPressed: state.processing || !state.otpSigninUserRefInput.isValid
+                    ? null
+                    : () => _onSubmitted(context),
                 style: elevatedButtonStyles?.primary,
                 child: !state.processing
                     ? Text(context.l10n.login_Button_otpSigninRequestProceed)
@@ -72,7 +66,7 @@ class LoginOtpSigninRequestScreen extends StatelessWidget {
                         strokeWidth: 2,
                         color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                       ),
-              )
+              ),
             ],
           ),
         );

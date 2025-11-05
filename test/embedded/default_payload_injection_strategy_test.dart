@@ -62,7 +62,8 @@ void main() {
     strategy.onPageReadyForTesting(controller, context);
 
     final expectedJson = const JsonEncoder().convert(payload);
-    final expectedScript = '''
+    final expectedScript =
+        '''
       if (typeof window.onPayloadDataReady === 'function') {
         window.onPayloadDataReady($expectedJson);
       }
@@ -78,7 +79,8 @@ void main() {
     strategy.setPayload(payload);
 
     final expectedJson = const JsonEncoder().convert(payload);
-    final expectedScript = '''
+    final expectedScript =
+        '''
       if (typeof window.onPayloadDataReady === 'function') {
         window.onPayloadDataReady($expectedJson);
       }

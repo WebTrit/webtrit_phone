@@ -43,10 +43,7 @@ class VoicemailScreenPage extends StatelessWidget {
         onCallStarted: (number) => callBloc.add(CallControlEvent.started(number: number, video: false)),
         onSubmitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
       ),
-      child: Provider<VoicemailScreenContext>(
-        create: (context) => screenContext,
-        child: const VoicemailScreen(),
-      ),
+      child: Provider<VoicemailScreenContext>(create: (context) => screenContext, child: const VoicemailScreen()),
     );
   }
 }

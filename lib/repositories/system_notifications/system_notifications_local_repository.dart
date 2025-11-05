@@ -80,9 +80,7 @@ class SystemNotificationsLocalRepositoryDriftImpl
     final data = notifications.map(systemNotificationToDrift).toList();
     await _dao.upsertNotifications(data);
     if (silent == false) {
-      notifications.forEach(
-        (n) => _addEvent(SystemNotificationUpdate(n, initialData: initialData)),
-      );
+      notifications.forEach((n) => _addEvent(SystemNotificationUpdate(n, initialData: initialData)));
     }
   }
 

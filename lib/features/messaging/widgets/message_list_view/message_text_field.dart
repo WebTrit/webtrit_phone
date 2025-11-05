@@ -4,12 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 class MessageTextField extends StatefulWidget {
-  const MessageTextField({
-    required this.controller,
-    required this.onSend,
-    this.onChanged,
-    super.key,
-  });
+  const MessageTextField({required this.controller, required this.onSend, this.onChanged, super.key});
 
   final TextEditingController controller;
   final Function() onSend;
@@ -50,10 +45,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     isDense: true,
                     isCollapsed: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+                    border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(16)),
                   ),
                 ),
               ),

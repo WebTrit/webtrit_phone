@@ -40,10 +40,8 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
 
   Iterable<ContactPhone> contactPhonesFromDrift(List<ContactPhoneData> phones, List<FavoriteData> favorites) {
     return phones.map(
-      (phone) => contactPhoneFromDrift(
-        phone,
-        favorite: favorites.any((favorite) => favorite.contactPhoneId == phone.id),
-      ),
+      (phone) =>
+          contactPhoneFromDrift(phone, favorite: favorites.any((favorite) => favorite.contactPhoneId == phone.id)),
     );
   }
 
@@ -56,19 +54,10 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
   }
 
   ContactPhone contactPhoneFromDrift(ContactPhoneData data, {bool favorite = false}) {
-    return ContactPhone(
-      id: data.id,
-      number: data.number,
-      label: data.label,
-      favorite: favorite,
-    );
+    return ContactPhone(id: data.id, number: data.number, label: data.label, favorite: favorite);
   }
 
   ContactEmail contactEmailFromDrift(ContactEmailData data) {
-    return ContactEmail(
-      id: data.id,
-      address: data.address,
-      label: data.label,
-    );
+    return ContactEmail(id: data.id, address: data.address, label: data.label);
   }
 }

@@ -9,8 +9,6 @@ class ListTileThemeDataFactory implements ThemeStyleFactory<ListTileThemeData> {
 
   @override
   ListTileThemeData create() {
-    return ListTileThemeData(
-      iconColor: colors.secondary,
-    );
+    return ListTileThemeData(iconColor: colors.secondary);
   }
 }

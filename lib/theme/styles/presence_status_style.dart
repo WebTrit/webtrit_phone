@@ -2,10 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PresenceStatusStyle with Diagnosticable {
-  PresenceStatusStyle({
-    this.available,
-    this.unavailable,
-  });
+  PresenceStatusStyle({this.available, this.unavailable});
 
   final Color? available;
   final Color? unavailable;

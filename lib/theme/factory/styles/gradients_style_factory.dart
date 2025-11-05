@@ -20,11 +20,7 @@ class GradientsStyleFactory implements ThemeStyleFactory<Gradients?> {
       return null;
     }
     return Gradients(
-      tab: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: customColors,
-      ),
+      tab: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: customColors),
     );
   }
 }

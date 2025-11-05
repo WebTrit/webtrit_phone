@@ -1,10 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class CallerIdSettings extends Equatable {
-  const CallerIdSettings({
-    this.defaultNumber,
-    this.matchers = const [],
-  });
+  const CallerIdSettings({this.defaultNumber, this.matchers = const []});
 
   final String? defaultNumber;
   final List<NumberMatcher> matchers;

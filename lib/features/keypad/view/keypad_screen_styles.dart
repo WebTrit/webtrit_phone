@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'keypad_screen_style.dart';
 
 class KeypadScreenStyles extends ThemeExtension<KeypadScreenStyles> {
-  const KeypadScreenStyles({
-    required this.primary,
-  });
+  const KeypadScreenStyles({required this.primary});
 
   final KeypadScreenStyle? primary;
 
@@ -14,13 +12,8 @@ class KeypadScreenStyles extends ThemeExtension<KeypadScreenStyles> {
   }
 
   @override
-  ThemeExtension<KeypadScreenStyles> lerp(
-    ThemeExtension<KeypadScreenStyles>? other,
-    double t,
-  ) {
+  ThemeExtension<KeypadScreenStyles> lerp(ThemeExtension<KeypadScreenStyles>? other, double t) {
     if (other is! KeypadScreenStyles) return this;
-    return KeypadScreenStyles(
-      primary: KeypadScreenStyle.lerp(primary, other.primary, t),
-    );
+    return KeypadScreenStyles(primary: KeypadScreenStyle.lerp(primary, other.primary, t));
   }
 }

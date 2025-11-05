@@ -58,12 +58,14 @@ Map<String, dynamic> _$FontStyleConfigToJson(FontStyleConfig instance) =>
 
 TextDecorationConfig _$TextDecorationConfigFromJson(
   Map<String, dynamic> json,
-) => TextDecorationConfig(
-  types:
-      (json['types'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-      const [],
-);
+) =>
+    TextDecorationConfig(
+      types:
+          (json['types'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
+    );
 
 Map<String, dynamic> _$TextDecorationConfigToJson(
   TextDecorationConfig instance,
-) => <String, dynamic>{'types': instance.types};
+) =>
+    <String, dynamic>{'types': instance.types};

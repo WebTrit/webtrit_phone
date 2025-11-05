@@ -93,7 +93,7 @@ class LoginState with _$LoginState {
 
   @override
   final EmailInput signupEmailInput;
-  
+
   @override
   final CodeInput signupCodeInput;
 }

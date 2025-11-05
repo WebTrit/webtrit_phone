@@ -8,7 +8,8 @@ enum SignalingRegistrationFailedCode {
   final int code;
 }
 
-extension SignalingRegistrationFailedCodeByCode on Iterable<SignalingRegistrationFailedCode> {
+extension SignalingRegistrationFailedCodeByCode
+    on Iterable<SignalingRegistrationFailedCode> {
   SignalingRegistrationFailedCode byCode(int? code) {
     if (code == null) return SignalingRegistrationFailedCode.nullCode;
 

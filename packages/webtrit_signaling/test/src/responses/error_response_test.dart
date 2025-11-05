@@ -20,7 +20,8 @@ void main() {
     );
 
     expect(
-      ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>),
+      ErrorResponse.fromJson(
+          json.decode(errorResponseJson) as Map<String, dynamic>),
       equals(errorResponse),
     );
   });
@@ -42,7 +43,8 @@ void main() {
     );
 
     expect(
-      ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>),
+      ErrorResponse.fromJson(
+          json.decode(errorResponseJson) as Map<String, dynamic>),
       equals(errorResponse),
     );
   });
@@ -62,7 +64,8 @@ void main() {
     );
 
     expect(
-      ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>),
+      ErrorResponse.fromJson(
+          json.decode(errorResponseJson) as Map<String, dynamic>),
       equals(errorResponse),
     );
   });
@@ -86,7 +89,8 @@ void main() {
     );
 
     expect(
-      ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>),
+      ErrorResponse.fromJson(
+          json.decode(errorResponseJson) as Map<String, dynamic>),
       equals(errorResponse),
     );
   });

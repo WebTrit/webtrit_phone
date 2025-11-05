@@ -7,28 +7,29 @@ part of 'app_config.dart';
 // **************************************************************************
 
 AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
-  loginConfig: json['loginConfig'] == null
-      ? const AppConfigLogin()
-      : AppConfigLogin.fromJson(json['loginConfig'] as Map<String, dynamic>),
-  mainConfig: json['mainConfig'] == null
-      ? const AppConfigMain()
-      : AppConfigMain.fromJson(json['mainConfig'] as Map<String, dynamic>),
-  settingsConfig: json['settingsConfig'] == null
-      ? const AppConfigSettings()
-      : AppConfigSettings.fromJson(
-          json['settingsConfig'] as Map<String, dynamic>,
-        ),
-  callConfig: json['callConfig'] == null
-      ? const AppConfigCall()
-      : AppConfigCall.fromJson(json['callConfig'] as Map<String, dynamic>),
-);
+      loginConfig: json['loginConfig'] == null
+          ? const AppConfigLogin()
+          : AppConfigLogin.fromJson(
+              json['loginConfig'] as Map<String, dynamic>),
+      mainConfig: json['mainConfig'] == null
+          ? const AppConfigMain()
+          : AppConfigMain.fromJson(json['mainConfig'] as Map<String, dynamic>),
+      settingsConfig: json['settingsConfig'] == null
+          ? const AppConfigSettings()
+          : AppConfigSettings.fromJson(
+              json['settingsConfig'] as Map<String, dynamic>,
+            ),
+      callConfig: json['callConfig'] == null
+          ? const AppConfigCall()
+          : AppConfigCall.fromJson(json['callConfig'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
-  'loginConfig': instance.loginConfig.toJson(),
-  'mainConfig': instance.mainConfig.toJson(),
-  'settingsConfig': instance.settingsConfig.toJson(),
-  'callConfig': instance.callConfig.toJson(),
-};
+      'loginConfig': instance.loginConfig.toJson(),
+      'mainConfig': instance.mainConfig.toJson(),
+      'settingsConfig': instance.settingsConfig.toJson(),
+      'callConfig': instance.callConfig.toJson(),
+    };
 
 AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
     AppConfigLogin(
@@ -52,62 +53,67 @@ Map<String, dynamic> _$AppConfigLoginToJson(AppConfigLogin instance) =>
 
 AppConfigLoginCommon _$AppConfigLoginCommonFromJson(
   Map<String, dynamic> json,
-) => AppConfigLoginCommon(
-  fullScreenLaunchEmbeddedResourceId:
-      json['fullScreenLaunchEmbeddedResourceId'] as String?,
-);
+) =>
+    AppConfigLoginCommon(
+      fullScreenLaunchEmbeddedResourceId:
+          json['fullScreenLaunchEmbeddedResourceId'] as String?,
+    );
 
 Map<String, dynamic> _$AppConfigLoginCommonToJson(
   AppConfigLoginCommon instance,
-) => <String, dynamic>{
-  'fullScreenLaunchEmbeddedResourceId':
-      instance.fullScreenLaunchEmbeddedResourceId,
-};
+) =>
+    <String, dynamic>{
+      'fullScreenLaunchEmbeddedResourceId':
+          instance.fullScreenLaunchEmbeddedResourceId,
+    };
 
 AppConfigLoginModeSelect _$AppConfigLoginModeSelectFromJson(
   Map<String, dynamic> json,
-) => AppConfigLoginModeSelect(
-  greetingL10n: json['greetingL10n'] as String?,
-  actions:
-      (json['actions'] as List<dynamic>?)
-          ?.map(
-            (e) =>
-                AppConfigModeSelectAction.fromJson(e as Map<String, dynamic>),
-          )
-          .toList() ??
-      const [
-        AppConfigModeSelectAction(
-          enabled: true,
-          type: 'login',
-          titleL10n: 'login_Button_signUpToDemoInstance',
-        ),
-      ],
-);
+) =>
+    AppConfigLoginModeSelect(
+      greetingL10n: json['greetingL10n'] as String?,
+      actions: (json['actions'] as List<dynamic>?)
+              ?.map(
+                (e) => AppConfigModeSelectAction.fromJson(
+                    e as Map<String, dynamic>),
+              )
+              .toList() ??
+          const [
+            AppConfigModeSelectAction(
+              enabled: true,
+              type: 'login',
+              titleL10n: 'login_Button_signUpToDemoInstance',
+            ),
+          ],
+    );
 
 Map<String, dynamic> _$AppConfigLoginModeSelectToJson(
   AppConfigLoginModeSelect instance,
-) => <String, dynamic>{
-  'greetingL10n': instance.greetingL10n,
-  'actions': instance.actions.map((e) => e.toJson()).toList(),
-};
+) =>
+    <String, dynamic>{
+      'greetingL10n': instance.greetingL10n,
+      'actions': instance.actions.map((e) => e.toJson()).toList(),
+    };
 
 AppConfigModeSelectAction _$AppConfigModeSelectActionFromJson(
   Map<String, dynamic> json,
-) => AppConfigModeSelectAction(
-  enabled: json['enabled'] as bool,
-  type: json['type'] as String,
-  titleL10n: json['titleL10n'] as String,
-  embeddedId: json['embeddedId'] as String?,
-);
+) =>
+    AppConfigModeSelectAction(
+      enabled: json['enabled'] as bool,
+      type: json['type'] as String,
+      titleL10n: json['titleL10n'] as String,
+      embeddedId: json['embeddedId'] as String?,
+    );
 
 Map<String, dynamic> _$AppConfigModeSelectActionToJson(
   AppConfigModeSelectAction instance,
-) => <String, dynamic>{
-  'enabled': instance.enabled,
-  'type': instance.type,
-  'titleL10n': instance.titleL10n,
-  'embeddedId': instance.embeddedId,
-};
+) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'type': instance.type,
+      'titleL10n': instance.titleL10n,
+      'embeddedId': instance.embeddedId,
+    };
 
 AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) =>
     AppConfigMain(
@@ -167,8 +173,7 @@ Map<String, dynamic> _$AppConfigMainToJson(AppConfigMain instance) =>
 AppConfigBottomMenu _$AppConfigBottomMenuFromJson(Map<String, dynamic> json) =>
     AppConfigBottomMenu(
       cacheSelectedTab: json['cacheSelectedTab'] as bool? ?? true,
-      tabs:
-          (json['tabs'] as List<dynamic>?)
+      tabs: (json['tabs'] as List<dynamic>?)
               ?.map(
                 (e) => BottomMenuTabScheme.fromJson(e as Map<String, dynamic>),
               )
@@ -178,30 +183,34 @@ AppConfigBottomMenu _$AppConfigBottomMenuFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$AppConfigBottomMenuToJson(
   AppConfigBottomMenu instance,
-) => <String, dynamic>{
-  'cacheSelectedTab': instance.cacheSelectedTab,
-  'tabs': instance.tabs.map((e) => e.toJson()).toList(),
-};
+) =>
+    <String, dynamic>{
+      'cacheSelectedTab': instance.cacheSelectedTab,
+      'tabs': instance.tabs.map((e) => e.toJson()).toList(),
+    };
 
 AppConfigCall _$AppConfigCallFromJson(
   Map<String, dynamic> json,
-) => AppConfigCall(
-  videoEnabled: json['videoEnabled'] as bool? ?? true,
-  transfer: json['transfer'] == null
-      ? const AppConfigTransfer(
-          enableBlindTransfer: true,
-          enableAttendedTransfer: true,
-        )
-      : AppConfigTransfer.fromJson(json['transfer'] as Map<String, dynamic>),
-  encoding: json['encoding'] == null
-      ? const AppConfigEncoding()
-      : AppConfigEncoding.fromJson(json['encoding'] as Map<String, dynamic>),
-  peerConnection: json['peerConnection'] == null
-      ? const AppConfigPeerConnection()
-      : AppConfigPeerConnection.fromJson(
-          json['peerConnection'] as Map<String, dynamic>,
-        ),
-);
+) =>
+    AppConfigCall(
+      videoEnabled: json['videoEnabled'] as bool? ?? true,
+      transfer: json['transfer'] == null
+          ? const AppConfigTransfer(
+              enableBlindTransfer: true,
+              enableAttendedTransfer: true,
+            )
+          : AppConfigTransfer.fromJson(
+              json['transfer'] as Map<String, dynamic>),
+      encoding: json['encoding'] == null
+          ? const AppConfigEncoding()
+          : AppConfigEncoding.fromJson(
+              json['encoding'] as Map<String, dynamic>),
+      peerConnection: json['peerConnection'] == null
+          ? const AppConfigPeerConnection()
+          : AppConfigPeerConnection.fromJson(
+              json['peerConnection'] as Map<String, dynamic>,
+            ),
+    );
 
 Map<String, dynamic> _$AppConfigCallToJson(AppConfigCall instance) =>
     <String, dynamic>{
@@ -241,68 +250,72 @@ Map<String, dynamic> _$AppConfigEncodingToJson(AppConfigEncoding instance) =>
 
 AppConfigPeerConnection _$AppConfigPeerConnectionFromJson(
   Map<String, dynamic> json,
-) => AppConfigPeerConnection(
-  negotiation: json['negotiation'] == null
-      ? const AppConfigNegotiationSettingsOverride()
-      : AppConfigNegotiationSettingsOverride.fromJson(
-          json['negotiation'] as Map<String, dynamic>,
-        ),
-);
+) =>
+    AppConfigPeerConnection(
+      negotiation: json['negotiation'] == null
+          ? const AppConfigNegotiationSettingsOverride()
+          : AppConfigNegotiationSettingsOverride.fromJson(
+              json['negotiation'] as Map<String, dynamic>,
+            ),
+    );
 
 Map<String, dynamic> _$AppConfigPeerConnectionToJson(
   AppConfigPeerConnection instance,
-) => <String, dynamic>{'negotiation': instance.negotiation.toJson()};
+) =>
+    <String, dynamic>{'negotiation': instance.negotiation.toJson()};
 
 AppConfigNegotiationSettingsOverride
-_$AppConfigNegotiationSettingsOverrideFromJson(Map<String, dynamic> json) =>
-    AppConfigNegotiationSettingsOverride(
-      includeInactiveVideoInOfferAnswer:
-          json['includeInactiveVideoInOfferAnswer'] as bool? ?? false,
-    );
+    _$AppConfigNegotiationSettingsOverrideFromJson(Map<String, dynamic> json) =>
+        AppConfigNegotiationSettingsOverride(
+          includeInactiveVideoInOfferAnswer:
+              json['includeInactiveVideoInOfferAnswer'] as bool? ?? false,
+        );
 
 Map<String, dynamic> _$AppConfigNegotiationSettingsOverrideToJson(
   AppConfigNegotiationSettingsOverride instance,
-) => <String, dynamic>{
-  'includeInactiveVideoInOfferAnswer':
-      instance.includeInactiveVideoInOfferAnswer,
-};
+) =>
+    <String, dynamic>{
+      'includeInactiveVideoInOfferAnswer':
+          instance.includeInactiveVideoInOfferAnswer,
+    };
 
 EncodingDefaultPresetOverride _$EncodingDefaultPresetOverrideFromJson(
   Map<String, dynamic> json,
-) => EncodingDefaultPresetOverride(
-  audioBitrate: (json['audioBitrate'] as num?)?.toInt(),
-  videoBitrate: (json['videoBitrate'] as num?)?.toInt(),
-  ptime: (json['ptime'] as num?)?.toInt(),
-  maxptime: (json['maxptime'] as num?)?.toInt(),
-  opusSamplingRate: (json['opusSamplingRate'] as num?)?.toInt(),
-  opusBitrate: (json['opusBitrate'] as num?)?.toInt(),
-  opusStereo: json['opusStereo'] as bool?,
-  opusDtx: json['opusDtx'] as bool?,
-  removeExtmaps: json['removeExtmaps'] as bool?,
-  removeStaticAudioRtpMaps: json['removeStaticAudioRtpMaps'] as bool?,
-  remapTE8payloadTo101: json['remapTE8payloadTo101'] as bool?,
-);
+) =>
+    EncodingDefaultPresetOverride(
+      audioBitrate: (json['audioBitrate'] as num?)?.toInt(),
+      videoBitrate: (json['videoBitrate'] as num?)?.toInt(),
+      ptime: (json['ptime'] as num?)?.toInt(),
+      maxptime: (json['maxptime'] as num?)?.toInt(),
+      opusSamplingRate: (json['opusSamplingRate'] as num?)?.toInt(),
+      opusBitrate: (json['opusBitrate'] as num?)?.toInt(),
+      opusStereo: json['opusStereo'] as bool?,
+      opusDtx: json['opusDtx'] as bool?,
+      removeExtmaps: json['removeExtmaps'] as bool?,
+      removeStaticAudioRtpMaps: json['removeStaticAudioRtpMaps'] as bool?,
+      remapTE8payloadTo101: json['remapTE8payloadTo101'] as bool?,
+    );
 
 Map<String, dynamic> _$EncodingDefaultPresetOverrideToJson(
   EncodingDefaultPresetOverride instance,
-) => <String, dynamic>{
-  'audioBitrate': instance.audioBitrate,
-  'videoBitrate': instance.videoBitrate,
-  'ptime': instance.ptime,
-  'maxptime': instance.maxptime,
-  'opusSamplingRate': instance.opusSamplingRate,
-  'opusBitrate': instance.opusBitrate,
-  'opusStereo': instance.opusStereo,
-  'opusDtx': instance.opusDtx,
-  'removeExtmaps': instance.removeExtmaps,
-  'removeStaticAudioRtpMaps': instance.removeStaticAudioRtpMaps,
-  'remapTE8payloadTo101': instance.remapTE8payloadTo101,
-};
+) =>
+    <String, dynamic>{
+      'audioBitrate': instance.audioBitrate,
+      'videoBitrate': instance.videoBitrate,
+      'ptime': instance.ptime,
+      'maxptime': instance.maxptime,
+      'opusSamplingRate': instance.opusSamplingRate,
+      'opusBitrate': instance.opusBitrate,
+      'opusStereo': instance.opusStereo,
+      'opusDtx': instance.opusDtx,
+      'removeExtmaps': instance.removeExtmaps,
+      'removeStaticAudioRtpMaps': instance.removeStaticAudioRtpMaps,
+      'remapTE8payloadTo101': instance.remapTE8payloadTo101,
+    };
 
 AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) =>
     AppConfigSettings(
-      sections:
-          (json['sections'] as List<dynamic>?)
+      sections: (json['sections'] as List<dynamic>?)
               ?.map(
                 (e) => AppConfigSettingsSection.fromJson(
                   e as Map<String, dynamic>,
@@ -369,49 +382,53 @@ Map<String, dynamic> _$AppConfigSettingsToJson(AppConfigSettings instance) =>
 
 AppConfigSettingsSection _$AppConfigSettingsSectionFromJson(
   Map<String, dynamic> json,
-) => AppConfigSettingsSection(
-  titleL10n: json['titleL10n'] as String,
-  enabled: json['enabled'] as bool? ?? true,
-  items:
-      (json['items'] as List<dynamic>?)
-          ?.map(
-            (e) => AppConfigSettingsItem.fromJson(e as Map<String, dynamic>),
-          )
-          .toList() ??
-      const [],
-);
+) =>
+    AppConfigSettingsSection(
+      titleL10n: json['titleL10n'] as String,
+      enabled: json['enabled'] as bool? ?? true,
+      items: (json['items'] as List<dynamic>?)
+              ?.map(
+                (e) =>
+                    AppConfigSettingsItem.fromJson(e as Map<String, dynamic>),
+              )
+              .toList() ??
+          const [],
+    );
 
 Map<String, dynamic> _$AppConfigSettingsSectionToJson(
   AppConfigSettingsSection instance,
-) => <String, dynamic>{
-  'titleL10n': instance.titleL10n,
-  'enabled': instance.enabled,
-  'items': instance.items.map((e) => e.toJson()).toList(),
-};
+) =>
+    <String, dynamic>{
+      'titleL10n': instance.titleL10n,
+      'enabled': instance.enabled,
+      'items': instance.items.map((e) => e.toJson()).toList(),
+    };
 
 AppConfigSettingsItem _$AppConfigSettingsItemFromJson(
   Map<String, dynamic> json,
-) => AppConfigSettingsItem(
-  enabled: json['enabled'] as bool? ?? true,
-  titleL10n: json['titleL10n'] as String,
-  type: json['type'] as String,
-  icon: json['icon'] as String,
-  embeddedResourceId: const IntToStringOptionalConverter().fromJson(
-    json['embeddedResourceId'],
-  ),
-);
+) =>
+    AppConfigSettingsItem(
+      enabled: json['enabled'] as bool? ?? true,
+      titleL10n: json['titleL10n'] as String,
+      type: json['type'] as String,
+      icon: json['icon'] as String,
+      embeddedResourceId: const IntToStringOptionalConverter().fromJson(
+        json['embeddedResourceId'],
+      ),
+    );
 
 Map<String, dynamic> _$AppConfigSettingsItemToJson(
   AppConfigSettingsItem instance,
-) => <String, dynamic>{
-  'enabled': instance.enabled,
-  'titleL10n': instance.titleL10n,
-  'type': instance.type,
-  'icon': instance.icon,
-  'embeddedResourceId': const IntToStringOptionalConverter().toJson(
-    instance.embeddedResourceId,
-  ),
-};
+) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'titleL10n': instance.titleL10n,
+      'type': instance.type,
+      'icon': instance.icon,
+      'embeddedResourceId': const IntToStringOptionalConverter().toJson(
+        instance.embeddedResourceId,
+      ),
+    };
 
 FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
     FavoritesTabScheme(
@@ -457,8 +474,7 @@ ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      contactSourceTypes:
-          (json['contactSourceTypes'] as List<dynamic>?)
+      contactSourceTypes: (json['contactSourceTypes'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],

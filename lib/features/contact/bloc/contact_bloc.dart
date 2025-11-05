@@ -16,10 +16,7 @@ part 'contact_event.dart';
 part 'contact_state.dart';
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
-  ContactBloc(
-    this.contactId, {
-    required this.contactsRepository,
-  }) : super(const ContactState()) {
+  ContactBloc(this.contactId, {required this.contactsRepository}) : super(const ContactState()) {
     on<ContactStarted>(_onStarted, transformer: restartable());
     on<ContactAddedToFavorites>(_onAddedToFavorites);
     on<ContactRemovedFromFavorites>(_onRemovedFromFavorites);
@@ -55,10 +52,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   }
 
   FutureOr<void> _onEmailSend(ContactEmailSend event, Emitter<ContactState> emit) async {
-    final emailLaunchUri = Uri(
-      scheme: 'mailto',
-      path: event.contactEmail.address,
-    );
+    final emailLaunchUri = Uri(scheme: 'mailto', path: event.contactEmail.address);
     if (await canLaunchUrl(emailLaunchUri)) {
       await launchUrl(emailLaunchUri);
     }

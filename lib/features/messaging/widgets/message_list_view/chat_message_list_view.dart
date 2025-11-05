@@ -167,31 +167,28 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      list(),
-      Positioned(
-        top: MediaQuery.of(context).padding.top,
-        left: 0,
-        right: 0,
-        child: const MessagingStateBar(),
-      ),
-      Positioned(
-        bottom: MediaQuery.of(context).padding.bottom,
-        left: 0,
-        right: 0,
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              alignment: Alignment.centerRight,
-              child: ScrollToBottomButton(scrolledAway, scrollToBottom),
-            ),
-            const SizedBox(height: 24),
-            field(),
-          ],
+    return Stack(
+      children: [
+        list(),
+        Positioned(top: MediaQuery.of(context).padding.top, left: 0, right: 0, child: const MessagingStateBar()),
+        Positioned(
+          bottom: MediaQuery.of(context).padding.bottom,
+          left: 0,
+          right: 0,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                alignment: Alignment.centerRight,
+                child: ScrollToBottomButton(scrolledAway, scrollToBottom),
+              ),
+              const SizedBox(height: 24),
+              field(),
+            ],
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   Widget list() {
@@ -242,10 +239,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Center(
-                  child: Text(
-                    entry.date.toDayOfMonth,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
+                  child: Text(entry.date.toDayOfMonth, style: const TextStyle(fontSize: 12, color: Colors.grey)),
                 ),
               );
             }
@@ -318,7 +312,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                 controller: inputController,
                 onSend: handleSend,
                 onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
-              )
+              ),
           ],
         );
       },
@@ -362,10 +356,7 @@ typedef _ComputeParams = ({
   DateTime dueTime,
 });
 
-typedef _ComputeResult = ({
-  List<_ChatMessageListViewEntry> entries,
-  DateTime dueTime,
-});
+typedef _ComputeResult = ({List<_ChatMessageListViewEntry> entries, DateTime dueTime});
 
 _ComputeResult _computeList(_ComputeParams params) {
   final userId = params.userId;
@@ -408,13 +399,15 @@ _ComputeResult _computeList(_ComputeParams params) {
       entries.add(_DateViewEntry(message.createdAt));
     }
 
-    entries.add(_MessageViewEntry(
-      message: message,
-      outboxEditEntry: editEntry,
-      outboxDeleteEntry: deleteEntry,
-      userReadedUntil: userReadedUntil,
-      membersReadedUntil: membersReadedUntil,
-    ));
+    entries.add(
+      _MessageViewEntry(
+        message: message,
+        outboxEditEntry: editEntry,
+        outboxDeleteEntry: deleteEntry,
+        userReadedUntil: userReadedUntil,
+        membersReadedUntil: membersReadedUntil,
+      ),
+    );
   }
 
   return (entries: entries, dueTime: dueTime);

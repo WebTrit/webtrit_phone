@@ -7,12 +7,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class UserInfoListTile extends StatelessWidget {
-  const UserInfoListTile({
-    super.key,
-    this.info,
-    this.onEditPressed,
-    this.contentPadding,
-  });
+  const UserInfoListTile({super.key, this.info, this.onEditPressed, this.contentPadding});
 
   final UserInfo? info;
   final VoidCallback? onEditPressed;
@@ -28,7 +23,8 @@ class UserInfoListTile extends StatelessWidget {
 
     const EdgeInsets defaultContentPadding = EdgeInsets.symmetric(horizontal: 16.0);
     final TextDirection textDirection = Directionality.of(context);
-    final EdgeInsets resolvedContentPadding = contentPadding?.resolve(textDirection) ??
+    final EdgeInsets resolvedContentPadding =
+        contentPadding?.resolve(textDirection) ??
         tileTheme.contentPadding?.resolve(textDirection) ??
         defaultContentPadding;
 
@@ -84,11 +80,7 @@ class UserInfoListTile extends StatelessWidget {
                 ],
               ),
             ),
-            if (onEditPressed != null)
-              IconButton(
-                icon: const Icon(Icons.edit_outlined),
-                onPressed: onEditPressed,
-              )
+            if (onEditPressed != null) IconButton(icon: const Icon(Icons.edit_outlined), onPressed: onEditPressed),
           ],
         ),
       ),

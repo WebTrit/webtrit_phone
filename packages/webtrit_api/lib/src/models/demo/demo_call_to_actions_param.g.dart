@@ -8,11 +8,13 @@ part of 'demo_call_to_actions_param.dart';
 
 DemoCallToActionsParam _$DemoCallToActionsParamFromJson(
   Map<String, dynamic> json,
-) => DemoCallToActionsParam(
-  email: json['email'] as String,
-  tab: json['tab'] as String,
-);
+) =>
+    DemoCallToActionsParam(
+      email: json['email'] as String,
+      tab: json['tab'] as String,
+    );
 
 Map<String, dynamic> _$DemoCallToActionsParamToJson(
   DemoCallToActionsParam instance,
-) => <String, dynamic>{'email': instance.email, 'tab': instance.tab};
+) =>
+    <String, dynamic>{'email': instance.email, 'tab': instance.tab};

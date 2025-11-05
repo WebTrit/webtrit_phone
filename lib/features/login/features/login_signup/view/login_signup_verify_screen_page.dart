@@ -7,9 +7,7 @@ import 'package:webtrit_phone/features/features.dart';
 @RoutePage()
 class LoginSignupVerifyScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const LoginSignupVerifyScreenPage({
-    required this.bodySafeAreaSides,
-  });
+  const LoginSignupVerifyScreenPage({required this.bodySafeAreaSides});
 
   final Set<SafeAreaSide> bodySafeAreaSides;
 

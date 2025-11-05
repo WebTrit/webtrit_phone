@@ -2,20 +2,23 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements CallRoutingCubit {
+class MockCallRoutingCubit extends MockCubit<CallRoutingState?>
+    implements CallRoutingCubit {
   MockCallRoutingCubit();
 
   /// Null state (default).
   factory MockCallRoutingCubit.initial() {
     final mock = MockCallRoutingCubit();
-    whenListen(mock, const Stream<CallRoutingState?>.empty(), initialState: null);
+    whenListen(mock, const Stream<CallRoutingState?>.empty(),
+        initialState: null);
     return mock;
   }
 
   /// Provide any prebuilt state without touching private constructors.
   factory MockCallRoutingCubit.withState(CallRoutingState state) {
     final mock = MockCallRoutingCubit();
-    whenListen(mock, const Stream<CallRoutingState?>.empty(), initialState: state);
+    whenListen(mock, const Stream<CallRoutingState?>.empty(),
+        initialState: state);
     return mock;
   }
 

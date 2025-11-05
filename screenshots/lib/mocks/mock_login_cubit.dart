@@ -46,11 +46,13 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
         tenantId: '_',
         token: '_',
         otpSigninSessionOtpProvisionalWithDateTime: (
-          const SessionResult.otpProvisional(otpId: '_') as SessionOtpProvisional,
+          const SessionResult.otpProvisional(otpId: '_')
+              as SessionOtpProvisional,
           DateTime.now(),
         ),
         signupSessionOtpProvisionalWithDateTime: (
-          const SessionResult.otpProvisional(otpId: '_') as SessionOtpProvisional,
+          const SessionResult.otpProvisional(otpId: '_')
+              as SessionOtpProvisional,
           DateTime.now(),
         ),
         supportedLoginTypes: [

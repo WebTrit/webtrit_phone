@@ -133,9 +133,7 @@ class _CallActionsState extends State<CallActions> {
     final themeData = Theme.of(context);
 
     _inputDecorations = themeData.extension<InputDecorations>();
-    _textStyle = themeData.textTheme.displaySmall?.copyWith(
-      color: themeData.colorScheme.surface,
-    );
+    _textStyle = themeData.textTheme.displaySmall?.copyWith(color: themeData.colorScheme.surface);
 
     _iconSize = themeData.textTheme.headlineLarge?.fontSize;
 
@@ -194,16 +192,16 @@ class _CallActionsState extends State<CallActions> {
         widget.style?.key?.foregroundColor?.resolve(const <WidgetState>{}) ?? Theme.of(context).colorScheme.surface;
 
     final keypadTextStyle = DefaultTextStyle.of(context).style.copyWith(
-          fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
-          height: 1.0,
-          color: foregroundColor,
-        );
+      fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
+      height: 1.0,
+      color: foregroundColor,
+    );
 
     final subKeypadTextStyle = DefaultTextStyle.of(context).style.copyWith(
-          fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-          height: 1.0,
-          color: foregroundColor.withValues(alpha: 0.6),
-        );
+      fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+      height: 1.0,
+      color: foregroundColor.withValues(alpha: 0.6),
+    );
 
     final TextButtonsTable buttonsTable;
     if (widget.isIncoming && !widget.wasAccepted) {
@@ -219,10 +217,7 @@ class _CallActionsState extends State<CallActions> {
                 key: callActionsHangupKey,
                 onPressed: onHangupPressed,
                 style: widget.style?.hangup,
-                child: Icon(
-                  Icons.call_end,
-                  size: actionPadIconSize,
-                ),
+                child: Icon(Icons.call_end, size: actionPadIconSize),
               ),
             ),
             const SizedBox(),
@@ -233,10 +228,7 @@ class _CallActionsState extends State<CallActions> {
               child: TextButton(
                 onPressed: onAcceptPressed,
                 style: widget.style?.callStart,
-                child: Icon(
-                  widget.remoteVideo ? Icons.videocam : Icons.call,
-                  size: actionPadIconSize,
-                ),
+                child: Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
               ),
             ),
           ],
@@ -253,14 +245,8 @@ class _CallActionsState extends State<CallActions> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.call_end,
-                      size: actionPadIconSize,
-                    ),
-                    Icon(
-                      widget.remoteVideo ? Icons.videocam : Icons.call,
-                      size: actionPadIconSize,
-                    ),
+                    Icon(Icons.call_end, size: actionPadIconSize),
+                    Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
                   ],
                 ),
               ),
@@ -271,10 +257,7 @@ class _CallActionsState extends State<CallActions> {
                 key: callActionsHangupKey,
                 onPressed: onHangupPressed,
                 style: widget.style?.hangup,
-                child: Icon(
-                  Icons.call_end,
-                  size: actionPadIconSize,
-                ),
+                child: Icon(Icons.call_end, size: actionPadIconSize),
               ),
             ),
             Tooltip(
@@ -285,14 +268,8 @@ class _CallActionsState extends State<CallActions> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.pause,
-                      size: actionPadIconSize,
-                    ),
-                    Icon(
-                      widget.remoteVideo ? Icons.videocam : Icons.call,
-                      size: actionPadIconSize,
-                    ),
+                    Icon(Icons.pause, size: actionPadIconSize),
+                    Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
                   ],
                 ),
               ),
@@ -309,10 +286,7 @@ class _CallActionsState extends State<CallActions> {
             child: TextButton(
               onPressed: onDeclineTransferPressed,
               style: widget.style?.hangup,
-              child: Icon(
-                Icons.call_end,
-                size: actionPadIconSize,
-              ),
+              child: Icon(Icons.call_end, size: actionPadIconSize),
             ),
           ),
           const SizedBox(),
@@ -321,10 +295,7 @@ class _CallActionsState extends State<CallActions> {
             child: TextButton(
               onPressed: onApproveTransferPressed,
               style: widget.style?.callStart,
-              child: Icon(
-                Icons.phone_forwarded,
-                size: actionPadIconSize,
-              ),
+              child: Icon(Icons.phone_forwarded, size: actionPadIconSize),
             ),
           ),
         ],
@@ -342,10 +313,7 @@ class _CallActionsState extends State<CallActions> {
                   onKeyPressed: (key) {
                     final newText = _keypadTextEditingController.text + key;
                     final newSelection = TextSelection.collapsed(offset: newText.length);
-                    final value = _keypadTextEditingController.value.copyWith(
-                      text: newText,
-                      selection: newSelection,
-                    );
+                    final value = _keypadTextEditingController.value.copyWith(text: newText, selection: newSelection);
                     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(
                       value,
                       SelectionChangedCause.keyboard,
@@ -380,10 +348,7 @@ class _CallActionsState extends State<CallActions> {
               onPressed: onMutedChanged != null ? () => onMutedChanged(!widget.mutedValue) : null,
               statesController: _mutedStatesController..update(WidgetState.selected, widget.mutedValue),
               style: widget.style?.muted,
-              child: Icon(
-                widget.mutedValue ? Icons.mic_off : Icons.mic,
-                size: actionPadIconSize,
-              ),
+              child: Icon(widget.mutedValue ? Icons.mic_off : Icons.mic, size: actionPadIconSize),
             ),
           ),
           Tooltip(
@@ -395,10 +360,7 @@ class _CallActionsState extends State<CallActions> {
               onPressed: () => onCameraChanged?.call(!widget.cameraValue),
               statesController: _cameraStatesController..update(WidgetState.selected, widget.cameraValue),
               style: widget.style?.camera,
-              child: Icon(
-                widget.cameraValue ? Icons.videocam : Icons.videocam_off,
-                size: actionPadIconSize,
-              ),
+              child: Icon(widget.cameraValue ? Icons.videocam : Icons.videocam_off, size: actionPadIconSize),
             ),
           ),
           if (widget.availableAudioDevices.onlyBuiltIn)
@@ -415,10 +377,7 @@ class _CallActionsState extends State<CallActions> {
                 ),
                 statesController: _speakerStatesController..update(WidgetState.selected, speakerOn ?? false),
                 style: widget.style?.speaker,
-                child: Icon(
-                  (speakerOn ?? false) ? Icons.volume_up : Icons.phone_in_talk,
-                  size: actionPadIconSize,
-                ),
+                child: Icon((speakerOn ?? false) ? Icons.volume_up : Icons.phone_in_talk, size: actionPadIconSize),
               ),
             ),
           if (!widget.availableAudioDevices.onlyBuiltIn)
@@ -426,51 +385,50 @@ class _CallActionsState extends State<CallActions> {
               message: context.l10n.call_CallActionsTooltip_changeAudioDevice,
               child: CallPopupMenuButton<CallAudioDevice>(
                 offset: Offset(_dimension + 8, 0),
-                items: widget.availableAudioDevices.map(
-                  (device) {
-                    final CallAudioDevice(:name, :type, :id) = device;
-                    return CallPopupMenuItem<CallAudioDevice>(
-                      value: device,
-                      text: switch (type) {
-                        CallAudioDeviceType.speaker => context.l10n.call_CallActionsTooltip_device_speaker,
-                        CallAudioDeviceType.earpiece => context.l10n.call_CallActionsTooltip_device_earpiece,
-                        CallAudioDeviceType.wiredHeadset => context.l10n.call_CallActionsTooltip_device_wiredHeadset,
-                        CallAudioDeviceType.bluetooth => name ?? context.l10n.call_CallActionsTooltip_device_bluetooth,
-                        CallAudioDeviceType.streaming => name ?? context.l10n.call_CallActionsTooltip_device_streaming,
-                        _ => name ?? context.l10n.call_CallActionsTooltip_device_unknown,
-                      },
-                      icon: Icon(
-                        switch (type) {
-                          CallAudioDeviceType.speaker => Icons.volume_up,
-                          CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
-                          CallAudioDeviceType.wiredHeadset => Icons.headset,
-                          CallAudioDeviceType.earpiece => Icons.phone_in_talk,
-                          CallAudioDeviceType.streaming => Icons.usb,
-                          _ => Icons.device_unknown,
+                items: widget.availableAudioDevices
+                    .map((device) {
+                      final CallAudioDevice(:name, :type, :id) = device;
+                      return CallPopupMenuItem<CallAudioDevice>(
+                        value: device,
+                        text: switch (type) {
+                          CallAudioDeviceType.speaker => context.l10n.call_CallActionsTooltip_device_speaker,
+                          CallAudioDeviceType.earpiece => context.l10n.call_CallActionsTooltip_device_earpiece,
+                          CallAudioDeviceType.wiredHeadset => context.l10n.call_CallActionsTooltip_device_wiredHeadset,
+                          CallAudioDeviceType.bluetooth =>
+                            name ?? context.l10n.call_CallActionsTooltip_device_bluetooth,
+                          CallAudioDeviceType.streaming =>
+                            name ?? context.l10n.call_CallActionsTooltip_device_streaming,
+                          _ => name ?? context.l10n.call_CallActionsTooltip_device_unknown,
                         },
-                        size: 20,
-                        color: themeData.textTheme.bodyMedium!.color,
-                      ),
-                      textStyle: themeData.textTheme.bodyMedium,
-                    );
-                  },
-                ).toList(growable: false),
+                        icon: Icon(
+                          switch (type) {
+                            CallAudioDeviceType.speaker => Icons.volume_up,
+                            CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
+                            CallAudioDeviceType.wiredHeadset => Icons.headset,
+                            CallAudioDeviceType.earpiece => Icons.phone_in_talk,
+                            CallAudioDeviceType.streaming => Icons.usb,
+                            _ => Icons.device_unknown,
+                          },
+                          size: 20,
+                          color: themeData.textTheme.bodyMedium!.color,
+                        ),
+                        textStyle: themeData.textTheme.bodyMedium,
+                      );
+                    })
+                    .toList(growable: false),
                 onSelected: onAudioDeviceChanged,
                 child: IgnorePointer(
                   child: TextButton(
                     onPressed: null,
                     style: widget.style?.speaker,
-                    child: Icon(
-                      switch (audioDevice?.type) {
-                        CallAudioDeviceType.speaker => Icons.volume_up,
-                        CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
-                        CallAudioDeviceType.wiredHeadset => Icons.headset,
-                        CallAudioDeviceType.earpiece => Icons.phone_in_talk,
-                        CallAudioDeviceType.streaming => Icons.usb,
-                        _ => Icons.volume_off,
-                      },
-                      size: actionPadIconSize,
-                    ),
+                    child: Icon(switch (audioDevice?.type) {
+                      CallAudioDeviceType.speaker => Icons.volume_up,
+                      CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
+                      CallAudioDeviceType.wiredHeadset => Icons.headset,
+                      CallAudioDeviceType.earpiece => Icons.phone_in_talk,
+                      CallAudioDeviceType.streaming => Icons.usb,
+                      _ => Icons.volume_off,
+                    }, size: actionPadIconSize),
                   ),
                 ),
               ),
@@ -508,16 +466,13 @@ class _CallActionsState extends State<CallActions> {
                         color: themeData.textTheme.bodyMedium!.color,
                       ),
                       textStyle: themeData.textTheme.bodyMedium,
-                    )
+                    ),
                 ],
                 child: IgnorePointer(
                   child: TextButton(
                     onPressed: () {},
                     style: widget.style?.transfer,
-                    child: Icon(
-                      Icons.phone_forwarded,
-                      size: actionPadIconSize,
-                    ),
+                    child: Icon(Icons.phone_forwarded, size: actionPadIconSize),
                   ),
                 ),
               ),
@@ -551,16 +506,13 @@ class _CallActionsState extends State<CallActions> {
                         color: themeData.textTheme.bodyMedium!.color,
                       ),
                       textStyle: themeData.textTheme.bodyMedium,
-                    )
+                    ),
                 ],
                 child: IgnorePointer(
                   child: TextButton(
                     onPressed: onBlindTransferInitiated == null && onAttendedTransferInitiated == null ? null : () {},
                     style: widget.style?.transfer,
-                    child: Icon(
-                      Icons.phone_forwarded,
-                      size: actionPadIconSize,
-                    ),
+                    child: Icon(Icons.phone_forwarded, size: actionPadIconSize),
                   ),
                 ),
               ),
@@ -575,10 +527,7 @@ class _CallActionsState extends State<CallActions> {
                 onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
                 statesController: _heldStatesController..update(WidgetState.selected, widget.heldValue),
                 style: widget.style?.held,
-                child: Icon(
-                  Icons.pause,
-                  size: actionPadIconSize,
-                ),
+                child: Icon(Icons.pause, size: actionPadIconSize),
               ),
             ),
           if (onSwapPressed != null)
@@ -588,10 +537,7 @@ class _CallActionsState extends State<CallActions> {
               child: TextButton(
                 onPressed: onSwapPressed,
                 style: widget.style?.speaker,
-                child: Icon(
-                  Icons.swap_calls,
-                  size: actionPadIconSize,
-                ),
+                child: Icon(Icons.swap_calls, size: actionPadIconSize),
               ),
             ),
           Tooltip(
@@ -606,10 +552,7 @@ class _CallActionsState extends State<CallActions> {
                       });
                     },
               style: widget.style?.key,
-              child: Icon(
-                Icons.dialpad,
-                size: actionPadIconSize,
-              ),
+              child: Icon(Icons.dialpad, size: actionPadIconSize),
             ),
           ),
           // hangup delimiter
@@ -633,10 +576,7 @@ class _CallActionsState extends State<CallActions> {
               key: callActionsHangupKey,
               onPressed: onHangupPressed,
               style: widget.style?.hangup,
-              child: Icon(
-                Icons.call_end,
-                size: actionPadIconSize,
-              ),
+              child: Icon(Icons.call_end, size: actionPadIconSize),
             ),
           ),
           _keypadShow
@@ -651,10 +591,7 @@ class _CallActionsState extends State<CallActions> {
                       });
                     },
                     style: widget.style?.key,
-                    child: Icon(
-                      Icons.dialpad,
-                      size: actionPadIconSize,
-                    ),
+                    child: Icon(Icons.dialpad, size: actionPadIconSize),
                   ),
                 )
               : const SizedBox(),

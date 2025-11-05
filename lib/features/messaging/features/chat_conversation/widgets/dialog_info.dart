@@ -66,40 +66,40 @@ class _DialogInfoState extends State<DialogInfo> {
                   ],
                 ),
                 body: ContactInfoBuilder(
-                    source: ContactSourceId(ContactSourceType.external, participant),
-                    builder: (context, contact) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 32),
-                            LeadingAvatar(
-                              username: contact?.displayTitle,
-                              thumbnail: contact?.thumbnail,
-                              thumbnailUrl: contact?.thumbnailUrl,
-                              registered: contact?.registered,
-                              radius: 50,
+                  source: ContactSourceId(ContactSourceType.external, participant),
+                  builder: (context, contact) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 32),
+                          LeadingAvatar(
+                            username: contact?.displayTitle,
+                            thumbnail: contact?.thumbnail,
+                            thumbnailUrl: contact?.thumbnailUrl,
+                            registered: contact?.registered,
+                            radius: 50,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            contact?.displayTitle ?? context.l10n.messaging_ParticipantName_unknown,
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              // color: theme.primaryColor,
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              contact?.displayTitle ?? context.l10n.messaging_ParticipantName_unknown,
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                // color: theme.primaryColor,
-                              ),
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              'id: ${state.credentials.chatId ?? "n/a"}',
+                              style: const TextStyle(fontSize: 12),
+                              textAlign: TextAlign.right,
                             ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                'id: ${state.credentials.chatId ?? "n/a"}',
-                                style: const TextStyle(fontSize: 12),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                            Expanded(
-                                child: ListView(
+                          ),
+                          const SizedBox(height: 24),
+                          Expanded(
+                            child: ListView(
                               children: [
                                 for (ContactPhone contactPhone in contact?.phones ?? [])
                                   ListTile(
@@ -112,11 +112,13 @@ class _DialogInfoState extends State<DialogInfo> {
                                           icon: const Icon(Icons.call),
                                           onPressed: () {
                                             final callBloc = context.read<CallBloc>();
-                                            callBloc.add(CallControlEvent.started(
-                                              number: contactPhone.number,
-                                              displayName: contact?.maybeName,
-                                              video: false,
-                                            ));
+                                            callBloc.add(
+                                              CallControlEvent.started(
+                                                number: contactPhone.number,
+                                                displayName: contact?.maybeName,
+                                                video: false,
+                                              ),
+                                            );
                                             context.router.maybePop();
                                           },
                                         ),
@@ -125,11 +127,13 @@ class _DialogInfoState extends State<DialogInfo> {
                                           icon: const Icon(Icons.videocam),
                                           onPressed: () {
                                             final callBloc = context.read<CallBloc>();
-                                            callBloc.add(CallControlEvent.started(
-                                              number: contactPhone.number,
-                                              displayName: contact?.maybeName,
-                                              video: true,
-                                            ));
+                                            callBloc.add(
+                                              CallControlEvent.started(
+                                                number: contactPhone.number,
+                                                displayName: contact?.maybeName,
+                                                video: true,
+                                              ),
+                                            );
                                             context.router.maybePop();
                                           },
                                         ),
@@ -146,12 +150,14 @@ class _DialogInfoState extends State<DialogInfo> {
                                     ),
                                   ),
                               ],
-                            )),
-                            const SizedBox(height: 8),
-                          ],
-                        ),
-                      );
-                    }),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
               if (state.busy)
                 Container(

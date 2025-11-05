@@ -32,9 +32,7 @@ class MessagingStateWrapper extends StatelessWidget {
 }
 
 class MessagingStateBar extends StatelessWidget {
-  const MessagingStateBar({
-    super.key,
-  });
+  const MessagingStateBar({super.key});
 
   @override
   Widget build(BuildContext context) {

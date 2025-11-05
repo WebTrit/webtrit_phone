@@ -33,9 +33,7 @@ class LoginSignupRequestScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (signupRequestPreDescriptionText.isNotEmpty) ...[
-                Description(
-                  text: signupRequestPreDescriptionText,
-                ),
+                Description(text: signupRequestPreDescriptionText),
                 const SizedBox(height: kInset / 2),
               ],
               TextFormField(
@@ -49,17 +47,13 @@ class LoginSignupRequestScreen extends StatelessWidget {
                   errorMaxLines: 3,
                 ),
                 keyboardType: TextInputType.emailAddress,
-                autofillHints: const [
-                  AutofillHints.email,
-                ],
+                autofillHints: const [AutofillHints.email],
                 onChanged: context.read<LoginCubit>().signupEmailInputChanged,
                 onFieldSubmitted: !state.signupEmailInput.isValid ? null : (_) => _onSubmitted(context),
               ),
               if (signupRequestPostDescriptionText.isNotEmpty) ...[
                 const SizedBox(height: kInset / 2),
-                Description(
-                  text: signupRequestPostDescriptionText,
-                ),
+                Description(text: signupRequestPostDescriptionText),
               ],
               const Spacer(),
               const SizedBox(height: kInset),
@@ -74,7 +68,7 @@ class LoginSignupRequestScreen extends StatelessWidget {
                         strokeWidth: 2,
                         color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                       ),
-              )
+              ),
             ],
           ),
         );

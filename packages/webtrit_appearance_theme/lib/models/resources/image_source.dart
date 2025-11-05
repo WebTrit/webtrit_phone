@@ -85,7 +85,8 @@ class ImageSource with _$ImageSource {
   /// Whether the remote URI should be preserved (not replaced locally).
   bool get preserveRemote => metadata.getBool(_preserveRemoteKey) == true;
 
-  factory ImageSource.fromJson(Map<String, Object?> json) => _$ImageSourceFromJson(json);
+  factory ImageSource.fromJson(Map<String, Object?> json) =>
+      _$ImageSourceFromJson(json);
 
   Map<String, Object?> toJson() => _$ImageSourceToJson(this);
 }
@@ -109,7 +110,8 @@ class ImageRenderSpec with _$ImageRenderSpec {
   @override
   final PaddingConfig? padding;
 
-  factory ImageRenderSpec.fromJson(Map<String, Object?> json) => _$ImageRenderSpecFromJson(json);
+  factory ImageRenderSpec.fromJson(Map<String, Object?> json) =>
+      _$ImageRenderSpecFromJson(json);
 
   Map<String, Object?> toJson() => _$ImageRenderSpecToJson(this);
 }

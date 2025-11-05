@@ -14,7 +14,8 @@ class AppStatus with _$AppStatus {
   @override
   final bool register;
 
-  factory AppStatus.fromJson(Map<String, dynamic> json) => _$AppStatusFromJson(json);
+  factory AppStatus.fromJson(Map<String, dynamic> json) =>
+      _$AppStatusFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppStatusToJson(this);
 }

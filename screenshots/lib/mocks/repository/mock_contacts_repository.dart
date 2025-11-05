@@ -9,10 +9,12 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import '../../data/data.dart';
 
 class MockContactsRepository extends Mock implements ContactsRepository {
-  final StreamController<Contact?> _contactStreamController = StreamController<Contact?>.broadcast();
+  final StreamController<Contact?> _contactStreamController =
+      StreamController<Contact?>.broadcast();
 
   @override
-  Stream<Contact?> watchContactBySourceWithPhonesAndEmails(ContactSourceType sourceType, String sourceId) {
+  Stream<Contact?> watchContactBySourceWithPhonesAndEmails(
+      ContactSourceType sourceType, String sourceId) {
     return _contactStreamController.stream;
   }
 
@@ -21,9 +23,11 @@ class MockContactsRepository extends Mock implements ContactsRepository {
   }
 
   @override
-  Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
+  Future<Contact?> getContactBySource(
+      ContactSourceType sourceType, String sourceId) async {
     return dContactsRepository.firstWhereOrNull(
-      (contact) => contact.sourceType == sourceType && contact.sourceId == sourceId,
+      (contact) =>
+          contact.sourceType == sourceType && contact.sourceId == sourceId,
     );
   }
 }

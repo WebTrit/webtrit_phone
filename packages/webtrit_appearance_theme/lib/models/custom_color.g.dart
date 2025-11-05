@@ -7,9 +7,9 @@ part of 'custom_color.dart';
 // **************************************************************************
 
 CustomColor _$CustomColorFromJson(Map<String, dynamic> json) => CustomColor(
-  color: json['color'] as String,
-  blend: json['blend'] as bool? ?? true,
-);
+      color: json['color'] as String,
+      blend: json['blend'] as bool? ?? true,
+    );
 
 Map<String, dynamic> _$CustomColorToJson(CustomColor instance) =>
     <String, dynamic>{'color': instance.color, 'blend': instance.blend};

@@ -13,9 +13,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../contacts.dart';
 
 class ContactsLocalTab extends StatelessWidget {
-  const ContactsLocalTab({
-    super.key,
-  });
+  const ContactsLocalTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +44,7 @@ class ContactsLocalTab extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => openAppSettings(),
-                child: Text(
-                  context.l10n.contacts_LocalTabButton_openAppSettings,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(context.l10n.contacts_LocalTabButton_openAppSettings, textAlign: TextAlign.center),
               ),
             ],
           );
@@ -72,9 +67,7 @@ class ContactsLocalTab extends StatelessWidget {
           );
         } else {
           if (state.status == ContactsLocalTabStatus.failure) {
-            return NoDataPlaceholder(
-              content: Text(context.l10n.contacts_LocalTabText_failure),
-            );
+            return NoDataPlaceholder(content: Text(context.l10n.contacts_LocalTabText_failure));
           }
           if (state.status == ContactsLocalTabStatus.contactsAgreementFailure) {
             return NoDataPlaceholder(
@@ -97,17 +90,12 @@ class ContactsLocalTab extends StatelessWidget {
             );
           } else {
             if (state.searching) {
-              return NoDataPlaceholder(
-                content: Text(context.l10n.contacts_LocalTabText_emptyOnSearching),
-              );
+              return NoDataPlaceholder(content: Text(context.l10n.contacts_LocalTabText_emptyOnSearching));
             } else {
               return NoDataPlaceholder(
                 content: Text(context.l10n.contacts_LocalTabText_empty),
                 actions: [
-                  TextButton(
-                    onPressed: refreshContacts,
-                    child: Text(context.l10n.contacts_LocalTabButton_refresh),
-                  ),
+                  TextButton(onPressed: refreshContacts, child: Text(context.l10n.contacts_LocalTabButton_refresh)),
                 ],
               );
             }

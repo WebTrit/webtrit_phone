@@ -13,12 +13,8 @@ part 'network_state.dart';
 part 'network_cubit.freezed.dart';
 
 class NetworkCubit extends Cubit<NetworkState> {
-  NetworkCubit(
-    this._callTriggerConfig,
-    this._deviceInfo,
-    this._appPreferences,
-    this._callkeepBackgroundService,
-  ) : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
+  NetworkCubit(this._callTriggerConfig, this._deviceInfo, this._appPreferences, this._callkeepBackgroundService)
+    : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
     _initializeActiveIncomingType();
   }
 
@@ -36,10 +32,7 @@ class NetworkCubit extends Cubit<NetworkState> {
 
     final incomingCallTypesRemainder = _buildIncomingCallTypesRemainder();
 
-    emit(state.copyWith(
-      incomingCallTypeModels: models,
-      incomingCallTypesRemainder: incomingCallTypesRemainder,
-    ));
+    emit(state.copyWith(incomingCallTypeModels: models, incomingCallTypesRemainder: incomingCallTypesRemainder));
   }
 
   List<IncomingCallTypeModel> _buildIncomingCallTypeModels(IncomingCallType currentType) {

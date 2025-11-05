@@ -17,7 +17,8 @@ class AppContact with _$AppContact {
   @override
   final List<String> phones;
 
-  factory AppContact.fromJson(Map<String, dynamic> json) => _$AppContactFromJson(json);
+  factory AppContact.fromJson(Map<String, dynamic> json) =>
+      _$AppContactFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppContactToJson(this);
 }

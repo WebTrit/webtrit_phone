@@ -23,9 +23,9 @@ Map<String, dynamic> _$ErrorResponseToJson(ErrorResponse instance) =>
     };
 
 ErrorDetail _$ErrorDetailFromJson(Map<String, dynamic> json) => ErrorDetail(
-  path: json['path'] as String?,
-  reason: json['reason'] as String,
-);
+      path: json['path'] as String?,
+      reason: json['reason'] as String,
+    );
 
 Map<String, dynamic> _$ErrorDetailToJson(ErrorDetail instance) =>
     <String, dynamic>{'path': instance.path, 'reason': instance.reason};

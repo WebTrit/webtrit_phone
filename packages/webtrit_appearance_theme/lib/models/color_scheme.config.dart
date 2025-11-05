@@ -8,7 +8,9 @@ part 'color_scheme.config.g.dart';
 @JsonSerializable(explicitToJson: true)
 class ColorSchemeConfig with _$ColorSchemeConfig {
   /// Creates a [ColorSchemeConfig].
-  const ColorSchemeConfig({this.seedColor = '#F95A14', this.colorSchemeOverride = const ColorSchemeOverride()});
+  const ColorSchemeConfig(
+      {this.seedColor = '#F95A14',
+      this.colorSchemeOverride = const ColorSchemeOverride()});
 
   /// The seed color used to generate tonal palettes for the theme.
   @override
@@ -18,7 +20,8 @@ class ColorSchemeConfig with _$ColorSchemeConfig {
   @override
   final ColorSchemeOverride colorSchemeOverride;
 
-  factory ColorSchemeConfig.fromJson(Map<String, Object?> json) => _$ColorSchemeConfigFromJson(json);
+  factory ColorSchemeConfig.fromJson(Map<String, Object?> json) =>
+      _$ColorSchemeConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ColorSchemeConfigToJson(this);
 }
@@ -214,7 +217,8 @@ class ColorSchemeOverride with _$ColorSchemeOverride {
   @override
   final String surfaceTint;
 
-  factory ColorSchemeOverride.fromJson(Map<String, Object?> json) => _$ColorSchemeOverrideFromJson(json);
+  factory ColorSchemeOverride.fromJson(Map<String, Object?> json) =>
+      _$ColorSchemeOverrideFromJson(json);
 
   Map<String, Object?> toJson() => _$ColorSchemeOverrideToJson(this);
 }

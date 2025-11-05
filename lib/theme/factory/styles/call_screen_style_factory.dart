@@ -10,11 +10,7 @@ import '../theme_style_factory.dart';
 const double kDisabledOpacity = 0.40;
 
 class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
-  CallScreenStyleFactory(
-    this.colors,
-    this.pageConfig,
-    this.legacyCallActionsConfig,
-  );
+  CallScreenStyleFactory(this.colors, this.pageConfig, this.legacyCallActionsConfig);
 
   final ColorScheme colors;
   final CallPageConfig? pageConfig;
@@ -33,10 +29,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         systemUiOverlayStyle: pageConfig?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
         appBar: _mapAppBarStyle(appBarCfg),
         callInfo: _mapCallInfoStyle(infoCfg),
-        actions: _resolveActionsStyle(
-          fromPage: pageConfig?.actions,
-          fromLegacy: legacyCallActionsConfig,
-        ),
+        actions: _resolveActionsStyle(fromPage: pageConfig?.actions, fromLegacy: legacyCallActionsConfig),
       ),
     );
   }
@@ -184,24 +177,9 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
     final keyBg = c.keyBackgroundColor?.toColor() ?? actionBg;
 
     return CallScreenActionsStyle(
-      callStart: buildFilledLikeStyle(
-        colors: colors,
-        fg: colors.onTertiary,
-        bg: callStartBg,
-        icon: inactiveIcon,
-      ),
-      hangup: buildFilledLikeStyle(
-        colors: colors,
-        fg: colors.onError,
-        bg: hangupBg,
-        icon: inactiveIcon,
-      ),
-      transfer: buildFilledLikeStyle(
-        colors: colors,
-        fg: colors.onSecondary,
-        bg: transferBg,
-        icon: inactiveIcon,
-      ),
+      callStart: buildFilledLikeStyle(colors: colors, fg: colors.onTertiary, bg: callStartBg, icon: inactiveIcon),
+      hangup: buildFilledLikeStyle(colors: colors, fg: colors.onError, bg: hangupBg, icon: inactiveIcon),
+      transfer: buildFilledLikeStyle(colors: colors, fg: colors.onSecondary, bg: transferBg, icon: inactiveIcon),
       camera: buildToggleLikeStyle(
         colors: colors,
         bg: cameraBg,
@@ -238,18 +216,8 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         fg: colors.surface,
         activeFg: colors.onSurface,
       ),
-      swap: buildFilledLikeStyle(
-        colors: colors,
-        fg: colors.surface,
-        bg: swapBg,
-        icon: inactiveIcon,
-      ),
-      key: buildFilledLikeStyle(
-        colors: colors,
-        fg: colors.surface,
-        bg: keyBg,
-        icon: inactiveIcon,
-      ),
+      swap: buildFilledLikeStyle(colors: colors, fg: colors.surface, bg: swapBg, icon: inactiveIcon),
+      key: buildFilledLikeStyle(colors: colors, fg: colors.surface, bg: keyBg, icon: inactiveIcon),
     );
   }
 

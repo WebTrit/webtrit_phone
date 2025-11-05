@@ -39,7 +39,7 @@ class CallInfo extends StatefulWidget {
   final CallProcessingStatus? processingStatus;
   final CallInfoStyle? style;
 
-// TODO(Serdun): Rename class to better represent the actual data it holds
+  // TODO(Serdun): Rename class to better represent the actual data it holds
   final CallStatus callStatus;
 
   @override
@@ -138,10 +138,7 @@ class _CallInfoState extends State<CallInfo> {
             overflow: TextOverflow.ellipsis,
           ),
         const SizedBox(height: 10),
-        Text(
-          statusMessage,
-          style: statusTextStyle,
-        ),
+        Text(statusMessage, style: statusTextStyle),
         const SizedBox(height: 10),
         if (widget.processingStatus != null)
           Padding(

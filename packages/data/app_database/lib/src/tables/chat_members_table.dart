@@ -13,9 +13,11 @@ class ChatMembersTable extends Table {
 
   IntColumn get id => integer()();
 
-  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chatId =>
+      integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get userId => text()();
 
-  TextColumn get groupAuthorities => textEnum<GroupAuthoritiesEnum>().nullable()();
+  TextColumn get groupAuthorities =>
+      textEnum<GroupAuthoritiesEnum>().nullable()();
 }

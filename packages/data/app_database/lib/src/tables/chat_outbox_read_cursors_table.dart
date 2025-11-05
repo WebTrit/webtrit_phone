@@ -9,7 +9,8 @@ class ChatOutboxReadCursorsTable extends Table {
   @override
   Set<Column> get primaryKey => {chatId};
 
-  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chatId =>
+      integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get timestampUsec => integer()();
 

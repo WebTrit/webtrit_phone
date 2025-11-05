@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen_style.dart';
 
 class LoginModeSelectScreenStyles extends ThemeExtension<LoginModeSelectScreenStyles> {
-  const LoginModeSelectScreenStyles({
-    required this.primary,
-  });
+  const LoginModeSelectScreenStyles({required this.primary});
 
   final LoginModeSelectScreenStyle? primary;
 
   @override
-  ThemeExtension<LoginModeSelectScreenStyles> copyWith({
-    LoginModeSelectScreenStyle? primary,
-  }) {
-    return LoginModeSelectScreenStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<LoginModeSelectScreenStyles> copyWith({LoginModeSelectScreenStyle? primary}) {
+    return LoginModeSelectScreenStyles(primary: primary ?? this.primary);
   }
 
   @override

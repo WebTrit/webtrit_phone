@@ -9,9 +9,8 @@ part of 'app_smart_contact.dart';
 AppSmartContact _$AppSmartContactFromJson(Map<String, dynamic> json) =>
     AppSmartContact(
       identifier: json['identifier'] as String,
-      phones: (json['phones'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      phones:
+          (json['phones'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$AppSmartContactToJson(AppSmartContact instance) =>

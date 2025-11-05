@@ -29,25 +29,29 @@ void main() {
       aliasName: Value('ШК'),
     ));
 
-    await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
+    await contactPhonesDao
+        .insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
       contactId: Value(1),
       number: Value('1234567890'),
       label: Value('Home'),
     ));
 
-    await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
+    await contactPhonesDao
+        .insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
       contactId: Value(2),
       number: Value('1234567890'),
       label: Value('Home'),
     ));
 
-    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+    await contactEmailsDao
+        .insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
       contactId: Value(1),
       address: Value('taras@example.com'),
       label: Value('Personal'),
     ));
 
-    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+    await contactEmailsDao
+        .insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
       contactId: Value(2),
       address: Value('kobzar@example.com'),
       label: Value('Work'),
@@ -60,7 +64,8 @@ void main() {
 
   group('watchAllLikeContacts', () {
     test('matching "Тарас"', () async {
-      final likeContactsStream = database.contactsDao.watchAllContacts(['Тарас']);
+      final likeContactsStream =
+          database.contactsDao.watchAllContacts(['Тарас']);
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
@@ -73,8 +78,14 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 2);
-      expect(likeContacts.any((contact) => contact.contact.lastName == 'Тарас Шевченко'), isTrue);
-      expect(likeContacts.any((contact) => contact.contact.lastName == 'Шевченко Кобзар'), isTrue);
+      expect(
+          likeContacts
+              .any((contact) => contact.contact.lastName == 'Тарас Шевченко'),
+          isTrue);
+      expect(
+          likeContacts
+              .any((contact) => contact.contact.lastName == 'Шевченко Кобзар'),
+          isTrue);
     });
 
     test('all contacts', () async {
@@ -82,14 +93,21 @@ void main() {
       final allContacts = await allContactsStream.first;
 
       expect(allContacts.length, 2);
-      expect(allContacts.any((contact) => contact.contact.lastName == 'Тарас Шевченко'), isTrue);
-      expect(allContacts.any((contact) => contact.contact.lastName == 'Шевченко Кобзар'), isTrue);
+      expect(
+          allContacts
+              .any((contact) => contact.contact.lastName == 'Тарас Шевченко'),
+          isTrue);
+      expect(
+          allContacts
+              .any((contact) => contact.contact.lastName == 'Шевченко Кобзар'),
+          isTrue);
     });
   });
 
   group('watchAllContactsWithPhonesAndEmailsLikeExt', () {
     test('matching "Тарас"', () async {
-      final likeContactsStream = database.contactsDao.watchAllContacts(['Тарас']);
+      final likeContactsStream =
+          database.contactsDao.watchAllContacts(['Тарас']);
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 1);
@@ -106,8 +124,14 @@ void main() {
       final likeContacts = await likeContactsStream.first;
 
       expect(likeContacts.length, 2);
-      expect(likeContacts.any((contact) => contact.contact.lastName == 'Тарас Шевченко'), isTrue);
-      expect(likeContacts.any((contact) => contact.contact.lastName == 'Шевченко Кобзар'), isTrue);
+      expect(
+          likeContacts
+              .any((contact) => contact.contact.lastName == 'Тарас Шевченко'),
+          isTrue);
+      expect(
+          likeContacts
+              .any((contact) => contact.contact.lastName == 'Шевченко Кобзар'),
+          isTrue);
       expect(likeContacts.first.emails.length, 1);
       expect(likeContacts.first.emails.first.address, 'taras@example.com');
       expect(likeContacts.first.phones.length, 1);
@@ -119,25 +143,34 @@ void main() {
       final allContacts = await allContactsStream.first;
 
       expect(allContacts.length, 2);
-      expect(allContacts.any((contact) => contact.contact.lastName == 'Тарас Шевченко'), isTrue);
-      expect(allContacts.any((contact) => contact.contact.lastName == 'Шевченко Кобзар'), isTrue);
+      expect(
+          allContacts
+              .any((contact) => contact.contact.lastName == 'Тарас Шевченко'),
+          isTrue);
+      expect(
+          allContacts
+              .any((contact) => contact.contact.lastName == 'Шевченко Кобзар'),
+          isTrue);
     });
   });
 
   group('getContactByPhoneNumber', () {
     test('should return contact for existing phone number', () async {
-      final fetchedContact = await database.contactsDao.getContactByPhoneNumber('1234567890');
+      final fetchedContact =
+          await database.contactsDao.getContactByPhoneNumber('1234567890');
 
       expect(fetchedContact, isNotNull);
       expect(fetchedContact!.phones, isNotEmpty);
       expect(fetchedContact.phones.first.number == '1234567890', isTrue);
       expect(fetchedContact.emails, isNotEmpty);
-      expect(fetchedContact.emails.first.address == 'taras@example.com', isTrue);
+      expect(
+          fetchedContact.emails.first.address == 'taras@example.com', isTrue);
       expect(fetchedContact.contact.lastName == 'Тарас Шевченко', isTrue);
     });
 
     test('should return empty list for non-existent phone number', () async {
-      final fetchedContact = await database.contactsDao.getContactByPhoneNumber('0000000000');
+      final fetchedContact =
+          await database.contactsDao.getContactByPhoneNumber('0000000000');
 
       expect(fetchedContact, isNull);
     });
@@ -149,7 +182,8 @@ void main() {
       final contactPhonesDao = database.contactPhonesDao;
 
       // Insert contacts with sourceId == null
-      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      final contact1 = await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value(null),
         firstName: Value('John'),
@@ -157,7 +191,8 @@ void main() {
         aliasName: Value('JD'),
       ));
 
-      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      final contact2 = await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value(null),
         firstName: Value('Jane'),
@@ -165,24 +200,29 @@ void main() {
         aliasName: Value('JS'),
       ));
 
-      await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
+      await contactPhonesDao
+          .insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
         contactId: Value(contact2.id),
         number: Value('1234567890'),
         label: Value('Home'),
       ));
 
-      await database.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
+      await database.contactEmailsDao
+          .insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
         contactId: Value(contact2.id),
         address: Value('asd@qwe.main'),
         label: Value('Work'),
       ));
 
       // Verify all fields
-      final allContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final allContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(allContacts.length, 2);
 
-      final insertedContact1 = allContacts.firstWhere((data) => data.contact.id == contact1.id);
-      expect(insertedContact1.contact.sourceType, ContactSourceTypeEnum.external);
+      final insertedContact1 =
+          allContacts.firstWhere((data) => data.contact.id == contact1.id);
+      expect(
+          insertedContact1.contact.sourceType, ContactSourceTypeEnum.external);
       expect(insertedContact1.contact.sourceId, isNull);
       expect(insertedContact1.contact.firstName, 'John');
       expect(insertedContact1.contact.lastName, 'Doe');
@@ -190,8 +230,10 @@ void main() {
       expect(insertedContact1.phones, isEmpty);
       expect(insertedContact1.emails, isEmpty);
 
-      final insertedContact2 = allContacts.firstWhere((data) => data.contact.id == contact2.id);
-      expect(insertedContact2.contact.sourceType, ContactSourceTypeEnum.external);
+      final insertedContact2 =
+          allContacts.firstWhere((data) => data.contact.id == contact2.id);
+      expect(
+          insertedContact2.contact.sourceType, ContactSourceTypeEnum.external);
       expect(insertedContact2.contact.sourceId, isNull);
       expect(insertedContact2.contact.firstName, 'Jane');
       expect(insertedContact2.contact.lastName, 'Smith');
@@ -206,7 +248,8 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert contacts with sourceId == null
-      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      final contact1 = await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value(null),
         firstName: Value('John'),
@@ -214,7 +257,8 @@ void main() {
         aliasName: Value('JD'),
       ));
 
-      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      final contact2 = await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value(null),
         firstName: Value('Jane'),
@@ -223,18 +267,23 @@ void main() {
       ));
 
       // Verify all fields
-      final allContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final allContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(allContacts.length, 2);
 
-      final insertedContact1 = allContacts.firstWhere((data) => data.contact.id == contact1.id);
-      expect(insertedContact1.contact.sourceType, ContactSourceTypeEnum.external);
+      final insertedContact1 =
+          allContacts.firstWhere((data) => data.contact.id == contact1.id);
+      expect(
+          insertedContact1.contact.sourceType, ContactSourceTypeEnum.external);
       expect(insertedContact1.contact.sourceId, isNull);
       expect(insertedContact1.contact.firstName, 'John');
       expect(insertedContact1.contact.lastName, 'Doe');
       expect(insertedContact1.contact.aliasName, 'JD');
 
-      final insertedContact2 = allContacts.firstWhere((data) => data.contact.id == contact2.id);
-      expect(insertedContact2.contact.sourceType, ContactSourceTypeEnum.external);
+      final insertedContact2 =
+          allContacts.firstWhere((data) => data.contact.id == contact2.id);
+      expect(
+          insertedContact2.contact.sourceType, ContactSourceTypeEnum.external);
       expect(insertedContact2.contact.sourceId, isNull);
       expect(insertedContact2.contact.firstName, 'Jane');
       expect(insertedContact2.contact.lastName, 'Smith');
@@ -245,7 +294,8 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert contacts with sourceId != null
-      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      final contact1 = await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value('source1'),
         firstName: Value('John'),
@@ -253,7 +303,8 @@ void main() {
         aliasName: Value('JD'),
       ));
 
-      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      final contact2 = await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value('source2'),
         firstName: Value('Jane'),
@@ -262,29 +313,36 @@ void main() {
       ));
 
       // Verify all fields
-      final allContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final allContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(allContacts.length, 2);
 
-      final insertedContact1 = allContacts.firstWhere((data) => data.contact.id == contact1.id);
-      expect(insertedContact1.contact.sourceType, ContactSourceTypeEnum.external);
+      final insertedContact1 =
+          allContacts.firstWhere((data) => data.contact.id == contact1.id);
+      expect(
+          insertedContact1.contact.sourceType, ContactSourceTypeEnum.external);
       expect(insertedContact1.contact.sourceId, 'source1');
       expect(insertedContact1.contact.firstName, 'John');
       expect(insertedContact1.contact.lastName, 'Doe');
       expect(insertedContact1.contact.aliasName, 'JD');
 
-      final insertedContact2 = allContacts.firstWhere((data) => data.contact.id == contact2.id);
-      expect(insertedContact2.contact.sourceType, ContactSourceTypeEnum.external);
+      final insertedContact2 =
+          allContacts.firstWhere((data) => data.contact.id == contact2.id);
+      expect(
+          insertedContact2.contact.sourceType, ContactSourceTypeEnum.external);
       expect(insertedContact2.contact.sourceId, 'source2');
       expect(insertedContact2.contact.firstName, 'Jane');
       expect(insertedContact2.contact.lastName, 'Smith');
       expect(insertedContact2.contact.aliasName, 'JS');
     });
 
-    test('Half contacts with sourceId == null and half with sourceId != null', () async {
+    test('Half contacts with sourceId == null and half with sourceId != null',
+        () async {
       final contactsDao = database.contactsDao;
 
       // Insert mixed contacts
-      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      final contact1 = await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value(null),
         firstName: Value('John'),
@@ -292,7 +350,8 @@ void main() {
         aliasName: Value('JD'),
       ));
 
-      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      final contact2 = await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value('source1'),
         firstName: Value('Jane'),
@@ -301,18 +360,23 @@ void main() {
       ));
 
       // Verify all fields
-      final allContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final allContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(allContacts.length, 2);
 
-      final insertedContact1 = allContacts.firstWhere((data) => data.contact.id == contact1.id);
-      expect(insertedContact1.contact.sourceType, ContactSourceTypeEnum.external);
+      final insertedContact1 =
+          allContacts.firstWhere((data) => data.contact.id == contact1.id);
+      expect(
+          insertedContact1.contact.sourceType, ContactSourceTypeEnum.external);
       expect(insertedContact1.contact.sourceId, isNull);
       expect(insertedContact1.contact.firstName, 'John');
       expect(insertedContact1.contact.lastName, 'Doe');
       expect(insertedContact1.contact.aliasName, 'JD');
 
-      final insertedContact2 = allContacts.firstWhere((data) => data.contact.id == contact2.id);
-      expect(insertedContact2.contact.sourceType, ContactSourceTypeEnum.external);
+      final insertedContact2 =
+          allContacts.firstWhere((data) => data.contact.id == contact2.id);
+      expect(
+          insertedContact2.contact.sourceType, ContactSourceTypeEnum.external);
       expect(insertedContact2.contact.sourceId, 'source1');
       expect(insertedContact2.contact.firstName, 'Jane');
       expect(insertedContact2.contact.lastName, 'Smith');
@@ -325,14 +389,16 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert contacts with sourceId == null
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value(null),
         firstName: Value('John'),
         lastName: Value('Doe'),
       ));
 
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value(null),
         firstName: Value('Jane'),
@@ -347,7 +413,8 @@ void main() {
 
       // Verify deletion
       expect(deletedCount, 2);
-      final remainingContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final remainingContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(remainingContacts, isEmpty);
     });
 
@@ -355,14 +422,16 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert contacts with sourceId != null
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value('source1'),
         firstName: Value('John'),
         lastName: Value('Doe'),
       ));
 
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value('source2'),
         firstName: Value('Jane'),
@@ -377,7 +446,8 @@ void main() {
 
       // Verify partial deletion
       expect(deletedCount1, 1);
-      final remainingContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final remainingContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(remainingContacts.length, 1);
       expect(remainingContacts.first.contact.sourceId, 'source2');
 
@@ -389,22 +459,26 @@ void main() {
 
       // Verify complete deletion
       expect(deletedCount2, 1);
-      final finalContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final finalContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(finalContacts, isEmpty);
     });
 
-    test('Half contacts with sourceId == null and half with sourceId != null', () async {
+    test('Half contacts with sourceId == null and half with sourceId != null',
+        () async {
       final contactsDao = database.contactsDao;
 
       // Insert mixed contacts
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value(null),
         firstName: Value('John'),
         lastName: Value('Doe'),
       ));
 
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
+      await contactsDao
+          .insertOnUniqueConflictUpdateContact(ContactDataCompanion(
         sourceType: Value(ContactSourceTypeEnum.external),
         sourceId: Value('source1'),
         firstName: Value('Jane'),
@@ -419,7 +493,8 @@ void main() {
 
       // Verify partial deletion
       expect(deletedCount1, 1);
-      final remainingContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final remainingContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(remainingContacts.length, 1);
       expect(remainingContacts.first.contact.sourceId, 'source1');
 
@@ -431,7 +506,8 @@ void main() {
 
       // Verify complete deletion
       expect(deletedCount2, 1);
-      final finalContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
+      final finalContacts =
+          await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
       expect(finalContacts, isEmpty);
     });
   });

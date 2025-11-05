@@ -12,7 +12,8 @@ class UnholdRequest extends CallRequest {
   factory UnholdRequest.fromJson(Map<String, dynamic> json) {
     final requestTypeValue = json[Request.typeKey];
     if (requestTypeValue != typeValue) {
-      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(
+          requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return UnholdRequest(

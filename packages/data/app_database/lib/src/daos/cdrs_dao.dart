@@ -23,12 +23,21 @@ class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
     final query = select(cdrTable);
     query.orderBy([(t) => OrderingTerm.desc(t.connectTimeUsec)]);
 
-    if (number != null) query.where((tbl) => tbl.callerNumber.equals(number) | tbl.calleeNumber.equals(number));
-    if (destination != null) query.where((tbl) => tbl.caller.equals(destination) | tbl.callee.equals(destination));
+    if (number != null)
+      query.where((tbl) =>
+          tbl.callerNumber.equals(number) | tbl.calleeNumber.equals(number));
+    if (destination != null)
+      query.where((tbl) =>
+          tbl.caller.equals(destination) | tbl.callee.equals(destination));
     if (status != null) query.where((tbl) => tbl.status.equals(status.name));
-    if (direction != null) query.where((tbl) => tbl.direction.equals(direction.name));
-    if (from != null) query.where((tbl) => tbl.connectTimeUsec.isSmallerThanValue(from.microsecondsSinceEpoch));
-    if (to != null) query.where((tbl) => tbl.connectTimeUsec.isBiggerThanValue(to.microsecondsSinceEpoch));
+    if (direction != null)
+      query.where((tbl) => tbl.direction.equals(direction.name));
+    if (from != null)
+      query.where((tbl) =>
+          tbl.connectTimeUsec.isSmallerThanValue(from.microsecondsSinceEpoch));
+    if (to != null)
+      query.where((tbl) =>
+          tbl.connectTimeUsec.isBiggerThanValue(to.microsecondsSinceEpoch));
     if (limit != null) query.limit(limit);
 
     return query.get();
@@ -39,7 +48,9 @@ class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
       ..orderBy([(t) => OrderingTerm.desc(t.connectTimeUsec)])
       ..limit(1);
     final result = await query.getSingleOrNull();
-    return result?.connectTimeUsec != null ? DateTime.fromMicrosecondsSinceEpoch(result!.connectTimeUsec) : null;
+    return result?.connectTimeUsec != null
+        ? DateTime.fromMicrosecondsSinceEpoch(result!.connectTimeUsec)
+        : null;
   }
 
   Future<DateTime?> getFirstRecordTime() async {
@@ -47,7 +58,9 @@ class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
       ..orderBy([(t) => OrderingTerm.asc(t.connectTimeUsec)])
       ..limit(1);
     final result = await query.getSingleOrNull();
-    return result?.connectTimeUsec != null ? DateTime.fromMicrosecondsSinceEpoch(result!.connectTimeUsec) : null;
+    return result?.connectTimeUsec != null
+        ? DateTime.fromMicrosecondsSinceEpoch(result!.connectTimeUsec)
+        : null;
   }
 
   Future<void> wipeData() async {

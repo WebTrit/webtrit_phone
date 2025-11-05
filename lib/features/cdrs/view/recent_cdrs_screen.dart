@@ -53,9 +53,7 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(
-            padding: const EdgeInsets.only(
-              bottom: kMainAppBarBottomPaddingGap,
-            ),
+            padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
             child: ExtTabBar(
               width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,

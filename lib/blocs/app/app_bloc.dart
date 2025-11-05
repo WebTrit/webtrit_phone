@@ -32,15 +32,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.appInfo,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
-  }) : super(AppState(
-          /// Important to manage routing and navigation in AppRouter
-          session: sessionRepository.getCurrent() ?? const Session(),
-          themeSettings: appThemes.values.first.settings,
-          themeMode: appPreferences.getThemeMode(),
-          locale: appPreferences.getLocale(),
-          userAgreementStatus: appPreferences.getUserAgreementStatus(),
-          contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
-        )) {
+  }) : super(
+         AppState(
+           /// Important to manage routing and navigation in AppRouter
+           session: sessionRepository.getCurrent() ?? const Session(),
+           themeSettings: appThemes.values.first.settings,
+           themeMode: appPreferences.getThemeMode(),
+           locale: appPreferences.getLocale(),
+           userAgreementStatus: appPreferences.getUserAgreementStatus(),
+           contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
+         ),
+       ) {
     on<_SessionUpdated>(_onSessionUpdated, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
@@ -72,12 +74,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
-    unawaited(CrashlyticsUtils.logSession(
-      userId: session.userId,
-      tenantId: session.tenantId,
-      coreUrl: session.coreUrl!,
-      sessionId: appInfo.identifier,
-    ));
+    unawaited(
+      CrashlyticsUtils.logSession(
+        userId: session.userId,
+        tenantId: session.tenantId,
+        coreUrl: session.coreUrl!,
+        sessionId: appInfo.identifier,
+      ),
+    );
   }
 
   void _onSessionLoggedOut(Session session) {
@@ -86,9 +90,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _subscribeSession() {
     _sessionSub = sessionRepository.watch().listen(
-          (session) => add(_SessionUpdated(session)),
-          onError: (e, st) => _logger.severe('authSessionRepository.watch', e, st),
-        );
+      (session) => add(_SessionUpdated(session)),
+      onError: (e, st) => _logger.severe('authSessionRepository.watch', e, st),
+    );
   }
 
   void _onSessionUpdated(_SessionUpdated event, Emitter<AppState> emit) async {
@@ -133,28 +137,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  Future<void> _onUserAgreementAccepted(
-    AppAgreementAccepted event,
-    Emitter<AppState> emit,
-  ) {
+  Future<void> _onUserAgreementAccepted(AppAgreementAccepted event, Emitter<AppState> emit) {
     return switch (event) {
       _UserAppAgreementUpdate() => __onUpdateUserAgreementStatus(event, emit),
       _ContactsAppAgreementUpdate() => __onContactsUserAgreementStatus(event, emit),
     };
   }
 
-  Future<void> __onUpdateUserAgreementStatus(
-    _UserAppAgreementUpdate event,
-    Emitter<AppState> emit,
-  ) async {
+  Future<void> __onUpdateUserAgreementStatus(_UserAppAgreementUpdate event, Emitter<AppState> emit) async {
     await appPreferences.setUserAgreementStatus(event.status);
     emit(state.copyWith(userAgreementStatus: event.status));
   }
 
-  Future<void> __onContactsUserAgreementStatus(
-    _ContactsAppAgreementUpdate event,
-    Emitter<AppState> emit,
-  ) async {
+  Future<void> __onContactsUserAgreementStatus(_ContactsAppAgreementUpdate event, Emitter<AppState> emit) async {
     await appPreferences.setContactsAgreementStatus(event.status);
     emit(state.copyWith(contactsAgreementStatus: event.status));
   }

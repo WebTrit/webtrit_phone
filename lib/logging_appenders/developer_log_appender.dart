@@ -13,9 +13,7 @@ class DeveloperLogAppender extends BaseLogAppender {
   ///
   /// If [stderrLevel] is set in dart:io, will log everything at and above
   /// this level to stderr instead of stdout.
-  static DeveloperLogAppender setupLogging({
-    Level level = Level.ALL,
-  }) {
+  static DeveloperLogAppender setupLogging({Level level = Level.ALL}) {
     Logger.root.clearListeners();
     Logger.root.level = level;
     return DeveloperLogAppender()..attachToLogger(Logger.root);

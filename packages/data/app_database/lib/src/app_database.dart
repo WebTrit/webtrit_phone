@@ -100,8 +100,10 @@ class AppDatabase extends _$AppDatabase {
           // Assert that the schema is valid after migrations
           assert(() {
             () async {
-              final wrongForeignKeys = await customSelect('PRAGMA foreign_key_check').get();
-              assert(wrongForeignKeys.isEmpty, '${wrongForeignKeys.map((e) => e.data)}');
+              final wrongForeignKeys =
+                  await customSelect('PRAGMA foreign_key_check').get();
+              assert(wrongForeignKeys.isEmpty,
+                  '${wrongForeignKeys.map((e) => e.data)}');
             }();
             return true;
           }());
@@ -125,7 +127,8 @@ class AppDatabase extends _$AppDatabase {
     ];
   }
 
-  Iterable<DatabaseSchemaEntity> generateTableCompanionEntities(TableInfo tableInfo) sync* {
+  Iterable<DatabaseSchemaEntity> generateTableCompanionEntities(
+      TableInfo tableInfo) sync* {
     {
       final afterInsertTrigger = _generateTableAfterInsertTrigger(tableInfo);
       if (afterInsertTrigger != null) yield afterInsertTrigger;
@@ -140,8 +143,10 @@ class AppDatabase extends _$AppDatabase {
   static const _updatedAtColumnName = 'updated_at';
 
   Trigger? _generateTableAfterInsertTrigger(TableInfo tableInfo) {
-    final isInsertedAtColumnExist = tableInfo.columnsByName.containsKey(_insertedAtColumnName);
-    final isUpdatedAtColumnExist = tableInfo.columnsByName.containsKey(_updatedAtColumnName);
+    final isInsertedAtColumnExist =
+        tableInfo.columnsByName.containsKey(_insertedAtColumnName);
+    final isUpdatedAtColumnExist =
+        tableInfo.columnsByName.containsKey(_updatedAtColumnName);
     if (!isInsertedAtColumnExist && !isUpdatedAtColumnExist) {
       return null;
     } else {
@@ -160,7 +165,8 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Trigger? _generateTableAfterUpdateTrigger(TableInfo tableInfo) {
-    final isUpdatedAtColumnExist = tableInfo.columnsByName.containsKey(_updatedAtColumnName);
+    final isUpdatedAtColumnExist =
+        tableInfo.columnsByName.containsKey(_updatedAtColumnName);
     if (!isUpdatedAtColumnExist) {
       return null;
     } else {

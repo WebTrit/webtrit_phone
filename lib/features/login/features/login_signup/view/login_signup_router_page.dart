@@ -42,7 +42,8 @@ class LoginSignupRouterPage extends StatelessWidget {
               // For the next native screen (e.g., OTP verification), a safe area is required to avoid UI overlap.
               if (whenLoginSignupVerifyScreenPageActive(state))
                 LoginSignupVerifyScreenPageRoute(
-                    bodySafeAreaSides: embedded != null ? SafeAreaSide.values.toSet() : {}),
+                  bodySafeAreaSides: embedded != null ? SafeAreaSide.values.toSet() : {},
+                ),
             ];
           },
           onPopRoute: (route, results) {

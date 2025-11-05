@@ -29,11 +29,7 @@ final class SignalingConnectFailedNotification extends ErrorNotification {
 }
 
 final class SignalingDisconnectNotification extends ErrorNotification {
-  const SignalingDisconnectNotification({
-    required this.knownCode,
-    this.systemCode,
-    this.systemReason,
-  });
+  const SignalingDisconnectNotification({required this.knownCode, this.systemCode, this.systemReason});
 
   final SignalingDisconnectCode knownCode;
   final int? systemCode;
@@ -127,11 +123,7 @@ final class CallNegotiationTimeoutNotification extends MessageNotification {
 }
 
 final class SipRegistrationFailedNotification extends ErrorNotification {
-  const SipRegistrationFailedNotification({
-    required this.knownCode,
-    this.systemCode,
-    this.systemReason,
-  });
+  const SipRegistrationFailedNotification({required this.knownCode, this.systemCode, this.systemReason});
 
   final SignalingRegistrationFailedCode knownCode;
   final int? systemCode;
@@ -177,9 +169,7 @@ final class AppOfflineNotification extends MessageNotification {
   }
 
   @override
-  List<NotificationScope> scopes() => [
-        NotificationScope.main,
-      ];
+  List<NotificationScope> scopes() => [NotificationScope.main];
 }
 
 final class AppOnlineNotification extends SuccessNotification {
@@ -189,9 +179,7 @@ final class AppOnlineNotification extends SuccessNotification {
   }
 
   @override
-  List<NotificationScope> scopes() => [
-        NotificationScope.main,
-      ];
+  List<NotificationScope> scopes() => [NotificationScope.main];
 }
 
 final class ActiveLineBlindTransferWarningNotification extends MessageNotification {

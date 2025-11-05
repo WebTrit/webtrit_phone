@@ -8,37 +8,18 @@ void main() {
   group('parsing', () {
     test('from language tag', () {
       const l1 = Locale('en');
-      expect(
-        LocaleExtension.fromLanguageTag(l1.toLanguageTag()),
-        l1,
-      );
+      expect(LocaleExtension.fromLanguageTag(l1.toLanguageTag()), l1);
 
       const l2 = Locale('fr', 'CH');
-      expect(
-        LocaleExtension.fromLanguageTag(l2.toLanguageTag()),
-        l2,
-      );
+      expect(LocaleExtension.fromLanguageTag(l2.toLanguageTag()), l2);
 
-      const l3 = Locale.fromSubtags(
-        countryCode: 'zh',
-        scriptCode: 'cmn',
-        languageCode: 'TW',
-      );
-      expect(
-        LocaleExtension.fromLanguageTag(l3.toLanguageTag()),
-        l3,
-      );
+      const l3 = Locale.fromSubtags(countryCode: 'zh', scriptCode: 'cmn', languageCode: 'TW');
+      expect(LocaleExtension.fromLanguageTag(l3.toLanguageTag()), l3);
     });
 
     test('from incorrect language tag', () {
-      expect(
-        () => LocaleExtension.fromLanguageTag(''),
-        throwsA(isAssertionError),
-      );
-      expect(
-        () => LocaleExtension.fromLanguageTag('a-b-c-d'),
-        throwsA(isArgumentError),
-      );
+      expect(() => LocaleExtension.fromLanguageTag(''), throwsA(isAssertionError));
+      expect(() => LocaleExtension.fromLanguageTag('a-b-c-d'), throwsA(isArgumentError));
     });
   });
 

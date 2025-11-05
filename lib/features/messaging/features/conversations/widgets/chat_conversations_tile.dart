@@ -90,10 +90,9 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
         final text = switch (contact) {
           null => context.l10n.messaging_ParticipantName_unknown,
           _ => switch (presenceSource) {
-              PresenceViewSource.contactInfo => contact.displayTitle,
-              PresenceViewSource.sipPresence =>
-                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
-            }
+            PresenceViewSource.contactInfo => contact.displayTitle,
+            PresenceViewSource.sipPresence => '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+          },
         };
         return ListTile(
           leading: LeadingAvatar(
@@ -106,7 +105,9 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
           ),
           title: Row(
             children: [
-              Expanded(child: Text(text, style: const TextStyle(overflow: TextOverflow.ellipsis))),
+              Expanded(
+                child: Text(text, style: const TextStyle(overflow: TextOverflow.ellipsis)),
+              ),
               const SizedBox(width: 4),
               if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
             ],
@@ -154,7 +155,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
       children: [
         const Icon(Icons.people, size: 12),
         const SizedBox(width: 4),
-        Text('$membersCount', style: const TextStyle(fontSize: 12))
+        Text('$membersCount', style: const TextStyle(fontSize: 12)),
       ],
     );
   }
@@ -197,10 +198,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
                 color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Text(
-                '$count',
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
+              child: Text('$count', style: const TextStyle(color: Colors.white, fontSize: 12)),
             );
           },
         ),

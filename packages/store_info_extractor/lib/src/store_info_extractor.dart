@@ -29,7 +29,8 @@ class StoreInfoExtractor {
         ));
       }
 
-      throw UnimplementedError('Currently only supports Android, iOS, and MacOS platforms');
+      throw UnimplementedError(
+          'Currently only supports Android, iOS, and MacOS platforms');
     }
   }
 

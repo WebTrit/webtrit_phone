@@ -1,9 +1,6 @@
 import 'package:logging/logging.dart';
 
-enum RetryDelayStrategy {
-  linear,
-  exponential,
-}
+enum RetryDelayStrategy { linear, exponential }
 
 final _logger = Logger('BackoffRetries');
 
@@ -21,10 +18,7 @@ class BackoffRetries {
     this.delayStrategy = RetryDelayStrategy.linear,
   });
 
-  Future<T?> execute<T>(
-    Future<T> Function(int attempt) action, {
-    bool Function(Exception, int)? shouldRetry,
-  }) async {
+  Future<T?> execute<T>(Future<T> Function(int attempt) action, {bool Function(Exception, int)? shouldRetry}) async {
     int attempt = 0;
     Duration delay = initialDelay;
 

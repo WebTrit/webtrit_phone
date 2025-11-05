@@ -16,7 +16,8 @@ void main(List<String> arguments) async {
     tenantId = arguments[1];
     token = arguments[2];
   } else {
-    stderr.writeln('Incorrect arguments count, must be: <url> [<tenantId>] <token>');
+    stderr.writeln(
+        'Incorrect arguments count, must be: <url> [<tenantId>] <token>');
     exit(1);
   }
 

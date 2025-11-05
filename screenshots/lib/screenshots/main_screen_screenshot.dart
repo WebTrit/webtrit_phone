@@ -58,11 +58,14 @@ class MainScreenScreenshot extends StatelessWidget {
   List<BlocProvider> _createMockBlocProviders() {
     return [
       BlocProvider<CallBloc>(create: (_) => MockCallBloc.mainScreen()),
-      BlocProvider<CallRoutingCubit>(create: (_) => MockCallRoutingCubit.initial()),
+      BlocProvider<CallRoutingCubit>(
+          create: (_) => MockCallRoutingCubit.initial()),
       BlocProvider<MainBloc>(create: (_) => MockMainBloc.mainScreen()),
-      BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
+      BlocProvider<SessionStatusCubit>(
+          create: (_) => MockSessionStatusCubit.initial()),
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
-      BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
+      BlocProvider<SystemNotificationsCounterCubit>(
+          create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
     ];
   }
 
@@ -103,7 +106,8 @@ class MainScreenScreenshot extends StatelessWidget {
     ];
   }
 
-  BottomNavigationBar _buildBottomNavigationBar(BuildContext context, List<BottomMenuTab> tabs) {
+  BottomNavigationBar _buildBottomNavigationBar(
+      BuildContext context, List<BottomMenuTab> tabs) {
     final textTheme = Theme.of(context).textTheme;
 
     return BottomNavigationBar(
@@ -120,7 +124,8 @@ class MainScreenScreenshot extends StatelessWidget {
     );
   }
 
-  Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor, FeatureAccess featureAccess) {
+  Widget _buildFlavorWidget(
+      BuildContext context, MainFlavor flavor, FeatureAccess featureAccess) {
     switch (flavor) {
       case MainFlavor.favorites:
         return BlocProvider<FavoritesBloc>(
@@ -177,17 +182,23 @@ class MainScreenScreenshot extends StatelessWidget {
               title: const Text('Embedded'),
               context: context,
             ),
-            connectivityRecoveryStrategyBuilder: () => NoneConnectivityRecoveryStrategy(),
-            pageInjectionStrategyBuilder: () => DefaultPayloadInjectionStrategy(),
+            connectivityRecoveryStrategyBuilder: () =>
+                NoneConnectivityRecoveryStrategy(),
+            pageInjectionStrategyBuilder: () =>
+                DefaultPayloadInjectionStrategy(),
           ),
         );
       case MainFlavor.messaging:
         return MultiBlocProvider(
           providers: [
-            BlocProvider<MessagingBloc>(create: (_) => MockMessagingBloc.initial()),
-            BlocProvider<ChatConversationsCubit>(create: (_) => MockChatConversationsCubit.withMockData()),
-            BlocProvider<SmsConversationsCubit>(create: (_) => MockSmsConversationsCubit.withConversations()),
-            BlocProvider<UnreadCountCubit>(create: (_) => MockUnreadCountCubit.withUnreadMessages()),
+            BlocProvider<MessagingBloc>(
+                create: (_) => MockMessagingBloc.initial()),
+            BlocProvider<ChatConversationsCubit>(
+                create: (_) => MockChatConversationsCubit.withMockData()),
+            BlocProvider<SmsConversationsCubit>(
+                create: (_) => MockSmsConversationsCubit.withConversations()),
+            BlocProvider<UnreadCountCubit>(
+                create: (_) => MockUnreadCountCubit.withUnreadMessages()),
           ],
           child: const ConversationsScreen(
             title: Text(
@@ -198,7 +209,8 @@ class MainScreenScreenshot extends StatelessWidget {
     }
   }
 
-  Widget _buildContactSourceTypeWidget(BuildContext context, ContactSourceType sourceType) {
+  Widget _buildContactSourceTypeWidget(
+      BuildContext context, ContactSourceType sourceType) {
     switch (sourceType) {
       case ContactSourceType.local:
         return BlocProvider<ContactsLocalTabBloc>(

@@ -24,18 +24,9 @@ class ContactEmailTile extends StatelessWidget {
       contentPadding: const EdgeInsets.only(left: 16.0),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            splashRadius: 24,
-            icon: const Icon(Icons.email),
-            onPressed: onEmailPressed,
-          ),
-        ],
+        children: [IconButton(splashRadius: 24, icon: const Icon(Icons.email), onPressed: onEmailPressed)],
       ),
-      title: CopyToClipboard(
-        data: address,
-        child: Text(address),
-      ),
+      title: CopyToClipboard(data: address, child: Text(address)),
       subtitle: label.isEmpty ? null : Text(label),
       onTap: onTap,
       onLongPress: onLongPress,

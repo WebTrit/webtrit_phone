@@ -21,8 +21,8 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
     required this.payload,
     required PrivateGatewayRepository? customPrivateGatewayRepository,
     required this.embeddedPayloadBuilder,
-  })  : _customPrivateGatewayRepository = customPrivateGatewayRepository,
-        super(const EmbeddedState()) {
+  }) : _customPrivateGatewayRepository = customPrivateGatewayRepository,
+       super(const EmbeddedState()) {
     _init();
   }
 

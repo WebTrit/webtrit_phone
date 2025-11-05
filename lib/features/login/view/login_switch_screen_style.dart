@@ -4,10 +4,7 @@ import 'package:flutter/services.dart';
 import '../widgets/onboarding_logo_style.dart';
 
 class LoginSwitchScreenStyle with Diagnosticable {
-  LoginSwitchScreenStyle({
-    this.systemUiOverlayStyle,
-    this.onboardingLogoStyle,
-  });
+  LoginSwitchScreenStyle({this.systemUiOverlayStyle, this.onboardingLogoStyle});
 
   final SystemUiOverlayStyle? systemUiOverlayStyle;
   final OnboardingLogoStyle? onboardingLogoStyle;

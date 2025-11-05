@@ -8,7 +8,8 @@ import 'package:webtrit_signaling/src/events/call_event.dart';
 import '../event_jsons.dart';
 
 void main() {
-  void testFromJson(String description, Map<String, dynamic> actual, NotifyEvent expected) {
+  void testFromJson(
+      String description, Map<String, dynamic> actual, NotifyEvent expected) {
     test(description, () {
       expect(
         NotifyEvent.fromJson(actual),
@@ -67,7 +68,8 @@ void main() {
 
   test('$NotifyEvent fromJson error', () {
     expect(
-      () => NotifyEvent.fromJson(json.decode(eventJsonEmpty) as Map<String, dynamic>),
+      () => NotifyEvent.fromJson(
+          json.decode(eventJsonEmpty) as Map<String, dynamic>),
       throwsA(isArgumentError),
     );
   });

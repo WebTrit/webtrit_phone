@@ -23,8 +23,11 @@ class LoginModeSelectScreenStyle with Diagnosticable {
       signInTypeButton: LerpTools.lerpButtonStyleType(a?.signInTypeButton, b?.signInTypeButton, t),
       signUpTypeButton: LerpTools.lerpButtonStyleType(a?.signUpTypeButton, b?.signUpTypeButton, t),
       systemUiOverlayStyle: b?.systemUiOverlayStyle ?? a?.systemUiOverlayStyle,
-      onboardingPictureLogoStyle:
-          OnboardingPictureLogoStyle.lerp(a?.onboardingPictureLogoStyle, b?.onboardingPictureLogoStyle, t),
+      onboardingPictureLogoStyle: OnboardingPictureLogoStyle.lerp(
+        a?.onboardingPictureLogoStyle,
+        b?.onboardingPictureLogoStyle,
+        t,
+      ),
     );
   }
 
@@ -35,6 +38,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     properties.add(DiagnosticsProperty<ElevatedButtonStyleType?>('signUpTypeButton', signUpTypeButton));
     properties.add(DiagnosticsProperty<SystemUiOverlayStyle?>('systemUiOverlayStyle', systemUiOverlayStyle));
     properties.add(
-        DiagnosticsProperty<OnboardingPictureLogoStyle?>('onboardingPictureLogoStyle', onboardingPictureLogoStyle));
+      DiagnosticsProperty<OnboardingPictureLogoStyle?>('onboardingPictureLogoStyle', onboardingPictureLogoStyle),
+    );
   }
 }

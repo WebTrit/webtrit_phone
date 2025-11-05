@@ -9,7 +9,8 @@ class ChatMessageReadCursorTable extends Table {
   @override
   Set<Column> get primaryKey => {chatId, userId};
 
-  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chatId =>
+      integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get userId => text()();
 

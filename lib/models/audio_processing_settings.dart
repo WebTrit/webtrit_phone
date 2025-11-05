@@ -18,8 +18,14 @@ class AudioProcessingSettings extends Equatable {
   final bool? audioMirroring;
 
   @override
-  List<Object?> get props =>
-      [bypassVoiceProcessing, echoCancellation, autoGainControl, noiseSuppression, highpassFilter, audioMirroring];
+  List<Object?> get props => [
+    bypassVoiceProcessing,
+    echoCancellation,
+    autoGainControl,
+    noiseSuppression,
+    highpassFilter,
+    audioMirroring,
+  ];
 
   @override
   String toString() {

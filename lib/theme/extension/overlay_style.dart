@@ -6,8 +6,9 @@ extension OverlayStyleModelMapper on OverlayStyleModel {
   SystemUiOverlayStyle toSystemUiOverlayStyle() {
     return SystemUiOverlayStyle(
       systemNavigationBarColor: systemNavigationBarColor?.toColor(),
-      systemNavigationBarIconBrightness:
-          systemNavigationBarIconBrightness != null ? _mapBrightness(systemNavigationBarIconBrightness!) : null,
+      systemNavigationBarIconBrightness: systemNavigationBarIconBrightness != null
+          ? _mapBrightness(systemNavigationBarIconBrightness!)
+          : null,
       statusBarIconBrightness: _mapBrightness(statusBarIconBrightness),
       statusBarBrightness: statusBarBrightness != null ? _mapBrightness(statusBarBrightness!) : null,
     );

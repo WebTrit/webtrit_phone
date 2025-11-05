@@ -37,14 +37,7 @@ class AnonymizingFormatter extends ColorFormatter {
   StringBuffer formatToStringBuffer(LogRecord rec, StringBuffer sb) {
     final sanitizedMessage = _sanitize(rec.message);
 
-    final sanitizedRecord = LogRecord(
-      rec.level,
-      sanitizedMessage,
-      rec.loggerName,
-      rec.error,
-      rec.stackTrace,
-      rec.zone,
-    );
+    final sanitizedRecord = LogRecord(rec.level, sanitizedMessage, rec.loggerName, rec.error, rec.stackTrace, rec.zone);
 
     return super.formatToStringBuffer(sanitizedRecord, sb);
   }

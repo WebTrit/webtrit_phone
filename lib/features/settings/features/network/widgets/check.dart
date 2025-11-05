@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Check extends StatelessWidget {
-  const Check({
-    super.key,
-    required this.selected,
-    this.enabled = true,
-  });
+  const Check({super.key, required this.selected, this.enabled = true});
 
   final bool selected;
   final bool enabled;

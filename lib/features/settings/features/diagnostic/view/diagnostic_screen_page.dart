@@ -28,14 +28,8 @@ class DiagnosticScreenPage extends StatelessWidget {
     );
 
     return BlocProvider<DiagnosticCubit>(
-      create: (context) => DiagnosticCubit(
-        pushTokensBloc: pushTokensBloc,
-        appPermissions: AppPermissions(),
-      ),
-      child: Provider<DiagnosticScreenContext>(
-        create: (context) => screenContext,
-        child: const DiagnosticScreen(),
-      ),
+      create: (context) => DiagnosticCubit(pushTokensBloc: pushTokensBloc, appPermissions: AppPermissions()),
+      child: Provider<DiagnosticScreenContext>(create: (context) => screenContext, child: const DiagnosticScreen()),
     );
   }
 }

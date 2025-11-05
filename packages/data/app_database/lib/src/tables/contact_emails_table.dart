@@ -11,7 +11,8 @@ class ContactEmailsTable extends Table {
 
   TextColumn get label => text()();
 
-  IntColumn get contactId => integer().customConstraint('NOT NULL REFERENCES contacts(id) ON DELETE CASCADE')();
+  IntColumn get contactId => integer()
+      .customConstraint('NOT NULL REFERENCES contacts(id) ON DELETE CASCADE')();
 
   DateTimeColumn get insertedAt => dateTime().nullable()();
 

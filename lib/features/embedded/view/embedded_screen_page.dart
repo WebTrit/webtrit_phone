@@ -27,9 +27,7 @@ final _logger = Logger('EmbeddedScreenPage');
 @RoutePage()
 class EmbeddedScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const EmbeddedScreenPage({
-    required this.data,
-  });
+  const EmbeddedScreenPage({required this.data});
 
   final EmbeddedData data;
 
@@ -41,7 +39,8 @@ class EmbeddedScreenPage extends StatelessWidget {
 
     if (selfConfigRepository == null) {
       _logger.fine(
-          'SelfConfigRepository not found in the widget tree; skipping all injections such as external page token');
+        'SelfConfigRepository not found in the widget tree; skipping all injections such as external page token',
+      );
     }
 
     final resource = ResourceLoader.fromUri(data.uri.toString());
@@ -50,13 +49,9 @@ class EmbeddedScreenPage extends StatelessWidget {
       future: resource.loadContent(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Failed to load content: ${snapshot.error}'),
-          );
+          return Center(child: Text('Failed to load content: ${snapshot.error}'));
         } else if (snapshot.hasData) {
           final content = snapshot.data!;
           return resource is NetworkResourceLoader
@@ -91,9 +86,7 @@ class EmbeddedScreenPage extends StatelessWidget {
                   ),
                 );
         } else {
-          return const Center(
-            child: Text('Unexpected error occurred.'),
-          );
+          return const Center(child: Text('Unexpected error occurred.'));
         }
       },
     );
@@ -101,16 +94,10 @@ class EmbeddedScreenPage extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     final title = data.titleL10n;
-    return AppBar(
-      leading: const AutoLeadingButton(),
-      title: title != null ? Text(context.parseL10n(title)) : null,
-    );
+    return AppBar(leading: const AutoLeadingButton(), title: title != null ? Text(context.parseL10n(title)) : null);
   }
 
-  EmbeddedCubit _createCubit(
-    PrivateGatewayRepository? selfConfigRepository,
-    SecureStorage secureStorage,
-  ) {
+  EmbeddedCubit _createCubit(PrivateGatewayRepository? selfConfigRepository, SecureStorage secureStorage) {
     return EmbeddedCubit(
       customPrivateGatewayRepository: selfConfigRepository,
       embeddedPayloadBuilder: EmbeddedPayloadBuilder(secureStorage),
@@ -127,9 +114,8 @@ class EmbeddedScreenPage extends StatelessWidget {
       initialUri: data.uri,
       type: data.reconnectStrategy,
       connectivityStream: Connectivity().onConnectivityChanged,
-      connectivityCheckerBuilder: () => const DefaultConnectivityChecker(
-        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
-      ),
+      connectivityCheckerBuilder: () =>
+          const DefaultConnectivityChecker(connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL),
     );
   }
 }

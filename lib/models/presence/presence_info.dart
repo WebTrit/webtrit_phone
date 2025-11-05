@@ -42,13 +42,11 @@ extension PresenceInfoListExtension on Iterable<PresenceInfo> {
     final presenceWithActivity = where((p) => p.activities.isNotEmpty);
     final inCall = presenceWithActivity.any((p) => p.activities.contains(PresenceActivity.onThePhone));
     if (inCall) return PresenceActivity.onThePhone;
-    final byUpdate = sorted(
-      (a, b) {
-        final aTime = a.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
-        final bTime = b.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
-        return bTime.compareTo(aTime);
-      },
-    );
+    final byUpdate = sorted((a, b) {
+      final aTime = a.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final bTime = b.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
+      return bTime.compareTo(aTime);
+    });
     return byUpdate.firstOrNull?.activities.firstOrNull;
   }
 
@@ -56,13 +54,11 @@ extension PresenceInfoListExtension on Iterable<PresenceInfo> {
     if (isEmpty) return null;
     final presenceWithIcon = where((p) => p.statusIcon != null && p.statusIcon!.isNotEmpty);
     if (presenceWithIcon.isEmpty) return null;
-    final byUpdate = presenceWithIcon.sorted(
-      (a, b) {
-        final aTime = a.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
-        final bTime = b.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
-        return bTime.compareTo(aTime);
-      },
-    );
+    final byUpdate = presenceWithIcon.sorted((a, b) {
+      final aTime = a.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final bTime = b.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
+      return bTime.compareTo(aTime);
+    });
     return byUpdate.first.statusIcon;
   }
 
@@ -70,13 +66,11 @@ extension PresenceInfoListExtension on Iterable<PresenceInfo> {
     if (isEmpty) return null;
     final presenceWithNote = where((p) => p.note.isNotEmpty);
     if (presenceWithNote.isEmpty) return null;
-    final byUpdate = presenceWithNote.sorted(
-      (a, b) {
-        final aTime = a.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
-        final bTime = b.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
-        return bTime.compareTo(aTime);
-      },
-    );
+    final byUpdate = presenceWithNote.sorted((a, b) {
+      final aTime = a.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
+      final bTime = b.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0);
+      return bTime.compareTo(aTime);
+    });
     return byUpdate.first.note;
   }
 }

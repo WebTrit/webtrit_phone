@@ -11,7 +11,9 @@ class ChatOutboxMessageTable extends Table {
 
   TextColumn get idKey => text()();
 
-  IntColumn get chatId => integer().nullable().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chatId => integer()
+      .nullable()
+      .references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get participantId => text().nullable()();
 

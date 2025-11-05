@@ -17,7 +17,7 @@ class Session with _$Session {
 
   @override
   final String tenantId;
-  
+
   @override
   final String userId;
 

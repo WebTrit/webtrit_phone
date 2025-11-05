@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 
 class ExtBackButton extends StatelessWidget {
-  const ExtBackButton({
-    super.key,
-    this.disabled = false,
-  });
+  const ExtBackButton({super.key, this.disabled = false});
 
   final bool disabled;
 

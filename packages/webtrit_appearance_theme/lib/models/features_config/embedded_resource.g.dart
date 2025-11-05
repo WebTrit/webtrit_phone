@@ -8,25 +8,27 @@ part of 'embedded_resource.dart';
 
 EmbeddedResource _$EmbeddedResourceFromJson(
   Map<String, dynamic> json,
-) => EmbeddedResource(
-  id: const IntToStringConverter().fromJson(json['id']),
-  uri: json['uri'] as String,
-  type:
-      $enumDecodeNullable(_$EmbeddedResourceTypeEnumMap, json['type']) ??
-      EmbeddedResourceType.unknown,
-  attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
-  toolbar: json['toolbar'] == null
-      ? const ToolbarConfig()
-      : ToolbarConfig.fromJson(json['toolbar'] as Map<String, dynamic>),
-  metadata: json['metadata'] == null
-      ? const Metadata()
-      : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
-  payload:
-      (json['payload'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-      const [],
-  enableConsoleLogCapture: json['enableConsoleLogCapture'] as bool? ?? false,
-  reconnectStrategy: json['reconnectStrategy'] as String?,
-);
+) =>
+    EmbeddedResource(
+      id: const IntToStringConverter().fromJson(json['id']),
+      uri: json['uri'] as String,
+      type: $enumDecodeNullable(_$EmbeddedResourceTypeEnumMap, json['type']) ??
+          EmbeddedResourceType.unknown,
+      attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
+      toolbar: json['toolbar'] == null
+          ? const ToolbarConfig()
+          : ToolbarConfig.fromJson(json['toolbar'] as Map<String, dynamic>),
+      metadata: json['metadata'] == null
+          ? const Metadata()
+          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+      payload: (json['payload'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      enableConsoleLogCapture:
+          json['enableConsoleLogCapture'] as bool? ?? false,
+      reconnectStrategy: json['reconnectStrategy'] as String?,
+    );
 
 Map<String, dynamic> _$EmbeddedResourceToJson(EmbeddedResource instance) =>
     <String, dynamic>{

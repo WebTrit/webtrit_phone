@@ -44,7 +44,8 @@ class SystemNotification with _$SystemNotification {
   @override
   final DateTime? readAt;
 
-  factory SystemNotification.fromJson(Map<String, Object?> json) => _$SystemNotificationFromJson(json);
+  factory SystemNotification.fromJson(Map<String, Object?> json) =>
+      _$SystemNotificationFromJson(json);
 
   Map<String, Object?> toJson() => _$SystemNotificationToJson(this);
 }
@@ -57,7 +58,8 @@ class SystemNotificationResponce with _$SystemNotificationResponce {
   @override
   final List<SystemNotification> items;
 
-  factory SystemNotificationResponce.fromJson(Map<String, Object?> json) => _$SystemNotificationResponceFromJson(json);
+  factory SystemNotificationResponce.fromJson(Map<String, Object?> json) =>
+      _$SystemNotificationResponceFromJson(json);
 
   Map<String, Object?> toJson() => _$SystemNotificationResponceToJson(this);
 }

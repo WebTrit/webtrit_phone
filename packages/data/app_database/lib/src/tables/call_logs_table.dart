@@ -11,8 +11,8 @@ class CallLogsTable extends Table {
 
   IntColumn get direction => intEnum<CallLogDirectionEnum>()();
 
-  TextColumn get number =>
-      text().customConstraint('NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)')();
+  TextColumn get number => text().customConstraint(
+      'NOT NULL CONSTRAINT "call_logs.number not_empty" CHECK (length(number) > 0)')();
 
   TextColumn get username => text().nullable()();
 

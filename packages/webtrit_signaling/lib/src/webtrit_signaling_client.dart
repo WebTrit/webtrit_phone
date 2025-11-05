@@ -22,16 +22,20 @@ typedef DisconnectHandler = void Function(int? code, String? reason);
 
 class WebtritSignalingClient {
   static final _callIdRandom = Random();
-  static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  static const _callIdChars =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
   @visibleForTesting
   static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
     if (tenantId.isEmpty) {
       return baseUrl;
     } else {
-      final baseUrlPathSegments = List.of(baseUrl.pathSegments.where((segment) => segment.isNotEmpty));
-      if (baseUrlPathSegments.length >= 2 && baseUrlPathSegments[baseUrlPathSegments.length - 2] == 'tenant') {
-        baseUrlPathSegments.removeRange(baseUrlPathSegments.length - 2, baseUrlPathSegments.length);
+      final baseUrlPathSegments =
+          List.of(baseUrl.pathSegments.where((segment) => segment.isNotEmpty));
+      if (baseUrlPathSegments.length >= 2 &&
+          baseUrlPathSegments[baseUrlPathSegments.length - 2] == 'tenant') {
+        baseUrlPathSegments.removeRange(
+            baseUrlPathSegments.length - 2, baseUrlPathSegments.length);
       }
       return baseUrl.replace(
         pathSegments: [
@@ -47,12 +51,15 @@ class WebtritSignalingClient {
   }
 
   static String generateCallId([int length = 24]) {
-    return List.generate(length, (index) => _callIdChars[_callIdRandom.nextInt(_callIdChars.length)]).join();
+    return List.generate(length,
+            (index) => _callIdChars[_callIdRandom.nextInt(_callIdChars.length)])
+        .join();
   }
 
   static const subprotocol = 'webtrit-protocol';
 
-  static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 10000);
+  static const defaultExecuteTransactionTimeoutDuration =
+      Duration(milliseconds: 10000);
 
   static int _createCounter = 0;
 
@@ -119,7 +126,8 @@ class WebtritSignalingClient {
     required DisconnectHandler onDisconnect,
   }) {
     if (_wscStreamSubscription != null) {
-      throw StateError('$WebtritSignalingClient with id: $_id has already been listened to');
+      throw StateError(
+          '$WebtritSignalingClient with id: $_id has already been listened to');
     }
     _logger.fine('listen');
 
@@ -138,7 +146,8 @@ class WebtritSignalingClient {
   Future<void> disconnect([int? code, String? reason]) async {
     final wscStreamSubscription = _wscStreamSubscription;
     if (wscStreamSubscription == null) {
-      _logger.fine('already disconnected with code: ${_wsc.closeCode} reason: ${_wsc.closeReason}');
+      _logger.fine(
+          'already disconnected with code: ${_wsc.closeCode} reason: ${_wsc.closeReason}');
     } else {
       _logger.fine('disconnect code: $code reason: $reason');
 
@@ -148,7 +157,8 @@ class WebtritSignalingClient {
 
       _wscStreamSubscription = null;
 
-      await wscStreamSubscription.cancel(); // to prevent onDisconnect and other handlers call
+      await wscStreamSubscription
+          .cancel(); // to prevent onDisconnect and other handlers call
 
       await _wsc.sink.close(code, reason);
     }
@@ -186,7 +196,9 @@ class WebtritSignalingClient {
 
   //
 
-  Future<void> execute(Request request, [Duration timeoutDuration = defaultExecuteTransactionTimeoutDuration]) async {
+  Future<void> execute(Request request,
+      [Duration timeoutDuration =
+          defaultExecuteTransactionTimeoutDuration]) async {
     if (_wscStreamSubscription == null) {
       throw WebtritSignalingDisconnectedException(_id);
     }
@@ -194,7 +206,8 @@ class WebtritSignalingClient {
     _restartKeepaliveTimer();
 
     final requestJson = request.toJson();
-    final responseJson = await _executeTransaction(requestJson, timeoutDuration);
+    final responseJson =
+        await _executeTransaction(requestJson, timeoutDuration);
     final response = Response.fromJson(responseJson);
     if (response is AckResponse) {
       return;
@@ -208,7 +221,8 @@ class WebtritSignalingClient {
   //
 
   void _onMessage(Map<String, dynamic> messageJson) {
-    if (messageJson.containsKey(Response.typeKey) || messageJson[Handshake.typeKey] == KeepaliveHandshake.typeValue) {
+    if (messageJson.containsKey(Response.typeKey) ||
+        messageJson[Handshake.typeKey] == KeepaliveHandshake.typeValue) {
       final responseJson = messageJson;
 
       final transactionId = responseJson['transaction'];
@@ -217,7 +231,9 @@ class WebtritSignalingClient {
       if (transaction != null) {
         transaction.handleResponse(responseJson);
       } else {
-        _onError(WebtritSignalingTransactionUnavailableException(_id, transactionId), StackTrace.current);
+        _onError(
+            WebtritSignalingTransactionUnavailableException(_id, transactionId),
+            StackTrace.current);
       }
     } else if (messageJson.containsKey(Event.typeKey)) {
       final eventJson = messageJson;
@@ -241,11 +257,13 @@ class WebtritSignalingClient {
         _onError(error, stackTrace);
       }
     } else {
-      _onError(WebtritSignalingUnknownMessageException(_id, messageJson), StackTrace.current);
+      _onError(WebtritSignalingUnknownMessageException(_id, messageJson),
+          StackTrace.current);
     }
   }
 
-  Future<Map<String, dynamic>> _executeTransaction(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
+  Future<Map<String, dynamic>> _executeTransaction(
+      Map<String, dynamic> requestJson, Duration timeoutDuration) async {
     final transaction = Transaction(
       signalingClientId: _id,
       id: requestJson['transaction'],
@@ -307,27 +325,34 @@ class WebtritSignalingClient {
 
   void _onKeepalive() async {
     try {
-      final elapsed = await _executeKeepaliveTransaction(defaultExecuteTransactionTimeoutDuration);
+      final elapsed = await _executeKeepaliveTransaction(
+          defaultExecuteTransactionTimeoutDuration);
       _logger.finest('handshake keepalive latency: $elapsed');
 
       _startKeepaliveTimer();
     } on WebtritSignalingTransactionTimeoutException catch (e, stackTrace) {
-      _onError(WebtritSignalingKeepaliveTransactionTimeoutException(e.id, e.transactionId), stackTrace);
+      _onError(
+          WebtritSignalingKeepaliveTransactionTimeoutException(
+              e.id, e.transactionId),
+          stackTrace);
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     }
   }
 
-  Future<Duration> _executeKeepaliveTransaction(Duration timeoutDuration) async {
+  Future<Duration> _executeKeepaliveTransaction(
+      Duration timeoutDuration) async {
     final stopwatch = Stopwatch();
 
     final keepaliveHandshakeRequest = KeepaliveHandshake();
     final requestJson = keepaliveHandshakeRequest.toJson();
     stopwatch.start();
-    final responseJson = await _executeTransaction(requestJson, timeoutDuration);
+    final responseJson =
+        await _executeTransaction(requestJson, timeoutDuration);
     stopwatch.stop();
     // ignore: unused_local_variable
-    final keepaliveHandshakeResponse = KeepaliveHandshake.fromJson(responseJson);
+    final keepaliveHandshakeResponse =
+        KeepaliveHandshake.fromJson(responseJson);
 
     return stopwatch.elapsed;
   }

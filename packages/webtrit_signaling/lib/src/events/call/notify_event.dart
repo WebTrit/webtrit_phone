@@ -19,7 +19,8 @@ sealed class NotifyEvent extends CallEvent {
   factory NotifyEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(
+          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     final notifyValue = json['notify'];
@@ -53,12 +54,14 @@ class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
   factory DialogNotifyEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != NotifyEvent.typeValue) {
-      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal ${NotifyEvent.typeValue}');
+      throw ArgumentError.value(
+          eventTypeValue, Event.typeKey, 'Not equal ${NotifyEvent.typeValue}');
     }
 
     final notifyValue = json['notify'];
     if (notifyValue != DialogNotifyEvent.notifyValue) {
-      throw ArgumentError.value(notifyValue, 'notify', 'Not equal ${DialogNotifyEvent.notifyValue}');
+      throw ArgumentError.value(
+          notifyValue, 'notify', 'Not equal ${DialogNotifyEvent.notifyValue}');
     }
 
     return DialogNotifyEvent(
@@ -66,15 +69,18 @@ class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
       line: json['line'],
       callId: json['call_id'],
       notify: json['notify'],
-      subscriptionState:
-          json['subscription_state'] != null ? SubscriptionState.values.byName(json['subscription_state']) : null,
-      userActiveCalls:
-          (json['user_active_calls'] as List).map((e) => UserActiveCall.fromJson(e as Map<String, dynamic>)).toList(),
+      subscriptionState: json['subscription_state'] != null
+          ? SubscriptionState.values.byName(json['subscription_state'])
+          : null,
+      userActiveCalls: (json['user_active_calls'] as List)
+          .map((e) => UserActiveCall.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 
   @override
-  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, userActiveCalls];
+  List<Object?> get props =>
+      [transaction, line, callId, notify, subscriptionState, userActiveCalls];
 
   @override
   String toString() {
@@ -125,7 +131,16 @@ class UserActiveCall extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, state, callId, direction, localTag, remoteTag, remoteNumber, remoteDisplayName];
+  List<Object?> get props => [
+        id,
+        state,
+        callId,
+        direction,
+        localTag,
+        remoteTag,
+        remoteNumber,
+        remoteDisplayName
+      ];
 
   @override
   String toString() {
@@ -155,16 +170,26 @@ class PresenceNotifyEvent extends NotifyEvent with EquatableMixin {
       line: json['line'],
       callId: json['call_id'],
       notify: json['notify'],
-      subscriptionState:
-          json['subscription_state'] != null ? SubscriptionState.values.byName(json['subscription_state']) : null,
+      subscriptionState: json['subscription_state'] != null
+          ? SubscriptionState.values.byName(json['subscription_state'])
+          : null,
       number: json['number'],
-      presenceInfo:
-          (json['presence_info'] as List<dynamic>).map((item) => SignalingPresenceInfo.fromJson(item)).toList(),
+      presenceInfo: (json['presence_info'] as List<dynamic>)
+          .map((item) => SignalingPresenceInfo.fromJson(item))
+          .toList(),
     );
   }
 
   @override
-  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, number, presenceInfo];
+  List<Object?> get props => [
+        transaction,
+        line,
+        callId,
+        notify,
+        subscriptionState,
+        number,
+        presenceInfo
+      ];
 
   @override
   String toString() {
@@ -203,12 +228,23 @@ class SignalingPresenceInfo extends Equatable {
       device: json['device'],
       timeOffsetMin: json['time_offset_min'],
       timestamp: json['timestamp'],
-      activities: (json['activities'] as List<dynamic>).map((e) => e as String).toList(),
+      activities: (json['activities'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
   }
 
   @override
-  List<Object?> get props => [id, available, note, statusIcon, device, timeOffsetMin, timestamp, activities];
+  List<Object?> get props => [
+        id,
+        available,
+        note,
+        statusIcon,
+        device,
+        timeOffsetMin,
+        timestamp,
+        activities
+      ];
 
   @override
   String toString() {
@@ -246,14 +282,16 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
       line: json['line'],
       callId: json['call_id'],
       notify: json['notify'],
-      subscriptionState:
-          json['subscription_state'] != null ? SubscriptionState.values.byName(json['subscription_state']) : null,
+      subscriptionState: json['subscription_state'] != null
+          ? SubscriptionState.values.byName(json['subscription_state'])
+          : null,
       state: state,
     );
   }
 
   @override
-  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, state];
+  List<Object?> get props =>
+      [transaction, line, callId, notify, subscriptionState, state];
 
   @override
   String toString() {
@@ -283,15 +321,24 @@ class UnknownNotifyEvent extends NotifyEvent with EquatableMixin {
       line: json['line'],
       callId: json['call_id'],
       notify: json['notify'],
-      subscriptionState:
-          json['subscription_state'] != null ? SubscriptionState.values.byName(json['subscription_state']) : null,
+      subscriptionState: json['subscription_state'] != null
+          ? SubscriptionState.values.byName(json['subscription_state'])
+          : null,
       content: json['content'],
       contentType: json['content_type'],
     );
   }
 
   @override
-  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, content, contentType];
+  List<Object?> get props => [
+        transaction,
+        line,
+        callId,
+        notify,
+        subscriptionState,
+        content,
+        contentType
+      ];
 
   @override
   String toString() {

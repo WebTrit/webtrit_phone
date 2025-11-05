@@ -61,8 +61,8 @@ class ConnectivityLifecycleService implements Disposable {
     Iterable<ConnectivityRecoveryRegistration> registrations = const [],
     this.options = const ConnectivityLifecycleOptions(),
     Random? random, // for jitter; inject a seeded Random in tests if needed
-  })  : _connectivityService = connectivity,
-        _rand = random ?? Random() {
+  }) : _connectivityService = connectivity,
+       _rand = random ?? Random() {
     _subscription = _connectivityService.connectionStream.listen(_onConnectivityChanged);
 
     for (final r in registrations) {
@@ -196,10 +196,7 @@ class ConnectivityLifecycleService implements Disposable {
   }
 
   // Execute tasks one by one, with optional jitter and per-listener timeout.
-  Future<void> _runSequential<T>(
-    List<T> items,
-    Future<void> Function(T item) run,
-  ) async {
+  Future<void> _runSequential<T>(List<T> items, Future<void> Function(T item) run) async {
     for (final item in items) {
       if (_isDisposed) return;
 
@@ -222,10 +219,7 @@ class ConnectivityLifecycleService implements Disposable {
   }
 
   // Execute tasks concurrently, each with optional jitter and per-listener timeout.
-  Future<void> _runConcurrent<T>(
-    List<T> items,
-    Future<void> Function(T item) run,
-  ) async {
+  Future<void> _runConcurrent<T>(List<T> items, Future<void> Function(T item) run) async {
     final futures = <Future<void>>[];
     for (final item in items) {
       futures.add(() async {
@@ -251,9 +245,12 @@ class ConnectivityLifecycleService implements Disposable {
   }
 
   Future<void> _withTimeout(Future<void> f, Duration timeout) {
-    return f.timeout(timeout, onTimeout: () {
-      throw TimeoutException('Listener task exceeded $timeout');
-    });
+    return f.timeout(
+      timeout,
+      onTimeout: () {
+        throw TimeoutException('Listener task exceeded $timeout');
+      },
+    );
   }
 
   @override
@@ -273,13 +270,8 @@ class ConnectivityRecoveryRegistration {
   final Refreshable? refreshable;
   final Suspendable? suspendable;
 
-  const ConnectivityRecoveryRegistration({
-    this.refreshable,
-    this.suspendable,
-  }) : assert(
-          refreshable != null || suspendable != null,
-          'At least one listener must be provided',
-        );
+  const ConnectivityRecoveryRegistration({this.refreshable, this.suspendable})
+    : assert(refreshable != null || suspendable != null, 'At least one listener must be provided');
 
   /// Convenience factory for Refreshable-only registration.
   factory ConnectivityRecoveryRegistration.refreshable(Refreshable r) =>

@@ -8,11 +8,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 
 class EmbeddedRequestError extends StatelessWidget {
-  const EmbeddedRequestError({
-    super.key,
-    required this.error,
-    this.onPressed,
-  });
+  const EmbeddedRequestError({super.key, required this.error, this.onPressed});
 
   final WebResourceError error;
   final VoidCallback? onPressed;
@@ -26,30 +22,16 @@ class EmbeddedRequestError extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(
-          Icons.wifi_off_rounded,
-          size: 100,
-          color: themeData.colorScheme.error,
-        ),
+        Icon(Icons.wifi_off_rounded, size: 100, color: themeData.colorScheme.error),
         const SizedBox(height: kInset),
-        Text(
-          error.titleL10n(context),
-          style: themeData.textTheme.titleLarge,
-          textAlign: TextAlign.center,
-        ),
+        Text(error.titleL10n(context), style: themeData.textTheme.titleLarge, textAlign: TextAlign.center),
         const SizedBox(height: 8),
-        Text(
-          error.messageL10n(context),
-          textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyMedium,
-        ),
+        Text(error.messageL10n(context), textAlign: TextAlign.center, style: themeData.textTheme.bodyMedium),
         const SizedBox(height: kInset),
         ElevatedButton(
           onPressed: onPressed,
           style: styles?.primary,
-          child: Text(
-            context.l10n.common_noInternetConnection_retryButton,
-          ),
+          child: Text(context.l10n.common_noInternetConnection_retryButton),
         ),
       ],
     );

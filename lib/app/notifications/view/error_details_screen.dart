@@ -20,12 +20,7 @@ class ErrorDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: shareError,
-          )
-        ],
+        actions: [IconButton(icon: const Icon(Icons.share), onPressed: shareError)],
       ),
       body: Column(
         children: [
@@ -35,10 +30,7 @@ class ErrorDetailsScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return CopyToClipboard(
                   data: fields[index].details,
-                  child: ListTile(
-                    title: Text(fields[index].title),
-                    subtitle: Text(fields[index].details),
-                  ),
+                  child: ListTile(title: Text(fields[index].title), subtitle: Text(fields[index].details)),
                 );
               },
             ),

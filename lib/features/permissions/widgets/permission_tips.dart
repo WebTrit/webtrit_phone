@@ -31,17 +31,9 @@ class PermissionTips extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: kInset * 2),
-          Icon(
-            Icons.settings_suggest,
-            color: themeData.colorScheme.primary,
-            size: kInset * 6,
-          ),
+          Icon(Icons.settings_suggest, color: themeData.colorScheme.primary, size: kInset * 6),
           const SizedBox(height: kInset * 2),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: themeData.textTheme.bodyLarge,
-          ),
+          Text(title, textAlign: TextAlign.center, style: themeData.textTheme.bodyLarge),
           const SizedBox(height: kInset / 4),
           Card(
             elevation: 0,
@@ -55,16 +47,8 @@ class PermissionTips extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '${entry.key + 1}. ',
-                          style: themeData.textTheme.labelLarge,
-                        ),
-                        Expanded(
-                          child: Text(
-                            entry.value,
-                            style: themeData.textTheme.labelLarge,
-                          ),
-                        ),
+                        Text('${entry.key + 1}. ', style: themeData.textTheme.labelLarge),
+                        Expanded(child: Text(entry.value, style: themeData.textTheme.labelLarge)),
                       ],
                     ),
                   );
@@ -100,15 +84,8 @@ class PermissionTips extends StatelessWidget {
         builder: (context, viewportConstraints) {
           return SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-              ),
-              child: IntrinsicHeight(
-                child: InertSafeArea(
-                  bottom: true,
-                  child: body,
-                ),
-              ),
+              constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+              child: IntrinsicHeight(child: InertSafeArea(bottom: true, child: body)),
             ),
           );
         },

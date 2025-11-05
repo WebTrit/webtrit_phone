@@ -18,9 +18,9 @@ class ExternalContactsRepository with ExternalContactApiMapper implements Refres
     required WebtritApiClient webtritApiClient,
     required String token,
     SessionGuard? sessionGuard,
-  })  : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
-        _webtritApiClient = webtritApiClient,
-        _token = token {
+  }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
+       _webtritApiClient = webtritApiClient,
+       _token = token {
     _controller = StreamController<List<ExternalContact>>.broadcast();
   }
 

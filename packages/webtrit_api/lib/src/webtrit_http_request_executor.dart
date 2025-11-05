@@ -49,9 +49,11 @@ class HttpRequestExecutor {
       final httpResponse = await http.Response.fromStream(streamedResponse);
 
       final responseData = httpResponse.body;
-      final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
+      final responseDataJson =
+          responseData.isEmpty ? {} : jsonDecode(responseData);
 
-      _logger.info('${method.toUpperCase()} response ${httpResponse.statusCode} for $url: ${httpResponse.body}');
+      _logger.info(
+          '${method.toUpperCase()} response ${httpResponse.statusCode} for $url: ${httpResponse.body}');
 
       if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
         return switch (responseOptions.responseType) {

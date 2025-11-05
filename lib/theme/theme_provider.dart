@@ -105,11 +105,7 @@ class ThemeProvider extends InheritedWidget {
       seedThemeData: seedThemeData,
     );
 
-    return ThemeData.from(
-      colorScheme: colorScheme,
-      textTheme: style.createTextTheme(),
-      useMaterial3: true,
-    ).copyWith(
+    return ThemeData.from(colorScheme: colorScheme, textTheme: style.createTextTheme(), useMaterial3: true).copyWith(
       primaryColorLight: colorScheme.secondaryContainer,
       primaryColorDark: colorScheme.onSecondaryContainer,
       scaffoldBackgroundColor: colorScheme.surfaceBright,

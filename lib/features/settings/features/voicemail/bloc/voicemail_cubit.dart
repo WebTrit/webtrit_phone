@@ -20,8 +20,8 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     required VoicemailRepository repository,
     required this.onCallStarted,
     required this.onSubmitNotification,
-  })  : _repository = repository,
-        super(const VoicemailState()) {
+  }) : _repository = repository,
+       super(const VoicemailState()) {
     _initialize();
   }
 

@@ -15,12 +15,7 @@ void main() {
     apiClient = MockWebtritApiClient();
     secureStorage = MockSecureStorage();
 
-    repo = CustomPrivateGatewayRepository(
-      apiClient,
-      secureStorage,
-      'user_token',
-      const EmptySessionGuard(),
-    );
+    repo = CustomPrivateGatewayRepository(apiClient, secureStorage, 'user_token', const EmptySessionGuard());
   });
 
   group('CustomPrivateGatewayRepository.dispose', () {

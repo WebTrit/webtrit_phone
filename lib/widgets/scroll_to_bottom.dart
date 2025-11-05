@@ -40,10 +40,7 @@ class ScrollToBottomButton extends StatelessWidget {
           return FadeTransition(
             opacity: animation.drive(CurveTween(curve: Curves.linear)),
             child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 1),
-                end: const Offset(0, 0),
-              ).animate(animation),
+              position: Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0)).animate(animation),
               child: ScaleTransition(scale: animation, child: child),
             ),
           );
@@ -56,11 +53,7 @@ class ScrollToBottomButton extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 4,
-                      offset: const Offset(0, 4),
-                    ),
+                    BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4, offset: const Offset(0, 4)),
                   ],
                 ),
                 margin: const EdgeInsets.all(8),

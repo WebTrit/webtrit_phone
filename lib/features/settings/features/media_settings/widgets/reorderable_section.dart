@@ -48,13 +48,7 @@ class ReorderableSection<T> extends StatelessWidget {
                   fontSize: 13.0,
                 ),
               ),
-              Text(
-                warningMessage,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                  fontSize: 12.0,
-                ),
-              ),
+              Text(warningMessage, style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12.0)),
             ],
           ),
           const SizedBox(height: 16),
@@ -87,13 +81,15 @@ class ReorderableSection<T> extends StatelessWidget {
                     onChanged: enabled
                         ? (v) {
                             if (v == null) return;
-                            onChange(items.map((i) {
-                              if (i == item) {
-                                return (option: i.option, enabled: v);
-                              } else {
-                                return i;
-                              }
-                            }).toList());
+                            onChange(
+                              items.map((i) {
+                                if (i == item) {
+                                  return (option: i.option, enabled: v);
+                                } else {
+                                  return i;
+                                }
+                              }).toList(),
+                            );
                           }
                         : null,
                   ),

@@ -46,7 +46,8 @@ void main() {
     );
   });
 
-  void takeScreenshotTestWidgets(String name, FutureOr<Widget> Function() buildWidget) {
+  void takeScreenshotTestWidgets(
+      String name, FutureOr<Widget> Function() buildWidget) {
     testWidgets(name, (tester) async {
       final screenshotName = '$screenshotNamePrefix/$name';
 

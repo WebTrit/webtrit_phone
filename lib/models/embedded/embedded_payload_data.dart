@@ -1,5 +1,1 @@
-enum EmbeddedPayloadData {
-  userId,
-  coreToken,
-  externalPageToken,
-}
+enum EmbeddedPayloadData { userId, coreToken, externalPageToken }

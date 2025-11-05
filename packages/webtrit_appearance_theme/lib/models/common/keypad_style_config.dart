@@ -46,7 +46,8 @@ class KeypadStyleConfig with _$KeypadStyleConfig {
   @override
   final double? padding;
 
-  factory KeypadStyleConfig.fromJson(Map<String, dynamic> json) => _$KeypadStyleConfigFromJson(json);
+  factory KeypadStyleConfig.fromJson(Map<String, dynamic> json) =>
+      _$KeypadStyleConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$KeypadStyleConfigToJson(this);
 }

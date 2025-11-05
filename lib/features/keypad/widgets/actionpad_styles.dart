@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'actionpad_style.dart';
 
 class ActionpadStyles extends ThemeExtension<ActionpadStyles> {
-  const ActionpadStyles({
-    required this.primary,
-  });
+  const ActionpadStyles({required this.primary});
 
   final ActionpadStyle? primary;
 
   @override
-  ThemeExtension<ActionpadStyles> copyWith({
-    ActionpadStyle? primary,
-  }) {
-    return ActionpadStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<ActionpadStyles> copyWith({ActionpadStyle? primary}) {
+    return ActionpadStyles(primary: primary ?? this.primary);
   }
 
   @override

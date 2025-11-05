@@ -3,9 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'sip_version.dart';
 
 class Plugins with EquatableMixin {
-  Plugins({
-    this.sip,
-  });
+  Plugins({this.sip});
 
   final SipVersion? sip;
 

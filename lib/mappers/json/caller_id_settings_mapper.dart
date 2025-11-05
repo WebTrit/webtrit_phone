@@ -8,19 +8,16 @@ mixin CallerIdSettingsJsonMapper {
   Map<String, dynamic> numberMatcherToMap(NumberMatcher matcher) {
     return switch (matcher) {
       PrefixMatcher prefixMatcher => <String, dynamic>{
-          'type': prefixMatcherDescriminator,
-          'prefix': prefixMatcher.prefix,
-          'number': prefixMatcher.number,
-        },
+        'type': prefixMatcherDescriminator,
+        'prefix': prefixMatcher.prefix,
+        'number': prefixMatcher.number,
+      },
     };
   }
 
   NumberMatcher numberMatcherFromMap(Map<String, dynamic> map) {
     return switch (map['type']) {
-      prefixMatcherDescriminator => PrefixMatcher(
-          map['prefix'] as String,
-          map['number'] as String,
-        ),
+      prefixMatcherDescriminator => PrefixMatcher(map['prefix'] as String, map['number'] as String),
       _ => throw Exception('Unknown matcher type: ${map['type']}'),
     };
   }

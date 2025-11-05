@@ -85,7 +85,7 @@ class _SystemNotificationsBadgeState extends State<SystemNotificationsBadge> wit
                                 height: 1,
                               ),
                             ),
-                          )
+                          ),
                       ],
                     ),
                   ),

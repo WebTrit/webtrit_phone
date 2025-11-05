@@ -15,11 +15,9 @@ part 'call_to_actions_cubit.freezed.dart';
 final _logger = Logger('DemoCubit');
 
 class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
-  CallToActionsCubit({
-    required CallToActionsRepository callToActionsRepository,
-    required Locale locale,
-  })  : _callToActionsRepository = callToActionsRepository,
-        super(CallToActionsCubitState(locale: locale));
+  CallToActionsCubit({required CallToActionsRepository callToActionsRepository, required Locale locale})
+    : _callToActionsRepository = callToActionsRepository,
+      super(CallToActionsCubitState(locale: locale));
 
   final CallToActionsRepository _callToActionsRepository;
 
@@ -31,11 +29,7 @@ class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
     final flavor = state.flavor;
 
     // Emit the updated state with the new locale, resetting flavor and actions
-    emit(state.copyWith(
-      locale: locale,
-      flavor: null,
-      actions: {},
-    ));
+    emit(state.copyWith(locale: locale, flavor: null, actions: {}));
 
     // Re-fetch actions if a flavor was previously set
     if (flavor != null) getActions(state.flavor!);

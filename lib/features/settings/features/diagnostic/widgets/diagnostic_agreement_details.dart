@@ -31,10 +31,7 @@ class _DiagnosticAgreementDetailsState extends State<DiagnosticAgreementDetails>
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 32.0,
-        horizontal: 16,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,17 +39,11 @@ class _DiagnosticAgreementDetailsState extends State<DiagnosticAgreementDetails>
             children: [
               const AppIcon(Icons.contacts),
               const SizedBox(width: 16),
-              Text(
-                widget.title,
-                style: textTheme.titleLarge?.copyWith(color: colorScheme.primary),
-              ),
+              Text(widget.title, style: textTheme.titleLarge?.copyWith(color: colorScheme.primary)),
             ],
           ),
           const SizedBox(height: 16),
-          Text(
-            widget.description,
-            style: textTheme.bodyMedium,
-          ),
+          Text(widget.description, style: textTheme.bodyMedium),
           const Spacer(),
           AgreementCheckbox(
             agreementAccepted: _agreementStatus.isAccepted,

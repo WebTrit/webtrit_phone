@@ -38,10 +38,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
     final contentStyle = Theme.of(context).textTheme.bodyMedium;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.settings_ListViewTileTitle_presence),
-        leading: const ExtBackButton(),
-      ),
+      appBar: AppBar(title: Text(l10n.settings_ListViewTileTitle_presence), leading: const ExtBackButton()),
       body: BlocBuilder<PresenceSettingsCubit, PresenceSettings>(
         builder: (context, state) {
           return Padding(
@@ -58,31 +55,33 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                       DropdownMenu<PresenceSettingsPreset?>(
                         controller: TextEditingController(),
                         dropdownMenuEntries: presets
-                            .map((e) => DropdownMenuEntry(
-                                  value: e,
-                                  label: e.name,
-                                  labelWidget: Row(
-                                    children: [
-                                      LeadingAvatar(
-                                        username: 'User',
-                                        presenceInfo: [
-                                          PresenceInfo(
-                                            id: 'id',
-                                            available: e.available,
-                                            note: e.note,
-                                            activities: [if (e.activity != null) e.activity!],
-                                            statusIcon: null,
-                                            device: 'device',
-                                            timeOffsetMin: 0,
-                                            timestamp: DateTime.now(),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text(e.name),
-                                    ],
-                                  ),
-                                ))
+                            .map(
+                              (e) => DropdownMenuEntry(
+                                value: e,
+                                label: e.name,
+                                labelWidget: Row(
+                                  children: [
+                                    LeadingAvatar(
+                                      username: 'User',
+                                      presenceInfo: [
+                                        PresenceInfo(
+                                          id: 'id',
+                                          available: e.available,
+                                          note: e.note,
+                                          activities: [if (e.activity != null) e.activity!],
+                                          statusIcon: null,
+                                          device: 'device',
+                                          timeOffsetMin: 0,
+                                          timestamp: DateTime.now(),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(e.name),
+                                  ],
+                                ),
+                              ),
+                            )
                             .toList(),
                         initialSelection: presets.firstWhereOrNull(
                           (element) =>
@@ -139,7 +138,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                           margin: const EdgeInsets.all(16),
                           showDuration: const Duration(seconds: 10),
                           child: const Icon(Icons.info_outline),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -152,9 +151,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                           initialValue: state.note,
                           decoration: InputDecoration(
                             labelText: l10n.presence_settings_note_label,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                           ),
                           onChanged: (value) {
                             cubit.setPresenceSettings(state.copyWithNote(value));
@@ -169,7 +166,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                         margin: const EdgeInsets.all(16),
                         showDuration: const Duration(seconds: 10),
                         child: const Icon(Icons.info_outline),
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(height: 24),
@@ -178,19 +175,10 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                       Expanded(
                         child: DropdownMenu<PresenceActivity?>(
                           dropdownMenuEntries: [
-                            DropdownMenuEntry(
-                              value: null,
-                              label: l10n.presence_activity_none_name,
-                            ),
+                            DropdownMenuEntry(value: null, label: l10n.presence_activity_none_name),
                             if (state.available == false) ...[
-                              DropdownMenuEntry(
-                                value: PresenceActivity.away,
-                                label: PresenceActivity.away.l10n(l10n),
-                              ),
-                              DropdownMenuEntry(
-                                value: PresenceActivity.busy,
-                                label: PresenceActivity.busy.l10n(l10n),
-                              ),
+                              DropdownMenuEntry(value: PresenceActivity.away, label: PresenceActivity.away.l10n(l10n)),
+                              DropdownMenuEntry(value: PresenceActivity.busy, label: PresenceActivity.busy.l10n(l10n)),
                               DropdownMenuEntry(
                                 value: PresenceActivity.doNotDisturb,
                                 label: PresenceActivity.doNotDisturb.l10n(l10n),
@@ -213,10 +201,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                 value: PresenceActivity.inTransit,
                                 label: PresenceActivity.inTransit.l10n(l10n),
                               ),
-                              DropdownMenuEntry(
-                                value: PresenceActivity.meal,
-                                label: PresenceActivity.meal.l10n(l10n),
-                              ),
+                              DropdownMenuEntry(value: PresenceActivity.meal, label: PresenceActivity.meal.l10n(l10n)),
                               DropdownMenuEntry(
                                 value: PresenceActivity.meeting,
                                 label: PresenceActivity.meeting.l10n(l10n),
@@ -229,7 +214,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                 value: PresenceActivity.vacation,
                                 label: PresenceActivity.vacation.l10n(l10n),
                               ),
-                            ]
+                            ],
                           ],
                           initialSelection: state.activity,
                           onSelected: (value) {
@@ -252,7 +237,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                         margin: const EdgeInsets.all(16),
                         showDuration: const Duration(seconds: 10),
                         child: const Icon(Icons.info_outline),
-                      )
+                      ),
                     ],
                   ),
                   // SizedBox(height: 8),
@@ -280,7 +265,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                         margin: const EdgeInsets.all(16),
                         showDuration: const Duration(seconds: 10),
                         child: const Icon(Icons.info_outline),
-                      )
+                      ),
                     ],
                   ),
                   // SizedBox(height: 16),
@@ -290,51 +275,50 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                     children: [
                       Text(l10n.presence_settings_statusIcon_title, style: titleStyle),
                       SizedBox(width: 8),
-                      Text(
-                        state.statusIcon ?? l10n.presence_settings_statusIcon_none,
-                        style: contentStyle,
-                      ),
+                      Text(state.statusIcon ?? l10n.presence_settings_statusIcon_none, style: contentStyle),
                       Spacer(),
                       IconButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                                    child: Dialog(
-                                      shadowColor: Colors.black,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
-                                          color: Colors.white,
-                                        ),
-                                        clipBehavior: Clip.hardEdge,
-                                        width: 300,
-                                        height: 300,
-                                        child: OverflowBox(
-                                          alignment: Alignment.topCenter,
-                                          maxHeight: 350,
-                                          minHeight: 350,
-                                          child: EmojiPicker(
-                                            config: Config(
-                                              emojiViewConfig: EmojiViewConfig(
-                                                backgroundColor: Colors.white,
-                                                emojiSizeMax: 20,
-                                              ),
-                                            ),
-                                            onEmojiSelected: (category, emoji) {
-                                              cubit.setPresenceSettings(state.copyWithStatusIcon(emoji.emoji));
-                                              Navigator.pop(context);
-                                            },
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                                child: Dialog(
+                                  shadowColor: Colors.black,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.white,
+                                    ),
+                                    clipBehavior: Clip.hardEdge,
+                                    width: 300,
+                                    height: 300,
+                                    child: OverflowBox(
+                                      alignment: Alignment.topCenter,
+                                      maxHeight: 350,
+                                      minHeight: 350,
+                                      child: EmojiPicker(
+                                        config: Config(
+                                          emojiViewConfig: EmojiViewConfig(
+                                            backgroundColor: Colors.white,
+                                            emojiSizeMax: 20,
                                           ),
                                         ),
+                                        onEmojiSelected: (category, emoji) {
+                                          cubit.setPresenceSettings(state.copyWithStatusIcon(emoji.emoji));
+                                          Navigator.pop(context);
+                                        },
                                       ),
                                     ),
-                                  );
-                                });
-                          },
-                          icon: Icon(Icons.search)),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(Icons.search),
+                      ),
                       if (state.statusIcon != null)
                         IconButton(
                           onPressed: () => cubit.setPresenceSettings(state.copyWithStatusIcon(null)),

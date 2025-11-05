@@ -111,10 +111,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       return widget.initialUri;
     } else {
       return widget.initialUri.replace(
-        queryParameters: {
-          ...widget.initialUri.queryParameters,
-          'localeName': context.l10n.localeName,
-        },
+        queryParameters: {...widget.initialUri.queryParameters, 'localeName': context.l10n.localeName},
       );
     }
   }
@@ -132,11 +129,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 
     errorPlaceholderBuilder(BuildContext context) {
       if (_sslAuthError != null) {
-        return SslAuthErrorView(
-          error: _sslAuthError!,
-          onReload: _reloadPage,
-          failingUrl: _sslFailingUrl,
-        );
+        return SslAuthErrorView(error: _sslAuthError!, onReload: _reloadPage, failingUrl: _sslFailingUrl);
       }
 
       if (widget.errorBuilder != null) {
@@ -144,10 +137,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       }
 
       // fallback to default
-      return DefaultWebViewErrorView(
-        error: _latestError!,
-        onReload: _reloadPage,
-      );
+      return DefaultWebViewErrorView(error: _latestError!, onReload: _reloadPage);
     }
 
     successBuilder(BuildContext context) {
@@ -165,10 +155,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     if (widget.showToolbar) {
       return Column(
         children: [
-          WebViewToolbar(
-            title: widget.title,
-            onReload: _webViewController.reload,
-          ),
+          WebViewToolbar(title: widget.title, onReload: _webViewController.reload),
           Expanded(child: content),
         ],
       );
@@ -237,10 +224,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
   }
 
   void _initializeHandlers() {
-    _navigationRequestHandler = NavigationRequestHandler(
-      canLaunchUrlFn: canLaunchUrl,
-      launchUrlFn: launchUrl,
-    );
+    _navigationRequestHandler = NavigationRequestHandler(canLaunchUrlFn: canLaunchUrl, launchUrlFn: launchUrl);
   }
 
   void _initializeWebViewController() {
@@ -351,10 +335,13 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
     final url = error.url;
     final isMain = error.isForMainFrame ?? true;
 
-    _logger.warning(
-      'WebView error',
-      {'code': code, 'type': type, 'url': url, 'isMainFrame': isMain, 'desc': error.description},
-    );
+    _logger.warning('WebView error', {
+      'code': code,
+      'type': type,
+      'url': url,
+      'isMainFrame': isMain,
+      'desc': error.description,
+    });
 
     // Ignore subresource errors (images, fonts, trackers, etc.)
     if (!isMain) {
@@ -392,10 +379,7 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
 }
 
 class NavigationRequestHandler {
-  NavigationRequestHandler({
-    required this.canLaunchUrlFn,
-    required this.launchUrlFn,
-  });
+  NavigationRequestHandler({required this.canLaunchUrlFn, required this.launchUrlFn});
 
   final Future<bool> Function(Uri) canLaunchUrlFn;
   final Future<bool> Function(Uri, {LaunchMode mode}) launchUrlFn;
@@ -502,10 +486,8 @@ abstract class PageInjectionStrategy {
 /// on the `window` object. By default, it calls `window.onPayloadDataReady(...)`,
 /// but the function name can be customized via the [functionName] parameter.
 class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
-  DefaultPayloadInjectionStrategy({
-    this.functionName = 'onPayloadDataReady',
-    Map<String, dynamic>? initialPayload,
-  }) : _payloadNotifier = ValueNotifier<Map<String, dynamic>>(initialPayload ?? {}) {
+  DefaultPayloadInjectionStrategy({this.functionName = 'onPayloadDataReady', Map<String, dynamic>? initialPayload})
+    : _payloadNotifier = ValueNotifier<Map<String, dynamic>>(initialPayload ?? {}) {
     _payloadNotifier.addListener(_attemptPayloadInjection);
   }
 
@@ -555,7 +537,8 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
     }
 
     final jsonString = const JsonEncoder().convert(payload);
-    final script = '''
+    final script =
+        '''
       if (typeof window.$functionName === 'function') {
         window.$functionName($jsonString);
       }
@@ -578,13 +561,7 @@ class DefaultPayloadInjectionStrategy implements PageInjectionStrategy {
 
 /// Strategy for injecting arbitrary JavaScript when the page is ready.
 class JavaScriptInjectionStrategy implements PageInjectionStrategy {
-  JavaScriptInjectionStrategy.raw(
-    this.script, {
-    this.label,
-    this.returnResult = false,
-    this.onError,
-    this.onSuccess,
-  });
+  JavaScriptInjectionStrategy.raw(this.script, {this.label, this.returnResult = false, this.onError, this.onSuccess});
 
   /// Optional label to simplify logging.
   final String? label;
@@ -662,14 +639,9 @@ abstract class ConnectivityRecoveryStrategy {
           connectivityChecker: connectivityCheckerBuilder(),
         );
       case ReconnectStrategy.softReload:
-        return SoftReloadRecoveryStrategy(
-          connectivityStream: connectivityStream,
-        );
+        return SoftReloadRecoveryStrategy(connectivityStream: connectivityStream);
       case ReconnectStrategy.hardReload:
-        return HardReloadRecoveryStrategy(
-          connectivityStream: connectivityStream,
-          initialUri: initialUri,
-        );
+        return HardReloadRecoveryStrategy(connectivityStream: connectivityStream, initialUri: initialUri);
     }
   }
 
@@ -1008,11 +980,7 @@ class JSChannelStrategy {
   /// - [name]: The JavaScript channel name to listen for (must match the name used in the web page).
   /// - [onEvent]: Callback invoked with the [WebViewController] and parsed [JsonJsEvent] when a valid message is received.
   /// - [onMalformed]: Optional callback when the incoming message is not valid JSON or cannot be parsed.
-  const JSChannelStrategy({
-    required this.name,
-    required this.onEvent,
-    this.onMalformed,
-  });
+  const JSChannelStrategy({required this.name, required this.onEvent, this.onMalformed});
 
   /// The JavaScript channel name.
   final String name;

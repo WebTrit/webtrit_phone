@@ -41,19 +41,19 @@ class CdrRecord extends Equatable {
 
   @override
   List<Object?> get props => [
-        callId,
-        direction,
-        status,
-        callee,
-        calleeNumber,
-        caller,
-        callerNumber,
-        connectTime,
-        disconnectTime,
-        disconnectReason,
-        duration,
-        recordingId,
-      ];
+    callId,
+    direction,
+    status,
+    callee,
+    calleeNumber,
+    caller,
+    callerNumber,
+    connectTime,
+    disconnectTime,
+    disconnectReason,
+    duration,
+    recordingId,
+  ];
   @override
   String toString() =>
       'CdrRecord(callId: $callId, direction: $direction, status: $status, callee: $callee, calleeNumber: $calleeNumber, caller: $caller, callerNumber: $callerNumber, connectTime: $connectTime, disconnectTime: $disconnectTime, disconnectReason: $disconnectReason, duration: $duration, recordingId: $recordingId)';

@@ -8,11 +8,7 @@ import '../models/models.dart';
 import '../extensions/extensions.dart';
 
 class DiagnosticPermissionDetails extends StatelessWidget {
-  const DiagnosticPermissionDetails({
-    super.key,
-    this.onTap,
-    required this.permissionWithStatus,
-  });
+  const DiagnosticPermissionDetails({super.key, this.onTap, required this.permissionWithStatus});
 
   final PermissionWithStatus permissionWithStatus;
   final Function()? onTap;
@@ -34,16 +30,10 @@ class DiagnosticPermissionDetails extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          ListTile(
-            title: Text(permissionTitle),
-            subtitle: Text(permissionDescription),
-          ),
+          ListTile(title: Text(permissionTitle), subtitle: Text(permissionDescription)),
           ListTile(
             title: Text(context.l10n.diagnosticPermissionDetails_title_statusPermission),
-            subtitle: Text(
-              statusText,
-              style: textTheme.bodyMedium?.copyWith(color: statusColor),
-            ),
+            subtitle: Text(statusText, style: textTheme.bodyMedium?.copyWith(color: statusColor)),
           ),
           ListTile(
             title: Text(

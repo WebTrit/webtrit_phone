@@ -15,12 +15,7 @@ import '../contacts.dart';
 typedef ContactSourceTypeWidgetBuilder = Widget Function(BuildContext context, ContactSourceType sourceType);
 
 class ContactsScreen extends StatefulWidget {
-  const ContactsScreen({
-    super.key,
-    required this.sourceTypes,
-    required this.sourceTypeWidgetBuilder,
-    this.title,
-  });
+  const ContactsScreen({super.key, required this.sourceTypes, required this.sourceTypeWidgetBuilder, this.title});
 
   final List<ContactSourceType> sourceTypes;
   final ContactSourceTypeWidgetBuilder sourceTypeWidgetBuilder;
@@ -70,24 +65,20 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
     final tabBar = widget.sourceTypes.length <= 1
         ? null
         : Padding(
-            padding: const EdgeInsets.only(
-              bottom: kMainAppBarBottomPaddingGap,
-            ),
+            padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
             child: ExtTabBar(
               controller: _tabController,
               width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: widget.sourceTypes.map(
-                (sourceType) {
-                  return Tab(
-                    key: switch (sourceType) {
-                      ContactSourceType.local => contactsTabLocalKey,
-                      ContactSourceType.external => contactsTabExtKey,
-                    },
-                    text: sourceType.l10n(context),
-                  );
-                },
-              ).toList(),
+              tabs: widget.sourceTypes.map((sourceType) {
+                return Tab(
+                  key: switch (sourceType) {
+                    ContactSourceType.local => contactsTabLocalKey,
+                    ContactSourceType.external => contactsTabExtKey,
+                  },
+                  text: sourceType.l10n(context),
+                );
+              }).toList(),
             ),
           );
 
@@ -123,20 +114,13 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
             ),
-            child: Column(
-              children: [
-                if (tabBar != null) tabBar,
-                search,
-              ],
-            ),
+            child: Column(children: [if (tabBar != null) tabBar, search]),
           ),
           context: context,
         ),
         body: TabBarView(
           controller: _tabController,
-          children: [
-            for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType),
-          ],
+          children: [for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType)],
         ),
         bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
           buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,

@@ -36,14 +36,14 @@ class ModifyWithEncodingSettings implements SDPMunger {
 
     EncodingSettings settings = switch (preset) {
       null => EncodingSettings.defaultWithOverrides(
-          audioBitrate: defaultPresetOverride.audioBitrate,
-          videoBitrate: defaultPresetOverride.videoBitrate,
-          ptime: defaultPresetOverride.ptime,
-          maxptime: defaultPresetOverride.maxptime,
-          opusSamplingRate: defaultPresetOverride.opusSamplingRate,
-          opusStereo: defaultPresetOverride.opusStereo,
-          opusDtx: defaultPresetOverride.opusDtx,
-        ),
+        audioBitrate: defaultPresetOverride.audioBitrate,
+        videoBitrate: defaultPresetOverride.videoBitrate,
+        ptime: defaultPresetOverride.ptime,
+        maxptime: defaultPresetOverride.maxptime,
+        opusSamplingRate: defaultPresetOverride.opusSamplingRate,
+        opusStereo: defaultPresetOverride.opusStereo,
+        opusDtx: defaultPresetOverride.opusDtx,
+      ),
       EncodingPreset.eco => EncodingSettings.eco(),
       EncodingPreset.balance => EncodingSettings.balance(),
       EncodingPreset.quality => EncodingSettings.quality(),

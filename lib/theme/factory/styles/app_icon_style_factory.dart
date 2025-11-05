@@ -17,10 +17,6 @@ class AppIconStyleFactory implements ThemeStyleFactory<AppIconStyles> {
   AppIconStyles create() {
     final appIconColor = config?.color?.toColor() ?? colors.primary;
 
-    return AppIconStyles(
-      primary: AppIconStyle(
-        color: appIconColor,
-      ),
-    );
+    return AppIconStyles(primary: AppIconStyle(color: appIconColor));
   }
 }

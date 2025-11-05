@@ -22,16 +22,7 @@ class ChatOutboxMessageEntry extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-        idKey,
-        content,
-        chatId,
-        participantId,
-        replyToId,
-        forwardFromId,
-        authorId,
-        sendAttempts,
-      ];
+  List<Object?> get props => [idKey, content, chatId, participantId, replyToId, forwardFromId, authorId, sendAttempts];
 
   @override
   bool get stringify => true;

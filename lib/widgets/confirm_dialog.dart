@@ -19,11 +19,7 @@ class ConfirmDialog extends StatelessWidget {
     return showDialog<bool?>(
       context: context,
       builder: (context) {
-        return ConfirmDialog._(
-          title: title,
-          content: content,
-          style: style,
-        );
+        return ConfirmDialog._(title: title, content: content, style: style);
       },
     );
   }
@@ -37,22 +33,12 @@ class ConfirmDialog extends StatelessWidget {
     return showDialog<bool?>(
       context: context,
       builder: (context) {
-        return ConfirmDialog._(
-          dangerous: true,
-          title: title,
-          content: content,
-          style: style,
-        );
+        return ConfirmDialog._(dangerous: true, title: title, content: content, style: style);
       },
     );
   }
 
-  const ConfirmDialog._({
-    this.dangerous = false,
-    required this.title,
-    required this.content,
-    required this.style,
-  });
+  const ConfirmDialog._({this.dangerous = false, required this.title, required this.content, required this.style});
 
   final bool dangerous;
   final String title;

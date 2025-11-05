@@ -11,11 +11,7 @@ import 'package:intl/intl.dart';
 /// - [mediaHeaders]: Headers for authenticated media requests.
 ///
 class VoicemailScreenContext {
-  VoicemailScreenContext({
-    required this.mediaCacheBasePath,
-    required this.dateFormat,
-    required this.mediaHeaders,
-  });
+  VoicemailScreenContext({required this.mediaCacheBasePath, required this.dateFormat, required this.mediaHeaders});
 
   final String mediaCacheBasePath;
   final DateFormat dateFormat;

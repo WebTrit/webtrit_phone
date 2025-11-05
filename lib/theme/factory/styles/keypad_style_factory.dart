@@ -25,11 +25,7 @@ import '../theme_style_factory.dart';
 /// inside widgets (e.g. `merge(theme.textTheme.headlineLarge)`),
 /// so that the final computed sizes are always respected.
 class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
-  KeypadStyleFactory(
-    this.colors, {
-    required this.config,
-    required this.textTheme,
-  });
+  KeypadStyleFactory(this.colors, {required this.config, required this.textTheme});
 
   final ColorScheme colors;
   final KeypadStyleConfig? config;
@@ -50,7 +46,8 @@ class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
     return KeypadStyles(
       primary: KeypadStyle(
         keyStyle: KeypadKeyStyle(
-          textStyle: config?.textStyle?.toTextStyle(
+          textStyle:
+              config?.textStyle?.toTextStyle(
                 fallbackColor: defaultNumberColor,
                 defaultFontSize: defaultNumberFontSize,
                 defaultFontWeight: defaultNumberFontWeight,
@@ -61,7 +58,8 @@ class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
                 color: defaultNumberColor,
                 height: 1.125,
               ),
-          subtextStyle: config?.subtextStyle?.toTextStyle(
+          subtextStyle:
+              config?.subtextStyle?.toTextStyle(
                 fallbackColor: defaultSubColor,
                 defaultFontSize: defaultSubFontSize,
                 defaultFontWeight: defaultSubFontWeight,

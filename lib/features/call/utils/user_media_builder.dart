@@ -6,30 +6,19 @@ import 'audio_constraints_builder.dart';
 import 'video_constraints_builder.dart';
 
 abstract class UserMediaBuilder {
-  Future<MediaStream> build({
-    required bool video,
-    bool? frontCamera,
-  });
+  Future<MediaStream> build({required bool video, bool? frontCamera});
 }
 
 class DefaultUserMediaBuilder implements UserMediaBuilder {
-  const DefaultUserMediaBuilder({
-    this.audioConstraintsBuilder,
-    this.videoConstraintsBuilder,
-  });
+  const DefaultUserMediaBuilder({this.audioConstraintsBuilder, this.videoConstraintsBuilder});
 
   final AudioConstraintsBuilder? audioConstraintsBuilder;
   final VideoConstraintsBuilder? videoConstraintsBuilder;
 
   @override
-  Future<MediaStream> build({
-    required bool video,
-    bool? frontCamera,
-  }) async {
+  Future<MediaStream> build({required bool video, bool? frontCamera}) async {
     final Map<String, dynamic> mediaConstraints = {
-      'audio': {
-        'mandatory': audioConstraintsBuilder?.build() ?? {},
-      },
+      'audio': {'mandatory': audioConstraintsBuilder?.build() ?? {}},
       'video': video
           ? {
               'mandatory': videoConstraintsBuilder?.build() ?? {},
@@ -44,9 +33,7 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
 
       if (!kIsWeb) {
         await Helper.setAppleAudioConfiguration(
-          AppleAudioConfiguration(
-            appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat,
-          ),
+          AppleAudioConfiguration(appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
         );
         await Helper.setSpeakerphoneOn(video);
       }

@@ -14,14 +14,10 @@ mixin NegotiationSettingsJsonMapper {
   }
 
   NegotiationSettings negotiationSettingsFromMap(Map<String, dynamic> map) {
-    return NegotiationSettings(
-      includeInactiveVideoInOfferAnswer: map[_kIncludeInactiveVideoInOfferAnswerKey] ?? false,
-    );
+    return NegotiationSettings(includeInactiveVideoInOfferAnswer: map[_kIncludeInactiveVideoInOfferAnswerKey] ?? false);
   }
 
   Map<String, dynamic> negotiationSettingsToMap(NegotiationSettings settings) {
-    return {
-      _kIncludeInactiveVideoInOfferAnswerKey: settings.includeInactiveVideoInOfferAnswer,
-    };
+    return {_kIncludeInactiveVideoInOfferAnswerKey: settings.includeInactiveVideoInOfferAnswer};
   }
 }

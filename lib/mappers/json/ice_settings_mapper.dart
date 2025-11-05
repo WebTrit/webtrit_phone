@@ -13,10 +13,12 @@ mixin IceSettingsJsonMapper {
 
   IceSettings iceSettingsFromMap(Map<String, dynamic> map) {
     return IceSettings(
-      iceTransportFilter:
-          map['iceTransportFilter'] != null ? IceTransportFilter.values.byName(map['iceTransportFilter']) : null,
-      iceNetworkFilter:
-          map['iceNetworkFilter'] != null ? IceNetworkFilter.values.byName(map['iceNetworkFilter']) : null,
+      iceTransportFilter: map['iceTransportFilter'] != null
+          ? IceTransportFilter.values.byName(map['iceTransportFilter'])
+          : null,
+      iceNetworkFilter: map['iceNetworkFilter'] != null
+          ? IceNetworkFilter.values.byName(map['iceNetworkFilter'])
+          : null,
     );
   }
 

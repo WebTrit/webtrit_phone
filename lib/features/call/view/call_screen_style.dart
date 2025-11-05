@@ -5,12 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
 class CallScreenStyle with Diagnosticable {
-  CallScreenStyle({
-    this.systemUiOverlayStyle,
-    this.appBar,
-    this.callInfo,
-    this.actions,
-  });
+  CallScreenStyle({this.systemUiOverlayStyle, this.appBar, this.callInfo, this.actions});
 
   final SystemUiOverlayStyle? systemUiOverlayStyle;
   final AppBarStyle? appBar;
@@ -40,12 +35,7 @@ class CallScreenStyle with Diagnosticable {
 }
 
 class CallInfoStyle with Diagnosticable {
-  const CallInfoStyle({
-    this.userInfo,
-    this.number,
-    this.callStatus,
-    this.processingStatus,
-  });
+  const CallInfoStyle({this.userInfo, this.number, this.callStatus, this.processingStatus});
 
   final TextStyle? userInfo;
 

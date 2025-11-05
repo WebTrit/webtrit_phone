@@ -2,9 +2,7 @@ import 'dart:ui';
 
 import 'package:json_annotation/json_annotation.dart';
 
-const themeJsonSerializable = JsonSerializable(
-  converters: [CSSColorConverter()],
-);
+const themeJsonSerializable = JsonSerializable(converters: [CSSColorConverter()]);
 
 class CSSColorConverter implements JsonConverter<Color, String> {
   const CSSColorConverter();

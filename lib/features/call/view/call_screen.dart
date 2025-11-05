@@ -79,9 +79,6 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
       },
     );
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: style ?? SystemUiOverlayStyle.light,
-      child: scaffold,
-    );
+    return AnnotatedRegion<SystemUiOverlayStyle>(value: style ?? SystemUiOverlayStyle.light, child: scaffold);
   }
 }

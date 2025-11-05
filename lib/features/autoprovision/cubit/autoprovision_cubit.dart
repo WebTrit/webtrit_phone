@@ -79,8 +79,9 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
       final tenantId = session.tenantId ?? config.tenantId;
 
       if (userId == null) {
-        final notSupportedCoreException =
-            Exception('User ID is required for proper auto provisioning. Please verify the core version.');
+        final notSupportedCoreException = Exception(
+          'User ID is required for proper auto provisioning. Please verify the core version.',
+        );
         emit(AutoprovisionState.error(notSupportedCoreException));
         return;
       }

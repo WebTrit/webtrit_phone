@@ -7,16 +7,16 @@ part of 'image_source.dart';
 // **************************************************************************
 
 ImageSource _$ImageSourceFromJson(Map<String, dynamic> json) => ImageSource(
-  id: json['id'] as String?,
-  uri: json['uri'] as String?,
-  ref: json[r'$ref'] as String? ?? 'asset',
-  render: json['render'] == null
-      ? null
-      : ImageRenderSpec.fromJson(json['render'] as Map<String, dynamic>),
-  metadata: json['metadata'] == null
-      ? const Metadata()
-      : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
-);
+      id: json['id'] as String?,
+      uri: json['uri'] as String?,
+      ref: json[r'$ref'] as String? ?? 'asset',
+      render: json['render'] == null
+          ? null
+          : ImageRenderSpec.fromJson(json['render'] as Map<String, dynamic>),
+      metadata: json['metadata'] == null
+          ? const Metadata()
+          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$ImageSourceToJson(ImageSource instance) =>
     <String, dynamic>{

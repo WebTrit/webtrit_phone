@@ -4,7 +4,8 @@ import 'package:webtrit_phone/features/features.dart';
 
 import '../data/messaging.dart';
 
-class MockChatConversationsCubit extends MockCubit<ChatConversationsState> implements ChatConversationsCubit {
+class MockChatConversationsCubit extends MockCubit<ChatConversationsState>
+    implements ChatConversationsCubit {
   MockChatConversationsCubit();
 
   factory MockChatConversationsCubit.initial() {
@@ -28,8 +29,16 @@ class MockChatConversationsCubit extends MockCubit<ChatConversationsState> imple
         ChatConversationsState.initial(),
         ChatConversationsState(
           [
-            (chat: dChatsMockChatsRepository[0], message: dMessagesMockChatsRepository[0], contacts: []),
-            (chat: dChatsMockChatsRepository[1], message: dMessagesMockChatsRepository[1], contacts: []),
+            (
+              chat: dChatsMockChatsRepository[0],
+              message: dMessagesMockChatsRepository[0],
+              contacts: []
+            ),
+            (
+              chat: dChatsMockChatsRepository[1],
+              message: dMessagesMockChatsRepository[1],
+              contacts: []
+            ),
           ],
           false,
         ),

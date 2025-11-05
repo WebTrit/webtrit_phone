@@ -14,9 +14,9 @@ class CallToActionsRepositoryImpl implements CallToActionsRepository {
     required WebtritApiClient webtritApiClient,
     required String token,
     SessionGuard? sessionGuard,
-  })  : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
-        _webtritApiClient = webtritApiClient,
-        _token = token;
+  }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
+       _webtritApiClient = webtritApiClient,
+       _token = token;
 
   final WebtritApiClient _webtritApiClient;
   final String _token;
@@ -30,10 +30,7 @@ class CallToActionsRepositoryImpl implements CallToActionsRepository {
     try {
       final userInfo = await _getUserInfo();
 
-      final param = DemoCallToActionsParam(
-        email: userInfo.email!,
-        tab: flavor.name,
-      );
+      final param = DemoCallToActionsParam(email: userInfo.email!, tab: flavor.name);
 
       final callToActions = await _webtritApiClient.getCallToActions(
         _token,

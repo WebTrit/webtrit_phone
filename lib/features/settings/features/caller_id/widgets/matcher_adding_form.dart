@@ -39,13 +39,7 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withAlpha(25),
-            blurRadius: 32,
-            offset: const Offset(8, 8),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(25), blurRadius: 32, offset: const Offset(8, 8))],
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -76,23 +70,15 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
                     shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
                     padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
-                  textStyle: TextStyle(
-                    color: colorScheme.onSurface,
-                    fontSize: 14,
-                  ),
+                  textStyle: TextStyle(color: colorScheme.onSurface, fontSize: 14),
                   inputDecorationTheme: InputDecorationTheme(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
                     filled: true,
                     fillColor: colorScheme.surfaceContainerLow,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     isCollapsed: true,
                   ),
-                  dropdownMenuEntries: [
-                    for (final n in widget.numbers) DropdownMenuEntry<String>(value: n, label: n),
-                  ],
+                  dropdownMenuEntries: [for (final n in widget.numbers) DropdownMenuEntry<String>(value: n, label: n)],
                   onSelected: (value) => setState(() => number = value ?? ''),
                 ),
               ),
@@ -121,10 +107,7 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
                 child: Text(l10n.settings_callerId_save_button),
               ),
               const SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: widget.onCancel,
-                child: Text(l10n.settings_callerId_cancel_button),
-              ),
+              ElevatedButton(onPressed: widget.onCancel, child: Text(l10n.settings_callerId_cancel_button)),
             ],
           ),
         ],

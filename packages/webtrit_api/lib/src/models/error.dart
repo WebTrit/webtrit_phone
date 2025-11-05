@@ -20,7 +20,8 @@ class ErrorResponse with _$ErrorResponse {
   @override
   final ErrorDetail? details;
 
-  factory ErrorResponse.fromJson(Map<String, dynamic> json) => _$ErrorResponseFromJson(json);
+  factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
+      _$ErrorResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
 }
@@ -36,7 +37,8 @@ class ErrorDetail with _$ErrorDetail {
   @override
   final String reason;
 
-  factory ErrorDetail.fromJson(Map<String, dynamic> json) => _$ErrorDetailFromJson(json);
+  factory ErrorDetail.fromJson(Map<String, dynamic> json) =>
+      _$ErrorDetailFromJson(json);
 
   Map<String, dynamic> toJson() => _$ErrorDetailToJson(this);
 }

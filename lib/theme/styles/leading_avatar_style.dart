@@ -51,7 +51,8 @@ class LeadingAvatarStyle with Diagnosticable {
     return LeadingAvatarStyle(
       backgroundColor: override.backgroundColor ?? base.backgroundColor,
       radius: override.radius ?? base.radius,
-      initialsTextStyle: base.initialsTextStyle?.merge(override.initialsTextStyle) ??
+      initialsTextStyle:
+          base.initialsTextStyle?.merge(override.initialsTextStyle) ??
           override.initialsTextStyle ??
           base.initialsTextStyle,
       placeholderIcon: override.placeholderIcon ?? base.placeholderIcon,
@@ -62,11 +63,7 @@ class LeadingAvatarStyle with Diagnosticable {
     );
   }
 
-  static LeadingAvatarStyle? lerp(
-    LeadingAvatarStyle? a,
-    LeadingAvatarStyle? b,
-    double t,
-  ) {
+  static LeadingAvatarStyle? lerp(LeadingAvatarStyle? a, LeadingAvatarStyle? b, double t) {
     if (identical(a, b)) return a;
     if (a == null && b == null) return null;
 
@@ -98,11 +95,7 @@ class LeadingAvatarStyle with Diagnosticable {
 }
 
 class LoadingOverlayStyle with Diagnosticable {
-  const LoadingOverlayStyle({
-    this.showByDefault = false,
-    this.padding,
-    this.strokeWidth,
-  });
+  const LoadingOverlayStyle({this.showByDefault = false, this.padding, this.strokeWidth});
 
   final bool showByDefault;
   final EdgeInsets? padding;
@@ -119,11 +112,7 @@ class LoadingOverlayStyle with Diagnosticable {
     );
   }
 
-  static LoadingOverlayStyle? lerp(
-    LoadingOverlayStyle? a,
-    LoadingOverlayStyle? b,
-    double t,
-  ) {
+  static LoadingOverlayStyle? lerp(LoadingOverlayStyle? a, LoadingOverlayStyle? b, double t) {
     if (identical(a, b)) return a;
     if (a == null && b == null) return null;
 

@@ -16,15 +16,17 @@ class CallLogsRepository with CallLogsDriftMapper {
   }
 
   Future<void> add(NewCall call) {
-    return _appDatabase.callLogsDao.insertCallLog(CallLogDataCompanion(
-      direction: Value(CallLogDirectionEnum.values.byName(call.direction.name)),
-      number: Value(call.number),
-      video: Value(call.video),
-      username: Value(call.username),
-      createdAt: Value(call.createdTime),
-      acceptedAt: Value(call.acceptedTime),
-      hungUpAt: Value(call.hungUpTime),
-    ));
+    return _appDatabase.callLogsDao.insertCallLog(
+      CallLogDataCompanion(
+        direction: Value(CallLogDirectionEnum.values.byName(call.direction.name)),
+        number: Value(call.number),
+        video: Value(call.video),
+        username: Value(call.username),
+        createdAt: Value(call.createdTime),
+        acceptedAt: Value(call.acceptedTime),
+        hungUpAt: Value(call.hungUpTime),
+      ),
+    );
   }
 
   Future<void> deleteById(int id) async {

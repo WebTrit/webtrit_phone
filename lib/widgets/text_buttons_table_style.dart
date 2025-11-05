@@ -2,11 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TextButtonsTableStyle with Diagnosticable {
-  const TextButtonsTableStyle({
-    this.buttonStyle,
-    this.minimumSize,
-    this.spacing,
-  });
+  const TextButtonsTableStyle({this.buttonStyle, this.minimumSize, this.spacing});
 
   final ButtonStyle? buttonStyle;
 
@@ -14,11 +10,7 @@ class TextButtonsTableStyle with Diagnosticable {
 
   final EdgeInsetsGeometry? spacing;
 
-  TextButtonsTableStyle copyWith({
-    ButtonStyle? buttonStyle,
-    Size? minimumSize,
-    EdgeInsetsGeometry? spacing,
-  }) {
+  TextButtonsTableStyle copyWith({ButtonStyle? buttonStyle, Size? minimumSize, EdgeInsetsGeometry? spacing}) {
     return TextButtonsTableStyle(
       buttonStyle: buttonStyle ?? this.buttonStyle,
       minimumSize: minimumSize ?? this.minimumSize,

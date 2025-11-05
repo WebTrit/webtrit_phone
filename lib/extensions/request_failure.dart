@@ -17,7 +17,7 @@ extension RequestFailureExension on RequestFailure {
       if (message != null) ErrorFieldModel(context.l10n.default_ErrorMessage, message),
       if (detailsReason != null && message != detailsReason)
         ErrorFieldModel(context.l10n.default_ErrorDetails, detailsReason),
-      if (detailsPath != null) ErrorFieldModel(context.l10n.default_ErrorPath, detailsPath)
+      if (detailsPath != null) ErrorFieldModel(context.l10n.default_ErrorPath, detailsPath),
     ];
   }
 }

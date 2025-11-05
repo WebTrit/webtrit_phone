@@ -2,11 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmDialogStyle with Diagnosticable {
-  ConfirmDialogStyle({
-    this.activeButtonStyle1,
-    this.activeButtonStyle2,
-    this.defaultButtonStyle,
-  });
+  ConfirmDialogStyle({this.activeButtonStyle1, this.activeButtonStyle2, this.defaultButtonStyle});
 
   final ButtonStyle? activeButtonStyle1;
   final ButtonStyle? activeButtonStyle2;

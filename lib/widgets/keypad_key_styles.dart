@@ -13,13 +13,8 @@ class KeypadKeyStyles extends ThemeExtension<KeypadKeyStyles> {
   }
 
   @override
-  ThemeExtension<KeypadKeyStyles> lerp(
-    ThemeExtension<KeypadKeyStyles>? other,
-    double t,
-  ) {
+  ThemeExtension<KeypadKeyStyles> lerp(ThemeExtension<KeypadKeyStyles>? other, double t) {
     if (other is! KeypadKeyStyles) return this;
-    return KeypadKeyStyles(
-      primary: KeypadKeyStyle.lerp(primary, other.primary, t),
-    );
+    return KeypadKeyStyles(primary: KeypadKeyStyle.lerp(primary, other.primary, t));
   }
 }

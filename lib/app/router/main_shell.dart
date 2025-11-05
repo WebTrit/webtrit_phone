@@ -25,9 +25,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 @RoutePage()
 class MainShell extends StatefulWidget {
-  const MainShell({
-    super.key,
-  });
+  const MainShell({super.key});
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -68,13 +66,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
     context.read<AppLogger>().regenerateRemoteLabels();
 
-    _sessionGuard = RouterLogoutSessionGuard(performLogout: () {
-      context.read<SessionRepository>().logout();
-    }, onPreLogout: () {
-      final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
-      final notificationsBloc = context.read<NotificationsBloc>();
-      notificationsBloc.add(NotificationsSubmitted(notification));
-    });
+    _sessionGuard = RouterLogoutSessionGuard(
+      performLogout: () {
+        context.read<SessionRepository>().logout();
+      },
+      onPreLogout: () {
+        final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
+        final notificationsBloc = context.read<NotificationsBloc>();
+        notificationsBloc.add(NotificationsSubmitted(notification));
+      },
+    );
   }
 
   @override
@@ -110,28 +111,18 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           },
         ),
         RepositoryProvider<FavoritesRepository>(
-          create: (context) => FavoritesRepository(
-            appDatabase: context.read<AppDatabase>(),
-          ),
+          create: (context) => FavoritesRepository(appDatabase: context.read<AppDatabase>()),
         ),
         RepositoryProvider<RecentsRepository>(
-          create: (context) => RecentsRepository(
-            appDatabase: context.read<AppDatabase>(),
-          ),
+          create: (context) => RecentsRepository(appDatabase: context.read<AppDatabase>()),
         ),
         RepositoryProvider<CallLogsRepository>(
-          create: (context) => CallLogsRepository(
-            appDatabase: context.read<AppDatabase>(),
-          ),
+          create: (context) => CallLogsRepository(appDatabase: context.read<AppDatabase>()),
         ),
         RepositoryProvider<ContactsRepository>(
-          create: (context) => ContactsRepository(
-            appDatabase: context.read<AppDatabase>(),
-          ),
+          create: (context) => ContactsRepository(appDatabase: context.read<AppDatabase>()),
         ),
-        RepositoryProvider<LocalContactsRepository>(
-          create: (context) => LocalContactsRepository(),
-        ),
+        RepositoryProvider<LocalContactsRepository>(create: (context) => LocalContactsRepository()),
         RepositoryProvider<PushTokensRepository>(
           create: (context) => PushTokensRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
@@ -152,9 +143,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ),
         ),
         RepositoryProvider<SystemInfoRepository>(
-          create: (context) => SystemInfoRepository(
-            context.read<WebtritApiClient>(),
-          ),
+          create: (context) => SystemInfoRepository(context.read<WebtritApiClient>()),
         ),
         RepositoryProvider<PrivateGatewayRepository>(
           create: (context) => CustomPrivateGatewayRepository(
@@ -181,24 +170,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ),
         ),
         RepositoryProvider<ChatsRepository>(
-          create: (context) => ChatsRepository(
-            appDatabase: context.read<AppDatabase>(),
-          ),
+          create: (context) => ChatsRepository(appDatabase: context.read<AppDatabase>()),
         ),
         RepositoryProvider<ChatsOutboxRepository>(
-          create: (context) => ChatsOutboxRepository(
-            appDatabase: context.read<AppDatabase>(),
-          ),
+          create: (context) => ChatsOutboxRepository(appDatabase: context.read<AppDatabase>()),
         ),
-        RepositoryProvider<SmsRepository>(
-          create: (context) => SmsRepository(
-            appDatabase: context.read<AppDatabase>(),
-          ),
-        ),
+        RepositoryProvider<SmsRepository>(create: (context) => SmsRepository(appDatabase: context.read<AppDatabase>())),
         RepositoryProvider<SmsOutboxRepository>(
-          create: (context) => SmsOutboxRepository(
-            appDatabase: context.read<AppDatabase>(),
-          ),
+          create: (context) => SmsOutboxRepository(appDatabase: context.read<AppDatabase>()),
         ),
         RepositoryProvider<MainScreenRouteStateRepository>(
           create: (context) => MainScreenRouteStateRepositoryDefaultImpl(),
@@ -206,16 +185,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         RepositoryProvider<MainShellRouteStateRepository>(
           create: (context) => MainShellRouteStateRepositoryAutoRouteImpl(),
         ),
-        RepositoryProvider<RemotePushRepository>(
-          create: (context) => RemotePushRepositoryBrokerImpl(),
-        ),
-        RepositoryProvider<LocalPushRepository>(
-          create: (context) => LocalPushRepositoryFLNImpl(),
-        ),
+        RepositoryProvider<RemotePushRepository>(create: (context) => RemotePushRepositoryBrokerImpl()),
+        RepositoryProvider<LocalPushRepository>(create: (context) => LocalPushRepositoryFLNImpl()),
         RepositoryProvider<ActiveMessagePushsRepository>(
-          create: (context) => ActiveMessagePushsRepositoryDriftImpl(
-            appDatabase: context.read<AppDatabase>(),
-          ),
+          create: (context) => ActiveMessagePushsRepositoryDriftImpl(appDatabase: context.read<AppDatabase>()),
         ),
         RepositoryProvider<CallToActionsRepository>(
           create: (context) => CallToActionsRepositoryImpl(
@@ -224,9 +197,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ),
         ),
         RepositoryProvider<SystemNotificationsLocalRepository>(
-          create: (context) => SystemNotificationsLocalRepositoryDriftImpl(
-            context.read<AppDatabase>(),
-          ),
+          create: (context) => SystemNotificationsLocalRepositoryDriftImpl(context.read<AppDatabase>()),
         ),
         RepositoryProvider<SystemNotificationsRemoteRepository>(
           create: (context) => SystemNotificationsRemoteRepositoryApiImpl(
@@ -235,23 +206,15 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             _sessionGuard,
           ),
         ),
-        RepositoryProvider<CallPullRepository>(
-          create: (context) => CallPullRepositoryMemoryImpl(),
-        ),
-        RepositoryProvider<LinesStateRepository>(
-          create: (context) => LinesStateRepositoryInMemoryImpl(),
-        ),
+        RepositoryProvider<CallPullRepository>(create: (context) => CallPullRepositoryMemoryImpl()),
+        RepositoryProvider<LinesStateRepository>(create: (context) => LinesStateRepositoryInMemoryImpl()),
         RepositoryProvider<PresenceRepository>(
-          create: (context) => PresenceRepositoryPrefsAndDriftImpl(
-            context.read<AppPreferences>(),
-            context.read<AppDatabase>(),
-          ),
+          create: (context) =>
+              PresenceRepositoryPrefsAndDriftImpl(context.read<AppPreferences>(), context.read<AppDatabase>()),
           dispose: (value) => value.clearSettings(),
         ),
         RepositoryProvider<CdrsLocalRepository>(
-          create: (context) => CdrsLocalRepositoryDriftImpl(
-            context.read<AppDatabase>(),
-          ),
+          create: (context) => CdrsLocalRepositoryDriftImpl(context.read<AppDatabase>()),
         ),
         RepositoryProvider<CdrsRemoteRepository>(
           create: (context) => CdrsRemoteRepositoryApiImpl(
@@ -265,294 +228,283 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       /// Bridge layers for background/periodic tasks between repositories and Blocs
       /// (connectivity recovery, scheduled polling, auto-refresh on network restore).
       child: Builder(
-          builder: (context) => MultiProvider(
+        builder: (context) => MultiProvider(
+          providers: [
+            Provider(
+              create: (context) => ConnectivityLifecycleService(
+                connectivity: context.read<ConnectivityService>(),
+                registrations: _connectivityRecoveryRegistrations(context),
+              ),
+              dispose: (context, service) => service.dispose(),
+              lazy: false,
+            ),
+            Provider<PollingService>(
+              create: (context) => _polling = PollingService(
+                connectivityService: context.read<ConnectivityService>(),
+                registrations: _pollingRegistrations(context),
+              ),
+              dispose: (context, service) => service.dispose(),
+              lazy: false,
+            ),
+            if (bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
+              Provider<CdrsSyncWorker>(
+                create: (context) =>
+                    CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
+                dispose: (context, worker) => worker.dispose(),
+                lazy: false,
+              ),
+          ],
+
+          /// Builds and wires up all feature-level BLoCs together with the main shell widgets.
+          ///
+          /// This section is responsible for application-wide state orchestration:
+          /// - Initializes domain-specific blocs (push tokens, recents, contacts sync, calls, messaging, unread counters, etc.)
+          ///   with their required repositories and dependencies.
+          /// - Dispatches initial events (`Started`/`Init`) right after bloc creation to bootstrap feature flows.
+          /// - Provides higher-level status cubits (e.g. `SessionStatusCubit`, `RegisterStatusCubit`) that depend on lower-level blocs.
+          /// - Ensures feature blocs are eagerly created (`lazy: false`) where necessary to guarantee immediate availability
+          ///   (e.g. push tokens, contacts sync, session status).
+          ///
+          /// The returned widget tree is wrapped into multiple shell layers:
+          /// - [CallShell] for handling call-related UI and logic.
+          /// - [MessagingShell] for in-app messaging flows.
+          /// - [SystemNotificationsShell] for displaying system notifications.
+          /// - [AutoRouter] for navigation, with a [MainShellNavigatorObserver] attached.
+          ///
+          /// Centralizing bloc creation and shell composition here makes the
+          /// feature setup explicit, maintainable, and ensures all cross-cutting
+          /// concerns (calls, messaging, notifications, routing) are consistently
+          /// available throughout the app.
+          child: Builder(
+            builder: (context) {
+              return MultiBlocProvider(
                 providers: [
-                  Provider(
-                    create: (context) => ConnectivityLifecycleService(
-                      connectivity: context.read<ConnectivityService>(),
-                      registrations: _connectivityRecoveryRegistrations(context),
-                    ),
-                    dispose: (context, service) => service.dispose(),
+                  BlocProvider<PushTokensBloc>(
                     lazy: false,
+                    create: (context) {
+                      return PushTokensBloc(
+                        pushTokensRepository: context.read<PushTokensRepository>(),
+                        secureStorage: context.read<SecureStorage>(),
+                        firebaseMessaging: FirebaseMessaging.instance,
+                        callkeep: _callkeep,
+                      )..add(const PushTokensEventStarted());
+                    },
                   ),
-                  Provider<PollingService>(
-                    create: (context) => _polling = PollingService(
-                      connectivityService: context.read<ConnectivityService>(),
-                      registrations: _pollingRegistrations(context),
-                    ),
-                    dispose: (context, service) => service.dispose(),
+                  BlocProvider<RecentsBloc>(
+                    create: (context) {
+                      return RecentsBloc(
+                        recentsRepository: context.read<RecentsRepository>(),
+                        appPreferences: context.read<AppPreferences>(),
+                        dateFormat: AppTime().formatDateTime(),
+                      )..add(const RecentsStarted());
+                    },
+                  ),
+                  BlocProvider<LocalContactsSyncBloc>(
                     lazy: false,
+                    create: (context) {
+                      final localContactsRepository = context.read<LocalContactsRepository>();
+                      final appDatabase = context.read<AppDatabase>();
+                      final appPreferences = context.read<AppPreferences>();
+                      final appPermissions = context.read<AppPermissions>();
+
+                      Future<bool> isFutureEnabled() async {
+                        final contactTab = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
+                        final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
+                        return contactSourceTypes.contains(ContactSourceType.local);
+                      }
+
+                      Future<bool> isAgreementAccepted() async {
+                        final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+                        return contactsAgreementStatus.isAccepted;
+                      }
+
+                      final bloc = LocalContactsSyncBloc(
+                        localContactsRepository: localContactsRepository,
+                        appDatabase: appDatabase,
+                        appPreferences: appPreferences,
+                        isFeatureEnabled: isFutureEnabled,
+                        isAgreementAccepted: isAgreementAccepted,
+                        isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
+                        requestContactPermission: () => appPermissions.requestContactPermission(),
+                      );
+
+                      bloc.add(const LocalContactsSyncStarted());
+                      return bloc;
+                    },
                   ),
-                  if (bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
-                    Provider<CdrsSyncWorker>(
-                      create: (context) => CdrsSyncWorker(
-                        context.read<CdrsLocalRepository>(),
-                        context.read<CdrsRemoteRepository>(),
-                      )..init(),
-                      dispose: (context, worker) => worker.dispose(),
-                      lazy: false,
-                    ),
+                  BlocProvider<ExternalContactsSyncBloc>(
+                    lazy: false,
+                    create: (context) {
+                      return ExternalContactsSyncBloc(
+                        userRepository: context.read<UserRepository>(),
+                        externalContactsRepository: context.read<ExternalContactsRepository>(),
+                        appDatabase: context.read<AppDatabase>(),
+                      )..add(const ExternalContactsSyncStarted());
+                    },
+                  ),
+                  BlocProvider<CallBloc>(
+                    create: (context) {
+                      final appBloc = context.read<AppBloc>();
+                      final appPreferences = context.read<AppPreferences>();
+                      final notificationsBloc = context.read<NotificationsBloc>();
+                      // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
+                      final appCertificates = AppCertificates();
+                      final featureAccess = context.read<FeatureAccess>();
+
+                      final encodingConfig = featureAccess.callFeature.encoding;
+                      final peerConnectionConfig = featureAccess.callFeature.peerConnection;
+
+                      // Initialize media builder with app-configured audio/video constraints
+                      // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
+                      final userMediaBuilder = DefaultUserMediaBuilder(
+                        audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
+                        videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
+                      );
+                      // Initialize peer connection policy applier with app-specific negotiation rules
+                      final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
+                        appPreferences,
+                        peerConnectionConfig,
+                        userMediaBuilder,
+                      );
+                      // Initialize contact name resolver with app-specific contact repository
+                      // Used to display contact name of caller
+                      final contactNameResolver = DefaultContactNameResolver(
+                        contactRepository: context.read<ContactsRepository>(),
+                      );
+
+                      // Try to get CDRs sync worker to trigger immediate sync after call ends
+                      // If CDRs feature is disabled, the worker will be null and no sync will be performed
+                      final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
+
+                      return CallBloc(
+                        coreUrl: appBloc.state.session.coreUrl!,
+                        tenantId: appBloc.state.session.tenantId,
+                        token: appBloc.state.session.token!,
+                        trustedCertificates: appCertificates.trustedCertificates,
+                        callLogsRepository: context.read<CallLogsRepository>(),
+                        callPullRepository: context.read<CallPullRepository>(),
+                        linesStateRepository: context.read<LinesStateRepository>(),
+                        presenceRepository: context.read<PresenceRepository>(),
+                        sessionRepository: context.read<SessionRepository>(),
+                        userRepository: context.read<UserRepository>(),
+                        submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+                        callkeep: _callkeep,
+                        callkeepConnections: _callkeepConnections,
+                        sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
+                        sdpSanitizer: RemoteSdpSanitizer(),
+                        webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
+                        userMediaBuilder: userMediaBuilder,
+                        contactNameResolver: contactNameResolver,
+                        callErrorReporter: DefaultCallErrorReporter(
+                          (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+                        ),
+                        iceFilter: FilterWithAppSettings(appPreferences),
+                        peerConnectionPolicyApplier: pearConnectionPolicyApplier,
+                        sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
+                        onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
+                      )..add(const CallStarted());
+                    },
+                  ),
+                  BlocProvider<MessagingBloc>(
+                    lazy: false,
+                    create: (context) {
+                      final session = context.read<AppBloc>().state.session;
+
+                      return MessagingBloc(
+                        session.userId,
+                        createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
+                        FeatureAccess().messagingFeature,
+                        context.read<ChatsRepository>(),
+                        context.read<ChatsOutboxRepository>(),
+                        context.read<SmsRepository>(),
+                        context.read<SmsOutboxRepository>(),
+                        (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
+                      );
+                    },
+                  ),
+                  BlocProvider<UnreadCountCubit>(
+                    create: (context) {
+                      return UnreadCountCubit(
+                        userId: context.read<AppBloc>().state.session.userId,
+                        chatsRepository: context.read<ChatsRepository>(),
+                        smsRepository: context.read<SmsRepository>(),
+                      )..init();
+                    },
+                  ),
+                  BlocProvider(create: (_) => ChatsForwardingCubit()),
                 ],
-
-                /// Builds and wires up all feature-level BLoCs together with the main shell widgets.
-                ///
-                /// This section is responsible for application-wide state orchestration:
-                /// - Initializes domain-specific blocs (push tokens, recents, contacts sync, calls, messaging, unread counters, etc.)
-                ///   with their required repositories and dependencies.
-                /// - Dispatches initial events (`Started`/`Init`) right after bloc creation to bootstrap feature flows.
-                /// - Provides higher-level status cubits (e.g. `SessionStatusCubit`, `RegisterStatusCubit`) that depend on lower-level blocs.
-                /// - Ensures feature blocs are eagerly created (`lazy: false`) where necessary to guarantee immediate availability
-                ///   (e.g. push tokens, contacts sync, session status).
-                ///
-                /// The returned widget tree is wrapped into multiple shell layers:
-                /// - [CallShell] for handling call-related UI and logic.
-                /// - [MessagingShell] for in-app messaging flows.
-                /// - [SystemNotificationsShell] for displaying system notifications.
-                /// - [AutoRouter] for navigation, with a [MainShellNavigatorObserver] attached.
-                ///
-                /// Centralizing bloc creation and shell composition here makes the
-                /// feature setup explicit, maintainable, and ensures all cross-cutting
-                /// concerns (calls, messaging, notifications, routing) are consistently
-                /// available throughout the app.
-                child: Builder(builder: (context) {
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider<PushTokensBloc>(
-                        lazy: false,
-                        create: (context) {
-                          return PushTokensBloc(
-                            pushTokensRepository: context.read<PushTokensRepository>(),
-                            secureStorage: context.read<SecureStorage>(),
-                            firebaseMessaging: FirebaseMessaging.instance,
-                            callkeep: _callkeep,
-                          )..add(const PushTokensEventStarted());
-                        },
-                      ),
-                      BlocProvider<RecentsBloc>(
-                        create: (context) {
-                          return RecentsBloc(
-                            recentsRepository: context.read<RecentsRepository>(),
-                            appPreferences: context.read<AppPreferences>(),
-                            dateFormat: AppTime().formatDateTime(),
-                          )..add(const RecentsStarted());
-                        },
-                      ),
-                      BlocProvider<LocalContactsSyncBloc>(
-                        lazy: false,
-                        create: (context) {
-                          final localContactsRepository = context.read<LocalContactsRepository>();
-                          final appDatabase = context.read<AppDatabase>();
-                          final appPreferences = context.read<AppPreferences>();
-                          final appPermissions = context.read<AppPermissions>();
-
-                          Future<bool> isFutureEnabled() async {
-                            final contactTab = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
-                            final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
-                            return contactSourceTypes.contains(ContactSourceType.local);
-                          }
-
-                          Future<bool> isAgreementAccepted() async {
-                            final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
-                            return contactsAgreementStatus.isAccepted;
-                          }
-
-                          final bloc = LocalContactsSyncBloc(
-                            localContactsRepository: localContactsRepository,
-                            appDatabase: appDatabase,
-                            appPreferences: appPreferences,
-                            isFeatureEnabled: isFutureEnabled,
-                            isAgreementAccepted: isAgreementAccepted,
-                            isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
-                            requestContactPermission: () => appPermissions.requestContactPermission(),
-                          );
-
-                          bloc.add(const LocalContactsSyncStarted());
-                          return bloc;
-                        },
-                      ),
-                      BlocProvider<ExternalContactsSyncBloc>(
-                        lazy: false,
-                        create: (context) {
-                          return ExternalContactsSyncBloc(
-                            userRepository: context.read<UserRepository>(),
-                            externalContactsRepository: context.read<ExternalContactsRepository>(),
-                            appDatabase: context.read<AppDatabase>(),
-                          )..add(const ExternalContactsSyncStarted());
-                        },
-                      ),
-                      BlocProvider<CallBloc>(
-                        create: (context) {
-                          final appBloc = context.read<AppBloc>();
-                          final appPreferences = context.read<AppPreferences>();
-                          final notificationsBloc = context.read<NotificationsBloc>();
-                          // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
-                          final appCertificates = AppCertificates();
-                          final featureAccess = context.read<FeatureAccess>();
-
-                          final encodingConfig = featureAccess.callFeature.encoding;
-                          final peerConnectionConfig = featureAccess.callFeature.peerConnection;
-
-                          // Initialize media builder with app-configured audio/video constraints
-                          // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
-                          final userMediaBuilder = DefaultUserMediaBuilder(
-                            audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
-                            videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
-                          );
-                          // Initialize peer connection policy applier with app-specific negotiation rules
-                          final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
-                            appPreferences,
-                            peerConnectionConfig,
-                            userMediaBuilder,
-                          );
-                          // Initialize contact name resolver with app-specific contact repository
-                          // Used to display contact name of caller
-                          final contactNameResolver = DefaultContactNameResolver(
-                            contactRepository: context.read<ContactsRepository>(),
-                          );
-
-                          // Try to get CDRs sync worker to trigger immediate sync after call ends
-                          // If CDRs feature is disabled, the worker will be null and no sync will be performed
-                          final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
-
-                          return CallBloc(
-                            coreUrl: appBloc.state.session.coreUrl!,
-                            tenantId: appBloc.state.session.tenantId,
-                            token: appBloc.state.session.token!,
-                            trustedCertificates: appCertificates.trustedCertificates,
-                            callLogsRepository: context.read<CallLogsRepository>(),
-                            callPullRepository: context.read<CallPullRepository>(),
-                            linesStateRepository: context.read<LinesStateRepository>(),
-                            presenceRepository: context.read<PresenceRepository>(),
-                            sessionRepository: context.read<SessionRepository>(),
-                            userRepository: context.read<UserRepository>(),
-                            submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
-                            callkeep: _callkeep,
-                            callkeepConnections: _callkeepConnections,
-                            sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
-                            sdpSanitizer: RemoteSdpSanitizer(),
-                            webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
-                            userMediaBuilder: userMediaBuilder,
-                            contactNameResolver: contactNameResolver,
-                            callErrorReporter:
-                                DefaultCallErrorReporter((n) => notificationsBloc.add(NotificationsSubmitted(n))),
-                            iceFilter: FilterWithAppSettings(appPreferences),
-                            peerConnectionPolicyApplier: pearConnectionPolicyApplier,
-                            sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
-                            onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
-                          )..add(const CallStarted());
-                        },
-                      ),
-                      BlocProvider<MessagingBloc>(
-                        lazy: false,
-                        create: (context) {
-                          final session = context.read<AppBloc>().state.session;
-
-                          return MessagingBloc(
-                            session.userId,
-                            createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
-                            FeatureAccess().messagingFeature,
-                            context.read<ChatsRepository>(),
-                            context.read<ChatsOutboxRepository>(),
-                            context.read<SmsRepository>(),
-                            context.read<SmsOutboxRepository>(),
-                            (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
-                          );
-                        },
-                      ),
-                      BlocProvider<UnreadCountCubit>(
-                        create: (context) {
-                          return UnreadCountCubit(
-                            userId: context.read<AppBloc>().state.session.userId,
-                            chatsRepository: context.read<ChatsRepository>(),
-                            smsRepository: context.read<SmsRepository>(),
-                          )..init();
-                        },
-                      ),
-                      BlocProvider(
-                        create: (_) => ChatsForwardingCubit(),
-                      ),
-                    ],
-                    child: Builder(
-                      builder: (context) {
-                        return MultiBlocProvider(
-                          providers: [
-                            BlocProvider(
-                              lazy: false,
-                              create: (_) => UserInfoCubit(
-                                context.read<UserRepository>(),
-                              ),
-                            ),
-                            BlocProvider(
-                              lazy: false,
-                              create: (_) => SessionStatusCubit(
-                                pushTokensBloc: context.read<PushTokensBloc>(),
-                                callBloc: context.read<CallBloc>(),
-                              ),
-                            ),
-                            BlocProvider(
-                              lazy: false,
-                              create: (_) => RegisterStatusCubit(
-                                context.read<AppRepository>(),
-                                context.read<AppPreferences>(),
-                                handleError: (error, stackTrace) {
-                                  context
-                                      .read<NotificationsBloc>()
-                                      .add(NotificationsSubmitted(DefaultErrorNotification(error)));
-                                  context.read<AppBloc>().maybeHandleError(error);
-                                },
-                              ),
-                            ),
-                            BlocProvider(
-                              lazy: false,
-                              create: (_) => SystemNotificationsCounterCubit(
-                                context.read<SystemNotificationsLocalRepository>(),
-                              ),
-                            ),
-                            BlocProvider(
-                              lazy: false,
-                              create: (_) => CallPullCubit(
-                                context.read<CallPullRepository>(),
-                              ),
-                            ),
-                            BlocProvider<CallRoutingCubit>(
-                              lazy: false,
-                              create: (_) => CallRoutingCubit(
-                                context.read<UserRepository>(),
-                                context.read<LinesStateRepository>(),
-                                context.read<AppPreferences>(),
-                                context.read<ConnectivityService>(),
-                              ),
-                            ),
-                          ],
-                          child: Builder(
-                            builder: (context) {
-                              final sipPresenceFeature = FeatureAccess().sipPresenceFeature;
-
-                              return PresenceViewParams(
-                                viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
-                                  true => PresenceViewSource.sipPresence,
-                                  false => PresenceViewSource.contactInfo,
-                                },
-                                child: CallShell(
-                                  child: MessagingShell(
-                                    child: SystemNotificationsShell(
-                                      child: AutoRouter(
-                                        navigatorObservers: () => [
-                                          MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                child: Builder(
+                  builder: (context) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider(lazy: false, create: (_) => UserInfoCubit(context.read<UserRepository>())),
+                        BlocProvider(
+                          lazy: false,
+                          create: (_) => SessionStatusCubit(
+                            pushTokensBloc: context.read<PushTokensBloc>(),
+                            callBloc: context.read<CallBloc>(),
+                          ),
+                        ),
+                        BlocProvider(
+                          lazy: false,
+                          create: (_) => RegisterStatusCubit(
+                            context.read<AppRepository>(),
+                            context.read<AppPreferences>(),
+                            handleError: (error, stackTrace) {
+                              context.read<NotificationsBloc>().add(
+                                NotificationsSubmitted(DefaultErrorNotification(error)),
                               );
+                              context.read<AppBloc>().maybeHandleError(error);
                             },
                           ),
-                        );
-                      },
-                    ),
-                  );
-                }),
-              )),
+                        ),
+                        BlocProvider(
+                          lazy: false,
+                          create: (_) =>
+                              SystemNotificationsCounterCubit(context.read<SystemNotificationsLocalRepository>()),
+                        ),
+                        BlocProvider(lazy: false, create: (_) => CallPullCubit(context.read<CallPullRepository>())),
+                        BlocProvider<CallRoutingCubit>(
+                          lazy: false,
+                          create: (_) => CallRoutingCubit(
+                            context.read<UserRepository>(),
+                            context.read<LinesStateRepository>(),
+                            context.read<AppPreferences>(),
+                            context.read<ConnectivityService>(),
+                          ),
+                        ),
+                      ],
+                      child: Builder(
+                        builder: (context) {
+                          final sipPresenceFeature = FeatureAccess().sipPresenceFeature;
+
+                          return PresenceViewParams(
+                            viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
+                              true => PresenceViewSource.sipPresence,
+                              false => PresenceViewSource.contactInfo,
+                            },
+                            child: CallShell(
+                              child: MessagingShell(
+                                child: SystemNotificationsShell(
+                                  child: AutoRouter(
+                                    navigatorObservers: () => [
+                                      MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -574,23 +526,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
 
     return [
-      PollingRegistration(
-        listener: context.read<UserRepository>(),
-        interval: const Duration(seconds: 10),
-      ),
-      PollingRegistration(
-        listener: context.read<SystemInfoRepository>(),
-        interval: const Duration(minutes: 5),
-      ),
-      PollingRegistration(
-        listener: context.read<ExternalContactsRepository>(),
-        interval: const Duration(minutes: 1),
-      ),
+      PollingRegistration(listener: context.read<UserRepository>(), interval: const Duration(seconds: 10)),
+      PollingRegistration(listener: context.read<SystemInfoRepository>(), interval: const Duration(minutes: 5)),
+      PollingRegistration(listener: context.read<ExternalContactsRepository>(), interval: const Duration(minutes: 1)),
       if (isVoicemailsEnabled)
-        PollingRegistration(
-          listener: context.read<VoicemailRepository>(),
-          interval: const Duration(minutes: 5),
-        ),
+        PollingRegistration(listener: context.read<VoicemailRepository>(), interval: const Duration(minutes: 5)),
     ];
   }
 
@@ -609,12 +549,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   List<ConnectivityRecoveryRegistration> _connectivityRecoveryRegistrations(BuildContext context) {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
 
-    return [
-      if (isVoicemailsEnabled)
-        ConnectivityRecoveryRegistration.refreshable(
-          context.read<VoicemailRepository>(),
-        ),
-    ];
+    return [if (isVoicemailsEnabled) ConnectivityRecoveryRegistration.refreshable(context.read<VoicemailRepository>())];
   }
 
   /// Disposes [sessionGuard] if it implements [Disposable].

@@ -4,9 +4,7 @@ import 'package:webtrit_appearance_theme/models/models.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
 
 extension InputDecorationConfigExtension on InputDecorationConfig {
-  InputDecoration toInputDecoration({
-    required ColorScheme colors,
-  }) {
+  InputDecoration toInputDecoration({required ColorScheme colors}) {
     final mappedBorder = _mapBorder(border, colors);
     final mappedEnabledBorder = _mapBorder(enabledBorder, colors);
     final mappedFocusedBorder = _mapBorder(focusedBorder, colors);
@@ -18,9 +16,7 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
 
     return InputDecoration(
       hintText: hintText,
-      hintStyle: hintStyle?.toTextStyle(
-        fallbackColor: colors.onSurface.withValues(alpha: 0.5),
-      ),
+      hintStyle: hintStyle?.toTextStyle(fallbackColor: colors.onSurface.withValues(alpha: 0.5)),
       labelText: labelText,
       labelStyle: labelStyle?.toTextStyle(fallbackColor: colors.onSurface),
       helperText: helperText,

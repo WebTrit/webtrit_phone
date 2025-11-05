@@ -39,14 +39,8 @@ class WebTritPhonePictureLogo extends StatelessWidget {
         if (svg != null) Padding(padding: padding, child: svg),
         const SizedBox(),
         if (text != null) ...[
-          SizedBox(
-            height: dividerHeight ?? fontSize / 3,
-          ),
-          Text(
-            text!,
-            style: titleStyle,
-            textAlign: TextAlign.center,
-          ),
+          SizedBox(height: dividerHeight ?? fontSize / 3),
+          Text(text!, style: titleStyle, textAlign: TextAlign.center),
         ],
       ],
     );

@@ -7,9 +7,9 @@ part of 'app_push_token.dart';
 // **************************************************************************
 
 AppPushToken _$AppPushTokenFromJson(Map<String, dynamic> json) => AppPushToken(
-  type: $enumDecode(_$AppPushTokenTypeEnumMap, json['type']),
-  value: json['value'] as String,
-);
+      type: $enumDecode(_$AppPushTokenTypeEnumMap, json['type']),
+      value: json['value'] as String,
+    );
 
 Map<String, dynamic> _$AppPushTokenToJson(AppPushToken instance) =>
     <String, dynamic>{

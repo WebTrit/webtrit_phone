@@ -61,10 +61,10 @@ class VoicemailRepositoryImpl
     required String token,
     required AppDatabase appDatabase,
     SessionGuard? sessionGuard,
-  })  : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
-        _webtritApiClient = webtritApiClient,
-        _token = token,
-        _appDatabase = appDatabase {
+  }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
+       _webtritApiClient = webtritApiClient,
+       _token = token,
+       _appDatabase = appDatabase {
     _initialize();
   }
 
@@ -91,10 +91,7 @@ class VoicemailRepositoryImpl
   Completer<void>? _fetchingCompleter;
 
   void _initialize() {
-    _updatesController = StreamController<List<Voicemail>>.broadcast(
-      onListen: _onListen,
-      onCancel: _onCancel,
-    );
+    _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
     unawaited(fetchVoicemails());
   }
@@ -302,10 +299,7 @@ class VoicemailRepositoryImpl
   Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data) {
     final displayName = data.contact != null ? contactFromDrift(data.contact!).maybeName : null;
 
-    return voicemailFromDrift(
-      data.voicemail,
-      displayName ?? data.voicemail.sender,
-    );
+    return voicemailFromDrift(data.voicemail, displayName ?? data.voicemail.sender);
   }
 
   @override

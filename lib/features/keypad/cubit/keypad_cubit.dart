@@ -12,8 +12,8 @@ class KeypadCubit extends Cubit<KeypadState> {
   final ContactsRepository _contactsRepository;
 
   KeypadCubit(ContactsRepository contactsRepository)
-      : _contactsRepository = contactsRepository,
-        super(const KeypadState());
+    : _contactsRepository = contactsRepository,
+      super(const KeypadState());
 
   void getContactByPhoneNumber(String number) async {
     final contact = await _contactsRepository.getContactByPhoneNumber(number);

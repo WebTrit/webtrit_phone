@@ -1,5 +1,1 @@
-enum LoginMode {
-  core,
-  demoCore,
-  customCore,
-}
+enum LoginMode { core, demoCore, customCore }

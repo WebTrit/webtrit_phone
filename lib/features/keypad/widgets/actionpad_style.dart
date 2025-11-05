@@ -2,21 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ActionpadStyle with Diagnosticable {
-  const ActionpadStyle({
-    this.callTransfer,
-    this.callStart,
-    this.backspacePressed,
-  });
+  const ActionpadStyle({this.callTransfer, this.callStart, this.backspacePressed});
 
   final ButtonStyle? callTransfer;
   final ButtonStyle? callStart;
   final ButtonStyle? backspacePressed;
 
-  ActionpadStyle copyWith({
-    ButtonStyle? callTransfer,
-    ButtonStyle? callStart,
-    ButtonStyle? backspacePressed,
-  }) {
+  ActionpadStyle copyWith({ButtonStyle? callTransfer, ButtonStyle? callStart, ButtonStyle? backspacePressed}) {
     return ActionpadStyle(
       callTransfer: callTransfer ?? this.callTransfer,
       callStart: callStart ?? this.callStart,

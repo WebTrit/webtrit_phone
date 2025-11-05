@@ -54,21 +54,22 @@ class CallActionsStyle with Diagnosticable {
     final keypadActiveStyle = _mergeButtonStyles(a?.keypadActive, b?.keypadActive);
 
     return CallActionsStyle(
-        camera: cameraStyle,
-        callStart: callStartStyle,
-        cameraActive: cameraActiveStyle,
-        muted: mutedStyle,
-        mutedActive: mutedActiveStyle,
-        speaker: speakerStyle,
-        speakerActive: speakerActiveStyle,
-        transfer: transferStyle,
-        held: heldStyle,
-        heldActive: heldActiveStyle,
-        swap: swapStyle,
-        hangup: hangupStyle,
-        key: keyStyle,
-        keypad: keypadStyle,
-        keypadActive: keypadActiveStyle);
+      camera: cameraStyle,
+      callStart: callStartStyle,
+      cameraActive: cameraActiveStyle,
+      muted: mutedStyle,
+      mutedActive: mutedActiveStyle,
+      speaker: speakerStyle,
+      speakerActive: speakerActiveStyle,
+      transfer: transferStyle,
+      held: heldStyle,
+      heldActive: heldActiveStyle,
+      swap: swapStyle,
+      hangup: hangupStyle,
+      key: keyStyle,
+      keypad: keypadStyle,
+      keypadActive: keypadActiveStyle,
+    );
   }
 
   static ButtonStyle? _mergeButtonStyles(ButtonStyle? a, ButtonStyle? b) {

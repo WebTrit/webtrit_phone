@@ -16,17 +16,14 @@ class ThemeSettings with _$ThemeSettings {
   const ThemeSettings({
     // Colors scheme
     this.lightColorSchemeConfig = const ColorSchemeConfig(),
-
     this.darkColorSchemeConfig = const ColorSchemeConfig(),
 
     // Widgets config
     this.themeWidgetLightConfig = const ThemeWidgetConfig(),
-
     this.themeWidgetDarkConfig = const ThemeWidgetConfig(),
 
     // Pages config
     this.themePageLightConfig = const ThemePageConfig(),
-
     this.themePageDarkConfig = const ThemePageConfig(),
   });
 
@@ -54,7 +51,8 @@ class ThemeSettings with _$ThemeSettings {
   @override
   final ThemePageConfig themePageDarkConfig;
 
-  factory ThemeSettings.fromJson(Map<String, Object?> json) => _$ThemeSettingsFromJson(json);
+  factory ThemeSettings.fromJson(Map<String, Object?> json) =>
+      _$ThemeSettingsFromJson(json);
 
   Map<String, Object?> toJson() => _$ThemeSettingsToJson(this);
 }

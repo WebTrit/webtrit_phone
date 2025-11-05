@@ -64,7 +64,7 @@ Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureA
   AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
 
-// If the fallback incoming call trigger via SMS is enabled in the feature access config
+  // If the fallback incoming call trigger via SMS is enabled in the feature access config
   if (featureAccess.callFeature.callTriggerConfig.smsFallback.enabled) {
     // Configure Android CallKeep to process incoming SMS messages
     // - prefix: filters SMS messages by required prefix
@@ -81,9 +81,7 @@ Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureA
 /// https://firebase.google.com/docs/cloud-messaging/flutter/receive
 Future<void> _initFirebase() async {
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
     Logger('Firebase').severe('Error in _initFirebase', e);
   }
@@ -204,10 +202,7 @@ void _dHandleInspectPush(Map<String, dynamic> data, bool background) {
 }
 
 // Debugging push notifications
-Future<void> _dShowInspectLocalPush({
-  required String title,
-  required String body,
-}) async {
+Future<void> _dShowInspectLocalPush({required String title, required String body}) async {
   await FlutterLocalNotificationsPlugin().show(
     0,
     title,

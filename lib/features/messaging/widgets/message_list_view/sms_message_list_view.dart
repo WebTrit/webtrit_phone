@@ -121,35 +121,32 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      list(),
-      Positioned(
-        top: MediaQuery.of(context).padding.top,
-        left: 0,
-        right: 0,
-        child: const MessagingStateBar(),
-      ),
-      Positioned(
-        bottom: MediaQuery.of(context).padding.bottom,
-        left: 0,
-        right: 0,
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              alignment: Alignment.centerRight,
-              child: ScrollToBottomButton(scrolledAway, scrollToBottom),
-            ),
-            const SizedBox(height: 24),
-            MessageTextField(
-              controller: inputController,
-              onSend: handleSend,
-              onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
-            ),
-          ],
+    return Stack(
+      children: [
+        list(),
+        Positioned(top: MediaQuery.of(context).padding.top, left: 0, right: 0, child: const MessagingStateBar()),
+        Positioned(
+          bottom: MediaQuery.of(context).padding.bottom,
+          left: 0,
+          right: 0,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                alignment: Alignment.centerRight,
+                child: ScrollToBottomButton(scrolledAway, scrollToBottom),
+              ),
+              const SizedBox(height: 24),
+              MessageTextField(
+                controller: inputController,
+                onSend: handleSend,
+                onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
+              ),
+            ],
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   Widget list() {
@@ -196,10 +193,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Center(
-                  child: Text(
-                    entry.date.toDayOfMonth,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
+                  child: Text(entry.date.toDayOfMonth, style: const TextStyle(fontSize: 12, color: Colors.grey)),
                 ),
               );
             }
@@ -247,10 +241,7 @@ typedef _ComputeParams = ({
   DateTime dueTime,
 });
 
-typedef _ComputeResult = ({
-  List<_SmsMessageListViewEntry> entries,
-  DateTime dueTime,
-});
+typedef _ComputeResult = ({List<_SmsMessageListViewEntry> entries, DateTime dueTime});
 
 _ComputeResult _computeList(_ComputeParams params) {
   final userId = params.userId;
@@ -291,12 +282,14 @@ _ComputeResult _computeList(_ComputeParams params) {
       entries.add(_DateViewEntry(date: message.createdAt));
     }
 
-    entries.add(_MessageViewEntry(
-      message: message,
-      outboxDeleteEntry: deleteEntry,
-      userReadedUntil: userReadedUntil,
-      membersReadedUntil: membersReadedUntil,
-    ));
+    entries.add(
+      _MessageViewEntry(
+        message: message,
+        outboxDeleteEntry: deleteEntry,
+        userReadedUntil: userReadedUntil,
+        membersReadedUntil: membersReadedUntil,
+      ),
+    );
   }
   return (entries: entries, dueTime: dueTime);
 }

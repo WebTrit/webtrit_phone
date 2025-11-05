@@ -37,8 +37,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   late TabType? selectedTab = chatsEnabled
       ? TabType.chat
       : smsEnabled
-          ? TabType.sms
-          : null;
+      ? TabType.sms
+      : null;
 
   onFloatingButton() {
     if (selectedTab == TabType.chat) {
@@ -113,11 +113,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   openSmsDialog(String userNumber, String recipientNumber, String? recipientId) async {
     if (!mounted) return;
     context.router.navigate(
-      SmsConversationScreenPageRoute(
-        firstNumber: userNumber,
-        secondNumber: recipientNumber,
-        recipientId: recipientId,
-      ),
+      SmsConversationScreenPageRoute(firstNumber: userNumber, secondNumber: recipientNumber, recipientId: recipientId),
     );
   }
 
@@ -127,10 +123,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: MainAppBar(
-        title: widget.title,
-        context: context,
-      ),
+      appBar: MainAppBar(title: widget.title, context: context),
       body: MessagingStateWrapper(
         child: Column(
           children: [
@@ -143,16 +136,18 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           ],
         ),
       ),
-      floatingActionButton: Builder(builder: (context) {
-        if (selectedTab == null) return const SizedBox();
+      floatingActionButton: Builder(
+        builder: (context) {
+          if (selectedTab == null) return const SizedBox();
 
-        return FloatingActionButton(
-          backgroundColor: colorScheme.primary,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-          onPressed: onFloatingButton,
-          child: Icon(Icons.add, color: colorScheme.onPrimary),
-        );
-      }),
+          return FloatingActionButton(
+            backgroundColor: colorScheme.primary,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
+            onPressed: onFloatingButton,
+            child: Icon(Icons.add, color: colorScheme.onPrimary),
+          );
+        },
+      ),
     );
   }
 }

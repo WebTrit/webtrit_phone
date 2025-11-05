@@ -19,7 +19,8 @@ abstract class LineRequest extends SessionRequest {
     final lineRequest = tryFromJson(json);
     if (lineRequest == null) {
       final requestTypeValue = json[Request.typeKey];
-      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Unknown line request type');
+      throw ArgumentError.value(
+          requestTypeValue, Request.typeKey, 'Unknown line request type');
     } else {
       return lineRequest;
     }
@@ -27,10 +28,12 @@ abstract class LineRequest extends SessionRequest {
 
   static LineRequest? tryFromJson(Map<String, dynamic> json) {
     final requestTypeValue = json[Request.typeKey];
-    return _lineRequestFromJsonDecoders[requestTypeValue]?.call(json) ?? CallRequest.tryFromJson(json);
+    return _lineRequestFromJsonDecoders[requestTypeValue]?.call(json) ??
+        CallRequest.tryFromJson(json);
   }
 
-  static final Map<String, LineRequest Function(Map<String, dynamic>)> _lineRequestFromJsonDecoders = {
+  static final Map<String, LineRequest Function(Map<String, dynamic>)>
+      _lineRequestFromJsonDecoders = {
     IceTrickleRequest.typeValue: IceTrickleRequest.fromJson,
   };
 }

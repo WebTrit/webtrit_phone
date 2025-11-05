@@ -6,13 +6,8 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class ParticipantName extends StatelessWidget {
-  const ParticipantName({
-    required this.senderId,
-    required this.userId,
-    this.style,
-    this.textMap,
-    super.key,
-  }) : isMine = senderId == userId;
+  const ParticipantName({required this.senderId, required this.userId, this.style, this.textMap, super.key})
+    : isMine = senderId == userId;
 
   final String senderId;
   final String userId;

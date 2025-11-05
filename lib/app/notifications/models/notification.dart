@@ -14,11 +14,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-enum NotificationScope {
-  login,
-  main,
-  call;
-}
+enum NotificationScope { login, main, call }
 
 // Base notifications definitions
 @immutable

@@ -21,13 +21,7 @@ class DefaultNumberForm extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withAlpha(25),
-            blurRadius: 32,
-            offset: const Offset(4, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(25), blurRadius: 32, offset: const Offset(4, 4))],
       ),
       child: Row(
         children: [
@@ -40,30 +34,17 @@ class DefaultNumberForm extends StatelessWidget {
               shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
               padding: WidgetStateProperty.all(EdgeInsets.zero),
             ),
-            textStyle: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontSize: 14,
-            ),
+            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14),
             inputDecorationTheme: InputDecorationTheme(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
               filled: true,
               fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
               contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               isCollapsed: true,
             ),
             dropdownMenuEntries: [
-              DropdownMenuEntry<String?>(
-                value: null,
-                label: state.mainNumber,
-              ),
-              for (final n in state.additionalNumbers)
-                DropdownMenuEntry<String>(
-                  value: n,
-                  label: n,
-                ),
+              DropdownMenuEntry<String?>(value: null, label: state.mainNumber),
+              for (final n in state.additionalNumbers) DropdownMenuEntry<String>(value: n, label: n),
             ],
             onSelected: (value) {
               context.read<CallerIdSettingsCubit>().setDefaultNumber(value);

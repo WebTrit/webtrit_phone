@@ -41,12 +41,14 @@ const _$SystemNotificationTypeEnumMap = {
 
 SystemNotificationResponce _$SystemNotificationResponceFromJson(
   Map<String, dynamic> json,
-) => SystemNotificationResponce(
-  items: (json['items'] as List<dynamic>)
-      .map((e) => SystemNotification.fromJson(e as Map<String, dynamic>))
-      .toList(),
-);
+) =>
+    SystemNotificationResponce(
+      items: (json['items'] as List<dynamic>)
+          .map((e) => SystemNotification.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$SystemNotificationResponceToJson(
   SystemNotificationResponce instance,
-) => <String, dynamic>{'items': instance.items.map((e) => e.toJson()).toList()};
+) =>
+    <String, dynamic>{'items': instance.items.map((e) => e.toJson()).toList()};

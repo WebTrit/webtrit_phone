@@ -2,12 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AppBarStyle with Diagnosticable {
-  const AppBarStyle({
-    this.backgroundColor,
-    this.foregroundColor,
-    this.primary = true,
-    this.showBackButton = true,
-  });
+  const AppBarStyle({this.backgroundColor, this.foregroundColor, this.primary = true, this.showBackButton = true});
 
   final Color? backgroundColor;
   final Color? foregroundColor;
@@ -15,12 +10,7 @@ class AppBarStyle with Diagnosticable {
   final bool showBackButton;
 
   /// Shallow updates; null keeps current value.
-  AppBarStyle copyWith({
-    Color? backgroundColor,
-    Color? foregroundColor,
-    bool? primary,
-    bool? showBackButton,
-  }) {
+  AppBarStyle copyWith({Color? backgroundColor, Color? foregroundColor, bool? primary, bool? showBackButton}) {
     return AppBarStyle(
       backgroundColor: backgroundColor ?? this.backgroundColor,
       foregroundColor: foregroundColor ?? this.foregroundColor,
@@ -70,10 +60,5 @@ class AppBarStyle with Diagnosticable {
   }
 
   @override
-  int get hashCode => Object.hash(
-        backgroundColor,
-        foregroundColor,
-        primary,
-        showBackButton,
-      );
+  int get hashCode => Object.hash(backgroundColor, foregroundColor, primary, showBackButton);
 }

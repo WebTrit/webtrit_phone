@@ -54,12 +54,7 @@ class AppLogger {
 
     if (logzioUrl != null && logzioToken != null && isEnabled) {
       return [
-        LogzioLoggingService(
-          url: logzioUrl,
-          token: logzioToken,
-          bufferSize: logzioBufferSize,
-          minLevel: minLevel,
-        )
+        LogzioLoggingService(url: logzioUrl, token: logzioToken, bufferSize: logzioBufferSize, minLevel: minLevel),
       ];
     }
 

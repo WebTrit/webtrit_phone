@@ -10,17 +10,13 @@ class HelpScreenPage extends StatelessWidget {
   static const initialUriQueryParamName = 'initialUrl';
 
   // ignore: use_key_in_widget_constructors
-  const HelpScreenPage({
-    @QueryParam(initialUriQueryParamName) this.initialUriQueryParam,
-  });
+  const HelpScreenPage({@QueryParam(initialUriQueryParamName) this.initialUriQueryParam});
 
   final String? initialUriQueryParam;
 
   @override
   Widget build(BuildContext context) {
-    final widget = HelpScreen(
-      initialUri: Uri.parse(initialUriQueryParam ?? kBlankUri),
-    );
+    final widget = HelpScreen(initialUri: Uri.parse(initialUriQueryParam ?? kBlankUri));
     return widget;
   }
 }

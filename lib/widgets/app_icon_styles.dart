@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/widgets/app_icon.dart';
 
 class AppIconStyles extends ThemeExtension<AppIconStyles> {
-  const AppIconStyles({
-    required this.primary,
-  });
+  const AppIconStyles({required this.primary});
 
   final AppIconStyle? primary;
 
   @override
-  ThemeExtension<AppIconStyles> copyWith({
-    AppIconStyle? primary,
-  }) {
-    return AppIconStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<AppIconStyles> copyWith({AppIconStyle? primary}) {
+    return AppIconStyles(primary: primary ?? this.primary);
   }
 
   @override

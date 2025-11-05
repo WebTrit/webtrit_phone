@@ -402,7 +402,7 @@ class SDPModBuilder {
 
     media['bandwidth'] = [
       {'type': 'AS', 'limit': as},
-      {'type': 'TIAS', 'limit': tias}
+      {'type': 'TIAS', 'limit': tias},
     ];
   }
 

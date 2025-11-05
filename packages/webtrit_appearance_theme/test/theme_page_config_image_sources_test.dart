@@ -9,18 +9,21 @@ void main() {
     late Map<String, dynamic> json;
 
     setUp(() async {
-      json = await loadFixtureJson('../../assets/themes/original.page.light.config.json');
+      json = await loadFixtureJson(
+          '../../assets/themes/original.page.light.config.json');
     });
 
     test('parses login.modeSelect.mainLogo with render scale & padding', () {
       final config = ThemePageConfig.fromJson(json);
 
       final mainLogo = config.login.modeSelect.mainLogo;
-      expect(mainLogo, isNotNull, reason: 'login.modeSelect.mainLogo should be present');
+      expect(mainLogo, isNotNull,
+          reason: 'login.modeSelect.mainLogo should be present');
 
       expect(mainLogo!.uri, 'asset://assets/primary_onboardin_logo.svg');
 
-      expect(mainLogo.render, isNotNull, reason: 'render should be present for modeSelect.mainLogo');
+      expect(mainLogo.render, isNotNull,
+          reason: 'render should be present for modeSelect.mainLogo');
       expect(mainLogo.render!.scale, closeTo(0.42, 1e-9));
 
       final p = mainLogo.render!.padding;
@@ -34,7 +37,8 @@ void main() {
       final config = ThemePageConfig.fromJson(json);
 
       final mainLogo = config.login.switchPage.mainLogo;
-      expect(mainLogo, isNotNull, reason: 'login.switchPage.mainLogo should be present');
+      expect(mainLogo, isNotNull,
+          reason: 'login.switchPage.mainLogo should be present');
 
       expect(mainLogo!.uri, 'asset://assets/secondary_onboardin_logo.svg');
 

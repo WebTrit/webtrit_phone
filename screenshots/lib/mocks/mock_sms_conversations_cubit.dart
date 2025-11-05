@@ -4,7 +4,8 @@ import 'package:webtrit_phone/features/features.dart';
 
 import '../data/data.dart';
 
-class MockSmsConversationsCubit extends MockCubit<SmsConversationsState> implements SmsConversationsCubit {
+class MockSmsConversationsCubit extends MockCubit<SmsConversationsState>
+    implements SmsConversationsCubit {
   MockSmsConversationsCubit();
 
   factory MockSmsConversationsCubit.initial() {
@@ -21,8 +22,14 @@ class MockSmsConversationsCubit extends MockCubit<SmsConversationsState> impleme
     final mock = MockSmsConversationsCubit();
 
     final testConversationsWithMessages = [
-      (dConversationsMockSmsConversationsCubit[0], dMessagesMockSmsConversationsCubit[0]),
-      (dConversationsMockSmsConversationsCubit[1], dMessagesMockSmsConversationsCubit[1]),
+      (
+        dConversationsMockSmsConversationsCubit[0],
+        dMessagesMockSmsConversationsCubit[0]
+      ),
+      (
+        dConversationsMockSmsConversationsCubit[1],
+        dMessagesMockSmsConversationsCubit[1]
+      ),
     ];
 
     whenListen(

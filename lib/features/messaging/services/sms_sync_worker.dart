@@ -48,17 +48,15 @@ class SmsSyncWorker {
   Future init() async {
     _logger.info('Initialising...');
     _closeSubs();
-    _conversationsSyncSub = _conversationsSyncStream().listen(
-      (e) {
-        if (e is (Object, StackTrace)) {
-          final (error, stackTrace) = e;
-          _logger.warning('conversations sync error:', error, stackTrace);
-          onError(error);
-        } else {
-          _logger.info('conversations sync event: $e');
-        }
-      },
-    );
+    _conversationsSyncSub = _conversationsSyncStream().listen((e) {
+      if (e is (Object, StackTrace)) {
+        final (error, stackTrace) = e;
+        _logger.warning('conversations sync error:', error, stackTrace);
+        onError(error);
+      } else {
+        _logger.info('conversations sync event: $e');
+      }
+    });
   }
 
   Future dispose() async {
@@ -81,17 +79,15 @@ class SmsSyncWorker {
 
     _conversationSyncSubs.putIfAbsent(
       id,
-      () => _conversationSyncStream(id, channel!).listen(
-        (e) {
-          if (e is (Object, StackTrace)) {
-            final (error, stackTrace) = e;
-            _logger.warning('conversation sync error: $id', error, stackTrace);
-            onError(error);
-          } else {
-            _logger.info('conversation sync event: $id $e');
-          }
-        },
-      ),
+      () => _conversationSyncStream(id, channel!).listen((e) {
+        if (e is (Object, StackTrace)) {
+          final (error, stackTrace) = e;
+          _logger.warning('conversation sync error: $id', error, stackTrace);
+          onError(error);
+        } else {
+          _logger.info('conversation sync event: $id $e');
+        }
+      }),
     );
   }
 
@@ -189,16 +185,20 @@ class SmsSyncWorker {
 
             // set initial cursors
             // Pay attention, the history is fetched in reverse order
-            await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
-              conversationId: id,
-              cursorType: SmsSyncCursorType.oldest,
-              time: messages.last.createdAt,
-            ));
-            await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
-              conversationId: id,
-              cursorType: SmsSyncCursorType.newest,
-              time: messages.first.updatedAt,
-            ));
+            await smsRepository.upsertSmsMessageSyncCursor(
+              SmsMessageSyncCursor(
+                conversationId: id,
+                cursorType: SmsSyncCursorType.oldest,
+                time: messages.last.createdAt,
+              ),
+            );
+            await smsRepository.upsertSmsMessageSyncCursor(
+              SmsMessageSyncCursor(
+                conversationId: id,
+                cursorType: SmsSyncCursorType.newest,
+                time: messages.first.updatedAt,
+              ),
+            );
           }
         }
 
@@ -242,11 +242,13 @@ class SmsSyncWorker {
               await smsRepository.upsertConversation(event.conversation);
             case SmsChannelMessageUpdate _:
               await smsRepository.upsertMessage(event.message);
-              await smsRepository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
-                conversationId: id,
-                cursorType: SmsSyncCursorType.newest,
-                time: event.message.updatedAt,
-              ));
+              await smsRepository.upsertSmsMessageSyncCursor(
+                SmsMessageSyncCursor(
+                  conversationId: id,
+                  cursorType: SmsSyncCursorType.newest,
+                  time: event.message.updatedAt,
+                ),
+              );
             case SmsChannelCursorSet _:
               await smsRepository.upsertMessageReadCursor(event.cursor);
             case SmsChannelDisconnect _:

@@ -16,15 +16,10 @@ class GroupTitleListStyleFactory implements ThemeStyleFactory<GroupTitleListStyl
     final textColor = config?.textColor?.toColor();
     final backgroundColor = config?.backgroundColor?.toColor();
 
-    final textStyle = TextStyle(
-      color: textColor,
-    );
+    final textStyle = TextStyle(color: textColor);
 
     return GroupTitleListStyles(
-      primary: GroutTitleListStyle(
-        textStyle: textStyle,
-        background: backgroundColor,
-      ),
+      primary: GroutTitleListStyle(textStyle: textStyle, background: backgroundColor),
     );
   }
 }

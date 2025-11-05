@@ -28,7 +28,8 @@ class GooglePlayStoreClient extends BaseStoreClient {
         reasonPhrase: response.reasonPhrase,
       );
     } else {
-      final match = RegExp(r'\[\[\["(\d+.\d+.\d+)"\]\]').firstMatch(response.body);
+      final match =
+          RegExp(r'\[\[\["(\d+.\d+.\d+)"\]\]').firstMatch(response.body);
       if (match == null) {
         return null;
       } else {

@@ -1,13 +1,6 @@
 part of 'contacts_local_tab_bloc.dart';
 
-enum ContactsLocalTabStatus {
-  initial,
-  inProgress,
-  success,
-  failure,
-  permissionFailure,
-  contactsAgreementFailure,
-}
+enum ContactsLocalTabStatus { initial, inProgress, success, failure, permissionFailure, contactsAgreementFailure }
 
 class ContactsLocalTabState extends Equatable {
   const ContactsLocalTabState({
@@ -23,11 +16,7 @@ class ContactsLocalTabState extends Equatable {
   @override
   List<Object?> get props => [status, EquatablePropToString.list(contacts), searching];
 
-  ContactsLocalTabState copyWith({
-    ContactsLocalTabStatus? status,
-    List<Contact>? contacts,
-    bool? searching,
-  }) {
+  ContactsLocalTabState copyWith({ContactsLocalTabStatus? status, List<Contact>? contacts, bool? searching}) {
     return ContactsLocalTabState(
       status: status ?? this.status,
       contacts: contacts ?? this.contacts,

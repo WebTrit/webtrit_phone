@@ -11,7 +11,8 @@ class ChatMessageSyncCursorTable extends Table {
   @override
   Set<Column> get primaryKey => {chatId, cursorType};
 
-  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chatId =>
+      integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get cursorType => textEnum<MessageSyncCursorTypeEnum>()();
 

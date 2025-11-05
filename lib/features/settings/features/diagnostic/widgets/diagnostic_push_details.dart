@@ -5,11 +5,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import '../models/models.dart';
 
 class DiagnosticPushDetails extends StatelessWidget {
-  const DiagnosticPushDetails({
-    super.key,
-    this.onTap,
-    required this.status,
-  });
+  const DiagnosticPushDetails({super.key, this.onTap, required this.status});
 
   final PushTokenStatus status;
   final VoidCallback? onTap;
@@ -41,10 +37,7 @@ class DiagnosticPushDetails extends StatelessWidget {
                     ),
                   if (status.type.isError)
                     ListTile(
-                      title: Text(
-                        status.error!,
-                        style: textTheme.bodyMedium?.copyWith(color: colorScheme.error),
-                      ),
+                      title: Text(status.error!, style: textTheme.bodyMedium?.copyWith(color: colorScheme.error)),
                     ),
                   if (status.type.isError)
                     ListTile(
@@ -80,7 +73,7 @@ class DiagnosticPushDetails extends StatelessWidget {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

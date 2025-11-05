@@ -30,42 +30,47 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
             children: [
               Scaffold(
                 appBar: buildAppBar(state),
-                body: Builder(builder: (context) {
-                  if (state is ChatCBCommon) {
-                    return AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      reverseDuration: const Duration(milliseconds: 0),
-                      switchInCurve: Curves.easeOutExpo,
-                      switchOutCurve: Curves.easeInExpo,
-                      child: switch (state) {
-                        ChatCBDialogContactSelection() => DialogContactSelectionView(state),
-                        ChatCBGroupContactsSelection() => GroupContactsSelectionView(state),
-                        ChatCBGroupFillInfo() => GroupFillInfoView(state)
-                      },
-                      transitionBuilder: (child, animation) {
-                        final reverse = state.cameBack;
+                body: Builder(
+                  builder: (context) {
+                    if (state is ChatCBCommon) {
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        reverseDuration: const Duration(milliseconds: 0),
+                        switchInCurve: Curves.easeOutExpo,
+                        switchOutCurve: Curves.easeInExpo,
+                        child: switch (state) {
+                          ChatCBDialogContactSelection() => DialogContactSelectionView(state),
+                          ChatCBGroupContactsSelection() => GroupContactsSelectionView(state),
+                          ChatCBGroupFillInfo() => GroupFillInfoView(state),
+                        },
+                        transitionBuilder: (child, animation) {
+                          final reverse = state.cameBack;
 
-                        final begin = Offset(reverse ? -1.0 : 1.0, 0);
-                        const end = Offset(0, 0);
+                          final begin = Offset(reverse ? -1.0 : 1.0, 0);
+                          const end = Offset(0, 0);
 
-                        return SlideTransition(position: animation.drive(Tween(begin: begin, end: end)), child: child);
-                      },
-                    );
-                  }
+                          return SlideTransition(
+                            position: animation.drive(Tween(begin: begin, end: end)),
+                            child: child,
+                          );
+                        },
+                      );
+                    }
 
-                  if (state is ChatCBInitializingError) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Text(state.error.toString())],
-                      ),
-                    );
-                  }
+                    if (state is ChatCBInitializingError) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [Text(state.error.toString())],
+                        ),
+                      );
+                    }
 
-                  return const Center(child: CircularProgressIndicator());
-                  // return widget;
-                }),
+                    return const Center(child: CircularProgressIndicator());
+                    // return widget;
+                  },
+                ),
               ),
               if (state is ChatCBGroupFillInfo && state.processing)
                 Container(

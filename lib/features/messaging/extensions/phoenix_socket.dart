@@ -181,11 +181,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error fetching chat conversation',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error fetching chat conversation', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -204,11 +200,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error fetching sms conversation',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error fetching sms conversation', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -229,11 +221,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error fetching chat cursors',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error fetching chat cursors', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -254,11 +242,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error fetching sms cursors',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error fetching sms cursors', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -442,11 +426,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error processing $outboxEntry',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error processing $outboxEntry', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -524,7 +504,7 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// It returns a [Future] that resolves to a tuple containing the sent [SmsMessage]
   /// and an optional [SmsConversation] object if a new conversation was created by first message.
   /// Throws an exception if the message sending process fails.
-  Future<(SmsMessage, SmsConversation?) /*?*/ > newSmsMessage(SmsOutboxMessageEntry outboxEntry) async {
+  Future<(SmsMessage, SmsConversation?) /*?*/> newSmsMessage(SmsOutboxMessageEntry outboxEntry) async {
     try {
       final payload = {
         'content': outboxEntry.content,
@@ -554,11 +534,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error processing $outboxEntry',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error processing $outboxEntry', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -596,7 +572,10 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       if (req.isOk) {
         return SmsMessageReadCursor(
-            conversationId: readCursor.conversationId, userId: socket.userId!, time: readCursor.time);
+          conversationId: readCursor.conversationId,
+          userId: socket.userId!,
+          time: readCursor.time,
+        );
       }
 
       throw req;
@@ -635,11 +614,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error deleting chat',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error deleting chat', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -657,11 +632,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error deleting sms conversation',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error deleting sms conversation', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -711,11 +682,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error leaving group',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error leaving group', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -817,11 +784,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error setting group name $name',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error setting group name $name', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -859,16 +822,10 @@ extension PhoenixChannelExt on PhoenixChannel {
     }
 
     if (e is ChannelClosedError) {
-      return {
-        'code': kPhxChannelClosedCode,
-        'message': e.toString(),
-      };
+      return {'code': kPhxChannelClosedCode, 'message': e.toString()};
     }
 
-    return {
-      'code': kPhxUnknownErrorCode,
-      'exception': e.toString(),
-    };
+    return {'code': kPhxUnknownErrorCode, 'exception': e.toString()};
   }
 }
 

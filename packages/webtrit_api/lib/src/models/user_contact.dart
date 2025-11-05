@@ -52,7 +52,8 @@ class UserContact with _$UserContact {
   @override
   final bool? isRegisteredUser;
 
-  factory UserContact.fromJson(Map<String, Object?> json) => _$UserContactFromJson(json);
+  factory UserContact.fromJson(Map<String, Object?> json) =>
+      _$UserContactFromJson(json);
 
   Map<String, Object?> toJson() => _$UserContactToJson(this);
 }

@@ -7,25 +7,32 @@ part 'voicemail_dao.g.dart';
   VoicemailTable,
   ContactsTable,
 ])
-class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixin {
+class VoicemailDao extends DatabaseAccessor<AppDatabase>
+    with _$VoicemailDaoMixin {
   VoicemailDao(super.db);
 
-  Future<List<VoicemailData>> getAllVoicemails() => select(voicemailTable).get();
+  Future<List<VoicemailData>> getAllVoicemails() =>
+      select(voicemailTable).get();
 
   Future<VoicemailData?> getVoicemailById(String id) {
-    return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    return (select(voicemailTable)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
   }
 
-  Future<void> insertVoicemail(Insertable<VoicemailData> voicemail) => into(voicemailTable).insert(voicemail);
+  Future<void> insertVoicemail(Insertable<VoicemailData> voicemail) =>
+      into(voicemailTable).insert(voicemail);
 
   Future<void> insertOrUpdateVoicemail(VoicemailData voicemail) =>
       into(voicemailTable).insertOnConflictUpdate(voicemail);
 
   Future<void> updateVoicemail(VoicemailDataCompanion voicemail) {
-    return (update(voicemailTable)..where((tbl) => tbl.id.equals(voicemail.id.value))).write(voicemail);
+    return (update(voicemailTable)
+          ..where((tbl) => tbl.id.equals(voicemail.id.value)))
+        .write(voicemail);
   }
 
-  Future<int> deleteVoicemail(Insertable<VoicemailData> voicemail) => delete(voicemailTable).delete(voicemail);
+  Future<int> deleteVoicemail(Insertable<VoicemailData> voicemail) =>
+      delete(voicemailTable).delete(voicemail);
 
   Future<int> deleteVoicemailById(String id) {
     return (delete(voicemailTable)..where((tbl) => tbl.id.equals(id))).go();
@@ -33,10 +40,12 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Future<int> deleteAllVoicemails() => delete(voicemailTable).go();
 
-  Stream<List<VoicemailData>> watchAllVoicemails() => select(voicemailTable).watch();
+  Stream<List<VoicemailData>> watchAllVoicemails() =>
+      select(voicemailTable).watch();
 
   Stream<VoicemailData?> watchVoicemailById(String id) {
-    return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
+    return (select(voicemailTable)..where((tbl) => tbl.id.equals(id)))
+        .watchSingleOrNull();
   }
 
   Future<List<VoicemailWithContact>> getVoicemailsWithContacts() async {

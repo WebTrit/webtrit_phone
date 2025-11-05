@@ -8,7 +8,7 @@ class UserAgent {
   static String of(BuildContext context) {
     final packageInfo = context.read<PackageInfo>();
     final deviceInfo = context.read<DeviceInfo>();
-    
+
     return '${packageInfo.appName}/${packageInfo.version} (${deviceInfo.systemName}; ${deviceInfo.systemVersion})';
   }
 }

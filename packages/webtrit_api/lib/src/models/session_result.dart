@@ -37,7 +37,9 @@ class SessionResult with _$SessionResult {
     } else if (json.containsKey('token')) {
       return SessionToken.fromJson(json);
     } else {
-      return SessionData.fromJson({'data': json}); // a bit hacky way to wrap response data for proper fromJson call
+      return SessionData.fromJson({
+        'data': json
+      }); // a bit hacky way to wrap response data for proper fromJson call
     }
   }
 }

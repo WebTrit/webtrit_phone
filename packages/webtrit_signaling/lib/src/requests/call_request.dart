@@ -20,7 +20,8 @@ abstract class CallRequest extends LineRequest {
     final callRequest = tryFromJson(json);
     if (callRequest == null) {
       final requestTypeValue = json[Request.typeKey];
-      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Unknown call request type');
+      throw ArgumentError.value(
+          requestTypeValue, Request.typeKey, 'Unknown call request type');
     } else {
       return callRequest;
     }
@@ -31,7 +32,8 @@ abstract class CallRequest extends LineRequest {
     return _callRequestFromJsonDecoders[requestTypeValue]?.call(json);
   }
 
-  static final Map<String, CallRequest Function(Map<String, dynamic>)> _callRequestFromJsonDecoders = {
+  static final Map<String, CallRequest Function(Map<String, dynamic>)>
+      _callRequestFromJsonDecoders = {
     AcceptRequest.typeValue: AcceptRequest.fromJson,
     DeclineRequest.typeValue: DeclineRequest.fromJson,
     HangupRequest.typeValue: HangupRequest.fromJson,

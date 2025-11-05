@@ -6,11 +6,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class Description extends StatelessWidget {
-  const Description({
-    super.key,
-    required this.text,
-    this.launchLinkableElement = false,
-  });
+  const Description({super.key, required this.text, this.launchLinkableElement = false});
 
   final String text;
   final bool launchLinkableElement;
@@ -24,9 +20,7 @@ class Description extends StatelessWidget {
       highlightLinkifyElement: launchLinkableElement,
       style: LinkifyStyle(
         style: themeData.textTheme.bodyMedium,
-        linkStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
+        linkStyle: const TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }

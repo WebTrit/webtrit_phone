@@ -13,10 +13,7 @@ final class SelfConfigUnsupported extends SelfConfig {
 }
 
 final class SelfConfigSupported extends SelfConfig with EquatableMixin {
-  SelfConfigSupported({
-    required this.url,
-    required this.expiresAt,
-  });
+  SelfConfigSupported({required this.url, required this.expiresAt});
 
   final Uri url;
   final DateTime expiresAt;
