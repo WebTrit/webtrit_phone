@@ -4,7 +4,7 @@ sealed class SettingsEvent extends Equatable {
   const SettingsEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class SettingsLogouted extends SettingsEvent {
@@ -21,5 +21,5 @@ class SettingsUnreadVoicemailCountChanged extends SettingsEvent {
   final int count;
 
   @override
-  List<Object> get props => [count];
+  List<Object?> get props => [count];
 }

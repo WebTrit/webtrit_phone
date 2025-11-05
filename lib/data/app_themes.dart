@@ -111,7 +111,5 @@ class AppTheme extends Equatable {
   final ThemeSettings settings;
 
   @override
-  List<Object> get props => [
-        settings,
-      ];
+  List<Object?> get props => [settings];
 }

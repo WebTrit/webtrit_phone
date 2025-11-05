@@ -21,7 +21,7 @@ class OgPreview with EquatableMixin {
   final String? imageUrl;
 
   @override
-  List<Object> get props => [description ?? '', imageUrl ?? '', title ?? ''];
+  List<Object?> get props => [description, imageUrl, title];
 
   @override
   bool get stringify => true;

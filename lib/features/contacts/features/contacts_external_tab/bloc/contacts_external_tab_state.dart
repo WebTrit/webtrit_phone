@@ -19,7 +19,7 @@ class ContactsExternalTabState extends Equatable {
   final bool searching;
 
   @override
-  List<Object> get props => [status, EquatablePropToString.list(contacts), searching];
+  List<Object?> get props => [status, EquatablePropToString.list(contacts), searching];
 
   ContactsExternalTabState copyWith({
     ContactsExternalTabStatus? status,

@@ -4,7 +4,7 @@ sealed class AppEvent extends Equatable {
   const AppEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class _SessionUpdated extends AppEvent {
@@ -13,7 +13,7 @@ class _SessionUpdated extends AppEvent {
   final Session? session;
 
   @override
-  List<Object> get props => [?session];
+  List<Object?> get props => [session];
 }
 
 class AppThemeSettingsChanged extends AppEvent {
@@ -22,7 +22,7 @@ class AppThemeSettingsChanged extends AppEvent {
   final ThemeSettings value;
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class AppThemeModeChanged extends AppEvent {
@@ -31,7 +31,7 @@ class AppThemeModeChanged extends AppEvent {
   final ThemeMode value;
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class AppLocaleChanged extends AppEvent {
@@ -40,7 +40,7 @@ class AppLocaleChanged extends AppEvent {
   final Locale value;
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 sealed class AppAgreementAccepted extends AppEvent {
@@ -57,7 +57,7 @@ class _UserAppAgreementUpdate extends AppAgreementAccepted {
   final AgreementStatus status;
 
   @override
-  List<Object> get props => [status];
+  List<Object?> get props => [status];
 }
 
 class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
@@ -66,5 +66,5 @@ class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
   final AgreementStatus status;
 
   @override
-  List<Object> get props => [status];
+  List<Object?> get props => [status];
 }

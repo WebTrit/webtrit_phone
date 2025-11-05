@@ -4,7 +4,7 @@ sealed class CallEvent extends Equatable {
   const CallEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class CallStarted extends CallEvent {
@@ -17,7 +17,7 @@ class _AppLifecycleStateChanged extends CallEvent {
   final AppLifecycleState state;
 
   @override
-  List<Object> get props => [state];
+  List<Object?> get props => [state];
 }
 
 class _ConnectivityResultChanged extends CallEvent {
@@ -26,7 +26,7 @@ class _ConnectivityResultChanged extends CallEvent {
   final ConnectivityResult result;
 
   @override
-  List<Object> get props => [result];
+  List<Object?> get props => [result];
 }
 
 class _NavigatorMediaDevicesChange extends CallEvent {
@@ -41,7 +41,7 @@ class _RegistrationChange extends CallEvent {
   final Registration registration;
 
   @override
-  List<Object> get props => [registration];
+  List<Object?> get props => [registration];
 }
 
 // handle app state
@@ -64,7 +64,7 @@ class _ResetStateEventCompleteCall extends _ResetStateEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 // signaling client events
@@ -94,7 +94,7 @@ class _SignalingClientEventDisconnected extends _SignalingClientEvent {
   final String? reason;
 
   @override
-  List<Object> get props => [?code, ?reason];
+  List<Object?> get props => [code, reason];
 }
 
 // handshake signaling events
@@ -106,7 +106,7 @@ class _HandshakeSignalingEventState extends CallEvent {
   final int linesCount;
 
   @override
-  List<Object> get props => [registration, linesCount];
+  List<Object?> get props => [registration, linesCount];
 }
 
 // call signaling events
@@ -244,16 +244,16 @@ class _CallSignalingEventIncoming extends _CallSignalingEvent {
   final JsepValue? jsep;
 
   @override
-  List<Object> get props => [
-    ?line,
+  List<Object?> get props => [
+    line,
     callId,
     callee,
     caller,
-    ?callerDisplayName,
-    ?referredBy,
-    ?replaceCallId,
-    ?isFocus,
-    ?jsep,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
   ];
 }
 
@@ -264,7 +264,7 @@ class _CallSignalingEventRinging extends _CallSignalingEvent {
   final String callId;
 
   @override
-  List<Object> get props => [?line, callId];
+  List<Object?> get props => [line, callId];
 }
 
 class _CallSignalingEventProgress extends _CallSignalingEvent {
@@ -276,7 +276,7 @@ class _CallSignalingEventProgress extends _CallSignalingEvent {
   final JsepValue? jsep;
 
   @override
-  List<Object> get props => [?line, callId, callee, ?jsep];
+  List<Object?> get props => [line, callId, callee, jsep];
 }
 
 class _CallSignalingEventAccepted extends _CallSignalingEvent {
@@ -288,7 +288,7 @@ class _CallSignalingEventAccepted extends _CallSignalingEvent {
   final JsepValue? jsep;
 
   @override
-  List<Object> get props => [?line, callId, ?callee, ?jsep];
+  List<Object?> get props => [line, callId, callee, jsep];
 }
 
 class _CallSignalingEventHangup extends _CallSignalingEvent {
@@ -300,7 +300,7 @@ class _CallSignalingEventHangup extends _CallSignalingEvent {
   final String reason;
 
   @override
-  List<Object> get props => [?line, callId, code, reason];
+  List<Object?> get props => [line, callId, code, reason];
 }
 
 class _CallSignalingEventUpdating extends _CallSignalingEvent {
@@ -327,16 +327,16 @@ class _CallSignalingEventUpdating extends _CallSignalingEvent {
   final JsepValue? jsep;
 
   @override
-  List<Object> get props => [
-    ?line,
+  List<Object?> get props => [
+    line,
     callId,
     callee,
     caller,
-    ?callerDisplayName,
-    ?referredBy,
-    ?replaceCallId,
-    ?isFocus,
-    ?jsep,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
   ];
 }
 
@@ -347,7 +347,7 @@ class _CallSignalingEventUpdated extends _CallSignalingEvent {
   final String callId;
 
   @override
-  List<Object> get props => [?line, callId];
+  List<Object?> get props => [line, callId];
 }
 
 class _CallSignalingEventTransfer extends _CallSignalingEvent {
@@ -366,7 +366,7 @@ class _CallSignalingEventTransfer extends _CallSignalingEvent {
   final String? replaceCallId;
 
   @override
-  List<Object> get props => [?line, referId, referTo, ?referredBy, ?replaceCallId];
+  List<Object?> get props => [line, referId, referTo, referredBy, replaceCallId];
 }
 
 class _CallSignalingEventTransferring extends _CallSignalingEvent {
@@ -376,7 +376,7 @@ class _CallSignalingEventTransferring extends _CallSignalingEvent {
   final String callId;
 
   @override
-  List<Object> get props => [?line, callId];
+  List<Object?> get props => [line, callId];
 }
 
 class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
@@ -395,7 +395,7 @@ class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
   final List<UserActiveCall> userActiveCalls;
 
   @override
-  List<Object> get props => [?line, callId, ?notify, ?subscriptionState, userActiveCalls];
+  List<Object?> get props => [line, callId, notify, subscriptionState, userActiveCalls];
 }
 
 class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
@@ -414,7 +414,7 @@ class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
   final ReferNotifyState state;
 
   @override
-  List<Object> get props => [?line, callId, ?notify, ?subscriptionState, state];
+  List<Object?> get props => [line, callId, notify, subscriptionState, state];
 }
 
 class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
@@ -435,7 +435,7 @@ class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
   final List<SignalingPresenceInfo> presenceInfo;
 
   @override
-  List<Object> get props => [?line, callId, ?notify, ?subscriptionState, number, presenceInfo];
+  List<Object?> get props => [line, callId, notify, subscriptionState, number, presenceInfo];
 }
 
 class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
@@ -456,7 +456,7 @@ class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   final String? content;
 
   @override
-  List<Object> get props => [?line, callId, ?notify, ?subscriptionState, ?contentType, ?content];
+  List<Object?> get props => [line, callId, notify, subscriptionState, contentType, content];
 }
 
 class _CallSignalingEventRegistering extends _CallSignalingEvent {
@@ -474,7 +474,7 @@ class _CallSignalingEventRegisterationFailed extends _CallSignalingEvent {
   final String reason;
 
   @override
-  List<Object> get props => [code, reason];
+  List<Object?> get props => [code, reason];
 }
 
 class _CallSignalingEventUnregistering extends _CallSignalingEvent {
@@ -503,7 +503,7 @@ class _CallPushEventIncoming extends CallEvent {
   final CallkeepIncomingCallError? error;
 
   @override
-  List<Object> get props => [callId, handle, ?displayName, video, ?error];
+  List<Object?> get props => [callId, handle, displayName, video, error];
 }
 
 // call control events
@@ -585,7 +585,7 @@ class _CallControlEventStarted extends CallControlEvent with CallControlEventSta
   final bool video;
 
   @override
-  List<Object> get props => [?line, ?generic, ?number, ?email, ?displayName, ?replaces, ?fromNumber, video];
+  List<Object?> get props => [line, generic, number, email, displayName, replaces, fromNumber, video];
 }
 
 class _CallControlEventAnswered extends CallControlEvent {
@@ -594,7 +594,7 @@ class _CallControlEventAnswered extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventEnded extends CallControlEvent {
@@ -603,7 +603,7 @@ class _CallControlEventEnded extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventSetHeld extends CallControlEvent {
@@ -613,7 +613,7 @@ class _CallControlEventSetHeld extends CallControlEvent {
   final bool onHold;
 
   @override
-  List<Object> get props => [callId, onHold];
+  List<Object?> get props => [callId, onHold];
 }
 
 class _CallControlEventSetMuted extends CallControlEvent {
@@ -623,7 +623,7 @@ class _CallControlEventSetMuted extends CallControlEvent {
   final bool muted;
 
   @override
-  List<Object> get props => [callId, muted];
+  List<Object?> get props => [callId, muted];
 }
 
 class _CallControlEventSentDTMF extends CallControlEvent {
@@ -633,7 +633,7 @@ class _CallControlEventSentDTMF extends CallControlEvent {
   final String key;
 
   @override
-  List<Object> get props => [callId, key];
+  List<Object?> get props => [callId, key];
 }
 
 class _CallControlEventCameraSwitched extends CallControlEvent {
@@ -642,7 +642,7 @@ class _CallControlEventCameraSwitched extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventCameraEnabled extends CallControlEvent {
@@ -652,7 +652,7 @@ class _CallControlEventCameraEnabled extends CallControlEvent {
   final bool enabled;
 
   @override
-  List<Object> get props => [callId, enabled];
+  List<Object?> get props => [callId, enabled];
 }
 
 class _CallControlEventAudioDeviceSet extends CallControlEvent {
@@ -662,7 +662,7 @@ class _CallControlEventAudioDeviceSet extends CallControlEvent {
   final CallAudioDevice device;
 
   @override
-  List<Object> get props => [callId, device];
+  List<Object?> get props => [callId, device];
 }
 
 class _CallControlEventFailureApproved extends CallControlEvent {
@@ -671,7 +671,7 @@ class _CallControlEventFailureApproved extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventBlindTransferInitiated extends CallControlEvent {
@@ -680,7 +680,7 @@ class _CallControlEventBlindTransferInitiated extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventAttendedTransferInitiated extends CallControlEvent {
@@ -689,7 +689,7 @@ class _CallControlEventAttendedTransferInitiated extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventBlindTransferSubmitted extends CallControlEvent {
@@ -698,7 +698,7 @@ class _CallControlEventBlindTransferSubmitted extends CallControlEvent {
   final String number;
 
   @override
-  List<Object> get props => [number];
+  List<Object?> get props => [number];
 }
 
 class _CallControlEventAttendedTransferSubmitted extends CallControlEvent {
@@ -708,7 +708,7 @@ class _CallControlEventAttendedTransferSubmitted extends CallControlEvent {
   final ActiveCall replaceCall;
 
   @override
-  List<Object> get props => [referorCall, replaceCall];
+  List<Object?> get props => [referorCall, replaceCall];
 }
 
 class _CallControlEventAttendedRequestDeclined extends CallControlEvent {
@@ -718,7 +718,7 @@ class _CallControlEventAttendedRequestDeclined extends CallControlEvent {
   final String referId;
 
   @override
-  List<Object> get props => [callId, referId];
+  List<Object?> get props => [callId, referId];
 }
 
 class _CallControlEventAttendedRequestApproved extends CallControlEvent {
@@ -728,7 +728,7 @@ class _CallControlEventAttendedRequestApproved extends CallControlEvent {
   final String referTo;
 
   @override
-  List<Object> get props => [referId, referTo];
+  List<Object?> get props => [referId, referTo];
 }
 
 mixin CallControlEventStartedMixin {
@@ -796,7 +796,7 @@ class _CallPerformEventStarted extends _CallPerformEvent {
   final bool video;
 
   @override
-  List<Object> get props => [callId, handle, ?displayName, video];
+  List<Object?> get props => [callId, handle, displayName, video];
 }
 
 class _CallPerformEventAnswered extends _CallPerformEvent {
@@ -805,7 +805,7 @@ class _CallPerformEventAnswered extends _CallPerformEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 class _CallPerformEventEnded extends _CallPerformEvent {
@@ -814,7 +814,7 @@ class _CallPerformEventEnded extends _CallPerformEvent {
   final String callId;
 
   @override
-  List<Object> get props => [callId];
+  List<Object?> get props => [callId];
 }
 
 class _CallPerformEventSetHeld extends _CallPerformEvent {
@@ -824,7 +824,7 @@ class _CallPerformEventSetHeld extends _CallPerformEvent {
   final bool onHold;
 
   @override
-  List<Object> get props => [callId, onHold];
+  List<Object?> get props => [callId, onHold];
 }
 
 class _CallPerformEventSetMuted extends _CallPerformEvent {
@@ -834,7 +834,7 @@ class _CallPerformEventSetMuted extends _CallPerformEvent {
   final bool muted;
 
   @override
-  List<Object> get props => [callId, muted];
+  List<Object?> get props => [callId, muted];
 }
 
 class _CallPerformEventSentDTMF extends _CallPerformEvent {
@@ -844,7 +844,7 @@ class _CallPerformEventSentDTMF extends _CallPerformEvent {
   final String key;
 
   @override
-  List<Object> get props => [callId, key];
+  List<Object?> get props => [callId, key];
 }
 
 class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
@@ -854,7 +854,7 @@ class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
   final CallAudioDevice device;
 
   @override
-  List<Object> get props => [callId, device];
+  List<Object?> get props => [callId, device];
 }
 
 class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
@@ -864,7 +864,7 @@ class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
   final List<CallAudioDevice> devices;
 
   @override
-  List<Object> get props => [callId, devices];
+  List<Object?> get props => [callId, devices];
 }
 
 // peer connection events
@@ -900,7 +900,7 @@ class _PeerConnectionEventSignalingStateChanged extends _PeerConnectionEvent {
   final RTCSignalingState state;
 
   @override
-  List<Object> get props => [callId, state];
+  List<Object?> get props => [callId, state];
 }
 
 class _PeerConnectionEventConnectionStateChanged extends _PeerConnectionEvent {
@@ -910,7 +910,7 @@ class _PeerConnectionEventConnectionStateChanged extends _PeerConnectionEvent {
   final RTCPeerConnectionState state;
 
   @override
-  List<Object> get props => [callId, state];
+  List<Object?> get props => [callId, state];
 }
 
 class _PeerConnectionEventIceGatheringStateChanged extends _PeerConnectionEvent {
@@ -920,7 +920,7 @@ class _PeerConnectionEventIceGatheringStateChanged extends _PeerConnectionEvent 
   final RTCIceGatheringState state;
 
   @override
-  List<Object> get props => [callId, state];
+  List<Object?> get props => [callId, state];
 }
 
 class _PeerConnectionEventIceConnectionStateChanged extends _PeerConnectionEvent {
@@ -930,7 +930,7 @@ class _PeerConnectionEventIceConnectionStateChanged extends _PeerConnectionEvent
   final RTCIceConnectionState state;
 
   @override
-  List<Object> get props => [callId, state];
+  List<Object?> get props => [callId, state];
 }
 
 class _PeerConnectionEventIceCandidateIdentified extends _PeerConnectionEvent {
@@ -940,7 +940,7 @@ class _PeerConnectionEventIceCandidateIdentified extends _PeerConnectionEvent {
   final RTCIceCandidate candidate;
 
   @override
-  List<Object> get props => [callId, candidate];
+  List<Object?> get props => [callId, candidate];
 }
 
 class _PeerConnectionEventStreamAdded extends _PeerConnectionEvent {
@@ -950,7 +950,7 @@ class _PeerConnectionEventStreamAdded extends _PeerConnectionEvent {
   final MediaStream stream;
 
   @override
-  List<Object> get props => [callId, stream];
+  List<Object?> get props => [callId, stream];
 }
 
 class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
@@ -960,7 +960,7 @@ class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
   final MediaStream stream;
 
   @override
-  List<Object> get props => [callId, stream];
+  List<Object?> get props => [callId, stream];
 }
 
 // call screen events

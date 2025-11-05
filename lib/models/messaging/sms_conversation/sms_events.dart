@@ -16,7 +16,7 @@ class SmsConversationUpdate extends SmsEvent with EquatableMixin {
   int get conversationId => conversation.id;
 
   @override
-  List<Object> get props => [conversation];
+  List<Object?> get props => [conversation];
 
   @override
   bool get stringify => true;
@@ -29,7 +29,7 @@ class SmsConversationRemove extends SmsEvent with EquatableMixin {
   final int conversationId;
 
   @override
-  List<Object> get props => [conversationId];
+  List<Object?> get props => [conversationId];
 
   @override
   bool get stringify => true;
@@ -43,7 +43,7 @@ class SmsMessageUpdate extends SmsEvent with EquatableMixin {
   int get conversationId => message.conversationId;
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   bool get stringify => true;
@@ -57,7 +57,7 @@ class SmsReadCursorUpdate extends SmsEvent with EquatableMixin {
   int get conversationId => cursor.conversationId;
 
   @override
-  List<Object> get props => [cursor];
+  List<Object?> get props => [cursor];
 
   @override
   bool get stringify => true;

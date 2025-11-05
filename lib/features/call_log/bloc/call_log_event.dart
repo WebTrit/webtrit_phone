@@ -4,7 +4,7 @@ sealed class CallLogEvent extends Equatable {
   const CallLogEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class CallLogStarted extends CallLogEvent {
@@ -17,5 +17,5 @@ class CallLogEntryDeleted extends CallLogEvent {
   final CallLogEntry callLogEntry;
 
   @override
-  List<Object> get props => [callLogEntry];
+  List<Object?> get props => [callLogEntry];
 }

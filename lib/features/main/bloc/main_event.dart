@@ -4,7 +4,7 @@ sealed class MainBlocEvent extends Equatable {
   const MainBlocEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class MainBlocInit extends MainBlocEvent {
@@ -17,7 +17,7 @@ class MainBlocSystemInfoArrived extends MainBlocEvent {
   const MainBlocSystemInfoArrived(this.systemInfo);
 
   @override
-  List<Object> get props => [systemInfo];
+  List<Object?> get props => [systemInfo];
 }
 
 class MainBlocAppUpdatePressed extends MainBlocEvent {
@@ -26,5 +26,5 @@ class MainBlocAppUpdatePressed extends MainBlocEvent {
   const MainBlocAppUpdatePressed(this.storeUrl);
 
   @override
-  List<Object> get props => [storeUrl];
+  List<Object?> get props => [storeUrl];
 }

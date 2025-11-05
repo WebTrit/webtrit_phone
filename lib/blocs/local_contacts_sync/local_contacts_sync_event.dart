@@ -4,7 +4,7 @@ sealed class LocalContactsSyncEvent extends Equatable {
   const LocalContactsSyncEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LocalContactsSyncStarted extends LocalContactsSyncEvent {
@@ -21,5 +21,5 @@ class _LocalContactsSyncUpdated extends LocalContactsSyncEvent {
   const _LocalContactsSyncUpdated({required this.contacts});
 
   @override
-  List<Object> get props => [EquatablePropToString.list(contacts)];
+  List<Object?> get props => [EquatablePropToString.list(contacts)];
 }

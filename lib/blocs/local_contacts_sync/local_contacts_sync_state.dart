@@ -5,7 +5,7 @@ abstract class LocalContactsSyncState extends Equatable {
   const LocalContactsSyncState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LocalContactsSyncInitial extends LocalContactsSyncState {

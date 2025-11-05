@@ -15,7 +15,7 @@ class ChatCBInitializing extends ChatCBState {
   ChatCBInitializing();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
   @override
   bool get stringify => true;
@@ -30,7 +30,7 @@ class ChatCBInitializingError extends ChatCBState {
   final Object error;
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [error];
 
   @override
   bool get stringify => true;
@@ -80,7 +80,7 @@ class ChatCBDialogContactSelection extends ChatCBCommon {
   }
 
   @override
-  List<Object> get props => [contacts, cameBack, searchFilter];
+  List<Object?> get props => [contacts, cameBack, searchFilter];
 
   @override
   bool get stringify => true;
@@ -124,7 +124,7 @@ class ChatCBGroupContactsSelection extends ChatCBCommon {
   }
 
   @override
-  List<Object> get props => [contacts, cameBack, searchFilter, selectedContacts];
+  List<Object?> get props => [contacts, cameBack, searchFilter, selectedContacts];
 
   @override
   bool get stringify => true;
@@ -164,7 +164,7 @@ class ChatCBGroupFillInfo extends ChatCBCommon {
   }
 
   @override
-  List<Object> get props => [contacts, cameBack, selectedContacts, name, processing];
+  List<Object?> get props => [contacts, cameBack, selectedContacts, name, processing];
 
   @override
   bool get stringify => true;
