@@ -14,11 +14,7 @@ class Transaction {
   final _completer = Completer<Map<String, dynamic>>();
   late final Timer _timer;
 
-  Transaction({
-    required this.signalingClientId,
-    String? id,
-    required Duration timeoutDuration,
-  }) {
+  Transaction({required this.signalingClientId, String? id, required Duration timeoutDuration}) {
     if (id != null) {
       this.id = id;
       isIdGenerate = false;
@@ -27,10 +23,7 @@ class Transaction {
       isIdGenerate = true;
     }
 
-    _timer = Timer(
-      timeoutDuration,
-      _onTimeout,
-    );
+    _timer = Timer(timeoutDuration, _onTimeout);
   }
 
   Future<Map<String, dynamic>> get future => _completer.future;
@@ -43,16 +36,14 @@ class Transaction {
   void terminateByDisconnect([int? closeCode, String? closeReason]) {
     _timer.cancel();
     _completer.completeError(
-        WebtritSignalingTransactionTerminateByDisconnectException(
-            signalingClientId, id, closeCode, closeReason));
+      WebtritSignalingTransactionTerminateByDisconnectException(signalingClientId, id, closeCode, closeReason),
+    );
   }
 
   void _onTimeout() {
     if (_completer.isCompleted) {
       return;
     }
-    _completer.completeError(
-        WebtritSignalingTransactionTimeoutException(signalingClientId, id),
-        StackTrace.current);
+    _completer.completeError(WebtritSignalingTransactionTimeoutException(signalingClientId, id), StackTrace.current);
   }
 }

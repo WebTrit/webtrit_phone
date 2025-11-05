@@ -15,20 +15,14 @@ class MissedCallEvent extends CallEvent {
   final String? callerDisplayName;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        callee,
-        caller,
-        callerDisplayName,
-      ];
+  List<Object?> get props => [...super.props, callee, caller, callerDisplayName];
 
   static const typeValue = 'missed_call';
 
   factory MissedCallEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(
-          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return MissedCallEvent(

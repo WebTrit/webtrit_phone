@@ -1,12 +1,7 @@
 import '../abstract_requests.dart';
 
 class DeclineRequest extends CallRequest {
-  const DeclineRequest({
-    required super.transaction,
-    required super.line,
-    required super.callId,
-    this.referId,
-  });
+  const DeclineRequest({required super.transaction, required super.line, required super.callId, this.referId});
 
   static const typeValue = 'decline';
   final String? referId;
@@ -14,8 +9,7 @@ class DeclineRequest extends CallRequest {
   factory DeclineRequest.fromJson(Map<String, dynamic> json) {
     final requestTypeValue = json[Request.typeKey];
     if (requestTypeValue != typeValue) {
-      throw ArgumentError.value(
-          requestTypeValue, Request.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return DeclineRequest(

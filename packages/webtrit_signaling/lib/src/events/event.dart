@@ -14,8 +14,7 @@ abstract class Event extends Equatable {
       if (eventTypeValue == ErrorEvent.typeValue) {
         throw ArgumentError('Incorrect error event');
       } else {
-        throw ArgumentError.value(
-            eventTypeValue, Event.typeKey, 'Unknown event type');
+        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown event type');
       }
     } else {
       return event;

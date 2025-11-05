@@ -3,10 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../abstract_requests.dart';
 
 class PresenceSettingsUpdateRequest extends SessionRequest {
-  const PresenceSettingsUpdateRequest({
-    required super.transaction,
-    required this.settings,
-  });
+  const PresenceSettingsUpdateRequest({required super.transaction, required this.settings});
 
   final SignalingPresenceSettings settings;
 
@@ -17,11 +14,7 @@ class PresenceSettingsUpdateRequest extends SessionRequest {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      Request.typeKey: typeValue,
-      'transaction': transaction,
-      'settings': settings.toJson(),
-    };
+    return {Request.typeKey: typeValue, 'transaction': transaction, 'settings': settings.toJson()};
   }
 }
 
@@ -60,16 +53,7 @@ class SignalingPresenceSettings extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        available,
-        note,
-        statusIcon,
-        device,
-        timeOffsetMin,
-        timestamp,
-        activity,
-        dndMode
-      ];
+  List<Object?> get props => [available, note, statusIcon, device, timeOffsetMin, timestamp, activity, dndMode];
 
   @override
   String toString() {

@@ -1,12 +1,7 @@
 import '../abstract_events.dart';
 
 class LineErrorEvent extends LineEvent implements ErrorEvent {
-  const LineErrorEvent({
-    super.transaction,
-    required super.line,
-    required this.code,
-    required this.reason,
-  });
+  const LineErrorEvent({super.transaction, required super.line, required this.code, required this.reason});
 
   @override
   final int code;
@@ -14,11 +9,7 @@ class LineErrorEvent extends LineEvent implements ErrorEvent {
   final String reason;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        code,
-        reason,
-      ];
+  List<Object?> get props => [...super.props, code, reason];
 
   static LineErrorEvent? tryFromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];

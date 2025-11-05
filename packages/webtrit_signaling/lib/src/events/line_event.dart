@@ -2,18 +2,12 @@ import 'abstract_events.dart';
 import 'line/line_events.dart';
 
 abstract class LineEvent extends SessionEvent {
-  const LineEvent({
-    super.transaction,
-    required this.line,
-  });
+  const LineEvent({super.transaction, required this.line});
 
   final int? line;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        line,
-      ];
+  List<Object?> get props => [...super.props, line];
 
   factory LineEvent.fromJson(Map<String, dynamic> json) {
     final lineRequest = tryFromJson(json);
@@ -22,8 +16,7 @@ abstract class LineEvent extends SessionEvent {
       if (eventTypeValue == ErrorEvent.typeValue) {
         throw ArgumentError('Incorrect error event');
       } else {
-        throw ArgumentError.value(
-            eventTypeValue, Event.typeKey, 'Unknown line event type');
+        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown line event type');
       }
     } else {
       return lineRequest;
@@ -37,8 +30,7 @@ abstract class LineEvent extends SessionEvent {
         LineErrorEvent.tryFromJson(json);
   }
 
-  static final Map<String, LineEvent Function(Map<String, dynamic>)>
-      _lineEventFromJsonDecoders = {
+  static final Map<String, LineEvent Function(Map<String, dynamic>)> _lineEventFromJsonDecoders = {
     IceHangupEvent.typeValue: IceHangupEvent.fromJson,
     IceMediaEvent.typeValue: IceMediaEvent.fromJson,
     IceSlowLinkEvent.typeValue: IceSlowLinkEvent.fromJson,

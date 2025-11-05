@@ -1,34 +1,21 @@
 import '../abstract_requests.dart';
 
-enum HoldDirection {
-  sendonly,
-  recvonly,
-  inactive,
-}
+enum HoldDirection { sendonly, recvonly, inactive }
 
 class HoldRequest extends CallRequest {
-  const HoldRequest({
-    required super.transaction,
-    required super.line,
-    required super.callId,
-    this.direction,
-  });
+  const HoldRequest({required super.transaction, required super.line, required super.callId, this.direction});
 
   final HoldDirection? direction;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        direction,
-      ];
+  List<Object?> get props => [...super.props, direction];
 
   static const typeValue = 'hold';
 
   factory HoldRequest.fromJson(Map<String, dynamic> json) {
     final requestTypeValue = json[Request.typeKey];
     if (requestTypeValue != typeValue) {
-      throw ArgumentError.value(
-          requestTypeValue, Request.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     HoldDirection? direction;

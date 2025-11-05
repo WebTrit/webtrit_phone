@@ -13,19 +13,14 @@ class HangupEvent extends CallEvent {
   final String reason;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        code,
-        reason,
-      ];
+  List<Object?> get props => [...super.props, code, reason];
 
   static const typeValue = 'hangup';
 
   factory HangupEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(
-          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return HangupEvent(

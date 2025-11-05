@@ -17,21 +17,14 @@ class IceSlowLinkEvent extends LineEvent {
   final int lost;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        mid,
-        media,
-        uplink,
-        lost,
-      ];
+  List<Object?> get props => [...super.props, mid, media, uplink, lost];
 
   static const typeValue = 'ice_slowlink';
 
   factory IceSlowLinkEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(
-          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return IceSlowLinkEvent(

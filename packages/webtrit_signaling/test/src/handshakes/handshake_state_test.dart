@@ -38,9 +38,7 @@ void main() {
   final stateHandshake = StateHandshake(
     keepaliveInterval: Duration(seconds: 30),
     timestamp: 1662114679648,
-    registration: Registration(
-      status: RegistrationStatus.registered,
-    ),
+    registration: Registration(status: RegistrationStatus.registered),
     lines: [
       Line(
         callId: 'qwertyuiopasdfghjklzxcvbnm',
@@ -66,10 +64,6 @@ void main() {
   );
 
   test('$StateHandshake fromJson', () {
-    expect(
-      StateHandshake.fromJson(
-          json.decode(stateHandshakeJson) as Map<String, dynamic>),
-      equals(stateHandshake),
-    );
+    expect(StateHandshake.fromJson(json.decode(stateHandshakeJson) as Map<String, dynamic>), equals(stateHandshake));
   });
 }

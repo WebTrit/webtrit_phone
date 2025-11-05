@@ -14,11 +14,7 @@ void main() {
 
     final ackResponse = AckResponse();
 
-    expect(
-      AckResponse.fromJson(
-          json.decode(ackResponseJson) as Map<String, dynamic>),
-      equals(ackResponse),
-    );
+    expect(AckResponse.fromJson(json.decode(ackResponseJson) as Map<String, dynamic>), equals(ackResponse));
   });
 
   test('$AckResponse fromJson 2', () {
@@ -29,15 +25,9 @@ void main() {
     }
     ''';
 
-    final ackResponse = AckResponse(
-      line: 0,
-    );
+    final ackResponse = AckResponse(line: 0);
 
-    expect(
-      AckResponse.fromJson(
-          json.decode(ackResponseJson) as Map<String, dynamic>),
-      equals(ackResponse),
-    );
+    expect(AckResponse.fromJson(json.decode(ackResponseJson) as Map<String, dynamic>), equals(ackResponse));
   });
 
   test('$AckResponse fromJson 3', () {
@@ -49,15 +39,8 @@ void main() {
     }
     ''';
 
-    final ackResponse = AckResponse(
-      line: 1,
-      callId: 'qwerty',
-    );
+    final ackResponse = AckResponse(line: 1, callId: 'qwerty');
 
-    expect(
-      AckResponse.fromJson(
-          json.decode(ackResponseJson) as Map<String, dynamic>),
-      equals(ackResponse),
-    );
+    expect(AckResponse.fromJson(json.decode(ackResponseJson) as Map<String, dynamic>), equals(ackResponse));
   });
 }

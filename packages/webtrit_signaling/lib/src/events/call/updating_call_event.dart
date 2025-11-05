@@ -24,23 +24,22 @@ class UpdatingCallEvent extends CallEvent {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        callee,
-        caller,
-        callerDisplayName,
-        referredBy,
-        replaceCallId,
-        isFocus,
-        jsep,
-      ];
+    ...super.props,
+    callee,
+    caller,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
+  ];
 
   static const typeValue = 'updating_call';
 
   factory UpdatingCallEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(
-          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return UpdatingCallEvent(

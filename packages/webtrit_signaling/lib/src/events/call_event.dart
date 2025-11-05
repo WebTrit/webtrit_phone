@@ -2,19 +2,12 @@ import 'abstract_events.dart';
 import 'call/call_events.dart';
 
 abstract class CallEvent extends LineEvent {
-  const CallEvent({
-    super.transaction,
-    required super.line,
-    required this.callId,
-  });
+  const CallEvent({super.transaction, required super.line, required this.callId});
 
   final String callId;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        callId,
-      ];
+  List<Object?> get props => [...super.props, callId];
 
   factory CallEvent.fromJson(Map<String, dynamic> json) {
     final callEvent = tryFromJson(json);
@@ -23,8 +16,7 @@ abstract class CallEvent extends LineEvent {
       if (eventTypeValue == ErrorEvent.typeValue) {
         throw ArgumentError('Incorrect error event');
       } else {
-        throw ArgumentError.value(
-            eventTypeValue, Event.typeKey, 'Unknown call event type');
+        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown call event type');
       }
     } else {
       return callEvent;
@@ -33,12 +25,10 @@ abstract class CallEvent extends LineEvent {
 
   static CallEvent? tryFromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
-    return _callEventFromJsonDecoders[eventTypeValue]?.call(json) ??
-        CallErrorEvent.tryFromJson(json);
+    return _callEventFromJsonDecoders[eventTypeValue]?.call(json) ?? CallErrorEvent.tryFromJson(json);
   }
 
-  static final Map<String, CallEvent Function(Map<String, dynamic>)>
-      _callEventFromJsonDecoders = {
+  static final Map<String, CallEvent Function(Map<String, dynamic>)> _callEventFromJsonDecoders = {
     AcceptedEvent.typeValue: AcceptedEvent.fromJson,
     AcceptingEvent.typeValue: AcceptingEvent.fromJson,
     CallingEvent.typeValue: CallingEvent.fromJson,

@@ -9,35 +9,19 @@ import '../event_jsons.dart';
 
 void main() {
   test('$SessionErrorEvent tryFromJson', () {
-    expect(
-      SessionErrorEvent.tryFromJson(
-          json.decode(callErrorEventJson1) as Map<String, dynamic>),
-      equals(isNotNull),
-    );
+    expect(SessionErrorEvent.tryFromJson(json.decode(callErrorEventJson1) as Map<String, dynamic>), equals(isNotNull));
   });
 
   test('$SessionErrorEvent tryFromJson', () {
-    expect(
-      SessionErrorEvent.tryFromJson(
-          json.decode(callErrorEventJson2) as Map<String, dynamic>),
-      equals(isNotNull),
-    );
+    expect(SessionErrorEvent.tryFromJson(json.decode(callErrorEventJson2) as Map<String, dynamic>), equals(isNotNull));
   });
 
   test('$SessionErrorEvent tryFromJson', () {
-    expect(
-      SessionErrorEvent.tryFromJson(
-          json.decode(lineErrorEventJson1) as Map<String, dynamic>),
-      equals(isNotNull),
-    );
+    expect(SessionErrorEvent.tryFromJson(json.decode(lineErrorEventJson1) as Map<String, dynamic>), equals(isNotNull));
   });
 
   test('$SessionErrorEvent tryFromJson', () {
-    expect(
-      SessionErrorEvent.tryFromJson(
-          json.decode(lineErrorEventJson2) as Map<String, dynamic>),
-      equals(isNotNull),
-    );
+    expect(SessionErrorEvent.tryFromJson(json.decode(lineErrorEventJson2) as Map<String, dynamic>), equals(isNotNull));
   });
 
   test('$SessionErrorEvent tryFromJson', () {
@@ -48,30 +32,21 @@ void main() {
     );
 
     expect(
-      SessionErrorEvent.tryFromJson(
-          json.decode(sessionErrorEventJson1) as Map<String, dynamic>),
+      SessionErrorEvent.tryFromJson(json.decode(sessionErrorEventJson1) as Map<String, dynamic>),
       equals(sessionErrorEvent),
     );
   });
 
   test('$SessionErrorEvent tryFromJson', () {
-    final sessionErrorEvent = SessionErrorEvent(
-      code: 123,
-      reason: 'some error message 1',
-    );
+    final sessionErrorEvent = SessionErrorEvent(code: 123, reason: 'some error message 1');
 
     expect(
-      SessionErrorEvent.tryFromJson(
-          json.decode(sessionErrorEventJson2) as Map<String, dynamic>),
+      SessionErrorEvent.tryFromJson(json.decode(sessionErrorEventJson2) as Map<String, dynamic>),
       equals(sessionErrorEvent),
     );
   });
 
   test('$SessionErrorEvent tryFromJson', () {
-    expect(
-      SessionErrorEvent.tryFromJson(
-          json.decode(eventJsonEmpty) as Map<String, dynamic>),
-      equals(null),
-    );
+    expect(SessionErrorEvent.tryFromJson(json.decode(eventJsonEmpty) as Map<String, dynamic>), equals(null));
   });
 }

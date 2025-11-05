@@ -2,26 +2,18 @@ import 'abstract_requests.dart';
 import 'call/call_requests.dart';
 
 abstract class CallRequest extends LineRequest {
-  const CallRequest({
-    required super.transaction,
-    required super.line,
-    required this.callId,
-  });
+  const CallRequest({required super.transaction, required super.line, required this.callId});
 
   final String callId;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        callId,
-      ];
+  List<Object?> get props => [...super.props, callId];
 
   factory CallRequest.fromJson(Map<String, dynamic> json) {
     final callRequest = tryFromJson(json);
     if (callRequest == null) {
       final requestTypeValue = json[Request.typeKey];
-      throw ArgumentError.value(
-          requestTypeValue, Request.typeKey, 'Unknown call request type');
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Unknown call request type');
     } else {
       return callRequest;
     }
@@ -32,8 +24,7 @@ abstract class CallRequest extends LineRequest {
     return _callRequestFromJsonDecoders[requestTypeValue]?.call(json);
   }
 
-  static final Map<String, CallRequest Function(Map<String, dynamic>)>
-      _callRequestFromJsonDecoders = {
+  static final Map<String, CallRequest Function(Map<String, dynamic>)> _callRequestFromJsonDecoders = {
     AcceptRequest.typeValue: AcceptRequest.fromJson,
     DeclineRequest.typeValue: DeclineRequest.fromJson,
     HangupRequest.typeValue: HangupRequest.fromJson,

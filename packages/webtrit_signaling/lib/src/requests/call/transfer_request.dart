@@ -13,19 +13,14 @@ class TransferRequest extends CallRequest {
   final String? replaceCallId;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        number,
-        replaceCallId,
-      ];
+  List<Object?> get props => [...super.props, number, replaceCallId];
 
   static const typeValue = 'transfer';
 
   factory TransferRequest.fromJson(Map<String, dynamic> json) {
     final requestTypeValue = json[Request.typeKey];
     if (requestTypeValue != typeValue) {
-      throw ArgumentError.value(
-          requestTypeValue, Request.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return TransferRequest(

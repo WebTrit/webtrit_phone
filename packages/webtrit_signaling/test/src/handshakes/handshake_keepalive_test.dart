@@ -16,8 +16,7 @@ void main() {
 
   test('$KeepaliveHandshake fromJson', () {
     expect(
-      KeepaliveHandshake.fromJson(
-          json.decode(keepaliveHandshakeJson) as Map<String, dynamic>),
+      KeepaliveHandshake.fromJson(json.decode(keepaliveHandshakeJson) as Map<String, dynamic>),
       equals(keepaliveHandshake),
     );
   });

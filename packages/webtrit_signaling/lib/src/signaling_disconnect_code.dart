@@ -1,36 +1,20 @@
 import 'package:web_socket_channel/status.dart' as status;
 
-enum SignalingDisconnectCodeType {
-  auxiliary,
-  socket,
-  session,
-  app,
-  controller,
-  signaling,
-  request,
-}
+enum SignalingDisconnectCodeType { auxiliary, socket, session, app, controller, signaling, request }
 
 enum SignalingDisconnectCode {
   normalClosure(SignalingDisconnectCodeType.auxiliary, status.normalClosure),
   goingAway(SignalingDisconnectCodeType.auxiliary, status.goingAway),
   protocolError(SignalingDisconnectCodeType.auxiliary, status.protocolError),
-  unsupportedData(
-      SignalingDisconnectCodeType.auxiliary, status.unsupportedData),
-  noStatusReceived(
-      SignalingDisconnectCodeType.auxiliary, status.noStatusReceived),
-  abnormalClosure(
-      SignalingDisconnectCodeType.auxiliary, status.abnormalClosure),
-  invalidFramePayloadData(
-      SignalingDisconnectCodeType.auxiliary, status.invalidFramePayloadData),
-  policyViolation(
-      SignalingDisconnectCodeType.auxiliary, status.policyViolation),
+  unsupportedData(SignalingDisconnectCodeType.auxiliary, status.unsupportedData),
+  noStatusReceived(SignalingDisconnectCodeType.auxiliary, status.noStatusReceived),
+  abnormalClosure(SignalingDisconnectCodeType.auxiliary, status.abnormalClosure),
+  invalidFramePayloadData(SignalingDisconnectCodeType.auxiliary, status.invalidFramePayloadData),
+  policyViolation(SignalingDisconnectCodeType.auxiliary, status.policyViolation),
   messageTooBig(SignalingDisconnectCodeType.auxiliary, status.messageTooBig),
-  missingMandatoryExtension(
-      SignalingDisconnectCodeType.auxiliary, status.missingMandatoryExtension),
-  internalServerError(
-      SignalingDisconnectCodeType.auxiliary, status.internalServerError),
-  tlsHandshakeFailed(
-      SignalingDisconnectCodeType.auxiliary, status.tlsHandshakeFailed),
+  missingMandatoryExtension(SignalingDisconnectCodeType.auxiliary, status.missingMandatoryExtension),
+  internalServerError(SignalingDisconnectCodeType.auxiliary, status.internalServerError),
+  tlsHandshakeFailed(SignalingDisconnectCodeType.auxiliary, status.tlsHandshakeFailed),
   unmappedCode(SignalingDisconnectCodeType.auxiliary, -1),
   unmappedError(SignalingDisconnectCodeType.auxiliary, 4000),
   socketMessageError(SignalingDisconnectCodeType.socket, 4101),
@@ -42,10 +26,8 @@ enum SignalingDisconnectCode {
   controllerMissedError(SignalingDisconnectCodeType.controller, 4401),
   controllerExitError(SignalingDisconnectCodeType.controller, 4402),
   controllerBillingError(SignalingDisconnectCodeType.controller, 4410),
-  controllerBillingAccountMissedError(
-      SignalingDisconnectCodeType.controller, 4411),
-  controllerBillingAccountCredentialsMissedError(
-      SignalingDisconnectCodeType.controller, 4412),
+  controllerBillingAccountMissedError(SignalingDisconnectCodeType.controller, 4411),
+  controllerBillingAccountCredentialsMissedError(SignalingDisconnectCodeType.controller, 4412),
   controllerWebrtcError(SignalingDisconnectCodeType.controller, 4420),
   controllerAttachedError(SignalingDisconnectCodeType.controller, 4431),
   controllerNotAttachedError(SignalingDisconnectCodeType.controller, 4432),
