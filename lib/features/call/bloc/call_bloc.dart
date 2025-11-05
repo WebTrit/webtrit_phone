@@ -218,32 +218,42 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info(() => 'status transitions: $currentProcessingStatuses -> $nextProcessingStatuses');
     }
 
+    /// RegistrationStatus can be not allowed  if the signaling state
+    /// was not yet fully initialized. For this situation we decide allow RegistrationStatus be nullable that indicate signaling was not initialized yet
+    ///
+    /// This scenario is particularly relevant when a call is triggered before the app
+    /// is fully active, such as via [CallkeepDelegate.continueStartCallIntent]
+    /// (e.g., from phone recents).
+    ///
+
     final newRegistration = change.nextState.callServiceState.registration;
     final previousRegistration = change.currentState.callServiceState.registration;
+
     if (newRegistration != previousRegistration) {
       _logger.fine('_onRegistrationChange: $newRegistration to $previousRegistration');
-      final newRegistrationStatus = newRegistration.status;
-      final previousRegistrationStatus = previousRegistration.status;
 
-      if (newRegistrationStatus.isRegistered && !previousRegistrationStatus.isRegistered) {
+      final newRegistrationStatus = newRegistration?.status;
+      final previousRegistrationStatus = previousRegistration?.status;
+
+      if (newRegistrationStatus?.isRegistered == true && previousRegistrationStatus?.isRegistered == false) {
         presenceRepository.resetLastSettingsSync();
         submitNotification(AppOnlineNotification());
       }
 
-      if (!newRegistrationStatus.isRegistered && previousRegistrationStatus.isRegistered) {
+      if (newRegistrationStatus?.isRegistered == false && previousRegistrationStatus?.isRegistered == true) {
         submitNotification(AppOfflineNotification());
       }
 
-      if (newRegistrationStatus.isFailed || newRegistrationStatus.isUnregistered) {
+      if (newRegistrationStatus?.isFailed == true || newRegistrationStatus?.isUnregistered == true) {
         add(const _ResetStateEvent.completeCalls());
       }
 
-      if (newRegistrationStatus.isFailed) {
+      if (newRegistrationStatus?.isFailed == true) {
         submitNotification(
           SipRegistrationFailedNotification(
-            knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration.code),
-            systemCode: newRegistration.code,
-            systemReason: newRegistration.reason,
+            knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration?.code),
+            systemCode: newRegistration?.code,
+            systemReason: newRegistration?.reason,
           ),
         );
       }
@@ -676,7 +686,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         state.copyWith(
           callServiceState: state.callServiceState.copyWith(
             signalingClientStatus: SignalingClientStatus.disconnect,
-            registration: const Registration(status: RegistrationStatus.registering),
             lastSignalingClientDisconnectError: null,
             lastSignalingDisconnectCode: null,
           ),
@@ -705,7 +714,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     CallState newState = state.copyWith(
       callServiceState: state.callServiceState.copyWith(
-        registration: const Registration(status: RegistrationStatus.registering),
         signalingClientStatus: SignalingClientStatus.disconnect,
         lastSignalingDisconnectCode: event.code,
       ),
@@ -714,9 +722,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     bool shouldReconnect = true;
 
     if (code == SignalingDisconnectCode.appUnregisteredError) {
+      add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
+
       newState = state.copyWith(
         callServiceState: state.callServiceState.copyWith(
-          registration: const Registration(status: RegistrationStatus.unregistered),
           signalingClientStatus: SignalingClientStatus.disconnect,
           lastSignalingDisconnectCode: event.code,
         ),
@@ -824,11 +833,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
       _CallSignalingEventNotifyPresence() => __onCallSignalingEventNotifyPresence(event, emit),
       _CallSignalingEventNotifyUnknown() => __onCallSignalingEventNotifyUnknown(event, emit),
-      _CallSignalingEventRegistering() => __onCallSignalingEventRegistering(event, emit),
-      _CallSignalingEventRegistered() => __onCallSignalingEventRegistered(event, emit),
-      _CallSignalingEventRegisterationFailed() => __onCallSignalingEventRegistrationFailed(event, emit),
-      _CallSignalingEventUnregistering() => __onCallSignalingEventUnregistering(event, emit),
-      _CallSignalingEventUnregistered() => __onCallSignalingEventUnregistered(event, emit),
+      _CallSignalingEventRegistration() => __onCallSignalingEventRegistration(event, emit),
     };
   }
 
@@ -1164,41 +1169,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine('_CallSignalingEventNotifyUnknown: $event');
   }
 
-  Future<void> __onCallSignalingEventRegistering(_CallSignalingEventRegistering event, Emitter<CallState> emit) async {
-    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.registering)));
-  }
-
-  Future<void> __onCallSignalingEventRegistered(_CallSignalingEventRegistered event, Emitter<CallState> emit) async {
-    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.registered)));
-  }
-
-  Future<void> __onCallSignalingEventRegistrationFailed(
-    _CallSignalingEventRegisterationFailed event,
+  Future<void> __onCallSignalingEventRegistration(
+    _CallSignalingEventRegistration event,
     Emitter<CallState> emit,
   ) async {
-    add(
-      _RegistrationChange(
-        registration: Registration(
-          status: RegistrationStatus.registration_failed,
-          code: event.code,
-          reason: event.reason,
-        ),
-      ),
-    );
-  }
-
-  Future<void> __onCallSignalingEventUnregistering(
-    _CallSignalingEventUnregistering event,
-    Emitter<CallState> emit,
-  ) async {
-    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistering)));
-  }
-
-  Future<void> __onCallSignalingEventUnregistered(
-    _CallSignalingEventUnregistered event,
-    Emitter<CallState> emit,
-  ) async {
-    add(const _RegistrationChange(registration: Registration(status: RegistrationStatus.unregistered)));
+    final registration = Registration(status: event.status, code: event.code, reason: event.reason);
+    add(_RegistrationChange(registration: registration));
   }
 
   // processing call control events
@@ -1225,7 +1201,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallControlEventStarted(_CallControlEventStarted event, Emitter<CallState> emit) async {
-    if (!state.callServiceState.registration.status.isRegistered) {
+    if (state.callServiceState.registration?.status.isRegistered == false) {
       _logger.info('__onCallControlEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
       return;
@@ -1668,7 +1644,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallPerformEventStarted(_CallPerformEventStarted event, Emitter<CallState> emit) async {
-    if (!state.callServiceState.registration.status.isRegistered) {
+    if (state.callServiceState.registration?.status.isRegistered == false) {
       _logger.info('__onCallPerformEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
 
@@ -2501,15 +2477,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ),
       });
     } else if (event is RegisteringEvent) {
-      add(const _CallSignalingEvent.registering());
+      add(const _CallSignalingEvent.registration(RegistrationStatus.registering));
     } else if (event is RegisteredEvent) {
-      add(const _CallSignalingEvent.registered());
+      add(const _CallSignalingEvent.registration(RegistrationStatus.registered));
     } else if (event is RegistrationFailedEvent) {
-      add(_CallSignalingEvent.registrationFailed(event.code, event.reason));
+      final registrationFailedEvent = _CallSignalingEvent.registration(
+        RegistrationStatus.registration_failed,
+        code: event.code,
+        reason: event.reason,
+      );
+      add(registrationFailedEvent);
     } else if (event is UnregisteringEvent) {
-      add(const _CallSignalingEvent.unregistering());
+      add(const _CallSignalingEvent.registration(RegistrationStatus.unregistering));
     } else if (event is UnregisteredEvent) {
-      add(const _CallSignalingEvent.unregistered());
+      add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
     } else if (event is TransferringEvent) {
       add(_CallSignalingEvent.transferring(line: event.line, callId: event.callId));
     } else {
@@ -2541,15 +2522,75 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void continueStartCallIntent(CallkeepHandle handle, String? displayName, bool video) {
     _logger.fine(() => 'continueStartCallIntent handle: $handle displayName: $displayName video: $video');
 
-    add(
-      CallControlEvent.started(
+    _continueStartCallIntent(handle, displayName, video);
+  }
+
+  Future<void> _continueStartCallIntent(CallkeepHandle handle, String? displayName, bool video) async {
+    _logger.fine(
+      () => StringBuffer()
+        ..write('_continueStartCallIntent - Attempting to start call')
+        ..write(' handle: $handle')
+        ..write(' displayName: $displayName')
+        ..write(' video: $video')
+        ..write(' isHandshakeActive: ${state.isHandshakeEstablished}')
+        ..write(' isSignalingActive: ${state.isSignalingEstablished}')
+        ..toString(),
+    );
+
+    try {
+      // Wait until both signaling and handshake are active.
+      // If the desired state is not reached within kSignalingClientConnectionTimeout, a TimeoutException will be thrown.
+      final resolvedState = await stream
+          .firstWhere((state) => state.isHandshakeEstablished && state.isSignalingEstablished)
+          .timeout(kSignalingClientConnectionTimeout);
+
+      if (isClosed) return;
+
+      _logger.fine(
+        () => StringBuffer()
+          ..write('_continueStartCallIntent - Signaling and handshake are now active for')
+          ..write(' handle: $handle')
+          ..write(' displayName: $displayName')
+          ..write(' video: $video')
+          ..write(' isHandshakeActive: ${resolvedState.isHandshakeEstablished}')
+          ..write(' isSignalingActive: ${resolvedState.isSignalingEstablished}')
+          ..toString(),
+      );
+
+      final event = CallControlEvent.started(
         generic: handle.isGeneric ? handle.value : null,
         number: handle.isNumber ? handle.value : null,
         email: handle.isEmail ? handle.value : null,
         displayName: displayName,
         video: video,
-      ),
-    );
+      );
+
+      add(event);
+    } on TimeoutException {
+      if (isClosed) return;
+
+      _logger.warning(
+        () => StringBuffer()
+          ..write('_continueStartCallIntent - Failed to start call')
+          ..write(' handle: $handle')
+          ..write(' (Signaling/handshake connection timed out after ${kSignalingClientConnectionTimeout.inSeconds}s)')
+          ..write(' isHandshakeActive: ${state.isHandshakeEstablished}')
+          ..write(' isSignalingActive: ${state.isSignalingEstablished}')
+          ..toString(),
+      );
+
+      submitNotification(const SignalingConnectFailedNotification());
+    } catch (e, s) {
+      if (isClosed) return;
+
+      final severeMessage = StringBuffer()
+        ..write('_continueStartCallIntent - An unexpected error occurred while waiting for signaling')
+        ..write(' handle: $handle')
+        ..toString();
+      _logger.severe(() => severeMessage, e, s);
+
+      submitNotification(ErrorMessageNotification(e.toString()));
+    }
   }
 
   @override
