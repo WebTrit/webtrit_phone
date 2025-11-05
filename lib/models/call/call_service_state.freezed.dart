@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CallServiceState {
 
- SignalingClientStatus get signalingClientStatus; Registration get registration; NetworkStatus? get networkStatus; Object? get lastSignalingClientConnectError; Object? get lastSignalingClientDisconnectError; int? get lastSignalingDisconnectCode;
+ SignalingClientStatus get signalingClientStatus; Registration? get registration; NetworkStatus? get networkStatus; Object? get lastSignalingClientConnectError; Object? get lastSignalingClientDisconnectError; int? get lastSignalingDisconnectCode;
 /// Create a copy of CallServiceState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $CallServiceStateCopyWith<$Res>  {
   factory $CallServiceStateCopyWith(CallServiceState value, $Res Function(CallServiceState) _then) = _$CallServiceStateCopyWithImpl;
 @useResult
 $Res call({
- SignalingClientStatus signalingClientStatus, Registration registration, NetworkStatus? networkStatus, Object? lastSignalingClientConnectError, Object? lastSignalingClientDisconnectError, int? lastSignalingDisconnectCode
+ SignalingClientStatus signalingClientStatus, Registration? registration, NetworkStatus? networkStatus, Object? lastSignalingClientConnectError, Object? lastSignalingClientDisconnectError, int? lastSignalingDisconnectCode
 });
 
 
@@ -62,11 +62,11 @@ class _$CallServiceStateCopyWithImpl<$Res>
 
 /// Create a copy of CallServiceState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? signalingClientStatus = null,Object? registration = null,Object? networkStatus = freezed,Object? lastSignalingClientConnectError = freezed,Object? lastSignalingClientDisconnectError = freezed,Object? lastSignalingDisconnectCode = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? signalingClientStatus = null,Object? registration = freezed,Object? networkStatus = freezed,Object? lastSignalingClientConnectError = freezed,Object? lastSignalingClientDisconnectError = freezed,Object? lastSignalingDisconnectCode = freezed,}) {
   return _then(CallServiceState(
 signalingClientStatus: null == signalingClientStatus ? _self.signalingClientStatus : signalingClientStatus // ignore: cast_nullable_to_non_nullable
-as SignalingClientStatus,registration: null == registration ? _self.registration : registration // ignore: cast_nullable_to_non_nullable
-as Registration,networkStatus: freezed == networkStatus ? _self.networkStatus : networkStatus // ignore: cast_nullable_to_non_nullable
+as SignalingClientStatus,registration: freezed == registration ? _self.registration : registration // ignore: cast_nullable_to_non_nullable
+as Registration?,networkStatus: freezed == networkStatus ? _self.networkStatus : networkStatus // ignore: cast_nullable_to_non_nullable
 as NetworkStatus?,lastSignalingClientConnectError: freezed == lastSignalingClientConnectError ? _self.lastSignalingClientConnectError : lastSignalingClientConnectError ,lastSignalingClientDisconnectError: freezed == lastSignalingClientDisconnectError ? _self.lastSignalingClientDisconnectError : lastSignalingClientDisconnectError ,lastSignalingDisconnectCode: freezed == lastSignalingDisconnectCode ? _self.lastSignalingDisconnectCode : lastSignalingDisconnectCode // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
