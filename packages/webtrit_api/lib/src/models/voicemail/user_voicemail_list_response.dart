@@ -21,8 +21,7 @@ class UserVoicemailListResponse with _$UserVoicemailListResponse {
   @override
   final List<UserVoicemailItem> items;
 
-  factory UserVoicemailListResponse.fromJson(Map<String, dynamic> json) =>
-      _$UserVoicemailListResponseFromJson(json);
+  factory UserVoicemailListResponse.fromJson(Map<String, dynamic> json) => _$UserVoicemailListResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserVoicemailListResponseToJson(this);
 }
@@ -57,8 +56,7 @@ class UserVoicemailItem with _$UserVoicemailItem {
   @override
   final String type;
 
-  factory UserVoicemailItem.fromJson(Map<String, dynamic> json) =>
-      _$UserVoicemailItemFromJson(json);
+  factory UserVoicemailItem.fromJson(Map<String, dynamic> json) => _$UserVoicemailItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserVoicemailItemToJson(this);
 }

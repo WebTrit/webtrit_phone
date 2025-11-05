@@ -19,8 +19,7 @@ class AppPushToken with _$AppPushToken {
   @override
   final String value;
 
-  factory AppPushToken.fromJson(Map<String, dynamic> json) =>
-      _$AppPushTokenFromJson(json);
+  factory AppPushToken.fromJson(Map<String, dynamic> json) => _$AppPushTokenFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppPushTokenToJson(this);
 }

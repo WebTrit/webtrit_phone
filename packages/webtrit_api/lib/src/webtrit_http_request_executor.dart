@@ -13,8 +13,8 @@ class HttpRequestExecutor {
   final Logger _logger;
 
   HttpRequestExecutor({http.Client? httpClient})
-      : _httpClient = httpClient ?? http.Client(),
-        _logger = Logger('HttpRequestExecutor');
+    : _httpClient = httpClient ?? http.Client(),
+      _logger = Logger('HttpRequestExecutor');
 
   void close() => _httpClient.close();
 
@@ -30,10 +30,7 @@ class HttpRequestExecutor {
     final request = http.Request(method.toUpperCase(), uri);
 
     final xRequestId = requestId ?? RequestUtil.generate();
-    final finalHeaders = {
-      'x-request-id': xRequestId,
-      if (headers != null) ...headers,
-    };
+    final finalHeaders = {'x-request-id': xRequestId, if (headers != null) ...headers};
 
     request.headers.addAll(finalHeaders);
 
@@ -49,11 +46,9 @@ class HttpRequestExecutor {
       final httpResponse = await http.Response.fromStream(streamedResponse);
 
       final responseData = httpResponse.body;
-      final responseDataJson =
-          responseData.isEmpty ? {} : jsonDecode(responseData);
+      final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
 
-      _logger.info(
-          '${method.toUpperCase()} response ${httpResponse.statusCode} for $url: ${httpResponse.body}');
+      _logger.info('${method.toUpperCase()} response ${httpResponse.statusCode} for $url: ${httpResponse.body}');
 
       if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
         return switch (responseOptions.responseType) {

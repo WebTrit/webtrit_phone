@@ -11,11 +11,7 @@ part 'session_otp_credential.g.dart';
 @freezed
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class SessionOtpCredential with _$SessionOtpCredential {
-  const SessionOtpCredential(
-      {this.bundleId,
-      required this.type,
-      required this.identifier,
-      required this.userRef});
+  const SessionOtpCredential({this.bundleId, required this.type, required this.identifier, required this.userRef});
 
   @override
   final String? bundleId;
@@ -29,8 +25,7 @@ class SessionOtpCredential with _$SessionOtpCredential {
   @override
   final String userRef;
 
-  factory SessionOtpCredential.fromJson(Map<String, dynamic> json) =>
-      _$SessionOtpCredentialFromJson(json);
+  factory SessionOtpCredential.fromJson(Map<String, dynamic> json) => _$SessionOtpCredentialFromJson(json);
 
   Map<String, dynamic> toJson() => _$SessionOtpCredentialToJson(this);
 }

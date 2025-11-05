@@ -6,9 +6,7 @@ part of 'session_autoprovision_credential.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SessionAutoProvisionCredential _$SessionAutoProvisionCredentialFromJson(
-  Map<String, dynamic> json,
-) =>
+SessionAutoProvisionCredential _$SessionAutoProvisionCredentialFromJson(Map<String, dynamic> json) =>
     SessionAutoProvisionCredential(
       bundleId: json['bundle_id'] as String?,
       type: $enumDecode(_$AppTypeEnumMap, json['type']),
@@ -16,9 +14,7 @@ SessionAutoProvisionCredential _$SessionAutoProvisionCredentialFromJson(
       configToken: json['config_token'] as String,
     );
 
-Map<String, dynamic> _$SessionAutoProvisionCredentialToJson(
-  SessionAutoProvisionCredential instance,
-) =>
+Map<String, dynamic> _$SessionAutoProvisionCredentialToJson(SessionAutoProvisionCredential instance) =>
     <String, dynamic>{
       'bundle_id': instance.bundleId,
       'type': _$AppTypeEnumMap[instance.type]!,

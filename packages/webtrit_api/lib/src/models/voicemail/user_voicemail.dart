@@ -46,8 +46,7 @@ class UserVoicemail with _$UserVoicemail {
   @override
   final List<UserVoicemailAttachment> attachments;
 
-  factory UserVoicemail.fromJson(Map<String, dynamic> json) =>
-      _$UserVoicemailFromJson(json);
+  factory UserVoicemail.fromJson(Map<String, dynamic> json) => _$UserVoicemailFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserVoicemailToJson(this);
 }
@@ -74,8 +73,7 @@ class UserVoicemailAttachment with _$UserVoicemailAttachment {
   @override
   final String subtype;
 
-  factory UserVoicemailAttachment.fromJson(Map<String, dynamic> json) =>
-      _$UserVoicemailAttachmentFromJson(json);
+  factory UserVoicemailAttachment.fromJson(Map<String, dynamic> json) => _$UserVoicemailAttachmentFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserVoicemailAttachmentToJson(this);
 }

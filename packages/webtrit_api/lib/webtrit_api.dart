@@ -1,4 +1,4 @@
-library webtrit_api;
+library;
 
 export 'dart:io' show HttpStatus;
 

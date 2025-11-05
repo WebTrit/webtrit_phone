@@ -23,8 +23,7 @@ class Numbers with _$Numbers {
   @override
   final List<String>? sms;
 
-  factory Numbers.fromJson(Map<String, Object?> json) =>
-      _$NumbersFromJson(json);
+  factory Numbers.fromJson(Map<String, Object?> json) => _$NumbersFromJson(json);
 
   Map<String, Object?> toJson() => _$NumbersToJson(this);
 }
@@ -32,8 +31,7 @@ class Numbers with _$Numbers {
 @freezed
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Balance with _$Balance {
-  const Balance(
-      {this.balanceType, this.amount, this.creditLimit, this.currency});
+  const Balance({this.balanceType, this.amount, this.creditLimit, this.currency});
 
   @override
   final BalanceType? balanceType;
@@ -47,8 +45,7 @@ class Balance with _$Balance {
   @override
   final String? currency;
 
-  factory Balance.fromJson(Map<String, Object?> json) =>
-      _$BalanceFromJson(json);
+  factory Balance.fromJson(Map<String, Object?> json) => _$BalanceFromJson(json);
 
   Map<String, Object?> toJson() => _$BalanceToJson(this);
 }

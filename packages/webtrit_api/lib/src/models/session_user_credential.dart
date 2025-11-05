@@ -11,11 +11,7 @@ part 'session_user_credential.g.dart';
 @freezed
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class SessionUserCredential with _$SessionUserCredential {
-  const SessionUserCredential(
-      {this.bundleId,
-      required this.type,
-      required this.identifier,
-      this.email});
+  const SessionUserCredential({this.bundleId, required this.type, required this.identifier, this.email});
 
   @override
   final String? bundleId;
@@ -29,8 +25,7 @@ class SessionUserCredential with _$SessionUserCredential {
   @override
   final String? email;
 
-  factory SessionUserCredential.fromJson(Map<String, dynamic> json) =>
-      _$SessionUserCredentialFromJson(json);
+  factory SessionUserCredential.fromJson(Map<String, dynamic> json) => _$SessionUserCredentialFromJson(json);
 
   Map<String, dynamic> toJson() => _$SessionUserCredentialToJson(this);
 }
