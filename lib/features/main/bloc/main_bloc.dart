@@ -25,6 +25,7 @@ final _logger = Logger('MainBloc');
 class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   MainBloc(
     this.systemInfoRemoteRepository,
+    this.systemInfoLocalRepository,
     this.customPrivateGatewayRepository,
     this.appPreferences,
     this.coreVersionConstraint,
@@ -36,7 +37,8 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
     on<MainBlocAppUpdatePressed>(_onAppUpdatePressed, transformer: droppable());
   }
 
-  final SystemInfoRepository systemInfoRemoteRepository;
+  final SystemInfoRemoteRepository systemInfoRemoteRepository;
+  final SystemInfoLocalRepository systemInfoLocalRepository;
   final PrivateGatewayRepository customPrivateGatewayRepository;
   final AppPreferences appPreferences;
   final String coreVersionConstraint;
@@ -60,7 +62,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   /// Initialize local system info and keeps it in sync with the remote one.
   /// To use it in core version compatibility verification, it emits the [MainBlocSystemInfoArrived] event.
   void _onInit(MainBlocInit event, Emitter<MainBlocState> emit) async {
-    var currentSystemInfo = appPreferences.getSystemInfo();
+    var currentSystemInfo = systemInfoLocalRepository.getSystemInfo();
 
     /// Migration workaround from the old version of the app
     /// Normally, the system info should be fetched during the login process and stored in sync with
@@ -68,7 +70,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
     if (currentSystemInfo == null) {
       try {
         final remoteSystemInfo = await systemInfoRemoteRepository.getInfo();
-        appPreferences.setSystemInfo(remoteSystemInfo);
+        systemInfoLocalRepository.setSystemInfo(remoteSystemInfo);
         currentSystemInfo = remoteSystemInfo;
       } catch (e) {
         _logger.warning('Failed to fetch initial system info', e);
@@ -80,7 +82,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
     // subscribe to the system info updates
     _systemInfoSubscription?.cancel();
     _systemInfoSubscription = systemInfoRemoteRepository.infoUpdates.listen((systemInfoUpdate) {
-      appPreferences.setSystemInfo(systemInfoUpdate);
+      systemInfoLocalRepository.setSystemInfo(systemInfoUpdate);
       add(MainBlocSystemInfoArrived(systemInfoUpdate));
     });
   }

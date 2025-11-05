@@ -45,10 +45,6 @@ abstract class AppPreferences {
 
   Future<bool> setIncomingCallType(IncomingCallType value);
 
-  WebtritSystemInfo? getSystemInfo();
-
-  Future<void> setSystemInfo(WebtritSystemInfo systemInfo);
-
   EncodingSettings getEncodingSettings();
 
   Future<void> setEncodingSettings(EncodingSettings settings);
@@ -108,7 +104,6 @@ class AppPreferencesImpl
   static const _kUserAgreementAcceptedKey = 'user-agreement-status';
   static const _kContactsAgreementAcceptedKey = 'contacts-agreement-status';
   static const _kIncomingCallTypeKey = 'call-incoming-type';
-  static const _kSystemInfoKey = 'system-info';
   static const _kEncodingSettingsKey = 'encoding-settings';
   static const _kEncodingPresetKey = 'encoding-preset';
   static const _kAudioProcessingSettingsKey = 'audio-processing-settings';
@@ -127,7 +122,6 @@ class AppPreferencesImpl
     _kUserAgreementAcceptedKey,
     _kContactsAgreementAcceptedKey,
     _kIncomingCallTypeKey,
-    _kSystemInfoKey,
     _kEncodingSettingsKey,
     _kEncodingPresetKey,
     _kAudioProcessingSettingsKey,
@@ -297,18 +291,6 @@ class AppPreferencesImpl
     } else {
       return defaultValue;
     }
-  }
-
-  @override
-  Future<void> setSystemInfo(WebtritSystemInfo systemInfo) async {
-    await _sharedPreferences.setString(_kSystemInfoKey, systemInfoToJson(systemInfo));
-  }
-
-  @override
-  WebtritSystemInfo? getSystemInfo() {
-    final systemInfoString = _sharedPreferences.getString(_kSystemInfoKey);
-    if (systemInfoString != null) return systemInfoFromJson(systemInfoString);
-    return null;
   }
 
   @override

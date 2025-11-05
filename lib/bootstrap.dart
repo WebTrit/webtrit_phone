@@ -16,6 +16,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/utils/core_support.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
@@ -38,15 +39,23 @@ Future<void> bootstrap() async {
 
   final appThemes = await AppThemes.init();
 
+  final appPreferencesPure = await AppPreferencesPure.init();
   final appPreferences = await AppPreferencesFactory.init();
-  final featureAccess = FeatureAccess.init(appThemes.appConfig, appThemes.embeddedResources, appPreferences);
+  final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferencesPure);
+
+  final coreSupport = CoreSupportImpl(systemInfoLocalRepository);
+  final featureAccess = FeatureAccess.init(
+    appThemes.appConfig,
+    appThemes.embeddedResources,
+    appPreferences,
+    coreSupport,
+  );
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
   final appLabels = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
 
-  await AppPreferencesPure.init();
   await AppPath.init();
   await AppPermissions.init(featureAccess);
   await AppCertificates.init();

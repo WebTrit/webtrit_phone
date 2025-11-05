@@ -94,7 +94,7 @@ class LoginRouterPage extends StatelessWidget {
       appInfo: context.read<AppInfo>(),
       platformInfo: context.read<PlatformInfo>(),
       sessionRepository: context.read<SessionRepository>(),
-      appPreferences: context.read<AppPreferences>(),
+      systemInfoLocalRepository: context.read<SystemInfoLocalRepository>(),
     );
     if (_launchEmbeddedData != null) {
       login.setEmbedded(_launchEmbeddedData);

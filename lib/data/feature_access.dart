@@ -73,10 +73,13 @@ class FeatureAccess {
   final SystemNotificationsFeature systemNotificationsFeature;
   final SipPresenceFeature sipPresenceFeature;
 
-  static FeatureAccess init(AppConfig appConfig, List<EmbeddedResource> embeddedResources, AppPreferences preferences) {
+  static FeatureAccess init(
+    AppConfig appConfig,
+    List<EmbeddedResource> embeddedResources,
+    AppPreferences preferences,
+    CoreSupport coreSupport,
+  ) {
     try {
-      final coreSupport = CoreSupport.fromPrefs(preferences);
-
       final embeddedFeature = _tryConfigureEmbeddedFeature(embeddedResources);
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig, embeddedFeature.embeddedResources);
       final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences, embeddedFeature);

@@ -143,8 +143,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             sessionGuard: _sessionGuard,
           ),
         ),
-        RepositoryProvider<SystemInfoRepository>(
-          create: (context) => SystemInfoRepository(context.read<WebtritApiClient>()),
+        RepositoryProvider<SystemInfoRemoteRepository>(
+          create: (context) => SystemInfoRemoteRepository(context.read<WebtritApiClient>()),
         ),
         RepositoryProvider<PrivateGatewayRepository>(
           create: (context) => CustomPrivateGatewayRepository(

@@ -1,11 +1,8 @@
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 /// Abstraction for checking core system feature support.
 abstract class CoreSupport {
-  /// Returns true if the given feature flag is supported.
-  bool has(String flag);
-
   /// Check if the voicemail feature is supported by remote system.
   bool get supportsVoicemail;
 
@@ -23,41 +20,33 @@ abstract class CoreSupport {
 
   /// Check if the SIP presence feature is supported by remote system.
   bool get supportsSipPresence;
-
-  /// Factory for real implementation backed by [AppPreferences].
-  factory CoreSupport.fromPrefs(AppPreferences prefs) {
-    final flags = {...?prefs.getSystemInfo()?.adapter?.supported};
-    return CoreSupport.fromFlags(flags);
-  }
-
-  /// Factory for an implementation backed by an explicit set of flags.
-  /// Useful for tests and previews.
-  factory CoreSupport.fromFlags(Set<String> flags) => _CoreSupportImpl(flags);
 }
 
-class _CoreSupportImpl implements CoreSupport {
-  _CoreSupportImpl(Set<String> flags) : _flags = Set.unmodifiable(flags);
+class CoreSupportImpl implements CoreSupport {
+  CoreSupportImpl(this.systemInfoLocalRepository);
 
-  final Set<String> _flags;
+  final SystemInfoLocalRepository systemInfoLocalRepository;
 
-  @override
-  bool has(String flag) => _flags.contains(flag);
+  /// Warning: do not refactor into a value, its should be getter that evaluated on each call
+  Set<String> get _flags => {...?systemInfoLocalRepository.getSystemInfo()?.adapter?.supported};
 
-  @override
-  bool get supportsVoicemail => has(kVoicemailFeatureFlag);
-
-  @override
-  bool get supportsSms => has(kSmsMessagingFeatureFlag);
+  bool _has(String flag) => _flags.contains(flag);
 
   @override
-  bool get supportsChats => has(kChatMessagingFeatureFlag);
+  bool get supportsVoicemail => _has(kVoicemailFeatureFlag);
 
   @override
-  bool get supportsSystemNotifications => has(kSystemNotificationsFeatureFlag);
+  bool get supportsSms => _has(kSmsMessagingFeatureFlag);
 
   @override
-  bool get supportsSystemPushNotifications => has(kSystemNotificationsPushFeatureFlag);
+  bool get supportsChats => _has(kChatMessagingFeatureFlag);
 
   @override
-  bool get supportsSipPresence => has(kSipPresenceFeatureFlag);
+  bool get supportsSystemNotifications => _has(kSystemNotificationsFeatureFlag);
+
+  @override
+  bool get supportsSystemPushNotifications => _has(kSystemNotificationsPushFeatureFlag);
+
+  @override
+  bool get supportsSipPresence => _has(kSipPresenceFeatureFlag);
 }
