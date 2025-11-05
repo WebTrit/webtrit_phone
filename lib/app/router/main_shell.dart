@@ -217,8 +217,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         RepositoryProvider<LinesStateRepository>(create: (context) => LinesStateRepositoryInMemoryImpl()),
         RepositoryProvider<PresenceRepository>(
           create: (context) =>
-              PresenceRepositoryPrefsAndDriftImpl(context.read<AppPreferences>(), context.read<AppDatabase>()),
-          dispose: (value) => value.clearSettings(),
+              PresenceRepositoryPrefsAndDriftImpl(context.read<AppPreferencesPure>(), context.read<AppDatabase>()),
+          dispose: disposeIfDisposable,
         ),
         RepositoryProvider<CdrsLocalRepository>(
           create: (context) => CdrsLocalRepositoryDriftImpl(context.read<AppDatabase>()),

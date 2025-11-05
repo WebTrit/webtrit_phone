@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:app_database/app_database.dart';
-import 'package:webtrit_phone/data/app_preferences.dart';
+import 'package:webtrit_phone/common/disposable.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -36,66 +36,12 @@ abstract class PresenceRepository {
   Future<void> clearSettings();
 }
 
-class PresenceRepositoryPrefsAndMemoryImpl with PresenceSettingJsonMapperMixin implements PresenceRepository {
-  PresenceRepositoryPrefsAndMemoryImpl(this.appPreferences);
-  AppPreferences appPreferences;
-
-  static const presenceSettingsKey = 'presence_settings';
-  final Map<String, List<PresenceInfo>> _numbersPresence = {};
-  final _controller = StreamController<(String, List<PresenceInfo>)>.broadcast();
-  DateTime? _lastSettingsSync;
-
-  @override
-  PresenceSettings get presenceSettings {
-    final prefsResult = appPreferences.getString(presenceSettingsKey);
-    if (prefsResult != null) {
-      return presenceSettingsFromJson(prefsResult);
-    } else {
-      return PresenceSettings.blank();
-    }
-  }
-
-  @override
-  void updatePresenceSettings(PresenceSettings settings) {
-    appPreferences.setString(presenceSettingsKey, presenceSettingsToJson(settings));
-  }
-
-  @override
-  DateTime? get lastSettingsSync => _lastSettingsSync;
-
-  @override
-  void updateLastSettingsSync(DateTime time) => _lastSettingsSync = time;
-
-  @override
-  void resetLastSettingsSync() => _lastSettingsSync = null;
-
-  @override
-  void setNumberPresence(String number, List<PresenceInfo> presence) {
-    _numbersPresence[number] = presence;
-    _controller.add((number, presence));
-  }
-
-  @override
-  Future<List<PresenceInfo>> getNumberPresence(String number) => Future.value(_numbersPresence[number] ?? []);
-
-  @override
-  Stream<List<PresenceInfo>> watchNumberPresence(String number) async* {
-    yield await getNumberPresence(number);
-    yield* _controller.stream.where((e) => e.$1 == number).map((e) => e.$2);
-  }
-
-  @override
-  Future<void> clearSettings() async {
-    _lastSettingsSync = null;
-    appPreferences.removeKey(presenceSettingsKey);
-  }
-}
-
+// TODO: split to PresenceInfoRepository and PresenceSettingsRepository
 class PresenceRepositoryPrefsAndDriftImpl
     with PresenceSettingJsonMapperMixin, PresenceInfoDriftMapper
-    implements PresenceRepository {
+    implements PresenceRepository, Disposable {
   PresenceRepositoryPrefsAndDriftImpl(this.appPreferences, this._appDatabase);
-  AppPreferences appPreferences;
+  AppPreferencesPure appPreferences;
   final AppDatabase _appDatabase;
   late final _dao = _appDatabase.presenceInfoDao;
 
@@ -155,6 +101,11 @@ class PresenceRepositoryPrefsAndDriftImpl
   @override
   Future<void> clearSettings() async {
     _lastSettingsSync = null;
-    await appPreferences.removeKey(presenceSettingsKey);
+    await appPreferences.remove(presenceSettingsKey);
+  }
+
+  @override
+  Future<void> dispose() async {
+    clearSettings();
   }
 }
