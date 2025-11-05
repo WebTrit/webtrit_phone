@@ -9,12 +9,6 @@ import 'package:webtrit_phone/mappers/mappers.dart';
 abstract class AppPreferences {
   Future<bool> clear({List<String> exclusion});
 
-  bool getRegisterStatus();
-
-  Future<bool> setRegisterStatus(bool value);
-
-  Future<bool> removeRegisterStatus();
-
   ThemeMode getThemeMode();
 
   Future<bool> setThemeMode(ThemeMode value);
@@ -106,7 +100,6 @@ class AppPreferencesImpl
         NegotiationSettingsJsonMapper,
         CallerIdSettingsJsonMapper
     implements AppPreferences {
-  static const _kRegisterStatusKey = 'register-status';
   static const _kThemeModeKey = 'theme-mode';
   static const _kLocaleLanguageTagKey = 'locale-language-tag';
   static const _kActiveMainFlavorKey = 'active-main-flavor';
@@ -126,7 +119,6 @@ class AppPreferencesImpl
 
   // Please add all new keys here for proper cleaning of preferences
   static const _kPreferencesList = [
-    _kRegisterStatusKey,
     _kThemeModeKey,
     _kLocaleLanguageTagKey,
     _kActiveMainFlavorKey,
@@ -157,15 +149,6 @@ class AppPreferencesImpl
       _kPreferencesList.where((key) => !exclusion.contains(key)).map((key) => _sharedPreferences.remove(key)).toList(),
     ).then((results) => results.every((result) => result));
   }
-
-  @override
-  bool getRegisterStatus() => _sharedPreferences.getBool(_kRegisterStatusKey) ?? true;
-
-  @override
-  Future<bool> setRegisterStatus(bool value) => _sharedPreferences.setBool(_kRegisterStatusKey, value);
-
-  @override
-  Future<bool> removeRegisterStatus() => _sharedPreferences.remove(_kRegisterStatusKey);
 
   @override
   ThemeMode getThemeMode() {

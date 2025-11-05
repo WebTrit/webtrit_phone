@@ -20,6 +20,7 @@ export 'push_notifications/local_push_repository.dart';
 export 'push_notifications/remote_push_repository.dart';
 export 'push_tokens/push_tokens_repository.dart';
 export 'recents/recents_repository.dart';
+export 'register_status/register_status_repository.dart';
 export 'route_state/route_state.dart';
 export 'system_info/system_info_repository.dart';
 export 'system_notifications/system_notifications_local_repository.dart';
