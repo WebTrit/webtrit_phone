@@ -35,20 +35,18 @@ abstract class SessionRepository {
 class SessionRepositoryImpl implements SessionRepository {
   SessionRepositoryImpl({
     required this.secureStorage,
-    required this.appPreferences,
-    required this.appDatabase,
     this.sessionCleanupWorker,
     this.createApiClient = defaultCreateWebtritApiClient,
+    this.onLogout,
   }) {
     _currentSession = _loadFromStorage();
     _sessionController.add(_currentSession);
   }
 
   final SecureStorage secureStorage;
-  final AppPreferences appPreferences;
-  final AppDatabase appDatabase;
   final WebtritApiClientFactory createApiClient;
   final SessionCleanupWorker? sessionCleanupWorker;
+  final Future<void> Function()? onLogout;
 
   final _sessionController = StreamController<Session?>.broadcast();
   Session? _currentSession;
@@ -101,12 +99,10 @@ class SessionRepositoryImpl implements SessionRepository {
 
   @override
   Future<void> clean() async {
-    await appPreferences.clear();
     await secureStorage.deleteCoreUrl();
     await secureStorage.deleteTenantId();
     await secureStorage.deleteToken();
     await secureStorage.deleteUserId();
-    await appDatabase.deleteEverything();
 
     _updateCurrent(_loadFromStorage());
   }
@@ -117,6 +113,7 @@ class SessionRepositoryImpl implements SessionRepository {
     if (session == null || !session.isLoggedIn) return;
 
     await clean();
+    if (onLogout != null) await onLogout!();
 
     unawaited(_revokeRemoteWithLogging(session));
   }

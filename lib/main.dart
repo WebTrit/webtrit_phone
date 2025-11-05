@@ -58,8 +58,6 @@ class RootApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sessionCleanupWorker = SessionCleanupWorker();
-
     return MultiProvider(
       providers: [
         Provider<AppInfo>(
@@ -164,18 +162,28 @@ class RootApp extends StatelessWidget {
       ],
       child: Builder(
         builder: (context) {
+          final appPreferences = context.read<AppPreferences>();
+          final appPreferencesPure = context.read<AppPreferencesPure>();
+          final appDatabase = context.read<AppDatabase>();
+
+          final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(appPreferencesPure);
+
+          final sessionRepository = SessionRepositoryImpl(
+            secureStorage: context.read<SecureStorage>(),
+            sessionCleanupWorker: SessionCleanupWorker(),
+            onLogout: () async {
+              await appDatabase.deleteEverything();
+              await appPreferences.clear();
+              await registerStatusRepository.clear();
+            },
+          );
+
           return MultiRepositoryProvider(
             providers: [
               RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
-              RepositoryProvider<SessionRepository>.value(
-                value: SessionRepositoryImpl(
-                  secureStorage: context.read<SecureStorage>(),
-                  appPreferences: context.read<AppPreferences>(),
-                  appDatabase: context.read<AppDatabase>(),
-                  sessionCleanupWorker: sessionCleanupWorker,
-                ),
-              ),
+              RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
+              RepositoryProvider<SessionRepository>.value(value: sessionRepository),
             ],
             child: const App(),
           );

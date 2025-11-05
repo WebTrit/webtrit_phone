@@ -1,13 +1,12 @@
-import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 
 abstract interface class RegisterStatusRepository {
   bool getRegisterStatus();
   Future<void> setRegisterStatus(bool value);
-  Future<void> removeRegisterStatus();
+  Future<void> clear();
 }
 
-class RegisterStatusRepositoryPrefsImpl implements RegisterStatusRepository, Disposable {
+class RegisterStatusRepositoryPrefsImpl implements RegisterStatusRepository {
   RegisterStatusRepositoryPrefsImpl(this._appPreferences);
   final AppPreferencesPure _appPreferences;
   static const _preferenceKey = 'register-status';
@@ -24,13 +23,7 @@ class RegisterStatusRepositoryPrefsImpl implements RegisterStatusRepository, Dis
   }
 
   @override
-  Future<void> removeRegisterStatus() async {
+  Future<void> clear() async {
     await _appPreferences.remove(_preferenceKey);
-  }
-
-  @override
-  Future<void> dispose() async {
-    // Clean on logout
-    await removeRegisterStatus();
   }
 }

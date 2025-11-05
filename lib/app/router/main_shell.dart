@@ -230,10 +230,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             _sessionGuard,
           ),
         ),
-        RepositoryProvider<RegisterStatusRepository>(
-          create: (context) => RegisterStatusRepositoryPrefsImpl(context.read<AppPreferencesPure>()),
-          dispose: disposeIfDisposable,
-        ),
       ],
 
       /// Bridge layers for background/periodic tasks between repositories and Blocs
