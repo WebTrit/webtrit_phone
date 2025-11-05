@@ -5,10 +5,7 @@ import 'package:http/io_client.dart';
 
 import 'package:ssl_certificates/ssl_certificates.dart';
 
-http.Client createHttpClient({
-  Duration? connectionTimeout,
-  TrustedCertificates certs = TrustedCertificates.empty,
-}) {
+http.Client createHttpClient({Duration? connectionTimeout, TrustedCertificates certs = TrustedCertificates.empty}) {
   SecurityContext? securityContext = initializeSecurityContext(certs);
 
   final customHttpClient = HttpClient(context: securityContext);
