@@ -8,7 +8,6 @@ import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 // TODO:
 // -  maybe rename to "messaging connection bloc" and place /cubits and /bloc together

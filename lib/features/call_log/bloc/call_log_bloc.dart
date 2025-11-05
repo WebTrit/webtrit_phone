@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 part 'call_log_bloc.freezed.dart';
 

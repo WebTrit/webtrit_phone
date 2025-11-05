@@ -12,7 +12,6 @@ import 'package:store_info_extractor/store_info_extractor.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 part 'main_event.dart';
 
