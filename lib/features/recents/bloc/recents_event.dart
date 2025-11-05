@@ -17,9 +17,7 @@ class RecentsFiltered extends RecentsEvent {
   final RecentsVisibilityFilter filter;
 
   @override
-  List<Object> get props => [
-        EquatablePropToString([filter], listPropToString),
-      ];
+  List<Object> get props => [filter];
 }
 
 class RecentsDeleted extends RecentsEvent {
@@ -28,7 +26,5 @@ class RecentsDeleted extends RecentsEvent {
   final Recent recent;
 
   @override
-  List<Object> get props => [
-        EquatablePropToString([recent], listPropToString),
-      ];
+  List<Object> get props => [recent];
 }

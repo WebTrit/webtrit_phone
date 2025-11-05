@@ -18,9 +18,7 @@ class PushTokensEventInsertedOrUpdated extends PushTokensEvent {
   final String value;
 
   @override
-  List<Object> get props => [
-        EquatablePropToString([type, value], listPropToString),
-      ];
+  List<Object> get props => [type, value];
 }
 
 class PushTokensEventError extends PushTokensEvent {
@@ -29,7 +27,5 @@ class PushTokensEventError extends PushTokensEvent {
   final String errorMessage;
 
   @override
-  List<Object> get props => [
-        EquatablePropToString([errorMessage], listPropToString),
-      ];
+  List<Object> get props => [errorMessage];
 }

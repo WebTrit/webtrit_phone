@@ -13,9 +13,7 @@ class ContactsSourceTypeChanged extends ContactsEvent {
   final ContactSourceType sourceType;
 
   @override
-  List<Object> get props => [
-        EquatablePropToString([sourceType], listPropToString),
-      ];
+  List<Object> get props => [sourceType];
 }
 
 class ContactsSearchChanged extends ContactsEvent {
@@ -24,9 +22,7 @@ class ContactsSearchChanged extends ContactsEvent {
   final String search;
 
   @override
-  List<Object> get props => [
-        EquatablePropToString([search], listPropToString),
-      ];
+  List<Object> get props => [search];
 }
 
 class ContactsSearchSubmitted extends ContactsEvent {
@@ -35,7 +31,5 @@ class ContactsSearchSubmitted extends ContactsEvent {
   final String search;
 
   @override
-  List<Object> get props => [
-        EquatablePropToString([search], listPropToString),
-      ];
+  List<Object> get props => [search];
 }

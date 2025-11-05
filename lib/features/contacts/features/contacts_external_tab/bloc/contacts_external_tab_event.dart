@@ -13,9 +13,7 @@ class ContactsExternalTabStarted extends ContactsExternalTabEvent {
   final String search;
 
   @override
-  List<Object> get props => [
-        EquatablePropToString([search], listPropToString),
-      ];
+  List<Object> get props => [search];
 }
 
 class ContactsExternalTabRefreshed extends ContactsExternalTabEvent {
