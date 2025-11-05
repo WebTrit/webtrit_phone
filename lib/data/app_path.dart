@@ -6,10 +6,7 @@ class AppPath {
   static Future<void> init() async {
     final appDocDir = await getApplicationDocumentsDirectory();
     final tempDir = await getTemporaryDirectory();
-    _instance = AppPath._(
-      appDocDir.path,
-      tempDir.path,
-    );
+    _instance = AppPath._(appDocDir.path, tempDir.path);
   }
 
   factory AppPath() => _instance;

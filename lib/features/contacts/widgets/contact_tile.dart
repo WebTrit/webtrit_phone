@@ -56,22 +56,13 @@ class ContactTile extends StatelessWidget {
       ),
       title: Text(title),
       subtitle: subtitle?.isNotEmpty == true
-          ? Text(
-              subtitle!,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 12),
-            )
+          ? Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12))
           : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (onMessagePressed != null)
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.messenger_outline),
-              onPressed: onMessagePressed,
-            ),
+            IconButton(splashRadius: 24, icon: const Icon(Icons.messenger_outline), onPressed: onMessagePressed),
         ],
       ),
       onTap: onTap,

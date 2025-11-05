@@ -21,7 +21,7 @@ extension SignalingExceptionExension on WebtritSignalingException {
       ],
       if (e is WebtritSignalingTransactionException) ...[
         ErrorFieldModel(context.l10n.default_ErrorTransactionId, e.transactionId),
-      ]
+      ],
     ];
   }
 }

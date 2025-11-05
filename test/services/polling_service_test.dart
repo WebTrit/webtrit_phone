@@ -35,9 +35,7 @@ void main() {
         final task = MockRefreshableRepository();
         service = PollingService(
           connectivityService: connectivity,
-          registrations: [
-            PollingRegistration(listener: task, interval: const Duration(seconds: 10)),
-          ],
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
           options: const PollingOptions(
             leadingRefreshRequiresVerify: true,
             verifyReachabilityOnTick: true,
@@ -60,9 +58,7 @@ void main() {
         final task = MockRefreshableRepository();
         service = PollingService(
           connectivityService: connectivity,
-          registrations: [
-            PollingRegistration(listener: task, interval: const Duration(seconds: 5)),
-          ],
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 5))],
         );
 
         async.flushMicrotasks();
@@ -85,9 +81,7 @@ void main() {
         final task = MockRefreshableRepository();
         service = PollingService(
           connectivityService: connectivity,
-          registrations: [
-            PollingRegistration(listener: task, interval: const Duration(seconds: 5)),
-          ],
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 5))],
           options: const PollingOptions(pauseInBackground: true),
         );
 
@@ -116,9 +110,7 @@ void main() {
         final task = MockRefreshableRepository();
         service = PollingService(
           connectivityService: connectivity,
-          registrations: [
-            PollingRegistration(listener: task, interval: const Duration(seconds: 3)),
-          ],
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 3))],
           options: const PollingOptions(
             verifyReachabilityOnTick: true,
             reachabilityTtl: Duration(seconds: 10),
@@ -135,8 +127,11 @@ void main() {
         expect(connectivity.checkCalls, initialCalls, reason: 'Within TTL no new checkConnection() calls expected');
 
         async.elapse(const Duration(seconds: 3, milliseconds: 1));
-        expect(connectivity.checkCalls, greaterThan(initialCalls),
-            reason: 'After TTL expiry a new checkConnection() should occur');
+        expect(
+          connectivity.checkCalls,
+          greaterThan(initialCalls),
+          reason: 'After TTL expiry a new checkConnection() should occur',
+        );
       });
     });
 
@@ -149,9 +144,7 @@ void main() {
         final task = MockRefreshableRepository();
         service = PollingService(
           connectivityService: connectivity,
-          registrations: [
-            PollingRegistration(listener: task, interval: const Duration(seconds: 8)),
-          ],
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 8))],
         );
 
         async.flushMicrotasks();
@@ -176,9 +169,7 @@ void main() {
         final task = MockRefreshableRepository()..failTimes = 2;
         service = PollingService(
           connectivityService: connectivity,
-          registrations: [
-            PollingRegistration(listener: task, interval: const Duration(seconds: 1)),
-          ],
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 1))],
           options: const PollingOptions(jitterMaxMs: 0),
         );
 
@@ -201,9 +192,7 @@ void main() {
       final task = MockRefreshableRepository();
       service = PollingService(
         connectivityService: connectivity,
-        registrations: [
-          PollingRegistration(listener: task, interval: const Duration(milliseconds: 200)),
-        ],
+        registrations: [PollingRegistration(listener: task, interval: const Duration(milliseconds: 200))],
       );
 
       await Future<void>.delayed(const Duration(milliseconds: 50));

@@ -19,12 +19,7 @@ class ChatOutboxMessageDeleteEntry extends Equatable {
   @override
   bool get stringify => true;
 
-  ChatOutboxMessageDeleteEntry copyWith({
-    int? id,
-    String? idKey,
-    int? chatId,
-    int? sendAttempts,
-  }) {
+  ChatOutboxMessageDeleteEntry copyWith({int? id, String? idKey, int? chatId, int? sendAttempts}) {
     return ChatOutboxMessageDeleteEntry(
       id: id ?? this.id,
       idKey: idKey ?? this.idKey,

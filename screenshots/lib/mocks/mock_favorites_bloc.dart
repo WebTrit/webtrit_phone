@@ -4,7 +4,8 @@ import 'package:webtrit_phone/features/features.dart';
 
 import 'package:screenshots/data/data.dart';
 
-class MockFavoritesBloc extends MockBloc<FavoritesEvent, FavoritesState> implements FavoritesBloc {
+class MockFavoritesBloc extends MockBloc<FavoritesEvent, FavoritesState>
+    implements FavoritesBloc {
   MockFavoritesBloc();
 
   factory MockFavoritesBloc.mainScreen() {

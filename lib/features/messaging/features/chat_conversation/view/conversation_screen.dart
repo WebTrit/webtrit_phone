@@ -104,9 +104,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                   },
                 ),
               ),
-              actions: [
-                IconButton(onPressed: onMenuTap, icon: const Icon(Icons.menu)),
-              ],
+              actions: [IconButton(onPressed: onMenuTap, icon: const Icon(Icons.menu))],
             ),
             body: Builder(
               builder: (context) {
@@ -137,7 +135,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                       TextButton(
                         onPressed: conversationCubit.restart,
                         child: Text(context.l10n.messaging_ActionBtn_retry),
-                      )
+                      ),
                     ],
                   );
                 }
@@ -160,61 +158,40 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
 
         return switch ((presenceSource, contact)) {
           (_, null) => Text(
-              context.l10n.messaging_ParticipantName_unknown,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: nameTextStyle,
-            ),
+            context.l10n.messaging_ParticipantName_unknown,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: nameTextStyle,
+          ),
           (PresenceViewSource.contactInfo, Contact contact) => Column(
-              children: [
-                Text(
-                  contact.displayTitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: nameTextStyle,
-                ),
-                if (contact.registered == true)
-                  Text(
-                    context.l10n.messaging_ConversationScreen_titleAvailable,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-              ],
-            ),
+            children: [
+              Text(contact.displayTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: nameTextStyle),
+              if (contact.registered == true)
+                Text(context.l10n.messaging_ConversationScreen_titleAvailable, style: const TextStyle(fontSize: 12)),
+            ],
+          ),
           (PresenceViewSource.sipPresence, Contact contact) => Column(
-              children: [
-                Text(
-                  '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: nameTextStyle,
-                ),
-                if (contact.presenceInfo.anyAvailable == true)
-                  Text(
-                    context.l10n.messaging_ConversationScreen_titleAvailable,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-              ],
-            ),
+            children: [
+              Text(
+                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: nameTextStyle,
+              ),
+              if (contact.presenceInfo.anyAvailable == true)
+                Text(context.l10n.messaging_ConversationScreen_titleAvailable, style: const TextStyle(fontSize: 12)),
+            ],
+          ),
         };
       },
     );
   }
 
   Widget nameTitle(String name) {
-    return Text(
-      name,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontSize: 20),
-    );
+    return Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 20));
   }
 
   Widget unknownTitle(String chatId) {
-    return Text(
-      chatId,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontSize: 20),
-    );
+    return Text(chatId, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 20));
   }
 }

@@ -9,12 +9,7 @@ final _jsLogger = Logger('JSChannel');
 typedef JsonEventHandler = void Function(WebViewController controller, JsonJsEvent e);
 
 class JsonJsEvent {
-  JsonJsEvent({
-    required this.event,
-    required this.data,
-    this.callback,
-    this.raw,
-  });
+  JsonJsEvent({required this.event, required this.data, this.callback, this.raw});
 
   final String event;
   final Map<String, dynamic>? data;

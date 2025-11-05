@@ -93,21 +93,21 @@ class Contact extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        sourceType,
-        sourceId,
-        registered,
-        userRegistered,
-        isCurrentUser,
-        firstName,
-        lastName,
-        aliasName,
-        thumbnail,
-        thumbnailUrl,
-        phones,
-        emails,
-        presenceInfo,
-      ];
+    id,
+    sourceType,
+    sourceId,
+    registered,
+    userRegistered,
+    isCurrentUser,
+    firstName,
+    lastName,
+    aliasName,
+    thumbnail,
+    thumbnailUrl,
+    phones,
+    emails,
+    presenceInfo,
+  ];
 
   @override
   bool get stringify => true;

@@ -10,22 +10,14 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../widgets/widgets.dart';
 
 class LanguageScreen extends StatelessWidget {
-  const LanguageScreen({
-    super.key,
-  });
+  const LanguageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final locales = [
-      LocaleExtension.defaultNull,
-      ...AppLocalizations.supportedLocales,
-    ];
+    final locales = [LocaleExtension.defaultNull, ...AppLocalizations.supportedLocales];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.settings_ListViewTileTitle_language),
-        leading: const ExtBackButton(),
-      ),
+      appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_language), leading: const ExtBackButton()),
       body: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
           return RadioGroup<Locale?>(
@@ -38,10 +30,7 @@ class LanguageScreen extends StatelessWidget {
               separatorBuilder: (context, index) => const ListTileSeparator(),
               itemBuilder: (context, index) {
                 final locale = locales[index];
-                return RadioListTile<Locale?>(
-                  value: locale,
-                  title: Text(locale.l10n(context)),
-                );
+                return RadioListTile<Locale?>(value: locale, title: Text(locale.l10n(context)));
               },
             ),
           );

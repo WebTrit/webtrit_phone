@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WebViewProgressIndicator extends StatelessWidget {
-  const WebViewProgressIndicator({
-    super.key,
-    required this.stream,
-  });
+  const WebViewProgressIndicator({super.key, required this.stream});
 
   final Stream<int> stream;
 
@@ -21,10 +18,7 @@ class WebViewProgressIndicator extends StatelessWidget {
           }
           progressValue = snapshotData / 100;
         }
-        return LinearProgressIndicator(
-          value: progressValue,
-          minHeight: 2.0,
-        );
+        return LinearProgressIndicator(value: progressValue, minHeight: 2.0);
       },
     );
   }

@@ -43,9 +43,7 @@ class InputDecorationThemeDataFactory implements ThemeStyleFactory<InputDecorati
               : anyPrimaryBorderColor ?? colors.onSurface.withAlpha(128);
         }
 
-        return OutlineInputBorder(
-          borderSide: BorderSide(color: borderColor),
-        );
+        return OutlineInputBorder(borderSide: BorderSide(color: borderColor));
       }),
     );
   }

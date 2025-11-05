@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AgreementCheckbox extends StatelessWidget {
-  const AgreementCheckbox({
-    super.key,
-    required this.text,
-    required this.agreementAccepted,
-    required this.onChanged,
-  });
+  const AgreementCheckbox({super.key, required this.text, required this.agreementAccepted, required this.onChanged});
 
   final String text;
   final bool agreementAccepted;
@@ -24,9 +19,7 @@ class AgreementCheckbox extends StatelessWidget {
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         ),
-        Expanded(
-          child: Text(text),
-        ),
+        Expanded(child: Text(text)),
       ],
     );
   }

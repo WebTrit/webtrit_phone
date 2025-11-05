@@ -1,10 +1,4 @@
-enum SignalingClientStatus {
-  disconnecting,
-  disconnect,
-  connecting,
-  connect,
-  failure,
-}
+enum SignalingClientStatus { disconnecting, disconnect, connecting, connect, failure }
 
 extension SignalingClientStatusX on SignalingClientStatus {
   bool get isDisconnecting => this == SignalingClientStatus.disconnecting;

@@ -4,11 +4,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 
 /// A common fallback widget for WebView errors when no custom [errorBuilder] is provided.
 class DefaultWebViewErrorView extends StatelessWidget {
-  const DefaultWebViewErrorView({
-    super.key,
-    required this.error,
-    required this.onReload,
-  });
+  const DefaultWebViewErrorView({super.key, required this.error, required this.onReload});
 
   final WebResourceError error;
   final VoidCallback onReload;
@@ -32,10 +28,7 @@ class DefaultWebViewErrorView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              context.l10n.webview_defaultError_details(
-                error.description,
-                error.errorCode,
-              ),
+              context.l10n.webview_defaultError_details(error.description, error.errorCode),
               style: theme.textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),

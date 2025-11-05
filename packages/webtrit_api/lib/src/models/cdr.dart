@@ -50,7 +50,8 @@ class CdrRecord with _$CdrRecord {
   @override
   final String status;
 
-  factory CdrRecord.fromJson(Map<String, Object?> json) => _$CdrRecordFromJson(json);
+  factory CdrRecord.fromJson(Map<String, Object?> json) =>
+      _$CdrRecordFromJson(json);
 
   Map<String, Object?> toJson() => _$CdrRecordToJson(this);
 }
@@ -63,7 +64,8 @@ class CdrHistoryResponse with _$CdrHistoryResponse {
   @override
   final List<CdrRecord> items;
 
-  factory CdrHistoryResponse.fromJson(Map<String, Object?> json) => _$CdrHistoryResponseFromJson(json);
+  factory CdrHistoryResponse.fromJson(Map<String, Object?> json) =>
+      _$CdrHistoryResponseFromJson(json);
 
   Map<String, Object?> toJson() => _$CdrHistoryResponseToJson(this);
 }

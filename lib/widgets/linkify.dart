@@ -73,18 +73,14 @@ class _LinkifyState extends State<Linkify> {
   void initState() {
     super.initState();
 
-    _elements = linkify(
-      widget.text,
-      options: widget.options,
-      linkifiers: widget.linkifiers,
-    );
+    _elements = linkify(widget.text, options: widget.options, linkifiers: widget.linkifiers);
 
     final onOpen = widget.onOpen;
     if (onOpen != null) {
       _recognizers = Map.fromEntries(
-        _elements
-            .whereType<LinkableElement>()
-            .map((element) => MapEntry(element, (TapGestureRecognizer()..onTap = () => onOpen(element)))),
+        _elements.whereType<LinkableElement>().map(
+          (element) => MapEntry(element, (TapGestureRecognizer()..onTap = () => onOpen(element))),
+        ),
       );
     } else {
       _recognizers = {};
@@ -115,10 +111,7 @@ class _LinkifyState extends State<Linkify> {
               recognizer: _recognizers[element],
             );
           } else {
-            return TextSpan(
-              text: element.text,
-              style: style.style,
-            );
+            return TextSpan(text: element.text, style: style.style);
           }
         }).toList(),
       ),
@@ -129,11 +122,7 @@ class _LinkifyState extends State<Linkify> {
   }
 }
 
-final _telRegex = RegExp(
-  r'^(.*?)((tel:)[A-Z0-9._%+-]+)',
-  caseSensitive: false,
-  dotAll: true,
-);
+final _telRegex = RegExp(r'^(.*?)((tel:)[A-Z0-9._%+-]+)', caseSensitive: false, dotAll: true);
 
 class TelLinkifier extends Linkifier {
   const TelLinkifier();
@@ -157,9 +146,7 @@ class TelLinkifier extends Linkifier {
 
           if (match.group(2)?.isNotEmpty == true) {
             // Always humanize tels
-            list.add(TelElement(
-              match.group(2)!.replaceFirst(RegExp(r'tel:'), ''),
-            ));
+            list.add(TelElement(match.group(2)!.replaceFirst(RegExp(r'tel:'), '')));
           }
 
           if (text.isNotEmpty) {
@@ -196,11 +183,7 @@ class TelElement extends LinkableElement {
   bool equals(other) => other is TelElement && super.equals(other) && other.tel == tel;
 }
 
-final _urlRegex = RegExp(
-  r'^(.*?)((?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*)',
-  caseSensitive: false,
-  dotAll: true,
-);
+final _urlRegex = RegExp(r'^(.*?)((?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*)', caseSensitive: false, dotAll: true);
 
 class UrlReplaceLinkifier extends Linkifier {
   const UrlReplaceLinkifier(this.replaceText);

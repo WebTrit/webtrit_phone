@@ -1,12 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class ContactPhone extends Equatable {
-  const ContactPhone({
-    required this.id,
-    required this.number,
-    required this.label,
-    required this.favorite,
-  });
+  const ContactPhone({required this.id, required this.number, required this.label, required this.favorite});
 
   final int id;
   final String number;
@@ -14,10 +9,5 @@ class ContactPhone extends Equatable {
   final bool favorite;
 
   @override
-  List<Object?> get props => [
-    id,
-    number,
-    label,
-    favorite,
-  ];
+  List<Object?> get props => [id, number, label, favorite];
 }

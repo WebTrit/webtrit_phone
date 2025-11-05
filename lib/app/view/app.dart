@@ -99,12 +99,8 @@ class _AppState extends State<App> {
           lazy: false,
           create: (context) => OrientationsBloc()..add(const OrientationsChanged(PreferredOrientation.regular)),
         ),
-        BlocProvider<NotificationsBloc>(
-          create: (context) => NotificationsBloc(),
-        ),
-        BlocProvider<AppBloc>.value(
-          value: appBloc,
-        ),
+        BlocProvider<NotificationsBloc>(create: (context) => NotificationsBloc()),
+        BlocProvider<AppBloc>.value(value: appBloc),
       ],
       child: materialApp,
     );

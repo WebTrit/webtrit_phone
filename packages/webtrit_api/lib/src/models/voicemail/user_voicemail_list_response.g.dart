@@ -8,19 +8,21 @@ part of 'user_voicemail_list_response.dart';
 
 UserVoicemailListResponse _$UserVoicemailListResponseFromJson(
   Map<String, dynamic> json,
-) => UserVoicemailListResponse(
-  hasNewMessages: json['has_new_messages'] as bool,
-  items: (json['items'] as List<dynamic>)
-      .map((e) => UserVoicemailItem.fromJson(e as Map<String, dynamic>))
-      .toList(),
-);
+) =>
+    UserVoicemailListResponse(
+      hasNewMessages: json['has_new_messages'] as bool,
+      items: (json['items'] as List<dynamic>)
+          .map((e) => UserVoicemailItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$UserVoicemailListResponseToJson(
   UserVoicemailListResponse instance,
-) => <String, dynamic>{
-  'has_new_messages': instance.hasNewMessages,
-  'items': instance.items.map((e) => e.toJson()).toList(),
-};
+) =>
+    <String, dynamic>{
+      'has_new_messages': instance.hasNewMessages,
+      'items': instance.items.map((e) => e.toJson()).toList(),
+    };
 
 UserVoicemailItem _$UserVoicemailItemFromJson(Map<String, dynamic> json) =>
     UserVoicemailItem(

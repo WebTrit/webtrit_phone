@@ -27,10 +27,7 @@ enum IncomingCallTriggerType {
 
 /// Configuration related to SMS-based fallback triggering.
 class SmsFallbackTriggerConfig {
-  const SmsFallbackTriggerConfig({
-    this.enabled = false,
-    this.available = false,
-  });
+  const SmsFallbackTriggerConfig({this.enabled = false, this.available = false});
 
   /// Whether the SMS fallback mechanism is currently enabled by the user or system.
   final bool enabled;

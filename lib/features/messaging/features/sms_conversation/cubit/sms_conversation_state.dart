@@ -83,16 +83,16 @@ final class SCSReady extends SmsConversationState with EquatableMixin {
 
   @override
   List<Object> get props => [
-        creds,
-        conversation ?? 0,
-        messages,
-        outboxMessages,
-        outboxMessageDeletes,
-        readCursors,
-        fetchingHistory,
-        historyEndReached,
-        busy,
-      ];
+    creds,
+    conversation ?? 0,
+    messages,
+    outboxMessages,
+    outboxMessageDeletes,
+    readCursors,
+    fetchingHistory,
+    historyEndReached,
+    busy,
+  ];
 
   copyWith({
     UsersCreds? creds,

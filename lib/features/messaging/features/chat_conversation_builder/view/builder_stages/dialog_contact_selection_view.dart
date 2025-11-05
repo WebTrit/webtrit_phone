@@ -25,10 +25,7 @@ class DialogContactSelectionView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: ListTile(
             title: Text(context.l10n.messaging_ConversationBuilders_createGroup),
-            leading: Icon(
-              Icons.group_add_rounded,
-              color: colorScheme.onSurface.withValues(alpha: 0.75),
-            ),
+            leading: Icon(Icons.group_add_rounded, color: colorScheme.onSurface.withValues(alpha: 0.75)),
             onTap: () => builderCubit.onGroupCreateStageChoosen(),
           ),
         ),
@@ -47,10 +44,7 @@ class DialogContactSelectionView extends StatelessWidget {
             decoration: InputDecoration(
               hintText: context.l10n.messaging_ConversationBuilders_contactSearch_hint,
               fillColor: colorScheme.surface,
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(12),
-              ),
+              border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),
               prefixIcon: const Icon(Icons.search),
             ),
             onChanged: (value) => builderCubit.onSearchFilterChange(value),

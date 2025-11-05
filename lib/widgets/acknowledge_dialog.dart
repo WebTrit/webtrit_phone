@@ -3,26 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 class AcknowledgeDialog extends StatelessWidget {
-  static Future<void> show(
-    BuildContext context, {
-    required String title,
-    required String content,
-  }) {
+  static Future<void> show(BuildContext context, {required String title, required String content}) {
     return showDialog<void>(
       context: context,
       builder: (context) {
-        return AcknowledgeDialog._(
-          title: title,
-          content: content,
-        );
+        return AcknowledgeDialog._(title: title, content: content);
       },
     );
   }
 
-  const AcknowledgeDialog._({
-    required this.title,
-    required this.content,
-  });
+  const AcknowledgeDialog._({required this.title, required this.content});
 
   final String title;
   final String content;
@@ -33,10 +23,7 @@ class AcknowledgeDialog extends StatelessWidget {
       title: Text(title),
       content: Text(content),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.alertDialogActions_ok),
-        ),
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.alertDialogActions_ok)),
       ],
     );
   }

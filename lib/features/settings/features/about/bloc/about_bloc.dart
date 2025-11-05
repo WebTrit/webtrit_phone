@@ -25,17 +25,19 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     required SecureStorage secureStorage,
     required EmbeddedFeature embeddedFeature,
     required this.infoRepository,
-  }) : super(AboutState(
-          appName: packageInfo.appName,
-          packageName: packageInfo.packageName,
-          storeBuildVersion: packageInfo.version,
-          storeBuildNumber: packageInfo.buildNumber,
-          appVersion: appInfo.version,
-          appIdentifier: appInfo.identifier,
-          fcmPushToken: secureStorage.readFCMPushToken(),
-          embeddedLinks: embeddedFeature.embeddedResources.map((e) => e.uri.toString()).toList(),
-          coreUrl: infoRepository.coreUrl,
-        )) {
+  }) : super(
+         AboutState(
+           appName: packageInfo.appName,
+           packageName: packageInfo.packageName,
+           storeBuildVersion: packageInfo.version,
+           storeBuildNumber: packageInfo.buildNumber,
+           appVersion: appInfo.version,
+           appIdentifier: appInfo.identifier,
+           fcmPushToken: secureStorage.readFCMPushToken(),
+           embeddedLinks: embeddedFeature.embeddedResources.map((e) => e.uri.toString()).toList(),
+           coreUrl: infoRepository.coreUrl,
+         ),
+       ) {
     on<AboutStarted>(_onStarted, transformer: restartable());
   }
 
@@ -58,9 +60,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
 
       if (emit.isDone) return;
 
-      emit(state.copyWith(
-        progress: false,
-      ));
+      emit(state.copyWith(progress: false));
     }
   }
 }

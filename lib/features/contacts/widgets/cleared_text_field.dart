@@ -6,13 +6,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/regexes.dart';
 
 class ClearedTextField extends StatefulWidget {
-  const ClearedTextField({
-    super.key,
-    this.initialValue,
-    this.onChanged,
-    this.onSubmitted,
-    this.iconConstraints,
-  });
+  const ClearedTextField({super.key, this.initialValue, this.onChanged, this.onSubmitted, this.iconConstraints});
 
   final String? initialValue;
   final ValueChanged<String>? onChanged;

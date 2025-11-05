@@ -38,7 +38,8 @@ class OverlayStyleModel with _$OverlayStyleModel {
   @override
   final String? statusBarBrightness;
 
-  factory OverlayStyleModel.fromJson(Map<String, Object?> json) => _$OverlayStyleModelFromJson(json);
+  factory OverlayStyleModel.fromJson(Map<String, Object?> json) =>
+      _$OverlayStyleModelFromJson(json);
 
   Map<String, Object?> toJson() => _$OverlayStyleModelToJson(this);
 }

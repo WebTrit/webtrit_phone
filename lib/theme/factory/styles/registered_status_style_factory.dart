@@ -17,10 +17,7 @@ class RegisteredStatusStyleFactory implements ThemeStyleFactory<RegisteredStatus
     final unregisters = config?.offline.toColor() ?? colors.error;
 
     return RegisteredStatusStyles(
-      primary: RegisteredStatusStyle(
-        registered: registered,
-        unregistered: unregisters,
-      ),
+      primary: RegisteredStatusStyle(registered: registered, unregistered: unregisters),
     );
   }
 }

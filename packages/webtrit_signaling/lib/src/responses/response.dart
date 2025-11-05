@@ -30,7 +30,8 @@ abstract class Response extends Equatable {
       case ErrorResponse.typeValue:
         return ErrorResponse.fromJson(json);
       default:
-        throw ArgumentError.value(responseTypeValue, Response.typeKey, 'Unknown response type');
+        throw ArgumentError.value(
+            responseTypeValue, Response.typeKey, 'Unknown response type');
     }
   }
 }

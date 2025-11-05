@@ -7,11 +7,7 @@ import 'onboarding_picture_logo_style.dart';
 export 'onboarding_picture_logo_style.dart';
 
 class OnboardingPictureLogo extends StatelessWidget {
-  const OnboardingPictureLogo({
-    super.key,
-    this.text,
-    this.style,
-  });
+  const OnboardingPictureLogo({super.key, this.text, this.style});
 
   final String? text;
 

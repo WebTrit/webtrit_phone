@@ -5,11 +5,7 @@ import 'package:webtrit_phone/theme/extension/extension.dart';
 import 'package:webtrit_phone/theme/styles/text_field_style.dart';
 
 extension TextFieldConfigToStyle on TextFieldConfig {
-  TextFieldStyle toStyle({
-    required ColorScheme colors,
-    required ThemeData theme,
-    TextFieldStyle? base,
-  }) {
+  TextFieldStyle toStyle({required ColorScheme colors, required ThemeData theme, TextFieldStyle? base}) {
     final styleFromConfig = TextFieldStyle(
       decoration: decoration?.toInputDecoration(colors: colors),
       textStyle: style?.toTextStyle(

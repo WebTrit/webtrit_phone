@@ -7,10 +7,7 @@ import 'onboarding_logo_style.dart';
 export 'onboarding_logo_style.dart';
 
 class OnboardingLogo extends StatelessWidget {
-  const OnboardingLogo({
-    super.key,
-    this.style,
-  });
+  const OnboardingLogo({super.key, this.style});
 
   final OnboardingLogoStyle? style;
 

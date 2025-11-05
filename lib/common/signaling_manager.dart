@@ -184,10 +184,7 @@ class SignalingManager {
   Future<void> acceptCall(String callId) async =>
       _sendRequest(callId, (line, id, tx) => AcceptRequest(transaction: tx, line: line, callId: id, jsep: const {}));
 
-  Future<void> _sendRequest(
-    String callId,
-    Request Function(int line, String callId, String tx) requestBuilder,
-  ) async {
+  Future<void> _sendRequest(String callId, Request Function(int line, String callId, String tx) requestBuilder) async {
     if (!_isConnected) {
       _logger.warning('Not connected. Queueing request for $callId');
 
@@ -214,11 +211,7 @@ class SignalingManager {
     final lineIndex = _lines.indexWhere((line) => line.callId == callId);
     if (lineIndex == -1) return;
 
-    final request = requestBuilder(
-      lineIndex,
-      callId,
-      WebtritSignalingClient.generateTransactionId(),
-    );
+    final request = requestBuilder(lineIndex, callId, WebtritSignalingClient.generateTransactionId());
 
     await _client?.execute(request);
   }
@@ -234,20 +227,20 @@ class SignalingManager {
         continue;
       }
 
-      final request = pending.requestBuilder(
-        lineIndex,
-        pending.callId,
-        WebtritSignalingClient.generateTransactionId(),
-      );
+      final request = pending.requestBuilder(lineIndex, pending.callId, WebtritSignalingClient.generateTransactionId());
 
-      _client?.execute(request).then((_) {
-        pending.completer.complete();
-      }).catchError((e, s) {
-        pending.completer.completeError(e, s);
-      }).whenComplete(() {
-        pending.timeoutTimer.cancel();
-        _pendingRequests.remove(pending);
-      });
+      _client
+          ?.execute(request)
+          .then((_) {
+            pending.completer.complete();
+          })
+          .catchError((e, s) {
+            pending.completer.completeError(e, s);
+          })
+          .whenComplete(() {
+            pending.timeoutTimer.cancel();
+            _pendingRequests.remove(pending);
+          });
     }
   }
 

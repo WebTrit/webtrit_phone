@@ -18,6 +18,6 @@ class CallLogEntryDeleted extends CallLogEvent {
 
   @override
   List<Object> get props => [
-        EquatablePropToString([callLogEntry], listPropToString),
-      ];
+    EquatablePropToString([callLogEntry], listPropToString),
+  ];
 }

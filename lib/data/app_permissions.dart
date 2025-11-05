@@ -11,9 +11,7 @@ export 'package:permission_handler/permission_handler.dart' show Permission, Per
 final _logger = Logger('AppPermissions');
 
 class AppPermissions {
-  static const _specialPermissions = [
-    CallkeepSpecialPermissions.fullScreenIntent,
-  ];
+  static const _specialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
 
   static late AppPermissions _instance;
 
@@ -55,10 +53,12 @@ class AppPermissions {
   bool get isDenied => _isDenied;
 
   Future<List<CallkeepSpecialPermissions>> deniedSpecialPermissions() async {
-    final statuses = await Future.wait(_specialPermissions.map((permission) async {
-      final status = await permission.status();
-      return status.isDenied ? permission : null;
-    }));
+    final statuses = await Future.wait(
+      _specialPermissions.map((permission) async {
+        final status = await permission.status();
+        return status.isDenied ? permission : null;
+      }),
+    );
     return statuses.whereType<CallkeepSpecialPermissions>().toList();
   }
 
@@ -83,7 +83,8 @@ class AppPermissions {
     final isDeniedPermissions = permissionStatuses.values.every((status) => status.isDenied);
     final isDeniedSpecialPermissions = specialPermissionStatuses.every((status) => status.isDenied);
     _logger.info(
-        'Checking if permissions are denied - requested: $isDeniedPermissions, special: $isDeniedSpecialPermissions');
+      'Checking if permissions are denied - requested: $isDeniedPermissions, special: $isDeniedSpecialPermissions',
+    );
     _isDenied = isDeniedPermissions || isDeniedSpecialPermissions;
     _logger.info('Updated denied status: $_isDenied');
 

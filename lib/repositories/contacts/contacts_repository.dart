@@ -8,36 +8,42 @@ import 'package:webtrit_phone/utils/regexes.dart';
 import 'package:webtrit_phone/utils/string_phone_utils.dart';
 
 class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper {
-  ContactsRepository({
-    required AppDatabase appDatabase,
-  }) : _appDatabase = appDatabase;
+  ContactsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;
 
   Stream<List<Contact>> watchContacts(String search, [ContactSourceType? sourceType]) {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
     if (searchBits.isEmpty) {
-      return _appDatabase.contactsDao.watchAllContacts(null, sourceType?.toData()).map(
+      return _appDatabase.contactsDao
+          .watchAllContacts(null, sourceType?.toData())
+          .map(
             ((contactDatas) => contactDatas
-                .map((data) => contactFromDrift(
-                      data.contact,
-                      phones: data.phones,
-                      emails: data.emails,
-                      favorites: data.favorites,
-                      presenceInfo: data.presenceInfo,
-                    ))
+                .map(
+                  (data) => contactFromDrift(
+                    data.contact,
+                    phones: data.phones,
+                    emails: data.emails,
+                    favorites: data.favorites,
+                    presenceInfo: data.presenceInfo,
+                  ),
+                )
                 .toList()),
           );
     } else {
-      return _appDatabase.contactsDao.watchAllContacts(searchBits, sourceType?.toData()).map(
+      return _appDatabase.contactsDao
+          .watchAllContacts(searchBits, sourceType?.toData())
+          .map(
             ((contactDatas) => contactDatas
-                .map((data) => contactFromDrift(
-                      data.contact,
-                      phones: data.phones,
-                      emails: data.emails,
-                      favorites: data.favorites,
-                      presenceInfo: data.presenceInfo,
-                    ))
+                .map(
+                  (data) => contactFromDrift(
+                    data.contact,
+                    phones: data.phones,
+                    emails: data.emails,
+                    favorites: data.favorites,
+                    presenceInfo: data.presenceInfo,
+                  ),
+                )
                 .toList()),
           );
     }

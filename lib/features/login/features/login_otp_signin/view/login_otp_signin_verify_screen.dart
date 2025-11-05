@@ -32,12 +32,13 @@ class LoginOtpSigninVerifyScreen extends StatelessWidget {
         final isOtpNotificationEmail = sessionOtpProvisional.notificationType?.isEmail ?? false;
         final otpFromEmail = sessionOtpProvisional.fromEmail;
 
-        final otpSigninVerifyPreDescriptionText =
-            context.l10n.login_Text_otpSigninVerifyPreDescriptionUserRef(state.otpSigninUserRefInput.value);
+        final otpSigninVerifyPreDescriptionText = context.l10n.login_Text_otpSigninVerifyPreDescriptionUserRef(
+          state.otpSigninUserRefInput.value,
+        );
         final otpSigninVerifyPostDescriptionText = isOtpNotificationEmail
             ? otpFromEmail == null
-                ? context.l10n.login_Text_otpSigninVerifyPostDescriptionGeneral
-                : context.l10n.login_Text_otpSigninVerifyPostDescriptionFromEmail(otpFromEmail)
+                  ? context.l10n.login_Text_otpSigninVerifyPostDescriptionGeneral
+                  : context.l10n.login_Text_otpSigninVerifyPostDescriptionFromEmail(otpFromEmail)
             : '';
 
         return Container(
@@ -47,9 +48,7 @@ class LoginOtpSigninVerifyScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (otpSigninVerifyPreDescriptionText.isNotEmpty) ...[
-                Description(
-                  text: otpSigninVerifyPreDescriptionText,
-                ),
+                Description(text: otpSigninVerifyPreDescriptionText),
                 const SizedBox(height: kInset / 2),
               ],
               TextFormField(
@@ -63,18 +62,13 @@ class LoginOtpSigninVerifyScreen extends StatelessWidget {
                   errorMaxLines: 3,
                 ),
                 keyboardType: TextInputType.number,
-                autofillHints: const [
-                  AutofillHints.oneTimeCode,
-                  AutofillHints.password,
-                ],
+                autofillHints: const [AutofillHints.oneTimeCode, AutofillHints.password],
                 onChanged: context.read<LoginCubit>().otpSigninCodeInputChanged,
                 onFieldSubmitted: !state.otpSigninCodeInput.isValid ? null : (_) => _onSubmitted(context),
               ),
               if (otpSigninVerifyPostDescriptionText.isNotEmpty) ...[
                 const SizedBox(height: kInset / 8),
-                Description(
-                  text: otpSigninVerifyPostDescriptionText,
-                ),
+                Description(text: otpSigninVerifyPostDescriptionText),
               ],
               const Spacer(),
               const SizedBox(height: kInset),
@@ -103,8 +97,9 @@ class LoginOtpSigninVerifyScreen extends StatelessWidget {
                   const SizedBox(height: kInset / 4),
                   ElevatedButton(
                     key: otpVerifyButtonKey,
-                    onPressed:
-                        state.processing || !state.otpSigninCodeInput.isValid ? null : () => _onSubmitted(context),
+                    onPressed: state.processing || !state.otpSigninCodeInput.isValid
+                        ? null
+                        : () => _onSubmitted(context),
                     style: elevatedButtonStyles?.primary,
                     child: !state.processing
                         ? Text(context.l10n.login_Button_otpSigninVerifyProceed)

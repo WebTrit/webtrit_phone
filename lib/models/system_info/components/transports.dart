@@ -3,9 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'websocket.dart';
 
 class Transports with EquatableMixin {
-  Transports({
-    this.websocket,
-  });
+  Transports({this.websocket});
 
   final Websocket? websocket;
 

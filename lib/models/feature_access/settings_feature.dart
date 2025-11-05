@@ -7,10 +7,7 @@ class SettingsSection {
   final String titleL10n;
   final List<SettingItem> items;
 
-  SettingsSection({
-    required this.titleL10n,
-    required this.items,
-  });
+  SettingsSection({required this.titleL10n, required this.items});
 }
 
 class SettingItem {
@@ -19,10 +16,5 @@ class SettingItem {
   final SettingsFlavor flavor;
   final EmbeddedData? data;
 
-  SettingItem({
-    required this.titleL10n,
-    required this.icon,
-    required this.flavor,
-    this.data,
-  });
+  SettingItem({required this.titleL10n, required this.icon, required this.flavor, this.data});
 }

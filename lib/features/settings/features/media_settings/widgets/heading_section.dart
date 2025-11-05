@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HeadingSection extends StatelessWidget {
-  const HeadingSection({
-    required this.title,
-    this.tooltip,
-    required this.icon,
-    super.key,
-  });
+  const HeadingSection({required this.title, this.tooltip, required this.icon, super.key});
 
   final String title;
   final String? tooltip;
@@ -30,7 +25,7 @@ class HeadingSection extends StatelessWidget {
             margin: const EdgeInsets.all(16),
             showDuration: const Duration(seconds: 10),
             child: const Icon(Icons.info_outline),
-          )
+          ),
         ],
       ],
     );

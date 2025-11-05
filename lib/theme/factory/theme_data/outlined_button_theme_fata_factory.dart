@@ -9,10 +9,6 @@ class OutlinedButtonThemeFataFactory implements ThemeStyleFactory<OutlinedButton
 
   @override
   OutlinedButtonThemeData create() {
-    return OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        shape: const StadiumBorder(),
-      ),
-    );
+    return OutlinedButtonThemeData(style: OutlinedButton.styleFrom(shape: const StadiumBorder()));
   }
 }

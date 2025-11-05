@@ -63,8 +63,7 @@ import 'app_localizations_uk.g.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -72,8 +71,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -85,20 +83,15 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('it'),
-    Locale('uk'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('uk')];
 
   /// Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted.
   ///
@@ -1184,10 +1177,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
-  String login_CoreVersionUnsupportedExceptionError(
-    String actual,
-    String supportedConstraint,
-  );
+  String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
   /// Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty.
   ///
@@ -1499,8 +1489,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
-  String
-  main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+  String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
     String actual,
     String supportedConstraint,
   );
@@ -2115,17 +2104,13 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core with the code: {codeName}'**
-  String notifications_errorSnackBar_signalingDisconnectWithCodeName(
-    String codeName,
-  );
+  String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName);
 
   /// Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
-  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-    String reason,
-  );
+  String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason);
 
   /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality.
   ///
@@ -2149,9 +2134,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Registration with the remote VoIP system failed due to the following reason: {reason}'**
-  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-    String reason,
-  );
+  String notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(String reason);
 
   /// Shown in a notification or snackbar when authentication with the remote VoIP/SIP system fails or the service is unavailable. Typical causes: authentication rejection (invalid/expired credentials), remote service maintenance or outage, or transient network/TLS issues. Advise the user to verify account credentials, retry later, and contact their administrator or support if the problem persists.
   ///
@@ -2907,8 +2890,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Remove static RTP map lines for audio codecs (e.g., PCMU, PCMA) from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.'**
-  String
-  get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip;
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip;
 
   /// No description provided for @settings_encoding_Section_extra_sdp_mod_remapTE8.
   ///
@@ -4213,8 +4195,7 @@ abstract class AppLocalizations {
   String get presence_infoView_client;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -4223,8 +4204,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'it', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'it', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

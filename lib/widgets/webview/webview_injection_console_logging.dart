@@ -6,11 +6,7 @@ class ConsoleLoggingInjectionStrategy extends JavaScriptInjectionStrategy {
   static const consoleLoggingChannelName = 'WebtritConsoleLogChannel';
 
   ConsoleLoggingInjectionStrategy({String channelName = consoleLoggingChannelName})
-      : super.raw(
-          _buildScript(channelName),
-          label: '[$consoleLoggingChannelName]',
-          returnResult: true,
-        );
+    : super.raw(_buildScript(channelName), label: '[$consoleLoggingChannelName]', returnResult: true);
 
   static String _buildScript(String channelName) {
     final ch = jsonEncode(channelName);

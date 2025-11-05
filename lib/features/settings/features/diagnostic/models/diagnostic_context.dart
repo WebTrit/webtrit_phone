@@ -8,7 +8,5 @@
 class DiagnosticScreenContext {
   final bool isLocalContactsFeatureEnabled;
 
-  DiagnosticScreenContext({
-    required this.isLocalContactsFeatureEnabled,
-  });
+  DiagnosticScreenContext({required this.isLocalContactsFeatureEnabled});
 }

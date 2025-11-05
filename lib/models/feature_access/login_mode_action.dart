@@ -10,10 +10,7 @@ sealed class LoginModeAction {
 }
 
 final class LoginDefaultModeAction extends LoginModeAction {
-  const LoginDefaultModeAction({
-    required this.titleL10n,
-    required this.flavor,
-  });
+  const LoginDefaultModeAction({required this.titleL10n, required this.flavor});
 
   @override
   final String titleL10n;
@@ -23,11 +20,7 @@ final class LoginDefaultModeAction extends LoginModeAction {
 }
 
 final class LoginEmbeddedModeButton extends LoginModeAction {
-  const LoginEmbeddedModeButton({
-    required this.titleL10n,
-    required this.flavor,
-    required this.customLoginFeature,
-  });
+  const LoginEmbeddedModeButton({required this.titleL10n, required this.flavor, required this.customLoginFeature});
 
   @override
   final String titleL10n;

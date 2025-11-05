@@ -34,7 +34,8 @@ void main() {
     test('add tenant path segments for not empty tenantId 2', () {
       final baseUrl = Uri.https(authority, '/path1/path2');
       final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, 'tid');
-      expect(tenantUrl.toString(), equals('https://$authority/path1/path2/tenant/tid'));
+      expect(tenantUrl.toString(),
+          equals('https://$authority/path1/path2/tenant/tid'));
     });
 
     test('do not update tenant path segments for empty tenantId 1', () {
@@ -46,7 +47,8 @@ void main() {
     test('do not update tenant path segments for empty tenantId 2', () {
       final baseUrl = Uri.https(authority, '/path1/path2/tenant/tid1');
       final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, '');
-      expect(tenantUrl.toString(), equals('https://$authority/path1/path2/tenant/tid1'));
+      expect(tenantUrl.toString(),
+          equals('https://$authority/path1/path2/tenant/tid1'));
     });
 
     test('update tenant path segments for not empty tenantId 1', () {
@@ -58,13 +60,16 @@ void main() {
     test('update tenant path segments for not empty tenantId 2', () {
       final baseUrl = Uri.https(authority, '/path1/path2/tenant/tid1');
       final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, 'tid2');
-      expect(tenantUrl.toString(), equals('https://$authority/path1/path2/tenant/tid2'));
+      expect(tenantUrl.toString(),
+          equals('https://$authority/path1/path2/tenant/tid2'));
     });
 
     test('update tenant path segments for not empty tenantId 3', () {
-      final baseUrl = Uri.https(authority, '/path1/tenant/tid1/path2/tenant/tid2');
+      final baseUrl =
+          Uri.https(authority, '/path1/tenant/tid1/path2/tenant/tid2');
       final tenantUrl = WebtritApiClient.buildTenantUrl(baseUrl, 'tid3');
-      expect(tenantUrl.toString(), equals('https://$authority/path1/tenant/tid1/path2/tenant/tid3'));
+      expect(tenantUrl.toString(),
+          equals('https://$authority/path1/tenant/tid1/path2/tenant/tid3'));
     });
   });
 
@@ -72,7 +77,8 @@ void main() {
     test('get info', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('get'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/system-info'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/system-info'));
         expect(request.headers['authorization'], isNull);
         return Response(
           jsonEncode({
@@ -91,7 +97,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.getSystemInfo(),
@@ -119,7 +126,8 @@ void main() {
     test('create user with otp provisional result', () {
       Future<Response> handler1(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(
+            request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -145,7 +153,8 @@ void main() {
 
       Future<Response> handler2(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(
+            request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -170,7 +179,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsyncSend([handler1, handler2]));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.createUser(SessionUserCredential(
@@ -206,7 +216,8 @@ void main() {
     test('create user with token result', () {
       Future<Response> handler1(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(
+            request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -231,7 +242,8 @@ void main() {
 
       Future<Response> handler2(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(
+            request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -255,7 +267,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsyncSend([handler1, handler2]));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.createUser(SessionUserCredential(
@@ -283,7 +296,8 @@ void main() {
     test('create user with data result', () {
       Future<Response> handler1(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(
+            request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -309,7 +323,8 @@ void main() {
 
       Future<Response> handler2(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(
+            request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -332,7 +347,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsyncSend([handler1, handler2]));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.createUser(SessionUserCredential(
@@ -370,7 +386,8 @@ void main() {
     test('otp request', () {
       Future<Response> handler1(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/session/otp-create'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/session/otp-create'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -396,7 +413,8 @@ void main() {
 
       Future<Response> handler2(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/session/otp-create'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/session/otp-create'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -421,7 +439,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsyncSend([handler1, handler2]));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.createSessionOtp(SessionOtpCredential(
@@ -457,7 +476,8 @@ void main() {
     test('otp verify', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/session/otp-verify'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/session/otp-verify'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -479,7 +499,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.verifySessionOtp(
@@ -493,7 +514,8 @@ void main() {
     test('login', () {
       Future<Response> handler1(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/session'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/session'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -517,7 +539,8 @@ void main() {
 
       Future<Response> handler2(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/session'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/session'));
         expect(request.headers['authorization'], isNull);
         expect(
           jsonDecode(request.body),
@@ -542,7 +565,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsyncSend([handler1, handler2]));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.createSession(SessionLoginCredential(
@@ -568,7 +592,8 @@ void main() {
     test('logout', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('delete'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/session'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/session'));
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           '',
@@ -578,7 +603,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.deleteSession(token),
@@ -591,7 +617,8 @@ void main() {
     test('get info', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('get'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(
+            request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           jsonEncode({
@@ -617,7 +644,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.getUserInfo(token),
@@ -649,7 +677,8 @@ void main() {
     test('get contacts', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('get'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user/contacts'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/user/contacts'));
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           jsonEncode({
@@ -685,7 +714,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.getUserContactList(token),
@@ -723,7 +753,8 @@ void main() {
     test('delete info', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('delete'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/user'));
+        expect(
+            request.url.toString(), equals('https://$authority/api/v1/user'));
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           '',
@@ -733,7 +764,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.deleteUserInfo(token),
@@ -746,7 +778,8 @@ void main() {
     test('get status', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('get'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/app/status'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/app/status'));
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           jsonEncode({
@@ -758,7 +791,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.getAppStatus(token),
@@ -773,7 +807,8 @@ void main() {
     test('update status', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('patch'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/app/status'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/app/status'));
         expect(request.headers['authorization'], endsWith(token));
         expect(
           jsonDecode(request.body),
@@ -789,7 +824,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.updateAppStatus(token, AppStatus(register: false)),
@@ -800,7 +836,8 @@ void main() {
     test('create contacts', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/app/contacts'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/app/contacts'));
         expect(request.headers['authorization'], endsWith(token));
         expect(
           jsonDecode(request.body),
@@ -830,7 +867,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.createAppContact(
@@ -858,7 +896,8 @@ void main() {
     test('get smart contacts', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('get'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/app/contacts/smart'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/app/contacts/smart'));
         expect(request.headers['authorization'], endsWith(token));
         return Response(
           jsonEncode([
@@ -881,7 +920,8 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
         apiClient.getAppSmartContactList(token),
@@ -907,7 +947,8 @@ void main() {
     test('create push token', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));
-        expect(request.url.toString(), equals('https://$authority/api/v1/app/push-tokens'));
+        expect(request.url.toString(),
+            equals('https://$authority/api/v1/app/push-tokens'));
         expect(request.headers['authorization'], endsWith(token));
         expect(
           jsonDecode(request.body),
@@ -924,18 +965,26 @@ void main() {
       }
 
       final httpClient = MockClient(expectAsync1(handler));
-      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '',
+          httpClient: httpClient);
 
       expect(
-        apiClient.createAppPushToken(token, AppPushToken(type: AppPushTokenType.fcm, value: 'push_token_value')),
+        apiClient.createAppPushToken(
+            token,
+            AppPushToken(
+                type: AppPushTokenType.fcm, value: 'push_token_value')),
         completion(anything),
       );
     });
   });
 }
 
-Func1<T, A> expectAsync1WithCallCounter<T, A>(T Function(A, int) callbackWithCounter,
-    {int count = 1, int max = 0, String? id, String? reason}) {
+Func1<T, A> expectAsync1WithCallCounter<T, A>(
+    T Function(A, int) callbackWithCounter,
+    {int count = 1,
+    int max = 0,
+    String? id,
+    String? reason}) {
   var callCounter = 0;
   T callback(A a) {
     callCounter++;

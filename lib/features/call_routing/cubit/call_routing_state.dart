@@ -1,12 +1,7 @@
 part of 'call_routing_cubit.dart';
 
 class CallRoutingState extends Equatable {
-  CallRoutingState._(
-    this.mainNumber,
-    this.additionalNumbers,
-    this.mainLinesState,
-    this.guestLineState,
-  );
+  CallRoutingState._(this.mainNumber, this.additionalNumbers, this.mainLinesState, this.guestLineState);
 
   /// The main number of the user. From which the user makees calls regularly.
   final String mainNumber;

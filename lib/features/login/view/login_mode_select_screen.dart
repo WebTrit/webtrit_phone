@@ -14,12 +14,7 @@ export 'login_mode_select_screen_style.dart';
 export 'login_mode_select_screen_styles.dart';
 
 class LoginModeSelectScreen extends StatelessWidget {
-  const LoginModeSelectScreen({
-    super.key,
-    this.appGreetingL10n,
-    this.style,
-    required this.launchButtons,
-  });
+  const LoginModeSelectScreen({super.key, this.appGreetingL10n, this.style, required this.launchButtons});
 
   final String? appGreetingL10n;
 
@@ -62,9 +57,7 @@ class LoginModeSelectScreen extends StatelessWidget {
           ),
           body: Container(
             padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
-            decoration: BoxDecoration(
-              gradient: gradients?.tab,
-            ),
+            decoration: BoxDecoration(gradient: gradients?.tab),
             child: SafeArea(
               top: false,
               child: Column(
@@ -84,7 +77,8 @@ class LoginModeSelectScreen extends StatelessWidget {
                     // - If the app is processing:
                     //   - For non-embedded buttons: show loading only when no embedded switch is active
                     //   - For embedded buttons: show loading only if the active embedded config matches this button
-                    final processing = shouldProcess &&
+                    final processing =
+                        shouldProcess &&
                         switch (button) {
                           LoginEmbeddedModeButton(:final customLoginFeature) => state.embedded == customLoginFeature,
                           _ => state.embedded == null,
@@ -93,8 +87,9 @@ class LoginModeSelectScreen extends StatelessWidget {
                     // Use a stable key for integration tests:
                     // - assign the dedicated test key for the sign-up flavor
                     // - otherwise generate a unique ValueKey from the button
-                    final buttonKey =
-                        button.flavor == LoginFlavor.login ? loginModeScreenSignUpButtonKey : ValueKey(button.hashCode);
+                    final buttonKey = button.flavor == LoginFlavor.login
+                        ? loginModeScreenSignUpButtonKey
+                        : ValueKey(button.hashCode);
 
                     return LoginModeActionButton(
                       key: buttonKey,
@@ -104,7 +99,7 @@ class LoginModeSelectScreen extends StatelessWidget {
                       style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
                       title: context.parseL10n(button.titleL10n),
                     );
-                  })
+                  }),
                 ],
               ),
             ),

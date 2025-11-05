@@ -23,10 +23,7 @@ final _log = Logger('RouterLogoutSessionGuard');
 ///   when the session becomes invalid.
 class RouterLogoutSessionGuard implements SessionGuard, Disposable {
   /// Creates a new [RouterLogoutSessionGuard] instance.
-  RouterLogoutSessionGuard({
-    required this.performLogout,
-    this.onPreLogout,
-  });
+  RouterLogoutSessionGuard({required this.performLogout, this.onPreLogout});
 
   /// Function that performs the actual logout (e.g. dispatching a logout event).
   final AsyncVoidCallback performLogout;

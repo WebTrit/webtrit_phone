@@ -22,7 +22,7 @@ class RawHttpRequest with _$RawHttpRequest {
 
   @override
   final Map<String, String>? headers;
-  
+
   @override
   final Map<String, dynamic>? data;
 

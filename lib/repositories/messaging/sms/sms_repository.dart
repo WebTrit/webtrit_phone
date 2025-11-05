@@ -60,8 +60,12 @@ class SmsRepository with SmsDriftMapper {
     return messageData != null ? messageFromDrift(messageData) : null;
   }
 
-  Future<List<SmsMessage>> getMessageHistory(int conversationId,
-      {DateTime? from, DateTime? to, int limit = 100}) async {
+  Future<List<SmsMessage>> getMessageHistory(
+    int conversationId, {
+    DateTime? from,
+    DateTime? to,
+    int limit = 100,
+  }) async {
     final messagesData = await _smsDao.getMessageHistory(conversationId, from: from, to: to, limit: limit);
     return messagesData.map(messageFromDrift).toList();
   }

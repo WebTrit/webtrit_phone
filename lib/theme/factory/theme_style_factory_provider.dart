@@ -62,20 +62,29 @@ class ThemeStyleFactoryProvider {
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
 
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect, colorScheme);
-    final leadingAvatarStyleFactory =
-        LeadingAvatarStyleFactory(colorScheme, widgetConfig.imageAssets.leadingAvatarStyle);
+    final leadingAvatarStyleFactory = LeadingAvatarStyleFactory(
+      colorScheme,
+      widgetConfig.imageAssets.leadingAvatarStyle,
+    );
     final keypadStyleFactory = KeypadStyleFactory(colorScheme, config: null, textTheme: createTextTheme());
     final embeddedRequestErrorDialogFactory = EmbeddedRequestErrorDialogFactory(imageAssetsConfig);
 
     // Screen-specific styles
     final aboutScreenStyleFactory = AboutScreenStyleFactory(pageConfig.about);
     final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, callActions);
-    final keypadScreenStyleFactory =
-        KeypadScreenStyleFactory(colorScheme, config: pageConfig.keypad, textTheme: createTextTheme());
-    final loginOtpSigninVerifyScreenStyleFactory =
-        LoginOtpSigninVerifyScreenStyleFactory(colorScheme, loginPageScheme.otpSigninVerify);
-    final loginSignupVerifyScreenStyleFactory =
-        LoginSignupVerifyScreenStyleFactory(colorScheme, loginPageScheme.signupVerify);
+    final keypadScreenStyleFactory = KeypadScreenStyleFactory(
+      colorScheme,
+      config: pageConfig.keypad,
+      textTheme: createTextTheme(),
+    );
+    final loginOtpSigninVerifyScreenStyleFactory = LoginOtpSigninVerifyScreenStyleFactory(
+      colorScheme,
+      loginPageScheme.otpSigninVerify,
+    );
+    final loginSignupVerifyScreenStyleFactory = LoginSignupVerifyScreenStyleFactory(
+      colorScheme,
+      loginPageScheme.signupVerify,
+    );
     final loginSwitchScreenStyleFactory = LoginSwitchScreenStyleFactory(loginPageScheme.switchPage, colorScheme);
 
     return <ThemeExtension?>[
@@ -106,7 +115,7 @@ class ThemeStyleFactoryProvider {
       callScreenStyleFactory.create(),
       loginOtpSigninVerifyScreenStyleFactory.create(),
       loginSignupVerifyScreenStyleFactory.create(),
-      loginSwitchScreenStyleFactory.create()
+      loginSwitchScreenStyleFactory.create(),
     ].nonNulls.toList();
   }
 

@@ -18,9 +18,7 @@ import '../permissions.dart';
 import '../widgets/widgets.dart';
 
 class PermissionsScreen extends StatelessWidget {
-  const PermissionsScreen({
-    super.key,
-  });
+  const PermissionsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +45,7 @@ class PermissionsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: kInset * 2),
-                const AppIcon(
-                  Icons.settings_suggest,
-                  size: kInset * 6,
-                ),
+                const AppIcon(Icons.settings_suggest, size: kInset * 6),
                 const SizedBox(height: kInset * 2),
                 Text(
                   context.l10n.permission_Text_description,
@@ -83,15 +78,8 @@ class PermissionsScreen extends StatelessWidget {
             builder: (context, viewportConstraints) {
               return SingleChildScrollView(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: viewportConstraints.maxHeight,
-                  ),
-                  child: IntrinsicHeight(
-                    child: InertSafeArea(
-                      bottom: true,
-                      child: body,
-                    ),
-                  ),
+                  constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+                  child: IntrinsicHeight(child: InertSafeArea(bottom: true, child: body)),
                 ),
               );
             },

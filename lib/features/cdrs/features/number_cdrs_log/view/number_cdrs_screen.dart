@@ -14,11 +14,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../widgets/number_cdr_tile.dart';
 
 class NumberCdrsScreen extends StatefulWidget {
-  const NumberCdrsScreen({
-    required this.title,
-    required this.videoVisible,
-    super.key,
-  });
+  const NumberCdrsScreen({required this.title, required this.videoVisible, super.key});
 
   final Widget title;
   final bool videoVisible;
@@ -121,73 +117,62 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
               child: Padding(
                 padding: EdgeInsets.only(top: topPadding),
                 child: ContactInfoBuilder(
-                    key: headerKey,
-                    source: ContactSourcePhone(number),
-                    builder: (context, contact) {
-                      final number = cubit.number;
-                      final title = contact?.displayTitle ?? number;
-                      final email = contact?.emails.firstOrNull?.address;
+                  key: headerKey,
+                  source: ContactSourcePhone(number),
+                  builder: (context, contact) {
+                    final number = cubit.number;
+                    final title = contact?.displayTitle ?? number;
+                    final email = contact?.emails.firstOrNull?.address;
 
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: kAllPadding16,
-                            alignment: Alignment.center,
-                            child: LeadingAvatar(
-                              username: title,
-                              thumbnail: contact?.thumbnail,
-                              thumbnailUrl: gravatarThumbnailUrl(email),
-                              registered: contact?.registered,
-                              radius: 50,
-                            ),
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: kAllPadding16,
+                          alignment: Alignment.center,
+                          child: LeadingAvatar(
+                            username: title,
+                            thumbnail: contact?.thumbnail,
+                            thumbnailUrl: gravatarThumbnailUrl(email),
+                            registered: contact?.registered,
+                            radius: 50,
                           ),
-                          CopyToClipboard(
-                            data: number,
-                            child: Text(
-                              number,
-                              style: theme.textTheme.labelLarge?.copyWith(
-                                color: theme.colorScheme.outlineVariant,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Text(
-                            title,
-                            style: theme.textTheme.headlineMedium,
+                        ),
+                        CopyToClipboard(
+                          data: number,
+                          child: Text(
+                            number,
+                            style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.outlineVariant),
                             textAlign: TextAlign.center,
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                        ),
+                        Text(title, style: theme.textTheme.headlineMedium, textAlign: TextAlign.center),
+                        const SizedBox(height: 8),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            OutlinedButton(
+                              style: outlinedButtonStyles?.neutral,
+                              child: const AppIcon(Icons.call),
+                              onPressed: () => _initiateCall(context, number, contact?.maybeName, false),
+                            ),
+                            if (widget.videoVisible) ...[
+                              const SizedBox(width: 16),
                               OutlinedButton(
                                 style: outlinedButtonStyles?.neutral,
-                                child: const AppIcon(Icons.call),
-                                onPressed: () => _initiateCall(context, number, contact?.maybeName, false),
+                                child: const AppIcon(Icons.videocam),
+                                onPressed: () => _initiateCall(context, number, contact?.maybeName, true),
                               ),
-                              if (widget.videoVisible) ...[
-                                const SizedBox(
-                                  width: 16,
-                                ),
-                                OutlinedButton(
-                                  style: outlinedButtonStyles?.neutral,
-                                  child: const AppIcon(Icons.videocam),
-                                  onPressed: () => _initiateCall(context, number, contact?.maybeName, true),
-                                ),
-                              ]
                             ],
-                          ),
-                          const Divider(
-                            height: 16,
-                          ),
-                        ],
-                      );
-                    }),
+                          ],
+                        ),
+                        const Divider(height: 16),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),

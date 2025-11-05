@@ -7,11 +7,7 @@ class SmsMessageSyncCursor extends Equatable {
   final SmsSyncCursorType cursorType;
   final DateTime time;
 
-  const SmsMessageSyncCursor({
-    required this.conversationId,
-    required this.cursorType,
-    required this.time,
-  });
+  const SmsMessageSyncCursor({required this.conversationId, required this.cursorType, required this.time});
 
   @override
   List<Object?> get props => [conversationId, cursorType, time];

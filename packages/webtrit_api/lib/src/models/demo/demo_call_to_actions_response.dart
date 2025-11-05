@@ -14,7 +14,8 @@ class DemoCallToActionsResponse with _$DemoCallToActionsResponse {
   @override
   final List<DemoCallToActionsResponseActions> actions;
 
-  factory DemoCallToActionsResponse.fromJson(Map<String, dynamic> json) => _$DemoCallToActionsResponseFromJson(json);
+  factory DemoCallToActionsResponse.fromJson(Map<String, dynamic> json) =>
+      _$DemoCallToActionsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$DemoCallToActionsResponseToJson(this);
 }
@@ -42,15 +43,18 @@ class DemoCallToActionsResponseActions with _$DemoCallToActionsResponseActions {
   @JsonKey(name: 'extra_data')
   final DemoCallToActionsResponseActionsExtraData extraData;
 
-  factory DemoCallToActionsResponseActions.fromJson(Map<String, dynamic> json) =>
+  factory DemoCallToActionsResponseActions.fromJson(
+          Map<String, dynamic> json) =>
       _$DemoCallToActionsResponseActionsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DemoCallToActionsResponseActionsToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$DemoCallToActionsResponseActionsToJson(this);
 }
 
 @freezed
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
-class DemoCallToActionsResponseActionsExtraData with _$DemoCallToActionsResponseActionsExtraData {
+class DemoCallToActionsResponseActionsExtraData
+    with _$DemoCallToActionsResponseActionsExtraData {
   const DemoCallToActionsResponseActionsExtraData({
     @JsonKey(name: 'api_token') required this.apiToken,
     @JsonKey(name: 'token_expires') required this.tokenExpires,
@@ -64,8 +68,10 @@ class DemoCallToActionsResponseActionsExtraData with _$DemoCallToActionsResponse
   @JsonKey(name: 'token_expires')
   final String tokenExpires;
 
-  factory DemoCallToActionsResponseActionsExtraData.fromJson(Map<String, dynamic> json) =>
+  factory DemoCallToActionsResponseActionsExtraData.fromJson(
+          Map<String, dynamic> json) =>
       _$DemoCallToActionsResponseActionsExtraDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DemoCallToActionsResponseActionsExtraDataToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$DemoCallToActionsResponseActionsExtraDataToJson(this);
 }

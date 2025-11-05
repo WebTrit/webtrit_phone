@@ -3,11 +3,9 @@ import 'dart:async';
 import 'package:webtrit_api/webtrit_api.dart';
 
 class AppRepository {
-  AppRepository({
-    required WebtritApiClient webtritApiClient,
-    required String token,
-  })  : _webtritApiClient = webtritApiClient,
-        _token = token;
+  AppRepository({required WebtritApiClient webtritApiClient, required String token})
+    : _webtritApiClient = webtritApiClient,
+      _token = token;
 
   final WebtritApiClient _webtritApiClient;
   final String _token;

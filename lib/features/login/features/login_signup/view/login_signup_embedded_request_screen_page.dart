@@ -26,9 +26,7 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO(Serdun): Implement directly in LoginEmbedded
-    final resource = ResourceLoader.fromUri(
-      embeddedData.uri.toString(),
-    );
+    final resource = ResourceLoader.fromUri(embeddedData.uri.toString());
 
     final locale = Localizations.localeOf(context);
 
@@ -36,13 +34,9 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
       future: resource.loadContent(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Failed to load content: ${snapshot.error}'),
-          );
+          return Center(child: Text('Failed to load content: ${snapshot.error}'));
         } else if (snapshot.hasData) {
           final content = snapshot.data!;
           return resource is NetworkResourceLoader
@@ -54,20 +48,14 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
                   connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 )
               : LoginSignupEmbeddedRequestScreen(
-                  initialUrl: Uri.dataFromString(
-                    content,
-                    mimeType: 'text/html',
-                    encoding: Encoding.getByName('utf-8'),
-                  ),
+                  initialUrl: Uri.dataFromString(content, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')),
                   mediaQueryMetricsData: context.mediaQueryMetrics,
                   deviceInfoData: context.read<AppLabelsProvider>().build(),
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
                   connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 );
         } else {
-          return const Center(
-            child: Text('Unexpected error occurred.'),
-          );
+          return const Center(child: Text('Unexpected error occurred.'));
         }
       },
     );
@@ -75,11 +63,9 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
 
   PageInjectionStrategyBuilder _createInjectionStrategy(Locale locale) {
     return () => DefaultPayloadInjectionStrategy(
-          functionName: 'initializePage',
-          initialPayload: {
-            'locale': locale.languageCode,
-          },
-        );
+      functionName: 'initializePage',
+      initialPayload: {'locale': locale.languageCode},
+    );
   }
 
   ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {
@@ -87,9 +73,8 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
       initialUri: data.uri,
       type: data.reconnectStrategy,
       connectivityStream: Connectivity().onConnectivityChanged,
-      connectivityCheckerBuilder: () => const DefaultConnectivityChecker(
-        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
-      ),
+      connectivityCheckerBuilder: () =>
+          const DefaultConnectivityChecker(connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL),
     );
   }
 }

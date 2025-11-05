@@ -1,4 +1,1 @@
-enum UndefinedType {
-  deeplinkConfigurationInvalid,
-  stackScreenNotSupported,
-}
+enum UndefinedType { deeplinkConfigurationInvalid, stackScreenNotSupported }

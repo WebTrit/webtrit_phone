@@ -164,11 +164,7 @@ class _GroupInfoState extends State<GroupInfo> {
                       GroupAvatar(name: name, size: 50),
                       SizedBox(
                         width: double.infinity,
-                        child: Text(
-                          'id: ${chat.id}',
-                          style: const TextStyle(fontSize: 12),
-                          textAlign: TextAlign.right,
-                        ),
+                        child: Text('id: ${chat.id}', style: const TextStyle(fontSize: 12), textAlign: TextAlign.right),
                       ),
                       const SizedBox(height: 24),
                       nameField(chat, canChangeName),
@@ -177,10 +173,7 @@ class _GroupInfoState extends State<GroupInfo> {
                         width: double.infinity,
                         child: Text(
                           context.l10n.messaging_GroupInfo_groupMembersHeadline,
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontSize: 18,
-                            color: theme.primaryColor,
-                          ),
+                          style: theme.textTheme.headlineSmall?.copyWith(fontSize: 18, color: theme.primaryColor),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -276,62 +269,63 @@ class _GroupInfoState extends State<GroupInfo> {
       final canRemoveModerator = amIOwner && isModerator;
 
       return ContactInfoBuilder(
-          source: ContactSourceId(ContactSourceType.external, member.userId),
-          builder: (context, contact) {
-            return ListTile(
-              key: ValueKey(member),
-              minTileHeight: 0,
-              contentPadding: EdgeInsets.zero,
-              leading: LeadingAvatar(
-                username: contact?.displayTitle,
-                thumbnail: contact?.thumbnail,
-                thumbnailUrl: contact?.thumbnailUrl,
-                registered: contact?.registered,
-                radius: 20,
-              ),
-              title: ParticipantName(senderId: member.userId, userId: widget.userId),
-              subtitle: Text(
-                member.groupAuthorities?.nameL10n(context) ?? context.l10n.messaging_GroupAuthorities_noauthorities,
-                style: const TextStyle(fontSize: 12),
-              ),
-              trailing: ((canMakeModerator || canRemoveModerator || canRemove) && !isMe)
-                  ? SizedBox(
-                      width: 20,
-                      child: PopupMenuButton(
-                        itemBuilder: (_) => [
-                          if (canMakeModerator)
-                            PopupMenuItem(
-                              onTap: () => onSetModerator(member.userId, true),
-                              child: ListTile(
-                                title: Text(context.l10n.messaging_GroupInfo_makeModeratorBtnText),
-                                leading: const Icon(Icons.add_moderator_outlined),
-                                dense: true,
-                              ),
+        source: ContactSourceId(ContactSourceType.external, member.userId),
+        builder: (context, contact) {
+          return ListTile(
+            key: ValueKey(member),
+            minTileHeight: 0,
+            contentPadding: EdgeInsets.zero,
+            leading: LeadingAvatar(
+              username: contact?.displayTitle,
+              thumbnail: contact?.thumbnail,
+              thumbnailUrl: contact?.thumbnailUrl,
+              registered: contact?.registered,
+              radius: 20,
+            ),
+            title: ParticipantName(senderId: member.userId, userId: widget.userId),
+            subtitle: Text(
+              member.groupAuthorities?.nameL10n(context) ?? context.l10n.messaging_GroupAuthorities_noauthorities,
+              style: const TextStyle(fontSize: 12),
+            ),
+            trailing: ((canMakeModerator || canRemoveModerator || canRemove) && !isMe)
+                ? SizedBox(
+                    width: 20,
+                    child: PopupMenuButton(
+                      itemBuilder: (_) => [
+                        if (canMakeModerator)
+                          PopupMenuItem(
+                            onTap: () => onSetModerator(member.userId, true),
+                            child: ListTile(
+                              title: Text(context.l10n.messaging_GroupInfo_makeModeratorBtnText),
+                              leading: const Icon(Icons.add_moderator_outlined),
+                              dense: true,
                             ),
-                          if (canRemoveModerator)
-                            PopupMenuItem(
-                              onTap: () => onSetModerator(member.userId, false),
-                              child: ListTile(
-                                title: Text(context.l10n.messaging_GroupInfo_unmakeModeratorBtnText),
-                                leading: const Icon(Icons.remove_moderator_outlined),
-                                dense: true,
-                              ),
+                          ),
+                        if (canRemoveModerator)
+                          PopupMenuItem(
+                            onTap: () => onSetModerator(member.userId, false),
+                            child: ListTile(
+                              title: Text(context.l10n.messaging_GroupInfo_unmakeModeratorBtnText),
+                              leading: const Icon(Icons.remove_moderator_outlined),
+                              dense: true,
                             ),
-                          if (canRemove)
-                            PopupMenuItem(
-                              onTap: () => onRemoveUser(member.userId),
-                              child: ListTile(
-                                title: Text(context.l10n.messaging_GroupInfo_removeUserBtnText),
-                                leading: const Icon(Icons.person_remove_alt_1_outlined),
-                                dense: true,
-                              ),
+                          ),
+                        if (canRemove)
+                          PopupMenuItem(
+                            onTap: () => onRemoveUser(member.userId),
+                            child: ListTile(
+                              title: Text(context.l10n.messaging_GroupInfo_removeUserBtnText),
+                              leading: const Icon(Icons.person_remove_alt_1_outlined),
+                              dense: true,
                             ),
-                        ],
-                      ),
-                    )
-                  : null,
-            );
-          });
+                          ),
+                      ],
+                    ),
+                  )
+                : null,
+          );
+        },
+      );
     }).toList();
   }
 }

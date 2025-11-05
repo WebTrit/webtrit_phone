@@ -13,8 +13,9 @@ mixin PresenceInfoDriftMapper {
       device: data.device,
       timeOffsetMin: data.timeOffsetMin,
       timestamp: data.timestampUsec != null ? DateTime.fromMicrosecondsSinceEpoch(data.timestampUsec!) : null,
-      activities:
-          (jsonDecode(data.activitiesJson) as List<dynamic>).map((e) => PresenceActivity.values.byName(e)).toList(),
+      activities: (jsonDecode(data.activitiesJson) as List<dynamic>)
+          .map((e) => PresenceActivity.values.byName(e))
+          .toList(),
     );
   }
 

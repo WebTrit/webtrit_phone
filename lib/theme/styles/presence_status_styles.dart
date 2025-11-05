@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'presence_status_style.dart';
 
 class PresenceStatusStyles extends ThemeExtension<PresenceStatusStyles> {
-  const PresenceStatusStyles({
-    required this.primary,
-  });
+  const PresenceStatusStyles({required this.primary});
 
   final PresenceStatusStyle primary;
 
   @override
-  ThemeExtension<PresenceStatusStyles> copyWith({
-    PresenceStatusStyle? primary,
-  }) {
-    return PresenceStatusStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<PresenceStatusStyles> copyWith({PresenceStatusStyle? primary}) {
+    return PresenceStatusStyles(primary: primary ?? this.primary);
   }
 
   @override

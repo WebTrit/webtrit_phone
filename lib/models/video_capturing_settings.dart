@@ -9,17 +9,11 @@ class VideoCapturingSettings extends Equatable {
   factory VideoCapturingSettings.blank() => const VideoCapturingSettings();
 
   VideoCapturingSettings copyWithResolution(Resolution? resolution) {
-    return VideoCapturingSettings(
-      resolution: resolution,
-      framerate: framerate,
-    );
+    return VideoCapturingSettings(resolution: resolution, framerate: framerate);
   }
 
   VideoCapturingSettings copyWithFramerate(Framerate? framerate) {
-    return VideoCapturingSettings(
-      resolution: resolution,
-      framerate: framerate,
-    );
+    return VideoCapturingSettings(resolution: resolution, framerate: framerate);
   }
 
   @override

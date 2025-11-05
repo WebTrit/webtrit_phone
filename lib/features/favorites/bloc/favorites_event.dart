@@ -12,40 +12,34 @@ class FavoritesStarted extends FavoritesEvent {
 }
 
 class FavoritesAddedByContactPhoneId extends FavoritesEvent {
-  const FavoritesAddedByContactPhoneId({
-    required this.contactPhoneId,
-  });
+  const FavoritesAddedByContactPhoneId({required this.contactPhoneId});
 
   final int contactPhoneId;
 
   @override
   List<Object> get props => [
-        EquatablePropToString([contactPhoneId], listPropToString),
-      ];
+    EquatablePropToString([contactPhoneId], listPropToString),
+  ];
 }
 
 class FavoritesRemovedByContactPhoneId extends FavoritesEvent {
-  const FavoritesRemovedByContactPhoneId({
-    required this.contactPhoneId,
-  });
+  const FavoritesRemovedByContactPhoneId({required this.contactPhoneId});
 
   final int contactPhoneId;
 
   @override
   List<Object> get props => [
-        EquatablePropToString([contactPhoneId], listPropToString),
-      ];
+    EquatablePropToString([contactPhoneId], listPropToString),
+  ];
 }
 
 class FavoritesRemoved extends FavoritesEvent {
-  const FavoritesRemoved({
-    required this.favorite,
-  });
+  const FavoritesRemoved({required this.favorite});
 
   final Favorite favorite;
 
   @override
   List<Object> get props => [
-        EquatablePropToString([favorite], listPropToString),
-      ];
+    EquatablePropToString([favorite], listPropToString),
+  ];
 }

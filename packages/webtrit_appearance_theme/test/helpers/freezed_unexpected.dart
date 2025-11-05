@@ -1,10 +1,13 @@
 import 'package:test/test.dart';
 
-Never unexpectedFavorites(bool a, bool b, String c, String d) => throw TestFailure('Unexpected favorites variant hit');
+Never unexpectedFavorites(bool a, bool b, String c, String d) =>
+    throw TestFailure('Unexpected favorites variant hit');
 
-Never unexpectedKeypad(bool a, bool b, String c, String d) => throw TestFailure('Unexpected keypad variant hit');
+Never unexpectedKeypad(bool a, bool b, String c, String d) =>
+    throw TestFailure('Unexpected keypad variant hit');
 
-Never unexpectedMessaging(bool a, bool b, String c, String d) => throw TestFailure('Unexpected messaging variant hit');
+Never unexpectedMessaging(bool a, bool b, String c, String d) =>
+    throw TestFailure('Unexpected messaging variant hit');
 
 Never unexpectedRecents(bool a, bool b, String c, String d, bool e) =>
     throw TestFailure('Unexpected recents variant hit');

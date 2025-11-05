@@ -29,9 +29,8 @@ class FavoritesScreenPage extends StatelessWidget {
       cdrsEnabled: cdrsEnabled ?? false,
     );
     final provider = BlocProvider(
-      create: (context) => FavoritesBloc(
-        favoritesRepository: context.read<FavoritesRepository>(),
-      )..add(const FavoritesStarted()),
+      create: (context) =>
+          FavoritesBloc(favoritesRepository: context.read<FavoritesRepository>())..add(const FavoritesStarted()),
       child: widget,
     );
     return provider;

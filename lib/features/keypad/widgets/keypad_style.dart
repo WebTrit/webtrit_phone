@@ -3,22 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/widgets/keypad_key_style.dart';
 
 class KeypadStyle with Diagnosticable {
-  const KeypadStyle({
-    this.buttonStyle,
-    this.keyStyle,
-  });
+  const KeypadStyle({this.buttonStyle, this.keyStyle});
 
   final ButtonStyle? buttonStyle;
   final KeypadKeyStyle? keyStyle;
 
-  KeypadStyle copyWith({
-    ButtonStyle? buttonStyle,
-    KeypadKeyStyle? keyStyle,
-  }) {
-    return KeypadStyle(
-      buttonStyle: buttonStyle ?? this.buttonStyle,
-      keyStyle: keyStyle ?? this.keyStyle,
-    );
+  KeypadStyle copyWith({ButtonStyle? buttonStyle, KeypadKeyStyle? keyStyle}) {
+    return KeypadStyle(buttonStyle: buttonStyle ?? this.buttonStyle, keyStyle: keyStyle ?? this.keyStyle);
   }
 
   static KeypadStyle merge(KeypadStyle? a, KeypadStyle? b) {

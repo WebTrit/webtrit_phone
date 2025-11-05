@@ -52,17 +52,15 @@ class ChatsSyncWorker {
   Future init() async {
     _logger.fine('Initialising...');
     _closeSubs();
-    _conversationsSyncSub = _conversationsSyncStream().listen(
-      (e) {
-        if (e is (Object, StackTrace)) {
-          final (error, stackTrace) = e;
-          _logger.warning('conversations sync error:', error, stackTrace);
-          onError(error);
-        } else {
-          _logger.fine('conversations sync event: $e');
-        }
-      },
-    );
+    _conversationsSyncSub = _conversationsSyncStream().listen((e) {
+      if (e is (Object, StackTrace)) {
+        final (error, stackTrace) = e;
+        _logger.warning('conversations sync error:', error, stackTrace);
+        onError(error);
+      } else {
+        _logger.fine('conversations sync event: $e');
+      }
+    });
   }
 
   Future dispose() async {
@@ -85,17 +83,15 @@ class ChatsSyncWorker {
 
     _conversationSyncSubs.putIfAbsent(
       id,
-      () => _conversationSyncStream(id, channel!).listen(
-        (e) {
-          if (e is (Object, StackTrace)) {
-            final (error, stackTrace) = e;
-            _logger.warning('conversation sync error: $id', error, stackTrace);
-            onError(error);
-          } else {
-            _logger.fine('conversation sync event: $id $e');
-          }
-        },
-      ),
+      () => _conversationSyncStream(id, channel!).listen((e) {
+        if (e is (Object, StackTrace)) {
+          final (error, stackTrace) = e;
+          _logger.warning('conversation sync error: $id', error, stackTrace);
+          onError(error);
+        } else {
+          _logger.fine('conversation sync event: $id $e');
+        }
+      }),
     );
   }
 
@@ -189,16 +185,20 @@ class ChatsSyncWorker {
 
             // set initial cursors
             // Pay attention, the history is fetched in reverse order
-            await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
-              chatId: id,
-              cursorType: MessageSyncCursorType.oldest,
-              time: messages.last.createdAt,
-            ));
-            await chatsRepository.upsertChatMessageSyncCursor(ChatMessageSyncCursor(
-              chatId: id,
-              cursorType: MessageSyncCursorType.newest,
-              time: messages.first.updatedAt,
-            ));
+            await chatsRepository.upsertChatMessageSyncCursor(
+              ChatMessageSyncCursor(
+                chatId: id,
+                cursorType: MessageSyncCursorType.oldest,
+                time: messages.last.createdAt,
+              ),
+            );
+            await chatsRepository.upsertChatMessageSyncCursor(
+              ChatMessageSyncCursor(
+                chatId: id,
+                cursorType: MessageSyncCursorType.newest,
+                time: messages.first.updatedAt,
+              ),
+            );
           }
         }
 

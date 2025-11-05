@@ -28,9 +28,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (passwordSigninPreDescriptionText.isNotEmpty) ...[
-                  Description(
-                    text: passwordSigninPreDescriptionText,
-                  ),
+                  Description(text: passwordSigninPreDescriptionText),
                   const SizedBox(height: kInset / 2),
                 ],
                 TextFormField(
@@ -44,10 +42,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
                     errorMaxLines: 3,
                   ),
                   keyboardType: TextInputType.emailAddress,
-                  autofillHints: const [
-                    AutofillHints.email,
-                    AutofillHints.telephoneNumber,
-                  ],
+                  autofillHints: const [AutofillHints.email, AutofillHints.telephoneNumber],
                   onChanged: context.read<LoginCubit>().passwordSigninUserRefInputChanged,
                   onFieldSubmitted: !state.passwordSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
                 ),
@@ -78,15 +73,14 @@ class LoginPasswordSigninScreen extends StatelessWidget {
                 ),
                 if (passwordSigninPostDescriptionText.isNotEmpty) ...[
                   const SizedBox(height: kInset / 8),
-                  Description(
-                    text: passwordSigninPostDescriptionText,
-                  ),
+                  Description(text: passwordSigninPostDescriptionText),
                 ],
                 const Spacer(),
                 const SizedBox(height: kInset),
                 ElevatedButton(
                   key: passwordButtonKey,
-                  onPressed: state.processing ||
+                  onPressed:
+                      state.processing ||
                           !state.passwordSigninUserRefInput.isValid ||
                           !state.passwordSigninPasswordInput.isValid
                       ? null
@@ -99,7 +93,7 @@ class LoginPasswordSigninScreen extends StatelessWidget {
                           strokeWidth: 2,
                           color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
                         ),
-                )
+                ),
               ],
             ),
           ),

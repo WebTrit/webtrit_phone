@@ -2,9 +2,11 @@ library;
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'package:ssl_certificates/ssl_certificates.dart' show TrustedCertificates;
+import 'package:ssl_certificates/ssl_certificates.dart'
+    show TrustedCertificates;
 
-export 'package:ssl_certificates/ssl_certificates.dart' show TrustedCertificates;
+export 'package:ssl_certificates/ssl_certificates.dart'
+    show TrustedCertificates;
 
 import 'src/_web_socket_channel_stub.dart'
     if (dart.library.html) 'src/_web_socket_channel_html.dart'

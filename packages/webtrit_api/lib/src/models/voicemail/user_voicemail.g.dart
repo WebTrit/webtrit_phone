@@ -38,18 +38,20 @@ Map<String, dynamic> _$UserVoicemailToJson(UserVoicemail instance) =>
 
 UserVoicemailAttachment _$UserVoicemailAttachmentFromJson(
   Map<String, dynamic> json,
-) => UserVoicemailAttachment(
-  filename: json['filename'] as String,
-  size: (json['size'] as num).toInt(),
-  type: json['type'] as String,
-  subtype: json['subtype'] as String,
-);
+) =>
+    UserVoicemailAttachment(
+      filename: json['filename'] as String,
+      size: (json['size'] as num).toInt(),
+      type: json['type'] as String,
+      subtype: json['subtype'] as String,
+    );
 
 Map<String, dynamic> _$UserVoicemailAttachmentToJson(
   UserVoicemailAttachment instance,
-) => <String, dynamic>{
-  'filename': instance.filename,
-  'size': instance.size,
-  'type': instance.type,
-  'subtype': instance.subtype,
-};
+) =>
+    <String, dynamic>{
+      'filename': instance.filename,
+      'size': instance.size,
+      'type': instance.type,
+      'subtype': instance.subtype,
+    };

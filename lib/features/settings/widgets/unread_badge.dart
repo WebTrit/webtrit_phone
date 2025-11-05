@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UnreadBadge extends StatelessWidget {
-  const UnreadBadge({
-    super.key,
-    required this.count,
-  });
+  const UnreadBadge({super.key, required this.count});
 
   final int count;
 
@@ -22,10 +19,7 @@ class UnreadBadge extends StatelessWidget {
       radius: 16,
       child: Text(
         count.toString(),
-        style: textTheme.labelMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: colorScheme.onPrimary,
-        ),
+        style: textTheme.labelMedium?.copyWith(fontWeight: FontWeight.bold, color: colorScheme.onPrimary),
       ),
     );
   }

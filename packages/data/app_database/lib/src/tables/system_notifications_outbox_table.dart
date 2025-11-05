@@ -14,7 +14,8 @@ class SystemNotificationsOutboxTable extends Table {
   @override
   Set<Column> get primaryKey => {notificationId, actionType};
 
-  IntColumn get notificationId => integer().references(SystemNotificationsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get notificationId => integer()
+      .references(SystemNotificationsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get actionType => textEnum<SnOutboxDataActionType>()();
 

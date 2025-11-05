@@ -10,13 +10,7 @@ class HistoryFetchIndicator extends StatelessWidget {
     if (fetchingHistory) {
       return const Padding(
         padding: EdgeInsets.all(8.0),
-        child: Center(
-          child: SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(),
-          ),
-        ),
+        child: Center(child: SizedBox(width: 16, height: 16, child: CircularProgressIndicator())),
       );
     }
 

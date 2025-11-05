@@ -6,7 +6,8 @@ void main() {
   group('phone parser', () {
     test('normalize', () {
       expect(PhoneParser.normalize('(67) 123 45 67'), equals('671234567'));
-      expect(PhoneParser.normalize('+380 (67) 123 45 67'), equals('+380671234567'));
+      expect(PhoneParser.normalize('+380 (67) 123 45 67'),
+          equals('+380671234567'));
       expect(PhoneParser.normalize('123 45 67'), equals('1234567'));
       expect(PhoneParser.normalize('67 123-45-67'), equals('671234567'));
       expect(PhoneParser.normalize('#123#'), equals('#123#'));

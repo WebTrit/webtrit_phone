@@ -32,15 +32,17 @@ class LoginSwitchScreen extends StatelessWidget {
           if (supportedLoginTypes.length > 1) ...[
             SegmentedButton<LoginType>(
               segments: supportedLoginTypes
-                  .map((loginType) => ButtonSegment(
-                        value: loginType,
-                        label: Text(
-                          key: loginType.toLoginSegmentKey(),
-                          loginType.l10n(context),
-                          softWrap: false,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ))
+                  .map(
+                    (loginType) => ButtonSegment(
+                      value: loginType,
+                      label: Text(
+                        key: loginType.toLoginSegmentKey(),
+                        loginType.l10n(context),
+                        softWrap: false,
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                  )
                   .toList(growable: false),
               selected: {currentLoginType},
               onSelectionChanged: (Set<LoginType> newSelection) => onLoginTypeChanged?.call(newSelection.first),

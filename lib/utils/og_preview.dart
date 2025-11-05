@@ -152,9 +152,7 @@ Future<Size> _getImageSize(String url) {
 
   void listener(ImageInfo info, bool _) {
     if (!completer.isCompleted) {
-      completer.complete(
-        Size(info.image.height.toDouble(), info.image.width.toDouble()),
-      );
+      completer.complete(Size(info.image.height.toDouble(), info.image.width.toDouble()));
     }
     stream.removeListener(streamListener);
   }

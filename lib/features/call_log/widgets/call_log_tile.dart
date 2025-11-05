@@ -8,12 +8,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../call_log.dart';
 
 class CallLogHistoryTile extends StatelessWidget {
-  const CallLogHistoryTile({
-    super.key,
-    required this.callLogEntry,
-    this.dateFormat,
-    this.onDeleted,
-  });
+  const CallLogHistoryTile({super.key, required this.callLogEntry, this.dateFormat, this.onDeleted});
 
   final CallLogEntry callLogEntry;
   final DateFormat? dateFormat;
@@ -30,12 +25,7 @@ class CallLogHistoryTile extends StatelessWidget {
       background: Container(
         color: themeData.colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
-        child: const Align(
-          alignment: Alignment.centerRight,
-          child: Icon(
-            Icons.delete_outline,
-          ),
-        ),
+        child: const Align(alignment: Alignment.centerRight, child: Icon(Icons.delete_outline)),
       ),
       confirmDismiss: (direction) => ConfirmDialog.showDangerous(
         context,
@@ -46,9 +36,7 @@ class CallLogHistoryTile extends StatelessWidget {
       direction: DismissDirection.endToStart,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0),
-        title: Text(
-          dateFormat.format(callLogEntry.createdTime),
-        ),
+        title: Text(dateFormat.format(callLogEntry.createdTime)),
         subtitle: Row(
           children: [
             Icon(
@@ -59,11 +47,7 @@ class CallLogHistoryTile extends StatelessWidget {
                   : Colors.red,
             ),
             const Text(' · '),
-            Icon(
-              callLogEntry.video ? Icons.videocam : Icons.call,
-              size: 16,
-              color: Colors.grey,
-            ),
+            Icon(callLogEntry.video ? Icons.videocam : Icons.call, size: 16, color: Colors.grey),
             const Text(' · '),
             Text(
               callLogEntry.isComplete
@@ -77,8 +61,10 @@ class CallLogHistoryTile extends StatelessWidget {
   }
 
   String _formatDuration(Duration duration) {
-    return [duration.inHours, duration.inMinutes, duration.inSeconds]
-        .map((seg) => seg.remainder(60).toString().padLeft(2, '0'))
-        .join(':');
+    return [
+      duration.inHours,
+      duration.inMinutes,
+      duration.inSeconds,
+    ].map((seg) => seg.remainder(60).toString().padLeft(2, '0')).join(':');
   }
 }

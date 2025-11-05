@@ -71,10 +71,7 @@ class TextMatchers {
   static MatchText urlMatcher({final TextStyle? style, final Function(String url)? onLinkPressed}) {
     return MatchText(
       onTap: (urlText) async {
-        final protocolIdentifierRegex = RegExp(
-          r'^((http|ftp|https):\/\/)',
-          caseSensitive: false,
-        );
+        final protocolIdentifierRegex = RegExp(r'^((http|ftp|https):\/\/)', caseSensitive: false);
         if (!urlText.startsWith(protocolIdentifierRegex)) {
           urlText = 'https://$urlText';
         }
@@ -83,10 +80,7 @@ class TextMatchers {
         } else {
           final url = Uri.tryParse(urlText);
           if (url != null && await canLaunchUrl(url)) {
-            await launchUrl(
-              url,
-              mode: LaunchMode.externalApplication,
-            );
+            await launchUrl(url, mode: LaunchMode.externalApplication);
           }
         }
       },

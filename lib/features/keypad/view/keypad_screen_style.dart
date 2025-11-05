@@ -6,13 +6,7 @@ import '../widgets/actionpad_style.dart';
 import '../widgets/keypad_style.dart';
 
 class KeypadScreenStyle with Diagnosticable {
-  const KeypadScreenStyle({
-    this.inputField,
-    this.contactNameField,
-    this.keypadStyle,
-    this.actionpadStyle,
-    this.style,
-  });
+  const KeypadScreenStyle({this.inputField, this.contactNameField, this.keypadStyle, this.actionpadStyle, this.style});
 
   final TextFieldStyle? inputField;
 

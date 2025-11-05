@@ -67,7 +67,8 @@ void main() {
 
   test('$StateHandshake fromJson', () {
     expect(
-      StateHandshake.fromJson(json.decode(stateHandshakeJson) as Map<String, dynamic>),
+      StateHandshake.fromJson(
+          json.decode(stateHandshakeJson) as Map<String, dynamic>),
       equals(stateHandshake),
     );
   });

@@ -43,13 +43,16 @@ class Transaction {
   void terminateByDisconnect([int? closeCode, String? closeReason]) {
     _timer.cancel();
     _completer.completeError(
-        WebtritSignalingTransactionTerminateByDisconnectException(signalingClientId, id, closeCode, closeReason));
+        WebtritSignalingTransactionTerminateByDisconnectException(
+            signalingClientId, id, closeCode, closeReason));
   }
 
   void _onTimeout() {
     if (_completer.isCompleted) {
       return;
     }
-    _completer.completeError(WebtritSignalingTransactionTimeoutException(signalingClientId, id), StackTrace.current);
+    _completer.completeError(
+        WebtritSignalingTransactionTimeoutException(signalingClientId, id),
+        StackTrace.current);
   }
 }

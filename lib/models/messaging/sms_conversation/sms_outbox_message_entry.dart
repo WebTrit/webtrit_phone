@@ -24,14 +24,14 @@ class SmsOutboxMessageEntry extends Equatable {
 
   @override
   List<Object?> get props => [
-        idKey,
-        fromPhoneNumber,
-        toPhoneNumber,
-        content,
-        recepientId,
-        conversationId,
-        sendAttempts,
-      ];
+    idKey,
+    fromPhoneNumber,
+    toPhoneNumber,
+    content,
+    recepientId,
+    conversationId,
+    sendAttempts,
+  ];
 
   @override
   bool get stringify => true;

@@ -31,19 +31,19 @@ class ChatMessage extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        idKey,
-        senderId,
-        chatId,
-        replyToId,
-        forwardFromId,
-        authorId,
-        content,
-        createdAt,
-        updatedAt,
-        editedAt,
-        deletedAt,
-      ];
+    id,
+    idKey,
+    senderId,
+    chatId,
+    replyToId,
+    forwardFromId,
+    authorId,
+    content,
+    createdAt,
+    updatedAt,
+    editedAt,
+    deletedAt,
+  ];
 
   @override
   String toString() {

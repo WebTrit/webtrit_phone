@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'snack_bar_style.dart';
 
 class SnackBarStyles extends ThemeExtension<SnackBarStyles> {
-  const SnackBarStyles({
-    required this.primary,
-  });
+  const SnackBarStyles({required this.primary});
 
   final SnackBarStyle? primary;
 
   @override
-  ThemeExtension<SnackBarStyles> copyWith({
-    SnackBarStyle? primary,
-  }) {
-    return SnackBarStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<SnackBarStyles> copyWith({SnackBarStyle? primary}) {
+    return SnackBarStyles(primary: primary ?? this.primary);
   }
 
   @override

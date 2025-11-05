@@ -24,7 +24,8 @@ class RequestFailure implements Exception {
     if (error != null) {
       buffer.write(', code: ${error?.code}');
       final details = error?.details;
-      if (details != null) buffer.write(', path: ${details.path}, reason: ${details.reason}');
+      if (details != null)
+        buffer.write(', path: ${details.path}, reason: ${details.reason}');
     }
 
     buffer.write(')');

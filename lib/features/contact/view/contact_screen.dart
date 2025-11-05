@@ -50,10 +50,7 @@ class _ContactScreenState extends State<ContactScreen> {
     notificationsBloc: context.read<NotificationsBloc>(),
   );
 
-  void toggleFavorite({
-    required bool isFavorite,
-    required ContactPhone contactPhone,
-  }) {
+  void toggleFavorite({required bool isFavorite, required ContactPhone contactPhone}) {
     if (isFavorite) {
       context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
     } else {
@@ -114,13 +111,11 @@ class _ContactScreenState extends State<ContactScreen> {
                         actions: [
                           if (widget.chatsEnabled && contact.canMessage)
                             IconButton(
-                              icon: Icon(
-                                Icons.message,
-                                color: colorScheme.onSurface,
-                              ),
+                              icon: Icon(Icons.message, color: colorScheme.onSurface),
                               onPressed: () {
-                                context.router
-                                    .navigate(ChatConversationScreenPageRoute(participantId: contact.sourceId));
+                                context.router.navigate(
+                                  ChatConversationScreenPageRoute(participantId: contact.sourceId),
+                                );
                               },
                             ),
                         ],
@@ -142,9 +137,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             style: themeData.textTheme.headlineMedium,
                             textAlign: TextAlign.center,
                           ),
-                          const Divider(
-                            height: 16,
-                          ),
+                          const Divider(height: 16),
                           for (final contactPhone in contact.phones)
                             SizedBox(
                               key: ValueKey(contactPhone),
@@ -156,10 +149,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                 callNumbers: callRoutingState?.allNumbers ?? [],
                                 onFavoriteChanged: widget.favoriteEnabled
                                     ? (isFavorite) {
-                                        toggleFavorite(
-                                          isFavorite: isFavorite,
-                                          contactPhone: contactPhone,
-                                        );
+                                        toggleFavorite(isFavorite: isFavorite, contactPhone: contactPhone);
                                       }
                                     : null,
                                 onAudioPressed: () => _callController.createCall(
@@ -169,10 +159,10 @@ class _ContactScreenState extends State<ContactScreen> {
                                 ),
                                 onVideoPressed: widget.videoEnabled
                                     ? () => _callController.createCall(
-                                          destination: contactPhone.number,
-                                          displayName: contact.maybeName,
-                                          video: true,
-                                        )
+                                        destination: contactPhone.number,
+                                        displayName: contact.maybeName,
+                                        video: true,
+                                      )
                                     : null,
                                 onTransferPressed: widget.transferEnabled && hasActiveCall
                                     ? () {
@@ -188,14 +178,12 @@ class _ContactScreenState extends State<ContactScreen> {
                                     : null,
                                 onSendSmsPressed: widget.smsEnabled && contactSmsNumbers.contains(contactPhone.number)
                                     ? () => sendSms(
-                                          userSmsNumbers: userSmsNumbers,
-                                          contactPhoneNumber: contactPhone.number,
-                                          contactSourceId: contactSourceId,
-                                        )
+                                        userSmsNumbers: userSmsNumbers,
+                                        contactPhoneNumber: contactPhone.number,
+                                        contactSourceId: contactSourceId,
+                                      )
                                     : null,
-                                onCallLogPressed: () => openCallLog(
-                                  number: contactPhone.number,
-                                ),
+                                onCallLogPressed: () => openCallLog(number: contactPhone.number),
                                 onCallFrom: (fromNumber) => _callController.createCall(
                                   destination: contactPhone.number,
                                   displayName: contact.maybeName,
@@ -215,7 +203,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               contact.sourceType == ContactSourceType.external) ...[
                             const Divider(),
                             PresenceInfoView(presenceInfo: contact.presenceInfo),
-                          ]
+                          ],
                         ],
                       ),
                     );

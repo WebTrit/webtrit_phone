@@ -28,10 +28,7 @@ class NumberCdrsScreenPage extends StatelessWidget {
         context.read<CdrsRemoteRepository>(),
         (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
       )..init(),
-      child: NumberCdrsScreen(
-        title: const Text(EnvironmentConfig.APP_NAME),
-        videoVisible: videoVisible,
-      ),
+      child: NumberCdrsScreen(title: const Text(EnvironmentConfig.APP_NAME), videoVisible: videoVisible),
     );
   }
 }

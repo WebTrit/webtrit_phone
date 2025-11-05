@@ -32,9 +32,7 @@ bool whenLoginSwitchScreenPageActive(LoginState state) {
 @RoutePage()
 class LoginRouterPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const LoginRouterPage({
-    EmbeddedData? launchEmbeddedData,
-  }) : _launchEmbeddedData = launchEmbeddedData;
+  const LoginRouterPage({EmbeddedData? launchEmbeddedData}) : _launchEmbeddedData = launchEmbeddedData;
 
   final EmbeddedData? _launchEmbeddedData;
 
@@ -101,10 +99,7 @@ class LoginRouterPage extends StatelessWidget {
     if (_launchEmbeddedData != null) {
       login.setEmbedded(_launchEmbeddedData);
     }
-    final provider = BlocProvider(
-      create: (context) => login,
-      child: declarativeAutoRouter,
-    );
+    final provider = BlocProvider(create: (context) => login, child: declarativeAutoRouter);
     return provider;
   }
 

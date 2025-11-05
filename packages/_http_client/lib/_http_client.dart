@@ -2,9 +2,11 @@ library;
 
 import 'package:http/http.dart' as http;
 
-import 'package:ssl_certificates/ssl_certificates.dart' show TrustedCertificates;
+import 'package:ssl_certificates/ssl_certificates.dart'
+    show TrustedCertificates;
 
-export 'package:ssl_certificates/ssl_certificates.dart' show TrustedCertificates;
+export 'package:ssl_certificates/ssl_certificates.dart'
+    show TrustedCertificates;
 
 import 'src/_http_client_stub.dart'
     if (dart.library.html) 'src/_http_client_html.dart'

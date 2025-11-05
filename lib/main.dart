@@ -157,23 +157,25 @@ class RootApp extends StatelessWidget {
           },
         ),
       ],
-      child: Builder(builder: (context) {
-        return MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
-            RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
-            RepositoryProvider<SessionRepository>.value(
-              value: SessionRepositoryImpl(
-                secureStorage: context.read<SecureStorage>(),
-                appPreferences: context.read<AppPreferences>(),
-                appDatabase: context.read<AppDatabase>(),
-                sessionCleanupWorker: sessionCleanupWorker,
+      child: Builder(
+        builder: (context) {
+          return MultiRepositoryProvider(
+            providers: [
+              RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
+              RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
+              RepositoryProvider<SessionRepository>.value(
+                value: SessionRepositoryImpl(
+                  secureStorage: context.read<SecureStorage>(),
+                  appPreferences: context.read<AppPreferences>(),
+                  appDatabase: context.read<AppDatabase>(),
+                  sessionCleanupWorker: sessionCleanupWorker,
+                ),
               ),
-            ),
-          ],
-          child: const App(),
-        );
-      }),
+            ],
+            child: const App(),
+          );
+        },
+      ),
     );
   }
 }

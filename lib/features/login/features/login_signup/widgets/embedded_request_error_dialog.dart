@@ -27,16 +27,14 @@ class EmbeddedRequestErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final EmbeddedRequestErrorStyle? logo = theme
-        .extension<EmbeddedRequestErrorStyles>()
-        ?.primary;
+    final EmbeddedRequestErrorStyle? logo = theme.extension<EmbeddedRequestErrorStyles>()?.primary;
 
     final appBar = onBack != null
         ? AppBar(
-      automaticallyImplyLeading: onBack != null,
-      leading: BackButton(onPressed: onBack),
-      elevation: 0,
-    )
+            automaticallyImplyLeading: onBack != null,
+            leading: BackButton(onPressed: onBack),
+            elevation: 0,
+          )
         : null;
 
     return PopScope(

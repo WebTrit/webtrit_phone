@@ -36,15 +36,17 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
       ),
     );
 
-    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (state) {
-      add(ContactsLocalTabStarted(search: state.search));
-    });
+    final contactsSearchSateOnEachFuture = emit.onEach(
+      contactsSearchBloc.stream,
+      onData: (state) {
+        add(ContactsLocalTabStarted(search: state.search));
+      },
+    );
 
     final localContactsSyncStateForEachFuture = emit.forEach(
       localContactsSyncBloc.stream,
-      onData: (LocalContactsSyncState localContactsSyncState) => state.copyWith(
-        status: _mapLocalContactsSyncStateToStatus(localContactsSyncState),
-      ),
+      onData: (LocalContactsSyncState localContactsSyncState) =>
+          state.copyWith(status: _mapLocalContactsSyncStateToStatus(localContactsSyncState)),
     );
 
     await Future.wait([

@@ -39,15 +39,17 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
       ),
     );
 
-    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (state) {
-      add(ContactsExternalTabStarted(search: state.search));
-    });
+    final contactsSearchSateOnEachFuture = emit.onEach(
+      contactsSearchBloc.stream,
+      onData: (state) {
+        add(ContactsExternalTabStarted(search: state.search));
+      },
+    );
 
     final externalContactsSyncStateForEachFuture = emit.forEach(
       externalContactsSyncBloc.stream,
-      onData: (ExternalContactsSyncState externalContactsSyncState) => state.copyWith(
-        status: _mapExternalContactsSyncStateToStatus(externalContactsSyncState),
-      ),
+      onData: (ExternalContactsSyncState externalContactsSyncState) =>
+          state.copyWith(status: _mapExternalContactsSyncStateToStatus(externalContactsSyncState)),
     );
 
     await Future.wait([

@@ -22,7 +22,7 @@ class MediaQueryMetrics with _$MediaQueryMetrics {
 
   @override
   final int topSafeInset;
-  
+
   @override
   final int bottomSafeInset;
 

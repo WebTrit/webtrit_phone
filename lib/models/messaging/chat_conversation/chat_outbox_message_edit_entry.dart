@@ -21,13 +21,7 @@ class ChatOutboxMessageEditEntry extends Equatable {
   @override
   bool get stringify => true;
 
-  ChatOutboxMessageEditEntry copyWith({
-    int? id,
-    String? idKey,
-    int? chatId,
-    String? newContent,
-    int? sendAttempts,
-  }) {
+  ChatOutboxMessageEditEntry copyWith({int? id, String? idKey, int? chatId, String? newContent, int? sendAttempts}) {
     return ChatOutboxMessageEditEntry(
       id: id ?? this.id,
       idKey: idKey ?? this.idKey,

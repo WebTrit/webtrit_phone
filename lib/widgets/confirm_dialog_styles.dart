@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'confirm_dialog_style.dart';
 
 class ConfirmDialogStyles extends ThemeExtension<ConfirmDialogStyles> {
-  const ConfirmDialogStyles({
-    required this.primary,
-  });
+  const ConfirmDialogStyles({required this.primary});
 
   final ConfirmDialogStyle? primary;
 
   @override
-  ThemeExtension<ConfirmDialogStyles> copyWith({
-    ConfirmDialogStyle? primary,
-  }) {
-    return ConfirmDialogStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<ConfirmDialogStyles> copyWith({ConfirmDialogStyle? primary}) {
+    return ConfirmDialogStyles(primary: primary ?? this.primary);
   }
 
   @override

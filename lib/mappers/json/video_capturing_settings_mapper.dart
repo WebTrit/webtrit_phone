@@ -19,9 +19,6 @@ mixin VideoCapturingSettingsJsonMapper {
   }
 
   Map<String, dynamic> videoCapturingSettingsToMap(VideoCapturingSettings settings) {
-    return {
-      'resolution': settings.resolution?.name,
-      'framerate': settings.framerate?.name,
-    };
+    return {'resolution': settings.resolution?.name, 'framerate': settings.framerate?.name};
   }
 }

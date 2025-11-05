@@ -28,12 +28,12 @@ class LocalContact extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        displayName,
-        firstName,
-        lastName,
-        EquatablePropToString(thumbnail, (p) => p != null ? 'present' : 'absent'),
-        phones,
-        emails,
-      ];
+    id,
+    displayName,
+    firstName,
+    lastName,
+    EquatablePropToString(thumbnail, (p) => p != null ? 'present' : 'absent'),
+    phones,
+    emails,
+  ];
 }

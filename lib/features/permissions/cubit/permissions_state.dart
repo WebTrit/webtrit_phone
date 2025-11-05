@@ -34,14 +34,11 @@ class PermissionsState with _$PermissionsState {
 
 @freezed
 class ManufacturerTip with _$ManufacturerTip {
-  const ManufacturerTip({
-    required this.manufacturer,
-    this.shown = false,
-  });
+  const ManufacturerTip({required this.manufacturer, this.shown = false});
 
   @override
   final Manufacturer manufacturer;
-  
+
   @override
   final bool shown;
 }

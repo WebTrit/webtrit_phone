@@ -14,8 +14,8 @@ class _SessionUpdated extends AppEvent {
 
   @override
   List<Object> get props => [
-        EquatablePropToString([session], listPropToString),
-      ];
+    EquatablePropToString([session], listPropToString),
+  ];
 }
 
 class AppThemeSettingsChanged extends AppEvent {
@@ -25,8 +25,8 @@ class AppThemeSettingsChanged extends AppEvent {
 
   @override
   List<Object> get props => [
-        EquatablePropToString([value], listPropToString),
-      ];
+    EquatablePropToString([value], listPropToString),
+  ];
 }
 
 class AppThemeModeChanged extends AppEvent {
@@ -36,8 +36,8 @@ class AppThemeModeChanged extends AppEvent {
 
   @override
   List<Object> get props => [
-        EquatablePropToString([value], listPropToString),
-      ];
+    EquatablePropToString([value], listPropToString),
+  ];
 }
 
 class AppLocaleChanged extends AppEvent {
@@ -47,8 +47,8 @@ class AppLocaleChanged extends AppEvent {
 
   @override
   List<Object> get props => [
-        EquatablePropToString([value], listPropToString),
-      ];
+    EquatablePropToString([value], listPropToString),
+  ];
 }
 
 sealed class AppAgreementAccepted extends AppEvent {
@@ -66,8 +66,8 @@ class _UserAppAgreementUpdate extends AppAgreementAccepted {
 
   @override
   List<Object> get props => [
-        EquatablePropToString([status], listPropToString),
-      ];
+    EquatablePropToString([status], listPropToString),
+  ];
 }
 
 class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
@@ -77,6 +77,6 @@ class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
 
   @override
   List<Object> get props => [
-        EquatablePropToString([status], listPropToString),
-      ];
+    EquatablePropToString([status], listPropToString),
+  ];
 }

@@ -17,9 +17,7 @@ class NumberCdrTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withAlpha(10), blurRadius: 32),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withAlpha(10), blurRadius: 32)],
       ),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
@@ -54,7 +52,7 @@ class NumberCdrTile extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(cdr.connectTime.toDayOfMonth),
               ],
-            )
+            ),
           ],
         ),
       ),

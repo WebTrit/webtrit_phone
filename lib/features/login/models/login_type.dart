@@ -1,5 +1,1 @@
-enum LoginType {
-  otpSignin,
-  passwordSignin,
-  signup,
-}
+enum LoginType { otpSignin, passwordSignin, signup }

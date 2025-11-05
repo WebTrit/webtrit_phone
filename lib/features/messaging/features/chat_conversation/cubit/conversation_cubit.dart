@@ -94,11 +94,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     final (:chatId, :participantId) = state.credentials;
     if (chatId == null) return;
 
-    final outboxEntry = ChatOutboxMessageDeleteEntry(
-      id: message.id,
-      idKey: message.idKey,
-      chatId: chatId,
-    );
+    final outboxEntry = ChatOutboxMessageDeleteEntry(id: message.id, idKey: message.idKey, chatId: chatId);
     _outboxRepository.upsertOutboxMessageDelete(outboxEntry);
   }
 
@@ -106,10 +102,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     final (:chatId, :participantId) = state.credentials;
     if (chatId == null) return;
 
-    final outboxEntry = ChatOutboxReadCursorEntry(
-      chatId: chatId,
-      time: time,
-    );
+    final outboxEntry = ChatOutboxReadCursorEntry(chatId: chatId, time: time);
     _outboxRepository.upsertOutboxReadCursor(outboxEntry);
   }
 

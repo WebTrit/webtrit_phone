@@ -70,7 +70,7 @@ class TabButtonsBar extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ]
+                          ],
                         ],
                       ),
                     ),
@@ -119,7 +119,7 @@ class TabButtonsBar extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ]
+                          ],
                         ],
                       ),
                     ),

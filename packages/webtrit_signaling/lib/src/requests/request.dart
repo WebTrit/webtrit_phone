@@ -13,7 +13,8 @@ abstract class Request extends Equatable {
     final request = tryFromJson(json);
     if (request == null) {
       final requestTypeValue = json[Request.typeKey];
-      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Unknown request type');
+      throw ArgumentError.value(
+          requestTypeValue, Request.typeKey, 'Unknown request type');
     } else {
       return request;
     }

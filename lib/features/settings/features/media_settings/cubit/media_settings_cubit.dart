@@ -7,7 +7,7 @@ import 'media_settings_state.dart';
 
 class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   MediaSettingsCubit(this._prefs, this._defaultPeerConnectionSettings)
-      : super(MediaSettingsState.fromPrefs(_prefs, _defaultPeerConnectionSettings));
+    : super(MediaSettingsState.fromPrefs(_prefs, _defaultPeerConnectionSettings));
 
   final AppPreferences _prefs;
   final PeerConnectionSettings _defaultPeerConnectionSettings;
@@ -43,14 +43,16 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   }
 
   void reset() {
-    emit(MediaSettingsState(
-      encodingPreset: null,
-      encodingSettings: EncodingSettings.blank(),
-      audioProcessingSettings: AudioProcessingSettings.blank(),
-      videoCapturingSettings: VideoCapturingSettings.blank(),
-      iceSettings: IceSettings.blank(),
-      pearConnectionSettings: _defaultPeerConnectionSettings,
-    ));
+    emit(
+      MediaSettingsState(
+        encodingPreset: null,
+        encodingSettings: EncodingSettings.blank(),
+        audioProcessingSettings: AudioProcessingSettings.blank(),
+        videoCapturingSettings: VideoCapturingSettings.blank(),
+        iceSettings: IceSettings.blank(),
+        pearConnectionSettings: _defaultPeerConnectionSettings,
+      ),
+    );
 
     _prefs.setEncodingPreset(null);
     _prefs.setEncodingSettings(EncodingSettings.blank());

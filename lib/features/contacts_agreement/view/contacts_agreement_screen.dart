@@ -11,9 +11,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ContactsAgreementScreen extends StatefulWidget {
-  const ContactsAgreementScreen({
-    super.key,
-  });
+  const ContactsAgreementScreen({super.key});
 
   @override
   State<ContactsAgreementScreen> createState() => _ContactsAgreementScreenState();
@@ -50,10 +48,7 @@ class _ContactsAgreementScreenState extends State<ContactsAgreementScreen> {
                             style: theme.textTheme.titleLarge?.copyWith(color: theme.colorScheme.primary),
                           ),
                           const SizedBox(height: kInset),
-                          Text(
-                            context.l10n.contacts_agreement_description,
-                            textAlign: TextAlign.center,
-                          ),
+                          Text(context.l10n.contacts_agreement_description, textAlign: TextAlign.center),
                           const Spacer(),
                           const SizedBox(height: kInset),
                           AgreementCheckbox(

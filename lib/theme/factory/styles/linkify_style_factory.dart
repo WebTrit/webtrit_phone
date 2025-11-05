@@ -20,10 +20,7 @@ class LinkifyStyleFactory implements ThemeStyleFactory<LinkifyStyles> {
     final linkifyTextStyle = TextStyle(color: linkifyTextColor);
 
     return LinkifyStyles(
-      primary: LinkifyStyle(
-        style: regularTextStyle,
-        linkStyle: linkifyTextStyle,
-      ),
+      primary: LinkifyStyle(style: regularTextStyle, linkStyle: linkifyTextStyle),
     );
   }
 }

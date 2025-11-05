@@ -48,33 +48,35 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
         color: Theme.of(context).cardColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
-        child: UserSmsNumbersBuilder(builder: (context, List<String> numbers, {required loading}) {
-          final firstNumber = widget.conversation.firstPhoneNumber;
-          final secondNumber = widget.conversation.secondPhoneNumber;
-          String? userNumber;
-          userNumber = numbers.firstWhereOrNull((e) => e == firstNumber || e == secondNumber);
-          String? recipientNumber;
-          if (userNumber != null) recipientNumber = firstNumber == userNumber ? secondNumber : firstNumber;
+        child: UserSmsNumbersBuilder(
+          builder: (context, List<String> numbers, {required loading}) {
+            final firstNumber = widget.conversation.firstPhoneNumber;
+            final secondNumber = widget.conversation.secondPhoneNumber;
+            String? userNumber;
+            userNumber = numbers.firstWhereOrNull((e) => e == firstNumber || e == secondNumber);
+            String? recipientNumber;
+            if (userNumber != null) recipientNumber = firstNumber == userNumber ? secondNumber : firstNumber;
 
-          return Dismissible(
-            key: ValueKey(widget.conversation),
-            direction: DismissDirection.endToStart,
-            crossAxisEndOffset: 0.5,
-            dismissThresholds: const {DismissDirection.endToStart: 0.6},
-            background: Container(
-              color: Colors.red,
-              transform: Matrix4.translationValues(MediaQuery.of(context).size.width * 0.4, 0, 0),
-              child: const Icon(Icons.delete_forever, color: Colors.white),
-            ),
-            confirmDismiss: onDismiss,
-            child: ListTile(
-              leading: leading(recipientNumber),
-              title: title(recipientNumber),
-              subtitle: subtitle(userNumber),
-              onTap: onTap,
-            ),
-          );
-        }),
+            return Dismissible(
+              key: ValueKey(widget.conversation),
+              direction: DismissDirection.endToStart,
+              crossAxisEndOffset: 0.5,
+              dismissThresholds: const {DismissDirection.endToStart: 0.6},
+              background: Container(
+                color: Colors.red,
+                transform: Matrix4.translationValues(MediaQuery.of(context).size.width * 0.4, 0, 0),
+                child: const Icon(Icons.delete_forever, color: Colors.white),
+              ),
+              confirmDismiss: onDismiss,
+              child: ListTile(
+                leading: leading(recipientNumber),
+                title: title(recipientNumber),
+                subtitle: subtitle(userNumber),
+                onTap: onTap,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -89,7 +91,9 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
 
     return Row(
       children: [
-        Expanded(child: Text(recipientNumber ?? '', style: const TextStyle(overflow: TextOverflow.ellipsis))),
+        Expanded(
+          child: Text(recipientNumber ?? '', style: const TextStyle(overflow: TextOverflow.ellipsis)),
+        ),
         const SizedBox(width: 4),
         if (lastMessage != null) Text(lastMessage.createdAt.timeOrDate, style: const TextStyle(fontSize: 12)),
       ],
@@ -115,17 +119,9 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (lastMessage.deletedAt != null)
-                  Text(
-                    context.l10n.messaging_MessageView_deleted,
-                    style: textStyle,
-                    overflow: TextOverflow.ellipsis,
-                  )
+                  Text(context.l10n.messaging_MessageView_deleted, style: textStyle, overflow: TextOverflow.ellipsis)
                 else
-                  Text(
-                    lastMessage.content,
-                    style: textStyle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(lastMessage.content, style: textStyle, overflow: TextOverflow.ellipsis),
               ],
             ),
           )
@@ -143,10 +139,7 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
                 color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Text(
-                '$count',
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
+              child: Text('$count', style: const TextStyle(color: Colors.white, fontSize: 12)),
             );
           },
         ),

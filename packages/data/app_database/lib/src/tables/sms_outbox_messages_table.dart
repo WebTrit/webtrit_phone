@@ -11,8 +11,9 @@ class SmsOutboxMessagesTable extends Table {
 
   TextColumn get idKey => text()();
 
-  IntColumn get conversationId =>
-      integer().nullable().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get conversationId => integer()
+      .nullable()
+      .references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get fromPhoneNumber => text()();
 

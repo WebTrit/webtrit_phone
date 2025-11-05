@@ -12,7 +12,8 @@ class AckResponse extends Response {
   factory AckResponse.fromJson(Map<String, dynamic> json) {
     final responseTypeValue = json[Response.typeKey];
     if (responseTypeValue != typeValue) {
-      throw ArgumentError.value(responseTypeValue, Response.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(
+          responseTypeValue, Response.typeKey, 'Not equal $typeValue');
     }
 
     return AckResponse(

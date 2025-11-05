@@ -2,7 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class MockUserInfoCubit extends MockCubit<UserInfoState> implements UserInfoCubit {
+class MockUserInfoCubit extends MockCubit<UserInfoState>
+    implements UserInfoCubit {
   MockUserInfoCubit();
 
   factory MockUserInfoCubit.initial() {

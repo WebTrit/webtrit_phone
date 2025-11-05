@@ -2,7 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class MockContactsExternalTabBloc extends MockBloc<ContactsExternalTabEvent, ContactsExternalTabState>
+class MockContactsExternalTabBloc
+    extends MockBloc<ContactsExternalTabEvent, ContactsExternalTabState>
     implements ContactsExternalTabBloc {
   MockContactsExternalTabBloc();
 

@@ -64,11 +64,7 @@ class JSChannelBuilders {
     required JsonEventHandler onEvent,
     void Function(String raw)? onMalformed,
   }) {
-    return JSChannelStrategy(
-      name: name,
-      onEvent: onEvent,
-      onMalformed: onMalformed,
-    );
+    return JSChannelStrategy(name: name, onEvent: onEvent, onMalformed: onMalformed);
   }
 
   /// Creates a [JSChannelStrategy] that routes events to different handlers
@@ -84,12 +80,7 @@ class JSChannelBuilders {
     void Function(JsonJsEvent e)? onUnknown,
     void Function(String raw)? onMalformed,
   }) {
-    return JSChannelStrategy.route(
-      name: name,
-      routes: routes,
-      onUnknown: onUnknown,
-      onMalformed: onMalformed,
-    );
+    return JSChannelStrategy.route(name: name, routes: routes, onUnknown: onUnknown, onMalformed: onMalformed);
   }
 
   /// Creates a [JSChannelStrategy] for logging JavaScript console messages.
@@ -136,9 +127,7 @@ class JSChannelBuilders {
     );
   }
 
-  static JSChannelStrategy reloadPageChannel({
-    ReloadChannelOptions options = const ReloadChannelOptions(),
-  }) {
+  static JSChannelStrategy reloadPageChannel({ReloadChannelOptions options = const ReloadChannelOptions()}) {
     final List<DateTime> hits = <DateTime>[];
     Timer? debounceTimer;
     JsonJsEvent? pendingEvent;
@@ -181,9 +170,7 @@ class JSChannelBuilders {
 
     return JSChannelStrategy.route(
       name: options.name,
-      routes: {
-        'reload': (controller, it) => handle(controller, it),
-      },
+      routes: {'reload': (controller, it) => handle(controller, it)},
       onUnknown: options.onUnknown ?? (e) => _logger.fine('[reload] Unknown event: ${e.event}'),
     );
   }

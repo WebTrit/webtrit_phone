@@ -11,9 +11,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../contacts.dart';
 
 class ContactsExternalTab extends StatelessWidget {
-  const ContactsExternalTab({
-    super.key,
-  });
+  const ContactsExternalTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,22 +51,15 @@ class ContactsExternalTab extends StatelessWidget {
           );
         } else {
           if (state.status == ContactsExternalTabStatus.failure) {
-            return NoDataPlaceholder(
-              content: Text(context.l10n.contacts_ExternalTabText_failure),
-            );
+            return NoDataPlaceholder(content: Text(context.l10n.contacts_ExternalTabText_failure));
           } else {
             if (state.searching) {
-              return NoDataPlaceholder(
-                content: Text(context.l10n.contacts_ExternalTabText_emptyOnSearching),
-              );
+              return NoDataPlaceholder(content: Text(context.l10n.contacts_ExternalTabText_emptyOnSearching));
             } else {
               return NoDataPlaceholder(
                 content: Text(context.l10n.contacts_ExternalTabText_empty),
                 actions: [
-                  TextButton(
-                    onPressed: refreshContacts,
-                    child: Text(context.l10n.contacts_ExternalTabButton_refresh),
-                  )
+                  TextButton(onPressed: refreshContacts, child: Text(context.l10n.contacts_ExternalTabButton_refresh)),
                 ],
               );
             }

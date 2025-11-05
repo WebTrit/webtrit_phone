@@ -15,7 +15,8 @@ class LoginOtpVerifyInScreenshot extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyles? loginPageStyles =
+        themeData.extension<LoginSwitchScreenStyles>();
     final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
 
     return BlocProvider<LoginCubit>(

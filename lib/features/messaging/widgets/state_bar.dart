@@ -21,10 +21,7 @@ class StateBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       margin: const EdgeInsets.all(8),
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
-      ),
+      decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(8)),
       child: Row(
         children: [
           const SizedBox(width: 16, height: 16, child: CircularProgressIndicator()),

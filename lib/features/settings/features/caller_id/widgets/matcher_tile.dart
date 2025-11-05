@@ -22,13 +22,7 @@ class MatcherTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withAlpha(25),
-            blurRadius: 32,
-            offset: const Offset(4, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(25), blurRadius: 32, offset: const Offset(4, 4))],
       ),
       child: Row(
         children: [

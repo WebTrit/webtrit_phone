@@ -60,7 +60,16 @@ class SignalingPresenceSettings extends Equatable {
   }
 
   @override
-  List<Object?> get props => [available, note, statusIcon, device, timeOffsetMin, timestamp, activity, dndMode];
+  List<Object?> get props => [
+        available,
+        note,
+        statusIcon,
+        device,
+        timeOffsetMin,
+        timestamp,
+        activity,
+        dndMode
+      ];
 
   @override
   String toString() {

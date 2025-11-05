@@ -2,21 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class KeypadKeyStyle with Diagnosticable {
-  const KeypadKeyStyle({
-    this.buttonStyle,
-    this.textStyle,
-    this.subtextStyle,
-  });
+  const KeypadKeyStyle({this.buttonStyle, this.textStyle, this.subtextStyle});
 
   final ButtonStyle? buttonStyle;
   final TextStyle? textStyle;
   final TextStyle? subtextStyle;
 
-  KeypadKeyStyle copyWith({
-    ButtonStyle? buttonStyle,
-    TextStyle? textStyle,
-    TextStyle? subtextStyle,
-  }) {
+  KeypadKeyStyle copyWith({ButtonStyle? buttonStyle, TextStyle? textStyle, TextStyle? subtextStyle}) {
     return KeypadKeyStyle(
       buttonStyle: buttonStyle ?? this.buttonStyle,
       textStyle: textStyle ?? this.textStyle,

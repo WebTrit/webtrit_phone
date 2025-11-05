@@ -14,10 +14,6 @@ class AboutScreenStyleFactory implements ThemeStyleFactory<AboutScreenStyles> {
   AboutScreenStyles create() {
     final asset = config?.mainLogo?.uri?.toThemeSvgAsset();
 
-    return AboutScreenStyles(
-      primary: AboutScreenStyle(
-        picture: asset,
-      ),
-    );
+    return AboutScreenStyles(primary: AboutScreenStyle(picture: asset));
   }
 }

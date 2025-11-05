@@ -6,10 +6,7 @@ import 'package:webtrit_phone/features/features.dart';
 import '../theme_style_factory.dart';
 
 class LoginOtpSigninVerifyScreenStyleFactory implements ThemeStyleFactory<LoginOtpSigninVerifyScreenStyles> {
-  LoginOtpSigninVerifyScreenStyleFactory(
-    this.colors,
-    this.pageConfig,
-  );
+  LoginOtpSigninVerifyScreenStyleFactory(this.colors, this.pageConfig);
 
   /// Active color palette for resolving defaults/additional styling in future.
   final ColorScheme colors;
@@ -26,9 +23,7 @@ class LoginOtpSigninVerifyScreenStyleFactory implements ThemeStyleFactory<LoginO
     final countdownRepeatInterval = seconds <= 0 ? Duration.zero : Duration(seconds: seconds);
 
     return LoginOtpSigninVerifyScreenStyles(
-      primary: LoginOtpSigninVerifyScreenStyle(
-        countdownRepeatInterval: countdownRepeatInterval,
-      ),
+      primary: LoginOtpSigninVerifyScreenStyle(countdownRepeatInterval: countdownRepeatInterval),
     );
   }
 }

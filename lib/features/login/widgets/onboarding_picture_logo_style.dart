@@ -4,18 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class OnboardingPictureLogoStyle with Diagnosticable {
-  OnboardingPictureLogoStyle({
-    this.picture,
-    this.widthFactor,
-    this.textStyle,
-    this.padding,
-  });
+  OnboardingPictureLogoStyle({this.picture, this.widthFactor, this.textStyle, this.padding});
 
   final ThemeSvgAsset? picture;
   final double? widthFactor;
   final TextStyle? textStyle;
   final EdgeInsets? padding;
-
 
   static OnboardingPictureLogoStyle? lerp(OnboardingPictureLogoStyle? a, OnboardingPictureLogoStyle? b, double t) {
     if (identical(a, b)) {

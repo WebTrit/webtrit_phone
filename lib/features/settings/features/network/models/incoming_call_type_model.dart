@@ -4,8 +4,5 @@ class IncomingCallTypeModel {
   final IncomingCallType incomingCallType;
   final bool selected;
 
-  IncomingCallTypeModel(
-    this.incomingCallType,
-    this.selected,
-  );
+  IncomingCallTypeModel(this.incomingCallType, this.selected);
 }

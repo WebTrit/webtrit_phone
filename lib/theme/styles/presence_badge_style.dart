@@ -4,11 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PresenceBadgeStyle with Diagnosticable {
-  const PresenceBadgeStyle({
-    this.availableColor,
-    this.unavailableColor,
-    this.sizeFactor,
-  });
+  const PresenceBadgeStyle({this.availableColor, this.unavailableColor, this.sizeFactor});
 
   final Color? availableColor;
   final Color? unavailableColor;
@@ -27,11 +23,7 @@ class PresenceBadgeStyle with Diagnosticable {
     );
   }
 
-  static PresenceBadgeStyle? lerp(
-    PresenceBadgeStyle? a,
-    PresenceBadgeStyle? b,
-    double t,
-  ) {
+  static PresenceBadgeStyle? lerp(PresenceBadgeStyle? a, PresenceBadgeStyle? b, double t) {
     if (identical(a, b)) return a;
     if (a == null && b == null) return null;
 

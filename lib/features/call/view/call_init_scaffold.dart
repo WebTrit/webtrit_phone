@@ -4,10 +4,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class CallInitScaffold extends StatelessWidget {
-  const CallInitScaffold({
-    super.key,
-    this.showProgressIndicator = false,
-  });
+  const CallInitScaffold({super.key, this.showProgressIndicator = false});
 
   final bool showProgressIndicator;
 
@@ -19,9 +16,7 @@ class CallInitScaffold extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: gradients?.tab,
-        ),
+        decoration: BoxDecoration(gradient: gradients?.tab),
         child: Stack(
           children: [
             SafeArea(
@@ -35,11 +30,9 @@ class CallInitScaffold extends StatelessWidget {
             Center(
               child: Visibility(
                 visible: showProgressIndicator,
-                child: CircularProgressIndicator(
-                  color: onTabGradient,
-                ),
+                child: CircularProgressIndicator(color: onTabGradient),
               ),
-            )
+            ),
           ],
         ),
       ),

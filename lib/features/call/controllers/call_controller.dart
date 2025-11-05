@@ -21,18 +21,11 @@ class CallController {
   /// Creates a new call using the current call routing state.
   ///
   /// Handles caller ID logic and available line validation.
-  void createCall({
-    required String destination,
-    String? displayName,
-    bool video = false,
-    String? fromNumber,
-  }) {
+  void createCall({required String destination, String? displayName, bool video = false, String? fromNumber}) {
     final callRoutingState = callRoutingCubit.state;
     if (callRoutingState == null) {
       _logger.warning('Call routing state is null, cannot create call.');
-      notificationsBloc.add(
-        const NotificationsSubmitted(NoInternetConnectionNotification()),
-      );
+      notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
       return;
     }
 
@@ -53,20 +46,13 @@ class CallController {
 
     if (noIdleMain || noIdleGuest) {
       _logger.warning('Cannot create call: no idle lines available.');
-      notificationsBloc.add(
-        const NotificationsSubmitted(CallUndefinedLineNotification()),
-      );
+      notificationsBloc.add(const NotificationsSubmitted(CallUndefinedLineNotification()));
       return;
     }
 
     // All checks passed, create call
     callBloc.add(
-      CallControlEvent.started(
-        number: destination,
-        video: video,
-        displayName: displayName,
-        fromNumber: fromNumber,
-      ),
+      CallControlEvent.started(number: destination, video: video, displayName: displayName, fromNumber: fromNumber),
     );
   }
 

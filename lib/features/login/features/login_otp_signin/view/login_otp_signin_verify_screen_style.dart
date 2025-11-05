@@ -1,17 +1,13 @@
 import 'package:flutter/foundation.dart';
 
 class LoginOtpSigninVerifyScreenStyle with Diagnosticable {
-  const LoginOtpSigninVerifyScreenStyle({
-    this.countdownRepeatInterval = const Duration(seconds: 30),
-  });
+  const LoginOtpSigninVerifyScreenStyle({this.countdownRepeatInterval = const Duration(seconds: 30)});
 
   /// Countdown interval before the "Repeat" button becomes active.
   /// If [Duration.zero] -> countdown is disabled, button is always active.
   final Duration countdownRepeatInterval;
 
-  LoginOtpSigninVerifyScreenStyle copyWith({
-    Duration? countdownRepeatInterval,
-  }) {
+  LoginOtpSigninVerifyScreenStyle copyWith({Duration? countdownRepeatInterval}) {
     return LoginOtpSigninVerifyScreenStyle(
       countdownRepeatInterval: countdownRepeatInterval ?? this.countdownRepeatInterval,
     );
@@ -33,9 +29,6 @@ class LoginOtpSigninVerifyScreenStyle with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<Duration>(
-      'countdownRepeatInterval',
-      countdownRepeatInterval,
-    ));
+    properties.add(DiagnosticsProperty<Duration>('countdownRepeatInterval', countdownRepeatInterval));
   }
 }

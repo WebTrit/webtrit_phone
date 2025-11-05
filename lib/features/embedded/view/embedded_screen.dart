@@ -65,9 +65,10 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
 
     // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
     _pageInjectionStrategies = PageInjectionBuilders.resolve(
-        mediaQueryMetricsData: widget.mediaQueryMetricsData,
-        deviceInfoData: widget.deviceInfoData,
-        custom: [_pageInjectionStrategy]);
+      mediaQueryMetricsData: widget.mediaQueryMetricsData,
+      deviceInfoData: widget.deviceInfoData,
+      custom: [_pageInjectionStrategy],
+    );
 
     _jSChannelStrategies = JSChannelBuilders.resolve(enableLogCapture: widget.enableLogCapture);
     super.initState();
@@ -129,10 +130,10 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
     }
 
     return (context, error, controller) => EmbeddedRequestErrorDialog(
-          title: error.titleL10n(context),
-          error: error.messageL10n(context),
-          onRetry: () => _webViewController.reload(),
-        );
+      title: error.titleL10n(context),
+      error: error.messageL10n(context),
+      onRetry: () => _webViewController.reload(),
+    );
   }
 
   void _onBlocStateChanged(BuildContext context, EmbeddedState state) {

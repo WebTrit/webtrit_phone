@@ -21,7 +21,8 @@ class Metadata with _$Metadata {
   /// Creates an instance of `Metadata` from a JSON map.
   ///
   /// This is used for serialization and deserialization of metadata objects.
-  factory Metadata.fromJson(Map<String, Object?> json) => _$MetadataFromJson(json);
+  factory Metadata.fromJson(Map<String, Object?> json) =>
+      _$MetadataFromJson(json);
 
   /// Converts this `Metadata` object to a JSON map.
   Map<String, Object?> toJson() => _$MetadataToJson(this);

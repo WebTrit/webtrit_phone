@@ -97,15 +97,9 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     final smartSizeFactor = _style.smartIndicator?.sizeFactor ?? 0.4;
     final presenceSizeFactor = _style.presenceBadge?.sizeFactor ?? 0.325;
 
-    _registeredRect = BadgeLayout.bottomRightSquare(
-      size: _diameter,
-      sizeFactor: registeredSizeFactor,
-    );
+    _registeredRect = BadgeLayout.bottomRightSquare(size: _diameter, sizeFactor: registeredSizeFactor);
 
-    _presenceRect = BadgeLayout.bottomRightSquare(
-      size: _diameter,
-      sizeFactor: presenceSizeFactor,
-    );
+    _presenceRect = BadgeLayout.bottomRightSquare(size: _diameter, sizeFactor: presenceSizeFactor);
 
     _smartRect = BadgeLayout.topLeftSquare(
       size: _diameter,
@@ -123,10 +117,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     return Container(
       width: _diameter,
       height: _diameter,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: _style.backgroundColor ?? scheme.secondaryContainer,
-      ),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: _style.backgroundColor ?? scheme.secondaryContainer),
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.loose,
@@ -142,15 +133,9 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
             ),
           ),
           if (presenceSource == PresenceViewSource.contactInfo && widget.registered != null)
-            Positioned.fromRect(
-              rect: _registeredRect,
-              child: _registeredIndicator(_style),
-            ),
+            Positioned.fromRect(rect: _registeredRect, child: _registeredIndicator(_style)),
           if (presenceSource == PresenceViewSource.sipPresence && widget.presenceInfo != null)
-            Positioned.fromRect(
-              rect: _presenceRect,
-              child: _buildPresenceIndicator(_style),
-            ),
+            Positioned.fromRect(rect: _presenceRect, child: _buildPresenceIndicator(_style)),
           if (widget.smart) Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme)),
           if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
@@ -174,10 +159,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: color,
-            border: Border.all(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              width: 2,
-            ),
+            border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 2),
           ),
         ),
         if (primaryActivity != null)
@@ -214,20 +196,11 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 
   Widget _buildAvatarContent(double diameter, LeadingAvatarStyle style) {
     if (widget.thumbnailUrl != null) {
-      return ClipOval(
-        key: ValueKey('remote:${widget.thumbnailUrl?.hashCode}'),
-        child: _remoteImage(diameter, style),
-      );
+      return ClipOval(key: ValueKey('remote:${widget.thumbnailUrl?.hashCode}'), child: _remoteImage(diameter, style));
     } else if (widget.thumbnail != null) {
-      return const ClipOval(
-        key: ValueKey('local'),
-        child: _LocalImage(),
-      );
+      return const ClipOval(key: ValueKey('local'), child: _LocalImage());
     } else {
-      return ClipOval(
-        key: ValueKey('placeholder:${widget.username ?? ""}'),
-        child: _placeholder(diameter, style),
-      );
+      return ClipOval(key: ValueKey('placeholder:${widget.username ?? ""}'), child: _placeholder(diameter, style));
     }
   }
 
@@ -273,10 +246,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     final icon = style.placeholderIcon ?? widget.placeholderIcon;
 
     if (username != null) {
-      final defaultTs = TextStyle(
-        fontSize: diameter * 0.35,
-        fontWeight: FontWeight.bold,
-      );
+      final defaultTs = TextStyle(fontSize: diameter * 0.35, fontWeight: FontWeight.bold);
 
       return Center(
         child: Text(
@@ -300,7 +270,9 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
         ? (style.registeredBadge?.registeredColor ?? rs?.registered)
         : (style.registeredBadge?.unregisteredColor ?? rs?.unregistered);
 
-    return Container(decoration: BoxDecoration(shape: BoxShape.circle, color: color));
+    return Container(
+      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+    );
   }
 
   Widget _smartIndicator(double diameter, LeadingAvatarStyle style, ColorScheme scheme) {

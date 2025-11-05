@@ -52,9 +52,6 @@ extension TextStyleConfigExtension on TextStyleConfig {
 
 extension FontWeightConfigExtension on FontWeightConfig {
   FontWeight? toFontWeight() {
-    return FontWeight.values.firstWhere(
-      (fw) => fw.value == weight,
-      orElse: () => FontWeight.normal,
-    );
+    return FontWeight.values.firstWhere((fw) => fw.value == weight, orElse: () => FontWeight.normal);
   }
 }

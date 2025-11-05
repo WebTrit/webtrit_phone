@@ -10,13 +10,7 @@ export 'keypad_screen_style.dart';
 export 'keypad_screen_styles.dart';
 
 class KeypadScreen extends StatelessWidget {
-  const KeypadScreen({
-    super.key,
-    this.title,
-    required this.videoEnabled,
-    required this.transferEnabled,
-    this.style,
-  });
+  const KeypadScreen({super.key, this.title, required this.videoEnabled, required this.transferEnabled, this.style});
 
   final Widget? title;
   final bool videoEnabled;
@@ -30,15 +24,8 @@ class KeypadScreen extends StatelessWidget {
     final style = this.style ?? themeData.extension<KeypadScreenStyles>()?.primary;
 
     return Scaffold(
-      appBar: MainAppBar(
-        title: title,
-        context: context,
-      ),
-      body: KeypadView(
-        videoEnabled: videoEnabled,
-        transferEnabled: transferEnabled,
-        style: style,
-      ),
+      appBar: MainAppBar(title: title, context: context),
+      body: KeypadView(videoEnabled: videoEnabled, transferEnabled: transferEnabled, style: style),
     );
   }
 }

@@ -33,10 +33,7 @@ class PresenceInfoView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      l10n.presence_infoView_available,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    Text(l10n.presence_infoView_available, style: Theme.of(context).textTheme.bodyMedium),
                     const SizedBox(width: 4),
                     Text(
                       info.available ? l10n.presence_infoView_available_true : l10n.presence_infoView_available_false,
@@ -48,55 +45,34 @@ class PresenceInfoView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        l10n.presence_infoView_note,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(l10n.presence_infoView_note, style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(width: 4),
-                      Text(
-                        info.note,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(info.note, style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
                 if (info.activities.isNotEmpty)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        l10n.presence_infoView_activity,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(l10n.presence_infoView_activity, style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(width: 4),
-                      Text(
-                        info.activities.first.name,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(info.activities.first.name, style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
                 if (info.statusIcon != null && info.statusIcon!.isNotEmpty)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        l10n.presence_infoView_statusIcon,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(l10n.presence_infoView_statusIcon, style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(width: 4),
-                      Text(
-                        info.statusIcon!,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(info.statusIcon!, style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
                 if (info.timeOffsetMin != null)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        l10n.presence_infoView_timeZone,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(l10n.presence_infoView_timeZone, style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(width: 4),
                       Text(
                         'UTC${info.timeOffsetMin! >= 0 ? '+' : ''}${(info.timeOffsetMin! ~/ 60)}',
@@ -109,10 +85,7 @@ class PresenceInfoView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        l10n.presence_infoView_updated,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(l10n.presence_infoView_updated, style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(width: 4),
                       Text(
                         DateFormat.yMd().add_Hm().format(info.timestamp!.toLocal()),
@@ -124,15 +97,9 @@ class PresenceInfoView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        l10n.presence_infoView_client,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(l10n.presence_infoView_client, style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(width: 4),
-                      Text(
-                        info.device!,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(info.device!, style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
                 // const Divider(),

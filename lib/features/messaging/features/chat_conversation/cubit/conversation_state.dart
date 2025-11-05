@@ -76,17 +76,17 @@ final class CVSReady extends ConversationState {
 
   @override
   List<Object> get props => [
-        credentials,
-        chat ?? 0,
-        messages,
-        outboxMessages,
-        outboxMessageEdits,
-        outboxMessageDeletes,
-        readCursors,
-        fetchingHistory,
-        historyEndReached,
-        busy,
-      ];
+    credentials,
+    chat ?? 0,
+    messages,
+    outboxMessages,
+    outboxMessageEdits,
+    outboxMessageDeletes,
+    readCursors,
+    fetchingHistory,
+    historyEndReached,
+    busy,
+  ];
 
   copyWith({
     ChatCredentials? credentials,

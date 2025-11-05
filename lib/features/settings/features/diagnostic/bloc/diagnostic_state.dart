@@ -13,7 +13,7 @@ class DiagnosticState with _$DiagnosticState {
 
   @override
   final PushTokenStatus pushTokenStatus;
-  
+
   @override
   final CallkeepAndroidBatteryMode batteryMode;
 

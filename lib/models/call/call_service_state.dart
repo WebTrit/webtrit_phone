@@ -9,11 +9,7 @@ import 'signaling_client_status.dart';
 
 part 'call_service_state.freezed.dart';
 
-enum NetworkStatus {
-  changing,
-  available,
-  none,
-}
+enum NetworkStatus { changing, available, none }
 
 @freezed
 class CallServiceState with _$CallServiceState {
@@ -40,7 +36,7 @@ class CallServiceState with _$CallServiceState {
 
   @override
   final Object? lastSignalingClientDisconnectError;
-  
+
   @override
   final int? lastSignalingDisconnectCode;
 

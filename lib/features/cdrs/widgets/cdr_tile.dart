@@ -54,61 +54,40 @@ class _CdrTileState extends State<CdrTile> {
   String? get participantNumber => widget.cdr.participantNumber;
 
   List<PopupMenuEntry> get actions => [
-        if (widget.onAudioCallPressed != null)
-          PopupMenuItem(
-            onTap: widget.onAudioCallPressed,
-            child: Text(context.l10n.numberActions_audioCall),
-          ),
-        if (widget.onVideoCallPressed != null)
-          PopupMenuItem(
-            onTap: widget.onVideoCallPressed,
-            child: Text(context.l10n.numberActions_videoCall),
-          ),
-        if (widget.callNumbers.length > 1)
-          for (final number in widget.callNumbers)
-            PopupMenuItem(
-              onTap: () => widget.onCallFrom?.call(number),
-              child: Text(context.l10n.numberActions_callFrom(number)),
-            ),
-        if (widget.onTransferPressed != null)
-          PopupMenuItem(
-            onTap: widget.onTransferPressed,
-            child: Text(context.l10n.numberActions_transfer),
-          ),
-        if (widget.onChatPressed != null)
-          PopupMenuItem(
-            onTap: widget.onChatPressed,
-            child: Text(context.l10n.numberActions_chat),
-          ),
-        if (widget.onSendSmsPressed != null)
-          PopupMenuItem(
-            onTap: widget.onSendSmsPressed,
-            child: Text(context.l10n.numberActions_sendSms),
-          ),
-        if (widget.onViewContactPressed != null)
-          PopupMenuItem(
-            onTap: widget.onViewContactPressed,
-            child: Text(context.l10n.numberActions_viewContact),
-          ),
-        if (widget.onCallLogPressed != null)
-          PopupMenuItem(
-            onTap: widget.onCallLogPressed,
-            child: Text(context.l10n.numberActions_callLog),
-          ),
-        if (participantNumber != null)
-          PopupMenuItem(
-            onTap: () {
-              Clipboard.setData(ClipboardData(text: participantNumber!));
-            },
-            child: Text(context.l10n.numberActions_copyNumber),
-          ),
+    if (widget.onAudioCallPressed != null)
+      PopupMenuItem(onTap: widget.onAudioCallPressed, child: Text(context.l10n.numberActions_audioCall)),
+    if (widget.onVideoCallPressed != null)
+      PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
+    if (widget.callNumbers.length > 1)
+      for (final number in widget.callNumbers)
         PopupMenuItem(
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: cdr.callId));
-          },
-          child: Text(context.l10n.numberActions_copyCallId),
+          onTap: () => widget.onCallFrom?.call(number),
+          child: Text(context.l10n.numberActions_callFrom(number)),
         ),
-      ];
+    if (widget.onTransferPressed != null)
+      PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
+    if (widget.onChatPressed != null)
+      PopupMenuItem(onTap: widget.onChatPressed, child: Text(context.l10n.numberActions_chat)),
+    if (widget.onSendSmsPressed != null)
+      PopupMenuItem(onTap: widget.onSendSmsPressed, child: Text(context.l10n.numberActions_sendSms)),
+    if (widget.onViewContactPressed != null)
+      PopupMenuItem(onTap: widget.onViewContactPressed, child: Text(context.l10n.numberActions_viewContact)),
+    if (widget.onCallLogPressed != null)
+      PopupMenuItem(onTap: widget.onCallLogPressed, child: Text(context.l10n.numberActions_callLog)),
+    if (participantNumber != null)
+      PopupMenuItem(
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: participantNumber!));
+        },
+        child: Text(context.l10n.numberActions_copyNumber),
+      ),
+    PopupMenuItem(
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: cdr.callId));
+      },
+      child: Text(context.l10n.numberActions_copyCallId),
+    ),
+  ];
 
   void onLongPress() {
     final position = getPosition();
@@ -145,19 +124,12 @@ class _CdrTileState extends State<CdrTile> {
       ),
       trailing: Column(
         children: [
-          Text(
-            cdr.connectTime.toLocal().timeOrDate,
-            style: themeData.textTheme.bodySmall,
-          ),
+          Text(cdr.connectTime.toLocal().timeOrDate, style: themeData.textTheme.bodySmall),
           const SizedBox(width: 4),
           Text(cdr.duration.format()),
         ],
       ),
-      title: Text(
-        contact?.maybeName ?? participant,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
+      title: Text(contact?.maybeName ?? participant, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Row(
         children: [
           Icon(
@@ -166,13 +138,7 @@ class _CdrTileState extends State<CdrTile> {
             color: cdr.direction == CallDirection.incoming ? Colors.blue : Colors.green,
           ),
           SizedBox(width: 4),
-          Flexible(
-            child: Text(
-              participantNumber ?? participant,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          Flexible(child: Text(participantNumber ?? participant, maxLines: 1, overflow: TextOverflow.ellipsis)),
         ],
       ),
       onTap: widget.onTap,

@@ -21,7 +21,8 @@ class UpdateRequest extends CallRequest {
   factory UpdateRequest.fromJson(Map<String, dynamic> json) {
     final requestTypeValue = json[Request.typeKey];
     if (requestTypeValue != typeValue) {
-      throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(
+          requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
     return UpdateRequest(

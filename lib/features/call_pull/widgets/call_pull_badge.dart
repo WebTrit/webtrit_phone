@@ -51,96 +51,100 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
   }
 
   void onPickUp(PullableCall pullableCall) {
-    callBloc.add(CallControlEvent.started(
-      number: pullableCall.remoteNumber,
-      video: false,
-      replaces: '${pullableCall.callId};from-tag=${pullableCall.localTag};to-tag=${pullableCall.remoteTag}',
-      displayName: pullableCall.remoteDisplayName,
-    ));
+    callBloc.add(
+      CallControlEvent.started(
+        number: pullableCall.remoteNumber,
+        video: false,
+        replaces: '${pullableCall.callId};from-tag=${pullableCall.localTag};to-tag=${pullableCall.remoteTag}',
+        displayName: pullableCall.remoteDisplayName,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      final theme = Theme.of(context);
-      final colorScheme = theme.colorScheme;
-      final contentColor = colorScheme.onPrimary;
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final colorScheme = theme.colorScheme;
+        final contentColor = colorScheme.onPrimary;
 
-      return Material(
-        color: colorScheme.tertiary,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RotationTransition(
-                  turns: controller.drive(
-                    Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: Curves.elasticInOut)),
-                  ),
-                  child: Stack(
-                    children: [
-                      Icon(Icons.call_outlined, size: 16, color: contentColor),
-                      if (widget.pullableCalls.length > 1)
-                        Positioned(
-                          right: 1,
-                          top: 0,
-                          child: Text(
-                            widget.pullableCalls.length.toString(),
-                            style: TextStyle(
-                              fontSize: 8,
-                              color: contentColor,
-                              fontWeight: FontWeight.bold,
-                              height: 1,
+        return Material(
+          color: colorScheme.tertiary,
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RotationTransition(
+                    turns: controller.drive(
+                      Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: Curves.elasticInOut)),
+                    ),
+                    child: Stack(
+                      children: [
+                        Icon(Icons.call_outlined, size: 16, color: contentColor),
+                        if (widget.pullableCalls.length > 1)
+                          Positioned(
+                            right: 1,
+                            top: 0,
+                            child: Text(
+                              widget.pullableCalls.length.toString(),
+                              style: TextStyle(
+                                fontSize: 8,
+                                color: contentColor,
+                                fontWeight: FontWeight.bold,
+                                height: 1,
+                              ),
                             ),
+                          )
+                        else
+                          Positioned(
+                            right: 1,
+                            top: 1,
+                            child: switch (widget.pullableCalls.first.direction) {
+                              PullableCallDirection.initiator => Icon(Icons.call_made, size: 8, color: contentColor),
+                              PullableCallDirection.recipient => Icon(
+                                Icons.call_received,
+                                size: 8,
+                                color: contentColor,
+                              ),
+                            },
                           ),
-                        )
-                      else
-                        Positioned(
-                          right: 1,
-                          top: 1,
-                          child: switch (widget.pullableCalls.first.direction) {
-                            PullableCallDirection.initiator => Icon(Icons.call_made, size: 8, color: contentColor),
-                            PullableCallDirection.recipient => Icon(Icons.call_received, size: 8, color: contentColor),
-                          },
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: 4),
-                if (widget.pullableCalls.length > 1)
-                  LimitedBox(
-                    maxWidth: 100,
-                    child: Text(
-                      widget.pullableCalls.map((e) => e.displayName.split(' ').first).join(', '),
+                  const SizedBox(width: 4),
+                  if (widget.pullableCalls.length > 1)
+                    LimitedBox(
+                      maxWidth: 100,
+                      child: Text(
+                        widget.pullableCalls.map((e) => e.displayName.split(' ').first).join(', '),
+                        style: TextStyle(fontSize: 12, color: contentColor),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  else
+                    Text(
+                      widget.pullableCalls.first.displayName,
                       style: TextStyle(fontSize: 12, color: contentColor),
                       overflow: TextOverflow.ellipsis,
                     ),
-                  )
-                else
-                  Text(
-                    widget.pullableCalls.first.displayName,
-                    style: TextStyle(fontSize: 12, color: contentColor),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
 
 class PullableCallsDialog extends StatefulWidget {
-  const PullableCallsDialog({
-    required this.callPullCubit,
-    required this.callBloc,
-    super.key,
-  });
+  const PullableCallsDialog({required this.callPullCubit, required this.callBloc, super.key});
 
   final CallPullCubit callPullCubit;
   final CallBloc callBloc;
@@ -208,19 +212,15 @@ class _PullableCallsDialogState extends State<PullableCallsDialog> {
       children: [
         switch (pullableCall.state) {
           PullableCallState.proceeding || PullableCallState.early => switch (pullableCall.direction) {
-              PullableCallDirection.initiator => const Icon(Icons.phone_forwarded, size: 16),
-              PullableCallDirection.recipient => const Icon(Icons.phone_callback, size: 16),
-            },
+            PullableCallDirection.initiator => const Icon(Icons.phone_forwarded, size: 16),
+            PullableCallDirection.recipient => const Icon(Icons.phone_callback, size: 16),
+          },
           PullableCallState.confirmed => const Icon(Icons.phone_in_talk, size: 16),
           _ => const Icon(Icons.phone_locked, size: 16),
         },
         const SizedBox(width: 8),
         Expanded(
-          child: Text(
-            pullableCall.displayName,
-            style: const TextStyle(fontSize: 14),
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: Text(pullableCall.displayName, style: const TextStyle(fontSize: 14), overflow: TextOverflow.ellipsis),
         ),
         Material(
           color: colorScheme.tertiary.withAlpha(canPickUp ? 255 : 128),
@@ -238,7 +238,7 @@ class _PullableCallsDialogState extends State<PullableCallsDialog> {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

@@ -24,11 +24,7 @@ final class ContactSourceId extends ContactBuilderSource {
 }
 
 class ContactInfoBuilder extends StatefulWidget {
-  const ContactInfoBuilder({
-    required this.source,
-    required this.builder,
-    super.key,
-  });
+  const ContactInfoBuilder({required this.source, required this.builder, super.key});
 
   final ContactBuilderSource source;
   final Widget Function(BuildContext, Contact?) builder;
@@ -61,20 +57,20 @@ class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
     contact = valuesPool[key];
     final stream = switch (widget.source) {
       ContactSourcePhone(phoneNumber: var number) => contactsRepo.watchContactByPhoneNumberMatch(number),
-      ContactSourceId(sourceType: var type, sourceId: var id) =>
-        contactsRepo.watchContactBySourceWithPhonesAndEmails(type, id),
+      ContactSourceId(sourceType: var type, sourceId: var id) => contactsRepo.watchContactBySourceWithPhonesAndEmails(
+        type,
+        id,
+      ),
     };
-    contactSub = stream.listen(
-      (contact) {
-        if (contact != null && contact != this.contact) {
-          this.contact = contact;
-          if (mounted) setState(() {});
-        }
-        if (contact != null && contact != valuesPool[key]) {
-          valuesPool[key] = contact;
-        }
-      },
-    );
+    contactSub = stream.listen((contact) {
+      if (contact != null && contact != this.contact) {
+        this.contact = contact;
+        if (mounted) setState(() {});
+      }
+      if (contact != null && contact != valuesPool[key]) {
+        valuesPool[key] = contact;
+      }
+    });
   }
 
   @override

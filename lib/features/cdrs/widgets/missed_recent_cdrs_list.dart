@@ -72,9 +72,7 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
   }
 
   void openChat(String userId) {
-    final route = ChatConversationScreenPageRoute(
-      participantId: userId,
-    );
+    final route = ChatConversationScreenPageRoute(participantId: userId);
     context.router.navigate(route);
   }
 
@@ -147,83 +145,85 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                             child: SizedBox(
                               key: Key(cdr.callId.toString()),
                               child: ContactInfoBuilder(
-                                  source: ContactSourcePhone(participantNumber ?? participant),
-                                  builder: (context, contact) {
-                                    final contactSourceId = contact?.sourceId;
-                                    final contactSmsNumbers = contact?.smsNumbers ?? [];
-                                    final canSendSms = contactSmsNumbers.contains(participantNumber);
+                                source: ContactSourcePhone(participantNumber ?? participant),
+                                builder: (context, contact) {
+                                  final contactSourceId = contact?.sourceId;
+                                  final contactSmsNumbers = contact?.smsNumbers ?? [];
+                                  final canSendSms = contactSmsNumbers.contains(participantNumber);
 
-                                    return CdrTile(
-                                      cdr: cdr,
-                                      contact: contact,
-                                      callNumbers: callNumbers,
-                                      onTap: () {
-                                        if (participantNumber == null) return;
+                                  return CdrTile(
+                                    cdr: cdr,
+                                    contact: contact,
+                                    callNumbers: callNumbers,
+                                    onTap: () {
+                                      if (participantNumber == null) return;
 
-                                        if (transfer) {
-                                          submitTransfer(destination: participantNumber);
-                                        } else {
-                                          _callController.createCall(
+                                      if (transfer) {
+                                        submitTransfer(destination: participantNumber);
+                                      } else {
+                                        _callController.createCall(
+                                          destination: participantNumber,
+                                          displayName: contact?.maybeName,
+                                        );
+                                      }
+                                    },
+                                    onAudioCallPressed: participantNumber != null
+                                        ? () => _callController.createCall(
                                             destination: participantNumber,
                                             displayName: contact?.maybeName,
-                                          );
-                                        }
-                                      },
-                                      onAudioCallPressed: participantNumber != null
-                                          ? () => _callController.createCall(
-                                                destination: participantNumber,
-                                                displayName: contact?.maybeName,
-                                                video: false,
-                                              )
-                                          : null,
-                                      onVideoCallPressed: participantNumber != null && widget.videoEnabled
-                                          ? () => _callController.createCall(
-                                                destination: participantNumber,
-                                                displayName: contact?.maybeName,
-                                                video: true,
-                                              )
-                                          : null,
-                                      onTransferPressed:
-                                          participantNumber != null && widget.transferEnabled && hasActiveCall
-                                              ? () {
-                                                  submitTransfer(destination: participantNumber);
-                                                }
-                                              : null,
-                                      onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
-                                          ? () {
-                                              openChat(contactSourceId!);
-                                            }
-                                          : null,
-                                      onSendSmsPressed: participantNumber != null &&
-                                              widget.smssEnabled &&
-                                              userSmsNumbers.isNotEmpty &&
-                                              canSendSms
-                                          ? () {
-                                              sendSms(
-                                                userSmsNumbers: userSmsNumbers,
-                                                contactPhoneNumber: participantNumber,
-                                                contactSourceId: contactSourceId,
-                                              );
-                                            }
-                                          : null,
-                                      onViewContactPressed: contact != null
-                                          ? () {
-                                              openContact(contactId: contact.id);
-                                            }
-                                          : null,
-                                      onCallLogPressed: participantNumber != null
-                                          ? () => openCallLog(number: participantNumber)
-                                          : null,
-                                      onCallFrom: participantNumber != null
-                                          ? (fromNumber) => _callController.createCall(
-                                                destination: participantNumber,
-                                                displayName: contact?.maybeName,
-                                                fromNumber: fromNumber,
-                                                video: false,
-                                              )
-                                          : null,
-                                    );
-                                  }),
+                                            video: false,
+                                          )
+                                        : null,
+                                    onVideoCallPressed: participantNumber != null && widget.videoEnabled
+                                        ? () => _callController.createCall(
+                                            destination: participantNumber,
+                                            displayName: contact?.maybeName,
+                                            video: true,
+                                          )
+                                        : null,
+                                    onTransferPressed:
+                                        participantNumber != null && widget.transferEnabled && hasActiveCall
+                                        ? () {
+                                            submitTransfer(destination: participantNumber);
+                                          }
+                                        : null,
+                                    onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
+                                        ? () {
+                                            openChat(contactSourceId!);
+                                          }
+                                        : null,
+                                    onSendSmsPressed:
+                                        participantNumber != null &&
+                                            widget.smssEnabled &&
+                                            userSmsNumbers.isNotEmpty &&
+                                            canSendSms
+                                        ? () {
+                                            sendSms(
+                                              userSmsNumbers: userSmsNumbers,
+                                              contactPhoneNumber: participantNumber,
+                                              contactSourceId: contactSourceId,
+                                            );
+                                          }
+                                        : null,
+                                    onViewContactPressed: contact != null
+                                        ? () {
+                                            openContact(contactId: contact.id);
+                                          }
+                                        : null,
+                                    onCallLogPressed: participantNumber != null
+                                        ? () => openCallLog(number: participantNumber)
+                                        : null,
+                                    onCallFrom: participantNumber != null
+                                        ? (fromNumber) => _callController.createCall(
+                                            destination: participantNumber,
+                                            displayName: contact?.maybeName,
+                                            fromNumber: fromNumber,
+                                            video: false,
+                                          )
+                                        : null,
+                                  );
+                                },
+                              ),
                             ),
                           );
                         },

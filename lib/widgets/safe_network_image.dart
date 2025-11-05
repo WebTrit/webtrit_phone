@@ -10,13 +10,7 @@ class SafeNetworkImage extends StatefulWidget {
   final Widget Function()? errorBuilder;
   final BoxFit fit;
 
-  const SafeNetworkImage(
-    this.url, {
-    super.key,
-    this.placeholderBuilder,
-    this.errorBuilder,
-    this.fit = BoxFit.cover,
-  });
+  const SafeNetworkImage(this.url, {super.key, this.placeholderBuilder, this.errorBuilder, this.fit = BoxFit.cover});
 
   @override
   State<SafeNetworkImage> createState() => _SafeNetworkImageState();
@@ -32,7 +26,9 @@ class _SafeNetworkImageState extends State<SafeNetworkImage> {
   void initState() {
     super.initState();
     _imageProvider = NetworkImage(widget.url);
-    _imageProvider.resolve(const ImageConfiguration()).addListener(
+    _imageProvider
+        .resolve(const ImageConfiguration())
+        .addListener(
           ImageStreamListener(
             (imageInfo, _) {
               if (mounted) setState(() => _isLoaded = true);

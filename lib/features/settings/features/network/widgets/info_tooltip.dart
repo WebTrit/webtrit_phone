@@ -17,10 +17,7 @@ class InfoTooltip extends StatelessWidget {
       padding: kAllPadding16,
       margin: kAllPadding16,
       showDuration: const Duration(seconds: 10),
-      child: IconButton(
-        icon: Icon(Icons.info_outline, color: colorScheme.onSurfaceVariant),
-        onPressed: null,
-      ),
+      child: IconButton(icon: Icon(Icons.info_outline, color: colorScheme.onSurfaceVariant), onPressed: null),
     );
   }
 }

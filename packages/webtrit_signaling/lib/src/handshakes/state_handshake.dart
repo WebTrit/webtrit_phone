@@ -142,10 +142,12 @@ class StateHandshake extends Handshake {
   factory StateHandshake.fromJson(Map<String, dynamic> json) {
     final handshakeTypeValue = json[Handshake.typeKey];
     if (handshakeTypeValue != typeValue) {
-      throw ArgumentError.value(handshakeTypeValue, Handshake.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(
+          handshakeTypeValue, Handshake.typeKey, 'Not equal $typeValue');
     }
 
-    final keepaliveInterval = Duration(milliseconds: json['keepalive_interval'] as int);
+    final keepaliveInterval =
+        Duration(milliseconds: json['keepalive_interval'] as int);
 
     final timestamp = json['timestamp'] as int;
 
@@ -172,20 +174,29 @@ class StateHandshake extends Handshake {
         return null;
       }
 
-      final callLogs = (lineJson['call_logs'] as List<dynamic>).map<CallLog>((callLogJson) {
+      final callLogs =
+          (lineJson['call_logs'] as List<dynamic>).map<CallLog>((callLogJson) {
         final timestamp = callLogJson[0] as int;
         final requestOrResponseOrEventJson = callLogJson[1];
-        requestOrResponseOrEventJson['line'] = lineIndex; // inject line to apply universal fromJson methods
-        requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
+        requestOrResponseOrEventJson['line'] =
+            lineIndex; // inject line to apply universal fromJson methods
+        requestOrResponseOrEventJson['call_id'] =
+            callId; // inject call_id to apply universal fromJson methods
         if (requestOrResponseOrEventJson.containsKey(Request.typeKey)) {
-          return CallRequestLog(timestamp: timestamp, callRequest: CallRequest.fromJson(requestOrResponseOrEventJson));
+          return CallRequestLog(
+              timestamp: timestamp,
+              callRequest: CallRequest.fromJson(requestOrResponseOrEventJson));
         } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
-          return ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson));
+          return ResponseLog(
+              timestamp: timestamp,
+              response: Response.fromJson(requestOrResponseOrEventJson));
         } else if (requestOrResponseOrEventJson.containsKey(Event.typeKey)) {
-          return CallEventLog(timestamp: timestamp, callEvent: CallEvent.fromJson(requestOrResponseOrEventJson));
+          return CallEventLog(
+              timestamp: timestamp,
+              callEvent: CallEvent.fromJson(requestOrResponseOrEventJson));
         } else {
-          throw ArgumentError.value(
-              requestOrResponseOrEventJson, 'requestOrResponseOrEventJson', 'Active call\'s logs incorrect');
+          throw ArgumentError.value(requestOrResponseOrEventJson,
+              'requestOrResponseOrEventJson', 'Active call\'s logs incorrect');
         }
       }).toList(growable: false);
 
@@ -195,12 +206,17 @@ class StateHandshake extends Handshake {
       );
     }).toList(growable: false);
 
-    final userActiveCallsJson = json['user_active_calls'] as List<dynamic>? ?? <dynamic>[];
-    final userActiveCalls = userActiveCallsJson.map((e) => UserActiveCall.fromJson(e)).toList();
+    final userActiveCallsJson =
+        json['user_active_calls'] as List<dynamic>? ?? <dynamic>[];
+    final userActiveCalls =
+        userActiveCallsJson.map((e) => UserActiveCall.fromJson(e)).toList();
 
-    final contactsPresenceInfoJson = json['presence_contacts_info'] as Map<String, dynamic>?;
+    final contactsPresenceInfoJson =
+        json['presence_contacts_info'] as Map<String, dynamic>?;
     final contactsPresenceInfo = contactsPresenceInfoJson?.map((key, value) {
-          final presenceInfoList = (value as List<dynamic>).map((e) => SignalingPresenceInfo.fromJson(e)).toList();
+          final presenceInfoList = (value as List<dynamic>)
+              .map((e) => SignalingPresenceInfo.fromJson(e))
+              .toList();
           return MapEntry(key, presenceInfoList);
         }) ??
         <String, List<SignalingPresenceInfo>>{};
@@ -210,21 +226,31 @@ class StateHandshake extends Handshake {
     if (guestLineJson != null) {
       final callId = guestLineJson['call_id'] as String?;
       if (callId != null) {
-        final callLogs = (guestLineJson['call_logs'] as List<dynamic>).map<CallLog>((callLogJson) {
+        final callLogs = (guestLineJson['call_logs'] as List<dynamic>)
+            .map<CallLog>((callLogJson) {
           final timestamp = callLogJson[0] as int;
           final requestOrResponseOrEventJson = callLogJson[1];
-          requestOrResponseOrEventJson['line'] = null; // inject line to apply universal fromJson methods
-          requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
+          requestOrResponseOrEventJson['line'] =
+              null; // inject line to apply universal fromJson methods
+          requestOrResponseOrEventJson['call_id'] =
+              callId; // inject call_id to apply universal fromJson methods
           if (requestOrResponseOrEventJson.containsKey(Request.typeKey)) {
             return CallRequestLog(
-                timestamp: timestamp, callRequest: CallRequest.fromJson(requestOrResponseOrEventJson));
-          } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
-            return ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson));
+                timestamp: timestamp,
+                callRequest:
+                    CallRequest.fromJson(requestOrResponseOrEventJson));
+          } else if (requestOrResponseOrEventJson
+              .containsKey(Response.typeKey)) {
+            return ResponseLog(
+                timestamp: timestamp,
+                response: Response.fromJson(requestOrResponseOrEventJson));
           } else if (requestOrResponseOrEventJson.containsKey(Event.typeKey)) {
-            return CallEventLog(timestamp: timestamp, callEvent: CallEvent.fromJson(requestOrResponseOrEventJson));
+            return CallEventLog(
+                timestamp: timestamp,
+                callEvent: CallEvent.fromJson(requestOrResponseOrEventJson));
           } else {
-            throw ArgumentError.value(
-                requestOrResponseOrEventJson, 'requestOrResponseOrEventJson', 'Guest line\'s logs incorrect');
+            throw ArgumentError.value(requestOrResponseOrEventJson,
+                'requestOrResponseOrEventJson', 'Guest line\'s logs incorrect');
           }
         }).toList(growable: false);
 

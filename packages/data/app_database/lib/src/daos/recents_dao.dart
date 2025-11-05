@@ -31,7 +31,8 @@ class RecentData {
 class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
   RecentsDao(super.db);
 
-  Stream<List<RecentData>> watchLastRecents([Duration period = const Duration(days: 14)]) {
+  Stream<List<RecentData>> watchLastRecents(
+      [Duration period = const Duration(days: 14)]) {
     final callsQuery = select(callLogsTable)
       ..where((t) => t.createdAt.isBiggerOrEqualValue(clock.agoBy(period)))
       ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]);
@@ -40,11 +41,17 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
     final contactPhones = alias(contactPhonesTable, 'contact_phones');
 
     final recentsQuery = callsQuery.join([
-      leftOuterJoin(sourcePhone, callLogsTable.number.equalsExp(sourcePhone.number), useColumns: false),
-      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(sourcePhone.contactId)),
-      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(contactPhones, contactPhones.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
+      leftOuterJoin(
+          sourcePhone, callLogsTable.number.equalsExp(sourcePhone.number),
+          useColumns: false),
+      leftOuterJoin(
+          contactsTable, contactsTable.id.equalsExp(sourcePhone.contactId)),
+      leftOuterJoin(contactEmailsTable,
+          contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(
+          contactPhones, contactPhones.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(presenceInfoTable,
+          presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
 
     return recentsQuery.watch().map(_rowsToRecent);
@@ -52,10 +59,14 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
 
   Future<RecentData> getRecentByCallId(int id) {
     final q = (select(callLogsTable)..where((t) => t.id.equals(id))).join([
-      leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
-      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
-      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
+      leftOuterJoin(contactPhonesTable,
+          contactPhonesTable.number.equalsExp(callLogsTable.number)),
+      leftOuterJoin(contactsTable,
+          contactsTable.id.equalsExp(contactPhonesTable.contactId)),
+      leftOuterJoin(contactEmailsTable,
+          contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(presenceInfoTable,
+          presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
     return q.get().then((rows) => _rowsToRecent(rows).first);
   }
@@ -84,9 +95,12 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
             presenceInfo: {}),
       );
 
-      if (contactPhone != null) recents[callLogEntry.id]!.contactPhones.add(contactPhone);
-      if (contactEmail != null) recents[callLogEntry.id]!.contactEmails.add(contactEmail);
-      if (presenceInfo != null) recents[callLogEntry.id]!.presenceInfo.add(presenceInfo);
+      if (contactPhone != null)
+        recents[callLogEntry.id]!.contactPhones.add(contactPhone);
+      if (contactEmail != null)
+        recents[callLogEntry.id]!.contactEmails.add(contactEmail);
+      if (presenceInfo != null)
+        recents[callLogEntry.id]!.presenceInfo.add(presenceInfo);
     }
 
     return recents.values.toList();

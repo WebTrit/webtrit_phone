@@ -151,24 +151,17 @@ class AppPreferencesImpl
   ];
 
   // List of preferences keys to exclude by default during clean operation
-  static const List<String> _defaultCleanExclusionList = [
-    _kUserAgreementAcceptedKey,
-    _kContactsAgreementAcceptedKey,
-  ];
+  static const List<String> _defaultCleanExclusionList = [_kUserAgreementAcceptedKey, _kContactsAgreementAcceptedKey];
 
   final SharedPreferences _sharedPreferences;
 
   AppPreferencesImpl(this._sharedPreferences);
 
   @override
-  Future<bool> clear({
-    List<String> exclusion = _defaultCleanExclusionList,
-  }) {
+  Future<bool> clear({List<String> exclusion = _defaultCleanExclusionList}) {
     return Future.wait(
       _kPreferencesList.where((key) => !exclusion.contains(key)).map((key) => _sharedPreferences.remove(key)).toList(),
-    ).then(
-      (results) => results.every((result) => result),
-    );
+    ).then((results) => results.every((result) => result));
   }
 
   @override
@@ -253,8 +246,9 @@ class AppPreferencesImpl
   Future<bool> setActiveMainFlavor(MainFlavor value) => _sharedPreferences.setString(_kActiveMainFlavorKey, value.name);
 
   @override
-  RecentsVisibilityFilter getActiveRecentsVisibilityFilter(
-      {RecentsVisibilityFilter defaultValue = RecentsVisibilityFilter.all}) {
+  RecentsVisibilityFilter getActiveRecentsVisibilityFilter({
+    RecentsVisibilityFilter defaultValue = RecentsVisibilityFilter.all,
+  }) {
     final activeRecentsVisibilityFilterString = _sharedPreferences.getString(_kActiveRecentsVisibilityFilterKey);
     if (activeRecentsVisibilityFilterString != null) {
       try {
@@ -330,9 +324,7 @@ class AppPreferencesImpl
       _sharedPreferences.setString(_kIncomingCallTypeKey, value.name);
 
   @override
-  IncomingCallType getIncomingCallType({
-    IncomingCallType defaultValue = IncomingCallType.pushNotification,
-  }) {
+  IncomingCallType getIncomingCallType({IncomingCallType defaultValue = IncomingCallType.pushNotification}) {
     final incomingCallType = _sharedPreferences.getString(_kIncomingCallTypeKey);
     if (incomingCallType != null) {
       try {

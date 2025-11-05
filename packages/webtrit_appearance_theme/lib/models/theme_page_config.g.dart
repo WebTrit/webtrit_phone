@@ -63,66 +63,69 @@ Map<String, dynamic> _$LoginPageConfigToJson(LoginPageConfig instance) =>
     };
 
 LoginOtpSigninVerifyScreenPageConfig
-_$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) =>
-    LoginOtpSigninVerifyScreenPageConfig(
+    _$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) =>
+        LoginOtpSigninVerifyScreenPageConfig(
+          countdownRepeatIntervalSeconds:
+              (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
+        );
+
+Map<String, dynamic> _$LoginOtpSigninVerifyScreenPageConfigToJson(
+  LoginOtpSigninVerifyScreenPageConfig instance,
+) =>
+    <String, dynamic>{
+      'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds,
+    };
+
+LoginSignupVerifyScreenPageConfig _$LoginSignupVerifyScreenPageConfigFromJson(
+  Map<String, dynamic> json,
+) =>
+    LoginSignupVerifyScreenPageConfig(
       countdownRepeatIntervalSeconds:
           (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
     );
 
-Map<String, dynamic> _$LoginOtpSigninVerifyScreenPageConfigToJson(
-  LoginOtpSigninVerifyScreenPageConfig instance,
-) => <String, dynamic>{
-  'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds,
-};
-
-LoginSignupVerifyScreenPageConfig _$LoginSignupVerifyScreenPageConfigFromJson(
-  Map<String, dynamic> json,
-) => LoginSignupVerifyScreenPageConfig(
-  countdownRepeatIntervalSeconds:
-      (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
-);
-
 Map<String, dynamic> _$LoginSignupVerifyScreenPageConfigToJson(
   LoginSignupVerifyScreenPageConfig instance,
-) => <String, dynamic>{
-  'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds,
-};
+) =>
+    <String, dynamic>{
+      'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds,
+    };
 
 LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
   Map<String, dynamic> json,
-) => LoginModeSelectPageConfig(
-  systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
-      ? null
-      : OverlayStyleModel.fromJson(
-          json['systemUiOverlayStyle'] as Map<String, dynamic>,
-        ),
-  mainLogo: json['mainLogo'] == null
-      ? null
-      : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
-  buttonLoginStyleType:
-      $enumDecodeNullable(
-        _$ElevatedButtonStyleTypeEnumMap,
-        json['buttonLoginStyleType'],
-      ) ??
-      ElevatedButtonStyleType.primary,
-  buttonSignupStyleType:
-      $enumDecodeNullable(
-        _$ElevatedButtonStyleTypeEnumMap,
-        json['buttonSignupStyleType'],
-      ) ??
-      ElevatedButtonStyleType.primary,
-);
+) =>
+    LoginModeSelectPageConfig(
+      systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
+          ? null
+          : OverlayStyleModel.fromJson(
+              json['systemUiOverlayStyle'] as Map<String, dynamic>,
+            ),
+      mainLogo: json['mainLogo'] == null
+          ? null
+          : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
+      buttonLoginStyleType: $enumDecodeNullable(
+            _$ElevatedButtonStyleTypeEnumMap,
+            json['buttonLoginStyleType'],
+          ) ??
+          ElevatedButtonStyleType.primary,
+      buttonSignupStyleType: $enumDecodeNullable(
+            _$ElevatedButtonStyleTypeEnumMap,
+            json['buttonSignupStyleType'],
+          ) ??
+          ElevatedButtonStyleType.primary,
+    );
 
 Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
   LoginModeSelectPageConfig instance,
-) => <String, dynamic>{
-  'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
-  'mainLogo': instance.mainLogo?.toJson(),
-  'buttonLoginStyleType':
-      _$ElevatedButtonStyleTypeEnumMap[instance.buttonLoginStyleType]!,
-  'buttonSignupStyleType':
-      _$ElevatedButtonStyleTypeEnumMap[instance.buttonSignupStyleType]!,
-};
+) =>
+    <String, dynamic>{
+      'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
+      'mainLogo': instance.mainLogo?.toJson(),
+      'buttonLoginStyleType':
+          _$ElevatedButtonStyleTypeEnumMap[instance.buttonLoginStyleType]!,
+      'buttonSignupStyleType':
+          _$ElevatedButtonStyleTypeEnumMap[instance.buttonSignupStyleType]!,
+    };
 
 const _$ElevatedButtonStyleTypeEnumMap = {
   ElevatedButtonStyleType.primary: 'primary',
@@ -133,15 +136,17 @@ const _$ElevatedButtonStyleTypeEnumMap = {
 
 LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(
   Map<String, dynamic> json,
-) => LoginSwitchPageConfig(
-  mainLogo: json['mainLogo'] == null
-      ? null
-      : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
-);
+) =>
+    LoginSwitchPageConfig(
+      mainLogo: json['mainLogo'] == null
+          ? null
+          : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$LoginSwitchPageConfigToJson(
   LoginSwitchPageConfig instance,
-) => <String, dynamic>{'mainLogo': instance.mainLogo?.toJson()};
+) =>
+    <String, dynamic>{'mainLogo': instance.mainLogo?.toJson()};
 
 AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) =>
     AboutPageConfig(
@@ -161,22 +166,26 @@ Map<String, dynamic> _$AboutPageConfigToJson(AboutPageConfig instance) =>
 
 CallPageConfig _$CallPageConfigFromJson(
   Map<String, dynamic> json,
-) => CallPageConfig(
-  systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
-      ? null
-      : OverlayStyleModel.fromJson(
-          json['systemUiOverlayStyle'] as Map<String, dynamic>,
-        ),
-  appBarStyle: json['appBarStyle'] == null
-      ? null
-      : AppBarStyleConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
-  callInfo: json['callInfo'] == null
-      ? null
-      : CallPageInfoConfig.fromJson(json['callInfo'] as Map<String, dynamic>),
-  actions: json['actions'] == null
-      ? null
-      : CallPageActionsConfig.fromJson(json['actions'] as Map<String, dynamic>),
-);
+) =>
+    CallPageConfig(
+      systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
+          ? null
+          : OverlayStyleModel.fromJson(
+              json['systemUiOverlayStyle'] as Map<String, dynamic>,
+            ),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarStyleConfig.fromJson(
+              json['appBarStyle'] as Map<String, dynamic>),
+      callInfo: json['callInfo'] == null
+          ? null
+          : CallPageInfoConfig.fromJson(
+              json['callInfo'] as Map<String, dynamic>),
+      actions: json['actions'] == null
+          ? null
+          : CallPageActionsConfig.fromJson(
+              json['actions'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$CallPageConfigToJson(CallPageConfig instance) =>
     <String, dynamic>{
@@ -188,67 +197,69 @@ Map<String, dynamic> _$CallPageConfigToJson(CallPageConfig instance) =>
 
 CallPageActionsConfig _$CallPageActionsConfigFromJson(
   Map<String, dynamic> json,
-) => CallPageActionsConfig(
-  callStart: json['callStart'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['callStart'] as Map<String, dynamic>,
-        ),
-  hangup: json['hangup'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['hangup'] as Map<String, dynamic>,
-        ),
-  transfer: json['transfer'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['transfer'] as Map<String, dynamic>,
-        ),
-  camera: json['camera'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['camera'] as Map<String, dynamic>,
-        ),
-  muted: json['muted'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['muted'] as Map<String, dynamic>,
-        ),
-  speaker: json['speaker'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['speaker'] as Map<String, dynamic>,
-        ),
-  held: json['held'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['held'] as Map<String, dynamic>,
-        ),
-  swap: json['swap'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['swap'] as Map<String, dynamic>,
-        ),
-  key: json['key'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['key'] as Map<String, dynamic>,
-        ),
-);
+) =>
+    CallPageActionsConfig(
+      callStart: json['callStart'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['callStart'] as Map<String, dynamic>,
+            ),
+      hangup: json['hangup'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['hangup'] as Map<String, dynamic>,
+            ),
+      transfer: json['transfer'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['transfer'] as Map<String, dynamic>,
+            ),
+      camera: json['camera'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['camera'] as Map<String, dynamic>,
+            ),
+      muted: json['muted'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['muted'] as Map<String, dynamic>,
+            ),
+      speaker: json['speaker'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['speaker'] as Map<String, dynamic>,
+            ),
+      held: json['held'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['held'] as Map<String, dynamic>,
+            ),
+      swap: json['swap'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['swap'] as Map<String, dynamic>,
+            ),
+      key: json['key'] == null
+          ? const ElevatedButtonWidgetConfig()
+          : ElevatedButtonWidgetConfig.fromJson(
+              json['key'] as Map<String, dynamic>,
+            ),
+    );
 
 Map<String, dynamic> _$CallPageActionsConfigToJson(
   CallPageActionsConfig instance,
-) => <String, dynamic>{
-  'callStart': instance.callStart.toJson(),
-  'hangup': instance.hangup.toJson(),
-  'transfer': instance.transfer.toJson(),
-  'camera': instance.camera.toJson(),
-  'muted': instance.muted.toJson(),
-  'speaker': instance.speaker.toJson(),
-  'held': instance.held.toJson(),
-  'swap': instance.swap.toJson(),
-  'key': instance.key.toJson(),
-};
+) =>
+    <String, dynamic>{
+      'callStart': instance.callStart.toJson(),
+      'hangup': instance.hangup.toJson(),
+      'transfer': instance.transfer.toJson(),
+      'camera': instance.camera.toJson(),
+      'muted': instance.muted.toJson(),
+      'speaker': instance.speaker.toJson(),
+      'held': instance.held.toJson(),
+      'swap': instance.swap.toJson(),
+      'key': instance.key.toJson(),
+    };
 
 CallPageInfoConfig _$CallPageInfoConfigFromJson(Map<String, dynamic> json) =>
     CallPageInfoConfig(

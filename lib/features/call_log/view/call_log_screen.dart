@@ -12,10 +12,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class CallLogScreen extends StatelessWidget {
-  const CallLogScreen({
-    super.key,
-    required this.videoVisible,
-  });
+  const CallLogScreen({super.key, required this.videoVisible});
 
   final bool videoVisible;
 
@@ -23,90 +20,78 @@ class CallLogScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<CallLogBloc, CallLogState>(builder: (context, state) {
-        final number = state.number;
-        final contact = state.contact;
-        final callLog = state.callLog;
+      body: BlocBuilder<CallLogBloc, CallLogState>(
+        builder: (context, state) {
+          final number = state.number;
+          final contact = state.contact;
+          final callLog = state.callLog;
 
-        final title = contact?.displayTitle ?? number;
-        final email = contact?.emails.firstOrNull?.address;
+          final title = contact?.displayTitle ?? number;
+          final email = contact?.emails.firstOrNull?.address;
 
-        final themeData = Theme.of(context);
-        final outlinedButtonStyles = themeData.extension<OutlinedButtonStyles>();
+          final themeData = Theme.of(context);
+          final outlinedButtonStyles = themeData.extension<OutlinedButtonStyles>();
 
-        return ListView(
-          children: [
-            Container(
-              padding: kAllPadding16,
-              alignment: Alignment.center,
-              child: LeadingAvatar(
-                username: title,
-                thumbnail: contact?.thumbnail,
-                thumbnailUrl: gravatarThumbnailUrl(email),
-                registered: contact?.registered,
-                radius: 50,
-              ),
-            ),
-            CopyToClipboard(
-              data: number,
-              child: Text(
-                number,
-                style: themeData.textTheme.labelLarge?.copyWith(
-                  color: themeData.colorScheme.outlineVariant,
+          return ListView(
+            children: [
+              Container(
+                padding: kAllPadding16,
+                alignment: Alignment.center,
+                child: LeadingAvatar(
+                  username: title,
+                  thumbnail: contact?.thumbnail,
+                  thumbnailUrl: gravatarThumbnailUrl(email),
+                  registered: contact?.registered,
+                  radius: 50,
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-            Text(
-              title,
-              style: themeData.textTheme.headlineMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                OutlinedButton(
-                  style: outlinedButtonStyles?.neutral,
-                  child: const AppIcon(Icons.call),
-                  onPressed: () => _initiateCall(context, number, contact?.maybeName, false),
+              CopyToClipboard(
+                data: number,
+                child: Text(
+                  number,
+                  style: themeData.textTheme.labelLarge?.copyWith(color: themeData.colorScheme.outlineVariant),
+                  textAlign: TextAlign.center,
                 ),
-                if (videoVisible) ...[
-                  const SizedBox(
-                    width: 16,
-                  ),
+              ),
+              Text(title, style: themeData.textTheme.headlineMedium, textAlign: TextAlign.center),
+              const SizedBox(height: 8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   OutlinedButton(
                     style: outlinedButtonStyles?.neutral,
-                    child: const AppIcon(Icons.videocam),
-                    onPressed: () => _initiateCall(context, number, contact?.maybeName, true),
+                    child: const AppIcon(Icons.call),
+                    onPressed: () => _initiateCall(context, number, contact?.maybeName, false),
                   ),
-                ]
-              ],
-            ),
-            const Divider(
-              height: 16,
-            ),
-            if (callLog == null)
-              const Center(
-                child: CircularProgressIndicator(),
-              )
-            else
-              for (final entry in callLog)
-                CallLogHistoryTile(
-                  callLogEntry: entry,
-                  dateFormat: context.read<CallLogBloc>().dateFormat,
-                  onDeleted: (callLogEntry) {
-                    context.showSnackBar(context.l10n.recents_snackBar_deleted(entry.number));
-                    context.read<CallLogBloc>().add(CallLogEntryDeleted(entry));
-                  },
-                )
-          ],
-        );
-      }),
+                  if (videoVisible) ...[
+                    const SizedBox(width: 16),
+                    OutlinedButton(
+                      style: outlinedButtonStyles?.neutral,
+                      child: const AppIcon(Icons.videocam),
+                      onPressed: () => _initiateCall(context, number, contact?.maybeName, true),
+                    ),
+                  ],
+                ],
+              ),
+              const Divider(height: 16),
+              if (callLog == null)
+                const Center(child: CircularProgressIndicator())
+              else
+                for (final entry in callLog)
+                  CallLogHistoryTile(
+                    callLogEntry: entry,
+                    dateFormat: context.read<CallLogBloc>().dateFormat,
+                    onDeleted: (callLogEntry) {
+                      context.showSnackBar(context.l10n.recents_snackBar_deleted(entry.number));
+                      context.read<CallLogBloc>().add(CallLogEntryDeleted(entry));
+                    },
+                  ),
+            ],
+          );
+        },
+      ),
     );
   }
 

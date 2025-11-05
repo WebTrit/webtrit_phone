@@ -127,11 +127,7 @@ class FeatureAccess {
       throw Exception('No enabled tabs found in bottom menu configuration');
     }
 
-    return BottomMenuFeature(
-      bottomMenuTabs,
-      preferences,
-      cacheSelectedTab: bottomMenu.cacheSelectedTab,
-    );
+    return BottomMenuFeature(bottomMenuTabs, preferences, cacheSelectedTab: bottomMenu.cacheSelectedTab);
   }
 
   static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedData> embeddedResources) {
@@ -211,12 +207,7 @@ class FeatureAccess {
 
       // Skip empty sections
       if (items.isNotEmpty) {
-        settingSections.add(
-          SettingsSection(
-            titleL10n: section.titleL10n,
-            items: items,
-          ),
-        );
+        settingSections.add(SettingsSection(titleL10n: section.titleL10n, items: items));
       }
     }
 
@@ -278,24 +269,24 @@ class FeatureAccess {
       final loginEmbeddedData = embeddedData.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
 
       if (loginEmbeddedData != null && loginFlavor == LoginFlavor.embedded) {
-        buttons.add(LoginEmbeddedModeButton(
-          titleL10n: actions.titleL10n,
-          flavor: loginFlavor,
-          customLoginFeature: loginEmbeddedData,
-        ));
+        buttons.add(
+          LoginEmbeddedModeButton(
+            titleL10n: actions.titleL10n,
+            flavor: loginFlavor,
+            customLoginFeature: loginEmbeddedData,
+          ),
+        );
       } else if (loginFlavor == LoginFlavor.login) {
-        buttons.add(LoginDefaultModeAction(
-          titleL10n: actions.titleL10n,
-          flavor: loginFlavor,
-        ));
+        buttons.add(LoginDefaultModeAction(titleL10n: actions.titleL10n, flavor: loginFlavor));
       }
     }
 
     return LoginFeature(
       titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
       actions: buttons,
-      launchLoginPage: embeddedData
-          .firstWhereOrNull((it) => it.id == appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId),
+      launchLoginPage: embeddedData.firstWhereOrNull(
+        (it) => it.id == appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId,
+      ),
     );
   }
 
@@ -327,21 +318,22 @@ class FeatureAccess {
         ),
       ),
       encoding: EncodingConfig(
-          bypassConfig: encodingConfig.bypassConfig,
-          configurationAllowed: encodingViewEnabled,
-          defaultPresetOverride: DefaultPresetOverride(
-            audioBitrate: defaultPresetOverride.audioBitrate,
-            videoBitrate: defaultPresetOverride.videoBitrate,
-            ptime: defaultPresetOverride.ptime,
-            maxptime: defaultPresetOverride.maxptime,
-            opusSamplingRate: defaultPresetOverride.opusSamplingRate,
-            opusBitrate: defaultPresetOverride.opusBitrate,
-            opusStereo: defaultPresetOverride.opusStereo,
-            opusDtx: defaultPresetOverride.opusDtx,
-            removeExtmaps: defaultPresetOverride.removeExtmaps,
-            removeStaticAudioRtpMaps: defaultPresetOverride.removeStaticAudioRtpMaps,
-            remapTE8payloadTo101: defaultPresetOverride.remapTE8payloadTo101,
-          )),
+        bypassConfig: encodingConfig.bypassConfig,
+        configurationAllowed: encodingViewEnabled,
+        defaultPresetOverride: DefaultPresetOverride(
+          audioBitrate: defaultPresetOverride.audioBitrate,
+          videoBitrate: defaultPresetOverride.videoBitrate,
+          ptime: defaultPresetOverride.ptime,
+          maxptime: defaultPresetOverride.maxptime,
+          opusSamplingRate: defaultPresetOverride.opusSamplingRate,
+          opusBitrate: defaultPresetOverride.opusBitrate,
+          opusStereo: defaultPresetOverride.opusStereo,
+          opusDtx: defaultPresetOverride.opusDtx,
+          removeExtmaps: defaultPresetOverride.removeExtmaps,
+          removeStaticAudioRtpMaps: defaultPresetOverride.removeStaticAudioRtpMaps,
+          remapTE8payloadTo101: defaultPresetOverride.remapTE8payloadTo101,
+        ),
+      ),
       peerConnection: PeerConnectionSettings(
         negotiationSettings: NegotiationSettings(
           includeInactiveVideoInOfferAnswer: peerConnectionConfig.negotiation.includeInactiveVideoInOfferAnswer,
@@ -350,18 +342,12 @@ class FeatureAccess {
     );
   }
 
-  static MessagingFeature _tryConfigureMessagingFeature(
-    AppConfig appConfig,
-    CoreSupport coreSupport,
-  ) {
+  static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, CoreSupport coreSupport) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
       (tab) => tab.maybeWhen(messaging: (enabled, _, __, ___) => enabled, orElse: () => false),
     );
 
-    return MessagingFeature(
-      coreSupport,
-      tabEnabled: tabEnabled,
-    );
+    return MessagingFeature(coreSupport, tabEnabled: tabEnabled);
   }
 
   static TermsFeature _tryConfigureTermsFeature(List<EmbeddedResource> embeddedResources) {
@@ -380,12 +366,14 @@ class FeatureAccess {
 
     _logger.info('Privacy policy resource found: ${termsResource.uriOrNull}');
 
-    return TermsFeature(EmbeddedData(
-      id: termsResource.id,
-      uri: termsResource.uriOrNull!,
-      reconnectStrategy: ReconnectStrategy.softReload,
-      titleL10n: termsResource.toolbar.titleL10n,
-    ));
+    return TermsFeature(
+      EmbeddedData(
+        id: termsResource.id,
+        uri: termsResource.uriOrNull!,
+        reconnectStrategy: ReconnectStrategy.softReload,
+        titleL10n: termsResource.toolbar.titleL10n,
+      ),
+    );
   }
 
   static EmbeddedFeature _tryConfigureEmbeddedFeature(List<EmbeddedResource> embeddedResources) {
@@ -414,10 +402,7 @@ class FeatureAccess {
     return SystemNotificationsFeature(coreSupport, enabled);
   }
 
-  static SipPresenceFeature _tryConfigureSipPresenceFeature(
-    CoreSupport coreSupport,
-    AppConfig appConfig,
-  ) {
+  static SipPresenceFeature _tryConfigureSipPresenceFeature(CoreSupport coreSupport, AppConfig appConfig) {
     final enabled = appConfig.mainConfig.sipPresenceEnabled;
     return SipPresenceFeature(coreSupport, enabled);
   }
@@ -428,11 +413,7 @@ class LoginFeature {
   final List<LoginModeAction> actions;
   final EmbeddedData? launchLoginPage;
 
-  LoginFeature({
-    required this.titleL10n,
-    required this.actions,
-    required this.launchLoginPage,
-  });
+  LoginFeature({required this.titleL10n, required this.actions, required this.launchLoginPage});
 
   List<LoginEmbeddedModeButton> get embeddedConfigurations => actions.whereType<LoginEmbeddedModeButton>().toList();
 
@@ -442,11 +423,8 @@ class LoginFeature {
 }
 
 class BottomMenuFeature {
-  BottomMenuFeature(
-    List<BottomMenuTab> tabs,
-    this._appPreferences, {
-    bool cacheSelectedTab = true,
-  }) : _tabs = List.unmodifiable(tabs) {
+  BottomMenuFeature(List<BottomMenuTab> tabs, this._appPreferences, {bool cacheSelectedTab = true})
+    : _tabs = List.unmodifiable(tabs) {
     final savedFlavor = cacheSelectedTab ? _appPreferences.getActiveMainFlavor() : null;
     _activeTab = _findInitialTab(savedFlavor);
   }
@@ -497,10 +475,10 @@ class SettingsFeature {
   List<SettingsSection> get sections => List.unmodifiable(_sections);
 
   bool get isVoicemailsEnabled => _sections.any((section) {
-        return section.items.any((item) {
-          return item.flavor == SettingsFlavor.voicemail && _coreSupport.supportsVoicemail;
-        });
-      });
+    return section.items.any((item) {
+      return item.flavor == SettingsFlavor.voicemail && _coreSupport.supportsVoicemail;
+    });
+  });
 }
 
 class CallFeature {

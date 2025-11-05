@@ -16,20 +16,20 @@ Future<void> loginByMethod(PatrolIntegrationTester $, LoginMethod loginMethod) a
 
   await switch (loginMethod) {
     LoginMethod.email => loginByEmail(
-        $,
-        IntegrationTestEnvironmentConfig.EMAIL_CREDENTIAL,
-        IntegrationTestEnvironmentConfig.EMAIL_VERIFY_CREDENTIAL,
-      ),
+      $,
+      IntegrationTestEnvironmentConfig.EMAIL_CREDENTIAL,
+      IntegrationTestEnvironmentConfig.EMAIL_VERIFY_CREDENTIAL,
+    ),
     LoginMethod.otp => loginByOtp(
-        $,
-        IntegrationTestEnvironmentConfig.OTP_CREDENTIAL,
-        IntegrationTestEnvironmentConfig.OTP_VERIFY_CREDENTIAL,
-      ),
+      $,
+      IntegrationTestEnvironmentConfig.OTP_CREDENTIAL,
+      IntegrationTestEnvironmentConfig.OTP_VERIFY_CREDENTIAL,
+    ),
     LoginMethod.password => loginByPassword(
-        $,
-        IntegrationTestEnvironmentConfig.PASSWORD_USER_CREDENTIAL,
-        IntegrationTestEnvironmentConfig.PASSWORD_PASSWORD_CREDENTIAL,
-      ),
+      $,
+      IntegrationTestEnvironmentConfig.PASSWORD_USER_CREDENTIAL,
+      IntegrationTestEnvironmentConfig.PASSWORD_PASSWORD_CREDENTIAL,
+    ),
   };
   await acceptAgrementsUntilMainShell($);
 }

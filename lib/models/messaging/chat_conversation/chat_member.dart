@@ -6,12 +6,7 @@ class ChatMember extends Equatable {
   final String userId;
   final GroupAuthorities? groupAuthorities;
 
-  const ChatMember({
-    required this.id,
-    required this.chatId,
-    required this.userId,
-    required this.groupAuthorities,
-  });
+  const ChatMember({required this.id, required this.chatId, required this.userId, required this.groupAuthorities});
 
   @override
   List<Object?> get props => [id, chatId, userId, groupAuthorities];

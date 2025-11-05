@@ -9,7 +9,8 @@ class SmsMessageReadCursorTable extends Table {
   @override
   Set<Column> get primaryKey => {conversationId, userId};
 
-  IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get conversationId => integer()
+      .references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get userId => text()();
 

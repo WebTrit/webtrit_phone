@@ -88,8 +88,12 @@ class ChatCBDialogContactSelection extends ChatCBCommon {
 
 /// Represents state for when the group contacts selection is active.
 class ChatCBGroupContactsSelection extends ChatCBCommon {
-  ChatCBGroupContactsSelection(super.contacts,
-      {super.cameBack, this.searchFilter = '', this.selectedContacts = const {}});
+  ChatCBGroupContactsSelection(
+    super.contacts, {
+    super.cameBack,
+    this.searchFilter = '',
+    this.selectedContacts = const {},
+  });
 
   /// The search filter applied to the contacts.
   final String searchFilter;

@@ -23,10 +23,7 @@ class PageInjectionBuilders {
     MediaQueryMetrics mediaQueryMetrics, {
     String functionName = 'onMediaQueryReady',
   }) {
-    return DefaultPayloadInjectionStrategy(
-      functionName: functionName,
-      initialPayload: mediaQueryMetrics.toJson(),
-    );
+    return DefaultPayloadInjectionStrategy(functionName: functionName, initialPayload: mediaQueryMetrics.toJson());
   }
 
   /// Creates a [PageInjectionStrategy] that injects **device labels**
@@ -34,14 +31,8 @@ class PageInjectionBuilders {
   ///
   /// This strategy is asynchronous because it may query storage
   /// or system services to build the labels.
-  static PageInjectionStrategy deviceInfo(
-    Map<String, String> deviceInfo, {
-    String functionName = 'onDeviceInfoReady',
-  }) {
-    return DefaultPayloadInjectionStrategy(
-      functionName: functionName,
-      initialPayload: deviceInfo,
-    );
+  static PageInjectionStrategy deviceInfo(Map<String, String> deviceInfo, {String functionName = 'onDeviceInfoReady'}) {
+    return DefaultPayloadInjectionStrategy(functionName: functionName, initialPayload: deviceInfo);
   }
 
   /// Creates a [PageInjectionStrategy] that injects the console logger wrapper.
@@ -87,13 +78,7 @@ class PageInjectionBuilders {
   ///
   /// Useful when you want to pass custom structured data
   /// into the WebView without creating a new strategy type.
-  static PageInjectionStrategy payload(
-    Map<String, dynamic> payload, {
-    String functionName = 'onPayloadDataReady',
-  }) {
-    return DefaultPayloadInjectionStrategy(
-      functionName: functionName,
-      initialPayload: payload,
-    );
+  static PageInjectionStrategy payload(Map<String, dynamic> payload, {String functionName = 'onPayloadDataReady'}) {
+    return DefaultPayloadInjectionStrategy(functionName: functionName, initialPayload: payload);
   }
 }

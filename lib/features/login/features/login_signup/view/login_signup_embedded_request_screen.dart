@@ -63,13 +63,16 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
 
     // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
     _pageInjectionStrategies = PageInjectionBuilders.resolve(
-        mediaQueryMetricsData: widget.mediaQueryMetricsData,
-        deviceInfoData: widget.deviceInfoData,
-        custom: [widget.pageInjectionStrategyBuilder()]);
+      mediaQueryMetricsData: widget.mediaQueryMetricsData,
+      deviceInfoData: widget.deviceInfoData,
+      custom: [widget.pageInjectionStrategyBuilder()],
+    );
 
-    _jSChannelStrategies = JSChannelBuilders.resolve(custom: [
-      JSChannelStrategy.route(name: 'WebtritLoginChannel', routes: {'signup': _onJSMessageReceived})
-    ]);
+    _jSChannelStrategies = JSChannelBuilders.resolve(
+      custom: [
+        JSChannelStrategy.route(name: 'WebtritLoginChannel', routes: {'signup': _onJSMessageReceived}),
+      ],
+    );
 
     super.initState();
   }
@@ -107,10 +110,10 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
     }
 
     return (context, error, controller) => EmbeddedRequestErrorDialog(
-          title: error.titleL10n(context),
-          error: error.messageL10n(context),
-          onRetry: () => _webViewController.reload(),
-        );
+      title: error.titleL10n(context),
+      error: error.messageL10n(context),
+      onRetry: () => _webViewController.reload(),
+    );
   }
 
   /// Updates the `_canGoBack` state by checking if the WebView can navigate back.
@@ -148,8 +151,9 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
   }) {
     final isRequestFailure = error is RequestFailure;
 
-    final title =
-        isRequestFailure ? context.l10n.default_TypeErrorError : context.l10n.common_noInternetConnection_title;
+    final title = isRequestFailure
+        ? context.l10n.default_TypeErrorError
+        : context.l10n.common_noInternetConnection_title;
 
     final message = isRequestFailure
         ? (error.error?.message ?? error.toString())
@@ -168,10 +172,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
 
   /// Handles retry action from the embedded error dialog.
   /// Triggers a new embedded login request using previously cached data.
-  Future<void> _onEmbeddedErrorRetry(
-    Map<String, dynamic>? extras,
-    Map<String, dynamic>? callbackData,
-  ) async {
+  Future<void> _onEmbeddedErrorRetry(Map<String, dynamic>? extras, Map<String, dynamic>? callbackData) async {
     context.router.pop();
     _errorDialogShown = false;
 

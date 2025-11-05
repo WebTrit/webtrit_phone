@@ -31,18 +31,18 @@ class SmsMessage extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        idKey,
-        externalId,
-        conversationId,
-        fromPhoneNumber,
-        toPhoneNumber,
-        sendingStatus,
-        content,
-        createdAt,
-        updatedAt,
-        deletedAt,
-      ];
+    id,
+    idKey,
+    externalId,
+    conversationId,
+    fromPhoneNumber,
+    toPhoneNumber,
+    sendingStatus,
+    content,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
 
   @override
   String toString() {

@@ -22,7 +22,8 @@ class StoreInfoExtractorResponseError implements StoreInfoExtractorException {
   }
 }
 
-class StoreInfoExtractorResponseFormatException implements StoreInfoExtractorException {
+class StoreInfoExtractorResponseFormatException
+    implements StoreInfoExtractorException {
   StoreInfoExtractorResponseFormatException({
     required this.sourceError,
   });

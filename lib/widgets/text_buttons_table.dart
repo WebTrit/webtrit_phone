@@ -33,12 +33,14 @@ class TextButtonsTable extends StatelessWidget {
     for (int r = 0; r < children.length / keyButtonsInTableRowCount; r++) {
       final rowChildren = <Widget>[];
       for (int i = 0; i < keyButtonsInTableRowCount; i++) {
-        rowChildren.add(Center(
-          child: Padding(
-            padding: merged.spacing ?? EdgeInsets.zero,
-            child: children[r * keyButtonsInTableRowCount + i],
+        rowChildren.add(
+          Center(
+            child: Padding(
+              padding: merged.spacing ?? EdgeInsets.zero,
+              child: children[r * keyButtonsInTableRowCount + i],
+            ),
           ),
-        ));
+        );
       }
       tableRows.add(TableRow(children: rowChildren));
     }

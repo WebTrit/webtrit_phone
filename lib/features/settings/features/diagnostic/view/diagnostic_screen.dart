@@ -15,9 +15,7 @@ import '../widgets/widgets.dart';
 import '../extensions/extensions.dart';
 
 class DiagnosticScreen extends StatefulWidget {
-  const DiagnosticScreen({
-    super.key,
-  });
+  const DiagnosticScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -52,10 +50,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
     return BlocBuilder<DiagnosticCubit, DiagnosticState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            leading: const AutoLeadingButton(),
-            title: Text(context.l10n.diagnostic_AppBar_title),
-          ),
+          appBar: AppBar(leading: const AutoLeadingButton(), title: Text(context.l10n.diagnostic_AppBar_title)),
           body: SingleChildScrollView(
             child: Column(
               children: [
@@ -65,9 +60,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                     state.pushTokenStatus.type.isSuccess ? Icons.check_circle : Icons.error_outline,
                     color: state.pushTokenStatus.type.isSuccess ? Colors.green : Colors.red,
                   ),
-                  subtitle: Text(
-                    state.pushTokenStatus.type.title(context),
-                  ),
+                  subtitle: Text(state.pushTokenStatus.type.title(context)),
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
@@ -96,25 +89,27 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                     },
                   ),
                 GroupTitleListTile(titleData: context.l10n.diagnosticScreen_permissionsGroup_title),
-                ...state.filterPermissionsByAgreement(exclude: [
-                  if (!contactsAgreementStatus.isAccepted) Permission.contacts,
-                ]).map(
-                  (permission) => DiagnosticPermissionItem(
-                    permissionWithStatus: permission,
-                    onTap: () => showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return DiagnosticPermissionDetails(
-                          permissionWithStatus: permission,
-                          onTap: () {
-                            _handleRequestPermission(permission);
-                            Navigator.pop(context);
+                ...state
+                    .filterPermissionsByAgreement(
+                      exclude: [if (!contactsAgreementStatus.isAccepted) Permission.contacts],
+                    )
+                    .map(
+                      (permission) => DiagnosticPermissionItem(
+                        permissionWithStatus: permission,
+                        onTap: () => showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return DiagnosticPermissionDetails(
+                              permissionWithStatus: permission,
+                              onTap: () {
+                                _handleRequestPermission(permission);
+                                Navigator.pop(context);
+                              },
+                            );
                           },
-                        );
-                      },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
                 Visibility(
                   visible: context.read<DiagnosticScreenContext>().isLocalContactsFeatureEnabled,
                   child: GroupTitleListTile(titleData: context.l10n.diagnosticScreen_contacts_agreement_group_title),
@@ -140,7 +135,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                       );
                     },
                   ),
-                )
+                ),
               ],
             ),
           ),

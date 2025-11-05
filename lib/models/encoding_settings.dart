@@ -453,20 +453,20 @@ class EncodingSettings extends Equatable {
 
   @override
   List<Object?> get props => [
-        audioBitrate,
-        videoBitrate,
-        ptime,
-        maxptime,
-        opusSamplingRate,
-        opusBitrate,
-        opusStereo,
-        opusDtx,
-        audioProfiles,
-        videoProfiles,
-        removeExtmaps,
-        removeStaticAudioRtpMaps,
-        remapTE8payloadTo101,
-      ];
+    audioBitrate,
+    videoBitrate,
+    ptime,
+    maxptime,
+    opusSamplingRate,
+    opusBitrate,
+    opusStereo,
+    opusDtx,
+    audioProfiles,
+    videoProfiles,
+    removeExtmaps,
+    removeStaticAudioRtpMaps,
+    remapTE8payloadTo101,
+  ];
 
   @override
   String toString() {

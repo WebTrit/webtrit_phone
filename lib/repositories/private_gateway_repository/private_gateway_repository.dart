@@ -34,12 +34,7 @@ abstract class PrivateGatewayRepository {
 /// All subsequent lifecycle management of the token is delegated to the embedded WebView.
 
 class CustomPrivateGatewayRepository with SelfConfigApiMapper implements PrivateGatewayRepository, Disposable {
-  CustomPrivateGatewayRepository(
-    this._webtritApiClient,
-    this._secureStorage,
-    this._token,
-    this._sessionGuard,
-  );
+  CustomPrivateGatewayRepository(this._webtritApiClient, this._secureStorage, this._token, this._sessionGuard);
 
   final api.WebtritApiClient _webtritApiClient;
   final SecureStorage _secureStorage;

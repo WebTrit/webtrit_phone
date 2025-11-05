@@ -25,9 +25,12 @@ class WebtritApiClient {
     if (tenantId.isEmpty) {
       return baseUrl;
     } else {
-      final baseUrlPathSegments = List.of(baseUrl.pathSegments.where((segment) => segment.isNotEmpty));
-      if (baseUrlPathSegments.length >= 2 && baseUrlPathSegments[baseUrlPathSegments.length - 2] == 'tenant') {
-        baseUrlPathSegments.removeRange(baseUrlPathSegments.length - 2, baseUrlPathSegments.length);
+      final baseUrlPathSegments =
+          List.of(baseUrl.pathSegments.where((segment) => segment.isNotEmpty));
+      if (baseUrlPathSegments.length >= 2 &&
+          baseUrlPathSegments[baseUrlPathSegments.length - 2] == 'tenant') {
+        baseUrlPathSegments.removeRange(
+            baseUrlPathSegments.length - 2, baseUrlPathSegments.length);
       }
       return baseUrl.replace(
         pathSegments: [
@@ -98,7 +101,8 @@ class WebtritApiClient {
       if (token != null) 'authorization': 'Bearer $token',
     };
 
-    final requestData = requestDataJson != null ? jsonEncode(requestDataJson) : null;
+    final requestData =
+        requestDataJson != null ? jsonEncode(requestDataJson) : null;
 
     int requestAttempt = 0;
 
@@ -115,12 +119,15 @@ class WebtritApiClient {
 
         if (requestData != null) httpRequest.body = requestData;
 
-        _logger.info(' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
+        _logger.info(
+            ' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
 
-        final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
+        final httpResponse =
+            await http.Response.fromStream(await _httpClient.send(httpRequest));
 
         final responseData = httpResponse.body;
-        final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
+        final responseDataJson =
+            responseData.isEmpty ? {} : jsonDecode(responseData);
 
         _logger.info(
             '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}');
@@ -145,7 +152,8 @@ class WebtritApiClient {
           // Map 422 with code="refresh_token_invalid" to UnauthorizedException.
           // This ensures higher layers can handle expired/invalid sessions in a unified way
           // (e.g., trigger global logout or token refresh).
-          if (httpResponse.statusCode == 422 && error?.code == 'refresh_token_invalid') {
+          if (httpResponse.statusCode == 422 &&
+              error?.code == 'refresh_token_invalid') {
             throw UnauthorizedException(
               url: tenantUrl,
               requestId: xRequestId,
@@ -158,7 +166,8 @@ class WebtritApiClient {
           // If the server responds with 404 or 501, it may indicate that a specific private endpoint
           // is not implemented by the current adapter (e.g., tenant-specific or backend version mismatch).
           // In such case, throw a dedicated exception to handle unsupported endpoint scenarios gracefully.
-          if (httpResponse.statusCode == 404 || httpResponse.statusCode == 501) {
+          if (httpResponse.statusCode == 404 ||
+              httpResponse.statusCode == 501) {
             throw EndpointNotSupportedException(
               url: tenantUrl,
               requestId: xRequestId,
@@ -176,7 +185,8 @@ class WebtritApiClient {
           );
         }
       } catch (e) {
-        _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
+        _logger.severe(
+            '${method.toUpperCase()} failed for requestId: $requestId with error: $e');
 
         // Do not retry for valid server responses with a defined HTTP status code.
         if (e is RequestFailure || requestAttempt >= options.retries) rethrow;
@@ -481,7 +491,9 @@ class WebtritApiClient {
       requestOptions: options,
     );
 
-    return (responseJson as List<dynamic>).map((e) => AppSmartContact.fromJson(e as Map<String, dynamic>)).toList();
+    return (responseJson as List<dynamic>)
+        .map((e) => AppSmartContact.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> createAppPushToken(
@@ -630,14 +642,16 @@ class WebtritApiClient {
     return responseJson;
   }
 
-  String getVoicemailAttachmentUrl(String voicemailId, {String fileFormat = 'mp3'}) {
+  String getVoicemailAttachmentUrl(String voicemailId,
+      {String fileFormat = 'mp3'}) {
     final url = tenantUrl.replace(
       pathSegments: [
         ...tenantUrl.pathSegments.where((segment) => segment.isNotEmpty),
         ..._apiBasePathSegments,
         ...['user', 'voicemails', voicemailId, 'attachment'],
       ],
-      queryParameters: fileFormat.isNotEmpty ? {'file_format': fileFormat} : null,
+      queryParameters:
+          fileFormat.isNotEmpty ? {'file_format': fileFormat} : null,
     );
     return url.toString();
   }
@@ -660,7 +674,8 @@ class WebtritApiClient {
       },
     );
 
-    return SystemNotificationResponce.fromJson(responseJson as Map<String, dynamic>);
+    return SystemNotificationResponce.fromJson(
+        responseJson as Map<String, dynamic>);
   }
 
   Future<SystemNotificationResponce> getSystemNotificationsUpdates(
@@ -682,7 +697,8 @@ class WebtritApiClient {
     );
     print('Response JSON: $responseJson');
 
-    return SystemNotificationResponce.fromJson(responseJson as Map<String, dynamic>);
+    return SystemNotificationResponce.fromJson(
+        responseJson as Map<String, dynamic>);
   }
 
   Future<void> markSystemNotificationAsSeen(

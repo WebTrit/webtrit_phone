@@ -142,10 +142,7 @@ class MessagingPushService {
           notification.messageId,
           notification.title!,
           notification.body!,
-          payload: {
-            'source': kLocalPushSourceSystemNotification,
-            'chatId': notification.conversationId.toString(),
-          },
+          payload: {'source': kLocalPushSourceSystemNotification, 'chatId': notification.conversationId.toString()},
         );
         localPushRepository.displayPush(localPush);
 
@@ -253,8 +250,10 @@ class MessagingPushService {
     final secondNumber = conversation.secondPhoneNumber;
     _logger.info('_shouldSkipSmsPush firstNumber: $firstNumber second: $secondNumber');
 
-    final smsConversationScreenActive =
-        mainShellRouteStateRepository.isSmsConversationScreenActive(firstNumber, secondNumber);
+    final smsConversationScreenActive = mainShellRouteStateRepository.isSmsConversationScreenActive(
+      firstNumber,
+      secondNumber,
+    );
     _logger.info('smsConversationScreen: $smsConversationScreenActive');
     if (smsConversationScreenActive) return true;
 

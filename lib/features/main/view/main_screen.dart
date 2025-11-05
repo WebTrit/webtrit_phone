@@ -7,11 +7,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import '../main.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({
-    Key? key,
-    required this.body,
-    required this.bottomNavigationBar,
-  }) : super(key: key ?? const ValueKey<String>('MainScreen'));
+  const MainScreen({Key? key, required this.body, required this.bottomNavigationBar})
+    : super(key: key ?? const ValueKey<String>('MainScreen'));
 
   final Widget body;
   final BottomNavigationBar bottomNavigationBar;

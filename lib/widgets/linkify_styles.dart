@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/widgets/linkify_style.dart';
 
 class LinkifyStyles extends ThemeExtension<LinkifyStyles> {
-  const LinkifyStyles({
-    required this.primary,
-  });
+  const LinkifyStyles({required this.primary});
 
   final LinkifyStyle? primary;
 
   @override
-  ThemeExtension<LinkifyStyles> copyWith({
-    LinkifyStyle? primary,
-  }) {
-    return LinkifyStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<LinkifyStyles> copyWith({LinkifyStyle? primary}) {
+    return LinkifyStyles(primary: primary ?? this.primary);
   }
 
   @override

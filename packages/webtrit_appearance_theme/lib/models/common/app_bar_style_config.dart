@@ -33,7 +33,8 @@ class AppBarStyleConfig with _$AppBarStyleConfig {
   @override
   final bool showBackButton;
 
-  factory AppBarStyleConfig.fromJson(Map<String, dynamic> json) => _$AppBarStyleConfigFromJson(json);
+  factory AppBarStyleConfig.fromJson(Map<String, dynamic> json) =>
+      _$AppBarStyleConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppBarStyleConfigToJson(this);
 }

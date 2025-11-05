@@ -14,7 +14,7 @@ class EmbeddedState with _$EmbeddedState {
 
   @override
   final bool canGoBack;
-  
+
   @override
   final EmbeddedIntents? intent;
 

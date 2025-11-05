@@ -5,12 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 class SslAuthErrorView extends StatelessWidget {
-  const SslAuthErrorView({
-    super.key,
-    required this.error,
-    required this.onReload,
-    this.failingUrl,
-  });
+  const SslAuthErrorView({super.key, required this.error, required this.onReload, this.failingUrl});
 
   final SslAuthError error;
   final VoidCallback onReload;
@@ -34,11 +29,7 @@ class SslAuthErrorView extends StatelessWidget {
             children: [
               Icon(Icons.security_rounded, size: 56, color: theme.colorScheme.error),
               const SizedBox(height: 16),
-              Text(
-                context.l10n.webview_sslError_title,
-                style: theme.textTheme.titleLarge,
-                textAlign: TextAlign.center,
-              ),
+              Text(context.l10n.webview_sslError_title, style: theme.textTheme.titleLarge, textAlign: TextAlign.center),
               const SizedBox(height: 8),
               Text(
                 context.l10n.webview_sslError_message,
@@ -60,10 +51,7 @@ class SslAuthErrorView extends StatelessWidget {
                 runSpacing: 12,
                 alignment: WrapAlignment.center,
                 children: [
-                  FilledButton(
-                    onPressed: onReload,
-                    child: Text(context.l10n.webview_sslError_tryAgain),
-                  ),
+                  FilledButton(onPressed: onReload, child: Text(context.l10n.webview_sslError_tryAgain)),
                   OutlinedButton(
                     onPressed: () => _showSslDetails(context, error),
                     child: Text(context.l10n.webview_sslError_details),
@@ -85,15 +73,9 @@ class SslAuthErrorView extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            ListTile(
-              title: Text(context.l10n.webview_sslError_details_type),
-              subtitle: Text(error.toString()),
-            ),
+            ListTile(title: Text(context.l10n.webview_sslError_details_type), subtitle: Text(error.toString())),
             if (failingUrl != null)
-              ListTile(
-                title: Text(context.l10n.webview_sslError_details_url),
-                subtitle: Text(failingUrl!),
-              ),
+              ListTile(title: Text(context.l10n.webview_sslError_details_url), subtitle: Text(failingUrl!)),
           ],
         ),
       ),

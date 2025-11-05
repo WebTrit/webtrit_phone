@@ -78,11 +78,11 @@ class PollingService implements Disposable {
     PollingOptions options = const PollingOptions(),
     Jitter? jitter,
     BackoffPolicy? backoff,
-  })  : _connectivityService = connectivityService,
-        _options = options,
-        _jitter = jitter ?? RandomJitter(maxMs: options.jitterMaxMs),
-        _backoff = backoff ?? const ExponentialBackoff(),
-        _reachability = TtlCache<bool>(ttl: options.reachabilityTtl) {
+  }) : _connectivityService = connectivityService,
+       _options = options,
+       _jitter = jitter ?? RandomJitter(maxMs: options.jitterMaxMs),
+       _backoff = backoff ?? const ExponentialBackoff(),
+       _reachability = TtlCache<bool>(ttl: options.reachabilityTtl) {
     _connectivitySub = _connectivityService.connectionStream.listen(_handleConnectivityChange);
 
     for (final reg in registrations) {
@@ -116,10 +116,7 @@ class PollingService implements Disposable {
     final newInterval = registration.interval;
 
     final existed = _pollingConfigs.containsKey(listener);
-    final config = _pollingConfigs.putIfAbsent(
-      listener,
-      () => _PollingConfig(interval: newInterval),
-    );
+    final config = _pollingConfigs.putIfAbsent(listener, () => _PollingConfig(interval: newInterval));
 
     final intervalChanged = config.interval != newInterval;
     config.interval = newInterval;
@@ -268,11 +265,7 @@ class PollingService implements Disposable {
 
   /// Leading refresh for a listener that **does not** perform its own reachability check.
   /// It uses a known result [reachable] that was computed once for the entire leading cycle.
-  void _triggerOnceWithKnownReachability(
-    Refreshable listener,
-    _PollingConfig config,
-    bool reachable,
-  ) {
+  void _triggerOnceWithKnownReachability(Refreshable listener, _PollingConfig config, bool reachable) {
     if (_disposed || config.isRefreshing) return;
     config.isRefreshing = true;
 
@@ -347,10 +340,7 @@ class _PollingConfig {
 
 /// A registration for a [Refreshable] listener with a specific polling [interval].
 class PollingRegistration {
-  const PollingRegistration({
-    required this.listener,
-    required this.interval,
-  });
+  const PollingRegistration({required this.listener, required this.interval});
 
   final Refreshable listener;
   final Duration interval;

@@ -19,11 +19,9 @@ part 'diagnostic_cubit.freezed.dart';
 final _logger = Logger('DiagnosticCubit');
 
 class DiagnosticCubit extends Cubit<DiagnosticState> {
-  DiagnosticCubit({
-    required PushTokensBloc pushTokensBloc,
-    required AppPermissions appPermissions,
-  })  : _appPermissions = appPermissions,
-        super(const DiagnosticState()) {
+  DiagnosticCubit({required PushTokensBloc pushTokensBloc, required AppPermissions appPermissions})
+    : _appPermissions = appPermissions,
+      super(const DiagnosticState()) {
     fetchStatuses();
     _onPushTokensChanged(pushTokensBloc.state);
 
@@ -38,17 +36,19 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
     final pushToken = pushTokens.pushToken;
     final pushError = pushTokens.errorMessage;
 
-    emit(state.copyWith(
-      pushTokenStatus: PushTokenStatus(
-        token: pushToken,
-        error: pushError,
-        type: pushToken != null
-            ? PushTokenStatusType.success
-            : pushError != null
-                ? PushTokenStatusType.error
-                : PushTokenStatusType.progress,
+    emit(
+      state.copyWith(
+        pushTokenStatus: PushTokenStatus(
+          token: pushToken,
+          error: pushError,
+          type: pushToken != null
+              ? PushTokenStatusType.success
+              : pushError != null
+              ? PushTokenStatusType.error
+              : PushTokenStatusType.progress,
+        ),
       ),
-    ));
+    );
   }
 
   Future<void> fetchStatuses() async {

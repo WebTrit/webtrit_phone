@@ -3,7 +3,8 @@ import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class MockAboutBloc extends MockBloc<AboutEvent, AboutState> implements AboutBloc {
+class MockAboutBloc extends MockBloc<AboutEvent, AboutState>
+    implements AboutBloc {
   MockAboutBloc();
 
   // Single source of truth for the default/base state

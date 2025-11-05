@@ -7,7 +7,8 @@ import 'package:webtrit_phone/models/models.dart';
 
 import 'package:screenshots/data/data.dart';
 
-class MockRecentsBloc extends MockBloc<RecentsEvent, RecentsState> implements RecentsBloc {
+class MockRecentsBloc extends MockBloc<RecentsEvent, RecentsState>
+    implements RecentsBloc {
   MockRecentsBloc();
 
   factory MockRecentsBloc.mainScreen() {

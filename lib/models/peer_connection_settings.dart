@@ -18,27 +18,17 @@ import 'negotiation_settings.dart';
 /// [PeerConnectionSettings] is intended to group together all session-level behaviors
 /// that affect the WebRTC connection beyond media encoding (e.g., logic, policies, directionality).
 class PeerConnectionSettings extends Equatable {
-  const PeerConnectionSettings({
-    required this.negotiationSettings,
-  });
+  const PeerConnectionSettings({required this.negotiationSettings});
 
-  factory PeerConnectionSettings.blank() => const PeerConnectionSettings(
-        negotiationSettings: NegotiationSettings(),
-      );
+  factory PeerConnectionSettings.blank() => const PeerConnectionSettings(negotiationSettings: NegotiationSettings());
 
   /// Defines how the callee responds to an incoming SDP offer with video media.
   final NegotiationSettings negotiationSettings;
 
-  PeerConnectionSettings copyWith({
-    NegotiationSettings? negotiationSettings,
-  }) {
-    return PeerConnectionSettings(
-      negotiationSettings: negotiationSettings ?? this.negotiationSettings,
-    );
+  PeerConnectionSettings copyWith({NegotiationSettings? negotiationSettings}) {
+    return PeerConnectionSettings(negotiationSettings: negotiationSettings ?? this.negotiationSettings);
   }
 
   @override
-  List<Object?> get props => [
-        negotiationSettings,
-      ];
+  List<Object?> get props => [negotiationSettings];
 }

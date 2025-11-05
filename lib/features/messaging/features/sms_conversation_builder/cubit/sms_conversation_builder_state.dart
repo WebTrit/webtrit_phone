@@ -62,9 +62,7 @@ class SmsCBCommon extends SmsCBState {
   late final externalContacts = filteredContacts.where((c) => c.sourceType == ContactSourceType.external);
 
   /// Create next [SmsCBWrongNumberSelected] stage from this state.
-  SmsCBWrongNumberSelected toWrongNumberSelected(
-    String recipientNumber,
-  ) {
+  SmsCBWrongNumberSelected toWrongNumberSelected(String recipientNumber) {
     return SmsCBWrongNumberSelected(this, recipientNumber);
   }
 
@@ -76,11 +74,7 @@ class SmsCBCommon extends SmsCBState {
     return SmsCBUserNumberConfirmationNeeded(this, recipientCreds, userNumbers);
   }
 
-  SmsCBCommon copyWith({
-    List<Contact>? contacts,
-    String? searchFilter,
-    String? parsedNumber,
-  }) {
+  SmsCBCommon copyWith({List<Contact>? contacts, String? searchFilter, String? parsedNumber}) {
     return SmsCBCommon(
       contacts ?? this.contacts,
       searchFilter: searchFilter ?? this.searchFilter,
@@ -99,7 +93,7 @@ class SmsCBCommon extends SmsCBState {
 /// eg. non-e164 number, or himself.
 final class SmsCBWrongNumberSelected extends SmsCBCommon {
   SmsCBWrongNumberSelected(SmsCBCommon state, this.recipientNumber)
-      : super(state.contacts, searchFilter: state.searchFilter, parsedNumber: state.parsedNumber);
+    : super(state.contacts, searchFilter: state.searchFilter, parsedNumber: state.parsedNumber);
 
   /// The number that user selected to send the message to.
   final String recipientNumber;
@@ -121,7 +115,7 @@ final class SmsCBWrongNumberSelected extends SmsCBCommon {
 /// or has no numbers associated with him account.
 final class SmsCBUserNumberConfirmationNeeded extends SmsCBCommon {
   SmsCBUserNumberConfirmationNeeded(SmsCBCommon state, this.recipientCreds, this.userNumbers)
-      : super(state.contacts, searchFilter: state.searchFilter, parsedNumber: state.parsedNumber);
+    : super(state.contacts, searchFilter: state.searchFilter, parsedNumber: state.parsedNumber);
 
   /// The number that user selected to send the message to.
   final RecipientCreds recipientCreds;

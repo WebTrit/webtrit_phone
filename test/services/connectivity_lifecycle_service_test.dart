@@ -259,10 +259,7 @@ void main() {
 
         service = ConnectivityLifecycleService(
           connectivity: connectivity,
-          options: const ConnectivityLifecycleOptions(
-            debounce: Duration.zero,
-            jitterMaxMs: 0,
-          ),
+          options: const ConnectivityLifecycleOptions(debounce: Duration.zero, jitterMaxMs: 0),
         );
 
         final disposeReg = service.register(ConnectivityRecoveryRegistration.refreshable(r));
@@ -293,10 +290,7 @@ void main() {
 
         service = ConnectivityLifecycleService(
           connectivity: connectivity,
-          options: const ConnectivityLifecycleOptions(
-            debounce: Duration.zero,
-            jitterMaxMs: 0,
-          ),
+          options: const ConnectivityLifecycleOptions(debounce: Duration.zero, jitterMaxMs: 0),
         );
 
         service.register(ConnectivityRecoveryRegistration.suspendable(s1));
@@ -318,10 +312,7 @@ void main() {
 
       service = ConnectivityLifecycleService(
         connectivity: connectivity,
-        options: const ConnectivityLifecycleOptions(
-          debounce: Duration(milliseconds: 10),
-          jitterMaxMs: 0,
-        ),
+        options: const ConnectivityLifecycleOptions(debounce: Duration(milliseconds: 10), jitterMaxMs: 0),
       );
 
       service.register(ConnectivityRecoveryRegistration.refreshable(r));

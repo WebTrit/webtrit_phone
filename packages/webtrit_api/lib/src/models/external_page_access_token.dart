@@ -27,7 +27,8 @@ class ExternalPageAccessToken with _$ExternalPageAccessToken {
   @JsonKey(name: 'expires_at')
   final DateTime expiresAt;
 
-  factory ExternalPageAccessToken.fromJson(Map<String, Object?> json) => _$ExternalPageAccessTokenFromJson(json);
+  factory ExternalPageAccessToken.fromJson(Map<String, Object?> json) =>
+      _$ExternalPageAccessTokenFromJson(json);
 
   Map<String, Object?> toJson() => _$ExternalPageAccessTokenToJson(this);
 }

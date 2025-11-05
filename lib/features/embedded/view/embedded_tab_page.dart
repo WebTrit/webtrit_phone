@@ -25,9 +25,7 @@ import 'embedded_screen.dart';
 @RoutePage()
 class EmbeddedTabPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const EmbeddedTabPage({
-    @PathParam('id') required this.id,
-  });
+  const EmbeddedTabPage({@PathParam('id') required this.id});
 
   final String id;
 
@@ -55,13 +53,9 @@ class EmbeddedTabPage extends StatelessWidget {
             future: resource.loadContent(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Failed to load content: ${snapshot.error}'),
-                );
+                return Center(child: Text('Failed to load content: ${snapshot.error}'));
               } else if (snapshot.hasData) {
                 final content = snapshot.data!;
                 return resource is NetworkResourceLoader
@@ -92,9 +86,7 @@ class EmbeddedTabPage extends StatelessWidget {
                         enableLogCapture: true,
                       );
               } else {
-                return const Center(
-                  child: Text('Unexpected error occurred.'),
-                );
+                return const Center(child: Text('Unexpected error occurred.'));
               }
             },
           );
@@ -118,10 +110,7 @@ class EmbeddedTabPage extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, String titleL10n) {
-    return MainAppBar(
-      title: Text(context.parseL10n(titleL10n)),
-      context: context,
-    );
+    return MainAppBar(title: Text(context.parseL10n(titleL10n)), context: context);
   }
 
   PageInjectionStrategy _defaultPageInjectionStrategy(Map<String, dynamic>? payload) {
@@ -133,9 +122,8 @@ class EmbeddedTabPage extends StatelessWidget {
       initialUri: data.uri,
       type: data.reconnectStrategy,
       connectivityStream: Connectivity().onConnectivityChanged,
-      connectivityCheckerBuilder: () => const DefaultConnectivityChecker(
-        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
-      ),
+      connectivityCheckerBuilder: () =>
+          const DefaultConnectivityChecker(connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL),
     );
   }
 }

@@ -34,7 +34,8 @@ class SessionLoginCredential with _$SessionLoginCredential {
   @override
   final String password;
 
-  factory SessionLoginCredential.fromJson(Map<String, dynamic> json) => _$SessionLoginCredentialFromJson(json);
+  factory SessionLoginCredential.fromJson(Map<String, dynamic> json) =>
+      _$SessionLoginCredentialFromJson(json);
 
   Map<String, dynamic> toJson() => _$SessionLoginCredentialToJson(this);
 }

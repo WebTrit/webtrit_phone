@@ -52,10 +52,7 @@ class SlidableSection<T> extends StatelessWidget {
             Text(optionPrefix),
             Text(
               buildOptionLabel(selected),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.bold),
             ),
             const SizedBox(width: 12),
           ],

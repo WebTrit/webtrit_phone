@@ -9,3 +9,5 @@ analyzer:
     - "**/*.g.dart"
     - "build/**"
     
+formatter:
+  page_width: 120

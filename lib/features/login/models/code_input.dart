@@ -1,8 +1,6 @@
 import 'package:formz/formz.dart';
 
-enum CodeValidationError {
-  blank,
-}
+enum CodeValidationError { blank }
 
 class CodeInput extends FormzInput<String, CodeValidationError> {
   const CodeInput.pure([super.value = '']) : super.pure();

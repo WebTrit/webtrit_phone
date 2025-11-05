@@ -14,6 +14,6 @@ class OrientationsChanged extends OrientationsEvent {
 
   @override
   List<Object> get props => [
-        EquatablePropToString([orientation], listPropToString),
-      ];
+    EquatablePropToString([orientation], listPropToString),
+  ];
 }

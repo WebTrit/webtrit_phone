@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
 class TransferBottomNavigationBar extends StatelessWidget {
-  const TransferBottomNavigationBar(
-    this.data, {
-    super.key,
-  });
+  const TransferBottomNavigationBar(this.data, {super.key});
 
   final String data;
 
@@ -17,12 +14,7 @@ class TransferBottomNavigationBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(kMainAppBarBottomPaddingGap),
       color: themeData.colorScheme.secondary,
-      child: Text(
-        data,
-        style: TextStyle(
-          color: themeData.colorScheme.onSecondary,
-        ),
-      ),
+      child: Text(data, style: TextStyle(color: themeData.colorScheme.onSecondary)),
     );
   }
 }

@@ -13,11 +13,8 @@ export 'package:webtrit_api/webtrit_api.dart'
 final _logger = Logger('UserRepository');
 
 class UserRepository implements Refreshable {
-  UserRepository(
-    this.webtritApiClient,
-    this.token, {
-    SessionGuard? sessionGuard,
-  }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard() {
+  UserRepository(this.webtritApiClient, this.token, {SessionGuard? sessionGuard})
+    : _sessionGuard = sessionGuard ?? const EmptySessionGuard() {
     _updatesController = StreamController<UserInfo>.broadcast();
   }
 

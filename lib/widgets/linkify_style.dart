@@ -2,10 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LinkifyStyle with Diagnosticable {
-  LinkifyStyle({
-    this.style,
-    this.linkStyle,
-  });
+  LinkifyStyle({this.style, this.linkStyle});
 
   final TextStyle? style;
   final TextStyle? linkStyle;

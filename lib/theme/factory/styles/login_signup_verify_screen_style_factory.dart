@@ -11,10 +11,7 @@ import '../theme_style_factory.dart';
 /// - [LoginSignupVerifyScreenPageConfig.countdownRepeatIntervalSeconds]
 ///   -> [LoginSignupVerifyScreenStyle.countdownRepeatInterval]
 class LoginSignupVerifyScreenStyleFactory implements ThemeStyleFactory<LoginSignupVerifyScreenStyles> {
-  LoginSignupVerifyScreenStyleFactory(
-    this.colors,
-    this.pageConfig,
-  );
+  LoginSignupVerifyScreenStyleFactory(this.colors, this.pageConfig);
 
   final ColorScheme colors;
 
@@ -30,9 +27,7 @@ class LoginSignupVerifyScreenStyleFactory implements ThemeStyleFactory<LoginSign
     final countdownRepeatInterval = seconds <= 0 ? Duration.zero : Duration(seconds: seconds);
 
     return LoginSignupVerifyScreenStyles(
-      primary: LoginSignupVerifyScreenStyle(
-        countdownRepeatInterval: countdownRepeatInterval,
-      ),
+      primary: LoginSignupVerifyScreenStyle(countdownRepeatInterval: countdownRepeatInterval),
     );
   }
 }

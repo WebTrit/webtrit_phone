@@ -15,7 +15,8 @@ class SelfConfigResponse with _$SelfConfigResponse {
   @override
   final DateTime expiresAt;
 
-  factory SelfConfigResponse.fromJson(Map<String, Object?> json) => _$SelfConfigResponseFromJson(json);
+  factory SelfConfigResponse.fromJson(Map<String, Object?> json) =>
+      _$SelfConfigResponseFromJson(json);
 
   Map<String, Object?> toJson() => _$SelfConfigResponseToJson(this);
 }

@@ -9,9 +9,7 @@ class EquatablePropToString<T> extends Equatable {
   final String Function(T prop) propToString;
 
   @override
-  List<Object?> get props => [
-        prop,
-      ];
+  List<Object?> get props => [prop];
 
   @override
   String toString() => propToString(prop);

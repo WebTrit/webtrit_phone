@@ -5,9 +5,7 @@ typedef FeatureResolver = bool Function(FeatureFlag);
 
 extension FeatureAccessResolver on FeatureAccess {
   FeatureResolver _toResolver() {
-    final map = <FeatureFlag, bool Function()>{
-      FeatureFlag.voicemail: () => settingsFeature.isVoicemailsEnabled,
-    };
+    final map = <FeatureFlag, bool Function()>{FeatureFlag.voicemail: () => settingsFeature.isVoicemailsEnabled};
 
     return (FeatureFlag key) => map[key]?.call() ?? false;
   }

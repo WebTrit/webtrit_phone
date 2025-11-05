@@ -8,8 +8,6 @@ extension RouteMatchExension on RouteMatch {
       return this;
     }
 
-    return children?.firstWhereOrNull(
-      (child) => (child.name == pageInfo.name && child.args == null),
-    );
+    return children?.firstWhereOrNull((child) => (child.name == pageInfo.name && child.args == null));
   }
 }

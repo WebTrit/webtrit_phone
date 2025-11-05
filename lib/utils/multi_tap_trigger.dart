@@ -2,11 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 class MultiTapTrigger {
-  MultiTapTrigger({
-    required this.onTriggered,
-    this.requiredTapCount = 5,
-    this.timeout = const Duration(seconds: 2),
-  });
+  MultiTapTrigger({required this.onTriggered, this.requiredTapCount = 5, this.timeout = const Duration(seconds: 2)});
 
   final int requiredTapCount;
   final Duration timeout;

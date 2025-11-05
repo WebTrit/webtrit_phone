@@ -8,12 +8,7 @@ import 'package:webtrit_phone/models/system_notification.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 class SystemNotificationListTile extends StatefulWidget {
-  const SystemNotificationListTile(
-    this.notification, {
-    this.seenPending = false,
-    this.onSeen,
-    super.key,
-  });
+  const SystemNotificationListTile(this.notification, {this.seenPending = false, this.onSeen, super.key});
 
   final SystemNotification notification;
   final bool seenPending;
@@ -90,9 +85,7 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: seen ? colorScheme.surfaceBright : colorScheme.primaryContainer,
-                border: Border(
-                  left: BorderSide(color: wasSeen ? colorScheme.primary : colorScheme.tertiary, width: 4),
-                ),
+                border: Border(left: BorderSide(color: wasSeen ? colorScheme.primary : colorScheme.tertiary, width: 4)),
                 boxShadow: [
                   BoxShadow(
                     color: (seen ? colorScheme.primary : colorScheme.tertiary).withAlpha(50),
@@ -117,10 +110,7 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: time(style),
-            ),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 24), child: time(style)),
           ],
         ),
       ),
@@ -145,10 +135,7 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
         Row(
           children: [
             Expanded(
-              child: Text(
-                widget.notification.title,
-                style: style.copyWith(fontWeight: FontWeight.bold, fontSize: 14),
-              ),
+              child: Text(widget.notification.title, style: style.copyWith(fontWeight: FontWeight.bold, fontSize: 14)),
             ),
             Icon(
               switch (widget.notification.type) {
@@ -210,12 +197,7 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
                 Icon(Icons.link_sharp, size: 16, color: Colors.grey.shade600),
               ],
             ),
-          if (preview?.description != null) ...[
-            Text(
-              preview!.description!,
-              style: style,
-            ),
-          ],
+          if (preview?.description != null) ...[Text(preview!.description!, style: style)],
           if (preview?.imageUrl != null && preview?.title == null && preview?.description == null)
             Row(
               children: [

@@ -13,9 +13,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../login.dart';
 
 class LoginCoreUrlAssignScreen extends StatelessWidget {
-  const LoginCoreUrlAssignScreen({
-    super.key,
-  });
+  const LoginCoreUrlAssignScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +28,13 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
       buildWhen: (previous, current) => whenLoginCoreUrlAssignScreenPageActive(current),
       builder: (context, state) {
         final coreUrlAssignPreDescriptionText = context.l10n.login_Text_coreUrlAssignPreDescription;
-        final coreUrlAssignPostDescriptionText =
-            context.l10n.login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL);
+        final coreUrlAssignPostDescriptionText = context.l10n.login_Text_coreUrlAssignPostDescription(
+          EnvironmentConfig.SALES_EMAIL,
+        );
 
         return LoginScaffold(
           appBar: AppBar(
-            leading: ExtBackButton(
-              disabled: state.processing,
-            ),
+            leading: ExtBackButton(disabled: state.processing),
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
@@ -53,9 +50,7 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         if (coreUrlAssignPreDescriptionText.isNotEmpty) ...[
-                          Description(
-                            text: coreUrlAssignPreDescriptionText,
-                          ),
+                          Description(text: coreUrlAssignPreDescriptionText),
                           const SizedBox(height: kInset / 2),
                         ],
                         TextFormField(
@@ -71,15 +66,13 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                           keyboardType: TextInputType.url,
                           autocorrect: false,
                           onChanged: context.read<LoginCubit>().coreUrlInputChanged,
-                          onFieldSubmitted:
-                              !state.coreUrlInput.isValid ? null : (_) => _onCoreUrlAssignSubmitted(context),
+                          onFieldSubmitted: !state.coreUrlInput.isValid
+                              ? null
+                              : (_) => _onCoreUrlAssignSubmitted(context),
                         ),
                         if (coreUrlAssignPostDescriptionText.isNotEmpty) ...[
                           const SizedBox(height: kInset / 8),
-                          Description(
-                            text: coreUrlAssignPostDescriptionText,
-                            launchLinkableElement: true,
-                          ),
+                          Description(text: coreUrlAssignPostDescriptionText, launchLinkableElement: true),
                         ],
                         const Spacer(),
                         const SizedBox(height: kInset),

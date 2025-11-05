@@ -29,7 +29,8 @@ class TransferEvent extends LineEvent {
   factory TransferEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(
+          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return TransferEvent(

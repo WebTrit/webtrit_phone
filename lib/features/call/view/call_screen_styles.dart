@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'call_screen_style.dart';
 
 class CallScreenStyles extends ThemeExtension<CallScreenStyles> {
-  const CallScreenStyles({
-    required this.primary,
-  });
+  const CallScreenStyles({required this.primary});
 
   final CallScreenStyle? primary;
 
   @override
-  ThemeExtension<CallScreenStyles> copyWith({
-    CallScreenStyle? primary,
-  }) {
-    return CallScreenStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<CallScreenStyles> copyWith({CallScreenStyle? primary}) {
+    return CallScreenStyles(primary: primary ?? this.primary);
   }
 
   @override

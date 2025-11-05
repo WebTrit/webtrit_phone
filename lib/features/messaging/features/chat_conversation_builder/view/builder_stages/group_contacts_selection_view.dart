@@ -57,7 +57,7 @@ class GroupContactsSelectionView extends StatelessWidget {
                     ],
                   ),
                 );
-              })
+              }),
             ],
           ),
         ),
@@ -80,10 +80,7 @@ class GroupContactsSelectionView extends StatelessWidget {
             decoration: InputDecoration(
               hintText: context.l10n.messaging_ConversationBuilders_contactSearch_hint,
               fillColor: colorScheme.surface,
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(12),
-              ),
+              border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12)),
               prefixIcon: const Icon(Icons.search),
             ),
             onChanged: (value) => builderCubit.onSearchFilterChange(value),
@@ -101,11 +98,7 @@ class GroupContactsSelectionView extends StatelessWidget {
                 child: Row(
                   children: [
                     AbsorbPointer(
-                      child: Checkbox(
-                        value: selected,
-                        shape: const CircleBorder(),
-                        onChanged: (_) {},
-                      ),
+                      child: Checkbox(value: selected, shape: const CircleBorder(), onChanged: (_) {}),
                     ),
                     Expanded(
                       child: ListTile(

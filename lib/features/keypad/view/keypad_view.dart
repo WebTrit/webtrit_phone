@@ -7,12 +7,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 
 class KeypadView extends StatefulWidget {
-  const KeypadView({
-    super.key,
-    required this.videoEnabled,
-    required this.transferEnabled,
-    required this.style,
-  });
+  const KeypadView({super.key, required this.videoEnabled, required this.transferEnabled, required this.style});
 
   final bool videoEnabled;
   final bool transferEnabled;
@@ -134,9 +129,7 @@ class KeypadViewState extends State<KeypadView> {
             );
           },
         ),
-        SizedBox(
-          height: scaledInset,
-        ),
+        SizedBox(height: scaledInset),
       ],
     );
   }
@@ -162,10 +155,7 @@ class KeypadViewState extends State<KeypadView> {
 
     final newText = textBefore + keyText + textAfter;
     final newSelection = TextSelection.collapsed(offset: _controller.selection.start + 1);
-    final value = _controller.value.copyWith(
-      text: newText,
-      selection: newSelection,
-    );
+    final value = _controller.value.copyWith(text: newText, selection: newSelection);
     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
 
     _keypadTextFieldEditableTextState?.hideToolbar();
@@ -190,10 +180,7 @@ class KeypadViewState extends State<KeypadView> {
       newText = textBefore + textAfter;
       newSelection = TextSelection.collapsed(offset: _controller.selection.start);
     }
-    final value = _controller.value.copyWith(
-      text: newText,
-      selection: newSelection,
-    );
+    final value = _controller.value.copyWith(text: newText, selection: newSelection);
     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
 
     _keypadTextFieldEditableTextState?.hideToolbar();
@@ -216,10 +203,7 @@ class KeypadViewState extends State<KeypadView> {
       newText = textBefore + textAfter;
       newSelection = TextSelection.collapsed(offset: _controller.selection.start);
     }
-    final value = _controller.value.copyWith(
-      text: newText,
-      selection: newSelection,
-    );
+    final value = _controller.value.copyWith(text: newText, selection: newSelection);
     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
 
     _keypadTextFieldEditableTextState?.hideToolbar();

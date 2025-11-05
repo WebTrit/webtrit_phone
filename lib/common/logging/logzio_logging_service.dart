@@ -8,12 +8,7 @@ import 'remote_logging_service.dart';
 final _logger = Logger('LogzioLoggingService');
 
 class LogzioLoggingService implements RemoteLoggingService {
-  LogzioLoggingService({
-    required this.url,
-    required this.token,
-    required this.bufferSize,
-    required this.minLevel,
-  });
+  LogzioLoggingService({required this.url, required this.token, required this.bufferSize, required this.minLevel});
 
   final String url;
   final String token;

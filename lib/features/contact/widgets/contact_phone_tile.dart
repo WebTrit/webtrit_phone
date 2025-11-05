@@ -49,20 +49,11 @@ class ContactPhoneTile extends StatelessWidget {
             child: Text(context.l10n.numberActions_callFrom(number)),
           ),
       if (onTransferPressed != null)
-        PopupMenuItem(
-          onTap: onTransferPressed,
-          child: Text(context.l10n.numberActions_transfer),
-        ),
+        PopupMenuItem(onTap: onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
       if (onSendSmsPressed != null)
-        PopupMenuItem(
-          onTap: onSendSmsPressed,
-          child: Text(context.l10n.numberActions_sendSms),
-        ),
+        PopupMenuItem(onTap: onSendSmsPressed, child: Text(context.l10n.numberActions_sendSms)),
       if (onCallLogPressed != null)
-        PopupMenuItem(
-          onTap: onCallLogPressed,
-          child: Text(context.l10n.numberActions_callLog),
-        ),
+        PopupMenuItem(onTap: onCallLogPressed, child: Text(context.l10n.numberActions_callLog)),
       PopupMenuItem(
         onTap: () {
           Clipboard.setData(ClipboardData(text: number));
@@ -84,30 +75,14 @@ class ContactPhoneTile extends StatelessWidget {
               onPressed: () => onFavoriteChanged!(!favorite),
             ),
           if (onInitiatedTransferPressed != null)
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.phone_forwarded),
-              onPressed: onInitiatedTransferPressed,
-            )
+            IconButton(splashRadius: 24, icon: const Icon(Icons.phone_forwarded), onPressed: onInitiatedTransferPressed)
           else ...[
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.call),
-              onPressed: onAudioPressed,
-            ),
+            IconButton(splashRadius: 24, icon: const Icon(Icons.call), onPressed: onAudioPressed),
             if (onVideoPressed != null)
-              IconButton(
-                splashRadius: 24,
-                icon: const Icon(Icons.videocam),
-                onPressed: onVideoPressed,
-              ),
+              IconButton(splashRadius: 24, icon: const Icon(Icons.videocam), onPressed: onVideoPressed),
           ],
           if (onMessagePressed != null)
-            IconButton(
-              splashRadius: 24,
-              icon: const Icon(Icons.messenger),
-              onPressed: onMessagePressed,
-            ),
+            IconButton(splashRadius: 24, icon: const Icon(Icons.messenger), onPressed: onMessagePressed),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             itemBuilder: (context) {

@@ -13,9 +13,5 @@ class PushTokenStatus {
   final String? error;
   final PushTokenStatusType type;
 
-  const PushTokenStatus({
-    this.token,
-    this.error,
-    this.type = PushTokenStatusType.progress,
-  });
+  const PushTokenStatus({this.token, this.error, this.type = PushTokenStatusType.progress});
 }

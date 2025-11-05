@@ -25,11 +25,7 @@ class LoginModeActionButton extends StatelessWidget {
       style: style,
       child: !processing
           ? Text(title)
-          : SizedCircularProgressIndicator(
-              size: 16,
-              strokeWidth: 2,
-              color: style?.foregroundColor?.resolve({}),
-            ),
+          : SizedCircularProgressIndicator(size: 16, strokeWidth: 2, color: style?.foregroundColor?.resolve({})),
     );
   }
 }

@@ -15,9 +15,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 @RoutePage()
 class ContactsScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const ContactsScreenPage({
-    required this.sourceTypes,
-  });
+  const ContactsScreenPage({required this.sourceTypes});
 
   final List<ContactSourceType> sourceTypes;
 
@@ -34,9 +32,7 @@ class ContactsScreenPage extends StatelessWidget {
       sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
     );
     final provider = BlocProvider(
-      create: (context) => ContactsBloc(
-        appPreferences: context.read<AppPreferences>(),
-      ),
+      create: (context) => ContactsBloc(appPreferences: context.read<AppPreferences>()),
       child: widget,
     );
     return provider;

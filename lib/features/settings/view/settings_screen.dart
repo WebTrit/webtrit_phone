@@ -18,10 +18,7 @@ import '../settings.dart';
 import '../widgets/widgets.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({
-    super.key,
-    required this.sections,
-  });
+  const SettingsScreen({super.key, required this.sections});
 
   final List<SettingsSection> sections;
 
@@ -34,12 +31,8 @@ class SettingsScreen extends StatelessWidget {
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.refresh,
-            ),
-            style: IconButton.styleFrom(
-              foregroundColor: colorScheme.onSurface,
-            ),
+            icon: const Icon(Icons.refresh),
+            style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
             onPressed: () {
               context.read<RegisterStatusCubit>().fetchStatus();
             },
@@ -100,93 +93,110 @@ class SettingsScreen extends StatelessWidget {
                       for (var section in sections)
                         Column(
                           children: [
-                            GroupTitleListTile(
-                              titleData: context.parseL10n(section.titleL10n),
-                            ),
+                            GroupTitleListTile(titleData: context.parseL10n(section.titleL10n)),
                             ...[
                               for (var item in section.items)
                                 if (item.flavor == SettingsFlavor.network)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(const NetworkScreenPageRoute()),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(const NetworkScreenPageRoute()),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.language)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(const LanguageScreenPageRoute()),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(const LanguageScreenPageRoute()),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.help)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(
-                                          HelpScreenPageRoute(initialUriQueryParam: item.data!.uri.toString())),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(
+                                          HelpScreenPageRoute(initialUriQueryParam: item.data!.uri.toString()),
+                                        ),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.terms)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(EmbeddedScreenPageRoute(data: item.data!)),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(EmbeddedScreenPageRoute(data: item.data!)),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.about)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(const AboutScreenPageRoute()),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(const AboutScreenPageRoute()),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.log)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(const LogRecordsConsoleScreenPageRoute()),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(const LogRecordsConsoleScreenPageRoute()),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.deleteAccount)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => _deleteAccount(context),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => _deleteAccount(context),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.embedded)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(EmbeddedScreenPageRoute(data: item.data!)),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(EmbeddedScreenPageRoute(data: item.data!)),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.mediaSettings)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(const MediaSettingsScreenPageRoute()),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ])
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(const MediaSettingsScreenPageRoute()),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  )
                                 else if (item.flavor == SettingsFlavor.voicemail)
                                   Column(
                                     children: [
@@ -219,14 +229,16 @@ class SettingsScreen extends StatelessWidget {
                                   )
                                 else if (item.flavor == SettingsFlavor.presence &&
                                     PresenceViewParams.of(context).viewSource == PresenceViewSource.sipPresence)
-                                  Column(children: [
-                                    ListTile(
-                                      leading: Icon(item.icon),
-                                      title: Text(context.parseL10n(item.titleL10n)),
-                                      onTap: () => context.router.navigate(const PresenceSettingsScreenPageRoute()),
-                                    ),
-                                    const ListTileSeparator(),
-                                  ]),
+                                  Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(item.icon),
+                                        title: Text(context.parseL10n(item.titleL10n)),
+                                        onTap: () => context.router.navigate(const PresenceSettingsScreenPageRoute()),
+                                      ),
+                                      const ListTileSeparator(),
+                                    ],
+                                  ),
                             ],
                           ],
                         ),
@@ -234,10 +246,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              if (state.progress)
-                const AbsorbPointer(
-                  child: Center(child: CircularProgressIndicator()),
-                )
+              if (state.progress) const AbsorbPointer(child: Center(child: CircularProgressIndicator())),
             ],
           );
         },

@@ -19,7 +19,7 @@ class MediaSettingsState with EquatableMixin {
   final VideoCapturingSettings videoCapturingSettings;
 
   // TODO: Move [iceSettings] to [PeerConnectionSettings] since it relates to WebRTC session-level configuration,
-// such as ICE servers, transport policy, and connection establishment behavior.
+  // such as ICE servers, transport policy, and connection establishment behavior.
   final IceSettings iceSettings;
   final PeerConnectionSettings pearConnectionSettings;
 
@@ -102,13 +102,13 @@ class MediaSettingsState with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        encodingSettings,
-        encodingPreset,
-        audioProcessingSettings,
-        videoCapturingSettings,
-        iceSettings,
-        pearConnectionSettings,
-      ];
+    encodingSettings,
+    encodingPreset,
+    audioProcessingSettings,
+    videoCapturingSettings,
+    iceSettings,
+    pearConnectionSettings,
+  ];
 
   @override
   String toString() {

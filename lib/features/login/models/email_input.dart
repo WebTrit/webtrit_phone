@@ -1,10 +1,7 @@
 import 'package:formz/formz.dart';
 import 'package:validators/validators.dart';
 
-enum EmailValidationError {
-  blank,
-  format,
-}
+enum EmailValidationError { blank, format }
 
 class EmailInput extends FormzInput<String, EmailValidationError> {
   const EmailInput.pure([super.value = '']) : super.pure();

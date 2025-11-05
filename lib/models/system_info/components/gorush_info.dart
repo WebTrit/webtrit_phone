@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class GorushInfo with EquatableMixin {
-  GorushInfo({
-    this.version,
-  });
+  GorushInfo({this.version});
 
   final String? version;
 

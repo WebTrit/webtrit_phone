@@ -13,9 +13,7 @@ class OutlinedButtonStyleFactory implements ThemeStyleFactory<OutlinedButtonStyl
     return OutlinedButtonStyles(
       neutral: OutlinedButton.styleFrom(
         foregroundColor: colors.onSurface,
-        side: BorderSide(
-          color: colors.onSurface.withValues(alpha: 0.2),
-        ),
+        side: BorderSide(color: colors.onSurface.withValues(alpha: 0.2)),
       ),
     );
   }
