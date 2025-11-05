@@ -9,12 +9,6 @@ import 'package:webtrit_phone/mappers/mappers.dart';
 abstract class AppPreferences {
   Future<bool> clear({List<String> exclusion});
 
-  String? getString(String key);
-
-  Future<bool> setString(String key, String value);
-
-  Future<bool> removeKey(String key);
-
   bool getRegisterStatus();
 
   Future<bool> setRegisterStatus(bool value);
@@ -162,21 +156,6 @@ class AppPreferencesImpl
     return Future.wait(
       _kPreferencesList.where((key) => !exclusion.contains(key)).map((key) => _sharedPreferences.remove(key)).toList(),
     ).then((results) => results.every((result) => result));
-  }
-
-  @override
-  String? getString(String key) {
-    return _sharedPreferences.getString(key);
-  }
-
-  @override
-  Future<bool> setString(String key, String value) async {
-    return _sharedPreferences.setString(key, value);
-  }
-
-  @override
-  Future<bool> removeKey(String key) async {
-    return _sharedPreferences.remove(key);
   }
 
   @override

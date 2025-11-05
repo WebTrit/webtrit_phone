@@ -46,6 +46,7 @@ Future<void> bootstrap() async {
   final secureStorage = await SecureStorage.init();
   final appLabels = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
 
+  await AppPreferencesPure.init();
   await AppPath.init();
   await AppPermissions.init(featureAccess);
   await AppCertificates.init();
@@ -54,11 +55,11 @@ Future<void> bootstrap() async {
   await AppLogger.init(remoteFirebaseConfigService, appLabels);
   await AppLifecycle.initMaster();
 
-  await _initCallkeep(appPreferences, featureAccess);
+  await _initCallkeep(featureAccess);
   await _initWorkManager();
 }
 
-Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureAccess) async {
+Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   if (!Platform.isAndroid) return;
 
   AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);

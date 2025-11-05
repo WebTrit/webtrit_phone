@@ -8,6 +8,7 @@ export 'app_logger.dart';
 export 'app_path.dart';
 export 'app_permissions.dart';
 export 'app_preferences.dart';
+export 'app_preferences_pure.dart';
 export 'app_themes.dart';
 export 'app_time.dart';
 export 'device_info.dart';

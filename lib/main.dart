@@ -92,6 +92,11 @@ class RootApp extends StatelessWidget {
             return AppPreferencesFactory.instance;
           },
         ),
+        Provider<AppPreferencesPure>(
+          create: (context) {
+            return AppPreferencesPure();
+          },
+        ),
         Provider<FeatureAccess>(
           create: (context) {
             return FeatureAccess();
