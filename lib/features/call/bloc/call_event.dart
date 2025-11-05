@@ -4,7 +4,7 @@ sealed class CallEvent extends Equatable {
   const CallEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class CallStarted extends CallEvent {
@@ -17,9 +17,7 @@ class _AppLifecycleStateChanged extends CallEvent {
   final AppLifecycleState state;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([state], listPropToString),
-  ];
+  List<Object?> get props => [state];
 }
 
 class _ConnectivityResultChanged extends CallEvent {
@@ -28,9 +26,7 @@ class _ConnectivityResultChanged extends CallEvent {
   final ConnectivityResult result;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([result], listPropToString),
-  ];
+  List<Object?> get props => [result];
 }
 
 class _NavigatorMediaDevicesChange extends CallEvent {
@@ -45,9 +41,7 @@ class _RegistrationChange extends CallEvent {
   final Registration registration;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([registration], listPropToString),
-  ];
+  List<Object?> get props => [registration];
 }
 
 // handle app state
@@ -70,9 +64,7 @@ class _ResetStateEventCompleteCall extends _ResetStateEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 // signaling client events
@@ -102,9 +94,7 @@ class _SignalingClientEventDisconnected extends _SignalingClientEvent {
   final String? reason;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([code, reason], listPropToString),
-  ];
+  List<Object?> get props => [code, reason];
 }
 
 // handshake signaling events
@@ -116,9 +106,7 @@ class _HandshakeSignalingEventState extends CallEvent {
   final int linesCount;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([registration, linesCount], listPropToString),
-  ];
+  List<Object?> get props => [registration, linesCount];
 }
 
 // call signaling events
@@ -256,18 +244,16 @@ class _CallSignalingEventIncoming extends _CallSignalingEvent {
   final JsepValue? jsep;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([
-      line,
-      callId,
-      callee,
-      caller,
-      callerDisplayName,
-      referredBy,
-      replaceCallId,
-      isFocus,
-      jsep,
-    ], listPropToString),
+  List<Object?> get props => [
+    line,
+    callId,
+    callee,
+    caller,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
   ];
 }
 
@@ -278,9 +264,7 @@ class _CallSignalingEventRinging extends _CallSignalingEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId], listPropToString),
-  ];
+  List<Object?> get props => [line, callId];
 }
 
 class _CallSignalingEventProgress extends _CallSignalingEvent {
@@ -292,9 +276,7 @@ class _CallSignalingEventProgress extends _CallSignalingEvent {
   final JsepValue? jsep;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId, callee, jsep], listPropToString),
-  ];
+  List<Object?> get props => [line, callId, callee, jsep];
 }
 
 class _CallSignalingEventAccepted extends _CallSignalingEvent {
@@ -306,9 +288,7 @@ class _CallSignalingEventAccepted extends _CallSignalingEvent {
   final JsepValue? jsep;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId, callee, jsep], listPropToString),
-  ];
+  List<Object?> get props => [line, callId, callee, jsep];
 }
 
 class _CallSignalingEventHangup extends _CallSignalingEvent {
@@ -320,9 +300,7 @@ class _CallSignalingEventHangup extends _CallSignalingEvent {
   final String reason;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId, code, reason], listPropToString),
-  ];
+  List<Object?> get props => [line, callId, code, reason];
 }
 
 class _CallSignalingEventUpdating extends _CallSignalingEvent {
@@ -349,18 +327,16 @@ class _CallSignalingEventUpdating extends _CallSignalingEvent {
   final JsepValue? jsep;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([
-      line,
-      callId,
-      callee,
-      caller,
-      callerDisplayName,
-      referredBy,
-      replaceCallId,
-      isFocus,
-      jsep,
-    ], listPropToString),
+  List<Object?> get props => [
+    line,
+    callId,
+    callee,
+    caller,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
   ];
 }
 
@@ -371,9 +347,7 @@ class _CallSignalingEventUpdated extends _CallSignalingEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId], listPropToString),
-  ];
+  List<Object?> get props => [line, callId];
 }
 
 class _CallSignalingEventTransfer extends _CallSignalingEvent {
@@ -392,9 +366,7 @@ class _CallSignalingEventTransfer extends _CallSignalingEvent {
   final String? replaceCallId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, referId, referTo, referredBy, replaceCallId], listPropToString),
-  ];
+  List<Object?> get props => [line, referId, referTo, referredBy, replaceCallId];
 }
 
 class _CallSignalingEventTransferring extends _CallSignalingEvent {
@@ -404,9 +376,7 @@ class _CallSignalingEventTransferring extends _CallSignalingEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId], listPropToString),
-  ];
+  List<Object?> get props => [line, callId];
 }
 
 class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
@@ -425,9 +395,7 @@ class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
   final List<UserActiveCall> userActiveCalls;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId, notify, subscriptionState, userActiveCalls], listPropToString),
-  ];
+  List<Object?> get props => [line, callId, notify, subscriptionState, userActiveCalls];
 }
 
 class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
@@ -446,9 +414,7 @@ class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
   final ReferNotifyState state;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId, notify, subscriptionState, state], listPropToString),
-  ];
+  List<Object?> get props => [line, callId, notify, subscriptionState, state];
 }
 
 class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
@@ -469,9 +435,7 @@ class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
   final List<SignalingPresenceInfo> presenceInfo;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId, notify, subscriptionState, number, presenceInfo], listPropToString),
-  ];
+  List<Object?> get props => [line, callId, notify, subscriptionState, number, presenceInfo];
 }
 
 class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
@@ -492,9 +456,7 @@ class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   final String? content;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, callId, notify, subscriptionState, contentType, content], listPropToString),
-  ];
+  List<Object?> get props => [line, callId, notify, subscriptionState, contentType, content];
 }
 
 class _CallSignalingEventRegistering extends _CallSignalingEvent {
@@ -512,9 +474,7 @@ class _CallSignalingEventRegisterationFailed extends _CallSignalingEvent {
   final String reason;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([code, reason], listPropToString),
-  ];
+  List<Object?> get props => [code, reason];
 }
 
 class _CallSignalingEventUnregistering extends _CallSignalingEvent {
@@ -543,9 +503,7 @@ class _CallPushEventIncoming extends CallEvent {
   final CallkeepIncomingCallError? error;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, handle, displayName, video, error], listPropToString),
-  ];
+  List<Object?> get props => [callId, handle, displayName, video, error];
 }
 
 // call control events
@@ -627,9 +585,7 @@ class _CallControlEventStarted extends CallControlEvent with CallControlEventSta
   final bool video;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([line, generic, number, email, displayName, replaces, fromNumber, video], listPropToString),
-  ];
+  List<Object?> get props => [line, generic, number, email, displayName, replaces, fromNumber, video];
 }
 
 class _CallControlEventAnswered extends CallControlEvent {
@@ -638,9 +594,7 @@ class _CallControlEventAnswered extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventEnded extends CallControlEvent {
@@ -649,9 +603,7 @@ class _CallControlEventEnded extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventSetHeld extends CallControlEvent {
@@ -661,9 +613,7 @@ class _CallControlEventSetHeld extends CallControlEvent {
   final bool onHold;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, onHold], listPropToString),
-  ];
+  List<Object?> get props => [callId, onHold];
 }
 
 class _CallControlEventSetMuted extends CallControlEvent {
@@ -673,9 +623,7 @@ class _CallControlEventSetMuted extends CallControlEvent {
   final bool muted;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, muted], listPropToString),
-  ];
+  List<Object?> get props => [callId, muted];
 }
 
 class _CallControlEventSentDTMF extends CallControlEvent {
@@ -685,9 +633,7 @@ class _CallControlEventSentDTMF extends CallControlEvent {
   final String key;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, key], listPropToString),
-  ];
+  List<Object?> get props => [callId, key];
 }
 
 class _CallControlEventCameraSwitched extends CallControlEvent {
@@ -696,9 +642,7 @@ class _CallControlEventCameraSwitched extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventCameraEnabled extends CallControlEvent {
@@ -708,9 +652,7 @@ class _CallControlEventCameraEnabled extends CallControlEvent {
   final bool enabled;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, enabled], listPropToString),
-  ];
+  List<Object?> get props => [callId, enabled];
 }
 
 class _CallControlEventAudioDeviceSet extends CallControlEvent {
@@ -720,9 +662,7 @@ class _CallControlEventAudioDeviceSet extends CallControlEvent {
   final CallAudioDevice device;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, device], listPropToString),
-  ];
+  List<Object?> get props => [callId, device];
 }
 
 class _CallControlEventFailureApproved extends CallControlEvent {
@@ -731,9 +671,7 @@ class _CallControlEventFailureApproved extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventBlindTransferInitiated extends CallControlEvent {
@@ -742,9 +680,7 @@ class _CallControlEventBlindTransferInitiated extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventAttendedTransferInitiated extends CallControlEvent {
@@ -753,9 +689,7 @@ class _CallControlEventAttendedTransferInitiated extends CallControlEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 class _CallControlEventBlindTransferSubmitted extends CallControlEvent {
@@ -764,9 +698,7 @@ class _CallControlEventBlindTransferSubmitted extends CallControlEvent {
   final String number;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([number], listPropToString),
-  ];
+  List<Object?> get props => [number];
 }
 
 class _CallControlEventAttendedTransferSubmitted extends CallControlEvent {
@@ -776,9 +708,7 @@ class _CallControlEventAttendedTransferSubmitted extends CallControlEvent {
   final ActiveCall replaceCall;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([referorCall, replaceCall], listPropToString),
-  ];
+  List<Object?> get props => [referorCall, replaceCall];
 }
 
 class _CallControlEventAttendedRequestDeclined extends CallControlEvent {
@@ -788,9 +718,7 @@ class _CallControlEventAttendedRequestDeclined extends CallControlEvent {
   final String referId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, referId], listPropToString),
-  ];
+  List<Object?> get props => [callId, referId];
 }
 
 class _CallControlEventAttendedRequestApproved extends CallControlEvent {
@@ -800,9 +728,7 @@ class _CallControlEventAttendedRequestApproved extends CallControlEvent {
   final String referTo;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([referId, referTo], listPropToString),
-  ];
+  List<Object?> get props => [referId, referTo];
 }
 
 mixin CallControlEventStartedMixin {
@@ -870,9 +796,7 @@ class _CallPerformEventStarted extends _CallPerformEvent {
   final bool video;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, handle, displayName, video], listPropToString),
-  ];
+  List<Object?> get props => [callId, handle, displayName, video];
 }
 
 class _CallPerformEventAnswered extends _CallPerformEvent {
@@ -881,9 +805,7 @@ class _CallPerformEventAnswered extends _CallPerformEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 class _CallPerformEventEnded extends _CallPerformEvent {
@@ -892,9 +814,7 @@ class _CallPerformEventEnded extends _CallPerformEvent {
   final String callId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId], listPropToString),
-  ];
+  List<Object?> get props => [callId];
 }
 
 class _CallPerformEventSetHeld extends _CallPerformEvent {
@@ -904,9 +824,7 @@ class _CallPerformEventSetHeld extends _CallPerformEvent {
   final bool onHold;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, onHold], listPropToString),
-  ];
+  List<Object?> get props => [callId, onHold];
 }
 
 class _CallPerformEventSetMuted extends _CallPerformEvent {
@@ -916,9 +834,7 @@ class _CallPerformEventSetMuted extends _CallPerformEvent {
   final bool muted;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, muted], listPropToString),
-  ];
+  List<Object?> get props => [callId, muted];
 }
 
 class _CallPerformEventSentDTMF extends _CallPerformEvent {
@@ -928,9 +844,7 @@ class _CallPerformEventSentDTMF extends _CallPerformEvent {
   final String key;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, key], listPropToString),
-  ];
+  List<Object?> get props => [callId, key];
 }
 
 class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
@@ -940,9 +854,7 @@ class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
   final CallAudioDevice device;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, device], listPropToString),
-  ];
+  List<Object?> get props => [callId, device];
 }
 
 class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
@@ -952,9 +864,7 @@ class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
   final List<CallAudioDevice> devices;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, devices], listPropToString),
-  ];
+  List<Object?> get props => [callId, devices];
 }
 
 // peer connection events
@@ -990,9 +900,7 @@ class _PeerConnectionEventSignalingStateChanged extends _PeerConnectionEvent {
   final RTCSignalingState state;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, state], listPropToString),
-  ];
+  List<Object?> get props => [callId, state];
 }
 
 class _PeerConnectionEventConnectionStateChanged extends _PeerConnectionEvent {
@@ -1002,9 +910,7 @@ class _PeerConnectionEventConnectionStateChanged extends _PeerConnectionEvent {
   final RTCPeerConnectionState state;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, state], listPropToString),
-  ];
+  List<Object?> get props => [callId, state];
 }
 
 class _PeerConnectionEventIceGatheringStateChanged extends _PeerConnectionEvent {
@@ -1014,9 +920,7 @@ class _PeerConnectionEventIceGatheringStateChanged extends _PeerConnectionEvent 
   final RTCIceGatheringState state;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, state], listPropToString),
-  ];
+  List<Object?> get props => [callId, state];
 }
 
 class _PeerConnectionEventIceConnectionStateChanged extends _PeerConnectionEvent {
@@ -1026,9 +930,7 @@ class _PeerConnectionEventIceConnectionStateChanged extends _PeerConnectionEvent
   final RTCIceConnectionState state;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, state], listPropToString),
-  ];
+  List<Object?> get props => [callId, state];
 }
 
 class _PeerConnectionEventIceCandidateIdentified extends _PeerConnectionEvent {
@@ -1038,9 +940,7 @@ class _PeerConnectionEventIceCandidateIdentified extends _PeerConnectionEvent {
   final RTCIceCandidate candidate;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, candidate], listPropToString),
-  ];
+  List<Object?> get props => [callId, candidate];
 }
 
 class _PeerConnectionEventStreamAdded extends _PeerConnectionEvent {
@@ -1050,9 +950,7 @@ class _PeerConnectionEventStreamAdded extends _PeerConnectionEvent {
   final MediaStream stream;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, stream], listPropToString),
-  ];
+  List<Object?> get props => [callId, stream];
 }
 
 class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
@@ -1062,9 +960,7 @@ class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
   final MediaStream stream;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([callId, stream], listPropToString),
-  ];
+  List<Object?> get props => [callId, stream];
 }
 
 // call screen events

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
@@ -20,6 +21,8 @@ class AppLogger {
 
     Logger.root.clearListeners();
     Logger.root.level = localLogLevel;
+
+    EquatableConfig.stringify = localLogLevel <= Level.FINE || logzioLogLevel <= Level.FINE;
 
     // Set up local logs printing with a color formatter
     PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);

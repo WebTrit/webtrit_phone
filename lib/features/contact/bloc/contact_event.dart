@@ -4,7 +4,7 @@ sealed class ContactEvent extends Equatable {
   const ContactEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ContactStarted extends ContactEvent {
@@ -17,9 +17,7 @@ class ContactAddedToFavorites extends ContactEvent {
   final ContactPhone contactPhone;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([contactPhone], listPropToString),
-  ];
+  List<Object?> get props => [contactPhone];
 }
 
 class ContactRemovedFromFavorites extends ContactEvent {
@@ -28,9 +26,7 @@ class ContactRemovedFromFavorites extends ContactEvent {
   final ContactPhone contactPhone;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([contactPhone], listPropToString),
-  ];
+  List<Object?> get props => [contactPhone];
 }
 
 class ContactEmailSend extends ContactEvent {
@@ -39,7 +35,5 @@ class ContactEmailSend extends ContactEvent {
   final ContactEmail contactEmail;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([contactEmail], listPropToString),
-  ];
+  List<Object?> get props => [contactEmail];
 }

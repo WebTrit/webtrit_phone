@@ -28,7 +28,7 @@ final class SCSInit extends SmsConversationState with EquatableMixin {
   final UsersCreds creds;
 
   @override
-  List<Object> get props => [creds];
+  List<Object?> get props => [creds];
 }
 
 /// Represents the error state of the conversation during the initialization.
@@ -41,7 +41,7 @@ final class SCSError extends SmsConversationState with EquatableMixin {
   final Object error;
 
   @override
-  List<Object> get props => [creds, error];
+  List<Object?> get props => [creds, error];
 }
 
 /// Represents the state of the conversation after user leaved/removed.
@@ -52,7 +52,7 @@ final class SCSLeft extends SmsConversationState with EquatableMixin {
   final UsersCreds creds;
 
   @override
-  List<Object> get props => [creds];
+  List<Object?> get props => [creds];
 }
 
 /// Represents the state of the conversation cubit when the conversation is ready.
@@ -82,7 +82,7 @@ final class SCSReady extends SmsConversationState with EquatableMixin {
   final bool busy;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     creds,
     conversation ?? 0,
     messages,

@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 part 'contact_bloc.freezed.dart';
 

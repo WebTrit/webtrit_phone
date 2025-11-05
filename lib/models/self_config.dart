@@ -19,7 +19,7 @@ final class SelfConfigSupported extends SelfConfig with EquatableMixin {
   final DateTime expiresAt;
 
   @override
-  List<Object> get props => [url, expiresAt];
+  List<Object?> get props => [url, expiresAt];
 
   @override
   bool get stringify => true;

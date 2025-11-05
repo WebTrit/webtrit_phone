@@ -16,7 +16,7 @@ class ChatUpdate extends ChatsEvent with EquatableMixin {
   int get chatId => chat.id;
 
   @override
-  List<Object> get props => [chat];
+  List<Object?> get props => [chat];
 
   @override
   bool get stringify => true;
@@ -29,7 +29,7 @@ class ChatRemove extends ChatsEvent with EquatableMixin {
   final int chatId;
 
   @override
-  List<Object> get props => [chatId];
+  List<Object?> get props => [chatId];
 
   @override
   bool get stringify => true;
@@ -43,7 +43,7 @@ class ChatMessageUpdate extends ChatsEvent with EquatableMixin {
   int get chatId => message.chatId;
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   bool get stringify => true;
@@ -57,7 +57,7 @@ class ChatReadCursorUpdate extends ChatsEvent with EquatableMixin {
   int get chatId => cursor.chatId;
 
   @override
-  List<Object> get props => [cursor];
+  List<Object?> get props => [cursor];
 
   @override
   bool get stringify => true;

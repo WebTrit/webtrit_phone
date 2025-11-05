@@ -4,7 +4,7 @@ sealed class ContactsExternalTabEvent extends Equatable {
   const ContactsExternalTabEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ContactsExternalTabStarted extends ContactsExternalTabEvent {
@@ -13,9 +13,7 @@ class ContactsExternalTabStarted extends ContactsExternalTabEvent {
   final String search;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([search], listPropToString),
-  ];
+  List<Object?> get props => [search];
 }
 
 class ContactsExternalTabRefreshed extends ContactsExternalTabEvent {

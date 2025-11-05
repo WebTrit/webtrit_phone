@@ -4,7 +4,7 @@ sealed class FavoritesEvent extends Equatable {
   const FavoritesEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FavoritesStarted extends FavoritesEvent {
@@ -17,9 +17,7 @@ class FavoritesAddedByContactPhoneId extends FavoritesEvent {
   final int contactPhoneId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([contactPhoneId], listPropToString),
-  ];
+  List<Object?> get props => [contactPhoneId];
 }
 
 class FavoritesRemovedByContactPhoneId extends FavoritesEvent {
@@ -28,9 +26,7 @@ class FavoritesRemovedByContactPhoneId extends FavoritesEvent {
   final int contactPhoneId;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([contactPhoneId], listPropToString),
-  ];
+  List<Object?> get props => [contactPhoneId];
 }
 
 class FavoritesRemoved extends FavoritesEvent {
@@ -39,7 +35,5 @@ class FavoritesRemoved extends FavoritesEvent {
   final Favorite favorite;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([favorite], listPropToString),
-  ];
+  List<Object?> get props => [favorite];
 }

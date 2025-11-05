@@ -4,7 +4,7 @@ sealed class NotificationsEvent extends Equatable {
   const NotificationsEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class NotificationsSubmitted extends NotificationsEvent {
@@ -13,9 +13,7 @@ class NotificationsSubmitted extends NotificationsEvent {
   final Notification notification;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([notification], listPropToString),
-  ];
+  List<Object?> get props => [notification];
 }
 
 class NotificationsCleared extends NotificationsEvent {

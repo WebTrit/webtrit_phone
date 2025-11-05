@@ -9,7 +9,7 @@ class ChatConversationsState with EquatableMixin {
   factory ChatConversationsState.initial() => ChatConversationsState([], true);
 
   @override
-  List<Object> get props => [conversations, initialising];
+  List<Object?> get props => [conversations, initialising];
 
   ChatConversationsState copyWith({List<ChatWithMessageAndMemebers>? conversations, bool? initialising}) {
     return ChatConversationsState(conversations ?? this.conversations, initialising ?? this.initialising);

@@ -4,7 +4,7 @@ sealed class OrientationsEvent extends Equatable {
   const OrientationsEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class OrientationsChanged extends OrientationsEvent {
@@ -13,7 +13,5 @@ class OrientationsChanged extends OrientationsEvent {
   final PreferredOrientation orientation;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([orientation], listPropToString),
-  ];
+  List<Object?> get props => [orientation];
 }

@@ -20,7 +20,7 @@ class SmsOutboxReadCursorEntry extends Equatable {
   }
 
   @override
-  List<Object> get props => [conversationId, time, sendAttempts];
+  List<Object?> get props => [conversationId, time, sendAttempts];
 
   @override
   String toString() {

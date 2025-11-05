@@ -4,7 +4,7 @@ sealed class MessagingEvent extends Equatable {
   const MessagingEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class Connect extends MessagingEvent {
@@ -33,7 +33,5 @@ class _ClientError extends MessagingEvent {
   final Object error;
 
   @override
-  List<Object> get props => [
-    EquatablePropToString([error], listPropToString),
-  ];
+  List<Object?> get props => [error];
 }
