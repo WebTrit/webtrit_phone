@@ -53,7 +53,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final UserRepository userRepository;
   final SessionRepository sessionRepository;
   final LinesStateRepository linesStateRepository;
-  final PresenceRepository presenceRepository;
+  final PresenceInfoRepository presenceInfoRepository;
+  final PresenceSettingsRepository presenceSettingsRepository;
   final Function(Notification) submitNotification;
 
   final Callkeep callkeep;
@@ -90,7 +91,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callLogsRepository,
     required this.callPullRepository,
     required this.linesStateRepository,
-    required this.presenceRepository,
+    required this.presenceInfoRepository,
+    required this.presenceSettingsRepository,
     required this.sessionRepository,
     required this.userRepository,
     required this.submitNotification,
@@ -2841,13 +2843,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _assingNumberPresence(String number, List<SignalingPresenceInfo> data) async {
     final presenceInfo = data.map(SignalingPresenceInfoMapper.fromSignaling).toList();
-    presenceRepository.setNumberPresence(number, presenceInfo);
+    presenceInfoRepository.setNumberPresence(number, presenceInfo);
   }
 
   Future<void> syncPresenceSettings() async {
     final now = DateTime.now();
-    final lastSync = presenceRepository.lastSettingsSync;
-    final presenceSettings = presenceRepository.presenceSettings;
+    final lastSync = presenceSettingsRepository.lastSettingsSync;
+    final presenceSettings = presenceSettingsRepository.presenceSettings;
 
     final canUpdate = state.callServiceState.status == CallStatus.ready;
     bool shouldUpdate = false;
@@ -2868,7 +2870,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             settings: SignalingPresenceSettingsMapper.toSignaling(presenceSettings),
           ),
         );
-        presenceRepository.updateLastSettingsSync(now);
+        presenceSettingsRepository.updateLastSettingsSync(now);
         _logger.fine('Presence settings updated at $now');
       } on Exception catch (e, s) {
         _logger.warning('Failed to update presence settings', e, s);

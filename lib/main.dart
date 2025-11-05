@@ -167,6 +167,7 @@ class RootApp extends StatelessWidget {
           final appDatabase = context.read<AppDatabase>();
 
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(appPreferencesPure);
+          final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -175,6 +176,7 @@ class RootApp extends StatelessWidget {
               await appDatabase.deleteEverything();
               await appPreferences.clear();
               await registerStatusRepository.clear();
+              await presenceSettingsRepository.clear();
             },
           );
 
@@ -183,6 +185,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
+              RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<SessionRepository>.value(value: sessionRepository),
             ],
             child: const App(),
