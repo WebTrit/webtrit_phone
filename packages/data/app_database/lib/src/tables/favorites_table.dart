@@ -7,8 +7,8 @@ class FavoritesTable extends Table {
 
   IntColumn get id => integer().autoIncrement()();
 
-  IntColumn get contactPhoneId => integer().customConstraint(
-      'NOT NULL REFERENCES contact_phones(id) ON DELETE CASCADE')();
+  IntColumn get contactPhoneId =>
+      integer().customConstraint('NOT NULL REFERENCES contact_phones(id) ON DELETE CASCADE')();
 
   IntColumn get position => integer()();
 }

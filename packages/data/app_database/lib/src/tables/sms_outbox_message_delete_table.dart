@@ -13,8 +13,7 @@ class SmsOutboxMessageDeleteTable extends Table {
 
   TextColumn get idKey => text()();
 
-  IntColumn get conversationId => integer()
-      .references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
 }

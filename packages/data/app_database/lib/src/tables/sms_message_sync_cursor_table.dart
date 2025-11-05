@@ -11,8 +11,7 @@ class SmsMessageSyncCursorTable extends Table {
   @override
   Set<Column> get primaryKey => {conversationId, cursorType};
 
-  IntColumn get conversationId => integer()
-      .references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get cursorType => textEnum<SmsSyncCursorTypeEnum>()();
 

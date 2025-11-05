@@ -13,8 +13,7 @@ class ChatOutboxMessageEditTable extends Table {
 
   TextColumn get idKey => text()();
 
-  IntColumn get chatId =>
-      integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get newContent => text()();
 

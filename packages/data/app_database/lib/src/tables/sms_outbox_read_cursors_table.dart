@@ -9,8 +9,7 @@ class SmsOutboxReadCursorsTable extends Table {
   @override
   Set<Column> get primaryKey => {conversationId};
 
-  IntColumn get conversationId => integer()
-      .references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get timestampUsec => integer()();
 
