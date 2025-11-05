@@ -36,6 +36,8 @@ class ThemeStyleFactoryProvider {
     final callStatuses = widgetConfig.statuses.callStatuses;
     final registrationStatuses = widgetConfig.statuses.registrationStatuses;
     final elevatedButton = widgetConfig.button.primaryElevatedButton;
+    // TODO: Remove in future major release after migrating to CallPageActionsConfig
+    // ignore: deprecated_member_use
     final callActions = widgetConfig.group?.callActions;
     final groupTitleListTile = widgetConfig.group?.groupTitleListTile;
     final linkify = widgetConfig.text.linkify;
