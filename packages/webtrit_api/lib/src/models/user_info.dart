@@ -48,8 +48,7 @@ class UserInfo with _$UserInfo {
   @override
   final String? timeZone;
 
-  factory UserInfo.fromJson(Map<String, Object?> json) =>
-      _$UserInfoFromJson(json);
+  factory UserInfo.fromJson(Map<String, Object?> json) => _$UserInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$UserInfoToJson(this);
 }

@@ -15,20 +15,14 @@ class ProgressEvent extends CallEvent {
   final Map<String, dynamic> jsep;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        callee,
-        isFocus,
-        jsep,
-      ];
+  List<Object?> get props => [...super.props, callee, isFocus, jsep];
 
   static const typeValue = 'progress';
 
   factory ProgressEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(
-          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return ProgressEvent(

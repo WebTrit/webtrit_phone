@@ -73,8 +73,7 @@ class LeadingAvatarStyleConfig with _$LeadingAvatarStyleConfig {
   @override
   final PresenceBadgeStyleConfig? presenceBadge;
 
-  factory LeadingAvatarStyleConfig.fromJson(Map<String, Object?> json) =>
-      _$LeadingAvatarStyleConfigFromJson(json);
+  factory LeadingAvatarStyleConfig.fromJson(Map<String, Object?> json) => _$LeadingAvatarStyleConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LeadingAvatarStyleConfigToJson(this);
 }
@@ -107,8 +106,7 @@ class LoadingOverlayStyleConfig with _$LoadingOverlayStyleConfig {
   @override
   final double? strokeWidth;
 
-  factory LoadingOverlayStyleConfig.fromJson(Map<String, Object?> json) =>
-      _$LoadingOverlayStyleConfigFromJson(json);
+  factory LoadingOverlayStyleConfig.fromJson(Map<String, Object?> json) => _$LoadingOverlayStyleConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LoadingOverlayStyleConfigToJson(this);
 }
@@ -141,8 +139,7 @@ class SmartIndicatorStyleConfig with _$SmartIndicatorStyleConfig {
   @override
   final double? sizeFactor;
 
-  factory SmartIndicatorStyleConfig.fromJson(Map<String, Object?> json) =>
-      _$SmartIndicatorStyleConfigFromJson(json);
+  factory SmartIndicatorStyleConfig.fromJson(Map<String, Object?> json) => _$SmartIndicatorStyleConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$SmartIndicatorStyleConfigToJson(this);
 }
@@ -175,8 +172,7 @@ class RegisteredBadgeStyleConfig with _$RegisteredBadgeStyleConfig {
   @override
   final double? sizeFactor;
 
-  factory RegisteredBadgeStyleConfig.fromJson(Map<String, Object?> json) =>
-      _$RegisteredBadgeStyleConfigFromJson(json);
+  factory RegisteredBadgeStyleConfig.fromJson(Map<String, Object?> json) => _$RegisteredBadgeStyleConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$RegisteredBadgeStyleConfigToJson(this);
 }
@@ -209,8 +205,7 @@ class PresenceBadgeStyleConfig with _$PresenceBadgeStyleConfig {
   @override
   final double? sizeFactor;
 
-  factory PresenceBadgeStyleConfig.fromJson(Map<String, Object?> json) =>
-      _$PresenceBadgeStyleConfigFromJson(json);
+  factory PresenceBadgeStyleConfig.fromJson(Map<String, Object?> json) => _$PresenceBadgeStyleConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$PresenceBadgeStyleConfigToJson(this);
 }

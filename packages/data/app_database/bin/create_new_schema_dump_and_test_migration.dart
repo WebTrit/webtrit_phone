@@ -11,15 +11,10 @@ import 'package:app_database/src/migrations/migrations.dart';
 Future<void> main(List<String> args) async {
   final timestamp = DateTime.now().millisecondsSinceEpoch;
   final version = migrations.schemaVersion;
-  final appDatabasePath =
-      '${Directory.systemTemp.path}/$timestamp-db_stub_v$version.sqlite';
+  final appDatabasePath = '${Directory.systemTemp.path}/$timestamp-db_stub_v$version.sqlite';
 
   await _executeStep(1, 3, 'Creating reference application database', () async {
-    final appDatabase = AppDatabase(DatabaseConnection(
-      NativeDatabase(
-        File(appDatabasePath),
-      ),
-    ));
+    final appDatabase = AppDatabase(DatabaseConnection(NativeDatabase(File(appDatabasePath))));
     await appDatabase.doWhenOpened((e) {});
     await appDatabase.close();
     return true;
@@ -27,8 +22,7 @@ Future<void> main(List<String> args) async {
 
   var manager = ProcessManager();
 
-  await _executeStep(2, 3, 'Dumping schema of reference application database',
-      () async {
+  await _executeStep(2, 3, 'Dumping schema of reference application database', () async {
     final schemaDumpProcess = await manager.spawn('dart', [
       'run',
       'drift_dev',
@@ -40,8 +34,7 @@ Future<void> main(List<String> args) async {
     return await schemaDumpProcess.exitCode == ExitCode.success.code;
   });
 
-  await _executeStep(3, 3, 'Generate migration schemas of dumped schemas',
-      () async {
+  await _executeStep(3, 3, 'Generate migration schemas of dumped schemas', () async {
     final schemaGenerateProcess = await manager.spawn('dart', [
       'run',
       'drift_dev',
@@ -56,8 +49,7 @@ Future<void> main(List<String> args) async {
   exit(ExitCode.success.code);
 }
 
-Future<void> _executeStep(
-    int index, int count, String? name, Future<bool> Function() entry) async {
+Future<void> _executeStep(int index, int count, String? name, Future<bool> Function() entry) async {
   stdout.write(wrapWith('BEGIN $index/$count: ', [styleBold]));
   stdout.writeln(wrapWith(name, [darkGray]));
   if (await entry()) {

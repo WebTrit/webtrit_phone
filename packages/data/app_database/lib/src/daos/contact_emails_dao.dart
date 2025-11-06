@@ -5,17 +5,13 @@ import 'package:app_database/src/app_database.dart';
 part 'contact_emails_dao.g.dart';
 
 @DriftAccessor(tables: [ContactEmailsTable])
-class ContactEmailsDao extends DatabaseAccessor<AppDatabase>
-    with _$ContactEmailsDaoMixin {
+class ContactEmailsDao extends DatabaseAccessor<AppDatabase> with _$ContactEmailsDaoMixin {
   ContactEmailsDao(super.db);
 
-  SimpleSelectStatement<$ContactEmailsTableTable, ContactEmailData>
-      _selectContactEmailsByContactId(int contactId) {
+  SimpleSelectStatement<$ContactEmailsTableTable, ContactEmailData> _selectContactEmailsByContactId(int contactId) {
     return select(contactEmailsTable)
       ..where((t) => t.contactId.equals(contactId))
-      ..orderBy([
-        (t) => OrderingTerm.asc(t.insertedAt),
-      ]);
+      ..orderBy([(t) => OrderingTerm.asc(t.insertedAt)]);
   }
 
   Stream<List<ContactEmailData>> watchContactEmailsByContactId(int contactId) {
@@ -26,17 +22,14 @@ class ContactEmailsDao extends DatabaseAccessor<AppDatabase>
     return _selectContactEmailsByContactId(contactId).get();
   }
 
-  Future<int> insertOnUniqueConflictUpdateContactEmail(
-      Insertable<ContactEmailData> entity) {
+  Future<int> insertOnUniqueConflictUpdateContactEmail(Insertable<ContactEmailData> entity) {
     return into(contactEmailsTable).insert(
       entity,
-      onConflict: DoUpdate((_) => entity,
-          target: [contactEmailsTable.address, contactEmailsTable.contactId]),
+      onConflict: DoUpdate((_) => entity, target: [contactEmailsTable.address, contactEmailsTable.contactId]),
     );
   }
 
-  Future<int> deleteOtherContactEmailsOfContactId(
-      int contactId, Iterable<String> addresses) {
+  Future<int> deleteOtherContactEmailsOfContactId(int contactId, Iterable<String> addresses) {
     return (delete(contactEmailsTable)
           ..where((t) => t.contactId.equals(contactId))
           ..where((t) => t.address.isNotIn(addresses)))

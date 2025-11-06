@@ -1,13 +1,7 @@
 import 'models/error.dart';
 
 class RequestFailure implements Exception {
-  RequestFailure({
-    required this.url,
-    this.statusCode,
-    required this.requestId,
-    this.token,
-    this.error,
-  });
+  RequestFailure({required this.url, this.statusCode, required this.requestId, this.token, this.error});
 
   final Uri url;
   final int? statusCode;
@@ -24,8 +18,7 @@ class RequestFailure implements Exception {
     if (error != null) {
       buffer.write(', code: ${error?.code}');
       final details = error?.details;
-      if (details != null)
-        buffer.write(', path: ${details.path}, reason: ${details.reason}');
+      if (details != null) buffer.write(', path: ${details.path}, reason: ${details.reason}');
     }
 
     buffer.write(')');
@@ -43,11 +36,7 @@ class EndpointNotSupportedException extends RequestFailure {
 }
 
 class UserNotFoundException extends RequestFailure {
-  UserNotFoundException({
-    required super.url,
-    required super.requestId,
-    required super.statusCode,
-  });
+  UserNotFoundException({required super.url, required super.requestId, required super.statusCode});
 
   @override
   String toString() => 'UserNotFoundException($statusCode, $url)';

@@ -17,8 +17,7 @@ class DemoCallToActionsParam with _$DemoCallToActionsParam {
   @override
   final String tab;
 
-  factory DemoCallToActionsParam.fromJson(Map<String, dynamic> json) =>
-      _$DemoCallToActionsParamFromJson(json);
+  factory DemoCallToActionsParam.fromJson(Map<String, dynamic> json) => _$DemoCallToActionsParamFromJson(json);
 
   Map<String, dynamic> toJson() => _$DemoCallToActionsParamToJson(this);
 }

@@ -12,8 +12,7 @@ void main() {
       json = await loadFixtureJson('../../assets/themes/app.config.json');
     });
 
-    test('parses AppConfig and bottomMenu tabs with correct variants & values',
-        () {
+    test('parses AppConfig and bottomMenu tabs with correct variants & values', () {
       final config = AppConfig.fromJson(json);
 
       // sanity
@@ -135,16 +134,14 @@ void main() {
         embedded: (enabled, initial, titleL10n, icon, embeddedResourceId) {
           expect(enabled, isFalse);
           expect(initial, isFalse);
-          expect(titleL10n,
-              'main_BottomNavigationBarItemLabel_embedded_spa_example');
+          expect(titleL10n, 'main_BottomNavigationBarItemLabel_embedded_spa_example');
           expect(icon, '0xe2ce');
           expect(embeddedResourceId, 'example_embedded_spa');
         },
       );
     });
 
-    test('loginConfig [modeSelect screen] & settingsConfig basic fields parsed',
-        () {
+    test('loginConfig [modeSelect screen] & settingsConfig basic fields parsed', () {
       final config = AppConfig.fromJson(json);
 
       expect(config.loginConfig.modeSelect.greetingL10n, 'WebTrit');
@@ -155,9 +152,7 @@ void main() {
       final sections = config.settingsConfig.sections;
       expect(sections, isNotEmpty);
 
-      final settingsSection = sections.firstWhere(
-        (s) => s.titleL10n == 'settings_ListViewTileTitle_settings',
-      );
+      final settingsSection = sections.firstWhere((s) => s.titleL10n == 'settings_ListViewTileTitle_settings');
       expect(settingsSection.enabled, isTrue);
       expect(settingsSection.items.any((i) => i.type == 'terms'), isTrue);
     });

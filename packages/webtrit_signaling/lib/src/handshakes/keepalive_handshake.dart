@@ -11,16 +11,13 @@ class KeepaliveHandshake extends Handshake {
   factory KeepaliveHandshake.fromJson(Map<String, dynamic> json) {
     final handshakeTypeValue = json[Handshake.typeKey];
     if (handshakeTypeValue != typeValue) {
-      throw ArgumentError.value(
-          handshakeTypeValue, Handshake.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(handshakeTypeValue, Handshake.typeKey, 'Not equal $typeValue');
     }
 
     return KeepaliveHandshake();
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      Handshake.typeKey: typeValue,
-    };
+    return {Handshake.typeKey: typeValue};
   }
 }

@@ -10,10 +10,7 @@ void main() {
   test('getSoreInfo', () async {
     Future<Response> handler(Request request) async {
       expect(request.method, equalsIgnoringCase('get'));
-      expect(
-          request.url.toString(),
-          equals(
-              'https://play.google.com/store/apps/details?id=app.package.name'));
+      expect(request.url.toString(), equals('https://play.google.com/store/apps/details?id=app.package.name'));
       expect(request.headers['authorization'], isNull);
       return Response(
         '''
@@ -51,8 +48,7 @@ void main() {
       equals(
         StoreInfo(
           version: Version(1, 0, 0),
-          viewUrl: Uri.parse(
-              'https://play.google.com/store/apps/details?id=app.package.name'),
+          viewUrl: Uri.parse('https://play.google.com/store/apps/details?id=app.package.name'),
         ),
       ),
     );

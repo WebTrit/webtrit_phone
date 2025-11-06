@@ -13,10 +13,7 @@ class MigrationV11 extends Migration {
     final chatsTable = v11.Chats(db);
 
     // Update chats type value change from 'dialog' to 'direct'
-    final [
-      tableName,
-      columnName
-    ] = [chatsTable.aliasedName, chatsTable.type.$name];
+    final [tableName, columnName] = [chatsTable.aliasedName, chatsTable.type.$name];
     final [oldType, newType] = ['dialog', 'direct'];
     await db.customUpdate(
       'UPDATE $tableName SET $columnName = ? WHERE $columnName = ?',

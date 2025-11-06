@@ -15,8 +15,7 @@ class ChatMessagesTable extends Table {
 
   TextColumn get senderId => text()();
 
-  IntColumn get chatId =>
-      integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get replyToId => integer().nullable()();
 

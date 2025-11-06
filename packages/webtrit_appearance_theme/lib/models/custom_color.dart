@@ -18,8 +18,7 @@ class CustomColor with _$CustomColor {
   @override
   final bool blend;
 
-  factory CustomColor.fromJson(Map<String, Object?> json) =>
-      _$CustomColorFromJson(json);
+  factory CustomColor.fromJson(Map<String, Object?> json) => _$CustomColorFromJson(json);
 
   Map<String, Object?> toJson() => _$CustomColorToJson(this);
 }

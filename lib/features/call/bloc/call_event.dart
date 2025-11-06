@@ -91,6 +91,7 @@ class _SignalingClientEventDisconnected extends _SignalingClientEvent {
   const _SignalingClientEventDisconnected(this.code, this.reason);
 
   final int? code;
+
   final String? reason;
 
   @override
@@ -103,6 +104,7 @@ class _HandshakeSignalingEventState extends CallEvent {
   const _HandshakeSignalingEventState({required this.registration, required this.linesCount});
 
   final Registration registration;
+
   final int linesCount;
 
   @override
@@ -234,13 +236,21 @@ class _CallSignalingEventIncoming extends _CallSignalingEvent {
   });
 
   final int? line;
+
   final String callId;
+
   final String callee;
+
   final String caller;
+
   final String? callerDisplayName;
+
   final String? referredBy;
+
   final String? replaceCallId;
+
   final bool? isFocus;
+
   final JsepValue? jsep;
 
   @override
@@ -261,6 +271,7 @@ class _CallSignalingEventRinging extends _CallSignalingEvent {
   const _CallSignalingEventRinging({required this.line, required this.callId});
 
   final int? line;
+
   final String callId;
 
   @override
@@ -271,8 +282,11 @@ class _CallSignalingEventProgress extends _CallSignalingEvent {
   const _CallSignalingEventProgress({required this.line, required this.callId, required this.callee, this.jsep});
 
   final int? line;
+
   final String callId;
+
   final String callee;
+
   final JsepValue? jsep;
 
   @override
@@ -283,8 +297,11 @@ class _CallSignalingEventAccepted extends _CallSignalingEvent {
   const _CallSignalingEventAccepted({required this.line, required this.callId, this.callee, this.jsep});
 
   final int? line;
+
   final String callId;
+
   final String? callee;
+
   final JsepValue? jsep;
 
   @override
@@ -317,13 +334,21 @@ class _CallSignalingEventUpdating extends _CallSignalingEvent {
   });
 
   final int? line;
+
   final String callId;
+
   final String callee;
+
   final String caller;
+
   final String? callerDisplayName;
+
   final String? referredBy;
+
   final String? replaceCallId;
+
   final bool? isFocus;
+
   final JsepValue? jsep;
 
   @override
@@ -344,6 +369,7 @@ class _CallSignalingEventUpdated extends _CallSignalingEvent {
   const _CallSignalingEventUpdated({required this.line, required this.callId});
 
   final int? line;
+
   final String callId;
 
   @override
@@ -360,9 +386,13 @@ class _CallSignalingEventTransfer extends _CallSignalingEvent {
   });
 
   final int? line;
+
   final String referId;
+
   final String referTo;
+
   final String? referredBy;
+
   final String? replaceCallId;
 
   @override
@@ -389,9 +419,13 @@ class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
   });
 
   final int? line;
+
   final String callId;
+
   final String? notify;
+
   final SubscriptionState? subscriptionState;
+
   final List<UserActiveCall> userActiveCalls;
 
   @override
@@ -408,9 +442,13 @@ class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
   });
 
   final int? line;
+
   final String callId;
+
   final String? notify;
+
   final SubscriptionState? subscriptionState;
+
   final ReferNotifyState state;
 
   @override
@@ -428,10 +466,15 @@ class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
   });
 
   final int? line;
+
   final String callId;
+
   final String? notify;
+
   final SubscriptionState? subscriptionState;
+
   final String number;
+
   final List<SignalingPresenceInfo> presenceInfo;
 
   @override
@@ -449,10 +492,15 @@ class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   });
 
   final int? line;
+
   final String callId;
+
   final String? notify;
+
   final SubscriptionState? subscriptionState;
+
   final String? contentType;
+
   final String? content;
 
   @override
@@ -471,6 +519,7 @@ class _CallSignalingEventRegisterationFailed extends _CallSignalingEvent {
   const _CallSignalingEventRegisterationFailed(this.code, this.reason);
 
   final int code;
+
   final String reason;
 
   @override
@@ -497,9 +546,13 @@ class _CallPushEventIncoming extends CallEvent {
   });
 
   final String callId;
+
   final CallkeepHandle handle;
+
   final String? displayName;
+
   final bool video;
+
   final CallkeepIncomingCallError? error;
 
   @override
@@ -573,15 +626,22 @@ class _CallControlEventStarted extends CallControlEvent with CallControlEventSta
   });
 
   final int? line;
+
   @override
   final String? generic;
+
   @override
   final String? number;
+
   @override
   final String? email;
+
   final String? displayName;
+
   final String? replaces;
+
   final String? fromNumber;
+
   final bool video;
 
   @override
@@ -610,6 +670,7 @@ class _CallControlEventSetHeld extends CallControlEvent {
   const _CallControlEventSetHeld(this.callId, this.onHold);
 
   final String callId;
+
   final bool onHold;
 
   @override
@@ -620,6 +681,7 @@ class _CallControlEventSetMuted extends CallControlEvent {
   const _CallControlEventSetMuted(this.callId, this.muted);
 
   final String callId;
+
   final bool muted;
 
   @override
@@ -630,6 +692,7 @@ class _CallControlEventSentDTMF extends CallControlEvent {
   const _CallControlEventSentDTMF(this.callId, this.key);
 
   final String callId;
+
   final String key;
 
   @override
@@ -649,6 +712,7 @@ class _CallControlEventCameraEnabled extends CallControlEvent {
   const _CallControlEventCameraEnabled(this.callId, this.enabled);
 
   final String callId;
+
   final bool enabled;
 
   @override
@@ -659,6 +723,7 @@ class _CallControlEventAudioDeviceSet extends CallControlEvent {
   const _CallControlEventAudioDeviceSet(this.callId, this.device);
 
   final String callId;
+
   final CallAudioDevice device;
 
   @override
@@ -705,6 +770,7 @@ class _CallControlEventAttendedTransferSubmitted extends CallControlEvent {
   const _CallControlEventAttendedTransferSubmitted({required this.referorCall, required this.replaceCall});
 
   final ActiveCall referorCall;
+
   final ActiveCall replaceCall;
 
   @override
@@ -715,6 +781,7 @@ class _CallControlEventAttendedRequestDeclined extends CallControlEvent {
   const _CallControlEventAttendedRequestDeclined({required this.callId, required this.referId});
 
   final String callId;
+
   final String referId;
 
   @override
@@ -725,6 +792,7 @@ class _CallControlEventAttendedRequestApproved extends CallControlEvent {
   const _CallControlEventAttendedRequestApproved({required this.referId, required this.referTo});
 
   final String referId;
+
   final String referTo;
 
   @override
@@ -791,8 +859,11 @@ class _CallPerformEventStarted extends _CallPerformEvent {
   _CallPerformEventStarted(this.callId, {required this.handle, this.displayName, required this.video});
 
   final String callId;
+
   final CallkeepHandle handle;
+
   final String? displayName;
+
   final bool video;
 
   @override
@@ -821,6 +892,7 @@ class _CallPerformEventSetHeld extends _CallPerformEvent {
   _CallPerformEventSetHeld(this.callId, this.onHold);
 
   final String callId;
+
   final bool onHold;
 
   @override
@@ -831,6 +903,7 @@ class _CallPerformEventSetMuted extends _CallPerformEvent {
   _CallPerformEventSetMuted(this.callId, this.muted);
 
   final String callId;
+
   final bool muted;
 
   @override
@@ -841,6 +914,7 @@ class _CallPerformEventSentDTMF extends _CallPerformEvent {
   _CallPerformEventSentDTMF(this.callId, this.key);
 
   final String callId;
+
   final String key;
 
   @override
@@ -851,6 +925,7 @@ class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
   _CallPerformEventAudioDeviceSet(this.callId, this.device);
 
   final String callId;
+
   final CallAudioDevice device;
 
   @override
@@ -861,6 +936,7 @@ class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
   _CallPerformEventAudioDevicesUpdate(this.callId, this.devices);
 
   final String callId;
+
   final List<CallAudioDevice> devices;
 
   @override
@@ -897,6 +973,7 @@ class _PeerConnectionEventSignalingStateChanged extends _PeerConnectionEvent {
   const _PeerConnectionEventSignalingStateChanged(this.callId, this.state);
 
   final String callId;
+
   final RTCSignalingState state;
 
   @override
@@ -907,6 +984,7 @@ class _PeerConnectionEventConnectionStateChanged extends _PeerConnectionEvent {
   const _PeerConnectionEventConnectionStateChanged(this.callId, this.state);
 
   final String callId;
+
   final RTCPeerConnectionState state;
 
   @override
@@ -917,6 +995,7 @@ class _PeerConnectionEventIceGatheringStateChanged extends _PeerConnectionEvent 
   const _PeerConnectionEventIceGatheringStateChanged(this.callId, this.state);
 
   final String callId;
+
   final RTCIceGatheringState state;
 
   @override
@@ -927,6 +1006,7 @@ class _PeerConnectionEventIceConnectionStateChanged extends _PeerConnectionEvent
   const _PeerConnectionEventIceConnectionStateChanged(this.callId, this.state);
 
   final String callId;
+
   final RTCIceConnectionState state;
 
   @override
@@ -937,6 +1017,7 @@ class _PeerConnectionEventIceCandidateIdentified extends _PeerConnectionEvent {
   const _PeerConnectionEventIceCandidateIdentified(this.callId, this.candidate);
 
   final String callId;
+
   final RTCIceCandidate candidate;
 
   @override
@@ -947,6 +1028,7 @@ class _PeerConnectionEventStreamAdded extends _PeerConnectionEvent {
   const _PeerConnectionEventStreamAdded(this.callId, this.stream);
 
   final String callId;
+
   final MediaStream stream;
 
   @override
@@ -957,6 +1039,7 @@ class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
   const _PeerConnectionEventStreamRemoved(this.callId, this.stream);
 
   final String callId;
+
   final MediaStream stream;
 
   @override

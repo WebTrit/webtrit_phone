@@ -20,13 +20,7 @@ void main() {
         details: ErrorDetail(path: path, reason: reason),
       );
 
-      final failure = RequestFailure(
-        url: uri,
-        statusCode: null,
-        requestId: requestId,
-        token: token,
-        error: error,
-      );
+      final failure = RequestFailure(url: uri, statusCode: null, requestId: requestId, token: token, error: error);
 
       final logString = failure.toString();
       print('Log output: $logString');
@@ -43,13 +37,7 @@ void main() {
       const requestId = 'req-no-error';
       final uri = Uri.parse('$baseUri/noerror');
 
-      final failure = RequestFailure(
-        url: uri,
-        statusCode: 400,
-        requestId: requestId,
-        token: null,
-        error: null,
-      );
+      final failure = RequestFailure(url: uri, statusCode: 400, requestId: requestId, token: null, error: null);
 
       final logString = failure.toString();
       print('Log output: $logString');
@@ -67,13 +55,7 @@ void main() {
 
       final error = ErrorResponse(code: code, details: null);
 
-      final failure = RequestFailure(
-        url: uri,
-        statusCode: 404,
-        requestId: requestId,
-        token: null,
-        error: error,
-      );
+      final failure = RequestFailure(url: uri, statusCode: 404, requestId: requestId, token: null, error: error);
 
       final logString = failure.toString();
       print('Log output: $logString');
@@ -98,13 +80,7 @@ void main() {
         details: ErrorDetail(path: path, reason: reason),
       );
 
-      final failure = RequestFailure(
-        url: uri,
-        statusCode: 500,
-        requestId: requestId,
-        token: token,
-        error: error,
-      );
+      final failure = RequestFailure(url: uri, statusCode: 500, requestId: requestId, token: token, error: error);
 
       final logString = failure.toString();
       print('Log output: $logString');

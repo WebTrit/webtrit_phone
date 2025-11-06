@@ -25,9 +25,7 @@ void main() {
 
     for (var oldVersion = 1; oldVersion < currentSchema; oldVersion++) {
       group('from v$oldVersion', () {
-        for (var targetVersion = oldVersion + 1;
-            targetVersion <= currentSchema;
-            targetVersion++) {
+        for (var targetVersion = oldVersion + 1; targetVersion <= currentSchema; targetVersion++) {
           test('to v$targetVersion', () async {
             final connection = await verifier.startAt(oldVersion);
             final appDatabase = AppDatabase(connection);

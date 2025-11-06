@@ -17,5 +17,5 @@ dependencies:
     path: ../_web_socket_channel
 
 dev_dependencies:
-  lints: ^4.0.0
+  lints: ^6.0.0
   test: ^1.25.2

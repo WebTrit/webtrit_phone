@@ -12,11 +12,6 @@ class MigrationV10 extends Migration {
   Future<void> execute(AppDatabase db, Migrator m) async {
     final contactsTable = v10.Contacts(db);
 
-    await m.alterTable(
-      TableMigration(
-        contactsTable,
-        columnTransformer: {},
-      ),
-    );
+    await m.alterTable(TableMigration(contactsTable, columnTransformer: {}));
   }
 }

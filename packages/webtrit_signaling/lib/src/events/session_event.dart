@@ -2,16 +2,12 @@ import 'abstract_events.dart';
 import 'session/session_events.dart';
 
 abstract class SessionEvent extends Event {
-  const SessionEvent({
-    this.transaction,
-  });
+  const SessionEvent({this.transaction});
 
   final String? transaction;
 
   @override
-  List<Object?> get props => [
-        transaction,
-      ];
+  List<Object?> get props => [transaction];
 
   factory SessionEvent.fromJson(Map<String, dynamic> json) {
     final sessionEvent = tryFromJson(json);
@@ -20,8 +16,7 @@ abstract class SessionEvent extends Event {
       if (eventTypeValue == ErrorEvent.typeValue) {
         throw ArgumentError('Incorrect error event');
       } else {
-        throw ArgumentError.value(
-            eventTypeValue, Event.typeKey, 'Unknown session event type');
+        throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Unknown session event type');
       }
     } else {
       return sessionEvent;
@@ -35,8 +30,7 @@ abstract class SessionEvent extends Event {
         SessionErrorEvent.tryFromJson(json);
   }
 
-  static final Map<String, SessionEvent Function(Map<String, dynamic>)>
-      _sessionEventFromJsonDecoders = {
+  static final Map<String, SessionEvent Function(Map<String, dynamic>)> _sessionEventFromJsonDecoders = {
     RegisteredEvent.typeValue: RegisteredEvent.fromJson,
     RegisteringEvent.typeValue: RegisteringEvent.fromJson,
     RegistrationFailedEvent.typeValue: RegistrationFailedEvent.fromJson,

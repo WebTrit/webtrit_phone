@@ -17,8 +17,7 @@ class SmsMessagesTable extends Table {
 
   TextColumn get externalId => text().nullable()();
 
-  IntColumn get conversationId => integer()
-      .references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get conversationId => integer().references(SmsConversationsTable, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get fromPhoneNumber => text()();
 

@@ -3,3 +3,6 @@ include: package:lints/recommended.yaml
 linter:
   rules:
     prefer_single_quotes: true
+
+formatter:
+  page_width: 120

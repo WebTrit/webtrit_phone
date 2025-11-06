@@ -14,8 +14,7 @@ void main() {
     const testTimeout = Duration(seconds: 10);
     final testCerts = TrustedCertificates();
 
-    test('defaultSignalingClientFactory returns WebtritSignalingClient',
-        () async {
+    test('defaultSignalingClientFactory returns WebtritSignalingClient', () async {
       final client = await testSignalingClientFactory(
         url: testUri,
         tenantId: testTenantId,

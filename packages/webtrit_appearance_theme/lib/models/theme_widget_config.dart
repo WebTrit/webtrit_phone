@@ -59,8 +59,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
   @override
   final DecorationConfig decorationConfig;
 
-  factory ThemeWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$ThemeWidgetConfigFromJson(json);
+  factory ThemeWidgetConfig.fromJson(Map<String, Object?> json) => _$ThemeWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ThemeWidgetConfigToJson(this);
 }
@@ -73,8 +72,7 @@ class FontsConfig with _$FontsConfig {
   @override
   final String? fontFamily;
 
-  factory FontsConfig.fromJson(Map<String, Object?> json) =>
-      _$FontsConfigFromJson(json);
+  factory FontsConfig.fromJson(Map<String, Object?> json) => _$FontsConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$FontsConfigToJson(this);
 }
@@ -82,14 +80,12 @@ class FontsConfig with _$FontsConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ButtonWidgetConfig with _$ButtonWidgetConfig {
-  const ButtonWidgetConfig(
-      {this.primaryElevatedButton = const ElevatedButtonWidgetConfig()});
+  const ButtonWidgetConfig({this.primaryElevatedButton = const ElevatedButtonWidgetConfig()});
 
   @override
   final ElevatedButtonWidgetConfig primaryElevatedButton;
 
-  factory ButtonWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$ButtonWidgetConfigFromJson(json);
+  factory ButtonWidgetConfig.fromJson(Map<String, Object?> json) => _$ButtonWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ButtonWidgetConfigToJson(this);
 }
@@ -128,8 +124,7 @@ class ElevatedButtonWidgetConfig with _$ElevatedButtonWidgetConfig {
   @override
   final String? disabledForegroundColor;
 
-  factory ElevatedButtonWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$ElevatedButtonWidgetConfigFromJson(json);
+  factory ElevatedButtonWidgetConfig.fromJson(Map<String, Object?> json) => _$ElevatedButtonWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ElevatedButtonWidgetConfigToJson(this);
 }
@@ -151,8 +146,7 @@ class GroupWidgetConfig with _$GroupWidgetConfig {
   @Deprecated('Use CallPageActionsConfig instead')
   final CallActionsWidgetConfig callActions;
 
-  factory GroupWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$GroupWidgetConfigFromJson(json);
+  factory GroupWidgetConfig.fromJson(Map<String, Object?> json) => _$GroupWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$GroupWidgetConfigToJson(this);
 }
@@ -171,8 +165,7 @@ class BarWidgetConfig with _$BarWidgetConfig {
   @override
   final ExtTabBarWidgetConfig extTabBar;
 
-  factory BarWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$BarWidgetConfigFromJson(json);
+  factory BarWidgetConfig.fromJson(Map<String, Object?> json) => _$BarWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$BarWidgetConfigToJson(this);
 }
@@ -180,8 +173,7 @@ class BarWidgetConfig with _$BarWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class BottomNavigationBarWidgetConfig with _$BottomNavigationBarWidgetConfig {
-  const BottomNavigationBarWidgetConfig(
-      {this.backgroundColor, this.selectedItemColor, this.unSelectedItemColor});
+  const BottomNavigationBarWidgetConfig({this.backgroundColor, this.selectedItemColor, this.unSelectedItemColor});
 
   @override
   final String? backgroundColor;
@@ -195,8 +187,7 @@ class BottomNavigationBarWidgetConfig with _$BottomNavigationBarWidgetConfig {
   factory BottomNavigationBarWidgetConfig.fromJson(Map<String, Object?> json) =>
       _$BottomNavigationBarWidgetConfigFromJson(json);
 
-  Map<String, Object?> toJson() =>
-      _$BottomNavigationBarWidgetConfigToJson(this);
+  Map<String, Object?> toJson() => _$BottomNavigationBarWidgetConfigToJson(this);
 }
 
 @freezed
@@ -221,8 +212,7 @@ class ExtTabBarWidgetConfig with _$ExtTabBarWidgetConfig {
   @override
   final String? unSelectedItemColor;
 
-  factory ExtTabBarWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$ExtTabBarWidgetConfigFromJson(json);
+  factory ExtTabBarWidgetConfig.fromJson(Map<String, Object?> json) => _$ExtTabBarWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ExtTabBarWidgetConfigToJson(this);
 }
@@ -311,8 +301,7 @@ class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
   @override
   final String? keypadActiveBackgroundColor;
 
-  factory CallActionsWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$CallActionsWidgetConfigFromJson(json);
+  factory CallActionsWidgetConfig.fromJson(Map<String, Object?> json) => _$CallActionsWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$CallActionsWidgetConfigToJson(this);
 }
@@ -335,14 +324,11 @@ class ImageAssetsConfig with _$ImageAssetsConfig {
   @override
   final LeadingAvatarStyleConfig leadingAvatarStyle;
 
-  static const String metadataPrimaryOnboardingLogoUrl =
-      'primaryOnboardingLogoUrl';
+  static const String metadataPrimaryOnboardingLogoUrl = 'primaryOnboardingLogoUrl';
 
-  static const String metadataSecondaryOnboardingLogoUrl =
-      'secondaryOnboardingLogoUrl';
+  static const String metadataSecondaryOnboardingLogoUrl = 'secondaryOnboardingLogoUrl';
 
-  factory ImageAssetsConfig.fromJson(Map<String, Object?> json) =>
-      _$ImageAssetsConfigFromJson(json);
+  factory ImageAssetsConfig.fromJson(Map<String, Object?> json) => _$ImageAssetsConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ImageAssetsConfigToJson(this);
 }
@@ -374,8 +360,7 @@ class ImageAssetConfig with _$ImageAssetConfig {
   @Deprecated('Use source.uri instead')
   final String? uri;
 
-  factory ImageAssetConfig.fromJson(Map<String, Object?> json) =>
-      _$ImageAssetConfigFromJson(json);
+  factory ImageAssetConfig.fromJson(Map<String, Object?> json) => _$ImageAssetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ImageAssetConfigToJson(this);
 }
@@ -388,8 +373,7 @@ class AppIconWidgetConfig with _$AppIconWidgetConfig {
   @override
   final String? color;
 
-  factory AppIconWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$AppIconWidgetConfigFromJson(json);
+  factory AppIconWidgetConfig.fromJson(Map<String, Object?> json) => _$AppIconWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$AppIconWidgetConfigToJson(this);
 }
@@ -402,8 +386,7 @@ class InputWidgetConfig with _$InputWidgetConfig {
   @override
   final TextFormFieldWidgetConfig primary;
 
-  factory InputWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$InputWidgetConfigFromJson(json);
+  factory InputWidgetConfig.fromJson(Map<String, Object?> json) => _$InputWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$InputWidgetConfigToJson(this);
 }
@@ -411,8 +394,7 @@ class InputWidgetConfig with _$InputWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class TextFormFieldWidgetConfig with _$TextFormFieldWidgetConfig {
-  const TextFormFieldWidgetConfig(
-      {this.labelColor, this.border = const InputBorderWidgetConfig()});
+  const TextFormFieldWidgetConfig({this.labelColor, this.border = const InputBorderWidgetConfig()});
 
   @override
   final String? labelColor;
@@ -420,8 +402,7 @@ class TextFormFieldWidgetConfig with _$TextFormFieldWidgetConfig {
   @override
   final InputBorderWidgetConfig border;
 
-  factory TextFormFieldWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$TextFormFieldWidgetConfigFromJson(json);
+  factory TextFormFieldWidgetConfig.fromJson(Map<String, Object?> json) => _$TextFormFieldWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$TextFormFieldWidgetConfigToJson(this);
 }
@@ -444,8 +425,7 @@ class InputBorderWidgetConfig with _$InputBorderWidgetConfig {
   @override
   final BorderWidgetConfig any;
 
-  factory InputBorderWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$InputBorderWidgetConfigFromJson(json);
+  factory InputBorderWidgetConfig.fromJson(Map<String, Object?> json) => _$InputBorderWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$InputBorderWidgetConfigToJson(this);
 }
@@ -461,8 +441,7 @@ class BorderWidgetConfig with _$BorderWidgetConfig {
   @override
   final String? errorColor;
 
-  factory BorderWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$BorderWidgetConfigFromJson(json);
+  factory BorderWidgetConfig.fromJson(Map<String, Object?> json) => _$BorderWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$BorderWidgetConfigToJson(this);
 }
@@ -481,8 +460,7 @@ class TextWidgetConfig with _$TextWidgetConfig {
   @override
   final LinkifyWidgetConfig linkify;
 
-  factory TextWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$TextWidgetConfigFromJson(json);
+  factory TextWidgetConfig.fromJson(Map<String, Object?> json) => _$TextWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$TextWidgetConfigToJson(this);
 }
@@ -490,8 +468,7 @@ class TextWidgetConfig with _$TextWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class TextSelectionWidgetConfig with _$TextSelectionWidgetConfig {
-  const TextSelectionWidgetConfig(
-      {this.cursorColor, this.selectionColor, this.selectionHandleColor});
+  const TextSelectionWidgetConfig({this.cursorColor, this.selectionColor, this.selectionHandleColor});
 
   @override
   final String? cursorColor;
@@ -502,8 +479,7 @@ class TextSelectionWidgetConfig with _$TextSelectionWidgetConfig {
   @override
   final String? selectionHandleColor;
 
-  factory TextSelectionWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$TextSelectionWidgetConfigFromJson(json);
+  factory TextSelectionWidgetConfig.fromJson(Map<String, Object?> json) => _$TextSelectionWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$TextSelectionWidgetConfigToJson(this);
 }
@@ -519,8 +495,7 @@ class LinkifyWidgetConfig with _$LinkifyWidgetConfig {
   @override
   final String? linkifyStyleColor;
 
-  factory LinkifyWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$LinkifyWidgetConfigFromJson(json);
+  factory LinkifyWidgetConfig.fromJson(Map<String, Object?> json) => _$LinkifyWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LinkifyWidgetConfigToJson(this);
 }
@@ -539,8 +514,7 @@ class DialogWidgetConfig with _$DialogWidgetConfig {
   @override
   final SnackBarWidgetConfig snackBar;
 
-  factory DialogWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$DialogWidgetConfigFromJson(json);
+  factory DialogWidgetConfig.fromJson(Map<String, Object?> json) => _$DialogWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$DialogWidgetConfigToJson(this);
 }
@@ -548,10 +522,7 @@ class DialogWidgetConfig with _$DialogWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
-  const ConfirmDialogWidgetConfig(
-      {this.activeButtonColor1,
-      this.activeButtonColor2,
-      this.defaultButtonColor});
+  const ConfirmDialogWidgetConfig({this.activeButtonColor1, this.activeButtonColor2, this.defaultButtonColor});
 
   @override
   final String? activeButtonColor1;
@@ -562,8 +533,7 @@ class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
   @override
   final String? defaultButtonColor;
 
-  factory ConfirmDialogWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$ConfirmDialogWidgetConfigFromJson(json);
+  factory ConfirmDialogWidgetConfig.fromJson(Map<String, Object?> json) => _$ConfirmDialogWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ConfirmDialogWidgetConfigToJson(this);
 }
@@ -590,8 +560,7 @@ class SnackBarWidgetConfig with _$SnackBarWidgetConfig {
   @override
   final String warningBackgroundColor;
 
-  factory SnackBarWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$SnackBarWidgetConfigFromJson(json);
+  factory SnackBarWidgetConfig.fromJson(Map<String, Object?> json) => _$SnackBarWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$SnackBarWidgetConfigToJson(this);
 }
@@ -614,8 +583,7 @@ class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
   @override
   final ElevatedButtonWidgetConfig backspacePressed;
 
-  factory ActionPadWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$ActionPadWidgetConfigFromJson(json);
+  factory ActionPadWidgetConfig.fromJson(Map<String, Object?> json) => _$ActionPadWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ActionPadWidgetConfigToJson(this);
 }
@@ -634,8 +602,7 @@ class StatusesWidgetConfig with _$StatusesWidgetConfig {
   @override
   final CallStatusesWidgetConfig callStatuses;
 
-  factory StatusesWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$StatusesWidgetConfigFromJson(json);
+  factory StatusesWidgetConfig.fromJson(Map<String, Object?> json) => _$StatusesWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$StatusesWidgetConfigToJson(this);
 }
@@ -643,8 +610,7 @@ class StatusesWidgetConfig with _$StatusesWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class RegistrationStatusesWidgetConfig with _$RegistrationStatusesWidgetConfig {
-  const RegistrationStatusesWidgetConfig(
-      {this.online = '#75B943', this.offline = '#EEF3F6'});
+  const RegistrationStatusesWidgetConfig({this.online = '#75B943', this.offline = '#EEF3F6'});
 
   @override
   final String online;
@@ -652,12 +618,10 @@ class RegistrationStatusesWidgetConfig with _$RegistrationStatusesWidgetConfig {
   @override
   final String offline;
 
-  factory RegistrationStatusesWidgetConfig.fromJson(
-          Map<String, Object?> json) =>
+  factory RegistrationStatusesWidgetConfig.fromJson(Map<String, Object?> json) =>
       _$RegistrationStatusesWidgetConfigFromJson(json);
 
-  Map<String, Object?> toJson() =>
-      _$RegistrationStatusesWidgetConfigToJson(this);
+  Map<String, Object?> toJson() => _$RegistrationStatusesWidgetConfigToJson(this);
 }
 
 @freezed
@@ -690,8 +654,7 @@ class CallStatusesWidgetConfig with _$CallStatusesWidgetConfig {
   @override
   final String ready;
 
-  factory CallStatusesWidgetConfig.fromJson(Map<String, Object?> json) =>
-      _$CallStatusesWidgetConfigFromJson(json);
+  factory CallStatusesWidgetConfig.fromJson(Map<String, Object?> json) => _$CallStatusesWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$CallStatusesWidgetConfigToJson(this);
 }
@@ -699,14 +662,12 @@ class CallStatusesWidgetConfig with _$CallStatusesWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class DecorationConfig with _$DecorationConfig {
-  const DecorationConfig(
-      {this.primaryGradientColorsConfig = const GradientColorsConfig()});
+  const DecorationConfig({this.primaryGradientColorsConfig = const GradientColorsConfig()});
 
   @override
   final GradientColorsConfig primaryGradientColorsConfig;
 
-  factory DecorationConfig.fromJson(Map<String, Object?> json) =>
-      _$DecorationConfigFromJson(json);
+  factory DecorationConfig.fromJson(Map<String, Object?> json) => _$DecorationConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$DecorationConfigToJson(this);
 }
@@ -719,8 +680,7 @@ class GradientColorsConfig with _$GradientColorsConfig {
   @override
   final List<CustomColor> colors;
 
-  factory GradientColorsConfig.fromJson(Map<String, Object?> json) =>
-      _$GradientColorsConfigFromJson(json);
+  factory GradientColorsConfig.fromJson(Map<String, Object?> json) => _$GradientColorsConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$GradientColorsConfigToJson(this);
 }

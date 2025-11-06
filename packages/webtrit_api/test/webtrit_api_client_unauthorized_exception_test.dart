@@ -17,11 +17,7 @@ class FakeBaseRequest extends Fake implements http.BaseRequest {}
 
 http.StreamedResponse _jsonResponse(Object json, int status) {
   final body = jsonEncode(json);
-  return http.StreamedResponse(
-    Stream.value(utf8.encode(body)),
-    status,
-    headers: {'content-type': 'application/json'},
-  );
+  return http.StreamedResponse(Stream.value(utf8.encode(body)), status, headers: {'content-type': 'application/json'});
 }
 
 void main() {
@@ -35,11 +31,7 @@ void main() {
 
     setUp(() {
       mockHttpClient = MockHttpClient();
-      apiClient = WebtritApiClient.inner(
-        Uri.parse(baseUri),
-        tenantId,
-        httpClient: mockHttpClient,
-      );
+      apiClient = WebtritApiClient.inner(Uri.parse(baseUri), tenantId, httpClient: mockHttpClient);
     });
 
     tearDown(() {
@@ -49,13 +41,7 @@ void main() {
 
     test('throws on 422 with code "refresh_token_invalid"', () async {
       when(() => mockHttpClient.send(any())).thenAnswer((_) async {
-        return _jsonResponse(
-          {
-            'code': 'refresh_token_invalid',
-            'message': 'Invalid refresh token',
-          },
-          422,
-        );
+        return _jsonResponse({'code': 'refresh_token_invalid', 'message': 'Invalid refresh token'}, 422);
       });
 
       expect(
@@ -63,8 +49,7 @@ void main() {
         throwsA(
           isA<UnauthorizedException>()
               .having((e) => e.statusCode, 'statusCode', 422)
-              .having(
-                  (e) => e.error?.code, 'error.code', 'refresh_token_invalid'),
+              .having((e) => e.error?.code, 'error.code', 'refresh_token_invalid'),
         ),
       );
 

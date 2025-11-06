@@ -21,19 +21,11 @@ class FullContactData {
   final List<PresenceInfoData> presenceInfo;
 }
 
-@DriftAccessor(tables: [
-  ContactsTable,
-  ContactPhonesTable,
-  ContactEmailsTable,
-  FavoritesTable,
-  PresenceInfoTable
-])
-class ContactsDao extends DatabaseAccessor<AppDatabase>
-    with _$ContactsDaoMixin {
+@DriftAccessor(tables: [ContactsTable, ContactPhonesTable, ContactEmailsTable, FavoritesTable, PresenceInfoTable])
+class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(super.db);
 
-  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts(
-          [ContactSourceTypeEnum? sourceType]) =>
+  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts([ContactSourceTypeEnum? sourceType]) =>
       select(contactsTable)
         ..where((t) {
           if (sourceType == null) {
@@ -49,11 +41,9 @@ class ContactsDao extends DatabaseAccessor<AppDatabase>
         ]);
 
   SimpleSelectStatement<$ContactsTableTable, ContactData> _selectBySource(
-          ContactSourceTypeEnum sourceType, String sourceId) =>
-      (select(contactsTable)
-        ..where((t) =>
-            t.sourceType.equalsValue(sourceType) &
-            t.sourceId.equals(sourceId)));
+    ContactSourceTypeEnum sourceType,
+    String sourceId,
+  ) => (select(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId)));
 
   FullContactData? _gatherSingleContact(List<TypedResult> rows) {
     if (rows.isEmpty) return null;
@@ -71,18 +61,17 @@ class ContactsDao extends DatabaseAccessor<AppDatabase>
 
       if (phone != null && !phones.contains(phone)) phones.add(phone);
       if (email != null && !emails.contains(email)) emails.add(email);
-      if (favorite != null && !favorites.contains(favorite))
-        favorites.add(favorite);
-      if (presence != null && !presenceInfo.contains(presence))
-        presenceInfo.add(presence);
+      if (favorite != null && !favorites.contains(favorite)) favorites.add(favorite);
+      if (presence != null && !presenceInfo.contains(presence)) presenceInfo.add(presence);
     }
 
     return FullContactData(
-        contact: contact,
-        phones: phones,
-        emails: emails,
-        favorites: favorites,
-        presenceInfo: presenceInfo);
+      contact: contact,
+      phones: phones,
+      emails: emails,
+      favorites: favorites,
+      presenceInfo: presenceInfo,
+    );
   }
 
   List<FullContactData> _gatherMultipleContacts(List<TypedResult> rows) {
@@ -97,12 +86,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase>
 
       final contactWithPhonesAndEmails = contactMap.putIfAbsent(
         contact.id,
-        () => FullContactData(
-            contact: contact,
-            phones: [],
-            emails: [],
-            favorites: [],
-            presenceInfo: []),
+        () => FullContactData(contact: contact, phones: [], emails: [], favorites: [], presenceInfo: []),
       );
 
       if (phone != null && !contactWithPhonesAndEmails.phones.contains(phone)) {
@@ -113,13 +97,11 @@ class ContactsDao extends DatabaseAccessor<AppDatabase>
         contactWithPhonesAndEmails.emails.add(email);
       }
 
-      if (favorite != null &&
-          !contactWithPhonesAndEmails.favorites.contains(favorite)) {
+      if (favorite != null && !contactWithPhonesAndEmails.favorites.contains(favorite)) {
         contactWithPhonesAndEmails.favorites.add(favorite);
       }
 
-      if (presenceInfo != null &&
-          !contactWithPhonesAndEmails.presenceInfo.contains(presenceInfo)) {
+      if (presenceInfo != null && !contactWithPhonesAndEmails.presenceInfo.contains(presenceInfo)) {
         contactWithPhonesAndEmails.presenceInfo.add(presenceInfo);
       }
     }
@@ -131,14 +113,10 @@ class ContactsDao extends DatabaseAccessor<AppDatabase>
   /// And favorites and something else in future
   JoinedSelectStatement _joinPhonesAndEmails(SimpleSelectStatement select) {
     return select.join([
-      leftOuterJoin(contactPhonesTable,
-          contactPhonesTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(contactEmailsTable,
-          contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(favoritesTable,
-          favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
-      leftOuterJoin(presenceInfoTable,
-          presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
   }
 
@@ -156,14 +134,12 @@ class ContactsDao extends DatabaseAccessor<AppDatabase>
     return query.watch().map(_gatherSingleContact);
   }
 
-  Future<FullContactData?> getContactBySource(
-      ContactSourceTypeEnum sourceType, String sourceId) {
+  Future<FullContactData?> getContactBySource(ContactSourceTypeEnum sourceType, String sourceId) {
     final query = _joinPhonesAndEmails(_selectBySource(sourceType, sourceId));
     return query.get().then(_gatherSingleContact);
   }
 
-  Stream<FullContactData?> watchContactBySource(
-      ContactSourceTypeEnum sourceType, String sourceId) {
+  Stream<FullContactData?> watchContactBySource(ContactSourceTypeEnum sourceType, String sourceId) {
     final query = _joinPhonesAndEmails(_selectBySource(sourceType, sourceId));
     return query.watch().map(_gatherSingleContact);
   }
@@ -178,81 +154,62 @@ class ContactsDao extends DatabaseAccessor<AppDatabase>
 
   Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
     final query = _joinPhonesAndEmails(select(contactsTable));
-    query.where(
-        contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
     query.limit(1);
 
-    return query
-        .watch()
-        .map((data) => _gatherMultipleContacts(data).firstOrNull);
+    return query.watch().map((data) => _gatherMultipleContacts(data).firstOrNull);
   }
 
-  Future<List<FullContactData>> getAllContacts(
-      [ContactSourceTypeEnum? sourceType]) async {
+  Future<List<FullContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) async {
     final query = _joinPhonesAndEmails(_selectAllContacts(sourceType));
     final rows = await query.get();
     return _gatherMultipleContacts(rows);
   }
 
-  Stream<List<FullContactData>> watchAllContacts([
-    Iterable<String>? searchBits,
-    ContactSourceTypeEnum? sourceType,
-  ]) {
+  Stream<List<FullContactData>> watchAllContacts([Iterable<String>? searchBits, ContactSourceTypeEnum? sourceType]) {
     final query = _joinPhonesAndEmails(_selectAllContacts(sourceType));
 
     if (searchBits != null) {
       query.where(
-        searchBits.map((searchBit) {
-          return [
-            contactsTable.lastName,
-            contactsTable.firstName,
-            contactsTable.aliasName,
-            contactPhonesTable.number,
-            contactEmailsTable.address,
-          ]
-              .map((c) => c.regexp('.*$searchBit.*', caseSensitive: false))
-              .reduce((v, e) => v | e);
-        }).reduce((v, e) => v | e),
+        searchBits
+            .map((searchBit) {
+              return [
+                contactsTable.lastName,
+                contactsTable.firstName,
+                contactsTable.aliasName,
+                contactPhonesTable.number,
+                contactEmailsTable.address,
+              ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e);
+            })
+            .reduce((v, e) => v | e),
       );
     }
 
     return query.watch().map(_gatherMultipleContacts);
   }
 
-  Future<Set<String>> getContactsSourceIds(
-      ContactSourceTypeEnum sourceType) async {
+  Future<Set<String>> getContactsSourceIds(ContactSourceTypeEnum sourceType) async {
     final query = selectOnly(contactsTable);
-    query.addColumns(
-        [contactsTable.id, contactsTable.sourceId, contactsTable.sourceType]);
+    query.addColumns([contactsTable.id, contactsTable.sourceId, contactsTable.sourceType]);
     query.where(contactsTable.sourceType.equals(sourceType.index));
 
     final rows = await query.get();
     return rows.map((row) => row.read(contactsTable.sourceId)).nonNulls.toSet();
   }
 
-  Future<ContactData> insertOnUniqueConflictUpdateContact(
-      Insertable<ContactData> contact) {
+  Future<ContactData> insertOnUniqueConflictUpdateContact(Insertable<ContactData> contact) {
     return into(contactsTable).insertReturning(
       contact,
-      onConflict: DoUpdate(
-        (old) => contact,
-        target: [
-          contactsTable.sourceType,
-          contactsTable.sourceId,
-        ],
-      ),
+      onConflict: DoUpdate((old) => contact, target: [contactsTable.sourceType, contactsTable.sourceId]),
     );
   }
 
-  Future<int> deleteContact(Insertable<ContactData> contact) =>
-      delete(contactsTable).delete(contact);
+  Future<int> deleteContact(Insertable<ContactData> contact) => delete(contactsTable).delete(contact);
 
-  Future<int> deleteContactBySource(
-      ContactSourceTypeEnum sourceType, String? sourceId) {
+  Future<int> deleteContactBySource(ContactSourceTypeEnum sourceType, String? sourceId) {
     final query = delete(contactsTable)
       ..where((t) => t.sourceType.equalsValue(sourceType))
-      ..where((t) =>
-          sourceId != null ? t.sourceId.equals(sourceId) : t.sourceId.isNull());
+      ..where((t) => sourceId != null ? t.sourceId.equals(sourceId) : t.sourceId.isNull());
 
     return query.go();
   }

@@ -55,13 +55,9 @@ void main() {
     });
 
     test('update tenant path segments for not empty tenantId 3', () {
-      final baseUrl = Uri(
-          scheme: 'wss',
-          host: host,
-          path: '/path1/tenant/tid1/path2/tenant/tid2');
+      final baseUrl = Uri(scheme: 'wss', host: host, path: '/path1/tenant/tid1/path2/tenant/tid2');
       final tenantUrl = WebtritSignalingClient.buildTenantUrl(baseUrl, 'tid3');
-      expect(tenantUrl.toString(),
-          equals('wss://$host/path1/tenant/tid1/path2/tenant/tid3'));
+      expect(tenantUrl.toString(), equals('wss://$host/path1/tenant/tid1/path2/tenant/tid3'));
     });
   });
 }

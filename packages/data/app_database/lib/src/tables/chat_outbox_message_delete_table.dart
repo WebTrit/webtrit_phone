@@ -13,8 +13,7 @@ class ChatOutboxMessageDeleteTable extends Table {
 
   TextColumn get idKey => text()();
 
-  IntColumn get chatId =>
-      integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chatId => integer().references(ChatsTable, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get sendAttempts => integer().withDefault(const Constant(0))();
 }

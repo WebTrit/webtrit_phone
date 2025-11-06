@@ -1,14 +1,4 @@
-enum SignalingResponseCodeType {
-  unauthorized,
-  unknown,
-  transport,
-  request,
-  session,
-  plugin,
-  webrtc,
-  token,
-  callHangup,
-}
+enum SignalingResponseCodeType { unauthorized, unknown, transport, request, session, plugin, webrtc, token, callHangup }
 
 /// The meaning of each code can be found at:
 /// https://github.com/WebTrit/webtrit_docs/blob/b2148c4011d98f2887a3994b8f63c351632ad9dd/signaling/responses/error_codes.md

@@ -1,4 +1,4 @@
-// dart format width=80
+// dart format width=120
 
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
@@ -18,8 +18,7 @@ class $AssetsCallkeepGen {
   const $AssetsCallkeepGen();
 
   /// File path: assets/callkeep/ios_icon_template_image.png
-  AssetGenImage get iosIconTemplateImage =>
-      const AssetGenImage('assets/callkeep/ios_icon_template_image.png');
+  AssetGenImage get iosIconTemplateImage => const AssetGenImage('assets/callkeep/ios_icon_template_image.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [iosIconTemplateImage];
@@ -39,26 +38,20 @@ class $AssetsImagesGen {
   const $AssetsImagesGen();
 
   /// File path: assets/images/primary_onboarding_logo.svg
-  SvgGenImage get primaryOnboardingLogo =>
-      const SvgGenImage('assets/images/primary_onboarding_logo.svg');
+  SvgGenImage get primaryOnboardingLogo => const SvgGenImage('assets/images/primary_onboarding_logo.svg');
 
   /// File path: assets/images/secondary_onboarding_logo.svg
-  SvgGenImage get secondaryOnboardingLogo =>
-      const SvgGenImage('assets/images/secondary_onboarding_logo.svg');
+  SvgGenImage get secondaryOnboardingLogo => const SvgGenImage('assets/images/secondary_onboarding_logo.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
-    primaryOnboardingLogo,
-    secondaryOnboardingLogo,
-  ];
+  List<SvgGenImage> get values => [primaryOnboardingLogo, secondaryOnboardingLogo];
 }
 
 class $AssetsLoginGen {
   const $AssetsLoginGen();
 
   /// File path: assets/login/onboarding-1.svg
-  SvgGenImage get onboarding1 =>
-      const SvgGenImage('assets/login/onboarding-1.svg');
+  SvgGenImage get onboarding1 => const SvgGenImage('assets/login/onboarding-1.svg');
 
   /// List of all assets
   List<SvgGenImage> get values => [onboarding1];
@@ -90,28 +83,22 @@ class $AssetsThemesGen {
   String get customSignup => 'assets/themes/custom_signup.html';
 
   /// File path: assets/themes/original.color_scheme.dark.config.json
-  String get originalColorSchemeDarkConfig =>
-      'assets/themes/original.color_scheme.dark.config.json';
+  String get originalColorSchemeDarkConfig => 'assets/themes/original.color_scheme.dark.config.json';
 
   /// File path: assets/themes/original.color_scheme.light.config.json
-  String get originalColorSchemeLightConfig =>
-      'assets/themes/original.color_scheme.light.config.json';
+  String get originalColorSchemeLightConfig => 'assets/themes/original.color_scheme.light.config.json';
 
   /// File path: assets/themes/original.page.dark.config.json
-  String get originalPageDarkConfig =>
-      'assets/themes/original.page.dark.config.json';
+  String get originalPageDarkConfig => 'assets/themes/original.page.dark.config.json';
 
   /// File path: assets/themes/original.page.light.config.json
-  String get originalPageLightConfig =>
-      'assets/themes/original.page.light.config.json';
+  String get originalPageLightConfig => 'assets/themes/original.page.light.config.json';
 
   /// File path: assets/themes/original.widget.dark.config.json
-  String get originalWidgetDarkConfig =>
-      'assets/themes/original.widget.dark.config.json';
+  String get originalWidgetDarkConfig => 'assets/themes/original.widget.dark.config.json';
 
   /// File path: assets/themes/original.widget.light.config.json
-  String get originalWidgetLightConfig =>
-      'assets/themes/original.widget.light.config.json';
+  String get originalWidgetLightConfig => 'assets/themes/original.widget.light.config.json';
 
   /// List of all assets
   List<String> get values => [
@@ -143,12 +130,7 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-    this.animation,
-  });
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}, this.animation});
 
   final String _assetName;
 
@@ -219,11 +201,7 @@ class AssetGenImage {
 }
 
 class AssetGenImageAnimation {
-  const AssetGenImageAnimation({
-    required this.isAnimation,
-    required this.duration,
-    required this.frames,
-  });
+  const AssetGenImageAnimation({required this.isAnimation, required this.duration, required this.frames});
 
   final bool isAnimation;
   final Duration duration;
@@ -231,11 +209,9 @@ class AssetGenImageAnimation {
 }
 
 class SvgGenImage {
-  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
-    : _isVecFormat = false;
+  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}}) : _isVecFormat = false;
 
-  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
-    : _isVecFormat = true;
+  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}}) : _isVecFormat = true;
 
   final String _assetName;
   final Size? size;
@@ -265,11 +241,7 @@ class SvgGenImage {
   }) {
     final _svg.BytesLoader loader;
     if (_isVecFormat) {
-      loader = _vg.AssetBytesLoader(
-        _assetName,
-        assetBundle: bundle,
-        packageName: package,
-      );
+      loader = _vg.AssetBytesLoader(_assetName, assetBundle: bundle, packageName: package);
     } else {
       loader = _svg.SvgAssetLoader(
         _assetName,
@@ -291,9 +263,7 @@ class SvgGenImage {
       placeholderBuilder: placeholderBuilder,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
-      colorFilter:
-          colorFilter ??
-          (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
+      colorFilter: colorFilter ?? (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
     );

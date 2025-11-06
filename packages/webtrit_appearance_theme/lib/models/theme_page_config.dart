@@ -32,8 +32,7 @@ class ThemePageConfig with _$ThemePageConfig {
   @override
   final KeypadPageConfig keypad;
 
-  factory ThemePageConfig.fromJson(Map<String, Object?> json) =>
-      _$ThemePageConfigFromJson(json);
+  factory ThemePageConfig.fromJson(Map<String, Object?> json) => _$ThemePageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ThemePageConfigToJson(this);
 }
@@ -64,8 +63,7 @@ class LoginPageConfig with _$LoginPageConfig {
   @override
   final LoginSignupVerifyScreenPageConfig signupVerify;
 
-  factory LoginPageConfig.fromJson(Map<String, Object?> json) =>
-      _$LoginPageConfigFromJson(json);
+  factory LoginPageConfig.fromJson(Map<String, Object?> json) => _$LoginPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LoginPageConfigToJson(this);
 
@@ -76,38 +74,30 @@ class LoginPageConfig with _$LoginPageConfig {
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class LoginOtpSigninVerifyScreenPageConfig
-    with _$LoginOtpSigninVerifyScreenPageConfig {
-  const LoginOtpSigninVerifyScreenPageConfig(
-      {this.countdownRepeatIntervalSeconds = 30});
+class LoginOtpSigninVerifyScreenPageConfig with _$LoginOtpSigninVerifyScreenPageConfig {
+  const LoginOtpSigninVerifyScreenPageConfig({this.countdownRepeatIntervalSeconds = 30});
 
   @override
   final int countdownRepeatIntervalSeconds;
 
-  factory LoginOtpSigninVerifyScreenPageConfig.fromJson(
-          Map<String, Object?> json) =>
+  factory LoginOtpSigninVerifyScreenPageConfig.fromJson(Map<String, Object?> json) =>
       _$LoginOtpSigninVerifyScreenPageConfigFromJson(json);
 
-  Map<String, Object?> toJson() =>
-      _$LoginOtpSigninVerifyScreenPageConfigToJson(this);
+  Map<String, Object?> toJson() => _$LoginOtpSigninVerifyScreenPageConfigToJson(this);
 }
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class LoginSignupVerifyScreenPageConfig
-    with _$LoginSignupVerifyScreenPageConfig {
-  const LoginSignupVerifyScreenPageConfig(
-      {this.countdownRepeatIntervalSeconds = 30});
+class LoginSignupVerifyScreenPageConfig with _$LoginSignupVerifyScreenPageConfig {
+  const LoginSignupVerifyScreenPageConfig({this.countdownRepeatIntervalSeconds = 30});
 
   @override
   final int countdownRepeatIntervalSeconds;
 
-  factory LoginSignupVerifyScreenPageConfig.fromJson(
-          Map<String, Object?> json) =>
+  factory LoginSignupVerifyScreenPageConfig.fromJson(Map<String, Object?> json) =>
       _$LoginSignupVerifyScreenPageConfigFromJson(json);
 
-  Map<String, Object?> toJson() =>
-      _$LoginSignupVerifyScreenPageConfigToJson(this);
+  Map<String, Object?> toJson() => _$LoginSignupVerifyScreenPageConfigToJson(this);
 }
 
 @freezed
@@ -132,8 +122,7 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
   @override
   final ElevatedButtonStyleType buttonSignupStyleType;
 
-  factory LoginModeSelectPageConfig.fromJson(Map<String, Object?> json) =>
-      _$LoginModeSelectPageConfigFromJson(json);
+  factory LoginModeSelectPageConfig.fromJson(Map<String, Object?> json) => _$LoginModeSelectPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LoginModeSelectPageConfigToJson(this);
 }
@@ -146,8 +135,7 @@ class LoginSwitchPageConfig with _$LoginSwitchPageConfig {
   @override
   final ImageSource? mainLogo;
 
-  factory LoginSwitchPageConfig.fromJson(Map<String, Object?> json) =>
-      _$LoginSwitchPageConfigFromJson(json);
+  factory LoginSwitchPageConfig.fromJson(Map<String, Object?> json) => _$LoginSwitchPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LoginSwitchPageConfigToJson(this);
 }
@@ -164,8 +152,7 @@ class AboutPageConfig with _$AboutPageConfig {
   @override
   final Metadata metadata;
 
-  factory AboutPageConfig.fromJson(Map<String, Object?> json) =>
-      _$AboutPageConfigFromJson(json);
+  factory AboutPageConfig.fromJson(Map<String, Object?> json) => _$AboutPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$AboutPageConfigToJson(this);
 
@@ -178,11 +165,7 @@ class AboutPageConfig with _$AboutPageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class CallPageConfig with _$CallPageConfig {
-  const CallPageConfig(
-      {this.systemUiOverlayStyle,
-      this.appBarStyle,
-      this.callInfo,
-      this.actions});
+  const CallPageConfig({this.systemUiOverlayStyle, this.appBarStyle, this.callInfo, this.actions});
 
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
@@ -196,8 +179,7 @@ class CallPageConfig with _$CallPageConfig {
   @override
   final CallPageActionsConfig? actions;
 
-  factory CallPageConfig.fromJson(Map<String, Object?> json) =>
-      _$CallPageConfigFromJson(json);
+  factory CallPageConfig.fromJson(Map<String, Object?> json) => _$CallPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$CallPageConfigToJson(this);
 }
@@ -244,8 +226,7 @@ class CallPageActionsConfig with _$CallPageActionsConfig {
   @override
   final ElevatedButtonWidgetConfig key;
 
-  factory CallPageActionsConfig.fromJson(Map<String, Object?> json) =>
-      _$CallPageActionsConfigFromJson(json);
+  factory CallPageActionsConfig.fromJson(Map<String, Object?> json) => _$CallPageActionsConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$CallPageActionsConfigToJson(this);
 }
@@ -273,8 +254,7 @@ class CallPageInfoConfig with _$CallPageInfoConfig {
   @override
   final TextStyleConfig? processingStatusTextStyle;
 
-  factory CallPageInfoConfig.fromJson(Map<String, Object?> json) =>
-      _$CallPageInfoConfigFromJson(json);
+  factory CallPageInfoConfig.fromJson(Map<String, Object?> json) => _$CallPageInfoConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$CallPageInfoConfigToJson(this);
 }
@@ -283,12 +263,7 @@ class CallPageInfoConfig with _$CallPageInfoConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class KeypadPageConfig with _$KeypadPageConfig {
-  const KeypadPageConfig(
-      {this.systemUiOverlayStyle,
-      this.textField,
-      this.contactName,
-      this.keypad,
-      this.actionpad});
+  const KeypadPageConfig({this.systemUiOverlayStyle, this.textField, this.contactName, this.keypad, this.actionpad});
 
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
@@ -305,8 +280,7 @@ class KeypadPageConfig with _$KeypadPageConfig {
   @override
   final ActionPadWidgetConfig? actionpad;
 
-  factory KeypadPageConfig.fromJson(Map<String, Object?> json) =>
-      _$KeypadPageConfigFromJson(json);
+  factory KeypadPageConfig.fromJson(Map<String, Object?> json) => _$KeypadPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$KeypadPageConfigToJson(this);
 }

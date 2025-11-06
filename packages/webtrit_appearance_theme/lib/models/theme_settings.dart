@@ -51,8 +51,7 @@ class ThemeSettings with _$ThemeSettings {
   @override
   final ThemePageConfig themePageDarkConfig;
 
-  factory ThemeSettings.fromJson(Map<String, Object?> json) =>
-      _$ThemeSettingsFromJson(json);
+  factory ThemeSettings.fromJson(Map<String, Object?> json) => _$ThemeSettingsFromJson(json);
 
   Map<String, Object?> toJson() => _$ThemeSettingsToJson(this);
 }

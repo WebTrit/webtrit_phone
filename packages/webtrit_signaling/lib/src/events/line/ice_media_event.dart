@@ -15,20 +15,14 @@ class IceMediaEvent extends LineEvent {
   final bool receiving;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        mid,
-        type,
-        receiving,
-      ];
+  List<Object?> get props => [...super.props, mid, type, receiving];
 
   static const typeValue = 'ice_media';
 
   factory IceMediaEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(
-          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return IceMediaEvent(

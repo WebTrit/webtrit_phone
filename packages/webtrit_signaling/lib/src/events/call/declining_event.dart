@@ -13,19 +13,14 @@ class DecliningEvent extends CallEvent {
   final int? referId;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        code,
-        referId,
-      ];
+  List<Object?> get props => [...super.props, code, referId];
 
   static const typeValue = 'declining';
 
   factory DecliningEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
-      throw ArgumentError.value(
-          eventTypeValue, Event.typeKey, 'Not equal $typeValue');
+      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
     return DecliningEvent(

@@ -32,7 +32,5 @@ class ContactsTable extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 
   @override
-  List<String> get customConstraints => [
-        'UNIQUE(source_type, source_id)',
-      ];
+  List<String> get customConstraints => ['UNIQUE(source_type, source_id)'];
 }

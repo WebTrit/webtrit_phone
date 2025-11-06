@@ -1,6 +1,1 @@
-enum ElevatedButtonStyleType {
-  primary,
-  neutral,
-  primaryOnDark,
-  neutralOnDark,
-}
+enum ElevatedButtonStyleType { primary, neutral, primaryOnDark, neutralOnDark }

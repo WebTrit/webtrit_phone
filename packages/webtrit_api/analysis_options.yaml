@@ -7,3 +7,7 @@ linter:
 analyzer:
   exclude:
     - "**/*.g.dart"
+    - "**/*.freezed.dart"
+
+formatter:
+  page_width: 120
