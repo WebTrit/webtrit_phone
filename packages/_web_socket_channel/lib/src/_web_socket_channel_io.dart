@@ -17,11 +17,7 @@ Future<io.WebSocket> connectWebSocket(
   final customHttpClient = io.HttpClient(context: securityContext);
   customHttpClient.connectionTimeout = connectionTimeout;
 
-  final webSocket = await io.WebSocket.connect(
-    url,
-    protocols: protocols,
-    customClient: customHttpClient,
-  );
+  final webSocket = await io.WebSocket.connect(url, protocols: protocols, customClient: customHttpClient);
   webSocket.pingInterval = pingInterval;
 
   return webSocket;
