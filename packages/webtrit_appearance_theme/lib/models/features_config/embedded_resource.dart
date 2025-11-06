@@ -89,8 +89,7 @@ class EmbeddedResource with _$EmbeddedResource {
   /// A globally consistent metadata key used to associate asset sources.
   static const String metadataAssetSource = 'source';
 
-  factory EmbeddedResource.fromJson(Map<String, Object?> json) =>
-      _$EmbeddedResourceFromJson(json);
+  factory EmbeddedResource.fromJson(Map<String, Object?> json) => _$EmbeddedResourceFromJson(json);
 
   Map<String, Object?> toJson() => _$EmbeddedResourceToJson(this);
 }
@@ -113,8 +112,7 @@ class ToolbarConfig with _$ToolbarConfig {
   @override
   final bool showToolbar;
 
-  factory ToolbarConfig.fromJson(Map<String, Object?> json) =>
-      _$ToolbarConfigFromJson(json);
+  factory ToolbarConfig.fromJson(Map<String, Object?> json) => _$ToolbarConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ToolbarConfigToJson(this);
 }

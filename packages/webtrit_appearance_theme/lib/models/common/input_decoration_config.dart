@@ -133,8 +133,7 @@ class InputDecorationConfig with _$InputDecorationConfig {
   @override
   final BorderConfig? disabledBorder;
 
-  factory InputDecorationConfig.fromJson(Map<String, dynamic> json) =>
-      _$InputDecorationConfigFromJson(json);
+  factory InputDecorationConfig.fromJson(Map<String, dynamic> json) => _$InputDecorationConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$InputDecorationConfigToJson(this);
 }
@@ -171,8 +170,7 @@ class BorderConfig with _$BorderConfig {
   @override
   final double? borderWidth;
 
-  factory BorderConfig.fromJson(Map<String, dynamic> json) =>
-      _$BorderConfigFromJson(json);
+  factory BorderConfig.fromJson(Map<String, dynamic> json) => _$BorderConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$BorderConfigToJson(this);
 }

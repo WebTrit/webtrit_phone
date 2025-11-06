@@ -31,8 +31,7 @@ class IconDataConfig with _$IconDataConfig {
   @override
   final bool matchTextDirection;
 
-  factory IconDataConfig.fromJson(Map<String, dynamic> json) =>
-      _$IconDataConfigFromJson(json);
+  factory IconDataConfig.fromJson(Map<String, dynamic> json) => _$IconDataConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$IconDataConfigToJson(this);
 }

@@ -27,8 +27,7 @@ class AppConfig with _$AppConfig {
   @override
   final AppConfigCall callConfig;
 
-  factory AppConfig.fromJson(Map<String, Object?> json) =>
-      _$AppConfigFromJson(json);
+  factory AppConfig.fromJson(Map<String, Object?> json) => _$AppConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigToJson(this);
 }
@@ -47,8 +46,7 @@ class AppConfigLogin with _$AppConfigLogin {
   @override
   final AppConfigLoginModeSelect modeSelect;
 
-  factory AppConfigLogin.fromJson(Map<String, Object?> json) =>
-      _$AppConfigLoginFromJson(json);
+  factory AppConfigLogin.fromJson(Map<String, Object?> json) => _$AppConfigLoginFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigLoginToJson(this);
 }
@@ -61,8 +59,7 @@ class AppConfigLoginCommon with _$AppConfigLoginCommon {
   @override
   final String? fullScreenLaunchEmbeddedResourceId;
 
-  factory AppConfigLoginCommon.fromJson(Map<String, Object?> json) =>
-      _$AppConfigLoginCommonFromJson(json);
+  factory AppConfigLoginCommon.fromJson(Map<String, Object?> json) => _$AppConfigLoginCommonFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigLoginCommonToJson(this);
 }
@@ -73,10 +70,7 @@ class AppConfigLoginModeSelect with _$AppConfigLoginModeSelect {
   const AppConfigLoginModeSelect({
     this.greetingL10n,
     this.actions = const [
-      AppConfigModeSelectAction(
-          enabled: true,
-          type: 'login',
-          titleL10n: 'login_Button_signUpToDemoInstance'),
+      AppConfigModeSelectAction(enabled: true, type: 'login', titleL10n: 'login_Button_signUpToDemoInstance'),
     ],
   });
 
@@ -86,8 +80,7 @@ class AppConfigLoginModeSelect with _$AppConfigLoginModeSelect {
   @override
   final List<AppConfigModeSelectAction> actions;
 
-  factory AppConfigLoginModeSelect.fromJson(Map<String, Object?> json) =>
-      _$AppConfigLoginModeSelectFromJson(json);
+  factory AppConfigLoginModeSelect.fromJson(Map<String, Object?> json) => _$AppConfigLoginModeSelectFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigLoginModeSelectToJson(this);
 }
@@ -114,8 +107,7 @@ class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
   @override
   final String? embeddedId;
 
-  factory AppConfigModeSelectAction.fromJson(Map<String, Object?> json) =>
-      _$AppConfigModeSelectActionFromJson(json);
+  factory AppConfigModeSelectAction.fromJson(Map<String, Object?> json) => _$AppConfigModeSelectActionFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigModeSelectActionToJson(this);
 }
@@ -174,8 +166,7 @@ class AppConfigMain with _$AppConfigMain {
   @override
   final bool sipPresenceEnabled;
 
-  factory AppConfigMain.fromJson(Map<String, Object?> json) =>
-      _$AppConfigMainFromJson(json);
+  factory AppConfigMain.fromJson(Map<String, Object?> json) => _$AppConfigMainFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigMainToJson(this);
 }
@@ -183,8 +174,7 @@ class AppConfigMain with _$AppConfigMain {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigBottomMenu with _$AppConfigBottomMenu {
-  const AppConfigBottomMenu(
-      {this.cacheSelectedTab = true, this.tabs = const []});
+  const AppConfigBottomMenu({this.cacheSelectedTab = true, this.tabs = const []});
 
   @override
   final bool cacheSelectedTab;
@@ -192,8 +182,7 @@ class AppConfigBottomMenu with _$AppConfigBottomMenu {
   @override
   final List<BottomMenuTabScheme> tabs;
 
-  factory AppConfigBottomMenu.fromJson(Map<String, Object?> json) =>
-      _$AppConfigBottomMenuFromJson(json);
+  factory AppConfigBottomMenu.fromJson(Map<String, Object?> json) => _$AppConfigBottomMenuFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigBottomMenuToJson(this);
 }
@@ -203,8 +192,7 @@ class AppConfigBottomMenu with _$AppConfigBottomMenu {
 class AppConfigCall with _$AppConfigCall {
   const AppConfigCall({
     this.videoEnabled = true,
-    this.transfer = const AppConfigTransfer(
-        enableBlindTransfer: true, enableAttendedTransfer: true),
+    this.transfer = const AppConfigTransfer(enableBlindTransfer: true, enableAttendedTransfer: true),
     this.encoding = const AppConfigEncoding(),
     this.peerConnection = const AppConfigPeerConnection(),
   });
@@ -221,8 +209,7 @@ class AppConfigCall with _$AppConfigCall {
   @override
   final AppConfigPeerConnection peerConnection;
 
-  factory AppConfigCall.fromJson(Map<String, Object?> json) =>
-      _$AppConfigCallFromJson(json);
+  factory AppConfigCall.fromJson(Map<String, Object?> json) => _$AppConfigCallFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigCallToJson(this);
 }
@@ -230,8 +217,7 @@ class AppConfigCall with _$AppConfigCall {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigTransfer with _$AppConfigTransfer {
-  const AppConfigTransfer(
-      {this.enableBlindTransfer = true, this.enableAttendedTransfer = true});
+  const AppConfigTransfer({this.enableBlindTransfer = true, this.enableAttendedTransfer = true});
 
   @override
   final bool enableBlindTransfer;
@@ -239,8 +225,7 @@ class AppConfigTransfer with _$AppConfigTransfer {
   @override
   final bool enableAttendedTransfer;
 
-  factory AppConfigTransfer.fromJson(Map<String, Object?> json) =>
-      _$AppConfigTransferFromJson(json);
+  factory AppConfigTransfer.fromJson(Map<String, Object?> json) => _$AppConfigTransferFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigTransferToJson(this);
 }
@@ -259,8 +244,7 @@ class AppConfigEncoding with _$AppConfigEncoding {
   @override
   final EncodingDefaultPresetOverride defaultPresetOverride;
 
-  factory AppConfigEncoding.fromJson(Map<String, Object?> json) =>
-      _$AppConfigEncodingFromJson(json);
+  factory AppConfigEncoding.fromJson(Map<String, Object?> json) => _$AppConfigEncodingFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigEncodingToJson(this);
 }
@@ -268,34 +252,28 @@ class AppConfigEncoding with _$AppConfigEncoding {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigPeerConnection with _$AppConfigPeerConnection {
-  const AppConfigPeerConnection(
-      {this.negotiation = const AppConfigNegotiationSettingsOverride()});
+  const AppConfigPeerConnection({this.negotiation = const AppConfigNegotiationSettingsOverride()});
 
   @override
   final AppConfigNegotiationSettingsOverride negotiation;
 
-  factory AppConfigPeerConnection.fromJson(Map<String, Object?> json) =>
-      _$AppConfigPeerConnectionFromJson(json);
+  factory AppConfigPeerConnection.fromJson(Map<String, Object?> json) => _$AppConfigPeerConnectionFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigPeerConnectionToJson(this);
 }
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class AppConfigNegotiationSettingsOverride
-    with _$AppConfigNegotiationSettingsOverride {
-  const AppConfigNegotiationSettingsOverride(
-      {this.includeInactiveVideoInOfferAnswer = false});
+class AppConfigNegotiationSettingsOverride with _$AppConfigNegotiationSettingsOverride {
+  const AppConfigNegotiationSettingsOverride({this.includeInactiveVideoInOfferAnswer = false});
 
   @override
   final bool includeInactiveVideoInOfferAnswer;
 
-  factory AppConfigNegotiationSettingsOverride.fromJson(
-          Map<String, Object?> json) =>
+  factory AppConfigNegotiationSettingsOverride.fromJson(Map<String, Object?> json) =>
       _$AppConfigNegotiationSettingsOverrideFromJson(json);
 
-  Map<String, Object?> toJson() =>
-      _$AppConfigNegotiationSettingsOverrideToJson(this);
+  Map<String, Object?> toJson() => _$AppConfigNegotiationSettingsOverrideToJson(this);
 }
 
 @freezed
@@ -409,8 +387,7 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @IntToStringConverter() required String embeddedResourceId,
   }) = EmbeddedTabScheme;
 
-  factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) =>
-      _$BottomMenuTabSchemeFromJson(json);
+  factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => _$BottomMenuTabSchemeFromJson(json);
 }
 
 @freezed
@@ -473,8 +450,7 @@ class AppConfigSettings with _$AppConfigSettings {
   @override
   final List<AppConfigSettingsSection> sections;
 
-  factory AppConfigSettings.fromJson(Map<String, Object?> json) =>
-      _$AppConfigSettingsFromJson(json);
+  factory AppConfigSettings.fromJson(Map<String, Object?> json) => _$AppConfigSettingsFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigSettingsToJson(this);
 }
@@ -482,8 +458,7 @@ class AppConfigSettings with _$AppConfigSettings {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigSettingsSection with _$AppConfigSettingsSection {
-  const AppConfigSettingsSection(
-      {required this.titleL10n, this.enabled = true, this.items = const []});
+  const AppConfigSettingsSection({required this.titleL10n, this.enabled = true, this.items = const []});
 
   @override
   final String titleL10n;
@@ -494,8 +469,7 @@ class AppConfigSettingsSection with _$AppConfigSettingsSection {
   @override
   final List<AppConfigSettingsItem> items;
 
-  factory AppConfigSettingsSection.fromJson(Map<String, Object?> json) =>
-      _$AppConfigSettingsSectionFromJson(json);
+  factory AppConfigSettingsSection.fromJson(Map<String, Object?> json) => _$AppConfigSettingsSectionFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigSettingsSectionToJson(this);
 }
@@ -530,8 +504,7 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
   @IntToStringOptionalConverter()
   final String? embeddedResourceId;
 
-  factory AppConfigSettingsItem.fromJson(Map<String, Object?> json) =>
-      _$AppConfigSettingsItemFromJson(json);
+  factory AppConfigSettingsItem.fromJson(Map<String, Object?> json) => _$AppConfigSettingsItemFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigSettingsItemToJson(this);
 }
