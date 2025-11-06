@@ -10,8 +10,7 @@ void main() {
   test('getSoreInfo', () async {
     Future<Response> handler(Request request) async {
       expect(request.method, equalsIgnoringCase('get'));
-      expect(request.url.toString(),
-          equals('https://itunes.apple.com/lookup?bundleId=app.package.name'));
+      expect(request.url.toString(), equals('https://itunes.apple.com/lookup?bundleId=app.package.name'));
       return Response(
         '''
         {
@@ -36,10 +35,7 @@ void main() {
     expect(
       storeInfo,
       equals(
-        StoreInfo(
-          version: Version(1, 0, 0),
-          viewUrl: Uri.parse('https://apps.apple.com/us/app/name/id1234567890'),
-        ),
+        StoreInfo(version: Version(1, 0, 0), viewUrl: Uri.parse('https://apps.apple.com/us/app/name/id1234567890')),
       ),
     );
   });
