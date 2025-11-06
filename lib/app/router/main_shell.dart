@@ -14,6 +14,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
@@ -249,7 +250,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             if (bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
               Provider<CdrsSyncWorker>(
                 create: (context) =>
-                    CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
+                CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
                 dispose: (context, worker) => worker.dispose(),
                 lazy: false,
               ),
@@ -396,7 +397,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         userMediaBuilder: userMediaBuilder,
                         contactNameResolver: contactNameResolver,
                         callErrorReporter: DefaultCallErrorReporter(
-                          (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+                              (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         ),
                         iceFilter: FilterWithAppSettings(appPreferences),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
@@ -418,7 +419,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         context.read<ChatsOutboxRepository>(),
                         context.read<SmsRepository>(),
                         context.read<SmsOutboxRepository>(),
-                        (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
+                            (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
                       );
                     },
                   ),
@@ -526,11 +527,23 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
 
     return [
-      PollingRegistration(listener: context.read<UserRepository>(), interval: const Duration(seconds: 10)),
-      PollingRegistration(listener: context.read<SystemInfoRepository>(), interval: const Duration(minutes: 5)),
-      PollingRegistration(listener: context.read<ExternalContactsRepository>(), interval: const Duration(minutes: 1)),
+      PollingRegistration(
+        listener: context.read<UserRepository>(),
+        interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL),
+      ),
+      PollingRegistration(
+        listener: context.read<SystemInfoRepository>(),
+        interval: const Duration(minutes: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL),
+      ),
+      PollingRegistration(
+        listener: context.read<ExternalContactsRepository>(),
+        interval: const Duration(minutes: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL),
+      ),
       if (isVoicemailsEnabled)
-        PollingRegistration(listener: context.read<VoicemailRepository>(), interval: const Duration(minutes: 5)),
+        PollingRegistration(
+          listener: context.read<VoicemailRepository>(),
+          interval: const Duration(minutes: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_INTERVAL),
+        ),
     ];
   }
 
