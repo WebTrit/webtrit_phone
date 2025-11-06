@@ -210,16 +210,8 @@ sealed class _CallSignalingEvent extends CallEvent {
     required String? content,
   }) = _CallSignalingEventNotifyUnknown;
 
-  const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
-
-  const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;
-
-  const factory _CallSignalingEvent.registrationFailed(int code, String reason) =
-      _CallSignalingEventRegisterationFailed;
-
-  const factory _CallSignalingEvent.unregistering() = _CallSignalingEventUnregistering;
-
-  const factory _CallSignalingEvent.unregistered() = _CallSignalingEventUnregistered;
+  const factory _CallSignalingEvent.registration(RegistrationStatus status, {int? code, String? reason}) =
+      _CallSignalingEventRegistration;
 }
 
 class _CallSignalingEventIncoming extends _CallSignalingEvent {
@@ -507,31 +499,15 @@ class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
   List<Object?> get props => [line, callId, notify, subscriptionState, contentType, content];
 }
 
-class _CallSignalingEventRegistering extends _CallSignalingEvent {
-  const _CallSignalingEventRegistering();
-}
+class _CallSignalingEventRegistration extends _CallSignalingEvent {
+  const _CallSignalingEventRegistration(this.status, {this.code, this.reason});
 
-class _CallSignalingEventRegistered extends _CallSignalingEvent {
-  const _CallSignalingEventRegistered();
-}
-
-class _CallSignalingEventRegisterationFailed extends _CallSignalingEvent {
-  const _CallSignalingEventRegisterationFailed(this.code, this.reason);
-
-  final int code;
-
-  final String reason;
+  final RegistrationStatus status;
+  final int? code;
+  final String? reason;
 
   @override
-  List<Object?> get props => [code, reason];
-}
-
-class _CallSignalingEventUnregistering extends _CallSignalingEvent {
-  const _CallSignalingEventUnregistering();
-}
-
-class _CallSignalingEventUnregistered extends _CallSignalingEvent {
-  const _CallSignalingEventUnregistered();
+  List<Object?> get props => [status, code, reason];
 }
 
 // call push events

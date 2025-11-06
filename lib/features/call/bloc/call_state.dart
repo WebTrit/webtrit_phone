@@ -39,6 +39,12 @@ class CallState with _$CallState {
 
   CallStatus get status => callServiceState.status;
 
+  /// Indicates that the handshake phase has completed and registration status is available.
+  bool get isHandshakeEstablished => callServiceState.registration?.status != null;
+
+  /// Indicates that the signaling connection to the server is successfully established.
+  bool get isSignalingEstablished => callServiceState.signalingClientStatus.isConnect;
+
   int? retrieveIdleLine() {
     for (var line = 0; line < linesCount; line++) {
       if (!activeCalls.any((activeCall) => activeCall.line == line)) {
