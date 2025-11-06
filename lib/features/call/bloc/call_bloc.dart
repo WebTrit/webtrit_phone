@@ -1064,7 +1064,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             final localDescription = await peerConnection.createAnswer({});
             sdpMunger?.apply(localDescription);
 
-            // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+            // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
             // localDescription should be set before sending the answer to transition into stable state.
             await peerConnection.setLocalDescription(localDescription);
 
@@ -1905,7 +1905,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
 
-      // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+      // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
       await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
 
@@ -2157,7 +2157,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             final localDescription = await peerConnection.createOffer({});
             sdpMunger?.apply(localDescription);
 
-            // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+            // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
             // localDescription should be set before sending the answer to transition into stable state.
             await peerConnection.setLocalDescription(localDescription);
 
@@ -2731,7 +2731,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           final localDescription = await peerConnection.createOffer({});
           sdpMunger?.apply(localDescription);
 
-          // According to RFC 8829 §5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+          // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
           // localDescription should be set before sending the offer to transition into have-local-offer state.
           await peerConnection.setLocalDescription(localDescription);
 
