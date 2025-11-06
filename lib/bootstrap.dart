@@ -42,12 +42,14 @@ Future<void> bootstrap() async {
   final appPreferencesPure = await AppPreferencesPure.init();
   final appPreferences = await AppPreferencesFactory.init();
   final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferencesPure);
+  final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferencesPure);
 
   final coreSupport = CoreSupportImpl(systemInfoLocalRepository);
   final featureAccess = FeatureAccess.init(
     appThemes.appConfig,
     appThemes.embeddedResources,
     appPreferences,
+    activeMainFlavorRepository,
     coreSupport,
   );
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());

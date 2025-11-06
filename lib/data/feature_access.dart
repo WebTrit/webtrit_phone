@@ -8,6 +8,7 @@ import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -77,12 +78,18 @@ class FeatureAccess {
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
     AppPreferences preferences,
+    ActiveMainFlavorRepository activeMainFlavorRepository,
     CoreSupport coreSupport,
   ) {
     try {
       final embeddedFeature = _tryConfigureEmbeddedFeature(embeddedResources);
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig, embeddedFeature.embeddedResources);
-      final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences, embeddedFeature);
+      final bottomMenuManager = _tryConfigureBottomMenuFeature(
+        appConfig,
+        preferences,
+        activeMainFlavorRepository,
+        embeddedFeature,
+      );
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, embeddedResources, coreSupport);
       final callFeature = _tryConfigureCallFeature(appConfig, preferences);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, coreSupport);
@@ -113,6 +120,7 @@ class FeatureAccess {
   static BottomMenuFeature _tryConfigureBottomMenuFeature(
     AppConfig appConfig,
     AppPreferences preferences,
+    ActiveMainFlavorRepository activeMainFlavorRepository,
     EmbeddedFeature embeddedFeature,
   ) {
     final bottomMenu = appConfig.mainConfig.bottomMenu;
@@ -130,7 +138,7 @@ class FeatureAccess {
       throw Exception('No enabled tabs found in bottom menu configuration');
     }
 
-    return BottomMenuFeature(bottomMenuTabs, preferences, cacheSelectedTab: bottomMenu.cacheSelectedTab);
+    return BottomMenuFeature(bottomMenuTabs, activeMainFlavorRepository, cacheSelectedTab: bottomMenu.cacheSelectedTab);
   }
 
   static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedData> embeddedResources) {
@@ -426,14 +434,14 @@ class LoginFeature {
 }
 
 class BottomMenuFeature {
-  BottomMenuFeature(List<BottomMenuTab> tabs, this._appPreferences, {bool cacheSelectedTab = true})
+  BottomMenuFeature(List<BottomMenuTab> tabs, this._activeMainFlavorRepository, {bool cacheSelectedTab = true})
     : _tabs = List.unmodifiable(tabs) {
-    final savedFlavor = cacheSelectedTab ? _appPreferences.getActiveMainFlavor() : null;
+    final savedFlavor = cacheSelectedTab ? _activeMainFlavorRepository.getActiveMainFlavor() : null;
     _activeTab = _findInitialTab(savedFlavor);
   }
 
   final List<BottomMenuTab> _tabs;
-  final AppPreferences _appPreferences;
+  final ActiveMainFlavorRepository _activeMainFlavorRepository;
   late BottomMenuTab _activeTab;
 
   List<BottomMenuTab> get tabs => _tabs;
@@ -458,7 +466,7 @@ class BottomMenuFeature {
   /// Sets the active tab to [newTab] and persists the selection in preferences.
   set activeFlavor(BottomMenuTab newTab) {
     _activeTab = newTab;
-    _appPreferences.setActiveMainFlavor(newTab.flavor);
+    _activeMainFlavorRepository.setActiveMainFlavor(newTab.flavor);
   }
 
   /// Finds the initial tab to be selected based on the saved flavor or the initial flag.

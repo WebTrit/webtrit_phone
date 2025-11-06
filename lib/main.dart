@@ -169,6 +169,7 @@ class RootApp extends StatelessWidget {
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(appPreferencesPure);
           final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(appPreferencesPure);
           final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferencesPure);
+          final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -179,6 +180,7 @@ class RootApp extends StatelessWidget {
               await registerStatusRepository.clear();
               await presenceSettingsRepository.clear();
               await systemInfoLocalRepository.clear();
+              await activeMainFlavorRepository.clear();
             },
           );
 
@@ -189,6 +191,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<SystemInfoLocalRepository>.value(value: systemInfoLocalRepository),
+              RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
               RepositoryProvider<SessionRepository>.value(value: sessionRepository),
             ],
             child: const App(),

@@ -21,10 +21,6 @@ abstract class AppPreferences {
 
   Future<bool> removeLocale();
 
-  MainFlavor getActiveMainFlavor({MainFlavor defaultValue});
-
-  Future<bool> setActiveMainFlavor(MainFlavor value);
-
   RecentsVisibilityFilter getActiveRecentsVisibilityFilter({RecentsVisibilityFilter defaultValue});
 
   Future<bool> setActiveRecentsVisibilityFilter(RecentsVisibilityFilter value);
@@ -98,7 +94,6 @@ class AppPreferencesImpl
     implements AppPreferences {
   static const _kThemeModeKey = 'theme-mode';
   static const _kLocaleLanguageTagKey = 'locale-language-tag';
-  static const _kActiveMainFlavorKey = 'active-main-flavor';
   static const _kActiveRecentsVisibilityFilterKey = 'active-recents-visibility-filter';
   static const _kActiveContactSourceTypeKey = 'active-contact-source-type';
   static const _kUserAgreementAcceptedKey = 'user-agreement-status';
@@ -116,7 +111,6 @@ class AppPreferencesImpl
   static const _kPreferencesList = [
     _kThemeModeKey,
     _kLocaleLanguageTagKey,
-    _kActiveMainFlavorKey,
     _kActiveRecentsVisibilityFilterKey,
     _kActiveContactSourceTypeKey,
     _kUserAgreementAcceptedKey,
@@ -183,23 +177,6 @@ class AppPreferencesImpl
 
   @override
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
-
-  @override
-  MainFlavor getActiveMainFlavor({MainFlavor defaultValue = MainFlavor.contacts}) {
-    final activeMainFlavorString = _sharedPreferences.getString(_kActiveMainFlavorKey);
-    if (activeMainFlavorString != null) {
-      try {
-        return MainFlavor.values.byName(activeMainFlavorString);
-      } catch (_) {
-        return defaultValue;
-      }
-    } else {
-      return defaultValue;
-    }
-  }
-
-  @override
-  Future<bool> setActiveMainFlavor(MainFlavor value) => _sharedPreferences.setString(_kActiveMainFlavorKey, value.name);
 
   @override
   RecentsVisibilityFilter getActiveRecentsVisibilityFilter({
