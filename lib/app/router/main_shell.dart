@@ -250,7 +250,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             if (bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
               Provider<CdrsSyncWorker>(
                 create: (context) =>
-                CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
+                    CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
                 dispose: (context, worker) => worker.dispose(),
                 lazy: false,
               ),
@@ -397,7 +397,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         userMediaBuilder: userMediaBuilder,
                         contactNameResolver: contactNameResolver,
                         callErrorReporter: DefaultCallErrorReporter(
-                              (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+                          (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         ),
                         iceFilter: FilterWithAppSettings(appPreferences),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
@@ -419,7 +419,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         context.read<ChatsOutboxRepository>(),
                         context.read<SmsRepository>(),
                         context.read<SmsOutboxRepository>(),
-                            (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
+                        (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
                       );
                     },
                   ),
@@ -529,20 +529,20 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     return [
       PollingRegistration(
         listener: context.read<UserRepository>(),
-        interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL),
+        interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_SECONDS_INTERVAL),
       ),
       PollingRegistration(
         listener: context.read<SystemInfoRepository>(),
-        interval: const Duration(minutes: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL),
+        interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_SECONDS_INTERVAL),
       ),
       PollingRegistration(
         listener: context.read<ExternalContactsRepository>(),
-        interval: const Duration(minutes: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL),
+        interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_SECONDS_INTERVAL),
       ),
       if (isVoicemailsEnabled)
         PollingRegistration(
           listener: context.read<VoicemailRepository>(),
-          interval: const Duration(minutes: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_INTERVAL),
+          interval: const Duration(seconds: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_SECONDS_INTERVAL),
         ),
     ];
   }
