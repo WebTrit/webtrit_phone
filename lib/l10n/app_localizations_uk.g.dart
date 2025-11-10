@@ -145,6 +145,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_description_transferProcessing => 'Обробка переадресації';
 
   @override
+  String get call_errorRegisteringSelfManagedPhoneAccount =>
+      'Виникла проблема під час реєстрації самокерованого телефонного облікового запису.';
+
+  @override
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override

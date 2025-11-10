@@ -1253,14 +1253,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     if (callkeepError != null) {
-      emit(state.copyWithPopActiveCall(callId));
-
       if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
         final Uri telLaunchUri = Uri(scheme: 'tel', path: event.handle.value);
         launchUrl(telLaunchUri);
+      } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+        submitNotification(const CallErrorRegisteringSelfManagedPhoneAccountNotification());
       } else {
         _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
       }
+      emit(state.copyWithPopActiveCall(callId));
+
       return;
     }
   }

@@ -92,6 +92,10 @@
   "@call_description_requestToAttendedTransfer": {},
   "call_description_transferProcessing": "Обробка переадресації",
   "@call_description_transferProcessing": {},
+  "call_errorRegisteringSelfManagedPhoneAccount": "Виникла проблема під час реєстрації самокерованого телефонного облікового запису.",
+  "@call_errorRegisteringSelfManagedPhoneAccount": {
+    "description": "Shown when the app fails to register a self-managed phone account with the system."
+  },
   "call_FailureAcknowledgeDialog_title": "Помилка",
   "@call_FailureAcknowledgeDialog_title": {},
   "callProcessingStatus_answering": "Прийняття виклику, будь ласка, зачекайте…",

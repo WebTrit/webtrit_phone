@@ -357,6 +357,12 @@ abstract class AppLocalizations {
   /// **'Transfer processing'**
   String get call_description_transferProcessing;
 
+  /// Shown when the app fails to register a self-managed phone account with the system.
+  ///
+  /// In en, this message translates to:
+  /// **'There was a problem registering the self-managed phone account.'**
+  String get call_errorRegisteringSelfManagedPhoneAccount;
+
   /// No description provided for @call_FailureAcknowledgeDialog_title.
   ///
   /// In en, this message translates to:
