@@ -23,7 +23,7 @@ class ChatConversationsTile extends StatefulWidget {
 }
 
 class _ChatConversationsTileState extends State<ChatConversationsTile> {
-  onTap() {
+  void onTap() {
     if (widget.conversation.type == ChatType.direct) {
       final userId = widget.userId;
       final participant = widget.conversation.members.firstWhere((m) => m.userId != userId);

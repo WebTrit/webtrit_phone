@@ -81,7 +81,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
     computeViewEntries();
   }
 
-  computeViewEntries() async {
+  Future<void> computeViewEntries() async {
     _ComputeParams params = (
       userId: widget.userId,
       userNumber: widget.userNumber,

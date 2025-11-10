@@ -88,7 +88,7 @@ final class CVSReady extends ConversationState {
     busy,
   ];
 
-  copyWith({
+  CVSReady copyWith({
     ChatCredentials? credentials,
     Chat? chat,
     List<ChatMessage>? messages,

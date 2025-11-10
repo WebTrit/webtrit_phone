@@ -350,7 +350,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     return super.close();
   }
 
-  _cancelSubs() {
+  void _cancelSubs() {
     _chatUpdateSub?.cancel();
     _chatRemoveSub?.cancel();
     _messagesSub?.cancel();

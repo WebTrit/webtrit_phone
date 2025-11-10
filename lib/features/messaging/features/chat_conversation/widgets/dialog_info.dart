@@ -23,7 +23,7 @@ class DialogInfo extends StatefulWidget {
 class _DialogInfoState extends State<DialogInfo> {
   late final conversationCubit = context.read<ConversationCubit>();
 
-  onDeleteDialog() async {
+  Future<void> onDeleteDialog() async {
     final askResult = await showDialog<bool>(
       context: context,
       builder: (context) => ConfirmDialog(askText: context.l10n.messaging_DialogInfo_deleteAsk),

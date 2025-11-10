@@ -94,7 +94,7 @@ final class SCSReady extends SmsConversationState with EquatableMixin {
     busy,
   ];
 
-  copyWith({
+  SCSReady copyWith({
     UsersCreds? creds,
     SmsConversation? conversation,
     List<SmsMessage>? messages,

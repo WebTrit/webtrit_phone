@@ -34,7 +34,7 @@ class _MessageBodyState extends State<MessageBody> {
     if (oldWidget.text != widget.text) findLink(widget.text);
   }
 
-  findLink(String text) {
+  void findLink(String text) {
     final match = RegExp(linkRegex, caseSensitive: false).stringMatch(text);
 
     if (match != null) {

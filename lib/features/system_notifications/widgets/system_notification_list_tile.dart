@@ -46,7 +46,7 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
     super.dispose();
   }
 
-  findLink(String text) {
+  void findLink(String text) {
     final match = RegExp(linkRegex, caseSensitive: false).stringMatch(text);
 
     if (match != null) {

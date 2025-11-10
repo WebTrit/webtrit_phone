@@ -26,7 +26,7 @@ class MissedRecentCdrsCubit extends Cubit<MissedRecentCdrsState> {
   final int pageSize;
   late final StreamSubscription _eventsSub;
 
-  init() async {
+  Future<void> init() async {
     _logger.info('Loading missed CDRs');
     final missedCdrs = await _cdrsLocalRepository.getHistory(
       status: CdrStatus.missed,

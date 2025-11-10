@@ -145,7 +145,7 @@ class KeypadViewState extends State<KeypadView> {
     _callController.submitTransfer(_popNumber());
   }
 
-  void _addChar(keyText) {
+  void _addChar(String keyText) {
     if (!_controller.selection.isValid) {
       _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
     }

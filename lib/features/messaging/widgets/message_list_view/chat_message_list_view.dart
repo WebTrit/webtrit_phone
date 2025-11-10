@@ -93,7 +93,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     computeViewEntries();
   }
 
-  computeViewEntries() async {
+  Future<void> computeViewEntries() async {
     _ComputeParams params = (
       userId: widget.userId,
       messages: widget.messages,

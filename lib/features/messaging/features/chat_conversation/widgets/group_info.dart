@@ -22,7 +22,7 @@ class _GroupInfoState extends State<GroupInfo> {
   late final conversationCubit = context.read<ConversationCubit>();
   late final contactsRepository = context.read<ContactsRepository>();
 
-  onLeaveGroup() async {
+  Future<void> onLeaveGroup() async {
     final askResult = await showDialog<bool>(
       context: context,
       builder: (context) => ConfirmDialog(askText: context.l10n.messaging_GroupInfo_leaveAsk),
@@ -34,7 +34,7 @@ class _GroupInfoState extends State<GroupInfo> {
     await conversationCubit.leaveGroup();
   }
 
-  onDeleteGroup() async {
+  Future<void> onDeleteGroup() async {
     final askResult = await showDialog<bool>(
       context: context,
       builder: (context) => ConfirmDialog(askText: context.l10n.messaging_GroupInfo_leaveAndDeleteAsk),
@@ -46,7 +46,7 @@ class _GroupInfoState extends State<GroupInfo> {
     await conversationCubit.deleteChat();
   }
 
-  onAddUser() async {
+  Future<void> onAddUser() async {
     final result = await showDialog<Contact>(
       context: context,
       builder: (context) => BackdropFilter(
@@ -78,7 +78,7 @@ class _GroupInfoState extends State<GroupInfo> {
     if (result?.sourceId != null) await conversationCubit.addGroupMember(result!.sourceId!);
   }
 
-  onRemoveUser(String userId) async {
+  Future<void> onRemoveUser(String userId) async {
     String askText = context.l10n.messaging_GroupInfo_removeUserAsk;
 
     final result = await showDialog<bool>(
@@ -89,7 +89,7 @@ class _GroupInfoState extends State<GroupInfo> {
     if (result == true) await conversationCubit.removeGroupMember(userId);
   }
 
-  onSetModerator(String userId, bool isModerator) async {
+  Future<void> onSetModerator(String userId, bool isModerator) async {
     String askText;
     if (isModerator) {
       askText = context.l10n.messaging_GroupInfo_makeModeratorAsk;
@@ -106,7 +106,7 @@ class _GroupInfoState extends State<GroupInfo> {
     if (result == true) await conversationCubit.setGroupModerator(userId, isModerator);
   }
 
-  onNameSubmit(String value) {
+  void onNameSubmit(String value) {
     if (value.length > 3) conversationCubit.setGroupName(value);
   }
 

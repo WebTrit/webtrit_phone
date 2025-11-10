@@ -8,11 +8,14 @@ class ChatsRepository with ChatsDriftMapper {
   ChatsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;
+
   ChatsDao get _chatsDao => _appDatabase.chatsDao;
 
   final StreamController<ChatsEvent> _eventBus = StreamController.broadcast();
+
   Stream<ChatsEvent> get eventBus => _eventBus.stream;
-  _addEvent(ChatsEvent event) => _eventBus.add(event);
+
+  void _addEvent(ChatsEvent event) => _eventBus.add(event);
 
   Future<Chat?> getChat(int chatId) async {
     final chatData = await _chatsDao.getChatWithMembers(chatId);

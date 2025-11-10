@@ -30,7 +30,7 @@ class _UserSmsNumbersBuilderState extends State<UserSmsNumbersBuilder> {
     numebersSub = e.stream.listen((c) => setNumbers(c));
   }
 
-  setNumbers(List<String>? numbers) {
+  void setNumbers(List<String>? numbers) {
     loading = false;
     this.numbers = numbers ?? [];
     if (mounted) setState(() {});
@@ -71,17 +71,17 @@ class NumbersWatchSubject {
   /// Last cached value of user sms numbers
   List<String>? get value => _numbersCache;
 
-  _onListen() {
+  void _onListen() {
     final stream = _repository.watchUserSmsNumbers();
     _sub = stream.listen((contact) => _handleUpdate(contact));
   }
 
-  _handleUpdate(List<String> contact) {
+  void _handleUpdate(List<String> contact) {
     _controller.add(contact);
     _numbersCache = contact;
   }
 
-  _onCancel() {
+  void _onCancel() {
     _sub?.cancel();
   }
 }

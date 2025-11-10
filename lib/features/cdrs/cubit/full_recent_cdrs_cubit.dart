@@ -26,7 +26,7 @@ class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
   final int pageSize;
   late final StreamSubscription _eventsSub;
 
-  init() async {
+  Future<void> init() async {
     _logger.info('Loading recent CDRs');
     final recentCdrs = await _cdrsLocalRepository.getHistory(limit: pageSize);
     emit(state.copyWith(records: recentCdrs, isLoading: false));

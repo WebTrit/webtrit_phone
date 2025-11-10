@@ -20,7 +20,7 @@ class SmsConversationBuilderView extends StatefulWidget {
 class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView> {
   late final builderCubit = context.read<SmsConversationBuilderCubit>();
 
-  onMultipleUserNumbers(List<String> userNumbers) async {
+  Future<void> onMultipleUserNumbers(List<String> userNumbers) async {
     final result = await showModalBottomSheet(
       context: context,
       builder: (context) => BackdropFilter(
@@ -45,7 +45,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
     result is String ? builderCubit.onConfirmUserNumber(result) : builderCubit.onBackToCommon();
   }
 
-  onEmptyUserNumbers() async {
+  Future<void> onEmptyUserNumbers() async {
     await showDialog(
       context: context,
       builder: (context) => BackdropFilter(
@@ -60,7 +60,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
     builderCubit.onBackToCommon();
   }
 
-  onWrongNumberSelected(String recipientNumber) async {
+  Future<void> onWrongNumberSelected(String recipientNumber) async {
     await showDialog(
       context: context,
       builder: (context) {

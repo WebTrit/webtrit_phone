@@ -130,7 +130,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     emit(state.copyWith(status: ConnectionStatus.initial));
   }
 
-  _onEventError(Object error) {
+  void _onEventError(Object error) {
     if (_errorNotificationFilter(error)) {
       _submitNotification(DefaultErrorNotification(error));
     } else {

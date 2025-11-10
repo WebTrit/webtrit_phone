@@ -24,7 +24,7 @@ class ChatsOutboxWorker {
 
   bool _disposed = false;
 
-  init() {
+  void init() {
     _logger.fine('Initialising...');
 
     /// Continuously processes messages, edits, deletes, and read cursors from the outbox repository
@@ -49,7 +49,7 @@ class ChatsOutboxWorker {
     });
   }
 
-  dispose() {
+  void dispose() {
     _logger.fine('Disposing...');
     _disposed = true;
   }

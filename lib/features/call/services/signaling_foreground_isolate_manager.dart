@@ -95,7 +95,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     }
   }
 
-  void _handleSignalingError(error, [StackTrace? stackTrace]) async {
+  void _handleSignalingError(Object error, [StackTrace? stackTrace]) async {
     try {} catch (e) {
       _handleExceptions(e);
     }
@@ -149,7 +149,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     await _callLogsRepository.add(call);
   }
 
-  void _handleExceptions(e) {
+  void _handleExceptions(Object e) {
     _logger.severe(e);
   }
 }

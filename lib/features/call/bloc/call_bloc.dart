@@ -2499,7 +2499,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  void _onSignalingError(error, [StackTrace? stackTrace]) {
+  void _onSignalingError(Object error, [StackTrace? stackTrace]) {
     _logger.severe('_onErrorCallback', error, stackTrace);
 
     _reconnectInitiated();

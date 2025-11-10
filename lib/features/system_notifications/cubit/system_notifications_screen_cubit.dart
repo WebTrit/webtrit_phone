@@ -56,7 +56,7 @@ class SystemNotificationsScreenCubit extends Cubit<SystemNotificationScreenState
     }
   }
 
-  init() async {
+  Future<void> init() async {
     final outboxEntries = await _systemNotificationsLocalRepository.getOutboxNotifications();
     final notifications = await _systemNotificationsLocalRepository.getNotifications(limit: pageSize);
     emit(state.copyWith(notifications: notifications, outboxEntries: outboxEntries, isLoading: false));

@@ -30,11 +30,11 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
   final PackageInfo packageInfo;
   final PlatformInfo platformInfo;
 
-  get _identifier => appInfo.identifier;
+  String get _identifier => appInfo.identifier;
 
-  get _bundleId => packageInfo.packageName;
+  String get _bundleId => packageInfo.packageName;
 
-  get _appType => platformInfo.appType;
+  AppType get _appType => platformInfo.appType;
 
   WebtritApiClient _apiClient(String coreUrl, String tenantId) {
     return WebtritApiClient(Uri.parse(coreUrl), tenantId, connectionTimeout: kApiClientConnectionTimeout);
@@ -100,12 +100,12 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
     }
   }
 
-  confirmReplaceSession() {
+  Future<void> confirmReplaceSession() {
     _logger.info('confirmReplaceSession');
     return _processToken();
   }
 
-  init() {
+  void init() {
     _logger.info('init: $config');
 
     // Ask for confirmation if the user is logged-in without config_token exchange

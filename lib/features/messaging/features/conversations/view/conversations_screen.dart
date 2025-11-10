@@ -40,7 +40,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       ? TabType.sms
       : null;
 
-  onFloatingButton() {
+  void onFloatingButton() {
     if (selectedTab == TabType.chat) {
       onNewChatConversation();
     }
@@ -49,7 +49,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     }
   }
 
-  onNewChatConversation() async {
+  Future<void> onNewChatConversation() async {
     showModalBottomSheet(
       useRootNavigator: true,
       useSafeArea: true,
@@ -79,7 +79,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     );
   }
 
-  onNewSmsConversation() async {
+  Future<void> onNewSmsConversation() async {
     showModalBottomSheet(
       useRootNavigator: true,
       useSafeArea: true,
@@ -100,17 +100,17 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     );
   }
 
-  openDialog(Contact contact) {
+  void openDialog(Contact contact) {
     if (!mounted) return;
     context.router.navigate(ChatConversationScreenPageRoute(participantId: contact.sourceId));
   }
 
-  openGroup(int id) {
+  void openGroup(int id) {
     if (!mounted) return;
     context.router.navigate(ChatConversationScreenPageRoute(chatId: id));
   }
 
-  openSmsDialog(String userNumber, String recipientNumber, String? recipientId) async {
+  Future<void> openSmsDialog(String userNumber, String recipientNumber, String? recipientId) async {
     if (!mounted) return;
     context.router.navigate(
       SmsConversationScreenPageRoute(firstNumber: userNumber, secondNumber: recipientNumber, recipientId: recipientId),

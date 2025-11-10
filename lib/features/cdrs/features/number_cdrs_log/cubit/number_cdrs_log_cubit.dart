@@ -28,7 +28,7 @@ class NumberCdrsLogCubit extends Cubit<NumberCdrsLogState> {
   final int pageSize;
   late final StreamSubscription _eventsSub;
 
-  init() async {
+  Future<void> init() async {
     _logger.info('Loading number CDRs');
     final numberCdrs = await _cdrsLocalRepository.getHistory(number: number, limit: pageSize);
     emit(state.copyWith(records: numberCdrs, isLoading: false));
