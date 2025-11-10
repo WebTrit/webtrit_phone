@@ -3,12 +3,11 @@ import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class MockAboutBloc extends MockBloc<AboutEvent, AboutState>
-    implements AboutBloc {
+class MockAboutBloc extends MockBloc<AboutEvent, AboutState> implements AboutBloc {
   MockAboutBloc();
 
   // Single source of truth for the default/base state
-  static AboutState _defaultState() => AboutState(
+  static AboutState _defaultState({bool progress = false, Version? coreVersion}) => AboutState(
         progress: false,
         embeddedLinks: const [],
         appName: 'WebTrit Phone',
@@ -19,7 +18,7 @@ class MockAboutBloc extends MockBloc<AboutEvent, AboutState>
         appIdentifier: 'com.webtrit.phone',
         coreUrl: Uri.parse('https://core.example.com'),
         fcmPushToken: 'fcm-token-demo',
-        coreVersion: null,
+        coreVersion: coreVersion,
       );
 
   // Small helper to seed the mock with an initial state
@@ -39,27 +38,21 @@ class MockAboutBloc extends MockBloc<AboutEvent, AboutState>
 
   factory MockAboutBloc.loading({AboutState? base}) {
     final mock = MockAboutBloc();
-    final initial = (base ?? _defaultState()).copyWith(progress: true);
+    final initial = base ?? _defaultState(progress: true);
     _seed(mock, initial);
     return mock;
   }
 
   factory MockAboutBloc.success({Version? coreVersion, AboutState? base}) {
     final mock = MockAboutBloc();
-    final initial = (base ?? _defaultState()).copyWith(
-      progress: false,
-      coreVersion: coreVersion ?? Version.parse('3.4.5'),
-    );
+    final initial = base ?? _defaultState(progress: false, coreVersion: coreVersion ?? Version.parse('3.4.5'));
     _seed(mock, initial);
     return mock;
   }
 
   factory MockAboutBloc.failure({AboutState? base}) {
     final mock = MockAboutBloc();
-    final initial = (base ?? _defaultState()).copyWith(
-      progress: false,
-      coreVersion: null,
-    );
+    final initial = base ?? _defaultState(progress: false);
     _seed(mock, initial);
     return mock;
   }

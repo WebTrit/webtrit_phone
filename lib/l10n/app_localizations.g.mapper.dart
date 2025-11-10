@@ -130,6 +130,8 @@ class AppLocalizationsMapper {
           localizations.call_description_requestToAttendedTransfer,
       'call_description_transferProcessing':
           localizations.call_description_transferProcessing,
+      'call_errorRegisteringSelfManagedPhoneAccount':
+          localizations.call_errorRegisteringSelfManagedPhoneAccount,
       'call_FailureAcknowledgeDialog_title':
           localizations.call_FailureAcknowledgeDialog_title,
       'callProcessingStatus_answering':

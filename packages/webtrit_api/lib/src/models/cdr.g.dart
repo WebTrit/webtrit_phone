@@ -32,10 +32,12 @@ Map<String, dynamic> _$CdrRecordToJson(CdrRecord instance) => <String, dynamic>{
   'status': instance.status,
 };
 
-CdrHistoryResponse _$CdrHistoryResponseFromJson(Map<String, dynamic> json) => CdrHistoryResponse(
-  items: (json['items'] as List<dynamic>).map((e) => CdrRecord.fromJson(e as Map<String, dynamic>)).toList(),
-);
+CdrHistoryResponse _$CdrHistoryResponseFromJson(Map<String, dynamic> json) =>
+    CdrHistoryResponse(
+      items: (json['items'] as List<dynamic>)
+          .map((e) => CdrRecord.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
-Map<String, dynamic> _$CdrHistoryResponseToJson(CdrHistoryResponse instance) => <String, dynamic>{
-  'items': instance.items.map((e) => e.toJson()).toList(),
-};
+Map<String, dynamic> _$CdrHistoryResponseToJson(CdrHistoryResponse instance) =>
+    <String, dynamic>{'items': instance.items.map((e) => e.toJson()).toList()};

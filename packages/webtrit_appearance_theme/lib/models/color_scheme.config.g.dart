@@ -6,19 +6,25 @@ part of 'color_scheme.config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ColorSchemeConfig _$ColorSchemeConfigFromJson(Map<String, dynamic> json) => ColorSchemeConfig(
-  seedColor: json['seedColor'] as String? ?? '#F95A14',
-  colorSchemeOverride: json['colorSchemeOverride'] == null
-      ? const ColorSchemeOverride()
-      : ColorSchemeOverride.fromJson(json['colorSchemeOverride'] as Map<String, dynamic>),
-);
+ColorSchemeConfig _$ColorSchemeConfigFromJson(Map<String, dynamic> json) =>
+    ColorSchemeConfig(
+      seedColor: json['seedColor'] as String? ?? '#F95A14',
+      colorSchemeOverride: json['colorSchemeOverride'] == null
+          ? const ColorSchemeOverride()
+          : ColorSchemeOverride.fromJson(
+              json['colorSchemeOverride'] as Map<String, dynamic>,
+            ),
+    );
 
-Map<String, dynamic> _$ColorSchemeConfigToJson(ColorSchemeConfig instance) => <String, dynamic>{
-  'seedColor': instance.seedColor,
-  'colorSchemeOverride': instance.colorSchemeOverride.toJson(),
-};
+Map<String, dynamic> _$ColorSchemeConfigToJson(ColorSchemeConfig instance) =>
+    <String, dynamic>{
+      'seedColor': instance.seedColor,
+      'colorSchemeOverride': instance.colorSchemeOverride.toJson(),
+    };
 
-ColorSchemeOverride _$ColorSchemeOverrideFromJson(Map<String, dynamic> json) => ColorSchemeOverride(
+ColorSchemeOverride _$ColorSchemeOverrideFromJson(
+  Map<String, dynamic> json,
+) => ColorSchemeOverride(
   primary: json['primary'] as String? ?? '#5CACE3',
   onPrimary: json['onPrimary'] as String? ?? '#FFFFFF',
   primaryContainer: json['primaryContainer'] as String? ?? '#B9E3F9',
@@ -34,7 +40,8 @@ ColorSchemeOverride _$ColorSchemeOverrideFromJson(Map<String, dynamic> json) => 
   secondaryFixed: json['secondaryFixed'] as String? ?? '#848581',
   secondaryFixedDim: json['secondaryFixedDim'] as String? ?? '#4C4D4A',
   onSecondaryFixed: json['onSecondaryFixed'] as String? ?? '#30302F',
-  onSecondaryFixedVariant: json['onSecondaryFixedVariant'] as String? ?? '#848581',
+  onSecondaryFixedVariant:
+      json['onSecondaryFixedVariant'] as String? ?? '#848581',
   tertiary: json['tertiary'] as String? ?? '#75B943',
   onTertiary: json['onTertiary'] as String? ?? '#FFFFFF',
   tertiaryContainer: json['tertiaryContainer'] as String? ?? '#E1F7C1',
@@ -42,7 +49,8 @@ ColorSchemeOverride _$ColorSchemeOverrideFromJson(Map<String, dynamic> json) => 
   tertiaryFixed: json['tertiaryFixed'] as String? ?? '#B8E078',
   tertiaryFixedDim: json['tertiaryFixedDim'] as String? ?? '#8CC14E',
   onTertiaryFixed: json['onTertiaryFixed'] as String? ?? '#224400',
-  onTertiaryFixedVariant: json['onTertiaryFixedVariant'] as String? ?? '#B8E078',
+  onTertiaryFixedVariant:
+      json['onTertiaryFixedVariant'] as String? ?? '#B8E078',
   error: json['error'] as String? ?? '#E74C3C',
   onError: json['onError'] as String? ?? '#FFFFFF',
   errorContainer: json['errorContainer'] as String? ?? '#F5B7B1',
@@ -53,11 +61,13 @@ ColorSchemeOverride _$ColorSchemeOverrideFromJson(Map<String, dynamic> json) => 
   onSurface: json['onSurface'] as String? ?? '#30302F',
   surfaceDim: json['surfaceDim'] as String? ?? '#DDE0E3',
   surfaceBright: json['surfaceBright'] as String? ?? '#FFFFFF',
-  surfaceContainerLowest: json['surfaceContainerLowest'] as String? ?? '#F8FBFD',
+  surfaceContainerLowest:
+      json['surfaceContainerLowest'] as String? ?? '#F8FBFD',
   surfaceContainerLow: json['surfaceContainerLow'] as String? ?? '#F0F3F5',
   surfaceContainer: json['surfaceContainer'] as String? ?? '#EEF3F6',
   surfaceContainerHigh: json['surfaceContainerHigh'] as String? ?? '#E2E6E9',
-  surfaceContainerHighest: json['surfaceContainerHighest'] as String? ?? '#DDE0E3',
+  surfaceContainerHighest:
+      json['surfaceContainerHighest'] as String? ?? '#DDE0E3',
   onSurfaceVariant: json['onSurfaceVariant'] as String? ?? '#848581',
   inverseSurface: json['inverseSurface'] as String? ?? '#30302F',
   onInverseSurface: json['onInverseSurface'] as String? ?? '#EEF3F6',
@@ -67,7 +77,9 @@ ColorSchemeOverride _$ColorSchemeOverrideFromJson(Map<String, dynamic> json) => 
   surfaceTint: json['surfaceTint'] as String? ?? '#F95A14',
 );
 
-Map<String, dynamic> _$ColorSchemeOverrideToJson(ColorSchemeOverride instance) => <String, dynamic>{
+Map<String, dynamic> _$ColorSchemeOverrideToJson(
+  ColorSchemeOverride instance,
+) => <String, dynamic>{
   'primary': instance.primary,
   'onPrimary': instance.onPrimary,
   'primaryContainer': instance.primaryContainer,

@@ -69,7 +69,6 @@ class ImageSource with _$ImageSource {
 
   /// Semantic type of reference (default = "asset").
   @override
-  @JsonKey(name: r'$ref')
   final String ref;
 
   /// Rendering specification (scale, padding, etc.).

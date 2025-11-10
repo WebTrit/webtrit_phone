@@ -15,7 +15,6 @@ class UserVoicemailListResponse with _$UserVoicemailListResponse {
   });
 
   @override
-  @JsonKey(name: 'has_new_messages')
   final bool hasNewMessages;
 
   @override

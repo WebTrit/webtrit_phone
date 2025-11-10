@@ -16,15 +16,12 @@ class ExternalPageAccessToken with _$ExternalPageAccessToken {
   });
 
   @override
-  @JsonKey(name: 'access_token')
   final String accessToken;
 
   @override
-  @JsonKey(name: 'refresh_token')
   final String refreshToken;
 
   @override
-  @JsonKey(name: 'expires_at')
   final DateTime expiresAt;
 
   factory ExternalPageAccessToken.fromJson(Map<String, Object?> json) => _$ExternalPageAccessTokenFromJson(json);

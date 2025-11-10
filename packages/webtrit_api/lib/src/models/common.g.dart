@@ -9,7 +9,9 @@ part of 'common.dart';
 Numbers _$NumbersFromJson(Map<String, dynamic> json) => Numbers(
   main: json['main'] as String,
   ext: json['ext'] as String?,
-  additional: (json['additional'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  additional: (json['additional'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
   sms: (json['sms'] as List<dynamic>?)?.map((e) => e as String).toList(),
 );
 
