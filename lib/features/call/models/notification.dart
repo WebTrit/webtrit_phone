@@ -188,3 +188,12 @@ final class ActiveLineBlindTransferWarningNotification extends MessageNotificati
     return context.l10n.notifications_errorSnackBar_activeLineBlindTransferWarning;
   }
 }
+
+final class CallErrorRegisteringSelfManagedPhoneAccountNotification extends ErrorNotification {
+  const CallErrorRegisteringSelfManagedPhoneAccountNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.call_errorRegisteringSelfManagedPhoneAccount;
+  }
+}

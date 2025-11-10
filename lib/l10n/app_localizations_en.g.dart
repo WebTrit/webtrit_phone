@@ -144,6 +144,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_description_transferProcessing => 'Transfer processing';
 
   @override
+  String get call_errorRegisteringSelfManagedPhoneAccount =>
+      'There was a problem registering the self-managed phone account.';
+
+  @override
   String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override

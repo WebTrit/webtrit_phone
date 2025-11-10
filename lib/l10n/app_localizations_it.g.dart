@@ -146,6 +146,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_description_transferProcessing => 'Elaborazione del trasferimento';
 
   @override
+  String get call_errorRegisteringSelfManagedPhoneAccount =>
+      'Si è verificato un problema durante la registrazione dell\'account telefonico autogestito.';
+
+  @override
   String get call_FailureAcknowledgeDialog_title => 'Guasto';
 
   @override

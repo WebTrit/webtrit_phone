@@ -92,6 +92,10 @@
   "@call_description_requestToAttendedTransfer": {},
   "call_description_transferProcessing": "Elaborazione del trasferimento",
   "@call_description_transferProcessing": {},
+  "call_errorRegisteringSelfManagedPhoneAccount": "Si è verificato un problema durante la registrazione dell'account telefonico autogestito.",
+  "@call_errorRegisteringSelfManagedPhoneAccount": {
+    "description": "Shown when the app fails to register a self-managed phone account with the system."
+  },
   "call_FailureAcknowledgeDialog_title": "Guasto",
   "@call_FailureAcknowledgeDialog_title": {},
   "callProcessingStatus_answering": "Rispondendo alla chiamata, attendi prego…",
