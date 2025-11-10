@@ -83,7 +83,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
           final forwardPop = widget.shouldForwardPop && state.canGoBack;
 
           return PopScope(
-            onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
+            onPopInvokedWithResult: (_, _) => _webViewController.goBack(),
             canPop: forwardPop == false,
             child: WebViewContainer(
               initialUri: widget.initialUri,
