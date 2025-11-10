@@ -7,7 +7,7 @@ import 'subsequences/login_by_method.dart';
 import 'subsequences/logout.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
-main() {
+void main() {
   const emailCredential = IntegrationTestEnvironmentConfig.EMAIL_CREDENTIAL;
   const emailVerifyCredential = IntegrationTestEnvironmentConfig.EMAIL_VERIFY_CREDENTIAL;
   final hasEmailCredentials = emailCredential.isNotEmpty && emailVerifyCredential.isNotEmpty;

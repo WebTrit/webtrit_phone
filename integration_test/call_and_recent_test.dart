@@ -15,7 +15,7 @@ import 'subsequences/login_by_method.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
-main() {
+void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
   const callNumber = IntegrationTestEnvironmentConfig.CALL_NUMBER_A;
   const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
