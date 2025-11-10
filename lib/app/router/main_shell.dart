@@ -14,6 +14,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
@@ -526,11 +527,23 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
 
     return [
-      PollingRegistration(listener: context.read<UserRepository>(), interval: const Duration(seconds: 10)),
-      PollingRegistration(listener: context.read<SystemInfoRepository>(), interval: const Duration(minutes: 5)),
-      PollingRegistration(listener: context.read<ExternalContactsRepository>(), interval: const Duration(minutes: 1)),
+      PollingRegistration(
+        listener: context.read<UserRepository>(),
+        interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS),
+      ),
+      PollingRegistration(
+        listener: context.read<SystemInfoRepository>(),
+        interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
+      ),
+      PollingRegistration(
+        listener: context.read<ExternalContactsRepository>(),
+        interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+      ),
       if (isVoicemailsEnabled)
-        PollingRegistration(listener: context.read<VoicemailRepository>(), interval: const Duration(minutes: 5)),
+        PollingRegistration(
+          listener: context.read<VoicemailRepository>(),
+          interval: const Duration(seconds: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
     ];
   }
 
