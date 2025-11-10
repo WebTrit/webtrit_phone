@@ -529,20 +529,20 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     return [
       PollingRegistration(
         listener: context.read<UserRepository>(),
-        interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_SECONDS_INTERVAL),
+        interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(
         listener: context.read<SystemInfoRepository>(),
-        interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_SECONDS_INTERVAL),
+        interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(
         listener: context.read<ExternalContactsRepository>(),
-        interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_SECONDS_INTERVAL),
+        interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       if (isVoicemailsEnabled)
         PollingRegistration(
           listener: context.read<VoicemailRepository>(),
-          interval: const Duration(seconds: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_SECONDS_INTERVAL),
+          interval: const Duration(seconds: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
     ];
   }
