@@ -344,7 +344,7 @@ class FeatureAccess {
 
   static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, CoreSupport coreSupport) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
-      (tab) => tab.maybeWhen(messaging: (enabled, _, __, ___) => enabled, orElse: () => false),
+      (tab) => tab.maybeWhen(messaging: (enabled, _, _, _) => enabled, orElse: () => false),
     );
 
     return MessagingFeature(coreSupport, tabEnabled: tabEnabled);

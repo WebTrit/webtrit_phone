@@ -12,7 +12,7 @@ class SmsRepository with SmsDriftMapper {
 
   final StreamController<SmsEvent> _eventBus = StreamController.broadcast();
   Stream<SmsEvent> get eventBus => _eventBus.stream;
-  _addEvent(SmsEvent event) => _eventBus.add(event);
+  void _addEvent(SmsEvent event) => _eventBus.add(event);
 
   Future<SmsConversation?> getConversation(int conversationId) async {
     final conversationData = await _smsDao.getConversationById(conversationId);

@@ -39,7 +39,6 @@ class DemoCallToActionsResponseActions with _$DemoCallToActionsResponseActions {
   final String url;
 
   @override
-  @JsonKey(name: 'extra_data')
   final DemoCallToActionsResponseActionsExtraData extraData;
 
   factory DemoCallToActionsResponseActions.fromJson(Map<String, dynamic> json) =>
@@ -57,11 +56,9 @@ class DemoCallToActionsResponseActionsExtraData with _$DemoCallToActionsResponse
   });
 
   @override
-  @JsonKey(name: 'api_token')
   final String apiToken;
 
   @override
-  @JsonKey(name: 'token_expires')
   final String tokenExpires;
 
   factory DemoCallToActionsResponseActionsExtraData.fromJson(Map<String, dynamic> json) =>

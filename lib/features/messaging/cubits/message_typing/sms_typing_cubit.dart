@@ -28,7 +28,7 @@ class SmsTypingCubit extends Cubit<TypingNumbers> {
   final Map<String, Timer> _typingTimers = {};
   DateTime? _lastTypingSent;
 
-  initConversation(int id) {
+  void initConversation(int id) {
     if (_conversationId != id) {
       _conversationId = id;
       _typingSub?.cancel();
@@ -50,7 +50,7 @@ class SmsTypingCubit extends Cubit<TypingNumbers> {
     }
   }
 
-  _addTypingNumber(String number) {
+  void _addTypingNumber(String number) {
     if (isClosed) return;
 
     final typings = state;
@@ -64,7 +64,7 @@ class SmsTypingCubit extends Cubit<TypingNumbers> {
     });
   }
 
-  _removeTypingNumber(String number) {
+  void _removeTypingNumber(String number) {
     if (isClosed) return;
 
     final typings = state;

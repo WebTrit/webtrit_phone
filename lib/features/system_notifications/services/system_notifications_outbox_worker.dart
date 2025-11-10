@@ -73,7 +73,7 @@ class SystemNotificationsOutboxWorker {
     }
   }
 
-  void _handleProcessingEvent(event) {
+  void _handleProcessingEvent(dynamic event) {
     if (event is (Object, StackTrace)) {
       final (error, stackTrace) = event;
       _logger.warning(error, stackTrace);

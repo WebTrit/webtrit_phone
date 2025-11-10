@@ -12,7 +12,7 @@ import 'subsequences/login_by_method.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
-main() {
+void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
   const contactA = IntegrationTestEnvironmentConfig.EXT_CONTACT_A;
   const contactANumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_NUMBER;

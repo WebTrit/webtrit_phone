@@ -28,7 +28,7 @@ class ChatTypingCubit extends Cubit<TypingUsers> {
   final Map<String, Timer> _typingTimers = {};
   DateTime? _lastTypingSent;
 
-  init(int chatId) {
+  void init(int chatId) {
     if (_chatId != chatId) {
       _chatId = chatId;
       _typingSub?.cancel();
@@ -50,7 +50,7 @@ class ChatTypingCubit extends Cubit<TypingUsers> {
     }
   }
 
-  _addTypingUser(String userId) {
+  void _addTypingUser(String userId) {
     if (isClosed) return;
 
     final typings = state;
@@ -64,7 +64,7 @@ class ChatTypingCubit extends Cubit<TypingUsers> {
     });
   }
 
-  _removeTypingUser(String userId) {
+  void _removeTypingUser(String userId) {
     if (isClosed) return;
 
     final typings = state;

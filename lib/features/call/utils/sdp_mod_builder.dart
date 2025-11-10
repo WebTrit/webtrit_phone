@@ -14,7 +14,7 @@ class SDPModBuilder {
   /// Sets the packetization-time for the audio codec.
   /// [ptime] is in milliseconds, range `10-120ms`
   /// Attects the packet size for transporting layer used to avoud MTU fitting issues.
-  setPtime(int? ptime, int? maxptime) {
+  void setPtime(int? ptime, int? maxptime) {
     final audioMedia = _getMedia(RTPCodecKind.audio);
 
     if (ptime != null) {
@@ -52,7 +52,7 @@ class SDPModBuilder {
   /// [bitrateLimit] limit maximum bitrate in kbps, range `6-500`.
   /// [stereo] stereo support on/off.
   /// [dtx] DTX support on/off.
-  setOpusParams(int? bandWidthLimit, int? bitrateLimit, bool? stereo, bool? dtx) {
+  void setOpusParams(int? bandWidthLimit, int? bitrateLimit, bool? stereo, bool? dtx) {
     final profileId = _getProfileId(RTPCodecProfile.opus);
     if (profileId == null) return;
 
@@ -106,7 +106,7 @@ class SDPModBuilder {
   }
 
   /// Removes the codec profile and all associated records e.g. fmtp, rtcp-fb, rtx etc.
-  removeProfile(RTPCodecProfile profile) {
+  Null removeProfile(RTPCodecProfile profile) {
     final profileId = _getProfileId(profile);
 
     final media = _getMedia(profile.kind);
@@ -139,7 +139,7 @@ class SDPModBuilder {
   /// [profiles] is a list of RTPCodecProfile.
   /// [kind] is the kind of media profiles to reorder.
   /// Used to prioritize the codecs in the SDP negotiation.
-  reorderProfiles(List<RTPCodecProfile> profiles, RTPCodecKind kind) {
+  void reorderProfiles(List<RTPCodecProfile> profiles, RTPCodecKind kind) {
     final media = _getMedia(kind);
 
     if (profiles.isNotEmpty && media != null) {
@@ -213,7 +213,7 @@ class SDPModBuilder {
 
   /// Removes all audio extmaps from the SDP.
   /// Used to reduce the SDP size and avoid issues with some endpoints.
-  removeAudioExtmaps() {
+  void removeAudioExtmaps() {
     final media = _getMedia(RTPCodecKind.audio);
     if (media == null) return;
     media.remove('ext');
@@ -221,7 +221,7 @@ class SDPModBuilder {
 
   /// Removes static audio RTP maps from the SDP.
   /// Used to reduce the SDP size and avoid issues with some endpoints.
-  removeStaticAudioRtpMaps() {
+  void removeStaticAudioRtpMaps() {
     final media = _getMedia(RTPCodecKind.audio);
     if (media == null) return;
 
@@ -248,7 +248,7 @@ class SDPModBuilder {
   }
 
   /// Remap the Telephone event 8k payload to 101 for compatibility with some endpoints.
-  remapTE8payloadTo101() {
+  void remapTE8payloadTo101() {
     final media = _getMedia(RTPCodecKind.audio);
     if (media == null) return;
 
@@ -349,7 +349,7 @@ class SDPModBuilder {
   /// Return codec by specific profile using fmtp records for multiprofile codecs
   /// e.g. H264 with profile 42e01f, 42e034, 640c34 etc.
   /// Elsewhere return codec finded by rtp records.
-  _getProfileId(RTPCodecProfile profile) {
+  dynamic _getProfileId(RTPCodecProfile profile) {
     final media = _getMedia(profile.kind);
     if (media == null) return null;
 

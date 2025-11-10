@@ -796,7 +796,7 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// Needed for prevent doubling of error handling
   /// because Phoenix uses mix of functional and throwable style error handling like req.isOk and throw
   /// and also messed up with sync and async errors. ¯\_(ツ)_/¯
-  Map _mapPhxErrorDetails(e) {
+  Map _mapPhxErrorDetails(Object e) {
     if (e is PushResponse) {
       final response = e.response;
       if (response is Map) return response;
@@ -852,6 +852,7 @@ sealed class UserChannelEvent {
 
 class ChatConversationJoin extends UserChannelEvent with EquatableMixin {
   ChatConversationJoin(this.chatId);
+
   final int chatId;
 
   @override
@@ -863,6 +864,7 @@ class ChatConversationJoin extends UserChannelEvent with EquatableMixin {
 
 class ChatConversationLeave extends UserChannelEvent with EquatableMixin {
   ChatConversationLeave(this.chatId);
+
   final int chatId;
 
   @override
@@ -874,6 +876,7 @@ class ChatConversationLeave extends UserChannelEvent with EquatableMixin {
 
 class SmsConversationJoin extends UserChannelEvent with EquatableMixin {
   SmsConversationJoin(this.conversationId);
+
   final int conversationId;
 
   @override
@@ -885,6 +888,7 @@ class SmsConversationJoin extends UserChannelEvent with EquatableMixin {
 
 class SmsConversationLeave extends UserChannelEvent with EquatableMixin {
   SmsConversationLeave(this.conversationId);
+
   final int conversationId;
 
   @override
@@ -921,6 +925,7 @@ sealed class ChatChannelEvent {
 
 class ChatChannelInfoUpdate extends ChatChannelEvent with EquatableMixin {
   ChatChannelInfoUpdate(this.chat);
+
   final Chat chat;
 
   @override
@@ -932,6 +937,7 @@ class ChatChannelInfoUpdate extends ChatChannelEvent with EquatableMixin {
 
 class ChatChannelMessageUpdate extends ChatChannelEvent with EquatableMixin {
   ChatChannelMessageUpdate(this.message);
+
   final ChatMessage message;
 
   @override
@@ -943,6 +949,7 @@ class ChatChannelMessageUpdate extends ChatChannelEvent with EquatableMixin {
 
 class ChatChannelCursorSet extends ChatChannelEvent with EquatableMixin {
   ChatChannelCursorSet(this.cursor);
+
   final ChatMessageReadCursor cursor;
 
   @override
@@ -954,6 +961,7 @@ class ChatChannelCursorSet extends ChatChannelEvent with EquatableMixin {
 
 class ChatChannelTyping extends ChatChannelEvent with EquatableMixin {
   ChatChannelTyping(this.userId);
+
   final String userId;
 
   @override
@@ -967,6 +975,7 @@ class ChatChannelDisconnect extends ChatChannelEvent {}
 
 class ChatChannelUnknown extends ChatChannelEvent {
   ChatChannelUnknown({this.event = 'unknown'});
+
   final String event;
 
   @override
@@ -994,6 +1003,7 @@ sealed class SmsChannelEvent {
 
 class SmsChannelInfoUpdate extends SmsChannelEvent with EquatableMixin {
   SmsChannelInfoUpdate(this.conversation);
+
   final SmsConversation conversation;
 
   @override
@@ -1005,6 +1015,7 @@ class SmsChannelInfoUpdate extends SmsChannelEvent with EquatableMixin {
 
 class SmsChannelMessageUpdate extends SmsChannelEvent with EquatableMixin {
   SmsChannelMessageUpdate(this.message);
+
   final SmsMessage message;
 
   @override
@@ -1016,6 +1027,7 @@ class SmsChannelMessageUpdate extends SmsChannelEvent with EquatableMixin {
 
 class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
   SmsChannelCursorSet(this.cursor);
+
   final SmsMessageReadCursor cursor;
 
   @override
@@ -1027,6 +1039,7 @@ class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
 
 class SmsChannelTyping extends ChatChannelEvent with EquatableMixin {
   SmsChannelTyping(this.number);
+
   final String number;
 
   @override
@@ -1040,6 +1053,7 @@ class SmsChannelDisconnect extends SmsChannelEvent {}
 
 class SmsChannelUnknown extends SmsChannelEvent {
   SmsChannelUnknown({this.event = 'unknown'});
+
   final String event;
 
   @override

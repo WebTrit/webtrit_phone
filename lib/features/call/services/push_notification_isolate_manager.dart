@@ -66,7 +66,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     }
   }
 
-  void _handleSignalingError(error, [StackTrace? stackTrace]) async {
+  void _handleSignalingError(Object error, [StackTrace? stackTrace]) async {
     try {
       await _callkeep.endCalls();
     } catch (e) {
@@ -128,7 +128,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     return;
   }
 
-  void _handleExceptions(e) {
+  void _handleExceptions(Object e) {
     _logger.severe(e);
   }
 }

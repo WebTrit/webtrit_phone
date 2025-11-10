@@ -11,7 +11,8 @@ AppContact _$AppContactFromJson(Map<String, dynamic> json) => AppContact(
   phones: (json['phones'] as List<dynamic>).map((e) => e as String).toList(),
 );
 
-Map<String, dynamic> _$AppContactToJson(AppContact instance) => <String, dynamic>{
-  'identifier': instance.identifier,
-  'phones': instance.phones,
-};
+Map<String, dynamic> _$AppContactToJson(AppContact instance) =>
+    <String, dynamic>{
+      'identifier': instance.identifier,
+      'phones': instance.phones,
+    };

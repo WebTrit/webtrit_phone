@@ -10,7 +10,7 @@ class CallPullCubit extends Cubit<List<PullableCall>> {
     _dialogsSub = _callPullRepository.pullableCallsStreamWithValue.listen(handleDialogs);
   }
 
-  void handleDialogs(dialogs) {
+  void handleDialogs(List<PullableCall> dialogs) {
     emit(List.unmodifiable(dialogs));
   }
 

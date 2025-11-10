@@ -23,11 +23,11 @@ class _ChooseContactState extends State<ChooseContact> {
   late final StreamSubscription contactsSub;
   List<Contact> contacts = [];
 
-  onConfirm(Contact contact) {
+  void onConfirm(Contact contact) {
     Navigator.of(context).pop(contact);
   }
 
-  onCancel() {
+  void onCancel() {
     Navigator.of(context).pop();
   }
 

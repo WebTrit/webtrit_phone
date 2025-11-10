@@ -85,7 +85,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
       listener: _handleEmbeddedErrorState,
       child: PopScope(
         canPop: !_canGoBack,
-        onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
+        onPopInvokedWithResult: (_, _) => _webViewController.goBack(),
         child: WebViewContainer(
           initialUri: widget.initialUrl,
           webViewController: _webViewController,

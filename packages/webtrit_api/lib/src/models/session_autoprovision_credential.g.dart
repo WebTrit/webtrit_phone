@@ -6,21 +6,23 @@ part of 'session_autoprovision_credential.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SessionAutoProvisionCredential _$SessionAutoProvisionCredentialFromJson(Map<String, dynamic> json) =>
-    SessionAutoProvisionCredential(
-      bundleId: json['bundle_id'] as String?,
-      type: $enumDecode(_$AppTypeEnumMap, json['type']),
-      identifier: json['identifier'] as String,
-      configToken: json['config_token'] as String,
-    );
+SessionAutoProvisionCredential _$SessionAutoProvisionCredentialFromJson(
+  Map<String, dynamic> json,
+) => SessionAutoProvisionCredential(
+  bundleId: json['bundle_id'] as String?,
+  type: $enumDecode(_$AppTypeEnumMap, json['type']),
+  identifier: json['identifier'] as String,
+  configToken: json['config_token'] as String,
+);
 
-Map<String, dynamic> _$SessionAutoProvisionCredentialToJson(SessionAutoProvisionCredential instance) =>
-    <String, dynamic>{
-      'bundle_id': instance.bundleId,
-      'type': _$AppTypeEnumMap[instance.type]!,
-      'identifier': instance.identifier,
-      'config_token': instance.configToken,
-    };
+Map<String, dynamic> _$SessionAutoProvisionCredentialToJson(
+  SessionAutoProvisionCredential instance,
+) => <String, dynamic>{
+  'bundle_id': instance.bundleId,
+  'type': _$AppTypeEnumMap[instance.type]!,
+  'identifier': instance.identifier,
+  'config_token': instance.configToken,
+};
 
 const _$AppTypeEnumMap = {
   AppType.smart: 'smart',

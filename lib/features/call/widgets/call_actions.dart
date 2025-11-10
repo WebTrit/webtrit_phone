@@ -129,7 +129,7 @@ class _CallActionsState extends State<CallActions> {
     computeDimensions();
   }
 
-  computeDimensions() {
+  void computeDimensions() {
     final themeData = Theme.of(context);
 
     _inputDecorations = themeData.extension<InputDecorations>();

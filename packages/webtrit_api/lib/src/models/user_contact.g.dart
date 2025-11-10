@@ -19,17 +19,21 @@ UserContact _$UserContactFromJson(Map<String, dynamic> json) => UserContact(
   isRegisteredUser: json['is_registered_user'] as bool?,
 );
 
-Map<String, dynamic> _$UserContactToJson(UserContact instance) => <String, dynamic>{
-  'user_id': instance.userId,
-  'sip_status': _$SipStatusEnumMap[instance.sipStatus],
-  'numbers': instance.numbers.toJson(),
-  'email': instance.email,
-  'first_name': instance.firstName,
-  'last_name': instance.lastName,
-  'alias_name': instance.aliasName,
-  'company_name': instance.companyName,
-  'is_current_user': instance.isCurrentUser,
-  'is_registered_user': instance.isRegisteredUser,
-};
+Map<String, dynamic> _$UserContactToJson(UserContact instance) =>
+    <String, dynamic>{
+      'user_id': instance.userId,
+      'sip_status': _$SipStatusEnumMap[instance.sipStatus],
+      'numbers': instance.numbers.toJson(),
+      'email': instance.email,
+      'first_name': instance.firstName,
+      'last_name': instance.lastName,
+      'alias_name': instance.aliasName,
+      'company_name': instance.companyName,
+      'is_current_user': instance.isCurrentUser,
+      'is_registered_user': instance.isRegisteredUser,
+    };
 
-const _$SipStatusEnumMap = {SipStatus.registered: 'registered', SipStatus.notregistered: 'notregistered'};
+const _$SipStatusEnumMap = {
+  SipStatus.registered: 'registered',
+  SipStatus.notregistered: 'notregistered',
+};

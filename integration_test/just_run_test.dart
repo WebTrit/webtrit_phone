@@ -6,7 +6,7 @@ import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart'
 
 import 'subsequences/pump_root_app.dart';
 
-main() {
+void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {

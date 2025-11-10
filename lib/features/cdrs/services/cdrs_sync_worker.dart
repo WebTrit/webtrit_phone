@@ -23,14 +23,14 @@ class CdrsSyncWorker {
   final int pageSize;
   StreamSubscription? _syncSub;
 
-  init() async {
+  Future<void> init() async {
     // Uncomment to wipe local CDRs data on each start (for testing purposes)
     // await localRepo.wipeData();
     _logger.info('Initializing CDRs sync worker');
     _syncSub = _syncStream().listen(_handleSyncEvent);
   }
 
-  forceSync(Duration? delay) async {
+  Future<void> forceSync(Duration? delay) async {
     _logger.info('Forcing CDRs sync');
     _syncSub?.cancel();
     if (delay != null) await Future.delayed(delay);
@@ -71,7 +71,7 @@ class CdrsSyncWorker {
     }
   }
 
-  void _handleSyncEvent(event) {
+  void _handleSyncEvent(dynamic event) {
     if (event is (Object, StackTrace)) {
       final (error, stackTrace) = event;
       _logger.warning(error, stackTrace);

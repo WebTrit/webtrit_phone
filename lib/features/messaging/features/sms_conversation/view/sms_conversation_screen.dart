@@ -27,7 +27,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
   late final conversationCubit = context.read<SmsConversationCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
 
-  onDeleteDialog() async {
+  Future<void> onDeleteDialog() async {
     final askResult = await showDialog<bool>(
       context: context,
       builder: (context) => ConfirmDialog(askText: context.l10n.messaging_DialogInfo_deleteAsk),
