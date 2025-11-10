@@ -9,6 +9,20 @@ class EnvironmentConfig {
   static const DATABASE_LOG_STATEMENTS__NAME = 'WEBTRIT_APP_DATABASE_LOG_STATEMENTS';
   static const DATABASE_LOG_STATEMENTS = bool.fromEnvironment(DATABASE_LOG_STATEMENTS__NAME, defaultValue: false);
 
+  static const PERIODIC_POLLING__NAME = 'WEBTRIT_APP_PERIODIC_POLLING';
+  @Deprecated(
+    'Use specific polling interval constants instead, e.g. '
+    'SYSTEM_INFO_REPOSITORY_POLLING_SECONDS_INTERVAL, '
+    'EXTERNAL_CONTACTS_REPOSITORY_POLLING_SECONDS_INTERVAL, or '
+    'VOICEMAIL_REPOSITORY_POLLING_SECONDS_INTERVAL. '
+    'To define a new one, create an int.fromEnvironment constant like:\n'
+    '  static const MY_FEATURE_POLLING_SECONDS_INTERVAL__NAME = '
+    '\'WEBTRIT_APP_MY_FEATURE_POLLING_SECONDS_INTERVAL\';\n'
+    '  static const MY_FEATURE_POLLING_SECONDS_INTERVAL = int.fromEnvironment('
+    'MY_FEATURE_POLLING_SECONDS_INTERVAL__NAME, defaultValue: 120);',
+  )
+  static const PERIODIC_POLLING = bool.fromEnvironment(PERIODIC_POLLING__NAME, defaultValue: true);
+
   static const ENABLE_ATTENDED_TRANSFER__NAME = 'WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER';
   static const ENABLE_ATTENDED_TRANSFER = bool.fromEnvironment(ENABLE_ATTENDED_TRANSFER__NAME, defaultValue: true);
 
