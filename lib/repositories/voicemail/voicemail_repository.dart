@@ -307,3 +307,38 @@ class VoicemailRepositoryImpl
     return fetchVoicemails();
   }
 }
+
+/// A no-op implementation of [VoicemailRepository] used when voicemail functionality
+/// is disabled or not available.
+///
+/// All methods in this repository perform no actions and return default or
+/// empty values (e.g., `Future.value()`, `Stream.value(0)`, `Stream.value(const [])`).
+///
+/// This serves as a placeholder to prevent errors when other parts of the application
+/// attempt to interact with the [VoicemailRepository] interface, even if the feature
+/// is not enabled.
+
+class EmptyVoicemailRepository implements VoicemailRepository {
+  const EmptyVoicemailRepository();
+
+  @override
+  Future<void> fetchVoicemails({String? localeCode}) => Future.value();
+
+  @override
+  Future<void> removeVoicemail(String messageId, {String? localeCode}) => Future.value();
+
+  @override
+  Future<void> removeAllVoicemails() => Future.value();
+
+  @override
+  Future<void> updateVoicemailSeenStatus(String messageId, bool seen, {String? localeCode}) => Future.value();
+
+  @override
+  Stream<int> watchUnreadVoicemailsCount() => Stream.value(0);
+
+  @override
+  Stream<List<Voicemail>> watchVoicemails() => Stream.value(const []);
+
+  @override
+  Future<void> refresh() => Future.value();
+}

@@ -157,11 +157,17 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
-            return VoicemailRepositoryImpl(
-              webtritApiClient: context.read<WebtritApiClient>(),
-              token: context.read<AppBloc>().state.session.token!,
-              appDatabase: context.read<AppDatabase>(),
-            );
+            final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
+
+            if (isVoicemailsEnabled) {
+              return VoicemailRepositoryImpl(
+                webtritApiClient: context.read<WebtritApiClient>(),
+                token: context.read<AppBloc>().state.session.token!,
+                appDatabase: context.read<AppDatabase>(),
+              );
+            } else {
+              return const EmptyVoicemailRepository();
+            }
           },
         ),
         RepositoryProvider<AppRepository>(
