@@ -53,22 +53,18 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                           Description(text: coreUrlAssignPreDescriptionText),
                           const SizedBox(height: kInset / 2),
                         ],
-                        TextFormField(
+                        HistoryAutocompleteField(
                           key: coreUrlInputKey,
-                          enabled: !state.processing,
+                          storageKey: 'recent_core_urls',
+                          labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
                           initialValue: state.coreUrlInput.value,
-                          decoration: InputDecoration(
-                            labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
-                            helperText: '', // reserve space for validator message
-                            errorText: state.coreUrlInput.displayError?.l10n(context),
-                            errorMaxLines: 3,
-                          ),
+                          errorText: state.coreUrlInput.displayError?.l10n(context),
                           keyboardType: TextInputType.url,
-                          autocorrect: false,
+                          textInputAction: TextInputAction.done,
+                          autofillHints: const [AutofillHints.url],
+                          enabled: !state.processing,
                           onChanged: context.read<LoginCubit>().coreUrlInputChanged,
-                          onFieldSubmitted: !state.coreUrlInput.isValid
-                              ? null
-                              : (_) => _onCoreUrlAssignSubmitted(context),
+                          onSubmit: !state.coreUrlInput.isValid ? null : () => _onCoreUrlAssignSubmitted(context),
                         ),
                         if (coreUrlAssignPostDescriptionText.isNotEmpty) ...[
                           const SizedBox(height: kInset / 8),

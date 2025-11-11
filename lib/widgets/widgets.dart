@@ -8,6 +8,7 @@ export 'contact_info_builder.dart';
 export 'copy_to_clipboard.dart';
 export 'embedded_request_error.dart';
 export 'fade_id.dart';
+export 'history_autocomplete_field.dart';
 export 'history_fetch_indicator.dart';
 export 'inert_safe_area.dart';
 export 'keypad_key_button.dart';
