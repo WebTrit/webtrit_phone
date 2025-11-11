@@ -139,9 +139,6 @@ class BenchmarkResult extends Equatable {
   /// A descriptive label for the benchmark.
   final String label;
 
-  /// The number of times the operation was run.
-  final int runs;
-
   /// The total time taken for all runs.
   final Duration total;
 
@@ -151,39 +148,16 @@ class BenchmarkResult extends Equatable {
   /// The longest (worst) duration recorded.
   final Duration max;
 
-  /// The median duration (50th percentile).
-  final Duration median;
-
-  /// The mean (average) duration.
-  final Duration mean;
-
-  /// The 90th percentile duration.
-  final Duration p90;
-
-  /// The 95th percentile duration.
-  final Duration p95;
-
   /// Creates a new benchmark result.
-  const BenchmarkResult({
-    required this.label,
-    required this.runs,
-    required this.total,
-    required this.min,
-    required this.max,
-    required this.median,
-    required this.mean,
-    required this.p90,
-    required this.p95,
-  });
+  const BenchmarkResult({required this.label, required this.total, required this.min, required this.max});
 
   /// Returns a compact, single-line string representation of the results.
   String toPrettyString() =>
-      '$label n=$runs total=${formatDuration(total)} min=${formatDuration(min)} '
-      'max=${formatDuration(max)} med=${formatDuration(median)} '
-      'mean=${formatDuration(mean)} p90=${formatDuration(p90)} p95=${formatDuration(p95)}';
+      '$label total=${formatDuration(total)} min=${formatDuration(min)} '
+      'max=${formatDuration(max)}}';
 
   @override
-  List<Object?> get props => [label, runs, total, min, max, median, mean, p90, p95];
+  List<Object?> get props => [label, total, min, max];
 
   @override
   String toString() => toPrettyString();
