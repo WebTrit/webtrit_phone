@@ -3,6 +3,12 @@ import 'package:flutter/services.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+// TODO: Refactor: Remove the internal `_HistoryStore` to externalize history management.
+// Instead, pass the historical options (e.g., `Iterable<String> options`) as a parameter,
+// and handle history persistence (adding/loading) outside this widget.
+// This change would enhance flexibility, allowing different storage mechanisms or
+// business logic for history, and improve separation of concerns by removing direct
+// `SharedPreferences` usage from the widget, which is generally considered bad practice.
 class _HistoryStore {
   _HistoryStore(this.key, {this.maxItems = 8});
 
