@@ -17,6 +17,7 @@ enum TabType { chat, sms }
 
 class ConversationsScreen extends StatefulWidget {
   const ConversationsScreen({super.key, this.title});
+
   final Widget? title;
 
   @override
@@ -51,7 +52,6 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
   Future<void> onNewChatConversation() async {
     showModalBottomSheet(
-      useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
@@ -74,14 +74,13 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
             notificationsBloc.add(NotificationsSubmitted(n));
           },
         ),
-        child: BottomSheet(enableDrag: false, onClosing: () {}, builder: (_) => const ChatConversationBuilderView()),
+        child: const ChatConversationBuilderView(),
       ),
     );
   }
 
   Future<void> onNewSmsConversation() async {
     showModalBottomSheet(
-      useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
@@ -95,7 +94,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
             openSmsDialog(userNumber, recipientNumber, recipientId);
           },
         ),
-        child: BottomSheet(enableDrag: false, onClosing: () {}, builder: (_) => const SmsConversationBuilderView()),
+        child: const SmsConversationBuilderView(),
       ),
     );
   }
