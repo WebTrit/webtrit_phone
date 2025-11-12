@@ -17,6 +17,7 @@ enum TabType { chat, sms }
 
 class ConversationsScreen extends StatefulWidget {
   const ConversationsScreen({super.key, this.title});
+
   final Widget? title;
 
   @override
