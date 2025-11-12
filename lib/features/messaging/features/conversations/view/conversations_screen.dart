@@ -51,7 +51,6 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
   Future<void> onNewChatConversation() async {
     showModalBottomSheet(
-      useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
@@ -81,7 +80,6 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
   Future<void> onNewSmsConversation() async {
     showModalBottomSheet(
-      useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
