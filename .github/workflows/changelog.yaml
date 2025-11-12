@@ -1,0 +1,350 @@
+name: "Generate Changelog"
+run-name: ${{ format('Changelog • {0}', github.ref_name) }}
+
+on:
+  push:
+    branches: [ "release/*" ]
+
+jobs:
+  generate-report:
+    name: Generate Changelog Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Resolve parameters (inputs → fallbacks)
+        id: params
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO="${{ github.event.inputs.repository }}"
+          if [ -z "${REPO}" ]; then REPO="${{ github.repository }}"; fi
+
+          BRANCH="${{ github.event.inputs.new_release_branch }}"
+          if [ -z "${BRANCH:-}" ]; then BRANCH="${{ github.ref_name }}"; fi
+
+          DEPS_INPUT="CallKeep,WebTrit/webtrit_callkeep"
+
+          {
+            echo "repository=$REPO"
+            echo "new_release_branch=$BRANCH"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "deps_multiline<<EOF"
+            printf "%s\n" "$DEPS_INPUT"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Checkout target repository (main)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.params.outputs.repository }}
+          fetch-depth: 0
+          path: mainrepo
+
+      # ---------- MAIN REPO ----------
+      - name: Find previous release branch (main)
+        id: find_branches_main
+        shell: bash
+        working-directory: mainrepo
+        run: |
+          set -euo pipefail
+          CURRENT_BRANCH_NAME="${{ steps.params.outputs.new_release_branch }}"
+          echo "Current branch (main repo): $CURRENT_BRANCH_NAME"
+
+          ALL_RELEASE_BRANCHES="$(git branch --remote --list 'origin/release/*' | sed 's#^[[:space:]]*origin/##' | sort -V || true)"
+          echo "--- All sorted release branches (main) ---"
+          echo "${ALL_RELEASE_BRANCHES:-<none>}"
+          echo "-----------------------------------------"
+
+          PREVIOUS_BRANCH_NAME=""
+          if [ -n "${ALL_RELEASE_BRANCHES}" ]; then
+            PREVIOUS_BRANCH_NAME="$(awk -v target="$CURRENT_BRANCH_NAME" '
+              $0==target {print prev; found=1}
+              {prev=$0}
+              END { if (!found) exit 0 }
+            ' <<< "$ALL_RELEASE_BRANCHES" || true)"
+
+            if [ -z "$PREVIOUS_BRANCH_NAME" ]; then
+              PREVIOUS_BRANCH_NAME="$(tail -n1 <<< "$ALL_RELEASE_BRANCHES")"
+              echo "Warning: Current not in list; using latest release as previous: $PREVIOUS_BRANCH_NAME"
+            fi
+          fi
+
+          if [ -z "$PREVIOUS_BRANCH_NAME" ] || [ "$PREVIOUS_BRANCH_NAME" = "$CURRENT_BRANCH_NAME" ]; then
+            echo "No previous release found → comparing against 'main'."
+            PREVIOUS_BRANCH_NAME="main"
+          fi
+
+          {
+            echo "OLD_REF_GIT_MAIN=origin/$PREVIOUS_BRANCH_NAME"
+            echo "NEW_REF_GIT_MAIN=origin/$CURRENT_BRANCH_NAME"
+            echo "PREVIOUS_BRANCH_NAME_MAIN=$PREVIOUS_BRANCH_NAME"
+            echo "CURRENT_BRANCH_NAME_MAIN=$CURRENT_BRANCH_NAME"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Verify refs exist (main)
+        shell: bash
+        working-directory: mainrepo
+        run: |
+          set -euo pipefail
+          OLD_REF="${{ steps.find_branches_main.outputs.OLD_REF_GIT_MAIN }}"
+          NEW_REF="${{ steps.find_branches_main.outputs.NEW_REF_GIT_MAIN }}"
+          echo "Verifying main refs: OLD='$OLD_REF' NEW='$NEW_REF'"
+          git rev-parse --verify --quiet "$OLD_REF" >/dev/null || { echo "Error: Missing $OLD_REF"; exit 1; }
+          git rev-parse --verify --quiet "$NEW_REF" >/dev/null || { echo "Error: Missing $NEW_REF"; exit 1; }
+
+      - name: Generate changelog (main)
+        shell: bash
+        working-directory: mainrepo
+        run: |
+          set -euo pipefail
+          OLD_NAME="${{ steps.find_branches_main.outputs.PREVIOUS_BRANCH_NAME_MAIN }}"
+          NEW_NAME="${{ steps.find_branches_main.outputs.CURRENT_BRANCH_NAME_MAIN }}"
+          OLD_REF="${{ steps.find_branches_main.outputs.OLD_REF_GIT_MAIN }}"
+          NEW_REF="${{ steps.find_branches_main.outputs.NEW_REF_GIT_MAIN }}"
+
+          if [ "$OLD_NAME" = "main" ]; then
+            RELEASE_STATUS="New release"
+          else
+            RELEASE_STATUS="Update"
+          fi
+
+          : > CHANGELOG_DIFF.md
+          {
+            echo "# Changelog for ${NEW_NAME}"
+            echo
+            echo "**Status:** ${RELEASE_STATUS}"
+            echo "**Comparing against:** \`${OLD_NAME}\`"
+            echo
+            echo "---"
+            echo
+          } >> CHANGELOG_DIFF.md
+
+          git log "$OLD_REF..$NEW_REF" --no-merges --pretty="format:%s (%h)" > raw_log.tmp || true
+
+          if [ ! -s raw_log.tmp ]; then
+            echo "_No new commits found since \`${OLD_NAME}\`._" >> CHANGELOG_DIFF.md
+            rm -f raw_log.tmp
+          else
+            for PATTERN in "feat|feature" "fix" "refactor" "chore|build|style|ci|docs|test"; do
+              case "$PATTERN" in
+                "feat|feature") TITLE="## Features";;
+                "fix")          TITLE="## Bug Fixes";;
+                "refactor")     TITLE="## Refactoring";;
+                "chore|build|style|ci|docs|test") TITLE="## Maintenance & Chores";;
+              esac
+              grep -E "^(${PATTERN}):" raw_log.tmp > section.tmp || true
+              if [ -s section.tmp ]; then
+                echo "$TITLE" >> CHANGELOG_DIFF.md
+                sed 's/^/* /' section.tmp >> CHANGELOG_DIFF.md
+                echo >> CHANGELOG_DIFF.md
+              fi
+            done
+
+            grep -E -v '^(feat|feature|fix|refactor|chore|build|style|ci|docs|test):' raw_log.tmp > section.tmp || true
+            if grep -q '[^[:space:]]' section.tmp; then
+              echo "## Other Commits" >> CHANGELOG_DIFF.md
+              sed 's/^/* /' section.tmp >> CHANGELOG_DIFF.md
+              echo >> CHANGELOG_DIFF.md
+            fi
+
+            rm -f raw_log.tmp section.tmp
+          fi
+
+      # ---------- DEPENDENCIES (N repos) ----------
+      - name: Append dependent repos sections
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf "%s\n" "${{ steps.params.outputs.deps_multiline }}" > deps.txt
+
+          awk -F',' '
+            {
+              line=$0; gsub(/\r/,"",line)
+              sub(/^[[:space:]]+/,"",line); sub(/[[:space:]]+$/,"",line)
+              if(line=="" || line ~ /^#/) next
+              split(line, arr, /,[[:space:]]*/)
+              name=arr[1]; repo=arr[2]
+              sub(/^[[:space:]]+/,"",name); sub(/[[:space:]]+$/,"",name)
+              sub(/^[[:space:]]+/,"",repo); sub(/[[:space:]]+$/,"",repo)
+              if(repo=="") next
+              print name "|" repo
+            }
+          ' deps.txt > deps_norm.txt
+
+          if [ ! -s deps_norm.txt ]; then
+            echo "No dependencies declared. Skipping."
+            exit 0
+          fi
+
+          mkdir -p deps
+
+          echo >> mainrepo/CHANGELOG_DIFF.md
+          echo "---" >> mainrepo/CHANGELOG_DIFF.md
+          echo >> mainrepo/CHANGELOG_DIFF.md
+          echo "## External Dependencies" >> mainrepo/CHANGELOG_DIFF.md
+          echo >> mainrepo/CHANGELOG_DIFF.md
+
+          i=0
+          while IFS='|' read -r NAME REPO; do
+            i=$((i+1))
+            SAFE_DIR="dep_$i"
+            GIT_URL="https://github.com/$REPO"
+            echo "=== Processing [$NAME] ($REPO) → $SAFE_DIR ==="
+
+            # This may be slow and resource-intensive for large repositories, but is necessary to accurately compare all release branches.
+            git clone "$GIT_URL" "deps/$SAFE_DIR"
+            (cd "deps/$SAFE_DIR" && git fetch --all --prune --tags --force)
+
+            pushd "deps/$SAFE_DIR" >/dev/null
+
+            ALL_RELEASE_BRANCHES="$(git branch --remote --list 'origin/release/*' | sed 's#^[[:space:]]*origin/##' | sort -V || true)"
+            LATEST=""; PREV=""
+
+            if [ -n "$ALL_RELEASE_BRANCHES" ]; then
+              LATEST="$(tail -n1 <<< "$ALL_RELEASE_BRANCHES")"
+              PREV="$(tail -n2 <<< "$ALL_RELEASE_BRANCHES" | head -n1 || true)"
+            fi
+
+            if [ -z "$LATEST" ] && [ -z "$PREV" ]; then
+              popd >/dev/null
+              {
+                echo "### $NAME"
+                echo "_Repository [$NAME]($GIT_URL) has no \`release/*\` branches — skipping section._"
+                echo
+              } >> "../../mainrepo/CHANGELOG_DIFF.md"
+              continue
+            fi
+
+            if [ -z "$PREV" ]; then
+              PREV="main"
+            fi
+
+            OLD_REF="origin/$PREV"
+            NEW_REF="origin/$LATEST"
+
+            if ! git rev-parse --verify --quiet "$OLD_REF" >/dev/null; then
+              popd >/dev/null
+              {
+                echo "### $NAME"
+                echo "_Could not find ref \`$OLD_REF\` in [$NAME]($GIT_URL)._"
+                echo
+              } >> "../../mainrepo/CHANGELOG_DIFF.md"
+              continue
+            fi
+            if ! git rev-parse --verify --quiet "$NEW_REF" >/dev/null; then
+              popd >/dev/null
+              {
+                echo "### $NAME"
+                echo "_Could not find ref \`$NEW_REF\` in [$NAME]($GIT_URL)._"
+                echo
+              } >> "../../mainrepo/CHANGELOG_DIFF.md"
+              continue
+            fi
+
+            git log "$OLD_REF..$NEW_REF" --no-merges --pretty="format:%s (%h)" > dep_raw_log.tmp || true
+            popd >/dev/null
+
+            {
+              echo "### $NAME"
+              echo "**Repository:** [$REPO]($GIT_URL)"
+              echo
+              if [ "$PREV" = "main" ]; then
+                echo "**Versions:** \`main\` → \`$LATEST\` (comparing against \`main\`)"
+              else
+                echo "**Versions:** \`$PREV\` → \`$LATEST\`"
+              fi
+              echo
+            } >> mainrepo/CHANGELOG_DIFF.md
+
+            if [ ! -s "deps/$SAFE_DIR/dep_raw_log.tmp" ]; then
+              echo "_No new commits found between these versions._" >> mainrepo/CHANGELOG_DIFF.md
+              echo >> mainrepo/CHANGELOG_DIFF.md
+            else
+              for PATTERN in "feat|feature" "fix" "refactor" "chore|build|style|ci|docs|test"; do
+                case "$PATTERN" in
+                  "feat|feature") TITLE="#### Features";;
+                  "fix")          TITLE="#### Bug Fixes";;
+                  "refactor")     TITLE="#### Refactoring";;
+                  "chore|build|style|ci|docs|test") TITLE="#### Maintenance & Chores";;
+                esac
+                grep -E "^(${PATTERN}):" "deps/$SAFE_DIR/dep_raw_log.tmp" > section.tmp || true
+                if [ -s section.tmp ]; then
+                  echo "$TITLE" >> mainrepo/CHANGELOG_DIFF.md
+                  sed 's/^/* /' section.tmp >> mainrepo/CHANGELOG_DIFF.md
+                  echo >> mainrepo/CHANGELOG_DIFF.md
+                fi
+              done
+
+              grep -E -v '^(feat|feature|fix|refactor|chore|build|style|ci|docs|test):' "deps/$SAFE_DIR/dep_raw_log.tmp" > section.tmp || true
+              if grep -q '[^[:space:]]' section.tmp; then
+                echo "#### Other Commits" >> mainrepo/CHANGELOG_DIFF.md
+                sed 's/^/* /' section.tmp >> mainrepo/CHANGELOG_DIFF.md
+                echo >> mainrepo/CHANGELOG_DIFF.md
+              fi
+
+              rm -f "deps/$SAFE_DIR/dep_raw_log.tmp" section.tmp
+            fi
+          done < deps_norm.txt
+
+      - name: Print Combined Changelog
+        shell: bash
+        run: |
+          echo "--- Generated Changelog ---"
+          cat mainrepo/CHANGELOG_DIFF.md || echo "No commits found."
+          echo "---------------------------"
+
+      - name: Sanitize Artifact Name
+        shell: bash
+        run: |
+          set -euo pipefail
+          RAW_NAME="changelog-${{ steps.params.outputs.repository }}-${{ steps.params.outputs.new_release_branch }}"
+          SAN_NAME="$(echo "$RAW_NAME" | sed 's#[/ ]#-#g')"
+          echo "SANITIZED_ARTIFACT_NAME=$SAN_NAME" >> "$GITHUB_ENV"
+
+      - name: Upload Changelog as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.SANITIZED_ARTIFACT_NAME }}
+          path: mainrepo/CHANGELOG_DIFF.md
+
+      - name: Prepare email subject & body
+        id: mail
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.find_branches_main.outputs.CURRENT_BRANCH_NAME_MAIN }}"
+          VERSION="${VERSION#release/}"
+          {
+            echo "version=$VERSION"
+            echo "repo=${{ steps.params.outputs.repository }}"
+          } >> "$GITHUB_OUTPUT"
+          {
+            echo "changelog<<EOF"
+            cat mainrepo/CHANGELOG_DIFF.md
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Send changelog email
+        if: startsWith(github.ref, 'refs/heads/release/')
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.CERT_EMAIL_USERNAME }}
+          password: ${{ secrets.CERT_EMAIL_PASSWORD }}
+          subject: "Changelog ${{ steps.mail.outputs.version }} - ${{
+            steps.mail.outputs.repo
+          }}"
+          to: ${{ secrets.CERT_EMAIL_TO }}
+          from: WebTrit App Updates
+          content_type: text/plain
+          body: |
+            Changelog for ${{ steps.mail.outputs.repo }}
+            Version: ${{ steps.mail.outputs.version }}
+
+            ----------------------------------------
+            ${{ steps.mail.outputs.changelog }}
+          attachments: |
+            mainrepo/CHANGELOG_DIFF.md
