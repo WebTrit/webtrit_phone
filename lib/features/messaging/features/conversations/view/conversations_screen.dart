@@ -73,7 +73,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
             notificationsBloc.add(NotificationsSubmitted(n));
           },
         ),
-        child: BottomSheet(enableDrag: false, onClosing: () {}, builder: (_) => const ChatConversationBuilderView()),
+        child: const ChatConversationBuilderView(),
       ),
     );
   }
@@ -93,7 +93,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
             openSmsDialog(userNumber, recipientNumber, recipientId);
           },
         ),
-        child: BottomSheet(enableDrag: false, onClosing: () {}, builder: (_) => const SmsConversationBuilderView()),
+        child: const SmsConversationBuilderView(),
       ),
     );
   }
