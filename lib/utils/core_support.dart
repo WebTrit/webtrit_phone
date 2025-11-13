@@ -20,6 +20,8 @@ abstract class CoreSupport {
 
   /// Check if the SIP presence feature is supported by remote system.
   bool get supportsSipPresence;
+
+  bool supportCustomPresence(String presence);
 }
 
 class CoreSupportImpl implements CoreSupport {
@@ -49,4 +51,7 @@ class CoreSupportImpl implements CoreSupport {
 
   @override
   bool get supportsSipPresence => _has(kSipPresenceFeatureFlag);
+
+  @override
+  bool supportCustomPresence(String presence) => _has(presence);
 }

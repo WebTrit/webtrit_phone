@@ -64,10 +64,6 @@ abstract class AppPreferences {
   PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue});
 
   Future<void> setPearConnectionSettings(PeerConnectionSettings settings);
-
-  CallerIdSettings getCallerIdSettings();
-
-  Future<void> setCallerIdSettings(CallerIdSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -377,17 +373,5 @@ class AppPreferencesImpl
 
   Future<void> _setNegotiationSettings(NegotiationSettings settings) {
     return _sharedPreferences.setString(_kNegotiationSettings, negotiationSettingsToJson(settings));
-  }
-
-  @override
-  CallerIdSettings getCallerIdSettings() {
-    final callerIdSettingsString = _sharedPreferences.getString(_kCallerIdSettingsKey);
-    if (callerIdSettingsString == null) return const CallerIdSettings();
-    return callerIdSettingsFromJson(callerIdSettingsString);
-  }
-
-  @override
-  Future<void> setCallerIdSettings(CallerIdSettings settings) {
-    return _sharedPreferences.setString(_kCallerIdSettingsKey, callerIdSettingsToJson(settings));
   }
 }

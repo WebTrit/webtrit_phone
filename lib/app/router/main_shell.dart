@@ -475,7 +475,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           create: (_) => CallRoutingCubit(
                             context.read<UserRepository>(),
                             context.read<LinesStateRepository>(),
-                            context.read<AppPreferences>(),
+                            context.read<CallerIdSettingsRepository>(),
                             context.read<ConnectivityService>(),
                           ),
                         ),
@@ -537,7 +537,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(
-        listener: context.read<SystemInfoRepository>(),
+        listener: context.read<SystemInfoRemoteRepository>(),
         interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(

@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/lines_state.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
@@ -12,14 +11,14 @@ import 'package:webtrit_phone/services/services.dart';
 part 'call_routing_state.dart';
 
 class CallRoutingCubit extends Cubit<CallRoutingState?> {
-  CallRoutingCubit(this._userRepository, this._linesStateRepository, this._appPreferences, this._connectivityService)
+  CallRoutingCubit(this._userRepository, this._linesStateRepository, this._callerIdSettingsRepository, this._connectivityService)
     : super(null) {
     _init();
   }
 
   final LinesStateRepository _linesStateRepository;
   final UserRepository _userRepository;
-  final AppPreferences _appPreferences;
+  final CallerIdSettingsRepository _callerIdSettingsRepository;
   final ConnectivityService _connectivityService;
 
   StreamSubscription? _infoSub;
@@ -50,19 +49,19 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
     final mainLinesState = linesState.mainLines;
     final guestLineState = linesState.guestLine;
 
-    final callerIdSettings = _appPreferences.getCallerIdSettings();
+    final callerIdSettings = _callerIdSettingsRepository.getCallerIdSettings();
     final matchers = callerIdSettings.matchers;
     final defaultNumber = callerIdSettings.defaultNumber;
 
     // Reset cli settings if additional number removed from user
     if (defaultNumber != null && !additionalNumbers.contains(defaultNumber)) {
-      _appPreferences.setCallerIdSettings(callerIdSettings.copyWithDefaultNumber(null));
+      _callerIdSettingsRepository.setCallerIdSettings(callerIdSettings.copyWithDefaultNumber(null));
       additionalNumbers.add(defaultNumber);
     }
     for (final matcher in matchers) {
       if (!additionalNumbers.contains(matcher.number)) {
         final filteredMatchers = matchers.where((m) => m.number != matcher.number).toList();
-        _appPreferences.setCallerIdSettings(callerIdSettings.copyWithMatchers(filteredMatchers));
+        _callerIdSettingsRepository.setCallerIdSettings(callerIdSettings.copyWithMatchers(filteredMatchers));
       }
     }
 
@@ -74,7 +73,7 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
   ///
   /// Returns `null` if no number specified for call.
   String? getFromNumber(String destination) {
-    final callerIdSettings = _appPreferences.getCallerIdSettings();
+    final callerIdSettings = _callerIdSettingsRepository.getCallerIdSettings();
     final matchers = callerIdSettings.matchers;
     final defaultNumber = callerIdSettings.defaultNumber;
 

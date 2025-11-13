@@ -29,3 +29,4 @@ export 'system_info/system_info_remote_repository.dart';
 export 'system_notifications/system_notifications_local_repository.dart';
 export 'system_notifications/system_notifications_remote_repository.dart';
 export 'voicemail/voicemail.dart';
+export 'caller_id_settings/caller_id_settings_repository.dart';

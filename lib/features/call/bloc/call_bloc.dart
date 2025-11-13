@@ -237,7 +237,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final previousRegistrationStatus = previousRegistration?.status;
 
       if (newRegistrationStatus?.isRegistered == true && previousRegistrationStatus?.isRegistered != true) {
-        presenceRepository.resetLastSettingsSync();
+        presenceSettingsRepository.resetLastSettingsSync();
         submitNotification(AppOnlineNotification());
       }
 

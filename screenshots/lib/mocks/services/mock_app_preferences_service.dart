@@ -38,33 +38,27 @@ class MockAppPreferencesService implements AppPreferences {
     return true;
   }
 
-  @override
   String? getString(String key) {
     return _mockData[key] as String?;
   }
 
-  @override
   Future<bool> setString(String key, String value) {
     _mockData[key] = value;
     return Future.value(true);
   }
 
-  @override
   Future<bool> removeKey(String key) async {
     _mockData.remove(key);
     return true;
   }
 
-  @override
   bool getRegisterStatus() => true;
 
-  @override
   Future<bool> setRegisterStatus(bool value) async {
     _mockData['register-status'] = value;
     return true;
   }
 
-  @override
   Future<bool> removeRegisterStatus() async {
     _mockData.remove('register-status');
     return true;
@@ -120,7 +114,6 @@ class MockAppPreferencesService implements AppPreferences {
     return true;
   }
 
-  @override
   MainFlavor getActiveMainFlavor(
       {MainFlavor defaultValue = MainFlavor.contacts}) {
     final flavorString = _mockData['active-main-flavor'] as String?;
@@ -134,7 +127,6 @@ class MockAppPreferencesService implements AppPreferences {
     return defaultValue;
   }
 
-  @override
   Future<bool> setActiveMainFlavor(MainFlavor value) async {
     _mockData['active-main-flavor'] = value.name;
     return true;
@@ -202,7 +194,6 @@ class MockAppPreferencesService implements AppPreferences {
     return true;
   }
 
-  @override
   WebtritSystemInfo? getSystemInfo() {
     return WebtritSystemInfo(
       core: CoreInfo(version: Version(0, 13, 0)),
@@ -221,7 +212,6 @@ class MockAppPreferencesService implements AppPreferences {
     );
   }
 
-  @override
   Future<void> setSystemInfo(WebtritSystemInfo systemInfo) async {}
 
   @override
@@ -309,12 +299,10 @@ class MockAppPreferencesService implements AppPreferences {
     return Future.value();
   }
 
-  @override
   CallerIdSettings getCallerIdSettings() {
     return const CallerIdSettings();
   }
 
-  @override
   Future<void> setCallerIdSettings(CallerIdSettings settings) {
     return Future.value();
   }
