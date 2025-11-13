@@ -29,9 +29,9 @@ abstract class AppPreferences {
 
   Future<bool> setActiveContactSourceType(ContactSourceType value);
 
-  Future<bool> setUserAgreementStatus(AgreementStatus value);
-
-  AgreementStatus getUserAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending});
+  // Future<bool> setUserAgreementStatus(AgreementStatus value);
+  //
+  // AgreementStatus getUserAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending});
 
   Future<bool> setContactsAgreementStatus(AgreementStatus value);
 

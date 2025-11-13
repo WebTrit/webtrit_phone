@@ -14,6 +14,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/auth/session_repository.dart';
+import 'package:webtrit_phone/repositories/user_agreement_status/user_agreement_status_repository.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -28,6 +29,7 @@ final _logger = Logger('AppBloc');
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.appPreferences,
+    required this.userAgreementStatusRepository,
     required this.sessionRepository,
     required this.appInfo,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
@@ -39,7 +41,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
            themeSettings: appThemes.values.first.settings,
            themeMode: appPreferences.getThemeMode(),
            locale: appPreferences.getLocale(),
-           userAgreementStatus: appPreferences.getUserAgreementStatus(),
+           userAgreementStatus: userAgreementStatusRepository.getUserAgreementStatus(),
            contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
          ),
        ) {
@@ -53,6 +55,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   final AppPreferences appPreferences;
+  final UserAgreementStatusRepository userAgreementStatusRepository;
   final WebtritApiClientFactory createWebtritApiClient;
   final SessionRepository sessionRepository;
   final AppInfo appInfo;
@@ -145,7 +148,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future<void> __onUpdateUserAgreementStatus(_UserAppAgreementUpdate event, Emitter<AppState> emit) async {
-    await appPreferences.setUserAgreementStatus(event.status);
+    await userAgreementStatusRepository.setUserAgreementStatus(event.status);
     emit(state.copyWith(userAgreementStatus: event.status));
   }
 

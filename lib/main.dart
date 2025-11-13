@@ -15,6 +15,7 @@ import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/repositories/user_agreement_status/user_agreement_status_repository.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -170,6 +171,8 @@ class RootApp extends StatelessWidget {
           final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(appPreferencesPure);
           final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferencesPure);
           final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferencesPure);
+          final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(appPreferencesPure);
+          final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -181,6 +184,8 @@ class RootApp extends StatelessWidget {
               await presenceSettingsRepository.clear();
               await systemInfoLocalRepository.clear();
               await activeMainFlavorRepository.clear();
+              await callerIdSettingsRepository.clear();
+              await userAgreementStatusRepository.clear();
             },
           );
 
@@ -193,6 +198,8 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<SystemInfoLocalRepository>.value(value: systemInfoLocalRepository),
               RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
               RepositoryProvider<SessionRepository>.value(value: sessionRepository),
+              RepositoryProvider<CallerIdSettingsRepository>.value(value: callerIdSettingsRepository),
+              RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
             ],
             child: const App(),
           );
