@@ -36,9 +36,7 @@ Future<void> bootstrap() async {
   final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
 
   // Initialization order is crucial for proper app setup
-
   final appThemes = await AppThemes.init();
-
   final appPreferences = await AppPreferences.init();
   final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
@@ -50,6 +48,7 @@ Future<void> bootstrap() async {
     activeMainFlavorRepository,
     coreSupport,
   );
+
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
