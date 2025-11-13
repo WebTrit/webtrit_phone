@@ -6,8 +6,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/core_support.dart';
 
 Future<void> main() async {
-  final appPreferencesPure = await AppPreferencesPure.init();
-  final SystemInfoLocalRepository systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferencesPure);
+  final appPreferences = await AppPreferences.init();
+  final SystemInfoLocalRepository systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
 
   final cs = CoreSupportImpl(systemInfoLocalRepository);
 
