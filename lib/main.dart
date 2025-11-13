@@ -175,7 +175,7 @@ class RootApp extends StatelessWidget {
           final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(prefs);
           final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(prefs);
           final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(prefs);
-          final encodingSettingsRepository = EncodingPresetRepositoryPrefsImpl(prefs);
+          final encodingSettingsRepository = EncodingSettingsRepositoryPrefsImpl(prefs);
           final localeRepository = LocaleRepositoryPrefsImpl(prefs);
           final themeModeRepository = ThemeModeRepositoryPrefsImpl(prefs);
 
@@ -225,7 +225,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
               RepositoryProvider<PeerConnectionSettingsRepository>.value(value: peerConnectionSettingsRepository),
               RepositoryProvider<VideoCapturingSettingsRepository>.value(value: videoCapturingSettingsRepository),
-              RepositoryProvider<EncodingPresetRepository>.value(value: encodingSettingsRepository),
+              RepositoryProvider<EncodingSettingsRepository>.value(value: encodingSettingsRepository),
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),
               RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
             ],
