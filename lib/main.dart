@@ -198,11 +198,9 @@ class RootApp extends StatelessWidget {
               await systemInfoLocalRepository.clear();
               await activeMainFlavorRepository.clear();
               await callerIdSettingsRepository.clear();
-              await userAgreementStatusRepository.clear();
               await activeRecentsVisibilityFilterRepository.clear();
               await activeContactSourceTypeRepository.clear();
               await audioProcessingSettingsRepository.clear();
-              await contactsAgreementStatusRepository.clear();
               await encodingPresetRepository.clear();
               await iceSettingsRepository.clear();
               await incomingCallTypeRepository.clear();
