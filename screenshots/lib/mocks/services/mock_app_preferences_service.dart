@@ -254,12 +254,10 @@ class MockAppPreferencesService implements AppPreferences {
     return Future.value();
   }
 
-  @override
   VideoCapturingSettings getVideoCapturingSettings() {
     return const VideoCapturingSettings();
   }
 
-  @override
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings) {
     return Future.value();
   }

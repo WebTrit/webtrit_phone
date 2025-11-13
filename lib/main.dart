@@ -182,6 +182,7 @@ class RootApp extends StatelessWidget {
           final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(appPreferencesPure);
           final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(appPreferencesPure);
           final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(appPreferencesPure);
+          final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -203,6 +204,7 @@ class RootApp extends StatelessWidget {
               await iceSettingsRepository.clear();
               await incomingCallTypeRepository.clear();
               await peerConnectionSettingsRepository.clear();
+              await videoCapturingSettingsRepository.clear();
             },
           );
 
@@ -227,6 +229,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
               RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
               RepositoryProvider<PeerConnectionSettingsRepository>.value(value: peerConnectionSettingsRepository),
+              RepositoryProvider<VideoCapturingSettingsRepository>.value(value: videoCapturingSettingsRepository),
             ],
             child: const App(),
           );

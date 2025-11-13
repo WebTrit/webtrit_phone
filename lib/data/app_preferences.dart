@@ -24,10 +24,6 @@ abstract class AppPreferences {
   EncodingSettings getEncodingSettings();
 
   Future<void> setEncodingSettings(EncodingSettings settings);
-
-  VideoCapturingSettings getVideoCapturingSettings();
-
-  Future<void> setVideoCapturingSettings(VideoCapturingSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -151,20 +147,5 @@ class AppPreferencesImpl
   @override
   Future<void> setEncodingSettings(EncodingSettings settings) {
     return _sharedPreferences.setString(_kEncodingSettingsKey, encodingSettingsToJson(settings));
-  }
-
-  @override
-  VideoCapturingSettings getVideoCapturingSettings() {
-    final videoCapturingSettingsString = _sharedPreferences.getString(_kVideoCapturingSettingsKey);
-    if (videoCapturingSettingsString != null) {
-      return videoCapturingSettingsFromJson(videoCapturingSettingsString);
-    } else {
-      return VideoCapturingSettings.blank();
-    }
-  }
-
-  @override
-  Future<void> setVideoCapturingSettings(VideoCapturingSettings settings) {
-    return _sharedPreferences.setString(_kVideoCapturingSettingsKey, videoCapturingSettingsToJson(settings));
   }
 }

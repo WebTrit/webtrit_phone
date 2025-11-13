@@ -2,10 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/audio_processing_settings/audio_processing_settings_repository.dart';
-import 'package:webtrit_phone/repositories/encoding_preset/encoding_preset_repository.dart';
-import 'package:webtrit_phone/repositories/ice_settings/ice_settings_repository.dart';
-import 'package:webtrit_phone/repositories/peer_connection_settings/peer_connection_settings_repository.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 import 'media_settings_state.dart';
 
@@ -17,6 +14,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     this._encodingPresetRepository,
     this._iceSettingsRepository,
     this._peerConnectionSettingsRepository,
+    this._videoCapturingSettingsRepository,
   ) : super(
         MediaSettingsState.fromPrefs(
           _prefs,
@@ -25,6 +23,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
           _encodingPresetRepository,
           _iceSettingsRepository,
           _peerConnectionSettingsRepository,
+          _videoCapturingSettingsRepository,
         ),
       );
 
@@ -34,6 +33,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   final EncodingPresetRepository _encodingPresetRepository;
   final IceSettingsRepository _iceSettingsRepository;
   final PeerConnectionSettingsRepository _peerConnectionSettingsRepository;
+  final VideoCapturingSettingsRepository _videoCapturingSettingsRepository;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
@@ -52,7 +52,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
 
   void setVideoCapturingSettings(VideoCapturingSettings settings) {
     emit(state.copyWithVideoCapturingSettings(settings));
-    _prefs.setVideoCapturingSettings(settings);
+    _videoCapturingSettingsRepository.setVideoCapturingSettings(settings);
   }
 
   void setIceSettings(IceSettings settings) {
@@ -80,7 +80,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     _encodingPresetRepository.setEncodingPreset(null);
     _prefs.setEncodingSettings(EncodingSettings.blank());
     _audioProcessingSettingsRepository.setAudioProcessingSettings(AudioProcessingSettings.blank());
-    _prefs.setVideoCapturingSettings(VideoCapturingSettings.blank());
+    _videoCapturingSettingsRepository.setVideoCapturingSettings(VideoCapturingSettings.blank());
     _iceSettingsRepository.setIceSettings(IceSettings.blank());
     _peerConnectionSettingsRepository.setPearConnectionSettings(_defaultPeerConnectionSettings);
   }
