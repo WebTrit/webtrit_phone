@@ -183,6 +183,8 @@ class RootApp extends StatelessWidget {
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
             sessionCleanupWorker: SessionCleanupWorker(),
+
+            /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here
             onLogout: () async {
               await database.deleteEverything(); // TODO: clear using repos instead of direct access
               await registerStatusRepository.clear();
