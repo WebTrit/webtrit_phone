@@ -28,10 +28,6 @@ abstract class AppPreferences {
   VideoCapturingSettings getVideoCapturingSettings();
 
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings);
-
-  PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue});
-
-  Future<void> setPearConnectionSettings(PeerConnectionSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -170,35 +166,5 @@ class AppPreferencesImpl
   @override
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings) {
     return _sharedPreferences.setString(_kVideoCapturingSettingsKey, videoCapturingSettingsToJson(settings));
-  }
-
-  @override
-  PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue}) {
-    final defaultPeerConnectionSettings = defaultValue ?? PeerConnectionSettings.blank();
-    final localNegotiationSettings = _getNegotiationSettings();
-
-    return defaultPeerConnectionSettings.copyWith(
-      negotiationSettings: defaultPeerConnectionSettings.negotiationSettings.copyWith(
-        includeInactiveVideoInOfferAnswer: localNegotiationSettings?.includeInactiveVideoInOfferAnswer,
-      ),
-    );
-  }
-
-  NegotiationSettings? _getNegotiationSettings() {
-    final negotiationSettingsString = _sharedPreferences.getString(_kNegotiationSettings);
-    if (negotiationSettingsString != null) {
-      return negotiationSettingsFromJson(negotiationSettingsString);
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  Future<void> setPearConnectionSettings(PeerConnectionSettings settings) async {
-    await _setNegotiationSettings(settings.negotiationSettings);
-  }
-
-  Future<void> _setNegotiationSettings(NegotiationSettings settings) {
-    return _sharedPreferences.setString(_kNegotiationSettings, negotiationSettingsToJson(settings));
   }
 }

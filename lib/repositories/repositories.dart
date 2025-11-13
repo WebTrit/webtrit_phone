@@ -38,3 +38,4 @@ export 'contacts_agreement_status/contacts_agreement_status_repository.dart';
 export 'encoding_preset/encoding_preset_repository.dart';
 export 'ice_settings/ice_settings_repository.dart';
 export 'incoming_call_type/incoming_call_type_repository.dart';
+export 'peer_connection_settings/peer_connection_settings_repository.dart';

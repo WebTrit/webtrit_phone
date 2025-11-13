@@ -356,6 +356,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final audioProcessingSettingsRepository = context.read<AudioProcessingSettingsRepository>();
                       final encodingPresetRepository = context.read<EncodingPresetRepository>();
                       final iceSettingsRepository = context.read<IceSettingsRepository>();
+                      final peerConnectionSettingsRepository = context.read<PeerConnectionSettingsRepository>();
                       // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
                       final appCertificates = AppCertificates();
                       final featureAccess = context.read<FeatureAccess>();
@@ -373,7 +374,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       );
                       // Initialize peer connection policy applier with app-specific negotiation rules
                       final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
-                        appPreferences,
+                        peerConnectionSettingsRepository,
                         peerConnectionConfig,
                         userMediaBuilder,
                       );

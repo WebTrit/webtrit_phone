@@ -272,13 +272,11 @@ class MockAppPreferencesService implements AppPreferences {
     return Future.value();
   }
 
-  @override
   PeerConnectionSettings getPeerConnectionSettings(
       {PeerConnectionSettings? defaultValue}) {
     return PeerConnectionSettings.blank();
   }
 
-  @override
   Future<void> setPearConnectionSettings(PeerConnectionSettings settings) {
     return Future.value();
   }

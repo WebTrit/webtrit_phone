@@ -175,14 +175,13 @@ class RootApp extends StatelessWidget {
           final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(
             appPreferencesPure,
           );
-          final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(
-            appPreferencesPure,
-          );
+          final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(appPreferencesPure);
           final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(appPreferencesPure);
           final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferencesPure);
           final encodingPresetRepository = EncodingPresetRepositoryPrefsImpl(appPreferencesPure);
           final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(appPreferencesPure);
           final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(appPreferencesPure);
+          final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -203,6 +202,7 @@ class RootApp extends StatelessWidget {
               await encodingPresetRepository.clear();
               await iceSettingsRepository.clear();
               await incomingCallTypeRepository.clear();
+              await peerConnectionSettingsRepository.clear();
             },
           );
 
@@ -220,24 +220,13 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
                 value: activeRecentsVisibilityFilterRepository,
               ),
-              RepositoryProvider<ActiveContactSourceTypeRepository>.value(
-                value: activeContactSourceTypeRepository,
-              ),
-              RepositoryProvider<AudioProcessingSettingsRepository>.value(
-                value: audioProcessingSettingsRepository,
-              ),
-              RepositoryProvider<ContactsAgreementStatusRepository>.value(
-                value: contactsAgreementStatusRepository,
-              ),
-              RepositoryProvider<EncodingPresetRepository>.value(
-                value: encodingPresetRepository,
-              ),
-              RepositoryProvider<IceSettingsRepository>.value(
-                value: iceSettingsRepository,
-              ),
-              RepositoryProvider<IncomingCallTypeRepository>.value(
-                value: incomingCallTypeRepository,
-              ),
+              RepositoryProvider<ActiveContactSourceTypeRepository>.value(value: activeContactSourceTypeRepository),
+              RepositoryProvider<AudioProcessingSettingsRepository>.value(value: audioProcessingSettingsRepository),
+              RepositoryProvider<ContactsAgreementStatusRepository>.value(value: contactsAgreementStatusRepository),
+              RepositoryProvider<EncodingPresetRepository>.value(value: encodingPresetRepository),
+              RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
+              RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
+              RepositoryProvider<PeerConnectionSettingsRepository>.value(value: peerConnectionSettingsRepository),
             ],
             child: const App(),
           );

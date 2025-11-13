@@ -5,6 +5,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/audio_processing_settings/audio_processing_settings_repository.dart';
 import 'package:webtrit_phone/repositories/encoding_preset/encoding_preset_repository.dart';
 import 'package:webtrit_phone/repositories/ice_settings/ice_settings_repository.dart';
+import 'package:webtrit_phone/repositories/peer_connection_settings/peer_connection_settings_repository.dart';
 
 import 'media_settings_state.dart';
 
@@ -15,6 +16,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     this._audioProcessingSettingsRepository,
     this._encodingPresetRepository,
     this._iceSettingsRepository,
+    this._peerConnectionSettingsRepository,
   ) : super(
         MediaSettingsState.fromPrefs(
           _prefs,
@@ -22,6 +24,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
           _audioProcessingSettingsRepository,
           _encodingPresetRepository,
           _iceSettingsRepository,
+          _peerConnectionSettingsRepository,
         ),
       );
 
@@ -30,6 +33,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   final AudioProcessingSettingsRepository _audioProcessingSettingsRepository;
   final EncodingPresetRepository _encodingPresetRepository;
   final IceSettingsRepository _iceSettingsRepository;
+  final PeerConnectionSettingsRepository _peerConnectionSettingsRepository;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
@@ -58,7 +62,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
 
   void setPeerConnectionSettings(PeerConnectionSettings settings) {
     emit(state.copyWithPeerConnectionSettings(settings));
-    _prefs.setPearConnectionSettings(settings);
+    _peerConnectionSettingsRepository.setPearConnectionSettings(settings);
   }
 
   void reset() {
@@ -78,6 +82,6 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     _audioProcessingSettingsRepository.setAudioProcessingSettings(AudioProcessingSettings.blank());
     _prefs.setVideoCapturingSettings(VideoCapturingSettings.blank());
     _iceSettingsRepository.setIceSettings(IceSettings.blank());
-    _prefs.setPearConnectionSettings(_defaultPeerConnectionSettings);
+    _peerConnectionSettingsRepository.setPearConnectionSettings(_defaultPeerConnectionSettings);
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/peer_connection_settings/peer_connection_settings_repository.dart';
 
 import 'user_media_builder.dart';
 
@@ -37,17 +37,18 @@ abstract class PeerConnectionPolicyApplier {
 ///   or sending video until explicitly activated by the user.
 class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPolicyApplier {
   ModifyWithSettingsPeerConnectionPolicyApplier(
-    this._prefs,
+    this._peerConnectionSettingsRepository,
     this._defaultPeerConnectionSettings,
     this._userMediaBuilder,
   );
 
-  final AppPreferences _prefs;
+  final PeerConnectionSettingsRepository _peerConnectionSettingsRepository;
   final PeerConnectionSettings _defaultPeerConnectionSettings;
   final UserMediaBuilder _userMediaBuilder;
 
-  NegotiationSettings get _negotiationSettings =>
-      _prefs.getPeerConnectionSettings(defaultValue: _defaultPeerConnectionSettings).negotiationSettings;
+  NegotiationSettings get _negotiationSettings => _peerConnectionSettingsRepository
+      .getPeerConnectionSettings(defaultValue: _defaultPeerConnectionSettings)
+      .negotiationSettings;
 
   @override
   Future<void> apply(RTCPeerConnection peerConnection, {required bool hasRemoteVideo}) async {
