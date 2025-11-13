@@ -179,6 +179,7 @@ class RootApp extends StatelessWidget {
             appPreferencesPure,
           );
           final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(appPreferencesPure);
+          final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -195,6 +196,7 @@ class RootApp extends StatelessWidget {
               await activeRecentsVisibilityFilterRepository.clear();
               await activeContactSourceTypeRepository.clear();
               await audioProcessingSettingsRepository.clear();
+              await contactsAgreementStatusRepository.clear();
             },
           );
 
@@ -217,6 +219,9 @@ class RootApp extends StatelessWidget {
               ),
               RepositoryProvider<AudioProcessingSettingsRepository>.value(
                 value: audioProcessingSettingsRepository,
+              ),
+              RepositoryProvider<ContactsAgreementStatusRepository>.value(
+                value: contactsAgreementStatusRepository,
               ),
             ],
             child: const App(),

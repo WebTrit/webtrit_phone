@@ -21,10 +21,6 @@ abstract class AppPreferences {
 
   Future<bool> removeLocale();
 
-  Future<bool> setContactsAgreementStatus(AgreementStatus value);
-
-  AgreementStatus getContactsAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending});
-
   IncomingCallType getIncomingCallType({IncomingCallType defaultValue});
 
   Future<bool> setIncomingCallType(IncomingCallType value);
@@ -157,24 +153,6 @@ class AppPreferencesImpl
 
   @override
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
-
-  @override
-  Future<bool> setContactsAgreementStatus(AgreementStatus value) =>
-      _sharedPreferences.setString(_kContactsAgreementAcceptedKey, value.name);
-
-  @override
-  AgreementStatus getContactsAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending}) {
-    final agreementStatusString = _sharedPreferences.getString(_kContactsAgreementAcceptedKey);
-    if (agreementStatusString != null) {
-      try {
-        return AgreementStatus.values.byName(agreementStatusString);
-      } catch (_) {
-        return defaultValue;
-      }
-    } else {
-      return defaultValue;
-    }
-  }
 
   @override
   Future<bool> setIncomingCallType(IncomingCallType value) =>

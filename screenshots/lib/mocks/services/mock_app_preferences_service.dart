@@ -210,7 +210,6 @@ class MockAppPreferencesService implements AppPreferences {
 
   Future<void> setSystemInfo(WebtritSystemInfo systemInfo) async {}
 
-  @override
   AgreementStatus getContactsAgreementStatus({
     AgreementStatus defaultValue = AgreementStatus.pending,
   }) {
@@ -223,7 +222,6 @@ class MockAppPreferencesService implements AppPreferences {
     return AgreementStatus.pending;
   }
 
-  @override
   Future<bool> setContactsAgreementStatus(AgreementStatus value) {
     return Future.value(true);
   }

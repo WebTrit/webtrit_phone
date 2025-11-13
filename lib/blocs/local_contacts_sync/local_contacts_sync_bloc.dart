@@ -22,7 +22,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   LocalContactsSyncBloc({
     required this.localContactsRepository,
     required this.appDatabase,
-    required this.appPreferences,
+    required this.contactsAgreementStatusRepository,
     required this.isFeatureEnabled,
     required this.isAgreementAccepted,
     required this.isContactsPermissionGranted,
@@ -37,7 +37,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
   final LocalContactsRepository localContactsRepository;
   final AppDatabase appDatabase;
-  final AppPreferences appPreferences;
+  final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final AsyncCallback isFeatureEnabled;
   final AsyncCallback isAgreementAccepted;
   final AsyncCallback isContactsPermissionGranted;

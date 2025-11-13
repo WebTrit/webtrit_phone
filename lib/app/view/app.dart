@@ -33,6 +33,7 @@ class _AppState extends State<App> {
     appBloc = AppBloc(
       appPreferences: context.read<AppPreferences>(),
       userAgreementStatusRepository: context.read<UserAgreementStatusRepository>(),
+      contactsAgreementStatusRepository: context.read<ContactsAgreementStatusRepository>(),
       appThemes: context.read<AppThemes>(),
       sessionRepository: context.read<SessionRepository>(),
       appInfo: context.read<AppInfo>(),

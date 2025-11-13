@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/repositories/contacts_agreement_status/contacts_agreement_status_repository.dart';
 
 import '../models/models.dart';
 
@@ -16,10 +17,10 @@ part 'permissions_state.dart';
 final _logger = Logger('PermissionsCubit');
 
 class PermissionsCubit extends Cubit<PermissionsState> {
-  PermissionsCubit({required this.appPreferences, required this.appPermissions, required this.deviceInfo})
+  PermissionsCubit({required this.contactsAgreementStatusRepository, required this.appPermissions, required this.deviceInfo})
     : super(const PermissionsState());
 
-  final AppPreferences appPreferences;
+  final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final AppPermissions appPermissions;
   final DeviceInfo deviceInfo;
 
@@ -75,7 +76,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   }
 
   List<Permission> _buildExcludedPermissions() {
-    final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+    final contactsAgreementStatus = contactsAgreementStatusRepository.getContactsAgreementStatus();
     _logger.info('Contacts agreement status: ${contactsAgreementStatus.isAccepted}');
 
     final exclude = <Permission>[if (!contactsAgreementStatus.isAccepted) Permission.contacts];

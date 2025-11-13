@@ -310,7 +310,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     create: (context) {
                       final localContactsRepository = context.read<LocalContactsRepository>();
                       final appDatabase = context.read<AppDatabase>();
-                      final appPreferences = context.read<AppPreferences>();
+                      final contactsAgreementStatusRepository = context.read<ContactsAgreementStatusRepository>();
                       final appPermissions = context.read<AppPermissions>();
 
                       Future<bool> isFutureEnabled() async {
@@ -320,14 +320,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       }
 
                       Future<bool> isAgreementAccepted() async {
-                        final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+                        final contactsAgreementStatus = contactsAgreementStatusRepository.getContactsAgreementStatus();
                         return contactsAgreementStatus.isAccepted;
                       }
 
                       final bloc = LocalContactsSyncBloc(
                         localContactsRepository: localContactsRepository,
                         appDatabase: appDatabase,
-                        appPreferences: appPreferences,
+                        contactsAgreementStatusRepository: contactsAgreementStatusRepository,
                         isFeatureEnabled: isFutureEnabled,
                         isAgreementAccepted: isAgreementAccepted,
                         isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),

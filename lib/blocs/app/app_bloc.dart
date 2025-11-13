@@ -13,8 +13,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/auth/session_repository.dart';
-import 'package:webtrit_phone/repositories/user_agreement_status/user_agreement_status_repository.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -30,6 +29,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.appPreferences,
     required this.userAgreementStatusRepository,
+    required this.contactsAgreementStatusRepository,
     required this.sessionRepository,
     required this.appInfo,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
@@ -42,7 +42,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
            themeMode: appPreferences.getThemeMode(),
            locale: appPreferences.getLocale(),
            userAgreementStatus: userAgreementStatusRepository.getUserAgreementStatus(),
-           contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
+           contactsAgreementStatus: contactsAgreementStatusRepository.getContactsAgreementStatus(),
          ),
        ) {
     on<_SessionUpdated>(_onSessionUpdated, transformer: sequential());
@@ -56,6 +56,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   final AppPreferences appPreferences;
   final UserAgreementStatusRepository userAgreementStatusRepository;
+  final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final WebtritApiClientFactory createWebtritApiClient;
   final SessionRepository sessionRepository;
   final AppInfo appInfo;
@@ -153,7 +154,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future<void> __onContactsUserAgreementStatus(_ContactsAppAgreementUpdate event, Emitter<AppState> emit) async {
-    await appPreferences.setContactsAgreementStatus(event.status);
+    await contactsAgreementStatusRepository.setContactsAgreementStatus(event.status);
     emit(state.copyWith(contactsAgreementStatus: event.status));
   }
 
