@@ -17,15 +17,15 @@ part 'recents_event.dart';
 part 'recents_state.dart';
 
 class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
-  RecentsBloc({required this.recentsRepository, required this.appPreferences, required this.dateFormat})
-    : super(RecentsState(filter: appPreferences.getActiveRecentsVisibilityFilter())) {
+  RecentsBloc({required this.recentsRepository, required this.activeRecentsVisibilityFilterRepository, required this.dateFormat})
+    : super(RecentsState(filter: activeRecentsVisibilityFilterRepository.getActiveRecentsVisibilityFilter())) {
     on<RecentsStarted>(_onStarted, transformer: restartable());
     on<RecentsFiltered>(_onFiltered);
     on<RecentsDeleted>(_onDeleted);
   }
 
   final RecentsRepository recentsRepository;
-  final AppPreferences appPreferences;
+  final ActiveRecentsVisibilityFilterRepository activeRecentsVisibilityFilterRepository;
   final DateFormat dateFormat;
 
   Future<void> _onStarted(RecentsStarted event, Emitter<RecentsState> emit) async {
@@ -40,7 +40,7 @@ class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
   }
 
   Future<void> _onFiltered(RecentsFiltered event, Emitter<RecentsState> emit) async {
-    await appPreferences.setActiveRecentsVisibilityFilter(event.filter);
+    await activeRecentsVisibilityFilterRepository.setActiveRecentsVisibilityFilter(event.filter);
 
     emit(state.copyWith(filter: event.filter));
   }

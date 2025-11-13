@@ -21,17 +21,13 @@ abstract class AppPreferences {
 
   Future<bool> removeLocale();
 
-  RecentsVisibilityFilter getActiveRecentsVisibilityFilter({RecentsVisibilityFilter defaultValue});
-
-  Future<bool> setActiveRecentsVisibilityFilter(RecentsVisibilityFilter value);
+  // RecentsVisibilityFilter getActiveRecentsVisibilityFilter({RecentsVisibilityFilter defaultValue});
+  //
+  // Future<bool> setActiveRecentsVisibilityFilter(RecentsVisibilityFilter value);
 
   ContactSourceType getActiveContactSourceType({ContactSourceType defaultValue});
 
   Future<bool> setActiveContactSourceType(ContactSourceType value);
-
-  // Future<bool> setUserAgreementStatus(AgreementStatus value);
-  //
-  // AgreementStatus getUserAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending});
 
   Future<bool> setContactsAgreementStatus(AgreementStatus value);
 
@@ -211,24 +207,6 @@ class AppPreferencesImpl
   @override
   Future<bool> setActiveContactSourceType(ContactSourceType value) =>
       _sharedPreferences.setString(_kActiveContactSourceTypeKey, value.name);
-
-  @override
-  Future<bool> setUserAgreementStatus(AgreementStatus value) =>
-      _sharedPreferences.setString(_kUserAgreementAcceptedKey, value.name);
-
-  @override
-  AgreementStatus getUserAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending}) {
-    final agreementStatusString = _sharedPreferences.getString(_kUserAgreementAcceptedKey);
-    if (agreementStatusString != null) {
-      try {
-        return AgreementStatus.values.byName(agreementStatusString);
-      } catch (_) {
-        return defaultValue;
-      }
-    } else {
-      return defaultValue;
-    }
-  }
 
   @override
   Future<bool> setContactsAgreementStatus(AgreementStatus value) =>

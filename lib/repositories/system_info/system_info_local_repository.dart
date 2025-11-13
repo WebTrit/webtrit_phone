@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/mappers/json/system_info_mapper.dart';
 import 'package:webtrit_phone/models/system_info/system_info.dart';
@@ -25,8 +23,7 @@ class SystemInfoLocalRepositoryPrefsImpl with SystemInfoJsonMapper implements Sy
 
   @override
   Future<void> setSystemInfo(WebtritSystemInfo systemInfo) {
-    final jsonMap = systemInfoToJson(systemInfo);
-    final jsonString = jsonEncode(jsonMap);
+    final jsonString = systemInfoToJson(systemInfo);
     return _appPreferences.setString(_prefsKey, jsonString);
   }
 

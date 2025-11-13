@@ -299,7 +299,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     create: (context) {
                       return RecentsBloc(
                         recentsRepository: context.read<RecentsRepository>(),
-                        appPreferences: context.read<AppPreferences>(),
+                        activeRecentsVisibilityFilterRepository: context
+                            .read<ActiveRecentsVisibilityFilterRepository>(),
                         dateFormat: AppTime().formatDateTime(),
                       )..add(const RecentsStarted());
                     },

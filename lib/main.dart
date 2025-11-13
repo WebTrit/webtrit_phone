@@ -173,6 +173,9 @@ class RootApp extends StatelessWidget {
           final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferencesPure);
           final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(appPreferencesPure);
           final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(appPreferencesPure);
+          final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(
+            appPreferencesPure,
+          );
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -186,6 +189,7 @@ class RootApp extends StatelessWidget {
               await activeMainFlavorRepository.clear();
               await callerIdSettingsRepository.clear();
               await userAgreementStatusRepository.clear();
+              await activeRecentsVisibilityFilterRepository.clear();
             },
           );
 
@@ -200,6 +204,9 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<SessionRepository>.value(value: sessionRepository),
               RepositoryProvider<CallerIdSettingsRepository>.value(value: callerIdSettingsRepository),
               RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
+              RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
+                value: activeRecentsVisibilityFilterRepository,
+              ),
             ],
             child: const App(),
           );
