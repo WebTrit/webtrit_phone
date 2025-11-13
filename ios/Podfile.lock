@@ -126,9 +126,9 @@ PODS:
     - Flutter
   - flutter_secure_storage (6.0.0):
     - Flutter
-  - flutter_webrtc (1.2.0):
+  - flutter_webrtc (0.14.0):
     - Flutter
-    - WebRTC-SDK (= 137.7151.04)
+    - WebRTC-SDK (= 125.6422.07)
   - GoogleAdsOnDeviceConversion (3.1.0):
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Logger (~> 8.1)
@@ -242,7 +242,7 @@ PODS:
     - sqlite3/session
   - url_launcher_ios (0.0.1):
     - Flutter
-  - WebRTC-SDK (137.7151.04)
+  - WebRTC-SDK (125.6422.07)
   - webtrit_callkeep_ios (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
@@ -402,7 +402,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
   flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
-  flutter_webrtc: c3e21fc0dcd9d8eb246ae4d5256fcbeb2f5ecd22
+  flutter_webrtc: fd0d3bdef8766a0736dbbe2e5b7e85f1f3c52117
   GoogleAdsOnDeviceConversion: e03a386840803ea7eef3fd22a061930142c039c1
   GoogleAppMeasurement: 1e718274b7e015cefd846ac1fcf7820c70dc017d
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
@@ -421,7 +421,7 @@ SPEC CHECKSUMS:
   sqlite3: 73513155ec6979715d3904ef53a8d68892d4032b
   sqlite3_flutter_libs: 83f8e9f5b6554077f1d93119fe20ebaa5f3a9ef1
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
-  WebRTC-SDK: 40d4f5ba05cadff14e4db5614aec402a633f007e
+  WebRTC-SDK: dff00a3892bc570b6014e046297782084071657e
   webtrit_callkeep_ios: b6e52a357f27f00596927407b1aff2dc5f9c9b14
   webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
   workmanager_apple: 904529ae31e97fc5be632cf628507652294a0778
