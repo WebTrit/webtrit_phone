@@ -18,4 +18,6 @@ class AppPreferences {
   bool? getBool(String key) => _sharedPreferences.getBool(key);
   Future<void> setBool(String key, bool value) => _sharedPreferences.setBool(key, value);
   Future<void> remove(String key) => _sharedPreferences.remove(key);
+  List<String>? getStringList(String key) => _sharedPreferences.getStringList(key);
+  Future<void> setStringList(String key, List<String> value) => _sharedPreferences.setStringList(key, value);
 }

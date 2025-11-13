@@ -178,6 +178,7 @@ class RootApp extends StatelessWidget {
           final encodingSettingsRepository = EncodingSettingsRepositoryPrefsImpl(prefs);
           final localeRepository = LocaleRepositoryPrefsImpl(prefs);
           final themeModeRepository = ThemeModeRepositoryPrefsImpl(prefs);
+          final autocompleteHistoryRepository = AutocompleteHistoryRepositoryPrefsImpl(prefs);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -228,6 +229,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<EncodingSettingsRepository>.value(value: encodingSettingsRepository),
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),
               RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
+              RepositoryProvider<AutocompleteHistoryRepository>.value(value: autocompleteHistoryRepository),
             ],
             child: const App(),
           );
