@@ -170,7 +170,6 @@ class MockAppPreferencesService implements AppPreferences {
     return true;
   }
 
-  @override
   IncomingCallType getIncomingCallType(
       {IncomingCallType defaultValue = IncomingCallType.pushNotification}) {
     final callTypeString = _mockData['call-incoming-type'] as String?;
@@ -184,7 +183,6 @@ class MockAppPreferencesService implements AppPreferences {
     return defaultValue;
   }
 
-  @override
   Future<bool> setIncomingCallType(IncomingCallType value) async {
     _mockData['call-incoming-type'] = value.name;
     return true;

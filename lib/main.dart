@@ -182,6 +182,7 @@ class RootApp extends StatelessWidget {
           final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferencesPure);
           final encodingPresetRepository = EncodingPresetRepositoryPrefsImpl(appPreferencesPure);
           final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(appPreferencesPure);
+          final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -201,6 +202,7 @@ class RootApp extends StatelessWidget {
               await contactsAgreementStatusRepository.clear();
               await encodingPresetRepository.clear();
               await iceSettingsRepository.clear();
+              await incomingCallTypeRepository.clear();
             },
           );
 
@@ -232,6 +234,9 @@ class RootApp extends StatelessWidget {
               ),
               RepositoryProvider<IceSettingsRepository>.value(
                 value: iceSettingsRepository,
+              ),
+              RepositoryProvider<IncomingCallTypeRepository>.value(
+                value: incomingCallTypeRepository,
               ),
             ],
             child: const App(),

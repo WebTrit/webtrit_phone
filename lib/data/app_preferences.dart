@@ -21,10 +21,6 @@ abstract class AppPreferences {
 
   Future<bool> removeLocale();
 
-  IncomingCallType getIncomingCallType({IncomingCallType defaultValue});
-
-  Future<bool> setIncomingCallType(IncomingCallType value);
-
   EncodingSettings getEncodingSettings();
 
   Future<void> setEncodingSettings(EncodingSettings settings);
@@ -145,24 +141,6 @@ class AppPreferencesImpl
 
   @override
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
-
-  @override
-  Future<bool> setIncomingCallType(IncomingCallType value) =>
-      _sharedPreferences.setString(_kIncomingCallTypeKey, value.name);
-
-  @override
-  IncomingCallType getIncomingCallType({IncomingCallType defaultValue = IncomingCallType.pushNotification}) {
-    final incomingCallType = _sharedPreferences.getString(_kIncomingCallTypeKey);
-    if (incomingCallType != null) {
-      try {
-        return IncomingCallType.values.byName(incomingCallType);
-      } catch (_) {
-        return defaultValue;
-      }
-    } else {
-      return defaultValue;
-    }
-  }
 
   @override
   EncodingSettings getEncodingSettings() {
