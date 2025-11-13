@@ -353,6 +353,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final appBloc = context.read<AppBloc>();
                       final appPreferences = context.read<AppPreferences>();
                       final notificationsBloc = context.read<NotificationsBloc>();
+                      final audioProcessingSettingsRepository = context.read<AudioProcessingSettingsRepository>();
                       // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
                       final appCertificates = AppCertificates();
                       final featureAccess = context.read<FeatureAccess>();
@@ -363,7 +364,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       // Initialize media builder with app-configured audio/video constraints
                       // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
                       final userMediaBuilder = DefaultUserMediaBuilder(
-                        audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
+                        audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(
+                          audioProcessingSettingsRepository,
+                        ),
                         videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
                       );
                       // Initialize peer connection policy applier with app-specific negotiation rules
@@ -399,7 +402,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         callkeepConnections: _callkeepConnections,
                         sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
                         sdpSanitizer: RemoteSdpSanitizer(),
-                        webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
+                        webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(audioProcessingSettingsRepository),
                         userMediaBuilder: userMediaBuilder,
                         contactNameResolver: contactNameResolver,
                         callErrorReporter: DefaultCallErrorReporter(

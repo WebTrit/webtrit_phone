@@ -37,10 +37,6 @@ abstract class AppPreferences {
 
   Future<void> setEncodingPreset(EncodingPreset? value);
 
-  AudioProcessingSettings getAudioProcessingSettings();
-
-  Future<void> setAudioProcessingSettings(AudioProcessingSettings settings);
-
   VideoCapturingSettings getVideoCapturingSettings();
 
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings);
@@ -230,21 +226,6 @@ class AppPreferencesImpl
     } else {
       return _sharedPreferences.remove(_kEncodingPresetKey);
     }
-  }
-
-  @override
-  AudioProcessingSettings getAudioProcessingSettings() {
-    final audioProcessingSettingsString = _sharedPreferences.getString(_kAudioProcessingSettingsKey);
-    if (audioProcessingSettingsString != null) {
-      return audioProcessingSettingsFromJson(audioProcessingSettingsString);
-    } else {
-      return AudioProcessingSettings.blank();
-    }
-  }
-
-  @override
-  Future<void> setAudioProcessingSettings(AudioProcessingSettings settings) {
-    return _sharedPreferences.setString(_kAudioProcessingSettingsKey, audioProcessingSettingsToJson(settings));
   }
 
   @override

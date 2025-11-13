@@ -252,12 +252,10 @@ class MockAppPreferencesService implements AppPreferences {
     return Future.value();
   }
 
-  @override
   AudioProcessingSettings getAudioProcessingSettings() {
     return const AudioProcessingSettings();
   }
 
-  @override
   Future<void> setAudioProcessingSettings(AudioProcessingSettings settings) {
     return Future.value();
   }

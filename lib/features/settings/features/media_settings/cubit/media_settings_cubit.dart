@@ -2,15 +2,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/audio_processing_settings/audio_processing_settings_repository.dart';
 
 import 'media_settings_state.dart';
 
 class MediaSettingsCubit extends Cubit<MediaSettingsState> {
-  MediaSettingsCubit(this._prefs, this._defaultPeerConnectionSettings)
-    : super(MediaSettingsState.fromPrefs(_prefs, _defaultPeerConnectionSettings));
+  MediaSettingsCubit(this._prefs, this._defaultPeerConnectionSettings, this._audioProcessingSettingsRepository)
+    : super(MediaSettingsState.fromPrefs(_prefs, _defaultPeerConnectionSettings, _audioProcessingSettingsRepository));
 
   final AppPreferences _prefs;
   final PeerConnectionSettings _defaultPeerConnectionSettings;
+  final AudioProcessingSettingsRepository _audioProcessingSettingsRepository;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
@@ -24,7 +26,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
 
   void setAudioProcessingSettings(AudioProcessingSettings settings) {
     emit(state.copyWithAudioProcessingSettings(settings));
-    _prefs.setAudioProcessingSettings(settings);
+    _audioProcessingSettingsRepository.setAudioProcessingSettings(settings);
   }
 
   void setVideoCapturingSettings(VideoCapturingSettings settings) {
@@ -56,7 +58,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
 
     _prefs.setEncodingPreset(null);
     _prefs.setEncodingSettings(EncodingSettings.blank());
-    _prefs.setAudioProcessingSettings(AudioProcessingSettings.blank());
+    _audioProcessingSettingsRepository.setAudioProcessingSettings(AudioProcessingSettings.blank());
     _prefs.setVideoCapturingSettings(VideoCapturingSettings.blank());
     _prefs.setIceSettings(IceSettings.blank());
     _prefs.setPearConnectionSettings(_defaultPeerConnectionSettings);

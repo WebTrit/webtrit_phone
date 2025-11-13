@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/repositories/audio_processing_settings/audio_processing_settings_repository.dart';
 
 import '../../media_settings/media_settings.dart';
 
@@ -16,7 +17,11 @@ class MediaSettingsScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final defaultPeerConnectionSettings = context.read<FeatureAccess>().callFeature.peerConnection;
     return BlocProvider(
-      create: (context) => MediaSettingsCubit(context.read<AppPreferences>(), defaultPeerConnectionSettings),
+      create: (context) => MediaSettingsCubit(
+        context.read<AppPreferences>(),
+        defaultPeerConnectionSettings,
+        context.read<AudioProcessingSettingsRepository>(),
+      ),
       child: const MediaSettingsScreen(),
     );
   }
