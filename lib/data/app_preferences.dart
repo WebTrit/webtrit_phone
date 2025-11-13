@@ -33,10 +33,6 @@ abstract class AppPreferences {
 
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings);
 
-  IceSettings getIceSettings();
-
-  Future<void> setIceSettings(IceSettings settings);
-
   PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue});
 
   Future<void> setPearConnectionSettings(PeerConnectionSettings settings);
@@ -184,25 +180,6 @@ class AppPreferencesImpl
   }
 
   @override
-  EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue}) {
-    final encodingPresetString = _sharedPreferences.getString(_kEncodingPresetKey);
-    if (encodingPresetString != null) {
-      return EncodingPreset.values.byName(encodingPresetString);
-    } else {
-      return defaultValue;
-    }
-  }
-
-  @override
-  Future<void> setEncodingPreset(EncodingPreset? value) {
-    if (value != null) {
-      return _sharedPreferences.setString(_kEncodingPresetKey, value.name);
-    } else {
-      return _sharedPreferences.remove(_kEncodingPresetKey);
-    }
-  }
-
-  @override
   VideoCapturingSettings getVideoCapturingSettings() {
     final videoCapturingSettingsString = _sharedPreferences.getString(_kVideoCapturingSettingsKey);
     if (videoCapturingSettingsString != null) {
@@ -215,21 +192,6 @@ class AppPreferencesImpl
   @override
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings) {
     return _sharedPreferences.setString(_kVideoCapturingSettingsKey, videoCapturingSettingsToJson(settings));
-  }
-
-  @override
-  IceSettings getIceSettings() {
-    final iceSettingsString = _sharedPreferences.getString(_kIceSettingsKey);
-    if (iceSettingsString != null) {
-      return iceSettingsFromJson(iceSettingsString);
-    } else {
-      return IceSettings.blank();
-    }
-  }
-
-  @override
-  Future<void> setIceSettings(IceSettings settings) {
-    return _sharedPreferences.setString(_kIceSettingsKey, iceSettingsToJson(settings));
   }
 
   @override

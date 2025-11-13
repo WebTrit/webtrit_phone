@@ -3,6 +3,7 @@ import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/audio_processing_settings/audio_processing_settings_repository.dart';
 import 'package:webtrit_phone/repositories/encoding_preset/encoding_preset_repository.dart';
+import 'package:webtrit_phone/repositories/ice_settings/ice_settings_repository.dart';
 
 // TODO(Serdun): Maybe better to use Freezed for avoid a lot of copyWith methods.
 class MediaSettingsState with EquatableMixin {
@@ -25,13 +26,19 @@ class MediaSettingsState with EquatableMixin {
   final IceSettings iceSettings;
   final PeerConnectionSettings pearConnectionSettings;
 
-  factory MediaSettingsState.fromPrefs(AppPreferences prefs, PeerConnectionSettings defaultPeerConnectionSettings, AudioProcessingSettingsRepository audioProcessingSettingsRepository, EncodingPresetRepository encodingPresetRepository) {
+  factory MediaSettingsState.fromPrefs(
+    AppPreferences prefs,
+    PeerConnectionSettings defaultPeerConnectionSettings,
+    AudioProcessingSettingsRepository audioProcessingSettingsRepository,
+    EncodingPresetRepository encodingPresetRepository,
+    IceSettingsRepository iceSettingsRepository,
+  ) {
     return MediaSettingsState(
       encodingSettings: prefs.getEncodingSettings(),
       encodingPreset: encodingPresetRepository.getEncodingPreset(),
       audioProcessingSettings: audioProcessingSettingsRepository.getAudioProcessingSettings(),
       videoCapturingSettings: prefs.getVideoCapturingSettings(),
-      iceSettings: prefs.getIceSettings(),
+      iceSettings: iceSettingsRepository.getIceSettings(),
       pearConnectionSettings: prefs.getPeerConnectionSettings(defaultValue: defaultPeerConnectionSettings),
     );
   }

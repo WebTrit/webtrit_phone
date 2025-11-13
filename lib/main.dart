@@ -181,6 +181,7 @@ class RootApp extends StatelessWidget {
           final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(appPreferencesPure);
           final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferencesPure);
           final encodingPresetRepository = EncodingPresetRepositoryPrefsImpl(appPreferencesPure);
+          final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -199,6 +200,7 @@ class RootApp extends StatelessWidget {
               await audioProcessingSettingsRepository.clear();
               await contactsAgreementStatusRepository.clear();
               await encodingPresetRepository.clear();
+              await iceSettingsRepository.clear();
             },
           );
 
@@ -227,6 +229,9 @@ class RootApp extends StatelessWidget {
               ),
               RepositoryProvider<EncodingPresetRepository>.value(
                 value: encodingPresetRepository,
+              ),
+              RepositoryProvider<IceSettingsRepository>.value(
+                value: iceSettingsRepository,
               ),
             ],
             child: const App(),

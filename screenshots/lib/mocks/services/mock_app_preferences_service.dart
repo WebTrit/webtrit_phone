@@ -240,12 +240,10 @@ class MockAppPreferencesService implements AppPreferences {
     return Future.value();
   }
 
-  @override
   EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue}) {
     return defaultValue;
   }
 
-  @override
   Future<void> setEncodingPreset(EncodingPreset? value) {
     return Future.value();
   }
@@ -268,12 +266,10 @@ class MockAppPreferencesService implements AppPreferences {
     return Future.value();
   }
 
-  @override
   IceSettings getIceSettings() {
     return const IceSettings();
   }
 
-  @override
   Future<void> setIceSettings(IceSettings settings) {
     return Future.value();
   }

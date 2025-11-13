@@ -355,6 +355,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final notificationsBloc = context.read<NotificationsBloc>();
                       final audioProcessingSettingsRepository = context.read<AudioProcessingSettingsRepository>();
                       final encodingPresetRepository = context.read<EncodingPresetRepository>();
+                      final iceSettingsRepository = context.read<IceSettingsRepository>();
                       // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
                       final appCertificates = AppCertificates();
                       final featureAccess = context.read<FeatureAccess>();
@@ -409,7 +410,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         callErrorReporter: DefaultCallErrorReporter(
                           (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         ),
-                        iceFilter: FilterWithAppSettings(appPreferences),
+                        iceFilter: FilterWithAppSettings(iceSettingsRepository),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                         sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
