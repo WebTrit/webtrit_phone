@@ -32,6 +32,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.contactsAgreementStatusRepository,
     required this.sessionRepository,
     required this.appInfo,
+    required this.localeRepository,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(
@@ -40,7 +41,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
            session: sessionRepository.getCurrent() ?? const Session(),
            themeSettings: appThemes.values.first.settings,
            themeMode: appPreferences.getThemeMode(),
-           locale: appPreferences.getLocale(),
+           locale: localeRepository.getLocale(),
            userAgreementStatus: userAgreementStatusRepository.getUserAgreementStatus(),
            contactsAgreementStatus: contactsAgreementStatusRepository.getContactsAgreementStatus(),
          ),
@@ -60,6 +61,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final WebtritApiClientFactory createWebtritApiClient;
   final SessionRepository sessionRepository;
   final AppInfo appInfo;
+  final LocaleRepository localeRepository;
 
   late final StreamSubscription<Session?> _sessionSub;
 
@@ -120,9 +122,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onLocaleChanged(AppLocaleChanged event, Emitter<AppState> emit) async {
     final locale = event.value;
     if (locale == LocaleExtension.defaultNull) {
-      await appPreferences.removeLocale();
+      await localeRepository.clear();
     } else {
-      await appPreferences.setLocale(locale);
+      await localeRepository.setLocale(locale);
     }
     emit(state.copyWith(locale: locale));
   }

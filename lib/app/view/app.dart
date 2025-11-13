@@ -34,6 +34,7 @@ class _AppState extends State<App> {
       appPreferences: context.read<AppPreferences>(),
       userAgreementStatusRepository: context.read<UserAgreementStatusRepository>(),
       contactsAgreementStatusRepository: context.read<ContactsAgreementStatusRepository>(),
+      localeRepository: context.read<LocaleRepository>(),
       appThemes: context.read<AppThemes>(),
       sessionRepository: context.read<SessionRepository>(),
       appInfo: context.read<AppInfo>(),

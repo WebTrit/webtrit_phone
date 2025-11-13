@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 
 abstract class AppPreferences {
@@ -13,12 +12,6 @@ abstract class AppPreferences {
   Future<bool> setThemeMode(ThemeMode value);
 
   Future<bool> removeThemeMode();
-
-  Locale getLocale();
-
-  Future<bool> setLocale(Locale value);
-
-  Future<bool> removeLocale();
 }
 
 class AppPreferencesFactory {
@@ -108,24 +101,4 @@ class AppPreferencesImpl
 
   @override
   Future<bool> removeThemeMode() => _sharedPreferences.remove(_kThemeModeKey);
-
-  @override
-  Locale getLocale() {
-    final localeLanguageTag = _sharedPreferences.getString(_kLocaleLanguageTagKey);
-    if (localeLanguageTag != null) {
-      try {
-        return LocaleExtension.fromLanguageTag(localeLanguageTag);
-      } catch (_) {
-        return LocaleExtension.defaultNull;
-      }
-    } else {
-      return LocaleExtension.defaultNull;
-    }
-  }
-
-  @override
-  Future<bool> setLocale(Locale value) => _sharedPreferences.setString(_kLocaleLanguageTagKey, value.toLanguageTag());
-
-  @override
-  Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
 }

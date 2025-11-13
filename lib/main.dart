@@ -184,6 +184,7 @@ class RootApp extends StatelessWidget {
           final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(appPreferencesPure);
           final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(appPreferencesPure);
           final encodingSettingsRepository = EncodingPresetRepositoryPrefsImpl(appPreferencesPure);
+          final localeRepository = LocaleRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -207,6 +208,7 @@ class RootApp extends StatelessWidget {
               await peerConnectionSettingsRepository.clear();
               await videoCapturingSettingsRepository.clear();
               await encodingSettingsRepository.clear();
+              await localeRepository.clear();
             },
           );
 
@@ -233,6 +235,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<PeerConnectionSettingsRepository>.value(value: peerConnectionSettingsRepository),
               RepositoryProvider<VideoCapturingSettingsRepository>.value(value: videoCapturingSettingsRepository),
               RepositoryProvider<EncodingPresetRepository>.value(value: encodingSettingsRepository),
+              RepositoryProvider<LocaleRepository>.value(value: localeRepository),
             ],
             child: const App(),
           );

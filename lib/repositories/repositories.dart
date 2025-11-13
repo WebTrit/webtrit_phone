@@ -41,3 +41,4 @@ export 'incoming_call_type/incoming_call_type_repository.dart';
 export 'peer_connection_settings/peer_connection_settings_repository.dart';
 export 'video_capturing_settings/video_capturing_settings_repository.dart';
 export 'encoding_settings/encoding_settings_repository.dart';
+export 'locale/locale_repository.dart';

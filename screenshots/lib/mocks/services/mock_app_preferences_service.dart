@@ -89,7 +89,6 @@ class MockAppPreferencesService implements AppPreferences {
     return true;
   }
 
-  @override
   Locale getLocale() {
     final localeLanguageTag = _mockData['locale-language-tag'] as String?;
     if (localeLanguageTag != null) {
@@ -102,13 +101,11 @@ class MockAppPreferencesService implements AppPreferences {
     return LocaleExtension.defaultNull;
   }
 
-  @override
   Future<bool> setLocale(Locale value) async {
     _mockData['locale-language-tag'] = value.toLanguageTag();
     return true;
   }
 
-  @override
   Future<bool> removeLocale() async {
     _mockData.remove('locale-language-tag');
     return true;
