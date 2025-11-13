@@ -228,12 +228,10 @@ class MockAppPreferencesService implements AppPreferences {
     return Future.value(true);
   }
 
-  @override
   EncodingSettings getEncodingSettings() {
     return EncodingSettings();
   }
 
-  @override
   Future<void> setEncodingSettings(EncodingSettings settings) {
     return Future.value();
   }

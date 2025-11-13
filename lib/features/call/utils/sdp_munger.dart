@@ -10,6 +10,7 @@ import 'package:webtrit_phone/models/encoding_settings.dart';
 import 'package:webtrit_phone/models/feature_access/encoding_config.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 import 'package:webtrit_phone/repositories/encoding_preset/encoding_preset_repository.dart';
+import 'package:webtrit_phone/repositories/encoding_settings/encoding_settings_repository.dart';
 
 final _logger = Logger('SDPMunger');
 
@@ -27,9 +28,9 @@ abstract class SDPMunger {
 /// can be used to set bitrate, ptime, opus stereo & bandwidth
 /// and audio/video profiles reordering and exclusion by settings.
 class ModifyWithEncodingSettings implements SDPMunger {
-  ModifyWithEncodingSettings(this._prefs, this._encodingConfig, this._encodingPresetRepository);
+  ModifyWithEncodingSettings(this._encodingSettingsRepository, this._encodingConfig, this._encodingPresetRepository);
 
-  final AppPreferences _prefs;
+  final EncodingSettingsRepository _encodingSettingsRepository;
   final EncodingConfig _encodingConfig;
   final EncodingPresetRepository _encodingPresetRepository;
 
@@ -50,7 +51,7 @@ class ModifyWithEncodingSettings implements SDPMunger {
       EncodingPreset.balance => EncodingSettings.balance(),
       EncodingPreset.quality => EncodingSettings.quality(),
       EncodingPreset.fullFlex => EncodingSettings.fullFlex(),
-      EncodingPreset.custom => _prefs.getEncodingSettings(),
+      EncodingPreset.custom => _encodingSettingsRepository.getEncodingSettings(),
       EncodingPreset.bypass => EncodingSettings.blank(),
     };
     return settings;

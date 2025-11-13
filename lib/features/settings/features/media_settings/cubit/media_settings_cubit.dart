@@ -15,6 +15,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     this._iceSettingsRepository,
     this._peerConnectionSettingsRepository,
     this._videoCapturingSettingsRepository,
+    this._encodingSettingsRepository,
   ) : super(
         MediaSettingsState.fromPrefs(
           _prefs,
@@ -24,6 +25,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
           _iceSettingsRepository,
           _peerConnectionSettingsRepository,
           _videoCapturingSettingsRepository,
+          _encodingSettingsRepository,
         ),
       );
 
@@ -34,10 +36,11 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   final IceSettingsRepository _iceSettingsRepository;
   final PeerConnectionSettingsRepository _peerConnectionSettingsRepository;
   final VideoCapturingSettingsRepository _videoCapturingSettingsRepository;
+  final EncodingSettingsRepository _encodingSettingsRepository;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
-    _prefs.setEncodingSettings(settings);
+    _encodingSettingsRepository.setEncodingSettings(settings);
   }
 
   void setEncodingPreset(EncodingPreset? preset) {
@@ -78,7 +81,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     );
 
     _encodingPresetRepository.setEncodingPreset(null);
-    _prefs.setEncodingSettings(EncodingSettings.blank());
+    _encodingSettingsRepository.setEncodingSettings(EncodingSettings.blank());
     _audioProcessingSettingsRepository.setAudioProcessingSettings(AudioProcessingSettings.blank());
     _videoCapturingSettingsRepository.setVideoCapturingSettings(VideoCapturingSettings.blank());
     _iceSettingsRepository.setIceSettings(IceSettings.blank());

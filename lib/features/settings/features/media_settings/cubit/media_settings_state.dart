@@ -31,10 +31,11 @@ class MediaSettingsState with EquatableMixin {
     EncodingPresetRepository encodingPresetRepository,
     IceSettingsRepository iceSettingsRepository,
     PeerConnectionSettingsRepository peerConnectionSettingsRepository,
-      VideoCapturingSettingsRepository videoCapturingSettingsRepository,
+    VideoCapturingSettingsRepository videoCapturingSettingsRepository,
+    EncodingSettingsRepository encodingSettingsRepository,
   ) {
     return MediaSettingsState(
-      encodingSettings: prefs.getEncodingSettings(),
+      encodingSettings: encodingSettingsRepository.getEncodingSettings(),
       encodingPreset: encodingPresetRepository.getEncodingPreset(),
       audioProcessingSettings: audioProcessingSettingsRepository.getAudioProcessingSettings(),
       videoCapturingSettings: videoCapturingSettingsRepository.getVideoCapturingSettings(),

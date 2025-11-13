@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 
 abstract class AppPreferences {
@@ -20,10 +19,6 @@ abstract class AppPreferences {
   Future<bool> setLocale(Locale value);
 
   Future<bool> removeLocale();
-
-  EncodingSettings getEncodingSettings();
-
-  Future<void> setEncodingSettings(EncodingSettings settings);
 }
 
 class AppPreferencesFactory {
@@ -133,19 +128,4 @@ class AppPreferencesImpl
 
   @override
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
-
-  @override
-  EncodingSettings getEncodingSettings() {
-    final encodingSettingsString = _sharedPreferences.getString(_kEncodingSettingsKey);
-    if (encodingSettingsString != null) {
-      return encodingSettingsFromJson(encodingSettingsString);
-    } else {
-      return EncodingSettings.blank();
-    }
-  }
-
-  @override
-  Future<void> setEncodingSettings(EncodingSettings settings) {
-    return _sharedPreferences.setString(_kEncodingSettingsKey, encodingSettingsToJson(settings));
-  }
 }
