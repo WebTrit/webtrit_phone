@@ -4,20 +4,19 @@ import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('RegisterStatusCubit');
 
 class RegisterStatusCubit extends Cubit<RegisterStatus> {
-  RegisterStatusCubit(this.appRepository, this.appPreferences, {this.handleError})
-    : super(appPreferences.getRegisterStatus()) {
+  RegisterStatusCubit(this.appRepository, this.registerStatusRepository, {this.handleError})
+    : super(registerStatusRepository.getRegisterStatus()) {
     fetchStatus();
     _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }
 
   final AppRepository appRepository;
-  final AppPreferences appPreferences;
+  final RegisterStatusRepository registerStatusRepository;
   final Function(Object error, StackTrace stackTrace)? handleError;
 
   late final StreamSubscription _connectivitySub;
@@ -29,7 +28,7 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
   Future<void> fetchStatus() async {
     try {
       final status = await appRepository.getRegisterStatus();
-      appPreferences.setRegisterStatus(status);
+      registerStatusRepository.setRegisterStatus(status);
       emit(status);
     } catch (e, s) {
       _logger.warning('Failed to get register status', e, s);
@@ -40,7 +39,7 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
   Future<void> setStatus(bool value) async {
     try {
       await appRepository.setRegisterStatus(value);
-      await appPreferences.setRegisterStatus(value);
+      await registerStatusRepository.setRegisterStatus(value);
       emit(value);
     } catch (e, stackTrace) {
       _logger.warning('_onRegisterStatusChanged', e, stackTrace);

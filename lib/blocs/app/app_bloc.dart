@@ -13,7 +13,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/auth/session_repository.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -27,9 +27,12 @@ final _logger = Logger('AppBloc');
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
-    required this.appPreferences,
+    required this.userAgreementStatusRepository,
+    required this.contactsAgreementStatusRepository,
     required this.sessionRepository,
     required this.appInfo,
+    required this.localeRepository,
+    required this.themeModeRepository,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(
@@ -37,10 +40,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
            /// Important to manage routing and navigation in AppRouter
            session: sessionRepository.getCurrent() ?? const Session(),
            themeSettings: appThemes.values.first.settings,
-           themeMode: appPreferences.getThemeMode(),
-           locale: appPreferences.getLocale(),
-           userAgreementStatus: appPreferences.getUserAgreementStatus(),
-           contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
+           themeMode: themeModeRepository.getThemeMode(),
+           locale: localeRepository.getLocale(),
+           userAgreementStatus: userAgreementStatusRepository.getUserAgreementStatus(),
+           contactsAgreementStatus: contactsAgreementStatusRepository.getContactsAgreementStatus(),
          ),
        ) {
     on<_SessionUpdated>(_onSessionUpdated, transformer: sequential());
@@ -52,10 +55,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _subscribeSession();
   }
 
-  final AppPreferences appPreferences;
+  final UserAgreementStatusRepository userAgreementStatusRepository;
+  final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final WebtritApiClientFactory createWebtritApiClient;
   final SessionRepository sessionRepository;
   final AppInfo appInfo;
+  final LocaleRepository localeRepository;
+  final ThemeModeRepository themeModeRepository;
 
   late final StreamSubscription<Session?> _sessionSub;
 
@@ -106,9 +112,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onThemeModeChanged(AppThemeModeChanged event, Emitter<AppState> emit) async {
     final themeMode = event.value;
     if (themeMode == ThemeMode.system) {
-      await appPreferences.removeThemeMode();
+      await themeModeRepository.clear();
     } else {
-      await appPreferences.setThemeMode(themeMode);
+      await themeModeRepository.setThemeMode(themeMode);
     }
     emit(state.copyWith(themeMode: themeMode));
   }
@@ -116,9 +122,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onLocaleChanged(AppLocaleChanged event, Emitter<AppState> emit) async {
     final locale = event.value;
     if (locale == LocaleExtension.defaultNull) {
-      await appPreferences.removeLocale();
+      await localeRepository.clear();
     } else {
-      await appPreferences.setLocale(locale);
+      await localeRepository.setLocale(locale);
     }
     emit(state.copyWith(locale: locale));
   }
@@ -145,12 +151,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future<void> __onUpdateUserAgreementStatus(_UserAppAgreementUpdate event, Emitter<AppState> emit) async {
-    await appPreferences.setUserAgreementStatus(event.status);
+    await userAgreementStatusRepository.setUserAgreementStatus(event.status);
     emit(state.copyWith(userAgreementStatus: event.status));
   }
 
   Future<void> __onContactsUserAgreementStatus(_ContactsAppAgreementUpdate event, Emitter<AppState> emit) async {
-    await appPreferences.setContactsAgreementStatus(event.status);
+    await contactsAgreementStatusRepository.setContactsAgreementStatus(event.status);
     emit(state.copyWith(contactsAgreementStatus: event.status));
   }
 

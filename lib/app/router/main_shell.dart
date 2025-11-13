@@ -143,8 +143,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             sessionGuard: _sessionGuard,
           ),
         ),
-        RepositoryProvider<SystemInfoRepository>(
-          create: (context) => SystemInfoRepository(context.read<WebtritApiClient>()),
+        RepositoryProvider<SystemInfoRemoteRepository>(
+          create: (context) => SystemInfoRemoteRepository(context.read<WebtritApiClient>()),
         ),
         RepositoryProvider<PrivateGatewayRepository>(
           create: (context) => CustomPrivateGatewayRepository(
@@ -215,10 +215,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         ),
         RepositoryProvider<CallPullRepository>(create: (context) => CallPullRepositoryMemoryImpl()),
         RepositoryProvider<LinesStateRepository>(create: (context) => LinesStateRepositoryInMemoryImpl()),
-        RepositoryProvider<PresenceRepository>(
-          create: (context) =>
-              PresenceRepositoryPrefsAndDriftImpl(context.read<AppPreferences>(), context.read<AppDatabase>()),
-          dispose: (value) => value.clearSettings(),
+        RepositoryProvider<PresenceInfoRepository>(
+          create: (context) => PresenceInfoRepositoryDriftImpl(context.read<AppDatabase>()),
         ),
         RepositoryProvider<CdrsLocalRepository>(
           create: (context) => CdrsLocalRepositoryDriftImpl(context.read<AppDatabase>()),
@@ -301,7 +299,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     create: (context) {
                       return RecentsBloc(
                         recentsRepository: context.read<RecentsRepository>(),
-                        appPreferences: context.read<AppPreferences>(),
+                        activeRecentsVisibilityFilterRepository: context
+                            .read<ActiveRecentsVisibilityFilterRepository>(),
                         dateFormat: AppTime().formatDateTime(),
                       )..add(const RecentsStarted());
                     },
@@ -311,7 +310,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     create: (context) {
                       final localContactsRepository = context.read<LocalContactsRepository>();
                       final appDatabase = context.read<AppDatabase>();
-                      final appPreferences = context.read<AppPreferences>();
+                      final contactsAgreementStatusRepository = context.read<ContactsAgreementStatusRepository>();
                       final appPermissions = context.read<AppPermissions>();
 
                       Future<bool> isFutureEnabled() async {
@@ -321,14 +320,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       }
 
                       Future<bool> isAgreementAccepted() async {
-                        final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
+                        final contactsAgreementStatus = contactsAgreementStatusRepository.getContactsAgreementStatus();
                         return contactsAgreementStatus.isAccepted;
                       }
 
                       final bloc = LocalContactsSyncBloc(
                         localContactsRepository: localContactsRepository,
                         appDatabase: appDatabase,
-                        appPreferences: appPreferences,
+                        contactsAgreementStatusRepository: contactsAgreementStatusRepository,
                         isFeatureEnabled: isFutureEnabled,
                         isAgreementAccepted: isAgreementAccepted,
                         isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
@@ -352,8 +351,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                   BlocProvider<CallBloc>(
                     create: (context) {
                       final appBloc = context.read<AppBloc>();
-                      final appPreferences = context.read<AppPreferences>();
                       final notificationsBloc = context.read<NotificationsBloc>();
+                      final audioProcessingSettingsRepository = context.read<AudioProcessingSettingsRepository>();
+                      final encodingPresetRepository = context.read<EncodingPresetRepository>();
+                      final iceSettingsRepository = context.read<IceSettingsRepository>();
+                      final peerConnectionSettingsRepository = context.read<PeerConnectionSettingsRepository>();
+                      final videoCapturingSettingsRepository = context.read<VideoCapturingSettingsRepository>();
+                      final encodingSettingsRepository = context.read<EncodingSettingsRepository>();
                       // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
                       final appCertificates = AppCertificates();
                       final featureAccess = context.read<FeatureAccess>();
@@ -364,12 +368,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       // Initialize media builder with app-configured audio/video constraints
                       // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
                       final userMediaBuilder = DefaultUserMediaBuilder(
-                        audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(appPreferences),
-                        videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(appPreferences),
+                        audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(
+                          audioProcessingSettingsRepository,
+                        ),
+                        videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(
+                          videoCapturingSettingsRepository,
+                        ),
                       );
                       // Initialize peer connection policy applier with app-specific negotiation rules
                       final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
-                        appPreferences,
+                        peerConnectionSettingsRepository,
                         peerConnectionConfig,
                         userMediaBuilder,
                       );
@@ -391,21 +399,26 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         callLogsRepository: context.read<CallLogsRepository>(),
                         callPullRepository: context.read<CallPullRepository>(),
                         linesStateRepository: context.read<LinesStateRepository>(),
-                        presenceRepository: context.read<PresenceRepository>(),
+                        presenceInfoRepository: context.read<PresenceInfoRepository>(),
+                        presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
                         sessionRepository: context.read<SessionRepository>(),
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,
                         callkeepConnections: _callkeepConnections,
-                        sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
+                        sdpMunger: ModifyWithEncodingSettings(
+                          encodingSettingsRepository,
+                          encodingConfig,
+                          encodingPresetRepository,
+                        ),
                         sdpSanitizer: RemoteSdpSanitizer(),
-                        webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(appPreferences),
+                        webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(audioProcessingSettingsRepository),
                         userMediaBuilder: userMediaBuilder,
                         contactNameResolver: contactNameResolver,
                         callErrorReporter: DefaultCallErrorReporter(
                           (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         ),
-                        iceFilter: FilterWithAppSettings(appPreferences),
+                        iceFilter: FilterWithAppSettings(iceSettingsRepository),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                         sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
@@ -456,7 +469,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           lazy: false,
                           create: (_) => RegisterStatusCubit(
                             context.read<AppRepository>(),
-                            context.read<AppPreferences>(),
+                            context.read<RegisterStatusRepository>(),
                             handleError: (error, stackTrace) {
                               context.read<NotificationsBloc>().add(
                                 NotificationsSubmitted(DefaultErrorNotification(error)),
@@ -476,7 +489,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           create: (_) => CallRoutingCubit(
                             context.read<UserRepository>(),
                             context.read<LinesStateRepository>(),
-                            context.read<AppPreferences>(),
+                            context.read<CallerIdSettingsRepository>(),
                             context.read<ConnectivityService>(),
                           ),
                         ),
@@ -538,7 +551,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(
-        listener: context.read<SystemInfoRepository>(),
+        listener: context.read<SystemInfoRemoteRepository>(),
         interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(

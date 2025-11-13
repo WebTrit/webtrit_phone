@@ -1,46 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
-// TODO: Refactor: Remove the internal `_HistoryStore` to externalize history management.
-// Instead, pass the historical options (e.g., `Iterable<String> options`) as a parameter,
-// and handle history persistence (adding/loading) outside this widget.
-// This change would enhance flexibility, allowing different storage mechanisms or
-// business logic for history, and improve separation of concerns by removing direct
-// `SharedPreferences` usage from the widget, which is generally considered bad practice.
-class _HistoryStore {
-  _HistoryStore(this.key, {this.maxItems = 8});
-
-  final String key;
-  final int maxItems;
-
-  /// Loads the history list from [SharedPreferences].
-  Future<List<String>> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList(key) ?? [];
-  }
-
-  /// Adds a new value to the history.
-  ///
-  /// This method trims the value, ignores empty strings, removes
-  /// case-insensitive duplicates, adds the new value to the top,
-  /// and truncates the list to [maxItems].
-  Future<void> add(String value) async {
-    final trimmedValue = value.trim();
-    if (trimmedValue.isEmpty) return;
-
-    final prefs = await SharedPreferences.getInstance();
-    final List<String> history = await load();
-
-    history.removeWhere((item) => item.toLowerCase() == trimmedValue.toLowerCase());
-    history.insert(0, trimmedValue);
-
-    final truncatedHistory = history.length > maxItems ? history.sublist(0, maxItems) : history;
-
-    await prefs.setStringList(key, truncatedHistory);
-  }
-}
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 /// A [TextFormField] that provides autocomplete suggestions from a
 /// persistent local history and integrates with system autofill.
@@ -60,7 +23,7 @@ class HistoryAutocompleteField extends StatefulWidget {
     this.onSubmit,
   });
 
-  /// The key used to store the history in [SharedPreferences].
+  /// The key used to store the history.
   final String storageKey;
 
   /// The label for the [InputDecoration].
@@ -98,24 +61,19 @@ class HistoryAutocompleteField extends StatefulWidget {
 }
 
 class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
-  late _HistoryStore _historyStore;
+  late final _historyRepository = context.read<AutocompleteHistoryRepository>();
   late final TextEditingController _controller;
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _historyStore = _HistoryStore(widget.storageKey, maxItems: widget.maxItems);
     _controller = TextEditingController(text: widget.initialValue);
   }
 
   @override
   void didUpdateWidget(HistoryAutocompleteField oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    if (widget.storageKey != oldWidget.storageKey || widget.maxItems != oldWidget.maxItems) {
-      _historyStore = _HistoryStore(widget.storageKey, maxItems: widget.maxItems);
-    }
 
     if (widget.initialValue != oldWidget.initialValue && widget.initialValue != _controller.text) {
       final newText = widget.initialValue ?? '';
@@ -135,7 +93,7 @@ class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
     final query = textEditingValue.text.trim();
     if (query.isEmpty) return [];
 
-    final history = await _historyStore.load();
+    final history = _historyRepository.getHistory(widget.storageKey);
     return history.where((item) => item.toLowerCase().contains(query.toLowerCase())).toList();
   }
 
@@ -143,7 +101,7 @@ class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
     final currentValue = _controller.text;
     FocusScope.of(context).unfocus();
     TextInput.finishAutofillContext(shouldSave: true);
-    _historyStore.add(currentValue);
+    _historyRepository.addToHistory(widget.storageKey, currentValue, maxItems: widget.maxItems);
     widget.onSubmit?.call();
   }
 

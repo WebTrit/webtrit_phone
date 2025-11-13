@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/repositories/account/user_repository.dart';
+import 'package:webtrit_phone/repositories/caller_id_settings/caller_id_settings_repository.dart';
 
 import '../caller_id.dart';
 
@@ -16,7 +16,7 @@ class CallerIdSettingsScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          CallerIdSettingsCubit(context.read<AppPreferences>(), context.read<UserRepository>())..init(),
+          CallerIdSettingsCubit(context.read<CallerIdSettingsRepository>(), context.read<UserRepository>())..init(),
       child: const CallerIdSettingsScreen(),
     );
   }

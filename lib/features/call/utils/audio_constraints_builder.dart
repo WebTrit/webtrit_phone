@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences.dart';
+import 'package:webtrit_phone/repositories/audio_processing_settings/audio_processing_settings_repository.dart';
 
 /// Builds WebRTC audio constraints for the call.
 abstract class AudioConstraintsBuilder {
@@ -11,13 +11,13 @@ abstract class AudioConstraintsBuilder {
 /// functionality to create audio constraints that are tailored to the specific
 /// settings and requirements of the application.
 class AudioConstraintsWithAppSettingsBuilder implements AudioConstraintsBuilder {
-  AudioConstraintsWithAppSettingsBuilder(this._prefs);
+  AudioConstraintsWithAppSettingsBuilder(this._audioProcessingSettingsRepository);
 
-  final AppPreferences _prefs;
+  final AudioProcessingSettingsRepository _audioProcessingSettingsRepository;
 
   @override
   Map<String, String> build() {
-    final settings = _prefs.getAudioProcessingSettings();
+    final settings = _audioProcessingSettingsRepository.getAudioProcessingSettings();
     final echoCancellation = settings.echoCancellation;
     final autoGainControl = settings.autoGainControl;
     final noiseSuppression = settings.noiseSuppression;

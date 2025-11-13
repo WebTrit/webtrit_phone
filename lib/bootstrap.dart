@@ -16,6 +16,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/utils/core_support.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
@@ -35,11 +36,19 @@ Future<void> bootstrap() async {
   final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
 
   // Initialization order is crucial for proper app setup
-
   final appThemes = await AppThemes.init();
+  final appPreferences = await AppPreferences.init();
+  final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
+  final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
 
-  final appPreferences = await AppPreferencesFactory.init();
-  final featureAccess = FeatureAccess.init(appThemes.appConfig, appThemes.embeddedResources, appPreferences);
+  final coreSupport = CoreSupportImpl(systemInfoLocalRepository);
+  final featureAccess = FeatureAccess.init(
+    appThemes.appConfig,
+    appThemes.embeddedResources,
+    activeMainFlavorRepository,
+    coreSupport,
+  );
+
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
@@ -54,11 +63,11 @@ Future<void> bootstrap() async {
   await AppLogger.init(remoteFirebaseConfigService, appLabels);
   await AppLifecycle.initMaster();
 
-  await _initCallkeep(appPreferences, featureAccess);
+  await _initCallkeep(featureAccess);
   await _initWorkManager();
 }
 
-Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureAccess) async {
+Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   if (!Platform.isAndroid) return;
 
   AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);

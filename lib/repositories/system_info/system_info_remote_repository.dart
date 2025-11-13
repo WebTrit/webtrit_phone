@@ -10,8 +10,8 @@ import 'package:webtrit_phone/common/common.dart';
 
 final _logger = Logger('SystemInfoRepository');
 
-class SystemInfoRepository with SystemInfoApiMapper implements Refreshable {
-  SystemInfoRepository(this.webtritApiClient) {
+class SystemInfoRemoteRepository with SystemInfoApiMapper implements Refreshable {
+  SystemInfoRemoteRepository(this.webtritApiClient) {
     _updatesController = StreamController<WebtritSystemInfo>.broadcast();
   }
 

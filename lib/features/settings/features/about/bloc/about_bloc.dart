@@ -42,7 +42,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
   }
 
   final NotificationsBloc notificationsBloc;
-  final SystemInfoRepository infoRepository;
+  final SystemInfoRemoteRepository infoRepository;
 
   void _onStarted(AboutStarted event, Emitter<AboutState> emit) async {
     emit(state.copyWith(progress: true));

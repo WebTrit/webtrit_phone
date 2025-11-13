@@ -58,8 +58,6 @@ class RootApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sessionCleanupWorker = SessionCleanupWorker();
-
     return MultiProvider(
       providers: [
         Provider<AppInfo>(
@@ -89,7 +87,7 @@ class RootApp extends StatelessWidget {
         ),
         Provider<AppPreferences>(
           create: (context) {
-            return AppPreferencesFactory.instance;
+            return AppPreferences();
           },
         ),
         Provider<FeatureAccess>(
@@ -159,18 +157,81 @@ class RootApp extends StatelessWidget {
       ],
       child: Builder(
         builder: (context) {
+          final prefs = context.read<AppPreferences>();
+          final database = context.read<AppDatabase>();
+
+          final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
+          final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs);
+          final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(prefs);
+          final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(prefs);
+          final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(prefs);
+          final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(prefs);
+          final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(prefs);
+          final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(prefs);
+          final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(prefs);
+          final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(prefs);
+          final encodingPresetRepository = EncodingPresetRepositoryPrefsImpl(prefs);
+          final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(prefs);
+          final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(prefs);
+          final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(prefs);
+          final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(prefs);
+          final encodingSettingsRepository = EncodingSettingsRepositoryPrefsImpl(prefs);
+          final localeRepository = LocaleRepositoryPrefsImpl(prefs);
+          final themeModeRepository = ThemeModeRepositoryPrefsImpl(prefs);
+          final autocompleteHistoryRepository = AutocompleteHistoryRepositoryPrefsImpl(prefs);
+
+          final sessionRepository = SessionRepositoryImpl(
+            secureStorage: context.read<SecureStorage>(),
+            sessionCleanupWorker: SessionCleanupWorker(),
+
+            /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here
+            onLogout: () async {
+              await database.deleteEverything(); // TODO: clear using repos instead of direct access
+              await registerStatusRepository.clear();
+              await presenceSettingsRepository.clear();
+              await systemInfoLocalRepository.clear();
+              await activeMainFlavorRepository.clear();
+              await callerIdSettingsRepository.clear();
+              await activeRecentsVisibilityFilterRepository.clear();
+              await activeContactSourceTypeRepository.clear();
+              await audioProcessingSettingsRepository.clear();
+              await encodingPresetRepository.clear();
+              await iceSettingsRepository.clear();
+              await incomingCallTypeRepository.clear();
+              await peerConnectionSettingsRepository.clear();
+              await videoCapturingSettingsRepository.clear();
+              await encodingSettingsRepository.clear();
+              await localeRepository.clear();
+              await themeModeRepository.clear();
+            },
+          );
+
           return MultiRepositoryProvider(
             providers: [
               RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
-              RepositoryProvider<SessionRepository>.value(
-                value: SessionRepositoryImpl(
-                  secureStorage: context.read<SecureStorage>(),
-                  appPreferences: context.read<AppPreferences>(),
-                  appDatabase: context.read<AppDatabase>(),
-                  sessionCleanupWorker: sessionCleanupWorker,
-                ),
+              RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
+              RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
+              RepositoryProvider<SystemInfoLocalRepository>.value(value: systemInfoLocalRepository),
+              RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
+              RepositoryProvider<SessionRepository>.value(value: sessionRepository),
+              RepositoryProvider<CallerIdSettingsRepository>.value(value: callerIdSettingsRepository),
+              RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
+              RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
+                value: activeRecentsVisibilityFilterRepository,
               ),
+              RepositoryProvider<ActiveContactSourceTypeRepository>.value(value: activeContactSourceTypeRepository),
+              RepositoryProvider<AudioProcessingSettingsRepository>.value(value: audioProcessingSettingsRepository),
+              RepositoryProvider<ContactsAgreementStatusRepository>.value(value: contactsAgreementStatusRepository),
+              RepositoryProvider<EncodingPresetRepository>.value(value: encodingPresetRepository),
+              RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
+              RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
+              RepositoryProvider<PeerConnectionSettingsRepository>.value(value: peerConnectionSettingsRepository),
+              RepositoryProvider<VideoCapturingSettingsRepository>.value(value: videoCapturingSettingsRepository),
+              RepositoryProvider<EncodingSettingsRepository>.value(value: encodingSettingsRepository),
+              RepositoryProvider<LocaleRepository>.value(value: localeRepository),
+              RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
+              RepositoryProvider<AutocompleteHistoryRepository>.value(value: autocompleteHistoryRepository),
             ],
             child: const App(),
           );
