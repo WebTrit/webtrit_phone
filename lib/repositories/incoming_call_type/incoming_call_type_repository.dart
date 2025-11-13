@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/incoming_call_type.dart';
 
 abstract interface class IncomingCallTypeRepository {
@@ -12,7 +12,7 @@ abstract interface class IncomingCallTypeRepository {
 class IncomingCallTypeRepositoryPrefsImpl implements IncomingCallTypeRepository {
   IncomingCallTypeRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'call-incoming-type';
 
   @override

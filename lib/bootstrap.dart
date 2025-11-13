@@ -39,16 +39,14 @@ Future<void> bootstrap() async {
 
   final appThemes = await AppThemes.init();
 
-  final appPreferencesPure = await AppPreferencesPure.init();
-  final appPreferences = await AppPreferencesFactory.init();
-  final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferencesPure);
-  final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferencesPure);
+  final appPreferences = await AppPreferences.init();
+  final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
+  final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
 
   final coreSupport = CoreSupportImpl(systemInfoLocalRepository);
   final featureAccess = FeatureAccess.init(
     appThemes.appConfig,
     appThemes.embeddedResources,
-    appPreferences,
     activeMainFlavorRepository,
     coreSupport,
   );

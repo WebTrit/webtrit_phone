@@ -11,7 +11,7 @@ abstract interface class SystemInfoLocalRepository {
 class SystemInfoLocalRepositoryPrefsImpl with SystemInfoJsonMapper implements SystemInfoLocalRepository {
   SystemInfoLocalRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'system-info';
 
   @override

@@ -31,7 +31,6 @@ class _AppState extends State<App> {
     final featureAccess = FeatureAccess();
 
     appBloc = AppBloc(
-      appPreferences: context.read<AppPreferences>(),
       userAgreementStatusRepository: context.read<UserAgreementStatusRepository>(),
       contactsAgreementStatusRepository: context.read<ContactsAgreementStatusRepository>(),
       localeRepository: context.read<LocaleRepository>(),

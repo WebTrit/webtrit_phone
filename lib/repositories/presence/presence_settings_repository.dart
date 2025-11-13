@@ -28,7 +28,7 @@ abstract class PresenceSettingsRepository {
 
 class PresenceSettingsRepositoryPrefsImpl with PresenceSettingJsonMapperMixin implements PresenceSettingsRepository {
   PresenceSettingsRepositoryPrefsImpl(this.appPreferences);
-  AppPreferencesPure appPreferences;
+  AppPreferences appPreferences;
 
   static const presenceSettingsKey = 'presence_settings';
   DateTime? _lastSettingsSync;

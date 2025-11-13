@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/extensions/locale.dart';
 
 abstract interface class LocaleRepository {
@@ -14,7 +14,7 @@ abstract interface class LocaleRepository {
 class LocaleRepositoryPrefsImpl implements LocaleRepository {
   LocaleRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'locale-language-tag';
 
   @override

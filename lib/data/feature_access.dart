@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -77,21 +76,15 @@ class FeatureAccess {
   static FeatureAccess init(
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
-    AppPreferences preferences,
     ActiveMainFlavorRepository activeMainFlavorRepository,
     CoreSupport coreSupport,
   ) {
     try {
       final embeddedFeature = _tryConfigureEmbeddedFeature(embeddedResources);
       final customLoginFeature = _tryEnableCustomLoginFeature(appConfig, embeddedFeature.embeddedResources);
-      final bottomMenuManager = _tryConfigureBottomMenuFeature(
-        appConfig,
-        preferences,
-        activeMainFlavorRepository,
-        embeddedFeature,
-      );
+      final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, activeMainFlavorRepository, embeddedFeature);
       final settingsFeature = _tryConfigureSettingsFeature(appConfig, embeddedResources, coreSupport);
-      final callFeature = _tryConfigureCallFeature(appConfig, preferences);
+      final callFeature = _tryConfigureCallFeature(appConfig);
       final messagingFeature = _tryConfigureMessagingFeature(appConfig, coreSupport);
       final termsFeature = _tryConfigureTermsFeature(embeddedResources);
       final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(coreSupport, appConfig);
@@ -119,7 +112,6 @@ class FeatureAccess {
 
   static BottomMenuFeature _tryConfigureBottomMenuFeature(
     AppConfig appConfig,
-    AppPreferences preferences,
     ActiveMainFlavorRepository activeMainFlavorRepository,
     EmbeddedFeature embeddedFeature,
   ) {
@@ -301,7 +293,7 @@ class FeatureAccess {
     );
   }
 
-  static CallFeature _tryConfigureCallFeature(AppConfig appConfig, AppPreferences preferences) {
+  static CallFeature _tryConfigureCallFeature(AppConfig appConfig) {
     final callConfig = appConfig.callConfig;
 
     final transferConfig = appConfig.callConfig.transfer;

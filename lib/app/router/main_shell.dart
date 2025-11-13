@@ -351,7 +351,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                   BlocProvider<CallBloc>(
                     create: (context) {
                       final appBloc = context.read<AppBloc>();
-                      final appPreferences = context.read<AppPreferences>();
                       final notificationsBloc = context.read<NotificationsBloc>();
                       final audioProcessingSettingsRepository = context.read<AudioProcessingSettingsRepository>();
                       final encodingPresetRepository = context.read<EncodingPresetRepository>();
@@ -407,7 +406,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,
                         callkeepConnections: _callkeepConnections,
-                        sdpMunger: ModifyWithEncodingSettings(encodingSettingsRepository, encodingConfig, encodingPresetRepository),
+                        sdpMunger: ModifyWithEncodingSettings(
+                          encodingSettingsRepository,
+                          encodingConfig,
+                          encodingPresetRepository,
+                        ),
                         sdpSanitizer: RemoteSdpSanitizer(),
                         webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(audioProcessingSettingsRepository),
                         userMediaBuilder: userMediaBuilder,

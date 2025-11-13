@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/ice_settings.dart';
 import 'package:webtrit_phone/repositories/ice_settings/ice_settings_repository.dart';
 

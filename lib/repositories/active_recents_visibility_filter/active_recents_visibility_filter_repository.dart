@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/recents_visibility_filter.dart';
 
 abstract interface class ActiveRecentsVisibilityFilterRepository {
@@ -12,7 +12,7 @@ abstract interface class ActiveRecentsVisibilityFilterRepository {
 class ActiveRecentsVisibilityFilterRepositoryPrefsImpl implements ActiveRecentsVisibilityFilterRepository {
   ActiveRecentsVisibilityFilterRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'active-recents-visibility-filter';
 
   @override

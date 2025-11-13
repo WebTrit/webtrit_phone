@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 
 abstract interface class ActiveMainFlavorRepository {
@@ -11,7 +11,7 @@ abstract interface class ActiveMainFlavorRepository {
 
 class ActiveMainFlavorRepositoryPrefsImpl implements ActiveMainFlavorRepository {
   ActiveMainFlavorRepositoryPrefsImpl(this._appPreferences);
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'active-main-flavor';
 
   @override

@@ -8,7 +8,7 @@ abstract interface class RegisterStatusRepository {
 
 class RegisterStatusRepositoryPrefsImpl implements RegisterStatusRepository {
   RegisterStatusRepositoryPrefsImpl(this._appPreferences);
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   static const _preferenceKey = 'register-status';
 
   @override

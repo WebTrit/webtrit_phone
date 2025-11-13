@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/mappers/json/audio_processing_settings_mapper.dart';
 import 'package:webtrit_phone/models/audio_processing_settings.dart';
 
@@ -15,7 +15,7 @@ class AudioProcessingSettingsRepositoryPrefsImpl
     implements AudioProcessingSettingsRepository {
   AudioProcessingSettingsRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'audio-processing-settings';
 
   @override

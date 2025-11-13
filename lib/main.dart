@@ -87,12 +87,7 @@ class RootApp extends StatelessWidget {
         ),
         Provider<AppPreferences>(
           create: (context) {
-            return AppPreferencesFactory.instance;
-          },
-        ),
-        Provider<AppPreferencesPure>(
-          create: (context) {
-            return AppPreferencesPure();
+            return AppPreferences();
           },
         ),
         Provider<FeatureAccess>(
@@ -162,37 +157,33 @@ class RootApp extends StatelessWidget {
       ],
       child: Builder(
         builder: (context) {
-          final appPreferences = context.read<AppPreferences>();
-          final appPreferencesPure = context.read<AppPreferencesPure>();
-          final appDatabase = context.read<AppDatabase>();
+          final prefs = context.read<AppPreferences>();
+          final database = context.read<AppDatabase>();
 
-          final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(appPreferencesPure);
-          final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(appPreferencesPure);
-          final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferencesPure);
-          final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferencesPure);
-          final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(appPreferencesPure);
-          final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(appPreferencesPure);
-          final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(
-            appPreferencesPure,
-          );
-          final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(appPreferencesPure);
-          final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(appPreferencesPure);
-          final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferencesPure);
-          final encodingPresetRepository = EncodingPresetRepositoryPrefsImpl(appPreferencesPure);
-          final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(appPreferencesPure);
-          final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(appPreferencesPure);
-          final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(appPreferencesPure);
-          final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(appPreferencesPure);
-          final encodingSettingsRepository = EncodingPresetRepositoryPrefsImpl(appPreferencesPure);
-          final localeRepository = LocaleRepositoryPrefsImpl(appPreferencesPure);
-          final themeModeRepository = ThemeModeRepositoryPrefsImpl(appPreferencesPure);
+          final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
+          final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs);
+          final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(prefs);
+          final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(prefs);
+          final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(prefs);
+          final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(prefs);
+          final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(prefs);
+          final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(prefs);
+          final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(prefs);
+          final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(prefs);
+          final encodingPresetRepository = EncodingPresetRepositoryPrefsImpl(prefs);
+          final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(prefs);
+          final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(prefs);
+          final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(prefs);
+          final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(prefs);
+          final encodingSettingsRepository = EncodingPresetRepositoryPrefsImpl(prefs);
+          final localeRepository = LocaleRepositoryPrefsImpl(prefs);
+          final themeModeRepository = ThemeModeRepositoryPrefsImpl(prefs);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
             sessionCleanupWorker: SessionCleanupWorker(),
             onLogout: () async {
-              await appDatabase.deleteEverything();
-              await appPreferences.clear();
+              await database.deleteEverything(); // TODO: clear using repos instead of direct access
               await registerStatusRepository.clear();
               await presenceSettingsRepository.clear();
               await systemInfoLocalRepository.clear();

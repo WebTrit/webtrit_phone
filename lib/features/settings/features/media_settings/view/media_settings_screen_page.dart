@@ -18,7 +18,6 @@ class MediaSettingsScreenPage extends StatelessWidget {
     final defaultPeerConnectionSettings = context.read<FeatureAccess>().callFeature.peerConnection;
     return BlocProvider(
       create: (context) => MediaSettingsCubit(
-        context.read<AppPreferences>(),
         defaultPeerConnectionSettings,
         context.read<AudioProcessingSettingsRepository>(),
         context.read<EncodingPresetRepository>(),

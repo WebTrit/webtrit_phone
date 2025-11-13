@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -8,7 +7,6 @@ import 'media_settings_state.dart';
 
 class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   MediaSettingsCubit(
-    this._prefs,
     this._defaultPeerConnectionSettings,
     this._audioProcessingSettingsRepository,
     this._encodingPresetRepository,
@@ -17,19 +15,18 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     this._videoCapturingSettingsRepository,
     this._encodingSettingsRepository,
   ) : super(
-        MediaSettingsState.fromPrefs(
-          _prefs,
-          _defaultPeerConnectionSettings,
-          _audioProcessingSettingsRepository,
-          _encodingPresetRepository,
-          _iceSettingsRepository,
-          _peerConnectionSettingsRepository,
-          _videoCapturingSettingsRepository,
-          _encodingSettingsRepository,
+        MediaSettingsState(
+          encodingSettings: _encodingSettingsRepository.getEncodingSettings(),
+          encodingPreset: _encodingPresetRepository.getEncodingPreset(),
+          audioProcessingSettings: _audioProcessingSettingsRepository.getAudioProcessingSettings(),
+          videoCapturingSettings: _videoCapturingSettingsRepository.getVideoCapturingSettings(),
+          iceSettings: _iceSettingsRepository.getIceSettings(),
+          pearConnectionSettings: _peerConnectionSettingsRepository.getPeerConnectionSettings(
+            defaultValue: _defaultPeerConnectionSettings,
+          ),
         ),
       );
 
-  final AppPreferences _prefs;
   final PeerConnectionSettings _defaultPeerConnectionSettings;
   final AudioProcessingSettingsRepository _audioProcessingSettingsRepository;
   final EncodingPresetRepository _encodingPresetRepository;

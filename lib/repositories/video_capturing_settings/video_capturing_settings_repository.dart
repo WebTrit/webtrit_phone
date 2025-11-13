@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/mappers/json/video_capturing_settings_mapper.dart';
 import 'package:webtrit_phone/models/video_capturing_settings.dart';
 
@@ -15,7 +15,7 @@ class VideoCapturingSettingsRepositoryPrefsImpl
     implements VideoCapturingSettingsRepository {
   VideoCapturingSettingsRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'video-capturing-settings';
 
   @override

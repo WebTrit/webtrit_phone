@@ -26,9 +26,9 @@ void main() async {
       final packageInfo = await PackageInfoFactory.init();
       final deviceInfo = await DeviceInfoFactory.init();
 
-      final appPreferencesPure = await AppPreferencesPure.init();
-      final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferencesPure);
-      final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferencesPure);
+      final appPreferences = await AppPreferences.init();
+      final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
+      final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
       final coreSupport = CoreSupportImpl(systemInfoLocalRepository);
 
       final themeSettings = appThemes.values.first.settings;
@@ -42,7 +42,6 @@ void main() async {
       final featureAccess = FeatureAccess.init(
         appThemes.appConfig,
         [],
-        MockAppPreferencesService(),
         activeMainFlavorRepository,
         coreSupport,
       );

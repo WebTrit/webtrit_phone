@@ -27,7 +27,6 @@ final _logger = Logger('AppBloc');
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
-    required this.appPreferences,
     required this.userAgreementStatusRepository,
     required this.contactsAgreementStatusRepository,
     required this.sessionRepository,
@@ -56,7 +55,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _subscribeSession();
   }
 
-  final AppPreferences appPreferences;
   final UserAgreementStatusRepository userAgreementStatusRepository;
   final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final WebtritApiClientFactory createWebtritApiClient;

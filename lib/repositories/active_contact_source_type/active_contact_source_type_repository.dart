@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/contact_source_type.dart';
 
 abstract interface class ActiveContactSourceTypeRepository {
@@ -12,7 +12,7 @@ abstract interface class ActiveContactSourceTypeRepository {
 class ActiveContactSourceTypeRepositoryPrefsImpl implements ActiveContactSourceTypeRepository {
   ActiveContactSourceTypeRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'active-contact-source-type';
 
   @override

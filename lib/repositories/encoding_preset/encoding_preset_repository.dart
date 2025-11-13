@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
 
 abstract interface class EncodingPresetRepository {
@@ -12,7 +12,7 @@ abstract interface class EncodingPresetRepository {
 class EncodingPresetRepositoryPrefsImpl implements EncodingPresetRepository {
   EncodingPresetRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'encoding-preset';
 
   @override

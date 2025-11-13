@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/core_support.dart';
 

@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/mappers/json/negotiation_settings_mapper.dart';
 import 'package:webtrit_phone/models/negotiation_settings.dart';
 import 'package:webtrit_phone/models/peer_connection_settings.dart';
@@ -16,7 +16,7 @@ class PeerConnectionSettingsRepositoryPrefsImpl
     implements PeerConnectionSettingsRepository {
   PeerConnectionSettingsRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'negotiation-settings';
 
   @override

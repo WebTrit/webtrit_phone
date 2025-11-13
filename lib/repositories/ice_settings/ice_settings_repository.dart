@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/mappers/json/ice_settings_mapper.dart';
 import 'package:webtrit_phone/models/ice_settings.dart';
 
@@ -13,7 +13,7 @@ abstract interface class IceSettingsRepository {
 class IceSettingsRepositoryPrefsImpl with IceSettingsJsonMapper implements IceSettingsRepository {
   IceSettingsRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'ice-settings';
 
   @override

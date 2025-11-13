@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/mappers/json/encoding_settings_mapper.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
 
@@ -13,7 +13,7 @@ abstract interface class EncodingSettingsRepository {
 class EncodingSettingsRepositoryPrefsImpl with EncodingSettingsJsonMapper implements EncodingSettingsRepository {
   EncodingSettingsRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'encoding-settings';
 
   @override

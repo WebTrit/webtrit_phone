@@ -1,4 +1,4 @@
-import 'package:webtrit_phone/data/app_preferences_pure.dart';
+import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/agreement_status.dart';
 
 abstract interface class ContactsAgreementStatusRepository {
@@ -12,7 +12,7 @@ abstract interface class ContactsAgreementStatusRepository {
 class ContactsAgreementStatusRepositoryPrefsImpl implements ContactsAgreementStatusRepository {
   ContactsAgreementStatusRepositoryPrefsImpl(this._appPreferences);
 
-  final AppPreferencesPure _appPreferences;
+  final AppPreferences _appPreferences;
   final _prefsKey = 'contacts-agreement-status';
 
   @override

@@ -4,7 +4,6 @@ import 'package:logging/logging.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/features/call/utils/utils.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
 import 'package:webtrit_phone/models/feature_access/encoding_config.dart';
