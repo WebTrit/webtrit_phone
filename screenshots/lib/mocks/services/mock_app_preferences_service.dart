@@ -132,7 +132,6 @@ class MockAppPreferencesService implements AppPreferences {
     return true;
   }
 
-  @override
   RecentsVisibilityFilter getActiveRecentsVisibilityFilter(
       {RecentsVisibilityFilter defaultValue = RecentsVisibilityFilter.all}) {
     final filterString =
@@ -147,14 +146,12 @@ class MockAppPreferencesService implements AppPreferences {
     return defaultValue;
   }
 
-  @override
   Future<bool> setActiveRecentsVisibilityFilter(
       RecentsVisibilityFilter value) async {
     _mockData['active-recents-visibility-filter'] = value.name;
     return true;
   }
 
-  @override
   ContactSourceType getActiveContactSourceType(
       {ContactSourceType defaultValue = ContactSourceType.external}) {
     final sourceString = _mockData['active-contact-source-type'] as String?;
@@ -168,7 +165,6 @@ class MockAppPreferencesService implements AppPreferences {
     return defaultValue;
   }
 
-  @override
   Future<bool> setActiveContactSourceType(ContactSourceType value) async {
     _mockData['active-contact-source-type'] = value.name;
     return true;
@@ -221,7 +217,6 @@ class MockAppPreferencesService implements AppPreferences {
     return AgreementStatus.pending;
   }
 
-  @override
   AgreementStatus getUserAgreementStatus({
     AgreementStatus defaultValue = AgreementStatus.pending,
   }) {
@@ -233,7 +228,6 @@ class MockAppPreferencesService implements AppPreferences {
     return Future.value(true);
   }
 
-  @override
   Future<bool> setUserAgreementStatus(AgreementStatus value) {
     return Future.value(true);
   }

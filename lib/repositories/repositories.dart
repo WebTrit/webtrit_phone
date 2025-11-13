@@ -32,3 +32,4 @@ export 'voicemail/voicemail.dart';
 export 'caller_id_settings/caller_id_settings_repository.dart';
 export 'user_agreement_status/user_agreement_status_repository.dart';
 export 'active_recents_visibility_filter/active_recents_visibility_filter_repository.dart';
+export 'active_contact_source_type/active_contact_source_type_repository.dart';

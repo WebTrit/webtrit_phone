@@ -15,7 +15,6 @@ import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/repositories/user_agreement_status/user_agreement_status_repository.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -176,6 +175,9 @@ class RootApp extends StatelessWidget {
           final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(
             appPreferencesPure,
           );
+          final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(
+            appPreferencesPure,
+          );
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -190,6 +192,7 @@ class RootApp extends StatelessWidget {
               await callerIdSettingsRepository.clear();
               await userAgreementStatusRepository.clear();
               await activeRecentsVisibilityFilterRepository.clear();
+              await activeContactSourceTypeRepository.clear();
             },
           );
 
@@ -206,6 +209,9 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
               RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
                 value: activeRecentsVisibilityFilterRepository,
+              ),
+              RepositoryProvider<ActiveContactSourceTypeRepository>.value(
+                value: activeContactSourceTypeRepository,
               ),
             ],
             child: const App(),

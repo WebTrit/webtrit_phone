@@ -12,7 +12,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/repositories/user_agreement_status/user_agreement_status_repository.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class App extends StatefulWidget {

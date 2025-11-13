@@ -21,14 +21,6 @@ abstract class AppPreferences {
 
   Future<bool> removeLocale();
 
-  // RecentsVisibilityFilter getActiveRecentsVisibilityFilter({RecentsVisibilityFilter defaultValue});
-  //
-  // Future<bool> setActiveRecentsVisibilityFilter(RecentsVisibilityFilter value);
-
-  ContactSourceType getActiveContactSourceType({ContactSourceType defaultValue});
-
-  Future<bool> setActiveContactSourceType(ContactSourceType value);
-
   Future<bool> setContactsAgreementStatus(AgreementStatus value);
 
   AgreementStatus getContactsAgreementStatus({AgreementStatus defaultValue = AgreementStatus.pending});
@@ -169,44 +161,6 @@ class AppPreferencesImpl
 
   @override
   Future<bool> removeLocale() => _sharedPreferences.remove(_kLocaleLanguageTagKey);
-
-  @override
-  RecentsVisibilityFilter getActiveRecentsVisibilityFilter({
-    RecentsVisibilityFilter defaultValue = RecentsVisibilityFilter.all,
-  }) {
-    final activeRecentsVisibilityFilterString = _sharedPreferences.getString(_kActiveRecentsVisibilityFilterKey);
-    if (activeRecentsVisibilityFilterString != null) {
-      try {
-        return RecentsVisibilityFilter.values.byName(activeRecentsVisibilityFilterString);
-      } catch (_) {
-        return defaultValue;
-      }
-    } else {
-      return defaultValue;
-    }
-  }
-
-  @override
-  Future<bool> setActiveRecentsVisibilityFilter(RecentsVisibilityFilter value) =>
-      _sharedPreferences.setString(_kActiveRecentsVisibilityFilterKey, value.name);
-
-  @override
-  ContactSourceType getActiveContactSourceType({ContactSourceType defaultValue = ContactSourceType.external}) {
-    final activeContactSourceTypeString = _sharedPreferences.getString(_kActiveContactSourceTypeKey);
-    if (activeContactSourceTypeString != null) {
-      try {
-        return ContactSourceType.values.byName(activeContactSourceTypeString);
-      } catch (_) {
-        return defaultValue;
-      }
-    } else {
-      return defaultValue;
-    }
-  }
-
-  @override
-  Future<bool> setActiveContactSourceType(ContactSourceType value) =>
-      _sharedPreferences.setString(_kActiveContactSourceTypeKey, value.name);
 
   @override
   Future<bool> setContactsAgreementStatus(AgreementStatus value) =>
