@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/audio_processing_settings/audio_processing_settings_repository.dart';
+import 'package:webtrit_phone/repositories/encoding_preset/encoding_preset_repository.dart';
 
 import '../../media_settings/media_settings.dart';
 
@@ -21,6 +22,7 @@ class MediaSettingsScreenPage extends StatelessWidget {
         context.read<AppPreferences>(),
         defaultPeerConnectionSettings,
         context.read<AudioProcessingSettingsRepository>(),
+        context.read<EncodingPresetRepository>(),
       ),
       child: const MediaSettingsScreen(),
     );

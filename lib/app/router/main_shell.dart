@@ -354,6 +354,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final appPreferences = context.read<AppPreferences>();
                       final notificationsBloc = context.read<NotificationsBloc>();
                       final audioProcessingSettingsRepository = context.read<AudioProcessingSettingsRepository>();
+                      final encodingPresetRepository = context.read<EncodingPresetRepository>();
                       // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
                       final appCertificates = AppCertificates();
                       final featureAccess = context.read<FeatureAccess>();
@@ -400,7 +401,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,
                         callkeepConnections: _callkeepConnections,
-                        sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig),
+                        sdpMunger: ModifyWithEncodingSettings(appPreferences, encodingConfig, encodingPresetRepository),
                         sdpSanitizer: RemoteSdpSanitizer(),
                         webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(audioProcessingSettingsRepository),
                         userMediaBuilder: userMediaBuilder,

@@ -29,10 +29,6 @@ abstract class AppPreferences {
 
   Future<void> setEncodingSettings(EncodingSettings settings);
 
-  EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue});
-
-  Future<void> setEncodingPreset(EncodingPreset? value);
-
   VideoCapturingSettings getVideoCapturingSettings();
 
   Future<void> setVideoCapturingSettings(VideoCapturingSettings settings);

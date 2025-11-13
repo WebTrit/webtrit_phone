@@ -35,3 +35,4 @@ export 'active_recents_visibility_filter/active_recents_visibility_filter_reposi
 export 'active_contact_source_type/active_contact_source_type_repository.dart';
 export 'audio_processing_settings/audio_processing_settings_repository.dart';
 export 'contacts_agreement_status/contacts_agreement_status_repository.dart';
+export 'encoding_preset/encoding_preset_repository.dart';
