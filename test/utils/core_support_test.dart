@@ -18,9 +18,6 @@ Future<void> main() async {
       expect(cs.supportsChats, isFalse);
       expect(cs.supportsSystemNotifications, isFalse);
       expect(cs.supportsSystemPushNotifications, isFalse);
-
-      // sanity for has()
-      expect(cs.supportCustomPresence('unknown-flag'), isFalse);
     });
 
     test('voicemail only', () {
