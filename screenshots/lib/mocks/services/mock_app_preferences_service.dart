@@ -64,7 +64,6 @@ class MockAppPreferencesService implements AppPreferences {
     return true;
   }
 
-  @override
   ThemeMode getThemeMode() {
     final themeModeString = _mockData['theme-mode'] as String?;
     if (themeModeString != null) {
@@ -77,13 +76,11 @@ class MockAppPreferencesService implements AppPreferences {
     return ThemeMode.system;
   }
 
-  @override
   Future<bool> setThemeMode(ThemeMode value) async {
     _mockData['theme-mode'] = value.name;
     return true;
   }
 
-  @override
   Future<bool> removeThemeMode() async {
     _mockData.remove('theme-mode');
     return true;

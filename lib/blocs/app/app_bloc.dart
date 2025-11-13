@@ -33,6 +33,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.sessionRepository,
     required this.appInfo,
     required this.localeRepository,
+    required this.themeModeRepository,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(
@@ -40,7 +41,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
            /// Important to manage routing and navigation in AppRouter
            session: sessionRepository.getCurrent() ?? const Session(),
            themeSettings: appThemes.values.first.settings,
-           themeMode: appPreferences.getThemeMode(),
+           themeMode: themeModeRepository.getThemeMode(),
            locale: localeRepository.getLocale(),
            userAgreementStatus: userAgreementStatusRepository.getUserAgreementStatus(),
            contactsAgreementStatus: contactsAgreementStatusRepository.getContactsAgreementStatus(),
@@ -62,6 +63,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final SessionRepository sessionRepository;
   final AppInfo appInfo;
   final LocaleRepository localeRepository;
+  final ThemeModeRepository themeModeRepository;
 
   late final StreamSubscription<Session?> _sessionSub;
 
@@ -112,9 +114,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onThemeModeChanged(AppThemeModeChanged event, Emitter<AppState> emit) async {
     final themeMode = event.value;
     if (themeMode == ThemeMode.system) {
-      await appPreferences.removeThemeMode();
+      await themeModeRepository.clear();
     } else {
-      await appPreferences.setThemeMode(themeMode);
+      await themeModeRepository.setThemeMode(themeMode);
     }
     emit(state.copyWith(themeMode: themeMode));
   }

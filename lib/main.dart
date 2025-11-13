@@ -185,6 +185,7 @@ class RootApp extends StatelessWidget {
           final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(appPreferencesPure);
           final encodingSettingsRepository = EncodingPresetRepositoryPrefsImpl(appPreferencesPure);
           final localeRepository = LocaleRepositoryPrefsImpl(appPreferencesPure);
+          final themeModeRepository = ThemeModeRepositoryPrefsImpl(appPreferencesPure);
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
@@ -209,6 +210,7 @@ class RootApp extends StatelessWidget {
               await videoCapturingSettingsRepository.clear();
               await encodingSettingsRepository.clear();
               await localeRepository.clear();
+              await themeModeRepository.clear();
             },
           );
 
@@ -236,6 +238,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<VideoCapturingSettingsRepository>.value(value: videoCapturingSettingsRepository),
               RepositoryProvider<EncodingPresetRepository>.value(value: encodingSettingsRepository),
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),
+              RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
             ],
             child: const App(),
           );

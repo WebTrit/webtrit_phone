@@ -1,17 +1,9 @@
-import 'package:flutter/material.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:webtrit_phone/mappers/mappers.dart';
 
 abstract class AppPreferences {
   Future<bool> clear({List<String> exclusion});
-
-  ThemeMode getThemeMode();
-
-  Future<bool> setThemeMode(ThemeMode value);
-
-  Future<bool> removeThemeMode();
 }
 
 class AppPreferencesFactory {
@@ -81,24 +73,4 @@ class AppPreferencesImpl
       _kPreferencesList.where((key) => !exclusion.contains(key)).map((key) => _sharedPreferences.remove(key)).toList(),
     ).then((results) => results.every((result) => result));
   }
-
-  @override
-  ThemeMode getThemeMode() {
-    final themeModeString = _sharedPreferences.getString(_kThemeModeKey);
-    if (themeModeString != null) {
-      try {
-        return ThemeMode.values.byName(themeModeString);
-      } catch (_) {
-        return ThemeMode.system;
-      }
-    } else {
-      return ThemeMode.system;
-    }
-  }
-
-  @override
-  Future<bool> setThemeMode(ThemeMode value) => _sharedPreferences.setString(_kThemeModeKey, value.name);
-
-  @override
-  Future<bool> removeThemeMode() => _sharedPreferences.remove(_kThemeModeKey);
 }

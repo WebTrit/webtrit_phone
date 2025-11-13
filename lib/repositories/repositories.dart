@@ -42,3 +42,4 @@ export 'peer_connection_settings/peer_connection_settings_repository.dart';
 export 'video_capturing_settings/video_capturing_settings_repository.dart';
 export 'encoding_settings/encoding_settings_repository.dart';
 export 'locale/locale_repository.dart';
+export 'theme_mode/theme_mode_repository.dart';
