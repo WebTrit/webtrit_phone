@@ -15,9 +15,9 @@ abstract class AppMetadataProvider {
   /// Format: `AppName vVersion on Model (OS)`
   String get presenceDeviceName;
 
-  /// Returns a formatted User-Agent string for HTTP requests.
+  /// Returns a formatted User-Agent string for HTTP requests and Presence.
   ///
-  /// Format: `AppName/Version (OSName; OSVersion)`
+  /// Format: `AppName/AppVersion (Model; OSName: OSVersion)`
   String get userAgent;
 }
 
@@ -85,6 +85,6 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
 
   @override
   String get userAgent {
-    return '${_packageInfo.appName}/${_packageInfo.version} (${_deviceInfo.systemName}; ${_deviceInfo.systemVersion})';
+    return '${_packageInfo.appName}/${_appInfo.version} (${_deviceInfo.model}; ${_deviceInfo.systemName}: ${_deviceInfo.systemVersion})';
   }
 }
