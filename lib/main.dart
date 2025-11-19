@@ -63,17 +63,17 @@ class RootApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AppInfo>(create: (context) => instanceRegistry.get()),
-        Provider<AppThemes>(create: (context) => instanceRegistry.get()),
-        Provider<PackageInfo>(create: (context) => instanceRegistry.get()),
-        Provider<DeviceInfo>(create: (context) => instanceRegistry.get()),
-        Provider<AppPreferences>(create: (context) => instanceRegistry.get()),
-        Provider<FeatureAccess>(create: (context) => instanceRegistry.get()),
-        Provider<SecureStorage>(create: (context) => instanceRegistry.get()),
-        Provider<AppPermissions>(create: (context) => instanceRegistry.get()),
-        Provider<AppLogger>(create: (context) => instanceRegistry.get()),
-        Provider<AppTime>(create: (context) => instanceRegistry.get()),
-        Provider<AppPath>(create: (context) => instanceRegistry.get()),
+        Provider<AppInfo>(create: (_) => instanceRegistry.get()),
+        Provider<AppThemes>(create: (_) => instanceRegistry.get()),
+        Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
+        Provider<DeviceInfo>(create: (_) => instanceRegistry.get()),
+        Provider<AppPreferences>(create: (_) => instanceRegistry.get()),
+        Provider<FeatureAccess>(create: (_) => instanceRegistry.get()),
+        Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
+        Provider<AppPermissions>(create: (_) => instanceRegistry.get()),
+        Provider<AppLogger>(create: (_) => instanceRegistry.get()),
+        Provider<AppTime>(create: (_) => instanceRegistry.get()),
+        Provider<AppPath>(create: (_) => instanceRegistry.get()),
         Provider<AppCertificates>(create: (_) => instanceRegistry.get()),
         Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
 
