@@ -10,7 +10,7 @@ void main() {
   CoreSupport createCoreSupportWithFlags(List<String> flags) {
     final jsonInfo = SystemInfoBuilder(adapterSupported: flags).build();
 
-    final mockPrefs = MockAppPreferences(systemInfoJson: jsonInfo);
+    final mockPrefs = MockAppPreferences(initialData: {'system-info': jsonInfo});
 
     final systemInfoRepository = SystemInfoLocalRepositoryPrefsImpl(mockPrefs);
 
@@ -73,10 +73,7 @@ void main() {
   group('CoreSupport Immutability', () {
     test('internal flags are immutable (defensive copy check)', () {
       final sourceFlags = <String>[kVoicemailFeatureFlag];
-      final json = SystemInfoBuilder(adapterSupported: sourceFlags).build();
-      final prefs = MockAppPreferences(systemInfoJson: json);
-      final repo = SystemInfoLocalRepositoryPrefsImpl(prefs);
-      final cs = CoreSupportImpl(repo.getSystemInfo());
+      final cs = createCoreSupportWithFlags(sourceFlags);
 
       expect(cs.supportsVoicemail, isTrue, reason: 'Should be true initially');
       sourceFlags.clear();
