@@ -60,100 +60,21 @@ class RootApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AppInfo>(
-          create: (context) {
-            return AppInfo();
-          },
-        ),
-        Provider<AppThemes>(
-          create: (context) {
-            return AppThemes();
-          },
-        ),
-        Provider<PlatformInfo>(
-          create: (context) {
-            return PlatformInfo();
-          },
-        ),
-        Provider<PackageInfo>(
-          create: (context) {
-            return PackageInfoFactory.instance;
-          },
-        ),
-        Provider<DeviceInfo>(
-          create: (context) {
-            return DeviceInfoFactory.instance;
-          },
-        ),
-        Provider<AppPreferences>(
-          create: (context) {
-            return AppPreferencesImpl();
-          },
-        ),
-        Provider<FeatureAccess>(
-          create: (context) {
-            return FeatureAccess();
-          },
-        ),
-        Provider<SecureStorage>(
-          create: (context) {
-            return SecureStorage();
-          },
-        ),
-        Provider<AppDatabase>(
-          create: (context) {
-            final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
-              createAppDatabaseConnection(
-                AppPath().applicationDocumentsPath,
-                'db.sqlite',
-                logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-              ),
-            );
-            WidgetsBinding.instance.addObserver(appDatabase);
-            return appDatabase;
-          },
-          dispose: (context, value) {
-            final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
-            WidgetsBinding.instance.removeObserver(appDatabase);
-            appDatabase.close();
-          },
-        ),
-        Provider<AppPermissions>(
-          create: (context) {
-            return AppPermissions();
-          },
-        ),
-        Provider<AppLogger>(
-          create: (context) {
-            return AppLogger();
-          },
-        ),
-        Provider<AppTime>(
-          create: (context) {
-            return AppTime();
-          },
-        ),
-        Provider<AppPath>(
-          create: (context) {
-            return AppPath();
-          },
-        ),
+        Provider<AppInfo>(create: (context) => AppInfo()),
+        Provider<AppThemes>(create: (context) => AppThemes()),
+        Provider<PlatformInfo>(create: (context) => PlatformInfo()),
+        Provider<PackageInfo>(create: (context) => PackageInfoFactory.instance),
+        Provider<DeviceInfo>(create: (context) => DeviceInfoFactory.instance),
+        Provider<AppPreferences>(create: (context) => AppPreferencesImpl()),
+        Provider<FeatureAccess>(create: (context) => FeatureAccess()),
+        Provider<SecureStorage>(create: (context) => SecureStorage()),
+        Provider<AppPermissions>(create: (context) => AppPermissions()),
+        Provider<AppLogger>(create: (context) => AppLogger()),
+        Provider<AppTime>(create: (context) => AppTime()),
+        Provider<AppPath>(create: (context) => AppPath()),
         // Services
-        Provider<ConnectivityService>(
-          create: (context) {
-            return ConnectivityServiceImpl(
-              connectivityChecker: const DefaultConnectivityChecker(
-                connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
-              ),
-            );
-          },
-          dispose: (context, value) => value.dispose(),
-        ),
-        Provider<AppMetadataProvider>(
-          create: (context) {
-            return DefaultAppMetadataProvider();
-          },
-        ),
+        Provider<AppDatabase>(create: _createAppDatabase, dispose: _disposeAppDatabase),
+        Provider<ConnectivityService>(create: _createConnectivityService, dispose: _disposeConnectivityService),
       ],
       child: Builder(
         builder: (context) {
@@ -241,6 +162,36 @@ class RootApp extends StatelessWidget {
         },
       ),
     );
+  }
+
+  AppDatabase _createAppDatabase(BuildContext _) {
+    final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
+      createAppDatabaseConnection(
+        AppPath().applicationDocumentsPath,
+        'db.sqlite',
+        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+      ),
+    );
+    WidgetsBinding.instance.addObserver(appDatabase);
+    return appDatabase;
+  }
+
+  void _disposeAppDatabase(BuildContext _, AppDatabase value) {
+    final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
+    WidgetsBinding.instance.removeObserver(appDatabase);
+    appDatabase.close();
+  }
+
+  ConnectivityService _createConnectivityService(BuildContext _) {
+    return ConnectivityServiceImpl(
+      connectivityChecker: const DefaultConnectivityChecker(
+        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+      ),
+    );
+  }
+
+  void _disposeConnectivityService(BuildContext _, ConnectivityService value) {
+    value.dispose();
   }
 }
 
