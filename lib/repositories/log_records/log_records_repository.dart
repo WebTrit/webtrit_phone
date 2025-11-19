@@ -7,12 +7,12 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
-abstract interface class LogRecordsRepository {
+abstract class LogRecordsRepository {
   Future<void> attachToLogger(Logger logger);
 
   Future<void> clear();
 
-  void log(LogRecord record);
+  Future<void> log(LogRecord record);
 
   Future<void> dispose();
 
@@ -44,7 +44,7 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
   }
 
   @override
-  void log(LogRecord record) {
+  Future<void> log(LogRecord record) async {
     if (_logRecords.length >= capacity) {
       _logRecords.removeLast();
     }
@@ -101,7 +101,9 @@ class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
   }
 
   @override
-  void log(LogRecord record) => _logRecords.addFirst(record);
+  Future<void> log(LogRecord record) async {
+    _logRecords.addFirst(record);
+  }
 
   @override
   @mustCallSuper
