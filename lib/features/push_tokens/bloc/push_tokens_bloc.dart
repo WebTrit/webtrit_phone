@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
@@ -116,7 +117,12 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       },
       shouldRetry: (e, attempt) {
         add(PushTokensEventError('Failed to retrieve FCM token: $e at attempt $attempt'));
-        return true;
+        final isMissingGoogleServices =
+            e is FirebaseException &&
+            e.plugin == 'firebase_messaging' &&
+            e.message != null &&
+            (e.message!.contains('MISSING_INSTANCEID_SERVICE') || e.message!.contains('SERVICE_NOT_AVAILABLE'));
+        return !isMissingGoogleServices;
       },
     );
 
