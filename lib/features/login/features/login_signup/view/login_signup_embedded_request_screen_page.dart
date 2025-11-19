@@ -43,14 +43,14 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
               ? LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.parse(content),
                   mediaQueryMetricsData: context.mediaQueryMetrics,
-                  deviceInfoData: context.read<AppMetadataProvider>().build(),
+                  deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
                   connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 )
               : LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.dataFromString(content, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')),
                   mediaQueryMetricsData: context.mediaQueryMetrics,
-                  deviceInfoData: context.read<AppMetadataProvider>().build(),
+                  deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
                   connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 );

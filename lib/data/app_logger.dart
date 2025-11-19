@@ -37,7 +37,7 @@ class AppLogger {
     final remoteLoggingServices = _createRemoteLoggingServices(remoteConfigService, logzioLogLevel);
 
     for (var it in remoteLoggingServices) {
-      it.initialize(labelsProvider.build());
+      it.initialize(labelsProvider.logLabels);
     }
 
     _logger.info('Initializing AppLogger with local log level: $localLogLevel, remote log level: $logzioLogLevel');
@@ -73,7 +73,7 @@ class AppLogger {
 
   /// Allows regenerating labels when coreUrl and tenantId are available.
   void regenerateRemoteLabels() {
-    final labels = _labelsProvider.build();
+    final labels = _labelsProvider.logLabels;
     for (var it in _remoteLoggingServices) {
       it.initialize(labels);
     }

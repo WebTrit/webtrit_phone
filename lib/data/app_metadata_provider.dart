@@ -1,7 +1,24 @@
 import 'package:webtrit_phone/data/data.dart';
 
+/// Provides application metadata, including device information,
+/// package details, and configuration labels.
 abstract class AppMetadataProvider {
-  Map<String, String> build();
+  /// Builds a map of labels containing diagnostic and environment information.
+  ///
+  /// These labels are typically used for logging or appending metadata
+  /// to external requests.
+  Map<String, String> get logLabels;
+
+  /// Returns a formatted string representing the device and app version
+  /// for Presence settings.
+  ///
+  /// Format: `AppName vVersion on Model (OS)`
+  String get presenceDeviceName;
+
+  /// Returns a formatted User-Agent string for HTTP requests.
+  ///
+  /// Format: `AppName/Version (OSName; OSVersion)`
+  String get userAgent;
 }
 
 class DefaultAppMetadataProvider implements AppMetadataProvider {
@@ -37,11 +54,7 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
   final FeatureAccess? _featureAccess;
 
   @override
-  Map<String, String> build() {
-    return _assemble();
-  }
-
-  Map<String, String> _assemble() {
+  Map<String, String> get logLabels {
     final token = _secureStorage.readToken();
     final coreUrl = _secureStorage.readCoreUrl();
     final tenantId = _secureStorage.readTenantId();
@@ -63,5 +76,15 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
       if (coreUrl != null) 'coreUrl': coreUrl,
       if (tenantId != null) 'tenantId': tenantId,
     };
+  }
+
+  @override
+  String get presenceDeviceName {
+    return '${_packageInfo.appName} v${_packageInfo.version} on ${_deviceInfo.model} (${_deviceInfo.systemName})';
+  }
+
+  @override
+  String get userAgent {
+    return '${_packageInfo.appName}/${_packageInfo.version} (${_deviceInfo.systemName}; ${_deviceInfo.systemVersion})';
   }
 }
