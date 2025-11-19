@@ -53,7 +53,7 @@ Future<void> bootstrap() async {
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
-  final appLabels = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
+  final appLabels = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
 
   await AppPath.init();
   await AppPermissions.init(featureAccess);
@@ -138,7 +138,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
-  final appLabelsProvider = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
+  final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
   await AppLogger.init(remoteCacheConfigService, appLabelsProvider);
 

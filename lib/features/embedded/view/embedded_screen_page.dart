@@ -60,7 +60,7 @@ class EmbeddedScreenPage extends StatelessWidget {
                   child: EmbeddedScreen(
                     initialUri: data.uri,
                     mediaQueryMetricsData: context.mediaQueryMetrics,
-                    deviceInfoData: context.read<AppLabelsProvider>().build(),
+                    deviceInfoData: context.read<AppMetadataProvider>().build(),
                     appBar: _buildAppBar(context),
                     pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                     connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
@@ -77,7 +77,7 @@ class EmbeddedScreenPage extends StatelessWidget {
                       encoding: Encoding.getByName('utf-8'),
                     ),
                     mediaQueryMetricsData: context.mediaQueryMetrics,
-                    deviceInfoData: context.read<AppLabelsProvider>().build(),
+                    deviceInfoData: context.read<AppMetadataProvider>().build(),
                     appBar: _buildAppBar(context),
                     pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                     connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),

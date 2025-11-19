@@ -22,7 +22,7 @@ AppLogger? _appLogger;
 SecureStorage? _secureStorage;
 AppCertificates? _appCertificates;
 AppInfo? _appInfo;
-AppLabelsProvider? _appLabelsProvider;
+AppMetadataProvider? _appLabelsProvider;
 
 CallLogsRepository? _callLogsRepository;
 
@@ -35,7 +35,7 @@ Future<void> _initializeCommonDependencies() async {
   _deviceInfo ??= await DeviceInfoFactory.init();
   _packageInfo ??= await PackageInfoFactory.init();
   _secureStorage = await SecureStorage.init();
-  _appLabelsProvider ??= await DefaultAppLabelsProvider.init(_packageInfo!, _deviceInfo!, _appInfo!, _secureStorage!);
+  _appLabelsProvider ??= await DefaultAppMetadataProvider.init(_packageInfo!, _deviceInfo!, _appInfo!, _secureStorage!);
   _appLogger ??= await AppLogger.init(_remoteConfigService!, _appLabelsProvider!);
   _appCertificates ??= await AppCertificates.init();
 

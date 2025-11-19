@@ -62,7 +62,7 @@ class EmbeddedTabPage extends StatelessWidget {
                     ? EmbeddedScreen(
                         initialUri: data.data!.uri,
                         mediaQueryMetricsData: context.mediaQueryMetrics,
-                        deviceInfoData: context.read<AppLabelsProvider>().build(),
+                        deviceInfoData: context.read<AppMetadataProvider>().build(),
                         appBar: _buildAppBar(context, data.titleL10n),
                         pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                         connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
@@ -77,7 +77,7 @@ class EmbeddedTabPage extends StatelessWidget {
                           encoding: Encoding.getByName('utf-8'),
                         ),
                         mediaQueryMetricsData: context.mediaQueryMetrics,
-                        deviceInfoData: context.read<AppLabelsProvider>().build(),
+                        deviceInfoData: context.read<AppMetadataProvider>().build(),
                         appBar: _buildAppBar(context, data.titleL10n),
                         pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                         connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),

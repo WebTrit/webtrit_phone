@@ -1,28 +1,28 @@
 import 'package:webtrit_phone/data/data.dart';
 
-abstract class AppLabelsProvider {
+abstract class AppMetadataProvider {
   Map<String, String> build();
 }
 
-class DefaultAppLabelsProvider implements AppLabelsProvider {
-  static late DefaultAppLabelsProvider _instance;
+class DefaultAppMetadataProvider implements AppMetadataProvider {
+  static late DefaultAppMetadataProvider _instance;
 
-  static Future<DefaultAppLabelsProvider> init(
+  static Future<AppMetadataProvider> init(
     PackageInfo packageInfo,
     DeviceInfo deviceInfo,
     AppInfo appInfo,
     SecureStorage secureStorage, [
     FeatureAccess? featureAccess,
   ]) async {
-    _instance = DefaultAppLabelsProvider._(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
+    _instance = DefaultAppMetadataProvider._(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
     return _instance;
   }
 
-  factory DefaultAppLabelsProvider() {
+  factory DefaultAppMetadataProvider() {
     return _instance;
   }
 
-  DefaultAppLabelsProvider._(
+  DefaultAppMetadataProvider._(
     this._packageInfo,
     this._deviceInfo,
     this._appInfo,

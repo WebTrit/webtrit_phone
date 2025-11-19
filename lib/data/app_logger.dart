@@ -5,15 +5,16 @@ import 'package:logging_appenders/logging_appenders.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+
+import 'app_metadata_provider.dart';
 
 final _logger = Logger('AppLogger');
 
 class AppLogger {
   static late AppLogger _instance;
 
-  static Future<AppLogger> init(RemoteConfigService remoteConfigService, AppLabelsProvider labelsProvider) async {
+  static Future<AppLogger> init(RemoteConfigService remoteConfigService, AppMetadataProvider labelsProvider) async {
     hierarchicalLoggingEnabled = true;
 
     final localLogLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
@@ -68,7 +69,7 @@ class AppLogger {
   AppLogger._(this._remoteLoggingServices, this._labelsProvider);
 
   final List<RemoteLoggingService> _remoteLoggingServices;
-  final AppLabelsProvider _labelsProvider;
+  final AppMetadataProvider _labelsProvider;
 
   /// Allows regenerating labels when coreUrl and tenantId are available.
   void regenerateRemoteLabels() {
