@@ -26,10 +26,10 @@ abstract class CoreSupport {
 class CoreSupportImpl implements CoreSupport {
   CoreSupportImpl(this.webtritSystemInfo);
 
-  final WebtritSystemInfo? webtritSystemInfo;
+  final WebtritSystemInfo? Function()? webtritSystemInfo;
 
-  /// Warning: do not refactor into a value, its should be getter that evaluated on each call
-  Set<String> get _flags => {...?webtritSystemInfo?.adapter?.supported};
+  /// Warning: do not refactor this into a value; it must remain a getter that is evaluated on each call.
+  Set<String> get _flags => {...?webtritSystemInfo?.call()?.adapter?.supported};
 
   bool _has(String flag) => _flags.contains(flag);
 

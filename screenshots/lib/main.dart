@@ -29,7 +29,7 @@ void main() async {
       final appPreferences = await AppPreferencesImpl.init();
       final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
       final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
-      final coreSupport = CoreSupportImpl(systemInfoLocalRepository.getSystemInfo());
+      final coreSupport = CoreSupportImpl(() => systemInfoLocalRepository.getSystemInfo());
 
       final themeSettings = appThemes.values.first.settings;
 

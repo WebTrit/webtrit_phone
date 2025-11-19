@@ -41,7 +41,7 @@ Future<void> bootstrap() async {
   final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
 
-  final coreSupport = CoreSupportImpl(systemInfoLocalRepository.getSystemInfo());
+  final coreSupport = CoreSupportImpl(() => systemInfoLocalRepository.getSystemInfo());
   final featureAccess = FeatureAccess.init(
     appThemes.appConfig,
     appThemes.embeddedResources,

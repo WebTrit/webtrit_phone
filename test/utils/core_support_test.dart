@@ -14,7 +14,7 @@ void main() {
 
     final systemInfoRepository = SystemInfoLocalRepositoryPrefsImpl(mockPrefs);
 
-    return CoreSupportImpl(systemInfoRepository.getSystemInfo());
+    return CoreSupportImpl(() => systemInfoRepository.getSystemInfo());
   }
 
   group('CoreSupport Feature Flags', () {
