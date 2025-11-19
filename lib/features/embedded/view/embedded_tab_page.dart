@@ -36,6 +36,7 @@ class EmbeddedTabPage extends StatelessWidget {
 
     final customPrivateGatewayRepository = context.read<PrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
+    final appMetadataProvider = context.read<AppMetadataProvider>();
     final cubit = _createCubit(data.data!.payload, customPrivateGatewayRepository, secureStorage);
 
     final tabsRouter = AutoTabsRouter.of(context);
@@ -61,6 +62,7 @@ class EmbeddedTabPage extends StatelessWidget {
                 return resource is NetworkResourceLoader
                     ? EmbeddedScreen(
                         initialUri: data.data!.uri,
+                        userAgent: appMetadataProvider.userAgent,
                         mediaQueryMetricsData: context.mediaQueryMetrics,
                         deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                         appBar: _buildAppBar(context, data.titleL10n),
@@ -76,6 +78,7 @@ class EmbeddedTabPage extends StatelessWidget {
                           mimeType: 'text/html',
                           encoding: Encoding.getByName('utf-8'),
                         ),
+                        userAgent: appMetadataProvider.userAgent,
                         mediaQueryMetricsData: context.mediaQueryMetrics,
                         deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                         appBar: _buildAppBar(context, data.titleL10n),

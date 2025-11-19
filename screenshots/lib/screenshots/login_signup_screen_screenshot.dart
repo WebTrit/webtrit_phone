@@ -26,9 +26,9 @@ class LoginSignUpScreenshot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final appMetadataProvider = context.read<AppMetadataProvider>();
 
-    final LoginSwitchScreenStyles? loginPageStyles =
-        themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
     final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
 
     final sections = context
@@ -46,8 +46,7 @@ class LoginSignUpScreenshot extends StatelessWidget {
     }
 
     return BlocProvider<LoginCubit>(
-      create: (context) => MockLoginCubit.loginSwitchScreen(
-          embedded: embedded.customLoginFeature),
+      create: (context) => MockLoginCubit.loginSwitchScreen(embedded: embedded.customLoginFeature),
       child: LoginSwitchScreen(
         appBar: AppBar(
           leading: const ExtBackButton(disabled: false),
@@ -61,6 +60,7 @@ class LoginSignUpScreenshot extends StatelessWidget {
         ),
         body: LoginSignupEmbeddedRequestScreen(
           initialUrl: embedded.customLoginFeature.uri,
+          userAgent: appMetadataProvider.userAgent,
           mediaQueryMetricsData: null,
           deviceInfoData: null,
           pageInjectionStrategyBuilder: () {

@@ -6,7 +6,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../login/features/login_signup/widgets/widgets.dart';
@@ -17,6 +16,7 @@ final _logger = Logger('EmbeddedScreen');
 class EmbeddedScreen extends StatefulWidget {
   const EmbeddedScreen({
     required this.initialUri,
+    required this.userAgent,
     required this.mediaQueryMetricsData,
     required this.deviceInfoData,
     required this.appBar,
@@ -28,6 +28,7 @@ class EmbeddedScreen extends StatefulWidget {
   });
 
   final Uri initialUri;
+  final String userAgent;
   final MediaQueryMetrics? mediaQueryMetricsData;
   final Map<String, String>? deviceInfoData;
   final PreferredSizeWidget appBar;
@@ -92,7 +93,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
               pageInjectionStrategies: _pageInjectionStrategies,
               jSChannelStrategies: _jSChannelStrategies,
               showToolbar: false,
-              userAgent: UserAgent.of(context),
+              userAgent: widget.userAgent,
               errorBuilder: _buildErrorBuilder(),
               onUrlChange: _handleUrlChange,
             ),

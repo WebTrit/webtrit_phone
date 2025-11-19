@@ -18,7 +18,6 @@ export 'regexes.dart';
 export 'string_phone_utils.dart';
 export 'text_matchers.dart';
 export 'ttl_cache.dart';
-export 'user_agent.dart';
 export 'view_params/view_params.dart';
 export 'webtrit_api_client.dart';
 export 'webtrit_http_executor.dart';
