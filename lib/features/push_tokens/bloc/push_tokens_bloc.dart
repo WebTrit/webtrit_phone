@@ -120,8 +120,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
         final isMissingGoogleServices =
             e is FirebaseException &&
             e.plugin == 'firebase_messaging' &&
-            e.message != null &&
-            (e.message!.contains('MISSING_INSTANCEID_SERVICE') || e.message!.contains('SERVICE_NOT_AVAILABLE'));
+            (e.code == 'missing-instanceid-service' || e.code == 'service-not-available');
         return !isMissingGoogleServices;
       },
     );
