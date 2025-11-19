@@ -38,6 +38,7 @@ class AboutScreenPage extends StatelessWidget {
             secureStorage: context.read<SecureStorage>(),
             embeddedFeature: context.read<FeatureAccess>().embeddedFeature,
             infoRepository: context.read<SystemInfoRemoteRepository>(),
+            appMetadataProvider: appMetadataProvider,
           )..add(const AboutStarted());
         },
         child: widget,
