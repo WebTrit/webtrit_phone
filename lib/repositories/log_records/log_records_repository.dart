@@ -7,10 +7,10 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
-abstract class LogRecordsRepository {
-  void attachToLogger(Logger logger);
+abstract interface class LogRecordsRepository {
+  Future<void> attachToLogger(Logger logger);
 
-  void clear();
+  Future<void> clear();
 
   void log(LogRecord record);
 
@@ -34,12 +34,12 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
   Future<List<LogRecord>> getLogRecords() async => UnmodifiableListView(_logRecords);
 
   @override
-  void attachToLogger(Logger logger) {
+  Future<void> attachToLogger(Logger logger) async {
     _subscriptions.add(logger.onRecord.listen(log));
   }
 
   @override
-  void clear() {
+  Future<void> clear() async {
     _logRecords.clear();
   }
 
@@ -78,6 +78,17 @@ class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
   @override
   Future<void> attachToLogger(Logger logger) async => _subscriptions.add(logger.onRecord.listen(log));
 
+  Future<List<String>> getFileLogRecords() async {
+    final appDocDir = await getApplicationDocumentsPath();
+    final String baseLogDirectoryPath = '$appDocDir/logs';
+
+    final logRecordsFile = File('$baseLogDirectoryPath/app_logs.log');
+
+    final logRecords = await logRecordsFile.readAsLines();
+
+    return logRecords;
+  }
+
   @override
   Future<void> clear() async {
     final appDocDir = await getApplicationDocumentsPath();
@@ -85,16 +96,16 @@ class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
 
     final logRecordsFile = File('$baseLogDirectoryPath/app_logs.log');
 
-    await logRecordsFile.delete();
+    if (await logRecordsFile.exists()) await logRecordsFile.delete();
     _logRecords.clear();
   }
 
   @override
-  Future<void> log(LogRecord record) async => _logRecords.addFirst(record);
+  void log(LogRecord record) => _logRecords.addFirst(record);
 
   @override
   @mustCallSuper
-  Future<void> dispose() async => await cancelSubscriptions();
+  Future<void> dispose() async => cancelSubscriptions();
 
   @override
   Future<void> cancelSubscriptions() async {
