@@ -35,6 +35,7 @@ class EmbeddedScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final selfConfigRepository = context.readOrNull<PrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
+    final appMetadataProvider = context.read<AppMetadataProvider>();
     final cubit = _createCubit(selfConfigRepository, secureStorage);
 
     if (selfConfigRepository == null) {
@@ -59,8 +60,9 @@ class EmbeddedScreenPage extends StatelessWidget {
                   create: (_) => cubit,
                   child: EmbeddedScreen(
                     initialUri: data.uri,
+                    userAgent: appMetadataProvider.userAgent,
                     mediaQueryMetricsData: context.mediaQueryMetrics,
-                    deviceInfoData: context.read<AppLabelsProvider>().build(),
+                    deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                     appBar: _buildAppBar(context),
                     pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                     connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
@@ -76,8 +78,9 @@ class EmbeddedScreenPage extends StatelessWidget {
                       mimeType: 'text/html',
                       encoding: Encoding.getByName('utf-8'),
                     ),
+                    userAgent: appMetadataProvider.userAgent,
                     mediaQueryMetricsData: context.mediaQueryMetrics,
-                    deviceInfoData: context.read<AppLabelsProvider>().build(),
+                    deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                     appBar: _buildAppBar(context),
                     pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
                     connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),

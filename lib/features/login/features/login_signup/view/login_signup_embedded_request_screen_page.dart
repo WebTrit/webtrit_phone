@@ -27,6 +27,7 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO(Serdun): Implement directly in LoginEmbedded
     final resource = ResourceLoader.fromUri(embeddedData.uri.toString());
+    final appMetadataProvider = context.read<AppMetadataProvider>();
 
     final locale = Localizations.localeOf(context);
 
@@ -42,15 +43,17 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
           return resource is NetworkResourceLoader
               ? LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.parse(content),
+                  userAgent: appMetadataProvider.userAgent,
                   mediaQueryMetricsData: context.mediaQueryMetrics,
-                  deviceInfoData: context.read<AppLabelsProvider>().build(),
+                  deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
                   connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 )
               : LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.dataFromString(content, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')),
+                  userAgent: appMetadataProvider.userAgent,
                   mediaQueryMetricsData: context.mediaQueryMetrics,
-                  deviceInfoData: context.read<AppLabelsProvider>().build(),
+                  deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
                   connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
                 );

@@ -11,9 +11,11 @@ class PrivacyScreenScreenshot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final url = context.read<FeatureAccess>().termsFeature.configData.uri;
+    final appMetadataProvider = context.read<AppMetadataProvider>();
 
     return TermsConditionsScreen(
       initialUri: url,
+      userAgent: appMetadataProvider.userAgent,
     );
   }
 }

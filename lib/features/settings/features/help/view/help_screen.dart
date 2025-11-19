@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class HelpScreen extends StatelessWidget {
-  const HelpScreen({super.key, required this.initialUri});
+  const HelpScreen({super.key, required this.initialUri, required this.userAgent});
 
   final Uri initialUri;
+  final String userAgent;
 
   @override
   Widget build(BuildContext context) {
     final widget = WebViewContainer(
       title: Text(context.l10n.settings_ListViewTileTitle_help),
       initialUri: initialUri,
-      userAgent: UserAgent.of(context),
+      userAgent: userAgent,
     );
     return widget;
   }

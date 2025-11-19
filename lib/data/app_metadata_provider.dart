@@ -1,28 +1,39 @@
 import 'package:webtrit_phone/data/data.dart';
 
-abstract class AppLabelsProvider {
-  Map<String, String> build();
+/// Provides application metadata, including device information,
+/// package details, and configuration labels.
+abstract class AppMetadataProvider {
+  /// Builds a map of labels containing diagnostic and environment information.
+  ///
+  /// These labels are typically used for logging or appending metadata
+  /// to external requests.
+  Map<String, String> get logLabels;
+
+  /// Returns a formatted User-Agent string for HTTP requests and Presence.
+  ///
+  /// Format: `AppName/AppVersion (Model; OSName: OSVersion)`
+  String get userAgent;
 }
 
-class DefaultAppLabelsProvider implements AppLabelsProvider {
-  static late DefaultAppLabelsProvider _instance;
+class DefaultAppMetadataProvider implements AppMetadataProvider {
+  static late DefaultAppMetadataProvider _instance;
 
-  static Future<DefaultAppLabelsProvider> init(
+  static Future<AppMetadataProvider> init(
     PackageInfo packageInfo,
     DeviceInfo deviceInfo,
     AppInfo appInfo,
     SecureStorage secureStorage, [
     FeatureAccess? featureAccess,
   ]) async {
-    _instance = DefaultAppLabelsProvider._(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
+    _instance = DefaultAppMetadataProvider._(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
     return _instance;
   }
 
-  factory DefaultAppLabelsProvider() {
+  factory DefaultAppMetadataProvider() {
     return _instance;
   }
 
-  DefaultAppLabelsProvider._(
+  DefaultAppMetadataProvider._(
     this._packageInfo,
     this._deviceInfo,
     this._appInfo,
@@ -37,11 +48,7 @@ class DefaultAppLabelsProvider implements AppLabelsProvider {
   final FeatureAccess? _featureAccess;
 
   @override
-  Map<String, String> build() {
-    return _assemble();
-  }
-
-  Map<String, String> _assemble() {
+  Map<String, String> get logLabels {
     final token = _secureStorage.readToken();
     final coreUrl = _secureStorage.readCoreUrl();
     final tenantId = _secureStorage.readTenantId();
@@ -63,5 +70,10 @@ class DefaultAppLabelsProvider implements AppLabelsProvider {
       if (coreUrl != null) 'coreUrl': coreUrl,
       if (tenantId != null) 'tenantId': tenantId,
     };
+  }
+
+  @override
+  String get userAgent {
+    return '${_packageInfo.appName}/${_appInfo.version} (${_deviceInfo.model}; ${_deviceInfo.systemName}: ${_deviceInfo.systemVersion})';
   }
 }

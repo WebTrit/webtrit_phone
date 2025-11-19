@@ -17,9 +17,12 @@ class AboutScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const appAboutUrl = EnvironmentConfig.APP_ABOUT_URL;
+    final appMetadataProvider = context.read<AppMetadataProvider>();
+
     if (appAboutUrl != null) {
       final widget = WebAboutScreen(
         baseAppAboutUrl: Uri.parse(appAboutUrl),
+        userAgent: appMetadataProvider.userAgent,
         packageInfo: context.read<PackageInfo>(),
         infoRepository: context.read<SystemInfoRemoteRepository>(),
       );
@@ -35,6 +38,7 @@ class AboutScreenPage extends StatelessWidget {
             secureStorage: context.read<SecureStorage>(),
             embeddedFeature: context.read<FeatureAccess>().embeddedFeature,
             infoRepository: context.read<SystemInfoRemoteRepository>(),
+            appMetadataProvider: appMetadataProvider,
           )..add(const AboutStarted());
         },
         child: widget,

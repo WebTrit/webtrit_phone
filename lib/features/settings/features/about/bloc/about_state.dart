@@ -5,13 +5,10 @@ class AboutState with _$AboutState {
   const AboutState({
     this.progress = false,
     this.embeddedLinks = const [],
-    required this.appName,
     required this.packageName,
-    required this.storeBuildVersion,
-    required this.storeBuildNumber,
-    required this.appVersion,
     required this.appIdentifier,
     required this.coreUrl,
+    required this.userAgent,
     this.fcmPushToken,
     this.coreVersion,
   });
@@ -23,19 +20,7 @@ class AboutState with _$AboutState {
   final List<String> embeddedLinks;
 
   @override
-  final String appName;
-
-  @override
   final String packageName;
-
-  @override
-  final String storeBuildVersion;
-
-  @override
-  final String storeBuildNumber;
-
-  @override
-  final String appVersion;
 
   @override
   final String appIdentifier;
@@ -44,10 +29,11 @@ class AboutState with _$AboutState {
   final Uri coreUrl;
 
   @override
+  final String userAgent;
+
+  @override
   final String? fcmPushToken;
 
   @override
   final Version? coreVersion;
-
-  String get storeVersion => '$storeBuildVersion-$storeBuildNumber';
 }

@@ -27,7 +27,10 @@ abstract class PresenceSettingsRepository {
 }
 
 class PresenceSettingsRepositoryPrefsImpl with PresenceSettingJsonMapperMixin implements PresenceSettingsRepository {
-  PresenceSettingsRepositoryPrefsImpl(this.appPreferences);
+  PresenceSettingsRepositoryPrefsImpl(this.appPreferences, this.presenceDeviceName);
+
+  final String presenceDeviceName;
+
   AppPreferences appPreferences;
 
   static const presenceSettingsKey = 'presence_settings';
@@ -39,7 +42,7 @@ class PresenceSettingsRepositoryPrefsImpl with PresenceSettingJsonMapperMixin im
     if (prefsResult != null) {
       return presenceSettingsFromJson(prefsResult);
     } else {
-      final blank = PresenceSettings.blank();
+      final blank = PresenceSettings.blank(device: presenceDeviceName);
       updatePresenceSettings(blank);
       return blank;
     }
