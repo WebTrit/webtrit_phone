@@ -9,12 +9,6 @@ abstract class AppMetadataProvider {
   /// to external requests.
   Map<String, String> get logLabels;
 
-  /// Returns a formatted string representing the device and app version
-  /// for Presence settings.
-  ///
-  /// Format: `AppName vVersion on Model (OS)`
-  String get presenceDeviceName;
-
   /// Returns a formatted User-Agent string for HTTP requests and Presence.
   ///
   /// Format: `AppName/AppVersion (Model; OSName: OSVersion)`
@@ -76,11 +70,6 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
       if (coreUrl != null) 'coreUrl': coreUrl,
       if (tenantId != null) 'tenantId': tenantId,
     };
-  }
-
-  @override
-  String get presenceDeviceName {
-    return '${_packageInfo.appName} v${_packageInfo.version} on ${_deviceInfo.model} (${_deviceInfo.systemName})';
   }
 
   @override

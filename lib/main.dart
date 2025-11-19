@@ -161,7 +161,7 @@ class RootApp extends StatelessWidget {
           final database = context.read<AppDatabase>();
           final appMetadataProvider = context.read<AppMetadataProvider>();
 
-          final presenceDeviceName = appMetadataProvider.presenceDeviceName;
+          final presenceDeviceName = appMetadataProvider.userAgent;
 
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
           final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs, presenceDeviceName);
