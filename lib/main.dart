@@ -111,6 +111,7 @@ class RootApp extends StatelessWidget {
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
+            trustedCertificates: context.read<AppCertificates>().trustedCertificates,
             sessionCleanupWorker: instanceRegistry.get<SessionCleanupWorker>(),
 
             /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here

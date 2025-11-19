@@ -73,7 +73,7 @@ Future<InstanceRegistry> bootstrap() async {
   final appTime = await AppTime.init();
 
   // Background workers (assuming SessionCleanupWorker is still a side-effect init)
-  final sessionCleanupWorker = SessionCleanupWorker.init();
+  final sessionCleanupWorker = SessionCleanupWorker.init(appCertificates.trustedCertificates);
 
   // Remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();

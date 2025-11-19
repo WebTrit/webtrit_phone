@@ -3,22 +3,24 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
+import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('SessionCleanupWorker');
 
 class SessionCleanupWorker {
-  static SessionCleanupWorker init() {
+  static SessionCleanupWorker init(TrustedCertificates trustedCertificates) {
     final requestStorage = RequestStorage();
-    return SessionCleanupWorker._(requestStorage);
+    return SessionCleanupWorker._(requestStorage, trustedCertificates);
   }
 
-  SessionCleanupWorker._(this._requestStorage) {
+  SessionCleanupWorker._(this._requestStorage, this.trustedCertificates) {
     _initConnectivityListener();
   }
 
   final RequestStorage _requestStorage;
+  final TrustedCertificates trustedCertificates;
 
   void _initConnectivityListener() {
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) async {
@@ -65,7 +67,7 @@ class SessionCleanupWorker {
     final token = sessionData[RequestStorage.tokenKey];
 
     try {
-      await defaultCreateWebtritApiClient(uri.toString(), '').deleteSession(token);
+      await defaultCreateWebtritApiClient(uri.toString(), '', trustedCertificates).deleteSession(token);
       await _requestStorage.removeFailedSession(key);
     } catch (e) {
       _logger.severe('Session retry failed: $e');
