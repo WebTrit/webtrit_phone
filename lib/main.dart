@@ -159,9 +159,12 @@ class RootApp extends StatelessWidget {
         builder: (context) {
           final prefs = context.read<AppPreferences>();
           final database = context.read<AppDatabase>();
+          final appMetadataProvider = context.read<AppMetadataProvider>();
+
+          final presenceDeviceName = appMetadataProvider.presenceDeviceName;
 
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
-          final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs);
+          final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs, presenceDeviceName);
           final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(prefs);
           final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(prefs);
           final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(prefs);
