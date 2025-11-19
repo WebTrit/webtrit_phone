@@ -28,7 +28,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    final featureAccess = FeatureAccess();
+    final featureAccess = context.read<FeatureAccess>();
 
     appBloc = AppBloc(
       userAgreementStatusRepository: context.read<UserAgreementStatusRepository>(),

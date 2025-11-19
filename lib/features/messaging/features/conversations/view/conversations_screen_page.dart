@@ -16,7 +16,7 @@ class ConversationsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final messagingFeature = FeatureAccess().messagingFeature;
+    final messagingFeature = context.read<FeatureAccess>().messagingFeature;
     final chatsEnabled = messagingFeature.chatsPresent;
     final smsEnabled = messagingFeature.smsPresent;
 

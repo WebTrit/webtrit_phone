@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/main.dart';
 
 Future<void> pumpRootApp(WidgetTester tester) async {
-  const rootApp = RootApp();
+  final rootApp = RootApp(instanceRegistry: InstanceRegistry());
   await tester.pumpWidget(rootApp);
   await tester.pumpAndSettle();
 }

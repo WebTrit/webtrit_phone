@@ -31,7 +31,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   late final contactsRepository = context.read<ContactsRepository>();
   late final notificationsBloc = context.read<NotificationsBloc>();
 
-  late final messagingFeature = FeatureAccess().messagingFeature;
+  late final messagingFeature = context.read<FeatureAccess>().messagingFeature;
   late final chatsEnabled = messagingFeature.chatsPresent;
   late final smsEnabled = messagingFeature.smsPresent;
 

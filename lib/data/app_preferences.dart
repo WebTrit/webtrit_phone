@@ -17,27 +17,13 @@ abstract class AppPreferences {
 }
 
 class AppPreferencesImpl implements AppPreferences {
-  static AppPreferencesImpl? _instance;
-
   final SharedPreferences _sharedPreferences;
 
   AppPreferencesImpl._(this._sharedPreferences);
 
-  factory AppPreferencesImpl() {
-    if (_instance == null) {
-      throw Exception('AppPreferencesImpl.init() must be called before accessing the instance.');
-    }
-    return _instance!;
-  }
-
   static Future<AppPreferences> init() async {
-    if (_instance != null) {
-      return _instance!;
-    }
-
     final sharedPreferences = await SharedPreferences.getInstance();
-    _instance = AppPreferencesImpl._(sharedPreferences);
-    return _instance!;
+    return AppPreferencesImpl._(sharedPreferences);
   }
 
   @override

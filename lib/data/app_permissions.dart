@@ -13,8 +13,6 @@ final _logger = Logger('AppPermissions');
 class AppPermissions {
   static const _specialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
 
-  static late AppPermissions _instance;
-
   static Future<AppPermissions> init(FeatureAccess featureAccess) async {
     final bottomMenuFeature = featureAccess.bottomMenuFeature;
     final contactsSourceTypes = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
@@ -34,19 +32,14 @@ class AppPermissions {
 
     final statuses = await Future.wait(permissions.map((permission) => permission.status));
     final isDenied = statuses.every((status) => status.isDenied) || specialStatuses.every((status) => status.isDenied);
-    _instance = AppPermissions._(isDenied, permissions);
-    return _instance;
-  }
-
-  factory AppPermissions() {
-    return _instance;
+    return AppPermissions._(isDenied, permissions);
   }
 
   AppPermissions._(this._isDenied, this._permissions);
 
   bool _isDenied;
 
-  List<Permission> _permissions;
+  final List<Permission> _permissions;
 
   List<Permission> get permissions => _permissions;
 

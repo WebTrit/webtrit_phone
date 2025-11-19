@@ -44,7 +44,8 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
-    final androidTarget = PlatformInfo().isAndroid;
+    // TODO: Convert to a singleton and move to utils
+    final androidTarget = PlatformInfo.init().isAndroid;
     final contactsAgreementStatus = context.watch<AppBloc>().state.contactsAgreementStatus;
 
     return BlocBuilder<DiagnosticCubit, DiagnosticState>(

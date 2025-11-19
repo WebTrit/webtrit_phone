@@ -27,8 +27,6 @@ class SecureStorage {
   // Last FCM token that was pushed to the server
   static const _kFCMPushToken = 'fcm-push-token';
 
-  static late SecureStorage _instance;
-
   static Future<SecureStorage> init() async {
     const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
     final cache = await storage.readAll();
@@ -39,12 +37,7 @@ class SecureStorage {
       cache.clear();
     }
 
-    _instance = SecureStorage._(storage, cache);
-    return _instance;
-  }
-
-  factory SecureStorage() {
-    return _instance;
+    return SecureStorage._(storage, cache);
   }
 
   SecureStorage._(this._storage, [this._cache = const {}]);

@@ -6,8 +6,6 @@ import 'package:logging/logging.dart';
 final Logger _logger = Logger('AppTime');
 
 class AppTime {
-  static late final AppTime _instance;
-
   static Future<AppTime> init() async {
     final is24HourFormat = await _determine24HourFormat();
 
@@ -16,8 +14,7 @@ class AppTime {
 
     _logger.info('Initialized with format: $is24HourFormat');
 
-    _instance = AppTime._(is24HourFormat, shortDateFormat, detailDateFormat);
-    return _instance;
+    return AppTime._(is24HourFormat, shortDateFormat, detailDateFormat);
   }
 
   static Future<bool> _determine24HourFormat() async {
@@ -30,8 +27,6 @@ class AppTime {
       return true;
     }
   }
-
-  factory AppTime() => _instance;
 
   AppTime._(this._is24HourFormat, this.shortDateFormat, this.fullDateFormat);
 

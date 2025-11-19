@@ -26,21 +26,25 @@ import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSy
 import 'app/session/session.dart';
 import 'firebase_options.dart';
 
-Future<void> bootstrap() async {
+Future<InstanceRegistry> bootstrap() async {
+  final registry = InstanceRegistry();
+
+  // External SDKs (Side effects only, don't need registration)
   await _initFirebase();
   await _initFirebaseMessaging();
   await _initLocalPushs();
 
-  // Remote configuration
-  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
+  // Initialize Components
 
-  // Initialization order is crucial for proper app setup
+  // Core infrastructure
   final appThemes = await AppThemes.init();
   final appPreferences = await AppPreferencesImpl.init();
+
+  // Repositories
   final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
 
+  // Logic / Features
   final coreSupport = CoreSupportImpl(() => systemInfoLocalRepository.getSystemInfo());
   final featureAccess = FeatureAccess.init(
     appThemes.appConfig,
@@ -49,22 +53,66 @@ Future<void> bootstrap() async {
     coreSupport,
   );
 
+  // App Info & Device Data
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
-  final appLabels = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
+  final appLabels = await DefaultAppMetadataProvider.init(
+    packageInfo,
+    deviceInfo,
+    appInfo,
+    secureStorage,
+    featureAccess,
+  );
 
-  await AppPath.init();
-  await AppPermissions.init(featureAccess);
-  await AppCertificates.init();
-  await AppTime.init();
-  await SessionCleanupWorker.init();
-  await AppLogger.init(remoteFirebaseConfigService, appLabels);
-  await AppLifecycle.initMaster();
+  // Utilities - Capturing instances that were previously just `await Class.init()`
+  final appPath = await AppPath.init();
+  final appPermissions = await AppPermissions.init(featureAccess);
+  final appCertificates = await AppCertificates.init();
+  final appTime = await AppTime.init();
 
+  // Background workers (assuming SessionCleanupWorker is still a side-effect init)
+  final sessionCleanupWorker = SessionCleanupWorker.init();
+
+  // Remote configuration
+  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+  final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
+  final appLogger = await AppLogger.init(remoteFirebaseConfigService, appLabels);
+
+  final appLifecycle = await AppLifecycle.initMaster();
+
+  // Register instances into the Registry
+
+  // Configuration & Info
+  registry.register<AppThemes>(appThemes);
+  registry.register<AppInfo>(appInfo);
+  registry.register<PackageInfo>(packageInfo);
+  registry.register<DeviceInfo>(deviceInfo);
+  registry.register<AppPath>(appPath);
+  registry.register<AppTime>(appTime);
+
+  // Repositories & Storage
+  registry.register<AppPreferences>(appPreferences);
+  registry.register<SecureStorage>(secureStorage);
+  registry.register<SystemInfoLocalRepository>(systemInfoLocalRepository);
+  registry.register<ActiveMainFlavorRepository>(activeMainFlavorRepository);
+
+  // Logic & Features
+  registry.register<CoreSupport>(coreSupport);
+  registry.register<FeatureAccess>(featureAccess);
+  registry.register<AppMetadataProvider>(appLabels);
+  registry.register<AppPermissions>(appPermissions);
+  registry.register<AppCertificates>(appCertificates);
+  registry.register<AppLogger>(appLogger);
+  registry.register<AppLifecycle>(appLifecycle);
+  registry.register<SessionCleanupWorker>(sessionCleanupWorker);
+
+  // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);
   await _initWorkManager();
+
+  return registry;
 }
 
 Future<void> _initCallkeep(FeatureAccess featureAccess) async {

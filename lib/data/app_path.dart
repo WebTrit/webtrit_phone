@@ -1,15 +1,11 @@
 import 'package:path_provider/path_provider.dart';
 
 class AppPath {
-  static late AppPath _instance;
-
-  static Future<void> init() async {
+  static Future<AppPath> init() async {
     final appDocDir = await getApplicationDocumentsDirectory();
     final tempDir = await getTemporaryDirectory();
-    _instance = AppPath._(appDocDir.path, tempDir.path);
+    return AppPath._(appDocDir.path, tempDir.path);
   }
-
-  factory AppPath() => _instance;
 
   AppPath._(this._applicationDocumentsPath, this._temporaryPath);
 

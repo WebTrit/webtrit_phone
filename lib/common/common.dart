@@ -1,5 +1,6 @@
 export 'app_id_provider.dart';
 export 'disposable.dart';
+export 'instance_registry.dart';
 export 'isolate_database.dart';
 export 'logging/logging.dart';
 export 'refreshable.dart';

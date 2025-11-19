@@ -2,13 +2,12 @@ import 'package:flutter/foundation.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+// TODO: Convert to a singleton and move to utils
 class PlatformInfo {
-  static final PlatformInfo _instance = PlatformInfo._();
-
   PlatformInfo._();
 
-  factory PlatformInfo() {
-    return _instance;
+  static PlatformInfo init() {
+    return PlatformInfo._();
   }
 
   bool get isWeb => kIsWeb;

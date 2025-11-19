@@ -94,20 +94,21 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final bottomMenuFeature = context.watch<FeatureAccess>().bottomMenuFeature;
+    final featureAccess = context.watch<FeatureAccess>();
+    final appTime = context.read<AppTime>();
+    final appCertificates = context.read<AppCertificates>();
 
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<WebtritApiClient>(
           create: (context) {
             final appBloc = context.read<AppBloc>();
-            final appCerts = AppCertificates();
 
             return WebtritApiClient(
               Uri.parse(appBloc.state.session.coreUrl!),
               appBloc.state.session.tenantId,
               connectionTimeout: kApiClientConnectionTimeout,
-              certs: appCerts.trustedCertificates,
+              certs: appCertificates.trustedCertificates,
             );
           },
         ),
@@ -157,7 +158,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
-            final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
+            final isVoicemailsEnabled = featureAccess.settingsFeature.isVoicemailsEnabled;
 
             if (isVoicemailsEnabled) {
               return VoicemailRepositoryImpl(
@@ -251,7 +252,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               dispose: (context, service) => service.dispose(),
               lazy: false,
             ),
-            if (bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
+            if (featureAccess.bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
               Provider<CdrsSyncWorker>(
                 create: (context) =>
                     CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
@@ -301,7 +302,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         recentsRepository: context.read<RecentsRepository>(),
                         activeRecentsVisibilityFilterRepository: context
                             .read<ActiveRecentsVisibilityFilterRepository>(),
-                        dateFormat: AppTime().formatDateTime(),
+                        dateFormat: appTime.formatDateTime(),
                       )..add(const RecentsStarted());
                     },
                   ),
@@ -314,7 +315,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final appPermissions = context.read<AppPermissions>();
 
                       Future<bool> isFutureEnabled() async {
-                        final contactTab = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
+                        final contactTab = featureAccess.bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
                         final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
                         return contactSourceTypes.contains(ContactSourceType.local);
                       }
@@ -358,9 +359,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final peerConnectionSettingsRepository = context.read<PeerConnectionSettingsRepository>();
                       final videoCapturingSettingsRepository = context.read<VideoCapturingSettingsRepository>();
                       final encodingSettingsRepository = context.read<EncodingSettingsRepository>();
-                      // TODO(Serdun): Refactor into an inherited widget for better code consistency and reusability
-                      final appCertificates = AppCertificates();
-                      final featureAccess = context.read<FeatureAccess>();
 
                       final encodingConfig = featureAccess.callFeature.encoding;
                       final peerConnectionConfig = featureAccess.callFeature.peerConnection;
@@ -433,7 +431,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       return MessagingBloc(
                         session.userId,
                         createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
-                        FeatureAccess().messagingFeature,
+                        featureAccess.messagingFeature,
                         context.read<ChatsRepository>(),
                         context.read<ChatsOutboxRepository>(),
                         context.read<SmsRepository>(),
@@ -496,7 +494,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       ],
                       child: Builder(
                         builder: (context) {
-                          final sipPresenceFeature = FeatureAccess().sipPresenceFeature;
+                          final sipPresenceFeature = featureAccess.sipPresenceFeature;
 
                           return PresenceViewParams(
                             viewSource: switch (sipPresenceFeature.sipPresenceSupport) {

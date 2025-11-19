@@ -9,16 +9,9 @@ import 'package:webtrit_phone/utils/utils.dart';
 final _logger = Logger('SessionCleanupWorker');
 
 class SessionCleanupWorker {
-  static late SessionCleanupWorker _instance;
-
-  static Future<SessionCleanupWorker> init() async {
+  static SessionCleanupWorker init() {
     final requestStorage = RequestStorage();
-    _instance = SessionCleanupWorker._(requestStorage);
-    return _instance;
-  }
-
-  factory SessionCleanupWorker() {
-    return _instance;
+    return SessionCleanupWorker._(requestStorage);
   }
 
   SessionCleanupWorker._(this._requestStorage) {

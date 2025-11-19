@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/bootstrap.dart';
+import 'package:webtrit_phone/common/instance_registry.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -25,7 +26,7 @@ void main() {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      await bootstrap();
+      final instanceRegistry = await bootstrap();
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -42,7 +43,7 @@ void main() {
       Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
 
       Bloc.observer = AppBlocObserver();
-      runApp(const RootApp());
+      runApp(RootApp(instanceRegistry: instanceRegistry));
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
@@ -54,24 +55,28 @@ void main() {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key});
+  const RootApp({super.key, required this.instanceRegistry});
+
+  final InstanceRegistry instanceRegistry;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AppInfo>(create: (context) => AppInfo()),
-        Provider<AppThemes>(create: (context) => AppThemes()),
-        Provider<PlatformInfo>(create: (context) => PlatformInfo()),
-        Provider<PackageInfo>(create: (context) => PackageInfoFactory.instance),
-        Provider<DeviceInfo>(create: (context) => DeviceInfoFactory.instance),
-        Provider<AppPreferences>(create: (context) => AppPreferencesImpl()),
-        Provider<FeatureAccess>(create: (context) => FeatureAccess()),
-        Provider<SecureStorage>(create: (context) => SecureStorage()),
-        Provider<AppPermissions>(create: (context) => AppPermissions()),
-        Provider<AppLogger>(create: (context) => AppLogger()),
-        Provider<AppTime>(create: (context) => AppTime()),
-        Provider<AppPath>(create: (context) => AppPath()),
+        Provider<AppInfo>(create: (context) => instanceRegistry.get()),
+        Provider<AppThemes>(create: (context) => instanceRegistry.get()),
+        Provider<PackageInfo>(create: (context) => instanceRegistry.get()),
+        Provider<DeviceInfo>(create: (context) => instanceRegistry.get()),
+        Provider<AppPreferences>(create: (context) => instanceRegistry.get()),
+        Provider<FeatureAccess>(create: (context) => instanceRegistry.get()),
+        Provider<SecureStorage>(create: (context) => instanceRegistry.get()),
+        Provider<AppPermissions>(create: (context) => instanceRegistry.get()),
+        Provider<AppLogger>(create: (context) => instanceRegistry.get()),
+        Provider<AppTime>(create: (context) => instanceRegistry.get()),
+        Provider<AppPath>(create: (context) => instanceRegistry.get()),
+        Provider<AppCertificates>(create: (_) => instanceRegistry.get()),
+        Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
+
         // Services
         Provider<AppDatabase>(create: _createAppDatabase, dispose: _disposeAppDatabase),
         Provider<ConnectivityService>(create: _createConnectivityService, dispose: _disposeConnectivityService),
@@ -106,7 +111,7 @@ class RootApp extends StatelessWidget {
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
-            sessionCleanupWorker: SessionCleanupWorker(),
+            sessionCleanupWorker: instanceRegistry.get<SessionCleanupWorker>(),
 
             /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here
             onLogout: () async {
@@ -167,7 +172,7 @@ class RootApp extends StatelessWidget {
   AppDatabase _createAppDatabase(BuildContext _) {
     final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
       createAppDatabaseConnection(
-        AppPath().applicationDocumentsPath,
+        instanceRegistry.get<AppPath>().applicationDocumentsPath,
         'db.sqlite',
         logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
       ),

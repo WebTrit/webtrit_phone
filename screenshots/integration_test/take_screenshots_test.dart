@@ -25,8 +25,8 @@ void main() {
   late final AppBloc appBloc;
 
   setUpAll(() async {
-    await AppThemes.init();
-    final themeSettings = AppThemes().values.first.settings;
+    final theme = await AppThemes.init();
+    final themeSettings = theme.values.first.settings;
 
     final deviceInfo = await DeviceInfoPlugin().deviceInfo;
     if (deviceInfo is AndroidDeviceInfo) {

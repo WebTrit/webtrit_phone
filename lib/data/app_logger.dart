@@ -12,8 +12,6 @@ import 'app_metadata_provider.dart';
 final _logger = Logger('AppLogger');
 
 class AppLogger {
-  static late AppLogger _instance;
-
   static Future<AppLogger> init(RemoteConfigService remoteConfigService, AppMetadataProvider labelsProvider) async {
     hierarchicalLoggingEnabled = true;
 
@@ -42,8 +40,7 @@ class AppLogger {
 
     _logger.info('Initializing AppLogger with local log level: $localLogLevel, remote log level: $logzioLogLevel');
 
-    _instance = AppLogger._(remoteLoggingServices, labelsProvider);
-    return _instance;
+    return AppLogger._(remoteLoggingServices, labelsProvider);
   }
 
   static List<RemoteLoggingService> _createRemoteLoggingServices(RemoteConfigService configService, Level minLevel) {
@@ -60,10 +57,6 @@ class AppLogger {
     }
 
     return [];
-  }
-
-  factory AppLogger() {
-    return _instance;
   }
 
   AppLogger._(this._remoteLoggingServices, this._labelsProvider);
