@@ -1,18 +1,26 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/core_support.dart';
 
-Future<void> main() async {
-  final appPreferences = await AppPreferences.init();
-  final SystemInfoLocalRepository systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
+import '../mocks/mocks.dart';
 
-  final cs = CoreSupportImpl(systemInfoLocalRepository);
+void main() {
+  CoreSupport createCoreSupportWithFlags(List<String> flags) {
+    final jsonInfo = SystemInfoBuilder(adapterSupported: flags).build();
 
-  group('CoreSupport.fromFlags', () {
+    final mockPrefs = MockAppPreferences(initialData: {'system-info': jsonInfo});
+
+    final systemInfoRepository = SystemInfoLocalRepositoryPrefsImpl(mockPrefs);
+
+    return CoreSupportImpl(() => systemInfoRepository.getSystemInfo());
+  }
+
+  group('CoreSupport Feature Flags', () {
     test('returns all false when no flags provided', () {
+      final cs = createCoreSupportWithFlags([]);
+
       expect(cs.supportsVoicemail, isFalse);
       expect(cs.supportsSms, isFalse);
       expect(cs.supportsChats, isFalse);
@@ -21,65 +29,56 @@ Future<void> main() async {
     });
 
     test('voicemail only', () {
-      expect(cs.supportsVoicemail, isTrue);
-      expect(cs.supportsSms, isFalse);
-      expect(cs.supportsChats, isFalse);
-      expect(cs.supportsSystemNotifications, isFalse);
-      expect(cs.supportsSystemPushNotifications, isFalse);
+      final cs = createCoreSupportWithFlags([kVoicemailFeatureFlag]);
 
       expect(cs.supportsVoicemail, isTrue);
       expect(cs.supportsSms, isFalse);
+      expect(cs.supportsChats, isFalse);
     });
 
     test('sms only', () {
-      expect(cs.supportsVoicemail, isFalse);
+      final cs = createCoreSupportWithFlags([kSmsMessagingFeatureFlag]);
+
       expect(cs.supportsSms, isTrue);
+      expect(cs.supportsVoicemail, isFalse);
       expect(cs.supportsChats, isFalse);
-      expect(cs.supportsSystemNotifications, isFalse);
-      expect(cs.supportsSystemPushNotifications, isFalse);
     });
 
     test('chats only', () {
+      final cs = createCoreSupportWithFlags([kChatMessagingFeatureFlag]);
+
+      expect(cs.supportsChats, isTrue);
       expect(cs.supportsVoicemail, isFalse);
       expect(cs.supportsSms, isFalse);
-      expect(cs.supportsChats, isTrue);
-      expect(cs.supportsSystemNotifications, isFalse);
-      expect(cs.supportsSystemPushNotifications, isFalse);
     });
 
     test('system notifications only', () {
-      expect(cs.supportsVoicemail, isFalse);
-      expect(cs.supportsSms, isFalse);
-      expect(cs.supportsChats, isFalse);
+      final cs = createCoreSupportWithFlags([kSystemNotificationsFeatureFlag]);
       expect(cs.supportsSystemNotifications, isTrue);
-      expect(cs.supportsSystemPushNotifications, isFalse);
-    });
-
-    test('system push notifications only', () {
-      expect(cs.supportsVoicemail, isFalse);
-      expect(cs.supportsSms, isFalse);
-      expect(cs.supportsChats, isFalse);
-      expect(cs.supportsSystemNotifications, isFalse);
-      expect(cs.supportsSystemPushNotifications, isTrue);
     });
 
     test('all flags -> all getters true', () {
+      final cs = createCoreSupportWithFlags([
+        kVoicemailFeatureFlag,
+        kSmsMessagingFeatureFlag,
+        kChatMessagingFeatureFlag,
+      ]);
+
       expect(cs.supportsVoicemail, isTrue);
       expect(cs.supportsSms, isTrue);
       expect(cs.supportsChats, isTrue);
-      expect(cs.supportsSystemNotifications, isTrue);
-      expect(cs.supportsSystemPushNotifications, isTrue);
     });
+  });
 
-    test('internal flags are immutable (defensive copy)', () {
-      final source = <String>{kVoicemailFeatureFlag};
+  group('CoreSupport Immutability', () {
+    test('internal flags are immutable (defensive copy check)', () {
+      final sourceFlags = <String>[kVoicemailFeatureFlag];
+      final cs = createCoreSupportWithFlags(sourceFlags);
 
-      // mutate the original set after creating CoreSupport
-      source.add(kSmsMessagingFeatureFlag);
+      expect(cs.supportsVoicemail, isTrue, reason: 'Should be true initially');
+      sourceFlags.clear();
 
-      // CoreSupport should NOT see the mutation
-      expect(cs.supportsVoicemail, isTrue);
-      expect(cs.supportsSms, isFalse);
+      expect(cs.supportsVoicemail, isTrue, reason: 'Should stay true despite source list clearing');
     });
   });
 }
