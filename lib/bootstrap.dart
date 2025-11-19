@@ -37,7 +37,7 @@ Future<void> bootstrap() async {
 
   // Initialization order is crucial for proper app setup
   final appThemes = await AppThemes.init();
-  final appPreferences = await AppPreferences.init();
+  final appPreferences = await AppPreferencesImpl.init();
   final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
 

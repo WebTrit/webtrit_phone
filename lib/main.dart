@@ -87,7 +87,7 @@ class RootApp extends StatelessWidget {
         ),
         Provider<AppPreferences>(
           create: (context) {
-            return AppPreferences();
+            return AppPreferencesImpl();
           },
         ),
         Provider<FeatureAccess>(

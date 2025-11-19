@@ -26,10 +26,10 @@ void main() async {
       final packageInfo = await PackageInfoFactory.init();
       final deviceInfo = await DeviceInfoFactory.init();
 
-      final appPreferences = await AppPreferences.init();
+      final appPreferences = await AppPreferencesImpl.init();
       final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
       final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
-      final coreSupport = CoreSupportImpl(systemInfoLocalRepository);
+      final coreSupport = CoreSupportImpl(systemInfoLocalRepository.getSystemInfo());
 
       final themeSettings = appThemes.values.first.settings;
 
