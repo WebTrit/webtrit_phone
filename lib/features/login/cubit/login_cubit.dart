@@ -31,7 +31,6 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     required this.notificationsBloc,
     required this.packageInfo,
     required this.appInfo,
-    required this.platformInfo,
     required this.sessionRepository,
     required this.systemInfoLocalRepository,
   }) : super(const LoginState());
@@ -39,7 +38,6 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   final WebtritApiClientFactory createWebtritApiClient;
   final HttpRequestExecutorFactory createHttpRequestExecutor;
   final NotificationsBloc notificationsBloc;
-  final PlatformInfo platformInfo;
 
   // TODO: Replace by AuthRepository in next iteration
   final SessionRepository sessionRepository;
@@ -48,8 +46,6 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   final AppInfo appInfo;
 
   String get appBundleId => packageInfo.packageName;
-
-  AppType get appType => platformInfo.appType;
 
   String get appIdentifier => appInfo.identifier;
 
@@ -556,7 +552,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
   Future<SessionOtpProvisional> _createSessionOtp(WebtritApiClient webtritApiClient, String userRef) async {
     return await webtritApiClient.createSessionOtp(
-      SessionOtpCredential(bundleId: appBundleId, type: appType, identifier: appIdentifier, userRef: userRef),
+      SessionOtpCredential(bundleId: appBundleId, type: PlatformInfo.appType, identifier: appIdentifier, userRef: userRef),
     );
   }
 
@@ -572,7 +568,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     return await webtritApiClient.createSession(
       SessionLoginCredential(
         bundleId: appBundleId,
-        type: appType,
+        type: PlatformInfo.appType,
         identifier: appIdentifier,
         login: userRef,
         password: password,
@@ -586,7 +582,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     Map<String, dynamic>? extraPayload,
   }) async {
     return await client.createUser(
-      SessionUserCredential(bundleId: appBundleId, type: appType, identifier: appIdentifier, email: email),
+      SessionUserCredential(bundleId: appBundleId, type: PlatformInfo.appType, identifier: appIdentifier, email: email),
       extraPayload: extraPayload,
       options: RequestOptions.withExtraRetries(),
     );

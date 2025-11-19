@@ -92,7 +92,6 @@ class LoginRouterPage extends StatelessWidget {
       notificationsBloc: context.read<NotificationsBloc>(),
       packageInfo: context.read<PackageInfo>(),
       appInfo: context.read<AppInfo>(),
-      platformInfo: context.read<PlatformInfo>(),
       sessionRepository: context.read<SessionRepository>(),
       systemInfoLocalRepository: context.read<SystemInfoLocalRepository>(),
     );

@@ -53,7 +53,6 @@ class AutoprovisionScreenPage extends StatelessWidget {
       create: (context) => AutoprovisionCubit(
         appInfo: context.read<AppInfo>(),
         packageInfo: context.read<PackageInfo>(),
-        platformInfo: context.read<PlatformInfo>(),
         config: config,
       ),
       child: const AutoprovisionScreen(),

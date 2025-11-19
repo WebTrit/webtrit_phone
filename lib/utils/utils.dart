@@ -14,6 +14,7 @@ export 'og_preview.dart';
 export 'orientations.dart';
 export 'path_provider/path_provider.dart';
 export 'performance_timer.dart';
+export 'platform_info.dart';
 export 'regexes.dart';
 export 'string_phone_utils.dart';
 export 'text_matchers.dart';

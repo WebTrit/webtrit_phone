@@ -7,6 +7,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/agreement_status.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../../../widgets/widgets.dart';
 import '../bloc/diagnostic_cubit.dart';
@@ -44,8 +45,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Convert to a singleton and move to utils
-    final androidTarget = PlatformInfo.init().isAndroid;
+    final androidTarget = PlatformInfo.isAndroid;
     final contactsAgreementStatus = context.watch<AppBloc>().state.contactsAgreementStatus;
 
     return BlocBuilder<DiagnosticCubit, DiagnosticState>(
