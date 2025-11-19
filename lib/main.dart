@@ -140,7 +140,11 @@ class RootApp extends StatelessWidget {
 
           return MultiRepositoryProvider(
             providers: [
-              RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
+              RepositoryProvider<LogRecordsRepository>(
+                create: (context) {
+                  return LogRecordsFileRepositoryImpl()..attachToLogger(Logger.root);
+                },
+              ),
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
