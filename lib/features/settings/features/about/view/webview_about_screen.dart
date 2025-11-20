@@ -17,7 +17,7 @@ class WebAboutScreen extends StatelessWidget {
   final Uri baseAppAboutUrl;
   final String userAgent;
   final PackageInfo packageInfo;
-  final SystemInfoRemoteRepository infoRepository;
+  final SystemInfoRepository infoRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class WebAboutScreen extends StatelessWidget {
           'buildNumber': packageInfo.buildNumber,
 
           /// TODO: use session repository
-          'coreUrl': infoRepository.coreUrl.toString(),
+          'coreUrl': infoRepository.getCoreUrl().toString(),
         },
       ),
       userAgent: userAgent,

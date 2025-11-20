@@ -53,11 +53,16 @@ Future<InstanceRegistry> bootstrap() async {
   final appThemes = await AppThemes.init();
 
   // Repositories
-  final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
+  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
+  final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(clientFactory);
+  final systemInfoRepository = SystemInfoRepositoryImpl(
+    localDatasource: systemInfoLocalDatasource,
+    remoteDatasource: systemInfoRemoteDatasource,
+  );
 
   // Logic / Features
-  final coreSupport = CoreSupportImpl(() => systemInfoLocalRepository.getSystemInfo());
+  final coreSupport = CoreSupportImpl(() => systemInfoLocalDatasource.getSystemInfo());
   final featureAccess = FeatureAccess.init(
     appThemes.appConfig,
     appThemes.embeddedResources,
@@ -105,7 +110,7 @@ Future<InstanceRegistry> bootstrap() async {
   // Repositories & Storage
   registry.register<AppPreferences>(appPreferences);
   registry.register<SecureStorage>(secureStorage);
-  registry.register<SystemInfoLocalRepository>(systemInfoLocalRepository);
+  registry.register<SystemInfoRepository>(systemInfoRepository);
   registry.register<ActiveMainFlavorRepository>(activeMainFlavorRepository);
 
   // Logic & Features

@@ -24,8 +24,7 @@ final _logger = Logger('MainBloc');
 
 class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   MainBloc(
-    this.systemInfoRemoteRepository,
-    this.systemInfoLocalRepository,
+    this.systemInfoRepository,
     this.customPrivateGatewayRepository,
     this.coreVersionConstraint,
     this.packageInfo, {
@@ -36,8 +35,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
     on<MainBlocAppUpdatePressed>(_onAppUpdatePressed, transformer: droppable());
   }
 
-  final SystemInfoRemoteRepository systemInfoRemoteRepository;
-  final SystemInfoLocalRepository systemInfoLocalRepository;
+  final SystemInfoRepository systemInfoRepository;
   final PrivateGatewayRepository customPrivateGatewayRepository;
   final String coreVersionConstraint;
   final StoreInfoExtractor? storeInfoExtractor;
@@ -60,27 +58,15 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   /// Initialize local system info and keeps it in sync with the remote one.
   /// To use it in core version compatibility verification, it emits the [MainBlocSystemInfoArrived] event.
   void _onInit(MainBlocInit event, Emitter<MainBlocState> emit) async {
-    var currentSystemInfo = systemInfoLocalRepository.getSystemInfo();
-
-    /// Migration workaround from the old version of the app
-    /// Normally, the system info should be fetched during the login process and stored in sync with
-    /// other session data as token, tenant, userid etc.
-    if (currentSystemInfo == null) {
-      try {
-        final remoteSystemInfo = await systemInfoRemoteRepository.getInfo();
-        systemInfoLocalRepository.setSystemInfo(remoteSystemInfo);
-        currentSystemInfo = remoteSystemInfo;
-      } catch (e) {
-        _logger.warning('Failed to fetch initial system info', e);
-      }
+    // First, process the current system info if it's available
+    var currentSystemInfo = await systemInfoRepository.getSystemInfo();
+    if (currentSystemInfo != null) {
+      add(MainBlocSystemInfoArrived(currentSystemInfo));
     }
 
-    if (currentSystemInfo != null) add(MainBlocSystemInfoArrived(currentSystemInfo));
-
-    // subscribe to the system info updates
+    // Then, subscribe to the stream for future updates
     _systemInfoSubscription?.cancel();
-    _systemInfoSubscription = systemInfoRemoteRepository.infoUpdates.listen((systemInfoUpdate) {
-      systemInfoLocalRepository.setSystemInfo(systemInfoUpdate);
+    _systemInfoSubscription = systemInfoRepository.infoStream.listen((systemInfoUpdate) {
       add(MainBlocSystemInfoArrived(systemInfoUpdate));
     });
   }

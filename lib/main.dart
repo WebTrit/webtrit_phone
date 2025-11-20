@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/bootstrap.dart';
-import 'package:webtrit_phone/common/instance_registry.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -88,12 +88,12 @@ class RootApp extends StatelessWidget {
           final database = context.read<AppDatabase>();
           final webtritApiClientFactory = context.read<WebtritApiClientFactory>();
           final appMetadataProvider = context.read<AppMetadataProvider>();
-
           final presenceDeviceName = appMetadataProvider.userAgent;
+
+          final systemInfoRepository = instanceRegistry.get<SystemInfoRepository>();
 
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
           final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs, presenceDeviceName);
-          final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(prefs);
           final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(prefs);
           final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(prefs);
           final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(prefs);
@@ -119,9 +119,9 @@ class RootApp extends StatelessWidget {
             /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here
             onLogout: () async {
               await database.deleteEverything(); // TODO: clear using repos instead of direct access
+              await systemInfoRepository.clear();
               await registerStatusRepository.clear();
               await presenceSettingsRepository.clear();
-              await systemInfoLocalRepository.clear();
               await activeMainFlavorRepository.clear();
               await callerIdSettingsRepository.clear();
               await activeRecentsVisibilityFilterRepository.clear();
@@ -144,7 +144,6 @@ class RootApp extends StatelessWidget {
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
-              RepositoryProvider<SystemInfoLocalRepository>.value(value: systemInfoLocalRepository),
               RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
               RepositoryProvider<SessionRepository>.value(value: sessionRepository),
               RepositoryProvider<CallerIdSettingsRepository>.value(value: callerIdSettingsRepository),
@@ -164,6 +163,10 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),
               RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
               RepositoryProvider<AutocompleteHistoryRepository>.value(value: autocompleteHistoryRepository),
+              RepositoryProvider<SystemInfoRepository>(
+                create: (_) => instanceRegistry.get(),
+                dispose: disposeIfDisposable,
+              ),
             ],
             child: const App(),
           );

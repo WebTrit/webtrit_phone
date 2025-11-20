@@ -25,7 +25,7 @@ class AboutScreenPage extends StatelessWidget {
         baseAppAboutUrl: Uri.parse(appAboutUrl),
         userAgent: appMetadataProvider.userAgent,
         packageInfo: context.read<PackageInfo>(),
-        infoRepository: context.read<SystemInfoRemoteRepository>(),
+        infoRepository: context.read<SystemInfoRepository>(),
       );
       return widget;
     } else {
@@ -38,7 +38,7 @@ class AboutScreenPage extends StatelessWidget {
             packageInfo: context.read<PackageInfo>(),
             secureStorage: context.read<SecureStorage>(),
             embeddedFeature: context.read<FeatureAccess>().embeddedFeature,
-            infoRepository: context.read<SystemInfoRemoteRepository>(),
+            infoRepository: context.read<SystemInfoRepository>(),
             appMetadataProvider: appMetadataProvider,
           )..add(const AboutStarted());
         },
