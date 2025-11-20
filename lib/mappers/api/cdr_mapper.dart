@@ -1,6 +1,8 @@
-import 'package:webtrit_api/webtrit_api.dart' as api;
-import 'package:webtrit_phone/extensions/string.dart';
+import 'package:collection/collection.dart';
 
+import 'package:webtrit_api/webtrit_api.dart' as api;
+
+import 'package:webtrit_phone/extensions/string.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 mixin CdrApiMapper {
@@ -8,7 +10,7 @@ mixin CdrApiMapper {
     return CdrRecord(
       callId: cdrRecord.callId,
       direction: CallDirection.values.byName(cdrRecord.direction),
-      status: CdrStatus.values.byName(cdrRecord.status),
+      status: CdrStatus.values.firstWhereOrNull((s) => s.name == cdrRecord.status) ?? CdrStatus.error,
       callee: cdrRecord.callee,
       calleeNumber: cdrRecord.callee.extractNumber,
       caller: cdrRecord.caller,
