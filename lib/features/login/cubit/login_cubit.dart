@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
 import 'package:logging/logging.dart';
-import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -27,24 +26,18 @@ final _logger = Logger('LoginCubit');
 
 class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   LoginCubit({
-    @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
-    @visibleForTesting this.createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
-    required this.trustedCertificates,
+    required this.apiClientFactory,
     required this.notificationsBloc,
     required this.packageInfo,
     required this.appInfo,
     required this.sessionRepository,
-    required this.systemInfoLocalRepository,
   }) : super(const LoginState());
 
-  final WebtritApiClientFactory createWebtritApiClient;
-  final TrustedCertificates trustedCertificates;
-  final HttpRequestExecutorFactory createHttpRequestExecutor;
+  final WebtritApiClientFactory apiClientFactory;
   final NotificationsBloc notificationsBloc;
 
   // TODO: Replace by AuthRepository in next iteration
   final SessionRepository sessionRepository;
-  final SystemInfoLocalRepository systemInfoLocalRepository;
   final PackageInfo packageInfo;
   final AppInfo appInfo;
 
@@ -81,7 +74,6 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
           userId: change.nextState.userId!,
         ),
       );
-      systemInfoLocalRepository.setSystemInfo(change.nextState.systemInfo!);
     }
 
     super.onChange(change);
@@ -134,7 +126,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
   }
 
   Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId, bool demo) async {
-    final client = createWebtritApiClient(coreUrl, tenantId, trustedCertificates);
+    final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
     final systemInfo = await _retrieveSystemInfo(client);
 
     final coreInfo = systemInfo.core;
@@ -237,7 +229,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!, trustedCertificates);
+      final coreUrl = Uri.parse(state.coreUrl!);
+      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
       final sessionOtpProvisional = await _createSessionOtp(client, state.otpSigninUserRefInput.value);
 
       emit(
@@ -266,7 +259,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
     emit(state.copyWith(processing: true));
     try {
-      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!, trustedCertificates);
+      final coreUrl = Uri.parse(state.coreUrl!);
+      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
       final sessionToken = await _verifySessionOtp(
         client,
         state.otpSigninSessionOtpProvisionalWithDateTime!.$1,
@@ -319,7 +313,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!, trustedCertificates);
+      final coreUrl = Uri.parse(state.coreUrl!);
+      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
       final sessionToken = await _createSessionRequest(
         client,
         state.passwordSigninUserRefInput.value,
@@ -385,7 +380,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
     try {
       final tenantId = extras?['tenant_id'] ?? state.tenantId ?? defaultTenantId;
-      final client = createWebtritApiClient(state.coreUrl!, tenantId, trustedCertificates);
+      final coreUrl = Uri.parse(state.coreUrl!);
+      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: tenantId);
       final result = await _createUserRequest(client: client, extraPayload: extras);
 
       // In cases where the embedded page acts as the launch welcome screen,
@@ -432,7 +428,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!, trustedCertificates);
+      final coreUrl = Uri.parse(state.coreUrl!);
+      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
       final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
 
       _applyLoginResult(result, propagatedTenantId: state.tenantId);
@@ -453,7 +450,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     if (request == null) return;
 
     try {
-      await createHttpRequestExecutor().execute(
+      await apiClientFactory.createHttpRequestExecutor().execute(
         method: request.method,
         url: request.url,
         headers: request.headers,
@@ -516,7 +513,8 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final client = createWebtritApiClient(state.coreUrl!, state.tenantId!, trustedCertificates);
+      final coreUrl = Uri.parse(state.coreUrl!);
+      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
       final sessionToken = await _verifySessionOtp(
         client,
         state.signupSessionOtpProvisionalWithDateTime!.$1,

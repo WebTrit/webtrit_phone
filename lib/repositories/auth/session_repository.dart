@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -36,9 +35,8 @@ abstract class SessionRepository {
 class SessionRepositoryImpl implements SessionRepository {
   SessionRepositoryImpl({
     required this.secureStorage,
-    required this.trustedCertificates,
     this.sessionCleanupWorker,
-    this.createApiClient = defaultCreateWebtritApiClient,
+    required this.apiClientFactory,
     this.onLogout,
   }) {
     _currentSession = _loadFromStorage();
@@ -46,8 +44,7 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   final SecureStorage secureStorage;
-  final TrustedCertificates trustedCertificates;
-  final WebtritApiClientFactory createApiClient;
+  final WebtritApiClientFactory apiClientFactory;
   final SessionCleanupWorker? sessionCleanupWorker;
   final Future<void> Function()? onLogout;
 
@@ -134,7 +131,7 @@ class SessionRepositoryImpl implements SessionRepository {
     final token = s.token;
     if (coreUrl == null || token == null) return;
 
-    final client = createApiClient(coreUrl, s.tenantId, trustedCertificates);
+    final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: s.tenantId);
     try {
       await client.deleteSession(token, options: RequestOptions.withExtraRetries());
     } on UserNotFoundException catch (e, st) {

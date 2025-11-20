@@ -11,12 +11,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/common/common.dart';
-import 'package:webtrit_phone/utils/core_support.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
@@ -36,9 +36,21 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Initialize Components
 
+  // Storages
+  final secureStorage = await SecureStorage.init();
+  final appPreferences = await AppPreferencesImpl.init();
+
+  // Network clients
+  final appCertificates = await AppCertificates.init();
+  final clientFactory = WebtritApiClientFactory(
+    trustedCertificates: appCertificates.trustedCertificates,
+    getTenantId: () => secureStorage.readTenantId() ?? '',
+    getCoreUrl: () =>
+        Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
+  );
+
   // Core infrastructure
   final appThemes = await AppThemes.init();
-  final appPreferences = await AppPreferencesImpl.init();
 
   // Repositories
   final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
@@ -57,7 +69,6 @@ Future<InstanceRegistry> bootstrap() async {
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
-  final secureStorage = await SecureStorage.init();
   final appLabels = await DefaultAppMetadataProvider.init(
     packageInfo,
     deviceInfo,
@@ -69,11 +80,10 @@ Future<InstanceRegistry> bootstrap() async {
   // Utilities - Capturing instances that were previously just `await Class.init()`
   final appPath = await AppPath.init();
   final appPermissions = await AppPermissions.init(featureAccess);
-  final appCertificates = await AppCertificates.init();
   final appTime = await AppTime.init();
 
   // Background workers (assuming SessionCleanupWorker is still a side-effect init)
-  final sessionCleanupWorker = SessionCleanupWorker.init(appCertificates.trustedCertificates);
+  final sessionCleanupWorker = SessionCleanupWorker.init(clientFactory);
 
   // Remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
@@ -107,6 +117,9 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<AppLogger>(appLogger);
   registry.register<AppLifecycle>(appLifecycle);
   registry.register<SessionCleanupWorker>(sessionCleanupWorker);
+
+  // Network clients
+  registry.register<WebtritApiClientFactory>(clientFactory);
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);

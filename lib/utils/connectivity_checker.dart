@@ -1,25 +1,24 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 
-import 'webtrit_http_executor.dart';
+import 'package:webtrit_api/webtrit_api.dart';
 
 final _logger = Logger('ConnectivityService');
 
 abstract class ConnectivityChecker {
   Future<bool> checkConnection();
+
+  Future<void> dispose();
 }
 
 class DefaultConnectivityChecker implements ConnectivityChecker {
-  const DefaultConnectivityChecker({
-    required this.connectivityCheckUrl,
-    this.createHttpRequestExecutor = defaultCreateHttpRequestExecutor,
-  });
+  const DefaultConnectivityChecker({required this.connectivityCheckUrl, required this.createHttpRequestExecutor});
 
   /// Connectivity check URL.
   final String? connectivityCheckUrl;
 
-  /// Factory to create an HTTP request executor.
-  final HttpRequestExecutorFactory createHttpRequestExecutor;
+  /// HTTP request executor instance.
+  final HttpRequestExecutor createHttpRequestExecutor;
 
   /// Default URL used for connectivity checks if no custom URL is provided.
   String get _defaultUrlProvider => 'https://www.google.com/generate_204';
@@ -32,18 +31,20 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
       return false;
     }
 
-    final executor = createHttpRequestExecutor();
     final url = connectivityCheckUrl ?? _defaultUrlProvider;
 
     try {
-      await executor.execute(method: 'GET', url: url);
+      await createHttpRequestExecutor.execute(method: 'GET', url: url);
       _logger.finest('Connectivity check successful with URL: $url');
       return true;
     } catch (_) {
       _logger.finest('Connectivity check failed with URL: $url');
       return false;
-    } finally {
-      executor.close();
     }
+  }
+
+  @override
+  Future<void> dispose() async {
+    createHttpRequestExecutor.close();
   }
 }

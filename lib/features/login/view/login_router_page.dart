@@ -10,6 +10,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
@@ -38,8 +39,6 @@ class LoginRouterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appCertificates = context.read<AppCertificates>();
-
     final declarativeAutoRouter = BlocBuilder<LoginCubit, LoginState>(
       buildWhen: whenLoginRouterPageChange,
       builder: (context, state) {
@@ -95,8 +94,7 @@ class LoginRouterPage extends StatelessWidget {
       packageInfo: context.read<PackageInfo>(),
       appInfo: context.read<AppInfo>(),
       sessionRepository: context.read<SessionRepository>(),
-      systemInfoLocalRepository: context.read<SystemInfoLocalRepository>(),
-      trustedCertificates: appCertificates.trustedCertificates,
+      apiClientFactory: context.read<WebtritApiClientFactory>(),
     );
     if (_launchEmbeddedData != null) {
       login.setEmbedded(_launchEmbeddedData);

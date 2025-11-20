@@ -43,6 +43,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
 
   @override
   void dispose() {
+    _connectivityChecker.dispose();
     _connectivitySubscription.cancel();
     _controller.close();
   }
