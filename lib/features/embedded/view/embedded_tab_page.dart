@@ -59,6 +59,7 @@ class EmbeddedTabPage extends StatelessWidget {
                 return Center(child: Text('Failed to load content: ${snapshot.error}'));
               } else if (snapshot.hasData) {
                 final content = snapshot.data!;
+
                 return resource is NetworkResourceLoader
                     ? EmbeddedScreen(
                         initialUri: data.data!.uri,
@@ -67,7 +68,8 @@ class EmbeddedTabPage extends StatelessWidget {
                         deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                         appBar: _buildAppBar(context, data.titleL10n),
                         pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
-                        connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
+                        connectivityRecoveryStrategyBuilder: () =>
+                            _createConnectivityRecoveryStrategy(context, data.data!),
                         shouldForwardPop: tabActive,
                         // TODO: Use embedded configuration option to enable/disable log capture.
                         enableLogCapture: true,
@@ -83,7 +85,8 @@ class EmbeddedTabPage extends StatelessWidget {
                         deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                         appBar: _buildAppBar(context, data.titleL10n),
                         pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
-                        connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
+                        connectivityRecoveryStrategyBuilder: () =>
+                            _createConnectivityRecoveryStrategy(context, data.data!),
                         shouldForwardPop: tabActive,
                         // TODO: Use embedded configuration option to enable/disable log capture.
                         enableLogCapture: true,
@@ -120,13 +123,17 @@ class EmbeddedTabPage extends StatelessWidget {
     return DefaultPayloadInjectionStrategy(initialPayload: payload);
   }
 
-  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {
+  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(BuildContext context, EmbeddedData data) {
+    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+
     return ConnectivityRecoveryStrategy.create(
       initialUri: data.uri,
       type: data.reconnectStrategy,
       connectivityStream: Connectivity().onConnectivityChanged,
-      connectivityCheckerBuilder: () =>
-          const DefaultConnectivityChecker(connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL),
+      connectivityCheckerBuilder: () => DefaultConnectivityChecker(
+        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+        createHttpRequestExecutor: executor,
+      ),
     );
   }
 }

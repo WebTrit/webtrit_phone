@@ -33,7 +33,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.appInfo,
     required this.localeRepository,
     required this.themeModeRepository,
-    @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
   }) : super(
          AppState(
@@ -57,7 +56,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   final UserAgreementStatusRepository userAgreementStatusRepository;
   final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
-  final WebtritApiClientFactory createWebtritApiClient;
   final SessionRepository sessionRepository;
   final AppInfo appInfo;
   final LocaleRepository localeRepository;

@@ -20,7 +20,6 @@ export 'string_phone_utils.dart';
 export 'text_matchers.dart';
 export 'ttl_cache.dart';
 export 'view_params/view_params.dart';
-export 'webtrit_api_client.dart';
-export 'webtrit_http_executor.dart';
+export 'webtrit_api_client_factory.dart';
 export 'webtrit_signaling_client.dart';
 export 'webtrit_signaling_utils.dart';

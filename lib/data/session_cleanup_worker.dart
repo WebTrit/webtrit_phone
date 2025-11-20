@@ -3,24 +3,23 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
-import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('SessionCleanupWorker');
 
 class SessionCleanupWorker {
-  static SessionCleanupWorker init(TrustedCertificates trustedCertificates) {
+  static SessionCleanupWorker init(WebtritApiClientFactory apiClientFactory) {
     final requestStorage = RequestStorage();
-    return SessionCleanupWorker._(requestStorage, trustedCertificates);
+    return SessionCleanupWorker._(requestStorage, apiClientFactory);
   }
 
-  SessionCleanupWorker._(this._requestStorage, this.trustedCertificates) {
+  SessionCleanupWorker._(this._requestStorage, this.apiClientFactory) {
     _initConnectivityListener();
   }
 
   final RequestStorage _requestStorage;
-  final TrustedCertificates trustedCertificates;
+  final WebtritApiClientFactory apiClientFactory;
 
   void _initConnectivityListener() {
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) async {
@@ -67,7 +66,8 @@ class SessionCleanupWorker {
     final token = sessionData[RequestStorage.tokenKey];
 
     try {
-      await defaultCreateWebtritApiClient(uri.toString(), '', trustedCertificates).deleteSession(token);
+      // Omit the tenantId parameter (pass null) - the tenant ID is already encoded in the `uri`.
+      await apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(uri), tenantId: '').deleteSession(token);
       await _requestStorage.removeFailedSession(key);
     } catch (e) {
       _logger.severe('Session retry failed: $e');

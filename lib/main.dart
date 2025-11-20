@@ -76,6 +76,7 @@ class RootApp extends StatelessWidget {
         Provider<AppPath>(create: (_) => instanceRegistry.get()),
         Provider<AppCertificates>(create: (_) => instanceRegistry.get()),
         Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
+        Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
 
         // Services
         Provider<AppDatabase>(create: _createAppDatabase, dispose: _disposeAppDatabase),
@@ -85,6 +86,7 @@ class RootApp extends StatelessWidget {
         builder: (context) {
           final prefs = context.read<AppPreferences>();
           final database = context.read<AppDatabase>();
+          final webtritApiClientFactory = context.read<WebtritApiClientFactory>();
           final appMetadataProvider = context.read<AppMetadataProvider>();
 
           final presenceDeviceName = appMetadataProvider.userAgent;
@@ -111,8 +113,8 @@ class RootApp extends StatelessWidget {
 
           final sessionRepository = SessionRepositoryImpl(
             secureStorage: context.read<SecureStorage>(),
-            trustedCertificates: context.read<AppCertificates>().trustedCertificates,
             sessionCleanupWorker: instanceRegistry.get<SessionCleanupWorker>(),
+            apiClientFactory: webtritApiClientFactory,
 
             /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here
             onLogout: () async {
@@ -188,10 +190,13 @@ class RootApp extends StatelessWidget {
     appDatabase.close();
   }
 
-  ConnectivityService _createConnectivityService(BuildContext _) {
+  ConnectivityService _createConnectivityService(BuildContext context) {
+    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+
     return ConnectivityServiceImpl(
-      connectivityChecker: const DefaultConnectivityChecker(
+      connectivityChecker: DefaultConnectivityChecker(
         connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+        createHttpRequestExecutor: executor,
       ),
     );
   }
