@@ -7,6 +7,8 @@ final _logger = Logger('ConnectivityService');
 
 abstract class ConnectivityChecker {
   Future<bool> checkConnection();
+
+  Future<void> dispose();
 }
 
 class DefaultConnectivityChecker implements ConnectivityChecker {
@@ -42,8 +44,11 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
     } catch (_) {
       _logger.finest('Connectivity check failed with URL: $url');
       return false;
-    } finally {
-      executor.close();
     }
+  }
+
+  @override
+  Future<void> dispose() async {
+    createHttpRequestExecutor.close();
   }
 }
