@@ -18,6 +18,7 @@ class AboutScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const appAboutUrl = EnvironmentConfig.APP_ABOUT_URL;
     final appMetadataProvider = context.read<AppMetadataProvider>();
+    final appInfo = context.read<AppInfo>();
 
     if (appAboutUrl != null) {
       final widget = WebAboutScreen(
@@ -33,7 +34,7 @@ class AboutScreenPage extends StatelessWidget {
         create: (context) {
           return AboutBloc(
             notificationsBloc: context.read<NotificationsBloc>(),
-            appInfo: AppInfo(),
+            appInfo: appInfo,
             packageInfo: context.read<PackageInfo>(),
             secureStorage: context.read<SecureStorage>(),
             embeddedFeature: context.read<FeatureAccess>().embeddedFeature,

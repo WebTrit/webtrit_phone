@@ -23,8 +23,6 @@ abstract class DeviceInfo {
 }
 
 class DeviceInfoFactory {
-  static late DeviceInfo _instance;
-
   static Future<DeviceInfo> init() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
     late final Map<String, dynamic> deviceData;
@@ -47,11 +45,8 @@ class DeviceInfoFactory {
     } on PlatformException {
       deviceData = {'error': 'failed to get platform version'};
     }
-    _instance = _DeviceInfoImpl(deviceData);
-    return _instance;
+    return _DeviceInfoImpl(deviceData);
   }
-
-  static DeviceInfo get instance => _instance;
 }
 
 class _DeviceInfoImpl implements DeviceInfo {

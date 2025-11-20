@@ -21,24 +21,24 @@ void main() {
   final hasPasswordCredentials = passwordUserCredential.isNotEmpty && passwordPasswordCredential.isNotEmpty;
 
   patrolTest('should login by email credentials', ($) async {
-    await bootstrap();
-    await pumpRootAndWaitUntilVisible($);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
     await loginByMethod($, LoginMethod.email);
     await Future.delayed(const Duration(seconds: 5));
     await logout($);
   }, skip: hasEmailCredentials == false);
 
   patrolTest('should login by otp credentials', ($) async {
-    await bootstrap();
-    await pumpRootAndWaitUntilVisible($);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
     await loginByMethod($, LoginMethod.otp);
     await Future.delayed(const Duration(seconds: 5));
     await logout($);
   }, skip: hasOtpCredentials == false);
 
   patrolTest('should login by password credentials', ($) async {
-    await bootstrap();
-    await pumpRootAndWaitUntilVisible($);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
     await loginByMethod($, LoginMethod.password);
     await Future.delayed(const Duration(seconds: 5));
     await logout($);

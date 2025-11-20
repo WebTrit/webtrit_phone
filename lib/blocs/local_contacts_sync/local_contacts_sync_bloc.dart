@@ -55,7 +55,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _logger.finer('didChangeAppLifecycleState: $state');
 
-    if (PlatformInfo().isAndroid) {
+    if (PlatformInfo.isAndroid) {
       if (state == AppLifecycleState.resumed && this.state is LocalContactsSyncPermissionFailure) {
         add(const LocalContactsSyncStarted());
       }

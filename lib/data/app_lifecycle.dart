@@ -6,8 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///   - master mode for main isolate
 ///   - slave mode for background isolate.
 class AppLifecycle with WidgetsBindingObserver {
-  static late AppLifecycle _instance;
-  factory AppLifecycle() => _instance;
   AppLifecycle._(this._sharedPreferences, this.masterMode) {
     if (masterMode) {
       WidgetsBinding.instance.addObserver(this);
@@ -31,14 +29,12 @@ class AppLifecycle with WidgetsBindingObserver {
 
   static Future<AppLifecycle> initMaster() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    _instance = AppLifecycle._(sharedPreferences, true);
-    return _instance;
+    return AppLifecycle._(sharedPreferences, true);
   }
 
   static Future<AppLifecycle> initSlave() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    _instance = AppLifecycle._(sharedPreferences, false);
-    return _instance;
+    return AppLifecycle._(sharedPreferences, false);
   }
 
   AppLifecycleState? getLifecycleState() {

@@ -20,6 +20,7 @@ class DiagnosticScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final pushTokensBloc = context.read<PushTokensBloc>();
     final featureAccess = context.read<FeatureAccess>();
+    final appPermissions = context.read<AppPermissions>();
 
     final contactTab = featureAccess.bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
 
@@ -28,7 +29,7 @@ class DiagnosticScreenPage extends StatelessWidget {
     );
 
     return BlocProvider<DiagnosticCubit>(
-      create: (context) => DiagnosticCubit(pushTokensBloc: pushTokensBloc, appPermissions: AppPermissions()),
+      create: (context) => DiagnosticCubit(pushTokensBloc: pushTokensBloc, appPermissions: appPermissions),
       child: Provider<DiagnosticScreenContext>(create: (context) => screenContext, child: const DiagnosticScreen()),
     );
   }

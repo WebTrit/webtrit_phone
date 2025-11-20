@@ -49,8 +49,6 @@ final Logger _logger = Logger('FeatureAccess');
 
 // TODO(Serdun): Replace direct usage of AppConfig.embeddedResources with EmbeddedFeature.embeddedResources
 class FeatureAccess {
-  static late FeatureAccess _instance;
-
   FeatureAccess._(
     this.embeddedFeature,
     this.loginFeature,
@@ -90,7 +88,7 @@ class FeatureAccess {
       final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(coreSupport, appConfig);
       final sipPresenceFeature = _tryConfigureSipPresenceFeature(coreSupport, appConfig);
 
-      _instance = FeatureAccess._(
+      return FeatureAccess._(
         embeddedFeature,
         customLoginFeature,
         bottomMenuManager,
@@ -105,10 +103,7 @@ class FeatureAccess {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
     }
-    return _instance;
   }
-
-  factory FeatureAccess() => _instance;
 
   static BottomMenuFeature _tryConfigureBottomMenuFeature(
     AppConfig appConfig,

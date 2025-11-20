@@ -16,8 +16,6 @@ abstract class AppMetadataProvider {
 }
 
 class DefaultAppMetadataProvider implements AppMetadataProvider {
-  static late DefaultAppMetadataProvider _instance;
-
   static Future<AppMetadataProvider> init(
     PackageInfo packageInfo,
     DeviceInfo deviceInfo,
@@ -25,12 +23,7 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
     SecureStorage secureStorage, [
     FeatureAccess? featureAccess,
   ]) async {
-    _instance = DefaultAppMetadataProvider._(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
-    return _instance;
-  }
-
-  factory DefaultAppMetadataProvider() {
-    return _instance;
+    return DefaultAppMetadataProvider._(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
   }
 
   DefaultAppMetadataProvider._(

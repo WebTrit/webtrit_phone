@@ -38,6 +38,8 @@ class LoginRouterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appCertificates = context.read<AppCertificates>();
+
     final declarativeAutoRouter = BlocBuilder<LoginCubit, LoginState>(
       buildWhen: whenLoginRouterPageChange,
       builder: (context, state) {
@@ -92,9 +94,9 @@ class LoginRouterPage extends StatelessWidget {
       notificationsBloc: context.read<NotificationsBloc>(),
       packageInfo: context.read<PackageInfo>(),
       appInfo: context.read<AppInfo>(),
-      platformInfo: context.read<PlatformInfo>(),
       sessionRepository: context.read<SessionRepository>(),
       systemInfoLocalRepository: context.read<SystemInfoLocalRepository>(),
+      trustedCertificates: appCertificates.trustedCertificates,
     );
     if (_launchEmbeddedData != null) {
       login.setEmbedded(_launchEmbeddedData);
