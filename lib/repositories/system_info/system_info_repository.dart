@@ -32,12 +32,8 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
 
   final _controller = StreamController<WebtritSystemInfo>.broadcast();
 
-  StreamSubscription? _remoteSubscription;
-  StreamSubscription? _localSubscription;
-
   void _init() {
     _logger.info('Initializing system info repository');
-
     try {
       final localInfo = localDatasource.getSystemInfo();
       if (localInfo != null) {
@@ -48,35 +44,10 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
     } catch (e, s) {
       _logger.warning('Failed to load initial local system info', e, s);
     }
-    _localSubscription = localDatasource.infoStream.listen(
-      (info) {
-        if (info != null) {
-          _controller.add(info);
-        } else {
-          _controller.addError('System info from local storage is not available.');
-        }
-      },
-      onError: (e, s) {
-        _logger.warning('Error in local system info stream', e, s);
-      },
-    );
-
-    _remoteSubscription = remoteDatasource.infoUpdates.listen(
-      (newInfo) {
-        _saveToLocal(newInfo);
-        // Do NOT call `_controller.add(newInfo)` here.
-        // Saving to the local datasource triggers `localDatasource.infoStream`,
-        // which is already forwarded to `_controller` by `_localSubscription`.
-        // Emitting here would cause duplicate events.
-      },
-      onError: (e, s) {
-        _logger.warning('Error in remote system info stream', e, s);
-      },
-    );
   }
 
-  Future<void> _saveToLocal(WebtritSystemInfo info) async {
-    _logger.info('Saving system info locally');
+  Future<void> _updateSystemInfo(WebtritSystemInfo info) async {
+    _controller.add(info);
 
     try {
       await localDatasource.setSystemInfo(info);
@@ -90,19 +61,32 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
 
   @override
   Future<WebtritSystemInfo?> getSystemInfo({bool force = false}) async {
-    _logger.info('Getting system info');
+    _logger.info('Getting system info (force: $force)');
+
+    if (!force) {
+      try {
+        final localInfo = localDatasource.getSystemInfo();
+        if (localInfo != null) {
+          return localInfo;
+        }
+      } catch (e, s) {
+        _logger.warning('Failed to retrieve local system info', e, s);
+      }
+    }
 
     try {
-      final info = await remoteDatasource.getInfo(force);
+      final remoteInfo = await remoteDatasource.getSystemInfo();
 
-      await _saveToLocal(info);
+      await _updateSystemInfo(remoteInfo);
 
-      return info;
+      return remoteInfo;
     } catch (e) {
-      final localInfo = localDatasource.getSystemInfo();
-      if (localInfo != null && !force) {
-        _logger.info('Remote fetch failed, returning local data fallback');
-        return localInfo;
+      if (force) {
+        final localInfo = localDatasource.getSystemInfo();
+        if (localInfo != null) {
+          _logger.info('Remote fetch failed, returning local data fallback');
+          return localInfo;
+        }
       }
       rethrow;
     }
@@ -115,13 +99,11 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
 
   @override
   Future<void> clear() async {
-    _logger.info('Clearing system info');
     await localDatasource.clear();
   }
 
   @override
   Future<void> refresh() async {
-    _logger.info('Background refresh started');
     try {
       await getSystemInfo(force: true);
     } catch (e, s) {
@@ -132,11 +114,6 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
 
   @override
   Future<void> dispose() async {
-    await _remoteSubscription?.cancel();
-    await _localSubscription?.cancel();
     await _controller.close();
-
-    await remoteDatasource.dispose();
-    await localDatasource.dispose();
   }
 }

@@ -6,8 +6,6 @@ import 'package:webtrit_phone/mappers/json/system_info_mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 abstract interface class SystemInfoLocalDatasource implements Disposable {
-  Stream<WebtritSystemInfo?> get infoStream;
-
   WebtritSystemInfo? getSystemInfo();
 
   Future<void> setSystemInfo(WebtritSystemInfo systemInfo);
@@ -22,9 +20,6 @@ class SystemInfoLocalRepositoryPrefsImpl with SystemInfoJsonMapper implements Sy
   final _prefsKey = 'system-info';
 
   final _controller = StreamController<WebtritSystemInfo?>.broadcast();
-
-  @override
-  Stream<WebtritSystemInfo?> get infoStream => _controller.stream;
 
   @override
   WebtritSystemInfo? getSystemInfo() {
