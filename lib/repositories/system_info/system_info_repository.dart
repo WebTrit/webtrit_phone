@@ -8,10 +8,16 @@ import 'package:webtrit_phone/repositories/system_info/system_info_remote_dataso
 
 import 'system_info_local_datasource.dart';
 
+enum FetchPolicy {
+  cacheFirst, // Try local cache first; if missing, fetch from server
+  networkOnly, // Fetch only from server; do not use cache
+  cacheOnly, // Use only local cache; do not contact server
+}
+
 abstract interface class SystemInfoRepository implements Refreshable, Disposable {
   Stream<WebtritSystemInfo> get infoStream;
 
-  Future<WebtritSystemInfo?> getSystemInfo({bool force = false});
+  Future<WebtritSystemInfo?> getSystemInfo({FetchPolicy fetchPolicy = FetchPolicy.cacheFirst});
 
   // TODO: Consider extracting this into a dedicated provider (e.g. `CoreUrlProvider`)
   // Exposing the core URL from the repository mixes configuration/transport concerns with the repository's data responsibilities.
@@ -60,35 +66,64 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   Stream<WebtritSystemInfo> get infoStream => _controller.stream;
 
   @override
-  Future<WebtritSystemInfo?> getSystemInfo({bool force = false}) async {
-    _logger.info('Getting system info (force: $force)');
+  Future<WebtritSystemInfo?> getSystemInfo({FetchPolicy fetchPolicy = FetchPolicy.cacheFirst}) async {
+    switch (fetchPolicy) {
+      case FetchPolicy.cacheFirst:
+        return _getCacheFirstSystemInfoPolicy();
+      case FetchPolicy.networkOnly:
+        return _getNetworkSystemInfoPolicy();
+      case FetchPolicy.cacheOnly:
+        return _getCacheSystemInfoPolicy();
+    }
+  }
 
-    if (!force) {
-      try {
-        final localInfo = localDatasource.getSystemInfo();
-        if (localInfo != null) {
-          return localInfo;
-        }
-      } catch (e, s) {
-        _logger.warning('Failed to retrieve local system info', e, s);
-      }
+  Future<WebtritSystemInfo> _getCacheFirstSystemInfoPolicy() async {
+    _logger.fine('Fetching system info from cache first');
+    final localInfo = await _getLocalSystemInfoOrNull();
+    if (localInfo != null) {
+      return localInfo;
     }
 
+    final remoteInfo = await _getRemoteSystemInfo();
+    _updateSystemInfo(remoteInfo);
+
+    return remoteInfo;
+  }
+
+  Future<WebtritSystemInfo?> _getNetworkSystemInfoPolicy() async {
+    _logger.fine('Fetching system info from network only');
+    return _getRemoteSystemInfo();
+  }
+
+  Future<WebtritSystemInfo?> _getCacheSystemInfoPolicy() async {
+    _logger.fine('Fetching system info from cache only');
+    return _getLocalSystemInfoOrNull();
+  }
+
+  Future<WebtritSystemInfo> _getRemoteSystemInfo() async {
     try {
       final remoteInfo = await remoteDatasource.getSystemInfo();
 
-      await _updateSystemInfo(remoteInfo);
-
+      _logger.fine('System info loaded from remote');
       return remoteInfo;
-    } catch (e) {
-      if (force) {
-        final localInfo = localDatasource.getSystemInfo();
-        if (localInfo != null) {
-          _logger.info('Remote fetch failed, returning local data fallback');
-          return localInfo;
-        }
-      }
+    } catch (e, s) {
+      _logger.warning('Failed to fetch remote system info', e, s);
       rethrow;
+    }
+  }
+
+  Future<WebtritSystemInfo?> _getLocalSystemInfoOrNull() async {
+    try {
+      final localInfo = localDatasource.getSystemInfo();
+      if (localInfo == null) {
+        _logger.fine('No system info found in local storage');
+      } else {
+        _logger.fine('System info loaded from local storage');
+      }
+      return localInfo;
+    } catch (e, s) {
+      _logger.warning('Failed to retrieve local system info', e, s);
+      return null;
     }
   }
 
@@ -99,13 +134,15 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
 
   @override
   Future<void> clear() async {
+    _logger.info('Clearing system info');
     await localDatasource.clear();
   }
 
   @override
   Future<void> refresh() async {
+    _logger.info('Background refresh started');
     try {
-      await getSystemInfo(force: true);
+      await getSystemInfo();
     } catch (e, s) {
       _logger.warning('Background refresh failed', e, s);
       rethrow;
