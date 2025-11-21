@@ -34,7 +34,7 @@ Future<void> _initializeCommonDependencies() async {
   _appInfo ??= await AppInfo.init(const SharedPreferencesAppIdProvider());
   _deviceInfo ??= await DeviceInfoFactory.init();
   _packageInfo ??= await PackageInfoFactory.init();
-  _secureStorage = await SecureStorage.init();
+  _secureStorage = await SecureStorageImpl.init();
   _appLabelsProvider ??= await DefaultAppMetadataProvider.init(_packageInfo!, _deviceInfo!, _appInfo!, _secureStorage!);
   _appLogger ??= await AppLogger.init(_remoteConfigService!, _appLabelsProvider!);
   _appCertificates ??= await AppCertificates.init();
