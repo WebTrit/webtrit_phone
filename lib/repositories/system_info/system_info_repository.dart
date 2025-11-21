@@ -22,14 +22,20 @@ enum FetchPolicy {
 }
 
 abstract interface class SystemInfoRepository implements Refreshable, Disposable {
+  /// A broadcast stream that emits updated [WebtritSystemInfo] whenever
+  /// a successful network fetch occurs or the local cache is updated.
   Stream<WebtritSystemInfo> get infoStream;
 
+  /// The [fetchPolicy] determines whether to use cached data, fetch from the network,
+  /// or only use the cache. Typically used during login or initial setup flows.
   Future<WebtritSystemInfo?> getSystemInfo({FetchPolicy fetchPolicy = FetchPolicy.cacheFirst});
 
   // TODO: Consider extracting this into a dedicated provider (e.g. `CoreUrlProvider`)
   // Exposing the core URL from the repository mixes configuration/transport concerns with the repository's data responsibilities.
+  /// Returns the current Core URL used by the underlying remote data source.
   Uri getCoreUrl();
 
+  /// Clears the locally cached system information.
   Future<void> clear();
 }
 
