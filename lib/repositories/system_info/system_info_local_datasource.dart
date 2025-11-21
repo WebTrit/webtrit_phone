@@ -14,16 +14,15 @@ abstract interface class SystemInfoLocalDatasource implements Disposable {
 }
 
 class SystemInfoLocalRepositoryPrefsImpl with SystemInfoJsonMapper implements SystemInfoLocalDatasource {
-  SystemInfoLocalRepositoryPrefsImpl(this._appPreferences);
+  SystemInfoLocalRepositoryPrefsImpl(this._secureStorage);
 
-  final AppPreferences _appPreferences;
-  final _prefsKey = 'system-info';
+  final SecureStorage _secureStorage;
 
   final _controller = StreamController<WebtritSystemInfo?>.broadcast();
 
   @override
   WebtritSystemInfo? getSystemInfo() {
-    final jsonString = _appPreferences.getString(_prefsKey);
+    final jsonString = _secureStorage.readSystemInfo();
     if (jsonString == null) return null;
     return systemInfoFromJson(jsonString);
   }
@@ -31,13 +30,13 @@ class SystemInfoLocalRepositoryPrefsImpl with SystemInfoJsonMapper implements Sy
   @override
   Future<void> setSystemInfo(WebtritSystemInfo systemInfo) async {
     final jsonString = systemInfoToJson(systemInfo);
-    await _appPreferences.setString(_prefsKey, jsonString);
+    await _secureStorage.writeSystemInfo(jsonString);
     _controller.add(systemInfo);
   }
 
   @override
   Future<void> clear() async {
-    await _appPreferences.remove(_prefsKey);
+    await _secureStorage.deleteSystemInfo();
     _controller.add(null);
   }
 

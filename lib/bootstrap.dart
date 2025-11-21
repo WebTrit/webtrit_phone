@@ -60,7 +60,7 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Repositories
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
-  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
+  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
   final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
   final systemInfoRepository = SystemInfoRepositoryImpl(
     localDatasource: systemInfoLocalDatasource,

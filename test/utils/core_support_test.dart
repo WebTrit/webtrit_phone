@@ -10,7 +10,7 @@ void main() {
   CoreSupport createCoreSupportWithFlags(List<String> flags) {
     final jsonInfo = SystemInfoBuilder(adapterSupported: flags).build();
 
-    final mockPrefs = MockAppPreferences(initialData: {'system-info': jsonInfo});
+    final mockPrefs = MockSecureStorage(initialData: {'system-info': jsonInfo});
 
     final systemInfoRepository = SystemInfoLocalRepositoryPrefsImpl(mockPrefs);
 
