@@ -9,9 +9,16 @@ import 'package:webtrit_phone/repositories/system_info/system_info_remote_dataso
 import 'system_info_local_datasource.dart';
 
 enum FetchPolicy {
-  cacheFirst, // Try local cache first; if missing, fetch from server
-  networkOnly, // Fetch only from server; do not use cache
-  cacheOnly, // Use only local cache; do not contact server
+  /// Returns cached data if available; falls back to a network request.
+  cacheFirst,
+
+  /// Always fetches from the network, updating local cache and listeners.
+  /// Does not read from the cache.
+  networkOnly,
+
+  /// Returns data only from the local cache. No network requests are made.
+  /// Returns `null` if no cached value exists.
+  cacheOnly,
 }
 
 abstract interface class SystemInfoRepository implements Refreshable, Disposable {
@@ -62,24 +69,38 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
     }
   }
 
-  Future<WebtritSystemInfo> _getCacheFirstSystemInfoPolicy() async {
+  /// Returns system info from the cache if available.
+  ///
+  /// Falls back to a network fetch when no cached value exists.
+  /// The network path updates both the local cache and [infoStream]
+  /// via [_getNetworkSystemInfoPolicy].
+  Future<WebtritSystemInfo?> _getCacheFirstSystemInfoPolicy() async {
     _logger.fine('Fetching system info from cache first');
     final localInfo = await _getLocalSystemInfoOrNull();
     if (localInfo != null) {
       return localInfo;
     }
 
-    final remoteInfo = await _getRemoteSystemInfo();
-    _updateSystemInfo(remoteInfo);
+    return _getNetworkSystemInfoPolicy();
+  }
 
+  /// Fetches system info from the network and updates local state.
+  ///
+  /// Always overwrites the cached value and pushes the new data to
+  /// [infoStream]. Used by refresh flows to ensure the system info is
+  /// up to date even when cached data is present.
+  Future<WebtritSystemInfo?> _getNetworkSystemInfoPolicy() async {
+    _logger.fine('Fetching system info from network only');
+    final remoteInfo = await _getRemoteSystemInfo();
+    await _updateSystemInfo(remoteInfo);
     return remoteInfo;
   }
 
-  Future<WebtritSystemInfo?> _getNetworkSystemInfoPolicy() async {
-    _logger.fine('Fetching system info from network only');
-    return _getRemoteSystemInfo();
-  }
-
+  /// Returns system info from the local cache only.
+  ///
+  /// Does not perform any network requests. If no cached value exists,
+  /// returns `null`. Useful for lightweight reads where stale data is
+  /// acceptable or when operating in offline mode.
   Future<WebtritSystemInfo?> _getCacheSystemInfoPolicy() async {
     _logger.fine('Fetching system info from cache only');
     return _getLocalSystemInfoOrNull();
@@ -127,7 +148,7 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   Future<void> refresh() async {
     _logger.info('Background refresh started');
     try {
-      await getSystemInfo();
+      await getSystemInfo(fetchPolicy: FetchPolicy.networkOnly);
     } catch (e, s) {
       _logger.warning('Background refresh failed', e, s);
       rethrow;
