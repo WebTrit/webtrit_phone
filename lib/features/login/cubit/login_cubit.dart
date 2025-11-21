@@ -67,10 +67,14 @@ class LoginCubit extends Cubit<LoginState> {
   /// Then, it saves the [Session] via [SessionRepository]. This state change is observed
   /// by [AppBloc], effectively triggering navigation to the application's main screen.
   void _saveSession(LoginState state) {
-    systemInfoRepository.preload(state.systemInfo!);
-    sessionRepository.save(
-      Session(coreUrl: state.coreUrl!, tenantId: state.tenantId!, token: state.token!, userId: state.userId!),
-    );
+    final systemInfo = state.systemInfo!;
+    final coreUrl = state.coreUrl!;
+    final tenantId = state.tenantId!;
+    final token = state.token!;
+    final userId = state.userId!;
+
+    systemInfoRepository.preload(systemInfo);
+    sessionRepository.save(Session(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId));
   }
 
   void launchLinkableElement(LinkableElement link) async {
