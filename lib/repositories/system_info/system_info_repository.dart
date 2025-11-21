@@ -32,6 +32,7 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   SystemInfoRepositoryImpl({required this.localDatasource, required this.remoteDatasource});
 
   final SystemInfoLocalDatasource localDatasource;
+
   final SystemInfoRemoteDatasource remoteDatasource;
 
   final _controller = StreamController<WebtritSystemInfo>.broadcast();
