@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:webtrit_phone/utils/regexes.dart';
-
 extension StringExtension on String {
   String get capitalize {
     if (isEmpty) {
@@ -36,8 +34,6 @@ extension StringExtension on String {
   }
 
   String? get extractNumber {
-    final matches = RegExp(numbersExtractRegex).allMatches(this);
-    if (matches.isEmpty) return null;
-    return matches.first.group(0);
+    return split(' ').first;
   }
 }
