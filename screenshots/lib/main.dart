@@ -12,8 +12,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:screenshots/router.dart';
 import 'package:screenshots/data/data.dart';
 import 'package:screenshots/mocks/mocks.dart';
-import 'package:webtrit_phone/repositories/active_main_flavor/active_main_flavor_repository.dart';
-import 'package:webtrit_phone/repositories/system_info/system_info_local_repository.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/core_support.dart';
 
 void main() async {

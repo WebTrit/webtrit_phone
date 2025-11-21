@@ -144,9 +144,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             sessionGuard: _sessionGuard,
           ),
         ),
-        RepositoryProvider<SystemInfoRemoteRepository>(
-          create: (context) => SystemInfoRemoteRepository(context.read<WebtritApiClient>()),
-        ),
         RepositoryProvider<PrivateGatewayRepository>(
           create: (context) => CustomPrivateGatewayRepository(
             context.read<WebtritApiClient>(),
@@ -549,7 +546,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(
-        listener: context.read<SystemInfoRemoteRepository>(),
+        listener: context.read<SystemInfoRepository>(),
         interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(

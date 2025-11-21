@@ -80,8 +80,7 @@ class MainScreenPage extends StatelessWidget {
     final provider = BlocProvider(
       create: (context) {
         return MainBloc(
-          context.read<SystemInfoRemoteRepository>(),
-          context.read<SystemInfoLocalRepository>(),
+          context.read<SystemInfoRepository>(),
           context.read<PrivateGatewayRepository>(),
           EnvironmentConfig.CORE_VERSION_CONSTRAINT,
           context.read<PackageInfo>(),
