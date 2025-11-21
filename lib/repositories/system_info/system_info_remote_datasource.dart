@@ -9,15 +9,34 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('SystemInfoRepository');
 
+/// Responsible for fetching [WebtritSystemInfo] from the remote API.
+///
+/// This datasource acts as a low-level abstraction over the HTTP client,
+/// handling the raw request and mapping the response to the domain model
+/// via [SystemInfoApiMapper].
 class SystemInfoRemoteDatasource with SystemInfoApiMapper implements Disposable {
   SystemInfoRemoteDatasource(this.webtritApiClient);
 
   final WebtritApiClientFactory webtritApiClient;
 
-  Future<WebtritSystemInfo> getSystemInfo() async {
+  /// Retrieves the system information from the backend.
+  ///
+  /// By default, this utilizes the current configuration of [webtritApiClient].
+  ///
+  /// Optional parameters [overrideCoreUrl] and [overrideTenantId] can be provided
+  /// to force the request to a specific server or tenant. This is typically used
+  /// during server discovery or login flows (stateless checks) where the
+  /// application session has not yet been established or updated.
+  ///
+  /// Throws an exception and logs a warning if the API call fails or mapping errors occur.
+  Future<WebtritSystemInfo> getSystemInfo({Uri? overrideCoreUrl, String? overrideTenantId}) async {
     try {
-      final apiSystemInfo = await webtritApiClient.createWebtritApiClient().getSystemInfo();
+      // Creates a client. If overrides are null, the factory uses the default/current configuration.
+      final client = webtritApiClient.createWebtritApiClient(coreUrl: overrideCoreUrl, tenantId: overrideTenantId);
+
+      final apiSystemInfo = await client.getSystemInfo();
       final newInfo = systemInfoFromApi(apiSystemInfo);
+
       return newInfo;
     } catch (e, stackTrace) {
       _logger.warning('Failed to gather system info from remote API', e, stackTrace);
@@ -25,6 +44,7 @@ class SystemInfoRemoteDatasource with SystemInfoApiMapper implements Disposable 
     }
   }
 
+  /// Returns the default Core URL currently configured in the API client factory.
   Uri get coreUrl => webtritApiClient.createWebtritApiClient().tenantUrl;
 
   @override
