@@ -30,6 +30,13 @@ abstract interface class SystemInfoRepository implements Refreshable, Disposable
   /// or only use the cache. Typically used during login or initial setup flows.
   Future<WebtritSystemInfo?> getSystemInfo({FetchPolicy fetchPolicy = FetchPolicy.cacheFirst});
 
+  /// Preloads the repository with fresh data obtained from an external source
+  /// (e.g., during the login flow).
+  ///
+  /// This updates the local cache and emits the new value to [infoStream],
+  /// preventing unnecessary network requests immediately after navigation.
+  Future<void> preload(WebtritSystemInfo info);
+
   // TODO: Consider extracting this into a dedicated provider (e.g. `CoreUrlProvider`)
   // Exposing the core URL from the repository mixes configuration/transport concerns with the repository's data responsibilities.
   /// Returns the current Core URL used by the underlying remote data source.
@@ -73,6 +80,12 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
       case FetchPolicy.cacheOnly:
         return _getCacheSystemInfoPolicy();
     }
+  }
+
+  @override
+  Future<void> preload(WebtritSystemInfo info) async {
+    _logger.info('Preloading system info from external source');
+    await _updateSystemInfo(info);
   }
 
   /// Returns system info from the cache if available.
