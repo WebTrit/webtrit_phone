@@ -29,28 +29,12 @@ abstract interface class SystemInfoRepository implements Refreshable, Disposable
 final _logger = Logger('SystemInfoRepository');
 
 class SystemInfoRepositoryImpl implements SystemInfoRepository {
-  SystemInfoRepositoryImpl({required this.localDatasource, required this.remoteDatasource}) {
-    _init();
-  }
+  SystemInfoRepositoryImpl({required this.localDatasource, required this.remoteDatasource});
 
   final SystemInfoLocalDatasource localDatasource;
   final SystemInfoRemoteDatasource remoteDatasource;
 
   final _controller = StreamController<WebtritSystemInfo>.broadcast();
-
-  void _init() {
-    _logger.info('Initializing system info repository');
-    try {
-      final localInfo = localDatasource.getSystemInfo();
-      if (localInfo != null) {
-        _controller.add(localInfo);
-      } else {
-        _controller.addError('Failed to load system info from local storage');
-      }
-    } catch (e, s) {
-      _logger.warning('Failed to load initial local system info', e, s);
-    }
-  }
 
   Future<void> _updateSystemInfo(WebtritSystemInfo info) async {
     _controller.add(info);
