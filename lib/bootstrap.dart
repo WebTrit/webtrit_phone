@@ -36,13 +36,19 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Initialize Components
 
+  // App Info & Device Data
+
+  final packageInfo = await PackageInfoFactory.init();
+  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  final deviceInfo = await DeviceInfoFactory.init();
+
   // Storages
   final secureStorage = await SecureStorage.init();
   final appPreferences = await AppPreferencesImpl.init();
 
   // Network clients
   final appCertificates = await AppCertificates.init();
-  final clientFactory = WebtritApiClientFactory(
+  final apiClientFactory = WebtritApiClientFactory(
     trustedCertificates: appCertificates.trustedCertificates,
     getTenantId: () => secureStorage.readTenantId() ?? '',
     getCoreUrl: () =>
@@ -55,10 +61,16 @@ Future<InstanceRegistry> bootstrap() async {
   // Repositories
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
   final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
-  final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(clientFactory);
+  final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
   final systemInfoRepository = SystemInfoRepositoryImpl(
     localDatasource: systemInfoLocalDatasource,
     remoteDatasource: systemInfoRemoteDatasource,
+  );
+  final authRepository = AuthRepositoryImpl(
+    apiClientFactory: apiClientFactory,
+    systemInfoRemoteDatasource: systemInfoRemoteDatasource,
+    appIdentifier: appInfo.identifier,
+    appBundleId: packageInfo.packageName,
   );
 
   // Logic / Features
@@ -70,10 +82,10 @@ Future<InstanceRegistry> bootstrap() async {
     coreSupport,
   );
 
-  // App Info & Device Data
-  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
-  final deviceInfo = await DeviceInfoFactory.init();
-  final packageInfo = await PackageInfoFactory.init();
+  // Utilities - Capturing instances that were previously just `await Class.init()`
+  final appPath = await AppPath.init();
+  final appPermissions = await AppPermissions.init(featureAccess);
+  final appTime = await AppTime.init();
   final appLabels = await DefaultAppMetadataProvider.init(
     packageInfo,
     deviceInfo,
@@ -82,13 +94,8 @@ Future<InstanceRegistry> bootstrap() async {
     featureAccess,
   );
 
-  // Utilities - Capturing instances that were previously just `await Class.init()`
-  final appPath = await AppPath.init();
-  final appPermissions = await AppPermissions.init(featureAccess);
-  final appTime = await AppTime.init();
-
   // Background workers (assuming SessionCleanupWorker is still a side-effect init)
-  final sessionCleanupWorker = SessionCleanupWorker.init(clientFactory);
+  final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
 
   // Remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
@@ -112,6 +119,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<SecureStorage>(secureStorage);
   registry.register<SystemInfoRepository>(systemInfoRepository);
   registry.register<ActiveMainFlavorRepository>(activeMainFlavorRepository);
+  registry.register<AuthRepository>(authRepository);
 
   // Logic & Features
   registry.register<CoreSupport>(coreSupport);
@@ -124,7 +132,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<SessionCleanupWorker>(sessionCleanupWorker);
 
   // Network clients
-  registry.register<WebtritApiClientFactory>(clientFactory);
+  registry.register<WebtritApiClientFactory>(apiClientFactory);
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);

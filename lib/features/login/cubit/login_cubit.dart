@@ -3,18 +3,14 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
-import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import '../login.dart';
 
@@ -22,29 +18,23 @@ part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
 
-final _logger = Logger('LoginCubit');
-
-class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
+class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
-    required this.apiClientFactory,
+    required this.authRepository,
     required this.notificationsBloc,
-    required this.packageInfo,
-    required this.appInfo,
     required this.sessionRepository,
+    required this.systemInfoRepository,
   }) : super(const LoginState());
 
-  final WebtritApiClientFactory apiClientFactory;
+  final AuthRepository authRepository;
+
+  final SystemInfoRepository systemInfoRepository;
+
+  final SessionRepository sessionRepository;
+
   final NotificationsBloc notificationsBloc;
 
-  // TODO: Replace by AuthRepository in next iteration
-  final SessionRepository sessionRepository;
-  final PackageInfo packageInfo;
-  final AppInfo appInfo;
-
-  String get appBundleId => packageInfo.packageName;
-
-  String get appIdentifier => appInfo.identifier;
-
+  // Environment getters
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
 
   String? get credentialsRequestUrl => EnvironmentConfig.APP_CREDENTIALS_REQUEST_URL;
@@ -61,22 +51,30 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
   @override
   void onChange(Change<LoginState> change) {
-    if (change.nextState.coreUrl != null &&
-        change.nextState.tenantId != null &&
-        change.nextState.token != null &&
-        change.nextState.userId != null &&
-        change.nextState.systemInfo != null) {
-      sessionRepository.save(
-        Session(
-          coreUrl: change.nextState.coreUrl!,
-          tenantId: change.nextState.tenantId!,
-          token: change.nextState.token!,
-          userId: change.nextState.userId!,
-        ),
-      );
+    if (change.nextState.hasValidSession) {
+      _saveSession(change.nextState);
     }
 
     super.onChange(change);
+  }
+
+  /// Finalizes the authentication flow by persisting the session.
+  ///
+  /// First, this hydrates the [SystemInfoRepository] with the fresh [WebtritSystemInfo]
+  /// captured during login. This ensures the data is immediately available on the main screen,
+  /// preventing redundant network requests.
+  ///
+  /// Then, it saves the [Session] via [SessionRepository]. This state change is observed
+  /// by [AppBloc], effectively triggering navigation to the application's main screen.
+  void _saveSession(LoginState state) {
+    final systemInfo = state.systemInfo!;
+    final coreUrl = state.coreUrl!;
+    final tenantId = state.tenantId!;
+    final token = state.token!;
+    final userId = state.userId!;
+
+    systemInfoRepository.preload(systemInfo);
+    sessionRepository.save(Session(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId));
   }
 
   void launchLinkableElement(LinkableElement link) async {
@@ -90,7 +88,7 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final systemInfo = await _loadAndValidateSystemInfo(coreUrl, tenantId, demo);
+      final systemInfo = await _loadAndValidateSystemInfo(coreUrl, tenantId);
       if (systemInfo == null) {
         emit(state.copyWith(processing: false));
         return;
@@ -120,14 +118,12 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
       );
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
-
       emit(state.copyWith(processing: false));
     }
   }
 
-  Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId, bool demo) async {
-    final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
-    final systemInfo = await _retrieveSystemInfo(client);
+  Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId) async {
+    final systemInfo = await authRepository.getSystemInfo(coreUrl, tenantId);
 
     final coreInfo = systemInfo.core;
     final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
@@ -229,9 +225,11 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final coreUrl = Uri.parse(state.coreUrl!);
-      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
-      final sessionOtpProvisional = await _createSessionOtp(client, state.otpSigninUserRefInput.value);
+      final sessionOtpProvisional = await authRepository.requestOtp(
+        coreUrl: state.coreUrl!,
+        tenantId: state.tenantId!,
+        userRef: state.otpSigninUserRefInput.value,
+      );
 
       emit(
         state.copyWith(
@@ -259,12 +257,11 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
     emit(state.copyWith(processing: true));
     try {
-      final coreUrl = Uri.parse(state.coreUrl!);
-      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
-      final sessionToken = await _verifySessionOtp(
-        client,
-        state.otpSigninSessionOtpProvisionalWithDateTime!.$1,
-        state.otpSigninCodeInput.value,
+      final sessionToken = await authRepository.verifyOtp(
+        coreUrl: state.coreUrl!,
+        tenantId: state.tenantId!,
+        sessionOtpProvisional: state.otpSigninSessionOtpProvisionalWithDateTime!.$1,
+        code: state.otpSigninCodeInput.value,
       );
 
       // does not set processing to false to hold processing widgets state during navigation
@@ -313,12 +310,11 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final coreUrl = Uri.parse(state.coreUrl!);
-      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
-      final sessionToken = await _createSessionRequest(
-        client,
-        state.passwordSigninUserRefInput.value,
-        state.passwordSigninPasswordInput.value,
+      final sessionToken = await authRepository.login(
+        coreUrl: state.coreUrl!,
+        tenantId: state.tenantId!,
+        userRef: state.passwordSigninUserRefInput.value,
+        password: state.passwordSigninPasswordInput.value,
       );
 
       // does not set processing to false to hold processing widgets state during navigation
@@ -380,23 +376,22 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
     try {
       final tenantId = extras?['tenant_id'] ?? state.tenantId ?? defaultTenantId;
-      final coreUrl = Uri.parse(state.coreUrl!);
-      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: tenantId);
-      final result = await _createUserRequest(client: client, extraPayload: extras);
 
       // In cases where the embedded page acts as the launch welcome screen,
       // the systemInfo might not be loaded yet. Perform an additional check
       // and attempt to load it if necessary.
+      final result = await authRepository.signup(coreUrl: state.coreUrl!, tenantId: tenantId, extraPayload: extras);
+
       if (state.systemInfo == null) {
         emit(state.copyWith(processing: true));
-        final systemInfo = await _loadAndValidateSystemInfo(state.coreUrl!, tenantId, isDemoModeEnabled);
+        final systemInfo = await _loadAndValidateSystemInfo(state.coreUrl!, tenantId);
         emit(state.copyWith(systemInfo: systemInfo, processing: false));
       }
 
       // Executes optional post-login callback request if provided by embedded flow.
       if (result is SessionToken) {
         final postRequest = embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null;
-        await _executePostLoginHttpRequest(postRequest);
+        await authRepository.executePostLoginHttpRequest(postRequest);
       }
 
       // Applies login result and ensures tenant consistency.
@@ -428,36 +423,17 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final coreUrl = Uri.parse(state.coreUrl!);
-      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
-      final result = await _createUserRequest(client: client, email: state.signupEmailInput.value);
+      final result = await authRepository.signup(
+        coreUrl: state.coreUrl!,
+        tenantId: state.tenantId!,
+        email: state.signupEmailInput.value,
+      );
 
       _applyLoginResult(result, propagatedTenantId: state.tenantId);
     } catch (e) {
       notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
 
       emit(state.copyWith(processing: false));
-    }
-  }
-
-  /// Triggers a follow-up request after session creation,
-  /// if callback data (e.g. from an embedded page or external configuration) is provided.
-  ///
-  /// Note: This logic is currently tied to the login flow,
-  /// but may be reused in other contexts. If that happens,
-  /// consider moving it to a separate feature/module and injecting it via the widget tree.
-  Future<void> _executePostLoginHttpRequest(RawHttpRequest? request) async {
-    if (request == null) return;
-
-    try {
-      await apiClientFactory.createHttpRequestExecutor().execute(
-        method: request.method,
-        url: request.url,
-        headers: request.headers,
-        data: request.data,
-      );
-    } catch (e) {
-      _logger.warning(e);
     }
   }
 
@@ -513,12 +489,11 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
     emit(state.copyWith(processing: true));
 
     try {
-      final coreUrl = Uri.parse(state.coreUrl!);
-      final client = apiClientFactory.createWebtritApiClient(coreUrl: coreUrl, tenantId: state.tenantId!);
-      final sessionToken = await _verifySessionOtp(
-        client,
-        state.signupSessionOtpProvisionalWithDateTime!.$1,
-        state.signupCodeInput.value,
+      final sessionToken = await authRepository.verifyOtp(
+        coreUrl: state.coreUrl!,
+        tenantId: state.tenantId!,
+        sessionOtpProvisional: state.signupSessionOtpProvisionalWithDateTime!.$1,
+        code: state.signupCodeInput.value,
       );
 
       // does not set processing to false to hold processing widgets state during navigation
@@ -543,54 +518,5 @@ class LoginCubit extends Cubit<LoginState> with SystemInfoApiMapper {
 
   void loginSignupVerifyRepeat() {
     loginSignupRequestSubmitted();
-  }
-
-  Future<WebtritSystemInfo> _retrieveSystemInfo(WebtritApiClient webtritApiClient) async {
-    final apiSystemInfo = await webtritApiClient.getSystemInfo();
-    final systemInfo = systemInfoFromApi(apiSystemInfo);
-    return systemInfo;
-  }
-
-  Future<SessionOtpProvisional> _createSessionOtp(WebtritApiClient webtritApiClient, String userRef) async {
-    return await webtritApiClient.createSessionOtp(
-      SessionOtpCredential(
-        bundleId: appBundleId,
-        type: PlatformInfo.appType,
-        identifier: appIdentifier,
-        userRef: userRef,
-      ),
-    );
-  }
-
-  Future<SessionToken> _verifySessionOtp(
-    WebtritApiClient webtritApiClient,
-    SessionOtpProvisional sessionOtpProvisional,
-    String code,
-  ) async {
-    return await webtritApiClient.verifySessionOtp(sessionOtpProvisional, code);
-  }
-
-  Future<SessionToken> _createSessionRequest(WebtritApiClient webtritApiClient, String userRef, String password) async {
-    return await webtritApiClient.createSession(
-      SessionLoginCredential(
-        bundleId: appBundleId,
-        type: PlatformInfo.appType,
-        identifier: appIdentifier,
-        login: userRef,
-        password: password,
-      ),
-    );
-  }
-
-  Future<SessionResult> _createUserRequest({
-    required WebtritApiClient client,
-    String? email,
-    Map<String, dynamic>? extraPayload,
-  }) async {
-    return await client.createUser(
-      SessionUserCredential(bundleId: appBundleId, type: PlatformInfo.appType, identifier: appIdentifier, email: email),
-      extraPayload: extraPayload,
-      options: RequestOptions.withExtraRetries(),
-    );
   }
 }

@@ -96,4 +96,7 @@ class LoginState with _$LoginState {
 
   @override
   final CodeInput signupCodeInput;
+
+  bool get hasValidSession =>
+      coreUrl != null && tenantId != null && token != null && userId != null && systemInfo != null;
 }

@@ -167,6 +167,10 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
+              RepositoryProvider<AuthRepository>(
+                create: (_) => instanceRegistry.get(),
+                dispose: disposeIfDisposable,
+              ),
             ],
             child: const App(),
           );
