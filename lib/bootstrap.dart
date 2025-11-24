@@ -43,7 +43,7 @@ Future<InstanceRegistry> bootstrap() async {
   final deviceInfo = await DeviceInfoFactory.init();
 
   // Storages
-  final secureStorage = await SecureStorage.init();
+  final secureStorage = await SecureStorageImpl.init();
   final appPreferences = await AppPreferencesImpl.init();
 
   // Network clients
@@ -60,7 +60,7 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Repositories
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
-  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
+  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
   final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
   final systemInfoRepository = SystemInfoRepositoryImpl(
     localDatasource: systemInfoLocalDatasource,
@@ -211,7 +211,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final appInfo = await AppInfo.init(const SharedPreferencesAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
-  final secureStorage = await SecureStorage.init();
+  final secureStorage = await SecureStorageImpl.init();
   final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
   await AppLogger.init(remoteCacheConfigService, appLabelsProvider);
@@ -320,7 +320,7 @@ void workManagerDispatcher() {
       if (currentState == AppLifecycleState.resumed) return Future.value(true);
 
       // Init api and remote repository
-      final storage = await SecureStorage.init();
+      final storage = await SecureStorageImpl.init();
       final (coreUrl, tenantId, token) = (storage.readCoreUrl(), storage.readTenantId(), storage.readToken());
       if (coreUrl == null || tenantId == null || token == null) return Future.value(true);
       final api = WebtritApiClient(Uri.parse(coreUrl), tenantId);

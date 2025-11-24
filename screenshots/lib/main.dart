@@ -26,8 +26,9 @@ void main() async {
       final deviceInfo = await DeviceInfoFactory.init();
 
       final appPreferences = await AppPreferencesImpl.init();
+      final secureStorage = await SecureStorageImpl.init();
       final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
-      final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
+      final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
       final coreSupport = CoreSupportImpl(() => systemInfoLocalRepository.getSystemInfo());
 
       final themeSettings = appThemes.values.first.settings;
