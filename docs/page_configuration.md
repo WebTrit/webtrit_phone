@@ -11,6 +11,9 @@ back to sensible in-app defaults.
 - [Color format](#color-format)
 - [Global structure](#global-structure)
 - [Login page](#login-page)
+    - [Mode Select & Switch](#loginswitchpage)
+    - [OTP & Password Sign-in (Inputs & Masks)](#loginotpsignin--loginpasswordsignin)
+    - [Verification](#loginotpsigninverify--loginsignupverify)
 - [About page](#about-page)
 - [Call page (Dialing)](#call-page-dialing)
     - [App bar](#app-bar)
@@ -57,14 +60,18 @@ All sections can be provided independently.
 
 ## Login page
 
-Top-level keys inside `"login"`:
+Top-level keys inside `login`:
 
 | Key               | Type   | Description                                              |
 |-------------------|--------|----------------------------------------------------------|
 | `modeSelect`      | object | Mode selection screen (buttons, system bars, main logo). |
 | `switchPage`      | object | “Switch mode” screen (main logo only).                   |
+| `otpSignin`       | object | **NEW:** OTP request screen (phone/email input).         |
+| `passwordSignin`  | object | **NEW:** Password login screen (user & password inputs). |
 | `otpSigninVerify` | object | OTP sign-in verification screen (repeat countdown).      |
 | `signupVerify`    | object | Sign-up verification screen (repeat countdown).          |
+
+---
 
 ### `login.modeSelect`
 
@@ -86,10 +93,13 @@ Top-level keys inside `"login"`:
 }
 ```
 
-- `systemUiOverlayStyle` — status/navigation bar colors & icon brightness (see **Common object
-  formats**).
-- `mainLogo` — image descriptor for the primary logo (see **ImageSource**).
-- `buttonLoginStyleType`, `buttonSignupStyleType` — string enum style presets (e.g. `"primary"`).
+**Notes:**
+
+- `systemUiOverlayStyle` — status/navigation bar colors & icon brightness
+- `mainLogo` — image descriptor for the primary logo
+- `buttonLoginStyleType`, `buttonSignupStyleType` — enum style presets
+
+---
 
 ### `login.switchPage`
 
@@ -104,6 +114,53 @@ Top-level keys inside `"login"`:
   }
 }
 ```
+
+---
+
+### `login.otpSignin` / `login.passwordSignin`
+
+These sections configure the input fields for login forms, including input masks.
+
+### Configuration Keys:
+
+- `refTextField` — identifier input (phone/email)
+
+### Example with Input Mask
+
+```json
+{
+  "login": {
+    "otpSignin": {
+      "refTextField": {
+        "keyboardType": "phone",
+        "textAlign": "left",
+        "mask": {
+          "pattern": "+380 (##) ###-##-##",
+          "filter": {
+            "#": "[0-9]"
+          }
+        }
+      }
+    },
+    "passwordSignin": {
+      "refTextField": {
+        "keyboardType": "email",
+        "textAlign": "start",
+        "mask": null
+      }
+    }
+  }
+}
+```
+
+**Notes:**
+
+- `keyboardType`: `"phone"`, `"email"`, `"text"`, `"number"`, etc.
+- `mask.pattern`: Formatting pattern
+- `mask.filter`: Regex definitions
+- To disable masking: omit mask or set `"mask": null`
+
+---
 
 ### `login.otpSigninVerify` / `login.signupVerify`
 
@@ -120,28 +177,10 @@ Top-level keys inside `"login"`:
 }
 ```
 
-- `countdownRepeatIntervalSeconds`:  
-  `0` → “Repeat” always enabled; `>0` → enabled after that many seconds.
+**Behavior:**
 
-**Minimal login example:**
-
-```json
-{
-  "login": {
-    "modeSelect": {
-      "mainLogo": {
-        "asset": "assets/branding/logo.png"
-      }
-    },
-    "otpSigninVerify": {
-      "countdownRepeatIntervalSeconds": 0
-    },
-    "signupVerify": {
-      "countdownRepeatIntervalSeconds": 0
-    }
-  }
-}
-```
+- `0` → “Repeat” always enabled
+- `>0` → enabled after X seconds
 
 ---
 
