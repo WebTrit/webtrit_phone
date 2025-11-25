@@ -582,7 +582,7 @@ case _:
 /// @nodoc
 mixin _$TextDecorationConfig {
 
- List<String> get types;
+ List<String> get types; String? get hint; TextStyleConfig? get hintStyle; String? get prefixText; TextStyleConfig? get prefixStyle;
 /// Create a copy of TextDecorationConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -593,16 +593,16 @@ $TextDecorationConfigCopyWith<TextDecorationConfig> get copyWith => _$TextDecora
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TextDecorationConfig&&const DeepCollectionEquality().equals(other.types, types));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TextDecorationConfig&&const DeepCollectionEquality().equals(other.types, types)&&(identical(other.hint, hint) || other.hint == hint)&&(identical(other.hintStyle, hintStyle) || other.hintStyle == hintStyle)&&(identical(other.prefixText, prefixText) || other.prefixText == prefixText)&&(identical(other.prefixStyle, prefixStyle) || other.prefixStyle == prefixStyle));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(types));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(types),hint,hintStyle,prefixText,prefixStyle);
 
 @override
 String toString() {
-  return 'TextDecorationConfig(types: $types)';
+  return 'TextDecorationConfig(types: $types, hint: $hint, hintStyle: $hintStyle, prefixText: $prefixText, prefixStyle: $prefixStyle)';
 }
 
 
@@ -613,7 +613,7 @@ abstract mixin class $TextDecorationConfigCopyWith<$Res>  {
   factory $TextDecorationConfigCopyWith(TextDecorationConfig value, $Res Function(TextDecorationConfig) _then) = _$TextDecorationConfigCopyWithImpl;
 @useResult
 $Res call({
- List<String> types
+ List<String> types, String? hint, TextStyleConfig? hintStyle, String? prefixText, TextStyleConfig? prefixStyle
 });
 
 
@@ -630,10 +630,14 @@ class _$TextDecorationConfigCopyWithImpl<$Res>
 
 /// Create a copy of TextDecorationConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? types = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? types = null,Object? hint = freezed,Object? hintStyle = freezed,Object? prefixText = freezed,Object? prefixStyle = freezed,}) {
   return _then(TextDecorationConfig(
 types: null == types ? _self.types : types // ignore: cast_nullable_to_non_nullable
-as List<String>,
+as List<String>,hint: freezed == hint ? _self.hint : hint // ignore: cast_nullable_to_non_nullable
+as String?,hintStyle: freezed == hintStyle ? _self.hintStyle : hintStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,prefixText: freezed == prefixText ? _self.prefixText : prefixText // ignore: cast_nullable_to_non_nullable
+as String?,prefixStyle: freezed == prefixStyle ? _self.prefixStyle : prefixStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,
   ));
 }
 

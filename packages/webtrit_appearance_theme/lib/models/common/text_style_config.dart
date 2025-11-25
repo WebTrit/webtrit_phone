@@ -124,18 +124,34 @@ class FontStyleConfig with _$FontStyleConfig {
 
 /// Represents text decorations such as underline or line-through.
 @freezed
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TextDecorationConfig with _$TextDecorationConfig {
   /// Creates a [TextDecorationConfig].
   ///
-  /// A list of decoration types. Supported values:
+  /// [types] - A list of decoration types. Supported values:
   /// `"underline"`, `"lineThrough"`, `"overline"`.
-  const TextDecorationConfig({this.types = const []});
+  const TextDecorationConfig({this.types = const [], this.hint, this.hintStyle, this.prefixText, this.prefixStyle});
 
   /// A list of decoration types. Supported values:
   /// `"underline"`, `"lineThrough"`, `"overline"`.
   @override
   final List<String> types;
+
+  /// Text to suggest what sort of input the field accepts.
+  @override
+  final String? hint;
+
+  /// The style to use for the [hint].
+  @override
+  final TextStyleConfig? hintStyle;
+
+  /// Text that appears before the editable part of the field (e.g., a currency symbol or country code).
+  @override
+  final String? prefixText;
+
+  /// The style to use for the [prefixText].
+  @override
+  final TextStyleConfig? prefixStyle;
 
   factory TextDecorationConfig.fromJson(Map<String, Object?> json) => _$TextDecorationConfigFromJson(json);
 
