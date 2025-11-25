@@ -14,6 +14,7 @@ class AppPermissions {
   static const _specialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
 
   static Future<AppPermissions> init(FeatureAccess featureAccess) async {
+
     final bottomMenuFeature = featureAccess.bottomMenuFeature;
     final contactsSourceTypes = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
 
@@ -117,7 +118,7 @@ class AppPermissions {
   }
 
   Future<bool> requestContactPermission() async {
-    final status = await Permission.contacts.request();
+    final status = await Permission.contacts.status;
     return status.isGranted;
   }
 }
