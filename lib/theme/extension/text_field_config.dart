@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_appearance_theme/models/common/text_field_config.dart';
+import 'package:webtrit_appearance_theme/models/common/common.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
-import 'package:webtrit_phone/theme/styles/text_field_style.dart';
+import 'package:webtrit_phone/theme/styles/styles.dart';
 
 extension TextFieldConfigToStyle on TextFieldConfig {
   TextFieldStyle toStyle({required ColorScheme colors, required ThemeData theme, TextFieldStyle? base}) {
@@ -16,9 +16,15 @@ extension TextFieldConfigToStyle on TextFieldConfig {
       textAlign: _mapTextAlign(textAlign),
       showCursor: showCursor,
       keyboardType: _mapKeyboardType(keyboardType),
+      mask: mask != null ? _mapMask(mask) : null,
     );
 
     return TextFieldStyle.merge(base, styleFromConfig);
+  }
+
+  InputMaskStyle? _mapMask(MaskConfig? config) {
+    if (config == null) return null;
+    return InputMaskStyle(pattern: config.pattern, filter: config.filter);
   }
 
   TextAlign _mapTextAlign(String? v) {
