@@ -128,7 +128,7 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<LogRecord> logRecords)?  success,TResult Function( Object error)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<String> logRecords)?  success,TResult Function( Object error)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LogRecordsConsoleStateInitial() when initial != null:
 return initial();case LogRecordsConsoleStateLoading() when loading != null:
@@ -152,7 +152,7 @@ return failure(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<LogRecord> logRecords)  success,required TResult Function( Object error)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<String> logRecords)  success,required TResult Function( Object error)  failure,}) {final _that = this;
 switch (_that) {
 case LogRecordsConsoleStateInitial():
 return initial();case LogRecordsConsoleStateLoading():
@@ -175,7 +175,7 @@ return failure(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<LogRecord> logRecords)?  success,TResult? Function( Object error)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<String> logRecords)?  success,TResult? Function( Object error)?  failure,}) {final _that = this;
 switch (_that) {
 case LogRecordsConsoleStateInitial() when initial != null:
 return initial();case LogRecordsConsoleStateLoading() when loading != null:
@@ -257,11 +257,11 @@ String toString() {
 
 
 class LogRecordsConsoleStateSuccess implements LogRecordsConsoleState {
-  const LogRecordsConsoleStateSuccess(final  List<LogRecord> logRecords): _logRecords = logRecords;
+  const LogRecordsConsoleStateSuccess(final  List<String> logRecords): _logRecords = logRecords;
   
 
- final  List<LogRecord> _logRecords;
- List<LogRecord> get logRecords {
+ final  List<String> _logRecords;
+ List<String> get logRecords {
   if (_logRecords is EqualUnmodifiableListView) return _logRecords;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_logRecords);
@@ -298,7 +298,7 @@ abstract mixin class $LogRecordsConsoleStateSuccessCopyWith<$Res> implements $Lo
   factory $LogRecordsConsoleStateSuccessCopyWith(LogRecordsConsoleStateSuccess value, $Res Function(LogRecordsConsoleStateSuccess) _then) = _$LogRecordsConsoleStateSuccessCopyWithImpl;
 @useResult
 $Res call({
- List<LogRecord> logRecords
+ List<String> logRecords
 });
 
 
@@ -318,7 +318,7 @@ class _$LogRecordsConsoleStateSuccessCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? logRecords = null,}) {
   return _then(LogRecordsConsoleStateSuccess(
 null == logRecords ? _self._logRecords : logRecords // ignore: cast_nullable_to_non_nullable
-as List<LogRecord>,
+as List<String>,
   ));
 }
 

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
 import 'package:webtrit_phone/data/data.dart';
@@ -52,7 +51,7 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
 
     final logRecords = state.logRecords;
 
-    final time = logRecords[0].time;
+    final time = DateTime.now();
     final name = '$_namePrefix${_timeSlug(time)}.log';
 
     await shareLogRecords(logRecords, logRecordsFormatter: logRecordsFormatter, name: name);

@@ -6,7 +6,7 @@ class LogRecordsConsoleState with _$LogRecordsConsoleState {
 
   const factory LogRecordsConsoleState.loading() = LogRecordsConsoleStateLoading;
 
-  const factory LogRecordsConsoleState.success(List<LogRecord> logRecords) = LogRecordsConsoleStateSuccess;
+  const factory LogRecordsConsoleState.success(List<String> logRecords) = LogRecordsConsoleStateSuccess;
 
   const factory LogRecordsConsoleState.failure(Object error) = LogRecordsConsoleStateFailure;
 }

@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-
+import 'package:logging_appenders/logging_appenders.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 abstract class LogRecordsRepository {
@@ -18,7 +18,7 @@ abstract class LogRecordsRepository {
 
   Future<void> cancelSubscriptions();
 
-  Future<List<LogRecord>> getLogRecords();
+  Future<List<String>> getLogRecords();
 }
 
 class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
@@ -31,7 +31,8 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
   final ListQueue<LogRecord> _logRecords;
 
   @override
-  Future<List<LogRecord>> getLogRecords() async => UnmodifiableListView(_logRecords);
+  Future<List<String>> getLogRecords() async =>
+      UnmodifiableListView(_logRecords.map((it) => DefaultLogRecordFormatter().format(it)));
 
   @override
   Future<void> attachToLogger(Logger logger) async {
@@ -66,28 +67,15 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
 }
 
 class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
-  LogRecordsFileRepositoryImpl() : _logRecords = ListQueue<LogRecord>();
+  LogRecordsFileRepositoryImpl(this.appender);
 
-  final _subscriptions = <StreamSubscription<dynamic>>[];
-
-  final ListQueue<LogRecord> _logRecords;
+  final ReadableRotatingFileAppender appender;
 
   @override
-  Future<List<LogRecord>> getLogRecords() async => UnmodifiableListView(_logRecords);
+  Future<List<String>> getLogRecords() async => appender.readAllLogs();
 
   @override
-  Future<void> attachToLogger(Logger logger) async => _subscriptions.add(logger.onRecord.listen(log));
-
-  Future<List<String>> getFileLogRecords() async {
-    final appDocDir = await getApplicationDocumentsPath();
-    final String baseLogDirectoryPath = '$appDocDir/logs';
-
-    final logRecordsFile = File('$baseLogDirectoryPath/app_logs.log');
-
-    final logRecords = await logRecordsFile.readAsLines();
-
-    return logRecords;
-  }
+  Future<void> attachToLogger(Logger logger) async => appender.attachToLogger(logger);
 
   @override
   Future<void> clear() async {
@@ -97,22 +85,60 @@ class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
     final logRecordsFile = File('$baseLogDirectoryPath/app_logs.log');
 
     if (await logRecordsFile.exists()) await logRecordsFile.delete();
-    _logRecords.clear();
   }
 
   @override
-  Future<void> log(LogRecord record) async {
-    _logRecords.addFirst(record);
-  }
+  Future<void> log(LogRecord record) async {}
 
   @override
   @mustCallSuper
   Future<void> dispose() async => cancelSubscriptions();
 
   @override
-  Future<void> cancelSubscriptions() async {
-    final futures = _subscriptions.map((sub) => sub.cancel()).toList(growable: false);
-    _subscriptions.clear();
-    await Future.wait<dynamic>(futures);
+  Future<void> cancelSubscriptions() async {}
+}
+
+class ReadableRotatingFileAppender extends RotatingFileAppender {
+  ReadableRotatingFileAppender({
+    super.formatter,
+    required super.baseFilePath,
+    super.keepRotateCount,
+    super.rotateAtSizeBytes,
+    super.rotateCheckInterval,
+    super.clock,
+  });
+
+  Future<List<String>> readAllLogs() async {
+    final records = <String>[];
+
+    final files = getAllLogFiles();
+
+    for (var i = files.length - 1; i >= 0; i--) {
+      final file = files[i];
+      if (!file.existsSync()) {
+        continue;
+      }
+
+      try {
+        final lines = await file.readAsLines();
+
+        for (final line in lines) {
+          if (line.trim().isEmpty) continue;
+          try {
+            records.add(line);
+          } catch (e) {
+            if (kDebugMode) {
+              print('Error parsing line: $line');
+            }
+          }
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error when working with log file');
+        }
+      }
+    }
+
+    return records;
   }
 }
