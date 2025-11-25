@@ -40,7 +40,11 @@
       "_refTextField": {
         "keyboardType": "phone",
         "textAlign": "left",
-        "mask": {
+        "decoration": {
+          "prefixText": "123 ",
+          "hintText": "XXXXXXXXX"
+        },
+        "_mask": {
           "pattern": "+380 (##) ###-##-##",
           "filter": {
             "#": "[0-9]"
@@ -52,7 +56,11 @@
       "_refTextField": {
         "keyboardType": "phone",
         "textAlign": "left",
-        "mask": {
+        "decoration": {
+          "prefixText": "123 ",
+          "hintText": "XXXXXXXXX"
+        },
+        "_mask": {
           "pattern": "+380 (##) ###-##-##",
           "filter": {
             "#": "[0-9]"
