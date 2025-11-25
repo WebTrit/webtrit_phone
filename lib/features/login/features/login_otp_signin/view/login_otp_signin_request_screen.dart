@@ -26,16 +26,8 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
 
     final themeData = Theme.of(context);
     final otpStyles = themeData.extension<LoginOtpSigninPageStyles>()?.primary;
-    final userRefStyle = otpStyles?.refInput;
 
-    final maskConfig = userRefStyle?.mask;
-
-    if (maskConfig?.pattern != null) {
-      _maskFormatter.updateMask(
-        mask: maskConfig!.pattern,
-        filter: maskConfig.filter?.map((key, value) => MapEntry(key, RegExp(value))),
-      );
-    }
+    _maskFormatter.updateFromConfig(otpStyles?.refInput?.mask);
   }
 
   @override

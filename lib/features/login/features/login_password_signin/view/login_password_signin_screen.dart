@@ -26,16 +26,8 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
 
     final themeData = Theme.of(context);
     final loginStyles = themeData.extension<LoginPasswordSigninPageStyles>()?.primary;
-    final userRefStyle = loginStyles?.refInput;
 
-    final maskConfig = userRefStyle?.mask;
-
-    if (maskConfig?.pattern != null) {
-      _maskFormatter.updateMask(
-        mask: maskConfig!.pattern,
-        filter: maskConfig.filter?.map((key, value) => MapEntry(key, RegExp(value))),
-      );
-    }
+    _maskFormatter.updateFromConfig(loginStyles?.refInput?.mask);
   }
 
   @override
@@ -93,7 +85,8 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
                   initialValue: state.passwordSigninPasswordInput.value,
                   decoration: passwordDecoration.copyWith(
                     labelText: context.l10n.login_TextFieldLabelText_passwordSigninPassword,
-                    helperText: '', // reserve space for validator message
+                    helperText: '',
+                    // reserve space for validator message
                     errorText: state.passwordSigninPasswordInput.displayError?.l10n(context),
                     errorMaxLines: 3,
                     suffixIcon: IconButton(
