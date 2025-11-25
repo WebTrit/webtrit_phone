@@ -14,21 +14,30 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
 
     final noneEverywhere = border?.type == 'none';
 
+    final hintStyleResult = hintStyle?.toTextStyle(fallbackColor: colors.onSurface.withValues(alpha: 0.5));
+    final prefixStyleResult = prefixStyle?.toTextStyle(fallbackColor: colors.onSurface);
+    final labelStyleResult = labelStyle?.toTextStyle(fallbackColor: colors.onSurface);
+    final helperStyleResult = helperStyle?.toTextStyle(fallbackColor: colors.onSurfaceVariant);
+    final errorStyleResult = errorStyle?.toTextStyle(fallbackColor: colors.error);
+    final sufixStyleResult = suffixStyle?.toTextStyle(fallbackColor: colors.onSurface);
+
     return InputDecoration(
       hintText: hintText,
-      hintStyle: hintStyle?.toTextStyle(fallbackColor: colors.onSurface.withValues(alpha: 0.5)),
+      // Fallback to grey-ish color (medium emphasis)
+      hintStyle: hintStyleResult,
       labelText: labelText,
-      labelStyle: labelStyle?.toTextStyle(fallbackColor: colors.onSurface),
+      labelStyle: labelStyleResult,
       helperText: helperText,
-      helperStyle: helperStyle?.toTextStyle(fallbackColor: colors.onSurfaceVariant),
-      errorStyle: errorStyle?.toTextStyle(fallbackColor: colors.error),
+      helperStyle: helperStyleResult,
+      errorStyle: errorStyleResult,
       prefixText: prefixText,
-      prefixStyle: prefixStyle?.toTextStyle(fallbackColor: colors.onSurface),
+      // Fallback to solid main color (high emphasis)
+      prefixStyle: prefixStyleResult,
       suffixText: suffixText,
-      suffixStyle: suffixStyle?.toTextStyle(fallbackColor: colors.onSurface),
+      suffixStyle: sufixStyleResult,
       fillColor: fillColor?.toColor(),
       filled: filled ?? fillColor != null,
-      border: noneEverywhere ? InputBorder.none : (mappedBorder ?? InputBorder.none),
+      border: noneEverywhere ? InputBorder.none : mappedBorder,
       enabledBorder: noneEverywhere ? InputBorder.none : (mappedEnabledBorder ?? mappedBorder),
       focusedBorder: noneEverywhere ? InputBorder.none : (mappedFocusedBorder ?? mappedBorder),
       errorBorder: noneEverywhere ? InputBorder.none : (mappedErrorBorder ?? mappedBorder),
