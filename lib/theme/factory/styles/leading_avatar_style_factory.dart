@@ -18,7 +18,7 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
       primary: LeadingAvatarStyle(
         backgroundColor: _bgColor(),
         radius: config?.radius,
-        initialsTextStyle: config?.initialsTextStyle?.toTextStyle(fallbackColor: colors.onSecondaryContainer),
+        initialsTextStyle: config?.initialsTextStyle?.toTextStyle().copyWith(color: colors.onSecondaryContainer),
         placeholderIcon: null,
         loadingOverlay: _mapLoading(config?.loading),
         smartIndicator: _mapSmart(config?.smartIndicator),

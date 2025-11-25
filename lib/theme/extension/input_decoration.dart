@@ -14,12 +14,12 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
 
     final noneEverywhere = border?.type == 'none';
 
-    final hintStyleResult = hintStyle?.toTextStyle(fallbackColor: colors.onSurface.withValues(alpha: 0.5));
-    final prefixStyleResult = prefixStyle?.toTextStyle(fallbackColor: colors.onSurface);
-    final labelStyleResult = labelStyle?.toTextStyle(fallbackColor: colors.onSurface);
-    final helperStyleResult = helperStyle?.toTextStyle(fallbackColor: colors.onSurfaceVariant);
-    final errorStyleResult = errorStyle?.toTextStyle(fallbackColor: colors.error);
-    final sufixStyleResult = suffixStyle?.toTextStyle(fallbackColor: colors.onSurface);
+    final hintStyleResult = hintStyle?.toTextStyle().copyWith(color: colors.onSurface.withValues(alpha: 0.5));
+    final prefixStyleResult = prefixStyle?.toTextStyle().copyWith(color: colors.onSurface);
+    final labelStyleResult = labelStyle?.toTextStyle().copyWith(color: colors.onSurface);
+    final helperStyleResult = helperStyle?.toTextStyle().copyWith(color: colors.onSurfaceVariant);
+    final errorStyleResult = errorStyle?.toTextStyle().copyWith(color: colors.error);
+    final sufixStyleResult = suffixStyle?.toTextStyle().copyWith(color: colors.onSurface);
 
     return InputDecoration(
       hintText: hintText,

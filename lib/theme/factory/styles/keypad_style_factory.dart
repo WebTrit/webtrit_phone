@@ -47,11 +47,9 @@ class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
       primary: KeypadStyle(
         keyStyle: KeypadKeyStyle(
           textStyle:
-              config?.textStyle?.toTextStyle(
-                fallbackColor: defaultNumberColor,
-                defaultFontSize: defaultNumberFontSize,
-                defaultFontWeight: defaultNumberFontWeight,
-              ) ??
+              config?.textStyle
+                  ?.toTextStyle(defaultFontSize: defaultNumberFontSize, defaultFontWeight: defaultNumberFontWeight)
+                  .copyWith(color: defaultNumberColor) ??
               TextStyle(
                 fontSize: defaultNumberFontSize,
                 fontWeight: defaultNumberFontWeight,
@@ -59,11 +57,9 @@ class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
                 height: 1.125,
               ),
           subtextStyle:
-              config?.subtextStyle?.toTextStyle(
-                fallbackColor: defaultSubColor,
-                defaultFontSize: defaultSubFontSize,
-                defaultFontWeight: defaultSubFontWeight,
-              ) ??
+              config?.subtextStyle
+                  ?.toTextStyle(defaultFontSize: defaultSubFontSize, defaultFontWeight: defaultSubFontWeight)
+                  .copyWith(color: defaultSubColor) ??
               TextStyle(
                 fontSize: defaultSubFontSize,
                 fontWeight: defaultSubFontWeight,
