@@ -14,12 +14,12 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
 
     final noneEverywhere = border?.type == 'none';
 
-    final hintStyleResult = hintStyle?.toTextStyle().copyWith(color: colors.onSurface.withValues(alpha: 0.5));
-    final prefixStyleResult = prefixStyle?.toTextStyle().copyWith(color: colors.onSurface);
-    final labelStyleResult = labelStyle?.toTextStyle().copyWith(color: colors.onSurface);
-    final helperStyleResult = helperStyle?.toTextStyle().copyWith(color: colors.onSurfaceVariant);
-    final errorStyleResult = errorStyle?.toTextStyle().copyWith(color: colors.error);
-    final sufixStyleResult = suffixStyle?.toTextStyle().copyWith(color: colors.onSurface);
+    final hintStyleResult = _resolveStyle(hintStyle, color: colors.onSurface.withValues(alpha: 0.5));
+    final prefixStyleResult = _resolveStyle(prefixStyle, color: colors.onSurface);
+    final labelStyleResult = _resolveStyle(labelStyle, color: colors.onSurface);
+    final helperStyleResult = _resolveStyle(helperStyle, color: colors.onSurfaceVariant);
+    final errorStyleResult = _resolveStyle(errorStyle, color: colors.error);
+    final suffixStyleResult = _resolveStyle(suffixStyle, color: colors.onSurface);
 
     return InputDecoration(
       hintText: hintText,
@@ -34,7 +34,7 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
       // Fallback to solid main color (high emphasis)
       prefixStyle: prefixStyleResult,
       suffixText: suffixText,
-      suffixStyle: sufixStyleResult,
+      suffixStyle: suffixStyleResult,
       fillColor: fillColor?.toColor(),
       filled: filled ?? fillColor != null,
       border: noneEverywhere ? InputBorder.none : mappedBorder,
@@ -45,6 +45,19 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
       disabledBorder: noneEverywhere ? InputBorder.none : (mappedDisabledBorder ?? mappedBorder),
     );
   }
+
+  TextStyle _resolveStyle(
+    TextStyleConfig? config, {
+    Color? color,
+    double? fontSize,
+    FontWeight? fontWeight,
+    FontStyle? fontStyle,
+  }) => (config?.toTextStyle() ?? const TextStyle()).copyWith(
+    color: color,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    fontStyle: fontStyle,
+  );
 
   InputBorder? _mapBorder(BorderConfig? config, ColorScheme colors) {
     if (config == null) return null;
