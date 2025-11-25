@@ -47,6 +47,8 @@ class LoginPageConfig with _$LoginPageConfig {
   const LoginPageConfig({
     this.modeSelect = const LoginModeSelectPageConfig(),
     this.switchPage = const LoginSwitchPageConfig(),
+    this.otpSignin = const LoginOtpSigninPageConfig(),
+    this.passwordSignin = const LoginPasswordSigninPageConfig(),
     this.otpSigninVerify = const LoginOtpSigninVerifyScreenPageConfig(),
     this.signupVerify = const LoginSignupVerifyScreenPageConfig(),
   });
@@ -56,6 +58,12 @@ class LoginPageConfig with _$LoginPageConfig {
 
   @override
   final LoginSwitchPageConfig switchPage;
+
+  @override
+  final LoginOtpSigninPageConfig otpSignin;
+
+  @override
+  final LoginPasswordSigninPageConfig passwordSignin;
 
   @override
   final LoginOtpSigninVerifyScreenPageConfig otpSigninVerify;
@@ -70,6 +78,35 @@ class LoginPageConfig with _$LoginPageConfig {
   /// A globally consistent metadata key used to associate additional resources,
   /// specifically for the login page picture.
   static const String metadataPictureUrl = 'pictureUrl';
+}
+
+/// Configuration for the **OTP Signin Screen**.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class LoginOtpSigninPageConfig with _$LoginOtpSigninPageConfig {
+  const LoginOtpSigninPageConfig({this.refTextField});
+
+  @override
+  final TextFieldConfig? refTextField;
+
+  factory LoginOtpSigninPageConfig.fromJson(Map<String, Object?> json) => _$LoginOtpSigninPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LoginOtpSigninPageConfigToJson(this);
+}
+
+/// Configuration for the **Password Signin Screen**.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class LoginPasswordSigninPageConfig with _$LoginPasswordSigninPageConfig {
+  const LoginPasswordSigninPageConfig({this.refTextField});
+
+  @override
+  final TextFieldConfig? refTextField;
+
+  factory LoginPasswordSigninPageConfig.fromJson(Map<String, Object?> json) =>
+      _$LoginPasswordSigninPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$LoginPasswordSigninPageConfigToJson(this);
 }
 
 @freezed

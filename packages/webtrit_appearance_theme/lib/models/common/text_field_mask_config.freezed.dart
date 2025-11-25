@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'text_field_config.dart';
+part of 'text_field_mask_config.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,40 +13,40 @@ part of 'text_field_config.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$TextFieldConfig {
+mixin _$MaskConfig {
 
- InputDecorationConfig? get decoration; TextStyleConfig? get style; String get textAlign; bool get showCursor; String get keyboardType; MaskConfig? get mask;
-/// Create a copy of TextFieldConfig
+ String? get pattern; Map<String, String>? get filter;
+/// Create a copy of MaskConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$TextFieldConfigCopyWith<TextFieldConfig> get copyWith => _$TextFieldConfigCopyWithImpl<TextFieldConfig>(this as TextFieldConfig, _$identity);
+$MaskConfigCopyWith<MaskConfig> get copyWith => _$MaskConfigCopyWithImpl<MaskConfig>(this as MaskConfig, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TextFieldConfig&&(identical(other.decoration, decoration) || other.decoration == decoration)&&(identical(other.style, style) || other.style == style)&&(identical(other.textAlign, textAlign) || other.textAlign == textAlign)&&(identical(other.showCursor, showCursor) || other.showCursor == showCursor)&&(identical(other.keyboardType, keyboardType) || other.keyboardType == keyboardType)&&(identical(other.mask, mask) || other.mask == mask));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MaskConfig&&(identical(other.pattern, pattern) || other.pattern == pattern)&&const DeepCollectionEquality().equals(other.filter, filter));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,decoration,style,textAlign,showCursor,keyboardType,mask);
+int get hashCode => Object.hash(runtimeType,pattern,const DeepCollectionEquality().hash(filter));
 
 @override
 String toString() {
-  return 'TextFieldConfig(decoration: $decoration, style: $style, textAlign: $textAlign, showCursor: $showCursor, keyboardType: $keyboardType, mask: $mask)';
+  return 'MaskConfig(pattern: $pattern, filter: $filter)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $TextFieldConfigCopyWith<$Res>  {
-  factory $TextFieldConfigCopyWith(TextFieldConfig value, $Res Function(TextFieldConfig) _then) = _$TextFieldConfigCopyWithImpl;
+abstract mixin class $MaskConfigCopyWith<$Res>  {
+  factory $MaskConfigCopyWith(MaskConfig value, $Res Function(MaskConfig) _then) = _$MaskConfigCopyWithImpl;
 @useResult
 $Res call({
- InputDecorationConfig? decoration, TextStyleConfig? style, String textAlign, bool showCursor, String keyboardType, MaskConfig? mask
+ String? pattern, Map<String, String>? filter
 });
 
 
@@ -54,32 +54,28 @@ $Res call({
 
 }
 /// @nodoc
-class _$TextFieldConfigCopyWithImpl<$Res>
-    implements $TextFieldConfigCopyWith<$Res> {
-  _$TextFieldConfigCopyWithImpl(this._self, this._then);
+class _$MaskConfigCopyWithImpl<$Res>
+    implements $MaskConfigCopyWith<$Res> {
+  _$MaskConfigCopyWithImpl(this._self, this._then);
 
-  final TextFieldConfig _self;
-  final $Res Function(TextFieldConfig) _then;
+  final MaskConfig _self;
+  final $Res Function(MaskConfig) _then;
 
-/// Create a copy of TextFieldConfig
+/// Create a copy of MaskConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? decoration = freezed,Object? style = freezed,Object? textAlign = null,Object? showCursor = null,Object? keyboardType = null,Object? mask = freezed,}) {
-  return _then(TextFieldConfig(
-decoration: freezed == decoration ? _self.decoration : decoration // ignore: cast_nullable_to_non_nullable
-as InputDecorationConfig?,style: freezed == style ? _self.style : style // ignore: cast_nullable_to_non_nullable
-as TextStyleConfig?,textAlign: null == textAlign ? _self.textAlign : textAlign // ignore: cast_nullable_to_non_nullable
-as String,showCursor: null == showCursor ? _self.showCursor : showCursor // ignore: cast_nullable_to_non_nullable
-as bool,keyboardType: null == keyboardType ? _self.keyboardType : keyboardType // ignore: cast_nullable_to_non_nullable
-as String,mask: freezed == mask ? _self.mask : mask // ignore: cast_nullable_to_non_nullable
-as MaskConfig?,
+@pragma('vm:prefer-inline') @override $Res call({Object? pattern = freezed,Object? filter = freezed,}) {
+  return _then(MaskConfig(
+pattern: freezed == pattern ? _self.pattern : pattern // ignore: cast_nullable_to_non_nullable
+as String?,filter: freezed == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as Map<String, String>?,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [TextFieldConfig].
-extension TextFieldConfigPatterns on TextFieldConfig {
+/// Adds pattern-matching-related methods to [MaskConfig].
+extension MaskConfigPatterns on MaskConfig {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

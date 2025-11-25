@@ -19,6 +19,9 @@ TextFieldConfig _$TextFieldConfigFromJson(Map<String, dynamic> json) =>
       textAlign: json['textAlign'] as String? ?? 'center',
       showCursor: json['showCursor'] as bool? ?? true,
       keyboardType: json['keyboardType'] as String? ?? 'none',
+      mask: json['mask'] == null
+          ? null
+          : MaskConfig.fromJson(json['mask'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TextFieldConfigToJson(TextFieldConfig instance) =>
@@ -28,4 +31,5 @@ Map<String, dynamic> _$TextFieldConfigToJson(TextFieldConfig instance) =>
       'textAlign': instance.textAlign,
       'showCursor': instance.showCursor,
       'keyboardType': instance.keyboardType,
+      'mask': instance.mask?.toJson(),
     };
