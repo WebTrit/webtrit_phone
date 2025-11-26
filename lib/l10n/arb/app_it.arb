@@ -98,6 +98,10 @@
   },
   "call_FailureAcknowledgeDialog_title": "Guasto",
   "@call_FailureAcknowledgeDialog_title": {},
+  "call_MissingMicrophoneDialog_content": "Impossibile effettuare la chiamata perché manca l'autorizzazione per il microfono. Vai su Impostazioni e concedi l'accesso al microfono.",
+  "@call_MissingMicrophoneDialog_content": {},
+  "call_MissingMicrophoneDialog_title": "Manca l'autorizzazione all'uso del microfono",
+  "@call_MissingMicrophoneDialog_title": {},
   "callProcessingStatus_answering": "Rispondendo alla chiamata, attendi prego…",
   "@callProcessingStatus_answering": {},
   "callProcessingStatus_disconnecting": "Desconectando la llamada, por favor espere…",
@@ -1427,6 +1431,8 @@
   "@settings_LogoutConfirmDialog_content": {},
   "settings_LogoutConfirmDialog_title": "Confermare la disconnessione",
   "@settings_LogoutConfirmDialog_title": {},
+  "settings_missingMicrophoneIndicator_title": "Autorizzazione microfono mancante. Impossibile effettuare chiamate.",
+  "@settings_missingMicrophoneIndicator_title": {},
   "settings_network_fallbackCalls_description": "Abilita l'attivazione delle chiamate in entrata di riserva tramite SMS formattati appositamente",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"

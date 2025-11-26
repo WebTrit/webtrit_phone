@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/app_permissions.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'settings_event.dart';
@@ -25,10 +26,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.userRepository,
     required this.voicemailRepository,
     required this.sessionRepository,
+    required this.appPermissions,
   }) : super(const SettingsState(progress: false)) {
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
     on<SettingsUnreadVoicemailCountChanged>(_onVoicemailCountChanged);
+    on<SettingsStarted>(_onSettingsStarted);
 
     _initializeVoicemailCountBadge();
   }
@@ -38,8 +41,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final UserRepository userRepository;
   final VoicemailRepository voicemailRepository;
   final SessionRepository sessionRepository;
+  final AppPermissions appPermissions;
 
   late final StreamSubscription<int> _unreadVoicemailsSub;
+
+  Future<void> _onSettingsStarted(SettingsStarted event, Emitter<SettingsState> emit) async {
+    final microphonePermissionGranted = await appPermissions.isPermissionGranted(Permission.microphone);
+
+    emit(state.copyWith(hasMicrophonePermission: microphonePermissionGranted));
+  }
 
   void _initializeVoicemailCountBadge() {
     voicemailRepository.fetchVoicemails();

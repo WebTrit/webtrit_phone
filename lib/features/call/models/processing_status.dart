@@ -16,4 +16,6 @@ enum CallProcessingStatus {
 
   connected,
   disconnecting,
+
+  deniedMicrophone,
 }

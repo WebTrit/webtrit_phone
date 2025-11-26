@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SettingsState {
 
- bool get progress; int get unreadVoicemailCount;
+ bool get progress; int get unreadVoicemailCount; bool get hasMicrophonePermission;
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SettingsStateCopyWith<SettingsState> get copyWith => _$SettingsStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.unreadVoicemailCount, unreadVoicemailCount) || other.unreadVoicemailCount == unreadVoicemailCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.unreadVoicemailCount, unreadVoicemailCount) || other.unreadVoicemailCount == unreadVoicemailCount)&&(identical(other.hasMicrophonePermission, hasMicrophonePermission) || other.hasMicrophonePermission == hasMicrophonePermission));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,progress,unreadVoicemailCount);
+int get hashCode => Object.hash(runtimeType,progress,unreadVoicemailCount,hasMicrophonePermission);
 
 @override
 String toString() {
-  return 'SettingsState(progress: $progress, unreadVoicemailCount: $unreadVoicemailCount)';
+  return 'SettingsState(progress: $progress, unreadVoicemailCount: $unreadVoicemailCount, hasMicrophonePermission: $hasMicrophonePermission)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SettingsStateCopyWith<$Res>  {
   factory $SettingsStateCopyWith(SettingsState value, $Res Function(SettingsState) _then) = _$SettingsStateCopyWithImpl;
 @useResult
 $Res call({
- bool progress, int unreadVoicemailCount
+ bool progress, int unreadVoicemailCount, bool hasMicrophonePermission
 });
 
 
@@ -62,11 +62,12 @@ class _$SettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? unreadVoicemailCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? unreadVoicemailCount = null,Object? hasMicrophonePermission = null,}) {
   return _then(SettingsState(
 progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as bool,unreadVoicemailCount: null == unreadVoicemailCount ? _self.unreadVoicemailCount : unreadVoicemailCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,hasMicrophonePermission: null == hasMicrophonePermission ? _self.hasMicrophonePermission : hasMicrophonePermission // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

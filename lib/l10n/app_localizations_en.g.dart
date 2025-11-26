@@ -151,6 +151,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override
+  String get call_MissingMicrophoneDialog_content =>
+      'Unable to make call due to missing microphone permission. Please, go to Setting and give access to microphone';
+
+  @override
+  String get call_MissingMicrophoneDialog_title => 'Missing microphone permission';
+
+  @override
   String get callProcessingStatus_answering => 'Answering the call, please hold on…';
 
   @override
@@ -794,6 +801,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_ConversationBuilders_cancel => 'Cancel';
 
   @override
+  String messaging_ConversationBuilders_contactExtension(String extension) {
+    return 'Ext: $extension';
+  }
+
+  @override
   String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Enter name or phone number';
 
   @override
@@ -804,11 +816,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_ConversationBuilders_createGroup => 'Create group';
-
-  @override
-  String messaging_ConversationBuilders_contactExtension(String extension) {
-    return 'Ext: $extension';
-  }
 
   @override
   String get messaging_ConversationBuilders_externalContacts_heading => 'Cloud PBX contacts';
@@ -871,10 +878,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_Conversation_failure => 'Conversation load error';
 
   @override
-  String get messaging_ConversationScreen_titlePrefix => 'Dialog:';
+  String get messaging_ConversationScreen_titleAvailable => 'available';
 
   @override
-  String get messaging_ConversationScreen_titleAvailable => 'available';
+  String get messaging_ConversationScreen_titlePrefix => 'Dialog:';
 
   @override
   String get messaging_ConversationsScreen_chatsSearch_hint => 'Enter chat or user name';
@@ -1128,10 +1135,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get numberActions_chat => 'Send chat message';
 
   @override
-  String get numberActions_copyNumber => 'Copy number';
+  String get numberActions_copyCallId => 'Copy call ID';
 
   @override
-  String get numberActions_copyCallId => 'Copy call ID';
+  String get numberActions_copyNumber => 'Copy number';
 
   @override
   String get numberActions_delete => 'Delete';
@@ -1202,6 +1209,187 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get persistentConnectionReminderTitle => 'Important Reminder';
+
+  @override
+  String get presence_activity_appointment_name => 'At an appointment';
+
+  @override
+  String get presence_activity_away_name => 'Away';
+
+  @override
+  String get presence_activity_busy_name => 'Busy';
+
+  @override
+  String get presence_activity_doNotDisturb_name => 'Do not disturb';
+
+  @override
+  String get presence_activity_inTransit_name => 'In transit';
+
+  @override
+  String get presence_activity_meal_name => 'At meal';
+
+  @override
+  String get presence_activity_meeting_name => 'In a meeting';
+
+  @override
+  String get presence_activity_none_name => 'None';
+
+  @override
+  String get presence_activity_onThePhone_name => 'On the phone';
+
+  @override
+  String get presence_activity_permanentAbsence_name => 'Permanent absence';
+
+  @override
+  String get presence_activity_sleeping_name => 'Sleeping';
+
+  @override
+  String get presence_activity_travel_name => 'Traveling';
+
+  @override
+  String get presence_activity_vacation_name => 'On vacation';
+
+  @override
+  String get presence_infoView_activity => 'Activity:';
+
+  @override
+  String get presence_infoView_available => 'Available:';
+
+  @override
+  String get presence_infoView_available_false => 'No';
+
+  @override
+  String get presence_infoView_available_true => 'Yes';
+
+  @override
+  String get presence_infoView_client => 'Client:';
+
+  @override
+  String get presence_infoView_device => 'Device:';
+
+  @override
+  String get presence_infoView_note => 'Note:';
+
+  @override
+  String get presence_infoView_statusIcon => 'Status Icon:';
+
+  @override
+  String get presence_infoView_timeZone => 'Time Zone:';
+
+  @override
+  String get presence_infoView_title => 'Presence Information:';
+
+  @override
+  String get presence_infoView_updated => 'Updated:';
+
+  @override
+  String get presence_preset_absent_name => 'Absent';
+
+  @override
+  String get presence_preset_absent_note => 'Absent';
+
+  @override
+  String get presence_preset_appointment_name => 'Appointment';
+
+  @override
+  String get presence_preset_appointment_note => 'On appointment';
+
+  @override
+  String get presence_preset_available_name => 'Available';
+
+  @override
+  String get presence_preset_away_name => 'Away';
+
+  @override
+  String get presence_preset_away_note => 'Away';
+
+  @override
+  String get presence_preset_dnd_name => 'Do not disturb';
+
+  @override
+  String get presence_preset_dnd_note => 'Do not disturb';
+
+  @override
+  String get presence_preset_inTransit_name => 'Transit';
+
+  @override
+  String get presence_preset_inTransit_note => 'In transit';
+
+  @override
+  String get presence_preset_meal_name => 'Meal';
+
+  @override
+  String get presence_preset_meal_note => 'At meal';
+
+  @override
+  String get presence_preset_meeting_name => 'Meeting';
+
+  @override
+  String get presence_preset_meeting_note => 'In a meeting';
+
+  @override
+  String get presence_preset_sleeping_name => 'Sleeping';
+
+  @override
+  String get presence_preset_sleeping_note => 'Sleeping';
+
+  @override
+  String get presence_preset_travel_name => 'Traveling';
+
+  @override
+  String get presence_preset_travel_note => 'Traveling';
+
+  @override
+  String get presence_preset_unavailable_name => 'Unavailable';
+
+  @override
+  String get presence_preset_vacation_name => 'Vacation';
+
+  @override
+  String get presence_preset_vacation_note => 'On vacation';
+
+  @override
+  String get presence_settings_activity_label => 'Activity';
+
+  @override
+  String get presence_settings_activity_tooltip =>
+      'Describes current activity in more details. Uses SIP \"RPID\" extension \"activities\" element in pidf content (see RFC 4480)';
+
+  @override
+  String get presence_settings_availability_title => 'Availability:';
+
+  @override
+  String get presence_settings_availability_tooltip =>
+      'Represents general availability for communications within SIP service. Uses  SIP \"Status\" element in pidf content with \"open/closed\" values (see RFC 3863)';
+
+  @override
+  String get presence_settings_config_title => 'Configuration:';
+
+  @override
+  String get presence_settings_dnd_title => 'Reject calls (DND)';
+
+  @override
+  String get presence_settings_dnd_tooltip =>
+      'When enabled, all incoming calls will be automatically rejected by the server with \"603 Declined\" response.';
+
+  @override
+  String get presence_settings_note_label => 'Note';
+
+  @override
+  String get presence_settings_note_tooltip =>
+      'A short text note describing current status in details. Uses SIP \"note\" element in pidf content (see RFC 3863)';
+
+  @override
+  String get presence_settings_presets_label => 'Choose preset';
+
+  @override
+  String get presence_settings_presets_title => 'Presets:';
+
+  @override
+  String get presence_settings_statusIcon_none => 'None';
+
+  @override
+  String get presence_settings_statusIcon_title => 'Status Icon:';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -1404,6 +1592,30 @@ class AppLocalizationsEn extends AppLocalizations {
       'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.';
 
   @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove => 'Remove extmaps';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
+      'Remove all extmap lines from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8 => 'Remap TE_8k code to 101';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
+      'Change TE8 payload type to 101 in SDP for better compatibility with some SIP endpoints.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps => 'Remove static rtpmap lines';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
+      'Remove static RTP map lines for audio codecs (e.g., PCMU, PCMA) from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_title => 'Extra SDP modifications';
+
+  @override
   String get settings_encoding_Section_measure_hz => 'Hz';
 
   @override
@@ -1502,30 +1714,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_target_video_bitrate => 'Video target bitrate: ';
 
   @override
-  String get settings_encoding_Section_extra_sdp_mod_title => 'Extra SDP modifications';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove => 'Remove extmaps';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
-      'Remove all extmap lines from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps => 'Remove static rtpmap lines';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
-      'Remove static RTP map lines for audio codecs (e.g., PCMU, PCMA) from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_remapTE8 => 'Remap TE_8k code to 101';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
-      'Change TE8 payload type to 101 in SDP for better compatibility with some SIP endpoints.';
-
-  @override
   String get settings_encoding_Section_value_auto => 'Auto';
 
   @override
@@ -1584,9 +1772,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
-  String get settings_ListViewTileTitle_presence => 'SIP Presence';
-
-  @override
   String get settings_ListViewTileTitle_callerId => 'Caller ID';
 
   @override
@@ -1614,6 +1799,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Network settings';
 
   @override
+  String get settings_ListViewTileTitle_presence => 'SIP Presence';
+
+  @override
   String get settings_ListViewTileTitle_registered => 'Online';
 
   @override
@@ -1639,6 +1827,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_LogoutConfirmDialog_title => 'Confirm logout';
+
+  @override
+  String get settings_missingMicrophoneIndicator_title => 'Missing microphone permission. Unable to make calls.';
 
   @override
   String get settings_network_fallbackCalls_description =>
@@ -2009,9 +2200,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 
   @override
-  String get webview_defaultError_title => 'Something went wrong';
-
-  @override
   String webview_defaultError_details(String description, int code) {
     return '$description (code: $code)';
   }
@@ -2020,13 +2208,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webview_defaultError_reload => 'Reload';
 
   @override
-  String get webview_sslError_title => 'Your connection is not private';
-
-  @override
-  String get webview_sslError_message => 'The certificate for this site isn\'t trusted. The page can\'t be shown.';
-
-  @override
-  String get webview_sslError_tryAgain => 'Try again';
+  String get webview_defaultError_title => 'Something went wrong';
 
   @override
   String get webview_sslError_details => 'Details';
@@ -2038,183 +2220,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webview_sslError_details_url => 'URL';
 
   @override
-  String get presence_preset_available_name => 'Available';
+  String get webview_sslError_message => 'The certificate for this site isn\'t trusted. The page can\'t be shown.';
 
   @override
-  String get presence_preset_unavailable_name => 'Unavailable';
+  String get webview_sslError_title => 'Your connection is not private';
 
   @override
-  String get presence_preset_away_name => 'Away';
-
-  @override
-  String get presence_preset_away_note => 'Away';
-
-  @override
-  String get presence_preset_dnd_name => 'Do not disturb';
-
-  @override
-  String get presence_preset_dnd_note => 'Do not disturb';
-
-  @override
-  String get presence_preset_sleeping_name => 'Sleeping';
-
-  @override
-  String get presence_preset_sleeping_note => 'Sleeping';
-
-  @override
-  String get presence_preset_absent_name => 'Absent';
-
-  @override
-  String get presence_preset_absent_note => 'Absent';
-
-  @override
-  String get presence_preset_meal_name => 'Meal';
-
-  @override
-  String get presence_preset_meal_note => 'At meal';
-
-  @override
-  String get presence_preset_inTransit_name => 'Transit';
-
-  @override
-  String get presence_preset_inTransit_note => 'In transit';
-
-  @override
-  String get presence_preset_meeting_name => 'Meeting';
-
-  @override
-  String get presence_preset_meeting_note => 'In a meeting';
-
-  @override
-  String get presence_preset_vacation_name => 'Vacation';
-
-  @override
-  String get presence_preset_vacation_note => 'On vacation';
-
-  @override
-  String get presence_preset_travel_name => 'Traveling';
-
-  @override
-  String get presence_preset_travel_note => 'Traveling';
-
-  @override
-  String get presence_preset_appointment_name => 'Appointment';
-
-  @override
-  String get presence_preset_appointment_note => 'On appointment';
-
-  @override
-  String get presence_activity_none_name => 'None';
-
-  @override
-  String get presence_activity_away_name => 'Away';
-
-  @override
-  String get presence_activity_busy_name => 'Busy';
-
-  @override
-  String get presence_activity_doNotDisturb_name => 'Do not disturb';
-
-  @override
-  String get presence_activity_sleeping_name => 'Sleeping';
-
-  @override
-  String get presence_activity_permanentAbsence_name => 'Permanent absence';
-
-  @override
-  String get presence_activity_onThePhone_name => 'On the phone';
-
-  @override
-  String get presence_activity_meal_name => 'At meal';
-
-  @override
-  String get presence_activity_meeting_name => 'In a meeting';
-
-  @override
-  String get presence_activity_appointment_name => 'At an appointment';
-
-  @override
-  String get presence_activity_vacation_name => 'On vacation';
-
-  @override
-  String get presence_activity_travel_name => 'Traveling';
-
-  @override
-  String get presence_activity_inTransit_name => 'In transit';
-
-  @override
-  String get presence_settings_presets_title => 'Presets:';
-
-  @override
-  String get presence_settings_presets_label => 'Choose preset';
-
-  @override
-  String get presence_settings_config_title => 'Configuration:';
-
-  @override
-  String get presence_settings_availability_title => 'Availability:';
-
-  @override
-  String get presence_settings_availability_tooltip =>
-      'Represents general availability for communications within SIP service. Uses  SIP \"Status\" element in pidf content with \"open/closed\" values (see RFC 3863)';
-
-  @override
-  String get presence_settings_note_label => 'Note';
-
-  @override
-  String get presence_settings_note_tooltip =>
-      'A short text note describing current status in details. Uses SIP \"note\" element in pidf content (see RFC 3863)';
-
-  @override
-  String get presence_settings_activity_label => 'Activity';
-
-  @override
-  String get presence_settings_activity_tooltip =>
-      'Describes current activity in more details. Uses SIP \"RPID\" extension \"activities\" element in pidf content (see RFC 4480)';
-
-  @override
-  String get presence_settings_dnd_title => 'Reject calls (DND)';
-
-  @override
-  String get presence_settings_dnd_tooltip =>
-      'When enabled, all incoming calls will be automatically rejected by the server with \"603 Declined\" response.';
-
-  @override
-  String get presence_settings_statusIcon_title => 'Status Icon:';
-
-  @override
-  String get presence_settings_statusIcon_none => 'None';
-
-  @override
-  String get presence_infoView_title => 'Presence Information:';
-
-  @override
-  String get presence_infoView_device => 'Device:';
-
-  @override
-  String get presence_infoView_available => 'Available:';
-
-  @override
-  String get presence_infoView_available_true => 'Yes';
-
-  @override
-  String get presence_infoView_available_false => 'No';
-
-  @override
-  String get presence_infoView_note => 'Note:';
-
-  @override
-  String get presence_infoView_activity => 'Activity:';
-
-  @override
-  String get presence_infoView_statusIcon => 'Status Icon:';
-
-  @override
-  String get presence_infoView_timeZone => 'Time Zone:';
-
-  @override
-  String get presence_infoView_updated => 'Updated:';
-
-  @override
-  String get presence_infoView_client => 'Client:';
+  String get webview_sslError_tryAgain => 'Try again';
 }

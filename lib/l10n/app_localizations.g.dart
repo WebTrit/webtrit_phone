@@ -369,6 +369,18 @@ abstract class AppLocalizations {
   /// **'Failure'**
   String get call_FailureAcknowledgeDialog_title;
 
+  /// No description provided for @call_MissingMicrophoneDialog_content.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to make call due to missing microphone permission. Please, go to Setting and give access to microphone'**
+  String get call_MissingMicrophoneDialog_content;
+
+  /// No description provided for @call_MissingMicrophoneDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing microphone permission'**
+  String get call_MissingMicrophoneDialog_title;
+
   /// No description provided for @callProcessingStatus_answering.
   ///
   /// In en, this message translates to:
@@ -3491,6 +3503,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm logout'**
   String get settings_LogoutConfirmDialog_title;
+
+  /// No description provided for @settings_missingMicrophoneIndicator_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing microphone permission. Unable to make calls.'**
+  String get settings_missingMicrophoneIndicator_title;
 
   /// Tooltip description for fallback SMS-based call trigger
   ///

@@ -98,6 +98,10 @@
   },
   "call_FailureAcknowledgeDialog_title": "Помилка",
   "@call_FailureAcknowledgeDialog_title": {},
+  "call_MissingMicrophoneDialog_content": "Неможливо здійснити дзвінок через відсутність дозволу на використання мікрофона. Перейдіть до налаштувань і надайте доступ до мікрофона.",
+  "@call_MissingMicrophoneDialog_content": {},
+  "call_MissingMicrophoneDialog_title": "Відсутній дозвіл на використання мікрофона",
+  "@call_MissingMicrophoneDialog_title": {},
   "callProcessingStatus_answering": "Прийняття виклику, будь ласка, зачекайте…",
   "@callProcessingStatus_answering": {},
   "callProcessingStatus_disconnecting": "Відключення дзвінка, будь ласка, зачекайте…",
@@ -1427,6 +1431,8 @@
   "@settings_LogoutConfirmDialog_content": {},
   "settings_LogoutConfirmDialog_title": "Підтвердження виходу",
   "@settings_LogoutConfirmDialog_title": {},
+  "settings_missingMicrophoneIndicator_title": "Відсутній дозвіл на використання мікрофона. Неможливо здійснювати дзвінки.",
+  "@settings_missingMicrophoneIndicator_title": {},
   "settings_network_fallbackCalls_description": "Увімкніть резервний виклик через спеціально сформатоване SMS",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"

@@ -98,6 +98,10 @@
   },
   "call_FailureAcknowledgeDialog_title": "Failure",
   "@call_FailureAcknowledgeDialog_title": {},
+  "call_MissingMicrophoneDialog_content": "Unable to make call due to missing microphone permission. Please, go to Setting and give access to microphone",
+  "@call_MissingMicrophoneDialog_content": {},
+  "call_MissingMicrophoneDialog_title": "Missing microphone permission",
+  "@call_MissingMicrophoneDialog_title": {},
   "callProcessingStatus_answering": "Answering the call, please hold on…",
   "@callProcessingStatus_answering": {},
   "callProcessingStatus_disconnecting": "Disconnecting the call, please hold on…",
@@ -1427,6 +1431,8 @@
   "@settings_LogoutConfirmDialog_content": {},
   "settings_LogoutConfirmDialog_title": "Confirm logout",
   "@settings_LogoutConfirmDialog_title": {},
+  "settings_missingMicrophoneIndicator_title": "Missing microphone permission. Unable to make calls.",
+  "@settings_missingMicrophoneIndicator_title": {},
   "settings_network_fallbackCalls_description": "Enable fallback incoming call triggering via specially formatted SMS",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"
