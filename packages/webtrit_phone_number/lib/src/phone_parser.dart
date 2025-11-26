@@ -36,7 +36,7 @@ abstract class PhoneParser {
     final buffer = StringBuffer();
 
     for (final codePoint in unformattedPhoneNumber.runes) {
-      final char = String.fromCharCode(codePoint);
+      final char = String.fromCharCodes([codePoint]);
       buffer.write(Constants.allNormalizationMappings[char] ?? char);
     }
 
