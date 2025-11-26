@@ -7,6 +7,7 @@ export 'confirm_dialog.dart';
 export 'contact_info_builder.dart';
 export 'copy_to_clipboard.dart';
 export 'embedded_request_error.dart';
+export 'extended_text_form_field.dart';
 export 'fade_id.dart';
 export 'history_autocomplete_field.dart';
 export 'history_fetch_indicator.dart';
