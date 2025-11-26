@@ -332,7 +332,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         isFeatureEnabled: isFutureEnabled,
                         isAgreementAccepted: isAgreementAccepted,
                         isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
-                        requestContactPermission: () => appPermissions.requestContactPermission(),
+                        checkContactPermission: () => appPermissions.checkContactPermission(),
                       );
 
                       bloc.add(const LocalContactsSyncStarted());

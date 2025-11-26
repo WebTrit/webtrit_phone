@@ -26,7 +26,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
     required this.isFeatureEnabled,
     required this.isAgreementAccepted,
     required this.isContactsPermissionGranted,
-    required this.requestContactPermission,
+    required this.checkContactPermission,
   }) : super(const LocalContactsSyncInitial()) {
     on<LocalContactsSyncStarted>(_onStarted, transformer: restartable());
     on<LocalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
@@ -41,7 +41,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   final AsyncCallback isFeatureEnabled;
   final AsyncCallback isAgreementAccepted;
   final AsyncCallback isContactsPermissionGranted;
-  final AsyncCallback requestContactPermission;
+  final AsyncCallback checkContactPermission;
 
   @override
   Future<void> close() async {
@@ -75,7 +75,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
       return;
     }
 
-    if (!await requestContactPermission()) {
+    if (!await checkContactPermission()) {
       emit(const LocalContactsSyncPermissionFailure());
       return;
     }
