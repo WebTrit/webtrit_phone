@@ -42,6 +42,16 @@ LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) =>
           : LoginSwitchPageConfig.fromJson(
               json['switchPage'] as Map<String, dynamic>,
             ),
+      otpSignin: json['otpSignin'] == null
+          ? const LoginOtpSigninPageConfig()
+          : LoginOtpSigninPageConfig.fromJson(
+              json['otpSignin'] as Map<String, dynamic>,
+            ),
+      passwordSignin: json['passwordSignin'] == null
+          ? const LoginPasswordSigninPageConfig()
+          : LoginPasswordSigninPageConfig.fromJson(
+              json['passwordSignin'] as Map<String, dynamic>,
+            ),
       otpSigninVerify: json['otpSigninVerify'] == null
           ? const LoginOtpSigninVerifyScreenPageConfig()
           : LoginOtpSigninVerifyScreenPageConfig.fromJson(
@@ -58,9 +68,35 @@ Map<String, dynamic> _$LoginPageConfigToJson(LoginPageConfig instance) =>
     <String, dynamic>{
       'modeSelect': instance.modeSelect.toJson(),
       'switchPage': instance.switchPage.toJson(),
+      'otpSignin': instance.otpSignin.toJson(),
+      'passwordSignin': instance.passwordSignin.toJson(),
       'otpSigninVerify': instance.otpSigninVerify.toJson(),
       'signupVerify': instance.signupVerify.toJson(),
     };
+
+LoginOtpSigninPageConfig _$LoginOtpSigninPageConfigFromJson(
+  Map<String, dynamic> json,
+) => LoginOtpSigninPageConfig(
+  refTextField: json['refTextField'] == null
+      ? null
+      : TextFieldConfig.fromJson(json['refTextField'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$LoginOtpSigninPageConfigToJson(
+  LoginOtpSigninPageConfig instance,
+) => <String, dynamic>{'refTextField': instance.refTextField?.toJson()};
+
+LoginPasswordSigninPageConfig _$LoginPasswordSigninPageConfigFromJson(
+  Map<String, dynamic> json,
+) => LoginPasswordSigninPageConfig(
+  refTextField: json['refTextField'] == null
+      ? null
+      : TextFieldConfig.fromJson(json['refTextField'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$LoginPasswordSigninPageConfigToJson(
+  LoginPasswordSigninPageConfig instance,
+) => <String, dynamic>{'refTextField': instance.refTextField?.toJson()};
 
 LoginOtpSigninVerifyScreenPageConfig
 _$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) =>

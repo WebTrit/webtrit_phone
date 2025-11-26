@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
+
+import 'input_mask_style.dart';
 
 class TextFieldStyle with Diagnosticable {
   const TextFieldStyle({
@@ -10,19 +11,16 @@ class TextFieldStyle with Diagnosticable {
     this.showCursor,
     this.keyboardType,
     this.cursorColor,
+    this.mask,
   });
 
   final InputDecoration? decoration;
-
   final TextStyle? textStyle;
-
   final TextAlign? textAlign;
-
   final bool? showCursor;
-
   final TextInputType? keyboardType;
-
   final Color? cursorColor;
+  final InputMaskStyle? mask;
 
   TextFieldStyle copyWith({
     InputDecoration? decoration,
@@ -31,6 +29,7 @@ class TextFieldStyle with Diagnosticable {
     bool? showCursor,
     TextInputType? keyboardType,
     Color? cursorColor,
+    InputMaskStyle? mask,
   }) {
     return TextFieldStyle(
       decoration: decoration ?? this.decoration,
@@ -39,6 +38,7 @@ class TextFieldStyle with Diagnosticable {
       showCursor: showCursor ?? this.showCursor,
       keyboardType: keyboardType ?? this.keyboardType,
       cursorColor: cursorColor ?? this.cursorColor,
+      mask: mask ?? this.mask,
     );
   }
 
@@ -52,6 +52,7 @@ class TextFieldStyle with Diagnosticable {
       showCursor: b.showCursor ?? a.showCursor,
       keyboardType: b.keyboardType ?? a.keyboardType,
       cursorColor: b.cursorColor ?? a.cursorColor,
+      mask: b.mask ?? a.mask,
     );
   }
 
@@ -65,6 +66,7 @@ class TextFieldStyle with Diagnosticable {
       showCursor: t < 0.5 ? a?.showCursor : b?.showCursor,
       keyboardType: t < 0.5 ? a?.keyboardType : b?.keyboardType,
       cursorColor: Color.lerp(a?.cursorColor, b?.cursorColor, t),
+      mask: InputMaskStyle.lerp(a?.mask, b?.mask, t),
     );
   }
 
@@ -77,6 +79,7 @@ class TextFieldStyle with Diagnosticable {
       ..add(EnumProperty<TextAlign?>('textAlign', textAlign))
       ..add(FlagProperty('showCursor', value: showCursor, ifTrue: 'true', ifFalse: 'false'))
       ..add(DiagnosticsProperty<TextInputType?>('keyboardType', keyboardType))
-      ..add(ColorProperty('cursorColor', cursorColor));
+      ..add(ColorProperty('cursorColor', cursorColor))
+      ..add(DiagnosticsProperty<InputMaskStyle?>('mask', mask));
   }
 }

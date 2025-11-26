@@ -29,9 +29,41 @@
           "scale": 0.25,
           "padding": {
             "left": 0.0,
-            "top": 128.0,
+            "top": 0.0,
             "right": 0.0,
             "bottom": 0.0
+          }
+        }
+      }
+    },
+    "otpSignin": {
+      "_refTextField": {
+        "keyboardType": "phone",
+        "textAlign": "left",
+        "decoration": {
+          "prefixText": "123 ",
+          "hintText": "XXXXXXXXX"
+        },
+        "_mask": {
+          "pattern": "+380 (##) ###-##-##",
+          "filter": {
+            "#": "[0-9]"
+          }
+        }
+      }
+    },
+    "passwordSignin": {
+      "_refTextField": {
+        "keyboardType": "phone",
+        "textAlign": "left",
+        "decoration": {
+          "prefixText": "123 ",
+          "hintText": "XXXXXXXXX"
+        },
+        "_mask": {
+          "pattern": "+380 (##) ###-##-##",
+          "filter": {
+            "#": "[0-9]"
           }
         }
       }

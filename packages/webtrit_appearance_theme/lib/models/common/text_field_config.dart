@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'text_field_mask_config.dart';
 import 'text_style_config.dart';
 import 'input_decoration_config.dart';
 
@@ -41,6 +42,9 @@ class TextFieldConfig with _$TextFieldConfig {
     ///
     /// Supported values: `"none" | "number" | "text" | "phone" | "email" | "multiline"`.
     this.keyboardType = 'none',
+
+    /// Input masking configuration.
+    this.mask,
   });
 
   /// Input decoration (borders, hints, labels, etc.).
@@ -66,6 +70,9 @@ class TextFieldConfig with _$TextFieldConfig {
   /// Supported values: `"none" | "number" | "text" | "phone" | "email" | "multiline"`.
   @override
   final String keyboardType;
+
+  @override
+  final MaskConfig? mask;
 
   /// Deserializes a [TextFieldConfig] from JSON.
   factory TextFieldConfig.fromJson(Map<String, Object?> json) => _$TextFieldConfigFromJson(json);

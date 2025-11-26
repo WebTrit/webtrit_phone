@@ -36,6 +36,38 @@
         }
       }
     },
+    "otpSignin": {
+      "_refTextField": {
+        "keyboardType": "phone",
+        "textAlign": "left",
+        "decoration": {
+          "prefixText": "123 ",
+          "hintText": "XXXXXXXXX"
+        },
+        "_mask": {
+          "pattern": "+380 (##) ###-##-##",
+          "filter": {
+            "#": "[0-9]"
+          }
+        }
+      }
+    },
+    "passwordSignin": {
+      "_refTextField": {
+        "keyboardType": "phone",
+        "textAlign": "left",
+        "decoration": {
+          "prefixText": "123 ",
+          "hintText": "XXXXXXXXX"
+        },
+        "_mask": {
+          "pattern": "+380 (##) ###-##-##",
+          "filter": {
+            "#": "[0-9]"
+          }
+        }
+      }
+    },
     "otpSigninVerify": {
       "countdownRepeatIntervalSeconds": 30
     },

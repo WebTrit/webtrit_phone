@@ -46,26 +46,18 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   CallInfoStyle? _mapCallInfoStyle(CallPageInfoConfig? cfg) {
     if (cfg == null) return null;
     return CallInfoStyle(
-      userInfo: cfg.usernameTextStyle?.toTextStyle(
-        fallbackColor: colors.surface,
-        defaultFontSize: 24,
-        defaultFontWeight: FontWeight.w400,
-      ),
-      number: cfg.numberTextStyle?.toTextStyle(
-        fallbackColor: colors.surface,
-        defaultFontSize: 20,
-        defaultFontWeight: FontWeight.w400,
-      ),
-      callStatus: cfg.callStatusTextStyle?.toTextStyle(
-        fallbackColor: colors.surface,
-        defaultFontSize: 16,
-        defaultFontWeight: FontWeight.w400,
-      ),
-      processingStatus: cfg.processingStatusTextStyle?.toTextStyle(
-        fallbackColor: colors.surface,
-        defaultFontSize: 14,
-        defaultFontWeight: FontWeight.w500,
-      ),
+      userInfo: cfg.usernameTextStyle
+          ?.toTextStyle(defaultFontSize: 24, defaultFontWeight: FontWeight.w400)
+          .copyWith(color: colors.surface),
+      number: cfg.numberTextStyle
+          ?.toTextStyle(defaultFontSize: 20, defaultFontWeight: FontWeight.w400)
+          .copyWith(color: colors.surface),
+      callStatus: cfg.callStatusTextStyle
+          ?.toTextStyle(defaultFontSize: 16, defaultFontWeight: FontWeight.w400)
+          .copyWith(color: colors.surface),
+      processingStatus: cfg.processingStatusTextStyle
+          ?.toTextStyle(defaultFontSize: 14, defaultFontWeight: FontWeight.w500)
+          .copyWith(color: colors.surface),
     );
   }
 

@@ -88,6 +88,16 @@ class ThemeStyleFactoryProvider {
       loginPageScheme.signupVerify,
     );
     final loginSwitchScreenStyleFactory = LoginSwitchScreenStyleFactory(loginPageScheme.switchPage, colorScheme);
+    final loginOtpSigninPageStyleFactory = LoginOtpSigninPageStyleFactory(
+      colorScheme,
+      config: loginPageScheme.otpSignin,
+      textTheme: createTextTheme(),
+    );
+    final loginPasswordSigninPageStyleFactory = LoginPasswordSigninPageStyleFactory(
+      colorScheme,
+      config: loginPageScheme.passwordSignin,
+      textTheme: createTextTheme(),
+    );
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -118,6 +128,8 @@ class ThemeStyleFactoryProvider {
       loginOtpSigninVerifyScreenStyleFactory.create(),
       loginSignupVerifyScreenStyleFactory.create(),
       loginSwitchScreenStyleFactory.create(),
+      loginOtpSigninPageStyleFactory.create(),
+      loginPasswordSigninPageStyleFactory.create(),
     ].nonNulls.toList();
   }
 

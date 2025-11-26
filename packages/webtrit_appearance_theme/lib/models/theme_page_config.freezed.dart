@@ -204,7 +204,7 @@ case _:
 /// @nodoc
 mixin _$LoginPageConfig {
 
- LoginModeSelectPageConfig get modeSelect; LoginSwitchPageConfig get switchPage; LoginOtpSigninVerifyScreenPageConfig get otpSigninVerify; LoginSignupVerifyScreenPageConfig get signupVerify;
+ LoginModeSelectPageConfig get modeSelect; LoginSwitchPageConfig get switchPage; LoginOtpSigninPageConfig get otpSignin; LoginPasswordSigninPageConfig get passwordSignin; LoginOtpSigninVerifyScreenPageConfig get otpSigninVerify; LoginSignupVerifyScreenPageConfig get signupVerify;
 /// Create a copy of LoginPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -215,16 +215,16 @@ $LoginPageConfigCopyWith<LoginPageConfig> get copyWith => _$LoginPageConfigCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginPageConfig&&(identical(other.modeSelect, modeSelect) || other.modeSelect == modeSelect)&&(identical(other.switchPage, switchPage) || other.switchPage == switchPage)&&(identical(other.otpSigninVerify, otpSigninVerify) || other.otpSigninVerify == otpSigninVerify)&&(identical(other.signupVerify, signupVerify) || other.signupVerify == signupVerify));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginPageConfig&&(identical(other.modeSelect, modeSelect) || other.modeSelect == modeSelect)&&(identical(other.switchPage, switchPage) || other.switchPage == switchPage)&&(identical(other.otpSignin, otpSignin) || other.otpSignin == otpSignin)&&(identical(other.passwordSignin, passwordSignin) || other.passwordSignin == passwordSignin)&&(identical(other.otpSigninVerify, otpSigninVerify) || other.otpSigninVerify == otpSigninVerify)&&(identical(other.signupVerify, signupVerify) || other.signupVerify == signupVerify));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,modeSelect,switchPage,otpSigninVerify,signupVerify);
+int get hashCode => Object.hash(runtimeType,modeSelect,switchPage,otpSignin,passwordSignin,otpSigninVerify,signupVerify);
 
 @override
 String toString() {
-  return 'LoginPageConfig(modeSelect: $modeSelect, switchPage: $switchPage, otpSigninVerify: $otpSigninVerify, signupVerify: $signupVerify)';
+  return 'LoginPageConfig(modeSelect: $modeSelect, switchPage: $switchPage, otpSignin: $otpSignin, passwordSignin: $passwordSignin, otpSigninVerify: $otpSigninVerify, signupVerify: $signupVerify)';
 }
 
 
@@ -235,7 +235,7 @@ abstract mixin class $LoginPageConfigCopyWith<$Res>  {
   factory $LoginPageConfigCopyWith(LoginPageConfig value, $Res Function(LoginPageConfig) _then) = _$LoginPageConfigCopyWithImpl;
 @useResult
 $Res call({
- LoginModeSelectPageConfig modeSelect, LoginSwitchPageConfig switchPage, LoginOtpSigninVerifyScreenPageConfig otpSigninVerify, LoginSignupVerifyScreenPageConfig signupVerify
+ LoginModeSelectPageConfig modeSelect, LoginSwitchPageConfig switchPage, LoginOtpSigninPageConfig otpSignin, LoginPasswordSigninPageConfig passwordSignin, LoginOtpSigninVerifyScreenPageConfig otpSigninVerify, LoginSignupVerifyScreenPageConfig signupVerify
 });
 
 
@@ -252,11 +252,13 @@ class _$LoginPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of LoginPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? modeSelect = null,Object? switchPage = null,Object? otpSigninVerify = null,Object? signupVerify = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? modeSelect = null,Object? switchPage = null,Object? otpSignin = null,Object? passwordSignin = null,Object? otpSigninVerify = null,Object? signupVerify = null,}) {
   return _then(LoginPageConfig(
 modeSelect: null == modeSelect ? _self.modeSelect : modeSelect // ignore: cast_nullable_to_non_nullable
 as LoginModeSelectPageConfig,switchPage: null == switchPage ? _self.switchPage : switchPage // ignore: cast_nullable_to_non_nullable
-as LoginSwitchPageConfig,otpSigninVerify: null == otpSigninVerify ? _self.otpSigninVerify : otpSigninVerify // ignore: cast_nullable_to_non_nullable
+as LoginSwitchPageConfig,otpSignin: null == otpSignin ? _self.otpSignin : otpSignin // ignore: cast_nullable_to_non_nullable
+as LoginOtpSigninPageConfig,passwordSignin: null == passwordSignin ? _self.passwordSignin : passwordSignin // ignore: cast_nullable_to_non_nullable
+as LoginPasswordSigninPageConfig,otpSigninVerify: null == otpSigninVerify ? _self.otpSigninVerify : otpSigninVerify // ignore: cast_nullable_to_non_nullable
 as LoginOtpSigninVerifyScreenPageConfig,signupVerify: null == signupVerify ? _self.signupVerify : signupVerify // ignore: cast_nullable_to_non_nullable
 as LoginSignupVerifyScreenPageConfig,
   ));
@@ -267,6 +269,378 @@ as LoginSignupVerifyScreenPageConfig,
 
 /// Adds pattern-matching-related methods to [LoginPageConfig].
 extension LoginPageConfigPatterns on LoginPageConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$LoginOtpSigninPageConfig {
+
+ TextFieldConfig? get refTextField;
+/// Create a copy of LoginOtpSigninPageConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LoginOtpSigninPageConfigCopyWith<LoginOtpSigninPageConfig> get copyWith => _$LoginOtpSigninPageConfigCopyWithImpl<LoginOtpSigninPageConfig>(this as LoginOtpSigninPageConfig, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginOtpSigninPageConfig&&(identical(other.refTextField, refTextField) || other.refTextField == refTextField));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,refTextField);
+
+@override
+String toString() {
+  return 'LoginOtpSigninPageConfig(refTextField: $refTextField)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $LoginOtpSigninPageConfigCopyWith<$Res>  {
+  factory $LoginOtpSigninPageConfigCopyWith(LoginOtpSigninPageConfig value, $Res Function(LoginOtpSigninPageConfig) _then) = _$LoginOtpSigninPageConfigCopyWithImpl;
+@useResult
+$Res call({
+ TextFieldConfig? refTextField
+});
+
+
+
+
+}
+/// @nodoc
+class _$LoginOtpSigninPageConfigCopyWithImpl<$Res>
+    implements $LoginOtpSigninPageConfigCopyWith<$Res> {
+  _$LoginOtpSigninPageConfigCopyWithImpl(this._self, this._then);
+
+  final LoginOtpSigninPageConfig _self;
+  final $Res Function(LoginOtpSigninPageConfig) _then;
+
+/// Create a copy of LoginOtpSigninPageConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? refTextField = freezed,}) {
+  return _then(LoginOtpSigninPageConfig(
+refTextField: freezed == refTextField ? _self.refTextField : refTextField // ignore: cast_nullable_to_non_nullable
+as TextFieldConfig?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [LoginOtpSigninPageConfig].
+extension LoginOtpSigninPageConfigPatterns on LoginOtpSigninPageConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$LoginPasswordSigninPageConfig {
+
+ TextFieldConfig? get refTextField;
+/// Create a copy of LoginPasswordSigninPageConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LoginPasswordSigninPageConfigCopyWith<LoginPasswordSigninPageConfig> get copyWith => _$LoginPasswordSigninPageConfigCopyWithImpl<LoginPasswordSigninPageConfig>(this as LoginPasswordSigninPageConfig, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginPasswordSigninPageConfig&&(identical(other.refTextField, refTextField) || other.refTextField == refTextField));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,refTextField);
+
+@override
+String toString() {
+  return 'LoginPasswordSigninPageConfig(refTextField: $refTextField)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $LoginPasswordSigninPageConfigCopyWith<$Res>  {
+  factory $LoginPasswordSigninPageConfigCopyWith(LoginPasswordSigninPageConfig value, $Res Function(LoginPasswordSigninPageConfig) _then) = _$LoginPasswordSigninPageConfigCopyWithImpl;
+@useResult
+$Res call({
+ TextFieldConfig? refTextField
+});
+
+
+
+
+}
+/// @nodoc
+class _$LoginPasswordSigninPageConfigCopyWithImpl<$Res>
+    implements $LoginPasswordSigninPageConfigCopyWith<$Res> {
+  _$LoginPasswordSigninPageConfigCopyWithImpl(this._self, this._then);
+
+  final LoginPasswordSigninPageConfig _self;
+  final $Res Function(LoginPasswordSigninPageConfig) _then;
+
+/// Create a copy of LoginPasswordSigninPageConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? refTextField = freezed,}) {
+  return _then(LoginPasswordSigninPageConfig(
+refTextField: freezed == refTextField ? _self.refTextField : refTextField // ignore: cast_nullable_to_non_nullable
+as TextFieldConfig?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [LoginPasswordSigninPageConfig].
+extension LoginPasswordSigninPageConfigPatterns on LoginPasswordSigninPageConfig {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

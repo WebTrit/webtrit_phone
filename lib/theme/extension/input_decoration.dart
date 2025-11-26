@@ -14,21 +14,30 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
 
     final noneEverywhere = border?.type == 'none';
 
+    final hintStyleResult = _resolveStyle(hintStyle, color: colors.onSurface.withValues(alpha: 0.5));
+    final prefixStyleResult = _resolveStyle(prefixStyle, color: colors.onSurface);
+    final labelStyleResult = _resolveStyle(labelStyle, color: colors.onSurface);
+    final helperStyleResult = _resolveStyle(helperStyle, color: colors.onSurfaceVariant);
+    final errorStyleResult = _resolveStyle(errorStyle, color: colors.error);
+    final suffixStyleResult = _resolveStyle(suffixStyle, color: colors.onSurface);
+
     return InputDecoration(
       hintText: hintText,
-      hintStyle: hintStyle?.toTextStyle(fallbackColor: colors.onSurface.withValues(alpha: 0.5)),
+      // Fallback to grey-ish color (medium emphasis)
+      hintStyle: hintStyleResult,
       labelText: labelText,
-      labelStyle: labelStyle?.toTextStyle(fallbackColor: colors.onSurface),
+      labelStyle: labelStyleResult,
       helperText: helperText,
-      helperStyle: helperStyle?.toTextStyle(fallbackColor: colors.onSurfaceVariant),
-      errorStyle: errorStyle?.toTextStyle(fallbackColor: colors.error),
+      helperStyle: helperStyleResult,
+      errorStyle: errorStyleResult,
       prefixText: prefixText,
-      prefixStyle: prefixStyle?.toTextStyle(fallbackColor: colors.onSurface),
+      // Fallback to solid main color (high emphasis)
+      prefixStyle: prefixStyleResult,
       suffixText: suffixText,
-      suffixStyle: suffixStyle?.toTextStyle(fallbackColor: colors.onSurface),
+      suffixStyle: suffixStyleResult,
       fillColor: fillColor?.toColor(),
       filled: filled ?? fillColor != null,
-      border: noneEverywhere ? InputBorder.none : (mappedBorder ?? InputBorder.none),
+      border: noneEverywhere ? InputBorder.none : mappedBorder,
       enabledBorder: noneEverywhere ? InputBorder.none : (mappedEnabledBorder ?? mappedBorder),
       focusedBorder: noneEverywhere ? InputBorder.none : (mappedFocusedBorder ?? mappedBorder),
       errorBorder: noneEverywhere ? InputBorder.none : (mappedErrorBorder ?? mappedBorder),
@@ -36,6 +45,19 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
       disabledBorder: noneEverywhere ? InputBorder.none : (mappedDisabledBorder ?? mappedBorder),
     );
   }
+
+  TextStyle _resolveStyle(
+    TextStyleConfig? config, {
+    Color? color,
+    double? fontSize,
+    FontWeight? fontWeight,
+    FontStyle? fontStyle,
+  }) => (config?.toTextStyle() ?? const TextStyle()).copyWith(
+    color: color,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    fontStyle: fontStyle,
+  );
 
   InputBorder? _mapBorder(BorderConfig? config, ColorScheme colors) {
     if (config == null) return null;
