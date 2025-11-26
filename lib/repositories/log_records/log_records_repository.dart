@@ -68,12 +68,12 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
 }
 
 class LogRecordsFileRepositoryImpl implements LogRecordsRepository, Disposable {
-  LogRecordsFileRepositoryImpl(String path, Logger logger)
+  LogRecordsFileRepositoryImpl(String path)
     : appender = ReadableRotatingFileAppender(
         baseFilePath: '$path/app_logs.log',
         keepRotateCount: 1,
         formatter: DefaultLogRecordFormatter(),
-      )..attachToLogger(logger);
+      );
 
   final ReadableRotatingFileAppender appender;
 
