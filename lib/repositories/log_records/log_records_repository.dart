@@ -20,6 +20,15 @@ abstract class LogRecordsRepository {
   Future<void> cancelSubscriptions();
 
   Future<List<String>> getLogRecords();
+
+  /// Factory that returns concrete implementation depending on [useFileStorage].
+  static LogRecordsRepository create({required bool useFileStorage, required String path, int memoryCapacity = 1000}) {
+    if (useFileStorage) {
+      return LogRecordsFileRepositoryImpl(path);
+    } else {
+      return LogRecordsMemoryRepositoryImpl(memoryCapacity);
+    }
+  }
 }
 
 class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
