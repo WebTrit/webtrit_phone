@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
@@ -121,9 +122,9 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     await forceFlush();
 
     // Get all log files and iterate in reverse to read newest logs first
-    final files = getAllLogFiles().reversed;
+    final files = await _getAllLogFilesWithRetry();
 
-    for (final file in files) {
+    for (final file in files.reversed) {
       if (!await file.exists()) {
         continue;
       }
@@ -158,6 +159,23 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     }
 
     return records;
+  }
+
+  /// Tries to get the list of log files.
+  /// If the list is empty, it waits and retries a few times.
+  /// This fixes issues where existsSync() returns false immediately after a flush.
+  Future<List<File>> _getAllLogFilesWithRetry({
+    int maxRetries = 3,
+    Duration retryDelay = const Duration(seconds: 1),
+  }) async {
+    for (int i = 0; i < maxRetries; i++) {
+      final files = getAllLogFiles();
+      if (files.isNotEmpty) {
+        return files;
+      }
+      await Future.delayed(retryDelay);
+    }
+    return getAllLogFiles();
   }
 
   /// Deletes all log files (base file and rotated files).
