@@ -1,13 +1,12 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../utils/utils.dart';
-
-part 'log_records_console_cubit.freezed.dart';
 
 part 'log_records_console_state.dart';
 
@@ -17,7 +16,7 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     this.logRecordsFormatter = const DefaultLogRecordFormatter(),
     required this.packageInfo,
     required this.appInfo,
-  }) : super(const LogRecordsConsoleState.initial());
+  }) : super(const LogRecordsConsoleStateInitial());
 
   final LogRecordsRepository logRecordsRepository;
   final LogRecordFormatter logRecordsFormatter;
@@ -25,19 +24,19 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   final AppInfo appInfo;
 
   void load() async {
-    emit(const LogRecordsConsoleState.loading());
+    emit(const LogRecordsConsoleStateLoading());
     try {
       final logRecords = await logRecordsRepository.getLogRecords();
-      emit(LogRecordsConsoleState.success(logRecords));
+      emit(LogRecordsConsoleStateSuccess(logRecords));
     } catch (error) {
-      emit(LogRecordsConsoleState.failure(error));
+      emit(LogRecordsConsoleStateFailure(error));
     }
   }
 
   void clear() async {
-    emit(const LogRecordsConsoleState.loading());
+    emit(const LogRecordsConsoleStateLoading());
     logRecordsRepository.clear();
-    emit(const LogRecordsConsoleState.success([]));
+    emit(const LogRecordsConsoleStateSuccess([]));
   }
 
   String get _namePrefix => '${packageInfo.appName}_${appInfo.identifier}_';

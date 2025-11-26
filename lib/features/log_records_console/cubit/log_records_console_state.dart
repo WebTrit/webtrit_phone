@@ -1,12 +1,37 @@
 part of 'log_records_console_cubit.dart';
 
-@freezed
-class LogRecordsConsoleState with _$LogRecordsConsoleState {
-  const factory LogRecordsConsoleState.initial() = LogRecordsConsoleStateInitial;
+sealed class LogRecordsConsoleState extends Equatable {
+  const LogRecordsConsoleState();
+}
 
-  const factory LogRecordsConsoleState.loading() = LogRecordsConsoleStateLoading;
+final class LogRecordsConsoleStateInitial extends LogRecordsConsoleState {
+  const LogRecordsConsoleStateInitial();
 
-  const factory LogRecordsConsoleState.success(List<String> logRecords) = LogRecordsConsoleStateSuccess;
+  @override
+  List<Object?> get props => [];
+}
 
-  const factory LogRecordsConsoleState.failure(Object error) = LogRecordsConsoleStateFailure;
+final class LogRecordsConsoleStateLoading extends LogRecordsConsoleState {
+  const LogRecordsConsoleStateLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+final class LogRecordsConsoleStateSuccess extends LogRecordsConsoleState {
+  const LogRecordsConsoleStateSuccess(this.logRecords);
+
+  final List<String> logRecords;
+
+  @override
+  List<Object?> get props => [EquatablePropToString.list(logRecords)];
+}
+
+final class LogRecordsConsoleStateFailure extends LogRecordsConsoleState {
+  const LogRecordsConsoleStateFailure(this.error);
+
+  final Object error;
+
+  @override
+  List<Object?> get props => [error];
 }
