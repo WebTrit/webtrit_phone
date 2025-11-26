@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
-import 'package:webtrit_phone/utils/utils.dart';
+
+import 'package:webtrit_phone/common/disposable.dart';
 
 abstract class LogRecordsRepository {
   Future<void> attachToLogger(Logger logger);
@@ -66,8 +66,13 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
   }
 }
 
-class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
-  LogRecordsFileRepositoryImpl(this.appender);
+class LogRecordsFileRepositoryImpl implements LogRecordsRepository, Disposable {
+  LogRecordsFileRepositoryImpl(String path, Logger logger)
+    : appender = ReadableRotatingFileAppender(
+        baseFilePath: '$path/app_logs.log',
+        keepRotateCount: 1,
+        formatter: DefaultLogRecordFormatter(),
+      )..attachToLogger(logger);
 
   final ReadableRotatingFileAppender appender;
 
@@ -78,13 +83,8 @@ class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
   Future<void> attachToLogger(Logger logger) async => appender.attachToLogger(logger);
 
   @override
-  Future<void> clear() async {
-    final appDocDir = await getApplicationDocumentsPath();
-    final String baseLogDirectoryPath = '$appDocDir/logs';
-
-    final logRecordsFile = File('$baseLogDirectoryPath/app_logs.log');
-
-    if (await logRecordsFile.exists()) await logRecordsFile.delete();
+  Future<void> clear() {
+    return appender.cleanLogs();
   }
 
   @override
@@ -92,7 +92,9 @@ class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
 
   @override
   @mustCallSuper
-  Future<void> dispose() async => cancelSubscriptions();
+  Future<void> dispose() async {
+    appender.dispose();
+  }
 
   @override
   Future<void> cancelSubscriptions() async {}
@@ -108,37 +110,76 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     super.clock,
   });
 
-  Future<List<String>> readAllLogs() async {
+  /// Reads logs from all log files, starting from the newest file,
+  /// up to the specified [limit] of records.
+  ///
+  /// Logs are returned as a list of formatted strings.
+  Future<List<String>> readAllLogs({int? limit}) async {
     final records = <String>[];
 
-    final files = getAllLogFiles();
+    // ignore: invalid_use_of_visible_for_testing_member
+    await forceFlush();
 
-    for (var i = files.length - 1; i >= 0; i--) {
-      final file = files[i];
-      if (!file.existsSync()) {
+    // Get all log files and iterate in reverse to read newest logs first
+    final files = getAllLogFiles().reversed;
+
+    for (final file in files) {
+      if (!await file.exists()) {
         continue;
       }
 
       try {
+        // Use readAsLines for simplicity, which is fine for moderately sized logs.
+        // For extremely large logs, a streaming approach (using file.openRead)
+        // would be necessary but is significantly more complex to implement
+        // while respecting the 'newest first' order.
         final lines = await file.readAsLines();
 
-        for (final line in lines) {
-          if (line.trim().isEmpty) continue;
-          try {
-            records.add(line);
-          } catch (e) {
-            if (kDebugMode) {
-              print('Error parsing line: $line');
-            }
+        // Iterate through lines in reverse (newest line in file first)
+        for (final line in lines.reversed) {
+          if (limit != null && records.length >= limit) {
+            return records; // Stop reading once limit is reached
           }
+
+          final trimmedLine = line.trim();
+          if (trimmedLine.isEmpty) continue;
+
+          // Note: The inner try-catch from the original was removed as
+          // adding a String to a List<String> does not throw an error.
+          records.add(trimmedLine);
         }
-      } catch (e) {
+      } catch (e, st) {
+        // Log the file access error itself without adding it to the log records list
         if (kDebugMode) {
-          print('Error when working with log file');
+          debugPrint('Error when reading log file: ${file.path}');
+          debugPrint('Error: $e\nStackTrace: $st');
         }
       }
     }
 
     return records;
+  }
+
+  /// Deletes all log files (base file and rotated files).
+  Future<void> cleanLogs() async {
+    // ignore: invalid_use_of_visible_for_testing_member
+    await forceFlush();
+
+    // Get all rotated files (e.g. app.log, app.log.1, app.log.2)
+    final files = getAllLogFiles();
+
+    for (final file in files) {
+      try {
+        if (await file.exists()) {
+          await file.delete();
+        }
+      } catch (e) {
+        // We print directly to console/stderr here because we shouldn't
+        // try to log to the file system we are currently destroying.
+        if (kDebugMode) {
+          print('Error deleting log file ${file.path}: $e');
+        }
+      }
+    }
   }
 }

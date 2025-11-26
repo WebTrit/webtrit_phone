@@ -23,7 +23,7 @@ void main() {
   final logger = Logger('run_app');
 
   runZonedGuarded(
-        () async {
+    () async {
       WidgetsFlutterBinding.ensureInitialized();
 
       final instanceRegistry = await bootstrap();
@@ -50,7 +50,7 @@ void main() {
 
       runApp(RootApp(instanceRegistry: instanceRegistry, baseLogFilePath: baseLogFilePath));
     },
-        (error, stackTrace) {
+    (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
       if (!kIsWeb) {
         FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
@@ -147,10 +147,8 @@ class RootApp extends StatelessWidget {
           return MultiRepositoryProvider(
             providers: [
               RepositoryProvider<LogRecordsRepository>(
-                create: (context) {
-                  return LogRecordsFileRepositoryImpl(ReadableRotatingFileAppender(baseFilePath: baseLogFilePath))
-                    ..attachToLogger(Logger.root);
-                },
+                create: (_) => instanceRegistry.get(),
+                dispose: disposeIfDisposable,
               ),
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
@@ -178,10 +176,7 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
-              RepositoryProvider<AuthRepository>(
-                create: (_) => instanceRegistry.get(),
-                dispose: disposeIfDisposable,
-              ),
+              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get(), dispose: disposeIfDisposable),
             ],
             child: const App(),
           );
