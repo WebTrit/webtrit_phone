@@ -45,6 +45,9 @@ class TextFieldConfig with _$TextFieldConfig {
 
     /// Input masking configuration.
     this.mask,
+
+    /// Input behavior configuration.
+    this.behavior,
   });
 
   /// Input decoration (borders, hints, labels, etc.).
@@ -74,9 +77,33 @@ class TextFieldConfig with _$TextFieldConfig {
   @override
   final MaskConfig? mask;
 
+  /// Describes how this field's value should be transformed/emitted.
+  @override
+  final InputBehaviorConfig? behavior;
+
   /// Deserializes a [TextFieldConfig] from JSON.
   factory TextFieldConfig.fromJson(Map<String, Object?> json) => _$TextFieldConfigFromJson(json);
 
   /// Serializes this [TextFieldConfig] to JSON.
   Map<String, Object?> toJson() => _$TextFieldConfigToJson(this);
+}
+
+/// Describes how the input value should be transformed between
+/// what the user sees and what is emitted/sent to business logic.
+@freezed
+@JsonSerializable()
+class InputBehaviorConfig with _$InputBehaviorConfig {
+  const InputBehaviorConfig({
+    /// When `true`, prefixText is treated as part of the logical value
+    /// (included in submitted/emitted data). When `false`, prefix is visual-only.
+    this.includePrefixInData,
+  });
+
+  @override
+  /// Whether [prefixText] should be included in the emitted value.
+  final bool? includePrefixInData;
+
+  factory InputBehaviorConfig.fromJson(Map<String, Object?> json) => _$InputBehaviorConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$InputBehaviorConfigToJson(this);
 }

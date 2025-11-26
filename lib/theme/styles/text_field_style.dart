@@ -12,6 +12,7 @@ class TextFieldStyle with Diagnosticable {
     this.keyboardType,
     this.cursorColor,
     this.mask,
+    this.behavior,
   });
 
   final InputDecoration? decoration;
@@ -21,6 +22,7 @@ class TextFieldStyle with Diagnosticable {
   final TextInputType? keyboardType;
   final Color? cursorColor;
   final InputMaskStyle? mask;
+  final InputBehavior? behavior;
 
   TextFieldStyle copyWith({
     InputDecoration? decoration,
@@ -30,6 +32,7 @@ class TextFieldStyle with Diagnosticable {
     TextInputType? keyboardType,
     Color? cursorColor,
     InputMaskStyle? mask,
+    InputBehavior? behavior,
   }) {
     return TextFieldStyle(
       decoration: decoration ?? this.decoration,
@@ -39,6 +42,7 @@ class TextFieldStyle with Diagnosticable {
       keyboardType: keyboardType ?? this.keyboardType,
       cursorColor: cursorColor ?? this.cursorColor,
       mask: mask ?? this.mask,
+      behavior: behavior ?? this.behavior,
     );
   }
 
@@ -53,6 +57,7 @@ class TextFieldStyle with Diagnosticable {
       keyboardType: b.keyboardType ?? a.keyboardType,
       cursorColor: b.cursorColor ?? a.cursorColor,
       mask: b.mask ?? a.mask,
+      behavior: b.behavior ?? a.behavior,
     );
   }
 
@@ -67,6 +72,7 @@ class TextFieldStyle with Diagnosticable {
       keyboardType: t < 0.5 ? a?.keyboardType : b?.keyboardType,
       cursorColor: Color.lerp(a?.cursorColor, b?.cursorColor, t),
       mask: InputMaskStyle.lerp(a?.mask, b?.mask, t),
+      behavior: InputBehavior.lerp(a?.behavior, b?.behavior, t),
     );
   }
 
@@ -80,6 +86,25 @@ class TextFieldStyle with Diagnosticable {
       ..add(FlagProperty('showCursor', value: showCursor, ifTrue: 'true', ifFalse: 'false'))
       ..add(DiagnosticsProperty<TextInputType?>('keyboardType', keyboardType))
       ..add(ColorProperty('cursorColor', cursorColor))
-      ..add(DiagnosticsProperty<InputMaskStyle?>('mask', mask));
+      ..add(DiagnosticsProperty<InputMaskStyle?>('mask', mask))
+      ..add(DiagnosticsProperty<InputBehavior?>('behavior', behavior));
+  }
+}
+
+class InputBehavior {
+  const InputBehavior({this.includePrefixInData});
+
+  /// Whether prefixText is included in the raw data sent outside
+  final bool? includePrefixInData;
+
+  InputBehavior copyWith({bool? includePrefixInData, bool? normalizePhone, bool? trim, bool? emptyAsNull}) {
+    return InputBehavior(includePrefixInData: includePrefixInData ?? this.includePrefixInData);
+  }
+
+  static InputBehavior? lerp(InputBehavior? a, InputBehavior? b, double t) {
+    if (a == null && b == null) return null;
+    if (t <= 0.0) return a ?? b;
+    if (t >= 1.0) return b ?? a;
+    return t < 0.5 ? (a ?? b) : (b ?? a);
   }
 }

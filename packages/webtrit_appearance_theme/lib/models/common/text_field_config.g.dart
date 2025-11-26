@@ -22,6 +22,11 @@ TextFieldConfig _$TextFieldConfigFromJson(Map<String, dynamic> json) =>
       mask: json['mask'] == null
           ? null
           : MaskConfig.fromJson(json['mask'] as Map<String, dynamic>),
+      behavior: json['behavior'] == null
+          ? null
+          : InputBehaviorConfig.fromJson(
+              json['behavior'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$TextFieldConfigToJson(TextFieldConfig instance) =>
@@ -32,4 +37,14 @@ Map<String, dynamic> _$TextFieldConfigToJson(TextFieldConfig instance) =>
       'showCursor': instance.showCursor,
       'keyboardType': instance.keyboardType,
       'mask': instance.mask?.toJson(),
+      'behavior': instance.behavior?.toJson(),
     };
+
+InputBehaviorConfig _$InputBehaviorConfigFromJson(Map<String, dynamic> json) =>
+    InputBehaviorConfig(
+      includePrefixInData: json['includePrefixInData'] as bool?,
+    );
+
+Map<String, dynamic> _$InputBehaviorConfigToJson(
+  InputBehaviorConfig instance,
+) => <String, dynamic>{'includePrefixInData': instance.includePrefixInData};
