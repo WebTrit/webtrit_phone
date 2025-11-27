@@ -78,11 +78,11 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
 
 class LogRecordsFileRepositoryImpl implements LogRecordsRepository, Disposable {
   LogRecordsFileRepositoryImpl(String path)
-      : appender = ReadableRotatingFileAppender(
-    baseFilePath: '$path/app_logs.log',
-    keepRotateCount: 1,
-    formatter: DefaultLogRecordFormatter(),
-  );
+    : appender = ReadableRotatingFileAppender(
+        baseFilePath: '$path/app_logs.log',
+        keepRotateCount: 1,
+        formatter: DefaultLogRecordFormatter(),
+      );
 
   final ReadableRotatingFileAppender appender;
 
@@ -174,8 +174,8 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
   /// If the list is empty, it waits and retries a few times.
   /// This fixes issues where existsSync() returns false immediately after a flush.
   Future<List<File>> _getAllLogFilesWithRetry({
-    int maxRetries = 3,
-    Duration retryDelay = const Duration(seconds: 1),
+    int maxRetries = 5,
+    Duration retryDelay = const Duration(seconds: 2),
   }) async {
     for (int i = 0; i < maxRetries; i++) {
       final files = getAllLogFiles();
