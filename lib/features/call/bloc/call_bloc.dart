@@ -2594,6 +2594,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   @override
+  // Handles incoming call notifications from the native side.
+  // On iOS, this is triggered via PushKit when a push is received.
+  //
+  // On Android, this method is currently not used. Call state synchronization
+  // from the background is handled by `CallkeepConnections`. A future refactoring
+  // could unify this logic so that both platforms use this delegate method.
+  //
+  // On Android, this is now fully feasible because after the recent callback
+  // improvement we can reliably detect when the bloc is ready.
+  //
+  // PDelegateFlutterApi.setUp(null);
+  // _api.onDelegateSet();
+  //
+  // TODO: Unify incoming-call handling for both iOS and Android so that
+  // this method becomes the shared entry point. This may require removing
+  // `CallkeepConnections` and adjusting the method signature.
   void didPushIncomingCall(
     CallkeepHandle handle,
     String? displayName,
