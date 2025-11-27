@@ -14,14 +14,18 @@ class LogRecordsConsoleScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const widget = LogRecordsConsoleScreen();
+    final appTime = context.read<AppTime>();
+    final appMetadataProvider = context.read<AppMetadataProvider>();
+
     final provider = BlocProvider(
       create: (context) => LogRecordsConsoleCubit(
         logRecordsRepository: context.read<LogRecordsRepository>(),
         packageInfo: context.read<PackageInfo>(),
         appInfo: context.read<AppInfo>(),
+        dateFormat: appTime.fileNameDateFormat,
+        exportFilenamePrefix: appMetadataProvider.exportFilenamePrefix,
       )..load(),
-      child: widget,
+      child: LogRecordsConsoleScreen(),
     );
     return provider;
   }

@@ -101,6 +101,8 @@ Future<InstanceRegistry> bootstrap() async {
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
   final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
   final appLogger = await AppLogger.init(remoteFirebaseConfigService, appLabels);
+  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
+    ..attachToLogger(Logger.root);
 
   final appLifecycle = await AppLifecycle.initMaster();
 
@@ -128,6 +130,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<AppPermissions>(appPermissions);
   registry.register<AppCertificates>(appCertificates);
   registry.register<AppLogger>(appLogger);
+  registry.register<LogRecordsRepository>(appLoggerRepository);
   registry.register<AppLifecycle>(appLifecycle);
   registry.register<SessionCleanupWorker>(sessionCleanupWorker);
 
