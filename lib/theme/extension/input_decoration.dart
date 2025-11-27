@@ -4,7 +4,7 @@ import 'package:webtrit_appearance_theme/models/models.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
 
 extension InputDecorationConfigExtension on InputDecorationConfig {
-  InputDecoration toInputDecoration({required ColorScheme colors}) {
+  InputDecoration toInputDecoration({required ColorScheme colors, TextStyle? baseStyle}) {
     final mappedBorder = _mapBorder(border, colors);
     final mappedEnabledBorder = _mapBorder(enabledBorder, colors);
     final mappedFocusedBorder = _mapBorder(focusedBorder, colors);
@@ -14,16 +14,20 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
 
     final noneEverywhere = border?.type == 'none';
 
-    final hintStyleResult = _resolveStyle(hintStyle, color: colors.onSurface.withValues(alpha: 0.5));
-    final prefixStyleResult = _resolveStyle(prefixStyle, color: colors.onSurface);
-    final labelStyleResult = _resolveStyle(labelStyle, color: colors.onSurface);
-    final helperStyleResult = _resolveStyle(helperStyle, color: colors.onSurfaceVariant);
-    final errorStyleResult = _resolveStyle(errorStyle, color: colors.error);
-    final suffixStyleResult = _resolveStyle(suffixStyle, color: colors.onSurface);
+    final onSurface = colors.onSurface;
+    final onSurface50 = onSurface.withValues(alpha: 0.5);
+    final onSurfaceVariant = colors.onSurfaceVariant;
+    final errorColor = colors.error;
+
+    final hintStyleResult = _resolveStyle(hintStyle, baseStyle: baseStyle, color: onSurface50);
+    final prefixStyleResult = _resolveStyle(prefixStyle, baseStyle: baseStyle, color: onSurface);
+    final labelStyleResult = _resolveStyle(labelStyle, baseStyle: baseStyle, color: onSurface);
+    final helperStyleResult = _resolveStyle(helperStyle, baseStyle: baseStyle, color: onSurfaceVariant);
+    final errorStyleResult = _resolveStyle(errorStyle, baseStyle: baseStyle, color: errorColor);
+    final suffixStyleResult = _resolveStyle(suffixStyle, baseStyle: baseStyle, color: onSurface);
 
     return InputDecoration(
       hintText: hintText,
-      // Fallback to grey-ish color (medium emphasis)
       hintStyle: hintStyleResult,
       labelText: labelText,
       labelStyle: labelStyleResult,
@@ -31,7 +35,6 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
       helperStyle: helperStyleResult,
       errorStyle: errorStyleResult,
       prefixText: prefixText,
-      // Fallback to solid main color (high emphasis)
       prefixStyle: prefixStyleResult,
       suffixText: suffixText,
       suffixStyle: suffixStyleResult,
@@ -46,18 +49,14 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
     );
   }
 
-  TextStyle _resolveStyle(
-    TextStyleConfig? config, {
-    Color? color,
-    double? fontSize,
-    FontWeight? fontWeight,
-    FontStyle? fontStyle,
-  }) => (config?.toTextStyle() ?? const TextStyle()).copyWith(
-    color: color,
-    fontSize: fontSize,
-    fontWeight: fontWeight,
-    fontStyle: fontStyle,
-  );
+  TextStyle _resolveStyle(TextStyleConfig? config, {TextStyle? baseStyle, Color? color}) {
+    final base = baseStyle ?? const TextStyle();
+
+    final custom = config?.toTextStyle();
+    final mergedStyle = custom != null ? base.merge(custom) : base;
+
+    return mergedStyle.copyWith(color: color);
+  }
 
   InputBorder? _mapBorder(BorderConfig? config, ColorScheme colors) {
     if (config == null) return null;

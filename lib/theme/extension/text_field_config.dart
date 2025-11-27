@@ -6,14 +6,18 @@ import 'package:webtrit_phone/theme/styles/styles.dart';
 
 extension TextFieldConfigToStyle on TextFieldConfig {
   TextFieldStyle toStyle({required ColorScheme colors, required ThemeData theme, TextFieldStyle? base}) {
+    final baseTextStyle = base?.textStyle ?? theme.textTheme.bodyLarge ?? const TextStyle();
+
+    final configTextStyle = style?.toTextStyle(
+      defaultFontSize: baseTextStyle.fontSize,
+      defaultFontWeight: baseTextStyle.fontWeight,
+    );
+
+    final effectiveTextStyle = baseTextStyle.merge(configTextStyle);
+
     final styleFromConfig = TextFieldStyle(
-      decoration: decoration?.toInputDecoration(colors: colors),
-      textStyle: style
-          ?.toTextStyle(
-            defaultFontSize: theme.textTheme.bodyLarge?.fontSize,
-            defaultFontWeight: theme.textTheme.bodyLarge?.fontWeight,
-          )
-          .copyWith(color: colors.onSurface),
+      decoration: decoration?.toInputDecoration(colors: colors, baseStyle: effectiveTextStyle),
+      textStyle: effectiveTextStyle.copyWith(color: colors.onSurface),
       textAlign: _mapTextAlign(textAlign),
       showCursor: showCursor,
       keyboardType: _mapKeyboardType(keyboardType),
