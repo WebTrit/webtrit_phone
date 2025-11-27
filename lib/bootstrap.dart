@@ -62,6 +62,7 @@ Future<void> bootstrap() async {
   await SessionCleanupWorker.init();
   await AppLogger.init(remoteFirebaseConfigService, appLabels);
   await AppLifecycle.initMaster();
+  await PushEnvironment.init();
 
   await _initCallkeep(featureAccess);
   await _initWorkManager();

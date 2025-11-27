@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
@@ -31,6 +30,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     required this.secureStorage,
     required this.firebaseMessaging,
     required this.callkeep,
+    required this.pushEnvironment,
   }) : super(PushTokensState.initial()) {
     _onTokenRefreshSubscription = firebaseMessaging.onTokenRefresh.listen((fcmToken) {
       add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
@@ -46,6 +46,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   final SecureStorage secureStorage;
   final FirebaseMessaging firebaseMessaging;
   final Callkeep callkeep;
+  final PushEnvironment pushEnvironment;
 
   late StreamSubscription _onTokenRefreshSubscription;
 
@@ -117,11 +118,8 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       },
       shouldRetry: (e, attempt) {
         add(PushTokensEventError('Failed to retrieve FCM token: $e at attempt $attempt'));
-        final isMissingGoogleServices =
-            e is FirebaseException &&
-            e.plugin == 'firebase_messaging' &&
-            (e.code == 'missing-instanceid-service' || e.code == 'service-not-available');
-        return !isMissingGoogleServices;
+        final isMissingGoogleServices = pushEnvironment.isGmsCapableDevice && pushEnvironment.googlePlayAvailability;
+        return isMissingGoogleServices;
       },
     );
 

@@ -138,6 +138,11 @@ class RootApp extends StatelessWidget {
             return AppPath();
           },
         ),
+        Provider<PushEnvironment>(
+          create: (context) {
+            return PushEnvironment();
+          },
+        ),
         // Services
         Provider<ConnectivityService>(
           create: (context) {
