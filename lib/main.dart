@@ -23,7 +23,7 @@ void main() {
   final logger = Logger('run_app');
 
   runZonedGuarded(
-    () async {
+        () async {
       WidgetsFlutterBinding.ensureInitialized();
 
       final instanceRegistry = await bootstrap();
@@ -43,9 +43,14 @@ void main() {
       Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
 
       Bloc.observer = AppBlocObserver();
-      runApp(RootApp(instanceRegistry: instanceRegistry));
+
+      final appDocDir = await getApplicationDocumentsPath();
+      final String baseLogDirectoryPath = '$appDocDir/logs';
+      final String baseLogFilePath = '$baseLogDirectoryPath/app_logs.log';
+
+      runApp(RootApp(instanceRegistry: instanceRegistry, baseLogFilePath: baseLogFilePath));
     },
-    (error, stackTrace) {
+        (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
       if (!kIsWeb) {
         FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
@@ -55,9 +60,10 @@ void main() {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry});
+  const RootApp({super.key, required this.instanceRegistry, required this.baseLogFilePath});
 
   final InstanceRegistry instanceRegistry;
+  final String baseLogFilePath;
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +146,10 @@ class RootApp extends StatelessWidget {
 
           return MultiRepositoryProvider(
             providers: [
-              RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
+              RepositoryProvider<LogRecordsRepository>(
+                create: (_) => instanceRegistry.get(),
+                dispose: disposeIfDisposable,
+              ),
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
@@ -167,10 +176,7 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
-              RepositoryProvider<AuthRepository>(
-                create: (_) => instanceRegistry.get(),
-                dispose: disposeIfDisposable,
-              ),
+              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get(), dispose: disposeIfDisposable),
             ],
             child: const App(),
           );
