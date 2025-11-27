@@ -1259,6 +1259,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final Uri telLaunchUri = Uri(scheme: 'tel', path: event.handle.value);
         launchUrl(telLaunchUri);
       } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+        _logger.warning('__onCallControlEventStarted selfManagedPhoneAccountNotRegistered');
         submitNotification(const CallErrorRegisteringSelfManagedPhoneAccountNotification());
       } else {
         _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
