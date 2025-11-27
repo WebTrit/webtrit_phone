@@ -18,9 +18,15 @@ extension TextFieldConfigToStyle on TextFieldConfig {
       showCursor: showCursor,
       keyboardType: _mapKeyboardType(keyboardType),
       mask: mask != null ? _mapMask(mask) : null,
+      behavior: _mapBehavior(behavior),
     );
 
     return TextFieldStyle.merge(base, styleFromConfig);
+  }
+
+  InputBehavior? _mapBehavior(InputBehaviorConfig? config) {
+    if (config == null) return null;
+    return InputBehavior(includePrefixInData: config.includePrefixInData);
   }
 
   InputMaskStyle? _mapMask(MaskConfig? config) {

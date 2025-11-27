@@ -61,8 +61,9 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
                 Description(text: otpSigninRequestPreDescriptionText),
                 const SizedBox(height: kInset / 2),
               ],
-              TextFormField(
+              ExtendedTextFormField(
                 key: optInputKey,
+                includePrefixInData: refStyle?.behavior?.includePrefixInData ?? false,
                 enabled: !state.processing,
                 initialValue: state.otpSigninUserRefInput.value,
                 decoration: refDecoration.copyWith(

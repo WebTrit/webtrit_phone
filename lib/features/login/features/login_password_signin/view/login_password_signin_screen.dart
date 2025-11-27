@@ -64,9 +64,10 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
                   Description(text: passwordSigninPreDescriptionText),
                   const SizedBox(height: kInset / 2),
                 ],
-                TextFormField(
+                ExtendedTextFormField(
                   key: passwordUserInputKey,
                   enabled: !state.processing,
+                  includePrefixInData: userRefStyle?.behavior?.includePrefixInData ?? false,
                   initialValue: state.passwordSigninUserRefInput.value,
                   decoration: userRefDecoration.copyWith(
                     labelText: decorationLabelText,
