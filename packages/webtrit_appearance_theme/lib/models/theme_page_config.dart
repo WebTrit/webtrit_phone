@@ -98,10 +98,13 @@ class LoginOtpSigninPageConfig with _$LoginOtpSigninPageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class LoginPasswordSigninPageConfig with _$LoginPasswordSigninPageConfig {
-  const LoginPasswordSigninPageConfig({this.refTextField});
+  const LoginPasswordSigninPageConfig({this.refTextField, this.passwordTextField});
 
   @override
   final TextFieldConfig? refTextField;
+
+  @override
+  final TextFieldConfig? passwordTextField;
 
   factory LoginPasswordSigninPageConfig.fromJson(Map<String, Object?> json) =>
       _$LoginPasswordSigninPageConfigFromJson(json);

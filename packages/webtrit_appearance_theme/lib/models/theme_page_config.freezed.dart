@@ -581,7 +581,7 @@ case _:
 /// @nodoc
 mixin _$LoginPasswordSigninPageConfig {
 
- TextFieldConfig? get refTextField;
+ TextFieldConfig? get refTextField; TextFieldConfig? get passwordTextField;
 /// Create a copy of LoginPasswordSigninPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -592,16 +592,16 @@ $LoginPasswordSigninPageConfigCopyWith<LoginPasswordSigninPageConfig> get copyWi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginPasswordSigninPageConfig&&(identical(other.refTextField, refTextField) || other.refTextField == refTextField));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginPasswordSigninPageConfig&&(identical(other.refTextField, refTextField) || other.refTextField == refTextField)&&(identical(other.passwordTextField, passwordTextField) || other.passwordTextField == passwordTextField));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,refTextField);
+int get hashCode => Object.hash(runtimeType,refTextField,passwordTextField);
 
 @override
 String toString() {
-  return 'LoginPasswordSigninPageConfig(refTextField: $refTextField)';
+  return 'LoginPasswordSigninPageConfig(refTextField: $refTextField, passwordTextField: $passwordTextField)';
 }
 
 
@@ -612,7 +612,7 @@ abstract mixin class $LoginPasswordSigninPageConfigCopyWith<$Res>  {
   factory $LoginPasswordSigninPageConfigCopyWith(LoginPasswordSigninPageConfig value, $Res Function(LoginPasswordSigninPageConfig) _then) = _$LoginPasswordSigninPageConfigCopyWithImpl;
 @useResult
 $Res call({
- TextFieldConfig? refTextField
+ TextFieldConfig? refTextField, TextFieldConfig? passwordTextField
 });
 
 
@@ -629,9 +629,10 @@ class _$LoginPasswordSigninPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of LoginPasswordSigninPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? refTextField = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? refTextField = freezed,Object? passwordTextField = freezed,}) {
   return _then(LoginPasswordSigninPageConfig(
 refTextField: freezed == refTextField ? _self.refTextField : refTextField // ignore: cast_nullable_to_non_nullable
+as TextFieldConfig?,passwordTextField: freezed == passwordTextField ? _self.passwordTextField : passwordTextField // ignore: cast_nullable_to_non_nullable
 as TextFieldConfig?,
   ));
 }

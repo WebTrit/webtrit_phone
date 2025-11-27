@@ -31,8 +31,8 @@ class LoginPasswordSigninPageStyleFactory implements ThemeStyleFactory<LoginPass
 
     return LoginPasswordSigninPageStyles(
       primary: LoginPasswordSigninPageStyle(
-        refInput: config?.refTextField?.toStyle(colors: colors, theme: themeData),
-        passwordInput: config?.refTextField?.toStyle(colors: colors, theme: themeData, base: baseTextFieldStyle),
+        refInput: config?.refTextField?.toStyle(colors: colors, theme: themeData, base: baseTextFieldStyle),
+        passwordInput: config?.passwordTextField?.toStyle(colors: colors, theme: themeData, base: baseTextFieldStyle),
       ),
     );
   }
