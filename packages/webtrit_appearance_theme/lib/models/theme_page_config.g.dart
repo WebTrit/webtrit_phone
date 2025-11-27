@@ -92,11 +92,19 @@ LoginPasswordSigninPageConfig _$LoginPasswordSigninPageConfigFromJson(
   refTextField: json['refTextField'] == null
       ? null
       : TextFieldConfig.fromJson(json['refTextField'] as Map<String, dynamic>),
+  passwordTextField: json['passwordTextField'] == null
+      ? null
+      : TextFieldConfig.fromJson(
+          json['passwordTextField'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$LoginPasswordSigninPageConfigToJson(
   LoginPasswordSigninPageConfig instance,
-) => <String, dynamic>{'refTextField': instance.refTextField?.toJson()};
+) => <String, dynamic>{
+  'refTextField': instance.refTextField?.toJson(),
+  'passwordTextField': instance.passwordTextField?.toJson(),
+};
 
 LoginOtpSigninVerifyScreenPageConfig
 _$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) =>
