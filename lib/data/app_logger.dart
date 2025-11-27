@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -8,7 +6,6 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import 'app_metadata_provider.dart';
 
@@ -28,18 +25,6 @@ class AppLogger {
 
     // Set up local logs printing with a color formatter
     PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
-
-    final appDocDir = await getApplicationDocumentsPath();
-    final String baseLogDirectoryPath = '$appDocDir/logs';
-
-    final logDirectory = Directory(baseLogDirectoryPath);
-    final directoryExists = await logDirectory.exists();
-    if (!directoryExists) await logDirectory.create();
-
-    RotatingFileAppender(
-      baseFilePath: '$baseLogDirectoryPath/app_logs.log',
-      keepRotateCount: 1,
-    ).attachToLogger(Logger.root);
 
     // Add log listener for Callkeep integration
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
