@@ -49,6 +49,11 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
         final userRefDecoration = userRefStyle?.decoration ?? const InputDecoration();
         final passwordDecoration = passwordStyle?.decoration ?? const InputDecoration();
 
+        final decorationLabelText = context.parseL10n(
+          userRefDecoration.labelText,
+          fallback: context.l10n.login_TextFieldLabelText_passwordSigninUserRef,
+        );
+
         return Padding(
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
           child: AutofillGroup(
@@ -64,7 +69,7 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
                   enabled: !state.processing,
                   initialValue: state.passwordSigninUserRefInput.value,
                   decoration: userRefDecoration.copyWith(
-                    labelText: context.l10n.login_TextFieldLabelText_passwordSigninUserRef,
+                    labelText: decorationLabelText,
                     helperText: '',
                     // reserve space for validator message
                     errorText: state.passwordSigninUserRefInput.displayError?.l10n(context),

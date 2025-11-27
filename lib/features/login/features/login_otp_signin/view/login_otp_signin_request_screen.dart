@@ -46,6 +46,11 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
 
         final refDecoration = refStyle?.decoration ?? const InputDecoration();
 
+        final decorationLabelText = context.parseL10n(
+          refDecoration.labelText,
+          fallback: context.l10n.login_TextFieldLabelText_otpSigninUserRef,
+        );
+
         return Container(
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
           color: themeData.scaffoldBackgroundColor,
@@ -61,7 +66,7 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
                 enabled: !state.processing,
                 initialValue: state.otpSigninUserRefInput.value,
                 decoration: refDecoration.copyWith(
-                  labelText: context.l10n.login_TextFieldLabelText_otpSigninUserRef,
+                  labelText: decorationLabelText,
                   helperText: '',
                   // reserve space for validator message
                   errorText: state.otpSigninUserRefInput.displayError?.l10n(context),

@@ -41,6 +41,8 @@
         "keyboardType": "phone",
         "textAlign": "left",
         "decoration": {
+          "labelText": "login_TextFieldLabelText_otpSigninUserRef",
+          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation. If the key is missing or cannot be resolved, the default label for this input will be used automatically. If omitted entirely, the value is treated as plain text for single-language setups.",
           "prefixText": "123 ",
           "hintText": "XXXXXXXXX"
         },
@@ -57,6 +59,8 @@
         "keyboardType": "phone",
         "textAlign": "left",
         "decoration": {
+          "labelText": "login_TextFieldLabelText_passwordSigninUserRef",
+          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation. If the key is missing or cannot be resolved, the default label for this input will be used automatically. If omitted entirely, the value is treated as plain text for single-language setups.",
           "prefixText": "123 ",
           "hintText": "XXXXXXXXX"
         },
