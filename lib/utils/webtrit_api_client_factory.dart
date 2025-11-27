@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -32,6 +34,7 @@ class WebtritApiClientFactory {
       actualTenantId,
       connectionTimeout: kApiClientConnectionTimeout,
       certs: trustedCertificates,
+      isDebug: kDebugMode,
     );
 
     _cachedClient = newClient;

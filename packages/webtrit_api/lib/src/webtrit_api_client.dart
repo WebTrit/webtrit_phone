@@ -43,20 +43,28 @@ class WebtritApiClient {
     String tenantId, {
     Duration? connectionTimeout,
     TrustedCertificates certs = TrustedCertificates.empty,
+    bool isDebug = false,
   }) : this.inner(
          baseUrl,
          tenantId,
          httpClient: createHttpClient(connectionTimeout: connectionTimeout, certs: certs),
+         isDebug: isDebug,
        );
 
   @visibleForTesting
-  WebtritApiClient.inner(Uri baseUrl, String tenantId, {required http.Client httpClient, Logger? logger})
-    : _httpClient = httpClient,
-      _logger = Logger('WebtritApiClient'),
-      tenantUrl = buildTenantUrl(baseUrl, tenantId);
+  WebtritApiClient.inner(
+    Uri baseUrl,
+    String tenantId, {
+    required http.Client httpClient,
+    Logger? logger,
+    this.isDebug = false,
+  }) : _httpClient = httpClient,
+       _logger = Logger('WebtritApiClient'),
+       tenantUrl = buildTenantUrl(baseUrl, tenantId);
 
   final Uri tenantUrl;
   final http.Client _httpClient;
+  final bool isDebug;
 
   void close() {
     _httpClient.close();
@@ -108,7 +116,11 @@ class WebtritApiClient {
 
         if (requestData != null) httpRequest.body = requestData;
 
-        _logger.info(' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId');
+        _logger.info(
+          ' ${method.toUpperCase()} request($requestAttempt) to $url with requestId: $xRequestId'
+          '${isDebug ? ' headers: ${jsonEncode(httpRequest.headers)}' : ''}'
+          '${isDebug && requestData != null ? ', request body: $requestData' : ''}',
+        );
 
         final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
 
