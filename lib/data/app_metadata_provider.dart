@@ -13,6 +13,15 @@ abstract class AppMetadataProvider {
   ///
   /// Format: `AppName/AppVersion (Model; OSName: OSVersion)`
   String get userAgent;
+
+  /// Generates a standardized prefix for filenames used in data exports or file sharing.
+  ///
+  /// Typically includes the app name, version, and device details to facilitate
+  /// issue tracking when files are analyzed externally.
+  ///
+  /// Format: `AppName_AppVersion_Identifier_Model_StoreVersion_BuildNumber_OS_OSVersion`
+  /// Note: Spaces in the metadata are replaced with underscores.
+  String get exportFilenamePrefix;
 }
 
 class DefaultAppMetadataProvider implements AppMetadataProvider {
@@ -68,5 +77,23 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
   @override
   String get userAgent {
     return '${_packageInfo.appName}/${_appInfo.version} (${_deviceInfo.model}; ${_deviceInfo.systemName}: ${_deviceInfo.systemVersion})';
+  }
+
+  @override
+  String get exportFilenamePrefix {
+    String sanitize(String input) => input.trim().replaceAll(RegExp(r'\s+'), '_');
+
+    final parts = [
+      _packageInfo.appName,
+      _appInfo.version,
+      _appInfo.identifier,
+      _deviceInfo.model,
+      _packageInfo.version,
+      _packageInfo.buildNumber,
+      _deviceInfo.systemName,
+      _deviceInfo.systemVersion,
+    ];
+
+    return parts.where((part) => part.isNotEmpty).map(sanitize).join('_');
   }
 }
