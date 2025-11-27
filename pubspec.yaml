@@ -52,6 +52,7 @@ dependencies:
   formz: ^0.8.0
   freezed_annotation: ^3.1.0
   google_fonts: ^6.3.2
+  google_api_availability: ^5.0.1
   intl: any
   json_annotation: ^4.9.0
   just_audio: ^0.10.5
