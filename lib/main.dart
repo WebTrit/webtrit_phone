@@ -23,7 +23,7 @@ void main() {
   final logger = Logger('run_app');
 
   runZonedGuarded(
-        () async {
+    () async {
       WidgetsFlutterBinding.ensureInitialized();
 
       final instanceRegistry = await bootstrap();
@@ -50,7 +50,7 @@ void main() {
 
       runApp(RootApp(instanceRegistry: instanceRegistry, baseLogFilePath: baseLogFilePath));
     },
-        (error, stackTrace) {
+    (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
       if (!kIsWeb) {
         FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
@@ -83,6 +83,7 @@ class RootApp extends StatelessWidget {
         Provider<AppCertificates>(create: (_) => instanceRegistry.get()),
         Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
         Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
+        Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
 
         // Services
         Provider<AppDatabase>(create: _createAppDatabase, dispose: _disposeAppDatabase),
