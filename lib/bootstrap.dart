@@ -83,6 +83,7 @@ Future<InstanceRegistry> bootstrap() async {
   );
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
+  final pushEnvironment = await PushEnvironment.init();
   final appPath = await AppPath.init();
   final appPermissions = await AppPermissions.init(featureAccess);
   final appTime = await AppTime.init();
@@ -115,6 +116,8 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<DeviceInfo>(deviceInfo);
   registry.register<AppPath>(appPath);
   registry.register<AppTime>(appTime);
+  // TODO: Replace direct injection with a future service that will take on some of the work from PushTokensBloc
+  registry.register<PushEnvironment>(pushEnvironment);
 
   // Repositories & Storage
   registry.register<AppPreferences>(appPreferences);
