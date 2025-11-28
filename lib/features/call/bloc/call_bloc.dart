@@ -16,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_phone/data/app_permissions.dart';
 import 'package:webtrit_phone/mappers/signaling/signaling.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
@@ -57,8 +56,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final PresenceInfoRepository presenceInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
   final Function(Notification) submitNotification;
-
-  final AppPermissions appPermissions;
 
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
@@ -105,7 +102,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.contactNameResolver,
     required this.callErrorReporter,
     required this.sipPresenceEnabled,
-    required this.appPermissions,
     this.sdpMunger,
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
@@ -1250,11 +1246,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
 
-    if (!await appPermissions.isPermissionGranted(Permission.microphone)) {
-      add(CallControlEvent.ended(callId));
-      return;
-    }
-
     final callkeepError = await callkeep.startCall(
       callId,
       event.handle,
@@ -1268,6 +1259,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final Uri telLaunchUri = Uri(scheme: 'tel', path: event.handle.value);
         launchUrl(telLaunchUri);
       } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+        _logger.warning('__onCallControlEventStarted selfManagedPhoneAccountNotRegistered');
         submitNotification(const CallErrorRegisteringSelfManagedPhoneAccountNotification());
       } else {
         _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
@@ -1284,8 +1276,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// call placed in [__onCallSignalingEventIncoming] or [__onCallPushEventIncoming]
   /// continues in [__onCallPerformEventAnswered]
   Future<void> __onCallControlEventAnswered(_CallControlEventAnswered event, Emitter<CallState> emit) async {
-    if (!await appPermissions.isPermissionGranted(Permission.microphone)) return add(CallControlEvent.ended(event.callId));
-
     final call = state.retrieveActiveCall(event.callId);
     if (call == null) return;
 
@@ -1313,20 +1303,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallControlEventEnded(_CallControlEventEnded event, Emitter<CallState> emit) async {
-    if (!await appPermissions.isPermissionGranted(Permission.microphone)) {
-      emit(
-        state.copyWithMappedActiveCall(event.callId, (activeCall) {
-          return activeCall.copyWith(processingStatus: CallProcessingStatus.deniedMicrophone);
-        }),
-      );
-    }
-    else {
-      emit(
-        state.copyWithMappedActiveCall(event.callId, (activeCall) {
-          return activeCall.copyWith(processingStatus: CallProcessingStatus.disconnecting);
-        }),
-      );
-    }
+    emit(
+      state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(processingStatus: CallProcessingStatus.disconnecting);
+      }),
+    );
 
     final error = await callkeep.endCall(event.callId);
     // Handle the case where the local connection is no longer available,

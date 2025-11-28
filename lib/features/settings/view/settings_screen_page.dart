@@ -28,7 +28,7 @@ class SettingsScreenPage extends StatelessWidget {
           userRepository: context.read<UserRepository>(),
           voicemailRepository: context.read<VoicemailRepository>(),
           sessionRepository: context.read(),
-          appPermissions: context.read<AppPermissions>()
+          appPermissions: context.read<AppPermissions>() 
         )..add(SettingsStarted());
       },
       child: widget,

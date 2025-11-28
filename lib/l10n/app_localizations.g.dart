@@ -372,7 +372,7 @@ abstract class AppLocalizations {
   /// No description provided for @call_MissingMicrophoneDialog_content.
   ///
   /// In en, this message translates to:
-  /// **'Unable to make call due to missing microphone permission. Please, go to Setting and give access to microphone'**
+  /// **'Unable to make call due to missing microphone permission. Please, go to Settings and give access to microphone'**
   String get call_MissingMicrophoneDialog_content;
 
   /// No description provided for @call_MissingMicrophoneDialog_title.

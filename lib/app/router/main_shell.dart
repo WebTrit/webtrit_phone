@@ -420,7 +420,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                         sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
-                        appPermissions: context.read<AppPermissions>(),
                       )..add(const CallStarted());
                     },
                   ),

@@ -246,9 +246,9 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   if (!state.hasMicrophonePermission)
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: ShapeDecoration(color: Colors.orange, shape: StadiumBorder()),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: const ShapeDecoration(color: Colors.orange, shape: StadiumBorder()),
                       child: Row(
                         spacing: 5,
                         children: [
