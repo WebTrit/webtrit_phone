@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 export 'package:webtrit_phone/extensions/push_environment.dart';
 
@@ -21,12 +20,12 @@ class PushEnvironment {
   Future<GmsAvailability> getAvailability() async {
     // On iOS, we don't have GMS, but the Push Environment (APNs) is valid.
     // We return 'success' so the Bloc proceeds to fetch the token.
-    if (Platform.isIOS) {
+    if (PlatformInfo.isIOS) {
       return GmsAvailability.success;
     }
 
     // For other non-Android platforms (e.g., Windows, macOS, Web if not supported)
-    if (!Platform.isAndroid) {
+    if (!PlatformInfo.isAndroid) {
       return GmsAvailability.notAvailable;
     }
 
