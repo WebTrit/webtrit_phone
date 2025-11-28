@@ -108,6 +108,8 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     }
   }
 
+  // If PushSystemAvailability status is unknown then it will retry in case if google_api_availability package could not get status because of vendor.
+  // In other statuses except of updating an success it will stop retrying.
   Future<void> _retrieveAndStoreFcmToken() async {
     const vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
 
