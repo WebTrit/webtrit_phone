@@ -28,7 +28,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
     required this.isContactsPermissionGranted,
     required this.requestContactPermission,
   }) : super(const LocalContactsSyncInitial()) {
-    on<LocalContactsSyncStarted>(_onStarted, transformer: restartable());
+    on<LocalContactsSyncStarted>(_onStarted, transformer: sequential());
     on<LocalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
     on<_LocalContactsSyncUpdated>(_onUpdated, transformer: droppable());
 
