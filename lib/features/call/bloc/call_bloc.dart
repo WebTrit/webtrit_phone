@@ -535,6 +535,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           (device) => device.type == CallAudioDeviceType.earpiece,
           orElse: () => available.first,
         );
+
+        _logger.warning(
+          'No "audiooutput" devices reported. Fallback selected: ${current.name} (type: ${current.type})',
+        );
       }
 
       emit(state.copyWith(availableAudioDevices: available, audioDevice: current));
