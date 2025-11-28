@@ -4,6 +4,7 @@ part of 'permissions_cubit.dart';
 class PermissionsState with _$PermissionsState {
   const PermissionsState({
     this.hasRequestedPermissions = false,
+    this.isRequesting = false,
     this.pendingSpecialPermissions = const [],
     this.manufacturerTip,
     this.failure,
@@ -11,6 +12,10 @@ class PermissionsState with _$PermissionsState {
 
   @override
   final bool hasRequestedPermissions;
+
+  /// Indicates whether the permission request process is currently in progress.
+  @override
+  final bool isRequesting;
 
   @override
   final List<CallkeepSpecialPermissions> pendingSpecialPermissions;

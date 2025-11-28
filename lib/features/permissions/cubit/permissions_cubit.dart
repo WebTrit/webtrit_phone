@@ -17,8 +17,11 @@ part 'permissions_state.dart';
 final _logger = Logger('PermissionsCubit');
 
 class PermissionsCubit extends Cubit<PermissionsState> {
-  PermissionsCubit({required this.contactsAgreementStatusRepository, required this.appPermissions, required this.deviceInfo})
-    : super(const PermissionsState());
+  PermissionsCubit({
+    required this.contactsAgreementStatusRepository,
+    required this.appPermissions,
+    required this.deviceInfo,
+  }) : super(const PermissionsState());
 
   final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final AppPermissions appPermissions;
@@ -26,6 +29,9 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
   void requestPermissions() async {
     _logger.info('Requesting permissions');
+
+    // Set loading state to disable UI interaction and prevent concurrent permission requests.
+    emit(state.copyWith(isRequesting: true));
 
     try {
       // Prepare the exclude list based on the contacts agreement status
@@ -61,6 +67,9 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     } catch (e, st) {
       _logger.severe('Permission request failed', e, st);
       emit(state.copyWith(failure: e));
+    } finally {
+      // Ensure the loading state is reset whether the request succeeds or fails.
+      if (!isClosed) emit(state.copyWith(isRequesting: false));
     }
   }
 
