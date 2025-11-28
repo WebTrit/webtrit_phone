@@ -111,15 +111,26 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   Future<void> _retrieveAndStoreFcmToken() async {
     const vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
 
+    final initialStatus = await pushEnvironment.getAvailability();
+
+    if (initialStatus.isTerminal) {
+      _logger.warning('GMS status is terminal ($initialStatus). Aborting.');
+      return;
+    }
+
     final fcmToken = await _backoffRetries.execute<String?>(
-      (attempt) async {
-        _logger.fine('_retrieveAndStoreFcmToken attempt $attempt');
-        return await firebaseMessaging.getToken(vapidKey: vapidKey);
-      },
-      shouldRetry: (e, attempt) {
-        add(PushTokensEventError('Failed to retrieve FCM token: $e at attempt $attempt'));
-        final isMissingGoogleServices = pushEnvironment.isGmsCapableDevice && pushEnvironment.googlePlayAvailability;
-        return isMissingGoogleServices;
+      (_) => firebaseMessaging.getToken(vapidKey: vapidKey),
+      shouldRetry: (e, attempt) async {
+        _logger.warning('Attempt $attempt failed: $e');
+
+        final retryStatus = await pushEnvironment.getAvailability();
+
+        if (retryStatus.isTerminal) {
+          _logger.warning('Stopping retries. GMS became terminal: $retryStatus');
+          return false;
+        }
+
+        return true;
       },
     );
 
@@ -132,10 +143,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   Future<void> _retrieveAndStoreApnsToken() async {
     final apnsToken = await _backoffRetries.execute<String?>(
-      (attempt) async {
-        _logger.fine('_retrieveAndStoreApnsToken attempt $attempt');
-        return await firebaseMessaging.getAPNSToken();
-      },
+      (attempt) => firebaseMessaging.getAPNSToken(),
       shouldRetry: (e, attempt) {
         add(PushTokensEventError('Failed to retrieve APNS token: $e at attempt $attempt'));
         return true;
