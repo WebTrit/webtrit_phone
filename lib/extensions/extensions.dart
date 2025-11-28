@@ -15,6 +15,7 @@ export 'media_query_metrics_extensions.dart';
 export 'messaging_socket_exception.dart';
 export 'platform_deep_link.dart';
 export 'presence_activity.dart';
+export 'push_environment.dart';
 export 'registration_status.dart';
 export 'request_failure.dart';
 export 'route_match.dart';
