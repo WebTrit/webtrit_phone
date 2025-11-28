@@ -17,16 +17,16 @@ class PushEnvironment {
     return PushEnvironment._(GoogleApiAvailability.instance);
   }
 
-  Future<GmsAvailability> getAvailability() async {
+  Future<PushSystemAvailability> getAvailability() async {
     // On iOS, we don't have GMS, but the Push Environment (APNs) is valid.
     // We return 'success' so the Bloc proceeds to fetch the token.
     if (PlatformInfo.isIOS) {
-      return GmsAvailability.success;
+      return PushSystemAvailability.success;
     }
 
     // For other non-Android platforms (e.g., Windows, macOS, Web if not supported)
     if (!PlatformInfo.isAndroid) {
-      return GmsAvailability.notAvailable;
+      return PushSystemAvailability.notAvailable;
     }
 
     _logger.info('Checking Google Play Services availability...');
@@ -36,7 +36,7 @@ class PushEnvironment {
       playStoreAvailability = await _googleApiAvailability.checkGooglePlayServicesAvailability();
     } catch (e) {
       _logger.warning('Error checking GMS: $e');
-      return GmsAvailability.unknown;
+      return PushSystemAvailability.unknown;
     }
 
     final status = playStoreAvailability.toAppStatus();
