@@ -19,6 +19,13 @@ class PushEnvironment {
   }
 
   Future<GmsAvailability> getAvailability() async {
+    // On iOS, we don't have GMS, but the Push Environment (APNs) is valid.
+    // We return 'success' so the Bloc proceeds to fetch the token.
+    if (Platform.isIOS) {
+      return GmsAvailability.success;
+    }
+
+    // For other non-Android platforms (e.g., Windows, macOS, Web if not supported)
     if (!Platform.isAndroid) {
       return GmsAvailability.notAvailable;
     }
