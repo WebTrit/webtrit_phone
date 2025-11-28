@@ -57,7 +57,9 @@ class PermissionsScreen extends StatelessWidget {
                 if (state.isInitial)
                   OutlinedButton(
                     key: permissionsInitButtonKey,
-                    onPressed: () => context.read<PermissionsCubit>().requestPermissions(),
+                    // Prevents "PlatformException: A request for permissions is already running"
+                    // by disabling interaction, as the permission_handler throws on concurrent requests.
+                    onPressed: state.isRequesting ? null : () => context.read<PermissionsCubit>().requestPermissions(),
                     style: elevatedButtonStyles?.primary,
                     child: Text(context.l10n.permission_Button_request),
                   )
