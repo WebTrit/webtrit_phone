@@ -41,7 +41,7 @@ void main() async {
 
       final featureAccess = FeatureAccess.init(
         appThemes.appConfig,
-        [],
+        appThemes.embeddedResources,
         activeMainFlavorRepository,
         coreSupport,
       );
