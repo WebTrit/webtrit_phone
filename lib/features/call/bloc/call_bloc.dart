@@ -518,11 +518,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final input = devices.where((d) => d.kind == 'audioinput').toList();
       _logger.info('Devices change - out:${output.map((e) => e.str).toList()}, in:${input.map((e) => e.str).toList()}');
 
-      final current = CallAudioDevice.fromMediaOutput(output.first);
       final available = [
         CallAudioDevice(type: CallAudioDeviceType.speaker),
         ...input.map(CallAudioDevice.fromMediaInput),
       ];
+
+      CallAudioDevice current;
+
+      if (output.isNotEmpty) {
+        current = CallAudioDevice.fromMediaOutput(output.first);
+      } else {
+        // Fallback behavior for iOS when out:[]
+        // We prioritize the Earpiece (Receiver) if available (derived from MicrophoneBuiltIn),
+        // otherwise fallback to the first available device (which is Speaker based on the list above).
+        current = available.firstWhere(
+          (device) => device.type == CallAudioDeviceType.earpiece,
+          orElse: () => available.first,
+        );
+
+        _logger.warning(
+          'No "audiooutput" devices reported. Fallback selected: ${current.name} (type: ${current.type})',
+        );
+      }
+
       emit(state.copyWith(availableAudioDevices: available, audioDevice: current));
     }
   }
