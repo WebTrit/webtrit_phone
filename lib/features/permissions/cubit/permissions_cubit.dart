@@ -55,6 +55,8 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       final manufacturerTip = _getManufacturerTIp(manufacturer, specialPermissions);
       _logger.info('Manufacturer tip: $manufacturerTip');
 
+      if (isClosed) return;
+
       // Emit state at the end to ensure all dependent UI elements are initialized.
       // If emitted earlier, state listeners might trigger navigation before the widget tree is ready.
       emit(
@@ -66,7 +68,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       );
     } catch (e, st) {
       _logger.severe('Permission request failed', e, st);
-      emit(state.copyWith(failure: e));
+      if (!isClosed) emit(state.copyWith(failure: e));
     } finally {
       // Ensure the loading state is reset whether the request succeeds or fails.
       if (!isClosed) emit(state.copyWith(isRequesting: false));
