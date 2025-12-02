@@ -25,68 +25,78 @@ class PermissionsScreen extends StatelessWidget {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     return Scaffold(
-      body: BlocConsumer<PermissionsCubit, PermissionsState>(
-        listener: (context, state) {
-          if (state.isManufacturerTipNeeded) {
-            _showManufacturerTips(context, state.manufacturerTip!.manufacturer);
-          } else if (state.isSpecialPermissionNeeded) {
-            _showSpecialPermissionTips(context, state.pendingSpecialPermissions.first);
-          } else if (state.isFailure) {
-            context.showErrorSnackBar(state.failure.toString());
-            context.read<PermissionsCubit>().dismissError();
-          } else if (state.isSuccess) {
-            context.router.replaceAll([const MainShellRoute()]);
-          }
-        },
-        builder: (context, state) {
-          final body = Padding(
-            padding: const EdgeInsets.all(kInset),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: kInset * 2),
-                const AppIcon(Icons.settings_suggest, size: kInset * 6),
-                const SizedBox(height: kInset * 2),
-                Text(
-                  context.l10n.permission_Text_description,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const Spacer(),
-                const SizedBox(height: kInset),
-                if (state.isInitial)
-                  OutlinedButton(
-                    key: permissionsInitButtonKey,
-                    // Prevents "PlatformException: A request for permissions is already running"
-                    // by disabling interaction, as the permission_handler throws on concurrent requests.
-                    onPressed: state.isRequesting ? null : () => context.read<PermissionsCubit>().requestPermissions(),
-                    style: elevatedButtonStyles?.primary,
-                    child: Text(context.l10n.permission_Button_request),
-                  )
-                else
-                  OutlinedButton(
-                    onPressed: null,
-                    style: elevatedButtonStyles?.primary,
-                    child: SizedCircularProgressIndicator(
-                      size: 16,
-                      strokeWidth: 2,
-                      color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                    ),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<PermissionsCubit, PermissionsState>(
+            listenWhen: (previous, current) => !previous.isManufacturerTipNeeded && current.isManufacturerTipNeeded,
+            listener: (context, state) => _showManufacturerTips(context, state.manufacturerTip!.manufacturer),
+          ),
+          BlocListener<PermissionsCubit, PermissionsState>(
+            listenWhen: (previous, current) => !previous.isSpecialPermissionNeeded && current.isSpecialPermissionNeeded,
+            listener: (context, state) => _showSpecialPermissionTips(context, state.pendingSpecialPermissions.first),
+          ),
+          BlocListener<PermissionsCubit, PermissionsState>(
+            listenWhen: (previous, current) => !previous.isFailure && current.isFailure,
+            listener: (context, state) => _showErrorNotification(context, state.failure!),
+          ),
+          BlocListener<PermissionsCubit, PermissionsState>(
+            listenWhen: (previous, current) => !previous.isSuccess && current.isSuccess,
+            listener: (context, state) => context.router.replaceAll([const MainShellRoute()]),
+          ),
+        ],
+        child: BlocBuilder<PermissionsCubit, PermissionsState>(
+          builder: (context, state) {
+            final body = Padding(
+              padding: const EdgeInsets.all(kInset),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: kInset * 2),
+                  const AppIcon(Icons.settings_suggest, size: kInset * 6),
+                  const SizedBox(height: kInset * 2),
+                  Text(
+                    context.l10n.permission_Text_description,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-              ],
-            ),
-          );
-          return LayoutBuilder(
-            builder: (context, viewportConstraints) {
-              return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
-                  child: IntrinsicHeight(child: InertSafeArea(bottom: true, child: body)),
-                ),
-              );
-            },
-          );
-        },
+                  const Spacer(),
+                  const SizedBox(height: kInset),
+                  if (state.isInitial)
+                    OutlinedButton(
+                      key: permissionsInitButtonKey,
+                      // Prevents "PlatformException: A request for permissions is already running"
+                      // by disabling interaction, as the permission_handler throws on concurrent requests.
+                      onPressed: state.isRequesting
+                          ? null
+                          : () => context.read<PermissionsCubit>().requestPermissions(),
+                      style: elevatedButtonStyles?.primary,
+                      child: Text(context.l10n.permission_Button_request),
+                    )
+                  else
+                    OutlinedButton(
+                      onPressed: null,
+                      style: elevatedButtonStyles?.primary,
+                      child: SizedCircularProgressIndicator(
+                        size: 16,
+                        strokeWidth: 2,
+                        color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                      ),
+                    ),
+                ],
+              ),
+            );
+            return LayoutBuilder(
+              builder: (context, viewportConstraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+                    child: IntrinsicHeight(child: InertSafeArea(bottom: true, child: body)),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -116,5 +126,10 @@ class PermissionsScreen extends StatelessWidget {
 
     permissionCubit.dismissTip();
     permissionCubit.requestPermissions();
+  }
+
+  void _showErrorNotification(BuildContext context, Object error) {
+    context.showErrorSnackBar(error.toString());
+    context.read<PermissionsCubit>().dismissError();
   }
 }
