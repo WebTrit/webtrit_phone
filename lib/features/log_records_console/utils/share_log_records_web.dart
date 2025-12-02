@@ -1,18 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:logging/logging.dart';
-import 'package:logging_appenders/logging_appenders.dart';
 import 'package:share_plus/share_plus.dart';
 
-Future<ShareResult> shareLogRecords(
-  List<LogRecord> logRecords, {
-  required LogRecordFormatter logRecordsFormatter,
-  required String name,
-}) {
+Future<ShareResult> shareLogRecords(List<String> logRecords, {required String name}) {
   final logRecordsBuffer = StringBuffer();
   for (final logRecord in logRecords) {
-    logRecordsBuffer.writeln(logRecordsFormatter.format(logRecord));
+    logRecordsBuffer.writeln(logRecord);
   }
 
   final logRecordsData = Uint8List.fromList(utf8.encode(logRecordsBuffer.toString()));

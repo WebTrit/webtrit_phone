@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
-import 'package:logging_appenders/logging_appenders.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -14,7 +13,6 @@ part 'log_records_console_state.dart';
 class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   LogRecordsConsoleCubit({
     required this.logRecordsRepository,
-    this.logRecordsFormatter = const DefaultLogRecordFormatter(),
     required this.packageInfo,
     required this.appInfo,
     required this.dateFormat,
@@ -22,7 +20,6 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   }) : super(const LogRecordsConsoleStateInitial());
 
   final LogRecordsRepository logRecordsRepository;
-  final LogRecordFormatter logRecordsFormatter;
   final PackageInfo packageInfo;
   final AppInfo appInfo;
   final DateFormat dateFormat;
@@ -52,6 +49,6 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     final time = DateTime.now();
     final name = '$exportFilenamePrefix(${dateFormat.format(time)}).log';
 
-    await shareLogRecords(logRecords, logRecordsFormatter: logRecordsFormatter, name: name);
+    await shareLogRecords(logRecords, name: name);
   }
 }
