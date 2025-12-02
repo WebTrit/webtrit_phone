@@ -12,8 +12,30 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
 
-class ContactsLocalTab extends StatelessWidget {
+class ContactsLocalTab extends StatefulWidget {
   const ContactsLocalTab({super.key});
+
+  @override
+  State<ContactsLocalTab> createState() => _ContactsLocalTabState();
+}
+
+class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Refresh contacts when the app is resumed.
+      // This is to account for cases where contacts were updated while the app was collapsed,
+      // or if the user changed contact permissions in the background,
+      // which is a common scenario on Android.
+      _refreshContacts();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +48,6 @@ class ContactsLocalTab extends StatelessWidget {
 
     Future routeToDiagnosticScreen() async {
       context.router.push(const SettingsRouterPageRoute(children: [DiagnosticScreenPageRoute()]));
-    }
-
-    Future refreshContacts() async {
-      final tabBloc = context.read<ContactsLocalTabBloc>();
-      tabBloc.add(const ContactsLocalTabRefreshed());
-      await tabBloc.stream.firstWhere((state) => state.status != ContactsLocalTabStatus.inProgress);
     }
 
     return BlocBuilder<ContactsLocalTabBloc, ContactsLocalTabState>(
@@ -50,7 +66,7 @@ class ContactsLocalTab extends StatelessWidget {
           );
         } else if (state.contacts.isNotEmpty) {
           return RefreshIndicator(
-            onRefresh: refreshContacts,
+            onRefresh: _refreshContacts,
             child: ListView.builder(
               itemCount: state.contacts.length,
               itemBuilder: (context, index) {
@@ -81,7 +97,7 @@ class ContactsLocalTab extends StatelessWidget {
                     child: Text(context.l10n.contacts_LocalTabButton_contactsAgreement),
                   ),
                   TextButton(
-                    onPressed: refreshContacts,
+                    onPressed: _refreshContacts,
                     style: elevatedButtonStyles?.neutral,
                     child: Text(context.l10n.contacts_LocalTabButton_refresh),
                   ),
@@ -95,7 +111,7 @@ class ContactsLocalTab extends StatelessWidget {
               return NoDataPlaceholder(
                 content: Text(context.l10n.contacts_LocalTabText_empty),
                 actions: [
-                  TextButton(onPressed: refreshContacts, child: Text(context.l10n.contacts_LocalTabButton_refresh)),
+                  TextButton(onPressed: _refreshContacts, child: Text(context.l10n.contacts_LocalTabButton_refresh)),
                 ],
               );
             }
@@ -103,5 +119,17 @@ class ContactsLocalTab extends StatelessWidget {
         }
       },
     );
+  }
+
+  Future<void> _refreshContacts() async {
+    final tabBloc = context.read<ContactsLocalTabBloc>();
+    tabBloc.add(const ContactsLocalTabRefreshed());
+    await tabBloc.stream.firstWhere((state) => state.status != ContactsLocalTabStatus.inProgress);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }

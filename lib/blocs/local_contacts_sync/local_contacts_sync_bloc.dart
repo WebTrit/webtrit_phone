@@ -18,7 +18,7 @@ final _logger = Logger('LocalContactsSyncBloc');
 
 typedef AsyncCallback = Future<bool> Function();
 
-class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSyncState> with WidgetsBindingObserver {
+class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSyncState> {
   LocalContactsSyncBloc({
     required this.localContactsRepository,
     required this.appDatabase,
@@ -31,8 +31,6 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
     on<LocalContactsSyncStarted>(_onStarted, transformer: sequential());
     on<LocalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
     on<_LocalContactsSyncUpdated>(_onUpdated, transformer: droppable());
-
-    WidgetsBinding.instance.addObserver(this);
   }
 
   final LocalContactsRepository localContactsRepository;
@@ -42,25 +40,6 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   final AsyncCallback isAgreementAccepted;
   final AsyncCallback isContactsPermissionGranted;
   final AsyncCallback requestContactPermission;
-
-  @override
-  Future<void> close() async {
-    _logger.finer('close');
-
-    WidgetsBinding.instance.removeObserver(this);
-    await super.close();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _logger.finer('didChangeAppLifecycleState: $state');
-
-    if (PlatformInfo.isAndroid) {
-      if (state == AppLifecycleState.resumed && this.state is LocalContactsSyncPermissionFailure) {
-        add(const LocalContactsSyncStarted());
-      }
-    }
-  }
 
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
