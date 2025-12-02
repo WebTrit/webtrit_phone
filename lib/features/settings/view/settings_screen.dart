@@ -244,19 +244,6 @@ class SettingsScreen extends StatelessWidget {
                         ),
                     ],
                   ),
-                  if (!state.hasMicrophonePermission)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: const ShapeDecoration(color: Colors.orange, shape: StadiumBorder()),
-                      child: Row(
-                        spacing: 5,
-                        children: [
-                          Icon(Icons.warning_amber, color: Colors.black),
-                          Flexible(child: Text(context.l10n.settings_missingMicrophoneIndicator_title)),
-                        ],
-                      ),
-                    ),
                 ],
               ),
               if (state.progress) const AbsorbPointer(child: Center(child: CircularProgressIndicator())),

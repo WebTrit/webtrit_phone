@@ -134,10 +134,6 @@ class AppLocalizationsMapper {
           localizations.call_errorRegisteringSelfManagedPhoneAccount,
       'call_FailureAcknowledgeDialog_title':
           localizations.call_FailureAcknowledgeDialog_title,
-      'call_MissingMicrophoneDialog_content':
-          localizations.call_MissingMicrophoneDialog_content,
-      'call_MissingMicrophoneDialog_title':
-          localizations.call_MissingMicrophoneDialog_title,
       'callProcessingStatus_answering':
           localizations.callProcessingStatus_answering,
       'callProcessingStatus_disconnecting':

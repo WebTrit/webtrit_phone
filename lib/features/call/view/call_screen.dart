@@ -46,61 +46,37 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
 
     final style = Theme.of(context).extension<CallScreenStyles>()?.primary?.systemUiOverlayStyle;
 
-    final scaffold = MultiBlocListener(
-      listeners: [
-        BlocListener<CallBloc, CallState>(
-          bloc: callBloc,
-          listener: (context, state) {
-            if (state.isActive) {
-              final activeCall = state.activeCalls.current;
-              final activeCallFailure = activeCall.failure;
-              if (activeCallFailure != null) {
-                context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId));
-                AcknowledgeDialog.show(
-                  context,
-                  title: context.l10n.call_FailureAcknowledgeDialog_title,
-                  content: activeCallFailure.toString(),
-                );
-              }
-            }
-          },
-        ),
-        BlocListener<CallBloc, CallState>(
-          bloc: callBloc,
-          listenWhen: (previous, current) =>
-              current.isActive && current.activeCalls.current.processingStatus != previous.activeCalls.current.processingStatus,
-          listener: (context, state) {
-            if (state.isActive) {
-              final activeCall = state.activeCalls.current;
-              if (activeCall.processingStatus == CallProcessingStatus.deniedMicrophone) {
-                AcknowledgeDialog.show(
-                  context,
-                  title: context.l10n.call_MissingMicrophoneDialog_title,
-                  content: context.l10n.call_MissingMicrophoneDialog_content,
-                );
-              }
-            }
-          },
-        ),
-      ],
-      child: BlocBuilder<CallBloc, CallState>(
-        bloc: callBloc,
-        builder: (context, state) {
-          if (state.isActive) {
-            return CallActiveScaffold(
-              callStatus: state.status,
-              activeCalls: state.activeCalls,
-              audioDevice: state.audioDevice,
-              availableAudioDevices: state.availableAudioDevices,
-              callConfig: widget.callConfig,
-              localePlaceholderBuilder: widget.localePlaceholderBuilder,
-              remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
+    final scaffold = BlocConsumer<CallBloc, CallState>(
+      bloc: callBloc,
+      listener: (context, state) async {
+        if (state.isActive) {
+          final activeCall = state.activeCalls.current;
+          final activeCallFailure = activeCall.failure;
+          if (activeCallFailure != null) {
+            context.read<CallBloc>().add(CallControlEvent.failureApproved(activeCall.callId));
+            AcknowledgeDialog.show(
+              context,
+              title: context.l10n.call_FailureAcknowledgeDialog_title,
+              content: activeCallFailure.toString(),
             );
-          } else {
-            return const CallInitScaffold();
           }
-        },
-      ),
+        }
+      },
+      builder: (context, state) {
+        if (state.isActive) {
+          return CallActiveScaffold(
+            callStatus: state.status,
+            activeCalls: state.activeCalls,
+            audioDevice: state.audioDevice,
+            availableAudioDevices: state.availableAudioDevices,
+            callConfig: widget.callConfig,
+            localePlaceholderBuilder: widget.localePlaceholderBuilder,
+            remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
+          );
+        } else {
+          return const CallInitScaffold();
+        }
+      },
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(value: style ?? SystemUiOverlayStyle.light, child: scaffold);

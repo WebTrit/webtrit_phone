@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/data/app_permissions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -14,19 +15,29 @@ part 'session_status_cubit.freezed.dart';
 final _logger = Logger('SessionStatusCubit');
 
 class SessionStatusCubit extends Cubit<SessionStatusState> {
-  SessionStatusCubit({required PushTokensBloc pushTokensBloc, required CallBloc callBloc})
+  SessionStatusCubit({required PushTokensBloc pushTokensBloc, required CallBloc callBloc, required AppPermissions appPermissions})
     : super(const SessionStatusState()) {
     _pushTokensSubscription = pushTokensBloc.stream.listen(_onPushTokensChanged);
     _callSubscription = callBloc.stream.listen(_onCallChanged);
+    _appPermissions = appPermissions;
+
+    _getMicrophonePermission();
 
     _emitCombinedStatus(pushTokensBloc.state, callBloc.state);
   }
 
   late final StreamSubscription<PushTokensState> _pushTokensSubscription;
   late final StreamSubscription<CallState> _callSubscription;
+  late final AppPermissions _appPermissions;
 
   PushTokensState? _lastPushTokensState;
   CallState? _lastCallState;
+
+  Future<void> _getMicrophonePermission() async {
+    final microphonePermissionGranted = await _appPermissions.isPermissionGranted(Permission.microphone);
+
+    emit(state.copyWith(hasMicrophonePermission: microphonePermissionGranted));
+  }
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
     _lastPushTokensState = pushTokens;

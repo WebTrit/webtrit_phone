@@ -151,13 +151,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Failure';
 
   @override
-  String get call_MissingMicrophoneDialog_content =>
-      'Unable to make call due to missing microphone permission. Please, go to Settings and give access to microphone';
-
-  @override
-  String get call_MissingMicrophoneDialog_title => 'Missing microphone permission';
-
-  @override
   String get callProcessingStatus_answering => 'Answering the call, please hold on…';
 
   @override

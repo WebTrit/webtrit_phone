@@ -36,11 +36,35 @@ class MainAppBar extends AppBar {
                         height: kMinInteractiveDimension,
                       ),
                       padding: const EdgeInsets.all(2),
-                      icon: LeadingAvatar(
-                        username: info?.name ?? info?.numbers.main,
-                        thumbnailUrl: gravatarThumbnailUrl(info?.email),
-                        radius: kMinInteractiveDimension / 2,
-                        showLoading: true,
+                      icon: Stack(
+                        clipBehavior: Clip.none,
+                        children: <Widget>[
+                          LeadingAvatar(
+                            username: info?.name ?? info?.numbers.main,
+                            thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                            radius: kMinInteractiveDimension / 2,
+                            showLoading: true,
+                          ),
+                          Visibility(
+                            visible: !sessionState.hasMicrophonePermission,
+                            child: Positioned(
+                              right: -8,
+                              top: -2,
+                              child: Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.warning_amber,
+                                  color: Colors.black,
+                                  size: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       onPressed: () {
                         context.router.navigate(const SettingsRouterPageRoute());

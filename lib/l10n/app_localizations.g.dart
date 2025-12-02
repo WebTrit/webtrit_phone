@@ -369,18 +369,6 @@ abstract class AppLocalizations {
   /// **'Failure'**
   String get call_FailureAcknowledgeDialog_title;
 
-  /// No description provided for @call_MissingMicrophoneDialog_content.
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to make call due to missing microphone permission. Please, go to Settings and give access to microphone'**
-  String get call_MissingMicrophoneDialog_content;
-
-  /// No description provided for @call_MissingMicrophoneDialog_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Missing microphone permission'**
-  String get call_MissingMicrophoneDialog_title;
-
   /// No description provided for @callProcessingStatus_answering.
   ///
   /// In en, this message translates to:

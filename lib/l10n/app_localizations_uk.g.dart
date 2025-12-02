@@ -152,13 +152,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_FailureAcknowledgeDialog_title => 'Помилка';
 
   @override
-  String get call_MissingMicrophoneDialog_content =>
-      'Неможливо здійснити дзвінок через відсутність дозволу на використання мікрофона. Перейдіть до налаштувань і надайте доступ до мікрофона.';
-
-  @override
-  String get call_MissingMicrophoneDialog_title => 'Відсутній дозвіл на використання мікрофона';
-
-  @override
   String get callProcessingStatus_answering => 'Прийняття виклику, будь ласка, зачекайте…';
 
   @override

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SessionStatusState {
 
- SessionStatus get status;
+ SessionStatus get status; bool get hasMicrophonePermission;
 /// Create a copy of SessionStatusState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SessionStatusStateCopyWith<SessionStatusState> get copyWith => _$SessionStatusS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SessionStatusState&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SessionStatusState&&(identical(other.status, status) || other.status == status)&&(identical(other.hasMicrophonePermission, hasMicrophonePermission) || other.hasMicrophonePermission == hasMicrophonePermission));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status);
+int get hashCode => Object.hash(runtimeType,status,hasMicrophonePermission);
 
 @override
 String toString() {
-  return 'SessionStatusState(status: $status)';
+  return 'SessionStatusState(status: $status, hasMicrophonePermission: $hasMicrophonePermission)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SessionStatusStateCopyWith<$Res>  {
   factory $SessionStatusStateCopyWith(SessionStatusState value, $Res Function(SessionStatusState) _then) = _$SessionStatusStateCopyWithImpl;
 @useResult
 $Res call({
- SessionStatus status
+ SessionStatus status, bool hasMicrophonePermission
 });
 
 
@@ -62,10 +62,11 @@ class _$SessionStatusStateCopyWithImpl<$Res>
 
 /// Create a copy of SessionStatusState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? hasMicrophonePermission = null,}) {
   return _then(SessionStatusState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as SessionStatus,
+as SessionStatus,hasMicrophonePermission: null == hasMicrophonePermission ? _self.hasMicrophonePermission : hasMicrophonePermission // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

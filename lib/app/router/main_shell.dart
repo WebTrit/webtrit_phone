@@ -455,12 +455,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                   builder: (context) {
                     return MultiBlocProvider(
                       providers: [
-                        BlocProvider(lazy: false, create: (_) => UserInfoCubit(context.read<UserRepository>())),
+                        BlocProvider(
+                          lazy: false,
+                          create: (_) => UserInfoCubit(context.read<UserRepository>()),
+                        ),
                         BlocProvider(
                           lazy: false,
                           create: (_) => SessionStatusCubit(
                             pushTokensBloc: context.read<PushTokensBloc>(),
                             callBloc: context.read<CallBloc>(),
+                            appPermissions: context.read<AppPermissions>(),
                           ),
                         ),
                         BlocProvider(
