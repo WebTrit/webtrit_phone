@@ -42,14 +42,18 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       _logger.info('Firebase messaging permission requested');
 
       // Handle special permissions
-      final specialPermissions = await appPermissions.deniedSpecialPermissions();
-      _logger.info('Denied special permissions: $specialPermissions');
+      final specialPermissionsStatuses = await appPermissions.getSpecialPermissionStatuses();
+      final specialPendingPermissions = specialPermissionsStatuses.entries
+          .where((entry) => entry.value.isDenied)
+          .map((entry) => entry.key)
+          .toList();
+      _logger.info('Denied special permissions: $specialPendingPermissions');
 
       // Check for manufacturer-specific tips or denied special permissions
       final manufacturer = _checkManufacturer();
       _logger.info('Manufacturer: $manufacturer');
 
-      final manufacturerTip = _getManufacturerTIp(manufacturer, specialPermissions);
+      final manufacturerTip = _getManufacturerTIp(manufacturer, specialPendingPermissions);
       _logger.info('Manufacturer tip: $manufacturerTip');
 
       if (isClosed) return;
@@ -60,7 +64,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
         state.copyWith(
           hasRequestedPermissions: true,
           manufacturerTip: manufacturerTip,
-          pendingSpecialPermissions: specialPermissions,
+          pendingSpecialPermissions: specialPendingPermissions,
         ),
       );
     } catch (e, st) {

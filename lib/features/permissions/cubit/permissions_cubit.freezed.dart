@@ -11,68 +11,47 @@ part of 'permissions_cubit.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$PermissionsState {
 
-  bool get hasRequestedPermissions;
-
-  bool get isRequesting;
-
-  List<CallkeepSpecialPermissions> get pendingSpecialPermissions;
-
-  ManufacturerTip? get manufacturerTip;
-
-  Object? get failure;
-
-  /// Create a copy of PermissionsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $PermissionsStateCopyWith<PermissionsState> get copyWith =>
-      _$PermissionsStateCopyWithImpl<PermissionsState>(this as PermissionsState, _$identity);
+ bool get hasRequestedPermissions; bool get isRequesting; List<CallkeepSpecialPermissions> get pendingSpecialPermissions; ManufacturerTip? get manufacturerTip; Object? get failure;
+/// Create a copy of PermissionsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PermissionsStateCopyWith<PermissionsState> get copyWith => _$PermissionsStateCopyWithImpl<PermissionsState>(this as PermissionsState, _$identity);
 
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType && other is PermissionsState &&
-        (identical(other.hasRequestedPermissions, hasRequestedPermissions) ||
-            other.hasRequestedPermissions == hasRequestedPermissions) &&
-        (identical(other.isRequesting, isRequesting) || other.isRequesting == isRequesting) &&
-        const DeepCollectionEquality().equals(other.pendingSpecialPermissions, pendingSpecialPermissions) &&
-        (identical(other.manufacturerTip, manufacturerTip) || other.manufacturerTip == manufacturerTip) &&
-        const DeepCollectionEquality().equals(other.failure, failure));
-  }
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PermissionsState&&(identical(other.hasRequestedPermissions, hasRequestedPermissions) || other.hasRequestedPermissions == hasRequestedPermissions)&&(identical(other.isRequesting, isRequesting) || other.isRequesting == isRequesting)&&const DeepCollectionEquality().equals(other.pendingSpecialPermissions, pendingSpecialPermissions)&&(identical(other.manufacturerTip, manufacturerTip) || other.manufacturerTip == manufacturerTip)&&const DeepCollectionEquality().equals(other.failure, failure));
+}
 
 
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, hasRequestedPermissions, isRequesting,
-          const DeepCollectionEquality().hash(pendingSpecialPermissions), manufacturerTip,
-          const DeepCollectionEquality().hash(failure));
+@override
+int get hashCode => Object.hash(runtimeType,hasRequestedPermissions,isRequesting,const DeepCollectionEquality().hash(pendingSpecialPermissions),manufacturerTip,const DeepCollectionEquality().hash(failure));
 
-  @override
-  String toString() {
-    return 'PermissionsState(hasRequestedPermissions: $hasRequestedPermissions, isRequesting: $isRequesting, pendingSpecialPermissions: $pendingSpecialPermissions, manufacturerTip: $manufacturerTip, failure: $failure)';
-  }
+@override
+String toString() {
+  return 'PermissionsState(hasRequestedPermissions: $hasRequestedPermissions, isRequesting: $isRequesting, pendingSpecialPermissions: $pendingSpecialPermissions, manufacturerTip: $manufacturerTip, failure: $failure)';
+}
 
 
 }
 
 /// @nodoc
-abstract mixin class $PermissionsStateCopyWith<$Res> {
-  factory $PermissionsStateCopyWith(PermissionsState value,
-      $Res Function(PermissionsState) _then) = _$PermissionsStateCopyWithImpl;
+abstract mixin class $PermissionsStateCopyWith<$Res>  {
+  factory $PermissionsStateCopyWith(PermissionsState value, $Res Function(PermissionsState) _then) = _$PermissionsStateCopyWithImpl;
+@useResult
+$Res call({
+ bool hasRequestedPermissions, bool isRequesting, List<CallkeepSpecialPermissions> pendingSpecialPermissions, ManufacturerTip? manufacturerTip, Object? failure
+});
 
-  @useResult
-  $Res call({
-    bool hasRequestedPermissions, bool isRequesting, List<
-        CallkeepSpecialPermissions> pendingSpecialPermissions, ManufacturerTip? manufacturerTip, Object? failure
-  });
+
 
 
 }
-
 /// @nodoc
 class _$PermissionsStateCopyWithImpl<$Res>
     implements $PermissionsStateCopyWith<$Res> {
@@ -81,80 +60,40 @@ class _$PermissionsStateCopyWithImpl<$Res>
   final PermissionsState _self;
   final $Res Function(PermissionsState) _then;
 
-  /// Create a copy of PermissionsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call(
-      {Object? hasRequestedPermissions = null, Object? isRequesting = null, Object? pendingSpecialPermissions = null, Object? manufacturerTip = freezed, Object? failure = freezed,}) {
-    return _then(PermissionsState(
-      hasRequestedPermissions: null == hasRequestedPermissions
-          ? _self.hasRequestedPermissions
-          : hasRequestedPermissions // ignore: cast_nullable_to_non_nullable
-      as bool,
-      isRequesting: null == isRequesting ? _self.isRequesting : isRequesting // ignore: cast_nullable_to_non_nullable
-      as bool,
-      pendingSpecialPermissions: null == pendingSpecialPermissions
-          ? _self.pendingSpecialPermissions
-          : pendingSpecialPermissions // ignore: cast_nullable_to_non_nullable
-      as List<CallkeepSpecialPermissions>,
-      manufacturerTip: freezed == manufacturerTip
-          ? _self.manufacturerTip
-          : manufacturerTip // ignore: cast_nullable_to_non_nullable
-      as ManufacturerTip?,
-      failure: freezed == failure ? _self.failure : failure,
-    ));
-  }
+/// Create a copy of PermissionsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? hasRequestedPermissions = null,Object? isRequesting = null,Object? pendingSpecialPermissions = null,Object? manufacturerTip = freezed,Object? failure = freezed,}) {
+  return _then(PermissionsState(
+hasRequestedPermissions: null == hasRequestedPermissions ? _self.hasRequestedPermissions : hasRequestedPermissions // ignore: cast_nullable_to_non_nullable
+as bool,isRequesting: null == isRequesting ? _self.isRequesting : isRequesting // ignore: cast_nullable_to_non_nullable
+as bool,pendingSpecialPermissions: null == pendingSpecialPermissions ? _self.pendingSpecialPermissions : pendingSpecialPermissions // ignore: cast_nullable_to_non_nullable
+as List<CallkeepSpecialPermissions>,manufacturerTip: freezed == manufacturerTip ? _self.manufacturerTip : manufacturerTip // ignore: cast_nullable_to_non_nullable
+as ManufacturerTip?,failure: freezed == failure ? _self.failure : failure ,
+  ));
+}
 
 }
 
 
 /// Adds pattern-matching-related methods to [PermissionsState].
 extension PermissionsStatePatterns on PermissionsState {
-  /// A variant of `map` that fallback to returning `orElse`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  @optionalTypeArgs TResult maybeMap
-
-  <
-
-  TResult
-
-  extends
-
-  Object?
-
-  >
-
-  (
-
-  {
-
-  required
-
-  TResult
-
-  orElse
-
-  (
-
-  )
-
-  ,
-}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _:
-return orElse();
+  return orElse();
 
 }
 }
@@ -171,15 +110,14 @@ return orElse();
 /// }
 /// ```
 
-@optionalTypeArgs
-TResult map<TResult extends Object?>() {
-  final _that = this;
-  switch (_that) {
-    case _:
-      throw StateError('Unexpected subclass');
-  }
-}
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
 
+}
+}
 /// A variant of `map` that fallback to returning `null`.
 ///
 /// It is equivalent to doing:
@@ -192,15 +130,14 @@ TResult map<TResult extends Object?>() {
 /// }
 /// ```
 
-@optionalTypeArgs
-TResult? mapOrNull<TResult extends Object?>() {
-  final _that = this;
-  switch (_that) {
-    case _:
-      return null;
-  }
-}
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
 
+}
+}
 /// A variant of `when` that fallback to an `orElse` callback.
 ///
 /// It is equivalent to doing:
@@ -213,16 +150,10 @@ TResult? mapOrNull<TResult extends Object?>() {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen
-<
-TResult extends Object?>(
-{
-required
-TResult
-orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _:
-return orElse();
+  return orElse();
 
 }
 }
@@ -242,7 +173,7 @@ return orElse();
 @optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
 case _:
-throw StateError('Unexpected subclass');
+  throw StateError('Unexpected subclass');
 
 }
 }
@@ -261,7 +192,7 @@ throw StateError('Unexpected subclass');
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
 case _:
-return null;
+  return null;
 
 }
 }
@@ -271,7 +202,7 @@ return null;
 /// @nodoc
 mixin _$ManufacturerTip {
 
-Manufacturer get manufacturer; bool get shown;
+ Manufacturer get manufacturer; bool get shown;
 /// Create a copy of ManufacturerTip
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -279,9 +210,10 @@ Manufacturer get manufacturer; bool get shown;
 $ManufacturerTipCopyWith<ManufacturerTip> get copyWith => _$ManufacturerTipCopyWithImpl<ManufacturerTip>(this as ManufacturerTip, _$identity);
 
 
+
 @override
 bool operator ==(Object other) {
-return identical(this, other) || (other.runtimeType == runtimeType&&other is ManufacturerTip&&(identical(other.manufacturer, manufacturer) || other.manufacturer == manufacturer)&&(identical(other.shown, shown) || other.shown == shown));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ManufacturerTip&&(identical(other.manufacturer, manufacturer) || other.manufacturer == manufacturer)&&(identical(other.shown, shown) || other.shown == shown));
 }
 
 
@@ -290,38 +222,40 @@ int get hashCode => Object.hash(runtimeType,manufacturer,shown);
 
 @override
 String toString() {
-return 'ManufacturerTip(manufacturer: $manufacturer, shown: $shown)';
+  return 'ManufacturerTip(manufacturer: $manufacturer, shown: $shown)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $ManufacturerTipCopyWith<$Res> {
-factory $ManufacturerTipCopyWith(ManufacturerTip value, $Res Function(ManufacturerTip) _then) = _$ManufacturerTipCopyWithImpl;
+abstract mixin class $ManufacturerTipCopyWith<$Res>  {
+  factory $ManufacturerTipCopyWith(ManufacturerTip value, $Res Function(ManufacturerTip) _then) = _$ManufacturerTipCopyWithImpl;
 @useResult
 $Res call({
-Manufacturer manufacturer, bool shown
+ Manufacturer manufacturer, bool shown
 });
+
+
 
 
 }
 /// @nodoc
 class _$ManufacturerTipCopyWithImpl<$Res>
-implements $ManufacturerTipCopyWith<$Res> {
-_$ManufacturerTipCopyWithImpl(this._self, this._then);
+    implements $ManufacturerTipCopyWith<$Res> {
+  _$ManufacturerTipCopyWithImpl(this._self, this._then);
 
-final ManufacturerTip _self;
-final $Res Function(ManufacturerTip) _then;
+  final ManufacturerTip _self;
+  final $Res Function(ManufacturerTip) _then;
 
 /// Create a copy of ManufacturerTip
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? manufacturer = null,Object? shown = null,}) {
-return _then(ManufacturerTip(
+  return _then(ManufacturerTip(
 manufacturer: null == manufacturer ? _self.manufacturer : manufacturer // ignore: cast_nullable_to_non_nullable
 as Manufacturer,shown: null == shown ? _self.shown : shown // ignore: cast_nullable_to_non_nullable
 as bool,
-));
+  ));
 }
 
 }
@@ -345,7 +279,7 @@ extension ManufacturerTipPatterns on ManufacturerTip {
 final _that = this;
 switch (_that) {
 case _:
-return orElse();
+  return orElse();
 
 }
 }
@@ -366,7 +300,7 @@ return orElse();
 final _that = this;
 switch (_that) {
 case _:
-throw StateError('Unexpected subclass');
+  throw StateError('Unexpected subclass');
 
 }
 }
@@ -386,7 +320,7 @@ throw StateError('Unexpected subclass');
 final _that = this;
 switch (_that) {
 case _:
-return null;
+  return null;
 
 }
 }
@@ -405,7 +339,7 @@ return null;
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _:
-return orElse();
+  return orElse();
 
 }
 }
@@ -425,7 +359,7 @@ return orElse();
 @optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
 case _:
-throw StateError('Unexpected subclass');
+  throw StateError('Unexpected subclass');
 
 }
 }
@@ -444,7 +378,7 @@ throw StateError('Unexpected subclass');
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
 case _:
-return null;
+  return null;
 
 }
 }
