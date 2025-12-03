@@ -34,11 +34,8 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     emit(state.copyWith(isRequesting: true));
 
     try {
-      // Prepare the exclude list based on the contacts agreement status
-      final excludePermissions = _buildExcludedPermissions();
-
       // Request permissions, excluding the specified ones
-      await appPermissions.request(exclude: excludePermissions);
+      await appPermissions.request();
       _logger.info('Permissions requested');
 
       await _requestFirebaseMessagingPermission();
@@ -84,16 +81,6 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
     // Determine if we need to set or keep the manufacturer tip
     return currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer) : null);
-  }
-
-  List<Permission> _buildExcludedPermissions() {
-    final contactsAgreementStatus = contactsAgreementStatusRepository.getContactsAgreementStatus();
-    _logger.info('Contacts agreement status: ${contactsAgreementStatus.isAccepted}');
-
-    final exclude = <Permission>[if (!contactsAgreementStatus.isAccepted) Permission.contacts];
-
-    _logger.info('Excluding permissions: $exclude');
-    return exclude;
   }
 
   Future<void> _requestFirebaseMessagingPermission() async {

@@ -6,6 +6,7 @@ export 'connectivity_checker.dart';
 export 'core_support.dart';
 export 'crashlytics_utils.dart';
 export 'equatable_prop_to_string.dart';
+export 'expiring_cache.dart';
 export 'fixed_delay_scheduler.dart';
 export 'gravatar.dart';
 export 'jitter.dart';
