@@ -6,7 +6,6 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/repositories/contacts_agreement_status/contacts_agreement_status_repository.dart';
 
 import '../models/models.dart';
 
@@ -17,13 +16,8 @@ part 'permissions_state.dart';
 final _logger = Logger('PermissionsCubit');
 
 class PermissionsCubit extends Cubit<PermissionsState> {
-  PermissionsCubit({
-    required this.contactsAgreementStatusRepository,
-    required this.appPermissions,
-    required this.deviceInfo,
-  }) : super(const PermissionsState());
+  PermissionsCubit({required this.appPermissions, required this.deviceInfo}) : super(const PermissionsState());
 
-  final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final AppPermissions appPermissions;
   final DeviceInfo deviceInfo;
 
@@ -35,8 +29,12 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
     try {
       // Request permissions, excluding the specified ones
-      await appPermissions.request();
-      _logger.info('Permissions requested');
+      if (state.hasRequestedPermissions) {
+        _logger.info('Permissions already requested');
+      } else {
+        await appPermissions.request();
+        _logger.info('Permissions requested');
+      }
 
       await _requestFirebaseMessagingPermission();
       _logger.info('Firebase messaging permission requested');
@@ -102,14 +100,8 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     emit(state.copyWith(failure: null));
   }
 
-  void dismissTip() {
-    emit(
-      state.copyWith(
-        hasRequestedPermissions: false,
-        manufacturerTip: state.manufacturerTip?.copyWith(shown: true),
-        pendingSpecialPermissions: [],
-      ),
-    );
+  void dismissManufacturerTip() {
+    emit(state.copyWith(manufacturerTip: state.manufacturerTip?.copyWith(shown: true)));
   }
 
   void openAppSettings() {

@@ -26,8 +26,6 @@ class PermissionsState with _$PermissionsState {
   @override
   final Object? failure;
 
-  bool get isInitial => !hasRequestedPermissions;
-
   bool get isSpecialPermissionNeeded => pendingSpecialPermissions.isNotEmpty;
 
   bool get isManufacturerTipNeeded => manufacturerTip != null && manufacturerTip!.shown == false;
