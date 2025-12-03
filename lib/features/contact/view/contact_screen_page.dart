@@ -19,24 +19,45 @@ class ContactScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
 
-    final favoriteEnabled = featureAccess.bottomMenuFeature.getTabEnabled<FavoritesBottomMenuTab>();
-    final cdrsEnabled = featureAccess.bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs;
+    final contactsConfig = featureAccess.contactsFeature.detailsConfig;
+    final callConfig = featureAccess.callFeature.callConfig;
+    final messagingFeature = featureAccess.messagingFeature;
+    final bottomMenuFeature = featureAccess.bottomMenuFeature;
+
+    final canChat = messagingFeature.chatsPresent;
+    final canSms = messagingFeature.smsPresent;
+    final canVideoCall = callConfig.isVideoCallEnabled;
+    final canTransfer = callConfig.isBlindTransferEnabled;
+    final favoritesEnabled = bottomMenuFeature.getTabEnabled<FavoritesBottomMenuTab>() != null;
+    final useCdrsForHistory = bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs ?? false;
+
+    bool isTileEnabled(ContactAction action, [bool capability = true]) {
+      return contactsConfig.phoneTileActions.contains(action) && capability;
+    }
+
+    bool isAppBarEnabled(ContactAction action, [bool capability = true]) {
+      return contactsConfig.appBarActions.contains(action) && capability;
+    }
 
     final widget = ContactScreen(
-      favoriteEnabled: favoriteEnabled != null,
-      transferEnabled: featureAccess.callFeature.callConfig.isBlindTransferEnabled,
-      videoEnabled: featureAccess.callFeature.callConfig.isVideoCallEnabled,
-      chatsEnabled: featureAccess.messagingFeature.chatsPresent,
-      smsEnabled: featureAccess.messagingFeature.smsPresent,
-      cdrsEnabled: cdrsEnabled ?? false,
+      enableAppBarChat: isAppBarEnabled(ContactAction.chat, canChat),
+      enableTileFavorite: isTileEnabled(ContactAction.favorite, favoritesEnabled),
+      enableTileVoiceCall: isTileEnabled(ContactAction.voiceCall),
+      enableTileVideoCall: isTileEnabled(ContactAction.videoCall, canVideoCall),
+      enableTileSms: isTileEnabled(ContactAction.sms, canSms),
+      enableTileChat: isTileEnabled(ContactAction.chat, canChat),
+      enableTileTransfer: isTileEnabled(ContactAction.transfer, canTransfer),
+      enableTileCallLog: isTileEnabled(ContactAction.callLog),
+      enableTileEmail: contactsConfig.emailTileActions.contains(ContactAction.sendEmail),
+      useCdrsForHistory: useCdrsForHistory,
     );
-    final provider = BlocProvider(
+
+    return BlocProvider(
       create: (context) {
         return ContactBloc(contactId, contactsRepository: context.read<ContactsRepository>())
           ..add(const ContactStarted());
       },
       child: widget,
     );
-    return provider;
   }
 }
