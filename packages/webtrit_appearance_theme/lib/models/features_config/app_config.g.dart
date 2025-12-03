@@ -21,6 +21,9 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
   callConfig: json['callConfig'] == null
       ? const AppConfigCall()
       : AppConfigCall.fromJson(json['callConfig'] as Map<String, dynamic>),
+  contacts: json['contacts'] == null
+      ? const AppConfigContacts()
+      : AppConfigContacts.fromJson(json['contacts'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
@@ -28,6 +31,7 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'mainConfig': instance.mainConfig.toJson(),
   'settingsConfig': instance.settingsConfig.toJson(),
   'callConfig': instance.callConfig.toJson(),
+  'contacts': instance.contacts.toJson(),
 };
 
 AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
@@ -411,6 +415,66 @@ Map<String, dynamic> _$AppConfigSettingsItemToJson(
   'embeddedResourceId': const IntToStringOptionalConverter().toJson(
     instance.embeddedResourceId,
   ),
+};
+
+AppConfigContacts _$AppConfigContactsFromJson(Map<String, dynamic> json) =>
+    AppConfigContacts(
+      list: json['list'] == null
+          ? const AppConfigContactList()
+          : AppConfigContactList.fromJson(json['list'] as Map<String, dynamic>),
+      details: json['details'] == null
+          ? const AppConfigContactDetails()
+          : AppConfigContactDetails.fromJson(
+              json['details'] as Map<String, dynamic>,
+            ),
+    );
+
+Map<String, dynamic> _$AppConfigContactsToJson(AppConfigContacts instance) =>
+    <String, dynamic>{
+      'list': instance.list.toJson(),
+      'details': instance.details.toJson(),
+    };
+
+AppConfigContactList _$AppConfigContactListFromJson(
+  Map<String, dynamic> json,
+) => AppConfigContactList();
+
+Map<String, dynamic> _$AppConfigContactListToJson(
+  AppConfigContactList instance,
+) => <String, dynamic>{};
+
+AppConfigContactDetails _$AppConfigContactDetailsFromJson(
+  Map<String, dynamic> json,
+) => AppConfigContactDetails(
+  actions: json['actions'] == null
+      ? const AppConfigContactDetailsActions()
+      : AppConfigContactDetailsActions.fromJson(
+          json['actions'] as Map<String, dynamic>,
+        ),
+);
+
+Map<String, dynamic> _$AppConfigContactDetailsToJson(
+  AppConfigContactDetails instance,
+) => <String, dynamic>{'actions': instance.actions.toJson()};
+
+AppConfigContactDetailsActions _$AppConfigContactDetailsActionsFromJson(
+  Map<String, dynamic> json,
+) => AppConfigContactDetailsActions(
+  appBar: (json['appBar'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  phoneTile: (json['phoneTile'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+  emailTile: (json['emailTile'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+);
+
+Map<String, dynamic> _$AppConfigContactDetailsActionsToJson(
+  AppConfigContactDetailsActions instance,
+) => <String, dynamic>{
+  'appBar': instance.appBar,
+  'phoneTile': instance.phoneTile,
+  'emailTile': instance.emailTile,
 };
 
 FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>

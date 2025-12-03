@@ -13,6 +13,7 @@ class AppConfig with _$AppConfig {
     this.mainConfig = const AppConfigMain(),
     this.settingsConfig = const AppConfigSettings(),
     this.callConfig = const AppConfigCall(),
+    this.contacts = const AppConfigContacts(),
   });
 
   @override
@@ -26,6 +27,9 @@ class AppConfig with _$AppConfig {
 
   @override
   final AppConfigCall callConfig;
+
+  @override
+  final AppConfigContacts contacts;
 
   factory AppConfig.fromJson(Map<String, Object?> json) => _$AppConfigFromJson(json);
 
@@ -507,4 +511,63 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
   factory AppConfigSettingsItem.fromJson(Map<String, Object?> json) => _$AppConfigSettingsItemFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigSettingsItemToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigContacts with _$AppConfigContacts {
+  const AppConfigContacts({this.list = const AppConfigContactList(), this.details = const AppConfigContactDetails()});
+
+  @override
+  final AppConfigContactList list;
+
+  @override
+  final AppConfigContactDetails details;
+
+  factory AppConfigContacts.fromJson(Map<String, Object?> json) => _$AppConfigContactsFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigContactsToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigContactList with _$AppConfigContactList {
+  const AppConfigContactList();
+
+  factory AppConfigContactList.fromJson(Map<String, Object?> json) => _$AppConfigContactListFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigContactListToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigContactDetails with _$AppConfigContactDetails {
+  const AppConfigContactDetails({this.actions = const AppConfigContactDetailsActions()});
+
+  @override
+  final AppConfigContactDetailsActions actions;
+
+  factory AppConfigContactDetails.fromJson(Map<String, Object?> json) => _$AppConfigContactDetailsFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigContactDetailsToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigContactDetailsActions with _$AppConfigContactDetailsActions {
+  const AppConfigContactDetailsActions({this.appBar, this.phoneTile, this.emailTile});
+
+  @override
+  final List<String>? appBar;
+
+  @override
+  final List<String>? phoneTile;
+
+  @override
+  final List<String>? emailTile;
+
+  factory AppConfigContactDetailsActions.fromJson(Map<String, Object?> json) =>
+      _$AppConfigContactDetailsActionsFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigContactDetailsActionsToJson(this);
 }
