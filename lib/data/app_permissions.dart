@@ -12,11 +12,17 @@ typedef ExcludePermissions = List<Permission> Function();
 final _logger = Logger('AppPermissions');
 
 class AppPermissions {
-  /// A list of special permissions required by the app, handled via `webtrit_callkeep`.
-  static const _specialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
+  /// A list of permissions that are absolutely required for the app to function correctly.
+  static const _requiredPermissions = [Permission.microphone];
 
   /// The list of all possible permissions that the app may request.
-  static const _fullPermissions = [Permission.microphone, Permission.camera, Permission.contacts, Permission.sms];
+  static const _fullPermissions = [..._requiredPermissions, Permission.camera, Permission.contacts, Permission.sms];
+
+  /// A list of special permissions that are absolutely required for the app to function correctly.
+  static const _requiredSpecialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
+
+  /// A list of special permissions required by the app, handled via `webtrit_callkeep`.
+  static const _specialPermissions = [..._requiredSpecialPermissions];
 
   /// The time-to-live for the permissions cache.
   static const _cacheTTL = Duration(seconds: 1);
@@ -41,51 +47,72 @@ class AppPermissions {
   /// The list of permissions that the app may request, excluding those specified by [_excludePermissions].
   List<Permission> get permissions => _permissionsCache.value;
 
-  /// Returns `true` if all regular permissions are denied or all special permissions are denied.
+  /// Returns `true` if any of the required permissions are not granted.
   ///
-  /// This checks the status of both [_fullPermissions] (filtered by [_excludePermissions]) and [_specialPermissions].
+  /// This checks the status of both [_requiredPermissions] and [_requiredSpecialPermissions].
   Future<bool> get isDenied async {
-    final currentPermissions = permissions;
-
-    if (currentPermissions.isNotEmpty) {
-      final statuses = await Future.wait(currentPermissions.map((p) => p.status));
-      if (statuses.every((status) => status.isDenied)) return true;
+    for (final permission in _requiredPermissions) {
+      final status = await permission.status;
+      if (!status.isGranted) {
+        return true;
+      }
     }
 
-    if (_specialPermissions.isNotEmpty) {
-      final specialStatuses = await Future.wait(_specialPermissions.map((p) => p.status()));
-      if (specialStatuses.every((status) => status.isDenied)) return true;
+    for (final permission in _requiredSpecialPermissions) {
+      final status = await permission.status();
+      if (!status.isGranted) {
+        return true;
+      }
     }
 
     return false;
   }
 
-  Future<List<CallkeepSpecialPermissions>> deniedSpecialPermissions() async {
-    final statuses = await Future.wait(
-      _specialPermissions.map((permission) async {
+  /// Checks the status of special permissions.
+  ///
+  /// [onlyRequired] - If true, checks only [_requiredSpecialPermissions].
+  ///                  If false (default), checks all [_specialPermissions].
+  Future<Map<CallkeepSpecialPermissions, CallkeepSpecialPermissionStatus>> getSpecialPermissionStatuses({
+    bool onlyRequired = false,
+  }) async {
+    final targetPermissions = onlyRequired ? _requiredSpecialPermissions : _specialPermissions;
+
+    if (targetPermissions.isEmpty) return {};
+
+    final entries = await Future.wait(
+      targetPermissions.map((permission) async {
         final status = await permission.status();
-        return status.isDenied ? permission : null;
+        return MapEntry(permission, status);
       }),
     );
-    return statuses.whereType<CallkeepSpecialPermissions>().toList();
+
+    return Map.fromEntries(entries);
   }
 
+  /// Checks the status of regular permissions.
+  ///
+  /// [onlyRequired] - If true, checks only [_requiredPermissions].
+  ///                  If false (default), checks all non-excluded permissions (the filtered list from [_fullPermissions]).
+  Future<Map<Permission, PermissionStatus>> getPermissionStatuses({bool onlyRequired = false}) async {
+    // Select the list based on the flag
+    final targetPermissions = onlyRequired ? _requiredPermissions : permissions;
+
+    if (targetPermissions.isEmpty) return {};
+
+    final entries = await Future.wait(
+      targetPermissions.map((permission) async {
+        final status = await permission.status;
+        return MapEntry(permission, status);
+      }),
+    );
+
+    return Map.fromEntries(entries);
+  }
+
+  /// Requests permissions and returns a map of permissions to their statuses.
   Future<Map<Permission, PermissionStatus>> request() async {
-    // Request statuses for the filtered permissions
     final permissionStatuses = await permissions.request();
     _logger.info('Requested permissions statuses: $permissionStatuses');
-
-    // Get statuses for special permissions
-    _logger.info('Requesting special permissions: $_specialPermissions');
-    final specialPermissionStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
-    _logger.info('Special permissions statuses: $specialPermissionStatuses');
-
-    // Update the denied status flag based on the remaining permissions
-    final isDeniedPermissions = permissionStatuses.values.every((status) => status.isDenied);
-    final isDeniedSpecialPermissions = specialPermissionStatuses.every((status) => status.isDenied);
-    _logger.info(
-      'Checking if permissions are denied - requested: $isDeniedPermissions, special: $isDeniedSpecialPermissions',
-    );
 
     return permissionStatuses;
   }
