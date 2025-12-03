@@ -2,6 +2,7 @@ import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_phone/utils/expiring_cache.dart';
 
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
 
@@ -11,17 +12,28 @@ final _logger = Logger('AppPermissions');
 
 class AppPermissions {
   static const _specialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
+
   static const _fullPermissions = [Permission.microphone, Permission.camera, Permission.contacts, Permission.sms];
+
+  static const _cacheTTL = Duration(seconds: 1);
 
   static Future<AppPermissions> init(ExcludePermissions excludePermissions) async {
     return AppPermissions._(excludePermissions);
   }
 
-  AppPermissions._(this.excludePermissions);
+  AppPermissions._(this.excludePermissions) {
+    _permissionsCache = ExpiringCache(
+      ttl: _cacheTTL,
+      compute: () => _fullPermissions.where((p) => !excludePermissions().contains(p)).toList(),
+    );
+  }
 
   final ExcludePermissions excludePermissions;
 
-  List<Permission> get permissions => _fullPermissions.where((p) => !excludePermissions().contains(p)).toList();
+  /// The timestamp of the last fetch, used for cache invalidation.
+  late final ExpiringCache<List<Permission>> _permissionsCache;
+
+  List<Permission> get permissions => _permissionsCache.value;
 
   Future<bool> get isDenied async {
     final statuses = await Future.wait(permissions.map((permission) => permission.status));
