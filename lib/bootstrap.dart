@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:logging/logging.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -59,6 +60,7 @@ Future<InstanceRegistry> bootstrap() async {
   final appThemes = await AppThemes.init();
 
   // Repositories
+  final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferences);
   final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
   final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
   final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
@@ -85,7 +87,7 @@ Future<InstanceRegistry> bootstrap() async {
   // Utilities - Capturing instances that were previously just `await Class.init()`
   final pushEnvironment = await PushEnvironment.init();
   final appPath = await AppPath.init();
-  final appPermissions = await AppPermissions.init(featureAccess);
+  final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
   final appTime = await AppTime.init();
   final appLabels = await DefaultAppMetadataProvider.init(
     packageInfo,
@@ -125,6 +127,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<SystemInfoRepository>(systemInfoRepository);
   registry.register<ActiveMainFlavorRepository>(activeMainFlavorRepository);
   registry.register<AuthRepository>(authRepository);
+  registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
 
   // Logic & Features
   registry.register<CoreSupport>(coreSupport);
@@ -145,6 +148,23 @@ Future<InstanceRegistry> bootstrap() async {
   await _initWorkManager();
 
   return registry;
+}
+
+/// Initializes [AppPermissions] with an exclusion callback.
+///
+/// This function creates a callback that combines permissions to be excluded based on feature access
+/// and the user's agreement status for contacts. This allows for dynamically determining which
+/// permissions should be excluded, for example, if a feature is disabled or the user has not consented
+/// to contact access.
+Future<AppPermissions> _createAppPermissions(
+  FeatureAccess featureAccess,
+  ContactsAgreementStatusRepository repository,
+) async {
+  return AppPermissions.init(
+    // Pass the callback directly. It captures the 'featureAccess' and 'contactsRepo'
+    // variables and evaluates them only when the callback is triggered.
+    () => [...featureAccess.excludedPermissions, ...repository.getContactsAgreementStatus().excludedPermissions],
+  );
 }
 
 Future<void> _initCallkeep(FeatureAccess featureAccess) async {

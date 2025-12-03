@@ -3,47 +3,33 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
-import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/models/models.dart';
-
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
+
+typedef ExcludePermissions = List<Permission> Function();
 
 final _logger = Logger('AppPermissions');
 
 class AppPermissions {
   static const _specialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
+  static const _fullPermissions = [Permission.microphone, Permission.camera, Permission.contacts, Permission.sms];
 
-  static Future<AppPermissions> init(FeatureAccess featureAccess) async {
-    final bottomMenuFeature = featureAccess.bottomMenuFeature;
-    final contactsSourceTypes = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
-
-    final isRequestContactsPermissions = contactsSourceTypes?.contains(ContactSourceType.local) == true;
-    final isRequestSmsPermissions = featureAccess.callFeature.callTriggerConfig.smsFallback.enabled;
-
-    final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
-
-    // Update initialization logic for better clarity and maintainability
-    final permissions = [
-      Permission.microphone,
-      Permission.camera,
-      if (isRequestContactsPermissions) Permission.contacts,
-      if (isRequestSmsPermissions) Permission.sms,
-    ];
-
-    final statuses = await Future.wait(permissions.map((permission) => permission.status));
-    final isDenied = statuses.every((status) => status.isDenied) || specialStatuses.every((status) => status.isDenied);
-    return AppPermissions._(isDenied, permissions);
+  static Future<AppPermissions> init(ExcludePermissions excludePermissions) async {
+    return AppPermissions._(excludePermissions);
   }
 
-  AppPermissions._(this._isDenied, this._permissions);
+  AppPermissions._(this.excludePermissions);
 
-  bool _isDenied;
+  final ExcludePermissions excludePermissions;
 
-  final List<Permission> _permissions;
+  List<Permission> get permissions => _fullPermissions.where((p) => !excludePermissions().contains(p)).toList();
 
-  List<Permission> get permissions => _permissions;
+  Future<bool> get isDenied async {
+    final statuses = await Future.wait(permissions.map((permission) => permission.status));
+    final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
+    final isDenied = statuses.every((status) => status.isDenied) || specialStatuses.every((status) => status.isDenied);
 
-  bool get isDenied => _isDenied;
+    return isDenied;
+  }
 
   Future<List<CallkeepSpecialPermissions>> deniedSpecialPermissions() async {
     final statuses = await Future.wait(
@@ -55,16 +41,9 @@ class AppPermissions {
     return statuses.whereType<CallkeepSpecialPermissions>().toList();
   }
 
-  Future<Map<Permission, PermissionStatus>> request({List<Permission>? exclude}) async {
-    // Filter out permissions that are in the exclude list
-    final filteredPermissions = _permissions.where((permission) {
-      return exclude == null || !exclude.contains(permission);
-    }).toList();
-
-    _logger.info('Requesting permissions: $_permissions');
-
+  Future<Map<Permission, PermissionStatus>> request() async {
     // Request statuses for the filtered permissions
-    final permissionStatuses = await filteredPermissions.request();
+    final permissionStatuses = await permissions.request();
     _logger.info('Requested permissions statuses: $permissionStatuses');
 
     // Get statuses for special permissions
@@ -78,8 +57,6 @@ class AppPermissions {
     _logger.info(
       'Checking if permissions are denied - requested: $isDeniedPermissions, special: $isDeniedSpecialPermissions',
     );
-    _isDenied = isDeniedPermissions || isDeniedSpecialPermissions;
-    _logger.info('Updated denied status: $_isDenied');
 
     return permissionStatuses;
   }

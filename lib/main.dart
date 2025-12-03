@@ -107,7 +107,6 @@ class RootApp extends StatelessWidget {
           final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(prefs);
           final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(prefs);
           final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(prefs);
-          final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(prefs);
           final encodingPresetRepository = EncodingPresetRepositoryPrefsImpl(prefs);
           final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(prefs);
           final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(prefs);
@@ -163,7 +162,7 @@ class RootApp extends StatelessWidget {
               ),
               RepositoryProvider<ActiveContactSourceTypeRepository>.value(value: activeContactSourceTypeRepository),
               RepositoryProvider<AudioProcessingSettingsRepository>.value(value: audioProcessingSettingsRepository),
-              RepositoryProvider<ContactsAgreementStatusRepository>.value(value: contactsAgreementStatusRepository),
+              RepositoryProvider<ContactsAgreementStatusRepository>.value(value: instanceRegistry.get()),
               RepositoryProvider<EncodingPresetRepository>.value(value: encodingPresetRepository),
               RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
               RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
