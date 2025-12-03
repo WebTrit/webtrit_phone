@@ -11,30 +11,38 @@ typedef ExcludePermissions = List<Permission> Function();
 final _logger = Logger('AppPermissions');
 
 class AppPermissions {
+  /// A list of special permissions required by the app, handled via `webtrit_callkeep`.
   static const _specialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
 
+  /// The list of all possible permissions that the app may request.
   static const _fullPermissions = [Permission.microphone, Permission.camera, Permission.contacts, Permission.sms];
 
+  /// The time-to-live for the permissions cache.
   static const _cacheTTL = Duration(seconds: 1);
 
   static Future<AppPermissions> init(ExcludePermissions excludePermissions) async {
     return AppPermissions._(excludePermissions);
   }
 
-  AppPermissions._(this.excludePermissions) {
+  AppPermissions._(this._excludePermissions) {
     _permissionsCache = ExpiringCache(
       ttl: _cacheTTL,
-      compute: () => _fullPermissions.where((p) => !excludePermissions().contains(p)).toList(),
+      compute: () => _fullPermissions.where((p) => !_excludePermissions().contains(p)).toList(),
     );
   }
 
-  final ExcludePermissions excludePermissions;
+  /// A function that returns a list of permissions to be excluded from the [_fullPermissions].
+  final ExcludePermissions _excludePermissions;
 
-  /// The timestamp of the last fetch, used for cache invalidation.
+  /// A cache for permissions with TTL-based expiration.
   late final ExpiringCache<List<Permission>> _permissionsCache;
 
+  /// The list of permissions that the app may request, excluding those specified by [_excludePermissions].
   List<Permission> get permissions => _permissionsCache.value;
 
+  /// Returns `true` if all regular permissions are denied or all special permissions are denied.
+  ///
+  /// This checks the status of both [_fullPermissions] (filtered by [_excludePermissions]) and [_specialPermissions].
   Future<bool> get isDenied async {
     final statuses = await Future.wait(permissions.map((permission) => permission.status));
     final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));

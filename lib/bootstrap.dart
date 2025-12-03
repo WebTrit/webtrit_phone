@@ -161,7 +161,7 @@ Future<AppPermissions> _createAppPermissions(
   ContactsAgreementStatusRepository repository,
 ) async {
   return AppPermissions.init(
-    // Pass the callback directly. It captures the 'featureAccess' and 'contactsRepo'
+    // Pass the callback directly. It captures the 'featureAccess' and 'repository'
     // variables and evaluates them only when the callback is triggered.
     () => [...featureAccess.excludedPermissions, ...repository.getContactsAgreementStatus().excludedPermissions],
   );
