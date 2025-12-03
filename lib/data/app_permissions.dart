@@ -2,7 +2,8 @@ import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_phone/utils/expiring_cache.dart';
+
+import 'package:webtrit_phone/utils/utils.dart';
 
 export 'package:permission_handler/permission_handler.dart' show Permission, PermissionStatus;
 
