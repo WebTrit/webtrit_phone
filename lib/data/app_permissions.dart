@@ -45,11 +45,19 @@ class AppPermissions {
   ///
   /// This checks the status of both [_fullPermissions] (filtered by [_excludePermissions]) and [_specialPermissions].
   Future<bool> get isDenied async {
-    final statuses = await Future.wait(permissions.map((permission) => permission.status));
-    final specialStatuses = await Future.wait(_specialPermissions.map((permission) => permission.status()));
-    final isDenied = statuses.every((status) => status.isDenied) || specialStatuses.every((status) => status.isDenied);
+    final currentPermissions = permissions;
 
-    return isDenied;
+    if (currentPermissions.isNotEmpty) {
+      final statuses = await Future.wait(currentPermissions.map((p) => p.status));
+      if (statuses.every((status) => status.isDenied)) return true;
+    }
+
+    if (_specialPermissions.isNotEmpty) {
+      final specialStatuses = await Future.wait(_specialPermissions.map((p) => p.status()));
+      if (specialStatuses.every((status) => status.isDenied)) return true;
+    }
+
+    return false;
   }
 
   Future<List<CallkeepSpecialPermissions>> deniedSpecialPermissions() async {
