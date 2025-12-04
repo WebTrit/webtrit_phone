@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import 'package:bloc/bloc.dart';
@@ -41,6 +43,8 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   final AsyncCallback isContactsPermissionGranted;
   final AsyncCallback requestContactPermission;
 
+  StreamSubscription<List<LocalContact>>? _contactsSubscription;
+
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
 
@@ -59,15 +63,9 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
       return;
     }
 
-    final localContactsForEachFuture = emit.onEach<List<LocalContact>>(
-      localContactsRepository.contacts(),
-      onData: (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
-      onError: (error, stackTrace) => _logger.warning('_onStarted', error, stackTrace),
-    );
+    _initContactsSubscription();
 
     add(const LocalContactsSyncRefreshed());
-
-    await localContactsForEachFuture;
   }
 
   void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
@@ -87,6 +85,8 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
       emit(const LocalContactsSyncPermissionFailure());
       return;
     }
+
+    _initContactsSubscription();
 
     emit(const LocalContactsSyncRefreshInProgress());
     try {
@@ -169,5 +169,21 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
         emit(const LocalContactsSyncUpdateFailure());
       }
     }
+  }
+
+  void _initContactsSubscription() {
+    if (_contactsSubscription != null) return;
+
+    _logger.info('_initContactsSubscription: subscribing to contacts stream');
+    _contactsSubscription = localContactsRepository.contacts().listen(
+      (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
+      onError: (error, stackTrace) => _logger.warning('Contacts stream error', error, stackTrace),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _contactsSubscription?.cancel();
+    return super.close();
   }
 }

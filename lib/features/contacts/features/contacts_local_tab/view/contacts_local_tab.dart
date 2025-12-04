@@ -24,7 +24,7 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    }
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

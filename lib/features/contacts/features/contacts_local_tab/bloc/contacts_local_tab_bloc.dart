@@ -29,7 +29,7 @@ class ContactsLocalTabBloc extends Bloc<ContactsLocalTabEvent, ContactsLocalTabS
   Future<void> _onStarted(ContactsLocalTabStarted event, Emitter<ContactsLocalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.local),
-      onData: (List<Contact> contacts) => ContactsLocalTabState(
+      onData: (List<Contact> contacts) => state.copyWith(
         status: _mapLocalContactsSyncStateToStatus(localContactsSyncBloc.state),
         contacts: contacts,
         searching: event.search.isNotEmpty,
