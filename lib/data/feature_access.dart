@@ -56,6 +56,7 @@ class FeatureAccess {
     this.settingsFeature,
     this.callFeature,
     this.messagingFeature,
+    this.contactsFeature,
     this.termsFeature,
     this.systemNotificationsFeature,
     this.sipPresenceFeature,
@@ -67,6 +68,7 @@ class FeatureAccess {
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
   final MessagingFeature messagingFeature;
+  final ContactsFeature contactsFeature;
   final TermsFeature termsFeature;
   final SystemNotificationsFeature systemNotificationsFeature;
   final SipPresenceFeature sipPresenceFeature;
@@ -90,6 +92,7 @@ class FeatureAccess {
       final settingsFeature = SettingsFeature.fromConfig(appConfig, embeddedResources, coreSupport, termsFeature);
       final callFeature = CallFeature.fromConfig(appConfig);
       final messagingFeature = MessagingFeature.fromConfig(appConfig, coreSupport);
+      final contactsFeature = ContactsFeature.fromConfig(appConfig);
       final systemNotificationsFeature = SystemNotificationsFeature.fromConfig(coreSupport, appConfig);
       final sipPresenceFeature = SipPresenceFeature.fromConfig(coreSupport, appConfig);
 
@@ -100,6 +103,7 @@ class FeatureAccess {
         settingsFeature,
         callFeature,
         messagingFeature,
+        contactsFeature,
         termsFeature,
         systemNotificationsFeature,
         sipPresenceFeature,
@@ -578,6 +582,53 @@ class SipPresenceFeature {
 
   /// Check if the SIP presence feature is enabled and supported by the remote system.
   bool get sipPresenceSupport => enabled && _coreSupport.supportsSipPresence;
+}
+
+/// Manages contact-related features, such as actions available on the contact details screen.
+class ContactsFeature {
+  /// Creates an instance of [ContactsFeature] with a given [detailsConfig].
+  const ContactsFeature({required this.detailsConfig});
+
+  /// The configuration for the contact details screen.
+  final ContactDetailsConfig detailsConfig;
+
+  static const Set<ContactAction> _defaultAppBarActions = {ContactAction.chat};
+
+  static const Set<ContactAction> _defaultEmailActions = {ContactAction.sendEmail};
+
+  static final Map<String, ContactAction> _actionByName = ContactAction.values.asNameMap();
+
+  /// Creates a [ContactsFeature] from the given [appConfig].
+  ///
+  /// It parses the actions defined in the contacts configuration for different UI elements.
+  /// If the config is null or contains invalid values, it falls back to defined defaults.
+  factory ContactsFeature.fromConfig(AppConfig appConfig) {
+    final detailsDto = appConfig.contacts.details;
+
+    // Pre-calculate the default "All except chat" for phone tiles
+    // to avoid recalculating it on every instantiation.
+    final defaultPhoneActions = ContactAction.values.where((action) => action != ContactAction.chat).toSet();
+
+    return ContactsFeature(
+      detailsConfig: ContactDetailsConfig(
+        appBarActions: _parseActions(detailsDto.actions.appBar, fallback: _defaultAppBarActions),
+        phoneTileActions: _parseActions(detailsDto.actions.phoneTile, fallback: defaultPhoneActions),
+        emailTileActions: _parseActions(detailsDto.actions.emailTile, fallback: _defaultEmailActions),
+      ),
+    );
+  }
+
+  /// Parses a list of raw action strings into a set of [ContactAction] enums.
+  ///
+  /// Returns [fallback] if [rawActions] is null.
+  /// Invalid strings inside [rawActions] are ignored.
+  static Set<ContactAction> _parseActions(List<String>? rawActions, {required Set<ContactAction> fallback}) {
+    if (rawActions == null) return fallback;
+
+    final parsed = rawActions.map((e) => _actionByName[e]).whereType<ContactAction>().toSet();
+
+    return parsed;
+  }
 }
 
 /// Provides a centralized way to check whether specific [FeatureFlag]s are enabled.

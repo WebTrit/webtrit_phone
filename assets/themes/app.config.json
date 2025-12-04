@@ -234,6 +234,33 @@
         "includeInactiveVideoInOfferAnswer": false
       }
     }
+  },
+  "contacts": {
+    "_list": {},
+    "__list": "Not implemented yet. Configuration for the Contacts List screen.",
+    "_details": {
+      "__details": "Configuration for the Contact Details screen, determining layout and available interactions.",
+      "actions": {
+        "__actions": "Defines the set of interactive actions (buttons or icons) available across different sections of the screen. Strings must match the 'ContactAction' enum names (e.g., 'chat', 'voiceCall', 'videoCall'). Invalid strings are ignored.",
+        "appBar": [
+          "chat"
+        ],
+        "__appBar": "Actions displayed in the top application bar (header). If omitted or null, defaults to ['chat']. Common value: 'chat'.",
+        "phoneTile": [
+          "voiceCall",
+          "videoCall",
+          "sms",
+          "transfer",
+          "callLog",
+          "favorite"
+        ],
+        "__phoneTile": "Actions available specifically on phone number items (e.g., swipe actions or inline buttons). If omitted, defaults to all available actions except 'chat'.",
+        "emailTile": [
+          "sendEmail"
+        ],
+        "__emailTile": "Actions available on email address items. If omitted, defaults to ['sendEmail']."
+      }
+    }
   }
 }
 
