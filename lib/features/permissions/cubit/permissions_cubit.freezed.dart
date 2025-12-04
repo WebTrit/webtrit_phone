@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PermissionsState {
 
- bool get hasRequestedPermissions; bool get isRequesting; List<CallkeepSpecialPermissions> get pendingSpecialPermissions; ManufacturerTip? get manufacturerTip; Object? get failure;
+ bool get initialRequestCompleted; bool get isPermanentlyDenied; bool get isRequesting; List<CallkeepSpecialPermissions> get missingSpecialPermissions; ManufacturerTip? get manufacturerTip; Object? get failure;
 /// Create a copy of PermissionsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PermissionsStateCopyWith<PermissionsState> get copyWith => _$PermissionsStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PermissionsState&&(identical(other.hasRequestedPermissions, hasRequestedPermissions) || other.hasRequestedPermissions == hasRequestedPermissions)&&(identical(other.isRequesting, isRequesting) || other.isRequesting == isRequesting)&&const DeepCollectionEquality().equals(other.pendingSpecialPermissions, pendingSpecialPermissions)&&(identical(other.manufacturerTip, manufacturerTip) || other.manufacturerTip == manufacturerTip)&&const DeepCollectionEquality().equals(other.failure, failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PermissionsState&&(identical(other.initialRequestCompleted, initialRequestCompleted) || other.initialRequestCompleted == initialRequestCompleted)&&(identical(other.isPermanentlyDenied, isPermanentlyDenied) || other.isPermanentlyDenied == isPermanentlyDenied)&&(identical(other.isRequesting, isRequesting) || other.isRequesting == isRequesting)&&const DeepCollectionEquality().equals(other.missingSpecialPermissions, missingSpecialPermissions)&&(identical(other.manufacturerTip, manufacturerTip) || other.manufacturerTip == manufacturerTip)&&const DeepCollectionEquality().equals(other.failure, failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,hasRequestedPermissions,isRequesting,const DeepCollectionEquality().hash(pendingSpecialPermissions),manufacturerTip,const DeepCollectionEquality().hash(failure));
+int get hashCode => Object.hash(runtimeType,initialRequestCompleted,isPermanentlyDenied,isRequesting,const DeepCollectionEquality().hash(missingSpecialPermissions),manufacturerTip,const DeepCollectionEquality().hash(failure));
 
 @override
 String toString() {
-  return 'PermissionsState(hasRequestedPermissions: $hasRequestedPermissions, isRequesting: $isRequesting, pendingSpecialPermissions: $pendingSpecialPermissions, manufacturerTip: $manufacturerTip, failure: $failure)';
+  return 'PermissionsState(initialRequestCompleted: $initialRequestCompleted, isPermanentlyDenied: $isPermanentlyDenied, isRequesting: $isRequesting, missingSpecialPermissions: $missingSpecialPermissions, manufacturerTip: $manufacturerTip, failure: $failure)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $PermissionsStateCopyWith<$Res>  {
   factory $PermissionsStateCopyWith(PermissionsState value, $Res Function(PermissionsState) _then) = _$PermissionsStateCopyWithImpl;
 @useResult
 $Res call({
- bool hasRequestedPermissions, bool isRequesting, List<CallkeepSpecialPermissions> pendingSpecialPermissions, ManufacturerTip? manufacturerTip, Object? failure
+ bool initialRequestCompleted, bool isPermanentlyDenied, bool isRequesting, List<CallkeepSpecialPermissions> missingSpecialPermissions, ManufacturerTip? manufacturerTip, Object? failure
 });
 
 
@@ -62,11 +62,12 @@ class _$PermissionsStateCopyWithImpl<$Res>
 
 /// Create a copy of PermissionsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? hasRequestedPermissions = null,Object? isRequesting = null,Object? pendingSpecialPermissions = null,Object? manufacturerTip = freezed,Object? failure = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? initialRequestCompleted = null,Object? isPermanentlyDenied = null,Object? isRequesting = null,Object? missingSpecialPermissions = null,Object? manufacturerTip = freezed,Object? failure = freezed,}) {
   return _then(PermissionsState(
-hasRequestedPermissions: null == hasRequestedPermissions ? _self.hasRequestedPermissions : hasRequestedPermissions // ignore: cast_nullable_to_non_nullable
+initialRequestCompleted: null == initialRequestCompleted ? _self.initialRequestCompleted : initialRequestCompleted // ignore: cast_nullable_to_non_nullable
+as bool,isPermanentlyDenied: null == isPermanentlyDenied ? _self.isPermanentlyDenied : isPermanentlyDenied // ignore: cast_nullable_to_non_nullable
 as bool,isRequesting: null == isRequesting ? _self.isRequesting : isRequesting // ignore: cast_nullable_to_non_nullable
-as bool,pendingSpecialPermissions: null == pendingSpecialPermissions ? _self.pendingSpecialPermissions : pendingSpecialPermissions // ignore: cast_nullable_to_non_nullable
+as bool,missingSpecialPermissions: null == missingSpecialPermissions ? _self.missingSpecialPermissions : missingSpecialPermissions // ignore: cast_nullable_to_non_nullable
 as List<CallkeepSpecialPermissions>,manufacturerTip: freezed == manufacturerTip ? _self.manufacturerTip : manufacturerTip // ignore: cast_nullable_to_non_nullable
 as ManufacturerTip?,failure: freezed == failure ? _self.failure : failure ,
   ));
