@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:logging/logging.dart';
+
 import 'package:webtrit_appearance_theme/models/models.dart';
+
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
 
@@ -8,6 +11,8 @@ import '../../styles/styles.dart';
 import '../theme_style_factory.dart';
 
 const double kDisabledOpacity = 0.40;
+
+final _logger = Logger('CallScreenStyleFactory');
 
 class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   CallScreenStyleFactory(this.colors, this.pageConfig, this.legacyCallActionsConfig);
@@ -44,20 +49,54 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   }
 
   CallInfoStyle? _mapCallInfoStyle(CallPageInfoConfig? cfg) {
-    if (cfg == null) return null;
+    if (cfg == null) {
+      _logger.fine('Call info styles config not provided, call info will use default styles');
+      return null;
+    }
+
+    final userInfoTextStyle = cfg.usernameTextStyle?.toTextStyle();
+    final numberTextStyle = cfg.numberTextStyle?.toTextStyle();
+    final callStatusTextStyle = cfg.callStatusTextStyle?.toTextStyle();
+    final processingStatusTextStyle = cfg.processingStatusTextStyle?.toTextStyle();
+
     return CallInfoStyle(
-      userInfo: cfg.usernameTextStyle
-          ?.toTextStyle(defaultFontSize: 24, defaultFontWeight: FontWeight.w400)
-          .copyWith(color: colors.surface),
-      number: cfg.numberTextStyle
-          ?.toTextStyle(defaultFontSize: 20, defaultFontWeight: FontWeight.w400)
-          .copyWith(color: colors.surface),
-      callStatus: cfg.callStatusTextStyle
-          ?.toTextStyle(defaultFontSize: 16, defaultFontWeight: FontWeight.w400)
-          .copyWith(color: colors.surface),
-      processingStatus: cfg.processingStatusTextStyle
-          ?.toTextStyle(defaultFontSize: 14, defaultFontWeight: FontWeight.w500)
-          .copyWith(color: colors.surface),
+      userInfo: _mergeWithDefaultTextStyle(
+        userInfoTextStyle,
+        defaultColor: colors.surface,
+        defaultFontWeight: FontWeight.w400,
+        defaultFontSize: 24,
+      ),
+      number: _mergeWithDefaultTextStyle(
+        numberTextStyle,
+        defaultColor: colors.surface,
+        defaultFontWeight: FontWeight.w400,
+        defaultFontSize: 20,
+      ),
+      callStatus: _mergeWithDefaultTextStyle(
+        callStatusTextStyle,
+        defaultColor: colors.surface,
+        defaultFontWeight: FontWeight.w400,
+        defaultFontSize: 16,
+      ),
+      processingStatus: _mergeWithDefaultTextStyle(
+        processingStatusTextStyle,
+        defaultColor: colors.surface,
+        defaultFontWeight: FontWeight.w500,
+        defaultFontSize: 14,
+      ),
+    );
+  }
+
+  TextStyle? _mergeWithDefaultTextStyle(
+    TextStyle? textStyle, {
+    required Color defaultColor,
+    required FontWeight defaultFontWeight,
+    required double defaultFontSize,
+  }) {
+    return textStyle?.copyWith(
+      color: textStyle.color ?? defaultColor,
+      fontWeight: textStyle.fontWeight ?? defaultFontWeight,
+      fontSize: textStyle.fontSize ?? defaultFontSize,
     );
   }
 
