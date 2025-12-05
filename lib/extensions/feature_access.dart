@@ -13,4 +13,13 @@ extension FeatureAccessResolver on FeatureAccess {
   FeatureChecker toChecker() {
     return FeatureChecker(_toResolver());
   }
+
+  List<Permission> get excludedPermissions {
+    final sourceTypes = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
+
+    final hasLocalContacts = sourceTypes?.contains(ContactSourceType.local) ?? false;
+    final isSmsFallbackEnabled = callFeature.callTriggerConfig.smsFallback.enabled;
+
+    return [if (!hasLocalContacts) Permission.contacts, if (!isSmsFallbackEnabled) Permission.sms];
+  }
 }
