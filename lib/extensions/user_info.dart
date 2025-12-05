@@ -31,7 +31,7 @@ extension UserInfoFormatting on UserInfo {
   }
 
   String get numberWithExtension {
-    final sb = StringBuffer(numbers.main);
+    final sb = StringBuffer(numbers.main!);
     final numbersExt = numbers.ext;
     if (numbersExt != null) {
       sb.write(' (ext: $numbersExt)');

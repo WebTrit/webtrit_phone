@@ -25,7 +25,7 @@ class FavoriteTile extends StatefulWidget {
   });
 
   final Favorite favorite;
-  final List<String> callNumbers;
+  final List<String?> callNumbers;
   final Function()? onTap;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
@@ -52,10 +52,11 @@ class _FavoriteTileState extends State<FavoriteTile> {
       PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
     if (widget.callNumbers.length > 1)
       for (final callNumber in widget.callNumbers)
-        PopupMenuItem(
-          onTap: () => widget.onCallFrom?.call(callNumber),
-          child: Text(context.l10n.numberActions_callFrom(callNumber)),
-        ),
+        if (callNumber != null)
+          PopupMenuItem(
+            onTap: () => widget.onCallFrom?.call(callNumber),
+            child: Text(context.l10n.numberActions_callFrom(callNumber)),
+          ),
     if (widget.onTransferPressed != null)
       PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
     if (widget.onChatPressed != null)

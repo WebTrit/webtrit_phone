@@ -114,13 +114,13 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
           final externalContactNumber = externalContact.number;
           final externalContactExt = externalContact.ext;
-          final externalContactMobile = externalContact.mobile;
+          final externalContactAdditional = externalContact.additional;
           final externalSmsNumbers = externalContact.smsNumbers;
 
           final externalContactNumbers = [
             if (externalContactNumber != null) externalContactNumber,
             if (externalContactExt != null) externalContactExt,
-            if (externalContactMobile != null) externalContactMobile,
+            if (externalContactAdditional != null) ...externalContactAdditional,
             if (externalSmsNumbers != null) ...externalSmsNumbers,
           ];
 
@@ -147,14 +147,16 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
               ),
             );
           }
-          if (externalContactMobile != null) {
-            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-              ContactPhoneDataCompanion(
-                number: Value(externalContactMobile),
-                label: const Value('mobile'),
-                contactId: Value(insertOrUpdateContactData.id),
-              ),
-            );
+          if (externalContactAdditional != null) {
+            for (final externalContactAdditionalNumber in externalContactAdditional) {
+              await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+                ContactPhoneDataCompanion(
+                  number: Value(externalContactAdditionalNumber),
+                  label: const Value('additional'),
+                  contactId: Value(insertOrUpdateContactData.id),
+                ),
+              );
+            }
           }
           if (externalSmsNumbers != null) {
             for (final externalSmsNumber in externalSmsNumbers) {
@@ -219,10 +221,6 @@ extension ExternalContactExtensions on ExternalContact {
 
     if (number?.trim().isNotEmpty ?? false) {
       return 'number_${number!.trim()}';
-    }
-
-    if (mobile?.trim().isNotEmpty ?? false) {
-      return 'mobile_${mobile!.trim()}';
     }
 
     if (email?.trim().isNotEmpty ?? false) {

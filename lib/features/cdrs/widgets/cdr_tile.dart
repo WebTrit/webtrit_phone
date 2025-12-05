@@ -29,7 +29,7 @@ class CdrTile extends StatefulWidget {
 
   final CdrRecord cdr;
   final Contact? contact;
-  final List<String> callNumbers;
+  final List<String?> callNumbers;
   final Function()? onTap;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
@@ -60,10 +60,11 @@ class _CdrTileState extends State<CdrTile> {
       PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
     if (widget.callNumbers.length > 1)
       for (final number in widget.callNumbers)
-        PopupMenuItem(
-          onTap: () => widget.onCallFrom?.call(number),
-          child: Text(context.l10n.numberActions_callFrom(number)),
-        ),
+        if (number != null)
+          PopupMenuItem(
+            onTap: () => widget.onCallFrom?.call(number),
+            child: Text(context.l10n.numberActions_callFrom(number)),
+          ),
     if (widget.onTransferPressed != null)
       PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
     if (widget.onChatPressed != null)

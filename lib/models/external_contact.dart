@@ -11,7 +11,7 @@ class ExternalContact extends Equatable {
     this.aliasName,
     this.number,
     this.ext,
-    this.mobile,
+    this.additional,
     this.smsNumbers,
     this.email,
   });
@@ -32,7 +32,7 @@ class ExternalContact extends Equatable {
   final String? aliasName;
   final String? number;
   final String? ext;
-  final String? mobile;
+  final List<String>? additional;
   final List<String>? smsNumbers;
   final String? email;
 
@@ -47,7 +47,7 @@ class ExternalContact extends Equatable {
     aliasName,
     number,
     ext,
-    mobile,
+    additional,
     smsNumbers,
     email,
   ];

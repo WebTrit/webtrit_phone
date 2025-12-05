@@ -138,7 +138,69 @@ class _ContactScreenState extends State<ContactScreen> {
                             textAlign: TextAlign.center,
                           ),
                           const Divider(height: 16),
-                          for (final contactPhone in contact.phones)
+                          SizedBox(
+                            key: ValueKey(contact.mobilePhone),
+                            child: ContactPhoneTile(
+                              key: contactPhoneTileKey,
+                              number: contact.mobilePhone?.number ?? 'Unknown',
+                              label: contact.mobilePhone?.label ?? 'mobile',
+                              favorite: contact.mobilePhone?.favorite ?? false,
+                              callNumbers: callRoutingState?.allNumbers ?? [],
+                              onFavoriteChanged: contact.mobilePhone != null && widget.favoriteEnabled
+                                  ? (isFavorite) {
+                                      toggleFavorite(isFavorite: isFavorite, contactPhone: contact.mobilePhone!);
+                                    }
+                                  : null,
+                              onAudioPressed: contact.mobilePhone != null
+                                  ? () => _callController.createCall(
+                                      destination: contact.mobilePhone!.number,
+                                      displayName: contact.maybeName,
+                                      video: false,
+                                    )
+                                  : null,
+                              onVideoPressed: contact.mobilePhone != null && widget.videoEnabled
+                                  ? () => _callController.createCall(
+                                      destination: contact.mobilePhone!.number,
+                                      displayName: contact.maybeName,
+                                      video: true,
+                                    )
+                                  : null,
+                              onTransferPressed: contact.mobilePhone != null && widget.transferEnabled && hasActiveCall
+                                  ? () {
+                                      _callController.submitTransfer(contact.mobilePhone!.number);
+                                      context.router.maybePop();
+                                    }
+                                  : null,
+                              onInitiatedTransferPressed:
+                                  contact.mobilePhone != null &&
+                                      widget.transferEnabled &&
+                                      callState.isBlingTransferInitiated
+                                  ? () {
+                                      _callController.submitTransfer(contact.mobilePhone!.number);
+                                      context.router.maybePop();
+                                    }
+                                  : null,
+                              onSendSmsPressed:
+                                  contact.mobilePhone != null &&
+                                      widget.smsEnabled &&
+                                      contactSmsNumbers.contains(contact.mobilePhone!.number)
+                                  ? () => sendSms(
+                                      userSmsNumbers: userSmsNumbers,
+                                      contactPhoneNumber: contact.mobilePhone!.number,
+                                      contactSourceId: contactSourceId,
+                                    )
+                                  : null,
+                              onCallLogPressed: contact.mobilePhone != null
+                                  ? () => openCallLog(number: contact.mobilePhone!.number)
+                                  : null,
+                              onCallFrom: (fromNumber) => _callController.createCall(
+                                destination: contact.mobilePhone!.number,
+                                displayName: contact.maybeName,
+                                fromNumber: fromNumber,
+                              ),
+                            ),
+                          ),
+                          for (final contactPhone in contact.additionalNumbers)
                             SizedBox(
                               key: ValueKey(contactPhone),
                               child: ContactPhoneTile(
@@ -186,6 +248,60 @@ class _ContactScreenState extends State<ContactScreen> {
                                 onCallLogPressed: () => openCallLog(number: contactPhone.number),
                                 onCallFrom: (fromNumber) => _callController.createCall(
                                   destination: contactPhone.number,
+                                  displayName: contact.maybeName,
+                                  fromNumber: fromNumber,
+                                ),
+                              ),
+                            ),
+                          if (contact.extensionPhone != null)
+                            SizedBox(
+                              key: ValueKey(contact.extensionPhone),
+                              child: ContactPhoneTile(
+                                key: contactPhoneTileKey,
+                                number: contact.extensionPhone!.number,
+                                label: contact.extensionPhone!.label,
+                                favorite: contact.extensionPhone!.favorite,
+                                callNumbers: callRoutingState?.allNumbers ?? [],
+                                onFavoriteChanged: widget.favoriteEnabled
+                                    ? (isFavorite) {
+                                        toggleFavorite(isFavorite: isFavorite, contactPhone: contact.extensionPhone!);
+                                      }
+                                    : null,
+                                onAudioPressed: () => _callController.createCall(
+                                  destination: contact.extensionPhone!.number,
+                                  displayName: contact.maybeName,
+                                  video: false,
+                                ),
+                                onVideoPressed: widget.videoEnabled
+                                    ? () => _callController.createCall(
+                                        destination: contact.extensionPhone!.number,
+                                        displayName: contact.maybeName,
+                                        video: true,
+                                      )
+                                    : null,
+                                onTransferPressed: widget.transferEnabled && hasActiveCall
+                                    ? () {
+                                        _callController.submitTransfer(contact.extensionPhone!.number);
+                                        context.router.maybePop();
+                                      }
+                                    : null,
+                                onInitiatedTransferPressed: widget.transferEnabled && callState.isBlingTransferInitiated
+                                    ? () {
+                                        _callController.submitTransfer(contact.extensionPhone!.number);
+                                        context.router.maybePop();
+                                      }
+                                    : null,
+                                onSendSmsPressed:
+                                    widget.smsEnabled && contactSmsNumbers.contains(contact.extensionPhone!.number)
+                                    ? () => sendSms(
+                                        userSmsNumbers: userSmsNumbers,
+                                        contactPhoneNumber: contact.extensionPhone!.number,
+                                        contactSourceId: contactSourceId,
+                                      )
+                                    : null,
+                                onCallLogPressed: () => openCallLog(number: contact.extensionPhone!.number),
+                                onCallFrom: (fromNumber) => _callController.createCall(
+                                  destination: contact.extensionPhone!.number,
                                   displayName: contact.maybeName,
                                   fromNumber: fromNumber,
                                 ),

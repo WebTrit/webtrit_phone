@@ -10,7 +10,7 @@ class CallerIdSettingsState extends Equatable {
   const CallerIdSettingsState({required this.settings, required this.mainNumber, required this.additionalNumbers});
 
   final CallerIdSettings settings;
-  final String mainNumber;
+  final String? mainNumber;
   final List<String> additionalNumbers;
 
   @override

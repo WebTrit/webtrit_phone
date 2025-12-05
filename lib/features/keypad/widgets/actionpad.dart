@@ -35,7 +35,7 @@ class Actionpad extends StatelessWidget {
   final VoidCallback? onBackspacePressed;
   final VoidCallback? onBackspaceLongPress;
   final Function(String)? onCallFrom;
-  final List<String> callNumbers;
+  final List<String?> callNumbers;
   final ActionpadStyle? style;
 
   @override
@@ -71,10 +71,11 @@ class Actionpad extends StatelessWidget {
                         PopupMenuItem(onTap: onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
                       if (callNumbers.length > 1)
                         for (final number in callNumbers)
-                          PopupMenuItem(
-                            onTap: () => onCallFrom?.call(number),
-                            child: Text(context.l10n.numberActions_callFrom(number)),
-                          ),
+                          if (number != null)
+                            PopupMenuItem(
+                              onTap: () => onCallFrom?.call(number),
+                              child: Text(context.l10n.numberActions_callFrom(number)),
+                            ),
                     ];
                   },
                 ),

@@ -4,7 +4,7 @@ class CallRoutingState extends Equatable {
   CallRoutingState._(this.mainNumber, this.additionalNumbers, this.mainLinesState, this.guestLineState);
 
   /// The main number of the user. From which the user makees calls regularly.
-  final String mainNumber;
+  final String? mainNumber;
 
   /// The additional numbers of the user. From which the user can make calls.
   final List<String> additionalNumbers;
@@ -19,7 +19,7 @@ class CallRoutingState extends Equatable {
   final LineState? guestLineState;
 
   /// Returns true if the user can make calls using any of the numbers.
-  late final allNumbers = <String>[mainNumber, ...additionalNumbers];
+  late final allNumbers = <String?>[mainNumber, ...additionalNumbers];
 
   @override
   List<Object?> get props => [mainNumber, additionalNumbers, mainLinesState, guestLineState];

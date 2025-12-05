@@ -31,7 +31,7 @@ class RecentTile extends StatefulWidget {
   });
 
   final Recent recent;
-  final List<String> callNumbers;
+  final List<String?> callNumbers;
   final DateFormat? dateFormat;
   final Function()? onTap;
   final Function()? onAudioCallPressed;
@@ -62,10 +62,11 @@ class _RecentTileState extends State<RecentTile> {
       PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
     if (widget.callNumbers.length > 1)
       for (final number in widget.callNumbers)
-        PopupMenuItem(
-          onTap: () => widget.onCallFrom?.call(number),
-          child: Text(context.l10n.numberActions_callFrom(number)),
-        ),
+        if (number != null)
+          PopupMenuItem(
+            onTap: () => widget.onCallFrom?.call(number),
+            child: Text(context.l10n.numberActions_callFrom(number)),
+          ),
     if (widget.onTransferPressed != null)
       PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
     if (widget.onChatPressed != null)
