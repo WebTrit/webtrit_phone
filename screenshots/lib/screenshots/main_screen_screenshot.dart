@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: depend_on_referenced_packages
@@ -31,12 +30,12 @@ class MainScreenScreenshot extends StatelessWidget {
     // Fetch tabs for the bottom menu using FeatureAccess, which is specifically used in the configurator project.
     // If FeatureAccess is not available, fallback to predefined default tabs.
     final featureAccess = context.read<FeatureAccess?>();
+
     final tabs = featureAccess?.bottomMenuFeature.tabs ?? _defaultTabs(context);
 
     return MultiProvider(
       providers: [
         // TODO(Vladislav): Replace workaround with ContactsRepository in _ContactInfoBuilderState.
-        // The data source should be moved to the BLoC for better architecture.
         Provider<ContactsRepository>(
           create: (c) => MockContactsRepository(),
         ),
@@ -47,7 +46,7 @@ class MainScreenScreenshot extends StatelessWidget {
           body: AppBarParams(
             systemNotificationsEnabled: true,
             pullableCalls: const [],
-            child: _buildFlavorWidget(context, flavor, featureAccess!),
+            child: _buildFlavorWidget(context, flavor, featureAccess),
           ),
           bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
         ),
@@ -120,7 +119,7 @@ class MainScreenScreenshot extends StatelessWidget {
     );
   }
 
-  Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor, FeatureAccess featureAccess) {
+  Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor, FeatureAccess? featureAccess) {
     final appMetadataProvider = context.read<AppMetadataProvider>();
 
     switch (flavor) {
