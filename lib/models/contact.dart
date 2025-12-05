@@ -59,7 +59,7 @@ class Contact extends Equatable {
 
   /// Computed getter for contact's first mobile phone number
   /// also known as the primary phone number or `main` number.
-  late final String? mobileNumber = phones.firstWhereOrNull((element) => element.label == 'mobile')?.number;
+  late final String? mobileNumber = phones.firstWhereOrNull((element) => element.label == 'number')?.number;
 
   /// Computed list for contact's of sms phone numbers
   /// suitable as list of number to wich user can send sms messages.
@@ -73,7 +73,7 @@ class Contact extends Equatable {
 
   late final ContactPhone? extensionPhone = phones.firstWhereOrNull((element) => element.label == 'ext');
 
-  late final ContactPhone? mobilePhone = phones.firstWhereOrNull((element) => element.label == 'mobile');
+  late final ContactPhone? mobilePhone = phones.firstWhereOrNull((element) => element.label == 'number');
 
   late final List<ContactPhone> additionalNumbers = phones
       .where((phone) => phone.label == 'additional')
