@@ -25,8 +25,7 @@ final _logger = Logger('ContactsRepository');
 ///
 /// Once all logic is migrated, the [AppDatabase] dependency and related mappers
 /// should be removed from this class.
-class ContactsRepository
-    with PresenceInfoDriftMapper, ContactsDriftMapper, ExternalContactApiMapper, AsyncKeyLockMixin {
+class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, ExternalContactApiMapper {
   ContactsRepository({
     // TODO: Remove this dependency after migrating logic to ContactsLocalDataSource
     required AppDatabase appDatabase,
@@ -39,6 +38,11 @@ class ContactsRepository
   final AppDatabase _appDatabase;
   final ContactsRemoteDataSource? _contactsRemoteDataSource;
   final ContactsLocalDataSource? _contactsLocalDataSource;
+
+  /// A lock to prevent concurrent fetching of the same contact when using
+  /// [watchContactBySourceWithPhonesAndEmails] with `fetchIfMissing: true`.
+  /// This avoids redundant network requests if a contact is requested multiple times before the first fetch completes.
+  final _contactFetchLock = AsyncKeyLock();
 
   Stream<List<Contact>> watchContacts(String search, [ContactSourceType? sourceType]) {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
@@ -102,38 +106,44 @@ class ContactsRepository
     String sourceId, {
     bool fetchIfMissing = false,
   }) {
-    return _appDatabase.contactsDao
-        .watchContactBySource(sourceType.toData(), sourceId)
-        .map((it) => contactFromFullDataOrNull(it))
-        .doOnData((contact) => _handleAutoFetch(contact, sourceType, sourceId, canFetch: fetchIfMissing));
+    return _appDatabase.contactsDao.watchContactBySource(sourceType.toData(), sourceId).asyncMap((data) async {
+      if (data != null) {
+        return contactFromDrift(
+          data.contact,
+          phones: data.phones,
+          emails: data.emails,
+          favorites: data.favorites,
+          presenceInfo: data.presenceInfo,
+        );
+      }
+
+      if (fetchIfMissing && sourceType == ContactSourceType.external) {
+        await _fetchContact(sourceId);
+      }
+
+      return null;
+    }).distinct();
   }
 
-  /// Triggers a network fetch for a missing external contact.
-  ///
-  /// If a contact is null (not found locally), and it's an `external` type,
-  /// this method initiates a fetch from the remote API. It uses an `AsyncKeyLockMixin`
-  /// to prevent duplicate network requests for the same `sourceId`.
-  void _handleAutoFetch(Contact? contact, ContactSourceType type, String sourceId, {required bool canFetch}) {
-    if (!canFetch) return;
+  /// Fetches a single external contact by its [sourceId] from the remote data source
+  /// and stores it in the local database.
+  /// It uses a lock to prevent concurrent fetches for the same contact.
+  Future<void> _fetchContact(String sourceId) async {
+    if (_contactFetchLock.isLocked(sourceId)) return;
 
-    if (contact == null && type == ContactSourceType.external) {
-      runExclusive(sourceId, () => _fetchAndUpsertContact(sourceId));
-    }
-  }
+    _contactFetchLock.lock(sourceId);
 
-  /// Fetches an external contact and upserts it into the local database.
-  ///
-  /// Retrieves contact details from the remote source using [sourceId],
-  /// maps the API response, and saves it locally. Exceptions are logged and
-  /// swallowed to prevent crashing the stream that triggered this fetch.
-  Future<void> _fetchAndUpsertContact(String sourceId) async {
     try {
-      final apiContact = await _contactsRemoteDataSource?.getContact(sourceId);
-      if (apiContact == null) return;
-      final external = externalContactFromApi(apiContact);
-      await _contactsLocalDataSource?.upsertContact(external);
+      final contact = await _contactsRemoteDataSource?.getContact(sourceId);
+
+      if (contact != null) {
+        await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact));
+        // No need to return data here; the database watcher will automatically emit the updated contact.
+      }
     } catch (e, s) {
       _logger.warning('Failed to auto-fetch contact $sourceId', e, s);
+    } finally {
+      _contactFetchLock.unlock(sourceId);
     }
   }
 

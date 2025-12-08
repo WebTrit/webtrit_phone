@@ -38,18 +38,6 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
     );
   }
 
-  Contact? contactFromFullDataOrNull(FullContactData? data) {
-    if (data == null) return null;
-
-    return contactFromDrift(
-      data.contact,
-      phones: data.phones,
-      emails: data.emails,
-      favorites: data.favorites,
-      presenceInfo: data.presenceInfo,
-    );
-  }
-
   Iterable<ContactPhone> contactPhonesFromDrift(List<ContactPhoneData> phones, List<FavoriteData> favorites) {
     return phones.map(
       (phone) =>

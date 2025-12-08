@@ -25,6 +25,16 @@ class AsyncKeyLock {
 
   /// Returns `true` if an operation for the specified [key] is currently in progress.
   bool isLocked(String key) => _pendingKeys.contains(key);
+
+  /// Manually locks a [key] to prevent [runExclusive] from executing for it.
+  ///
+  /// The key will remain locked until [unlock] is called.
+  void lock(String key) => _pendingKeys.add(key);
+
+  /// Manually unlocks a [key] that was locked with [lock].
+  ///
+  /// This allows subsequent calls to [runExclusive] for the same [key] to execute.
+  void unlock(String key) => _pendingKeys.remove(key);
 }
 
 /// A mixin that provides [AsyncKeyLock] capabilities to any class.
@@ -36,6 +46,14 @@ mixin AsyncKeyLockMixin {
   void runExclusive(String key, Future<void> Function() action) {
     _asyncKeyLock.runExclusive(key, action);
   }
+
+  /// Manually locks a [key].
+  /// See [AsyncKeyLock.lock] for details.
+  void lock(String key) => _asyncKeyLock.lock(key);
+
+  /// Manually unlocks a [key].
+  /// See [AsyncKeyLock.unlock] for details.
+  void unlock(String key) => _asyncKeyLock.unlock(key);
 
   /// Checks if [key] is currently locked.
   bool isLocked(String key) => _asyncKeyLock.isLocked(key);
