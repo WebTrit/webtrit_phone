@@ -45,7 +45,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
   /// before the initial fetch completes. When a fetch is triggered for a specific [sourceId],
   /// a [Completer] is created and stored. Subsequent requests for the same [sourceId] will
   /// simply await the existing [Completer]'s future instead of initiating a new network call.
-  final _pendingFetches = <String, Completer<void>>{};
+  final _externalContactFetchLocks = <String, Completer<void>>{};
 
   Stream<List<Contact>> watchContacts(String search, [ContactSourceType? sourceType]) {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
@@ -132,14 +132,14 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
   /// and stores it in the local database.
   ///
   /// This method implements a **single-flight** concurrency pattern using the
-  /// [_pendingFetches] pool. If a request for the same [sourceId] is already
+  /// [_externalContactFetchLocks] pool. If a request for the same [sourceId] is already
   /// in progress, subsequent callers will simply await the existing Future
   /// instead of initiating a redundant network request.
   Future<void> _fetchContact(String sourceId) async {
-    if (_pendingFetches.containsKey(sourceId)) {
-      return _pendingFetches[sourceId]!.future;
+    if (_externalContactFetchLocks.containsKey(sourceId)) {
+      return _externalContactFetchLocks[sourceId]!.future;
     }
-    _pendingFetches[sourceId] = Completer<void>();
+    _externalContactFetchLocks[sourceId] = Completer<void>();
 
     try {
       final contact = await _contactsRemoteDataSource?.getContact(sourceId);
@@ -147,15 +147,15 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
         await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
         // No need to return data here; the database watcher will automatically emit the updated contact.
       }
-      _pendingFetches[sourceId]!.complete();
+      _externalContactFetchLocks[sourceId]!.complete();
     } catch (e, s) {
       _logger.warning('Failed to auto-fetch contact $sourceId', e, s);
-      _pendingFetches[sourceId]!.completeError(e, s);
+      _externalContactFetchLocks[sourceId]!.completeError(e, s);
     } finally {
-      _pendingFetches.remove(sourceId);
+      _externalContactFetchLocks.remove(sourceId);
     }
 
-    return _pendingFetches[sourceId]!.future;
+    return _externalContactFetchLocks[sourceId]!.future;
   }
 
   Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
