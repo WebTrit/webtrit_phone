@@ -131,25 +131,22 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
   /// Fetches a single external contact by its [sourceId] from the remote data source
   /// and stores it in the local database.
   ///
-  /// It uses a lock to prevent concurrent fetches for the same contact,
-  /// ensuring that if multiple requests for the same `sourceId` arrive simultaneously, only one network request is made.
+  /// This method implements a **single-flight** concurrency pattern using the
+  /// [_pendingFetches] pool. If a request for the same [sourceId] is already
+  /// in progress, subsequent callers will simply await the existing Future
+  /// instead of initiating a redundant network request.
   Future<void> _fetchContact(String sourceId) async {
     if (_pendingFetches.containsKey(sourceId)) {
       return _pendingFetches[sourceId]!.future;
     }
-
     _pendingFetches[sourceId] = Completer<void>();
 
     try {
       final contact = await _contactsRemoteDataSource?.getContact(sourceId);
-
       if (contact != null) {
         await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
-        _logger.fine('Fetched contact $sourceId');
-      } else {
-        _logger.warning('Failed to fetch contact $sourceId');
+        // No need to return data here; the database watcher will automatically emit the updated contact.
       }
-
       _pendingFetches[sourceId]!.complete();
     } catch (e, s) {
       _logger.warning('Failed to auto-fetch contact $sourceId', e, s);
