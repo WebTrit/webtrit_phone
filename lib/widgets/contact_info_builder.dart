@@ -60,6 +60,7 @@ class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
       ContactSourceId(sourceType: var type, sourceId: var id) => contactsRepo.watchContactBySourceWithPhonesAndEmails(
         type,
         id,
+        fetchIfMissing: true,
       ),
     };
     contactSub = stream.listen((contact) {

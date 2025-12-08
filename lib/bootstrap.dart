@@ -251,7 +251,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   if (appPush is PendingCallPush && Platform.isAndroid) {
     final appDatabase = await IsolateDatabase.create();
-    final contactsRepository = ContactsRepository(appDatabase: appDatabase);
+    final contactsRepository = ContactsRepository(
+      appDatabase: appDatabase,
+      contactsRemoteDataSource: null,
+      contactsLocalDataSource: null,
+    );
 
     final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
     final displayName = contact?.maybeName ?? appPush.call.displayName;

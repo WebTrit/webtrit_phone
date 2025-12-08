@@ -121,9 +121,26 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         RepositoryProvider<CallLogsRepository>(
           create: (context) => CallLogsRepository(appDatabase: context.read<AppDatabase>()),
         ),
+
+        // TODO: Refactor dependency injection.
         RepositoryProvider<ContactsRepository>(
-          create: (context) => ContactsRepository(appDatabase: context.read<AppDatabase>()),
+          create: (context) {
+            final appDatabase = context.read<AppDatabase>();
+            final webtritApiClient = context.read<WebtritApiClient>();
+
+            final token = context.read<AppBloc>().state.session.token!;
+
+            final contactsRemoteDataSource = ContactsRemoteDataSourceImpl(webtritApiClient, token);
+            final contactsLocalDataSource = ContactsLocalDataSourceImpl(appDatabase);
+
+            return ContactsRepository(
+              appDatabase: appDatabase,
+              contactsRemoteDataSource: contactsRemoteDataSource,
+              contactsLocalDataSource: contactsLocalDataSource,
+            );
+          },
         ),
+
         RepositoryProvider<LocalContactsRepository>(create: (context) => LocalContactsRepository()),
         RepositoryProvider<PushTokensRepository>(
           create: (context) => PushTokensRepository(
