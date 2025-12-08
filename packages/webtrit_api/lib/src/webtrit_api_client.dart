@@ -353,6 +353,20 @@ class WebtritApiClient {
     }).toList();
   }
 
+  Future<UserContact> getUserContact(
+    String userId,
+    String token, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'contacts', userId],
+      null,
+      token,
+      requestOptions: options,
+    );
+    return UserContact.fromJson(responseJson as Map<String, dynamic>);
+  }
+
   Future<void> deleteUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
     await _httpClientExecuteDelete(['user'], null, token, options: options);
   }
