@@ -39,10 +39,13 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
   final ContactsRemoteDataSource? _contactsRemoteDataSource;
   final ContactsLocalDataSource? _contactsLocalDataSource;
 
-  /// A lock to prevent concurrent fetching of the same contact when using
-  /// [watchContactBySourceWithPhonesAndEmails] with `fetchIfMissing: true`.
-  /// This avoids redundant network requests if a contact is requested multiple times before the first fetch completes.
-  final _contactFetchLock = AsyncKeyLock();
+  /// Pool of [Completer] objects used to manage concurrent network fetching for the same contact source ID.
+  ///
+  /// This avoids **redundant network requests** if a contact is requested multiple times
+  /// before the initial fetch completes. When a fetch is triggered for a specific [sourceId],
+  /// a [Completer] is created and stored. Subsequent requests for the same [sourceId] will
+  /// simply await the existing [Completer]'s future instead of initiating a new network call.
+  final _pendingFetches = <String, Completer<void>>{};
 
   Stream<List<Contact>> watchContacts(String search, [ContactSourceType? sourceType]) {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
@@ -127,24 +130,34 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
 
   /// Fetches a single external contact by its [sourceId] from the remote data source
   /// and stores it in the local database.
-  /// It uses a lock to prevent concurrent fetches for the same contact.
+  ///
+  /// It uses a lock to prevent concurrent fetches for the same contact,
+  /// ensuring that if multiple requests for the same `sourceId` arrive simultaneously, only one network request is made.
   Future<void> _fetchContact(String sourceId) async {
-    if (_contactFetchLock.isLocked(sourceId)) return;
+    if (_pendingFetches.containsKey(sourceId)) {
+      return _pendingFetches[sourceId]!.future;
+    }
 
-    _contactFetchLock.lock(sourceId);
+    _pendingFetches[sourceId] = Completer<void>();
 
     try {
       final contact = await _contactsRemoteDataSource?.getContact(sourceId);
 
       if (contact != null) {
         await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact));
-        // No need to return data here; the database watcher will automatically emit the updated contact.
+      } else {
+        _logger.warning('Failed to fetch contact $sourceId');
       }
+
+      _pendingFetches[sourceId]!.complete();
     } catch (e, s) {
       _logger.warning('Failed to auto-fetch contact $sourceId', e, s);
+      _pendingFetches[sourceId]!.completeError(e, s);
     } finally {
-      _contactFetchLock.unlock(sourceId);
+      _pendingFetches.remove(sourceId);
     }
+
+    return _pendingFetches[sourceId]!.future;
   }
 
   Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
