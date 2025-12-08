@@ -41,7 +41,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       contactsRepository.watchContact(contactId),
       onData: (contact) {
         return state.copyWith(contact: contact, deleted: contact == null);
-        },
+      },
     );
   }
 

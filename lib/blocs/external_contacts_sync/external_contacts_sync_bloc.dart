@@ -35,7 +35,9 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
     final externalContactsForEachFuture = emit.onEach<List<ExternalContact>>(
       externalContactsRepository.contacts(),
-      onData: (contacts) => add(_ExternalContactsSyncUpdated(contacts: contacts)),
+      onData: (contacts) {
+        return add(_ExternalContactsSyncUpdated(contacts: contacts));
+      },
       onError: (e, stackTrace) => _logger.warning('_onStarted', e, stackTrace),
     );
 
@@ -147,23 +149,23 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
               ),
             );
           }
-          if (externalContactAdditional != null) {
-            for (final externalContactAdditionalNumber in externalContactAdditional) {
-              await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-                ContactPhoneDataCompanion(
-                  number: Value(externalContactAdditionalNumber),
-                  label: const Value('additional'),
-                  contactId: Value(insertOrUpdateContactData.id),
-                ),
-              );
-            }
-          }
           if (externalSmsNumbers != null) {
             for (final externalSmsNumber in externalSmsNumbers) {
               await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
                 ContactPhoneDataCompanion(
                   number: Value(externalSmsNumber),
                   label: const Value('sms'),
+                  contactId: Value(insertOrUpdateContactData.id),
+                ),
+              );
+            }
+          }
+          if (externalContactAdditional != null) {
+            for (final externalContactAdditionalNumber in externalContactAdditional) {
+              await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+                ContactPhoneDataCompanion(
+                  number: Value(externalContactAdditionalNumber),
+                  label: const Value('additional'),
                   contactId: Value(insertOrUpdateContactData.id),
                 ),
               );

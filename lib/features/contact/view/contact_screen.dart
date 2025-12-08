@@ -118,7 +118,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             child: ContactPhoneTile(
                               key: contactPhoneTileKey,
                               number: contact.mobilePhone?.number ?? 'Unknown',
-                              label: contact.mobilePhone?.label ?? 'mobile',
+                              label: contact.mobilePhone?.label ?? 'number',
                               favorite: contact.mobilePhone?.favorite ?? false,
                               callNumbers: callRoutingState?.allNumbers ?? [],
                               onFavoriteChanged: contact.mobilePhone != null && widget.enableTileFavorite
@@ -205,41 +205,34 @@ class _ContactScreenState extends State<ContactScreen> {
                                 label: contact.extensionPhone!.label,
                                 favorite: contact.extensionPhone!.favorite,
                                 callNumbers: callRoutingState?.allNumbers ?? [],
-                                onFavoriteChanged: contact.extensionPhone != null && widget.enableTileFavorite
+                                onFavoriteChanged: widget.enableTileFavorite
                                     ? (isFavorite) => _onFavoriteChanged(isFavorite, contact.extensionPhone!)
                                     : null,
-                                onAudioPressed: contact.extensionPhone != null && widget.enableTileVoiceCall
+                                onAudioPressed: widget.enableTileVoiceCall
                                     ? () => _onAudioPressed(contact.extensionPhone!, contact)
                                     : null,
-                                onVideoPressed: contact.extensionPhone != null && widget.enableTileVideoCall
+                                onVideoPressed: widget.enableTileVideoCall
                                     ? () => _onVideoPressed(contact.extensionPhone!, contact)
                                     : null,
-                                onTransferPressed:
-                                    contact.extensionPhone != null && widget.enableTileTransfer && hasActiveCall
+                                onTransferPressed: widget.enableTileTransfer && hasActiveCall
                                     ? () => _onTransferPressed(contact.extensionPhone!)
                                     : null,
                                 onInitiatedTransferPressed:
-                                    contact.extensionPhone != null &&
-                                        widget.enableTileTransfer &&
-                                        callState.isBlingTransferInitiated
+                                    widget.enableTileTransfer && callState.isBlingTransferInitiated
                                     ? () => _onTransferPressed(contact.extensionPhone!)
                                     : null,
                                 onSendSmsPressed:
-                                    contact.extensionPhone != null &&
-                                        widget.enableTileSms &&
-                                        contactSmsNumbers.contains(contact.extensionPhone!.number)
+                                    widget.enableTileSms && contactSmsNumbers.contains(contact.extensionPhone!.number)
                                     ? () => _onSendSmsPressed(contact.extensionPhone!, contactSourceId, userSmsNumbers)
                                     : null,
-                                onMessagePressed:
-                                    contact.extensionPhone != null && widget.enableTileChat && contact.canMessage
+                                onMessagePressed: widget.enableTileChat && contact.canMessage
                                     ? () => _navigateToChatConversation(contact)
                                     : null,
-                                onCallLogPressed: contact.extensionPhone != null && widget.enableTileCallLog
+                                onCallLogPressed: widget.enableTileCallLog
                                     ? () => _onCallLogPressed(contact.extensionPhone!.number)
                                     : null,
-                                onCallFrom: contact.extensionPhone != null
-                                    ? (fromNumber) => _onCallFromPressed(contact.extensionPhone!, contact, fromNumber)
-                                    : null,
+                                onCallFrom: (fromNumber) =>
+                                    _onCallFromPressed(contact.extensionPhone!, contact, fromNumber),
                               ),
                             ),
                           for (final contactEmail in contact.emails)
