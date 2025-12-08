@@ -4,7 +4,7 @@ import 'package:webtrit_phone/models/models.dart';
 abstract class ContactsLocalDataSource {
   Future<void> syncContacts(List<ExternalContact> contacts, String? currentUserMainNumber);
 
-  Future<int> upsertContact(ExternalContact externalContact);
+  Future<int> upsertContact(ExternalContact externalContact, ContactKind kind);
 }
 
 class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
@@ -122,13 +122,13 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
   }
 
   @override
-  Future<int> upsertContact(ExternalContact externalContact) async {
+  Future<int> upsertContact(ExternalContact externalContact, ContactKind kind) async {
     return _appDatabase.transaction(() async {
       final insertOrUpdateContactData = await _appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
         ContactDataCompanion(
           sourceType: const Value(ContactSourceTypeEnum.external),
           sourceId: Value(externalContact.safeSourceId),
-          kind: const Value(ContactKind.service),
+          kind: Value(kind),
           firstName: Value(externalContact.firstName),
           lastName: Value(externalContact.lastName),
           aliasName: Value(externalContact.aliasName),

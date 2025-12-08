@@ -144,7 +144,8 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
       final contact = await _contactsRemoteDataSource?.getContact(sourceId);
 
       if (contact != null) {
-        await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact));
+        await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
+        _logger.fine('Fetched contact $sourceId');
       } else {
         _logger.warning('Failed to fetch contact $sourceId');
       }
