@@ -6,13 +6,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class SessionStatusListTile extends StatelessWidget {
-  const SessionStatusListTile({
-    super.key,
-    required this.status,
-    this.info,
-    this.onTap,
-    this.contentPadding,
-  });
+  const SessionStatusListTile({super.key, required this.status, this.info, this.onTap, this.contentPadding});
 
   final SessionStatus status;
   final UserInfo? info;
@@ -29,16 +23,9 @@ class SessionStatusListTile extends StatelessWidget {
       leading: CircleAvatar(
         radius: 12,
         backgroundColor: themeData.colorScheme.surface.withValues(alpha: 0.5),
-        child: CircleAvatar(
-          radius: 4,
-          backgroundColor: status.color(context),
-        ),
+        child: CircleAvatar(radius: 4, backgroundColor: status.color(context)),
       ),
-      title: Text(
-        status.l10n(context),
-        key: status.key,
-        style: themeData.textTheme.labelLarge,
-      ),
+      title: Text(status.l10n(context), key: status.key, style: themeData.textTheme.labelLarge),
       trailing: const Icon(Icons.arrow_right),
     );
   }

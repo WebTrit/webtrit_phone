@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class LoginScaffold extends StatelessWidget {
-  const LoginScaffold({
-    super.key,
-    this.appBar,
-    this.body,
-  });
+  const LoginScaffold({super.key, this.appBar, this.body});
 
   final PreferredSizeWidget? appBar;
   final Widget? body;
@@ -22,12 +18,8 @@ class LoginScaffold extends StatelessWidget {
           builder: (context, viewportConstraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
-                ),
-                child: IntrinsicHeight(
-                  child: body,
-                ),
+                constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+                child: IntrinsicHeight(child: body),
               ),
             );
           },

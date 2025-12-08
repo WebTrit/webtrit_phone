@@ -23,11 +23,7 @@ class DemoActionOverlay {
 
   bool get inserted => _entry != null;
 
-  void insert({
-    required BuildContext context,
-    required Widget child,
-    GestureTapCallback? onTap,
-  }) {
+  void insert({required BuildContext context, required Widget child, GestureTapCallback? onTap}) {
     if (inserted) return;
 
     _entry = OverlayEntry(
@@ -36,10 +32,7 @@ class DemoActionOverlay {
         initialOffset: _offset ?? _calculateButtonOffset(),
         onOffsetUpdate: (offset) => _offset = offset,
         onTap: onTap,
-        child: Container(
-          constraints: BoxConstraints.tight(_converterCardSize),
-          child: child,
-        ),
+        child: Container(constraints: BoxConstraints.tight(_converterCardSize), child: child),
       ),
     );
 
@@ -56,9 +49,6 @@ class DemoActionOverlay {
     final cardAndPadding = _converterCardSize.height + _stickyPadding.bottom;
     final totalHeight = screenSize.height - bottomBarHeight - safePadding.bottom;
 
-    return Offset(
-      screenSize.width - _converterCardSize.width - _stickyPadding.right,
-      totalHeight - cardAndPadding,
-    );
+    return Offset(screenSize.width - _converterCardSize.width - _stickyPadding.right, totalHeight - cardAndPadding);
   }
 }

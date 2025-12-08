@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,445 +9,384 @@ part of 'common.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Numbers _$NumbersFromJson(Map<String, dynamic> json) {
-  return _Numbers.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Numbers {
-  String get main => throw _privateConstructorUsedError;
-  String? get ext => throw _privateConstructorUsedError;
-  List<String>? get additional => throw _privateConstructorUsedError;
-  List<String>? get sms => throw _privateConstructorUsedError;
 
-  /// Serializes this Numbers to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+ String get main; String? get ext; List<String>? get additional; List<String>? get sms;
+/// Create a copy of Numbers
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$NumbersCopyWith<Numbers> get copyWith => _$NumbersCopyWithImpl<Numbers>(this as Numbers, _$identity);
 
-  /// Create a copy of Numbers
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $NumbersCopyWith<Numbers> get copyWith => throw _privateConstructorUsedError;
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Numbers&&(identical(other.main, main) || other.main == main)&&(identical(other.ext, ext) || other.ext == ext)&&const DeepCollectionEquality().equals(other.additional, additional)&&const DeepCollectionEquality().equals(other.sms, sms));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,main,ext,const DeepCollectionEquality().hash(additional),const DeepCollectionEquality().hash(sms));
+
+@override
+String toString() {
+  return 'Numbers(main: $main, ext: $ext, additional: $additional, sms: $sms)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $NumbersCopyWith<$Res> {
-  factory $NumbersCopyWith(Numbers value, $Res Function(Numbers) then) =
-      _$NumbersCopyWithImpl<$Res, Numbers>;
-  @useResult
-  $Res call(
-      {String main, String? ext, List<String>? additional, List<String>? sms});
-}
+abstract mixin class $NumbersCopyWith<$Res>  {
+  factory $NumbersCopyWith(Numbers value, $Res Function(Numbers) _then) = _$NumbersCopyWithImpl;
+@useResult
+$Res call({
+ String main, String? ext, List<String>? additional, List<String>? sms
+});
 
+
+
+
+}
 /// @nodoc
-class _$NumbersCopyWithImpl<$Res, $Val extends Numbers>
+class _$NumbersCopyWithImpl<$Res>
     implements $NumbersCopyWith<$Res> {
-  _$NumbersCopyWithImpl(this._value, this._then);
+  _$NumbersCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Numbers _self;
+  final $Res Function(Numbers) _then;
 
-  /// Create a copy of Numbers
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? main = null,
-    Object? ext = freezed,
-    Object? additional = freezed,
-    Object? sms = freezed,
-  }) {
-    return _then(_value.copyWith(
-      main: null == main
-          ? _value.main
-          : main // ignore: cast_nullable_to_non_nullable
-              as String,
-      ext: freezed == ext
-          ? _value.ext
-          : ext // ignore: cast_nullable_to_non_nullable
-              as String?,
-      additional: freezed == additional
-          ? _value.additional
-          : additional // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      sms: freezed == sms
-          ? _value.sms
-          : sms // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-    ) as $Val);
-  }
+/// Create a copy of Numbers
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? main = null,Object? ext = freezed,Object? additional = freezed,Object? sms = freezed,}) {
+  return _then(Numbers(
+main: null == main ? _self.main : main // ignore: cast_nullable_to_non_nullable
+as String,ext: freezed == ext ? _self.ext : ext // ignore: cast_nullable_to_non_nullable
+as String?,additional: freezed == additional ? _self.additional : additional // ignore: cast_nullable_to_non_nullable
+as List<String>?,sms: freezed == sms ? _self.sms : sms // ignore: cast_nullable_to_non_nullable
+as List<String>?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$NumbersImplCopyWith<$Res> implements $NumbersCopyWith<$Res> {
-  factory _$$NumbersImplCopyWith(
-          _$NumbersImpl value, $Res Function(_$NumbersImpl) then) =
-      __$$NumbersImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String main, String? ext, List<String>? additional, List<String>? sms});
 }
 
-/// @nodoc
-class __$$NumbersImplCopyWithImpl<$Res>
-    extends _$NumbersCopyWithImpl<$Res, _$NumbersImpl>
-    implements _$$NumbersImplCopyWith<$Res> {
-  __$$NumbersImplCopyWithImpl(
-      _$NumbersImpl _value, $Res Function(_$NumbersImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of Numbers
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? main = null,
-    Object? ext = freezed,
-    Object? additional = freezed,
-    Object? sms = freezed,
-  }) {
-    return _then(_$NumbersImpl(
-      main: null == main
-          ? _value.main
-          : main // ignore: cast_nullable_to_non_nullable
-              as String,
-      ext: freezed == ext
-          ? _value.ext
-          : ext // ignore: cast_nullable_to_non_nullable
-              as String?,
-      additional: freezed == additional
-          ? _value._additional
-          : additional // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      sms: freezed == sms
-          ? _value._sms
-          : sms // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-    ));
-  }
+/// Adds pattern-matching-related methods to [Numbers].
+extension NumbersPatterns on Numbers {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-class _$NumbersImpl implements _Numbers {
-  const _$NumbersImpl(
-      {required this.main,
-      this.ext,
-      final List<String>? additional,
-      final List<String>? sms})
-      : _additional = additional,
-        _sms = sms;
-
-  factory _$NumbersImpl.fromJson(Map<String, dynamic> json) =>
-      _$$NumbersImplFromJson(json);
-
-  @override
-  final String main;
-  @override
-  final String? ext;
-  final List<String>? _additional;
-  @override
-  List<String>? get additional {
-    final value = _additional;
-    if (value == null) return null;
-    if (_additional is EqualUnmodifiableListView) return _additional;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<String>? _sms;
-  @override
-  List<String>? get sms {
-    final value = _sms;
-    if (value == null) return null;
-    if (_sms is EqualUnmodifiableListView) return _sms;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  @override
-  String toString() {
-    return 'Numbers(main: $main, ext: $ext, additional: $additional, sms: $sms)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$NumbersImpl &&
-            (identical(other.main, main) || other.main == main) &&
-            (identical(other.ext, ext) || other.ext == ext) &&
-            const DeepCollectionEquality()
-                .equals(other._additional, _additional) &&
-            const DeepCollectionEquality().equals(other._sms, _sms));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      main,
-      ext,
-      const DeepCollectionEquality().hash(_additional),
-      const DeepCollectionEquality().hash(_sms));
-
-  /// Create a copy of Numbers
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$NumbersImplCopyWith<_$NumbersImpl> get copyWith =>
-      __$$NumbersImplCopyWithImpl<_$NumbersImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$NumbersImplToJson(
-      this,
-    );
-  }
 }
 
-abstract class _Numbers implements Numbers {
-  const factory _Numbers(
-      {required final String main,
-      final String? ext,
-      final List<String>? additional,
-      final List<String>? sms}) = _$NumbersImpl;
-
-  factory _Numbers.fromJson(Map<String, dynamic> json) = _$NumbersImpl.fromJson;
-
-  @override
-  String get main;
-  @override
-  String? get ext;
-  @override
-  List<String>? get additional;
-  @override
-  List<String>? get sms;
-
-  /// Create a copy of Numbers
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$NumbersImplCopyWith<_$NumbersImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-Balance _$BalanceFromJson(Map<String, dynamic> json) {
-  return _Balance.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Balance {
-  BalanceType? get balanceType => throw _privateConstructorUsedError;
-  double? get amount => throw _privateConstructorUsedError;
-  double? get creditLimit => throw _privateConstructorUsedError;
-  String? get currency => throw _privateConstructorUsedError;
 
-  /// Serializes this Balance to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+ BalanceType? get balanceType; double? get amount; double? get creditLimit; String? get currency;
+/// Create a copy of Balance
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$BalanceCopyWith<Balance> get copyWith => _$BalanceCopyWithImpl<Balance>(this as Balance, _$identity);
 
-  /// Create a copy of Balance
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $BalanceCopyWith<Balance> get copyWith => throw _privateConstructorUsedError;
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Balance&&(identical(other.balanceType, balanceType) || other.balanceType == balanceType)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.creditLimit, creditLimit) || other.creditLimit == creditLimit)&&(identical(other.currency, currency) || other.currency == currency));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,balanceType,amount,creditLimit,currency);
+
+@override
+String toString() {
+  return 'Balance(balanceType: $balanceType, amount: $amount, creditLimit: $creditLimit, currency: $currency)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $BalanceCopyWith<$Res> {
-  factory $BalanceCopyWith(Balance value, $Res Function(Balance) then) =
-      _$BalanceCopyWithImpl<$Res, Balance>;
-  @useResult
-  $Res call(
-      {BalanceType? balanceType,
-      double? amount,
-      double? creditLimit,
-      String? currency});
-}
+abstract mixin class $BalanceCopyWith<$Res>  {
+  factory $BalanceCopyWith(Balance value, $Res Function(Balance) _then) = _$BalanceCopyWithImpl;
+@useResult
+$Res call({
+ BalanceType? balanceType, double? amount, double? creditLimit, String? currency
+});
 
+
+
+
+}
 /// @nodoc
-class _$BalanceCopyWithImpl<$Res, $Val extends Balance>
+class _$BalanceCopyWithImpl<$Res>
     implements $BalanceCopyWith<$Res> {
-  _$BalanceCopyWithImpl(this._value, this._then);
+  _$BalanceCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Balance _self;
+  final $Res Function(Balance) _then;
 
-  /// Create a copy of Balance
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? balanceType = freezed,
-    Object? amount = freezed,
-    Object? creditLimit = freezed,
-    Object? currency = freezed,
-  }) {
-    return _then(_value.copyWith(
-      balanceType: freezed == balanceType
-          ? _value.balanceType
-          : balanceType // ignore: cast_nullable_to_non_nullable
-              as BalanceType?,
-      amount: freezed == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as double?,
-      creditLimit: freezed == creditLimit
-          ? _value.creditLimit
-          : creditLimit // ignore: cast_nullable_to_non_nullable
-              as double?,
-      currency: freezed == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
+/// Create a copy of Balance
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? balanceType = freezed,Object? amount = freezed,Object? creditLimit = freezed,Object? currency = freezed,}) {
+  return _then(Balance(
+balanceType: freezed == balanceType ? _self.balanceType : balanceType // ignore: cast_nullable_to_non_nullable
+as BalanceType?,amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as double?,creditLimit: freezed == creditLimit ? _self.creditLimit : creditLimit // ignore: cast_nullable_to_non_nullable
+as double?,currency: freezed == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$BalanceImplCopyWith<$Res> implements $BalanceCopyWith<$Res> {
-  factory _$$BalanceImplCopyWith(
-          _$BalanceImpl value, $Res Function(_$BalanceImpl) then) =
-      __$$BalanceImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {BalanceType? balanceType,
-      double? amount,
-      double? creditLimit,
-      String? currency});
 }
 
-/// @nodoc
-class __$$BalanceImplCopyWithImpl<$Res>
-    extends _$BalanceCopyWithImpl<$Res, _$BalanceImpl>
-    implements _$$BalanceImplCopyWith<$Res> {
-  __$$BalanceImplCopyWithImpl(
-      _$BalanceImpl _value, $Res Function(_$BalanceImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of Balance
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? balanceType = freezed,
-    Object? amount = freezed,
-    Object? creditLimit = freezed,
-    Object? currency = freezed,
-  }) {
-    return _then(_$BalanceImpl(
-      balanceType: freezed == balanceType
-          ? _value.balanceType
-          : balanceType // ignore: cast_nullable_to_non_nullable
-              as BalanceType?,
-      amount: freezed == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as double?,
-      creditLimit: freezed == creditLimit
-          ? _value.creditLimit
-          : creditLimit // ignore: cast_nullable_to_non_nullable
-              as double?,
-      currency: freezed == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
+/// Adds pattern-matching-related methods to [Balance].
+extension BalancePatterns on Balance {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-class _$BalanceImpl implements _Balance {
-  const _$BalanceImpl(
-      {this.balanceType, this.amount, this.creditLimit, this.currency});
-
-  factory _$BalanceImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BalanceImplFromJson(json);
-
-  @override
-  final BalanceType? balanceType;
-  @override
-  final double? amount;
-  @override
-  final double? creditLimit;
-  @override
-  final String? currency;
-
-  @override
-  String toString() {
-    return 'Balance(balanceType: $balanceType, amount: $amount, creditLimit: $creditLimit, currency: $currency)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$BalanceImpl &&
-            (identical(other.balanceType, balanceType) ||
-                other.balanceType == balanceType) &&
-            (identical(other.amount, amount) || other.amount == amount) &&
-            (identical(other.creditLimit, creditLimit) ||
-                other.creditLimit == creditLimit) &&
-            (identical(other.currency, currency) ||
-                other.currency == currency));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, balanceType, amount, creditLimit, currency);
-
-  /// Create a copy of Balance
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$BalanceImplCopyWith<_$BalanceImpl> get copyWith =>
-      __$$BalanceImplCopyWithImpl<_$BalanceImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BalanceImplToJson(
-      this,
-    );
-  }
 }
 
-abstract class _Balance implements Balance {
-  const factory _Balance(
-      {final BalanceType? balanceType,
-      final double? amount,
-      final double? creditLimit,
-      final String? currency}) = _$BalanceImpl;
-
-  factory _Balance.fromJson(Map<String, dynamic> json) = _$BalanceImpl.fromJson;
-
-  @override
-  BalanceType? get balanceType;
-  @override
-  double? get amount;
-  @override
-  double? get creditLimit;
-  @override
-  String? get currency;
-
-  /// Create a copy of Balance
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BalanceImplCopyWith<_$BalanceImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

@@ -1,11 +1,7 @@
 import '../abstract_events.dart';
 
 class UpdatedEvent extends CallEvent {
-  const UpdatedEvent({
-    super.transaction,
-    required super.line,
-    required super.callId,
-  });
+  const UpdatedEvent({super.transaction, required super.line, required super.callId});
 
   static const typeValue = 'updated';
 
@@ -15,10 +11,6 @@ class UpdatedEvent extends CallEvent {
       throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    return UpdatedEvent(
-      transaction: json['transaction'],
-      line: json['line'],
-      callId: json['call_id'],
-    );
+    return UpdatedEvent(transaction: json['transaction'], line: json['line'], callId: json['call_id']);
   }
 }

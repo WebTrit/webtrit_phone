@@ -5,28 +5,15 @@ import '../models/models.dart';
 import 'store_client.dart';
 
 class GooglePlayStoreClient extends BaseStoreClient {
-  GooglePlayStoreClient({
-    super.httpClient,
-  });
+  GooglePlayStoreClient({super.httpClient});
 
   @override
   Future<StoreInfo?> getStoreInfo(String appPackageName) async {
-    final viewUrl = Uri.https(
-      'play.google.com',
-      '/store/apps/details',
-      {
-        'id': appPackageName,
-      },
-    );
+    final viewUrl = Uri.https('play.google.com', '/store/apps/details', {'id': appPackageName});
     print('viewUrl: $viewUrl');
-    final response = await get(
-      viewUrl,
-    );
+    final response = await get(viewUrl);
     if (response.statusCode != 200) {
-      throw StoreInfoExtractorResponseError(
-        statusCode: response.statusCode,
-        reasonPhrase: response.reasonPhrase,
-      );
+      throw StoreInfoExtractorResponseError(statusCode: response.statusCode, reasonPhrase: response.reasonPhrase);
     } else {
       final match = RegExp(r'\[\[\["(\d+.\d+.\d+)"\]\]').firstMatch(response.body);
       if (match == null) {
@@ -36,10 +23,7 @@ class GooglePlayStoreClient extends BaseStoreClient {
         if (versionValue == null) {
           return null;
         } else {
-          return StoreInfo(
-            version: Version.parse(versionValue),
-            viewUrl: viewUrl,
-          );
+          return StoreInfo(version: Version.parse(versionValue), viewUrl: viewUrl);
         }
       }
     }

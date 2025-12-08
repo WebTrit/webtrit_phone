@@ -32,12 +32,12 @@ class CallScreen extends StatefulWidget {
 class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
   @override
   void didPush() {
-    context.read<CallBloc>().add(CallScreenEvent.didPush());
+    context.read<CallBloc>().add(const CallScreenEvent.didPush());
   }
 
   @override
   void didPop() {
-    context.read<CallBloc>().add(CallScreenEvent.didPop());
+    context.read<CallBloc>().add(const CallScreenEvent.didPop());
   }
 
   @override
@@ -65,9 +65,10 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
       builder: (context, state) {
         if (state.isActive) {
           return CallActiveScaffold(
-            speaker: state.speaker,
             callStatus: state.status,
             activeCalls: state.activeCalls,
+            audioDevice: state.audioDevice,
+            availableAudioDevices: state.availableAudioDevices,
             callConfig: widget.callConfig,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
@@ -78,9 +79,6 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
       },
     );
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: style ?? SystemUiOverlayStyle.light,
-      child: scaffold,
-    );
+    return AnnotatedRegion<SystemUiOverlayStyle>(value: style ?? SystemUiOverlayStyle.light, child: scaffold);
   }
 }

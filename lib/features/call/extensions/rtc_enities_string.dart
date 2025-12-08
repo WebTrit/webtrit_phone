@@ -29,3 +29,7 @@ extension RTCTrackEventToString on RTCTrackEvent {
   String get str =>
       'TrackEvent(track: ${track.str}, receiver: ${receiver?.str}, transceiver: ${transceiver?.str}, streams: ${streams.map((e) => e.str).toList()})';
 }
+
+extension MediaDeviceInfoToString on MediaDeviceInfo {
+  String get str => 'MediaDeviceInfo(id: $deviceId, kind: $kind, label: $label, groupId: $groupId)';
+}

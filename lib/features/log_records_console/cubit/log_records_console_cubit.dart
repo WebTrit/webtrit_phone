@@ -55,10 +55,6 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     final time = logRecords[0].time;
     final name = '$_namePrefix${_timeSlug(time)}.log';
 
-    await shareLogRecords(
-      logRecords,
-      logRecordsFormatter: logRecordsFormatter,
-      name: name,
-    );
+    await shareLogRecords(logRecords, logRecordsFormatter: logRecordsFormatter, name: name);
   }
 }

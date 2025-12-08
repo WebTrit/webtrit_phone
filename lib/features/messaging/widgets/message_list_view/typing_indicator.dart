@@ -6,12 +6,7 @@ import '../participant_name.dart';
 import 'typing_icon_driver.dart';
 
 class TypingIndicator extends StatelessWidget {
-  const TypingIndicator({
-    super.key,
-    required this.userId,
-    this.typingUsers = const {},
-    this.typingNumbers = const {},
-  });
+  const TypingIndicator({super.key, required this.userId, this.typingUsers = const {}, this.typingNumbers = const {}});
 
   final String userId;
   final Set<String> typingUsers;
@@ -34,12 +29,8 @@ class TypingIndicator extends StatelessWidget {
           spacing: 4,
           children: [
             const TypingIconDriver(),
-            for (final id in typingUsers) ...[
-              ParticipantName(senderId: id, userId: userId, style: textStyle),
-            ],
-            for (final number in typingNumbers) ...[
-              Text(number, style: textStyle),
-            ],
+            for (final id in typingUsers) ...[ParticipantName(senderId: id, userId: userId, style: textStyle)],
+            for (final number in typingNumbers) ...[Text(number, style: textStyle)],
             Text(context.l10n.messaging_MessageListView_typingTrail, style: textStyle),
           ],
         ),

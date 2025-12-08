@@ -2,19 +2,12 @@ import 'abstract_requests.dart';
 import 'call/call_requests.dart';
 
 abstract class CallRequest extends LineRequest {
-  const CallRequest({
-    required super.transaction,
-    required super.line,
-    required this.callId,
-  });
+  const CallRequest({required super.transaction, required super.line, required this.callId});
 
   final String callId;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        callId,
-      ];
+  List<Object?> get props => [...super.props, callId];
 
   factory CallRequest.fromJson(Map<String, dynamic> json) {
     final callRequest = tryFromJson(json);

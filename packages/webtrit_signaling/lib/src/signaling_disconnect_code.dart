@@ -1,14 +1,6 @@
 import 'package:web_socket_channel/status.dart' as status;
 
-enum SignalingDisconnectCodeType {
-  auxiliary,
-  socket,
-  session,
-  app,
-  controller,
-  signaling,
-  request,
-}
+enum SignalingDisconnectCodeType { auxiliary, socket, session, app, controller, signaling, request }
 
 enum SignalingDisconnectCode {
   normalClosure(SignalingDisconnectCodeType.auxiliary, status.normalClosure),

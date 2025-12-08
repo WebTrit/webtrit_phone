@@ -1,22 +1,24 @@
 part of 'embedded_cubit.dart';
 
-enum EmbeddedIntents {
-  reloadWebView,
-}
+enum EmbeddedIntents { reloadWebView }
 
 @freezed
 class EmbeddedState with _$EmbeddedState {
-  const EmbeddedState._();
+  const EmbeddedState({this.payload = const {}, this.currentUrl = '', this.canGoBack = false, this.intent});
 
-  const factory EmbeddedState({
-    @Default({}) Map<String, dynamic> payload,
-    @Default('') String currentUrl,
-    @Default(false) bool canGoBack,
-    @Default(false) bool payloadReady,
-    EmbeddedIntents? intent,
-  }) = _Initial;
+  @override
+  final Map<String, dynamic> payload;
 
-  bool get isReadyToInjectedScript => payloadReady;
+  @override
+  final String currentUrl;
+
+  @override
+  final bool canGoBack;
+
+  @override
+  final EmbeddedIntents? intent;
+
+  bool get isReadyToInjectedScript => payload.isNotEmpty;
 
   bool get isReloadWebView => intent == EmbeddedIntents.reloadWebView;
 }

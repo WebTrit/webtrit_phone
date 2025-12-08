@@ -44,23 +44,16 @@ class WebtritApiClient {
     Duration? connectionTimeout,
     TrustedCertificates certs = TrustedCertificates.empty,
   }) : this.inner(
-          baseUrl,
-          tenantId,
-          httpClient: createHttpClient(
-            connectionTimeout: connectionTimeout,
-            certs: certs,
-          ),
-        );
+         baseUrl,
+         tenantId,
+         httpClient: createHttpClient(connectionTimeout: connectionTimeout, certs: certs),
+       );
 
   @visibleForTesting
-  WebtritApiClient.inner(
-    Uri baseUrl,
-    String tenantId, {
-    required http.Client httpClient,
-    Logger? logger,
-  })  : _httpClient = httpClient,
-        _logger = Logger('WebtritApiClient'),
-        tenantUrl = buildTenantUrl(baseUrl, tenantId);
+  WebtritApiClient.inner(Uri baseUrl, String tenantId, {required http.Client httpClient, Logger? logger})
+    : _httpClient = httpClient,
+      _logger = Logger('WebtritApiClient'),
+      tenantUrl = buildTenantUrl(baseUrl, tenantId);
 
   final Uri tenantUrl;
   final http.Client _httpClient;
@@ -123,7 +116,8 @@ class WebtritApiClient {
         final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
 
         _logger.info(
-            '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}');
+          '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}',
+        );
 
         if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
           // Return response in the requested format depending on the response type:
@@ -141,6 +135,19 @@ class WebtritApiClient {
             {'errors': {'detail': _}} => null,
             _ => ErrorResponse.fromJson(responseDataJson),
           };
+
+          // Map 422 with code="refresh_token_invalid" to UnauthorizedException.
+          // This ensures higher layers can handle expired/invalid sessions in a unified way
+          // (e.g., trigger global logout or token refresh).
+          if (httpResponse.statusCode == 422 && error?.code == 'refresh_token_invalid') {
+            throw UnauthorizedException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              token: token,
+              error: error,
+            );
+          }
 
           // If the server responds with 404 or 501, it may indicate that a specific private endpoint
           // is not implemented by the current adapter (e.g., tenant-specific or backend version mismatch).
@@ -218,13 +225,7 @@ class WebtritApiClient {
     Object? requestDataJson, {
     RequestOptions options = const RequestOptions(),
   }) {
-    return _httpClientExecute(
-      'patch',
-      pathSegments,
-      token,
-      requestDataJson,
-      options: options,
-    );
+    return _httpClientExecute('patch', pathSegments, token, requestDataJson, options: options);
   }
 
   Future<dynamic> _httpClientExecuteDelete(
@@ -233,24 +234,11 @@ class WebtritApiClient {
     String? token, {
     RequestOptions options = const RequestOptions(),
   }) {
-    return _httpClientExecute(
-      'delete',
-      pathSegments,
-      token,
-      null,
-      options: options,
-    );
+    return _httpClientExecute('delete', pathSegments, token, null, options: options);
   }
 
-  Future<SystemInfo> getSystemInfo({
-    RequestOptions options = const RequestOptions(),
-  }) async {
-    final responseJson = await _httpClientExecuteGet(
-      ['system-info'],
-      null,
-      null,
-      requestOptions: options,
-    );
+  Future<SystemInfo> getSystemInfo({RequestOptions options = const RequestOptions()}) async {
+    final responseJson = await _httpClientExecuteGet(['system-info'], null, null, requestOptions: options);
 
     return SystemInfo.fromJson(responseJson);
   }
@@ -260,18 +248,9 @@ class WebtritApiClient {
     Map<String, dynamic>? extraPayload,
     RequestOptions options = const RequestOptions(),
   }) async {
-    final requestPayload = {
-      ...sessionUserCredential.toJson(),
-      if (extraPayload?.isNotEmpty == true) ...extraPayload!,
-    };
+    final requestPayload = {...sessionUserCredential.toJson(), if (extraPayload?.isNotEmpty == true) ...extraPayload!};
 
-    final responseJson = await _httpClientExecutePost(
-      ['user'],
-      null,
-      null,
-      requestPayload,
-      options: options,
-    );
+    final responseJson = await _httpClientExecutePost(['user'], null, null, requestPayload, options: options);
 
     return SessionResult.fromJson(responseJson);
   }
@@ -298,10 +277,7 @@ class WebtritApiClient {
     String code, {
     RequestOptions options = const RequestOptions(),
   }) async {
-    final requestJson = {
-      'otp_id': sessionOtpProvisional.otpId,
-      'code': code,
-    };
+    final requestJson = {'otp_id': sessionOtpProvisional.otpId, 'code': code};
 
     final responseJson = await _httpClientExecutePost(
       ['session', 'otp-verify'],
@@ -319,13 +295,7 @@ class WebtritApiClient {
   }) async {
     final requestJson = sessionLoginCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(
-      ['session'],
-      null,
-      null,
-      requestJson,
-      options: options,
-    );
+    final responseJson = await _httpClientExecutePost(['session'], null, null, requestJson, options: options);
 
     return SessionToken.fromJson(responseJson);
   }
@@ -347,80 +317,36 @@ class WebtritApiClient {
     return SessionToken.fromJson(responseJson);
   }
 
-  Future<void> deleteSession(
-    String token, {
-    RequestOptions options = const RequestOptions(),
-  }) async {
-    await _httpClientExecuteDelete(
-      ['session'],
-      null,
-      token,
-      options: options,
-    );
+  Future<void> deleteSession(String token, {RequestOptions options = const RequestOptions()}) async {
+    await _httpClientExecuteDelete(['session'], null, token, options: options);
   }
 
-  Future<UserInfo> getUserInfo(
-    String token, {
-    RequestOptions options = const RequestOptions(),
-  }) async {
+  Future<UserInfo> getUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
     try {
-      final responseJson = await _httpClientExecuteGet(
-        ['user'],
-        null,
-        token,
-        requestOptions: options,
-      );
+      final responseJson = await _httpClientExecuteGet(['user'], null, token, requestOptions: options);
       return UserInfo.fromJson(responseJson);
     } on RequestFailure catch (e) {
       if (e.statusCode == 404) {
-        throw UserNotFoundException(
-          url: e.url,
-          requestId: e.requestId,
-          statusCode: e.statusCode!,
-        );
+        throw UserNotFoundException(url: e.url, requestId: e.requestId, statusCode: e.statusCode!);
       }
       rethrow;
     }
   }
 
-  Future<List<UserContact>> getUserContactList(
-    String token, {
-    RequestOptions options = const RequestOptions(),
-  }) async {
-    final responseJson = await _httpClientExecuteGet(
-      ['user', 'contacts'],
-      null,
-      token,
-      requestOptions: options,
-    );
+  Future<List<UserContact>> getUserContactList(String token, {RequestOptions options = const RequestOptions()}) async {
+    final responseJson = await _httpClientExecuteGet(['user', 'contacts'], null, token, requestOptions: options);
 
     return (responseJson['items'] as List<dynamic>).map((e) {
       return UserContact.fromJson(e as Map<String, dynamic>);
     }).toList();
   }
 
-  Future<void> deleteUserInfo(
-    String token, {
-    RequestOptions options = const RequestOptions(),
-  }) async {
-    await _httpClientExecuteDelete(
-      ['user'],
-      null,
-      token,
-      options: options,
-    );
+  Future<void> deleteUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
+    await _httpClientExecuteDelete(['user'], null, token, options: options);
   }
 
-  Future<AppStatus> getAppStatus(
-    String token, {
-    RequestOptions options = const RequestOptions(),
-  }) async {
-    final responseJson = await _httpClientExecuteGet(
-      ['app', 'status'],
-      null,
-      token,
-      requestOptions: options,
-    );
+  Future<AppStatus> getAppStatus(String token, {RequestOptions options = const RequestOptions()}) async {
+    final responseJson = await _httpClientExecuteGet(['app', 'status'], null, token, requestOptions: options);
 
     return AppStatus.fromJson(responseJson);
   }
@@ -432,13 +358,7 @@ class WebtritApiClient {
   }) async {
     final requestJson = appStatus.toJson();
 
-    await _httpClientExecutePatch(
-      ['app', 'status'],
-      null,
-      token,
-      requestJson,
-      options: options,
-    );
+    await _httpClientExecutePatch(['app', 'status'], null, token, requestJson, options: options);
   }
 
   Future<void> createAppContact(
@@ -448,13 +368,7 @@ class WebtritApiClient {
   }) async {
     final requestJson = appContacts.map((e) => e.toJson()).toList();
 
-    await _httpClientExecutePost(
-      ['app', 'contacts'],
-      null,
-      token,
-      requestJson,
-      options: options,
-    );
+    await _httpClientExecutePost(['app', 'contacts'], null, token, requestJson, options: options);
   }
 
   Future<List<AppSmartContact>> getAppSmartContactList(
@@ -478,13 +392,7 @@ class WebtritApiClient {
   }) async {
     final requestJson = appPushToken.toJson();
 
-    await _httpClientExecutePost(
-      ['app', 'push-tokens'],
-      null,
-      token,
-      requestJson,
-      options: options,
-    );
+    await _httpClientExecutePost(['app', 'push-tokens'], null, token, requestJson, options: options);
   }
 
   Future<DemoCallToActionsResponse> getCallToActions(
@@ -506,10 +414,7 @@ class WebtritApiClient {
     return DemoCallToActionsResponse.fromJson(responseJson);
   }
 
-  Future<SelfConfigResponse> getSelfConfig(
-    String token, {
-    RequestOptions options = const RequestOptions(),
-  }) async {
+  Future<SelfConfigResponse> getSelfConfig(String token, {RequestOptions options = const RequestOptions()}) async {
     final responseJson = await _httpClientExecutePost(
       ['custom', 'private', 'self-config-portal-url'],
       null,
@@ -662,10 +567,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
-      queryParameters: {
-        'updated_after': since.toUtc().toIso8601String(),
-        if (limit != null) 'limit': limit.toString(),
-      },
+      queryParameters: {'updated_after': since.toUtc().toIso8601String(), if (limit != null) 'limit': limit.toString()},
     );
     print('Response JSON: $responseJson');
 
@@ -686,5 +588,28 @@ class WebtritApiClient {
       requestJson,
       options: options,
     );
+  }
+
+  Future<CdrHistoryResponse> getCdrHistory(
+    String token, {
+    DateTime? from,
+    DateTime? to,
+    int? limit,
+    String? locale,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'history'],
+      locale != null ? {'Accept-Language': locale} : null,
+      token,
+      requestOptions: options,
+      queryParameters: {
+        if (from != null) 'time_from': from.toUtc().toIso8601String(),
+        if (to != null) 'time_to': to.toUtc().toIso8601String(),
+        if (limit != null) 'items_per_page': limit.toString(),
+      },
+    );
+
+    return CdrHistoryResponse.fromJson(responseJson as Map<String, dynamic>);
   }
 }

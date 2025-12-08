@@ -16,13 +16,7 @@ class TransferEvent extends LineEvent {
   final String? replaceCallId;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        referId,
-        referTo,
-        referredBy,
-        replaceCallId,
-      ];
+  List<Object?> get props => [...super.props, referId, referTo, referredBy, replaceCallId];
 
   static const typeValue = 'transfer';
 

@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -11,6 +13,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/auth/session_repository.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -25,96 +28,75 @@ final _logger = Logger('AppBloc');
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({
     required this.appPreferences,
-    required this.secureStorage,
-    required this.appDatabase,
+    required this.sessionRepository,
+    required this.appInfo,
     @visibleForTesting this.createWebtritApiClient = defaultCreateWebtritApiClient,
     required AppThemes appThemes,
-  }) : super(AppState(
-          coreUrl: secureStorage.readCoreUrl(),
-          tenantId: secureStorage.readTenantId(),
-          token: secureStorage.readToken(),
-          userId: secureStorage.readUserId(),
-          themeSettings: appThemes.values.first.settings,
-          themeMode: appPreferences.getThemeMode(),
-          locale: appPreferences.getLocale(),
-          userAgreementStatus: appPreferences.getUserAgreementStatus(),
-          contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
-        )) {
-    on<AppLogined>(_onLogined, transformer: sequential());
-    on<AppLogouted>(_onLogouted, transformer: sequential());
-    on<AppLogoutedTeardown>(_onLogoutedTeardown, transformer: sequential());
+  }) : super(
+         AppState(
+           /// Important to manage routing and navigation in AppRouter
+           session: sessionRepository.getCurrent() ?? const Session(),
+           themeSettings: appThemes.values.first.settings,
+           themeMode: appPreferences.getThemeMode(),
+           locale: appPreferences.getLocale(),
+           userAgreementStatus: appPreferences.getUserAgreementStatus(),
+           contactsAgreementStatus: appPreferences.getContactsAgreementStatus(),
+         ),
+       ) {
+    on<_SessionUpdated>(_onSessionUpdated, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
     on<AppAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
+
+    _subscribeSession();
   }
 
   final AppPreferences appPreferences;
-  final SecureStorage secureStorage;
-  final AppDatabase appDatabase;
   final WebtritApiClientFactory createWebtritApiClient;
+  final SessionRepository sessionRepository;
+  final AppInfo appInfo;
 
-  Future<void> _cleanUpUserData() async {
-    await appPreferences.clear();
+  late final StreamSubscription<Session?> _sessionSub;
 
-    await secureStorage.deleteCoreUrl();
-    await secureStorage.deleteTenantId();
-    await secureStorage.deleteToken();
-    await secureStorage.deleteUserId();
-    await secureStorage.deleteExternalPageTokenData();
-
-    await appDatabase.deleteEverything();
-  }
-
-  void _onLogined(AppLogined event, Emitter<AppState> emit) async {
-    // Check if the user is re-logging in.
-    // Example: logging in with a deeplink while already logged with another account.
-    // In this case, clear the database and preferences.
-    final isRelogin = state.token != null;
-    if (isRelogin) await _cleanUpUserData();
-
-    await secureStorage.writeCoreUrl(event.coreUrl);
-    await secureStorage.writeTenantId(event.tenantId);
-    await secureStorage.writeToken(event.token);
-    await secureStorage.writeUserId(event.userId);
-
-    await appPreferences.setSystemInfo(event.systemInfo);
-
-    emit(state.copyWith(
-      coreUrl: event.coreUrl,
-      tenantId: event.tenantId,
-      token: event.token,
-      userId: event.userId,
-    ));
-
-    FirebaseCrashlytics.instance.setUserIdentifier(event.userId).ignore();
-    FirebaseCrashlytics.instance.setCustomKey('coreUrl', event.coreUrl).ignore();
-    FirebaseCrashlytics.instance.setCustomKey('tenantId', event.tenantId).ignore();
-  }
-
-  void _onLogouted(AppLogouted event, Emitter<AppState> emit) async {
-    final token = state.token;
-    final coreUrl = state.coreUrl;
-
-    if (token != null && coreUrl != null && event.checkTokenForError) {
-      try {
-        final client = createWebtritApiClient(coreUrl, state.tenantId ?? '');
-        await client.getUserInfo(token, options: const RequestOptions(retries: 0));
-      } on RequestFailure catch (e) {
-        final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
-        emit(state.copyWith(accountErrorCode: errorCode));
-      } catch (e) {
-        _logger.severe('_onLogouted', e);
-      }
+  @override
+  void onChange(Change<AppState> change) {
+    /// Trigger when user transitions from logged out to logged in
+    if (!change.currentState.session.isLoggedIn && change.nextState.session.isLoggedIn) {
+      _onSessionLoggedIn(change.nextState.session);
     }
 
-    await _cleanUpUserData();
-
-    emit(state.copyWith(coreUrl: null, tenantId: null, token: null, userId: null));
+    /// Trigger when user transitions from logged in to logged out
+    if (change.currentState.session.isLoggedIn && !change.nextState.session.isLoggedIn) {
+      _onSessionLoggedOut(change.currentState.session);
+    }
+    super.onChange(change);
   }
 
-  void _onLogoutedTeardown(AppLogoutedTeardown event, Emitter<AppState> emit) async {
-    emit(state.copyWith(accountErrorCode: null));
+  void _onSessionLoggedIn(Session session) {
+    unawaited(
+      CrashlyticsUtils.logSession(
+        userId: session.userId,
+        tenantId: session.tenantId,
+        coreUrl: session.coreUrl!,
+        sessionId: appInfo.identifier,
+      ),
+    );
+  }
+
+  void _onSessionLoggedOut(Session session) {
+    _logger.info('User logged out: ${session.userId}');
+  }
+
+  void _subscribeSession() {
+    _sessionSub = sessionRepository.watch().listen(
+      (session) => add(_SessionUpdated(session)),
+      onError: (e, st) => _logger.severe('authSessionRepository.watch', e, st),
+    );
+  }
+
+  void _onSessionUpdated(_SessionUpdated event, Emitter<AppState> emit) async {
+    emit(state.copyWith(session: event.session ?? const Session()));
   }
 
   void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {
@@ -141,38 +123,40 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     emit(state.copyWith(locale: locale));
   }
 
+  /// Handles unauthorized errors for the active session.
+  /// Logs out only if the failing request used the current token,
+  /// avoiding accidental logout from outdated tokens (e.g. after re-login).
+  // TODO: Consider moving this logic to another place, like a middleware or interceptor.
   void maybeHandleError(Object error) {
     if (error is RequestFailure) {
       if (error.statusCode == HttpStatus.unauthorized) {
-        if (state.token != null && state.token == error.token) {
-          add(const AppLogouted());
+        if (state.session.isLoggedIn && state.session.token == error.token) {
+          sessionRepository.logout();
         }
       }
     }
   }
 
-  Future<void> _onUserAgreementAccepted(
-    AppAgreementAccepted event,
-    Emitter<AppState> emit,
-  ) {
-    return event.map(
-        updateUserAgreement: (event) => __onUpdateUserAgreementStatus(event, emit),
-        updateContactsAgreement: (event) => __onContactsUserAgreementStatus(event, emit));
+  Future<void> _onUserAgreementAccepted(AppAgreementAccepted event, Emitter<AppState> emit) {
+    return switch (event) {
+      _UserAppAgreementUpdate() => __onUpdateUserAgreementStatus(event, emit),
+      _ContactsAppAgreementUpdate() => __onContactsUserAgreementStatus(event, emit),
+    };
   }
 
-  Future<void> __onUpdateUserAgreementStatus(
-    _UserAppAgreementUpdate event,
-    Emitter<AppState> emit,
-  ) async {
+  Future<void> __onUpdateUserAgreementStatus(_UserAppAgreementUpdate event, Emitter<AppState> emit) async {
     await appPreferences.setUserAgreementStatus(event.status);
     emit(state.copyWith(userAgreementStatus: event.status));
   }
 
-  Future<void> __onContactsUserAgreementStatus(
-    _ContactsAppAgreementUpdate event,
-    Emitter<AppState> emit,
-  ) async {
+  Future<void> __onContactsUserAgreementStatus(_ContactsAppAgreementUpdate event, Emitter<AppState> emit) async {
     await appPreferences.setContactsAgreementStatus(event.status);
     emit(state.copyWith(contactsAgreementStatus: event.status));
+  }
+
+  @override
+  Future<void> close() async {
+    await _sessionSub.cancel();
+    return super.close();
   }
 }

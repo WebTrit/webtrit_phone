@@ -7,9 +7,7 @@ abstract class StoreClient {
 }
 
 abstract class BaseStoreClient extends StoreClient {
-  BaseStoreClient({
-    http.Client? httpClient,
-  }) : _httpClient = httpClient ?? http.Client();
+  BaseStoreClient({http.Client? httpClient}) : _httpClient = httpClient ?? http.Client();
 
   final http.Client _httpClient;
 

@@ -14,10 +14,8 @@ part 'session_status_cubit.freezed.dart';
 final _logger = Logger('SessionStatusCubit');
 
 class SessionStatusCubit extends Cubit<SessionStatusState> {
-  SessionStatusCubit({
-    required PushTokensBloc pushTokensBloc,
-    required CallBloc callBloc,
-  }) : super(const SessionStatusState.initial()) {
+  SessionStatusCubit({required PushTokensBloc pushTokensBloc, required CallBloc callBloc})
+    : super(const SessionStatusState()) {
     _pushTokensSubscription = pushTokensBloc.stream.listen(_onPushTokensChanged);
     _callSubscription = callBloc.stream.listen(_onCallChanged);
 

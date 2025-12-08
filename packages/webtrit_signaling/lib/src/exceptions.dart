@@ -66,7 +66,11 @@ abstract class WebtritSignalingTransactionTerminateException extends WebtritSign
 
 class WebtritSignalingTransactionTerminateByDisconnectException extends WebtritSignalingTransactionTerminateException {
   const WebtritSignalingTransactionTerminateByDisconnectException(
-      super.id, super.transactionId, this.closeCode, this.closeReason);
+    super.id,
+    super.transactionId,
+    this.closeCode,
+    this.closeReason,
+  );
 
   final int? closeCode;
   final String? closeReason;

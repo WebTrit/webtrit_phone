@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import '../models/theme_asset.dart';
 
 class LogoAssets extends ThemeExtension<LogoAssets> {
-  const LogoAssets({
-    required this.primaryOnboarding,
-    required this.secondaryOnboarding,
-  });
+  const LogoAssets({required this.primaryOnboarding, required this.secondaryOnboarding});
 
-  final ThemeSvgAsset primaryOnboarding;
-  final ThemeSvgAsset secondaryOnboarding;
+  final ThemeSvgAsset? primaryOnboarding;
+  final ThemeSvgAsset? secondaryOnboarding;
 
   @override
-  ThemeExtension<LogoAssets> copyWith({
-    ThemeSvgAsset? primaryOnboarding,
-    ThemeSvgAsset? secondaryOnboarding,
-  }) {
+  ThemeExtension<LogoAssets> copyWith({ThemeSvgAsset? primaryOnboarding, ThemeSvgAsset? secondaryOnboarding}) {
     return LogoAssets(
       primaryOnboarding: primaryOnboarding ?? this.primaryOnboarding,
       secondaryOnboarding: secondaryOnboarding ?? this.secondaryOnboarding,

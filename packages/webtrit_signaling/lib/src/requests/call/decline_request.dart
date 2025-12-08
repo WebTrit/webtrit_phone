@@ -1,12 +1,7 @@
 import '../abstract_requests.dart';
 
 class DeclineRequest extends CallRequest {
-  const DeclineRequest({
-    required super.transaction,
-    required super.line,
-    required super.callId,
-    this.referId,
-  });
+  const DeclineRequest({required super.transaction, required super.line, required super.callId, this.referId});
 
   static const typeValue = 'decline';
   final String? referId;

@@ -27,16 +27,9 @@ class CallkeepLogs implements CallkeepLogsDelegate {
     }
   }
 
-  void _recordCrashlyticsError(
-    String message, {
-    bool fatal = false,
-  }) {
+  void _recordCrashlyticsError(String message, {bool fatal = false}) {
     try {
-      FirebaseCrashlytics.instance.recordError(
-        Exception(message),
-        null,
-        fatal: fatal,
-      );
+      FirebaseCrashlytics.instance.recordError(Exception(message), null, fatal: fatal);
     } catch (e) {
       _logger.warning('Failed to record error to FirebaseCrashlytics: $e');
     }

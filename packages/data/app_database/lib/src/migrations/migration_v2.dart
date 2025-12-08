@@ -11,10 +11,7 @@ class MigrationV2 extends Migration {
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
     final contactEmailsTable = v2.ContactEmails(db);
-    final newSchemaEntities = [
-      contactEmailsTable,
-      ...db.generateTableCompanionEntities(contactEmailsTable),
-    ];
+    final newSchemaEntities = [contactEmailsTable, ...db.generateTableCompanionEntities(contactEmailsTable)];
     for (final entity in newSchemaEntities) {
       await m.create(entity);
     }

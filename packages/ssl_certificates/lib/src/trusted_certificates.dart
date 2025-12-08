@@ -1,13 +1,9 @@
 class TrustedCertificates {
   static const TrustedCertificates empty = TrustedCertificates._internal(certificates: []);
 
-  const TrustedCertificates._internal({
-    required this.certificates,
-  });
+  const TrustedCertificates._internal({required this.certificates});
 
-  factory TrustedCertificates({
-    List<TrustCertificate> certificates = const [],
-  }) {
+  factory TrustedCertificates({List<TrustCertificate> certificates = const []}) {
     return TrustedCertificates._internal(certificates: certificates);
   }
 
@@ -17,15 +13,9 @@ class TrustedCertificates {
 }
 
 class TrustCertificate {
-  const TrustCertificate._internal({
-    required this.bytes,
-    required this.password,
-  });
+  const TrustCertificate._internal({required this.bytes, required this.password});
 
-  factory TrustCertificate({
-    required List<int> bytes,
-    String? password,
-  }) {
+  factory TrustCertificate({required List<int> bytes, String? password}) {
     if (bytes.isEmpty) {
       throw ArgumentError('certificate cannot be empty');
     }

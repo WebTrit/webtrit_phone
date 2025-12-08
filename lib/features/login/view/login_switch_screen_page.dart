@@ -7,6 +7,9 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
+export 'login_switch_screen_style.dart';
+export 'login_switch_screen_styles.dart.dart';
+
 enum SafeAreaSide { top, bottom, left, right }
 
 @RoutePage()
@@ -17,15 +20,21 @@ class LoginSwitchScreenPage extends StatelessWidget {
     this.forceLoginTypes,
     this.isLogoVisible = true,
     this.isAppBarVisible = true,
+    this.style,
   });
 
   final Set<SafeAreaSide> bodySafeAreaSides;
   final List<LoginType>? forceLoginTypes;
   final bool isLogoVisible;
   final bool isAppBarVisible;
+  final LoginSwitchScreenStyle? style;
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyle? localStyle = style ?? loginPageStyles?.primary;
+
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) =>
           whenLoginSwitchScreenPageActive(current) && previous.supportedLoginTypes != current.supportedLoginTypes,
@@ -44,10 +53,10 @@ class LoginSwitchScreenPage extends StatelessWidget {
                     )
                   : null,
               header: isLogoVisible
-                  ? const Column(
+                  ? Column(
                       children: [
-                        OnboardingLogo(),
-                        SizedBox(height: kInset),
+                        OnboardingLogo(style: localStyle?.onboardingLogoStyle),
+                        const SizedBox(height: kInset),
                       ],
                     )
                   : null,

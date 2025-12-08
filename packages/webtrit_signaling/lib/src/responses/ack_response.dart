@@ -1,11 +1,7 @@
 import 'response.dart';
 
 class AckResponse extends Response {
-  const AckResponse({
-    super.transaction,
-    super.line,
-    super.callId,
-  });
+  const AckResponse({super.transaction, super.line, super.callId});
 
   static const typeValue = 'ack';
 
@@ -15,10 +11,6 @@ class AckResponse extends Response {
       throw ArgumentError.value(responseTypeValue, Response.typeKey, 'Not equal $typeValue');
     }
 
-    return AckResponse(
-      transaction: json['transaction'],
-      line: json['line'],
-      callId: json['call_id'],
-    );
+    return AckResponse(transaction: json['transaction'], line: json['line'], callId: json['call_id']);
   }
 }

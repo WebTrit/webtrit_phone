@@ -15,12 +15,7 @@ class IceMediaEvent extends LineEvent {
   final bool receiving;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        mid,
-        type,
-        receiving,
-      ];
+  List<Object?> get props => [...super.props, mid, type, receiving];
 
   static const typeValue = 'ice_media';
 

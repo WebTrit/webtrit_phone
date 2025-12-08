@@ -30,10 +30,28 @@ class MockAppPreferencesService implements AppPreferences {
 
   @override
   Future<bool> clear({List<String> exclusion = const []}) async {
-    final keysToRemove = _mockData.keys.where((key) => !exclusion.contains(key)).toList();
+    final keysToRemove =
+        _mockData.keys.where((key) => !exclusion.contains(key)).toList();
     for (final key in keysToRemove) {
       _mockData.remove(key);
     }
+    return true;
+  }
+
+  @override
+  String? getString(String key) {
+    return _mockData[key] as String?;
+  }
+
+  @override
+  Future<bool> setString(String key, String value) {
+    _mockData[key] = value;
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> removeKey(String key) async {
+    _mockData.remove(key);
     return true;
   }
 
@@ -103,7 +121,8 @@ class MockAppPreferencesService implements AppPreferences {
   }
 
   @override
-  MainFlavor getActiveMainFlavor({MainFlavor defaultValue = MainFlavor.contacts}) {
+  MainFlavor getActiveMainFlavor(
+      {MainFlavor defaultValue = MainFlavor.contacts}) {
     final flavorString = _mockData['active-main-flavor'] as String?;
     if (flavorString != null) {
       try {
@@ -124,7 +143,8 @@ class MockAppPreferencesService implements AppPreferences {
   @override
   RecentsVisibilityFilter getActiveRecentsVisibilityFilter(
       {RecentsVisibilityFilter defaultValue = RecentsVisibilityFilter.all}) {
-    final filterString = _mockData['active-recents-visibility-filter'] as String?;
+    final filterString =
+        _mockData['active-recents-visibility-filter'] as String?;
     if (filterString != null) {
       try {
         return RecentsVisibilityFilter.values.byName(filterString);
@@ -136,13 +156,15 @@ class MockAppPreferencesService implements AppPreferences {
   }
 
   @override
-  Future<bool> setActiveRecentsVisibilityFilter(RecentsVisibilityFilter value) async {
+  Future<bool> setActiveRecentsVisibilityFilter(
+      RecentsVisibilityFilter value) async {
     _mockData['active-recents-visibility-filter'] = value.name;
     return true;
   }
 
   @override
-  ContactSourceType getActiveContactSourceType({ContactSourceType defaultValue = ContactSourceType.external}) {
+  ContactSourceType getActiveContactSourceType(
+      {ContactSourceType defaultValue = ContactSourceType.external}) {
     final sourceString = _mockData['active-contact-source-type'] as String?;
     if (sourceString != null) {
       try {
@@ -161,7 +183,8 @@ class MockAppPreferencesService implements AppPreferences {
   }
 
   @override
-  IncomingCallType getIncomingCallType({IncomingCallType defaultValue = IncomingCallType.pushNotification}) {
+  IncomingCallType getIncomingCallType(
+      {IncomingCallType defaultValue = IncomingCallType.pushNotification}) {
     final callTypeString = _mockData['call-incoming-type'] as String?;
     if (callTypeString != null) {
       try {
@@ -276,7 +299,8 @@ class MockAppPreferencesService implements AppPreferences {
   }
 
   @override
-  PeerConnectionSettings getPeerConnectionSettings({PeerConnectionSettings? defaultValue}) {
+  PeerConnectionSettings getPeerConnectionSettings(
+      {PeerConnectionSettings? defaultValue}) {
     return PeerConnectionSettings.blank();
   }
 

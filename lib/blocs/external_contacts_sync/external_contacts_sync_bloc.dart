@@ -79,11 +79,13 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
         await appDatabase.contactsDao.deleteContactsWithNullSourceId(ContactSourceTypeEnum.external);
 
         // skip external contact that represents own account
-        final externalContacts =
-            event.contacts.where((externalContact) => externalContact.id != userInfo!.numbers.main);
+        final externalContacts = event.contacts.where(
+          (externalContact) => externalContact.id != userInfo!.numbers.main,
+        );
 
-        final syncedExternalContactsIds =
-            await appDatabase.contactsDao.getContactsSourceIds(ContactSourceTypeEnum.external);
+        final syncedExternalContactsIds = await appDatabase.contactsDao.getContactsSourceIds(
+          ContactSourceTypeEnum.external,
+        );
 
         final updatedExternalContactsIds = externalContacts.map((externalContact) => externalContact.id).toSet();
         final delExternalContactsIds = syncedExternalContactsIds.difference(updatedExternalContactsIds);
@@ -95,19 +97,20 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
         // to add or update
         for (final externalContact in externalContacts) {
-          final insertOrUpdateContactData =
-              await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-            sourceType: const Value(ContactSourceTypeEnum.external),
-            // Ensure a stable and unique sourceId for deduplication and upsert logic.
-            // Falls back to contact number, email, or a hashed identity if no API-provided ID is available.
-            sourceId: Value(externalContact.safeSourceId),
-            firstName: Value(externalContact.firstName),
-            lastName: Value(externalContact.lastName),
-            aliasName: Value(externalContact.aliasName),
-            registered: Value(externalContact.registered),
-            userRegistered: Value(externalContact.userRegistered),
-            isCurrentUser: Value(externalContact.isCurrentUser),
-          ));
+          final insertOrUpdateContactData = await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
+            ContactDataCompanion(
+              sourceType: const Value(ContactSourceTypeEnum.external),
+              // Ensure a stable and unique sourceId for deduplication and upsert logic.
+              // Falls back to contact number, email, or a hashed identity if no API-provided ID is available.
+              sourceId: Value(externalContact.safeSourceId),
+              firstName: Value(externalContact.firstName),
+              lastName: Value(externalContact.lastName),
+              aliasName: Value(externalContact.aliasName),
+              registered: Value(externalContact.registered),
+              userRegistered: Value(externalContact.userRegistered),
+              isCurrentUser: Value(externalContact.isCurrentUser),
+            ),
+          );
 
           final externalContactNumber = externalContact.number;
           final externalContactExt = externalContact.ext;
@@ -121,55 +124,67 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             if (externalSmsNumbers != null) ...externalSmsNumbers,
           ];
 
-          await appDatabase.contactPhonesDao
-              .deleteOtherContactPhonesOfContactId(insertOrUpdateContactData.id, externalContactNumbers);
+          await appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
+            insertOrUpdateContactData.id,
+            externalContactNumbers,
+          );
 
           if (externalContactNumber != null) {
-            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-              number: Value(externalContactNumber),
-              label: const Value('number'),
-              contactId: Value(insertOrUpdateContactData.id),
-            ));
+            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+              ContactPhoneDataCompanion(
+                number: Value(externalContactNumber),
+                label: const Value('number'),
+                contactId: Value(insertOrUpdateContactData.id),
+              ),
+            );
           }
           if (externalContactExt != null) {
-            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-              number: Value(externalContactExt),
-              label: const Value('ext'),
-              contactId: Value(insertOrUpdateContactData.id),
-            ));
+            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+              ContactPhoneDataCompanion(
+                number: Value(externalContactExt),
+                label: const Value('ext'),
+                contactId: Value(insertOrUpdateContactData.id),
+              ),
+            );
           }
           if (externalContactMobile != null) {
-            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-              number: Value(externalContactMobile),
-              label: const Value('mobile'),
-              contactId: Value(insertOrUpdateContactData.id),
-            ));
+            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+              ContactPhoneDataCompanion(
+                number: Value(externalContactMobile),
+                label: const Value('mobile'),
+                contactId: Value(insertOrUpdateContactData.id),
+              ),
+            );
           }
           if (externalSmsNumbers != null) {
             for (final externalSmsNumber in externalSmsNumbers) {
-              await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-                number: Value(externalSmsNumber),
-                label: const Value('sms'),
-                contactId: Value(insertOrUpdateContactData.id),
-              ));
+              await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+                ContactPhoneDataCompanion(
+                  number: Value(externalSmsNumber),
+                  label: const Value('sms'),
+                  contactId: Value(insertOrUpdateContactData.id),
+                ),
+              );
             }
           }
 
           final externalContactEmail = externalContact.email;
 
-          final externalContactEmails = [
-            if (externalContactEmail != null) externalContactEmail,
-          ];
+          final externalContactEmails = [if (externalContactEmail != null) externalContactEmail];
 
-          await appDatabase.contactEmailsDao
-              .deleteOtherContactEmailsOfContactId(insertOrUpdateContactData.id, externalContactEmails);
+          await appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
+            insertOrUpdateContactData.id,
+            externalContactEmails,
+          );
 
           if (externalContactEmail != null) {
-            await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
-              address: Value(externalContactEmail),
-              label: const Value(''),
-              contactId: Value(insertOrUpdateContactData.id),
-            ));
+            await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
+              ContactEmailDataCompanion(
+                address: Value(externalContactEmail),
+                label: const Value(''),
+                contactId: Value(insertOrUpdateContactData.id),
+              ),
+            );
           }
         }
       });

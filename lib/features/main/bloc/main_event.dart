@@ -1,19 +1,30 @@
 part of 'main_bloc.dart';
 
-abstract class MainBlocEvent {
+sealed class MainBlocEvent extends Equatable {
   const MainBlocEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
-final class MainBlocInit extends MainBlocEvent {
+class MainBlocInit extends MainBlocEvent {
   const MainBlocInit();
 }
 
-final class MainBlocSystemInfoArrived extends MainBlocEvent {
+class MainBlocSystemInfoArrived extends MainBlocEvent {
   final WebtritSystemInfo systemInfo;
+
   const MainBlocSystemInfoArrived(this.systemInfo);
+
+  @override
+  List<Object?> get props => [systemInfo];
 }
 
-final class MainBlocAppUpdatePressed extends MainBlocEvent {
+class MainBlocAppUpdatePressed extends MainBlocEvent {
   final Uri storeUrl;
+
   const MainBlocAppUpdatePressed(this.storeUrl);
+
+  @override
+  List<Object?> get props => [storeUrl];
 }

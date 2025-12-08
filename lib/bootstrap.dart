@@ -22,6 +22,7 @@ import 'package:webtrit_phone/features/system_notifications/services/services.da
 
 import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
 
+import 'app/session/session.dart';
 import 'firebase_options.dart';
 
 Future<void> bootstrap() async {
@@ -38,24 +39,19 @@ Future<void> bootstrap() async {
   final appThemes = await AppThemes.init();
 
   final appPreferences = await AppPreferencesFactory.init();
-  final featureAccess = FeatureAccess.init(appThemes.appConfig, appPreferences);
+  final featureAccess = FeatureAccess.init(appThemes.appConfig, appThemes.embeddedResources, appPreferences);
   final appInfo = await AppInfo.init(FirebaseAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
+  final appLabels = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
 
   await AppPath.init();
   await AppPermissions.init(featureAccess);
   await AppCertificates.init();
   await AppTime.init();
   await SessionCleanupWorker.init();
-  await AppLogger.init(
-    remoteConfigService: remoteFirebaseConfigService,
-    packageInfo: packageInfo,
-    deviceInfo: deviceInfo,
-    appInfo: appInfo,
-    secureStorage: secureStorage,
-  );
+  await AppLogger.init(remoteFirebaseConfigService, appLabels);
   await AppLifecycle.initMaster();
 
   await _initCallkeep(appPreferences, featureAccess);
@@ -68,12 +64,12 @@ Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureA
   AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
 
-// If the fallback incoming call trigger via SMS is enabled in the feature access config
+  // If the fallback incoming call trigger via SMS is enabled in the feature access config
   if (featureAccess.callFeature.callTriggerConfig.smsFallback.enabled) {
     // Configure Android CallKeep to process incoming SMS messages
     // - prefix: filters SMS messages by required prefix
     // - regexPattern: extracts callId, handle, displayName, and hasVideo from the SMS body
-    await AndroidCallkeepServices.smsReceptionConfig.configureReceivedSms(
+    await AndroidCallkeepUtils.smsReceptionConfig.configureReceivedSms(
       prefix: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_PREFIX,
       regexPattern: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN,
     );
@@ -85,9 +81,7 @@ Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureA
 /// https://firebase.google.com/docs/cloud-messaging/flutter/receive
 Future<void> _initFirebase() async {
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
     Logger('Firebase').severe('Error in _initFirebase', e);
   }
@@ -135,14 +129,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
   final secureStorage = await SecureStorage.init();
+  final appLabelsProvider = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
-  await AppLogger.init(
-    remoteConfigService: remoteCacheConfigService,
-    packageInfo: packageInfo,
-    deviceInfo: deviceInfo,
-    appInfo: appInfo,
-    secureStorage: secureStorage,
-  );
+  await AppLogger.init(remoteCacheConfigService, appLabelsProvider);
 
   final appPush = AppRemotePush.fromFCM(message);
 
@@ -213,10 +202,7 @@ void _dHandleInspectPush(Map<String, dynamic> data, bool background) {
 }
 
 // Debugging push notifications
-Future<void> _dShowInspectLocalPush({
-  required String title,
-  required String body,
-}) async {
+Future<void> _dShowInspectLocalPush({required String title, required String body}) async {
   await FlutterLocalNotificationsPlugin().show(
     0,
     title,
@@ -255,7 +241,7 @@ void workManagerDispatcher() {
       final (coreUrl, tenantId, token) = (storage.readCoreUrl(), storage.readTenantId(), storage.readToken());
       if (coreUrl == null || tenantId == null || token == null) return Future.value(true);
       final api = WebtritApiClient(Uri.parse(coreUrl), tenantId);
-      final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token);
+      final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token, const EmptySessionGuard());
 
       // Init local database and repository
       final appDatabase = await IsolateDatabase.create();

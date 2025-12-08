@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ExtTabBar extends StatelessWidget {
-  const ExtTabBar({
-    super.key,
-    this.width,
-    this.height,
-    required this.tabs,
-    this.controller,
-  });
+  const ExtTabBar({super.key, this.width, this.height, required this.tabs, this.controller});
 
   final double? width;
   final double? height;
@@ -25,10 +19,7 @@ class ExtTabBar extends StatelessWidget {
       child: TabBar(
         tabs: tabs,
         controller: controller,
-        indicator: BoxDecoration(
-          borderRadius: borderRadius,
-          color: themeData.colorScheme.primary,
-        ),
+        indicator: BoxDecoration(borderRadius: borderRadius, color: themeData.colorScheme.primary),
         indicatorSize: TabBarIndicatorSize.tab,
         splashBorderRadius: borderRadius,
       ),

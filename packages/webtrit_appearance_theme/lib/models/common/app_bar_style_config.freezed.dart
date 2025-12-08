@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,249 +9,195 @@ part of 'app_bar_style_config.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-AppBarStyleConfig _$AppBarStyleConfigFromJson(Map<String, dynamic> json) {
-  return _AppBarStyleConfig.fromJson(json);
-}
 
 /// @nodoc
 mixin _$AppBarStyleConfig {
-  /// Background color for the AppBar (hex, e.g. "#FFFFFF")
-  String? get backgroundColor => throw _privateConstructorUsedError;
 
-  /// Foreground color for icons & text (hex)
-  String? get foregroundColor => throw _privateConstructorUsedError;
+ String? get backgroundColor; String? get foregroundColor; bool get primary; bool get showBackButton;
+/// Create a copy of AppBarStyleConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AppBarStyleConfigCopyWith<AppBarStyleConfig> get copyWith => _$AppBarStyleConfigCopyWithImpl<AppBarStyleConfig>(this as AppBarStyleConfig, _$identity);
 
-  /// Whether the AppBar is considered primary
-  bool get primary => throw _privateConstructorUsedError;
 
-  /// Optional flag for showing back button
-  bool get showBackButton => throw _privateConstructorUsedError;
 
-  /// Serializes this AppBarStyleConfig to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppBarStyleConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.foregroundColor, foregroundColor) || other.foregroundColor == foregroundColor)&&(identical(other.primary, primary) || other.primary == primary)&&(identical(other.showBackButton, showBackButton) || other.showBackButton == showBackButton));
+}
 
-  /// Create a copy of AppBarStyleConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $AppBarStyleConfigCopyWith<AppBarStyleConfig> get copyWith =>
-      throw _privateConstructorUsedError;
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,backgroundColor,foregroundColor,primary,showBackButton);
+
+@override
+String toString() {
+  return 'AppBarStyleConfig(backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, primary: $primary, showBackButton: $showBackButton)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $AppBarStyleConfigCopyWith<$Res> {
-  factory $AppBarStyleConfigCopyWith(
-          AppBarStyleConfig value, $Res Function(AppBarStyleConfig) then) =
-      _$AppBarStyleConfigCopyWithImpl<$Res, AppBarStyleConfig>;
-  @useResult
-  $Res call(
-      {String? backgroundColor,
-      String? foregroundColor,
-      bool primary,
-      bool showBackButton});
-}
+abstract mixin class $AppBarStyleConfigCopyWith<$Res>  {
+  factory $AppBarStyleConfigCopyWith(AppBarStyleConfig value, $Res Function(AppBarStyleConfig) _then) = _$AppBarStyleConfigCopyWithImpl;
+@useResult
+$Res call({
+ String? backgroundColor, String? foregroundColor, bool primary, bool showBackButton
+});
 
+
+
+
+}
 /// @nodoc
-class _$AppBarStyleConfigCopyWithImpl<$Res, $Val extends AppBarStyleConfig>
+class _$AppBarStyleConfigCopyWithImpl<$Res>
     implements $AppBarStyleConfigCopyWith<$Res> {
-  _$AppBarStyleConfigCopyWithImpl(this._value, this._then);
+  _$AppBarStyleConfigCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final AppBarStyleConfig _self;
+  final $Res Function(AppBarStyleConfig) _then;
 
-  /// Create a copy of AppBarStyleConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? backgroundColor = freezed,
-    Object? foregroundColor = freezed,
-    Object? primary = null,
-    Object? showBackButton = null,
-  }) {
-    return _then(_value.copyWith(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      foregroundColor: freezed == foregroundColor
-          ? _value.foregroundColor
-          : foregroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      primary: null == primary
-          ? _value.primary
-          : primary // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showBackButton: null == showBackButton
-          ? _value.showBackButton
-          : showBackButton // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
-  }
+/// Create a copy of AppBarStyleConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? foregroundColor = freezed,Object? primary = null,Object? showBackButton = null,}) {
+  return _then(AppBarStyleConfig(
+backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,foregroundColor: freezed == foregroundColor ? _self.foregroundColor : foregroundColor // ignore: cast_nullable_to_non_nullable
+as String?,primary: null == primary ? _self.primary : primary // ignore: cast_nullable_to_non_nullable
+as bool,showBackButton: null == showBackButton ? _self.showBackButton : showBackButton // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
 }
 
-/// @nodoc
-abstract class _$$AppBarStyleConfigImplCopyWith<$Res>
-    implements $AppBarStyleConfigCopyWith<$Res> {
-  factory _$$AppBarStyleConfigImplCopyWith(_$AppBarStyleConfigImpl value,
-          $Res Function(_$AppBarStyleConfigImpl) then) =
-      __$$AppBarStyleConfigImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String? backgroundColor,
-      String? foregroundColor,
-      bool primary,
-      bool showBackButton});
 }
 
-/// @nodoc
-class __$$AppBarStyleConfigImplCopyWithImpl<$Res>
-    extends _$AppBarStyleConfigCopyWithImpl<$Res, _$AppBarStyleConfigImpl>
-    implements _$$AppBarStyleConfigImplCopyWith<$Res> {
-  __$$AppBarStyleConfigImplCopyWithImpl(_$AppBarStyleConfigImpl _value,
-      $Res Function(_$AppBarStyleConfigImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of AppBarStyleConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? backgroundColor = freezed,
-    Object? foregroundColor = freezed,
-    Object? primary = null,
-    Object? showBackButton = null,
-  }) {
-    return _then(_$AppBarStyleConfigImpl(
-      backgroundColor: freezed == backgroundColor
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      foregroundColor: freezed == foregroundColor
-          ? _value.foregroundColor
-          : foregroundColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      primary: null == primary
-          ? _value.primary
-          : primary // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showBackButton: null == showBackButton
-          ? _value.showBackButton
-          : showBackButton // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
+/// Adds pattern-matching-related methods to [AppBarStyleConfig].
+extension AppBarStyleConfigPatterns on AppBarStyleConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-
-@JsonSerializable(explicitToJson: true)
-class _$AppBarStyleConfigImpl implements _AppBarStyleConfig {
-  const _$AppBarStyleConfigImpl(
-      {this.backgroundColor,
-      this.foregroundColor,
-      this.primary = true,
-      this.showBackButton = true});
-
-  factory _$AppBarStyleConfigImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AppBarStyleConfigImplFromJson(json);
-
-  /// Background color for the AppBar (hex, e.g. "#FFFFFF")
-  @override
-  final String? backgroundColor;
-
-  /// Foreground color for icons & text (hex)
-  @override
-  final String? foregroundColor;
-
-  /// Whether the AppBar is considered primary
-  @override
-  @JsonKey()
-  final bool primary;
-
-  /// Optional flag for showing back button
-  @override
-  @JsonKey()
-  final bool showBackButton;
-
-  @override
-  String toString() {
-    return 'AppBarStyleConfig(backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, primary: $primary, showBackButton: $showBackButton)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AppBarStyleConfigImpl &&
-            (identical(other.backgroundColor, backgroundColor) ||
-                other.backgroundColor == backgroundColor) &&
-            (identical(other.foregroundColor, foregroundColor) ||
-                other.foregroundColor == foregroundColor) &&
-            (identical(other.primary, primary) || other.primary == primary) &&
-            (identical(other.showBackButton, showBackButton) ||
-                other.showBackButton == showBackButton));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, backgroundColor, foregroundColor, primary, showBackButton);
-
-  /// Create a copy of AppBarStyleConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$AppBarStyleConfigImplCopyWith<_$AppBarStyleConfigImpl> get copyWith =>
-      __$$AppBarStyleConfigImplCopyWithImpl<_$AppBarStyleConfigImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$AppBarStyleConfigImplToJson(
-      this,
-    );
-  }
 }
 
-abstract class _AppBarStyleConfig implements AppBarStyleConfig {
-  const factory _AppBarStyleConfig(
-      {final String? backgroundColor,
-      final String? foregroundColor,
-      final bool primary,
-      final bool showBackButton}) = _$AppBarStyleConfigImpl;
-
-  factory _AppBarStyleConfig.fromJson(Map<String, dynamic> json) =
-      _$AppBarStyleConfigImpl.fromJson;
-
-  /// Background color for the AppBar (hex, e.g. "#FFFFFF")
-  @override
-  String? get backgroundColor;
-
-  /// Foreground color for icons & text (hex)
-  @override
-  String? get foregroundColor;
-
-  /// Whether the AppBar is considered primary
-  @override
-  bool get primary;
-
-  /// Optional flag for showing back button
-  @override
-  bool get showBackButton;
-
-  /// Create a copy of AppBarStyleConfig
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AppBarStyleConfigImplCopyWith<_$AppBarStyleConfigImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

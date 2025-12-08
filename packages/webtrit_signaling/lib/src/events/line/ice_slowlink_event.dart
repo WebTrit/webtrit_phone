@@ -17,13 +17,7 @@ class IceSlowLinkEvent extends LineEvent {
   final int lost;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        mid,
-        media,
-        uplink,
-        lost,
-      ];
+  List<Object?> get props => [...super.props, mid, media, uplink, lost];
 
   static const typeValue = 'ice_slowlink';
 

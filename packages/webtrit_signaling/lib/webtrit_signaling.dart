@@ -1,4 +1,4 @@
-library webtrit_signaling;
+library;
 
 export 'src/events/events.dart';
 export 'src/exceptions.dart';

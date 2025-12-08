@@ -1,3 +1,5 @@
+// dart format width=120
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -5,7 +7,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -16,8 +18,7 @@ class $AssetsCallkeepGen {
   const $AssetsCallkeepGen();
 
   /// File path: assets/callkeep/ios_icon_template_image.png
-  AssetGenImage get iosIconTemplateImage =>
-      const AssetGenImage('assets/callkeep/ios_icon_template_image.png');
+  AssetGenImage get iosIconTemplateImage => const AssetGenImage('assets/callkeep/ios_icon_template_image.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [iosIconTemplateImage];
@@ -33,12 +34,24 @@ class $AssetsCertificatesGen {
   List<String> get values => [credentials];
 }
 
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/primary_onboarding_logo.svg
+  SvgGenImage get primaryOnboardingLogo => const SvgGenImage('assets/images/primary_onboarding_logo.svg');
+
+  /// File path: assets/images/secondary_onboarding_logo.svg
+  SvgGenImage get secondaryOnboardingLogo => const SvgGenImage('assets/images/secondary_onboarding_logo.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [primaryOnboardingLogo, secondaryOnboardingLogo];
+}
+
 class $AssetsLoginGen {
   const $AssetsLoginGen();
 
   /// File path: assets/login/onboarding-1.svg
-  SvgGenImage get onboarding1 =>
-      const SvgGenImage('assets/login/onboarding-1.svg');
+  SvgGenImage get onboarding1 => const SvgGenImage('assets/login/onboarding-1.svg');
 
   /// List of all assets
   List<SvgGenImage> get values => [onboarding1];
@@ -63,36 +76,34 @@ class $AssetsThemesGen {
   /// File path: assets/themes/app.config.json
   String get appConfig => 'assets/themes/app.config.json';
 
+  /// File path: assets/themes/app.embedded.config.json
+  String get appEmbeddedConfig => 'assets/themes/app.embedded.config.json';
+
   /// File path: assets/themes/custom_signup.html
   String get customSignup => 'assets/themes/custom_signup.html';
 
   /// File path: assets/themes/original.color_scheme.dark.config.json
-  String get originalColorSchemeDarkConfig =>
-      'assets/themes/original.color_scheme.dark.config.json';
+  String get originalColorSchemeDarkConfig => 'assets/themes/original.color_scheme.dark.config.json';
 
   /// File path: assets/themes/original.color_scheme.light.config.json
-  String get originalColorSchemeLightConfig =>
-      'assets/themes/original.color_scheme.light.config.json';
+  String get originalColorSchemeLightConfig => 'assets/themes/original.color_scheme.light.config.json';
 
   /// File path: assets/themes/original.page.dark.config.json
-  String get originalPageDarkConfig =>
-      'assets/themes/original.page.dark.config.json';
+  String get originalPageDarkConfig => 'assets/themes/original.page.dark.config.json';
 
   /// File path: assets/themes/original.page.light.config.json
-  String get originalPageLightConfig =>
-      'assets/themes/original.page.light.config.json';
+  String get originalPageLightConfig => 'assets/themes/original.page.light.config.json';
 
   /// File path: assets/themes/original.widget.dark.config.json
-  String get originalWidgetDarkConfig =>
-      'assets/themes/original.widget.dark.config.json';
+  String get originalWidgetDarkConfig => 'assets/themes/original.widget.dark.config.json';
 
   /// File path: assets/themes/original.widget.light.config.json
-  String get originalWidgetLightConfig =>
-      'assets/themes/original.widget.light.config.json';
+  String get originalWidgetLightConfig => 'assets/themes/original.widget.light.config.json';
 
   /// List of all assets
   List<String> get values => [
     appConfig,
+    appEmbeddedConfig,
     customSignup,
     originalColorSchemeDarkConfig,
     originalColorSchemeLightConfig,
@@ -108,32 +119,24 @@ class Assets {
 
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
   static const $AssetsCertificatesGen certificates = $AssetsCertificatesGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
-  static const SvgGenImage primaryOnboardinLogo = SvgGenImage(
-    'assets/primary_onboardin_logo.svg',
-  );
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();
-  static const SvgGenImage secondaryOnboardinLogo = SvgGenImage(
-    'assets/secondary_onboardin_logo.svg',
-  );
   static const $AssetsThemesGen themes = $AssetsThemesGen();
   static const String pubspec = 'pubspec.yaml';
 
   /// List of all assets
-  static List<dynamic> get values => [
-    primaryOnboardinLogo,
-    secondaryOnboardinLogo,
-    pubspec,
-  ];
+  static List<String> get values => [pubspec];
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}, this.animation});
 
   final String _assetName;
 
   final Size? size;
   final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
 
   Image image({
     Key? key,
@@ -197,12 +200,18 @@ class AssetGenImage {
   String get keyName => _assetName;
 }
 
-class SvgGenImage {
-  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
-    : _isVecFormat = false;
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({required this.isAnimation, required this.duration, required this.frames});
 
-  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
-    : _isVecFormat = true;
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
+}
+
+class SvgGenImage {
+  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}}) : _isVecFormat = false;
+
+  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}}) : _isVecFormat = true;
 
   final String _assetName;
   final Size? size;
@@ -223,6 +232,7 @@ class SvgGenImage {
     String? semanticsLabel,
     bool excludeFromSemantics = false,
     _svg.SvgTheme? theme,
+    _svg.ColorMapper? colorMapper,
     ColorFilter? colorFilter,
     Clip clipBehavior = Clip.hardEdge,
     @deprecated Color? color,
@@ -231,17 +241,14 @@ class SvgGenImage {
   }) {
     final _svg.BytesLoader loader;
     if (_isVecFormat) {
-      loader = _vg.AssetBytesLoader(
-        _assetName,
-        assetBundle: bundle,
-        packageName: package,
-      );
+      loader = _vg.AssetBytesLoader(_assetName, assetBundle: bundle, packageName: package);
     } else {
       loader = _svg.SvgAssetLoader(
         _assetName,
         assetBundle: bundle,
         packageName: package,
         theme: theme,
+        colorMapper: colorMapper,
       );
     }
     return _svg.SvgPicture(
@@ -256,9 +263,7 @@ class SvgGenImage {
       placeholderBuilder: placeholderBuilder,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
-      colorFilter:
-          colorFilter ??
-          (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
+      colorFilter: colorFilter ?? (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
     );

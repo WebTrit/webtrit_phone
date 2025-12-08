@@ -35,10 +35,7 @@ void main() {
     expect(
       storeInfo,
       equals(
-        StoreInfo(
-          version: Version(1, 0, 0),
-          viewUrl: Uri.parse('https://apps.apple.com/us/app/name/id1234567890'),
-        ),
+        StoreInfo(version: Version(1, 0, 0), viewUrl: Uri.parse('https://apps.apple.com/us/app/name/id1234567890')),
       ),
     );
   });

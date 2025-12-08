@@ -7,27 +7,51 @@ part 'user_info.freezed.dart';
 part 'user_info.g.dart';
 
 @freezed
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class UserInfo with _$UserInfo {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory UserInfo({
-    UserInfoStatus? status,
-    Balance? balance,
-    required Numbers numbers,
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? aliasName,
-    String? companyName,
-    String? timeZone,
-  }) = _UserInfo;
+  const UserInfo({
+    this.status,
+    this.balance,
+    required this.numbers,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.aliasName,
+    this.companyName,
+    this.timeZone,
+  });
+
+  @override
+  final UserInfoStatus? status;
+
+  @override
+  final Balance? balance;
+
+  @override
+  final Numbers numbers;
+
+  @override
+  final String? email;
+
+  @override
+  final String? firstName;
+
+  @override
+  final String? lastName;
+
+  @override
+  final String? aliasName;
+
+  @override
+  final String? companyName;
+
+  @override
+  final String? timeZone;
 
   factory UserInfo.fromJson(Map<String, Object?> json) => _$UserInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$UserInfoToJson(this);
 }
 
 @JsonEnum(fieldRename: FieldRename.snake)
-enum UserInfoStatus {
-  active,
-  limited,
-  blocked,
-}
+enum UserInfoStatus { active, limited, blocked }

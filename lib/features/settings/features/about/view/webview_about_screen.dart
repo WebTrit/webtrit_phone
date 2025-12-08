@@ -22,13 +22,15 @@ class WebAboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WebViewContainer(
       title: Text(context.l10n.settings_ListViewTileTitle_about),
-      initialUri: baseAppAboutUrl.replace(queryParameters: {
-        'appName': packageInfo.appName,
-        'packageName': packageInfo.packageName,
-        'version': packageInfo.version,
-        'buildNumber': packageInfo.buildNumber,
-        'coreUrl': infoRepository.coreUrl.toString(),
-      }),
+      initialUri: baseAppAboutUrl.replace(
+        queryParameters: {
+          'appName': packageInfo.appName,
+          'packageName': packageInfo.packageName,
+          'version': packageInfo.version,
+          'buildNumber': packageInfo.buildNumber,
+          'coreUrl': infoRepository.coreUrl.toString(),
+        },
+      ),
       userAgent: UserAgent.of(context),
     );
   }

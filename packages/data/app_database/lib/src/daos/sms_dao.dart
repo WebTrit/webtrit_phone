@@ -3,16 +3,18 @@ import 'package:drift/drift.dart';
 
 part 'sms_dao.g.dart';
 
-@DriftAccessor(tables: [
-  SmsConversationsTable,
-  SmsMessagesTable,
-  SmsMessageSyncCursorTable,
-  SmsMessageReadCursorTable,
-  SmsOutboxMessagesTable,
-  SmsOutboxMessageDeleteTable,
-  SmsOutboxReadCursorsTable,
-  UserSmsNumbersTable,
-])
+@DriftAccessor(
+  tables: [
+    SmsConversationsTable,
+    SmsMessagesTable,
+    SmsMessageSyncCursorTable,
+    SmsMessageReadCursorTable,
+    SmsOutboxMessagesTable,
+    SmsOutboxMessageDeleteTable,
+    SmsOutboxReadCursorsTable,
+    UserSmsNumbersTable,
+  ],
+)
 class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   SmsDao(super.db);
 
@@ -50,10 +52,11 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   }
 
   Future<SmsConversationData?> findConversationBetweenNumbers(String firstNumber, String secondNumber) {
-    return (select(smsConversationsTable)
-          ..where((t) =>
+    return (select(smsConversationsTable)..where(
+          (t) =>
               t.firstPhoneNumber.isIn([firstNumber, secondNumber]) &
-              t.secondPhoneNumber.isIn([firstNumber, secondNumber])))
+              t.secondPhoneNumber.isIn([firstNumber, secondNumber]),
+        ))
         .getSingleOrNull();
   }
 
@@ -111,9 +114,9 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   }
 
   Future<SmsMessageReadCursorData?> getSmsMessageReadCursor(int conversationId, String userId) async {
-    return (select(smsMessageReadCursorTable)
-          ..where((t) => t.conversationId.equals(conversationId) & t.userId.equals(userId)))
-        .getSingleOrNull();
+    return (select(
+      smsMessageReadCursorTable,
+    )..where((t) => t.conversationId.equals(conversationId) & t.userId.equals(userId))).getSingleOrNull();
   }
 
   Stream<List<SmsMessageReadCursorData>> watchSmsMessageReadCursors(int conversationId) {
@@ -147,9 +150,9 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   // Sync cursors
 
   Future<SmsMessageSyncCursorData?> getSyncCursor(int conversationId, SmsSyncCursorTypeEnum cursorType) {
-    return (select(smsMessageSyncCursorTable)
-          ..where((t) => t.conversationId.equals(conversationId) & t.cursorType.equals(cursorType.name)))
-        .getSingleOrNull();
+    return (select(
+      smsMessageSyncCursorTable,
+    )..where((t) => t.conversationId.equals(conversationId) & t.cursorType.equals(cursorType.name))).getSingleOrNull();
   }
 
   Future<int> upsertSyncCursor(Insertable<SmsMessageSyncCursorData> smsMessageSyncCursor) {
@@ -199,8 +202,9 @@ class SmsDao extends DatabaseAccessor<AppDatabase> with _$SmsDaoMixin {
   }
 
   Stream<SmsOutboxReadCursorData?> watchSmsOutboxReadCursor(int conversationId) {
-    return (select(smsOutboxReadCursorsTable)..where((t) => t.conversationId.equals(conversationId)))
-        .watchSingleOrNull();
+    return (select(
+      smsOutboxReadCursorsTable,
+    )..where((t) => t.conversationId.equals(conversationId))).watchSingleOrNull();
   }
 
   Future<List<SmsOutboxReadCursorData>> getSmsOutboxReadCursors() {

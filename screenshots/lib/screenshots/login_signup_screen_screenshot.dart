@@ -25,6 +25,12 @@ class LoginSignUpScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
+    final LoginSwitchScreenStyles? loginPageStyles =
+        themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
+
     final sections = context
         .watch<FeatureAccess?>()
         ?.loginFeature
@@ -40,20 +46,29 @@ class LoginSignUpScreenshot extends StatelessWidget {
     }
 
     return BlocProvider<LoginCubit>(
-      create: (context) => MockLoginCubit.loginSwitchScreen(embedded: embedded.customLoginFeature),
+      create: (context) => MockLoginCubit.loginSwitchScreen(
+          embedded: embedded.customLoginFeature),
       child: LoginSwitchScreen(
         appBar: AppBar(
           leading: const ExtBackButton(disabled: false),
           backgroundColor: Colors.transparent,
         ),
-        header: const Column(
+        header: Column(
           children: [
-            OnboardingLogo(),
+            OnboardingLogo(style: localStyle?.onboardingLogoStyle),
             SizedBox(height: kInset),
           ],
         ),
         body: LoginSignupEmbeddedRequestScreen(
-          initialUrl: embedded.customLoginFeature.resource,
+          initialUrl: embedded.customLoginFeature.uri,
+          mediaQueryMetricsData: null,
+          deviceInfoData: null,
+          pageInjectionStrategyBuilder: () {
+            return DefaultPayloadInjectionStrategy();
+          },
+          connectivityRecoveryStrategyBuilder: () {
+            return NoneConnectivityRecoveryStrategy();
+          },
         ),
         currentLoginType: LoginType.signup,
         supportedLoginTypes: supportedLoginTypes,

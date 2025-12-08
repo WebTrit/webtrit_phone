@@ -1,10 +1,7 @@
 class StoreInfoExtractorException implements Exception {}
 
 class StoreInfoExtractorResponseError implements StoreInfoExtractorException {
-  StoreInfoExtractorResponseError({
-    required this.statusCode,
-    this.reasonPhrase,
-  });
+  StoreInfoExtractorResponseError({required this.statusCode, this.reasonPhrase});
 
   final int statusCode;
   final String? reasonPhrase;
@@ -23,9 +20,7 @@ class StoreInfoExtractorResponseError implements StoreInfoExtractorException {
 }
 
 class StoreInfoExtractorResponseFormatException implements StoreInfoExtractorException {
-  StoreInfoExtractorResponseFormatException({
-    required this.sourceError,
-  });
+  StoreInfoExtractorResponseFormatException({required this.sourceError});
 
   final Object sourceError;
 

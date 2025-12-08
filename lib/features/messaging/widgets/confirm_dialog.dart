@@ -15,11 +15,11 @@ class ConfirmDialog extends StatefulWidget {
 }
 
 class _ConfirmDialogState extends State<ConfirmDialog> {
-  onConfirm() {
+  void onConfirm() {
     Navigator.of(context).pop(true);
   }
 
-  onCancel() {
+  void onCancel() {
     Navigator.of(context).pop(false);
   }
 

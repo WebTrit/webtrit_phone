@@ -7,11 +7,7 @@ class ChatOutboxReadCursorEntry extends Equatable {
 
   const ChatOutboxReadCursorEntry({required this.chatId, required this.time, this.sendAttempts = 0});
 
-  ChatOutboxReadCursorEntry copyWith({
-    int? chatId,
-    DateTime? time,
-    int? sendAttempts,
-  }) {
+  ChatOutboxReadCursorEntry copyWith({int? chatId, DateTime? time, int? sendAttempts}) {
     return ChatOutboxReadCursorEntry(
       chatId: chatId ?? this.chatId,
       time: time ?? this.time,
@@ -24,7 +20,7 @@ class ChatOutboxReadCursorEntry extends Equatable {
   }
 
   @override
-  List<Object> get props => [chatId, time, sendAttempts];
+  List<Object?> get props => [chatId, time, sendAttempts];
 
   @override
   String toString() {

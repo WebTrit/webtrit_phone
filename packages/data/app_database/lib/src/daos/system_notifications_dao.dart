@@ -36,17 +36,16 @@ class SystemNotificationsDao extends DatabaseAccessor<AppDatabase> with _$System
   }
 
   Stream<int> unseenCount() {
-    final query = selectOnly(systemNotificationsTable).join(
-      [
-        leftOuterJoin(
-          systemNotificationsOutboxTable,
-          systemNotificationsOutboxTable.notificationId.equalsExp(systemNotificationsTable.id) &
-              systemNotificationsOutboxTable.actionType.equals(SnOutboxDataActionType.seen.name),
-        ),
-      ],
-    )
-      ..addColumns([countAll()])
-      ..where(systemNotificationsTable.seen.equals(false) & systemNotificationsOutboxTable.notificationId.isNull());
+    final query =
+        selectOnly(systemNotificationsTable).join([
+            leftOuterJoin(
+              systemNotificationsOutboxTable,
+              systemNotificationsOutboxTable.notificationId.equalsExp(systemNotificationsTable.id) &
+                  systemNotificationsOutboxTable.actionType.equals(SnOutboxDataActionType.seen.name),
+            ),
+          ])
+          ..addColumns([countAll()])
+          ..where(systemNotificationsTable.seen.equals(false) & systemNotificationsOutboxTable.notificationId.isNull());
 
     return query.map((row) => row.read(countAll()) ?? 0).watchSingle();
   }

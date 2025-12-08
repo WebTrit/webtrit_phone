@@ -11,9 +11,7 @@ import '../bloc/network_cubit.dart';
 import '../widgets/widgets.dart';
 
 class NetworkScreen extends StatefulWidget {
-  const NetworkScreen({
-    super.key,
-  });
+  const NetworkScreen({super.key});
 
   @override
   State<NetworkScreen> createState() => _NetworkScreenState();
@@ -25,10 +23,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.settings_ListViewTileTitle_network),
-        leading: const ExtBackButton(),
-      ),
+      appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_network), leading: const ExtBackButton()),
       body: BlocConsumer<NetworkCubit, NetworkState>(
         listenWhen: (previous, current) {
           return previous.incomingCallType != current.incomingCallType;
@@ -58,9 +53,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
                     return ListTile(
                       selected: item.selected,
                       title: Text(item.incomingCallType.titleL10n(context)),
-                      trailing: InfoTooltip(
-                        message: item.incomingCallType.descriptionL10n(context),
-                      ),
+                      trailing: InfoTooltip(message: item.incomingCallType.descriptionL10n(context)),
                       leading: Check(selected: item.selected),
                       onTap: () => _cubit.selectIncomingCallType(item),
                     );
@@ -71,20 +64,15 @@ class _NetworkScreenState extends State<NetworkScreen> {
                     context.l10n.settings_network_fallbackCalls_title,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  trailing: InfoTooltip(
-                    message: context.l10n.settings_network_fallbackCalls_description,
-                  ),
+                  trailing: InfoTooltip(message: context.l10n.settings_network_fallbackCalls_description),
                 ),
                 ListTile(
-                  leading: Check(
-                    selected: state.smsFallbackEnabled,
-                    enabled: _cubit.smsFallbackAvailable,
-                  ),
+                  leading: Check(selected: state.smsFallbackEnabled, enabled: _cubit.smsFallbackAvailable),
                   title: Text(
                     context.l10n.settings_network_smsFallback_toggle,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                )
+                ),
               ],
             ),
           );

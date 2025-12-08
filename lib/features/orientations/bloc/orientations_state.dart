@@ -2,5 +2,8 @@ part of 'orientations_bloc.dart';
 
 @freezed
 class OrientationsState with _$OrientationsState {
-  const factory OrientationsState([PreferredOrientation? lastOrientation]) = _OrientationsState;
+  const OrientationsState({this.lastOrientation});
+
+  @override
+  final PreferredOrientation? lastOrientation;
 }

@@ -1,11 +1,10 @@
 part of 'external_contacts_sync_bloc.dart';
 
-@immutable
-abstract class ExternalContactsSyncEvent extends Equatable {
+sealed class ExternalContactsSyncEvent extends Equatable {
   const ExternalContactsSyncEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ExternalContactsSyncStarted extends ExternalContactsSyncEvent {
@@ -19,12 +18,8 @@ class ExternalContactsSyncRefreshed extends ExternalContactsSyncEvent {
 class _ExternalContactsSyncUpdated extends ExternalContactsSyncEvent {
   final List<ExternalContact> contacts;
 
-  const _ExternalContactsSyncUpdated({
-    required this.contacts,
-  });
+  const _ExternalContactsSyncUpdated({required this.contacts});
 
   @override
-  List<Object> get props => [
-        EquatablePropToString(contacts, listPropToString),
-      ];
+  List<Object?> get props => [EquatablePropToString.list(contacts)];
 }

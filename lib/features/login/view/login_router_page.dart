@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
@@ -32,33 +32,13 @@ bool whenLoginSwitchScreenPageActive(LoginState state) {
 @RoutePage()
 class LoginRouterPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const LoginRouterPage({
-    LoginEmbedded? launchLoginEmbedded,
-  }) : _launchEmbedded = launchLoginEmbedded;
+  const LoginRouterPage({EmbeddedData? launchEmbeddedData}) : _launchEmbeddedData = launchEmbeddedData;
 
-  final LoginEmbedded? _launchEmbedded;
+  final EmbeddedData? _launchEmbeddedData;
 
   @override
   Widget build(BuildContext context) {
-    final declarativeAutoRouter = BlocConsumer<LoginCubit, LoginState>(
-      listener: (context, state) {
-        final coreUrl = state.coreUrl;
-        final tenantId = state.tenantId;
-        final token = state.token;
-        final userId = state.userId;
-        final systemInfo = state.systemInfo;
-
-        if (coreUrl != null && tenantId != null && token != null && userId != null && systemInfo != null) {
-          final event = AppLogined(
-            coreUrl: coreUrl,
-            tenantId: tenantId,
-            token: token,
-            userId: userId,
-            systemInfo: systemInfo,
-          );
-          context.read<AppBloc>().add(event);
-        }
-      },
+    final declarativeAutoRouter = BlocBuilder<LoginCubit, LoginState>(
       buildWhen: whenLoginRouterPageChange,
       builder: (context, state) {
         return AutoRouter.declarative(
@@ -66,7 +46,7 @@ class LoginRouterPage extends StatelessWidget {
           routes: (handler) {
             return [
               // Embedded page was not provided as launch, so use the native UI.
-              if (_launchEmbedded == null) const LoginModeSelectScreenPageRoute(),
+              if (_launchEmbeddedData == null) const LoginModeSelectScreenPageRoute(),
 
               // Open the core URL assignment screen (used in demo mode).
               // Note: this should be refactored to rely on a dedicated flag instead of demo mode.
@@ -74,13 +54,13 @@ class LoginRouterPage extends StatelessWidget {
 
               // After receiving server-provided login types (triggered from LoginModeSelectScreenPageRoute),
               // open the login switch screen.
-              if (_launchEmbedded == null && whenLoginSwitchScreenPageActive(state))
+              if (_launchEmbeddedData == null && whenLoginSwitchScreenPageActive(state))
                 LoginSwitchScreenPageRoute(bodySafeAreaSides: const {SafeAreaSide.bottom}),
 
               // Embedded page was provided, so use the embedded UI via LoginSwitchScreenPageRoute.
               // Force a single login type to disable rendering of other tabs.
               // Also hide the native logo if the server provides multiple login types.
-              if (_launchEmbedded != null)
+              if (_launchEmbeddedData != null)
                 LoginSwitchScreenPageRoute(
                   // For full-screen embedded pages, SafeArea handling is delegated to the embedded page itself.
                   bodySafeAreaSides: const {},
@@ -113,14 +93,13 @@ class LoginRouterPage extends StatelessWidget {
       packageInfo: context.read<PackageInfo>(),
       appInfo: context.read<AppInfo>(),
       platformInfo: context.read<PlatformInfo>(),
+      sessionRepository: context.read<SessionRepository>(),
+      appPreferences: context.read<AppPreferences>(),
     );
-    if (_launchEmbedded != null) {
-      login.setEmbedded(_launchEmbedded);
+    if (_launchEmbeddedData != null) {
+      login.setEmbedded(_launchEmbeddedData);
     }
-    final provider = BlocProvider(
-      create: (context) => login,
-      child: declarativeAutoRouter,
-    );
+    final provider = BlocProvider(create: (context) => login, child: declarativeAutoRouter);
     return provider;
   }
 

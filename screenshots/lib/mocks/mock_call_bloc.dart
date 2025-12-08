@@ -48,7 +48,6 @@ class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {
         activeCalls: [
           if (video) dVideoActiveCall else dAudioActiveCall,
         ],
-        speaker: false,
       ),
     );
     return mock;

@@ -13,9 +13,8 @@ abstract class ConnectivityService {
 }
 
 class ConnectivityServiceImpl implements ConnectivityService {
-  ConnectivityServiceImpl({
-    required ConnectivityChecker connectivityChecker,
-  }) : _connectivityChecker = connectivityChecker {
+  ConnectivityServiceImpl({required ConnectivityChecker connectivityChecker})
+    : _connectivityChecker = connectivityChecker {
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_handleConnectivityChange);
   }
 

@@ -6,16 +6,16 @@ part of 'icon_data_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$IconDataConfigImpl _$$IconDataConfigImplFromJson(Map<String, dynamic> json) =>
-    _$IconDataConfigImpl(
-      codePoint:
-          const HexCodePointConverter().fromJson(json['codePoint'] as String),
+IconDataConfig _$IconDataConfigFromJson(Map<String, dynamic> json) =>
+    IconDataConfig(
+      codePoint: const HexCodePointConverter().fromJson(
+        json['codePoint'] as String,
+      ),
       fontFamily: json['fontFamily'] as String? ?? 'MaterialIcons',
       matchTextDirection: json['matchTextDirection'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$$IconDataConfigImplToJson(
-        _$IconDataConfigImpl instance) =>
+Map<String, dynamic> _$IconDataConfigToJson(IconDataConfig instance) =>
     <String, dynamic>{
       'codePoint': const HexCodePointConverter().toJson(instance.codePoint),
       'fontFamily': instance.fontFamily,

@@ -38,17 +38,17 @@ class ExternalContact extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        registered,
-        userRegistered,
-        isCurrentUser,
-        firstName,
-        lastName,
-        aliasName,
-        number,
-        ext,
-        mobile,
-        smsNumbers,
-        email,
-      ];
+    id,
+    registered,
+    userRegistered,
+    isCurrentUser,
+    firstName,
+    lastName,
+    aliasName,
+    number,
+    ext,
+    mobile,
+    smsNumbers,
+    email,
+  ];
 }

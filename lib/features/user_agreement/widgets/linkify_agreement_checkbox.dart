@@ -39,10 +39,7 @@ class LinkifyAgreementCheckbox extends StatelessWidget {
             onOpen: (_) => onAgreementLinkTap(),
             style: LinkifyStyle(
               style: themeData.textTheme.labelLarge,
-              linkStyle: themeData.textTheme.labelLarge?.copyWith(
-                decoration: TextDecoration.underline,
-                color: null,
-              ),
+              linkStyle: themeData.textTheme.labelLarge?.copyWith(decoration: TextDecoration.underline, color: null),
             ),
             linkifiers: [UrlReplaceLinkifier(context.l10n.user_agreement_agrement_link)],
           ),

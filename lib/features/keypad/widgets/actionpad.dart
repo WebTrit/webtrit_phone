@@ -66,15 +66,9 @@ class Actionpad extends StatelessWidget {
                   itemBuilder: (context) {
                     return [
                       if (onVideoCallPressed != null)
-                        PopupMenuItem(
-                          onTap: onVideoCallPressed,
-                          child: Text(context.l10n.numberActions_videoCall),
-                        ),
+                        PopupMenuItem(onTap: onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
                       if (onTransferPressed != null)
-                        PopupMenuItem(
-                          onTap: onTransferPressed,
-                          child: Text(context.l10n.numberActions_transfer),
-                        ),
+                        PopupMenuItem(onTap: onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
                       if (callNumbers.length > 1)
                         for (final number in callNumbers)
                           PopupMenuItem(
@@ -118,9 +112,7 @@ class Actionpad extends StatelessWidget {
           onPressed: actionsEnabled ? onBackspacePressed : null,
           onLongPress: actionsEnabled ? onBackspaceLongPress : null,
           style: localStyle?.backspacePressed,
-          child: const Icon(
-            Icons.backspace_outlined,
-          ),
+          child: const Icon(Icons.backspace_outlined),
         ),
       ],
     );

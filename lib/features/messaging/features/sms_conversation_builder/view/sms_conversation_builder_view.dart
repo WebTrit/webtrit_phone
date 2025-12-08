@@ -20,7 +20,7 @@ class SmsConversationBuilderView extends StatefulWidget {
 class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView> {
   late final builderCubit = context.read<SmsConversationBuilderCubit>();
 
-  onMultipleUserNumbers(List<String> userNumbers) async {
+  Future<void> onMultipleUserNumbers(List<String> userNumbers) async {
     final result = await showModalBottomSheet(
       context: context,
       builder: (context) => BackdropFilter(
@@ -35,10 +35,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
               ),
             ),
             ...userNumbers.map((number) {
-              return ListTile(
-                title: Text(number),
-                onTap: () => Navigator.of(context).pop(number),
-              );
+              return ListTile(title: Text(number), onTap: () => Navigator.of(context).pop(number));
             }),
           ],
         ),
@@ -48,7 +45,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
     result is String ? builderCubit.onConfirmUserNumber(result) : builderCubit.onBackToCommon();
   }
 
-  onEmptyUserNumbers() async {
+  Future<void> onEmptyUserNumbers() async {
     await showDialog(
       context: context,
       builder: (context) => BackdropFilter(
@@ -63,7 +60,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
     builderCubit.onBackToCommon();
   }
 
-  onWrongNumberSelected(String recipientNumber) async {
+  Future<void> onWrongNumberSelected(String recipientNumber) async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -78,14 +75,17 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
               text: TextSpan(
                 children: [
                   TextSpan(
-                      text: context.l10n.messaging_ConversationBuilders_invalidNumber_message1,
-                      style: const TextStyle(fontWeight: FontWeight.normal)),
+                    text: context.l10n.messaging_ConversationBuilders_invalidNumber_message1,
+                    style: const TextStyle(fontWeight: FontWeight.normal),
+                  ),
                   TextSpan(
-                      text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                    text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   TextSpan(
-                      text: context.l10n.messaging_ConversationBuilders_invalidNumber_message2,
-                      style: const TextStyle(fontWeight: FontWeight.normal)),
+                    text: context.l10n.messaging_ConversationBuilders_invalidNumber_message2,
+                    style: const TextStyle(fontWeight: FontWeight.normal),
+                  ),
                 ],
                 style: Theme.of(context).textTheme.bodySmall,
               ),
@@ -126,19 +126,19 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
               SmsCBInitializing() => const Center(child: CircularProgressIndicator()),
               SmsCBInitializingError() => buildInitErrror(state.error),
               SmsCBCommon() => FadeIn(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: buildField(state.searchFilter, state.parsedNumber),
-                      ),
-                      const SizedBox(height: 8),
-                      Expanded(child: buildContactsList(state.externalContacts, state.localContacts)),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: buildField(state.searchFilter, state.parsedNumber),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(child: buildContactsList(state.externalContacts, state.localContacts)),
+                  ],
                 ),
+              ),
             },
           ),
         );
@@ -154,10 +154,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
       automaticallyImplyLeading: false,
       leading: TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: Text(
-          context.l10n.messaging_ConversationBuilders_cancel,
-          style: TextStyle(color: colorScheme.primary),
-        ),
+        child: Text(context.l10n.messaging_ConversationBuilders_cancel, style: TextStyle(color: colorScheme.primary)),
       ),
       leadingWidth: 100,
       actions: [
@@ -188,7 +185,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
-          const SizedBox(height: 8)
+          const SizedBox(height: 8),
         ],
         ...externalContactsToShow.map((Contact contact) => buildTile(contact)),
         const SizedBox(height: 8),
@@ -200,7 +197,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
-          const SizedBox(height: 8)
+          const SizedBox(height: 8),
         ],
         ...localContactsToShow.map((Contact contact) => buildTile(contact)),
       ],
@@ -216,10 +213,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
         child: Container(
           padding: const EdgeInsets.all(16),
           margin: const EdgeInsets.symmetric(horizontal: 64),
-          decoration: BoxDecoration(
-            color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(12)),
           child: Text(
             context.l10n.messaging_ConversationBuilders_noContacts,
             style: theme.textTheme.bodySmall,
@@ -239,15 +233,8 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
         child: Container(
           padding: const EdgeInsets.all(16),
           margin: const EdgeInsets.symmetric(horizontal: 64),
-          decoration: BoxDecoration(
-            color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
-            error.toString(),
-            style: theme.textTheme.bodySmall,
-            textAlign: TextAlign.center,
-          ),
+          decoration: BoxDecoration(color: colorScheme.surface, borderRadius: BorderRadius.circular(12)),
+          child: Text(error.toString(), style: theme.textTheme.bodySmall, textAlign: TextAlign.center),
         ),
       ),
     );
@@ -268,37 +255,43 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
 
     return TextFormField(
       decoration: InputDecoration(
-        error: Builder(builder: (context) {
-          if (numbersEntered && parsedNumber.isEmpty) {
+        error: Builder(
+          builder: (context) {
+            if (numbersEntered && parsedNumber.isEmpty) {
+              return RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: context.l10n.messaging_ConversationBuilders_numberSearch_errorError,
+                      style: const TextStyle(fontWeight: FontWeight.normal),
+                    ),
+                    TextSpan(
+                      text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                  style: theme.textTheme.bodySmall!.copyWith(color: Colors.red, fontSize: 13),
+                ),
+              );
+            }
+
             return RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
-                      text: context.l10n.messaging_ConversationBuilders_numberSearch_errorError,
-                      style: const TextStyle(fontWeight: FontWeight.normal)),
+                    text: context.l10n.messaging_ConversationBuilders_numberSearch_errorHint,
+                    style: const TextStyle(fontWeight: FontWeight.normal),
+                  ),
                   TextSpan(
-                      text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                    text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ],
-                style: theme.textTheme.bodySmall!.copyWith(color: Colors.red, fontSize: 13),
+                style: theme.textTheme.bodySmall!.copyWith(color: Colors.grey, fontSize: 13),
               ),
             );
-          }
-
-          return RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                    text: context.l10n.messaging_ConversationBuilders_numberSearch_errorHint,
-                    style: const TextStyle(fontWeight: FontWeight.normal)),
-                TextSpan(
-                    text: context.l10n.messaging_ConversationBuilders_numberFormatExample,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-              ],
-              style: theme.textTheme.bodySmall!.copyWith(color: Colors.grey, fontSize: 13),
-            ),
-          );
-        }),
+          },
+        ),
         hintText: context.l10n.messaging_ConversationBuilders_contactOrNumberSearch_hint,
         prefix: Text(prefix),
         fillColor: colorScheme.surface,
@@ -334,10 +327,7 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
           title: Text(contact.displayTitle),
           subtitle: Text(phones.first, style: theme.textTheme.bodySmall),
           children: phones.map((number) {
-            return ListTile(
-              title: Text(number),
-              onTap: () => builderCubit.onConfirm(number, extId),
-            );
+            return ListTile(title: Text(number), onTap: () => builderCubit.onConfirm(number, extId));
           }).toList(),
         ),
       );

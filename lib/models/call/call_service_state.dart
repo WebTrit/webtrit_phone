@@ -9,24 +9,46 @@ import 'signaling_client_status.dart';
 
 part 'call_service_state.freezed.dart';
 
-enum NetworkStatus {
-  changing,
-  available,
-  none,
-}
+enum NetworkStatus { changing, available, none }
 
 @freezed
 class CallServiceState with _$CallServiceState {
-  const CallServiceState._();
+  const CallServiceState({
+    this.signalingClientStatus = SignalingClientStatus.connecting,
+    this.registration,
+    this.networkStatus,
+    this.lastSignalingClientConnectError,
+    this.lastSignalingClientDisconnectError,
+    this.lastSignalingDisconnectCode,
+  });
 
-  const factory CallServiceState({
-    @Default(SignalingClientStatus.connecting) SignalingClientStatus signalingClientStatus,
-    @Default(Registration(status: RegistrationStatus.registering)) Registration registration,
-    @Default(null) NetworkStatus? networkStatus,
-    Object? lastSignalingClientConnectError,
-    Object? lastSignalingClientDisconnectError,
-    int? lastSignalingDisconnectCode,
-  }) = _CallServiceState;
+  @override
+  final SignalingClientStatus signalingClientStatus;
+
+  /// Represents the current registration status of the signaling client.
+  ///
+  /// This status is updated based on signaling-related events, such as:
+  /// - `onDisconnect`: triggered when the signaling connection is lost.
+  /// - `_onHandshakeSignalingEventState`: triggered during handshake updates.
+  /// - `RegisteringEvent` / `RegisteredEvent`: indicate ongoing or successful registration.
+  /// - `RegistrationFailedEvent`: indicates registration failure.
+  /// - `UnregisteringEvent` / `UnregisteredEvent`: indicate ongoing or completed unregistration.
+  ///
+  /// The `registration` field reflects the most recent registration state of the signaling client.
+  @override
+  final Registration? registration;
+
+  @override
+  final NetworkStatus? networkStatus;
+
+  @override
+  final Object? lastSignalingClientConnectError;
+
+  @override
+  final Object? lastSignalingClientDisconnectError;
+
+  @override
+  final int? lastSignalingDisconnectCode;
 
   CallStatus get status {
     final lastSignalingDisconnectCode = this.lastSignalingDisconnectCode;
@@ -35,13 +57,13 @@ class CallServiceState with _$CallServiceState {
       return CallStatus.connectivityNone;
     } else if (lastSignalingClientConnectError != null) {
       return CallStatus.connectError;
-    } else if (registration.status.isUnregistered) {
+    } else if (registration?.status.isUnregistered == true) {
       return CallStatus.appUnregistered;
-    } else if (registration.status.isFailed) {
+    } else if (registration?.status.isFailed == true) {
       return CallStatus.connectIssue;
     } else if (lastSignalingDisconnectCode != null) {
       return CallStatus.connectIssue;
-    } else if (signalingClientStatus.isConnect && registration.status.isRegistered) {
+    } else if (signalingClientStatus.isConnect && registration?.status.isRegistered == true) {
       return CallStatus.ready;
     } else {
       return CallStatus.inProgress;

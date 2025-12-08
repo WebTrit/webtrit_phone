@@ -16,11 +16,8 @@ part 'permissions_state.dart';
 final _logger = Logger('PermissionsCubit');
 
 class PermissionsCubit extends Cubit<PermissionsState> {
-  PermissionsCubit({
-    required this.appPreferences,
-    required this.appPermissions,
-    required this.deviceInfo,
-  }) : super(const PermissionsState());
+  PermissionsCubit({required this.appPreferences, required this.appPermissions, required this.deviceInfo})
+    : super(const PermissionsState());
 
   final AppPreferences appPreferences;
   final AppPermissions appPermissions;
@@ -53,11 +50,13 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
       // Emit state at the end to ensure all dependent UI elements are initialized.
       // If emitted earlier, state listeners might trigger navigation before the widget tree is ready.
-      emit(state.copyWith(
-        hasRequestedPermissions: true,
-        manufacturerTip: manufacturerTip,
-        pendingSpecialPermissions: specialPermissions,
-      ));
+      emit(
+        state.copyWith(
+          hasRequestedPermissions: true,
+          manufacturerTip: manufacturerTip,
+          pendingSpecialPermissions: specialPermissions,
+        ),
+      );
     } catch (e, st) {
       _logger.severe('Permission request failed', e, st);
       emit(state.copyWith(failure: e));
@@ -79,9 +78,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     final contactsAgreementStatus = appPreferences.getContactsAgreementStatus();
     _logger.info('Contacts agreement status: ${contactsAgreementStatus.isAccepted}');
 
-    final exclude = <Permission>[
-      if (!contactsAgreementStatus.isAccepted) Permission.contacts,
-    ];
+    final exclude = <Permission>[if (!contactsAgreementStatus.isAccepted) Permission.contacts];
 
     _logger.info('Excluding permissions: $exclude');
     return exclude;
@@ -107,11 +104,13 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   }
 
   void dismissTip() {
-    emit(state.copyWith(
-      hasRequestedPermissions: false,
-      manufacturerTip: state.manufacturerTip?.copyWith(shown: true),
-      pendingSpecialPermissions: [],
-    ));
+    emit(
+      state.copyWith(
+        hasRequestedPermissions: false,
+        manufacturerTip: state.manufacturerTip?.copyWith(shown: true),
+        pendingSpecialPermissions: [],
+      ),
+    );
   }
 
   void openAppSettings() {

@@ -36,14 +36,14 @@ class ModifyWithEncodingSettings implements SDPMunger {
 
     EncodingSettings settings = switch (preset) {
       null => EncodingSettings.defaultWithOverrides(
-          audioBitrate: defaultPresetOverride.audioBitrate,
-          videoBitrate: defaultPresetOverride.videoBitrate,
-          ptime: defaultPresetOverride.ptime,
-          maxptime: defaultPresetOverride.maxptime,
-          opusSamplingRate: defaultPresetOverride.opusSamplingRate,
-          opusStereo: defaultPresetOverride.opusStereo,
-          opusDtx: defaultPresetOverride.opusDtx,
-        ),
+        audioBitrate: defaultPresetOverride.audioBitrate,
+        videoBitrate: defaultPresetOverride.videoBitrate,
+        ptime: defaultPresetOverride.ptime,
+        maxptime: defaultPresetOverride.maxptime,
+        opusSamplingRate: defaultPresetOverride.opusSamplingRate,
+        opusStereo: defaultPresetOverride.opusStereo,
+        opusDtx: defaultPresetOverride.opusDtx,
+      ),
       EncodingPreset.eco => EncodingSettings.eco(),
       EncodingPreset.balance => EncodingSettings.balance(),
       EncodingPreset.quality => EncodingSettings.quality(),
@@ -74,6 +74,9 @@ class ModifyWithEncodingSettings implements SDPMunger {
       opusDtx,
       audioProfiles,
       videoProfiles,
+      removeExtmaps,
+      removeStaticAudioRtpMaps,
+      remapTE8payloadTo101,
     ) = settings.asRecord;
 
     final sdp = description.sdp;
@@ -114,6 +117,21 @@ class ModifyWithEncodingSettings implements SDPMunger {
 
     if (opusSamplingRate != null || opusBitrate != null || opusStereo != null || opusDtx != null) {
       builder.setOpusParams(opusSamplingRate, opusBitrate, opusStereo, opusDtx);
+      modified = true;
+    }
+
+    if (removeExtmaps) {
+      builder.removeAudioExtmaps();
+      modified = true;
+    }
+
+    if (removeStaticAudioRtpMaps) {
+      builder.removeStaticAudioRtpMaps();
+      modified = true;
+    }
+
+    if (remapTE8payloadTo101) {
+      builder.remapTE8payloadTo101();
       modified = true;
     }
 

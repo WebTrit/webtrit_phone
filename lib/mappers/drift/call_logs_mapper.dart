@@ -1,4 +1,5 @@
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/call_direction.dart';
 import 'package:webtrit_phone/models/call_log_entry.dart';
 
 mixin CallLogsDriftMapper {

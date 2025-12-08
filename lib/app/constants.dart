@@ -12,6 +12,8 @@ const kCompatibilityVerifyRepeatDelay = Duration(seconds: 2);
 
 const kDebounceDuration = Duration(milliseconds: 275);
 
+const kDefaultCountdownRepeatIntervalSeconds = Duration(seconds: 30);
+
 const kInset = kMinInteractiveDimension / 2;
 
 const kMainAppBarBottomTabHeight = 42.0;
@@ -31,9 +33,23 @@ const kChatMessagingFeatureFlag = 'internalMessaging';
 const kVoicemailFeatureFlag = 'voicemail';
 const kSystemNotificationsFeatureFlag = 'notifications';
 const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
+const kSipPresenceFeatureFlag = 'sipPresence';
 
 const kSystemNotificationsTask = 'systemNotificationsTask';
 const kSystemNotificationsTaskId = 'systemNotificationsTask-id';
 
 const kLocalPushSourceSystemNotification = 'system-notification';
 const kLocalPushSourceMessaging = 'messaging';
+
+const kPresenceActivityKeyAway = 'away';
+const kPresenceActivityKeyBusy = 'busy';
+const kPresenceActivityKeySleeping = 'sleeping';
+const kPresenceActivityKeyDoNotDisturb = 'do-not-disturb';
+const kPresenceActivityKeyPermanentAbsence = 'permanent-absence';
+const kPresenceActivityKeyOnThePhone = 'on-the-phone';
+const kPresenceActivityKeyMeal = 'meal';
+const kPresenceActivityKeyMeeting = 'meeting';
+const kPresenceActivityKeyAppointment = 'appointment';
+const kPresenceActivityKeyVacation = 'vacation';
+const kPresenceActivityKeyTravel = 'travel';
+const kPresenceActivityKeyInTransit = 'in-transit';

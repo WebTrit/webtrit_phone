@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class SipVersion with EquatableMixin {
-  SipVersion({
-    this.version,
-  });
+  SipVersion({this.version});
 
   final String? version;
 

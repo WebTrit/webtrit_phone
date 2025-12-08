@@ -9,3 +9,7 @@ analyzer:
     invalid_annotation_target: ignore
   exclude:
     - "**/*.g.dart"
+    - "**/*.freezed.dart"
+
+formatter:
+  page_width: 120

@@ -13,16 +13,13 @@ final class SelfConfigUnsupported extends SelfConfig {
 }
 
 final class SelfConfigSupported extends SelfConfig with EquatableMixin {
-  SelfConfigSupported({
-    required this.url,
-    required this.expiresAt,
-  });
+  SelfConfigSupported({required this.url, required this.expiresAt});
 
   final Uri url;
   final DateTime expiresAt;
 
   @override
-  List<Object> get props => [url, expiresAt];
+  List<Object?> get props => [url, expiresAt];
 
   @override
   bool get stringify => true;

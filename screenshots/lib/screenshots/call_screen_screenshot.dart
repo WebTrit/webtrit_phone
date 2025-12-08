@@ -11,8 +11,10 @@ class CallScreenScreenshot extends StatefulWidget {
   const CallScreenScreenshot(
     this.video, {
     super.key,
-    this.localePlaceholderImageUrl = 'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
-    this.remotePlaceholderImageUrl = 'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
+    this.localePlaceholderImageUrl =
+        'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
+    this.remotePlaceholderImageUrl =
+        'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
   });
 
   final bool video;

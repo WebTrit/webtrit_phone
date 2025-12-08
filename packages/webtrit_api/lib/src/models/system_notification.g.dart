@@ -6,9 +6,8 @@ part of 'system_notification.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SystemNotificationImpl _$$SystemNotificationImplFromJson(
-        Map<String, dynamic> json) =>
-    _$SystemNotificationImpl(
+SystemNotification _$SystemNotificationFromJson(Map<String, dynamic> json) =>
+    SystemNotification(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
       content: json['content'] as String,
@@ -21,8 +20,7 @@ _$SystemNotificationImpl _$$SystemNotificationImplFromJson(
           : DateTime.parse(json['read_at'] as String),
     );
 
-Map<String, dynamic> _$$SystemNotificationImplToJson(
-        _$SystemNotificationImpl instance) =>
+Map<String, dynamic> _$SystemNotificationToJson(SystemNotification instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
@@ -41,16 +39,14 @@ const _$SystemNotificationTypeEnumMap = {
   SystemNotificationType.system: 'system',
 };
 
-_$SystemNotificationResponceImpl _$$SystemNotificationResponceImplFromJson(
-        Map<String, dynamic> json) =>
-    _$SystemNotificationResponceImpl(
-      items: (json['items'] as List<dynamic>)
-          .map((e) => SystemNotification.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+SystemNotificationResponce _$SystemNotificationResponceFromJson(
+  Map<String, dynamic> json,
+) => SystemNotificationResponce(
+  items: (json['items'] as List<dynamic>)
+      .map((e) => SystemNotification.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
-Map<String, dynamic> _$$SystemNotificationResponceImplToJson(
-        _$SystemNotificationResponceImpl instance) =>
-    <String, dynamic>{
-      'items': instance.items,
-    };
+Map<String, dynamic> _$SystemNotificationResponceToJson(
+  SystemNotificationResponce instance,
+) => <String, dynamic>{'items': instance.items.map((e) => e.toJson()).toList()};

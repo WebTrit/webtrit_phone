@@ -24,7 +24,7 @@ class SmsOutboxWorker {
 
   bool _disposed = false;
 
-  init() {
+  void init() {
     _logger.info('Initialising...');
 
     /// Continuously processes messages, edits, deletes, and read cursors from the outbox repository
@@ -46,7 +46,7 @@ class SmsOutboxWorker {
     });
   }
 
-  dispose() {
+  void dispose() {
     _logger.info('Disposing...');
     _disposed = true;
   }

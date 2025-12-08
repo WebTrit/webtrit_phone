@@ -2,18 +2,12 @@ import 'abstract_requests.dart';
 import 'line/line_requests.dart';
 
 abstract class LineRequest extends SessionRequest {
-  const LineRequest({
-    required super.transaction,
-    required this.line,
-  });
+  const LineRequest({required super.transaction, required this.line});
 
   final int? line;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        line,
-      ];
+  List<Object?> get props => [...super.props, line];
 
   factory LineRequest.fromJson(Map<String, dynamic> json) {
     final lineRequest = tryFromJson(json);

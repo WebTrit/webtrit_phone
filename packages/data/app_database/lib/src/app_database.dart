@@ -37,6 +37,8 @@ part 'app_database.g.dart';
     VoicemailTable,
     SystemNotificationsTable,
     SystemNotificationsOutboxTable,
+    PresenceInfoTable,
+    CdrTable,
   ],
   daos: [
     ContactsDao,
@@ -50,6 +52,8 @@ part 'app_database.g.dart';
     ActiveMessageNotificationsDao,
     VoicemailDao,
     SystemNotificationsDao,
+    PresenceInfoDao,
+    CdrsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -113,8 +117,7 @@ class AppDatabase extends _$AppDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities {
     return [
       ...super.allSchemaEntities,
-      ...super
-          .allSchemaEntities
+      ...super.allSchemaEntities
           .whereType<TableInfo>()
           .map((tableInfo) => generateTableCompanionEntities(tableInfo))
           .expand((e) => e),
@@ -143,7 +146,8 @@ class AppDatabase extends _$AppDatabase {
     } else {
       final tableName = tableInfo.actualTableName;
       final triggerName = '${tableName}_after_insert_trigger';
-      final triggerSql = '''
+      final triggerSql =
+          '''
         CREATE TRIGGER $triggerName
           AFTER INSERT ON $tableName
         BEGIN
@@ -162,7 +166,8 @@ class AppDatabase extends _$AppDatabase {
     } else {
       final tableName = tableInfo.actualTableName;
       final triggerName = '${tableName}_after_update_trigger';
-      final triggerSql = '''
+      final triggerSql =
+          '''
         CREATE TRIGGER $triggerName
           AFTER UPDATE ON $tableName
         BEGIN

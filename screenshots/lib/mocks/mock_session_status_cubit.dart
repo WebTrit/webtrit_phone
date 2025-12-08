@@ -2,7 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class MockSessionStatusCubit extends MockCubit<SessionStatusState> implements SessionStatusCubit {
+class MockSessionStatusCubit extends MockCubit<SessionStatusState>
+    implements SessionStatusCubit {
   MockSessionStatusCubit();
 
   factory MockSessionStatusCubit.initial() {
@@ -10,7 +11,7 @@ class MockSessionStatusCubit extends MockCubit<SessionStatusState> implements Se
     whenListen(
       mock,
       const Stream<SessionStatusState>.empty(),
-      initialState: const SessionStatusState.initial(),
+      initialState: const SessionStatusState(),
     );
     return mock;
   }

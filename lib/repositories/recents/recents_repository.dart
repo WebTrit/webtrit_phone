@@ -4,15 +4,15 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-class RecentsRepository with CallLogsDriftMapper, ContactsDriftMapper, RecentsDriftMapper {
+class RecentsRepository with PresenceInfoDriftMapper, CallLogsDriftMapper, ContactsDriftMapper, RecentsDriftMapper {
   RecentsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;
 
   Stream<List<Recent>> watchRecents() {
-    return _appDatabase.recentsDao
-        .watchLastRecents()
-        .map((callLogsExt) => callLogsExt.map(recentFromDrift).toList(growable: false));
+    return _appDatabase.recentsDao.watchLastRecents().map(
+      (callLogsExt) => callLogsExt.map(recentFromDrift).toList(growable: false),
+    );
   }
 
   Future<void> deleteByCallId(int id) async {

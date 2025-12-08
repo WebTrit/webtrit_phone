@@ -1,21 +1,13 @@
 import '../abstract_events.dart';
 
 class RegistrationFailedEvent extends SessionEvent {
-  const RegistrationFailedEvent({
-    super.transaction,
-    required this.code,
-    required this.reason,
-  });
+  const RegistrationFailedEvent({super.transaction, required this.code, required this.reason});
 
   final int code;
   final String reason;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        code,
-        reason,
-      ];
+  List<Object?> get props => [...super.props, code, reason];
 
   static const typeValue = 'registration_failed';
 
@@ -25,10 +17,6 @@ class RegistrationFailedEvent extends SessionEvent {
       throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    return RegistrationFailedEvent(
-      transaction: json['transaction'],
-      code: json['code'],
-      reason: json['reason'],
-    );
+    return RegistrationFailedEvent(transaction: json['transaction'], code: json['code'], reason: json['reason']);
   }
 }

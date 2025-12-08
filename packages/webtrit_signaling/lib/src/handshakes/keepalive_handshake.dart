@@ -18,8 +18,6 @@ class KeepaliveHandshake extends Handshake {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      Handshake.typeKey: typeValue,
-    };
+    return {Handshake.typeKey: typeValue};
   }
 }

@@ -1,12 +1,31 @@
 part of 'push_tokens_bloc.dart';
 
-@freezed
-class PushTokensEvent with _$PushTokensEvent {
-  const factory PushTokensEvent.started() = PushTokensStarted;
+sealed class PushTokensEvent extends Equatable {
+  const PushTokensEvent();
 
-  const factory PushTokensEvent.insertedOrUpdated(AppPushTokenType type, String value) = PushTokensInsertedOrUpdated;
+  @override
+  List<Object?> get props => [];
+}
 
-  const factory PushTokensEvent.error(String errorMessage) = _PushTokensError;
+class PushTokensEventStarted extends PushTokensEvent {
+  const PushTokensEventStarted();
+}
 
-  const factory PushTokensEvent.fcmTokenDeletionRequested() = PushTokensFcmTokenDeletionRequested;
+class PushTokensEventInsertedOrUpdated extends PushTokensEvent {
+  const PushTokensEventInsertedOrUpdated(this.type, this.value);
+
+  final AppPushTokenType type;
+  final String value;
+
+  @override
+  List<Object?> get props => [type, value];
+}
+
+class PushTokensEventError extends PushTokensEvent {
+  const PushTokensEventError(this.errorMessage);
+
+  final String errorMessage;
+
+  @override
+  List<Object?> get props => [errorMessage];
 }

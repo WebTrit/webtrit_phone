@@ -2,13 +2,20 @@ part of 'network_cubit.dart';
 
 @freezed
 class NetworkState with _$NetworkState {
-  const NetworkState._();
+  const NetworkState({
+    this.incomingCallTypeModels = const [],
+    this.incomingCallTypesRemainder = const [],
+    this.smsFallbackEnabled = false,
+  });
 
-  const factory NetworkState({
-    @Default([]) List<IncomingCallTypeModel> incomingCallTypeModels,
-    @Default([]) List<IncomingCallType> incomingCallTypesRemainder,
-    @Default(false) bool smsFallbackEnabled,
-  }) = _NetworkState;
+  @override
+  final List<IncomingCallTypeModel> incomingCallTypeModels;
+
+  @override
+  final List<IncomingCallType> incomingCallTypesRemainder;
+
+  @override
+  final bool smsFallbackEnabled;
 
   IncomingCallTypeModel? get selectedIncomingCallTypeModel =>
       incomingCallTypeModels.firstWhereOrNull((m) => m.selected);

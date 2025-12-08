@@ -12,7 +12,7 @@ class SmsRepository with SmsDriftMapper {
 
   final StreamController<SmsEvent> _eventBus = StreamController.broadcast();
   Stream<SmsEvent> get eventBus => _eventBus.stream;
-  _addEvent(SmsEvent event) => _eventBus.add(event);
+  void _addEvent(SmsEvent event) => _eventBus.add(event);
 
   Future<SmsConversation?> getConversation(int conversationId) async {
     final conversationData = await _smsDao.getConversationById(conversationId);
@@ -60,8 +60,12 @@ class SmsRepository with SmsDriftMapper {
     return messageData != null ? messageFromDrift(messageData) : null;
   }
 
-  Future<List<SmsMessage>> getMessageHistory(int conversationId,
-      {DateTime? from, DateTime? to, int limit = 100}) async {
+  Future<List<SmsMessage>> getMessageHistory(
+    int conversationId, {
+    DateTime? from,
+    DateTime? to,
+    int limit = 100,
+  }) async {
     final messagesData = await _smsDao.getMessageHistory(conversationId, from: from, to: to, limit: limit);
     return messagesData.map(messageFromDrift).toList();
   }

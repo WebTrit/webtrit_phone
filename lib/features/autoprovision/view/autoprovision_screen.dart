@@ -11,6 +11,8 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 class AutoprovisionScreen extends StatefulWidget {
   const AutoprovisionScreen({super.key});
@@ -21,6 +23,9 @@ class AutoprovisionScreen extends StatefulWidget {
 
 class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   late final appBloc = context.read<AppBloc>();
+
+  // TODO: Move to the bloc
+  late final sessionRepository = context.read<SessionRepository>();
   late final callBloc = context.readOrNull<CallBloc>();
   late final notificationsBloc = context.read<NotificationsBloc>();
   late final autoprovisionCubit = context.read<AutoprovisionCubit>();
@@ -68,23 +73,16 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     final token = state.token;
     final userId = state.userId;
     final tenantId = state.tenantId;
-    final systemInfo = state.systemInfo;
 
-    final loginEvent = AppLogined(
-      coreUrl: coreUrl,
-      token: token,
-      userId: userId,
-      tenantId: tenantId,
-      systemInfo: systemInfo,
-    );
+    final session = Session(coreUrl: coreUrl, token: token, userId: userId, tenantId: tenantId);
 
     if (router.canPop()) {
       await router.maybePop();
 
       // Logout if the session exists
-      if (appBloc.state.token != null) {
-        appBloc.add(const AppLogouted());
-        await appBloc.stream.firstWhere((element) => element.token == null);
+      if (appBloc.state.session.isLoggedIn) {
+        await sessionRepository.logout();
+        await appBloc.stream.firstWhere((element) => !element.session.isLoggedIn);
       }
 
       // Wait until Callkeep is uninitialized, if needed
@@ -93,12 +91,12 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       }
 
       // Login with the new session
-      appBloc.add(loginEvent);
-      await appBloc.stream.firstWhere((element) => element.token == token);
+      await sessionRepository.save(session);
+      await appBloc.stream.firstWhere((element) => element.session.token == token);
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
-      appBloc.add(loginEvent);
-      await appBloc.stream.firstWhere((element) => element.token == token);
+      await sessionRepository.save(session);
+      await appBloc.stream.firstWhere((element) => element.session.token == token);
       // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
 

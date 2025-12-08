@@ -7,8 +7,40 @@
         "systemNavigationBarColor": "#000000",
         "systemNavigationBarIconBrightness": "light"
       },
+      "mainLogo": {
+        "uri": "asset://assets/images/primary_onboarding_logo.svg",
+        "render": {
+          "scale": 0.42,
+          "padding": {
+            "left": 0.0,
+            "top": 0.0,
+            "right": 0.0,
+            "bottom": 0.0
+          }
+        }
+      },
       "buttonLoginStyleType": "neutralOnDark",
       "buttonSignupStyleType": "neutralOnDark"
+    },
+    "switchPage": {
+      "mainLogo": {
+        "uri": "asset://assets/images/secondary_onboarding_logo.svg",
+        "render": {
+          "scale": 0.25,
+          "padding": {
+            "left": 0.0,
+            "top": 128.0,
+            "right": 0.0,
+            "bottom": 0.0
+          }
+        }
+      }
+    },
+    "otpSigninVerify": {
+      "countdownRepeatIntervalSeconds": 30
+    },
+    "signupVerify": {
+      "countdownRepeatIntervalSeconds": 30
     }
   },
   "dialing": {
@@ -25,21 +57,21 @@
     },
     "callInfo": {
       "usernameTextStyle": {
-        "fontSize": 36,
+        "fontSize": 24,
         "fontWeight": {
           "weight": 400
         },
         "color": "#FFFFFF"
       },
       "numberTextStyle": {
-        "fontSize": 16,
+        "fontSize": 20,
         "fontWeight": {
           "weight": 400
         },
         "color": "#EEF3F6"
       },
       "callStatusTextStyle": {
-        "fontSize": 14,
+        "fontSize": 16,
         "fontWeight": {
           "weight": 400
         },
@@ -54,6 +86,103 @@
           "weight": 500
         },
         "color": "#EEF3F6"
+      }
+    },
+    "actions": {
+      "callStart": {
+        "backgroundColor": "#75B943",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#66DDE0E3",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "hangup": {
+        "backgroundColor": "#E74C3C",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#66DDE0E3",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "transfer": {
+        "backgroundColor": "#123752",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#66DDE0E3",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "camera": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "muted": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "speaker": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "held": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "swap": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "key": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      }
+    }
+  },
+  "about": {
+    "mainLogo": {
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg",
+      "render": {
+        "scale": 0.25,
+        "padding": {
+          "left": 0.0,
+          "top": 48.0,
+          "right": 0.0,
+          "bottom": 0.0
+        }
       }
     }
   }

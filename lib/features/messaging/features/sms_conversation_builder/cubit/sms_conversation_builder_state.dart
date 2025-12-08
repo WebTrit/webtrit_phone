@@ -15,7 +15,7 @@ final class SmsCBInitializing extends SmsCBState {
   const SmsCBInitializing();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
   @override
   bool get stringify => true;
@@ -30,7 +30,7 @@ final class SmsCBInitializingError extends SmsCBState {
   final Object error;
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [error];
 
   @override
   bool get stringify => true;
@@ -62,9 +62,7 @@ class SmsCBCommon extends SmsCBState {
   late final externalContacts = filteredContacts.where((c) => c.sourceType == ContactSourceType.external);
 
   /// Create next [SmsCBWrongNumberSelected] stage from this state.
-  SmsCBWrongNumberSelected toWrongNumberSelected(
-    String recipientNumber,
-  ) {
+  SmsCBWrongNumberSelected toWrongNumberSelected(String recipientNumber) {
     return SmsCBWrongNumberSelected(this, recipientNumber);
   }
 
@@ -76,11 +74,7 @@ class SmsCBCommon extends SmsCBState {
     return SmsCBUserNumberConfirmationNeeded(this, recipientCreds, userNumbers);
   }
 
-  SmsCBCommon copyWith({
-    List<Contact>? contacts,
-    String? searchFilter,
-    String? parsedNumber,
-  }) {
+  SmsCBCommon copyWith({List<Contact>? contacts, String? searchFilter, String? parsedNumber}) {
     return SmsCBCommon(
       contacts ?? this.contacts,
       searchFilter: searchFilter ?? this.searchFilter,
@@ -89,7 +83,7 @@ class SmsCBCommon extends SmsCBState {
   }
 
   @override
-  List<Object> get props => [contacts, searchFilter, parsedNumber];
+  List<Object?> get props => [contacts, searchFilter, parsedNumber];
 
   @override
   bool get stringify => true;
@@ -99,7 +93,7 @@ class SmsCBCommon extends SmsCBState {
 /// eg. non-e164 number, or himself.
 final class SmsCBWrongNumberSelected extends SmsCBCommon {
   SmsCBWrongNumberSelected(SmsCBCommon state, this.recipientNumber)
-      : super(state.contacts, searchFilter: state.searchFilter, parsedNumber: state.parsedNumber);
+    : super(state.contacts, searchFilter: state.searchFilter, parsedNumber: state.parsedNumber);
 
   /// The number that user selected to send the message to.
   final String recipientNumber;
@@ -110,7 +104,7 @@ final class SmsCBWrongNumberSelected extends SmsCBCommon {
   }
 
   @override
-  List<Object> get props => [recipientNumber, contacts, searchFilter, parsedNumber];
+  List<Object?> get props => [recipientNumber, contacts, searchFilter, parsedNumber];
 
   @override
   bool get stringify => true;
@@ -121,7 +115,7 @@ final class SmsCBWrongNumberSelected extends SmsCBCommon {
 /// or has no numbers associated with him account.
 final class SmsCBUserNumberConfirmationNeeded extends SmsCBCommon {
   SmsCBUserNumberConfirmationNeeded(SmsCBCommon state, this.recipientCreds, this.userNumbers)
-      : super(state.contacts, searchFilter: state.searchFilter, parsedNumber: state.parsedNumber);
+    : super(state.contacts, searchFilter: state.searchFilter, parsedNumber: state.parsedNumber);
 
   /// The number that user selected to send the message to.
   final RecipientCreds recipientCreds;
@@ -135,7 +129,7 @@ final class SmsCBUserNumberConfirmationNeeded extends SmsCBCommon {
   }
 
   @override
-  List<Object> get props => [recipientCreds, userNumbers, contacts, searchFilter, parsedNumber];
+  List<Object?> get props => [recipientCreds, userNumbers, contacts, searchFilter, parsedNumber];
 
   @override
   bool get stringify => true;

@@ -11,6 +11,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
@@ -57,54 +58,56 @@ class MainScreenScreenshot extends StatelessWidget {
   List<BlocProvider> _createMockBlocProviders() {
     return [
       BlocProvider<CallBloc>(create: (_) => MockCallBloc.mainScreen()),
+      BlocProvider<CallRoutingCubit>(
+          create: (_) => MockCallRoutingCubit.initial()),
       BlocProvider<MainBloc>(create: (_) => MockMainBloc.mainScreen()),
-      BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
+      BlocProvider<SessionStatusCubit>(
+          create: (_) => MockSessionStatusCubit.initial()),
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
-      BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
+      BlocProvider<SystemNotificationsCounterCubit>(
+          create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
     ];
   }
 
   List<BottomMenuTab> _defaultTabs(BuildContext context) {
     return [
-      const BottomMenuTab(
+      const FavoritesBottomMenuTab(
         enabled: true,
         initial: true,
-        flavor: MainFlavor.favorites,
         titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
         icon: Icons.star,
       ),
-      const BottomMenuTab(
+      const RecentsBottomMenuTab(
         enabled: true,
         initial: false,
-        flavor: MainFlavor.recents,
         titleL10n: 'main_BottomNavigationBarItemLabel_recents',
         icon: Icons.history,
+        useCdrs: false,
       ),
-      const BottomMenuTab(
+      const ContactsBottomMenuTab(
         enabled: true,
         initial: false,
-        flavor: MainFlavor.contacts,
         titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
         icon: Icons.people,
+        contactSourceTypes: [],
       ),
-      const BottomMenuTab(
+      const KeypadBottomMenuTab(
         enabled: true,
         initial: false,
-        flavor: MainFlavor.keypad,
         titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
         icon: Icons.dialpad,
       ),
-      BottomMenuTab(
+      MessagingBottomMenuTab(
         enabled: true,
         initial: false,
-        flavor: MainFlavor.messaging,
         titleL10n: context.l10n.main_BottomNavigationBarItemLabel_chats,
         icon: Icons.messenger_outline,
       ),
     ];
   }
 
-  BottomNavigationBar _buildBottomNavigationBar(BuildContext context, List<BottomMenuTab> tabs) {
+  BottomNavigationBar _buildBottomNavigationBar(
+      BuildContext context, List<BottomMenuTab> tabs) {
     final textTheme = Theme.of(context).textTheme;
 
     return BottomNavigationBar(
@@ -121,7 +124,8 @@ class MainScreenScreenshot extends StatelessWidget {
     );
   }
 
-  Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor, FeatureAccess featureAccess) {
+  Widget _buildFlavorWidget(
+      BuildContext context, MainFlavor flavor, FeatureAccess featureAccess) {
     switch (flavor) {
       case MainFlavor.favorites:
         return BlocProvider<FavoritesBloc>(
@@ -132,6 +136,7 @@ class MainScreenScreenshot extends StatelessWidget {
             videoEnabled: true,
             chatsEnabled: false,
             smssEnabled: false,
+            cdrsEnabled: false,
           ),
         );
       case MainFlavor.recents:
@@ -171,21 +176,29 @@ class MainScreenScreenshot extends StatelessWidget {
           create: (_) => MockEmbeddedCubit.mainScreen(),
           child: EmbeddedScreen(
             initialUri: Uri.parse('https://example.com'),
+            mediaQueryMetricsData: null,
+            deviceInfoData: null,
             appBar: MainAppBar(
               title: const Text('Embedded'),
               context: context,
             ),
-            connectivityRecoveryStrategyBuilder: () => NoneConnectivityRecoveryStrategy(),
-            pageInjectionStrategyBuilder: () => DefaultPayloadInjectionStrategy(),
+            connectivityRecoveryStrategyBuilder: () =>
+                NoneConnectivityRecoveryStrategy(),
+            pageInjectionStrategyBuilder: () =>
+                DefaultPayloadInjectionStrategy(),
           ),
         );
       case MainFlavor.messaging:
         return MultiBlocProvider(
           providers: [
-            BlocProvider<MessagingBloc>(create: (_) => MockMessagingBloc.initial()),
-            BlocProvider<ChatConversationsCubit>(create: (_) => MockChatConversationsCubit.withMockData()),
-            BlocProvider<SmsConversationsCubit>(create: (_) => MockSmsConversationsCubit.withConversations()),
-            BlocProvider<UnreadCountCubit>(create: (_) => MockUnreadCountCubit.withUnreadMessages()),
+            BlocProvider<MessagingBloc>(
+                create: (_) => MockMessagingBloc.initial()),
+            BlocProvider<ChatConversationsCubit>(
+                create: (_) => MockChatConversationsCubit.withMockData()),
+            BlocProvider<SmsConversationsCubit>(
+                create: (_) => MockSmsConversationsCubit.withConversations()),
+            BlocProvider<UnreadCountCubit>(
+                create: (_) => MockUnreadCountCubit.withUnreadMessages()),
           ],
           child: const ConversationsScreen(
             title: Text(
@@ -196,7 +209,8 @@ class MainScreenScreenshot extends StatelessWidget {
     }
   }
 
-  Widget _buildContactSourceTypeWidget(BuildContext context, ContactSourceType sourceType) {
+  Widget _buildContactSourceTypeWidget(
+      BuildContext context, ContactSourceType sourceType) {
     switch (sourceType) {
       case ContactSourceType.local:
         return BlocProvider<ContactsLocalTabBloc>(

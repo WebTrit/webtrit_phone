@@ -7,18 +7,31 @@ part 'icon_data_config.freezed.dart';
 part 'icon_data_config.g.dart';
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class IconDataConfig with _$IconDataConfig {
   /// Exact IconData representation.
-  const factory IconDataConfig({
+  const IconDataConfig({
     /// e.g. 0xe491 (58513)
-    @HexCodePointConverter() required int codePoint,
+    required this.codePoint,
 
     /// e.g. "MaterialIcons"
-    @Default('MaterialIcons') String fontFamily,
+    this.fontFamily = 'MaterialIcons',
 
     /// Mirrors IconData.matchTextDirection
-    @Default(false) bool matchTextDirection,
-  }) = _IconDataConfig;
+    this.matchTextDirection = false,
+  });
+
+  @override
+  @HexCodePointConverter()
+  final int codePoint;
+
+  @override
+  final String fontFamily;
+
+  @override
+  final bool matchTextDirection;
 
   factory IconDataConfig.fromJson(Map<String, dynamic> json) => _$IconDataConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$IconDataConfigToJson(this);
 }

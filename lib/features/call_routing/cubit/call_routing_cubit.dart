@@ -7,18 +7,13 @@ import 'package:stream_transform/stream_transform.dart';
 import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/lines_state.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-
 import 'package:webtrit_phone/services/services.dart';
 
 part 'call_routing_state.dart';
 
 class CallRoutingCubit extends Cubit<CallRoutingState?> {
-  CallRoutingCubit(
-    this._userRepository,
-    this._linesStateRepository,
-    this._appPreferences,
-    this._connectivityService,
-  ) : super(null) {
+  CallRoutingCubit(this._userRepository, this._linesStateRepository, this._appPreferences, this._connectivityService)
+    : super(null) {
     _init();
   }
 

@@ -21,7 +21,7 @@ class OgPreview with EquatableMixin {
   final String? imageUrl;
 
   @override
-  List<Object> get props => [description ?? '', imageUrl ?? '', title ?? ''];
+  List<Object?> get props => [description, imageUrl, title];
 
   @override
   bool get stringify => true;
@@ -152,9 +152,7 @@ Future<Size> _getImageSize(String url) {
 
   void listener(ImageInfo info, bool _) {
     if (!completer.isCompleted) {
-      completer.complete(
-        Size(info.image.height.toDouble(), info.image.width.toDouble()),
-      );
+      completer.complete(Size(info.image.height.toDouble(), info.image.width.toDouble()));
     }
     stream.removeListener(streamListener);
   }

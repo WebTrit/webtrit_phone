@@ -9,10 +9,6 @@ class TextButtonThemeDataFactory implements ThemeStyleFactory<TextButtonThemeDat
 
   @override
   TextButtonThemeData create() {
-    return TextButtonThemeData(
-      style: TextButton.styleFrom(
-        shape: const StadiumBorder(),
-      ),
-    );
+    return TextButtonThemeData(style: TextButton.styleFrom(shape: const StadiumBorder()));
   }
 }

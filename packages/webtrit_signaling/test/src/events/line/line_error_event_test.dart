@@ -9,17 +9,11 @@ import '../event_jsons.dart';
 
 void main() {
   test('$LineErrorEvent tryFromJson', () {
-    expect(
-      LineErrorEvent.tryFromJson(json.decode(callErrorEventJson1) as Map<String, dynamic>),
-      equals(isNotNull),
-    );
+    expect(LineErrorEvent.tryFromJson(json.decode(callErrorEventJson1) as Map<String, dynamic>), equals(isNotNull));
   });
 
   test('$LineErrorEvent tryFromJson', () {
-    expect(
-      LineErrorEvent.tryFromJson(json.decode(callErrorEventJson2) as Map<String, dynamic>),
-      equals(isNotNull),
-    );
+    expect(LineErrorEvent.tryFromJson(json.decode(callErrorEventJson2) as Map<String, dynamic>), equals(isNotNull));
   });
 
   test('$LineErrorEvent tryFromJson', () {
@@ -37,11 +31,7 @@ void main() {
   });
 
   test('$LineErrorEvent tryFromJson', () {
-    final lineErrorEvent = LineErrorEvent(
-      line: 0,
-      code: 123,
-      reason: 'some error message 1',
-    );
+    final lineErrorEvent = LineErrorEvent(line: 0, code: 123, reason: 'some error message 1');
 
     expect(
       LineErrorEvent.tryFromJson(json.decode(lineErrorEventJson2) as Map<String, dynamic>),
@@ -50,23 +40,14 @@ void main() {
   });
 
   test('$LineErrorEvent tryFromJson', () {
-    expect(
-      LineErrorEvent.tryFromJson(json.decode(sessionErrorEventJson1) as Map<String, dynamic>),
-      equals(null),
-    );
+    expect(LineErrorEvent.tryFromJson(json.decode(sessionErrorEventJson1) as Map<String, dynamic>), equals(null));
   });
 
   test('$LineErrorEvent tryFromJson', () {
-    expect(
-      LineErrorEvent.tryFromJson(json.decode(sessionErrorEventJson2) as Map<String, dynamic>),
-      equals(null),
-    );
+    expect(LineErrorEvent.tryFromJson(json.decode(sessionErrorEventJson2) as Map<String, dynamic>), equals(null));
   });
 
   test('$LineErrorEvent tryFromJson', () {
-    expect(
-      LineErrorEvent.tryFromJson(json.decode(eventJsonEmpty) as Map<String, dynamic>),
-      equals(null),
-    );
+    expect(LineErrorEvent.tryFromJson(json.decode(eventJsonEmpty) as Map<String, dynamic>), equals(null));
   });
 }

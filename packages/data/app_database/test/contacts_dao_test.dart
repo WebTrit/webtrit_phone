@@ -13,45 +13,41 @@ void main() {
     final contactEmailsDao = database.contactEmailsDao;
     final contactPhonesDao = database.contactPhonesDao;
 
-    await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-      sourceType: Value(ContactSourceTypeEnum.local),
-      sourceId: Value('source1'),
-      firstName: Value(''),
-      lastName: Value('Тарас Шевченко'),
-      aliasName: Value('ТШ'),
-    ));
+    await contactsDao.insertOnUniqueConflictUpdateContact(
+      ContactDataCompanion(
+        sourceType: Value(ContactSourceTypeEnum.local),
+        sourceId: Value('source1'),
+        firstName: Value(''),
+        lastName: Value('Тарас Шевченко'),
+        aliasName: Value('ТШ'),
+      ),
+    );
 
-    await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-      sourceType: Value(ContactSourceTypeEnum.local),
-      sourceId: Value('source2'),
-      firstName: Value(''),
-      lastName: Value('Шевченко Кобзар'),
-      aliasName: Value('ШК'),
-    ));
+    await contactsDao.insertOnUniqueConflictUpdateContact(
+      ContactDataCompanion(
+        sourceType: Value(ContactSourceTypeEnum.local),
+        sourceId: Value('source2'),
+        firstName: Value(''),
+        lastName: Value('Шевченко Кобзар'),
+        aliasName: Value('ШК'),
+      ),
+    );
 
-    await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-      contactId: Value(1),
-      number: Value('1234567890'),
-      label: Value('Home'),
-    ));
+    await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+      ContactPhoneDataCompanion(contactId: Value(1), number: Value('1234567890'), label: Value('Home')),
+    );
 
-    await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-      contactId: Value(2),
-      number: Value('1234567890'),
-      label: Value('Home'),
-    ));
+    await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+      ContactPhoneDataCompanion(contactId: Value(2), number: Value('1234567890'), label: Value('Home')),
+    );
 
-    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
-      contactId: Value(1),
-      address: Value('taras@example.com'),
-      label: Value('Personal'),
-    ));
+    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
+      ContactEmailDataCompanion(contactId: Value(1), address: Value('taras@example.com'), label: Value('Personal')),
+    );
 
-    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
-      contactId: Value(2),
-      address: Value('kobzar@example.com'),
-      label: Value('Work'),
-    ));
+    await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
+      ContactEmailDataCompanion(contactId: Value(2), address: Value('kobzar@example.com'), label: Value('Work')),
+    );
   });
 
   tearDown(() async {
@@ -149,33 +145,33 @@ void main() {
       final contactPhonesDao = database.contactPhonesDao;
 
       // Insert contacts with sourceId == null
-      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value(null),
-        firstName: Value('John'),
-        lastName: Value('Doe'),
-        aliasName: Value('JD'),
-      ));
+      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value(null),
+          firstName: Value('John'),
+          lastName: Value('Doe'),
+          aliasName: Value('JD'),
+        ),
+      );
 
-      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value(null),
-        firstName: Value('Jane'),
-        lastName: Value('Smith'),
-        aliasName: Value('JS'),
-      ));
+      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value(null),
+          firstName: Value('Jane'),
+          lastName: Value('Smith'),
+          aliasName: Value('JS'),
+        ),
+      );
 
-      await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(ContactPhoneDataCompanion(
-        contactId: Value(contact2.id),
-        number: Value('1234567890'),
-        label: Value('Home'),
-      ));
+      await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+        ContactPhoneDataCompanion(contactId: Value(contact2.id), number: Value('1234567890'), label: Value('Home')),
+      );
 
-      await database.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(ContactEmailDataCompanion(
-        contactId: Value(contact2.id),
-        address: Value('asd@qwe.main'),
-        label: Value('Work'),
-      ));
+      await database.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
+        ContactEmailDataCompanion(contactId: Value(contact2.id), address: Value('asd@qwe.main'), label: Value('Work')),
+      );
 
       // Verify all fields
       final allContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
@@ -206,21 +202,25 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert contacts with sourceId == null
-      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value(null),
-        firstName: Value('John'),
-        lastName: Value('Doe'),
-        aliasName: Value('JD'),
-      ));
+      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value(null),
+          firstName: Value('John'),
+          lastName: Value('Doe'),
+          aliasName: Value('JD'),
+        ),
+      );
 
-      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value(null),
-        firstName: Value('Jane'),
-        lastName: Value('Smith'),
-        aliasName: Value('JS'),
-      ));
+      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value(null),
+          firstName: Value('Jane'),
+          lastName: Value('Smith'),
+          aliasName: Value('JS'),
+        ),
+      );
 
       // Verify all fields
       final allContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
@@ -245,21 +245,25 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert contacts with sourceId != null
-      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value('source1'),
-        firstName: Value('John'),
-        lastName: Value('Doe'),
-        aliasName: Value('JD'),
-      ));
+      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('source1'),
+          firstName: Value('John'),
+          lastName: Value('Doe'),
+          aliasName: Value('JD'),
+        ),
+      );
 
-      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value('source2'),
-        firstName: Value('Jane'),
-        lastName: Value('Smith'),
-        aliasName: Value('JS'),
-      ));
+      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('source2'),
+          firstName: Value('Jane'),
+          lastName: Value('Smith'),
+          aliasName: Value('JS'),
+        ),
+      );
 
       // Verify all fields
       final allContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
@@ -284,21 +288,25 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert mixed contacts
-      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value(null),
-        firstName: Value('John'),
-        lastName: Value('Doe'),
-        aliasName: Value('JD'),
-      ));
+      final contact1 = await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value(null),
+          firstName: Value('John'),
+          lastName: Value('Doe'),
+          aliasName: Value('JD'),
+        ),
+      );
 
-      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value('source1'),
-        firstName: Value('Jane'),
-        lastName: Value('Smith'),
-        aliasName: Value('JS'),
-      ));
+      final contact2 = await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('source1'),
+          firstName: Value('Jane'),
+          lastName: Value('Smith'),
+          aliasName: Value('JS'),
+        ),
+      );
 
       // Verify all fields
       final allContacts = await contactsDao.getAllContacts(ContactSourceTypeEnum.external);
@@ -325,25 +333,26 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert contacts with sourceId == null
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value(null),
-        firstName: Value('John'),
-        lastName: Value('Doe'),
-      ));
+      await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value(null),
+          firstName: Value('John'),
+          lastName: Value('Doe'),
+        ),
+      );
 
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value(null),
-        firstName: Value('Jane'),
-        lastName: Value('Smith'),
-      ));
+      await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value(null),
+          firstName: Value('Jane'),
+          lastName: Value('Smith'),
+        ),
+      );
 
       // Delete contacts
-      final deletedCount = await contactsDao.deleteContactBySource(
-        ContactSourceTypeEnum.external,
-        null,
-      );
+      final deletedCount = await contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, null);
 
       // Verify deletion
       expect(deletedCount, 2);
@@ -355,25 +364,26 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert contacts with sourceId != null
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value('source1'),
-        firstName: Value('John'),
-        lastName: Value('Doe'),
-      ));
+      await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('source1'),
+          firstName: Value('John'),
+          lastName: Value('Doe'),
+        ),
+      );
 
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value('source2'),
-        firstName: Value('Jane'),
-        lastName: Value('Smith'),
-      ));
+      await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('source2'),
+          firstName: Value('Jane'),
+          lastName: Value('Smith'),
+        ),
+      );
 
       // Delete contacts with specific sourceId
-      final deletedCount1 = await contactsDao.deleteContactBySource(
-        ContactSourceTypeEnum.external,
-        'source1',
-      );
+      final deletedCount1 = await contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, 'source1');
 
       // Verify partial deletion
       expect(deletedCount1, 1);
@@ -382,10 +392,7 @@ void main() {
       expect(remainingContacts.first.contact.sourceId, 'source2');
 
       // Delete remaining contacts
-      final deletedCount2 = await contactsDao.deleteContactBySource(
-        ContactSourceTypeEnum.external,
-        'source2',
-      );
+      final deletedCount2 = await contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, 'source2');
 
       // Verify complete deletion
       expect(deletedCount2, 1);
@@ -397,25 +404,26 @@ void main() {
       final contactsDao = database.contactsDao;
 
       // Insert mixed contacts
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value(null),
-        firstName: Value('John'),
-        lastName: Value('Doe'),
-      ));
+      await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value(null),
+          firstName: Value('John'),
+          lastName: Value('Doe'),
+        ),
+      );
 
-      await contactsDao.insertOnUniqueConflictUpdateContact(ContactDataCompanion(
-        sourceType: Value(ContactSourceTypeEnum.external),
-        sourceId: Value('source1'),
-        firstName: Value('Jane'),
-        lastName: Value('Smith'),
-      ));
+      await contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('source1'),
+          firstName: Value('Jane'),
+          lastName: Value('Smith'),
+        ),
+      );
 
       // Delete contacts with sourceId == null
-      final deletedCount1 = await contactsDao.deleteContactBySource(
-        ContactSourceTypeEnum.external,
-        null,
-      );
+      final deletedCount1 = await contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, null);
 
       // Verify partial deletion
       expect(deletedCount1, 1);
@@ -424,10 +432,7 @@ void main() {
       expect(remainingContacts.first.contact.sourceId, 'source1');
 
       // Delete contacts with sourceId != null
-      final deletedCount2 = await contactsDao.deleteContactBySource(
-        ContactSourceTypeEnum.external,
-        'source1',
-      );
+      final deletedCount2 = await contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, 'source1');
 
       // Verify complete deletion
       expect(deletedCount2, 1);

@@ -14,8 +14,11 @@ extension BuildContextExtension on BuildContext {
   Locale get locale => Localizations.localeOf(this);
   String? parseL10n(String translationKey, {List<Object>? arguments}) {
     final localizations = AppLocalizations.of(this)!;
-    return L10nHelper.parseL10n(localizations, translationKey,
-        arguments: arguments);
+    return L10nHelper.parseL10n(
+      localizations,
+      translationKey,
+      arguments: arguments,
+    );
   }
 }
 
@@ -26,8 +29,11 @@ extension AppLocalizationsExtension on AppLocalizations {
 }
 
 class L10nHelper {
-  static String parseL10n(AppLocalizations localizations, String translationKey,
-      {List<Object>? arguments}) {
+  static String parseL10n(
+    AppLocalizations localizations,
+    String translationKey, {
+    List<Object>? arguments,
+  }) {
     const mapper = AppLocalizationsMapper();
     final object = mapper.toLocalizationMap(localizations)[translationKey];
     if (object is String || object == null) return object;
@@ -65,8 +71,22 @@ class AppLocalizationsMapper {
           localizations.call_CallActionsTooltip_accept_inviteToAttendedTransfer,
       'call_CallActionsTooltip_attended_transfer':
           localizations.call_CallActionsTooltip_attended_transfer,
+      'call_CallActionsTooltip_changeAudioDevice':
+          localizations.call_CallActionsTooltip_changeAudioDevice,
       'call_CallActionsTooltip_decline_inviteToAttendedTransfer': localizations
           .call_CallActionsTooltip_decline_inviteToAttendedTransfer,
+      'call_CallActionsTooltip_device_bluetooth':
+          localizations.call_CallActionsTooltip_device_bluetooth,
+      'call_CallActionsTooltip_device_earpiece':
+          localizations.call_CallActionsTooltip_device_earpiece,
+      'call_CallActionsTooltip_device_speaker':
+          localizations.call_CallActionsTooltip_device_speaker,
+      'call_CallActionsTooltip_device_streaming':
+          localizations.call_CallActionsTooltip_device_streaming,
+      'call_CallActionsTooltip_device_unknown':
+          localizations.call_CallActionsTooltip_device_unknown,
+      'call_CallActionsTooltip_device_wiredHeadset':
+          localizations.call_CallActionsTooltip_device_wiredHeadset,
       'call_CallActionsTooltip_disableCamera':
           localizations.call_CallActionsTooltip_disableCamera,
       'call_CallActionsTooltip_disableSpeaker':
@@ -110,6 +130,8 @@ class AppLocalizationsMapper {
           localizations.call_description_requestToAttendedTransfer,
       'call_description_transferProcessing':
           localizations.call_description_transferProcessing,
+      'call_errorRegisteringSelfManagedPhoneAccount':
+          localizations.call_errorRegisteringSelfManagedPhoneAccount,
       'call_FailureAcknowledgeDialog_title':
           localizations.call_FailureAcknowledgeDialog_title,
       'callProcessingStatus_answering':
@@ -502,6 +524,8 @@ class AppLocalizationsMapper {
           localizations.messaging_Conversation_failure,
       'messaging_ConversationScreen_titlePrefix':
           localizations.messaging_ConversationScreen_titlePrefix,
+      'messaging_ConversationScreen_titleAvailable':
+          localizations.messaging_ConversationScreen_titleAvailable,
       'messaging_ConversationsScreen_chatsSearch_hint':
           localizations.messaging_ConversationsScreen_chatsSearch_hint,
       'messaging_ConversationsScreen_empty':
@@ -624,6 +648,8 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_callWhileOffline,
       'notifications_errorSnackBar_callWhileUnregistered':
           localizations.notifications_errorSnackBar_callWhileUnregistered,
+      'notifications_errorSnackBar_sessionExpired':
+          localizations.notifications_errorSnackBar_sessionExpired,
       'notifications_errorSnackBar_SignalingConnectFailed':
           localizations.notifications_errorSnackBar_SignalingConnectFailed,
       'notifications_errorSnackBar_SignalingSessionMissed':
@@ -644,6 +670,7 @@ class AppLocalizationsMapper {
       'numberActions_callLog': localizations.numberActions_callLog,
       'numberActions_chat': localizations.numberActions_chat,
       'numberActions_copyNumber': localizations.numberActions_copyNumber,
+      'numberActions_copyCallId': localizations.numberActions_copyCallId,
       'numberActions_delete': localizations.numberActions_delete,
       'numberActions_sendSms': localizations.numberActions_sendSms,
       'numberActions_transfer': localizations.numberActions_transfer,
@@ -675,6 +702,10 @@ class AppLocalizationsMapper {
       'permission_manufacturer_Text_xiaomi_tip2':
           localizations.permission_manufacturer_Text_xiaomi_tip2,
       'permission_Text_description': localizations.permission_Text_description,
+      'persistentConnectionReminderContent':
+          localizations.persistentConnectionReminderContent,
+      'persistentConnectionReminderTitle':
+          localizations.persistentConnectionReminderTitle,
       'recents_DeleteConfirmDialog_content':
           localizations.recents_DeleteConfirmDialog_content,
       'recents_DeleteConfirmDialog_title':
@@ -703,6 +734,8 @@ class AppLocalizationsMapper {
       'request_StatusName': localizations.request_StatusName,
       'sessionStatus_pushNotificationServiceProblem':
           localizations.sessionStatus_pushNotificationServiceProblem,
+      'settings_AboutText_ApplicationEmbeddedLinks':
+          localizations.settings_AboutText_ApplicationEmbeddedLinks,
       'settings_AboutText_AppSessionIdentifier':
           localizations.settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion':
@@ -713,8 +746,6 @@ class AppLocalizationsMapper {
           localizations.settings_AboutText_FCMPushNotificationToken,
       'settings_AboutText_StoreVersion':
           localizations.settings_AboutText_StoreVersion,
-      'settings_AboutText_ApplicationEmbeddedLinks':
-          localizations.settings_AboutText_ApplicationEmbeddedLinks,
       'settings_AccountDeleteConfirmDialog_content':
           localizations.settings_AccountDeleteConfirmDialog_content,
       'settings_AccountDeleteConfirmDialog_title':
@@ -843,6 +874,23 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_target_audio_bitrate,
       'settings_encoding_Section_target_video_bitrate':
           localizations.settings_encoding_Section_target_video_bitrate,
+      'settings_encoding_Section_extra_sdp_mod_title':
+          localizations.settings_encoding_Section_extra_sdp_mod_title,
+      'settings_encoding_Section_extra_sdp_mod_extmapsRemove':
+          localizations.settings_encoding_Section_extra_sdp_mod_extmapsRemove,
+      'settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps,
+      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_remapTE8':
+          localizations.settings_encoding_Section_extra_sdp_mod_remapTE8,
+      'settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip': localizations
+          .settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip,
       'settings_encoding_Section_value_auto':
           localizations.settings_encoding_Section_value_auto,
       'settings_encoding_Section_value_disable':
@@ -881,6 +929,8 @@ class AppLocalizationsMapper {
           localizations.settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs':
           localizations.settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_presence':
+          localizations.settings_ListViewTileTitle_presence,
       'settings_ListViewTileTitle_callerId':
           localizations.settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_encoding':
@@ -1078,6 +1128,14 @@ class AppLocalizationsMapper {
       'themeMode_dark': localizations.themeMode_dark,
       'themeMode_light': localizations.themeMode_light,
       'themeMode_system': localizations.themeMode_system,
+      'undefined_autoprovision_invalidToken':
+          localizations.undefined_autoprovision_invalidToken,
+      'undefined_autoprovision_invalidToken_title':
+          localizations.undefined_autoprovision_invalidToken_title,
+      'undefined_stackScreenNotSupported':
+          localizations.undefined_stackScreenNotSupported,
+      'undefined_stackScreenNotSupported_title':
+          localizations.undefined_stackScreenNotSupported_title,
       'user_agreement_agrement_link':
           localizations.user_agreement_agrement_link,
       'user_agreement_button_text': localizations.user_agreement_button_text,
@@ -1107,10 +1165,111 @@ class AppLocalizationsMapper {
           localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
       'webRegistration_ErrorAcknowledgeDialog_title':
           localizations.webRegistration_ErrorAcknowledgeDialog_title,
-      'persistentConnectionReminderTitle':
-          localizations.persistentConnectionReminderTitle,
-      'persistentConnectionReminderContent':
-          localizations.persistentConnectionReminderContent,
+      'webview_defaultError_title': localizations.webview_defaultError_title,
+      'webview_defaultError_reload': localizations.webview_defaultError_reload,
+      'webview_sslError_title': localizations.webview_sslError_title,
+      'webview_sslError_message': localizations.webview_sslError_message,
+      'webview_sslError_tryAgain': localizations.webview_sslError_tryAgain,
+      'webview_sslError_details': localizations.webview_sslError_details,
+      'webview_sslError_details_type':
+          localizations.webview_sslError_details_type,
+      'webview_sslError_details_url':
+          localizations.webview_sslError_details_url,
+      'presence_preset_available_name':
+          localizations.presence_preset_available_name,
+      'presence_preset_unavailable_name':
+          localizations.presence_preset_unavailable_name,
+      'presence_preset_away_name': localizations.presence_preset_away_name,
+      'presence_preset_away_note': localizations.presence_preset_away_note,
+      'presence_preset_dnd_name': localizations.presence_preset_dnd_name,
+      'presence_preset_dnd_note': localizations.presence_preset_dnd_note,
+      'presence_preset_sleeping_name':
+          localizations.presence_preset_sleeping_name,
+      'presence_preset_sleeping_note':
+          localizations.presence_preset_sleeping_note,
+      'presence_preset_absent_name': localizations.presence_preset_absent_name,
+      'presence_preset_absent_note': localizations.presence_preset_absent_note,
+      'presence_preset_meal_name': localizations.presence_preset_meal_name,
+      'presence_preset_meal_note': localizations.presence_preset_meal_note,
+      'presence_preset_inTransit_name':
+          localizations.presence_preset_inTransit_name,
+      'presence_preset_inTransit_note':
+          localizations.presence_preset_inTransit_note,
+      'presence_preset_meeting_name':
+          localizations.presence_preset_meeting_name,
+      'presence_preset_meeting_note':
+          localizations.presence_preset_meeting_note,
+      'presence_preset_vacation_name':
+          localizations.presence_preset_vacation_name,
+      'presence_preset_vacation_note':
+          localizations.presence_preset_vacation_note,
+      'presence_preset_travel_name': localizations.presence_preset_travel_name,
+      'presence_preset_travel_note': localizations.presence_preset_travel_note,
+      'presence_preset_appointment_name':
+          localizations.presence_preset_appointment_name,
+      'presence_preset_appointment_note':
+          localizations.presence_preset_appointment_note,
+      'presence_activity_none_name': localizations.presence_activity_none_name,
+      'presence_activity_away_name': localizations.presence_activity_away_name,
+      'presence_activity_busy_name': localizations.presence_activity_busy_name,
+      'presence_activity_doNotDisturb_name':
+          localizations.presence_activity_doNotDisturb_name,
+      'presence_activity_sleeping_name':
+          localizations.presence_activity_sleeping_name,
+      'presence_activity_permanentAbsence_name':
+          localizations.presence_activity_permanentAbsence_name,
+      'presence_activity_onThePhone_name':
+          localizations.presence_activity_onThePhone_name,
+      'presence_activity_meal_name': localizations.presence_activity_meal_name,
+      'presence_activity_meeting_name':
+          localizations.presence_activity_meeting_name,
+      'presence_activity_appointment_name':
+          localizations.presence_activity_appointment_name,
+      'presence_activity_vacation_name':
+          localizations.presence_activity_vacation_name,
+      'presence_activity_travel_name':
+          localizations.presence_activity_travel_name,
+      'presence_activity_inTransit_name':
+          localizations.presence_activity_inTransit_name,
+      'presence_settings_presets_title':
+          localizations.presence_settings_presets_title,
+      'presence_settings_presets_label':
+          localizations.presence_settings_presets_label,
+      'presence_settings_config_title':
+          localizations.presence_settings_config_title,
+      'presence_settings_availability_title':
+          localizations.presence_settings_availability_title,
+      'presence_settings_availability_tooltip':
+          localizations.presence_settings_availability_tooltip,
+      'presence_settings_note_label':
+          localizations.presence_settings_note_label,
+      'presence_settings_note_tooltip':
+          localizations.presence_settings_note_tooltip,
+      'presence_settings_activity_label':
+          localizations.presence_settings_activity_label,
+      'presence_settings_activity_tooltip':
+          localizations.presence_settings_activity_tooltip,
+      'presence_settings_dnd_title': localizations.presence_settings_dnd_title,
+      'presence_settings_dnd_tooltip':
+          localizations.presence_settings_dnd_tooltip,
+      'presence_settings_statusIcon_title':
+          localizations.presence_settings_statusIcon_title,
+      'presence_settings_statusIcon_none':
+          localizations.presence_settings_statusIcon_none,
+      'presence_infoView_title': localizations.presence_infoView_title,
+      'presence_infoView_device': localizations.presence_infoView_device,
+      'presence_infoView_available': localizations.presence_infoView_available,
+      'presence_infoView_available_true':
+          localizations.presence_infoView_available_true,
+      'presence_infoView_available_false':
+          localizations.presence_infoView_available_false,
+      'presence_infoView_note': localizations.presence_infoView_note,
+      'presence_infoView_activity': localizations.presence_infoView_activity,
+      'presence_infoView_statusIcon':
+          localizations.presence_infoView_statusIcon,
+      'presence_infoView_timeZone': localizations.presence_infoView_timeZone,
+      'presence_infoView_updated': localizations.presence_infoView_updated,
+      'presence_infoView_client': localizations.presence_infoView_client,
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>
@@ -1119,18 +1278,22 @@ class AppLocalizationsMapper {
           localizations.login_Button_otpSigninVerifyRepeatInterval(seconds),
       'login_Button_signupVerifyRepeatInterval': (seconds) =>
           localizations.login_Button_signupVerifyRepeatInterval(seconds),
-      'login_CoreVersionUnsupportedExceptionError': (actual,
-              supportedConstraint) =>
-          localizations.login_CoreVersionUnsupportedExceptionError(
-              actual, supportedConstraint),
+      'login_CoreVersionUnsupportedExceptionError':
+          (actual, supportedConstraint) =>
+              localizations.login_CoreVersionUnsupportedExceptionError(
+                actual,
+                supportedConstraint,
+              ),
       'login_Text_coreUrlAssignPostDescription': (email) =>
           localizations.login_Text_coreUrlAssignPostDescription(email),
       'login_Text_otpSigninVerifyPostDescriptionFromEmail': (email) =>
-          localizations
-              .login_Text_otpSigninVerifyPostDescriptionFromEmail(email),
+          localizations.login_Text_otpSigninVerifyPostDescriptionFromEmail(
+            email,
+          ),
       'login_Text_otpSigninVerifyPreDescriptionUserRef': (userRef) =>
-          localizations
-              .login_Text_otpSigninVerifyPreDescriptionUserRef(userRef),
+          localizations.login_Text_otpSigninVerifyPreDescriptionUserRef(
+            userRef,
+          ),
       'login_Text_signupVerifyPostDescriptionFromEmail': (email) =>
           localizations.login_Text_signupVerifyPostDescriptionFromEmail(email),
       'login_Text_signupVerifyPreDescriptionEmail': (email) =>
@@ -1138,19 +1301,28 @@ class AppLocalizationsMapper {
       'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError':
           (actual, supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-                  actual, supportedConstraint),
+                actual,
+                supportedConstraint,
+              ),
+      'messaging_ConversationBuilders_contactExtension': (extension) =>
+          localizations.messaging_ConversationBuilders_contactExtension(
+            extension,
+          ),
       'notifications_errorSnackBar_signalingDisconnectWithCodeName':
           (codeName) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithCodeName(
-                  codeName),
+                codeName,
+              ),
       'notifications_errorSnackBar_signalingDisconnectWithSystemReason':
           (reason) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-                  reason),
+                reason,
+              ),
       'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason':
           (reason) => localizations
               .notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-                  reason),
+                reason,
+              ),
       'numberActions_callFrom': (number) =>
           localizations.numberActions_callFrom(number),
       'recents_BodyCenter_empty': (filter) =>
@@ -1167,6 +1339,8 @@ class AppLocalizationsMapper {
           localizations.user_agreement_checkbox_text(url),
       'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
+      'webview_defaultError_details': (description, code) =>
+          localizations.webview_defaultError_details(description, code),
     };
   }
 }

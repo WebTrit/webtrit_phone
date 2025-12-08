@@ -30,11 +30,7 @@ class SecureStorage {
   static late SecureStorage _instance;
 
   static Future<SecureStorage> init() async {
-    const storage = FlutterSecureStorage(
-      iOptions: IOSOptions(
-        accessibility: KeychainAccessibility.first_unlock,
-      ),
-    );
+    const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
     final cache = await storage.readAll();
 
     // Migration from old version of the app where the user ID wasnt provided to the app

@@ -77,7 +77,7 @@ class SystemNotificationsSyncWorker {
     }
   }
 
-  void _handleSyncEvent(event) {
+  void _handleSyncEvent(dynamic event) {
     if (event is (Object, StackTrace)) {
       final (error, stackTrace) = event;
       _logger.warning(error, stackTrace);

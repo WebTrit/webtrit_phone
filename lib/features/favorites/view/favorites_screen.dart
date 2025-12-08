@@ -25,6 +25,7 @@ class FavoritesScreen extends StatefulWidget {
     required this.videoEnabled,
     required this.chatsEnabled,
     required this.smssEnabled,
+    required this.cdrsEnabled,
   });
 
   final Widget? title;
@@ -32,6 +33,7 @@ class FavoritesScreen extends StatefulWidget {
   final bool videoEnabled;
   final bool chatsEnabled;
   final bool smssEnabled;
+  final bool cdrsEnabled;
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
@@ -51,9 +53,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   void openChat(String userId) {
-    final route = ChatConversationScreenPageRoute(
-      participantId: userId,
-    );
+    final route = ChatConversationScreenPageRoute(participantId: userId);
     context.router.navigate(route);
   }
 
@@ -75,7 +75,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   void openCallLog({required String number}) {
-    context.router.navigate(CallLogScreenPageRoute(number: number));
+    if (widget.cdrsEnabled) {
+      context.router.navigate(NumberCdrsScreenPageRoute(number: number));
+    } else {
+      context.router.navigate(CallLogScreenPageRoute(number: number));
+    }
   }
 
   void delete({required Favorite favorite}) {
@@ -86,22 +90,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(
-        title: widget.title,
-        context: context,
-      ),
+      appBar: MainAppBar(title: widget.title, context: context),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           final favorites = state.favorites;
           if (favorites == null) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else {
             if (favorites.isEmpty) {
-              return NoDataPlaceholder(
-                content: Text(context.l10n.favorites_BodyCenter_empty),
-              );
+              return NoDataPlaceholder(content: Text(context.l10n.favorites_BodyCenter_empty));
             } else {
               return BlocBuilder<UserInfoCubit, UserInfoState>(
                 builder: (context, userInfoState) {
@@ -136,16 +133,24 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                       }
                                     : () {
                                         _callController.createCall(
-                                            destination: favorite.number, displayName: favorite.name);
+                                          destination: favorite.number,
+                                          displayName: favorite.name,
+                                        );
                                       },
                                 onAudioCallPressed: () {
                                   _callController.createCall(
-                                      destination: favorite.number, displayName: favorite.name, video: false);
+                                    destination: favorite.number,
+                                    displayName: favorite.name,
+                                    video: false,
+                                  );
                                 },
                                 onVideoCallPressed: widget.videoEnabled
                                     ? () {
                                         _callController.createCall(
-                                            destination: favorite.number, displayName: favorite.name, video: true);
+                                          destination: favorite.number,
+                                          displayName: favorite.name,
+                                          video: true,
+                                        );
                                       }
                                     : null,
                                 onTransferPressed: widget.transferEnabled && hasActiveCall

@@ -6,11 +6,7 @@ class ChatMessageReadCursor extends Equatable {
   final String userId;
   final DateTime time;
 
-  const ChatMessageReadCursor({
-    required this.chatId,
-    required this.userId,
-    required this.time,
-  });
+  const ChatMessageReadCursor({required this.chatId, required this.userId, required this.time});
 
   @override
   List<Object?> get props => [chatId, userId, time];

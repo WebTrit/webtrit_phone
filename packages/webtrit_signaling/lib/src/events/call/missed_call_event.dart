@@ -15,12 +15,7 @@ class MissedCallEvent extends CallEvent {
   final String? callerDisplayName;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        callee,
-        caller,
-        callerDisplayName,
-      ];
+  List<Object?> get props => [...super.props, callee, caller, callerDisplayName];
 
   static const typeValue = 'missed_call';
 

@@ -5,6 +5,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 import '../theme_style_factory.dart';
 
+@Deprecated('Use CallScreenStyleFactory instead')
 class CallActionsStyleFactory implements ThemeStyleFactory<CallActionsStyles> {
   CallActionsStyleFactory(this.colors, this.config);
 
@@ -90,53 +91,39 @@ class CallActionsStyleFactory implements ThemeStyleFactory<CallActionsStyles> {
     );
 
     // Camera style group
-    final cameraStyle = callAction.copyWith(
-      backgroundColor: WidgetStatePropertyAll(cameraBackgroundColor),
-    );
+    final cameraStyle = callAction.copyWith(backgroundColor: WidgetStatePropertyAll(cameraBackgroundColor));
     final cameraActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(cameraActiveBackgroundColor),
       iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     // Muted style group
-    final mutedStyle = callAction.copyWith(
-      backgroundColor: WidgetStatePropertyAll(mutedBackgroundColor),
-    );
+    final mutedStyle = callAction.copyWith(backgroundColor: WidgetStatePropertyAll(mutedBackgroundColor));
     final mutedActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(mutedActiveBackgroundColor),
       iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     // Speaker style group
-    final speakerStyle = callAction.copyWith(
-      backgroundColor: WidgetStatePropertyAll(speakerBackgroundColor),
-    );
+    final speakerStyle = callAction.copyWith(backgroundColor: WidgetStatePropertyAll(speakerBackgroundColor));
     final speakerActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(speakerActiveBackgroundColor),
       iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     // Held style group
-    final heldStyle = callAction.copyWith(
-      backgroundColor: WidgetStatePropertyAll(heldBackgroundColor),
-    );
+    final heldStyle = callAction.copyWith(backgroundColor: WidgetStatePropertyAll(heldBackgroundColor));
     final heldActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(heldActiveBackgroundColor),
       iconColor: WidgetStatePropertyAll(activeIconColor),
     );
 
     // Swap style group
-    final swapStyle = callAction.copyWith(
-      backgroundColor: WidgetStatePropertyAll(swapBackgroundColor),
-    );
+    final swapStyle = callAction.copyWith(backgroundColor: WidgetStatePropertyAll(swapBackgroundColor));
 
     // Key style group
-    final keyStyle = callAction.copyWith(
-      backgroundColor: WidgetStatePropertyAll(keyBackgroundColor),
-    );
-    final keypadStyle = callAction.copyWith(
-      backgroundColor: WidgetStatePropertyAll(keypadBackgroundColor),
-    );
+    final keyStyle = callAction.copyWith(backgroundColor: WidgetStatePropertyAll(keyBackgroundColor));
+    final keypadStyle = callAction.copyWith(backgroundColor: WidgetStatePropertyAll(keypadBackgroundColor));
     final keypadActiveStyle = callActiveAction.copyWith(
       backgroundColor: WidgetStatePropertyAll(keypadActiveBackgroundColor),
       iconColor: WidgetStatePropertyAll(activeIconColor),

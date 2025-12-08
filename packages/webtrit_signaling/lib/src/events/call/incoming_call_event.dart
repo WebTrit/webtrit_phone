@@ -24,15 +24,15 @@ class IncomingCallEvent extends CallEvent {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        callee,
-        caller,
-        callerDisplayName,
-        referredBy,
-        replaceCallId,
-        isFocus,
-        jsep,
-      ];
+    ...super.props,
+    callee,
+    caller,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
+  ];
 
   static const typeValue = 'incoming_call';
 

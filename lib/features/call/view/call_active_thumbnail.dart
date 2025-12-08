@@ -47,11 +47,7 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
       valueListenable: remoteRenderer,
       builder: (BuildContext context, RTCVideoValue value, Widget? child) {
         final isPortrait = value.renderVideo == false || value.aspectRatio < 1.0;
-        return SizedBox(
-          width: isPortrait ? 90.0 : 120.0,
-          height: isPortrait ? 120.0 : 90.0,
-          child: child,
-        );
+        return SizedBox(width: isPortrait ? 90.0 : 120.0, height: isPortrait ? 120.0 : 90.0, child: child);
       },
       child: Card(
         clipBehavior: Clip.hardEdge,

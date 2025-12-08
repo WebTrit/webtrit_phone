@@ -40,7 +40,7 @@ class _MessagingShellState extends State<MessagingShell> {
   /// user for enabling/disabling messaging services on the fly if remote confing changes
   /// init messaging socket connection and notifications service if messaging is enabled
   /// dispose messaging socket connection and notifications service if messaging is disabled
-  syncMessaging() {
+  void syncMessaging() {
     final messagingEnabled = messagingFeature.anyMessagingEnabled;
 
     if (messagingEnabled == true) {
@@ -48,7 +48,7 @@ class _MessagingShellState extends State<MessagingShell> {
       if (connectionStatus == ConnectionStatus.initial) messagingBloc.add(const Connect());
 
       pushService ??= MessagingPushService(
-        context.read<AppBloc>().state.userId!,
+        context.read<AppBloc>().state.session.userId,
         context.read<ChatsRepository>(),
         context.read<SmsRepository>(),
         context.read<ContactsRepository>(),
@@ -79,19 +79,19 @@ class _MessagingShellState extends State<MessagingShell> {
     super.dispose();
   }
 
-  onOpenConversation(participantId) {
+  void onOpenConversation(String? participantId) {
     context.router.navigate(ChatConversationScreenPageRoute(participantId: participantId));
   }
 
-  onOpenChat(chatId) {
+  void onOpenChat(int? chatId) {
     context.router.navigate(ChatConversationScreenPageRoute(chatId: chatId));
   }
 
-  onOpenSmsConversation(firstNumber, secondNumber) {
+  void onOpenSmsConversation(String firstNumber, String secondNumber) {
     context.router.navigate(SmsConversationScreenPageRoute(firstNumber: firstNumber, secondNumber: secondNumber));
   }
 
-  onOpenChatList() {
+  void onOpenChatList() {
     context.router.navigate(const MainScreenPageRoute(children: [ConversationsScreenPageRoute()]));
   }
 

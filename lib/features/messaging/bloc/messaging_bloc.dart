@@ -1,3 +1,7 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
@@ -17,6 +21,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 //    but for rare change (like customer paid montly for sms feature) it's fine
 
 part 'messaging_event.dart';
+
 part 'messaging_state.dart';
 
 final _logger = Logger('MessagingBloc');
@@ -39,16 +44,11 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     on<_ClientDisconnected>(_onClientDisconnected);
     on<_ClientError>(_onClientError);
 
-    _client.openStream.listen((_) {
-      if (!isClosed) add(const _ClientConnected());
-    });
-    _client.closeStream.listen((_) {
-      if (!isClosed) add(const _ClientDisconnected());
-    });
-    _client.errorStream.listen((e) {
-      if (!isClosed) add(_ClientError(e));
-    });
+    _subs.add(_client.openStream.listen((_) => add(const _ClientConnected())));
+    _subs.add(_client.closeStream.listen((_) => add(const _ClientDisconnected())));
+    _subs.add(_client.errorStream.listen((e) => add(_ClientError(e))));
   }
+
   final String _userId;
   final PhoenixSocket _client;
   final MessagingFeature _messagingFeature;
@@ -57,6 +57,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   final SmsRepository _smsRepository;
   final SmsOutboxRepository _smsOutboxRepository;
   final Function(Notification) _submitNotification;
+  final List<StreamSubscription> _subs = [];
 
   ChatsSyncWorker? _chatsSyncWorker;
   ChatsOutboxWorker? _chatsOutboxWorker;
@@ -128,7 +129,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     emit(state.copyWith(status: ConnectionStatus.initial));
   }
 
-  _onEventError(Object error) {
+  void _onEventError(Object error) {
     if (_errorNotificationFilter(error)) {
       _submitNotification(DefaultErrorNotification(error));
     } else {
@@ -147,9 +148,15 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     _smsOutboxWorker = null;
   }
 
+  void _disposeSubscriptions() {
+    _subs.forEach((sub) => sub.cancel());
+    _subs.clear();
+  }
+
   @override
   Future<void> close() {
     _disposeWorkers();
+    _disposeSubscriptions();
     _client.dispose();
     return super.close();
   }

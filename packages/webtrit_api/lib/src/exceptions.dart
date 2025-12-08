@@ -1,13 +1,7 @@
 import 'models/error.dart';
 
 class RequestFailure implements Exception {
-  RequestFailure({
-    required this.url,
-    this.statusCode,
-    required this.requestId,
-    this.token,
-    this.error,
-  });
+  RequestFailure({required this.url, this.statusCode, required this.requestId, this.token, this.error});
 
   final Uri url;
   final int? statusCode;
@@ -42,12 +36,25 @@ class EndpointNotSupportedException extends RequestFailure {
 }
 
 class UserNotFoundException extends RequestFailure {
-  UserNotFoundException({
-    required super.url,
-    required super.requestId,
-    required super.statusCode,
-  });
+  UserNotFoundException({required super.url, required super.requestId, required super.statusCode});
 
   @override
   String toString() => 'UserNotFoundException($statusCode, $url)';
+}
+
+class UnauthorizedException extends RequestFailure {
+  UnauthorizedException({
+    required super.url,
+    required super.requestId,
+    required super.statusCode,
+    super.token,
+    super.error,
+  });
+
+  @override
+  String toString() {
+    final code = error?.code;
+    return 'UnauthorizedException(statusCode: $statusCode, requestId: $requestId, url: $url'
+        '${code != null ? ', code: $code' : ''})';
+  }
 }

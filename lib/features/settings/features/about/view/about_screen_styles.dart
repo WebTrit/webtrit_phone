@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'about_screen_style.dart';
 
 class AboutScreenStyles extends ThemeExtension<AboutScreenStyles> {
-  const AboutScreenStyles({
-    required this.primary,
-  });
+  const AboutScreenStyles({required this.primary});
 
   final AboutScreenStyle? primary;
 
   @override
-  ThemeExtension<AboutScreenStyles> copyWith({
-    AboutScreenStyle? primary,
-  }) {
-    return AboutScreenStyles(
-      primary: primary ?? this.primary,
-    );
+  ThemeExtension<AboutScreenStyles> copyWith({AboutScreenStyle? primary}) {
+    return AboutScreenStyles(primary: primary ?? this.primary);
   }
 
   @override

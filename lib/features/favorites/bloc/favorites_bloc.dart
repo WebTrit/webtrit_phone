@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -12,9 +13,7 @@ part 'favorites_event.dart';
 part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
-  FavoritesBloc({
-    required this.favoritesRepository,
-  }) : super(const FavoritesState()) {
+  FavoritesBloc({required this.favoritesRepository}) : super(const FavoritesState()) {
     on<FavoritesStarted>(_onStarted, transformer: restartable());
     on<FavoritesRemoved>(_onRemoved);
   }
@@ -24,9 +23,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   Future<void> _onStarted(FavoritesStarted event, Emitter<FavoritesState> emit) async {
     await emit.forEach(
       favoritesRepository.favorites(),
-      onData: (List<Favorite> favorites) => FavoritesState(
-        favorites: favorites,
-      ),
+      onData: (List<Favorite> favorites) => FavoritesState(favorites: favorites),
     );
   }
 

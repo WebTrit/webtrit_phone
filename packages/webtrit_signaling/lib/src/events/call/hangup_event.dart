@@ -13,11 +13,7 @@ class HangupEvent extends CallEvent {
   final String reason;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        code,
-        reason,
-      ];
+  List<Object?> get props => [...super.props, code, reason];
 
   static const typeValue = 'hangup';
 

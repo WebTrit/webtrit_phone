@@ -22,9 +22,7 @@ class ConversationsScreenPage extends StatelessWidget {
 
     final widget = MultiBlocProvider(
       providers: [
-        Provider(
-          create: (context) => ('stub', 123),
-        ),
+        Provider(create: (context) => ('stub', 123)),
         if (chatsEnabled)
           BlocProvider(
             key: const Key('chat_conversations_cubit'),
@@ -37,10 +35,8 @@ class ConversationsScreenPage extends StatelessWidget {
         if (smsEnabled)
           BlocProvider(
             key: const Key('sms_conversations_cubit'),
-            create: (context) => SmsConversationsCubit(
-              context.read<MessagingBloc>().state.client,
-              context.read<SmsRepository>(),
-            ),
+            create: (context) =>
+                SmsConversationsCubit(context.read<MessagingBloc>().state.client, context.read<SmsRepository>()),
           ),
       ],
       child: const ConversationsScreen(title: Text(EnvironmentConfig.APP_NAME)),

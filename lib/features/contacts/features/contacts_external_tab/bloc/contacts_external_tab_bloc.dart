@@ -1,9 +1,8 @@
 import 'dart:async';
 
+import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:equatable/equatable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -11,8 +10,6 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../../../contacts.dart';
-
-part 'contacts_external_tab_bloc.freezed.dart';
 
 part 'contacts_external_tab_event.dart';
 
@@ -42,15 +39,17 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
       ),
     );
 
-    final contactsSearchSateOnEachFuture = emit.onEach(contactsSearchBloc.stream, onData: (state) {
-      add(ContactsExternalTabStarted(search: state.search));
-    });
+    final contactsSearchSateOnEachFuture = emit.onEach(
+      contactsSearchBloc.stream,
+      onData: (state) {
+        add(ContactsExternalTabStarted(search: state.search));
+      },
+    );
 
     final externalContactsSyncStateForEachFuture = emit.forEach(
       externalContactsSyncBloc.stream,
-      onData: (ExternalContactsSyncState externalContactsSyncState) => state.copyWith(
-        status: _mapExternalContactsSyncStateToStatus(externalContactsSyncState),
-      ),
+      onData: (ExternalContactsSyncState externalContactsSyncState) =>
+          state.copyWith(status: _mapExternalContactsSyncStateToStatus(externalContactsSyncState)),
     );
 
     await Future.wait([

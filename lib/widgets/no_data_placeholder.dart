@@ -61,10 +61,7 @@ class NoDataPlaceholder extends StatelessWidget {
       iconWidget = Padding(
         padding: effectiveIconPadding,
         child: IconTheme(
-          data: IconThemeData(
-            size: iconSize,
-            color: iconColor ?? themeData.colorScheme.secondaryContainer,
-          ),
+          data: IconThemeData(size: iconSize, color: iconColor ?? themeData.colorScheme.secondaryContainer),
           child: icon,
         ),
       );
@@ -91,11 +88,7 @@ class NoDataPlaceholder extends StatelessWidget {
     }
 
     if (actions != null) {
-      const EdgeInsets defaultActionsPadding = EdgeInsets.only(
-        left: 24.0,
-        right: 24.0,
-        bottom: 24.0,
-      );
+      const EdgeInsets defaultActionsPadding = EdgeInsets.only(left: 24.0, right: 24.0, bottom: 24.0);
       final double spacing = (buttonPadding?.horizontal ?? 16) / 2;
       actionsWidget = Padding(
         padding: actionsPadding ?? defaultActionsPadding,

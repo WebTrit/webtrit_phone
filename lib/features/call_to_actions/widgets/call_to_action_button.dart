@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DemoActionButton extends StatelessWidget {
-  const DemoActionButton({
-    super.key,
-    required this.title,
-    required this.description,
-    this.thumbnailUrl,
-  });
+  const DemoActionButton({super.key, required this.title, required this.description, this.thumbnailUrl});
 
   final String? title;
   final String? description;
@@ -30,13 +25,7 @@ class DemoActionButton extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            if (thumbnailUrl.isNotEmpty)
-              Positioned.fill(
-                child: Image.network(
-                  thumbnailUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
+            if (thumbnailUrl.isNotEmpty) Positioned.fill(child: Image.network(thumbnailUrl, fit: BoxFit.cover)),
             Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
@@ -57,7 +46,7 @@ class DemoActionButton extends StatelessWidget {
                       style: textTheme.bodyMedium?.copyWith(color: colorScheme.surface),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4, // Limit the number of lines if needed
-                    )
+                    ),
                 ],
               ),
             ),

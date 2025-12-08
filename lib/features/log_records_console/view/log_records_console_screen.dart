@@ -6,9 +6,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 class LogRecordsConsoleScreen extends StatelessWidget {
-  const LogRecordsConsoleScreen({
-    super.key,
-  });
+  const LogRecordsConsoleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +18,12 @@ class LogRecordsConsoleScreen extends StatelessWidget {
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
             builder: (context, state) {
               return IconButton(
-                icon: const Icon(
-                  Icons.delete_outline,
-                ),
-                style: IconButton.styleFrom(
-                  foregroundColor: colorScheme.onSurface,
-                ),
+                icon: const Icon(Icons.delete_outline),
+                style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
                 onPressed: switch (state) {
                   LogRecordsConsoleStateSuccess() => () {
-                      context.read<LogRecordsConsoleCubit>().clear();
-                    },
+                    context.read<LogRecordsConsoleCubit>().clear();
+                  },
                   _ => null,
                 },
               );
@@ -38,16 +32,12 @@ class LogRecordsConsoleScreen extends StatelessWidget {
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
             builder: (context, state) {
               return IconButton(
-                icon: const Icon(
-                  Icons.share,
-                ),
-                style: IconButton.styleFrom(
-                  foregroundColor: colorScheme.onSurface,
-                ),
+                icon: const Icon(Icons.share),
+                style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
                 onPressed: switch (state) {
                   LogRecordsConsoleStateSuccess(:final logRecords) when logRecords.isNotEmpty => () {
-                      context.read<LogRecordsConsoleCubit>().share();
-                    },
+                    context.read<LogRecordsConsoleCubit>().share();
+                  },
                   _ => null,
                 },
               );
@@ -63,10 +53,7 @@ class LogRecordsConsoleScreen extends StatelessWidget {
               return ListView.separated(
                 itemBuilder: (context, index) {
                   final logRecord = logRecords[index];
-                  return Text(
-                    logRecordsFormatter.format(logRecord),
-                    maxLines: 100,
-                  );
+                  return Text(logRecordsFormatter.format(logRecord), maxLines: 100);
                 },
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: state.logRecords.length,
@@ -82,14 +69,12 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                         context.read<LogRecordsConsoleCubit>().load();
                       },
                       child: Text(context.l10n.logRecordsConsole_Button_failureRefresh),
-                    )
+                    ),
                   ],
                 ),
               );
             default:
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
           }
         },
       ),

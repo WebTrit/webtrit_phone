@@ -22,13 +22,9 @@ Future<ShareResult> shareLogRecords(
   }
   await logRecordsSink.close();
 
-  final logRecordsXFile = XFile(
-    logRecordsPath,
-    mimeType: 'text/plain',
-    name: name,
-  );
+  final logRecordsXFile = XFile(logRecordsPath, mimeType: 'text/plain', name: name);
   try {
-    return await Share.shareXFiles([logRecordsXFile]);
+    return await SharePlus.instance.share(ShareParams(files: [logRecordsXFile]));
   } finally {
     await logRecordsFile.delete();
   }

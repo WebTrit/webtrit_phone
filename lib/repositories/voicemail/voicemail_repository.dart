@@ -6,10 +6,12 @@ import 'package:app_database/app_database.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/app/session/session.dart';
 
-abstract class VoicemailRepository {
+abstract class VoicemailRepository implements Refreshable {
   /// Fetches voicemails from the remote server and updates the local database.
   ///
   /// If [localeCode] is provided, it will be used to localize the request.
@@ -51,28 +53,30 @@ abstract class VoicemailRepository {
 
 final _logger = Logger('VoicemailRepository');
 
-class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implements VoicemailRepository {
+class VoicemailRepositoryImpl
+    with PresenceInfoDriftMapper, ContactsDriftMapper, VoicemailMapper
+    implements VoicemailRepository {
   VoicemailRepositoryImpl({
     required WebtritApiClient webtritApiClient,
     required String token,
     required AppDatabase appDatabase,
-    this.repositoryOptions = const RepositoryOptions(),
-  })  : _webtritApiClient = webtritApiClient,
-        _token = token,
-        _appDatabase = appDatabase {
+    SessionGuard? sessionGuard,
+  }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
+       _webtritApiClient = webtritApiClient,
+       _token = token,
+       _appDatabase = appDatabase {
     _initialize();
   }
 
   final WebtritApiClient _webtritApiClient;
   final String _token;
   final AppDatabase _appDatabase;
-  final RepositoryOptions repositoryOptions;
+  final SessionGuard _sessionGuard;
 
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
   StreamController<List<Voicemail>>? _updatesController;
   StreamSubscription? _databaseSubscription;
-  Timer? _pollTimer;
 
   /// A [Completer] used to coordinate access to the ongoing [fetchVoicemails] operation.
   ///
@@ -87,44 +91,20 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   Completer<void>? _fetchingCompleter;
 
   void _initialize() {
-    if (repositoryOptions.shouldOperate) {
-      _updatesController = StreamController<List<Voicemail>>.broadcast(
-        onListen: _onListen,
-        onCancel: _onCancel,
-      );
+    _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
-      unawaited(fetchVoicemails());
-    } else {
-      _logger.warning('Voicemail repository is not active');
-    }
+    unawaited(fetchVoicemails());
   }
 
-  // Listener for the database changes and add them to the stream
   void _onListen() {
     _databaseSubscription = _appDatabase.voicemailDao.watchVoicemailsWithContacts().listen((dataList) {
       final items = dataList.map(_voicemailFromDriftWithContact).toList();
       _updatesController?.add(items);
     });
-
-    // If polling is enabled, start the timer to fetch voicemails periodically
-    if (repositoryOptions.polling) {
-      _pollTimer = Timer.periodic(repositoryOptions.pollPeriod, (_) => _fetchFromServer().ignore());
-    }
   }
 
-  // Fetch voicemails from the server and add them to database
-  Future<void> _fetchFromServer() async {
-    try {
-      await fetchVoicemails();
-    } catch (e, st) {
-      _updatesController?.addError(e, st);
-    }
-  }
-
-// Cancel the database subscription and the timer when there are no listeners
   void _onCancel() {
     _databaseSubscription?.cancel();
-    _pollTimer?.cancel();
   }
 
   /// Fetches the latest voicemails from the remote server and synchronizes them with the local database.
@@ -147,8 +127,6 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   /// Throws an exception if the remote request fails.
   @override
   Future<void> fetchVoicemails({String? localeCode}) async {
-    if (!repositoryOptions.shouldOperate) return;
-
     if (_fetchingCompleter?.isCompleted == false) {
       return _fetchingCompleter!.future;
     }
@@ -169,14 +147,15 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
       for (final item in remoteItems.items) {
         final details = await _webtritApiClient.getUserVoicemail(_token, item.id, locale: localeCode);
 
-        await _appDatabase.voicemailDao.insertOrUpdateVoicemail(voicemailToDrift(
-          item,
-          details,
-          _webtritApiClient.getVoicemailAttachmentUrl(item.id),
-        ));
+        await _appDatabase.voicemailDao.insertOrUpdateVoicemail(
+          voicemailToDrift(item, details, _webtritApiClient.getVoicemailAttachmentUrl(item.id)),
+        );
       }
 
       _fetchingCompleter?.complete();
+    } on UnauthorizedException catch (e) {
+      _sessionGuard.onUnauthorized(e);
+      rethrow;
     } catch (e, st) {
       _logger.warning('Failed to fetch voicemails', e, st);
       _fetchingCompleter?.completeError(e, st);
@@ -204,14 +183,19 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
       await _fetchingCompleter!.future;
     }
 
-    await _webtritApiClient.deleteUserVoicemail(
-      _token,
-      messageId,
-      locale: localeCode,
-      options: RequestOptions.withNoRetries(),
-    );
+    try {
+      await _webtritApiClient.deleteUserVoicemail(
+        _token,
+        messageId,
+        locale: localeCode,
+        options: RequestOptions.withNoRetries(),
+      );
 
-    await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+      await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+    } on UnauthorizedException catch (e) {
+      _sessionGuard.onUnauthorized(e);
+      rethrow;
+    }
   }
 
   /// Removes all voicemails from both the remote server and the local database.
@@ -274,6 +258,9 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
 
     try {
       await _webtritApiClient.updateUserVoicemail(_token, messageId, seen: seen, locale: localeCode);
+    } on UnauthorizedException catch (e) {
+      _sessionGuard.onUnauthorized(e);
+      rethrow;
     } catch (e) {
       await _appDatabase.voicemailDao.updateVoicemail(previousVoicemail);
       rethrow;
@@ -312,9 +299,46 @@ class VoicemailRepositoryImpl with ContactsDriftMapper, VoicemailMapper implemen
   Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data) {
     final displayName = data.contact != null ? contactFromDrift(data.contact!).maybeName : null;
 
-    return voicemailFromDrift(
-      data.voicemail,
-      displayName ?? data.voicemail.sender,
-    );
+    return voicemailFromDrift(data.voicemail, displayName ?? data.voicemail.sender);
   }
+
+  @override
+  Future<void> refresh() {
+    return fetchVoicemails();
+  }
+}
+
+/// A no-op implementation of [VoicemailRepository] used when voicemail functionality
+/// is disabled or not available.
+///
+/// All methods in this repository perform no actions and return default or
+/// empty values (e.g., `Future.value()`, `Stream.value(0)`, `Stream.value(const [])`).
+///
+/// This serves as a placeholder to prevent errors when other parts of the application
+/// attempt to interact with the [VoicemailRepository] interface, even if the feature
+/// is not enabled.
+
+class EmptyVoicemailRepository implements VoicemailRepository {
+  const EmptyVoicemailRepository();
+
+  @override
+  Future<void> fetchVoicemails({String? localeCode}) => Future.value();
+
+  @override
+  Future<void> removeVoicemail(String messageId, {String? localeCode}) => Future.value();
+
+  @override
+  Future<void> removeAllVoicemails() => Future.value();
+
+  @override
+  Future<void> updateVoicemailSeenStatus(String messageId, bool seen, {String? localeCode}) => Future.value();
+
+  @override
+  Stream<int> watchUnreadVoicemailsCount() => Stream.value(0);
+
+  @override
+  Stream<List<Voicemail>> watchVoicemails() => Stream.value(const []);
+
+  @override
+  Future<void> refresh() => Future.value();
 }

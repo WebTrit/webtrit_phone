@@ -25,9 +25,7 @@ class _CallerIdSettingsScreenState extends State<CallerIdSettingsScreen> {
     final l10n = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.settings_ListViewTileTitle_callerId),
-      ),
+      appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_callerId)),
       body: BlocBuilder<CallerIdSettingsCubit, CallerIdSettingsState?>(
         builder: (context, state) {
           if (state == null) return const Center(child: CircularProgressIndicator());

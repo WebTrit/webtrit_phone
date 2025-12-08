@@ -15,9 +15,7 @@ import 'package:webtrit_phone/data/data.dart';
 /// Example endpoint requiring headers:
 /// `https://core1.demo.webtrit.com/api/v1/user/voicemails/2184/attachment?file_format=mp3`
 class MediaHeadersBuilder {
-  MediaHeadersBuilder({
-    required this.secureStorage,
-  });
+  MediaHeadersBuilder({required this.secureStorage});
 
   final SecureStorage secureStorage;
 

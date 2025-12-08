@@ -28,11 +28,7 @@ class AppCertificates {
     final credentials = await _loadCredentials(credentialsPath);
     final certificates = await Future.wait(certificatePaths.map((it) => _prepareCertificate(it, credentials)));
 
-    _instance = AppCertificates._(
-      TrustedCertificates(
-        certificates: certificates,
-      ),
-    );
+    _instance = AppCertificates._(TrustedCertificates(certificates: certificates));
     return _instance;
   }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
@@ -22,6 +23,7 @@ part 'push_tokens_state.dart';
 
 final _logger = Logger('PushTokensBloc');
 
+// TODO: Refactor PushTokensBloc by extracting push token logic into dedicated services and repositories for better separation of concerns and testability.
 class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements PushRegistryDelegate {
   PushTokensBloc({
     required this.pushTokensRepository,
@@ -30,14 +32,13 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     required this.callkeep,
   }) : super(PushTokensState.initial()) {
     _onTokenRefreshSubscription = firebaseMessaging.onTokenRefresh.listen((fcmToken) {
-      add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
+      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     });
     callkeep.setPushRegistryDelegate(this);
 
-    on<PushTokensStarted>(_onStarted);
-    on<PushTokensInsertedOrUpdated>(_onInsertedOrUpdated);
-    on<_PushTokensError>(_onError);
-    on<PushTokensFcmTokenDeletionRequested>(_onFcmTokenDeletionRequested);
+    on<PushTokensEventStarted>(_onStarted);
+    on<PushTokensEventInsertedOrUpdated>(_onInsertedOrUpdated);
+    on<PushTokensEventError>(_onError);
   }
 
   final PushTokensRepository pushTokensRepository;
@@ -47,17 +48,53 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   late StreamSubscription _onTokenRefreshSubscription;
 
+  // TODO: Move to repository when repository is ready
+  bool get _isSignedIn => secureStorage.readToken() != null;
+
   // Retry handler with exponential backoff to handle scenarios where Google or Apple services
   // throw exceptions, such as when there is no internet connection, or in cases where
   // services are disabled by the user (e.g., Google Play Services on Android).
   final _backoffRetries = BackoffRetries();
 
+  /// Closes the bloc and releases push/FCM resources in a safe order.
   @override
   Future<void> close() async {
-    callkeep.setPushRegistryDelegate(null);
-    _onTokenRefreshSubscription.cancel();
-    _backoffRetries.cancel();
-    await super.close();
+    try {
+      callkeep.setPushRegistryDelegate(null);
+
+      await _cancelInternalDisposables();
+      await _deleteFcmTokenIfSignedOut();
+    } finally {
+      await super.close();
+    }
+  }
+
+  Future<void> _cancelInternalDisposables() async {
+    try {
+      await _onTokenRefreshSubscription.cancel();
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to cancel token refresh subscription', e, stackTrace);
+    }
+
+    try {
+      _backoffRetries.cancel();
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to cancel backoff retries', e, stackTrace);
+    }
+  }
+
+  Future<void> _deleteFcmTokenIfSignedOut() async {
+    if (_isSignedIn) {
+      _logger.finest('Skipping FCM token deletion because a user token is still present.');
+      return;
+    }
+
+    try {
+      await firebaseMessaging.deleteToken();
+      _logger.fine('FCM token deleted successfully.');
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to delete FCM token', e, stackTrace);
+    }
   }
 
   void _onStarted(PushTokensEvent event, Emitter<PushTokensState> emit) async {
@@ -78,13 +115,13 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
         return await firebaseMessaging.getToken(vapidKey: vapidKey);
       },
       shouldRetry: (e, attempt) {
-        add(PushTokensEvent.error('Failed to retrieve FCM token: $e at attempt $attempt'));
+        add(PushTokensEventError('Failed to retrieve FCM token: $e at attempt $attempt'));
         return true;
       },
     );
 
     if (fcmToken != null) {
-      add(PushTokensInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
+      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     } else {
       _logger.severe('_retrieveAndStoreFcmToken failed after max attempts');
     }
@@ -97,19 +134,19 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
         return await firebaseMessaging.getAPNSToken();
       },
       shouldRetry: (e, attempt) {
-        add(PushTokensEvent.error('Failed to retrieve APNS token: $e at attempt $attempt'));
+        add(PushTokensEventError('Failed to retrieve APNS token: $e at attempt $attempt'));
         return true;
       },
     );
 
     if (apnsToken != null) {
-      add(PushTokensInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
+      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
     } else {
       _logger.severe('_retrieveAndStoreApnsToken failed after max attempts');
     }
   }
 
-  void _onInsertedOrUpdated(PushTokensInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
+  void _onInsertedOrUpdated(PushTokensEventInsertedOrUpdated event, Emitter<PushTokensState> emit) async {
     try {
       await _backoffRetries.execute<void>(
         (attempt) async {
@@ -134,27 +171,14 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     }
   }
 
-  Future<void> _onFcmTokenDeletionRequested(
-    PushTokensFcmTokenDeletionRequested event,
-    Emitter<PushTokensState> emit,
-  ) async {
-    try {
-      await firebaseMessaging.deleteToken();
-      _logger.fine('FCM token deleted successfully');
-    } catch (e, stackTrace) {
-      _logger.warning('Failed to delete FCM token', e, stackTrace);
-      add(PushTokensEvent.error('Failed to delete FCM token: $e'));
-    }
-  }
-
-  void _onError(_PushTokensError event, Emitter<PushTokensState> emit) async {
+  void _onError(PushTokensEventError event, Emitter<PushTokensState> emit) async {
     emit(PushTokensState.uploadFailure(event.errorMessage));
   }
 
   @override
   void didUpdatePushTokenForPushTypeVoIP(String? token) {
     if (token != null) {
-      add(PushTokensInsertedOrUpdated(AppPushTokenType.apkvoip, token));
+      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.apkvoip, token));
     } else {
       // TODO: null mean that the system invalidated the push token for VoIP type
     }

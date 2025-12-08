@@ -6,11 +6,7 @@ class SmsMessageReadCursor extends Equatable {
   final String userId;
   final DateTime time;
 
-  const SmsMessageReadCursor({
-    required this.conversationId,
-    required this.userId,
-    required this.time,
-  });
+  const SmsMessageReadCursor({required this.conversationId, required this.userId, required this.time});
 
   @override
   List<Object?> get props => [conversationId, userId, time];

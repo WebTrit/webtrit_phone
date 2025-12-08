@@ -44,9 +44,7 @@ class DefaultCallErrorReporter implements CallErrorReporter {
     _logger.warning('[$context] $error', error, stack);
 
     if (error is WebtritSignalingTransactionTerminateByDisconnectException) {
-      final code = SignalingDisconnectCode.values.byCode(
-        error.closeCode ?? SignalingDisconnectCode.unmappedCode.code,
-      );
+      final code = SignalingDisconnectCode.values.byCode(error.closeCode ?? SignalingDisconnectCode.unmappedCode.code);
       if (_shouldNotifyOnDisconnect(code)) {
         submitNotification(DefaultErrorNotification(error));
       }

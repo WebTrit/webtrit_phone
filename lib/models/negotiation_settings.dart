@@ -19,9 +19,7 @@ class NegotiationSettings extends Equatable {
 
   factory NegotiationSettings.blank() => const NegotiationSettings();
 
-  NegotiationSettings copyWith({
-    bool? includeInactiveVideoInOfferAnswer,
-  }) {
+  NegotiationSettings copyWith({bool? includeInactiveVideoInOfferAnswer}) {
     return NegotiationSettings(
       includeInactiveVideoInOfferAnswer: includeInactiveVideoInOfferAnswer ?? this.includeInactiveVideoInOfferAnswer,
     );

@@ -8,10 +8,7 @@ SecurityContext? initializeSecurityContext(TrustedCertificates trustedCertificat
   final securityContext = SecurityContext(withTrustedRoots: true);
 
   for (final cert in trustedCertificates.certificates) {
-    securityContext.setTrustedCertificatesBytes(
-      cert.bytes,
-      password: cert.password,
-    );
+    securityContext.setTrustedCertificatesBytes(cert.bytes, password: cert.password);
   }
 
   return securityContext;

@@ -10,35 +10,29 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../widgets/widgets.dart';
 
 class LanguageScreen extends StatelessWidget {
-  const LanguageScreen({
-    super.key,
-  });
+  const LanguageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final locales = [
-      LocaleExtension.defaultNull,
-      ...AppLocalizations.supportedLocales,
-    ];
+    final locales = [LocaleExtension.defaultNull, ...AppLocalizations.supportedLocales];
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.settings_ListViewTileTitle_language),
-        leading: const ExtBackButton(),
-      ),
+      appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_language), leading: const ExtBackButton()),
       body: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
-          return ListView.separated(
-            itemBuilder: (context, index) {
-              final locale = locales[index];
-              return RadioListTile<Locale>(
-                value: locale,
-                groupValue: state.locale,
-                onChanged: (value) => context.read<AppBloc>().add(AppLocaleChanged(value!)),
-                title: Text(locale.l10n(context)),
-              );
+          return RadioGroup<Locale?>(
+            groupValue: state.locale,
+            onChanged: (value) {
+              context.read<AppBloc>().add(AppLocaleChanged(value ?? LocaleExtension.defaultNull));
             },
-            separatorBuilder: (context, index) => const ListTileSeparator(),
-            itemCount: locales.length,
+            child: ListView.separated(
+              itemCount: locales.length,
+              separatorBuilder: (context, index) => const ListTileSeparator(),
+              itemBuilder: (context, index) {
+                final locale = locales[index];
+                return RadioListTile<Locale?>(value: locale, title: Text(locale.l10n(context)));
+              },
+            ),
           );
         },
       ),

@@ -15,11 +15,7 @@ final _logger = Logger('SystemNotificationsOutboxWorker');
 /// sending, and managing notifications that need to be delivered
 /// by the system.
 class SystemNotificationsOutboxWorker {
-  SystemNotificationsOutboxWorker(
-    this.localRepo,
-    this.remoteRepo, {
-    this.pollingInterval = const Duration(seconds: 1),
-  });
+  SystemNotificationsOutboxWorker(this.localRepo, this.remoteRepo, {this.pollingInterval = const Duration(seconds: 1)});
 
   final SystemNotificationsLocalRepository localRepo;
   final SystemNotificationsRemoteRepository remoteRepo;
@@ -77,7 +73,7 @@ class SystemNotificationsOutboxWorker {
     }
   }
 
-  void _handleProcessingEvent(event) {
+  void _handleProcessingEvent(dynamic event) {
     if (event is (Object, StackTrace)) {
       final (error, stackTrace) = event;
       _logger.warning(error, stackTrace);
@@ -99,10 +95,7 @@ class SystemNotificationsOutboxWorker {
 
   Future dispose() async {
     _logger.info('Disposing');
-    await Future.wait([
-      _processingSub.cancel(),
-      _localEventSub.cancel(),
-    ]);
+    await Future.wait([_processingSub.cancel(), _localEventSub.cancel()]);
     _disposed = true;
   }
 }

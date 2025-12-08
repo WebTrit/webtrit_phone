@@ -1,6 +1,1 @@
-enum CallDisplay {
-  none,
-  noneScreen,
-  screen,
-  overlay,
-}
+enum CallDisplay { none, noneScreen, screen, overlay }

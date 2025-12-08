@@ -24,10 +24,7 @@ mixin VoicemailMapper {
     return voicemail;
   }
 
-  Voicemail voicemailFromDrift(
-    VoicemailData voicemailData,
-    String? contactName,
-  ) {
+  Voicemail voicemailFromDrift(VoicemailData voicemailData, String? contactName) {
     return Voicemail(
       voicemailData.id,
       voicemailData.date,

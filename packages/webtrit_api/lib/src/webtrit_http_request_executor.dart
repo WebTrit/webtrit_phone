@@ -13,8 +13,8 @@ class HttpRequestExecutor {
   final Logger _logger;
 
   HttpRequestExecutor({http.Client? httpClient})
-      : _httpClient = httpClient ?? http.Client(),
-        _logger = Logger('HttpRequestExecutor');
+    : _httpClient = httpClient ?? http.Client(),
+      _logger = Logger('HttpRequestExecutor');
 
   void close() => _httpClient.close();
 
@@ -30,10 +30,7 @@ class HttpRequestExecutor {
     final request = http.Request(method.toUpperCase(), uri);
 
     final xRequestId = requestId ?? RequestUtil.generate();
-    final finalHeaders = {
-      'x-request-id': xRequestId,
-      if (headers != null) ...headers,
-    };
+    final finalHeaders = {'x-request-id': xRequestId, if (headers != null) ...headers};
 
     request.headers.addAll(finalHeaders);
 

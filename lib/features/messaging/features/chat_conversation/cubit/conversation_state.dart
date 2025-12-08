@@ -24,7 +24,7 @@ sealed class ConversationState with EquatableMixin {
   }
 
   @override
-  List<Object> get props => [credentials];
+  List<Object?> get props => [credentials];
 }
 
 /// Represents the state of the conversation cubit when preparing the conversation.
@@ -45,7 +45,7 @@ final class CVSError extends ConversationState {
   final Object error;
 
   @override
-  List<Object> get props => [credentials, error];
+  List<Object?> get props => [credentials, error];
 }
 
 /// Represents the state of the conversation cubit when the conversation is ready.
@@ -75,20 +75,20 @@ final class CVSReady extends ConversationState {
   final bool busy;
 
   @override
-  List<Object> get props => [
-        credentials,
-        chat ?? 0,
-        messages,
-        outboxMessages,
-        outboxMessageEdits,
-        outboxMessageDeletes,
-        readCursors,
-        fetchingHistory,
-        historyEndReached,
-        busy,
-      ];
+  List<Object?> get props => [
+    credentials,
+    chat ?? 0,
+    messages,
+    outboxMessages,
+    outboxMessageEdits,
+    outboxMessageDeletes,
+    readCursors,
+    fetchingHistory,
+    historyEndReached,
+    busy,
+  ];
 
-  copyWith({
+  CVSReady copyWith({
     ChatCredentials? credentials,
     Chat? chat,
     List<ChatMessage>? messages,

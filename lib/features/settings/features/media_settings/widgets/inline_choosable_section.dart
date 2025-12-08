@@ -38,7 +38,7 @@ class InlineChoosableSection<T> extends StatelessWidget {
                     onSelect(options[index - 1]);
                   }
                 },
-              )
+              ),
             ],
           ),
           // const SizedBox(height: 8.0),

@@ -6,6 +6,7 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/mappers/phoenix/phoenix.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/string_phone_utils.dart';
 
 // TODO(Vlad):
 // - create separate "MessagingClient" and all nessacery entities(channels, states, transactions)
@@ -180,11 +181,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error fetching chat conversation',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error fetching chat conversation', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -203,11 +200,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error fetching sms conversation',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error fetching sms conversation', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -228,11 +221,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error fetching chat cursors',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error fetching chat cursors', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -253,11 +242,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error fetching sms cursors',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error fetching sms cursors', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -441,11 +426,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error processing $outboxEntry',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error processing $outboxEntry', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -523,7 +504,7 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// It returns a [Future] that resolves to a tuple containing the sent [SmsMessage]
   /// and an optional [SmsConversation] object if a new conversation was created by first message.
   /// Throws an exception if the message sending process fails.
-  Future<(SmsMessage, SmsConversation?) /*?*/ > newSmsMessage(SmsOutboxMessageEntry outboxEntry) async {
+  Future<(SmsMessage, SmsConversation?) /*?*/> newSmsMessage(SmsOutboxMessageEntry outboxEntry) async {
     try {
       final payload = {
         'content': outboxEntry.content,
@@ -553,11 +534,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error processing $outboxEntry',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error processing $outboxEntry', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -595,7 +572,10 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       if (req.isOk) {
         return SmsMessageReadCursor(
-            conversationId: readCursor.conversationId, userId: socket.userId!, time: readCursor.time);
+          conversationId: readCursor.conversationId,
+          userId: socket.userId!,
+          time: readCursor.time,
+        );
       }
 
       throw req;
@@ -634,11 +614,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error deleting chat',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error deleting chat', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -656,11 +632,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error deleting sms conversation',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error deleting sms conversation', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -710,11 +682,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error leaving group',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error leaving group', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -816,11 +784,7 @@ extension PhoenixChannelExt on PhoenixChannel {
 
       throw req;
     } catch (e) {
-      throw MessagingSocketException(
-        'Error setting group name $name',
-        details: _mapPhxErrorDetails(e),
-        topic: topic,
-      );
+      throw MessagingSocketException('Error setting group name $name', details: _mapPhxErrorDetails(e), topic: topic);
     }
   }
 
@@ -832,7 +796,7 @@ extension PhoenixChannelExt on PhoenixChannel {
   /// Needed for prevent doubling of error handling
   /// because Phoenix uses mix of functional and throwable style error handling like req.isOk and throw
   /// and also messed up with sync and async errors. ¯\_(ツ)_/¯
-  Map _mapPhxErrorDetails(e) {
+  Map _mapPhxErrorDetails(Object e) {
     if (e is PushResponse) {
       final response = e.response;
       if (response is Map) return response;
@@ -858,16 +822,10 @@ extension PhoenixChannelExt on PhoenixChannel {
     }
 
     if (e is ChannelClosedError) {
-      return {
-        'code': kPhxChannelClosedCode,
-        'message': e.toString(),
-      };
+      return {'code': kPhxChannelClosedCode, 'message': e.toString()};
     }
 
-    return {
-      'code': kPhxUnknownErrorCode,
-      'exception': e.toString(),
-    };
+    return {'code': kPhxUnknownErrorCode, 'exception': e.toString()};
   }
 }
 
@@ -894,10 +852,11 @@ sealed class UserChannelEvent {
 
 class ChatConversationJoin extends UserChannelEvent with EquatableMixin {
   ChatConversationJoin(this.chatId);
+
   final int chatId;
 
   @override
-  List<Object> get props => [chatId];
+  List<Object?> get props => [chatId];
 
   @override
   bool get stringify => true;
@@ -905,10 +864,11 @@ class ChatConversationJoin extends UserChannelEvent with EquatableMixin {
 
 class ChatConversationLeave extends UserChannelEvent with EquatableMixin {
   ChatConversationLeave(this.chatId);
+
   final int chatId;
 
   @override
-  List<Object> get props => [chatId];
+  List<Object?> get props => [chatId];
 
   @override
   bool get stringify => true;
@@ -916,10 +876,11 @@ class ChatConversationLeave extends UserChannelEvent with EquatableMixin {
 
 class SmsConversationJoin extends UserChannelEvent with EquatableMixin {
   SmsConversationJoin(this.conversationId);
+
   final int conversationId;
 
   @override
-  List<Object> get props => [conversationId];
+  List<Object?> get props => [conversationId];
 
   @override
   bool get stringify => true;
@@ -927,10 +888,11 @@ class SmsConversationJoin extends UserChannelEvent with EquatableMixin {
 
 class SmsConversationLeave extends UserChannelEvent with EquatableMixin {
   SmsConversationLeave(this.conversationId);
+
   final int conversationId;
 
   @override
-  List<Object> get props => [conversationId];
+  List<Object?> get props => [conversationId];
 
   @override
   bool get stringify => true;
@@ -963,10 +925,11 @@ sealed class ChatChannelEvent {
 
 class ChatChannelInfoUpdate extends ChatChannelEvent with EquatableMixin {
   ChatChannelInfoUpdate(this.chat);
+
   final Chat chat;
 
   @override
-  List<Object> get props => [chat];
+  List<Object?> get props => [chat];
 
   @override
   bool get stringify => true;
@@ -974,10 +937,11 @@ class ChatChannelInfoUpdate extends ChatChannelEvent with EquatableMixin {
 
 class ChatChannelMessageUpdate extends ChatChannelEvent with EquatableMixin {
   ChatChannelMessageUpdate(this.message);
+
   final ChatMessage message;
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   bool get stringify => true;
@@ -985,10 +949,11 @@ class ChatChannelMessageUpdate extends ChatChannelEvent with EquatableMixin {
 
 class ChatChannelCursorSet extends ChatChannelEvent with EquatableMixin {
   ChatChannelCursorSet(this.cursor);
+
   final ChatMessageReadCursor cursor;
 
   @override
-  List<Object> get props => [cursor];
+  List<Object?> get props => [cursor];
 
   @override
   bool get stringify => true;
@@ -996,10 +961,11 @@ class ChatChannelCursorSet extends ChatChannelEvent with EquatableMixin {
 
 class ChatChannelTyping extends ChatChannelEvent with EquatableMixin {
   ChatChannelTyping(this.userId);
+
   final String userId;
 
   @override
-  List<Object> get props => [userId];
+  List<Object?> get props => [userId];
 
   @override
   bool get stringify => true;
@@ -1009,6 +975,7 @@ class ChatChannelDisconnect extends ChatChannelEvent {}
 
 class ChatChannelUnknown extends ChatChannelEvent {
   ChatChannelUnknown({this.event = 'unknown'});
+
   final String event;
 
   @override
@@ -1036,10 +1003,11 @@ sealed class SmsChannelEvent {
 
 class SmsChannelInfoUpdate extends SmsChannelEvent with EquatableMixin {
   SmsChannelInfoUpdate(this.conversation);
+
   final SmsConversation conversation;
 
   @override
-  List<Object> get props => [conversation];
+  List<Object?> get props => [conversation];
 
   @override
   bool get stringify => true;
@@ -1047,10 +1015,11 @@ class SmsChannelInfoUpdate extends SmsChannelEvent with EquatableMixin {
 
 class SmsChannelMessageUpdate extends SmsChannelEvent with EquatableMixin {
   SmsChannelMessageUpdate(this.message);
+
   final SmsMessage message;
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   bool get stringify => true;
@@ -1058,10 +1027,11 @@ class SmsChannelMessageUpdate extends SmsChannelEvent with EquatableMixin {
 
 class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
   SmsChannelCursorSet(this.cursor);
+
   final SmsMessageReadCursor cursor;
 
   @override
-  List<Object> get props => [cursor];
+  List<Object?> get props => [cursor];
 
   @override
   bool get stringify => true;
@@ -1069,10 +1039,11 @@ class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
 
 class SmsChannelTyping extends ChatChannelEvent with EquatableMixin {
   SmsChannelTyping(this.number);
+
   final String number;
 
   @override
-  List<Object> get props => [number];
+  List<Object?> get props => [number];
 
   @override
   bool get stringify => true;
@@ -1082,6 +1053,7 @@ class SmsChannelDisconnect extends SmsChannelEvent {}
 
 class SmsChannelUnknown extends SmsChannelEvent {
   SmsChannelUnknown({this.event = 'unknown'});
+
   final String event;
 
   @override
@@ -1107,7 +1079,7 @@ class MessagingSocketException with EquatableMixin implements Exception {
   String toString() => 'MessagingSocketException:\n$message\ntopic:$topic\ncode:$code';
 
   @override
-  List<Object> get props => [message, details, topic];
+  List<Object?> get props => [message, details, topic];
 }
 
 const kPhxChannelClosedCode = 'channel_closed';

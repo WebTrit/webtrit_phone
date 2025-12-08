@@ -24,7 +24,8 @@ class ScreenshotApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget widgetsApp = BlocBuilder<AppBloc, AppState>(
-      buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
+      buildWhen: (previous, current) =>
+          previous.themeSettings != current.themeSettings,
       builder: (context, state) {
         return ThemeProvider(
           settings: state.themeSettings,
@@ -77,7 +78,8 @@ class ScreenshotApp extends StatelessWidget {
   }
 }
 
-class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+class ScreenshotRouterDelegate extends RouterDelegate<Object>
+    with ChangeNotifier {
   ScreenshotRouterDelegate(this.child);
 
   final Widget child;
@@ -119,7 +121,8 @@ class _NoOpRouteInformationParser extends RouteInformationParser<Object> {
   const _NoOpRouteInformationParser();
 
   @override
-  Future<Object> parseRouteInformation(RouteInformation routeInformation) async {
+  Future<Object> parseRouteInformation(
+      RouteInformation routeInformation) async {
     return Object();
   }
 }
@@ -132,7 +135,10 @@ class _AutoStackRouter extends Mock implements StackRouter {
   PagelessRoutesObserver pagelessRoutesObserver = PagelessRoutesObserver();
 
   @override
-  bool canPop({bool ignoreChildRoutes = false, bool ignoreParentRoutes = false, bool ignorePagelessRoutes = false}) {
+  bool canPop(
+      {bool ignoreChildRoutes = false,
+      bool ignoreParentRoutes = false,
+      bool ignorePagelessRoutes = false}) {
     return true;
   }
 }
@@ -142,6 +148,7 @@ Widget _autoStackRouterWrap(Widget child) {
     controller: _AutoStackRouter(),
     stateHash: 0,
     inheritableObserversBuilder: () => [],
-    child: StackRouterScope(controller: _AutoStackRouter(), stateHash: 0, child: child),
+    child: StackRouterScope(
+        controller: _AutoStackRouter(), stateHash: 0, child: child),
   );
 }

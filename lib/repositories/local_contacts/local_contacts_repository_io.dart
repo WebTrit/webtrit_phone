@@ -5,6 +5,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/regexes.dart';
 
 import 'local_contacts_repository.dart';
 
@@ -57,11 +58,7 @@ class LocalContactsRepository implements ILocalContactsRepository {
   }
 
   Future<List<LocalContact>> _listContacts() async {
-    final contacts = await FlutterContacts.getContacts(
-      withProperties: true,
-      withAccounts: true,
-      withThumbnail: true,
-    );
+    final contacts = await FlutterContacts.getContacts(withProperties: true, withAccounts: true, withThumbnail: true);
     return contacts
         .where((contact) {
           if (Platform.isAndroid) {
@@ -75,25 +72,32 @@ class LocalContactsRepository implements ILocalContactsRepository {
             return true;
           }
         })
-        .map((contact) => LocalContact(
-              id: contact.id,
-              displayName: contact.displayName,
-              firstName: contact.name.first,
-              lastName: contact.name.last,
-              thumbnail: contact.thumbnail,
-              phones: contact.phones
-                  .map((phone) => LocalContactPhone(
-                        number: phone.number,
-                        label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.name,
-                      ))
-                  .toList(),
-              emails: contact.emails
-                  .map((email) => LocalContactEmail(
-                        address: email.address,
-                        label: email.label == EmailLabel.custom ? email.customLabel : email.label.name,
-                      ))
-                  .toList(),
-            ))
+        .map(
+          (contact) => LocalContact(
+            id: contact.id,
+            displayName: contact.displayName,
+            firstName: contact.name.first,
+            lastName: contact.name.last,
+            thumbnail: contact.thumbnail,
+            phones: contact.phones
+                .map(
+                  (phone) => LocalContactPhone(
+                    // TODO: maybe store raw and sanitized versions together
+                    number: phone.number.replaceAll(RegExp(numberSanitizeRegex), ''),
+                    label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.name,
+                  ),
+                )
+                .toList(),
+            emails: contact.emails
+                .map(
+                  (email) => LocalContactEmail(
+                    address: email.address,
+                    label: email.label == EmailLabel.custom ? email.customLabel : email.label.name,
+                  ),
+                )
+                .toList(),
+          ),
+        )
         .toList();
   }
 }

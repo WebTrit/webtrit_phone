@@ -10,11 +10,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 final _logger = Logger('RegisterStatusCubit');
 
 class RegisterStatusCubit extends Cubit<RegisterStatus> {
-  RegisterStatusCubit(
-    this.appRepository,
-    this.appPreferences, {
-    this.handleError,
-  }) : super(appPreferences.getRegisterStatus()) {
+  RegisterStatusCubit(this.appRepository, this.appPreferences, {this.handleError})
+    : super(appPreferences.getRegisterStatus()) {
     fetchStatus();
     _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }

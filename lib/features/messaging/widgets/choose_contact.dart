@@ -10,11 +10,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 bool _defaultFilter(Contact contact) => true;
 
 class ChooseContact extends StatefulWidget {
-  const ChooseContact({
-    required this.contactsRepository,
-    this.filter = _defaultFilter,
-    super.key,
-  });
+  const ChooseContact({required this.contactsRepository, this.filter = _defaultFilter, super.key});
 
   final ContactsRepository contactsRepository;
   final bool Function(Contact) filter;
@@ -27,11 +23,11 @@ class _ChooseContactState extends State<ChooseContact> {
   late final StreamSubscription contactsSub;
   List<Contact> contacts = [];
 
-  onConfirm(Contact contact) {
+  void onConfirm(Contact contact) {
     Navigator.of(context).pop(contact);
   }
 
-  onCancel() {
+  void onCancel() {
     Navigator.of(context).pop();
   }
 

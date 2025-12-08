@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GroupAvatar extends StatelessWidget {
-  const GroupAvatar({
-    required this.name,
-    this.size = 24,
-    super.key,
-  });
+  const GroupAvatar({required this.name, this.size = 24, super.key});
 
   final String name;
   final double size;
@@ -27,9 +23,7 @@ class GroupAvatar extends StatelessWidget {
       backgroundColor: colorScheme.secondaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(8),
-        child: FittedBox(
-          child: Text(text.toUpperCase(), softWrap: true, textAlign: TextAlign.center),
-        ),
+        child: FittedBox(child: Text(text.toUpperCase(), softWrap: true, textAlign: TextAlign.center)),
       ),
     );
   }

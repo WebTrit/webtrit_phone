@@ -1,19 +1,30 @@
 part of 'recents_bloc.dart';
 
-abstract class RecentsEvent {
+sealed class RecentsEvent extends Equatable {
   const RecentsEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class RecentsStarted extends RecentsEvent {
   const RecentsStarted();
 }
 
-@Freezed(copyWith: false)
-class RecentsFiltered with _$RecentsFiltered implements RecentsEvent {
-  const factory RecentsFiltered(RecentsVisibilityFilter filter) = _RecentsFiltered;
+class RecentsFiltered extends RecentsEvent {
+  const RecentsFiltered(this.filter);
+
+  final RecentsVisibilityFilter filter;
+
+  @override
+  List<Object?> get props => [filter];
 }
 
-@Freezed(copyWith: false)
-class RecentsDeleted with _$RecentsDeleted implements RecentsEvent {
-  const factory RecentsDeleted(Recent recent) = _RecentsDeleted;
+class RecentsDeleted extends RecentsEvent {
+  const RecentsDeleted(this.recent);
+
+  final Recent recent;
+
+  @override
+  List<Object?> get props => [recent];
 }

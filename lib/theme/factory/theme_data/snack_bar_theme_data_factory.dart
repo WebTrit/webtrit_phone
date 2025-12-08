@@ -9,8 +9,6 @@ class SnackBarThemeDataFactory implements ThemeStyleFactory<SnackBarThemeData> {
 
   @override
   SnackBarThemeData create() {
-    return SnackBarThemeData(
-      actionTextColor: colors.surface,
-    );
+    return SnackBarThemeData(actionTextColor: colors.surface);
   }
 }

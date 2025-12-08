@@ -14,15 +14,9 @@ void main() {
     }
     ''';
 
-    final errorResponse = ErrorResponse(
-      code: -1,
-      reason: 'some error message 1',
-    );
+    final errorResponse = ErrorResponse(code: -1, reason: 'some error message 1');
 
-    expect(
-      ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>),
-      equals(errorResponse),
-    );
+    expect(ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>), equals(errorResponse));
   });
 
   test('$ErrorResponse fromJson 2', () {
@@ -35,16 +29,9 @@ void main() {
     }
     ''';
 
-    final errorResponse = ErrorResponse(
-      line: 0,
-      code: -2,
-      reason: 'some error message 2',
-    );
+    final errorResponse = ErrorResponse(line: 0, code: -2, reason: 'some error message 2');
 
-    expect(
-      ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>),
-      equals(errorResponse),
-    );
+    expect(ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>), equals(errorResponse));
   });
 
   test('$ErrorResponse fromJson 3', () {
@@ -56,15 +43,9 @@ void main() {
     }
     ''';
 
-    final errorResponse = ErrorResponse(
-      code: 123,
-      reason: 'some error reason 3',
-    );
+    final errorResponse = ErrorResponse(code: 123, reason: 'some error reason 3');
 
-    expect(
-      ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>),
-      equals(errorResponse),
-    );
+    expect(ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>), equals(errorResponse));
   });
 
   test('$ErrorResponse fromJson 4', () {
@@ -78,16 +59,8 @@ void main() {
     }
     ''';
 
-    final errorResponse = ErrorResponse(
-      line: 1,
-      callId: 'qwerty',
-      code: 456,
-      reason: 'some error reason 4',
-    );
+    final errorResponse = ErrorResponse(line: 1, callId: 'qwerty', code: 456, reason: 'some error reason 4');
 
-    expect(
-      ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>),
-      equals(errorResponse),
-    );
+    expect(ErrorResponse.fromJson(json.decode(errorResponseJson) as Map<String, dynamic>), equals(errorResponse));
   });
 }

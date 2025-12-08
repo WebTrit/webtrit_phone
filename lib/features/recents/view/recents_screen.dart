@@ -86,9 +86,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
   }
 
   void openChat(String userId) {
-    final route = ChatConversationScreenPageRoute(
-      participantId: userId,
-    );
+    final route = ChatConversationScreenPageRoute(participantId: userId);
     context.router.navigate(route);
   }
 
@@ -128,15 +126,11 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(
-            padding: const EdgeInsets.only(
-              bottom: kMainAppBarBottomPaddingGap,
-            ),
+            padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
             child: ExtTabBar(
               width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: [
-                for (final recentsFilter in widget.recentsFilters) Tab(text: recentsFilter.l10n(context)),
-              ],
+              tabs: [for (final recentsFilter in widget.recentsFilters) Tab(text: recentsFilter.l10n(context))],
               controller: _tabController,
             ),
           ),
@@ -147,9 +141,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
         builder: (context, state) {
           final recents = state.recents;
           if (recents == null) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else {
             final recentsFiltered = state.recentsFiltered!; // can not be null if state.recents is not null
             if (recentsFiltered.isEmpty) {
@@ -159,9 +151,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
               } else {
                 filterL10n = '${state.filter.l10nPreposit(context)} ';
               }
-              return NoDataPlaceholder(
-                content: Text(context.l10n.recents_BodyCenter_empty(filterL10n)),
-              );
+              return NoDataPlaceholder(content: Text(context.l10n.recents_BodyCenter_empty(filterL10n)));
             } else {
               return BlocBuilder<UserInfoCubit, UserInfoState>(
                 builder: (context, userInfoState) {
@@ -187,65 +177,68 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                               final contactSmsNumbers = contact?.smsNumbers ?? [];
                               final canSendSms = contactSmsNumbers.contains(callLogEntry.number);
 
-                              return RecentTile(
-                                key: recentsTileKey,
-                                recent: recent,
-                                callNumbers: callRoutingState?.allNumbers ?? [],
-                                dateFormat: context.read<RecentsBloc>().dateFormat,
-                                onTap: transfer
-                                    ? () {
-                                        submitTransfer(destination: callLogEntry.number);
-                                      }
-                                    : () {
-                                        _callController.createCall(
-                                          destination: callLogEntry.number,
-                                          displayName: contact?.maybeName,
-                                          video: callLogEntry.video && widget.videoEnabled,
-                                        );
-                                      },
-                                onAudioCallPressed: () => _callController.createCall(
-                                  destination: callLogEntry.number,
-                                  displayName: contact?.maybeName,
-                                  video: false,
-                                ),
-                                onVideoCallPressed: widget.videoEnabled
-                                    ? () => _callController.createCall(
+                              return SizedBox(
+                                key: ValueKey(recent),
+                                child: RecentTile(
+                                  key: recentsTileKey,
+                                  recent: recent,
+                                  callNumbers: callRoutingState?.allNumbers ?? [],
+                                  dateFormat: context.read<RecentsBloc>().dateFormat,
+                                  onTap: transfer
+                                      ? () {
+                                          submitTransfer(destination: callLogEntry.number);
+                                        }
+                                      : () {
+                                          _callController.createCall(
+                                            destination: callLogEntry.number,
+                                            displayName: contact?.maybeName,
+                                            video: callLogEntry.video && widget.videoEnabled,
+                                          );
+                                        },
+                                  onAudioCallPressed: () => _callController.createCall(
+                                    destination: callLogEntry.number,
+                                    displayName: contact?.maybeName,
+                                    video: false,
+                                  ),
+                                  onVideoCallPressed: widget.videoEnabled
+                                      ? () => _callController.createCall(
                                           destination: callLogEntry.number,
                                           displayName: contact?.maybeName,
                                           video: true,
                                         )
-                                    : null,
-                                onTransferPressed: widget.transferEnabled && hasActiveCall
-                                    ? () {
-                                        submitTransfer(destination: callLogEntry.number);
-                                      }
-                                    : null,
-                                onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
-                                    ? () {
-                                        openChat(contactSourceId!);
-                                      }
-                                    : null,
-                                onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
-                                    ? () {
-                                        sendSms(
-                                          userSmsNumbers: userSmsNumbers,
-                                          contactPhoneNumber: callLogEntry.number,
-                                          contactSourceId: contactSourceId,
-                                        );
-                                      }
-                                    : null,
-                                onViewContactPressed: contact != null
-                                    ? () {
-                                        openContact(contactId: contact.id);
-                                      }
-                                    : null,
-                                onCallLogPressed: () => openCallLog(number: callLogEntry.number),
-                                onDelete: () => delete(recent: recent),
-                                onCallFrom: (fromNumber) => _callController.createCall(
-                                  destination: callLogEntry.number,
-                                  displayName: contact?.maybeName,
-                                  fromNumber: fromNumber,
-                                  video: false,
+                                      : null,
+                                  onTransferPressed: widget.transferEnabled && hasActiveCall
+                                      ? () {
+                                          submitTransfer(destination: callLogEntry.number);
+                                        }
+                                      : null,
+                                  onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
+                                      ? () {
+                                          openChat(contactSourceId!);
+                                        }
+                                      : null,
+                                  onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
+                                      ? () {
+                                          sendSms(
+                                            userSmsNumbers: userSmsNumbers,
+                                            contactPhoneNumber: callLogEntry.number,
+                                            contactSourceId: contactSourceId,
+                                          );
+                                        }
+                                      : null,
+                                  onViewContactPressed: contact != null
+                                      ? () {
+                                          openContact(contactId: contact.id);
+                                        }
+                                      : null,
+                                  onCallLogPressed: () => openCallLog(number: callLogEntry.number),
+                                  onDelete: () => delete(recent: recent),
+                                  onCallFrom: (fromNumber) => _callController.createCall(
+                                    destination: callLogEntry.number,
+                                    displayName: contact?.maybeName,
+                                    fromNumber: fromNumber,
+                                    video: false,
+                                  ),
                                 ),
                               );
                             },

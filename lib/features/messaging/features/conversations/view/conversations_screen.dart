@@ -17,6 +17,7 @@ enum TabType { chat, sms }
 
 class ConversationsScreen extends StatefulWidget {
   const ConversationsScreen({super.key, this.title});
+
   final Widget? title;
 
   @override
@@ -37,10 +38,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   late TabType? selectedTab = chatsEnabled
       ? TabType.chat
       : smsEnabled
-          ? TabType.sms
-          : null;
+      ? TabType.sms
+      : null;
 
-  onFloatingButton() {
+  void onFloatingButton() {
     if (selectedTab == TabType.chat) {
       onNewChatConversation();
     }
@@ -49,9 +50,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     }
   }
 
-  onNewChatConversation() async {
+  Future<void> onNewChatConversation() async {
     showModalBottomSheet(
-      useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
@@ -74,14 +74,13 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
             notificationsBloc.add(NotificationsSubmitted(n));
           },
         ),
-        child: BottomSheet(enableDrag: false, onClosing: () {}, builder: (_) => const ChatConversationBuilderView()),
+        child: const ChatConversationBuilderView(),
       ),
     );
   }
 
-  onNewSmsConversation() async {
+  Future<void> onNewSmsConversation() async {
     showModalBottomSheet(
-      useRootNavigator: true,
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
@@ -95,29 +94,25 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
             openSmsDialog(userNumber, recipientNumber, recipientId);
           },
         ),
-        child: BottomSheet(enableDrag: false, onClosing: () {}, builder: (_) => const SmsConversationBuilderView()),
+        child: const SmsConversationBuilderView(),
       ),
     );
   }
 
-  openDialog(Contact contact) {
+  void openDialog(Contact contact) {
     if (!mounted) return;
     context.router.navigate(ChatConversationScreenPageRoute(participantId: contact.sourceId));
   }
 
-  openGroup(int id) {
+  void openGroup(int id) {
     if (!mounted) return;
     context.router.navigate(ChatConversationScreenPageRoute(chatId: id));
   }
 
-  openSmsDialog(String userNumber, String recipientNumber, String? recipientId) async {
+  Future<void> openSmsDialog(String userNumber, String recipientNumber, String? recipientId) async {
     if (!mounted) return;
     context.router.navigate(
-      SmsConversationScreenPageRoute(
-        firstNumber: userNumber,
-        secondNumber: recipientNumber,
-        recipientId: recipientId,
-      ),
+      SmsConversationScreenPageRoute(firstNumber: userNumber, secondNumber: recipientNumber, recipientId: recipientId),
     );
   }
 
@@ -127,10 +122,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: MainAppBar(
-        title: widget.title,
-        context: context,
-      ),
+      appBar: MainAppBar(title: widget.title, context: context),
       body: MessagingStateWrapper(
         child: Column(
           children: [
@@ -143,16 +135,18 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           ],
         ),
       ),
-      floatingActionButton: Builder(builder: (context) {
-        if (selectedTab == null) return const SizedBox();
+      floatingActionButton: Builder(
+        builder: (context) {
+          if (selectedTab == null) return const SizedBox();
 
-        return FloatingActionButton(
-          backgroundColor: colorScheme.primary,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-          onPressed: onFloatingButton,
-          child: Icon(Icons.add, color: colorScheme.onPrimary),
-        );
-      }),
+          return FloatingActionButton(
+            backgroundColor: colorScheme.primary,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
+            onPressed: onFloatingButton,
+            child: Icon(Icons.add, color: colorScheme.onPrimary),
+          );
+        },
+      ),
     );
   }
 }

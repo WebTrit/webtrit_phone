@@ -23,10 +23,11 @@ class EmbeddedData {
     this.titleL10n,
     this.payload = const [],
     this.enableConsoleLogCapture = false,
+    this.attributes = const {},
   });
 
   /// The URI representing either a local asset file path or a remote URL.
-  final int id;
+  final String id;
 
   /// The unique identifier for the embedded resource, used to link it with other features or components.
   final Uri uri;
@@ -42,4 +43,7 @@ class EmbeddedData {
 
   /// The key to use to look up the localized title.
   final String? titleL10n;
+
+  /// Attributes
+  final Map<String, dynamic> attributes;
 }

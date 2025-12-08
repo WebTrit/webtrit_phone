@@ -76,15 +76,14 @@ class BadgeLayout {
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectFor(
-        width: width,
-        height: height,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.topLeft,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectFor(
+    width: width,
+    height: height,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.topLeft,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect topRight({
     required double width,
@@ -92,15 +91,14 @@ class BadgeLayout {
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectFor(
-        width: width,
-        height: height,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.topRight,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectFor(
+    width: width,
+    height: height,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.topRight,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect bottomLeft({
     required double width,
@@ -108,15 +106,14 @@ class BadgeLayout {
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectFor(
-        width: width,
-        height: height,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.bottomLeft,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectFor(
+    width: width,
+    height: height,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.bottomLeft,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect bottomRight({
     required double width,
@@ -124,15 +121,14 @@ class BadgeLayout {
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectFor(
-        width: width,
-        height: height,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.bottomRight,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectFor(
+    width: width,
+    height: height,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.bottomRight,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect center({
     required double width,
@@ -140,83 +136,77 @@ class BadgeLayout {
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectFor(
-        width: width,
-        height: height,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.center,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectFor(
+    width: width,
+    height: height,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.center,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect topLeftSquare({
     required double size,
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectForSquare(
-        size: size,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.topLeft,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectForSquare(
+    size: size,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.topLeft,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect topRightSquare({
     required double size,
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectForSquare(
-        size: size,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.topRight,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectForSquare(
+    size: size,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.topRight,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect bottomLeftSquare({
     required double size,
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectForSquare(
-        size: size,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.bottomLeft,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectForSquare(
+    size: size,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.bottomLeft,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect bottomRightSquare({
     required double size,
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectForSquare(
-        size: size,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.bottomRight,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectForSquare(
+    size: size,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.bottomRight,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 
   static Rect centerSquare({
     required double size,
     required double sizeFactor,
     double dxFactor = 0.0,
     double dyFactor = 0.0,
-  }) =>
-      rectForSquare(
-        size: size,
-        sizeFactor: sizeFactor,
-        anchor: BadgeAnchor.center,
-        dxFactor: dxFactor,
-        dyFactor: dyFactor,
-      );
+  }) => rectForSquare(
+    size: size,
+    sizeFactor: sizeFactor,
+    anchor: BadgeAnchor.center,
+    dxFactor: dxFactor,
+    dyFactor: dyFactor,
+  );
 }

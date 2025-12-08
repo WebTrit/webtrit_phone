@@ -1,9 +1,6 @@
 import 'package:formz/formz.dart';
 
-enum UserRefValidationError {
-  blank,
-  format,
-}
+enum UserRefValidationError { blank, format }
 
 class UserRefInput extends FormzInput<String, UserRefValidationError> {
   const UserRefInput.pure([super.value = '']) : super.pure();

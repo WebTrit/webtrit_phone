@@ -13,11 +13,7 @@ class TransferRequest extends CallRequest {
   final String? replaceCallId;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        number,
-        replaceCallId,
-      ];
+  List<Object?> get props => [...super.props, number, replaceCallId];
 
   static const typeValue = 'transfer';
 

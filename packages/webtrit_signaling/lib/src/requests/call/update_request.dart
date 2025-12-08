@@ -1,20 +1,12 @@
 import '../abstract_requests.dart';
 
 class UpdateRequest extends CallRequest {
-  const UpdateRequest({
-    required super.transaction,
-    required super.line,
-    required super.callId,
-    required this.jsep,
-  });
+  const UpdateRequest({required super.transaction, required super.line, required super.callId, required this.jsep});
 
   final Map<String, dynamic> jsep;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        jsep,
-      ];
+  List<Object?> get props => [...super.props, jsep];
 
   static const typeValue = 'update';
 
@@ -34,12 +26,6 @@ class UpdateRequest extends CallRequest {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      Request.typeKey: typeValue,
-      'transaction': transaction,
-      'line': line,
-      'call_id': callId,
-      'jsep': jsep,
-    };
+    return {Request.typeKey: typeValue, 'transaction': transaction, 'line': line, 'call_id': callId, 'jsep': jsep};
   }
 }

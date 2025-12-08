@@ -115,11 +115,7 @@ final class UnknownPush extends AppRemotePush {
   UnknownPush(super.id, {super.title, super.body});
 
   factory UnknownPush.fromFCM(RemoteMessage message) {
-    return UnknownPush(
-      message.messageId ?? '_',
-      title: message.notification?.title,
-      body: message.notification?.body,
-    );
+    return UnknownPush(message.messageId ?? '_', title: message.notification?.title, body: message.notification?.body);
   }
 
   @override

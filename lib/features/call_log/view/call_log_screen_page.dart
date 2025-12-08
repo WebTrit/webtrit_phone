@@ -18,9 +18,7 @@ class CallLogScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
 
-    final widget = CallLogScreen(
-      videoVisible: featureAccess.callFeature.callConfig.isVideoCallEnabled,
-    );
+    final widget = CallLogScreen(videoVisible: featureAccess.callFeature.callConfig.isVideoCallEnabled);
     var provider = BlocProvider(
       create: (context) {
         return CallLogBloc(

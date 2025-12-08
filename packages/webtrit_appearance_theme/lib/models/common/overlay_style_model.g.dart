@@ -6,9 +6,8 @@ part of 'overlay_style_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$OverlayStyleModelImpl _$$OverlayStyleModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$OverlayStyleModelImpl(
+OverlayStyleModel _$OverlayStyleModelFromJson(Map<String, dynamic> json) =>
+    OverlayStyleModel(
       systemNavigationBarColor: json['systemNavigationBarColor'] as String?,
       systemNavigationBarIconBrightness:
           json['systemNavigationBarIconBrightness'] as String?,
@@ -16,8 +15,7 @@ _$OverlayStyleModelImpl _$$OverlayStyleModelImplFromJson(
       statusBarBrightness: json['statusBarBrightness'] as String?,
     );
 
-Map<String, dynamic> _$$OverlayStyleModelImplToJson(
-        _$OverlayStyleModelImpl instance) =>
+Map<String, dynamic> _$OverlayStyleModelToJson(OverlayStyleModel instance) =>
     <String, dynamic>{
       'systemNavigationBarColor': instance.systemNavigationBarColor,
       'systemNavigationBarIconBrightness':

@@ -1,10 +1,17 @@
 part of 'orientations_bloc.dart';
 
-abstract class OrientationsEvent {
+sealed class OrientationsEvent extends Equatable {
   const OrientationsEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
-@Freezed(copyWith: false)
-class OrientationsChanged with _$OrientationsChanged implements OrientationsEvent {
-  const factory OrientationsChanged(PreferredOrientation orientation) = _OrientationsChanged;
+class OrientationsChanged extends OrientationsEvent {
+  const OrientationsChanged(this.orientation);
+
+  final PreferredOrientation orientation;
+
+  @override
+  List<Object?> get props => [orientation];
 }

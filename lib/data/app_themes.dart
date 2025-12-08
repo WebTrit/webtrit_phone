@@ -14,6 +14,8 @@ final Logger _logger = Logger('AppThemes');
 class AppThemes {
   static late AppThemes _instance;
 
+  static const _fontPreloadTimeout = Duration(seconds: 3);
+
   static Future<AppThemes> init() async {
     final themeColorSchemeLightConfigJson = await _getJson(Assets.themes.originalColorSchemeLightConfig);
     final themeColorSchemeDarkConfigJson = await _getJson(Assets.themes.originalColorSchemeDarkConfig);
@@ -25,6 +27,7 @@ class AppThemes {
     final themePageDarkConfigJson = await _getJson(Assets.themes.originalPageDarkConfig);
 
     final appConfigJson = await _getJson(Assets.themes.appConfig);
+    final eppEmbeddedConfigJson = await _getJson(Assets.themes.appEmbeddedConfig);
 
     final themeColorSchemeLightConfig = ColorSchemeConfig.fromJson(themeColorSchemeLightConfigJson);
     final themeColorSchemeDarkConfig = ColorSchemeConfig.fromJson(themeColorSchemeDarkConfigJson);
@@ -36,6 +39,9 @@ class AppThemes {
     final themePageDarkConfig = ThemePageConfig.fromJson(themePageDarkConfigJson);
 
     final appConfig = AppConfig.fromJson(appConfigJson);
+    final embeddedResources = (eppEmbeddedConfigJson as List)
+        .map<EmbeddedResource>((e) => EmbeddedResource.fromJson(Map<String, dynamic>.from(e)))
+        .toList(growable: false);
 
     final settings = ThemeSettings(
       lightColorSchemeConfig: themeColorSchemeLightConfig,
@@ -48,21 +54,37 @@ class AppThemes {
 
     final themes = [AppTheme(settings: settings)];
 
-    try {
-      final lightFontFamily = themeWidgetLightConfig.fonts.fontFamily;
-      final darkFontFamily = themeWidgetDarkConfig.fonts.fontFamily;
+    await _preloadFonts(themeWidgetLightConfig, themeWidgetDarkConfig);
 
-      // Preload Google Fonts for preventing flickering during the first render
-      await GoogleFonts.pendingFonts([
-        if (lightFontFamily != null) GoogleFonts.getFont(lightFontFamily),
-        if (darkFontFamily != null) GoogleFonts.getFont(darkFontFamily),
-      ]);
-    } catch (e) {
-      _logger.finest('Failed to preload Google Fonts: $e');
-    }
-
-    _instance = AppThemes._(themes, appConfig);
+    _instance = AppThemes._(themes, appConfig, embeddedResources);
     return _instance;
+  }
+
+  // TODO(offline-fonts): In the future, run flutter pub run google_fonts:update
+  // to bundle the required TTF fonts into assets and update pubspec.yaml.
+  // After that, set GoogleFonts.config.allowRuntimeFetching = false
+  // permanently to avoid any network dependency.
+  static Future<void> _preloadFonts(ThemeWidgetConfig lightConfig, ThemeWidgetConfig darkConfig) async {
+    GoogleFonts.config.allowRuntimeFetching = true;
+
+    try {
+      final families = <String>{
+        if (lightConfig.fonts.fontFamily != null) lightConfig.fonts.fontFamily!,
+        if (darkConfig.fonts.fontFamily != null) darkConfig.fonts.fontFamily!,
+      }.toList();
+
+      if (families.isEmpty) return;
+
+      await GoogleFonts.pendingFonts([for (final font in families) GoogleFonts.getFont(font)]).timeout(
+        _fontPreloadTimeout,
+        onTimeout: () {
+          _logger.warning('Preloading Google Fonts timed out ($_fontPreloadTimeout)');
+          return const [];
+        },
+      );
+    } catch (e, st) {
+      _logger.finest('Failed to preload Google Fonts: $e\n$st');
+    }
   }
 
   static Future<dynamic> _getJson(String path) async {
@@ -73,21 +95,18 @@ class AppThemes {
     return _instance;
   }
 
-  AppThemes._(this.values, this.appConfig);
+  AppThemes._(this.values, this.appConfig, this.embeddedResources);
 
   final List<AppTheme> values;
   final AppConfig appConfig;
+  final List<EmbeddedResource> embeddedResources;
 }
 
 class AppTheme extends Equatable {
-  const AppTheme({
-    required this.settings,
-  });
+  const AppTheme({required this.settings});
 
   final ThemeSettings settings;
 
   @override
-  List<Object> get props => [
-        settings,
-      ];
+  List<Object?> get props => [settings];
 }

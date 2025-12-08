@@ -58,8 +58,8 @@ class WebtritSignalingClient {
 
   @visibleForTesting
   WebtritSignalingClient.inner(this._wsc)
-      : _id = _createCounter,
-        _logger = Logger('WebtritSignalingClient-$_createCounter') {
+    : _id = _createCounter,
+      _logger = Logger('WebtritSignalingClient-$_createCounter') {
     _createCounter++;
 
     _logger.fine('connected');
@@ -90,17 +90,12 @@ class WebtritSignalingClient {
     TrustedCertificates certs = TrustedCertificates.empty,
   }) async {
     final tenantUrl = buildTenantUrl(baseUrl, tenantId);
-    final signalingUrl = tenantUrl.replace(
-      pathSegments: [
-        ...tenantUrl.pathSegments,
-        'signaling',
-        'v1',
-      ],
-      queryParameters: {
-        'token': token,
-        'force': force.toString(),
-      },
-    ).toString();
+    final signalingUrl = tenantUrl
+        .replace(
+          pathSegments: [...tenantUrl.pathSegments, 'signaling', 'v1'],
+          queryParameters: {'token': token, 'force': force.toString()},
+        )
+        .toString();
 
     final ws = await connectWebSocket(
       signalingUrl,
@@ -128,11 +123,7 @@ class WebtritSignalingClient {
     _onError = onError;
     _onDisconnect = onDisconnect;
 
-    _wscStreamSubscription = _wsc.stream.listen(
-      _wscStreamOnData,
-      onError: _wscStreamOnError,
-      onDone: _wscStreamOnDone,
-    );
+    _wscStreamSubscription = _wsc.stream.listen(_wscStreamOnData, onError: _wscStreamOnError, onDone: _wscStreamOnDone);
   }
 
   Future<void> disconnect([int? code, String? reason]) async {

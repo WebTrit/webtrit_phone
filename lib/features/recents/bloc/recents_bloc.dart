@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 
@@ -16,11 +17,8 @@ part 'recents_event.dart';
 part 'recents_state.dart';
 
 class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
-  RecentsBloc({
-    required this.recentsRepository,
-    required this.appPreferences,
-    required this.dateFormat,
-  }) : super(RecentsState(filter: appPreferences.getActiveRecentsVisibilityFilter())) {
+  RecentsBloc({required this.recentsRepository, required this.appPreferences, required this.dateFormat})
+    : super(RecentsState(filter: appPreferences.getActiveRecentsVisibilityFilter())) {
     on<RecentsStarted>(_onStarted, transformer: restartable());
     on<RecentsFiltered>(_onFiltered);
     on<RecentsDeleted>(_onDeleted);

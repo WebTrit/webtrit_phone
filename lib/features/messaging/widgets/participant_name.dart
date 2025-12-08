@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
-import 'package:webtrit_phone/features/messaging/widgets/widgets.dart';
+import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class ParticipantName extends StatelessWidget {
-  const ParticipantName({
-    required this.senderId,
-    required this.userId,
-    this.style,
-    this.textMap,
-    super.key,
-  }) : isMine = senderId == userId;
+  const ParticipantName({required this.senderId, required this.userId, this.style, this.textMap, super.key})
+    : isMine = senderId == userId;
 
   final String senderId;
   final String userId;
@@ -32,11 +27,8 @@ class ParticipantName extends StatelessWidget {
       );
     } else {
       return ContactInfoBuilder(
-        sourceType: ContactSourceType.external,
-        sourceId: senderId,
-        builder: (context, contact, {required bool loading}) {
-          if (loading) return const SizedBox.shrink();
-
+        source: ContactSourceId(ContactSourceType.external, senderId),
+        builder: (context, contact) {
           final name = contact?.displayTitle ?? context.l10n.messaging_ParticipantName_unknown;
           final mappedName = textMap?.call(name) ?? name;
           return Text(mappedName, style: textStyle, maxLines: 1, overflow: TextOverflow.ellipsis);

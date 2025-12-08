@@ -5,7 +5,7 @@ abstract class ExternalContactsSyncState extends Equatable {
   const ExternalContactsSyncState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ExternalContactsSyncInitial extends ExternalContactsSyncState {

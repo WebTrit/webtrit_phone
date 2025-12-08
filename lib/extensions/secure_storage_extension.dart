@@ -23,8 +23,13 @@ extension SecureStorageExtension on SecureStorage {
     final accessTokenSessionAssociated = readExternalPageAccessTokenSessionAssociated();
     final associate = readUserId() ?? readToken() ?? '';
 
-    if ([accessToken, refreshToken, expires, accessTokenSessionAssociated, associate]
-        .any((v) => v == null || v.isEmpty)) {
+    if ([
+      accessToken,
+      refreshToken,
+      expires,
+      accessTokenSessionAssociated,
+      associate,
+    ].any((v) => v == null || v.isEmpty)) {
       _logger.info('External page token is not set or incomplete.');
       return null;
     }

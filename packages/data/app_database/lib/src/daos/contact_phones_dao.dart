@@ -3,19 +3,14 @@ import 'package:drift/drift.dart';
 
 part 'contact_phones_dao.g.dart';
 
-@DriftAccessor(tables: [
-  ContactPhonesTable,
-  FavoritesTable,
-])
+@DriftAccessor(tables: [ContactPhonesTable, FavoritesTable])
 class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhonesDaoMixin {
   ContactPhonesDao(super.db);
 
   SimpleSelectStatement<$ContactPhonesTableTable, ContactPhoneData> _selectContactPhonesByContactId(int contactId) {
     return select(contactPhonesTable)
       ..where((t) => t.contactId.equals(contactId))
-      ..orderBy([
-        (t) => OrderingTerm.asc(t.insertedAt),
-      ]);
+      ..orderBy([(t) => OrderingTerm.asc(t.insertedAt)]);
   }
 
   Stream<List<ContactPhoneData>> watchContactPhonesByContactId(int contactId) {

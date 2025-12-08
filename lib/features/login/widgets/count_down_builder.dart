@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CountDownBuilder extends StatelessWidget {
-  const CountDownBuilder({
-    super.key,
-    required this.start,
-    required this.interval,
-    required this.builder,
-  });
+  const CountDownBuilder({super.key, required this.start, required this.interval, required this.builder});
 
   final DateTime start;
   final Duration interval;

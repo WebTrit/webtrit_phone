@@ -1,11 +1,14 @@
+export 'mock_about_bloc.dart';
 export 'mock_app_bloc.dart';
 export 'mock_call_bloc.dart';
+export 'mock_call_routing_cubit.dart';
 export 'mock_chat_conversations_cubit.dart';
 export 'mock_contacts_external_tab_bloc.dart';
 export 'mock_contacts_local_tab_bloc.dart';
 export 'mock_contacts_search_bloc.dart';
 export 'mock_embedded_cubit.dart';
 export 'mock_favorites_bloc.dart';
+export 'mock_full_recent_cdrs_cubit.dart';
 export 'mock_keypad_cubit.dart';
 export 'mock_login_cubit.dart';
 export 'mock_main_bloc.dart';

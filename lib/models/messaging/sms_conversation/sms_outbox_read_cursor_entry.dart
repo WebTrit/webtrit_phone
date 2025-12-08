@@ -7,11 +7,7 @@ class SmsOutboxReadCursorEntry extends Equatable {
 
   const SmsOutboxReadCursorEntry({required this.conversationId, required this.time, this.sendAttempts = 0});
 
-  SmsOutboxReadCursorEntry copyWith({
-    int? conversationId,
-    DateTime? time,
-    int? sendAttempts,
-  }) {
+  SmsOutboxReadCursorEntry copyWith({int? conversationId, DateTime? time, int? sendAttempts}) {
     return SmsOutboxReadCursorEntry(
       conversationId: conversationId ?? this.conversationId,
       time: time ?? this.time,
@@ -24,7 +20,7 @@ class SmsOutboxReadCursorEntry extends Equatable {
   }
 
   @override
-  List<Object> get props => [conversationId, time, sendAttempts];
+  List<Object?> get props => [conversationId, time, sendAttempts];
 
   @override
   String toString() {

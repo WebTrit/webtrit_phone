@@ -21,8 +21,8 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     required BackgroundSignalingService callkeep,
     required SecureStorage storage,
     required TrustedCertificates certificates,
-  })  : _callLogsRepository = callLogsRepository,
-        _callkeep = callkeep {
+  }) : _callLogsRepository = callLogsRepository,
+       _callkeep = callkeep {
     _initSignalingManager(storage, certificates);
     _callkeep.setBackgroundServiceDelegate(this);
   }
@@ -55,10 +55,12 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
   Future<void> sync(CallkeepServiceStatus status) async {
     _logger.info('onStart: $status');
 
-    final mainSignalingStatus = (status.mainSignalingStatus == CallkeepSignalingStatus.connecting ||
+    final mainSignalingStatus =
+        (status.mainSignalingStatus == CallkeepSignalingStatus.connecting ||
         status.mainSignalingStatus == CallkeepSignalingStatus.connect);
 
-    final isAppInBackground = (status.lifecycleEvent == CallkeepLifecycleEvent.onStop ||
+    final isAppInBackground =
+        (status.lifecycleEvent == CallkeepLifecycleEvent.onStop ||
         status.lifecycleEvent == CallkeepLifecycleEvent.onDestroy);
 
     if (isAppInBackground && !mainSignalingStatus) {
@@ -93,7 +95,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     }
   }
 
-  void _handleSignalingError(error, [StackTrace? stackTrace]) async {
+  void _handleSignalingError(Object error, [StackTrace? stackTrace]) async {
     try {} catch (e) {
       _handleExceptions(e);
     }
@@ -147,7 +149,7 @@ class SignalingForegroundIsolateManager implements CallkeepBackgroundServiceDele
     await _callLogsRepository.add(call);
   }
 
-  void _handleExceptions(e) {
+  void _handleExceptions(Object e) {
     _logger.severe(e);
   }
 }

@@ -80,59 +80,59 @@ class _DeviceInfoImpl implements DeviceInfo {
   int? get sdkVersion => data['sdkVersion'];
 
   static Map<String, dynamic> readWebBrowserInfo(WebBrowserInfo data) => {
-        'browserName': data.browserName.name,
-        'appCodeName': data.appCodeName,
-        'appName': data.appName,
-        'appVersion': data.appVersion,
-        'deviceMemory': data.deviceMemory,
-        'language': data.language,
-        'languages': data.languages,
-        'platform': data.platform,
-        'product': data.product,
-        'productSub': data.productSub,
-        'userAgent': data.userAgent,
-        'vendor': data.vendor,
-        'vendorSub': data.vendorSub,
-        'hardwareConcurrency': data.hardwareConcurrency,
-        'maxTouchPoints': data.maxTouchPoints,
-      };
+    'browserName': data.browserName.name,
+    'appCodeName': data.appCodeName,
+    'appName': data.appName,
+    'appVersion': data.appVersion,
+    'deviceMemory': data.deviceMemory,
+    'language': data.language,
+    'languages': data.languages,
+    'platform': data.platform,
+    'product': data.product,
+    'productSub': data.productSub,
+    'userAgent': data.userAgent,
+    'vendor': data.vendor,
+    'vendorSub': data.vendorSub,
+    'hardwareConcurrency': data.hardwareConcurrency,
+    'maxTouchPoints': data.maxTouchPoints,
+  };
 
   static Map<String, dynamic> readAndroidBuildData(AndroidDeviceInfo build) => {
-        'manufacturer': build.manufacturer,
-        'model': build.model,
-        'systemName': 'Android',
-        'systemVersion': build.version.release,
-        'sdkVersion': build.version.sdkInt,
-      };
+    'manufacturer': build.manufacturer,
+    'model': build.model,
+    'systemName': 'Android',
+    'systemVersion': build.version.release,
+    'sdkVersion': build.version.sdkInt,
+  };
 
   static Map<String, dynamic> readIosDeviceInfo(IosDeviceInfo data) => {
-        'manufacturer': 'Apple',
-        'model': data.model,
-        'systemName': data.systemName,
-        'systemVersion': data.systemVersion,
-        'sdkVersion': data.systemVersion.split('.').first,
-      };
+    'manufacturer': 'Apple',
+    'model': data.model,
+    'systemName': data.systemName,
+    'systemVersion': data.systemVersion,
+    'sdkVersion': data.systemVersion.split('.').first,
+  };
 
   static Map<String, dynamic> readLinuxDeviceInfo(LinuxDeviceInfo data) => {
-        'manufacturer': 'Linux',
-        'model': data.variant ?? 'unknown',
-        'systemName': data.name,
-        'systemVersion': data.version,
-        'sdkVersion': data.versionId,
-      };
+    'manufacturer': 'Linux',
+    'model': data.variant ?? 'unknown',
+    'systemName': data.name,
+    'systemVersion': data.version,
+    'sdkVersion': data.versionId,
+  };
 
   static Map<String, dynamic> readMacOsDeviceInfo(MacOsDeviceInfo data) => {
-        'manufacturer': 'Apple',
-        'model': data.model,
-        'systemName': 'macOS',
-        'systemVersion': data.osRelease,
-      };
+    'manufacturer': 'Apple',
+    'model': data.model,
+    'systemName': 'macOS',
+    'systemVersion': data.osRelease,
+  };
 
   static Map<String, dynamic> readWindowsDeviceInfo(WindowsDeviceInfo data) => {
-        'manufacturer': 'Microsoft',
-        'model': data.productName,
-        'systemName': 'Windows',
-        'systemVersion': data.displayVersion,
-        'sdkVersion': data.buildNumber,
-      };
+    'manufacturer': 'Microsoft',
+    'model': data.productName,
+    'systemName': 'Windows',
+    'systemVersion': data.displayVersion,
+    'sdkVersion': data.buildNumber,
+  };
 }

@@ -1,5 +1,1 @@
-enum SubscriptionState {
-  pending,
-  terminated,
-  active,
-}
+enum SubscriptionState { pending, terminated, active }

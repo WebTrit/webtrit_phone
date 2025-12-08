@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
@@ -20,12 +22,12 @@ class SmsConversationScreen extends StatefulWidget {
 }
 
 class _SmsConversationScreenState extends State<SmsConversationScreen> {
-  late final userId = context.read<AppBloc>().state.userId!;
+  late final userId = context.read<AppBloc>().state.session.userId;
   late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<SmsConversationCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
 
-  onDeleteDialog() async {
+  Future<void> onDeleteDialog() async {
     final askResult = await showDialog<bool>(
       context: context,
       builder: (context) => ConfirmDialog(askText: context.l10n.messaging_DialogInfo_deleteAsk),
@@ -41,6 +43,8 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider(
       create: (context) => SmsTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<SmsConversationCubit, SmsConversationState>(
@@ -53,105 +57,115 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
           }
         },
         builder: (context, state) {
-          return UserSmsNumbersBuilder(builder: (context, List<String> numbers, {required loading}) {
-            final firstNumber = state.creds.firstNumber;
-            final secondNumber = state.creds.secondNumber;
-            String? userNumber;
-            userNumber = numbers.firstWhereOrNull((e) => e == firstNumber || e == secondNumber);
-            String? recipientNumber;
-            if (userNumber != null) recipientNumber = firstNumber == userNumber ? secondNumber : firstNumber;
+          return UserSmsNumbersBuilder(
+            builder: (context, List<String> numbers, {required loading}) {
+              final firstNumber = state.creds.firstNumber;
+              final secondNumber = state.creds.secondNumber;
+              String? userNumber;
+              userNumber = numbers.firstWhereOrNull((e) => e == firstNumber || e == secondNumber);
+              String? recipientNumber;
+              if (userNumber != null) recipientNumber = firstNumber == userNumber ? secondNumber : firstNumber;
 
-            if (loading) return const SizedBox();
+              if (loading) return const SizedBox();
 
-            return Scaffold(
-              appBar: AppBar(
-                title: Builder(
+              return Scaffold(
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                  backgroundColor: theme.canvasColor.withAlpha(150),
+                  flexibleSpace: ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(color: theme.canvasColor.withAlpha(150)),
+                    ),
+                  ),
+                  title: Builder(
+                    builder: (context) {
+                      if (recipientNumber != null) {
+                        return FadeIn(
+                          child: Text(
+                            recipientNumber,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        );
+                      } else {
+                        return FadeIn(
+                          child: Column(
+                            children: [
+                              Text(
+                                firstNumber,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              Text(
+                                secondNumber,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  actions: [
+                    PopupMenuButton(
+                      itemBuilder: (context) {
+                        return [
+                          PopupMenuItem(
+                            onTap: onDeleteDialog,
+                            child: ListTile(
+                              title: Text(context.l10n.messaging_DialogInfo_deleteBtn),
+                              leading: const Icon(Icons.playlist_remove_rounded),
+                              dense: true,
+                            ),
+                          ),
+                        ];
+                      },
+                      icon: const Icon(Icons.menu),
+                    ),
+                  ],
+                ),
+                body: Builder(
                   builder: (context) {
-                    if (recipientNumber != null) {
-                      return FadeIn(
-                        child: Text(
-                          recipientNumber,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                      );
-                    } else {
-                      return FadeIn(
-                        child: Column(
-                          children: [
-                            Text(
-                              firstNumber,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              secondNumber,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ],
-                        ),
+                    if (state is SCSReady) {
+                      return SmsMessageListView(
+                        userId: userId,
+                        userNumber: userNumber,
+                        messages: state.messages,
+                        outboxMessages: state.outboxMessages,
+                        outboxMessageDeletes: state.outboxMessageDeletes,
+                        readCursors: state.readCursors,
+                        fetchingHistory: state.fetchingHistory,
+                        historyEndReached: state.historyEndReached,
+                        onSendMessage: (content) => conversationCubit.sendMessage(content),
+                        onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
+                        userReadedUntilUpdate: (date) => conversationCubit.userReadedUntilUpdate(date),
+                        onFetchHistory: conversationCubit.fetchHistory,
                       );
                     }
+
+                    if (state is SCSError) {
+                      return NoDataPlaceholder(
+                        content: Text(context.l10n.messaging_Conversation_failure),
+                        actions: [
+                          TextButton(
+                            onPressed: conversationCubit.restart,
+                            child: Text(context.l10n.messaging_ActionBtn_retry),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
-                actions: [
-                  PopupMenuButton(
-                    itemBuilder: (context) {
-                      return [
-                        PopupMenuItem(
-                          onTap: onDeleteDialog,
-                          child: ListTile(
-                            title: Text(context.l10n.messaging_DialogInfo_deleteBtn),
-                            leading: const Icon(Icons.playlist_remove_rounded),
-                            dense: true,
-                          ),
-                        )
-                      ];
-                    },
-                    icon: const Icon(Icons.menu),
-                  ),
-                ],
-              ),
-              body: Builder(
-                builder: (context) {
-                  if (state is SCSReady) {
-                    return SmsMessageListView(
-                      userId: userId,
-                      userNumber: userNumber,
-                      messages: state.messages,
-                      outboxMessages: state.outboxMessages,
-                      outboxMessageDeletes: state.outboxMessageDeletes,
-                      readCursors: state.readCursors,
-                      fetchingHistory: state.fetchingHistory,
-                      historyEndReached: state.historyEndReached,
-                      onSendMessage: (content) => conversationCubit.sendMessage(content),
-                      onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
-                      userReadedUntilUpdate: (date) => conversationCubit.userReadedUntilUpdate(date),
-                      onFetchHistory: conversationCubit.fetchHistory,
-                    );
-                  }
-
-                  if (state is SCSError) {
-                    return NoDataPlaceholder(
-                      content: Text(context.l10n.messaging_Conversation_failure),
-                      actions: [
-                        TextButton(
-                            onPressed: conversationCubit.restart, child: Text(context.l10n.messaging_ActionBtn_retry))
-                      ],
-                    );
-                  }
-
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            );
-          });
+              );
+            },
+          );
         },
       ),
     );

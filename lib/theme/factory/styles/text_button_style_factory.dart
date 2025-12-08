@@ -11,12 +11,8 @@ class TextButtonStyleFactory implements ThemeStyleFactory<TextButtonStyles> {
   @override
   TextButtonStyles create() {
     return TextButtonStyles(
-      neutral: TextButton.styleFrom(
-        foregroundColor: colors.secondary,
-      ),
-      dangerous: TextButton.styleFrom(
-        foregroundColor: colors.error,
-      ),
+      neutral: TextButton.styleFrom(foregroundColor: colors.secondary),
+      dangerous: TextButton.styleFrom(foregroundColor: colors.error),
       callStart: TextButton.styleFrom(
         foregroundColor: colors.onTertiary,
         backgroundColor: colors.tertiary,

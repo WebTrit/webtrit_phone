@@ -4,7 +4,8 @@ import 'package:webtrit_phone/features/features.dart';
 
 import '../data/data.dart';
 
-class MockUnreadCountCubit extends MockCubit<UnreadCountState> implements UnreadCountCubit {
+class MockUnreadCountCubit extends MockCubit<UnreadCountState>
+    implements UnreadCountCubit {
   MockUnreadCountCubit();
 
   factory MockUnreadCountCubit.initial() {
@@ -20,8 +21,9 @@ class MockUnreadCountCubit extends MockCubit<UnreadCountState> implements Unread
   factory MockUnreadCountCubit.withUnreadMessages() {
     final mock = MockUnreadCountCubit();
 
-    final unreadState =
-        UnreadCountState.fromCountPerChat(dChatUnreadCountsMockUnreadCountCubit, dSmsUnreadCountsMockUnreadCountCubit);
+    final unreadState = UnreadCountState.fromCountPerChat(
+        dChatUnreadCountsMockUnreadCountCubit,
+        dSmsUnreadCountsMockUnreadCountCubit);
 
     whenListen(
       mock,

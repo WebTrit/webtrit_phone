@@ -14,11 +14,7 @@ Future<void> main(List<String> args) async {
   final appDatabasePath = '${Directory.systemTemp.path}/$timestamp-db_stub_v$version.sqlite';
 
   await _executeStep(1, 3, 'Creating reference application database', () async {
-    final appDatabase = AppDatabase(DatabaseConnection(
-      NativeDatabase(
-        File(appDatabasePath),
-      ),
-    ));
+    final appDatabase = AppDatabase(DatabaseConnection(NativeDatabase(File(appDatabasePath))));
     await appDatabase.doWhenOpened((e) {});
     await appDatabase.close();
     return true;

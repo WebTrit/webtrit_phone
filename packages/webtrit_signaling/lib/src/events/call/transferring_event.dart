@@ -1,11 +1,7 @@
 import '../abstract_events.dart';
 
 class TransferringEvent extends CallEvent {
-  const TransferringEvent({
-    super.transaction,
-    required super.line,
-    required super.callId,
-  });
+  const TransferringEvent({super.transaction, required super.line, required super.callId});
 
   static const typeValue = 'transferring';
 
@@ -15,10 +11,6 @@ class TransferringEvent extends CallEvent {
       throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    return TransferringEvent(
-      transaction: json['transaction'],
-      line: json['line'],
-      callId: json['call_id'],
-    );
+    return TransferringEvent(transaction: json['transaction'], line: json['line'], callId: json['call_id']);
   }
 }

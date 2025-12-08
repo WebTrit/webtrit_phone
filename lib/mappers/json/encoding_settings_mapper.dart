@@ -25,6 +25,9 @@ mixin EncodingSettingsJsonMapper {
       opusDtx: map['opusDtx'] as bool?,
       audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
       videoProfiles: (map['videoProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
+      removeExtmaps: map['removeExtmaps'] as bool? ?? false,
+      removeStaticAudioRtpMaps: map['removeStaticAudioRtpMaps'] as bool? ?? false,
+      remapTE8payloadTo101: map['remapTE8payloadTo101'] as bool? ?? false,
     );
   }
 
@@ -40,6 +43,9 @@ mixin EncodingSettingsJsonMapper {
       'opusDtx': settings.opusDtx,
       'audioProfiles': settings.audioProfiles?.map((e) => profileToMap(e)).toList(),
       'videoProfiles': settings.videoProfiles?.map((e) => profileToMap(e)).toList(),
+      'removeExtmaps': settings.removeExtmaps,
+      'removeStaticAudioRtpMaps': settings.removeStaticAudioRtpMaps,
+      'remapTE8payloadTo101': settings.remapTE8payloadTo101,
     };
   }
 

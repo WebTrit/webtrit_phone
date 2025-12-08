@@ -1,10 +1,7 @@
 import '../abstract_events.dart';
 
 class IceWebrtcUpEvent extends LineEvent {
-  const IceWebrtcUpEvent({
-    super.transaction,
-    required super.line,
-  });
+  const IceWebrtcUpEvent({super.transaction, required super.line});
 
   static const typeValue = 'ice_webrtcup';
 
@@ -14,9 +11,6 @@ class IceWebrtcUpEvent extends LineEvent {
       throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    return IceWebrtcUpEvent(
-      transaction: json['transaction'],
-      line: json['line'],
-    );
+    return IceWebrtcUpEvent(transaction: json['transaction'], line: json['line']);
   }
 }

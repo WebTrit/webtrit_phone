@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -8,6 +10,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ChatConversationScreen extends StatefulWidget {
@@ -18,11 +21,11 @@ class ChatConversationScreen extends StatefulWidget {
 }
 
 class _ChatConversationScreenState extends State<ChatConversationScreen> {
-  late final userId = context.read<AppBloc>().state.userId!;
+  late final userId = context.read<AppBloc>().state.session.userId;
   late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<ConversationCubit>();
 
-  onMenuTap() {
+  void onMenuTap() {
     final state = conversationCubit.state;
     final isDialog = state.credentials.participantId != null;
     final isGroup = state is CVSReady && state.chat?.type == ChatType.group;
@@ -60,6 +63,8 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider(
       create: (context) => ChatTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<ConversationCubit, ConversationState>(
@@ -73,7 +78,15 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
         },
         builder: (context, state) {
           return Scaffold(
+            extendBodyBehindAppBar: true,
             appBar: AppBar(
+              backgroundColor: theme.canvasColor.withAlpha(150),
+              flexibleSpace: ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(color: theme.canvasColor.withAlpha(150)),
+                ),
+              ),
               title: FadeIn(
                 child: Builder(
                   builder: (context) {
@@ -91,9 +104,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                   },
                 ),
               ),
-              actions: [
-                IconButton(onPressed: onMenuTap, icon: const Icon(Icons.menu)),
-              ],
+              actions: [IconButton(onPressed: onMenuTap, icon: const Icon(Icons.menu))],
             ),
             body: Builder(
               builder: (context) {
@@ -124,7 +135,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                       TextButton(
                         onPressed: conversationCubit.restart,
                         child: Text(context.l10n.messaging_ActionBtn_retry),
-                      )
+                      ),
                     ],
                   );
                 }
@@ -140,51 +151,47 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
 
   Widget dialogTitle(String participant) {
     return ContactInfoBuilder(
-      sourceType: ContactSourceType.external,
-      sourceId: participant,
-      builder: (context, contact, {required bool loading}) {
-        if (loading) return const SizedBox();
-        if (contact != null) {
-          final online = contact.registered == true;
+      source: ContactSourceId(ContactSourceType.external, participant),
+      builder: (context, contact) {
+        final presenceSource = PresenceViewParams.of(context).viewSource;
+        const nameTextStyle = TextStyle(fontSize: 20);
 
-          return Column(
-            children: [
-              Text(
-                contact.displayTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 20),
-              ),
-              if (online) const Text('online', style: TextStyle(fontSize: 12)),
-            ],
-          );
-        } else {
-          return Text(
-            '${context.l10n.messaging_ConversationScreen_titlePrefix} $participant',
+        return switch ((presenceSource, contact)) {
+          (_, null) => Text(
+            context.l10n.messaging_ParticipantName_unknown,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 20),
-          );
-        }
+            style: nameTextStyle,
+          ),
+          (PresenceViewSource.contactInfo, Contact contact) => Column(
+            children: [
+              Text(contact.displayTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: nameTextStyle),
+              if (contact.registered == true)
+                Text(context.l10n.messaging_ConversationScreen_titleAvailable, style: const TextStyle(fontSize: 12)),
+            ],
+          ),
+          (PresenceViewSource.sipPresence, Contact contact) => Column(
+            children: [
+              Text(
+                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: nameTextStyle,
+              ),
+              if (contact.presenceInfo.anyAvailable == true)
+                Text(context.l10n.messaging_ConversationScreen_titleAvailable, style: const TextStyle(fontSize: 12)),
+            ],
+          ),
+        };
       },
     );
   }
 
   Widget nameTitle(String name) {
-    return Text(
-      name,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontSize: 20),
-    );
+    return Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 20));
   }
 
   Widget unknownTitle(String chatId) {
-    return Text(
-      chatId,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(fontSize: 20),
-    );
+    return Text(chatId, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 20));
   }
 }

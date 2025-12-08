@@ -9,10 +9,6 @@ class ElevatedButtonThemeDataFactory implements ThemeStyleFactory<ElevatedButton
 
   @override
   ElevatedButtonThemeData create() {
-    return ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-      ),
-    );
+    return ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: const StadiumBorder()));
   }
 }

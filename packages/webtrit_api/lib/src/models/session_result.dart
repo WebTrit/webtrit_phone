@@ -27,9 +27,7 @@ class SessionResult with _$SessionResult {
   }) = SessionToken;
 
   @JsonSerializable(fieldRename: FieldRename.snake)
-  const factory SessionResult.data({
-    required Map<String, dynamic> data,
-  }) = SessionData;
+  const factory SessionResult.data({required Map<String, dynamic> data}) = SessionData;
 
   factory SessionResult.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('otp_id')) {

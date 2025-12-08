@@ -194,15 +194,15 @@ class _ChatMessageViewState extends State<ChatMessageView> {
           children: [
             if (!isMine) ...[
               ContactInfoBuilder(
-                sourceType: ContactSourceType.external,
-                sourceId: senderId,
-                builder: (context, contact, {required bool loading}) {
+                source: ContactSourceId(ContactSourceType.external, senderId),
+                builder: (context, contact) {
                   return LeadingAvatar(
                     username: contact?.displayTitle,
                     thumbnail: contact?.thumbnail,
                     thumbnailUrl: contact?.thumbnailUrl,
-                    registered: contact?.registered,
                     radius: 20,
+                    registered: contact?.registered,
+                    presenceInfo: contact?.presenceInfo,
                   );
                 },
               ),
@@ -255,7 +255,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                             Icon(Icons.done, color: colorScheme.tertiary, size: 12),
                           if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
                           const SizedBox(width: 2),
-                          if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle)
+                          if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle),
                         ],
                       ),
                     ],
@@ -271,12 +271,7 @@ class _ChatMessageViewState extends State<ChatMessageView> {
 }
 
 class ReplyQuote extends StatefulWidget {
-  const ReplyQuote({
-    super.key,
-    required this.userId,
-    required this.message,
-    required this.isMine,
-  });
+  const ReplyQuote({super.key, required this.userId, required this.message, required this.isMine});
 
   final String userId;
   final ChatMessage message;
@@ -315,53 +310,44 @@ class _ReplyQuoteState extends State<ReplyQuote> {
     final theme = Theme.of(context);
 
     return FutureBuilder(
-        future: fetchMessage(widget.message.replyToId!, widget.message.chatId),
-        builder: (context, snapshot) {
-          final message = snapshot.data;
+      future: fetchMessage(widget.message.replyToId!, widget.message.chatId),
+      builder: (context, snapshot) {
+        final message = snapshot.data;
 
-          return Container(
-            padding: const EdgeInsets.all(8),
-            decoration: theme.quoteDecoration(widget.isMine),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (message != null)
-                      ParticipantName(
-                        senderId: message.senderId,
-                        userId: widget.userId,
-                        key: Key(message.senderId),
-                        style: theme.userNameStyle,
-                      )
-                    else
-                      Text('...', style: theme.userNameStyle),
-                    const SizedBox(width: 8),
-                    Icon(Icons.reply_outlined, color: theme.contentColor, size: 14),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                MessageBody(
-                  text: message?.content ?? '...',
-                  isMine: widget.isMine,
-                  style: theme.contentStyle,
-                ),
-              ],
-            ),
-          );
-        });
+        return Container(
+          padding: const EdgeInsets.all(8),
+          decoration: theme.quoteDecoration(widget.isMine),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (message != null)
+                    ParticipantName(
+                      senderId: message.senderId,
+                      userId: widget.userId,
+                      key: Key(message.senderId),
+                      style: theme.userNameStyle,
+                    )
+                  else
+                    Text('...', style: theme.userNameStyle),
+                  const SizedBox(width: 8),
+                  Icon(Icons.reply_outlined, color: theme.contentColor, size: 14),
+                ],
+              ),
+              const SizedBox(height: 4),
+              MessageBody(text: message?.content ?? '...', isMine: widget.isMine, style: theme.contentStyle),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
 class ForwartQuote extends StatelessWidget {
-  const ForwartQuote({
-    super.key,
-    required this.context,
-    required this.userId,
-    required this.msg,
-    required this.isMine,
-  });
+  const ForwartQuote({super.key, required this.context, required this.userId, required this.msg, required this.isMine});
 
   final BuildContext context;
   final String userId;
@@ -381,7 +367,9 @@ class ForwartQuote extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(child: ParticipantName(senderId: msg.authorId!, userId: userId, style: theme.userNameStyle)),
+              Flexible(
+                child: ParticipantName(senderId: msg.authorId!, userId: userId, style: theme.userNameStyle),
+              ),
               const SizedBox(width: 8),
               Icon(Icons.forward_outlined, color: theme.contentColor, size: 14),
             ],

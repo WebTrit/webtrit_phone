@@ -3,13 +3,8 @@
     "fontFamily": "Montserrat"
   },
   "imageAssets": {
-    "primaryOnboardingLogo": {
-      "uri": "asset://assets/primary_onboardin_logo.svg",
-      "widthFactor": 0.45
-    },
-    "secondaryOnboardingLogo": {
-      "uri": "asset://assets/secondary_onboardin_logo.svg",
-      "widthFactor": 0.25
+    "defaultPlaceholderImage": {
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg"
     },
     "leadingAvatarStyle": {
       "backgroundColor": "#EEF3F6",
@@ -50,6 +45,11 @@
         "registeredColor": null,
         "unregisteredColor": null,
         "sizeFactor": 0.2
+      },
+      "presenceBadge": {
+        "availableColor": null,
+        "unavailableColor": null,
+        "sizeFactor": 0.325 
       }
     }
   },

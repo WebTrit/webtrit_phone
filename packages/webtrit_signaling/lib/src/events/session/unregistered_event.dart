@@ -1,9 +1,7 @@
 import '../abstract_events.dart';
 
 class UnregisteredEvent extends SessionEvent {
-  UnregisteredEvent({
-    super.transaction,
-  });
+  UnregisteredEvent({super.transaction});
 
   static const typeValue = 'unregistered';
 
@@ -13,8 +11,6 @@ class UnregisteredEvent extends SessionEvent {
       throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    return UnregisteredEvent(
-      transaction: json['transaction'],
-    );
+    return UnregisteredEvent(transaction: json['transaction']);
   }
 }

@@ -1,5 +1,9 @@
 import 'package:drift/drift.dart';
 
+// needed for db generator
+// ignore: unused_import
+import 'contacts_table.dart';
+
 @DataClassName('ContactPhoneData')
 class ContactPhonesTable extends Table {
   @override
@@ -18,7 +22,5 @@ class ContactPhonesTable extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 
   @override
-  List<String> get customConstraints => [
-        'UNIQUE(number, contact_id)',
-      ];
+  List<String> get customConstraints => ['UNIQUE(number, contact_id)'];
 }

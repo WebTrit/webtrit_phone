@@ -14,8 +14,11 @@ abstract class SystemNotificationsLocalRepository {
   Stream<SystemNotificationEvent> get eventBus;
 
   Future<List<SystemNotification>> getNotifications({DateTime? from, DateTime? to, int limit = 50});
+
   Future<SystemNotification?> getNotificationById(int id);
+
   Future<DateTime?> getLastUpdate();
+
   Stream<int> unseenCount();
 
   Future<void> upsertNotifications(
@@ -23,13 +26,16 @@ abstract class SystemNotificationsLocalRepository {
     bool silent = false,
     bool initialData = false,
   });
+
   Future<void> deleteNotification(int id);
 
   Future<List<SystemNotificationOutboxEntry>> getOutboxNotifications({
     SnOutboxActionType? actionType,
     List<SnOutboxState> states = SnOutboxState.values,
   });
+
   Future<void> upsertOutboxNotification(SystemNotificationOutboxEntry entry);
+
   Future<void> deleteOutboxNotification(int notificationId, SnOutboxActionType actionType);
 
   Future<void> wipeData();
@@ -44,7 +50,8 @@ class SystemNotificationsLocalRepositoryDriftImpl
   late final _dao = _appDatabase.systemNotificationsDao;
 
   final StreamController<SystemNotificationEvent> _eventBus = StreamController.broadcast();
-  _addEvent(SystemNotificationEvent event) => _eventBus.add(event);
+
+  void _addEvent(SystemNotificationEvent event) => _eventBus.add(event);
 
   @override
   Stream<SystemNotificationEvent> get eventBus => _eventBus.stream;
@@ -80,9 +87,7 @@ class SystemNotificationsLocalRepositoryDriftImpl
     final data = notifications.map(systemNotificationToDrift).toList();
     await _dao.upsertNotifications(data);
     if (silent == false) {
-      notifications.forEach(
-        (n) => _addEvent(SystemNotificationUpdate(n, initialData: initialData)),
-      );
+      notifications.forEach((n) => _addEvent(SystemNotificationUpdate(n, initialData: initialData)));
     }
   }
 

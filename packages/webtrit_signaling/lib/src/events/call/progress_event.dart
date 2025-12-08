@@ -15,12 +15,7 @@ class ProgressEvent extends CallEvent {
   final Map<String, dynamic> jsep;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        callee,
-        isFocus,
-        jsep,
-      ];
+  List<Object?> get props => [...super.props, callee, isFocus, jsep];
 
   static const typeValue = 'progress';
 

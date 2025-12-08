@@ -2,11 +2,16 @@ part of 'call_log_bloc.dart';
 
 @freezed
 class CallLogState with _$CallLogState {
-  const factory CallLogState({
-    required String number,
-    Contact? contact,
-    List<CallLogEntry>? callLog,
-  }) = _CallLogState;
+  const CallLogState({required this.number, this.contact, this.callLog});
+
+  @override
+  final String number;
+
+  @override
+  final Contact? contact;
+
+  @override
+  final List<CallLogEntry>? callLog;
 
   @override
   toString() {

@@ -14,7 +14,7 @@ class SDPModBuilder {
   /// Sets the packetization-time for the audio codec.
   /// [ptime] is in milliseconds, range `10-120ms`
   /// Attects the packet size for transporting layer used to avoud MTU fitting issues.
-  setPtime(int? ptime, int? maxptime) {
+  void setPtime(int? ptime, int? maxptime) {
     final audioMedia = _getMedia(RTPCodecKind.audio);
 
     if (ptime != null) {
@@ -52,8 +52,8 @@ class SDPModBuilder {
   /// [bitrateLimit] limit maximum bitrate in kbps, range `6-500`.
   /// [stereo] stereo support on/off.
   /// [dtx] DTX support on/off.
-  setOpusParams(int? bandWidthLimit, int? bitrateLimit, bool? stereo, bool? dtx) {
-    final profileId = getProfileId(RTPCodecProfile.opus);
+  void setOpusParams(int? bandWidthLimit, int? bitrateLimit, bool? stereo, bool? dtx) {
+    final profileId = _getProfileId(RTPCodecProfile.opus);
     if (profileId == null) return;
 
     final media = _getMedia(RTPCodecKind.audio);
@@ -106,8 +106,8 @@ class SDPModBuilder {
   }
 
   /// Removes the codec profile and all associated records e.g. fmtp, rtcp-fb, rtx etc.
-  removeProfile(RTPCodecProfile profile) {
-    final profileId = getProfileId(profile);
+  Null removeProfile(RTPCodecProfile profile) {
+    final profileId = _getProfileId(profile);
 
     final media = _getMedia(profile.kind);
     if (media == null) return null;
@@ -139,7 +139,7 @@ class SDPModBuilder {
   /// [profiles] is a list of RTPCodecProfile.
   /// [kind] is the kind of media profiles to reorder.
   /// Used to prioritize the codecs in the SDP negotiation.
-  reorderProfiles(List<RTPCodecProfile> profiles, RTPCodecKind kind) {
+  void reorderProfiles(List<RTPCodecProfile> profiles, RTPCodecKind kind) {
     final media = _getMedia(kind);
 
     if (profiles.isNotEmpty && media != null) {
@@ -159,7 +159,7 @@ class SDPModBuilder {
       final reorderedRtcpFbs = [];
 
       for (var profile in profiles) {
-        final profileId = getProfileId(profile);
+        final profileId = _getProfileId(profile);
 
         final rtpMap = originalRtpMaps.firstWhereOrNull((r) => r['payload'] == profileId);
         final fmtp = originalFmtps.firstWhereOrNull((f) => f['payload'] == profileId);
@@ -211,11 +211,145 @@ class SDPModBuilder {
     }
   }
 
+  /// Removes all audio extmaps from the SDP.
+  /// Used to reduce the SDP size and avoid issues with some endpoints.
+  void removeAudioExtmaps() {
+    final media = _getMedia(RTPCodecKind.audio);
+    if (media == null) return;
+    media.remove('ext');
+  }
+
+  /// Removes static audio RTP maps from the SDP.
+  /// Used to reduce the SDP size and avoid issues with some endpoints.
+  void removeStaticAudioRtpMaps() {
+    final media = _getMedia(RTPCodecKind.audio);
+    if (media == null) return;
+
+    final originalPayloads = [];
+    final originalRtpMaps = [];
+    final originalFmtps = [];
+    final originalRtcpFbs = [];
+
+    if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
+    if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
+    if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
+    if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
+
+    // PCMU(0), PCMA(8), G722(9), CN(13) are static payload types that supports by our WebRTC stack.
+    final staticPayloads = ['0', '8', '9', '13'];
+
+    final modedRtpMaps = originalRtpMaps.where((r) => !staticPayloads.contains(r['payload'].toString()));
+    final modedFmtps = originalFmtps.where((f) => !staticPayloads.contains(f['payload'].toString()));
+    final modedRtcpFbs = originalRtcpFbs.where((f) => !staticPayloads.contains(f['payload'].toString()));
+
+    media['rtp'] = modedRtpMaps.toList();
+    media['fmtp'] = modedFmtps.toList();
+    media['rtcpFb'] = modedRtcpFbs.toList();
+  }
+
+  /// Remap the Telephone event 8k payload to 101 for compatibility with some endpoints.
+  void remapTE8payloadTo101() {
+    final media = _getMedia(RTPCodecKind.audio);
+    if (media == null) return;
+
+    final originalPayloads = [];
+    final originalRtpMaps = [];
+    final originalFmtps = [];
+    final originalRtcpFbs = [];
+
+    if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
+    if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
+    if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
+    if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
+
+    final te8Rtp = originalRtpMaps.firstWhereOrNull((r) => r['codec'] == 'telephone-event' && r['rate'] == 8000);
+    if (te8Rtp == null) return;
+
+    final te8Payload = te8Rtp['payload'];
+    if (te8Payload == 101) return; // already remapped
+
+    // Check if payload 101 is already used
+    final payload101Used = originalRtpMaps.any((r) => r['payload'] == 101);
+    if (payload101Used) return; // cannot remap
+
+    // Remap payload
+    te8Rtp['payload'] = 101;
+
+    for (var fmtp in originalFmtps) {
+      if (fmtp['payload'] == te8Payload) {
+        fmtp['payload'] = 101;
+      }
+    }
+
+    for (var rtcpFb in originalRtcpFbs) {
+      if (rtcpFb['payload'] == te8Payload) {
+        rtcpFb['payload'] = 101;
+      }
+    }
+
+    final modedPayloads = originalPayloads.map((p) {
+      if (p == te8Payload.toString()) return '101';
+      return p;
+    });
+
+    media['payloads'] = modedPayloads.join(' ');
+    media['rtp'] = originalRtpMaps;
+    media['fmtp'] = originalFmtps;
+    media['rtcpFb'] = originalRtcpFbs;
+  }
+
+  /// Removes incompatible declaration of G729a codec from the SDP.
+  /// that causes Webrtc crash when setting it as remote description.
+  ///
+  /// example sdp from Linksys942 that causes crash on Webrtc 0.12.11:
+  /// v=0
+  /// o=- 74097 74097 IN IP4 194.9.14.108
+  /// s=-
+  /// c=IN IP4 194.9.14.108
+  /// t=0 0
+  /// m=audio 16442 RTP/AVP 0 8 18 101
+  /// a=rtpmap:0 PCMU/8000
+  /// a=rtpmap:8 PCMA/8000
+  /// a=rtpmap:18 G729a/8000
+  /// a=rtpmap:101 telephone-event/8000
+  /// a=fmtp:101 0-15
+  /// a=ptime:20
+  /// a=sendrecv
+  void removeG729a() {
+    final media = _getMedia(RTPCodecKind.audio);
+    if (media == null) return;
+
+    final originalPayloads = [];
+    final originalRtpMaps = [];
+    final originalFmtps = [];
+    final originalRtcpFbs = [];
+
+    if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
+    if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
+    if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
+    if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
+
+    final g729aRtp = originalRtpMaps.firstWhereOrNull((r) => r['codec'].toString().toUpperCase() == 'G729A');
+    if (g729aRtp == null) return;
+
+    final g729aPayload = g729aRtp['payload'];
+
+    final modedPayloads = originalPayloads.where((p) => p != g729aPayload.toString());
+    final modedRtpMaps = originalRtpMaps.where((r) => r['payload'] != g729aPayload);
+    final modedFmtps = originalFmtps.where((f) => f['payload'] != g729aPayload);
+    final modedRtcpFbs = originalRtcpFbs.where((f) => f['payload'] != g729aPayload);
+
+    media['payloads'] = modedPayloads.join(' ');
+    media['rtp'] = modedRtpMaps.toList();
+    media['fmtp'] = modedFmtps.toList();
+    media['rtcpFb'] = modedRtcpFbs.toList();
+  }
+
   /// Get the codec profile payload id.
   /// Return codec by specific profile using fmtp records for multiprofile codecs
   /// e.g. H264 with profile 42e01f, 42e034, 640c34 etc.
   /// Elsewhere return codec finded by rtp records.
-  getProfileId(RTPCodecProfile profile) {
+  dynamic _getProfileId(RTPCodecProfile profile) {
     final media = _getMedia(profile.kind);
     if (media == null) return null;
 
@@ -268,7 +402,7 @@ class SDPModBuilder {
 
     media['bandwidth'] = [
       {'type': 'AS', 'limit': as},
-      {'type': 'TIAS', 'limit': tias}
+      {'type': 'TIAS', 'limit': tias},
     ];
   }
 

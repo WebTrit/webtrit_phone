@@ -6,8 +6,9 @@ class ChatMemberPhxMapper {
       id: map['id'] as int,
       chatId: map['chat_id'] as int,
       userId: map['user_id'] as String,
-      groupAuthorities:
-          map['group_authorities'] == null ? null : GroupAuthorities.values.byName(map['group_authorities'] as String),
+      groupAuthorities: map['group_authorities'] == null
+          ? null
+          : GroupAuthorities.values.byName(map['group_authorities'] as String),
     );
   }
 }

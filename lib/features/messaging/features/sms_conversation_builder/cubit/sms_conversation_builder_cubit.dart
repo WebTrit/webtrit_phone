@@ -12,6 +12,7 @@ import 'package:webtrit_phone/models/contact.dart';
 import 'package:webtrit_phone/models/contact_source_type.dart';
 import 'package:webtrit_phone/repositories/contacts/contacts_repository.dart';
 import 'package:webtrit_phone/repositories/messaging/messaging.dart';
+import 'package:webtrit_phone/utils/string_phone_utils.dart';
 
 part 'sms_conversation_builder_state.dart';
 
@@ -49,7 +50,10 @@ class SmsConversationBuilderCubit extends Cubit<SmsCBState> {
   late final StreamSubscription _contactsSub;
 
   StreamSubscription get _contactsSubFactory {
-    return contactsRepository.watchContacts('').debounce(const Duration(milliseconds: 250)).listen(
+    return contactsRepository
+        .watchContacts('')
+        .debounce(const Duration(milliseconds: 250))
+        .listen(
           (contacts) => _contactsUpdateHandler(contacts),
           onError: (error) => emit(SmsCBState.initializingError(error)),
         );

@@ -3,9 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class AboutScreenStyle with Diagnosticable {
-  AboutScreenStyle({
-    this.picture,
-  });
+  AboutScreenStyle({this.picture});
 
   final ThemeSvgAsset? picture;
 
@@ -13,9 +11,7 @@ class AboutScreenStyle with Diagnosticable {
     if (identical(a, b)) {
       return a;
     }
-    return AboutScreenStyle(
-      picture: t < 0.5 ? a?.picture : b?.picture,
-    );
+    return AboutScreenStyle(picture: t < 0.5 ? a?.picture : b?.picture);
   }
 
   @override

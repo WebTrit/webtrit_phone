@@ -69,14 +69,14 @@ class SystemNotificationBackgroundWorker {
   ///
   /// Typically used to ensure notifications are processed even when
   /// the app is not in the foreground.
-  static dispatchTask() {
+  static void dispatchTask() {
     if (_taskRegistered) return;
     Workmanager().registerPeriodicTask(
       kSystemNotificationsTaskId,
       kSystemNotificationsTask,
       constraints: Constraints(networkType: NetworkType.connected),
       backoffPolicy: BackoffPolicy.linear,
-      existingWorkPolicy: ExistingWorkPolicy.replace,
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
       initialDelay: const Duration(minutes: 1),
     );
     _taskRegistered = true;

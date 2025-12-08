@@ -13,10 +13,6 @@ class ProgressOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AbsorbPointer(
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const AbsorbPointer(child: Center(child: CircularProgressIndicator()));
   }
 }

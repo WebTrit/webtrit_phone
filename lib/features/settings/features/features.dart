@@ -1,10 +1,11 @@
 export 'about/about.dart';
+export 'caller_id/caller_id.dart';
 export 'diagnostic/diagnostic.dart';
 export 'help/help.dart';
 export 'language/language.dart';
 export 'media_settings/media_settings.dart';
 export 'network/network.dart';
+export 'presence/presence.dart';
 export 'self_config/self_config.dart';
 export 'theme_mode/theme_mode.dart';
 export 'voicemail/voicemail.dart';
-export 'caller_id/caller_id.dart';

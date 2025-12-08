@@ -10,10 +10,7 @@ import '../models/models.dart';
 import '../extensions/extensions.dart';
 
 class UndefinedScreen extends StatelessWidget {
-  const UndefinedScreen({
-    super.key,
-    required this.undefinedType,
-  });
+  const UndefinedScreen({super.key, required this.undefinedType});
 
   final UndefinedType undefinedType;
 
@@ -22,13 +19,18 @@ class UndefinedScreen extends StatelessWidget {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     return Scaffold(
+      appBar: undefinedType == UndefinedType.stackScreenNotSupported
+          ? AppBar(
+              title: Text(undefinedType.titleL10n(context)),
+              centerTitle: true,
+              leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => context.router.maybePop()),
+            )
+          : null,
       body: LayoutBuilder(
         builder: (context, viewportConstraints) {
           return SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-              ),
+              constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
               child: IntrinsicHeight(
                 child: Padding(
                   padding: const EdgeInsets.all(kInset),
@@ -36,14 +38,10 @@ class UndefinedScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: kInset * 2),
-                      Icon(
-                        Icons.info_outline,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: kInset * 6,
-                      ),
+                      Icon(Icons.info_outline, color: Theme.of(context).colorScheme.primary, size: kInset * 6),
                       const SizedBox(height: kInset * 2),
                       Text(
-                        undefinedType.l10n(context),
+                        undefinedType.descriptionL10n(context),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),

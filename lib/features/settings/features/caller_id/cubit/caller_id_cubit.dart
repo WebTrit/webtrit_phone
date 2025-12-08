@@ -7,29 +7,21 @@ import 'package:webtrit_phone/models/caller_id_settings.dart';
 import 'package:webtrit_phone/repositories/account/user_repository.dart';
 
 class CallerIdSettingsState extends Equatable {
-  const CallerIdSettingsState({
-    required this.settings,
-    required this.mainNumber,
-    required this.additionalNumbers,
-  });
+  const CallerIdSettingsState({required this.settings, required this.mainNumber, required this.additionalNumbers});
 
   final CallerIdSettings settings;
   final String mainNumber;
   final List<String> additionalNumbers;
 
   @override
-  List<Object> get props => [settings, mainNumber, additionalNumbers];
+  List<Object?> get props => [settings, mainNumber, additionalNumbers];
 
   @override
   String toString() {
     return 'CallerIdSettingsState(settings: $settings, mainNumber: $mainNumber, additionalNumbers: $additionalNumbers)';
   }
 
-  CallerIdSettingsState copyWith({
-    CallerIdSettings? settings,
-    String? mainNumber,
-    List<String>? additionalNumbers,
-  }) {
+  CallerIdSettingsState copyWith({CallerIdSettings? settings, String? mainNumber, List<String>? additionalNumbers}) {
     return CallerIdSettingsState(
       settings: settings ?? this.settings,
       mainNumber: mainNumber ?? this.mainNumber,
@@ -39,10 +31,7 @@ class CallerIdSettingsState extends Equatable {
 }
 
 class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
-  CallerIdSettingsCubit(
-    this._appPreferences,
-    this._userRepository,
-  ) : super(null);
+  CallerIdSettingsCubit(this._appPreferences, this._userRepository) : super(null);
 
   final UserRepository _userRepository;
   final AppPreferences _appPreferences;
@@ -53,11 +42,7 @@ class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
     final mainNumber = userInfo.numbers.main;
     final additionalNumbers = userInfo.numbers.additional?.nonNulls.toList() ?? <String>[];
 
-    emit(CallerIdSettingsState(
-      settings: settings,
-      mainNumber: mainNumber,
-      additionalNumbers: additionalNumbers,
-    ));
+    emit(CallerIdSettingsState(settings: settings, mainNumber: mainNumber, additionalNumbers: additionalNumbers));
   }
 
   void setDefaultNumber(String? number) {

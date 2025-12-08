@@ -2,18 +2,12 @@ import 'abstract_events.dart';
 import 'line/line_events.dart';
 
 abstract class LineEvent extends SessionEvent {
-  const LineEvent({
-    super.transaction,
-    required this.line,
-  });
+  const LineEvent({super.transaction, required this.line});
 
   final int? line;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        line,
-      ];
+  List<Object?> get props => [...super.props, line];
 
   factory LineEvent.fromJson(Map<String, dynamic> json) {
     final lineRequest = tryFromJson(json);

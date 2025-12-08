@@ -1,50 +1,77 @@
 part of 'call_bloc.dart';
 
-abstract class CallEvent {
+sealed class CallEvent extends Equatable {
   const CallEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-@Freezed(copyWith: false)
-class _AppLifecycleStateChanged with _$AppLifecycleStateChanged implements CallEvent {
-  const factory _AppLifecycleStateChanged(AppLifecycleState state) = __AppLifecycleStateChanged;
+class _AppLifecycleStateChanged extends CallEvent {
+  const _AppLifecycleStateChanged(this.state);
+
+  final AppLifecycleState state;
+
+  @override
+  List<Object?> get props => [state];
 }
 
-@Freezed(copyWith: false)
-class _ConnectivityResultChanged with _$ConnectivityResultChanged implements CallEvent {
-  const factory _ConnectivityResultChanged(ConnectivityResult result) = __ConnectivityResultChanged;
+class _ConnectivityResultChanged extends CallEvent {
+  const _ConnectivityResultChanged(this.result);
+
+  final ConnectivityResult result;
+
+  @override
+  List<Object?> get props => [result];
 }
 
-@Freezed(copyWith: false)
-class _NavigatorMediaDevicesChange with _$NavigatorMediaDevicesChange implements CallEvent {
-  const factory _NavigatorMediaDevicesChange() = __NavigatorMediaDevicesChange;
+class _NavigatorMediaDevicesChange extends CallEvent {
+  const _NavigatorMediaDevicesChange();
 }
 
 // registration event change
 
-@Freezed(copyWith: false)
-class _RegistrationChange with _$RegistrationChange implements CallEvent {
-  const factory _RegistrationChange({
-    required Registration registration,
-  }) = __RegistrationChange;
+class _RegistrationChange extends CallEvent {
+  const _RegistrationChange({required this.registration});
+
+  final Registration registration;
+
+  @override
+  List<Object?> get props => [registration];
 }
 
 // handle app state
 
-@Freezed(copyWith: false)
-class _ResetStateEvent with _$ResetStateEvent implements CallEvent {
+sealed class _ResetStateEvent extends CallEvent {
+  const _ResetStateEvent();
+
   const factory _ResetStateEvent.completeCalls() = _ResetStateEventCompleteCalls;
 
   const factory _ResetStateEvent.completeCall(String callId) = _ResetStateEventCompleteCall;
 }
 
+class _ResetStateEventCompleteCalls extends _ResetStateEvent {
+  const _ResetStateEventCompleteCalls();
+}
+
+class _ResetStateEventCompleteCall extends _ResetStateEvent {
+  const _ResetStateEventCompleteCall(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
 // signaling client events
 
-@Freezed(copyWith: false)
-class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
+sealed class _SignalingClientEvent extends CallEvent {
+  const _SignalingClientEvent();
+
   const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
 
   const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
@@ -52,20 +79,43 @@ class _SignalingClientEvent with _$SignalingClientEvent implements CallEvent {
   const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
 }
 
+class _SignalingClientEventConnectInitiated extends _SignalingClientEvent {
+  const _SignalingClientEventConnectInitiated();
+}
+
+class _SignalingClientEventDisconnectInitiated extends _SignalingClientEvent {
+  const _SignalingClientEventDisconnectInitiated();
+}
+
+class _SignalingClientEventDisconnected extends _SignalingClientEvent {
+  const _SignalingClientEventDisconnected(this.code, this.reason);
+
+  final int? code;
+
+  final String? reason;
+
+  @override
+  List<Object?> get props => [code, reason];
+}
+
 // handshake signaling events
 
-@Freezed(copyWith: false)
-class _HandshakeSignalingEvent with _$HandshakeSignalingEvent implements CallEvent {
-  const factory _HandshakeSignalingEvent.state({
-    required Registration registration,
-    required int linesCount,
-  }) = _HandshakeSignalingEventState;
+class _HandshakeSignalingEventState extends CallEvent {
+  const _HandshakeSignalingEventState({required this.registration, required this.linesCount});
+
+  final Registration registration;
+
+  final int linesCount;
+
+  @override
+  List<Object?> get props => [registration, linesCount];
 }
 
 // call signaling events
 
-@Freezed(copyWith: false)
-class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
+sealed class _CallSignalingEvent extends CallEvent {
+  const _CallSignalingEvent();
+
   const factory _CallSignalingEvent.incoming({
     required int? line,
     required String callId,
@@ -78,10 +128,7 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     JsepValue? jsep,
   }) = _CallSignalingEventIncoming;
 
-  const factory _CallSignalingEvent.ringing({
-    required int? line,
-    required String callId,
-  }) = _CallSignalingEventRinging;
+  const factory _CallSignalingEvent.ringing({required int? line, required String callId}) = _CallSignalingEventRinging;
 
   const factory _CallSignalingEvent.progress({
     required int? line,
@@ -116,10 +163,7 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     JsepValue? jsep,
   }) = _CallSignalingEventUpdating;
 
-  const factory _CallSignalingEvent.updated({
-    required int? line,
-    required String callId,
-  }) = _CallSignalingEventUpdated;
+  const factory _CallSignalingEvent.updated({required int? line, required String callId}) = _CallSignalingEventUpdated;
 
   const factory _CallSignalingEvent.transfer({
     required int? line,
@@ -129,10 +173,8 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required String? replaceCallId,
   }) = _CallSignalingEventTransfer;
 
-  const factory _CallSignalingEvent.transferring({
-    required int? line,
-    required String callId,
-  }) = _CallSignalingEventTransferring;
+  const factory _CallSignalingEvent.transferring({required int? line, required String callId}) =
+      _CallSignalingEventTransferring;
 
   const factory _CallSignalingEvent.notifyDialog({
     required int? line,
@@ -150,54 +192,354 @@ class _CallSignalingEvent with _$CallSignalingEvent implements CallEvent {
     required ReferNotifyState state,
   }) = _CallSignalingEventNotifyRefer;
 
+  const factory _CallSignalingEvent.notifyPresence({
+    required int? line,
+    required String callId,
+    required String? notify,
+    required SubscriptionState? subscriptionState,
+    required String number,
+    required List<SignalingPresenceInfo> presenceInfo,
+  }) = _CallSignalingEventNotifyPresence;
+
   const factory _CallSignalingEvent.notifyUnknown({
     required int? line,
     required String callId,
     required String? notify,
     required SubscriptionState? subscriptionState,
     required String? contentType,
-    required String content,
+    required String? content,
   }) = _CallSignalingEventNotifyUnknown;
 
-  const factory _CallSignalingEvent.registering() = _CallSignalingEventRegistering;
+  const factory _CallSignalingEvent.registration(RegistrationStatus status, {int? code, String? reason}) =
+      _CallSignalingEventRegistration;
+}
 
-  const factory _CallSignalingEvent.registered() = _CallSignalingEventRegistered;
+class _CallSignalingEventIncoming extends _CallSignalingEvent {
+  const _CallSignalingEventIncoming({
+    required this.line,
+    required this.callId,
+    required this.callee,
+    required this.caller,
+    this.callerDisplayName,
+    this.referredBy,
+    this.replaceCallId,
+    this.isFocus,
+    this.jsep,
+  });
 
-  const factory _CallSignalingEvent.registrationFailed(
-    int code,
-    String reason,
-  ) = _CallSignalingEventRegisterationFailed;
+  final int? line;
 
-  const factory _CallSignalingEvent.unregistering() = _CallSignalingEventUnregistering;
+  final String callId;
 
-  const factory _CallSignalingEvent.unregistered() = _CallSignalingEventUnregistered;
+  final String callee;
+
+  final String caller;
+
+  final String? callerDisplayName;
+
+  final String? referredBy;
+
+  final String? replaceCallId;
+
+  final bool? isFocus;
+
+  final JsepValue? jsep;
+
+  @override
+  List<Object?> get props => [
+    line,
+    callId,
+    callee,
+    caller,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
+  ];
+}
+
+class _CallSignalingEventRinging extends _CallSignalingEvent {
+  const _CallSignalingEventRinging({required this.line, required this.callId});
+
+  final int? line;
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [line, callId];
+}
+
+class _CallSignalingEventProgress extends _CallSignalingEvent {
+  const _CallSignalingEventProgress({required this.line, required this.callId, required this.callee, this.jsep});
+
+  final int? line;
+
+  final String callId;
+
+  final String callee;
+
+  final JsepValue? jsep;
+
+  @override
+  List<Object?> get props => [line, callId, callee, jsep];
+}
+
+class _CallSignalingEventAccepted extends _CallSignalingEvent {
+  const _CallSignalingEventAccepted({required this.line, required this.callId, this.callee, this.jsep});
+
+  final int? line;
+
+  final String callId;
+
+  final String? callee;
+
+  final JsepValue? jsep;
+
+  @override
+  List<Object?> get props => [line, callId, callee, jsep];
+}
+
+class _CallSignalingEventHangup extends _CallSignalingEvent {
+  const _CallSignalingEventHangup({required this.line, required this.callId, required this.code, required this.reason});
+
+  final int? line;
+  final String callId;
+  final int code;
+  final String reason;
+
+  @override
+  List<Object?> get props => [line, callId, code, reason];
+}
+
+class _CallSignalingEventUpdating extends _CallSignalingEvent {
+  const _CallSignalingEventUpdating({
+    required this.line,
+    required this.callId,
+    required this.callee,
+    required this.caller,
+    this.callerDisplayName,
+    this.referredBy,
+    this.replaceCallId,
+    this.isFocus,
+    this.jsep,
+  });
+
+  final int? line;
+
+  final String callId;
+
+  final String callee;
+
+  final String caller;
+
+  final String? callerDisplayName;
+
+  final String? referredBy;
+
+  final String? replaceCallId;
+
+  final bool? isFocus;
+
+  final JsepValue? jsep;
+
+  @override
+  List<Object?> get props => [
+    line,
+    callId,
+    callee,
+    caller,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
+  ];
+}
+
+class _CallSignalingEventUpdated extends _CallSignalingEvent {
+  const _CallSignalingEventUpdated({required this.line, required this.callId});
+
+  final int? line;
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [line, callId];
+}
+
+class _CallSignalingEventTransfer extends _CallSignalingEvent {
+  const _CallSignalingEventTransfer({
+    required this.line,
+    required this.referId,
+    required this.referTo,
+    required this.referredBy,
+    required this.replaceCallId,
+  });
+
+  final int? line;
+
+  final String referId;
+
+  final String referTo;
+
+  final String? referredBy;
+
+  final String? replaceCallId;
+
+  @override
+  List<Object?> get props => [line, referId, referTo, referredBy, replaceCallId];
+}
+
+class _CallSignalingEventTransferring extends _CallSignalingEvent {
+  const _CallSignalingEventTransferring({required this.line, required this.callId});
+
+  final int? line;
+  final String callId;
+
+  @override
+  List<Object?> get props => [line, callId];
+}
+
+class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyDialog({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.userActiveCalls,
+  });
+
+  final int? line;
+
+  final String callId;
+
+  final String? notify;
+
+  final SubscriptionState? subscriptionState;
+
+  final List<UserActiveCall> userActiveCalls;
+
+  @override
+  List<Object?> get props => [line, callId, notify, subscriptionState, userActiveCalls];
+}
+
+class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyRefer({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.state,
+  });
+
+  final int? line;
+
+  final String callId;
+
+  final String? notify;
+
+  final SubscriptionState? subscriptionState;
+
+  final ReferNotifyState state;
+
+  @override
+  List<Object?> get props => [line, callId, notify, subscriptionState, state];
+}
+
+class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyPresence({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.number,
+    required this.presenceInfo,
+  });
+
+  final int? line;
+
+  final String callId;
+
+  final String? notify;
+
+  final SubscriptionState? subscriptionState;
+
+  final String number;
+
+  final List<SignalingPresenceInfo> presenceInfo;
+
+  @override
+  List<Object?> get props => [line, callId, notify, subscriptionState, number, presenceInfo];
+}
+
+class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
+  const _CallSignalingEventNotifyUnknown({
+    required this.line,
+    required this.callId,
+    required this.notify,
+    required this.subscriptionState,
+    required this.contentType,
+    required this.content,
+  });
+
+  final int? line;
+
+  final String callId;
+
+  final String? notify;
+
+  final SubscriptionState? subscriptionState;
+
+  final String? contentType;
+
+  final String? content;
+
+  @override
+  List<Object?> get props => [line, callId, notify, subscriptionState, contentType, content];
+}
+
+class _CallSignalingEventRegistration extends _CallSignalingEvent {
+  const _CallSignalingEventRegistration(this.status, {this.code, this.reason});
+
+  final RegistrationStatus status;
+  final int? code;
+  final String? reason;
+
+  @override
+  List<Object?> get props => [status, code, reason];
 }
 
 // call push events
 
-@Freezed(copyWith: false)
-class _CallPushEvent with _$CallPushEvent implements CallEvent {
-  const factory _CallPushEvent.incoming({
-    required String callId,
-    required CallkeepHandle handle,
-    String? displayName,
-    required bool video,
-    CallkeepIncomingCallError? error,
-  }) = _CallPushEventIncoming;
+class _CallPushEventIncoming extends CallEvent {
+  const _CallPushEventIncoming({
+    required this.callId,
+    required this.handle,
+    this.displayName,
+    required this.video,
+    this.error,
+  });
+
+  final String callId;
+
+  final CallkeepHandle handle;
+
+  final String? displayName;
+
+  final bool video;
+
+  final CallkeepIncomingCallError? error;
+
+  @override
+  List<Object?> get props => [callId, handle, displayName, video, error];
 }
 
 // call control events
 
-@Freezed(copyWith: false)
-class CallControlEvent with _$CallControlEvent implements CallEvent {
-  @Assert('!(generic == null && number == null && email == null)',
-      'one of generic, number or email parameters must be assign')
-  @Assert(
-      '(generic != null && number == null && email == null) ||'
-          '(generic == null && number != null && email == null) ||'
-          '(generic == null && number == null && email != null)',
-      'only one of generic, number or email parameters must be assign')
-  @With<CallControlEventStartedMixin>()
+sealed class CallControlEvent extends CallEvent {
+  const CallControlEvent();
+
   const factory CallControlEvent.started({
     int? line,
     String? generic,
@@ -223,7 +565,8 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.cameraEnabled(String callId, bool enabled) = _CallControlEventCameraEnabled;
 
-  const factory CallControlEvent.speakerEnabled(String callId, bool enabled) = _CallControlEventSpeakerEnabled;
+  const factory CallControlEvent.audioDeviceSet(String callId, CallAudioDevice device) =
+      _CallControlEventAudioDeviceSet;
 
   const factory CallControlEvent.failureApproved(String callId) = _CallControlEventFailureApproved;
 
@@ -231,24 +574,205 @@ class CallControlEvent with _$CallControlEvent implements CallEvent {
 
   const factory CallControlEvent.attendedTransferInitiated(String callId) = _CallControlEventAttendedTransferInitiated;
 
-  const factory CallControlEvent.blindTransferSubmitted({
-    required String number,
-  }) = _CallControlEventBlindTransferSubmitted;
+  const factory CallControlEvent.blindTransferSubmitted({required String number}) =
+      _CallControlEventBlindTransferSubmitted;
 
   const factory CallControlEvent.attendedTransferSubmitted({
     required ActiveCall referorCall,
     required ActiveCall replaceCall,
   }) = _CallControlEventAttendedTransferSubmitted;
 
-  const factory CallControlEvent.attendedRequestDeclined({
-    required String callId,
-    required String referId,
-  }) = _CallControlEventAttendedRequestDeclined;
+  const factory CallControlEvent.attendedRequestDeclined({required String callId, required String referId}) =
+      _CallControlEventAttendedRequestDeclined;
 
-  const factory CallControlEvent.attendedRequestApproved({
-    required String referId,
-    required String referTo,
-  }) = _CallControlEventAttendedRequestApproved;
+  const factory CallControlEvent.attendedRequestApproved({required String referId, required String referTo}) =
+      _CallControlEventAttendedRequestApproved;
+}
+
+class _CallControlEventStarted extends CallControlEvent with CallControlEventStartedMixin {
+  const _CallControlEventStarted({
+    this.line,
+    this.generic,
+    this.number,
+    this.email,
+    this.displayName,
+    this.replaces,
+    this.fromNumber,
+    required this.video,
+  });
+
+  final int? line;
+
+  @override
+  final String? generic;
+
+  @override
+  final String? number;
+
+  @override
+  final String? email;
+
+  final String? displayName;
+
+  final String? replaces;
+
+  final String? fromNumber;
+
+  final bool video;
+
+  @override
+  List<Object?> get props => [line, generic, number, email, displayName, replaces, fromNumber, video];
+}
+
+class _CallControlEventAnswered extends CallControlEvent {
+  const _CallControlEventAnswered(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventEnded extends CallControlEvent {
+  const _CallControlEventEnded(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventSetHeld extends CallControlEvent {
+  const _CallControlEventSetHeld(this.callId, this.onHold);
+
+  final String callId;
+
+  final bool onHold;
+
+  @override
+  List<Object?> get props => [callId, onHold];
+}
+
+class _CallControlEventSetMuted extends CallControlEvent {
+  const _CallControlEventSetMuted(this.callId, this.muted);
+
+  final String callId;
+
+  final bool muted;
+
+  @override
+  List<Object?> get props => [callId, muted];
+}
+
+class _CallControlEventSentDTMF extends CallControlEvent {
+  const _CallControlEventSentDTMF(this.callId, this.key);
+
+  final String callId;
+
+  final String key;
+
+  @override
+  List<Object?> get props => [callId, key];
+}
+
+class _CallControlEventCameraSwitched extends CallControlEvent {
+  const _CallControlEventCameraSwitched(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventCameraEnabled extends CallControlEvent {
+  const _CallControlEventCameraEnabled(this.callId, this.enabled);
+
+  final String callId;
+
+  final bool enabled;
+
+  @override
+  List<Object?> get props => [callId, enabled];
+}
+
+class _CallControlEventAudioDeviceSet extends CallControlEvent {
+  const _CallControlEventAudioDeviceSet(this.callId, this.device);
+
+  final String callId;
+
+  final CallAudioDevice device;
+
+  @override
+  List<Object?> get props => [callId, device];
+}
+
+class _CallControlEventFailureApproved extends CallControlEvent {
+  const _CallControlEventFailureApproved(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventBlindTransferInitiated extends CallControlEvent {
+  const _CallControlEventBlindTransferInitiated(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventAttendedTransferInitiated extends CallControlEvent {
+  const _CallControlEventAttendedTransferInitiated(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventBlindTransferSubmitted extends CallControlEvent {
+  const _CallControlEventBlindTransferSubmitted({required this.number});
+
+  final String number;
+
+  @override
+  List<Object?> get props => [number];
+}
+
+class _CallControlEventAttendedTransferSubmitted extends CallControlEvent {
+  const _CallControlEventAttendedTransferSubmitted({required this.referorCall, required this.replaceCall});
+
+  final ActiveCall referorCall;
+
+  final ActiveCall replaceCall;
+
+  @override
+  List<Object?> get props => [referorCall, replaceCall];
+}
+
+class _CallControlEventAttendedRequestDeclined extends CallControlEvent {
+  const _CallControlEventAttendedRequestDeclined({required this.callId, required this.referId});
+
+  final String callId;
+
+  final String referId;
+
+  @override
+  List<Object?> get props => [callId, referId];
+}
+
+class _CallControlEventAttendedRequestApproved extends CallControlEvent {
+  const _CallControlEventAttendedRequestApproved({required this.referId, required this.referTo});
+
+  final String referId;
+
+  final String referTo;
+
+  @override
+  List<Object?> get props => [referId, referTo];
 }
 
 mixin CallControlEventStartedMixin {
@@ -273,9 +797,8 @@ mixin CallControlEventStartedMixin {
 
 // call perform events
 
-@Freezed(copyWith: false)
-class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
-  _CallPerformEvent._();
+sealed class _CallPerformEvent extends CallEvent {
+  _CallPerformEvent();
 
   factory _CallPerformEvent.started(
     String callId, {
@@ -294,7 +817,10 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
 
   factory _CallPerformEvent.sentDTMF(String callId, String key) = _CallPerformEventSentDTMF;
 
-  factory _CallPerformEvent.setSpeaker(String callId, bool enabled) = _CallPerformEventSetSpeaker;
+  factory _CallPerformEvent.audioDeviceSet(String callId, CallAudioDevice device) = _CallPerformEventAudioDeviceSet;
+
+  factory _CallPerformEvent.audioDevicesUpdate(String callId, List<CallAudioDevice> devices) =
+      _CallPerformEventAudioDevicesUpdate;
 
   final _performCompleter = Completer<bool>();
 
@@ -305,10 +831,99 @@ class _CallPerformEvent with _$CallPerformEvent implements CallEvent {
   void fail() => _performCompleter.isCompleted ? null : _performCompleter.complete(false);
 }
 
+class _CallPerformEventStarted extends _CallPerformEvent {
+  _CallPerformEventStarted(this.callId, {required this.handle, this.displayName, required this.video});
+
+  final String callId;
+
+  final CallkeepHandle handle;
+
+  final String? displayName;
+
+  final bool video;
+
+  @override
+  List<Object?> get props => [callId, handle, displayName, video];
+}
+
+class _CallPerformEventAnswered extends _CallPerformEvent {
+  _CallPerformEventAnswered(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallPerformEventEnded extends _CallPerformEvent {
+  _CallPerformEventEnded(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallPerformEventSetHeld extends _CallPerformEvent {
+  _CallPerformEventSetHeld(this.callId, this.onHold);
+
+  final String callId;
+
+  final bool onHold;
+
+  @override
+  List<Object?> get props => [callId, onHold];
+}
+
+class _CallPerformEventSetMuted extends _CallPerformEvent {
+  _CallPerformEventSetMuted(this.callId, this.muted);
+
+  final String callId;
+
+  final bool muted;
+
+  @override
+  List<Object?> get props => [callId, muted];
+}
+
+class _CallPerformEventSentDTMF extends _CallPerformEvent {
+  _CallPerformEventSentDTMF(this.callId, this.key);
+
+  final String callId;
+
+  final String key;
+
+  @override
+  List<Object?> get props => [callId, key];
+}
+
+class _CallPerformEventAudioDeviceSet extends _CallPerformEvent {
+  _CallPerformEventAudioDeviceSet(this.callId, this.device);
+
+  final String callId;
+
+  final CallAudioDevice device;
+
+  @override
+  List<Object?> get props => [callId, device];
+}
+
+class _CallPerformEventAudioDevicesUpdate extends _CallPerformEvent {
+  _CallPerformEventAudioDevicesUpdate(this.callId, this.devices);
+
+  final String callId;
+
+  final List<CallAudioDevice> devices;
+
+  @override
+  List<Object?> get props => [callId, devices];
+}
+
 // peer connection events
 
-@Freezed(copyWith: false)
-class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
+sealed class _PeerConnectionEvent extends CallEvent {
+  const _PeerConnectionEvent();
+
   const factory _PeerConnectionEvent.signalingStateChanged(String callId, RTCSignalingState state) =
       _PeerConnectionEventSignalingStateChanged;
 
@@ -330,11 +945,97 @@ class _PeerConnectionEvent with _$PeerConnectionEvent implements CallEvent {
       _PeerConnectionEventStreamRemoved;
 }
 
+class _PeerConnectionEventSignalingStateChanged extends _PeerConnectionEvent {
+  const _PeerConnectionEventSignalingStateChanged(this.callId, this.state);
+
+  final String callId;
+
+  final RTCSignalingState state;
+
+  @override
+  List<Object?> get props => [callId, state];
+}
+
+class _PeerConnectionEventConnectionStateChanged extends _PeerConnectionEvent {
+  const _PeerConnectionEventConnectionStateChanged(this.callId, this.state);
+
+  final String callId;
+
+  final RTCPeerConnectionState state;
+
+  @override
+  List<Object?> get props => [callId, state];
+}
+
+class _PeerConnectionEventIceGatheringStateChanged extends _PeerConnectionEvent {
+  const _PeerConnectionEventIceGatheringStateChanged(this.callId, this.state);
+
+  final String callId;
+
+  final RTCIceGatheringState state;
+
+  @override
+  List<Object?> get props => [callId, state];
+}
+
+class _PeerConnectionEventIceConnectionStateChanged extends _PeerConnectionEvent {
+  const _PeerConnectionEventIceConnectionStateChanged(this.callId, this.state);
+
+  final String callId;
+
+  final RTCIceConnectionState state;
+
+  @override
+  List<Object?> get props => [callId, state];
+}
+
+class _PeerConnectionEventIceCandidateIdentified extends _PeerConnectionEvent {
+  const _PeerConnectionEventIceCandidateIdentified(this.callId, this.candidate);
+
+  final String callId;
+
+  final RTCIceCandidate candidate;
+
+  @override
+  List<Object?> get props => [callId, candidate];
+}
+
+class _PeerConnectionEventStreamAdded extends _PeerConnectionEvent {
+  const _PeerConnectionEventStreamAdded(this.callId, this.stream);
+
+  final String callId;
+
+  final MediaStream stream;
+
+  @override
+  List<Object?> get props => [callId, stream];
+}
+
+class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
+  const _PeerConnectionEventStreamRemoved(this.callId, this.stream);
+
+  final String callId;
+
+  final MediaStream stream;
+
+  @override
+  List<Object?> get props => [callId, stream];
+}
+
 // call screen events
 
-@Freezed(copyWith: false)
-class CallScreenEvent with _$CallScreenEvent implements CallEvent {
-  factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
+sealed class CallScreenEvent extends CallEvent {
+  const CallScreenEvent();
 
-  factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
+  const factory CallScreenEvent.didPush() = _CallScreenEventDidPush;
+
+  const factory CallScreenEvent.didPop() = _CallScreenEventDidPop;
+}
+
+class _CallScreenEventDidPush extends CallScreenEvent {
+  const _CallScreenEventDidPush();
+}
+
+class _CallScreenEventDidPop extends CallScreenEvent {
+  const _CallScreenEventDidPop();
 }

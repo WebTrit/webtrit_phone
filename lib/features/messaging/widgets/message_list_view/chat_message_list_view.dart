@@ -93,7 +93,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     computeViewEntries();
   }
 
-  computeViewEntries() async {
+  Future<void> computeViewEntries() async {
     _ComputeParams params = (
       userId: widget.userId,
       messages: widget.messages,
@@ -167,97 +167,87 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Expanded(child: MessagingStateWrapper(child: list())),
-      field(),
-    ]);
+    return Stack(
+      children: [
+        list(),
+        Positioned(top: MediaQuery.of(context).padding.top, left: 0, right: 0, child: const MessagingStateBar()),
+        Positioned(
+          bottom: MediaQuery.of(context).padding.bottom,
+          left: 0,
+          right: 0,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                alignment: Alignment.centerRight,
+                child: ScrollToBottomButton(scrolledAway, scrollToBottom),
+              ),
+              const SizedBox(height: 24),
+              field(),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget list() {
-    return ShaderMask(
-      shaderCallback: (Rect rect) {
-        return const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.black,
-            Colors.transparent,
-            Colors.transparent,
-            Colors.black,
-          ],
-          stops: [0.0, 0.025, 0.975, 1.0],
-        ).createShader(rect);
-      },
-      blendMode: BlendMode.dstOut,
-      child: ScrollToBottomOverlay(
-        scrolledAway: scrolledAway,
-        onScrollToBottom: scrollToBottom,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: ListView.builder(
-            controller: scrollController,
-            reverse: true,
-            cacheExtent: 500,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            itemCount: viewEntries.length + 2,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return BlocBuilder<ChatTypingCubit, TypingUsers>(
-                  builder: (_, users) => TypingIndicator(userId: widget.userId, typingUsers: users),
-                );
-              }
-              if (index == viewEntries.length + 1) {
-                return HistoryFetchIndicator(widget.fetchingHistory);
-              }
-
-              final entry = viewEntries[index - 1];
-
-              if (entry is _MessageViewEntry) {
-                return FadeIn(
-                  child: ChatMessageView(
-                    key: Key(entry.message?.idKey ?? entry.outboxMessage!.idKey),
-                    userId: widget.userId,
-                    message: entry.message,
-                    outboxMessage: entry.outboxMessage,
-                    outboxEditEntry: entry.outboxEditEntry,
-                    outboxDeleteEntry: entry.outboxDeleteEntry,
-                    userReadedUntil: entry.userReadedUntil,
-                    membersReadedUntil: entry.membersReadedUntil,
-                    handleSetForReply: handleSetForReply,
-                    handleSetForForward: handleSetForForward,
-                    handleSetForEdit: handleSetForEdit,
-                    handleDelete: handleDelete,
-                    onRendered: () {
-                      final message = entry.message;
-                      if (message == null) return;
-
-                      final mine = message.senderId == widget.userId;
-                      if (mine) return;
-
-                      final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
-                      final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
-                      if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
-                    },
-                  ),
-                );
-              }
-
-              if (entry is _DateViewEntry) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Center(
-                    child: Text(
-                      entry.date.toDayOfMonth,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  ),
-                );
-              }
-
-              return const SizedBox();
-            },
-          ),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: ListView(
+        controller: scrollController,
+        reverse: true,
+        cacheExtent: 500,
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top + 24,
+          bottom: MediaQuery.of(context).padding.bottom + 64,
         ),
+        children: [
+          TypingIndicator(userId: widget.userId, typingUsers: context.watch<ChatTypingCubit>().state),
+          ...viewEntries.map((entry) {
+            if (entry is _MessageViewEntry) {
+              return FadeIn(
+                key: Key(entry.message?.idKey ?? entry.outboxMessage!.idKey),
+                child: ChatMessageView(
+                  userId: widget.userId,
+                  message: entry.message,
+                  outboxMessage: entry.outboxMessage,
+                  outboxEditEntry: entry.outboxEditEntry,
+                  outboxDeleteEntry: entry.outboxDeleteEntry,
+                  userReadedUntil: entry.userReadedUntil,
+                  membersReadedUntil: entry.membersReadedUntil,
+                  handleSetForReply: handleSetForReply,
+                  handleSetForForward: handleSetForForward,
+                  handleSetForEdit: handleSetForEdit,
+                  handleDelete: handleDelete,
+                  onRendered: () {
+                    final message = entry.message;
+                    if (message == null) return;
+
+                    final mine = message.senderId == widget.userId;
+                    if (mine) return;
+
+                    final userReadedUntil = widget.readCursors.userReadedUntil(widget.userId);
+                    final reachedUnreaded = userReadedUntil == null || message.createdAt.isAfter(userReadedUntil);
+                    if (reachedUnreaded) widget.userReadedUntilUpdate(message.createdAt);
+                  },
+                ),
+              );
+            }
+
+            if (entry is _DateViewEntry) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Center(
+                  child: Text(entry.date.toDayOfMonth, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                ),
+              );
+            }
+
+            return const SizedBox();
+          }),
+          HistoryFetchIndicator(widget.fetchingHistory),
+        ],
       ),
     );
   }
@@ -322,7 +312,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                 controller: inputController,
                 onSend: handleSend,
                 onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
-              )
+              ),
           ],
         );
       },
@@ -366,10 +356,7 @@ typedef _ComputeParams = ({
   DateTime dueTime,
 });
 
-typedef _ComputeResult = ({
-  List<_ChatMessageListViewEntry> entries,
-  DateTime dueTime,
-});
+typedef _ComputeResult = ({List<_ChatMessageListViewEntry> entries, DateTime dueTime});
 
 _ComputeResult _computeList(_ComputeParams params) {
   final userId = params.userId;
@@ -412,13 +399,15 @@ _ComputeResult _computeList(_ComputeParams params) {
       entries.add(_DateViewEntry(message.createdAt));
     }
 
-    entries.add(_MessageViewEntry(
-      message: message,
-      outboxEditEntry: editEntry,
-      outboxDeleteEntry: deleteEntry,
-      userReadedUntil: userReadedUntil,
-      membersReadedUntil: membersReadedUntil,
-    ));
+    entries.add(
+      _MessageViewEntry(
+        message: message,
+        outboxEditEntry: editEntry,
+        outboxDeleteEntry: deleteEntry,
+        userReadedUntil: userReadedUntil,
+        membersReadedUntil: membersReadedUntil,
+      ),
+    );
   }
 
   return (entries: entries, dueTime: dueTime);

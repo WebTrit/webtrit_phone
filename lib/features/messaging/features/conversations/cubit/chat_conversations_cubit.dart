@@ -14,11 +14,7 @@ part 'chat_conversations_state.dart';
 final _logger = Logger('ChatConversationsCubit');
 
 class ChatConversationsCubit extends Cubit<ChatConversationsState> {
-  ChatConversationsCubit(
-    this._client,
-    this._repository,
-    this._contactsRepo,
-  ) : super(ChatConversationsState.initial()) {
+  ChatConversationsCubit(this._client, this._repository, this._contactsRepo) : super(ChatConversationsState.initial()) {
     init();
   }
 

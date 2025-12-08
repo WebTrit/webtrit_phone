@@ -32,4 +32,8 @@ extension StringExtension on String {
       throw FormatException('Invalid IconData hex string: $this');
     }
   }
+
+  String? get extractNumber {
+    return split(' ').first;
+  }
 }

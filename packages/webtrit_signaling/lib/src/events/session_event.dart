@@ -2,16 +2,12 @@ import 'abstract_events.dart';
 import 'session/session_events.dart';
 
 abstract class SessionEvent extends Event {
-  const SessionEvent({
-    this.transaction,
-  });
+  const SessionEvent({this.transaction});
 
   final String? transaction;
 
   @override
-  List<Object?> get props => [
-        transaction,
-      ];
+  List<Object?> get props => [transaction];
 
   factory SessionEvent.fromJson(Map<String, dynamic> json) {
     final sessionEvent = tryFromJson(json);

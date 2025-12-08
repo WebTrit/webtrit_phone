@@ -17,7 +17,7 @@ class ConversationsList extends StatefulWidget {
 }
 
 class _ConversationsListState extends State<ConversationsList> {
-  late final userId = context.read<AppBloc>().state.userId!;
+  late final userId = context.read<AppBloc>().state.session.userId;
 
   final chatsSearchController = TextEditingController();
   final smsSearchController = TextEditingController();
@@ -95,8 +95,9 @@ class _ConversationsListState extends State<ConversationsList> {
                         },
                       ),
                       secondChild: const SizedBox(),
-                      crossFadeState:
-                          chatsSearchController.text.isNotEmpty ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                      crossFadeState: chatsSearchController.text.isNotEmpty
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
                     ),
                   ),
                 ],
@@ -183,8 +184,9 @@ class _ConversationsListState extends State<ConversationsList> {
                         },
                       ),
                       secondChild: const SizedBox(),
-                      crossFadeState:
-                          smsSearchController.text.isNotEmpty ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                      crossFadeState: smsSearchController.text.isNotEmpty
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
                     ),
                   ),
                 ],
@@ -214,12 +216,7 @@ class _ConversationsListState extends State<ConversationsList> {
 
     late final unsupported = Padding(
       padding: const EdgeInsets.all(16),
-      child: Center(
-        child: Text(
-          context.l10n.messaging_ConversationsScreen_unsupported,
-          textAlign: TextAlign.center,
-        ),
-      ),
+      child: Center(child: Text(context.l10n.messaging_ConversationsScreen_unsupported, textAlign: TextAlign.center)),
     );
 
     return AnimatedSwitcher(
@@ -238,7 +235,10 @@ class _ConversationsListState extends State<ConversationsList> {
         final begin = Offset(reverse ? 1.0 : -1.0, 0);
         const end = Offset(0, 0);
 
-        return SlideTransition(position: animation.drive(Tween(begin: begin, end: end)), child: child);
+        return SlideTransition(
+          position: animation.drive(Tween(begin: begin, end: end)),
+          child: child,
+        );
       },
     );
   }

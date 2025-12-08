@@ -2,10 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class RegisteredStatusStyle with Diagnosticable {
-  RegisteredStatusStyle({
-    this.registered,
-    this.unregistered,
-  });
+  RegisteredStatusStyle({this.registered, this.unregistered});
 
   final Color? registered;
   final Color? unregistered;

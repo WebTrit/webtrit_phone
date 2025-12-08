@@ -3,10 +3,7 @@ import 'package:app_database/src/app_database.dart';
 
 part 'voicemail_dao.g.dart';
 
-@DriftAccessor(tables: [
-  VoicemailTable,
-  ContactsTable,
-])
+@DriftAccessor(tables: [VoicemailTable, ContactsTable])
 class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixin {
   VoicemailDao(super.db);
 
@@ -45,14 +42,8 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     final contacts = db.contactsTable;
 
     final query = select(voicemail).join([
-      leftOuterJoin(
-        contactPhones,
-        contactPhones.number.equalsExp(voicemail.sender),
-      ),
-      leftOuterJoin(
-        contacts,
-        contacts.id.equalsExp(contactPhones.contactId),
-      ),
+      leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
+      leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
     ]);
 
     final rows = await query.get();
@@ -70,14 +61,8 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     final contacts = db.contactsTable;
 
     final query = select(voicemail).join([
-      leftOuterJoin(
-        contactPhones,
-        contactPhones.number.equalsExp(voicemail.sender),
-      ),
-      leftOuterJoin(
-        contacts,
-        contacts.id.equalsExp(contactPhones.contactId),
-      ),
+      leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
+      leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
     ]);
 
     return query.watch().map((rows) {

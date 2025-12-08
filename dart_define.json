@@ -28,5 +28,9 @@
   "WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN": "https://app\\.webtrit\\.com/call\\?callId=([^&]+)&handle=([^&]+)&displayName=([^&]+)&hasVideo=(true|false)",
   "__WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN_DESCRIPTION": "ICU-compatible regex pattern to extract callId, handle, displayName and hasVideo from the SMS body",
   "WEBTRIT_APP_CONNECTIVITY_CHECK_URL": "http://192.168.10.100:4000/api/v1/system-info",
-  "__WEBTRIT_APP_CONNECTIVITY_CHECK_URL_DESCRIPTION": "Used to verify internet connectivity via HTTP GET request. Should point to a lightweight, always-available endpoint (e.g. /system-info or /generate_204). Must return 2xx response on success."
+  "__WEBTRIT_APP_CONNECTIVITY_CHECK_URL_DESCRIPTION": "Used to verify internet connectivity via HTTP GET request. Should point to a lightweight, always-available endpoint (e.g. /system-info or /generate_204). Must return 2xx response on success.",
+  "WEBTRIT_APP_USER_REPOSITORY_POLLING_INTERVAL_SECONDS": 10,
+  "WEBTRIT_APP_SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS": 300,
+  "WEBTRIT_APP_EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS": 60,
+  "WEBTRIT_APP_VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS": 300
 }

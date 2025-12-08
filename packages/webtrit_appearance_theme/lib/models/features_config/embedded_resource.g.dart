@@ -6,33 +6,31 @@ part of 'embedded_resource.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$EmbeddedResourceImpl _$$EmbeddedResourceImplFromJson(
-        Map<String, dynamic> json) =>
-    _$EmbeddedResourceImpl(
-      id: (json['id'] as num).toInt(),
-      uri: json['uri'] as String,
-      type: $enumDecodeNullable(_$EmbeddedResourceTypeEnumMap, json['type']) ??
-          EmbeddedResourceType.unknown,
-      attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
-      toolbar: json['toolbar'] == null
-          ? const ToolbarConfig()
-          : ToolbarConfig.fromJson(json['toolbar'] as Map<String, dynamic>),
-      metadata: json['metadata'] == null
-          ? const Metadata()
-          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
-      payload: (json['payload'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-      enableConsoleLogCapture:
-          json['enableConsoleLogCapture'] as bool? ?? false,
-      reconnectStrategy: json['reconnectStrategy'] as String?,
-    );
+EmbeddedResource _$EmbeddedResourceFromJson(
+  Map<String, dynamic> json,
+) => EmbeddedResource(
+  id: const IntToStringConverter().fromJson(json['id']),
+  uri: json['uri'] as String,
+  type:
+      $enumDecodeNullable(_$EmbeddedResourceTypeEnumMap, json['type']) ??
+      EmbeddedResourceType.unknown,
+  attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
+  toolbar: json['toolbar'] == null
+      ? const ToolbarConfig()
+      : ToolbarConfig.fromJson(json['toolbar'] as Map<String, dynamic>),
+  metadata: json['metadata'] == null
+      ? const Metadata()
+      : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+  payload:
+      (json['payload'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+  enableConsoleLogCapture: json['enableConsoleLogCapture'] as bool? ?? false,
+  reconnectStrategy: json['reconnectStrategy'] as String?,
+);
 
-Map<String, dynamic> _$$EmbeddedResourceImplToJson(
-        _$EmbeddedResourceImpl instance) =>
+Map<String, dynamic> _$EmbeddedResourceToJson(EmbeddedResource instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'id': const IntToStringConverter().toJson(instance.id),
       'uri': instance.uri,
       'type': _$EmbeddedResourceTypeEnumMap[instance.type]!,
       'attributes': instance.attributes,
@@ -48,13 +46,13 @@ const _$EmbeddedResourceTypeEnumMap = {
   EmbeddedResourceType.unknown: 'unknown',
 };
 
-_$ToolbarConfigImpl _$$ToolbarConfigImplFromJson(Map<String, dynamic> json) =>
-    _$ToolbarConfigImpl(
+ToolbarConfig _$ToolbarConfigFromJson(Map<String, dynamic> json) =>
+    ToolbarConfig(
       titleL10n: json['titleL10n'] as String?,
       showToolbar: json['showToolbar'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$$ToolbarConfigImplToJson(_$ToolbarConfigImpl instance) =>
+Map<String, dynamic> _$ToolbarConfigToJson(ToolbarConfig instance) =>
     <String, dynamic>{
       'titleL10n': instance.titleL10n,
       'showToolbar': instance.showToolbar,

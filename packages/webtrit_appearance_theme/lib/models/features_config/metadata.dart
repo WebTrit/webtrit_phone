@@ -7,35 +7,44 @@ part 'metadata.g.dart';
 /// Represents metadata for a page or component, allowing storage of key-value pairs
 /// that are not directly related to the UI but provide additional context or configuration.
 @freezed
+@JsonSerializable()
 class Metadata with _$Metadata {
-  const Metadata._();
-
   /// Creates a metadata object with optional attributes.
   ///
   /// [attributes] is a map storing arbitrary key-value pairs. Defaults to an empty map.
-  const factory Metadata({
-    @Default({}) Map<String, dynamic> attributes,
-  }) = _Metadata;
+  const Metadata({this.attributes = const {}});
+
+  /// A map storing arbitrary key-value pairs for contextual or configuration data.
+  @override
+  final Map<String, dynamic> attributes;
 
   /// Creates an instance of `Metadata` from a JSON map.
   ///
   /// This is used for serialization and deserialization of metadata objects.
-  factory Metadata.fromJson(Map<String, dynamic> json) => _$MetadataFromJson(json);
+  factory Metadata.fromJson(Map<String, Object?> json) => _$MetadataFromJson(json);
+
+  /// Converts this `Metadata` object to a JSON map.
+  Map<String, Object?> toJson() => _$MetadataToJson(this);
 
   /// Retrieves a string value associated with the given [key].
   ///
   /// Returns `null` if the key does not exist or the value is not a string.
   String? getString(String key) => attributes[key] as String?;
 
-  /// Creates a new `Metadata` instance with an updated key-value pair in `attributes`.
+  /// Retrieves a boolean value associated with the given [key].
+  bool? getBool(String key) => attributes[key] as bool?;
+
+  /// Retrieves a double value associated with the given [key].
+  double? getDouble(String key) => attributes[key] as double?;
+
+  /// Retrieves a map value associated with the given [key].
   ///
-  /// This method does not mutate the existing object but instead returns a modified copy.
-  ///
-  /// [key] - The attribute key to update or add.
-  /// [value] - The new value to assign to the key.
-  Metadata copyWithKey(String key, dynamic value) {
-    final updatedAttributes = Map<String, dynamic>.from(attributes);
-    updatedAttributes[key] = value;
-    return copyWith(attributes: updatedAttributes);
+  /// Returns a copy of the map or `null` if the key does not exist or the value is not a map.
+  Map<String, dynamic>? getMap(String key) {
+    final value = attributes[key];
+    if (value is Map) {
+      return Map<String, dynamic>.from(value);
+    }
+    return null;
   }
 }

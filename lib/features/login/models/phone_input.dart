@@ -1,9 +1,6 @@
 import 'package:formz/formz.dart';
 
-enum PhoneValidationError {
-  blank,
-  format,
-}
+enum PhoneValidationError { blank, format }
 
 class PhoneInput extends FormzInput<String, PhoneValidationError> {
   const PhoneInput.pure([super.value = '']) : super.pure();

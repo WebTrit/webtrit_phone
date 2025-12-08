@@ -13,6 +13,12 @@ class LoginOtpSignInScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
+    final LoginSwitchScreenStyles? loginPageStyles =
+        themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
+
     return BlocProvider<LoginCubit>(
       create: (context) => MockLoginCubit.loginSwitchScreen(),
       child: LoginSwitchScreen(
@@ -20,9 +26,9 @@ class LoginOtpSignInScreenshot extends StatelessWidget {
           leading: const ExtBackButton(disabled: false),
           backgroundColor: Colors.transparent,
         ),
-        header: const Column(
+        header: Column(
           children: [
-            OnboardingLogo(),
+            OnboardingLogo(style: localStyle?.onboardingLogoStyle),
             SizedBox(height: kInset),
           ],
         ),

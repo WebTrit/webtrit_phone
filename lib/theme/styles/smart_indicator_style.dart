@@ -4,11 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../tools/lerp_tools.dart';
 
 class SmartIndicatorStyle with Diagnosticable {
-  const SmartIndicatorStyle({
-    this.backgroundColor,
-    this.icon,
-    this.sizeFactor,
-  });
+  const SmartIndicatorStyle({this.backgroundColor, this.icon, this.sizeFactor});
 
   final Color? backgroundColor;
   final IconData? icon;
@@ -26,11 +22,7 @@ class SmartIndicatorStyle with Diagnosticable {
     );
   }
 
-  static SmartIndicatorStyle? lerp(
-    SmartIndicatorStyle? a,
-    SmartIndicatorStyle? b,
-    double t,
-  ) {
+  static SmartIndicatorStyle? lerp(SmartIndicatorStyle? a, SmartIndicatorStyle? b, double t) {
     if (identical(a, b)) return a;
     if (a == null && b == null) return null;
 

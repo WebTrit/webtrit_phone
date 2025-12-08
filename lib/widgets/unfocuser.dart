@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class Unfocuser extends StatefulWidget {
-  const Unfocuser({
-    super.key,
-    this.child,
-    this.minScrollDistanceToIgnore = 10.0,
-  });
+  const Unfocuser({super.key, this.child, this.minScrollDistanceToIgnore = 10.0});
 
   final Widget? child;
   final double minScrollDistanceToIgnore;

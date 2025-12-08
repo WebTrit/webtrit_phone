@@ -14,7 +14,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/widgets/main_app_bar.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 @RoutePage()
 class MainScreenPage extends StatelessWidget {
@@ -81,7 +81,7 @@ class MainScreenPage extends StatelessWidget {
       create: (context) {
         return MainBloc(
           context.read<SystemInfoRepository>(),
-          context.read<CustomPrivateGatewayRepository>(),
+          context.read<PrivateGatewayRepository>(),
           context.read<AppPreferences>(),
           EnvironmentConfig.CORE_VERSION_CONSTRAINT,
           context.read<PackageInfo>(),
@@ -99,32 +99,12 @@ class MainScreenPage extends StatelessWidget {
           : autoTabsRouter,
     );
 
-    final accountErrorListener = BlocListener<AppBloc, AppState>(
-      listenWhen: (previous, current) =>
-          previous.accountErrorCode != current.accountErrorCode && current.accountErrorCode != null,
-      listener: (BuildContext context, state) {
-        context.showErrorSnackBar(state.accountErrorCode!.l10n(context));
-        context.read<AppBloc>().add(const AppLogoutedTeardown());
-      },
-      child: provider,
-    );
-
-    final postLogoutListener = BlocListener<AppBloc, AppState>(
-      listenWhen: (previous, current) => previous.isLoggedIn && !current.isLoggedIn,
-      listener: (context, state) {
-        context.read<PushTokensBloc>().add(const PushTokensEvent.fcmTokenDeletionRequested());
-        context.read<MainBloc>().postLogout();
-      },
-    );
-
-    final multiBlocListener = MultiBlocListener(listeners: [accountErrorListener, postLogoutListener], child: provider);
-
     return BlocBuilder<CallPullCubit, List<PullableCall>>(
       builder: (context, state) {
         return AppBarParams(
           systemNotificationsEnabled: systemNotificationsEnabled,
           pullableCalls: state,
-          child: multiBlocListener,
+          child: provider,
         );
       },
     );
@@ -132,25 +112,19 @@ class MainScreenPage extends StatelessWidget {
 
   List<PageRouteInfo> _buildRoutePages(List<BottomMenuTab> tabs) {
     return tabs.map<PageRouteInfo<dynamic>>((tab) {
-      switch (tab.flavor) {
-        case MainFlavor.favorites:
+      switch (tab) {
+        case FavoritesBottomMenuTab():
           return const FavoritesRouterPageRoute();
-        case MainFlavor.recents:
-          return const RecentsRouterPageRoute();
-        case MainFlavor.contacts:
-          return ContactsRouterPageRoute(
-            children: [
-              ContactsScreenPageRoute(
-                sourceTypes: tab.toContacts?.contactSourceTypes ?? [],
-              )
-            ],
-          );
-        case MainFlavor.keypad:
+        case KeypadBottomMenuTab():
           return const KeypadScreenPageRoute();
-        case MainFlavor.messaging:
+        case MessagingBottomMenuTab():
           return const ConversationsScreenPageRoute();
-        default:
-          return EmbeddedTabPageRoute(id: tab.toEmbedded!.id);
+        case RecentsBottomMenuTab():
+          return tab.useCdrs ? const RecentCdrsScreenPageRoute() : const RecentsRouterPageRoute();
+        case ContactsBottomMenuTab():
+          return ContactsRouterPageRoute(children: [ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes)]);
+        case EmbeddedBottomMenuTab():
+          return EmbeddedTabPageRoute(id: tab.id);
       }
     }).toList();
   }

@@ -1,11 +1,7 @@
 import '../abstract_events.dart';
 
 class HoldingEvent extends CallEvent {
-  const HoldingEvent({
-    super.transaction,
-    required super.line,
-    required super.callId,
-  });
+  const HoldingEvent({super.transaction, required super.line, required super.callId});
 
   static const typeValue = 'holding';
 
@@ -15,10 +11,6 @@ class HoldingEvent extends CallEvent {
       throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    return HoldingEvent(
-      transaction: json['transaction'],
-      line: json['line'],
-      callId: json['call_id'],
-    );
+    return HoldingEvent(transaction: json['transaction'], line: json['line'], callId: json['call_id']);
   }
 }

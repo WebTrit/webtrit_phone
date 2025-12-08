@@ -1,10 +1,7 @@
 import 'package:pub_semver/pub_semver.dart';
 
 class StoreInfo {
-  const StoreInfo({
-    required this.version,
-    required this.viewUrl,
-  });
+  const StoreInfo({required this.version, required this.viewUrl});
 
   final Version version;
   final Uri viewUrl;

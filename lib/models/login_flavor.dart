@@ -1,4 +1,1 @@
-enum LoginFlavor {
-  login,
-  embedded,
-}
+enum LoginFlavor { login, embedded }

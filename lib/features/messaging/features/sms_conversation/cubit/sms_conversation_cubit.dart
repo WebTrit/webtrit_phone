@@ -18,13 +18,8 @@ part 'sms_conversation_state.dart';
 final _logger = Logger('SmsConversationCubit');
 
 class SmsConversationCubit extends Cubit<SmsConversationState> {
-  SmsConversationCubit(
-    this._creds,
-    this._client,
-    this._repository,
-    this._outboxRepository,
-    this._submitNotification,
-  ) : super(SmsConversationState.init(_creds)) {
+  SmsConversationCubit(this._creds, this._client, this._repository, this._outboxRepository, this._submitNotification)
+    : super(SmsConversationState.init(_creds)) {
     _init();
   }
 
@@ -87,10 +82,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     final conversationId = state.conversation?.id;
     if (conversationId == null) return false;
 
-    final outboxEntry = SmsOutboxReadCursorEntry(
-      conversationId: conversationId,
-      time: time,
-    );
+    final outboxEntry = SmsOutboxReadCursorEntry(conversationId: conversationId, time: time);
     _outboxRepository.upsertOutboxReadCursor(outboxEntry);
   }
 
@@ -141,11 +133,13 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
         _logger.info('fetchHistory: remote messages ${messages.length}');
         if (messages.isNotEmpty) {
           await _repository.upsertMessages(messages, silent: true);
-          await _repository.upsertSmsMessageSyncCursor(SmsMessageSyncCursor(
-            conversationId: conversationId,
-            cursorType: SmsSyncCursorType.oldest,
-            time: messages.last.createdAt,
-          ));
+          await _repository.upsertSmsMessageSyncCursor(
+            SmsMessageSyncCursor(
+              conversationId: conversationId,
+              cursorType: SmsSyncCursorType.oldest,
+              time: messages.last.createdAt,
+            ),
+          );
         }
       }
 
@@ -199,8 +193,9 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     _readCursorsSub = _readCursorsSubFactory(conversationId, _handleReadCursorsUpdate);
 
     // Subscribe to outbox messages updates
-    _outboxMessageDeletesSub =
-        _outboxMessageDeletesSubFactory((entries) => _handleOutboxMessageDeletesUpdate(conversationId, entries));
+    _outboxMessageDeletesSub = _outboxMessageDeletesSubFactory(
+      (entries) => _handleOutboxMessageDeletesUpdate(conversationId, entries),
+    );
 
     // _fillHistory();
   }
@@ -264,9 +259,11 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     final state = this.state;
     if (state is! SCSReady) return;
     final conversationEntries = entries
-        .where((e) =>
-            (e.fromPhoneNumber == _creds.firstNumber && e.toPhoneNumber == _creds.secondNumber) ||
-            (e.fromPhoneNumber == _creds.secondNumber && e.toPhoneNumber == _creds.firstNumber))
+        .where(
+          (e) =>
+              (e.fromPhoneNumber == _creds.firstNumber && e.toPhoneNumber == _creds.secondNumber) ||
+              (e.fromPhoneNumber == _creds.secondNumber && e.toPhoneNumber == _creds.firstNumber),
+        )
         .toList();
     emit(state.copyWith(outboxMessages: conversationEntries));
   }
@@ -353,7 +350,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     return super.close();
   }
 
-  _cancelSubs() {
+  void _cancelSubs() {
     _chatUpdateSub?.cancel();
     _chatRemoveSub?.cancel();
     _messagesSub?.cancel();

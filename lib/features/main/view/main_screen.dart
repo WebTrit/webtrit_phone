@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../main.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({
-    Key? key,
-    required this.body,
-    required this.bottomNavigationBar,
-  }) : super(key: key ?? const ValueKey<String>('MainScreen'));
+  const MainScreen({Key? key, required this.body, required this.bottomNavigationBar})
+    : super(key: key ?? const ValueKey<String>('MainScreen'));
 
   final Widget body;
   final BottomNavigationBar bottomNavigationBar;
@@ -38,7 +35,7 @@ class MainScreen extends StatelessWidget {
                 : null,
             onLogoutPressed: () {
               Navigator.of(context).maybePop();
-              context.read<AppBloc>().add(const AppLogouted());
+              context.read<SessionRepository>().logout();
             },
           );
         }

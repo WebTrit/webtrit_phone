@@ -45,11 +45,7 @@ class VoicemailTile extends StatelessWidget {
       children: [
         ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: LeadingAvatar(
-            username: displayName,
-            thumbnail: thumbnail,
-            thumbnailUrl: thumbnailUrl,
-          ),
+          leading: LeadingAvatar(username: displayName, thumbnail: thumbnail, thumbnailUrl: thumbnailUrl),
           title: Text(voicemail.displaySender),
           subtitle: Row(
             children: [
@@ -57,9 +53,7 @@ class VoicemailTile extends StatelessWidget {
                 visible: !voicemail.seen,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  child: CircleIndicator(
-                    color: voicemail.seen ? colorScheme.onSurface : colorScheme.tertiary,
-                  ),
+                  child: CircleIndicator(color: voicemail.seen ? colorScheme.onSurface : colorScheme.tertiary),
                 ),
               ),
               Text(dateFormat.format(DateTime.parse(voicemail.date))),
@@ -72,10 +66,7 @@ class VoicemailTile extends StatelessWidget {
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: _VoicemailMenuAction.call,
-                child: ListTile(
-                  leading: const Icon(Icons.call),
-                  title: Text(context.l10n.voicemail_Label_call),
-                ),
+                child: ListTile(leading: const Icon(Icons.call), title: Text(context.l10n.voicemail_Label_call)),
               ),
               PopupMenuItem(
                 value: _VoicemailMenuAction.toggleSeenStatus,
@@ -102,16 +93,10 @@ class VoicemailTile extends StatelessWidget {
                 ),
               ),
             ],
-            child: Icon(
-              Icons.more_vert,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+            child: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
-        AudioView(
-          path: voicemail.url!,
-          onPlaybackStarted: _onPlaybackStarted,
-        ),
+        AudioView(path: voicemail.url!, onPlaybackStarted: _onPlaybackStarted),
       ],
     );
   }
@@ -137,8 +122,4 @@ class VoicemailTile extends StatelessWidget {
   }
 }
 
-enum _VoicemailMenuAction {
-  call,
-  toggleSeenStatus,
-  delete,
-}
+enum _VoicemailMenuAction { call, toggleSeenStatus, delete }

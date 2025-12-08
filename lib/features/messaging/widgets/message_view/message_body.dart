@@ -7,13 +7,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 class MessageBody extends StatefulWidget {
-  const MessageBody({
-    required this.text,
-    required this.isMine,
-    this.style,
-    this.previewDecoration,
-    super.key,
-  });
+  const MessageBody({required this.text, required this.isMine, this.style, this.previewDecoration, super.key});
 
   final String text;
   final bool isMine;
@@ -40,7 +34,7 @@ class _MessageBodyState extends State<MessageBody> {
     if (oldWidget.text != widget.text) findLink(widget.text);
   }
 
-  findLink(String text) {
+  void findLink(String text) {
     final match = RegExp(linkRegex, caseSensitive: false).stringMatch(text);
 
     if (match != null) {
@@ -78,10 +72,7 @@ class _MessageBodyState extends State<MessageBody> {
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                if (preview?.imageUrl != null) ...[
-                  Image.network(preview!.imageUrl!),
-                  const SizedBox(height: 8),
-                ],
+                if (preview?.imageUrl != null) ...[Image.network(preview!.imageUrl!), const SizedBox(height: 8)],
                 if (preview?.title != null) ...[
                   Text(preview?.title ?? '', style: style.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
@@ -89,7 +80,7 @@ class _MessageBodyState extends State<MessageBody> {
                 if (preview?.description != null) ...[
                   Text(preview?.description ?? '', style: style),
                   const SizedBox(height: 8),
-                ]
+                ],
               ],
             ),
           ),

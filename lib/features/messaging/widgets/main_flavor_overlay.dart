@@ -30,7 +30,9 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
               height: 14,
               padding: const EdgeInsets.symmetric(horizontal: 1),
               decoration: BoxDecoration(color: Theme.of(context).colorScheme.tertiary, shape: BoxShape.circle),
-              child: FittedBox(child: Text(count.toString(), style: const TextStyle(color: Colors.white))),
+              child: FittedBox(
+                child: Text(count.toString(), style: const TextStyle(color: Colors.white)),
+              ),
             );
 
             return Positioned(right: 0, bottom: 0, child: overlay);

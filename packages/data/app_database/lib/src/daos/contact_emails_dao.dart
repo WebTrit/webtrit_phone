@@ -11,9 +11,7 @@ class ContactEmailsDao extends DatabaseAccessor<AppDatabase> with _$ContactEmail
   SimpleSelectStatement<$ContactEmailsTableTable, ContactEmailData> _selectContactEmailsByContactId(int contactId) {
     return select(contactEmailsTable)
       ..where((t) => t.contactId.equals(contactId))
-      ..orderBy([
-        (t) => OrderingTerm.asc(t.insertedAt),
-      ]);
+      ..orderBy([(t) => OrderingTerm.asc(t.insertedAt)]);
   }
 
   Stream<List<ContactEmailData>> watchContactEmailsByContactId(int contactId) {

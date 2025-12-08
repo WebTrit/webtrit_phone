@@ -3,9 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AppAnalyticsRepository {
-  AppAnalyticsRepository({
-    required FirebaseAnalytics instance,
-  }) : _instance = instance;
+  AppAnalyticsRepository({required FirebaseAnalytics instance}) : _instance = instance;
 
   final FirebaseAnalytics _instance;
 

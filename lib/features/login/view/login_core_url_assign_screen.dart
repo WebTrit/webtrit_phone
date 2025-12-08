@@ -13,27 +13,28 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../login.dart';
 
 class LoginCoreUrlAssignScreen extends StatelessWidget {
-  const LoginCoreUrlAssignScreen({
-    super.key,
-  });
+  const LoginCoreUrlAssignScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
 
+    // TODO: Add separate style for this screen
+    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
+
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => whenLoginCoreUrlAssignScreenPageActive(current),
       builder: (context, state) {
         final coreUrlAssignPreDescriptionText = context.l10n.login_Text_coreUrlAssignPreDescription;
-        final coreUrlAssignPostDescriptionText =
-            context.l10n.login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL);
+        final coreUrlAssignPostDescriptionText = context.l10n.login_Text_coreUrlAssignPostDescription(
+          EnvironmentConfig.SALES_EMAIL,
+        );
 
         return LoginScaffold(
           appBar: AppBar(
-            leading: ExtBackButton(
-              disabled: state.processing,
-            ),
+            leading: ExtBackButton(disabled: state.processing),
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
@@ -41,7 +42,7 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
             top: false,
             child: Column(
               children: [
-                const OnboardingLogo(),
+                OnboardingLogo(style: localStyle?.onboardingLogoStyle),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
@@ -49,33 +50,25 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         if (coreUrlAssignPreDescriptionText.isNotEmpty) ...[
-                          Description(
-                            text: coreUrlAssignPreDescriptionText,
-                          ),
+                          Description(text: coreUrlAssignPreDescriptionText),
                           const SizedBox(height: kInset / 2),
                         ],
-                        TextFormField(
+                        HistoryAutocompleteField(
                           key: coreUrlInputKey,
-                          enabled: !state.processing,
+                          storageKey: 'recent_core_urls',
+                          labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
                           initialValue: state.coreUrlInput.value,
-                          decoration: InputDecoration(
-                            labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
-                            helperText: '', // reserve space for validator message
-                            errorText: state.coreUrlInput.displayError?.l10n(context),
-                            errorMaxLines: 3,
-                          ),
+                          errorText: state.coreUrlInput.displayError?.l10n(context),
                           keyboardType: TextInputType.url,
-                          autocorrect: false,
+                          textInputAction: TextInputAction.done,
+                          autofillHints: const [AutofillHints.url],
+                          enabled: !state.processing,
                           onChanged: context.read<LoginCubit>().coreUrlInputChanged,
-                          onFieldSubmitted:
-                              !state.coreUrlInput.isValid ? null : (_) => _onCoreUrlAssignSubmitted(context),
+                          onSubmit: !state.coreUrlInput.isValid ? null : () => _onCoreUrlAssignSubmitted(context),
                         ),
                         if (coreUrlAssignPostDescriptionText.isNotEmpty) ...[
                           const SizedBox(height: kInset / 8),
-                          Description(
-                            text: coreUrlAssignPostDescriptionText,
-                            launchLinkableElement: true,
-                          ),
+                          Description(text: coreUrlAssignPostDescriptionText, launchLinkableElement: true),
                         ],
                         const Spacer(),
                         const SizedBox(height: kInset),

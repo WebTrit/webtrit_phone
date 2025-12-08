@@ -18,13 +18,12 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
       primary: LeadingAvatarStyle(
         backgroundColor: _bgColor(),
         radius: config?.radius,
-        initialsTextStyle: config?.initialsTextStyle?.toTextStyle(
-          fallbackColor: colors.onSecondaryContainer,
-        ),
+        initialsTextStyle: config?.initialsTextStyle?.toTextStyle(fallbackColor: colors.onSecondaryContainer),
         placeholderIcon: null,
         loadingOverlay: _mapLoading(config?.loading),
         smartIndicator: _mapSmart(config?.smartIndicator),
         registeredBadge: _mapRegistered(config?.registeredBadge),
+        presenceBadge: _mapPresence(config?.presenceBadge),
       ),
     );
   }
@@ -54,6 +53,15 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
     return RegisteredBadgeStyle(
       registeredColor: c.registeredColor?.toColor(),
       unregisteredColor: c.unregisteredColor?.toColor(),
+      sizeFactor: c.sizeFactor,
+    );
+  }
+
+  PresenceBadgeStyle? _mapPresence(PresenceBadgeStyleConfig? c) {
+    if (c == null) return null;
+    return PresenceBadgeStyle(
+      availableColor: c.availableColor?.toColor() ?? colors.tertiary,
+      unavailableColor: c.unavailableColor?.toColor() ?? colors.onSurfaceVariant,
       sizeFactor: c.sizeFactor,
     );
   }

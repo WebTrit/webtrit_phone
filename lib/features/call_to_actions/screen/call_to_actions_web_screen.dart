@@ -9,10 +9,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 
 class CallToActionsWebScreen extends StatefulWidget {
-  const CallToActionsWebScreen({
-    super.key,
-    required this.initialUrl,
-  });
+  const CallToActionsWebScreen({super.key, required this.initialUrl});
 
   final Uri initialUrl;
 
@@ -81,9 +78,7 @@ class _CallToActionsWebScreenState extends State<CallToActionsWebScreen> with Wi
         return AlertDialog(
           scrollable: true,
           title: Text(context.l10n.webRegistration_ErrorAcknowledgeDialog_title),
-          content: Text(
-            error.description,
-          ),
+          content: Text(error.description),
           actions: [
             TextButton(
               child: Text(context.l10n.webRegistration_ErrorAcknowledgeDialogActions_skip),
@@ -148,10 +143,7 @@ class _CallToActionsWebScreenState extends State<CallToActionsWebScreen> with Wi
       body: Stack(
         children: [
           WebViewWidget(controller: _webViewController),
-          if (_isVisibleProgress)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
+          if (_isVisibleProgress) const Center(child: CircularProgressIndicator()),
         ],
       ),
     );
@@ -160,12 +152,11 @@ class _CallToActionsWebScreenState extends State<CallToActionsWebScreen> with Wi
   String _definesCssVariablesJavascript(BuildContext context) {
     final safeAreaPadding = MediaQuery.of(context).padding;
     return {
-      '--safe-area-inset-left': safeAreaPadding.left,
-      '--safe-area-inset-top': safeAreaPadding.top,
-      '--safe-area-inset-right': safeAreaPadding.right,
-      '--safe-area-inset-bottom': safeAreaPadding.bottom,
-    }
-        .entries
+          '--safe-area-inset-left': safeAreaPadding.left,
+          '--safe-area-inset-top': safeAreaPadding.top,
+          '--safe-area-inset-right': safeAreaPadding.right,
+          '--safe-area-inset-bottom': safeAreaPadding.bottom,
+        }.entries
         .map((mapEntry) => "document.documentElement.style.setProperty('${mapEntry.key}', '${mapEntry.value}px');")
         .join();
   }

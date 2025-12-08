@@ -34,8 +34,8 @@ abstract class ThemeSvgAsset {
     return resource is NetworkResourceLoader
         ? ThemeNetworkSvgAsset(resource)
         : resource is AssetResourceLoader
-            ? ThemeAssetSvgAsset(resource)
-            : ThemeMemorySvgAsset(resource as MemoryResourceLoader);
+        ? ThemeAssetSvgAsset(resource)
+        : ThemeMemorySvgAsset(resource as MemoryResourceLoader);
   }
 }
 

@@ -10,14 +10,8 @@ import '../event_jsons.dart';
 void main() {
   void testFromJson(String description, Map<String, dynamic> actual, NotifyEvent expected) {
     test(description, () {
-      expect(
-        NotifyEvent.fromJson(actual),
-        equals(expected),
-      );
-      expect(
-        CallEvent.fromJson(actual),
-        equals(expected),
-      );
+      expect(NotifyEvent.fromJson(actual), equals(expected));
+      expect(CallEvent.fromJson(actual), equals(expected));
     });
   }
 
@@ -34,14 +28,16 @@ void main() {
       "content_type": "message/sipfrag",
       "content": "SIP/2.0 100 Trying\r\n"
     }
-    ''') as Map<String, dynamic>,
+    ''')
+        as Map<String, dynamic>,
     ReferNotifyEvent(
-        transaction: 'transaction 1',
-        line: 0,
-        callId: 'qwerty',
-        notify: 'refer',
-        subscriptionState: SubscriptionState.active,
-        state: ReferNotifyState.trying),
+      transaction: 'transaction 1',
+      line: 0,
+      callId: 'qwerty',
+      notify: 'refer',
+      subscriptionState: SubscriptionState.active,
+      state: ReferNotifyState.trying,
+    ),
   );
 
   testFromJson(
@@ -56,19 +52,18 @@ void main() {
       "content_type": "message/sipfrag",
       "content": "SIP/2.0 100 Trying\r\n"
     }
-    ''') as Map<String, dynamic>,
+    ''')
+        as Map<String, dynamic>,
     ReferNotifyEvent(
-        line: 0,
-        callId: 'qwerty',
-        notify: 'refer',
-        subscriptionState: SubscriptionState.active,
-        state: ReferNotifyState.trying),
+      line: 0,
+      callId: 'qwerty',
+      notify: 'refer',
+      subscriptionState: SubscriptionState.active,
+      state: ReferNotifyState.trying,
+    ),
   );
 
   test('$NotifyEvent fromJson error', () {
-    expect(
-      () => NotifyEvent.fromJson(json.decode(eventJsonEmpty) as Map<String, dynamic>),
-      throwsA(isArgumentError),
-    );
+    expect(() => NotifyEvent.fromJson(json.decode(eventJsonEmpty) as Map<String, dynamic>), throwsA(isArgumentError));
   });
 }

@@ -69,12 +69,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                       final encodingPreset = state.encodingPreset;
 
                       if (encodingPreset == EncodingPreset.custom) {
-                        return const Column(
-                          children: [
-                            Divider(height: 24),
-                            EncodingCustomContent(),
-                          ],
-                        );
+                        return const Column(children: [Divider(height: 24), EncodingCustomContent()]);
                       }
 
                       return const SizedBox();

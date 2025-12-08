@@ -1,23 +1,13 @@
 import 'response.dart';
 
 class ErrorResponse extends Response {
-  const ErrorResponse({
-    super.transaction,
-    super.line,
-    super.callId,
-    required this.code,
-    required this.reason,
-  });
+  const ErrorResponse({super.transaction, super.line, super.callId, required this.code, required this.reason});
 
   final int code;
   final String reason;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        code,
-        reason,
-      ];
+  List<Object?> get props => [...super.props, code, reason];
 
   static const typeValue = 'error';
 

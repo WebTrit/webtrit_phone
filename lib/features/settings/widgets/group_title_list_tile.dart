@@ -7,11 +7,7 @@ export 'group_title_list_style.dart';
 export 'group_title_list_styles.dart';
 
 class GroupTitleListTile extends StatelessWidget {
-  const GroupTitleListTile({
-    super.key,
-    required this.titleData,
-    this.style,
-  });
+  const GroupTitleListTile({super.key, required this.titleData, this.style});
 
   final String titleData;
 
@@ -25,10 +21,7 @@ class GroupTitleListTile extends StatelessWidget {
     return Container(
       color: localStyle?.background ?? Colors.transparent,
       child: ListTile(
-        title: Text(
-          titleData,
-          style: themeData.textTheme.bodyMedium?.merge(localStyle?.textStyle),
-        ),
+        title: Text(titleData, style: themeData.textTheme.bodyMedium?.merge(localStyle?.textStyle)),
         tileColor: themeData.colorScheme.surface,
       ),
     );

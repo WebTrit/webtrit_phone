@@ -24,8 +24,16 @@ final dChatsMockChatsRepository = [
     createdAt: dFixedTime.subtract(const Duration(days: 3)),
     updatedAt: dFixedTime.add(const Duration(hours: 2)),
     members: const [
-      ChatMember(id: 3, chatId: 102, userId: 'user_3', groupAuthorities: GroupAuthorities.moderator),
-      ChatMember(id: 4, chatId: 102, userId: 'user_4', groupAuthorities: GroupAuthorities.moderator),
+      ChatMember(
+          id: 3,
+          chatId: 102,
+          userId: 'user_3',
+          groupAuthorities: GroupAuthorities.moderator),
+      ChatMember(
+          id: 4,
+          chatId: 102,
+          userId: 'user_4',
+          groupAuthorities: GroupAuthorities.moderator),
       ChatMember(id: 5, chatId: 102, userId: 'user_5', groupAuthorities: null),
     ],
   ),
@@ -76,7 +84,8 @@ final dContactsRepository = [
     userRegistered: true,
     isCurrentUser: false,
     phones: const [
-      ContactPhone(id: 101, number: '+1234567890', label: 'mobile', favorite: true),
+      ContactPhone(
+          id: 101, number: '+1234567890', label: 'mobile', favorite: true),
       ContactPhone(id: 102, number: '1001', label: 'ext', favorite: false),
     ],
     emails: const [],
@@ -94,7 +103,8 @@ final dContactsRepository = [
     userRegistered: false,
     isCurrentUser: false,
     phones: const [
-      ContactPhone(id: 201, number: '+1987654321', label: 'mobile', favorite: true),
+      ContactPhone(
+          id: 201, number: '+1987654321', label: 'mobile', favorite: true),
     ],
     emails: const [],
     thumbnail: Uint8List.fromList([0, 1, 2, 3]),

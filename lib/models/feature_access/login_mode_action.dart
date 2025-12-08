@@ -1,40 +1,32 @@
-import 'login_embedded.dart';
-
+import '../embedded/embedded.dart';
 import '../login_flavor.dart';
 
-class LoginModeAction {
-  LoginModeAction({
-    required this.titleL10n,
-    required this.flavor,
-    required this.isLaunchButtonVisible,
-  });
+sealed class LoginModeAction {
+  const LoginModeAction();
 
+  String get titleL10n;
+
+  LoginFlavor get flavor;
+}
+
+final class LoginDefaultModeAction extends LoginModeAction {
+  const LoginDefaultModeAction({required this.titleL10n, required this.flavor});
+
+  @override
   final String titleL10n;
+
+  @override
   final LoginFlavor flavor;
-  final bool isLaunchButtonVisible;
 }
 
-class LoginEmbeddedModeButton extends LoginModeAction {
-  LoginEmbeddedModeButton({
-    required this.customLoginFeature,
-    required super.titleL10n,
-    required super.flavor,
-    required super.isLaunchButtonVisible,
-    required this.isLaunchScreen,
-  });
+final class LoginEmbeddedModeButton extends LoginModeAction {
+  const LoginEmbeddedModeButton({required this.titleL10n, required this.flavor, required this.customLoginFeature});
 
-  final LoginEmbedded customLoginFeature;
-  final bool isLaunchScreen;
-}
+  @override
+  final String titleL10n;
 
-extension LoginModeActionExtension on LoginModeAction {
-  bool get isEmbeddedModeButton => this is LoginEmbeddedModeButton;
+  @override
+  final LoginFlavor flavor;
 
-  LoginEmbeddedModeButton? get toEmbedded {
-    if (this is LoginEmbeddedModeButton) {
-      return this as LoginEmbeddedModeButton?;
-    } else {
-      return null;
-    }
-  }
+  final EmbeddedData customLoginFeature;
 }

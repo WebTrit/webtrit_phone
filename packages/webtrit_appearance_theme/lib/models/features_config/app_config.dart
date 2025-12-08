@@ -1,273 +1,400 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:webtrit_appearance_theme/converters/converters.dart';
-import 'package:webtrit_appearance_theme/parsers/parsers.dart';
-
-import 'bottom_menu_tab_type.dart';
-import 'embedded_resource.dart';
 
 part 'app_config.freezed.dart';
 
 part 'app_config.g.dart';
 
-@Freezed()
+@freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfig with _$AppConfig {
-  const AppConfig._();
+  const AppConfig({
+    this.loginConfig = const AppConfigLogin(),
+    this.mainConfig = const AppConfigMain(),
+    this.settingsConfig = const AppConfigSettings(),
+    this.callConfig = const AppConfigCall(),
+  });
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfig({
-    @Default(AppConfigLogin()) AppConfigLogin loginConfig,
-    @Default(AppConfigMain()) AppConfigMain mainConfig,
-    @Default(AppConfigSettings()) AppConfigSettings settingsConfig,
-    @Default(AppConfigCall()) AppConfigCall callConfig,
-    @Default([]) List<EmbeddedResource> embeddedResources,
-  }) = _AppConfig;
+  @override
+  final AppConfigLogin loginConfig;
 
-  factory AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
+  @override
+  final AppConfigMain mainConfig;
+
+  @override
+  final AppConfigSettings settingsConfig;
+
+  @override
+  final AppConfigCall callConfig;
+
+  factory AppConfig.fromJson(Map<String, Object?> json) => _$AppConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigLogin with _$AppConfigLogin {
-  const AppConfigLogin._();
+  const AppConfigLogin({
+    this.common = const AppConfigLoginCommon(),
+    this.modeSelect = const AppConfigLoginModeSelect(),
+  });
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigLogin({
-    String? greetingL10n,
-    @Default([
-      AppConfigModeSelectAction(
-        enabled: true,
-        type: 'login',
-        titleL10n: 'login_Button_signUpToDemoInstance',
-      )
-    ])
-    List<AppConfigModeSelectAction> modeSelectActions,
-  }) = _AppConfigLogin;
+  @override
+  final AppConfigLoginCommon common;
 
-  factory AppConfigLogin.fromJson(Map<String, dynamic> json) => _$AppConfigLoginFromJson(json);
+  @override
+  final AppConfigLoginModeSelect modeSelect;
+
+  factory AppConfigLogin.fromJson(Map<String, Object?> json) => _$AppConfigLoginFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigLoginToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigLoginCommon with _$AppConfigLoginCommon {
+  const AppConfigLoginCommon({this.fullScreenLaunchEmbeddedResourceId});
+
+  @override
+  final String? fullScreenLaunchEmbeddedResourceId;
+
+  factory AppConfigLoginCommon.fromJson(Map<String, Object?> json) => _$AppConfigLoginCommonFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigLoginCommonToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigLoginModeSelect with _$AppConfigLoginModeSelect {
+  const AppConfigLoginModeSelect({
+    this.greetingL10n,
+    this.actions = const [
+      AppConfigModeSelectAction(enabled: true, type: 'login', titleL10n: 'login_Button_signUpToDemoInstance'),
+    ],
+  });
+
+  @override
+  final String? greetingL10n;
+
+  @override
+  final List<AppConfigModeSelectAction> actions;
+
+  factory AppConfigLoginModeSelect.fromJson(Map<String, Object?> json) => _$AppConfigLoginModeSelectFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigLoginModeSelectToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigModeSelectAction with _$AppConfigModeSelectAction {
-  const AppConfigModeSelectAction._();
+  const AppConfigModeSelectAction({
+    required this.enabled,
+    required this.type,
+    required this.titleL10n,
+    this.embeddedId,
+  });
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigModeSelectAction({
-    required bool enabled,
-    int? embeddedId,
-    required String type,
-    required String titleL10n,
-    @Default(false) bool isLaunchButtonVisible,
-    @Default(false) bool isLaunchScreen,
-  }) = _AppConfigModeSelectAction;
+  @override
+  final bool enabled;
 
-  factory AppConfigModeSelectAction.fromJson(Map<String, dynamic> json) => _$AppConfigModeSelectActionFromJson(json);
+  @override
+  final String type;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String? embeddedId;
+
+  factory AppConfigModeSelectAction.fromJson(Map<String, Object?> json) => _$AppConfigModeSelectActionFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigModeSelectActionToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigMain with _$AppConfigMain {
-  const AppConfigMain._();
-
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigMain({
-    @Default(
-      AppConfigBottomMenu(cacheSelectedTab: true, tabs: [
-        BaseTabScheme(
+  const AppConfigMain({
+    this.bottomMenu = const AppConfigBottomMenu(
+      cacheSelectedTab: true,
+      tabs: [
+        FavoritesTabScheme(
           enabled: true,
           initial: false,
-          type: BottomMenuTabType.favorites,
           titleL10n: 'main_BottomNavigationBarItemLabel_favorites',
           icon: '0xe5fd',
         ),
-        BaseTabScheme(
-          enabled: true,
+        RecentsTabScheme(
+          enabled: false,
           initial: false,
-          type: BottomMenuTabType.recents,
           titleL10n: 'main_BottomNavigationBarItemLabel_recents',
           icon: '0xe03a',
+          useCdrs: false,
         ),
         ContactsTabScheme(
           enabled: true,
           initial: false,
-          type: BottomMenuTabType.contacts,
           titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
           icon: '0xee35',
           contactSourceTypes: ['local', 'external'],
         ),
-        BaseTabScheme(
+        KeypadTabScheme(
           enabled: true,
           initial: true,
-          type: BottomMenuTabType.keypad,
           titleL10n: 'main_BottomNavigationBarItemLabel_keypad',
           icon: '0xe1ce',
         ),
-        BaseTabScheme(
+        MessagingTabScheme(
           enabled: false,
           initial: false,
-          type: BottomMenuTabType.messaging,
           titleL10n: 'main_BottomNavigationBarItemLabel_chats',
           icon: '0xe155',
-        )
-      ]),
-    )
-    AppConfigBottomMenu bottomMenu,
-    @Default(true) bool systemNotificationsEnabled,
-  }) = _AppConfigMain;
+        ),
+      ],
+    ),
+    this.systemNotificationsEnabled = true,
+    this.sipPresenceEnabled = false,
+  });
 
-  factory AppConfigMain.fromJson(Map<String, dynamic> json) => _$AppConfigMainFromJson(json);
+  @override
+  final AppConfigBottomMenu bottomMenu;
+
+  @override
+  final bool systemNotificationsEnabled;
+
+  @override
+  final bool sipPresenceEnabled;
+
+  factory AppConfigMain.fromJson(Map<String, Object?> json) => _$AppConfigMainFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigMainToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigBottomMenu with _$AppConfigBottomMenu {
-  const AppConfigBottomMenu._();
+  const AppConfigBottomMenu({this.cacheSelectedTab = true, this.tabs = const []});
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigBottomMenu({
-    @Default(true) bool cacheSelectedTab,
-    @Default([]) List<BottomMenuTabScheme> tabs,
-  }) = _AppConfigBottomMenu;
+  @override
+  final bool cacheSelectedTab;
 
-  factory AppConfigBottomMenu.fromJson(Map<String, dynamic> json) => _$AppConfigBottomMenuFromJson(json);
+  @override
+  final List<BottomMenuTabScheme> tabs;
+
+  factory AppConfigBottomMenu.fromJson(Map<String, Object?> json) => _$AppConfigBottomMenuFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigBottomMenuToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigCall with _$AppConfigCall {
-  const AppConfigCall._();
+  const AppConfigCall({
+    this.videoEnabled = true,
+    this.transfer = const AppConfigTransfer(enableBlindTransfer: true, enableAttendedTransfer: true),
+    this.encoding = const AppConfigEncoding(),
+    this.peerConnection = const AppConfigPeerConnection(),
+  });
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigCall({
-    @Default(true) bool videoEnabled,
-    @Default(AppConfigTransfer(
-      enableBlindTransfer: true,
-      enableAttendedTransfer: true,
-    ))
-    AppConfigTransfer transfer,
-    @Default(AppConfigEncoding()) AppConfigEncoding encoding,
-    @Default(AppConfigPeerConnection()) AppConfigPeerConnection peerConnection,
-  }) = _AppConfigCall;
+  @override
+  final bool videoEnabled;
 
-  factory AppConfigCall.fromJson(Map<String, dynamic> json) => _$AppConfigCallFromJson(json);
+  @override
+  final AppConfigTransfer transfer;
+
+  @override
+  final AppConfigEncoding encoding;
+
+  @override
+  final AppConfigPeerConnection peerConnection;
+
+  factory AppConfigCall.fromJson(Map<String, Object?> json) => _$AppConfigCallFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigCallToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigTransfer with _$AppConfigTransfer {
-  const AppConfigTransfer._();
+  const AppConfigTransfer({this.enableBlindTransfer = true, this.enableAttendedTransfer = true});
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigTransfer({
-    @Default(true) bool enableBlindTransfer,
-    @Default(true) bool enableAttendedTransfer,
-  }) = _AppConfigTransfer;
+  @override
+  final bool enableBlindTransfer;
 
-  factory AppConfigTransfer.fromJson(Map<String, dynamic> json) => _$AppConfigTransferFromJson(json);
+  @override
+  final bool enableAttendedTransfer;
+
+  factory AppConfigTransfer.fromJson(Map<String, Object?> json) => _$AppConfigTransferFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigTransferToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigEncoding with _$AppConfigEncoding {
-  const AppConfigEncoding._();
+  const AppConfigEncoding({
+    this.bypassConfig = false,
+    this.defaultPresetOverride = const EncodingDefaultPresetOverride(),
+  });
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigEncoding({
-    @Default(false) bool bypassConfig,
-    @Default(EncodingDefaultPresetOverride()) EncodingDefaultPresetOverride defaultPresetOverride,
-  }) = _AppConfigEncoding;
+  @override
+  final bool bypassConfig;
 
-  factory AppConfigEncoding.fromJson(Map<String, dynamic> json) => _$AppConfigEncodingFromJson(json);
+  @override
+  final EncodingDefaultPresetOverride defaultPresetOverride;
+
+  factory AppConfigEncoding.fromJson(Map<String, Object?> json) => _$AppConfigEncodingFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigEncodingToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigPeerConnection with _$AppConfigPeerConnection {
-  const AppConfigPeerConnection._();
+  const AppConfigPeerConnection({this.negotiation = const AppConfigNegotiationSettingsOverride()});
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigPeerConnection({
-    @Default(AppConfigNegotiationSettingsOverride()) AppConfigNegotiationSettingsOverride negotiation,
-  }) = _AppConfigPeerConnection;
+  @override
+  final AppConfigNegotiationSettingsOverride negotiation;
 
-  factory AppConfigPeerConnection.fromJson(Map<String, dynamic> json) => _$AppConfigPeerConnectionFromJson(json);
+  factory AppConfigPeerConnection.fromJson(Map<String, Object?> json) => _$AppConfigPeerConnectionFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigPeerConnectionToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigNegotiationSettingsOverride with _$AppConfigNegotiationSettingsOverride {
-  const AppConfigNegotiationSettingsOverride._();
+  const AppConfigNegotiationSettingsOverride({this.includeInactiveVideoInOfferAnswer = false});
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigNegotiationSettingsOverride({
-    @Default(false) bool includeInactiveVideoInOfferAnswer,
-  }) = _AppConfigNegotiationSettingsOverride;
+  @override
+  final bool includeInactiveVideoInOfferAnswer;
 
-  factory AppConfigNegotiationSettingsOverride.fromJson(Map<String, dynamic> json) =>
+  factory AppConfigNegotiationSettingsOverride.fromJson(Map<String, Object?> json) =>
       _$AppConfigNegotiationSettingsOverrideFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigNegotiationSettingsOverrideToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
-  const EncodingDefaultPresetOverride._();
+  const EncodingDefaultPresetOverride({
+    this.audioBitrate,
+    this.videoBitrate,
+    this.ptime,
+    this.maxptime,
+    this.opusSamplingRate,
+    this.opusBitrate,
+    this.opusStereo,
+    this.opusDtx,
+    this.removeExtmaps,
+    this.removeStaticAudioRtpMaps,
+    this.remapTE8payloadTo101,
+  });
 
-  @JsonSerializable(explicitToJson: true)
-  const factory EncodingDefaultPresetOverride({
-    int? audioBitrate,
-    int? videoBitrate,
-    int? ptime,
-    int? maxptime,
-    int? opusSamplingRate,
-    int? opusBitrate,
-    bool? opusStereo,
-    bool? opusDtx,
-  }) = _EncodingDefaultPresetOverride;
+  @override
+  final int? audioBitrate;
 
-  factory EncodingDefaultPresetOverride.fromJson(Map<String, dynamic> json) =>
+  @override
+  final int? videoBitrate;
+
+  @override
+  final int? ptime;
+
+  @override
+  final int? maxptime;
+
+  @override
+  final int? opusSamplingRate;
+
+  @override
+  final int? opusBitrate;
+
+  @override
+  final bool? opusStereo;
+
+  @override
+  final bool? opusDtx;
+
+  @override
+  final bool? removeExtmaps;
+
+  @override
+  final bool? removeStaticAudioRtpMaps;
+
+  @override
+  final bool? remapTE8payloadTo101;
+
+  factory EncodingDefaultPresetOverride.fromJson(Map<String, Object?> json) =>
       _$EncodingDefaultPresetOverrideFromJson(json);
+
+  Map<String, Object?> toJson() => _$EncodingDefaultPresetOverrideToJson(this);
 }
 
-@freezed
-class BottomMenuTabScheme with _$BottomMenuTabScheme {
-  static const String dataContactSourceTypes = 'contactSourceTypes';
-  static const String dataResource = 'resource';
-
+@Freezed(unionKey: 'type')
+sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
   const BottomMenuTabScheme._();
 
   @JsonSerializable(explicitToJson: true)
-  const factory BottomMenuTabScheme.base({
+  const factory BottomMenuTabScheme.favorites({
     @Default(true) bool enabled,
     @Default(false) bool initial,
-    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-  }) = BaseTabScheme;
+  }) = FavoritesTabScheme;
+
+  @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.recents({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    required String titleL10n,
+    required String icon,
+    @Default(false) bool useCdrs,
+  }) = RecentsTabScheme;
 
   @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.contacts({
     @Default(true) bool enabled,
     @Default(false) bool initial,
-    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    @Default([]) List<String> contactSourceTypes,
+    @Default(<String>[]) List<String> contactSourceTypes,
   }) = ContactsTabScheme;
+
+  @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.keypad({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    required String titleL10n,
+    required String icon,
+  }) = KeypadTabScheme;
+
+  @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.messaging({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    required String titleL10n,
+    required String icon,
+  }) = MessagingTabScheme;
 
   @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.embedded({
     @Default(true) bool enabled,
     @Default(false) bool initial,
-    @BottomMenuTabTypeConverter() required BottomMenuTabType type,
     required String titleL10n,
     required String icon,
-    required int embeddedResourceId,
-  }) = EmbededTabScheme;
+    @IntToStringConverter() required String embeddedResourceId,
+  }) = EmbeddedTabScheme;
 
-  factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => BottomMenuTabSchemeParser.fromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => BottomMenuTabSchemeParser.toJson(this);
+  factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => _$BottomMenuTabSchemeFromJson(json);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigSettings with _$AppConfigSettings {
-  const AppConfigSettings._();
-
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigSettings({
-    @Default([
+  const AppConfigSettings({
+    this.sections = const [
       AppConfigSettingsSection(
         titleL10n: 'settings_ListViewTileTitle_settings',
         enabled: true,
@@ -295,7 +422,7 @@ class AppConfigSettings with _$AppConfigSettings {
             type: 'terms',
             titleL10n: 'settings_ListViewTileTitle_termsConditions',
             icon: '0xeedf',
-            embeddedResourceId: 0,
+            embeddedResourceId: '0',
           ),
           AppConfigSettingsItem(
             enabled: true,
@@ -315,53 +442,69 @@ class AppConfigSettings with _$AppConfigSettings {
             titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
             icon: '0xee79',
           ),
-          AppConfigSettingsItem(
-            enabled: true,
-            type: 'selfConfig',
-            titleL10n: 'settings_ListViewTileTitle_self_config',
-            icon: '0xef7a',
-          ),
-          AppConfigSettingsItem(
-            enabled: true,
-            type: 'deleteAccount',
-            titleL10n: 'settings_ListViewTileTitle_accountDelete',
-            icon: '0xe1bb',
-          )
         ],
       ),
-    ])
-    List<AppConfigSettingsSection> sections,
-  }) = _AppConfigSettings;
+    ],
+  });
 
-  factory AppConfigSettings.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsFromJson(json);
+  @override
+  final List<AppConfigSettingsSection> sections;
+
+  factory AppConfigSettings.fromJson(Map<String, Object?> json) => _$AppConfigSettingsFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigSettingsToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigSettingsSection with _$AppConfigSettingsSection {
-  const AppConfigSettingsSection._();
+  const AppConfigSettingsSection({required this.titleL10n, this.enabled = true, this.items = const []});
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigSettingsSection({
-    required String titleL10n,
-    @Default(true) bool enabled,
-    @Default([]) List<AppConfigSettingsItem> items,
-  }) = _AppConfigSettingsSection;
+  @override
+  final String titleL10n;
 
-  factory AppConfigSettingsSection.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsSectionFromJson(json);
+  @override
+  final bool enabled;
+
+  @override
+  final List<AppConfigSettingsItem> items;
+
+  factory AppConfigSettingsSection.fromJson(Map<String, Object?> json) => _$AppConfigSettingsSectionFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigSettingsSectionToJson(this);
 }
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class AppConfigSettingsItem with _$AppConfigSettingsItem {
-  const AppConfigSettingsItem._();
+  const AppConfigSettingsItem({
+    this.enabled = true,
+    required this.titleL10n,
+    required this.type,
+    required this.icon,
 
-  @JsonSerializable(explicitToJson: true)
-  const factory AppConfigSettingsItem({
-    @Default(true) bool enabled,
-    required String titleL10n,
-    required String type,
-    required String icon,
-    int? embeddedResourceId,
-  }) = _AppConfigSettingsItem;
+    /// TODO: Migration workaround - accepts both int and string IDs.
+    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
+    @IntToStringOptionalConverter() this.embeddedResourceId,
+  });
 
-  factory AppConfigSettingsItem.fromJson(Map<String, dynamic> json) => _$AppConfigSettingsItemFromJson(json);
+  @override
+  final bool enabled;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String type;
+
+  @override
+  final String icon;
+
+  @override
+  @IntToStringOptionalConverter()
+  final String? embeddedResourceId;
+
+  factory AppConfigSettingsItem.fromJson(Map<String, Object?> json) => _$AppConfigSettingsItemFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigSettingsItemToJson(this);
 }

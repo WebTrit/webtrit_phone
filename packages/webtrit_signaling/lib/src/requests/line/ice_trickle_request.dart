@@ -1,19 +1,12 @@
 import '../abstract_requests.dart';
 
 class IceTrickleRequest extends LineRequest {
-  const IceTrickleRequest({
-    required super.transaction,
-    required super.line,
-    this.candidate,
-  });
+  const IceTrickleRequest({required super.transaction, required super.line, this.candidate});
 
   final Map<String, dynamic>? candidate;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        candidate,
-      ];
+  List<Object?> get props => [...super.props, candidate];
 
   static const typeValue = 'ice_trickle';
 
@@ -23,20 +16,11 @@ class IceTrickleRequest extends LineRequest {
       throw ArgumentError.value(requestTypeValue, Request.typeKey, 'Not equal $typeValue');
     }
 
-    return IceTrickleRequest(
-      transaction: json['transaction'],
-      line: json['line'],
-      candidate: json['candidate'],
-    );
+    return IceTrickleRequest(transaction: json['transaction'], line: json['line'], candidate: json['candidate']);
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      Request.typeKey: typeValue,
-      'transaction': transaction,
-      'line': line,
-      'candidate': candidate,
-    };
+    return {Request.typeKey: typeValue, 'transaction': transaction, 'line': line, 'candidate': candidate};
   }
 }

@@ -8,26 +8,14 @@ import 'package:webtrit_phone/app/router/app_router_observer.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class App extends StatefulWidget {
-  const App({
-    super.key,
-    required this.appPreferences,
-    required this.secureStorage,
-    required this.appDatabase,
-    required this.appPermissions,
-    required this.appThemes,
-  });
-
-  final AppPreferences appPreferences;
-  final SecureStorage secureStorage;
-  final AppDatabase appDatabase;
-  final AppPermissions appPermissions;
-  final AppThemes appThemes;
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();
@@ -35,8 +23,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   late final AppBloc appBloc;
-
-  late final AppRouter _appRouter;
+  late final AppRouter appRouter;
 
   @override
   void initState() {
@@ -44,16 +31,17 @@ class _AppState extends State<App> {
     final featureAccess = FeatureAccess();
 
     appBloc = AppBloc(
-      appPreferences: widget.appPreferences,
-      secureStorage: widget.secureStorage,
-      appDatabase: widget.appDatabase,
-      appThemes: widget.appThemes,
+      appPreferences: context.read<AppPreferences>(),
+      appThemes: context.read<AppThemes>(),
+      sessionRepository: context.read<SessionRepository>(),
+      appInfo: context.read<AppInfo>(),
     );
-    _appRouter = AppRouter(
+    appRouter = AppRouter(
       appBloc,
-      widget.appPermissions,
-      featureAccess.loginFeature.embeddedLaunchConfiguration?.customLoginFeature,
+      context.read<AppPermissions>(),
+      featureAccess.loginFeature.launchLoginPage,
       featureAccess.bottomMenuFeature,
+      featureAccess.toChecker(),
     );
   }
 
@@ -89,8 +77,8 @@ class _AppState extends State<App> {
                 themeMode: state.effectiveThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
-                routerConfig: _appRouter.config(
-                  deepLinkBuilder: isDeepLinkEnabled ? _appRouter.deepLinkBuilder : null,
+                routerConfig: appRouter.config(
+                  deepLinkBuilder: isDeepLinkEnabled ? appRouter.deepLinkBuilder : null,
                   navigatorObservers: () => [
                     AppRouterObserver(),
                     context.read<AppAnalyticsRepository>().createObserver(),
@@ -111,12 +99,8 @@ class _AppState extends State<App> {
           lazy: false,
           create: (context) => OrientationsBloc()..add(const OrientationsChanged(PreferredOrientation.regular)),
         ),
-        BlocProvider<NotificationsBloc>(
-          create: (context) => NotificationsBloc(),
-        ),
-        BlocProvider<AppBloc>.value(
-          value: appBloc,
-        ),
+        BlocProvider<NotificationsBloc>(create: (context) => NotificationsBloc()),
+        BlocProvider<AppBloc>.value(value: appBloc),
       ],
       child: materialApp,
     );

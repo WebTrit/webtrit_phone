@@ -17,28 +17,32 @@ final _logger = Logger('EmbeddedScreen');
 class EmbeddedScreen extends StatefulWidget {
   const EmbeddedScreen({
     required this.initialUri,
+    required this.mediaQueryMetricsData,
+    required this.deviceInfoData,
     required this.appBar,
-    this.shouldForwardPop = true,
-    this.enableConsoleLogCapture,
     required this.connectivityRecoveryStrategyBuilder,
     required this.pageInjectionStrategyBuilder,
+    this.shouldForwardPop = true,
+    this.enableLogCapture = true,
     super.key,
   });
 
   final Uri initialUri;
+  final MediaQueryMetrics? mediaQueryMetricsData;
+  final Map<String, String>? deviceInfoData;
   final PreferredSizeWidget appBar;
-
-  /// If true, the console log will be captured and forwarded to the logger.
-  final bool? enableConsoleLogCapture;
-
-  /// If true, the pop action will be forwarded to the WebView if backstack is available.
-  final bool shouldForwardPop;
 
   /// Builder for creating the page injection strategy.
   final PageInjectionStrategyBuilder pageInjectionStrategyBuilder;
 
   /// Builder for creating the connectivity recovery strategy.
   final ConnectivityRecoveryStrategyBuilder connectivityRecoveryStrategyBuilder;
+
+  /// If true, the console log will be captured and forwarded to the logger.
+  final bool enableLogCapture;
+
+  /// If true, the pop action will be forwarded to the WebView if backstack is available.
+  final bool shouldForwardPop;
 
   @override
   State<EmbeddedScreen> createState() => _EmbeddedScreenState();
@@ -49,12 +53,24 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
   late final ConnectivityRecoveryStrategy _connectivityRecoveryStrategy;
   late final PageInjectionStrategy _pageInjectionStrategy;
 
+  late final List<JSChannelStrategy> _jSChannelStrategies;
+  late final List<PageInjectionStrategy> _pageInjectionStrategies;
+
   EmbeddedCubit get _cubit => context.read<EmbeddedCubit>();
 
   @override
   void initState() {
     _pageInjectionStrategy = widget.pageInjectionStrategyBuilder();
     _connectivityRecoveryStrategy = widget.connectivityRecoveryStrategyBuilder();
+
+    // TODO: Add to embedded configuration possibly disable media query injection and/or device info injection.
+    _pageInjectionStrategies = PageInjectionBuilders.resolve(
+      mediaQueryMetricsData: widget.mediaQueryMetricsData,
+      deviceInfoData: widget.deviceInfoData,
+      custom: [_pageInjectionStrategy],
+    );
+
+    _jSChannelStrategies = JSChannelBuilders.resolve(enableLogCapture: widget.enableLogCapture);
     super.initState();
   }
 
@@ -67,15 +83,15 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
           final forwardPop = widget.shouldForwardPop && state.canGoBack;
 
           return PopScope(
-            onPopInvokedWithResult: (_, __) => _webViewController.goBack(),
+            onPopInvokedWithResult: (_, _) => _webViewController.goBack(),
             canPop: forwardPop == false,
             child: WebViewContainer(
               initialUri: widget.initialUri,
               webViewController: _webViewController,
               connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
-              pageInjectionStrategies: [_pageInjectionStrategy],
+              pageInjectionStrategies: _pageInjectionStrategies,
+              jSChannelStrategies: _jSChannelStrategies,
               showToolbar: false,
-              enableEmbeddedLogging: widget.enableConsoleLogCapture ?? false,
               userAgent: UserAgent.of(context),
               errorBuilder: _buildErrorBuilder(),
               onUrlChange: _handleUrlChange,
@@ -114,10 +130,10 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
     }
 
     return (context, error, controller) => EmbeddedRequestErrorDialog(
-          title: error.titleL10n(context),
-          error: error.messageL10n(context),
-          onRetry: () => _webViewController.reload(),
-        );
+      title: error.titleL10n(context),
+      error: error.messageL10n(context),
+      onRetry: () => _webViewController.reload(),
+    );
   }
 
   void _onBlocStateChanged(BuildContext context, EmbeddedState state) {

@@ -14,12 +14,10 @@ part 'sms_conversations_state.dart';
 final _logger = Logger('SmsConversationsCubit');
 
 class SmsConversationsCubit extends Cubit<SmsConversationsState> {
-  SmsConversationsCubit(
-    this._client,
-    this._repository,
-  ) : super(SmsConversationsState.initial()) {
+  SmsConversationsCubit(this._client, this._repository) : super(SmsConversationsState.initial()) {
     init();
   }
+
   final PhoenixSocket _client;
   final SmsRepository _repository;
   late final StreamSubscription _conversationsSub;

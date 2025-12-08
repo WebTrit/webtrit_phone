@@ -2,12 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-enum RecentsVisibilityFilter {
-  all,
-  missed,
-  incoming,
-  outgoing,
-}
+enum RecentsVisibilityFilter { all, missed, incoming, outgoing }
 
 extension RecentsVisibilityFilterI10nExtension on RecentsVisibilityFilter {
   String l10n(BuildContext context) {

@@ -19,8 +19,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     required BackgroundPushNotificationService callkeep,
     required SecureStorage storage,
     required TrustedCertificates certificates,
-  })  : _callLogsRepository = callLogsRepository,
-        _callkeep = callkeep {
+  }) : _callLogsRepository = callLogsRepository,
+       _callkeep = callkeep {
     _initSignalingManager(storage, certificates);
     _callkeep.setBackgroundServiceDelegate(this);
   }
@@ -66,7 +66,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     }
   }
 
-  void _handleSignalingError(error, [StackTrace? stackTrace]) async {
+  void _handleSignalingError(Object error, [StackTrace? stackTrace]) async {
     try {
       await _callkeep.endCalls();
     } catch (e) {
@@ -99,7 +99,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     return _signalingManager.declineCall(callId);
   }
 
-// TODO (Serdun): Rename this callback to align with naming conventions.
+  // TODO (Serdun): Rename this callback to align with naming conventions.
   @override
   Future<void> performReceivedCall(
     String callId,
@@ -128,7 +128,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     return;
   }
 
-  void _handleExceptions(e) {
+  void _handleExceptions(Object e) {
     _logger.severe(e);
   }
 }

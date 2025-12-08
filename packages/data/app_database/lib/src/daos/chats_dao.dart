@@ -13,17 +13,19 @@ class ChatDataWithMembers {
   final List<ChatMemberData> members;
 }
 
-@DriftAccessor(tables: [
-  ChatsTable,
-  ChatMembersTable,
-  ChatMessagesTable,
-  ChatMessageSyncCursorTable,
-  ChatMessageReadCursorTable,
-  ChatOutboxMessageTable,
-  ChatOutboxMessageEditTable,
-  ChatOutboxMessageDeleteTable,
-  ChatOutboxReadCursorsTable,
-])
+@DriftAccessor(
+  tables: [
+    ChatsTable,
+    ChatMembersTable,
+    ChatMessagesTable,
+    ChatMessageSyncCursorTable,
+    ChatMessageReadCursorTable,
+    ChatOutboxMessageTable,
+    ChatOutboxMessageEditTable,
+    ChatOutboxMessageDeleteTable,
+    ChatOutboxReadCursorsTable,
+  ],
+)
 class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   ChatsDao(super.db);
 
@@ -84,8 +86,7 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   Future<List<ChatDataWithMembers>> getAllChatsWithMembers() {
     final q = select(chatsTable).join([
       leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
-    ])
-      ..orderBy([OrderingTerm(expression: chatsTable.updatedAtRemote, mode: OrderingMode.desc)]);
+    ])..orderBy([OrderingTerm(expression: chatsTable.updatedAtRemote, mode: OrderingMode.desc)]);
 
     return q.get().then((rows) {
       final chatData = <ChatData>[];
@@ -116,9 +117,9 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future<ChatDataWithMembers?> getChatWithMembers(int chatId) {
-    final q = select(chatsTable).join([
-      leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id)),
-    ]);
+    final q = select(
+      chatsTable,
+    ).join([leftOuterJoin(chatMembersTable, chatMembersTable.chatId.equalsExp(chatsTable.id))]);
     q.where(chatsTable.id.equals(chatId));
     return q.get().then((rows) {
       ChatData? chatData;
@@ -198,8 +199,9 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Future<ChatMessageReadCursorData?> getChatMessageReadCursor(int chatId, String userId) async {
-    return (select(chatMessageReadCursorTable)..where((t) => t.chatId.equals(chatId) & t.userId.equals(userId)))
-        .getSingleOrNull();
+    return (select(
+      chatMessageReadCursorTable,
+    )..where((t) => t.chatId.equals(chatId) & t.userId.equals(userId))).getSingleOrNull();
   }
 
   Stream<List<ChatMessageReadCursorData>> watchChatMessageReadCursors(int chatId) {
@@ -232,9 +234,9 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   // Message sync cursors
 
   Future<ChatMessageSyncCursorData?> getChatMessageSyncCursor(int chatId, MessageSyncCursorTypeEnum cursorType) {
-    return (select(chatMessageSyncCursorTable)
-          ..where((t) => t.chatId.equals(chatId) & t.cursorType.equals(cursorType.name)))
-        .getSingleOrNull();
+    return (select(
+      chatMessageSyncCursorTable,
+    )..where((t) => t.chatId.equals(chatId) & t.cursorType.equals(cursorType.name))).getSingleOrNull();
   }
 
   Future<int> upsertChatMessageSyncCursor(Insertable<ChatMessageSyncCursorData> chatMessageSyncCursor) {
@@ -333,9 +335,9 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
 
   Future<void> wipeStaleDeletedChatMessagesData({int ttlSeconds = 60 * 60 * 24}) async {
     final staleTime = clock.now().subtract(Duration(seconds: ttlSeconds));
-    await (delete(chatMessagesTable)
-          ..where((t) => t.deletedAtRemoteUsec.isSmallerThanValue(staleTime.microsecondsSinceEpoch)))
-        .go();
+    await (delete(
+      chatMessagesTable,
+    )..where((t) => t.deletedAtRemoteUsec.isSmallerThanValue(staleTime.microsecondsSinceEpoch))).go();
   }
 
   Future<void> wipeChatsData() async {

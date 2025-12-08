@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'presence_badge_style.dart';
 import 'registered_badge_style.dart';
 import 'smart_indicator_style.dart';
 
@@ -15,6 +16,7 @@ class LeadingAvatarStyle with Diagnosticable {
     this.loadingOverlay,
     this.smartIndicator,
     this.registeredBadge,
+    this.presenceBadge,
   });
 
   /// Circle background; falls back to ColorScheme.secondaryContainer when null.
@@ -38,6 +40,9 @@ class LeadingAvatarStyle with Diagnosticable {
   /// Registered/unregistered badge (bottom-right).
   final RegisteredBadgeStyle? registeredBadge;
 
+  /// Presence badge (bottom-right).
+  final PresenceBadgeStyle? presenceBadge;
+
   static LeadingAvatarStyle merge(LeadingAvatarStyle? base, LeadingAvatarStyle? override) {
     if (base == null && override == null) return const LeadingAvatarStyle();
     base ??= const LeadingAvatarStyle();
@@ -46,21 +51,19 @@ class LeadingAvatarStyle with Diagnosticable {
     return LeadingAvatarStyle(
       backgroundColor: override.backgroundColor ?? base.backgroundColor,
       radius: override.radius ?? base.radius,
-      initialsTextStyle: base.initialsTextStyle?.merge(override.initialsTextStyle) ??
+      initialsTextStyle:
+          base.initialsTextStyle?.merge(override.initialsTextStyle) ??
           override.initialsTextStyle ??
           base.initialsTextStyle,
       placeholderIcon: override.placeholderIcon ?? base.placeholderIcon,
       loadingOverlay: LoadingOverlayStyle.merge(base.loadingOverlay, override.loadingOverlay),
       smartIndicator: SmartIndicatorStyle.merge(base.smartIndicator, override.smartIndicator),
       registeredBadge: RegisteredBadgeStyle.merge(base.registeredBadge, override.registeredBadge),
+      presenceBadge: PresenceBadgeStyle.merge(base.presenceBadge, override.presenceBadge),
     );
   }
 
-  static LeadingAvatarStyle? lerp(
-    LeadingAvatarStyle? a,
-    LeadingAvatarStyle? b,
-    double t,
-  ) {
+  static LeadingAvatarStyle? lerp(LeadingAvatarStyle? a, LeadingAvatarStyle? b, double t) {
     if (identical(a, b)) return a;
     if (a == null && b == null) return null;
 
@@ -72,6 +75,7 @@ class LeadingAvatarStyle with Diagnosticable {
       loadingOverlay: LoadingOverlayStyle.lerp(a?.loadingOverlay, b?.loadingOverlay, t),
       smartIndicator: SmartIndicatorStyle.lerp(a?.smartIndicator, b?.smartIndicator, t),
       registeredBadge: RegisteredBadgeStyle.lerp(a?.registeredBadge, b?.registeredBadge, t),
+      presenceBadge: PresenceBadgeStyle.lerp(a?.presenceBadge, b?.presenceBadge, t),
     );
   }
 
@@ -85,16 +89,13 @@ class LeadingAvatarStyle with Diagnosticable {
       ..add(DiagnosticsProperty<IconData?>('placeholderIcon', placeholderIcon))
       ..add(DiagnosticsProperty<LoadingOverlayStyle?>('loadingOverlay', loadingOverlay))
       ..add(DiagnosticsProperty<SmartIndicatorStyle?>('smartIndicator', smartIndicator))
-      ..add(DiagnosticsProperty<RegisteredBadgeStyle?>('registeredBadge', registeredBadge));
+      ..add(DiagnosticsProperty<RegisteredBadgeStyle?>('registeredBadge', registeredBadge))
+      ..add(DiagnosticsProperty<PresenceBadgeStyle?>('presenceBadge', presenceBadge));
   }
 }
 
 class LoadingOverlayStyle with Diagnosticable {
-  const LoadingOverlayStyle({
-    this.showByDefault = false,
-    this.padding,
-    this.strokeWidth,
-  });
+  const LoadingOverlayStyle({this.showByDefault = false, this.padding, this.strokeWidth});
 
   final bool showByDefault;
   final EdgeInsets? padding;
@@ -111,11 +112,7 @@ class LoadingOverlayStyle with Diagnosticable {
     );
   }
 
-  static LoadingOverlayStyle? lerp(
-    LoadingOverlayStyle? a,
-    LoadingOverlayStyle? b,
-    double t,
-  ) {
+  static LoadingOverlayStyle? lerp(LoadingOverlayStyle? a, LoadingOverlayStyle? b, double t) {
     if (identical(a, b)) return a;
     if (a == null && b == null) return null;
 

@@ -14,38 +14,35 @@ import 'subsequences/login_by_method.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
-main() {
+void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
   const accountName = IntegrationTestEnvironmentConfig.ACCOUNT_NAME;
   const accountMainNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
 
-  patrolTest(
-    'Should show correct profile data and perform sip registration',
-    ($) async {
-      await bootstrap();
-      await pumpRootAndWaitUntilVisible($);
+  patrolTest('Should show correct profile data and perform sip registration', ($) async {
+    await bootstrap();
+    await pumpRootAndWaitUntilVisible($);
 
-      // Login if not.
-      if ($(LoginModeSelectScreen).visible) {
-        await loginByMethod($, defaultLoginMethod);
-        // Wait some time for components loading and session establishment.
-        await pumpFor(const Duration(seconds: 5), $);
-      }
+    // Login if not.
+    if ($(LoginModeSelectScreen).visible) {
+      await loginByMethod($, defaultLoginMethod);
+      // Wait some time for components loading and session establishment.
+      await pumpFor(const Duration(seconds: 5), $);
+    }
 
-      // Open profile screen and check if the profile data is correct.
-      await $(mainAppBarKey).tap();
-      await pumpFor(const Duration(seconds: 2), $);
-      expect($(UserInfoListTile).$(accountName), findsOneWidget, reason: 'Verify account name');
-      expect($(UserInfoListTile).$(accountMainNumber), findsOneWidget, reason: 'Verify account main number');
-      expect($(SessionStatus.ready.key), findsOneWidget, reason: 'Should be registered');
+    // Open profile screen and check if the profile data is correct.
+    await $(mainAppBarKey).tap();
+    await pumpFor(const Duration(seconds: 2), $);
+    expect($(UserInfoListTile).$(accountName), findsOneWidget, reason: 'Verify account name');
+    expect($(UserInfoListTile).$(accountMainNumber), findsOneWidget, reason: 'Verify account main number');
+    expect($(SessionStatus.ready.key), findsOneWidget, reason: 'Should be registered');
 
-      // Check manual sip registration.
-      await $(SwitchListTile).tap();
-      await pumpFor(const Duration(seconds: 2), $);
-      expect($(SessionStatus.appUnregistered.key), findsOneWidget, reason: 'Should unregister sip session');
-      await $(SwitchListTile).tap();
-      await pumpFor(const Duration(seconds: 2), $);
-      expect($(SessionStatus.ready.key), findsOneWidget, reason: 'Should register sip session');
-    },
-  );
+    // Check manual sip registration.
+    await $(SwitchListTile).tap();
+    await pumpFor(const Duration(seconds: 2), $);
+    expect($(SessionStatus.appUnregistered.key), findsOneWidget, reason: 'Should unregister sip session');
+    await $(SwitchListTile).tap();
+    await pumpFor(const Duration(seconds: 2), $);
+    expect($(SessionStatus.ready.key), findsOneWidget, reason: 'Should register sip session');
+  });
 }

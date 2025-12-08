@@ -5,11 +5,7 @@ class AppLocalPushAction {
   final LocalPushActionType type;
   final Map<String, dynamic> payload;
 
-  AppLocalPushAction({
-    required this.id,
-    required this.type,
-    required this.payload,
-  });
+  AppLocalPushAction({required this.id, required this.type, required this.payload});
 
   @override
   String toString() {

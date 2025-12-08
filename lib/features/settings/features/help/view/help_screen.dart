@@ -5,10 +5,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class HelpScreen extends StatelessWidget {
-  const HelpScreen({
-    super.key,
-    required this.initialUri,
-  });
+  const HelpScreen({super.key, required this.initialUri});
 
   final Uri initialUri;
 

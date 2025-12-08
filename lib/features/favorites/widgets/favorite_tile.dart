@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/favorite.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class FavoriteTile extends StatefulWidget {
@@ -45,59 +46,34 @@ class _FavoriteTileState extends State<FavoriteTile> {
   late final number = widget.favorite.number;
 
   List<PopupMenuEntry> get actions => [
-        if (widget.onAudioCallPressed != null)
-          PopupMenuItem(
-            onTap: widget.onAudioCallPressed,
-            child: Text(context.l10n.numberActions_audioCall),
-          ),
-        if (widget.onVideoCallPressed != null)
-          PopupMenuItem(
-            onTap: widget.onVideoCallPressed,
-            child: Text(context.l10n.numberActions_videoCall),
-          ),
-        if (widget.callNumbers.length > 1)
-          for (final callNumber in widget.callNumbers)
-            PopupMenuItem(
-              onTap: () => widget.onCallFrom?.call(callNumber),
-              child: Text(context.l10n.numberActions_callFrom(callNumber)),
-            ),
-        if (widget.onTransferPressed != null)
-          PopupMenuItem(
-            onTap: widget.onTransferPressed,
-            child: Text(context.l10n.numberActions_transfer),
-          ),
-        if (widget.onChatPressed != null)
-          PopupMenuItem(
-            onTap: widget.onChatPressed,
-            child: Text(context.l10n.numberActions_chat),
-          ),
-        if (widget.onSendSmsPressed != null)
-          PopupMenuItem(
-            onTap: widget.onSendSmsPressed,
-            child: Text(context.l10n.numberActions_sendSms),
-          ),
-        if (widget.onViewContactPressed != null)
-          PopupMenuItem(
-            onTap: widget.onViewContactPressed,
-            child: Text(context.l10n.numberActions_viewContact),
-          ),
-        if (widget.onCallLogPressed != null)
-          PopupMenuItem(
-            onTap: widget.onCallLogPressed,
-            child: Text(context.l10n.numberActions_callLog),
-          ),
+    if (widget.onAudioCallPressed != null)
+      PopupMenuItem(onTap: widget.onAudioCallPressed, child: Text(context.l10n.numberActions_audioCall)),
+    if (widget.onVideoCallPressed != null)
+      PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
+    if (widget.callNumbers.length > 1)
+      for (final callNumber in widget.callNumbers)
         PopupMenuItem(
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: number));
-          },
-          child: Text(context.l10n.numberActions_copyNumber),
+          onTap: () => widget.onCallFrom?.call(callNumber),
+          child: Text(context.l10n.numberActions_callFrom(callNumber)),
         ),
-        if (widget.onDelete != null)
-          PopupMenuItem(
-            onTap: widget.onDelete,
-            child: Text(context.l10n.numberActions_delete),
-          ),
-      ];
+    if (widget.onTransferPressed != null)
+      PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
+    if (widget.onChatPressed != null)
+      PopupMenuItem(onTap: widget.onChatPressed, child: Text(context.l10n.numberActions_chat)),
+    if (widget.onSendSmsPressed != null)
+      PopupMenuItem(onTap: widget.onSendSmsPressed, child: Text(context.l10n.numberActions_sendSms)),
+    if (widget.onViewContactPressed != null)
+      PopupMenuItem(onTap: widget.onViewContactPressed, child: Text(context.l10n.numberActions_viewContact)),
+    if (widget.onCallLogPressed != null)
+      PopupMenuItem(onTap: widget.onCallLogPressed, child: Text(context.l10n.numberActions_callLog)),
+    PopupMenuItem(
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: number));
+      },
+      child: Text(context.l10n.numberActions_copyNumber),
+    ),
+    if (widget.onDelete != null) PopupMenuItem(onTap: widget.onDelete, child: Text(context.l10n.numberActions_delete)),
+  ];
 
   void onLongPress() {
     final position = getPosition();
@@ -121,18 +97,17 @@ class _FavoriteTileState extends State<FavoriteTile> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final presenceSource = PresenceViewParams.of(context).viewSource;
+
+    final contact = widget.favorite.contact;
+    final name = widget.favorite.name;
 
     return Dismissible(
       key: ObjectKey(widget.favorite),
       background: Container(
         color: themeData.colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
-        child: const Align(
-          alignment: Alignment.centerRight,
-          child: Icon(
-            Icons.delete_outline,
-          ),
-        ),
+        child: const Align(alignment: Alignment.centerRight, child: Icon(Icons.delete_outline)),
       ),
       confirmDismiss: (direction) => ConfirmDialog.showDangerous(
         context,
@@ -145,12 +120,16 @@ class _FavoriteTileState extends State<FavoriteTile> {
         key: tileKey,
         contentPadding: const EdgeInsets.only(left: 16.0),
         leading: LeadingAvatar(
-          username: widget.favorite.name,
-          thumbnail: widget.favorite.contact.thumbnail,
-          thumbnailUrl: widget.favorite.contact.thumbnailUrl,
-          registered: widget.favorite.contact.registered,
+          username: name,
+          thumbnail: contact.thumbnail,
+          thumbnailUrl: contact.thumbnailUrl,
+          registered: contact.registered,
+          presenceInfo: contact.presenceInfo,
         ),
-        title: Text(widget.favorite.name),
+        title: switch (presenceSource) {
+          PresenceViewSource.sipPresence => Text('$name ${contact.presenceInfo.primaryStatusIcon ?? ''}'),
+          PresenceViewSource.contactInfo => Text(name),
+        },
         subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
         onTap: widget.onTap,
         onLongPress: onLongPress,

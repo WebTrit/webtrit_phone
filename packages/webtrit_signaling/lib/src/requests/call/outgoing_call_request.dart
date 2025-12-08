@@ -19,14 +19,7 @@ class OutgoingCallRequest extends CallRequest {
   final String? from;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        number,
-        jsep,
-        referId,
-        replaces,
-        from,
-      ];
+  List<Object?> get props => [...super.props, number, jsep, referId, replaces, from];
 
   static const typeValue = 'outgoing_call';
 

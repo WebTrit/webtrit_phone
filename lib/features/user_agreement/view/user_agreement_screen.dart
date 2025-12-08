@@ -14,11 +14,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class UserAgreementScreen extends StatefulWidget {
-  const UserAgreementScreen({
-    super.key,
-    required this.appTermsAndConditionsUrl,
-    required this.appName,
-  });
+  const UserAgreementScreen({super.key, required this.appTermsAndConditionsUrl, required this.appName});
 
   final String appTermsAndConditionsUrl;
   final String appName;
@@ -46,10 +42,7 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: kInset * 2),
-                    const AppIcon(
-                      Icons.menu_book_rounded,
-                      size: kInset * 6,
-                    ),
+                    const AppIcon(Icons.menu_book_rounded, size: kInset * 6),
                     const SizedBox(height: kInset * 2),
                     Text(
                       context.l10n.user_agreement_description(widget.appName),
@@ -63,7 +56,8 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                       userAgreementAccepted: agreementStatus.isAccepted,
                       onChanged: _handleAgreementStatusChange,
                       onAgreementLinkTap: () => context.router.navigate(
-                          TermsConditionsScreenPageRoute(initialUriQueryParam: widget.appTermsAndConditionsUrl)),
+                        TermsConditionsScreenPageRoute(initialUriQueryParam: widget.appTermsAndConditionsUrl),
+                      ),
                     ),
                     const SizedBox(height: kInset / 2),
                     OutlinedButton(
@@ -78,15 +72,8 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
 
               return SingleChildScrollView(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: viewportConstraints.maxHeight,
-                  ),
-                  child: IntrinsicHeight(
-                    child: InertSafeArea(
-                      bottom: true,
-                      child: body,
-                    ),
-                  ),
+                  constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+                  child: IntrinsicHeight(child: InertSafeArea(bottom: true, child: body)),
                 ),
               );
             },

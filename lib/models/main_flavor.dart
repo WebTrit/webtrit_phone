@@ -1,8 +1,1 @@
-enum MainFlavor {
-  favorites,
-  recents,
-  contacts,
-  keypad,
-  embedded,
-  messaging,
-}
+enum MainFlavor { favorites, recents, contacts, keypad, embedded, messaging }

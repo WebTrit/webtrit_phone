@@ -1,12 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class AdapterInfo with EquatableMixin {
-  AdapterInfo({
-    this.name,
-    this.version,
-    this.supported,
-    this.custom,
-  });
+  AdapterInfo({this.name, this.version, this.supported, this.custom});
 
   final String? name;
   final String? version;

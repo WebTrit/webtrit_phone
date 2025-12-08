@@ -12,11 +12,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import '../models/models.dart';
 
 class AudioView extends StatefulWidget {
-  const AudioView({
-    super.key,
-    required this.path,
-    this.onPlaybackStarted,
-  });
+  const AudioView({super.key, required this.path, this.onPlaybackStarted});
 
   final String path;
 
@@ -52,11 +48,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     if (widget.path.isLocalPath) {
       return AudioSource.uri(_uri);
     } else {
-      return LockCachingAudioSource(
-        _uri,
-        headers: _headers,
-        cacheFile: _cacheFile(),
-      );
+      return LockCachingAudioSource(_uri, headers: _headers, cacheFile: _cacheFile());
     }
   }
 
@@ -122,15 +114,8 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
                 child: Container(
                   width: 40,
                   height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: colorScheme.primary,
-                  ),
-                  child: Icon(
-                    _player.playing ? Icons.pause : Icons.play_arrow,
-                    color: colorScheme.onPrimary,
-                    size: 24,
-                  ),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: colorScheme.primary),
+                  child: Icon(_player.playing ? Icons.pause : Icons.play_arrow, color: colorScheme.onPrimary, size: 24),
                 ),
               ),
               const SizedBox(width: 16),
@@ -159,12 +144,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
 }
 
 class AudioSlider extends StatelessWidget {
-  const AudioSlider({
-    super.key,
-    required this.position,
-    required this.duration,
-    required this.onSeek,
-  });
+  const AudioSlider({super.key, required this.position, required this.duration, required this.onSeek});
 
   final Duration position;
   final Duration duration;
@@ -203,17 +183,13 @@ class AudioSlider extends StatelessWidget {
                 children: [
                   Text(
                     _formatDuration(clampedPosition),
-                    style: textTheme.labelMedium?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.5),
-                    ),
+                    style: textTheme.labelMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
                   ),
                 ],
               ),
               Text(
                 _formatDuration(duration),
-                style: textTheme.labelMedium?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.5),
-                ),
+                style: textTheme.labelMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
               ),
             ],
           ),

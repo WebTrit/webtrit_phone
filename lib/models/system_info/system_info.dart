@@ -17,13 +17,7 @@ export 'components/websocket.dart';
 export 'components/sip_version.dart';
 
 class WebtritSystemInfo with EquatableMixin {
-  WebtritSystemInfo({
-    required this.core,
-    required this.postgres,
-    this.adapter,
-    this.janus,
-    this.gorush,
-  });
+  WebtritSystemInfo({required this.core, required this.postgres, this.adapter, this.janus, this.gorush});
 
   final CoreInfo core;
   final PostgresInfo postgres;

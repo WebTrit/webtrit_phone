@@ -18,7 +18,5 @@ class ContactEmailsTable extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 
   @override
-  List<String> get customConstraints => [
-        'UNIQUE(address, contact_id)',
-      ];
+  List<String> get customConstraints => ['UNIQUE(address, contact_id)'];
 }

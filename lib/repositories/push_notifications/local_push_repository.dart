@@ -86,7 +86,4 @@ const kDarwinNotificationDetails = DarwinNotificationDetails(
   presentSound: true,
   interruptionLevel: InterruptionLevel.active,
 );
-const kNotificationDetails = NotificationDetails(
-  android: kAndroidNotificationDetails,
-  iOS: kDarwinNotificationDetails,
-);
+const kNotificationDetails = NotificationDetails(android: kAndroidNotificationDetails, iOS: kDarwinNotificationDetails);

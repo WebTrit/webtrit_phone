@@ -4,7 +4,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-class FavoritesRepository with ContactsDriftMapper, FavoritesDriftMapper {
+class FavoritesRepository with PresenceInfoDriftMapper, ContactsDriftMapper, FavoritesDriftMapper {
   FavoritesRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;

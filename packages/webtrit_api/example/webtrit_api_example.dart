@@ -20,11 +20,7 @@ void main(List<String> arguments) async {
     exit(1);
   }
 
-  final client = WebtritApiClient(
-    Uri.parse(url),
-    tenantId,
-    connectionTimeout: Duration(seconds: 5),
-  );
+  final client = WebtritApiClient(Uri.parse(url), tenantId, connectionTimeout: Duration(seconds: 5));
 
   final info = await client.getSystemInfo();
   print(jsonEncode(info.toJson()));

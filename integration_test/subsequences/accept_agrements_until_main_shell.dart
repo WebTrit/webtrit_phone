@@ -30,13 +30,11 @@ Future<void> acceptAgrementsUntilMainShell(PatrolIntegrationTester $) async {
       await permissionsInitButton.tap(settlePolicy: SettlePolicy.noSettle);
 
       // Process native permission dialogs until they go away
-      await Future.doWhile(
-        () async {
-          final isPermissionDialogVisible = await $.native.isPermissionDialogVisible();
-          if (isPermissionDialogVisible) await $.native.grantPermissionWhenInUse();
-          return isPermissionDialogVisible;
-        },
-      );
+      await Future.doWhile(() async {
+        final isPermissionDialogVisible = await $.native.isPermissionDialogVisible();
+        if (isPermissionDialogVisible) await $.native.grantPermissionWhenInUse();
+        return isPermissionDialogVisible;
+      });
       await $.pumpAndTrySettle();
     }
     if (permissionTipsButton.visible) await permissionTipsButton.tap();

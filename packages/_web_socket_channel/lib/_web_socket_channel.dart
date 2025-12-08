@@ -8,7 +8,8 @@ export 'package:ssl_certificates/ssl_certificates.dart' show TrustedCertificates
 
 import 'src/_web_socket_channel_stub.dart'
     if (dart.library.html) 'src/_web_socket_channel_html.dart'
-    if (dart.library.io) 'src/_web_socket_channel_io.dart' as platform;
+    if (dart.library.io) 'src/_web_socket_channel_io.dart'
+    as platform;
 
 Future<dynamic> connectWebSocket(
   String url, {

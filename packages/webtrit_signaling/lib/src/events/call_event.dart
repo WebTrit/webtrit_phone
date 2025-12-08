@@ -2,19 +2,12 @@ import 'abstract_events.dart';
 import 'call/call_events.dart';
 
 abstract class CallEvent extends LineEvent {
-  const CallEvent({
-    super.transaction,
-    required super.line,
-    required this.callId,
-  });
+  const CallEvent({super.transaction, required super.line, required this.callId});
 
   final String callId;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        callId,
-      ];
+  List<Object?> get props => [...super.props, callId];
 
   factory CallEvent.fromJson(Map<String, dynamic> json) {
     final callEvent = tryFromJson(json);
