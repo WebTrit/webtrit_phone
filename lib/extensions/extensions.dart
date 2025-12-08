@@ -26,6 +26,7 @@ export 'session_status.dart';
 export 'signaling_exception.dart';
 export 'signaling_hangup_failure.dart';
 export 'socket_exception.dart';
+export 'stream_extensions.dart';
 export 'string.dart';
 export 'theme_mode.dart';
 export 'uri_extension.dart';
