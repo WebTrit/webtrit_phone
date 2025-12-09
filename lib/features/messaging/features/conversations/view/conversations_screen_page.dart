@@ -16,8 +16,10 @@ class ConversationsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Consider moving the logic for checking messaging features into the MessagingBloc to maintain a single source of truth.
     final messagingFeature = context.read<FeatureAccess>().messagingFeature;
     final chatsEnabled = messagingFeature.chatsPresent;
+    final enableGroupChats = messagingFeature.groupChatSupport;
     final smsEnabled = messagingFeature.smsPresent;
 
     final widget = MultiBlocProvider(
@@ -39,7 +41,7 @@ class ConversationsScreenPage extends StatelessWidget {
                 SmsConversationsCubit(context.read<MessagingBloc>().state.client, context.read<SmsRepository>()),
           ),
       ],
-      child: const ConversationsScreen(title: Text(EnvironmentConfig.APP_NAME)),
+      child: ConversationsScreen(title: Text(EnvironmentConfig.APP_NAME), enableGroupChats: enableGroupChats),
     );
 
     return widget;

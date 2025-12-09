@@ -14,6 +14,7 @@ class AppConfig with _$AppConfig {
     this.settingsConfig = const AppConfigSettings(),
     this.callConfig = const AppConfigCall(),
     this.contacts = const AppConfigContacts(),
+    this.messaging = const AppConfigMessaging(),
   });
 
   @override
@@ -30,6 +31,9 @@ class AppConfig with _$AppConfig {
 
   @override
   final AppConfigContacts contacts;
+
+  @override
+  final AppConfigMessaging messaging;
 
   factory AppConfig.fromJson(Map<String, Object?> json) => _$AppConfigFromJson(json);
 
@@ -570,4 +574,43 @@ class AppConfigContactDetailsActions with _$AppConfigContactDetailsActions {
       _$AppConfigContactDetailsActionsFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigContactDetailsActionsToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigMessaging with _$AppConfigMessaging {
+  const AppConfigMessaging({this.sms = const AppConfigSms(), this.chats = const AppConfigChats()});
+
+  @override
+  final AppConfigSms sms;
+
+  @override
+  final AppConfigChats chats;
+
+  factory AppConfigMessaging.fromJson(Map<String, Object?> json) => _$AppConfigMessagingFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigMessagingToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigSms with _$AppConfigSms {
+  const AppConfigSms();
+
+  factory AppConfigSms.fromJson(Map<String, Object?> json) => _$AppConfigSmsFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigSmsToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigChats with _$AppConfigChats {
+  const AppConfigChats({this.groupChatButtonEnabled = true});
+
+  @override
+  final bool groupChatButtonEnabled;
+
+  factory AppConfigChats.fromJson(Map<String, Object?> json) => _$AppConfigChatsFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigChatsToJson(this);
 }

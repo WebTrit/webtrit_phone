@@ -5,8 +5,11 @@ abstract class ChatCBState with EquatableMixin {
   ChatCBState();
 
   factory ChatCBState.initializing() => ChatCBInitializing();
+
   factory ChatCBState.initializingError(Object error) => ChatCBInitializingError(error);
-  factory ChatCBState.common(List<Contact> contacts) => ChatCBCommon.initialized(contacts);
+
+  factory ChatCBState.common(List<Contact> contacts, {bool enableGroupChats = true}) =>
+      ChatCBCommon.initialized(contacts, enableGroupChats: enableGroupChats);
 }
 
 /// Represents state when the chat conversation builder is initializing.
@@ -50,7 +53,8 @@ sealed class ChatCBCommon extends ChatCBState {
   final bool cameBack;
 
   /// Creates an instance of default initialized state with the given list of [contacts].
-  factory ChatCBCommon.initialized(List<Contact> contacts) => ChatCBDialogContactSelection(contacts);
+  factory ChatCBCommon.initialized(List<Contact> contacts, {bool enableGroupChats = true}) =>
+      ChatCBDialogContactSelection(contacts, enableGroupChats: enableGroupChats);
 
   /// Creates a copy of this state with the given properties.
   ///
@@ -61,7 +65,7 @@ sealed class ChatCBCommon extends ChatCBState {
 /// Represents the state when user has ability to
 /// choose contact to start dialog with or switch to group creation form.
 class ChatCBDialogContactSelection extends ChatCBCommon {
-  ChatCBDialogContactSelection(super.contacts, {super.cameBack, this.searchFilter = ''});
+  ChatCBDialogContactSelection(super.contacts, {super.cameBack, this.searchFilter = '', this.enableGroupChats = true});
 
   /// The search filter applied to the contacts.
   final String searchFilter;
@@ -69,14 +73,21 @@ class ChatCBDialogContactSelection extends ChatCBCommon {
   /// Computed lists of contacts based on the search filter.
   late final filteredContacts = contacts.where((c) => _searchMatcher(c, searchFilter));
 
+  /// Indicates if group chats are enabled and user can create them.
+  final bool enableGroupChats;
+
   /// Create next [ChatCBGroupContactsSelection] stage from this state.
   ChatCBGroupContactsSelection toGroupContactsSelection() {
     return ChatCBGroupContactsSelection(contacts, searchFilter: searchFilter);
   }
 
   @override
-  ChatCBDialogContactSelection copyWith({List<Contact>? contacts, String? searchFilter}) {
-    return ChatCBDialogContactSelection(contacts ?? this.contacts, searchFilter: searchFilter ?? this.searchFilter);
+  ChatCBDialogContactSelection copyWith({List<Contact>? contacts, String? searchFilter, bool? enableGroupChats}) {
+    return ChatCBDialogContactSelection(
+      contacts ?? this.contacts,
+      searchFilter: searchFilter ?? this.searchFilter,
+      enableGroupChats: enableGroupChats ?? this.enableGroupChats,
+    );
   }
 
   @override
