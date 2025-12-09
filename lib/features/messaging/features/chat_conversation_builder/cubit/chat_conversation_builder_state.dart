@@ -5,7 +5,9 @@ abstract class ChatCBState with EquatableMixin {
   ChatCBState();
 
   factory ChatCBState.initializing() => ChatCBInitializing();
+
   factory ChatCBState.initializingError(Object error) => ChatCBInitializingError(error);
+
   factory ChatCBState.common(List<Contact> contacts) => ChatCBCommon.initialized(contacts);
 }
 
