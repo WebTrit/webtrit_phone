@@ -110,7 +110,6 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
     bool fetchIfMissing = false,
   }) {
     const skipSymbol = -1;
-
     return _appDatabase.contactsDao
         .watchContactBySource(sourceType.toData(), sourceId)
         .asyncMap((data) async {
@@ -161,7 +160,6 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
       final contact = await contactsRemoteDataSource.getContact(sourceId);
       await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
       // No need to return data here; the database watcher will automatically emit the updated contact.
-
       externalContactFetchCompleter.complete();
     } catch (e, s) {
       externalContactFetchCompleter.completeError(e, s);
