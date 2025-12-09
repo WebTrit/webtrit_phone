@@ -16,9 +16,11 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 enum TabType { chat, sms }
 
 class ConversationsScreen extends StatefulWidget {
-  const ConversationsScreen({super.key, this.title});
+  const ConversationsScreen({super.key, this.title, this.enableGroupChats = true});
 
   final Widget? title;
+
+  final bool enableGroupChats;
 
   @override
   State<ConversationsScreen> createState() => _ConversationsScreenState();
@@ -60,6 +62,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           messagingBloc.state.client,
           chatsRepository,
           contactsRepository,
+          chatConversationBuilderConfig: ChatConversationBuilderConfig(enableGroupChats: widget.enableGroupChats),
           openDialog: (contact) async {
             Navigator.of(context).pop();
             await Future.delayed(const Duration(milliseconds: 300));

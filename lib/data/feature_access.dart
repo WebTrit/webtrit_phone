@@ -490,7 +490,7 @@ class MessagingFeature {
   bool get chatsPresent => coreChatsSupport && tabEnabled;
 
   /// Check if the group chat functionality is enabled.
-  bool get isGroupChatSupport => _groupChatSupport;
+  bool get groupChatSupport => _groupChatSupport;
 }
 
 /// Represents the configuration of the terms and privacy policy feature in the app.
