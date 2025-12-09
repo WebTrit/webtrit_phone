@@ -261,6 +261,12 @@
         "__emailTile": "Actions available on email address items. If omitted, defaults to ['sendEmail']."
       }
     }
+  },
+  "messaging": {
+    "sms": {},
+    "chats": {
+      "groupChatButtonEnabled": true
+    }
   }
 }
 
