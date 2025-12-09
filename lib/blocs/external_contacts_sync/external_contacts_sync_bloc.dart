@@ -35,9 +35,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
     final externalContactsForEachFuture = emit.onEach<List<ExternalContact>>(
       externalContactsRepository.contacts(),
-      onData: (contacts) {
-        return add(_ExternalContactsSyncUpdated(contacts: contacts));
-      },
+      onData: (contacts) => add(_ExternalContactsSyncUpdated(contacts: contacts)),
       onError: (e, stackTrace) => _logger.warning('_onStarted', e, stackTrace),
     );
 

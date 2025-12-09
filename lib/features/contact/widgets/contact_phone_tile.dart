@@ -26,7 +26,7 @@ class ContactPhoneTile extends StatelessWidget {
   final String number;
   final String label;
   final bool favorite;
-  final List<String?> callNumbers;
+  final List<String> callNumbers;
 
   final GestureTapCallback? onTap;
 
@@ -98,11 +98,9 @@ class ContactPhoneTile extends StatelessWidget {
 
     if (callNumbers.length > 1 && onCallFrom != null) {
       for (final fromNumber in callNumbers) {
-        if (fromNumber != null) {
-          entries.add(
-            PopupMenuItem(onTap: () => onCallFrom!(fromNumber), child: Text(l10n.numberActions_callFrom(fromNumber))),
-          );
-        }
+        entries.add(
+          PopupMenuItem(onTap: () => onCallFrom!(fromNumber), child: Text(l10n.numberActions_callFrom(fromNumber))),
+        );
       }
     }
 

@@ -39,9 +39,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   FutureOr<void> _onStarted(ContactStarted event, Emitter<ContactState> emit) async {
     await emit.forEach(
       contactsRepository.watchContact(contactId),
-      onData: (contact) {
-        return state.copyWith(contact: contact, deleted: contact == null);
-      },
+      onData: (contact) => state.copyWith(contact: contact, deleted: contact == null),
     );
   }
 

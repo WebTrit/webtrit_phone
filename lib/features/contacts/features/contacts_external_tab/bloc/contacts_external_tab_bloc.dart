@@ -32,13 +32,11 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
   Future<void> _onStarted(ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.external),
-      onData: (List<Contact> contacts) {
-        return state.copyWith(
-          status: _mapExternalContactsSyncStateToStatus(externalContactsSyncBloc.state),
-          contacts: contacts,
-          searching: event.search.isNotEmpty,
-        );
-      },
+      onData: (List<Contact> contacts) => state.copyWith(
+        status: _mapExternalContactsSyncStateToStatus(externalContactsSyncBloc.state),
+        contacts: contacts,
+        searching: event.search.isNotEmpty,
+      ),
     );
 
     final contactsSearchSateOnEachFuture = emit.onEach(

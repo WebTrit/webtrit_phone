@@ -19,7 +19,7 @@ class CallRoutingState extends Equatable {
   final LineState? guestLineState;
 
   /// Returns true if the user can make calls using any of the numbers.
-  late final allNumbers = <String?>[mainNumber, ...additionalNumbers];
+  late final allNumbers = <String>[?mainNumber, ...additionalNumbers];
 
   @override
   List<Object?> get props => [mainNumber, additionalNumbers, mainLinesState, guestLineState];
