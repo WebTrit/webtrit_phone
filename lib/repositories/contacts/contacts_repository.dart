@@ -109,23 +109,37 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
     String sourceId, {
     bool fetchIfMissing = false,
   }) {
-    return _appDatabase.contactsDao.watchContactBySource(sourceType.toData(), sourceId).asyncMap((data) async {
-      if (data != null) {
-        return contactFromDrift(
-          data.contact,
-          phones: data.phones,
-          emails: data.emails,
-          favorites: data.favorites,
-          presenceInfo: data.presenceInfo,
-        );
-      }
+    const skipSymbol = -1;
 
-      if (fetchIfMissing && sourceType == ContactSourceType.external) {
-        await _fetchContact(sourceId);
-      }
+    return _appDatabase.contactsDao
+        .watchContactBySource(sourceType.toData(), sourceId)
+        .asyncMap((data) async {
+          if (data != null) {
+            return contactFromDrift(
+              data.contact,
+              phones: data.phones,
+              emails: data.emails,
+              favorites: data.favorites,
+              presenceInfo: data.presenceInfo,
+            );
+          }
 
-      return null;
-    }).distinct();
+          // After full migration, _contactsRemoteDataSource shouldn't be null and can be removed from the condition.
+          if (fetchIfMissing && sourceType == ContactSourceType.external && _contactsRemoteDataSource != null) {
+            try {
+              await _fetchContact(sourceId, _contactsRemoteDataSource);
+
+              return skipSymbol;
+            } catch (e) {
+              _logger.warning('Failed to fetch contact from remote source: $e');
+            }
+          }
+
+          return null;
+        })
+        .skipWhile((event) => event == skipSymbol)
+        .cast<Contact?>()
+        .distinct();
   }
 
   /// Fetches a single external contact by its [sourceId] from the remote data source
@@ -135,27 +149,27 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
   /// [_externalContactFetchLocks] pool. If a request for the same [sourceId] is already
   /// in progress, subsequent callers will simply await the existing Future
   /// instead of initiating a redundant network request.
-  Future<void> _fetchContact(String sourceId) async {
+  Future<void> _fetchContact(String sourceId, ContactsRemoteDataSource contactsRemoteDataSource) async {
     if (_externalContactFetchLocks.containsKey(sourceId)) {
       return _externalContactFetchLocks[sourceId]!.future;
     }
-    _externalContactFetchLocks[sourceId] = Completer<void>();
+
+    final externalContactFetchCompleter = Completer<void>();
+    _externalContactFetchLocks[sourceId] = externalContactFetchCompleter;
 
     try {
-      final contact = await _contactsRemoteDataSource?.getContact(sourceId);
-      if (contact != null) {
-        await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
-        // No need to return data here; the database watcher will automatically emit the updated contact.
-      }
-      _externalContactFetchLocks[sourceId]!.complete();
+      final contact = await contactsRemoteDataSource.getContact(sourceId);
+      await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
+      // No need to return data here; the database watcher will automatically emit the updated contact.
+
+      externalContactFetchCompleter.complete();
     } catch (e, s) {
-      _logger.warning('Failed to auto-fetch contact $sourceId', e, s);
-      _externalContactFetchLocks[sourceId]!.completeError(e, s);
+      externalContactFetchCompleter.completeError(e, s);
     } finally {
       _externalContactFetchLocks.remove(sourceId);
     }
 
-    return _externalContactFetchLocks[sourceId]!.future;
+    return externalContactFetchCompleter.future;
   }
 
   Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
