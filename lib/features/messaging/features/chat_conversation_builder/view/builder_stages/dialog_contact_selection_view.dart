@@ -21,14 +21,15 @@ class DialogContactSelectionView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: ListTile(
-            title: Text(context.l10n.messaging_ConversationBuilders_createGroup),
-            leading: Icon(Icons.group_add_rounded, color: colorScheme.onSurface.withValues(alpha: 0.75)),
-            onTap: () => builderCubit.onGroupCreateStageChoosen(),
+        if (state.enableGroupChats)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: ListTile(
+              title: Text(context.l10n.messaging_ConversationBuilders_createGroup),
+              leading: Icon(Icons.group_add_rounded, color: colorScheme.onSurface.withValues(alpha: 0.75)),
+              onTap: () => builderCubit.onGroupCreateStageChoosen(),
+            ),
           ),
-        ),
         const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
