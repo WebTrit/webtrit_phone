@@ -24,6 +24,9 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
   contacts: json['contacts'] == null
       ? const AppConfigContacts()
       : AppConfigContacts.fromJson(json['contacts'] as Map<String, dynamic>),
+  messaging: json['messaging'] == null
+      ? const AppConfigMessaging()
+      : AppConfigMessaging.fromJson(json['messaging'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
@@ -32,6 +35,7 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'settingsConfig': instance.settingsConfig.toJson(),
   'callConfig': instance.callConfig.toJson(),
   'contacts': instance.contacts.toJson(),
+  'messaging': instance.messaging.toJson(),
 };
 
 AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
@@ -476,6 +480,38 @@ Map<String, dynamic> _$AppConfigContactDetailsActionsToJson(
   'phoneTile': instance.phoneTile,
   'emailTile': instance.emailTile,
 };
+
+AppConfigMessaging _$AppConfigMessagingFromJson(Map<String, dynamic> json) =>
+    AppConfigMessaging(
+      sms: json['sms'] == null
+          ? const AppConfigSms()
+          : AppConfigSms.fromJson(json['sms'] as Map<String, dynamic>),
+      chats: json['chats'] == null
+          ? const AppConfigChats()
+          : AppConfigChats.fromJson(json['chats'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AppConfigMessagingToJson(AppConfigMessaging instance) =>
+    <String, dynamic>{
+      'sms': instance.sms.toJson(),
+      'chats': instance.chats.toJson(),
+    };
+
+AppConfigSms _$AppConfigSmsFromJson(Map<String, dynamic> json) =>
+    AppConfigSms();
+
+Map<String, dynamic> _$AppConfigSmsToJson(AppConfigSms instance) =>
+    <String, dynamic>{};
+
+AppConfigChats _$AppConfigChatsFromJson(Map<String, dynamic> json) =>
+    AppConfigChats(
+      groupChatButtonEnabled: json['groupChatButtonEnabled'] as bool? ?? true,
+    );
+
+Map<String, dynamic> _$AppConfigChatsToJson(AppConfigChats instance) =>
+    <String, dynamic>{
+      'groupChatButtonEnabled': instance.groupChatButtonEnabled,
+    };
 
 FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
     FavoritesTabScheme(
