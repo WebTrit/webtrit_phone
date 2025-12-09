@@ -42,7 +42,7 @@ const int _kUndefinedLine = -1;
 
 final _logger = Logger('CallBloc');
 
-class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
+class CallBloc extends Bloc<CallEvent, CallState> implements CallkeepDelegate {
   final String coreUrl;
   final String tenantId;
   final String token;
@@ -113,7 +113,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingClientFactory = signalingClientFactory;
 
     on<CallStarted>(_onCallStarted, transformer: sequential());
-    on<_AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());
+    on<AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());
     on<_ConnectivityResultChanged>(_onConnectivityResultChanged, transformer: sequential());
     on<_NavigatorMediaDevicesChange>(_onNavigatorMediaDevicesChange, transformer: debounce());
     on<_RegistrationChange>(_onRegistrationChange, transformer: droppable());
@@ -131,8 +131,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(const _NavigatorMediaDevicesChange());
     };
 
-    WidgetsBinding.instance.addObserver(this);
-
     callkeep.setDelegate(this);
 
     if (sipPresenceEnabled) {
@@ -143,8 +141,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   @override
   Future<void> close() async {
     callkeep.setDelegate(null);
-
-    WidgetsBinding.instance.removeObserver(this);
 
     navigator.mediaDevices.ondevicechange = null;
 
@@ -479,7 +475,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
 
-  Future<void> _onAppLifecycleStateChanged(_AppLifecycleStateChanged event, Emitter<CallState> emit) async {
+  Future<void> _onAppLifecycleStateChanged(AppLifecycleStateChanged event, Emitter<CallState> emit) async {
     final appLifecycleState = event.state;
     _logger.fine('_onAppLifecycleStateChanged: $appLifecycleState');
 
@@ -2528,14 +2524,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _onSignalingDisconnect(int? code, String? reason) {
     add(_SignalingClientEvent.disconnected(code, reason));
-  }
-
-  // WidgetsBindingObserver
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _logger.finer('didChangeAppLifecycleState: $state');
-    add(_AppLifecycleStateChanged(state));
   }
 
   // CallkeepDelegate

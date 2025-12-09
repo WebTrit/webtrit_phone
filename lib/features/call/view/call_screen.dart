@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -11,6 +12,8 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../call.dart';
 import 'call_active_scaffold.dart';
 import 'call_init_scaffold.dart';
+
+final _logger = Logger('CallScreen');
 
 class CallScreen extends StatefulWidget {
   const CallScreen({
@@ -29,7 +32,7 @@ class CallScreen extends StatefulWidget {
   State<CallScreen> createState() => _CallScreenState();
 }
 
-class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
+class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin, WidgetsBindingObserver {
   @override
   void didPush() {
     context.read<CallBloc>().add(const CallScreenEvent.didPush());
@@ -38,6 +41,24 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
   @override
   void didPop() {
     context.read<CallBloc>().add(const CallScreenEvent.didPop());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _logger.finer('didChangeAppLifecycleState: $state');
+    context.read<CallBloc>().add(AppLifecycleStateChanged(state));
   }
 
   @override

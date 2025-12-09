@@ -11,8 +11,8 @@ class CallStarted extends CallEvent {
   const CallStarted();
 }
 
-class _AppLifecycleStateChanged extends CallEvent {
-  const _AppLifecycleStateChanged(this.state);
+class AppLifecycleStateChanged extends CallEvent {
+  const AppLifecycleStateChanged(this.state);
 
   final AppLifecycleState state;
 
