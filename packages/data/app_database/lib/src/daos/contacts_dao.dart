@@ -25,20 +25,28 @@ class FullContactData {
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(super.db);
 
-  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts([ContactSourceTypeEnum? sourceType]) =>
-      select(contactsTable)
-        ..where((t) {
-          if (sourceType == null) {
-            return const Constant(true);
-          } else {
-            return t.sourceType.equals(sourceType.index);
-          }
-        })
-        ..orderBy([
-          (t) => OrderingTerm.asc(t.lastName),
-          (t) => OrderingTerm.asc(t.firstName),
-          (t) => OrderingTerm.asc(t.aliasName),
-        ]);
+  SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts({
+    ContactSourceTypeEnum? sourceType,
+    ContactKind? kind = ContactKind.visible,
+  }) => select(contactsTable)
+    ..where((t) {
+      Expression<bool> predicate = const Constant(true);
+
+      if (sourceType != null) {
+        predicate &= t.sourceType.equals(sourceType.index);
+      }
+
+      if (kind != null) {
+        predicate &= t.kind.equals(kind.index);
+      }
+
+      return predicate;
+    })
+    ..orderBy([
+      (t) => OrderingTerm.asc(t.lastName),
+      (t) => OrderingTerm.asc(t.firstName),
+      (t) => OrderingTerm.asc(t.aliasName),
+    ]);
 
   SimpleSelectStatement<$ContactsTableTable, ContactData> _selectBySource(
     ContactSourceTypeEnum sourceType,
@@ -160,14 +168,21 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return query.watch().map((data) => _gatherMultipleContacts(data).firstOrNull);
   }
 
-  Future<List<FullContactData>> getAllContacts([ContactSourceTypeEnum? sourceType]) async {
-    final query = _joinPhonesAndEmails(_selectAllContacts(sourceType));
+  Future<List<FullContactData>> getAllContacts(
+    ContactSourceTypeEnum? sourceType, {
+    ContactKind kind = ContactKind.visible,
+  }) async {
+    final query = _joinPhonesAndEmails(_selectAllContacts(sourceType: sourceType, kind: kind));
     final rows = await query.get();
     return _gatherMultipleContacts(rows);
   }
 
-  Stream<List<FullContactData>> watchAllContacts([Iterable<String>? searchBits, ContactSourceTypeEnum? sourceType]) {
-    final query = _joinPhonesAndEmails(_selectAllContacts(sourceType));
+  Stream<List<FullContactData>> watchAllContacts([
+    Iterable<String>? searchBits,
+    ContactSourceTypeEnum? sourceType,
+    ContactKind kind = ContactKind.visible,
+  ]) {
+    final query = _joinPhonesAndEmails(_selectAllContacts(sourceType: sourceType, kind: kind));
 
     if (searchBits != null) {
       query.where(
@@ -186,6 +201,10 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     }
 
     return query.watch().map(_gatherMultipleContacts);
+  }
+
+  Future<List<FullContactData>> getServiceContacts() async {
+    return getAllContacts(null, kind: ContactKind.service);
   }
 
   Future<Set<String>> getContactsSourceIds(ContactSourceTypeEnum sourceType) async {

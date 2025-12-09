@@ -34,6 +34,16 @@ class $ContactsTableTable extends ContactsTable
       ).withConverter<ContactSourceTypeEnum>(
         $ContactsTableTable.$convertersourceType,
       );
+  @override
+  late final GeneratedColumnWithTypeConverter<ContactKind, int> kind =
+      GeneratedColumn<int>(
+        'kind',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+        defaultValue: Constant(ContactKind.visible.index),
+      ).withConverter<ContactKind>($ContactsTableTable.$converterkind);
   static const VerificationMeta _sourceIdMeta = const VerificationMeta(
     'sourceId',
   );
@@ -157,6 +167,7 @@ class $ContactsTableTable extends ContactsTable
   List<GeneratedColumn> get $columns => [
     id,
     sourceType,
+    kind,
     sourceId,
     firstName,
     lastName,
@@ -268,6 +279,12 @@ class $ContactsTableTable extends ContactsTable
           data['${effectivePrefix}source_type'],
         )!,
       ),
+      kind: $ContactsTableTable.$converterkind.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}kind'],
+        )!,
+      ),
       sourceId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}source_id'],
@@ -320,11 +337,14 @@ class $ContactsTableTable extends ContactsTable
   $convertersourceType = const EnumIndexConverter<ContactSourceTypeEnum>(
     ContactSourceTypeEnum.values,
   );
+  static JsonTypeConverter2<ContactKind, int, int> $converterkind =
+      const EnumIndexConverter<ContactKind>(ContactKind.values);
 }
 
 class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
   final ContactSourceTypeEnum sourceType;
+  final ContactKind kind;
   final String? sourceId;
   final String? firstName;
   final String? lastName;
@@ -338,6 +358,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   const ContactData({
     required this.id,
     required this.sourceType,
+    required this.kind,
     this.sourceId,
     this.firstName,
     this.lastName,
@@ -356,6 +377,11 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     {
       map['source_type'] = Variable<int>(
         $ContactsTableTable.$convertersourceType.toSql(sourceType),
+      );
+    }
+    {
+      map['kind'] = Variable<int>(
+        $ContactsTableTable.$converterkind.toSql(kind),
       );
     }
     if (!nullToAbsent || sourceId != null) {
@@ -395,6 +421,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     return ContactDataCompanion(
       id: Value(id),
       sourceType: Value(sourceType),
+      kind: Value(kind),
       sourceId: sourceId == null && nullToAbsent
           ? const Value.absent()
           : Value(sourceId),
@@ -438,6 +465,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       sourceType: $ContactsTableTable.$convertersourceType.fromJson(
         serializer.fromJson<int>(json['sourceType']),
       ),
+      kind: $ContactsTableTable.$converterkind.fromJson(
+        serializer.fromJson<int>(json['kind']),
+      ),
       sourceId: serializer.fromJson<String?>(json['sourceId']),
       firstName: serializer.fromJson<String?>(json['firstName']),
       lastName: serializer.fromJson<String?>(json['lastName']),
@@ -458,6 +488,9 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       'sourceType': serializer.toJson<int>(
         $ContactsTableTable.$convertersourceType.toJson(sourceType),
       ),
+      'kind': serializer.toJson<int>(
+        $ContactsTableTable.$converterkind.toJson(kind),
+      ),
       'sourceId': serializer.toJson<String?>(sourceId),
       'firstName': serializer.toJson<String?>(firstName),
       'lastName': serializer.toJson<String?>(lastName),
@@ -474,6 +507,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   ContactData copyWith({
     int? id,
     ContactSourceTypeEnum? sourceType,
+    ContactKind? kind,
     Value<String?> sourceId = const Value.absent(),
     Value<String?> firstName = const Value.absent(),
     Value<String?> lastName = const Value.absent(),
@@ -487,6 +521,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   }) => ContactData(
     id: id ?? this.id,
     sourceType: sourceType ?? this.sourceType,
+    kind: kind ?? this.kind,
     sourceId: sourceId.present ? sourceId.value : this.sourceId,
     firstName: firstName.present ? firstName.value : this.firstName,
     lastName: lastName.present ? lastName.value : this.lastName,
@@ -508,6 +543,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       sourceType: data.sourceType.present
           ? data.sourceType.value
           : this.sourceType,
+      kind: data.kind.present ? data.kind.value : this.kind,
       sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
       firstName: data.firstName.present ? data.firstName.value : this.firstName,
       lastName: data.lastName.present ? data.lastName.value : this.lastName,
@@ -534,6 +570,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
     return (StringBuffer('ContactData(')
           ..write('id: $id, ')
           ..write('sourceType: $sourceType, ')
+          ..write('kind: $kind, ')
           ..write('sourceId: $sourceId, ')
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
@@ -552,6 +589,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   int get hashCode => Object.hash(
     id,
     sourceType,
+    kind,
     sourceId,
     firstName,
     lastName,
@@ -569,6 +607,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
       (other is ContactData &&
           other.id == this.id &&
           other.sourceType == this.sourceType &&
+          other.kind == this.kind &&
           other.sourceId == this.sourceId &&
           other.firstName == this.firstName &&
           other.lastName == this.lastName &&
@@ -584,6 +623,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
   final Value<ContactSourceTypeEnum> sourceType;
+  final Value<ContactKind> kind;
   final Value<String?> sourceId;
   final Value<String?> firstName;
   final Value<String?> lastName;
@@ -597,6 +637,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   const ContactDataCompanion({
     this.id = const Value.absent(),
     this.sourceType = const Value.absent(),
+    this.kind = const Value.absent(),
     this.sourceId = const Value.absent(),
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
@@ -611,6 +652,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   ContactDataCompanion.insert({
     this.id = const Value.absent(),
     required ContactSourceTypeEnum sourceType,
+    this.kind = const Value.absent(),
     this.sourceId = const Value.absent(),
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
@@ -625,6 +667,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   static Insertable<ContactData> custom({
     Expression<int>? id,
     Expression<int>? sourceType,
+    Expression<int>? kind,
     Expression<String>? sourceId,
     Expression<String>? firstName,
     Expression<String>? lastName,
@@ -639,6 +682,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (sourceType != null) 'source_type': sourceType,
+      if (kind != null) 'kind': kind,
       if (sourceId != null) 'source_id': sourceId,
       if (firstName != null) 'first_name': firstName,
       if (lastName != null) 'last_name': lastName,
@@ -655,6 +699,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   ContactDataCompanion copyWith({
     Value<int>? id,
     Value<ContactSourceTypeEnum>? sourceType,
+    Value<ContactKind>? kind,
     Value<String?>? sourceId,
     Value<String?>? firstName,
     Value<String?>? lastName,
@@ -669,6 +714,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     return ContactDataCompanion(
       id: id ?? this.id,
       sourceType: sourceType ?? this.sourceType,
+      kind: kind ?? this.kind,
       sourceId: sourceId ?? this.sourceId,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
@@ -691,6 +737,11 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     if (sourceType.present) {
       map['source_type'] = Variable<int>(
         $ContactsTableTable.$convertersourceType.toSql(sourceType.value),
+      );
+    }
+    if (kind.present) {
+      map['kind'] = Variable<int>(
+        $ContactsTableTable.$converterkind.toSql(kind.value),
       );
     }
     if (sourceId.present) {
@@ -731,6 +782,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
     return (StringBuffer('ContactDataCompanion(')
           ..write('id: $id, ')
           ..write('sourceType: $sourceType, ')
+          ..write('kind: $kind, ')
           ..write('sourceId: $sourceId, ')
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
@@ -12173,6 +12225,7 @@ typedef $$ContactsTableTableCreateCompanionBuilder =
     ContactDataCompanion Function({
       Value<int> id,
       required ContactSourceTypeEnum sourceType,
+      Value<ContactKind> kind,
       Value<String?> sourceId,
       Value<String?> firstName,
       Value<String?> lastName,
@@ -12188,6 +12241,7 @@ typedef $$ContactsTableTableUpdateCompanionBuilder =
     ContactDataCompanion Function({
       Value<int> id,
       Value<ContactSourceTypeEnum> sourceType,
+      Value<ContactKind> kind,
       Value<String?> sourceId,
       Value<String?> firstName,
       Value<String?> lastName,
@@ -12256,6 +12310,12 @@ class $$ContactsTableTableFilterComposer
     column: $table.sourceType,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
+
+  ColumnWithTypeConverterFilters<ContactKind, ContactKind, int> get kind =>
+      $composableBuilder(
+        column: $table.kind,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<String> get sourceId => $composableBuilder(
     column: $table.sourceId,
@@ -12352,6 +12412,11 @@ class $$ContactsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get sourceId => $composableBuilder(
     column: $table.sourceId,
     builder: (column) => ColumnOrderings(column),
@@ -12420,6 +12485,9 @@ class $$ContactsTableTableAnnotationComposer
         column: $table.sourceType,
         builder: (column) => column,
       );
+
+  GeneratedColumnWithTypeConverter<ContactKind, int> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
 
   GeneratedColumn<String> get sourceId =>
       $composableBuilder(column: $table.sourceId, builder: (column) => column);
@@ -12516,6 +12584,7 @@ class $$ContactsTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
+                Value<ContactKind> kind = const Value.absent(),
                 Value<String?> sourceId = const Value.absent(),
                 Value<String?> firstName = const Value.absent(),
                 Value<String?> lastName = const Value.absent(),
@@ -12529,6 +12598,7 @@ class $$ContactsTableTableTableManager
               }) => ContactDataCompanion(
                 id: id,
                 sourceType: sourceType,
+                kind: kind,
                 sourceId: sourceId,
                 firstName: firstName,
                 lastName: lastName,
@@ -12544,6 +12614,7 @@ class $$ContactsTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required ContactSourceTypeEnum sourceType,
+                Value<ContactKind> kind = const Value.absent(),
                 Value<String?> sourceId = const Value.absent(),
                 Value<String?> firstName = const Value.absent(),
                 Value<String?> lastName = const Value.absent(),
@@ -12557,6 +12628,7 @@ class $$ContactsTableTableTableManager
               }) => ContactDataCompanion.insert(
                 id: id,
                 sourceType: sourceType,
+                kind: kind,
                 sourceId: sourceId,
                 firstName: firstName,
                 lastName: lastName,

@@ -1,16 +1,51 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/utils/regexes.dart';
-import 'package:webtrit_phone/utils/string_phone_utils.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
-class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper {
-  ContactsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
+import 'contacts_local_data_source.dart';
+import 'contacts_remote_datasource.dart';
+
+final _logger = Logger('ContactsRepository');
+
+/// Repository responsible for managing contact data and orchestrating synchronization.
+///
+/// **Architecture Note:**
+/// This repository currently holds a direct dependency on [AppDatabase].
+///
+/// **TODO(Refactoring):**
+/// The goal is to migrate all direct database interactions (Drift logic) into
+/// the [ContactsLocalDataSource]. The Repository should strictly act as a mediator
+/// between the Local and Remote data sources, without knowing about the underlying
+/// database implementation.
+///
+/// Once all logic is migrated, the [AppDatabase] dependency and related mappers
+/// should be removed from this class.
+class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, ExternalContactApiMapper {
+  ContactsRepository({
+    // TODO: Remove this dependency after migrating logic to ContactsLocalDataSource
+    required AppDatabase appDatabase,
+    required ContactsRemoteDataSource? contactsRemoteDataSource,
+    required ContactsLocalDataSource? contactsLocalDataSource,
+  }) : _appDatabase = appDatabase,
+       _contactsRemoteDataSource = contactsRemoteDataSource,
+       _contactsLocalDataSource = contactsLocalDataSource;
 
   final AppDatabase _appDatabase;
+  final ContactsRemoteDataSource? _contactsRemoteDataSource;
+  final ContactsLocalDataSource? _contactsLocalDataSource;
+
+  /// Pool of [Completer] objects used to manage concurrent network fetching for the same contact source ID.
+  ///
+  /// This avoids **redundant network requests** if a contact is requested multiple times
+  /// before the initial fetch completes. When a fetch is triggered for a specific [sourceId],
+  /// a [Completer] is created and stored. Subsequent requests for the same [sourceId] will
+  /// simply await the existing [Completer]'s future instead of initiating a new network call.
+  final _externalContactFetchLocks = <String, Completer<void>>{};
 
   Stream<List<Contact>> watchContacts(String search, [ContactSourceType? sourceType]) {
     final searchBits = search.split(' ').where((value) => value.isNotEmpty);
@@ -62,17 +97,77 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper {
     });
   }
 
-  Stream<Contact?> watchContactBySourceWithPhonesAndEmails(ContactSourceType sourceType, String sourceId) {
-    return _appDatabase.contactsDao.watchContactBySource(sourceType.toData(), sourceId).map((data) {
-      if (data == null) return null;
-      return contactFromDrift(
-        data.contact,
-        phones: data.phones,
-        emails: data.emails,
-        favorites: data.favorites,
-        presenceInfo: data.presenceInfo,
-      );
-    });
+  /// Watches a contact by its [sourceType] and [sourceId].
+  ///
+  /// This method provides a stream of the contact's data, which will automatically
+  /// update when the underlying data changes in the local database.
+  ///
+  /// If [fetchIfMissing] is `true` (the default) and the contact is not found locally,
+  /// this method will trigger a one-time fetch from the remote source if the [sourceType] is `external`.
+  Stream<Contact?> watchContactBySourceWithPhonesAndEmails(
+    ContactSourceType sourceType,
+    String sourceId, {
+    bool fetchIfMissing = false,
+  }) {
+    const skipSymbol = -1;
+    return _appDatabase.contactsDao
+        .watchContactBySource(sourceType.toData(), sourceId)
+        .asyncMap((data) async {
+          if (data != null) {
+            return contactFromDrift(
+              data.contact,
+              phones: data.phones,
+              emails: data.emails,
+              favorites: data.favorites,
+              presenceInfo: data.presenceInfo,
+            );
+          }
+
+          // After full migration, _contactsRemoteDataSource shouldn't be null and can be removed from the condition.
+          if (fetchIfMissing && sourceType == ContactSourceType.external && _contactsRemoteDataSource != null) {
+            try {
+              await _fetchContact(sourceId, _contactsRemoteDataSource);
+
+              return skipSymbol;
+            } catch (e) {
+              _logger.warning('Failed to fetch contact from remote source: $e');
+            }
+          }
+
+          return null;
+        })
+        .skipWhile((event) => event == skipSymbol)
+        .cast<Contact?>()
+        .distinct();
+  }
+
+  /// Fetches a single external contact by its [sourceId] from the remote data source
+  /// and stores it in the local database.
+  ///
+  /// This method implements a **single-flight** concurrency pattern using the
+  /// [_externalContactFetchLocks] pool. If a request for the same [sourceId] is already
+  /// in progress, subsequent callers will simply await the existing Future
+  /// instead of initiating a redundant network request.
+  Future<void> _fetchContact(String sourceId, ContactsRemoteDataSource contactsRemoteDataSource) async {
+    if (_externalContactFetchLocks.containsKey(sourceId)) {
+      return _externalContactFetchLocks[sourceId]!.future;
+    }
+
+    final externalContactFetchCompleter = Completer<void>();
+    _externalContactFetchLocks[sourceId] = externalContactFetchCompleter;
+
+    try {
+      final contact = await contactsRemoteDataSource.getContact(sourceId);
+      await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
+      // No need to return data here; the database watcher will automatically emit the updated contact.
+      externalContactFetchCompleter.complete();
+    } catch (e, s) {
+      externalContactFetchCompleter.completeError(e, s);
+    } finally {
+      _externalContactFetchLocks.remove(sourceId);
+    }
+
+    return externalContactFetchCompleter.future;
   }
 
   Future<Contact?> getContactBySource(ContactSourceType sourceType, String sourceId) async {
