@@ -448,17 +448,24 @@ class CallFeature {
 }
 
 class MessagingFeature {
-  MessagingFeature(this._coreSupport, {bool tabEnabled = false}) : _tabEnabled = tabEnabled;
+  MessagingFeature(this._coreSupport, {bool tabEnabled = false, bool groupChatButtonEnabled = true})
+    : _tabEnabled = tabEnabled,
+      _groupChatSupport = groupChatButtonEnabled;
 
   final CoreSupport _coreSupport;
   final bool _tabEnabled;
+  final bool _groupChatSupport;
 
   factory MessagingFeature.fromConfig(AppConfig appConfig, CoreSupport coreSupport) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
       (tab) => tab.maybeWhen(messaging: (enabled, _, _, _) => enabled, orElse: () => false),
     );
 
-    return MessagingFeature(coreSupport, tabEnabled: tabEnabled);
+    return MessagingFeature(
+      coreSupport,
+      tabEnabled: tabEnabled,
+      groupChatButtonEnabled: appConfig.messaging.chats.groupChatButtonEnabled,
+    );
   }
 
   /// Check if the SMS messaging feature is supported by remote system.
@@ -481,6 +488,9 @@ class MessagingFeature {
   /// Check if the internal messaging feature is enabled and supported by remote system.
   /// This is used to determine if internal messaging UI components should be displayed or hidden.
   bool get chatsPresent => coreChatsSupport && tabEnabled;
+
+  /// Check if the group chat functionality is enabled.
+  bool get isGroupChatSupport => _groupChatSupport;
 }
 
 /// Represents the configuration of the terms and privacy policy feature in the app.
