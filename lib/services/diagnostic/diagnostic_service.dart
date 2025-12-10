@@ -123,6 +123,10 @@ class DiagnosticServiceImpl implements DiagnosticService {
     const prefix = 'UserReport';
     final sortedTypes = List<DiagnosticType>.from(types)..sort((a, b) => a.index.compareTo(b.index));
     final typesStr = sortedTypes.map(_getReadableTypeName).join('_');
+    // NOTE: A timestamp is explicitly included to ensure that every user-submitted diagnostic
+    // report creates a unique issue in Crashlytics. This guarantees a notification
+    // for every new user feedback submission, preventing them from being silently
+    // folded into a single existing issue.
     return '$prefix.$typesStr.${DateTime.now()}';
   }
 
