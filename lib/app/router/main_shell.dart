@@ -374,6 +374,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final peerConnectionSettingsRepository = context.read<PeerConnectionSettingsRepository>();
                       final videoCapturingSettingsRepository = context.read<VideoCapturingSettingsRepository>();
                       final encodingSettingsRepository = context.read<EncodingSettingsRepository>();
+                      final diagnosticService = context.read<DiagnosticService>();
 
                       final encodingConfig = featureAccess.callFeature.encoding;
                       final peerConnectionConfig = featureAccess.callFeature.peerConnection;
@@ -435,6 +436,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                         sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
+                        onDiagnosticReportRequested: (id, error) => diagnosticService.request(
+                          DiagnosticType.androidCallkeepOnly,
+                          extras: {'callId': id, 'error': error.name},
+                        ),
                       )..add(const CallStarted());
                     },
                   ),

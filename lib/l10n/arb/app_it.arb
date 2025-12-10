@@ -397,6 +397,38 @@
   "@diagnosticScreen_permissionsGroup_title": {},
   "diagnosticScreen_pushNotificationService_title": "Servizio di notifiche push",
   "@diagnosticScreen_pushNotificationService_title": {},
+  "diagnosticReportDialogTitle": "Invia rapporto diagnostico",
+  "@diagnosticReportDialogTitle": {
+    "description": "The title shown at the top of the diagnostic report dialog."
+  },
+  "diagnosticReportDialogContent": "Questo rapporto contiene dettagli tecnici per aiutarci a identificare i problemi di connessione.",
+  "@diagnosticReportDialogContent": {
+    "description": "The main body text explaining what the diagnostic report is for."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Includi log di sistema",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
+    "description": "The label for the switch toggle that allows the user to attach system logs."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Richiede autorizzazioni extra.",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
+    "description": "Subtitle text under the system logs switch indicating permission requirements."
+  },
+  "diagnosticReportDialogAddNoteExpansionTileTitle": "Aggiungi una nota (opzionale)",
+  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
+    "description": "Title for the expandable section where users can add manual comments."
+  },
+  "diagnosticReportDialogCommentTextFieldHintText": "Descrivi cosa è successo...",
+  "@diagnosticReportDialogCommentTextFieldHintText": {
+    "description": "Placeholder hint text displayed inside the comment text field."
+  },
+  "diagnosticReportDialogCancelButtonLabel": "Annulla",
+  "@diagnosticReportDialogCancelButtonLabel": {
+    "description": "Label for the button that closes the dialog without action."
+  },
+  "diagnosticReportDialogSendReportButtonLabel": "Invia rapporto",
+  "@diagnosticReportDialogSendReportButtonLabel": {
+    "description": "Label for the button that submits the diagnostic report."
+  },
   "favorites_BodyCenter_empty": "Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l'icona a stella",
   "@favorites_BodyCenter_empty": {},
   "favorites_DeleteConfirmDialog_content": "Sei sicuro di voler eliminare il contatto preferito?",

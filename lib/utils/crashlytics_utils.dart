@@ -54,4 +54,61 @@ class CrashlyticsUtils {
   static void log(String message) {
     FirebaseCrashlytics.instance.log(message);
   }
+
+  /// Used for reporting errors manually triggered by the user via the
+  /// "report a problem" feature. This is not for silent/automatic error
+  /// reporting. It synthesizes an exception and stack trace to ensure it
+  /// gets grouped and reported correctly in Crashlytics.
+  static Future<void> reportServiceError({
+    required String errorDescription,
+    required String userComment,
+    required Map<String, dynamic> diagnostics,
+    required Map<String, dynamic> metadata,
+    required Map<String, dynamic> extras,
+    String errorGroup = 'UserReport.submit',
+    bool isFatal = true,
+  }) async {
+    final crashlytics = FirebaseCrashlytics.instance;
+
+    if (userComment.isNotEmpty) {
+      _setSafeCustomKey('user_report_comment', userComment);
+      crashlytics.log('User Diagnostic Comment: $userComment');
+    }
+
+    if (diagnostics.isNotEmpty) {
+      crashlytics.log('Diagnostics: $diagnostics');
+    }
+
+    final allKeys = {...metadata, ...extras, ...diagnostics};
+
+    for (final entry in allKeys.entries) {
+      _setSafeCustomKey(entry.key, entry.value);
+    }
+
+    final exception = UserDiagnosticReportException(errorDescription);
+    final syntheticStackTrace = StackTrace.fromString('#0      $errorGroup (user_diagnostic_report:1:1)');
+
+    await crashlytics.recordError(
+      exception,
+      syntheticStackTrace,
+      reason: 'Manual User Report via Service',
+      fatal: isFatal,
+      printDetails: true,
+      information: extras.entries.map((e) => '${e.key}: ${e.value}').toList(),
+    );
+  }
+
+  static void _setSafeCustomKey(String key, dynamic value) {
+    final safeValue = (value is String || value is num || value is bool) ? value : value.toString();
+    unawaited(FirebaseCrashlytics.instance.setCustomKey(key, safeValue));
+  }
+}
+
+class UserDiagnosticReportException implements Exception {
+  final String message;
+
+  UserDiagnosticReportException(this.message);
+
+  @override
+  String toString() => message;
 }

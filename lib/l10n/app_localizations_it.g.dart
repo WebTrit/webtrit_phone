@@ -514,6 +514,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
 
   @override
+  String get diagnosticReportDialogTitle => 'Invia rapporto diagnostico';
+
+  @override
+  String get diagnosticReportDialogContent =>
+      'Questo rapporto contiene dettagli tecnici per aiutarci a identificare i problemi di connessione.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Includi log di sistema';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Richiede autorizzazioni extra.';
+
+  @override
+  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Aggiungi una nota (opzionale)';
+
+  @override
+  String get diagnosticReportDialogCommentTextFieldHintText => 'Descrivi cosa è successo...';
+
+  @override
+  String get diagnosticReportDialogCancelButtonLabel => 'Annulla';
+
+  @override
+  String get diagnosticReportDialogSendReportButtonLabel => 'Invia rapporto';
+
+  @override
   String get favorites_BodyCenter_empty =>
       'Al momento non hai numeri preferiti.\nAggiungi ai preferiti dai Contatti usando l\'icona a stella';
 
