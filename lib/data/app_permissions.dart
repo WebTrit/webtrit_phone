@@ -133,19 +133,19 @@ class AppPermissions {
   ///
   /// Returns a Map of the requested permissions and their results (Granted/Denied).
   Future<Map<CallkeepPermission, CallkeepSpecialPermissionStatus>> requestDiagnosticsPermissions() async {
-    _logger.info('Requesting diagnostics permissions via native bridge');
+    _logger.info('Checking diagnostics permission statuses via native bridge');
     try {
       final results = await callkeepPermission.requestPermissions(_callkeepDiagnosticPermissions);
       _logger.info('Diagnostics permissions results: $results');
       return results;
     } catch (e, s) {
-      _logger.severe('Failed to request diagnostics permissions', e, s);
+      _logger.severe('Failed to check diagnostics permission statuses', e, s);
       return {};
     }
   }
 
   Future<Map<CallkeepPermission, CallkeepSpecialPermissionStatus>> getDiagnosticPermissionStatuses() async {
-    _logger.info('Requesting diagnostics permissions via native bridge');
+    _logger.info('Requesting diagnostics permission statuses via native bridge');
     try {
       final results = await callkeepPermission.checkPermissionsStatus(_callkeepDiagnosticPermissions);
       _logger.info('Diagnostics permissions results: $results');
