@@ -24,10 +24,12 @@ class AppPermissions {
   /// A list of special permissions required by the app, handled via `webtrit_callkeep`.
   static const _specialPermissions = [..._requiredSpecialPermissions];
 
-  static const _callkeepDiagnosticPermissions = [
-    CallkeepPermission.readPhoneNumbers,
-    CallkeepPermission.readPhoneState,
-  ];
+  /// Defines the list of permissions critical for the plugin's core functionality.
+  ///
+  /// [CallkeepPermission.readPhoneState] is included here to verify if the user
+  /// has granted the necessary access for:
+  /// Successfully registering the `PhoneAccount` with the Android Telecom framework.
+  static const _callkeepDiagnosticPermissions = [CallkeepPermission.readPhoneState];
 
   /// The time-to-live for the permissions cache.
   static const _cacheTTL = Duration(seconds: 1);
