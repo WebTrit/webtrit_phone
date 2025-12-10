@@ -117,7 +117,7 @@ class AppPermissions {
   }
 
   Future<bool> requestContactPermission() async {
-    final status = await Permission.contacts.status;
+    final status = await Permission.contacts.request();
     return status.isGranted;
   }
 }
