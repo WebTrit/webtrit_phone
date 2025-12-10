@@ -24,8 +24,15 @@ class AppPermissions {
   /// A list of special permissions required by the app, handled via `webtrit_callkeep`.
   static const _specialPermissions = [..._requiredSpecialPermissions];
 
+  static const _callkeepDiagnosticPermissions = [
+    CallkeepPermission.readPhoneNumbers,
+    CallkeepPermission.readPhoneState,
+  ];
+
   /// The time-to-live for the permissions cache.
   static const _cacheTTL = Duration(seconds: 1);
+
+  static final callkeepPermission = WebtritCallkeepPermissions();
 
   static Future<AppPermissions> init(ExcludePermissions excludePermissions) async {
     return AppPermissions._(excludePermissions);
@@ -117,6 +124,36 @@ class AppPermissions {
     return permissionStatuses;
   }
 
+  /// Requests specific permissions via the native plugin required for generating diagnostic logs.
+  ///
+  /// This triggers the native implementation to ask for `READ_PHONE_STATE` / `READ_PHONE_NUMBERS`
+  /// without triggering the broader `CALL_PHONE` permission request flow.
+  ///
+  /// Returns a Map of the requested permissions and their results (Granted/Denied).
+  Future<Map<CallkeepPermission, CallkeepSpecialPermissionStatus>> requestDiagnosticsPermissions() async {
+    _logger.info('Requesting diagnostics permissions via native bridge');
+    try {
+      final results = await callkeepPermission.requestPermissions(_callkeepDiagnosticPermissions);
+      _logger.info('Diagnostics permissions results: $results');
+      return results;
+    } catch (e, s) {
+      _logger.severe('Failed to request diagnostics permissions', e, s);
+      return {};
+    }
+  }
+
+  Future<Map<CallkeepPermission, CallkeepSpecialPermissionStatus>> getDiagnosticPermissionStatuses() async {
+    _logger.info('Requesting diagnostics permissions via native bridge');
+    try {
+      final results = await callkeepPermission.checkPermissionsStatus(_callkeepDiagnosticPermissions);
+      _logger.info('Diagnostics permissions results: $results');
+      return results;
+    } catch (e, s) {
+      _logger.severe('Failed to request diagnostics permissions', e, s);
+      return {};
+    }
+  }
+
   /// Opens the app settings page.
   Future<void> toAppSettings() => openAppSettings();
 
@@ -127,8 +164,6 @@ class AppPermissions {
   /// the general app settings screen instead. This is useful for permissions that
   /// are typically located outside the standard app settings.
   Future<void> toSpecialPermissionsSetting(CallkeepSpecialPermissions permission) async {
-    final callkeepPermission = WebtritCallkeepPermissions();
-
     try {
       if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
         await callkeepPermission.openFullScreenIntentSettings();
