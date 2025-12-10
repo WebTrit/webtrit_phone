@@ -95,11 +95,9 @@ class DiagnosticServiceImpl implements DiagnosticService {
   /// that occurred during data collection.
   Map<String, dynamic> _buildMetadata(DiagnosticReportOptions? dialogResult, Map<String, String> errors) {
     return {
-      'meta': {
-        'timestamp': DateTime.now().toUtc().toIso8601String(),
-        'user_comment': dialogResult?.comment,
-        'include_advanced_logs': dialogResult?.includeAdvancedLogs,
-      },
+      'timestamp': DateTime.now().toUtc().toIso8601String(),
+      'user_comment': dialogResult?.comment,
+      'include_advanced_logs': dialogResult?.includeAdvancedLogs,
       if (errors.isNotEmpty) 'internal_errors': errors,
     };
   }
