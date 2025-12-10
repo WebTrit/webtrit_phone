@@ -1047,6 +1047,54 @@ abstract class AppLocalizations {
   /// **'Push notification service'**
   String get diagnosticScreen_pushNotificationService_title;
 
+  /// The title shown at the top of the diagnostic report dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Diagnostic Report'**
+  String get diagnosticReportDialogTitle;
+
+  /// The main body text explaining what the diagnostic report is for.
+  ///
+  /// In en, this message translates to:
+  /// **'This report contains technical details to help us identify connection issues.'**
+  String get diagnosticReportDialogContent;
+
+  /// The label for the switch toggle that allows the user to attach system logs.
+  ///
+  /// In en, this message translates to:
+  /// **'Include System Logs'**
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle;
+
+  /// Subtitle text under the system logs switch indicating permission requirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires extra permissions.'**
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle;
+
+  /// Title for the expandable section where users can add manual comments.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note (Optional)'**
+  String get diagnosticReportDialogAddNoteExpansionTileTitle;
+
+  /// Placeholder hint text displayed inside the comment text field.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe what happened...'**
+  String get diagnosticReportDialogCommentTextFieldHintText;
+
+  /// Label for the button that closes the dialog without action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get diagnosticReportDialogCancelButtonLabel;
+
+  /// Label for the button that submits the diagnostic report.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Report'**
+  String get diagnosticReportDialogSendReportButtonLabel;
+
   /// No description provided for @favorites_BodyCenter_empty.
   ///
   /// In en, this message translates to:
