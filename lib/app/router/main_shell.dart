@@ -436,7 +436,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                         sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
-                        diagnosticReport: (id, error) => diagnosticService.request(
+                        onDiagnosticReportRequested: (id, error) => diagnosticService.request(
                           DiagnosticType.androidCallkeepOnly,
                           extras: {'callId': id, 'error': error.name},
                         ),
