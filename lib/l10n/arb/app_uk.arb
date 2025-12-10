@@ -1427,6 +1427,8 @@
   "@settings_LogoutConfirmDialog_content": {},
   "settings_LogoutConfirmDialog_title": "Підтвердження виходу",
   "@settings_LogoutConfirmDialog_title": {},
+  "settings_missingMicrophoneIndicator_title": "Відсутній дозвіл на використання мікрофона. Неможливо здійснювати дзвінки.",
+  "@settings_missingMicrophoneIndicator_title": {},
   "settings_network_fallbackCalls_description": "Увімкніть резервний виклик через спеціально сформатоване SMS",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"

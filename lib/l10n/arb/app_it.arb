@@ -1427,6 +1427,8 @@
   "@settings_LogoutConfirmDialog_content": {},
   "settings_LogoutConfirmDialog_title": "Confermare la disconnessione",
   "@settings_LogoutConfirmDialog_title": {},
+  "settings_missingMicrophoneIndicator_title": "Autorizzazione microfono mancante. Impossibile effettuare chiamate.",
+  "@settings_missingMicrophoneIndicator_title": {},
   "settings_network_fallbackCalls_description": "Abilita l'attivazione delle chiamate in entrata di riserva tramite SMS formattati appositamente",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"

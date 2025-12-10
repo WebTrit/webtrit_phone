@@ -3492,6 +3492,12 @@ abstract class AppLocalizations {
   /// **'Confirm logout'**
   String get settings_LogoutConfirmDialog_title;
 
+  /// No description provided for @settings_missingMicrophoneIndicator_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing microphone permission. Unable to make calls.'**
+  String get settings_missingMicrophoneIndicator_title;
+
   /// Tooltip description for fallback SMS-based call trigger
   ///
   /// In en, this message translates to:

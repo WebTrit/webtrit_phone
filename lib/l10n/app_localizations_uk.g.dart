@@ -795,6 +795,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ConversationBuilders_cancel => 'Скасувати';
 
   @override
+  String messaging_ConversationBuilders_contactExtension(String extension) {
+    return 'Внутр: $extension';
+  }
+
+  @override
   String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Введіть ім\'я або номер телефону';
 
   @override
@@ -805,11 +810,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_ConversationBuilders_createGroup => 'Створити групу';
-
-  @override
-  String messaging_ConversationBuilders_contactExtension(String extension) {
-    return 'Внутр: $extension';
-  }
 
   @override
   String get messaging_ConversationBuilders_externalContacts_heading => 'Контакти Хмарної АТС';
@@ -873,10 +873,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_Conversation_failure => 'Помилка завантаження розмови';
 
   @override
-  String get messaging_ConversationScreen_titlePrefix => 'Діалог:';
+  String get messaging_ConversationScreen_titleAvailable => 'доступний';
 
   @override
-  String get messaging_ConversationScreen_titleAvailable => 'доступний';
+  String get messaging_ConversationScreen_titlePrefix => 'Діалог:';
 
   @override
   String get messaging_ConversationsScreen_chatsSearch_hint => 'Введіть ім\'я чату або користувача';
@@ -1134,10 +1134,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get numberActions_chat => 'Надіслати повідомлення в чаті';
 
   @override
-  String get numberActions_copyNumber => 'Скопіювати номер';
+  String get numberActions_copyCallId => 'Скопіювати ID дзвінка';
 
   @override
-  String get numberActions_copyCallId => 'Скопіювати ID дзвінка';
+  String get numberActions_copyNumber => 'Скопіювати номер';
 
   @override
   String get numberActions_delete => 'Видалити';
@@ -1208,6 +1208,187 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get persistentConnectionReminderTitle => 'Важливе нагадування';
+
+  @override
+  String get presence_activity_appointment_name => 'На зустрічі';
+
+  @override
+  String get presence_activity_away_name => 'Відійшов';
+
+  @override
+  String get presence_activity_busy_name => 'Зайнятий';
+
+  @override
+  String get presence_activity_doNotDisturb_name => 'Не турбувати';
+
+  @override
+  String get presence_activity_inTransit_name => 'У транзиті';
+
+  @override
+  String get presence_activity_meal_name => 'На їжі';
+
+  @override
+  String get presence_activity_meeting_name => 'На конференції';
+
+  @override
+  String get presence_activity_none_name => 'Не вказано';
+
+  @override
+  String get presence_activity_onThePhone_name => 'На дроті';
+
+  @override
+  String get presence_activity_permanentAbsence_name => 'Відсутній';
+
+  @override
+  String get presence_activity_sleeping_name => 'Спить';
+
+  @override
+  String get presence_activity_travel_name => 'В подорожі';
+
+  @override
+  String get presence_activity_vacation_name => 'У відпустці';
+
+  @override
+  String get presence_infoView_activity => 'Активність:';
+
+  @override
+  String get presence_infoView_available => 'Доступний:';
+
+  @override
+  String get presence_infoView_available_false => 'Ні';
+
+  @override
+  String get presence_infoView_available_true => 'Так';
+
+  @override
+  String get presence_infoView_client => 'Клієнт:';
+
+  @override
+  String get presence_infoView_device => 'Пристрій:';
+
+  @override
+  String get presence_infoView_note => 'Примітка:';
+
+  @override
+  String get presence_infoView_statusIcon => 'Іконка статусу:';
+
+  @override
+  String get presence_infoView_timeZone => 'Часовий пояс:';
+
+  @override
+  String get presence_infoView_title => 'Інформація про присутність:';
+
+  @override
+  String get presence_infoView_updated => 'Оновлено:';
+
+  @override
+  String get presence_preset_absent_name => 'Відсутній';
+
+  @override
+  String get presence_preset_absent_note => 'Відсутній';
+
+  @override
+  String get presence_preset_appointment_name => 'Запланована зустріч';
+
+  @override
+  String get presence_preset_appointment_note => 'На запланованій зустрічі';
+
+  @override
+  String get presence_preset_available_name => 'Доступний';
+
+  @override
+  String get presence_preset_away_name => 'Відійшов';
+
+  @override
+  String get presence_preset_away_note => 'Відійшов';
+
+  @override
+  String get presence_preset_dnd_name => 'Не турбувати';
+
+  @override
+  String get presence_preset_dnd_note => 'Не турбувати';
+
+  @override
+  String get presence_preset_inTransit_name => 'Транзит';
+
+  @override
+  String get presence_preset_inTransit_note => 'У транзиті';
+
+  @override
+  String get presence_preset_meal_name => 'Їжа';
+
+  @override
+  String get presence_preset_meal_note => 'На їжі';
+
+  @override
+  String get presence_preset_meeting_name => 'Зустріч';
+
+  @override
+  String get presence_preset_meeting_note => 'На зустрічі';
+
+  @override
+  String get presence_preset_sleeping_name => 'Спить';
+
+  @override
+  String get presence_preset_sleeping_note => 'Спить';
+
+  @override
+  String get presence_preset_travel_name => 'В подорожі';
+
+  @override
+  String get presence_preset_travel_note => 'В подорожі';
+
+  @override
+  String get presence_preset_unavailable_name => 'Недоступний';
+
+  @override
+  String get presence_preset_vacation_name => 'Відпустка';
+
+  @override
+  String get presence_preset_vacation_note => 'У відпустці';
+
+  @override
+  String get presence_settings_activity_label => 'Активність';
+
+  @override
+  String get presence_settings_activity_tooltip =>
+      'Детально описує поточну активність. Використовує елемент \"activities\" розширення SIP \"RPID\" у вмісті pidf (див. RFC 4480)';
+
+  @override
+  String get presence_settings_availability_title => 'Доступність:';
+
+  @override
+  String get presence_settings_availability_tooltip =>
+      'Відображає загальну доступність для спілкування в службі SIP. Використовує елемент SIP \"Status\" у вмісті pidf зі значеннями \"open/closed\" (див. RFC 3863)';
+
+  @override
+  String get presence_settings_config_title => 'Конфігурація:';
+
+  @override
+  String get presence_settings_dnd_title => 'Відхиляти дзвінки (DND)';
+
+  @override
+  String get presence_settings_dnd_tooltip =>
+      'Коли увімкнено, всі вхідні дзвінки будуть автоматично відхилені сервером з відповіддю \"603 Declined\".';
+
+  @override
+  String get presence_settings_note_label => 'Примітка';
+
+  @override
+  String get presence_settings_note_tooltip =>
+      'Короткий текстовий опис поточного стану. Використовує елемент SIP \"note\" у вмісті pidf (див. RFC 3863)';
+
+  @override
+  String get presence_settings_presets_label => 'Виберіть пресет';
+
+  @override
+  String get presence_settings_presets_title => 'Пресети:';
+
+  @override
+  String get presence_settings_statusIcon_none => 'Немає';
+
+  @override
+  String get presence_settings_statusIcon_title => 'Іконка статусу:';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -1410,6 +1591,30 @@ class AppLocalizationsUk extends AppLocalizations {
       'Налаштування пропускної здатності для аудіо-відео потоку, нижчі значення зменшать використання трафіку, більші значення покращать якість потоку';
 
   @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove => 'Видалити extmaps';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
+      'Видалити усі рядки extmap з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8 => 'Перепризначити код TE_8k на 101';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
+      'Змінити тип навантаження TE8 на 101 в SDP для кращої сумісності з деякими SIP клієнтами.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps => 'Видалити статичні rtpmap рядки';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
+      'Видалити статичні RTP map рядки для аудіо кодеків (наприклад, PCMU, PCMA) з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_title => 'Додаткові модифікації SDP';
+
+  @override
   String get settings_encoding_Section_measure_hz => 'Hz';
 
   @override
@@ -1508,30 +1713,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_target_video_bitrate => 'Цільовий бітрейт відео: ';
 
   @override
-  String get settings_encoding_Section_extra_sdp_mod_title => 'Додаткові модифікації SDP';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove => 'Видалити extmaps';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
-      'Видалити усі рядки extmap з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps => 'Видалити статичні rtpmap рядки';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
-      'Видалити статичні RTP map рядки для аудіо кодеків (наприклад, PCMU, PCMA) з SDP для зменшення розміру SDP. Може допомогти з проблемами фрагментації MTU на деяких SIP клієнтах.';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_remapTE8 => 'Перепризначити код TE_8k на 101';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
-      'Змінити тип навантаження TE8 на 101 в SDP для кращої сумісності з деякими SIP клієнтами.';
-
-  @override
   String get settings_encoding_Section_value_auto => 'Авто';
 
   @override
@@ -1590,9 +1771,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
-  String get settings_ListViewTileTitle_presence => 'SIP Присутність';
-
-  @override
   String get settings_ListViewTileTitle_callerId => 'Ідентифікатор абонента';
 
   @override
@@ -1620,6 +1798,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_network => 'Налаштування мережі';
 
   @override
+  String get settings_ListViewTileTitle_presence => 'SIP Присутність';
+
+  @override
   String get settings_ListViewTileTitle_registered => 'Зареєстровано';
 
   @override
@@ -1645,6 +1826,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_LogoutConfirmDialog_title => 'Підтвердження виходу';
+
+  @override
+  String get settings_missingMicrophoneIndicator_title =>
+      'Відсутній дозвіл на використання мікрофона. Неможливо здійснювати дзвінки.';
 
   @override
   String get settings_network_fallbackCalls_description =>
@@ -2020,9 +2205,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 
   @override
-  String get webview_defaultError_title => 'Щось пішло не так';
-
-  @override
   String webview_defaultError_details(String description, int code) {
     return '$description (код: $code)';
   }
@@ -2031,13 +2213,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get webview_defaultError_reload => 'Перезавантажити';
 
   @override
-  String get webview_sslError_title => 'Ваше з’єднання не є приватним';
-
-  @override
-  String get webview_sslError_message => 'Сертифікат цього сайту не є надійним. Сторінку неможливо відобразити.';
-
-  @override
-  String get webview_sslError_tryAgain => 'Спробувати ще раз';
+  String get webview_defaultError_title => 'Щось пішло не так';
 
   @override
   String get webview_sslError_details => 'Деталі';
@@ -2049,183 +2225,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get webview_sslError_details_url => 'URL';
 
   @override
-  String get presence_preset_available_name => 'Доступний';
+  String get webview_sslError_message => 'Сертифікат цього сайту не є надійним. Сторінку неможливо відобразити.';
 
   @override
-  String get presence_preset_unavailable_name => 'Недоступний';
+  String get webview_sslError_title => 'Ваше з’єднання не є приватним';
 
   @override
-  String get presence_preset_away_name => 'Відійшов';
-
-  @override
-  String get presence_preset_away_note => 'Відійшов';
-
-  @override
-  String get presence_preset_dnd_name => 'Не турбувати';
-
-  @override
-  String get presence_preset_dnd_note => 'Не турбувати';
-
-  @override
-  String get presence_preset_sleeping_name => 'Спить';
-
-  @override
-  String get presence_preset_sleeping_note => 'Спить';
-
-  @override
-  String get presence_preset_absent_name => 'Відсутній';
-
-  @override
-  String get presence_preset_absent_note => 'Відсутній';
-
-  @override
-  String get presence_preset_meal_name => 'Їжа';
-
-  @override
-  String get presence_preset_meal_note => 'На їжі';
-
-  @override
-  String get presence_preset_inTransit_name => 'Транзит';
-
-  @override
-  String get presence_preset_inTransit_note => 'У транзиті';
-
-  @override
-  String get presence_preset_meeting_name => 'Зустріч';
-
-  @override
-  String get presence_preset_meeting_note => 'На зустрічі';
-
-  @override
-  String get presence_preset_vacation_name => 'Відпустка';
-
-  @override
-  String get presence_preset_vacation_note => 'У відпустці';
-
-  @override
-  String get presence_preset_travel_name => 'В подорожі';
-
-  @override
-  String get presence_preset_travel_note => 'В подорожі';
-
-  @override
-  String get presence_preset_appointment_name => 'Запланована зустріч';
-
-  @override
-  String get presence_preset_appointment_note => 'На запланованій зустрічі';
-
-  @override
-  String get presence_activity_none_name => 'Не вказано';
-
-  @override
-  String get presence_activity_away_name => 'Відійшов';
-
-  @override
-  String get presence_activity_busy_name => 'Зайнятий';
-
-  @override
-  String get presence_activity_doNotDisturb_name => 'Не турбувати';
-
-  @override
-  String get presence_activity_sleeping_name => 'Спить';
-
-  @override
-  String get presence_activity_permanentAbsence_name => 'Відсутній';
-
-  @override
-  String get presence_activity_onThePhone_name => 'На дроті';
-
-  @override
-  String get presence_activity_meal_name => 'На їжі';
-
-  @override
-  String get presence_activity_meeting_name => 'На конференції';
-
-  @override
-  String get presence_activity_appointment_name => 'На зустрічі';
-
-  @override
-  String get presence_activity_vacation_name => 'У відпустці';
-
-  @override
-  String get presence_activity_travel_name => 'В подорожі';
-
-  @override
-  String get presence_activity_inTransit_name => 'У транзиті';
-
-  @override
-  String get presence_settings_presets_title => 'Пресети:';
-
-  @override
-  String get presence_settings_presets_label => 'Виберіть пресет';
-
-  @override
-  String get presence_settings_config_title => 'Конфігурація:';
-
-  @override
-  String get presence_settings_availability_title => 'Доступність:';
-
-  @override
-  String get presence_settings_availability_tooltip =>
-      'Відображає загальну доступність для спілкування в службі SIP. Використовує елемент SIP \"Status\" у вмісті pidf зі значеннями \"open/closed\" (див. RFC 3863)';
-
-  @override
-  String get presence_settings_note_label => 'Примітка';
-
-  @override
-  String get presence_settings_note_tooltip =>
-      'Короткий текстовий опис поточного стану. Використовує елемент SIP \"note\" у вмісті pidf (див. RFC 3863)';
-
-  @override
-  String get presence_settings_activity_label => 'Активність';
-
-  @override
-  String get presence_settings_activity_tooltip =>
-      'Детально описує поточну активність. Використовує елемент \"activities\" розширення SIP \"RPID\" у вмісті pidf (див. RFC 4480)';
-
-  @override
-  String get presence_settings_dnd_title => 'Відхиляти дзвінки (DND)';
-
-  @override
-  String get presence_settings_dnd_tooltip =>
-      'Коли увімкнено, всі вхідні дзвінки будуть автоматично відхилені сервером з відповіддю \"603 Declined\".';
-
-  @override
-  String get presence_settings_statusIcon_title => 'Іконка статусу:';
-
-  @override
-  String get presence_settings_statusIcon_none => 'Немає';
-
-  @override
-  String get presence_infoView_title => 'Інформація про присутність:';
-
-  @override
-  String get presence_infoView_device => 'Пристрій:';
-
-  @override
-  String get presence_infoView_available => 'Доступний:';
-
-  @override
-  String get presence_infoView_available_true => 'Так';
-
-  @override
-  String get presence_infoView_available_false => 'Ні';
-
-  @override
-  String get presence_infoView_note => 'Примітка:';
-
-  @override
-  String get presence_infoView_activity => 'Активність:';
-
-  @override
-  String get presence_infoView_statusIcon => 'Іконка статусу:';
-
-  @override
-  String get presence_infoView_timeZone => 'Часовий пояс:';
-
-  @override
-  String get presence_infoView_updated => 'Оновлено:';
-
-  @override
-  String get presence_infoView_client => 'Клієнт:';
+  String get webview_sslError_tryAgain => 'Спробувати ще раз';
 }

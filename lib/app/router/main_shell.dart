@@ -493,6 +493,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         ),
                         BlocProvider(
                           lazy: false,
+                          create: (context) {
+                            return MicrophoneStatusBloc(appPermissions: context.read<AppPermissions>())
+                              ..add(MicrophoneStatusStarted());
+                          },
+                        ),
+                        BlocProvider(
+                          lazy: false,
                           create: (_) =>
                               SystemNotificationsCounterCubit(context.read<SystemNotificationsLocalRepository>()),
                         ),

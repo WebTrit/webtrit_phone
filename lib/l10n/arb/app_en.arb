@@ -1427,6 +1427,8 @@
   "@settings_LogoutConfirmDialog_content": {},
   "settings_LogoutConfirmDialog_title": "Confirm logout",
   "@settings_LogoutConfirmDialog_title": {},
+  "settings_missingMicrophoneIndicator_title": "Missing microphone permission. Unable to make calls.",
+  "@settings_missingMicrophoneIndicator_title": {},
   "settings_network_fallbackCalls_description": "Enable fallback incoming call triggering via specially formatted SMS",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"
