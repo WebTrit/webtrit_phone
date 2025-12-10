@@ -42,6 +42,8 @@ const int _kUndefinedLine = -1;
 
 final _logger = Logger('CallBloc');
 
+typedef DiagnosticReport = void Function(String callId, CallkeepCallRequestError error);
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final String coreUrl;
   final String tenantId;
@@ -70,6 +72,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallErrorReporter callErrorReporter;
   final bool sipPresenceEnabled;
   final VoidCallback? onCallEnded;
+  final DiagnosticReport diagnosticReport;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -102,6 +105,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.contactNameResolver,
     required this.callErrorReporter,
     required this.sipPresenceEnabled,
+    required this.diagnosticReport,
     this.sdpMunger,
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
@@ -1281,6 +1285,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         submitNotification(const CallErrorRegisteringSelfManagedPhoneAccountNotification());
       } else {
         _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
+        diagnosticReport(callId, callkeepError);
       }
       emit(state.copyWithPopActiveCall(callId));
 
