@@ -68,6 +68,7 @@ class AppShell extends StatelessWidget {
     );
   }
 
+  // Use AppShell as an entry point because I need material/router context.
   DiagnosticService _createDiagnosticService(BuildContext context) {
     final appPermissions = context.read<AppPermissions>();
     final diagnostics = AndroidCallkeepUtils.diagnostics;
