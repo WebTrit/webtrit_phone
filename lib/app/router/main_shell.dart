@@ -13,7 +13,6 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
-import 'package:webtrit_phone/blocs/microphone_status/microphone_status_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -350,12 +349,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       )..add(const ExternalContactsSyncStarted());
                     },
                   ),
-                  BlocProvider(
-                    create: (context) {
-                      return MicrophoneStatusBloc(appPermissions: context.read<AppPermissions>())
-                        ..add(MicrophoneStatusStarted());
-                    },
-                  ),
                   BlocProvider<CallBloc>(
                     create: (context) {
                       final appBloc = context.read<AppBloc>();
@@ -482,6 +475,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                               context.read<AppBloc>().maybeHandleError(error);
                             },
                           ),
+                        ),
+                        BlocProvider(
+                          lazy: false,
+                          create: (context) {
+                            return MicrophoneStatusBloc(appPermissions: context.read<AppPermissions>())
+                              ..add(MicrophoneStatusStarted());
+                          },
                         ),
                         BlocProvider(
                           lazy: false,

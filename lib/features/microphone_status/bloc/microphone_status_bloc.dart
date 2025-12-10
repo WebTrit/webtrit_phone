@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../data/app_permissions.dart';
+import '../../../data/app_permissions.dart';
 
 part 'microphone_status_bloc.freezed.dart';
 
