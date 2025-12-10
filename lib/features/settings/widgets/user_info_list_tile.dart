@@ -61,7 +61,7 @@ class UserInfoListTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    if (info.cleanMainNumber.isNotEmpty || info.cleanExtNumber.isNotEmpty)
+                    if (info.hasAnyPhoneNumber)
                       CopyToClipboard(
                         data: info.numbers.main,
                         child: Text(

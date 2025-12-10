@@ -35,10 +35,14 @@ extension UserInfoFormatting on UserInfo {
   }
 
   /// Returns the main number without leading/trailing whitespace.
-  String get cleanMainNumber => numbers.main?.trim() ?? '';
+  String get mainNumberTrimmed => numbers.main?.trim() ?? '';
 
   /// Returns the extension number without leading/trailing whitespace.
-  String get cleanExtNumber => numbers.ext?.trim() ?? '';
+  String get extNumberTrimmed => numbers.ext?.trim() ?? '';
+
+  /// Returns true if either the main number or the extension number is present
+  /// after trimming whitespace.
+  bool get hasAnyPhoneNumber => mainNumberTrimmed.isNotEmpty || extNumberTrimmed.isNotEmpty;
 
   /// Formats the user's phone number for display.
   ///
@@ -51,9 +55,9 @@ extension UserInfoFormatting on UserInfo {
   /// - 'only_ext': When only the extension number is available.
   /// - 'empty': When neither is available.
   String formatPhoneNumber(BuildContext context) {
-    final style = cleanMainNumber.isNotEmpty
-        ? (cleanExtNumber.isNotEmpty ? 'full' : 'simple')
-        : (cleanExtNumber.isNotEmpty ? 'only_ext' : 'empty');
-    return context.l10n.formatPhone(style, cleanMainNumber, cleanExtNumber);
+    final style = mainNumberTrimmed.isNotEmpty
+        ? (extNumberTrimmed.isNotEmpty ? 'full' : 'simple')
+        : (extNumberTrimmed.isNotEmpty ? 'only_ext' : 'empty');
+    return context.l10n.formatPhone(style, mainNumberTrimmed, extNumberTrimmed);
   }
 }
