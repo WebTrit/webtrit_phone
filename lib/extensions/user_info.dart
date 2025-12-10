@@ -34,6 +34,12 @@ extension UserInfoFormatting on UserInfo {
     }
   }
 
+  /// Returns the main number without leading/trailing whitespace.
+  String get cleanMainNumber => numbers.main?.trim() ?? '';
+
+  /// Returns the extension number without leading/trailing whitespace.
+  String get cleanExtNumber => numbers.ext?.trim() ?? '';
+
   /// Formats the user's phone number for display.
   ///
   /// This method uses localization to format the main number and extension number.
