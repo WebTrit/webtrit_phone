@@ -60,7 +60,7 @@ class DiagnosticServiceImpl implements DiagnosticService {
 
       try {
         final includeAdvancedLogs = dialogResult?.includeAdvancedLogs ?? false;
-        final data = await strategy.collectReport(extraLog: includeAdvancedLogs);
+        final data = await strategy.collectReport(includeAdvancedLogs: includeAdvancedLogs);
         aggregatedResults.addAll(data);
       } catch (e, s) {
         final errorMsg = 'Strategy ${type.name} failed: $e';

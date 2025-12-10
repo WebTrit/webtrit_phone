@@ -8,7 +8,7 @@ import 'diagnostic_models.dart';
 abstract class DiagnosticStrategy {
   DiagnosticType get type;
 
-  Future<Map<String, dynamic>> collectReport({bool extraLog = false});
+  Future<Map<String, dynamic>> collectReport({bool includeAdvancedLogs = false});
 }
 
 /// A diagnostic strategy for collecting CallKeep-related information on Android.
@@ -24,8 +24,8 @@ class AndroidCallkeepDiagnosticStrategy implements DiagnosticStrategy {
   DiagnosticType get type => DiagnosticType.androidCallkeep;
 
   @override
-  Future<Map<String, dynamic>> collectReport({bool extraLog = false}) async {
-    if (extraLog) {
+  Future<Map<String, dynamic>> collectReport({bool includeAdvancedLogs = false}) async {
+    if (includeAdvancedLogs) {
       await _ensurePermissions();
     }
     return callkeepDiagnostics.getDiagnosticReport();
