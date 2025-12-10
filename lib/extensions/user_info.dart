@@ -34,17 +34,6 @@ extension UserInfoFormatting on UserInfo {
     }
   }
 
-  String get numberWithExtension {
-    final main = numbers.main?.trim() ?? '';
-    final ext = numbers.ext?.trim() ?? '';
-
-    if (main.isEmpty && ext.isEmpty) return '';
-
-    final extPart = ext.isNotEmpty ? ' (ext: $ext)' : '';
-
-    return '$main$extPart'.trimLeft();
-  }
-
   String formatPhoneNumber(BuildContext context) {
     if (cleanMainNumber.isEmpty && cleanExtNumber.isEmpty) return '';
 

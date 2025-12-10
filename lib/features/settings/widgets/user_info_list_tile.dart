@@ -61,11 +61,11 @@ class UserInfoListTile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    if (info.numberWithExtension.isNotEmpty)
+                    if (info.cleanMainNumber.isNotEmpty || info.cleanExtNumber.isNotEmpty)
                       CopyToClipboard(
                         data: info.numbers.main,
                         child: Text(
-                          info.numberWithExtension,
+                          info.formatPhoneNumber(context),
                           style: themeData.textTheme.bodyLarge,
                           overflow: TextOverflow.ellipsis,
                         ),

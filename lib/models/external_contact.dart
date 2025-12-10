@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../utils/equatable_prop_to_string.dart';
+import '../utils/utils.dart';
 
 class ExternalContact extends Equatable {
   const ExternalContact({
