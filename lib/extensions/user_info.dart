@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'package:webtrit_api/webtrit_api.dart';
+
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import 'iterable.dart';
 
@@ -31,12 +35,24 @@ extension UserInfoFormatting on UserInfo {
   }
 
   String get numberWithExtension {
-    if (numbers.main == null) return '';
-    final sb = StringBuffer(numbers.main!);
-    final numbersExt = numbers.ext;
-    if (numbersExt != null) {
-      sb.write(' (ext: $numbersExt)');
-    }
-    return sb.toString();
+    final main = numbers.main?.trim() ?? '';
+    final ext = numbers.ext?.trim() ?? '';
+
+    if (main.isEmpty && ext.isEmpty) return '';
+
+    final extPart = ext.isNotEmpty ? ' (ext: $ext)' : '';
+
+    return '$main$extPart'.trimLeft();
+  }
+
+  String formatPhoneNumber(BuildContext context) {
+    if (cleanMainNumber.isEmpty && cleanExtNumber.isEmpty) return '';
+
+    final style = cleanExtNumber.isNotEmpty ? 'full' : 'simple';
+    return context.l10n.formatPhone(
+        style,
+        cleanMainNumber,
+        cleanExtNumber,
+    );
   }
 }

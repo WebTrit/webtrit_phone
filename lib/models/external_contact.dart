@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../utils/equatable_prop_to_string.dart';
+
 class ExternalContact extends Equatable {
   const ExternalContact({
     this.id,
@@ -50,8 +52,8 @@ class ExternalContact extends Equatable {
     number,
     ext,
     mobile,
-    additional,
-    smsNumbers,
+    additional != null ? EquatablePropToString.list(additional!) : null,
+    smsNumbers != null ? EquatablePropToString.list(smsNumbers!) : null,
     email,
   ];
 }

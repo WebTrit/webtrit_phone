@@ -532,6 +532,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get favorites_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
+  String formatPhone(String style, String main, String ext) {
+    String _temp0 = intl.Intl.selectLogic(style, {'full': '$main (ext: $ext)', 'other': '$main'});
+    return '$_temp0';
+  }
+
+  @override
   String get locale_default => 'Predefinito';
 
   @override
@@ -799,6 +805,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ConversationBuilders_cancel => 'Cancellare';
 
   @override
+  String messaging_ConversationBuilders_contactExtension(String extension) {
+    return 'Int: $extension';
+  }
+
+  @override
   String get messaging_ConversationBuilders_contactOrNumberSearch_hint => 'Inserisci nome o numero di telefono';
 
   @override
@@ -809,11 +820,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messaging_ConversationBuilders_createGroup => 'Crea gruppo';
-
-  @override
-  String messaging_ConversationBuilders_contactExtension(String extension) {
-    return 'Int: $extension';
-  }
 
   @override
   String get messaging_ConversationBuilders_externalContacts_heading => 'Contatti Cloud PBX';
@@ -878,10 +884,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_Conversation_failure => 'Errore di caricamento della conversazione';
 
   @override
-  String get messaging_ConversationScreen_titlePrefix => 'Dialogo:';
+  String get messaging_ConversationScreen_titleAvailable => 'disponibile';
 
   @override
-  String get messaging_ConversationScreen_titleAvailable => 'disponibile';
+  String get messaging_ConversationScreen_titlePrefix => 'Dialogo:';
 
   @override
   String get messaging_ConversationsScreen_chatsSearch_hint => 'Inserisci il nome della chat o dell\'utente';
@@ -1141,10 +1147,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get numberActions_chat => 'Invia messaggio di chat';
 
   @override
-  String get numberActions_copyNumber => 'Numero di copie';
+  String get numberActions_copyCallId => 'Copia ID chiamata';
 
   @override
-  String get numberActions_copyCallId => 'Copia ID chiamata';
+  String get numberActions_copyNumber => 'Numero di copie';
 
   @override
   String get numberActions_delete => 'Elimina';
@@ -1216,6 +1222,187 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get persistentConnectionReminderTitle => 'Promemoria importante';
+
+  @override
+  String get presence_activity_appointment_name => 'In appuntamento';
+
+  @override
+  String get presence_activity_away_name => 'Assente';
+
+  @override
+  String get presence_activity_busy_name => 'Occupato';
+
+  @override
+  String get presence_activity_doNotDisturb_name => 'Non disturbare';
+
+  @override
+  String get presence_activity_inTransit_name => 'In transito';
+
+  @override
+  String get presence_activity_meal_name => 'Durante il pasto';
+
+  @override
+  String get presence_activity_meeting_name => 'In riunione';
+
+  @override
+  String get presence_activity_none_name => 'Non specificato';
+
+  @override
+  String get presence_activity_onThePhone_name => 'Al telefono';
+
+  @override
+  String get presence_activity_permanentAbsence_name => 'Assenza permanente';
+
+  @override
+  String get presence_activity_sleeping_name => 'Dormiente';
+
+  @override
+  String get presence_activity_travel_name => 'In viaggio';
+
+  @override
+  String get presence_activity_vacation_name => 'In vacanza';
+
+  @override
+  String get presence_infoView_activity => 'Attività:';
+
+  @override
+  String get presence_infoView_available => 'Disponibile:';
+
+  @override
+  String get presence_infoView_available_false => 'No';
+
+  @override
+  String get presence_infoView_available_true => 'Sì';
+
+  @override
+  String get presence_infoView_client => 'Client:';
+
+  @override
+  String get presence_infoView_device => 'Dispositivo:';
+
+  @override
+  String get presence_infoView_note => 'Nota:';
+
+  @override
+  String get presence_infoView_statusIcon => 'Icona di stato:';
+
+  @override
+  String get presence_infoView_timeZone => 'Fuso orario:';
+
+  @override
+  String get presence_infoView_title => 'Informazioni sulla presenza:';
+
+  @override
+  String get presence_infoView_updated => 'Aggiornato:';
+
+  @override
+  String get presence_preset_absent_name => 'Assente';
+
+  @override
+  String get presence_preset_absent_note => 'Assente';
+
+  @override
+  String get presence_preset_appointment_name => 'Appuntamento';
+
+  @override
+  String get presence_preset_appointment_note => 'In appuntamento';
+
+  @override
+  String get presence_preset_available_name => 'Disponibile';
+
+  @override
+  String get presence_preset_away_name => 'Assente';
+
+  @override
+  String get presence_preset_away_note => 'Assente';
+
+  @override
+  String get presence_preset_dnd_name => 'Non disturbare';
+
+  @override
+  String get presence_preset_dnd_note => 'Non disturbare';
+
+  @override
+  String get presence_preset_inTransit_name => 'In transito';
+
+  @override
+  String get presence_preset_inTransit_note => 'In transito';
+
+  @override
+  String get presence_preset_meal_name => 'Pausa pranzo';
+
+  @override
+  String get presence_preset_meal_note => 'Durante la pausa pranzo';
+
+  @override
+  String get presence_preset_meeting_name => 'In riunione';
+
+  @override
+  String get presence_preset_meeting_note => 'In riunione';
+
+  @override
+  String get presence_preset_sleeping_name => 'Dormiente';
+
+  @override
+  String get presence_preset_sleeping_note => 'Dormiente';
+
+  @override
+  String get presence_preset_travel_name => 'Viaggio';
+
+  @override
+  String get presence_preset_travel_note => 'In viaggio';
+
+  @override
+  String get presence_preset_unavailable_name => 'Non disponibile';
+
+  @override
+  String get presence_preset_vacation_name => 'Vacanza';
+
+  @override
+  String get presence_preset_vacation_note => 'In vacanza';
+
+  @override
+  String get presence_settings_activity_label => 'Attività';
+
+  @override
+  String get presence_settings_activity_tooltip =>
+      'Descrive l\'attività corrente in modo più dettagliato. Utilizza l\'elemento \"activities\" dell\'estensione SIP \"RPID\" nel contenuto pidf (vedi RFC 4480)';
+
+  @override
+  String get presence_settings_availability_title => 'Disponibilità:';
+
+  @override
+  String get presence_settings_availability_tooltip =>
+      'Rappresenta la disponibilità generale per le comunicazioni all\'interno del servizio SIP. Utilizza l\'elemento SIP \"Status\" nel contenuto pidf con i valori \"open/closed\" (vedi RFC 3863)';
+
+  @override
+  String get presence_settings_config_title => 'Configurazione:';
+
+  @override
+  String get presence_settings_dnd_title => 'Rifiuta chiamate (DND)';
+
+  @override
+  String get presence_settings_dnd_tooltip =>
+      'Quando abilitato, tutte le chiamate in arrivo verranno automaticamente rifiutate dal server con la risposta \"603 Declined\".';
+
+  @override
+  String get presence_settings_note_label => 'Nota';
+
+  @override
+  String get presence_settings_note_tooltip =>
+      'Una breve nota di testo che descrive lo stato attuale in dettaglio. Utilizza l\'elemento SIP \"note\" nel contenuto pidf (vedi RFC 3863)';
+
+  @override
+  String get presence_settings_presets_label => 'Scegli preset';
+
+  @override
+  String get presence_settings_presets_title => 'Preset:';
+
+  @override
+  String get presence_settings_statusIcon_none => 'Nessuna';
+
+  @override
+  String get presence_settings_statusIcon_title => 'Icona di stato:';
 
   @override
   String recents_BodyCenter_empty(Object filter) {
@@ -1419,6 +1606,30 @@ class AppLocalizationsIt extends AppLocalizations {
       'Regola le impostazioni del bitrate per i codec audio e video: valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, mentre valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda.';
 
   @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove => 'Rimuovere le extmaps';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
+      'Rimuovere tutte le linee extmap dall\'SDP, per ridurre la dimensione dell\'SDP. Può aiutare con problemi di frammentazione MTU su alcuni endpoint SIP.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8 => 'Rimappare il codice TE_8k a 101';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
+      'Cambiare il tipo di payload TE8 a 101 nell\'SDP per una migliore compatibilità con alcuni endpoint SIP.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps => 'Rimuovere le linee rtpmap statiche';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
+      'Rimuovere le linee di mappa RTP statiche per i codec audio (ad es. PCMU, PCMA) dall\'SDP, per ridurre la dimensione dell\'SDP. Può aiutare con problemi di frammentazione MTU su alcuni endpoint SIP.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_title => 'Modifiche SDP aggiuntive';
+
+  @override
   String get settings_encoding_Section_measure_hz => 'Hz';
 
   @override
@@ -1517,30 +1728,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_target_video_bitrate => 'Bitrate di destinazione video: ';
 
   @override
-  String get settings_encoding_Section_extra_sdp_mod_title => 'Modifiche SDP aggiuntive';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove => 'Rimuovere le extmaps';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
-      'Rimuovere tutte le linee extmap dall\'SDP, per ridurre la dimensione dell\'SDP. Può aiutare con problemi di frammentazione MTU su alcuni endpoint SIP.';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps => 'Rimuovere le linee rtpmap statiche';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip =>
-      'Rimuovere le linee di mappa RTP statiche per i codec audio (ad es. PCMU, PCMA) dall\'SDP, per ridurre la dimensione dell\'SDP. Può aiutare con problemi di frammentazione MTU su alcuni endpoint SIP.';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_remapTE8 => 'Rimappare il codice TE_8k a 101';
-
-  @override
-  String get settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip =>
-      'Cambiare il tipo di payload TE8 a 101 nell\'SDP per una migliore compatibilità con alcuni endpoint SIP.';
-
-  @override
   String get settings_encoding_Section_value_auto => 'Auto';
 
   @override
@@ -1599,9 +1786,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
 
   @override
-  String get settings_ListViewTileTitle_presence => 'SIP Presenza';
-
-  @override
   String get settings_ListViewTileTitle_callerId => 'ID chiamante';
 
   @override
@@ -1627,6 +1811,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_network => 'Impostazioni di rete';
+
+  @override
+  String get settings_ListViewTileTitle_presence => 'SIP Presenza';
 
   @override
   String get settings_ListViewTileTitle_registered => 'Registrato';
@@ -2029,9 +2216,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
 
   @override
-  String get webview_defaultError_title => 'Qualcosa è andato storto';
-
-  @override
   String webview_defaultError_details(String description, int code) {
     return '$description (codice: $code)';
   }
@@ -2040,14 +2224,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get webview_defaultError_reload => 'Ricarica';
 
   @override
-  String get webview_sslError_title => 'La tua connessione non è privata';
-
-  @override
-  String get webview_sslError_message =>
-      'Il certificato di questo sito non è considerato attendibile. La pagina non può essere visualizzata.';
-
-  @override
-  String get webview_sslError_tryAgain => 'Riprova';
+  String get webview_defaultError_title => 'Qualcosa è andato storto';
 
   @override
   String get webview_sslError_details => 'Dettagli';
@@ -2059,183 +2236,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get webview_sslError_details_url => 'URL';
 
   @override
-  String get presence_preset_available_name => 'Disponibile';
+  String get webview_sslError_message =>
+      'Il certificato di questo sito non è considerato attendibile. La pagina non può essere visualizzata.';
 
   @override
-  String get presence_preset_unavailable_name => 'Non disponibile';
+  String get webview_sslError_title => 'La tua connessione non è privata';
 
   @override
-  String get presence_preset_away_name => 'Assente';
-
-  @override
-  String get presence_preset_away_note => 'Assente';
-
-  @override
-  String get presence_preset_dnd_name => 'Non disturbare';
-
-  @override
-  String get presence_preset_dnd_note => 'Non disturbare';
-
-  @override
-  String get presence_preset_sleeping_name => 'Dormiente';
-
-  @override
-  String get presence_preset_sleeping_note => 'Dormiente';
-
-  @override
-  String get presence_preset_absent_name => 'Assente';
-
-  @override
-  String get presence_preset_absent_note => 'Assente';
-
-  @override
-  String get presence_preset_meal_name => 'Pausa pranzo';
-
-  @override
-  String get presence_preset_meal_note => 'Durante la pausa pranzo';
-
-  @override
-  String get presence_preset_inTransit_name => 'In transito';
-
-  @override
-  String get presence_preset_inTransit_note => 'In transito';
-
-  @override
-  String get presence_preset_meeting_name => 'In riunione';
-
-  @override
-  String get presence_preset_meeting_note => 'In riunione';
-
-  @override
-  String get presence_preset_vacation_name => 'Vacanza';
-
-  @override
-  String get presence_preset_vacation_note => 'In vacanza';
-
-  @override
-  String get presence_preset_travel_name => 'Viaggio';
-
-  @override
-  String get presence_preset_travel_note => 'In viaggio';
-
-  @override
-  String get presence_preset_appointment_name => 'Appuntamento';
-
-  @override
-  String get presence_preset_appointment_note => 'In appuntamento';
-
-  @override
-  String get presence_activity_none_name => 'Non specificato';
-
-  @override
-  String get presence_activity_away_name => 'Assente';
-
-  @override
-  String get presence_activity_busy_name => 'Occupato';
-
-  @override
-  String get presence_activity_doNotDisturb_name => 'Non disturbare';
-
-  @override
-  String get presence_activity_sleeping_name => 'Dormiente';
-
-  @override
-  String get presence_activity_permanentAbsence_name => 'Assenza permanente';
-
-  @override
-  String get presence_activity_onThePhone_name => 'Al telefono';
-
-  @override
-  String get presence_activity_meal_name => 'Durante il pasto';
-
-  @override
-  String get presence_activity_meeting_name => 'In riunione';
-
-  @override
-  String get presence_activity_appointment_name => 'In appuntamento';
-
-  @override
-  String get presence_activity_vacation_name => 'In vacanza';
-
-  @override
-  String get presence_activity_travel_name => 'In viaggio';
-
-  @override
-  String get presence_activity_inTransit_name => 'In transito';
-
-  @override
-  String get presence_settings_presets_title => 'Preset:';
-
-  @override
-  String get presence_settings_presets_label => 'Scegli preset';
-
-  @override
-  String get presence_settings_config_title => 'Configurazione:';
-
-  @override
-  String get presence_settings_availability_title => 'Disponibilità:';
-
-  @override
-  String get presence_settings_availability_tooltip =>
-      'Rappresenta la disponibilità generale per le comunicazioni all\'interno del servizio SIP. Utilizza l\'elemento SIP \"Status\" nel contenuto pidf con i valori \"open/closed\" (vedi RFC 3863)';
-
-  @override
-  String get presence_settings_note_label => 'Nota';
-
-  @override
-  String get presence_settings_note_tooltip =>
-      'Una breve nota di testo che descrive lo stato attuale in dettaglio. Utilizza l\'elemento SIP \"note\" nel contenuto pidf (vedi RFC 3863)';
-
-  @override
-  String get presence_settings_activity_label => 'Attività';
-
-  @override
-  String get presence_settings_activity_tooltip =>
-      'Descrive l\'attività corrente in modo più dettagliato. Utilizza l\'elemento \"activities\" dell\'estensione SIP \"RPID\" nel contenuto pidf (vedi RFC 4480)';
-
-  @override
-  String get presence_settings_dnd_title => 'Rifiuta chiamate (DND)';
-
-  @override
-  String get presence_settings_dnd_tooltip =>
-      'Quando abilitato, tutte le chiamate in arrivo verranno automaticamente rifiutate dal server con la risposta \"603 Declined\".';
-
-  @override
-  String get presence_settings_statusIcon_title => 'Icona di stato:';
-
-  @override
-  String get presence_settings_statusIcon_none => 'Nessuna';
-
-  @override
-  String get presence_infoView_title => 'Informazioni sulla presenza:';
-
-  @override
-  String get presence_infoView_device => 'Dispositivo:';
-
-  @override
-  String get presence_infoView_available => 'Disponibile:';
-
-  @override
-  String get presence_infoView_available_true => 'Sì';
-
-  @override
-  String get presence_infoView_available_false => 'No';
-
-  @override
-  String get presence_infoView_note => 'Nota:';
-
-  @override
-  String get presence_infoView_activity => 'Attività:';
-
-  @override
-  String get presence_infoView_statusIcon => 'Icona di stato:';
-
-  @override
-  String get presence_infoView_timeZone => 'Fuso orario:';
-
-  @override
-  String get presence_infoView_updated => 'Aggiornato:';
-
-  @override
-  String get presence_infoView_client => 'Client:';
+  String get webview_sslError_tryAgain => 'Riprova';
 }

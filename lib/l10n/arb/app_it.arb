@@ -413,6 +413,15 @@
   },
   "favorites_Text_blingTransferInitiated": "Trasferimento senza vedere",
   "@favorites_Text_blingTransferInitiated": {},
+  "formatPhone": "{style, select, full{{main} (ext: {ext})} other{{main}}}",
+  "@formatPhone": {
+    "description": "Formats phone number based on presence of extension",
+    "placeholders": {
+      "style": { "type": "String" },
+      "main": { "type": "String" },
+      "ext": { "type": "String" }
+    }
+  },
   "locale_default": "Predefinito",
   "@locale_default": {},
   "locale_en": "Inglese",

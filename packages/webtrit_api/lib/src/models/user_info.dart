@@ -51,6 +51,10 @@ class UserInfo with _$UserInfo {
   factory UserInfo.fromJson(Map<String, Object?> json) => _$UserInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$UserInfoToJson(this);
+
+  String get cleanMainNumber => numbers.main?.trim() ?? '';
+
+  String get cleanExtNumber => numbers.ext?.trim() ?? '';
 }
 
 @JsonEnum(fieldRename: FieldRename.snake)

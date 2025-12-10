@@ -1077,6 +1077,12 @@ abstract class AppLocalizations {
   /// **'Performing blind transfer'**
   String get favorites_Text_blingTransferInitiated;
 
+  /// Formats phone number based on presence of extension
+  ///
+  /// In en, this message translates to:
+  /// **'{style, select, full{{main} (ext: {ext})} other{{main}}}'**
+  String formatPhone(String style, String main, String ext);
+
   /// No description provided for @locale_default.
   ///
   /// In en, this message translates to:
