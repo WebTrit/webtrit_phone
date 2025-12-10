@@ -31,7 +31,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
     on<SettingsUnreadVoicemailCountChanged>(_onVoicemailCountChanged);
-    on<SettingsStarted>(_onSettingsStarted);
 
     _initializeVoicemailCountBadge();
   }
@@ -44,12 +43,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final AppPermissions appPermissions;
 
   late final StreamSubscription<int> _unreadVoicemailsSub;
-
-  Future<void> _onSettingsStarted(SettingsStarted event, Emitter<SettingsState> emit) async {
-    final microphonePermissionGranted = await appPermissions.isPermissionGranted(Permission.microphone);
-
-    emit(state.copyWith(hasMicrophonePermission: microphonePermissionGranted));
-  }
 
   void _initializeVoicemailCountBadge() {
     voicemailRepository.fetchVoicemails();

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'settings_bloc.dart';
+part of 'microphone_status_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,40 +12,40 @@ part of 'settings_bloc.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$SettingsState {
+mixin _$MicrophoneStatusState {
 
- bool get progress; int get unreadVoicemailCount;
-/// Create a copy of SettingsState
+ bool? get microphonePermissionGranted;
+/// Create a copy of MicrophoneStatusState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SettingsStateCopyWith<SettingsState> get copyWith => _$SettingsStateCopyWithImpl<SettingsState>(this as SettingsState, _$identity);
+$MicrophoneStatusStateCopyWith<MicrophoneStatusState> get copyWith => _$MicrophoneStatusStateCopyWithImpl<MicrophoneStatusState>(this as MicrophoneStatusState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.unreadVoicemailCount, unreadVoicemailCount) || other.unreadVoicemailCount == unreadVoicemailCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MicrophoneStatusState&&(identical(other.microphonePermissionGranted, microphonePermissionGranted) || other.microphonePermissionGranted == microphonePermissionGranted));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,progress,unreadVoicemailCount);
+int get hashCode => Object.hash(runtimeType,microphonePermissionGranted);
 
 @override
 String toString() {
-  return 'SettingsState(progress: $progress, unreadVoicemailCount: $unreadVoicemailCount)';
+  return 'MicrophoneStatusState(microphonePermissionGranted: $microphonePermissionGranted)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SettingsStateCopyWith<$Res>  {
-  factory $SettingsStateCopyWith(SettingsState value, $Res Function(SettingsState) _then) = _$SettingsStateCopyWithImpl;
+abstract mixin class $MicrophoneStatusStateCopyWith<$Res>  {
+  factory $MicrophoneStatusStateCopyWith(MicrophoneStatusState value, $Res Function(MicrophoneStatusState) _then) = _$MicrophoneStatusStateCopyWithImpl;
 @useResult
 $Res call({
- bool progress, int unreadVoicemailCount
+ bool? microphonePermissionGranted
 });
 
 
@@ -53,28 +53,27 @@ $Res call({
 
 }
 /// @nodoc
-class _$SettingsStateCopyWithImpl<$Res>
-    implements $SettingsStateCopyWith<$Res> {
-  _$SettingsStateCopyWithImpl(this._self, this._then);
+class _$MicrophoneStatusStateCopyWithImpl<$Res>
+    implements $MicrophoneStatusStateCopyWith<$Res> {
+  _$MicrophoneStatusStateCopyWithImpl(this._self, this._then);
 
-  final SettingsState _self;
-  final $Res Function(SettingsState) _then;
+  final MicrophoneStatusState _self;
+  final $Res Function(MicrophoneStatusState) _then;
 
-/// Create a copy of SettingsState
+/// Create a copy of MicrophoneStatusState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? unreadVoicemailCount = null,}) {
-  return _then(SettingsState(
-progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
-as bool,unreadVoicemailCount: null == unreadVoicemailCount ? _self.unreadVoicemailCount : unreadVoicemailCount // ignore: cast_nullable_to_non_nullable
-as int,
+@pragma('vm:prefer-inline') @override $Res call({Object? microphonePermissionGranted = freezed,}) {
+  return _then(MicrophoneStatusState(
+microphonePermissionGranted: freezed == microphonePermissionGranted ? _self.microphonePermissionGranted : microphonePermissionGranted // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [SettingsState].
-extension SettingsStatePatterns on SettingsState {
+/// Adds pattern-matching-related methods to [MicrophoneStatusState].
+extension MicrophoneStatusStatePatterns on MicrophoneStatusState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

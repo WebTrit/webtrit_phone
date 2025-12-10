@@ -29,7 +29,7 @@ class SettingsScreenPage extends StatelessWidget {
           voicemailRepository: context.read<VoicemailRepository>(),
           sessionRepository: context.read(),
           appPermissions: context.read<AppPermissions>() 
-        )..add(SettingsStarted());
+        );
       },
       child: widget,
     );

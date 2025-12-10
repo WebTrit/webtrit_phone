@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/blocs/microphone_status/microphone_status_bloc.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -45,24 +46,26 @@ class MainAppBar extends AppBar {
                             radius: kMinInteractiveDimension / 2,
                             showLoading: true,
                           ),
-                          Visibility(
-                            visible: !sessionState.hasMicrophonePermission,
-                            child: Positioned(
-                              right: -8,
-                              top: -2,
-                              child: Container(
-                                padding: EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                  color: Colors.orange,
-                                  shape: BoxShape.circle,
+                          BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
+                            builder: (context, microphoneStatusState) {
+                              return Visibility(
+                                visible:
+                                    microphoneStatusState.microphonePermissionGranted != null &&
+                                    !microphoneStatusState.microphonePermissionGranted!,
+                                child: Positioned(
+                                  right: -8,
+                                  top: -2,
+                                  child: Container(
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.error,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(Icons.mic_off, color: Colors.white, size: 14),
+                                  ),
                                 ),
-                                child: Icon(
-                                  Icons.warning_amber,
-                                  color: Colors.black,
-                                  size: 15,
-                                ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                         ],
                       ),

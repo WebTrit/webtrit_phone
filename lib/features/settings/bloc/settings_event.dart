@@ -23,7 +23,3 @@ class SettingsUnreadVoicemailCountChanged extends SettingsEvent {
   @override
   List<Object?> get props => [count];
 }
-
-class SettingsStarted extends SettingsEvent {
-  const SettingsStarted();
-}
