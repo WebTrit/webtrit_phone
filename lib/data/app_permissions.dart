@@ -34,18 +34,19 @@ class AppPermissions {
   /// The time-to-live for the permissions cache.
   static const _cacheTTL = Duration(seconds: 1);
 
-  static final callkeepPermission = WebtritCallkeepPermissions();
-
   static Future<AppPermissions> init(ExcludePermissions excludePermissions) async {
-    return AppPermissions._(excludePermissions);
+    return AppPermissions._(excludePermissions, WebtritCallkeepPermissions());
   }
 
-  AppPermissions._(this._excludePermissions) {
+  AppPermissions._(this._excludePermissions, this._webtritCallkeepPermissions) {
     _permissionsCache = ExpiringCache(
       ttl: _cacheTTL,
       compute: () => _fullPermissions.where((p) => !_excludePermissions().contains(p)).toList(),
     );
   }
+
+  /// Manages permissions related to `webtrit_callkeep` plugin.
+  final WebtritCallkeepPermissions _webtritCallkeepPermissions;
 
   /// A function that returns a list of permissions to be excluded from the [_fullPermissions].
   final ExcludePermissions _excludePermissions;
@@ -135,7 +136,7 @@ class AppPermissions {
   Future<Map<CallkeepPermission, CallkeepSpecialPermissionStatus>> requestDiagnosticsPermissions() async {
     _logger.info('Checking diagnostics permission statuses via native bridge');
     try {
-      final results = await callkeepPermission.requestPermissions(_callkeepDiagnosticPermissions);
+      final results = await _webtritCallkeepPermissions.requestPermissions(_callkeepDiagnosticPermissions);
       _logger.info('Diagnostics permissions results: $results');
       return results;
     } catch (e, s) {
@@ -147,7 +148,7 @@ class AppPermissions {
   Future<Map<CallkeepPermission, CallkeepSpecialPermissionStatus>> getDiagnosticPermissionStatuses() async {
     _logger.info('Requesting diagnostics permission statuses via native bridge');
     try {
-      final results = await callkeepPermission.checkPermissionsStatus(_callkeepDiagnosticPermissions);
+      final results = await _webtritCallkeepPermissions.checkPermissionsStatus(_callkeepDiagnosticPermissions);
       _logger.info('Diagnostics permissions results: $results');
       return results;
     } catch (e, s) {
@@ -168,12 +169,12 @@ class AppPermissions {
   Future<void> toSpecialPermissionsSetting(CallkeepSpecialPermissions permission) async {
     try {
       if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
-        await callkeepPermission.openFullScreenIntentSettings();
+        await _webtritCallkeepPermissions.openFullScreenIntentSettings();
       } else {
-        await callkeepPermission.openSettings();
+        await _webtritCallkeepPermissions.openSettings();
       }
     } catch (e) {
-      await callkeepPermission.openSettings();
+      await _webtritCallkeepPermissions.openSettings();
     }
   }
 
