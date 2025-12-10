@@ -529,7 +529,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String formatPhone(String style, String main, String ext) {
-    String _temp0 = intl.Intl.selectLogic(style, {'full': '$main (розш: $ext)', 'other': '$main'});
+    String _temp0 = intl.Intl.selectLogic(style, {
+      'full': '$main (розш: $ext)',
+      'simple': '$main',
+      'only_ext': 'розш: $ext',
+      'empty': 'Не вказано',
+      'other': '$main',
+    });
     return '$_temp0';
   }
 

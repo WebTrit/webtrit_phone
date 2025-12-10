@@ -413,13 +413,22 @@
   },
   "favorites_Text_blingTransferInitiated": "Trasferimento senza vedere",
   "@favorites_Text_blingTransferInitiated": {},
-  "formatPhone": "{style, select, full{{main} (est: {ext})} other{{main}}}",
+  "formatPhone": "{style, select, full{{main} (int.: {ext})} simple{{main}} only_ext{int.: {ext}} empty{Numero di telefono non specificato} other{{main}}}",
   "@formatPhone": {
-    "description": "Formats phone number based on presence of extension",
+    "description": "Formats phone number based on presence of main number and extension, covering four scenarios: both, main only, extension only, and neither.",
     "placeholders": {
-      "style": { "type": "String" },
-      "main": { "type": "String" },
-      "ext": { "type": "String" }
+      "style": {
+        "type": "String",
+        "example": "full"
+      },
+      "main": {
+        "type": "String",
+        "example": "+15551234567"
+      },
+      "ext": {
+        "type": "String",
+        "example": "101"
+      }
     }
   },
   "locale_default": "Predefinito",

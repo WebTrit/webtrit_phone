@@ -533,7 +533,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String formatPhone(String style, String main, String ext) {
-    String _temp0 = intl.Intl.selectLogic(style, {'full': '$main (est: $ext)', 'other': '$main'});
+    String _temp0 = intl.Intl.selectLogic(style, {
+      'full': '$main (int.: $ext)',
+      'simple': '$main',
+      'only_ext': 'int.: $ext',
+      'empty': 'Numero di telefono non specificato',
+      'other': '$main',
+    });
     return '$_temp0';
   }
 

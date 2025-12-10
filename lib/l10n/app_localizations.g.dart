@@ -1077,10 +1077,10 @@ abstract class AppLocalizations {
   /// **'Performing blind transfer'**
   String get favorites_Text_blingTransferInitiated;
 
-  /// Formats phone number based on presence of extension
+  /// Formats phone number based on presence of main number and extension, covering four scenarios: both, main only, extension only, and neither.
   ///
   /// In en, this message translates to:
-  /// **'{style, select, full{{main} (ext: {ext})} other{{main}}}'**
+  /// **'{style, select, full{{main} (ext: {ext})} simple{{main}} only_ext{ext: {ext}} empty{No phone number} other{{main}}}'**
   String formatPhone(String style, String main, String ext);
 
   /// No description provided for @locale_default.
