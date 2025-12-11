@@ -63,7 +63,7 @@ class Contact extends Equatable {
   late final String? mobileNumber = phones.firstWhereOrNull((element) => element.label == kContactMainLabel)?.number;
 
   /// Computed list for contact's of sms phone numbers
-  /// suitable as list of number to wich user can send sms messages.
+  /// suitable as list of number to which user can send sms messages.
   ///
   /// If the contact is external, only the `sms` numbers are returned.
   /// Otherwise, all the numbers are returned for phonebook contacts.
