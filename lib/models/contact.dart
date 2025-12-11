@@ -71,14 +71,6 @@ class Contact extends Equatable {
       .map((phone) => phone.number)
       .toList();
 
-  late final ContactPhone? extensionPhone = phones.firstWhereOrNull((element) => element.label == 'ext');
-
-  late final ContactPhone? mobilePhone = phones.firstWhereOrNull((element) => element.label == 'number');
-
-  late final List<ContactPhone> additionalNumbers = phones
-      .where((phone) => phone.label == 'additional')
-      .toList();
-
   /// Computed name of the contact in a single string if possible.
   ///
   /// Returns a [String] representing the name of the contact
