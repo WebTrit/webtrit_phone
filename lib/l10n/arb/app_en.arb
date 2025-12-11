@@ -397,6 +397,38 @@
   "@diagnosticScreen_permissionsGroup_title": {},
   "diagnosticScreen_pushNotificationService_title": "Push notification service",
   "@diagnosticScreen_pushNotificationService_title": {},
+  "diagnosticReportDialogTitle": "Send Diagnostic Report",
+  "@diagnosticReportDialogTitle": {
+    "description": "The title shown at the top of the diagnostic report dialog."
+  },
+  "diagnosticReportDialogContent": "This report contains technical details to help us identify connection issues.",
+  "@diagnosticReportDialogContent": {
+    "description": "The main body text explaining what the diagnostic report is for."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Include System Logs",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
+    "description": "The label for the switch toggle that allows the user to attach system logs."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Requires extra permissions.",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
+    "description": "Subtitle text under the system logs switch indicating permission requirements."
+  },
+  "diagnosticReportDialogAddNoteExpansionTileTitle": "Add a note (Optional)",
+  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
+    "description": "Title for the expandable section where users can add manual comments."
+  },
+  "diagnosticReportDialogCommentTextFieldHintText": "Describe what happened...",
+  "@diagnosticReportDialogCommentTextFieldHintText": {
+    "description": "Placeholder hint text displayed inside the comment text field."
+  },
+  "diagnosticReportDialogCancelButtonLabel": "Cancel",
+  "@diagnosticReportDialogCancelButtonLabel": {
+    "description": "Label for the button that closes the dialog without action."
+  },
+  "diagnosticReportDialogSendReportButtonLabel": "Send Report",
+  "@diagnosticReportDialogSendReportButtonLabel": {
+    "description": "Label for the button that submits the diagnostic report."
+  },
   "favorites_BodyCenter_empty": "Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon",
   "@favorites_BodyCenter_empty": {},
   "favorites_DeleteConfirmDialog_content": "Are you sure you want to delete the current favorite number?",
@@ -1445,6 +1477,8 @@
   "@settings_LogoutConfirmDialog_content": {},
   "settings_LogoutConfirmDialog_title": "Confirm logout",
   "@settings_LogoutConfirmDialog_title": {},
+  "settings_missingMicrophoneIndicator_title": "Missing microphone permission. Unable to make calls.",
+  "@settings_missingMicrophoneIndicator_title": {},
   "settings_network_fallbackCalls_description": "Enable fallback incoming call triggering via specially formatted SMS",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"

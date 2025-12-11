@@ -510,6 +510,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnosticScreen_pushNotificationService_title => 'Push notification service';
 
   @override
+  String get diagnosticReportDialogTitle => 'Send Diagnostic Report';
+
+  @override
+  String get diagnosticReportDialogContent =>
+      'This report contains technical details to help us identify connection issues.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Include System Logs';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Requires extra permissions.';
+
+  @override
+  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Add a note (Optional)';
+
+  @override
+  String get diagnosticReportDialogCommentTextFieldHintText => 'Describe what happened...';
+
+  @override
+  String get diagnosticReportDialogCancelButtonLabel => 'Cancel';
+
+  @override
+  String get diagnosticReportDialogSendReportButtonLabel => 'Send Report';
+
+  @override
   String get favorites_BodyCenter_empty =>
       'Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon';
 
@@ -1832,6 +1857,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_LogoutConfirmDialog_title => 'Confirm logout';
+
+  @override
+  String get settings_missingMicrophoneIndicator_title => 'Missing microphone permission. Unable to make calls.';
 
   @override
   String get settings_network_fallbackCalls_description =>

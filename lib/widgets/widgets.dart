@@ -6,6 +6,7 @@ export 'circular_progress_template.dart';
 export 'confirm_dialog.dart';
 export 'contact_info_builder.dart';
 export 'copy_to_clipboard.dart';
+export 'diagnostic_report_dialog.dart';
 export 'embedded_request_error.dart';
 export 'extended_text_form_field.dart';
 export 'fade_id.dart';

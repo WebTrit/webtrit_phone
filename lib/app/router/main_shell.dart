@@ -121,9 +121,26 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         RepositoryProvider<CallLogsRepository>(
           create: (context) => CallLogsRepository(appDatabase: context.read<AppDatabase>()),
         ),
+
+        // TODO: Refactor dependency injection.
         RepositoryProvider<ContactsRepository>(
-          create: (context) => ContactsRepository(appDatabase: context.read<AppDatabase>()),
+          create: (context) {
+            final appDatabase = context.read<AppDatabase>();
+            final webtritApiClient = context.read<WebtritApiClient>();
+
+            final token = context.read<AppBloc>().state.session.token!;
+
+            final contactsRemoteDataSource = ContactsRemoteDataSourceImpl(webtritApiClient, token);
+            final contactsLocalDataSource = ContactsLocalDataSourceImpl(appDatabase);
+
+            return ContactsRepository(
+              appDatabase: appDatabase,
+              contactsRemoteDataSource: contactsRemoteDataSource,
+              contactsLocalDataSource: contactsLocalDataSource,
+            );
+          },
         ),
+
         RepositoryProvider<LocalContactsRepository>(create: (context) => LocalContactsRepository()),
         RepositoryProvider<PushTokensRepository>(
           create: (context) => PushTokensRepository(
@@ -357,6 +374,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final peerConnectionSettingsRepository = context.read<PeerConnectionSettingsRepository>();
                       final videoCapturingSettingsRepository = context.read<VideoCapturingSettingsRepository>();
                       final encodingSettingsRepository = context.read<EncodingSettingsRepository>();
+                      final diagnosticService = context.read<DiagnosticService>();
 
                       final encodingConfig = featureAccess.callFeature.encoding;
                       final peerConnectionConfig = featureAccess.callFeature.peerConnection;
@@ -418,6 +436,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                         sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
+                        onDiagnosticReportRequested: (id, error) => diagnosticService.request(
+                          DiagnosticType.androidCallkeepOnly,
+                          extras: {'callId': id, 'error': error.name},
+                        ),
                       )..add(const CallStarted());
                     },
                   ),
@@ -473,6 +495,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                               context.read<AppBloc>().maybeHandleError(error);
                             },
                           ),
+                        ),
+                        BlocProvider(
+                          lazy: false,
+                          create: (context) {
+                            return MicrophoneStatusBloc(appPermissions: context.read<AppPermissions>())
+                              ..add(MicrophoneStatusStarted());
+                          },
                         ),
                         BlocProvider(
                           lazy: false,

@@ -510,6 +510,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
 
   @override
+  String get diagnosticReportDialogTitle => 'Надіслати звіт про діагностику';
+
+  @override
+  String get diagnosticReportDialogContent =>
+      'Цей звіт містить технічні дані, які допоможуть нам виявити проблеми з підключенням.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Додати системні логи';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Потрібні додаткові дозволи.';
+
+  @override
+  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Додати примітку (необов’язково)';
+
+  @override
+  String get diagnosticReportDialogCommentTextFieldHintText => 'Опишіть, що трапилося...';
+
+  @override
+  String get diagnosticReportDialogCancelButtonLabel => 'Скасувати';
+
+  @override
+  String get diagnosticReportDialogSendReportButtonLabel => 'Надіслати звіт';
+
+  @override
   String get favorites_BodyCenter_empty =>
       'Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку \"зірочка\"';
 
@@ -1838,6 +1863,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_LogoutConfirmDialog_title => 'Підтвердження виходу';
+
+  @override
+  String get settings_missingMicrophoneIndicator_title =>
+      'Відсутній дозвіл на використання мікрофона. Неможливо здійснювати дзвінки.';
 
   @override
   String get settings_network_fallbackCalls_description =>

@@ -42,6 +42,11 @@ const int _kUndefinedLine = -1;
 
 final _logger = Logger('CallBloc');
 
+/// A callback function type for handling diagnostic reports for call request errors.
+/// It takes the [callId] of the failed call and the specific [CallkeepCallRequestError]
+/// as parameters, allowing for detailed error logging or reporting.
+typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallRequestError error);
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final String coreUrl;
   final String tenantId;
@@ -70,6 +75,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallErrorReporter callErrorReporter;
   final bool sipPresenceEnabled;
   final VoidCallback? onCallEnded;
+  final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -102,6 +108,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.contactNameResolver,
     required this.callErrorReporter,
     required this.sipPresenceEnabled,
+    required this.onDiagnosticReportRequested,
     this.sdpMunger,
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
@@ -1281,6 +1288,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         submitNotification(const CallErrorRegisteringSelfManagedPhoneAccountNotification());
       } else {
         _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
+        onDiagnosticReportRequested(callId, callkeepError);
       }
       emit(state.copyWithPopActiveCall(callId));
 

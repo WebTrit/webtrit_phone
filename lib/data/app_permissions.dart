@@ -24,19 +24,29 @@ class AppPermissions {
   /// A list of special permissions required by the app, handled via `webtrit_callkeep`.
   static const _specialPermissions = [..._requiredSpecialPermissions];
 
+  /// Defines the list of permissions critical for the plugin's core functionality.
+  ///
+  /// [CallkeepPermission.readPhoneState] is included here to verify if the user
+  /// has granted the necessary access for:
+  /// Successfully registering the `PhoneAccount` with the Android Telecom framework.
+  static const _callkeepDiagnosticPermissions = [CallkeepPermission.readPhoneState];
+
   /// The time-to-live for the permissions cache.
   static const _cacheTTL = Duration(seconds: 1);
 
   static Future<AppPermissions> init(ExcludePermissions excludePermissions) async {
-    return AppPermissions._(excludePermissions);
+    return AppPermissions._(excludePermissions, WebtritCallkeepPermissions());
   }
 
-  AppPermissions._(this._excludePermissions) {
+  AppPermissions._(this._excludePermissions, this._webtritCallkeepPermissions) {
     _permissionsCache = ExpiringCache(
       ttl: _cacheTTL,
       compute: () => _fullPermissions.where((p) => !_excludePermissions().contains(p)).toList(),
     );
   }
+
+  /// Manages permissions related to `webtrit_callkeep` plugin.
+  final WebtritCallkeepPermissions _webtritCallkeepPermissions;
 
   /// A function that returns a list of permissions to be excluded from the [_fullPermissions].
   final ExcludePermissions _excludePermissions;
@@ -117,6 +127,36 @@ class AppPermissions {
     return permissionStatuses;
   }
 
+  /// Requests specific permissions via the native plugin required for generating diagnostic logs.
+  ///
+  /// This triggers the native implementation to ask for `READ_PHONE_STATE` / `READ_PHONE_NUMBERS`
+  /// without triggering the broader `CALL_PHONE` permission request flow.
+  ///
+  /// Returns a Map of the requested permissions and their results (Granted/Denied).
+  Future<Map<CallkeepPermission, CallkeepSpecialPermissionStatus>> requestDiagnosticsPermissions() async {
+    _logger.info('Checking diagnostics permission statuses via native bridge');
+    try {
+      final results = await _webtritCallkeepPermissions.requestPermissions(_callkeepDiagnosticPermissions);
+      _logger.info('Diagnostics permissions results: $results');
+      return results;
+    } catch (e, s) {
+      _logger.severe('Failed to check diagnostics permission statuses', e, s);
+      return {};
+    }
+  }
+
+  Future<Map<CallkeepPermission, CallkeepSpecialPermissionStatus>> getDiagnosticPermissionStatuses() async {
+    _logger.info('Requesting diagnostics permission statuses via native bridge');
+    try {
+      final results = await _webtritCallkeepPermissions.checkPermissionsStatus(_callkeepDiagnosticPermissions);
+      _logger.info('Diagnostics permissions results: $results');
+      return results;
+    } catch (e, s) {
+      _logger.severe('Failed to request diagnostics permissions', e, s);
+      return {};
+    }
+  }
+
   /// Opens the app settings page.
   Future<void> toAppSettings() => openAppSettings();
 
@@ -127,16 +167,14 @@ class AppPermissions {
   /// the general app settings screen instead. This is useful for permissions that
   /// are typically located outside the standard app settings.
   Future<void> toSpecialPermissionsSetting(CallkeepSpecialPermissions permission) async {
-    final callkeepPermission = WebtritCallkeepPermissions();
-
     try {
       if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
-        await callkeepPermission.openFullScreenIntentSettings();
+        await _webtritCallkeepPermissions.openFullScreenIntentSettings();
       } else {
-        await callkeepPermission.openSettings();
+        await _webtritCallkeepPermissions.openSettings();
       }
     } catch (e) {
-      await callkeepPermission.openSettings();
+      await _webtritCallkeepPermissions.openSettings();
     }
   }
 

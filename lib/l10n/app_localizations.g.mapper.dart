@@ -1062,6 +1062,8 @@ class AppLocalizationsMapper {
           localizations.settings_LogoutConfirmDialog_content,
       'settings_LogoutConfirmDialog_title':
           localizations.settings_LogoutConfirmDialog_title,
+      'settings_missingMicrophoneIndicator_title':
+          localizations.settings_missingMicrophoneIndicator_title,
       'settings_network_fallbackCalls_description':
           localizations.settings_network_fallbackCalls_description,
       'settings_network_fallbackCalls_title':
