@@ -553,6 +553,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favorites_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
+  String formatPhone(String style, String main, String ext) {
+    String _temp0 = intl.Intl.selectLogic(style, {
+      'full': '$main (ext: $ext)',
+      'simple': '$main',
+      'only_ext': 'ext: $ext',
+      'empty': 'No phone number',
+      'other': '$main',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get locale_default => 'Default';
 
   @override

@@ -113,14 +113,29 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
           );
 
           final externalContactNumber = externalContact.number;
-          final externalContactExt = externalContact.ext;
-          final externalContactMobile = externalContact.mobile;
+          // Some external accounts legitimately have `ext` equal to `number`
+          // (e.g. auto-provisioned users where the signup flow copies main into ext).
+          //
+          // In our local DB phone records are keyed by (contact_id, number), so each
+          // distinct phone number is stored only once. When we upsert phones, the last
+          // write "wins" for a given (contact_id, number) pair.
+          //
+          // If we insert both `number` and `ext` when they are the same value, the
+          // second upsert for label 'ext' overwrites the existing row that was created
+          // for label 'number'. As a result, the primary "number" entry disappears and
+          // the UI shows "Unknown" for the main number, while the same value is only
+          // visible under the 'ext' label.
+          //
+          // To avoid losing the main number label, when `ext` is identical to `number`
+          // we treat `ext` as absent and do not create a separate phone record for it.
+          final externalContactExt = externalContact.ext != externalContact.number ? externalContact.ext : null;
+          final externalContactAdditional = externalContact.additional;
           final externalSmsNumbers = externalContact.smsNumbers;
 
           final externalContactNumbers = [
             if (externalContactNumber != null) externalContactNumber,
             if (externalContactExt != null) externalContactExt,
-            if (externalContactMobile != null) externalContactMobile,
+            if (externalContactAdditional != null) ...externalContactAdditional,
             if (externalSmsNumbers != null) ...externalSmsNumbers,
           ];
 
@@ -147,21 +162,23 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
               ),
             );
           }
-          if (externalContactMobile != null) {
-            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-              ContactPhoneDataCompanion(
-                number: Value(externalContactMobile),
-                label: const Value('mobile'),
-                contactId: Value(insertOrUpdateContactData.id),
-              ),
-            );
-          }
           if (externalSmsNumbers != null) {
             for (final externalSmsNumber in externalSmsNumbers) {
               await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
                 ContactPhoneDataCompanion(
                   number: Value(externalSmsNumber),
                   label: const Value('sms'),
+                  contactId: Value(insertOrUpdateContactData.id),
+                ),
+              );
+            }
+          }
+          if (externalContactAdditional != null) {
+            for (final externalContactAdditionalNumber in externalContactAdditional) {
+              await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+                ContactPhoneDataCompanion(
+                  number: Value(externalContactAdditionalNumber),
+                  label: const Value('additional'),
                   contactId: Value(insertOrUpdateContactData.id),
                 ),
               );

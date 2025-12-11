@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../utils/utils.dart';
+
 class ExternalContact extends Equatable {
   const ExternalContact({
     this.id,
@@ -11,7 +13,7 @@ class ExternalContact extends Equatable {
     this.aliasName,
     this.number,
     this.ext,
-    this.mobile,
+    this.additional,
     this.smsNumbers,
     this.email,
   });
@@ -32,7 +34,7 @@ class ExternalContact extends Equatable {
   final String? aliasName;
   final String? number;
   final String? ext;
-  final String? mobile;
+  final List<String>? additional;
   final List<String>? smsNumbers;
   final String? email;
 
@@ -47,8 +49,8 @@ class ExternalContact extends Equatable {
     aliasName,
     number,
     ext,
-    mobile,
-    smsNumbers,
+    additional != null ? EquatablePropToString.list(additional!) : null,
+    smsNumbers != null ? EquatablePropToString.list(smsNumbers!) : null,
     email,
   ];
 }
@@ -68,10 +70,6 @@ extension ExternalContactExtensions on ExternalContact {
 
     if (number?.trim().isNotEmpty ?? false) {
       return 'number_${number!.trim()}';
-    }
-
-    if (mobile?.trim().isNotEmpty ?? false) {
-      return 'mobile_${mobile!.trim()}';
     }
 
     if (email?.trim().isNotEmpty ?? false) {

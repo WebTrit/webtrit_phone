@@ -9,10 +9,10 @@ part 'common.g.dart';
 @freezed
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Numbers with _$Numbers {
-  const Numbers({required this.main, this.ext, this.additional, this.sms});
+  const Numbers({this.main, this.ext, this.additional, this.sms});
 
   @override
-  final String main;
+  final String? main;
 
   @override
   final String? ext;

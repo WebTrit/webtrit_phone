@@ -553,6 +553,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get favorites_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
+  String formatPhone(String style, String main, String ext) {
+    String _temp0 = intl.Intl.selectLogic(style, {
+      'full': '$main (розш: $ext)',
+      'simple': '$main',
+      'only_ext': 'розш: $ext',
+      'empty': 'Не вказано',
+      'other': '$main',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get locale_default => 'За замовчуванням';
 
   @override

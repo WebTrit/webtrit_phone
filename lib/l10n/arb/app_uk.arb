@@ -445,6 +445,24 @@
   },
   "favorites_Text_blingTransferInitiated": "Безумовне переведення дзвінка",
   "@favorites_Text_blingTransferInitiated": {},
+  "formatPhone": "{style, select, full{{main} (розш: {ext})} simple{{main}} only_ext{розш: {ext}} empty{Не вказано} other{{main}}}",
+  "@formatPhone": {
+    "description": "Formats phone number based on presence of main number and extension, covering four scenarios: both, main only, extension only, and neither.",
+    "placeholders": {
+      "style": {
+        "type": "String",
+        "example": "full"
+      },
+      "main": {
+        "type": "String",
+        "example": "+15551234567"
+      },
+      "ext": {
+        "type": "String",
+        "example": "101"
+      }
+    }
+  },
   "locale_default": "За замовчуванням",
   "@locale_default": {},
   "locale_en": "Англійська",

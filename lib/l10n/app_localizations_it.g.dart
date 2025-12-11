@@ -557,6 +557,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get favorites_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
+  String formatPhone(String style, String main, String ext) {
+    String _temp0 = intl.Intl.selectLogic(style, {
+      'full': '$main (int.: $ext)',
+      'simple': '$main',
+      'only_ext': 'int.: $ext',
+      'empty': 'Numero di telefono non specificato',
+      'other': '$main',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get locale_default => 'Predefinito';
 
   @override

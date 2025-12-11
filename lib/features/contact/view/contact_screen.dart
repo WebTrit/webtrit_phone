@@ -5,7 +5,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
@@ -82,6 +81,7 @@ class _ContactScreenState extends State<ContactScreen> {
               builder: (context, callState) {
                 final email = contact.emails.firstOrNull?.address;
                 final hasActiveCall = callState.activeCalls.isNotEmpty;
+                final isBlingTransferInitiated = callState.isBlingTransferInitiated;
 
                 return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                   builder: (context, callRoutingState) {
@@ -113,44 +113,87 @@ class _ContactScreenState extends State<ContactScreen> {
                             textAlign: TextAlign.center,
                           ),
                           const Divider(height: 16),
-                          for (final contactPhone in contact.phones)
-                            SizedBox(
-                              key: ValueKey(contactPhone),
-                              child: ContactPhoneTile(
-                                key: contactPhoneTileKey,
-                                number: contactPhone.number,
-                                label: contactPhone.label,
-                                favorite: contactPhone.favorite,
-                                callNumbers: callRoutingState?.allNumbers ?? [],
-                                onFavoriteChanged: widget.enableTileFavorite
-                                    ? (isFavorite) => _onFavoriteChanged(isFavorite, contactPhone)
-                                    : null,
-                                onAudioPressed: widget.enableTileVoiceCall
-                                    ? () => _onAudioPressed(contactPhone, contact)
-                                    : null,
-                                onVideoPressed: widget.enableTileVideoCall
-                                    ? () => _onVideoPressed(contactPhone, contact)
-                                    : null,
-                                onTransferPressed: widget.enableTileTransfer && hasActiveCall
-                                    ? () => _onTransferPressed(contactPhone)
-                                    : null,
-                                onInitiatedTransferPressed:
-                                    widget.enableTileTransfer && callState.isBlingTransferInitiated
-                                    ? () => _onTransferPressed(contactPhone)
-                                    : null,
-                                onSendSmsPressed:
-                                    widget.enableTileSms && contactSmsNumbers.contains(contactPhone.number)
-                                    ? () => _onSendSmsPressed(contactPhone, contactSourceId, userSmsNumbers)
-                                    : null,
-                                onMessagePressed: widget.enableTileChat && contact.canMessage
-                                    ? () => _navigateToChatConversation(contact)
-                                    : null,
-                                onCallLogPressed: widget.enableTileCallLog
-                                    ? () => _onCallLogPressed(contactPhone.number)
-                                    : null,
-                                onCallFrom: (fromNumber) => _onCallFromPressed(contactPhone, contact, fromNumber),
-                              ),
+                          if (contact.mobilePhone != null)
+                            ContactPhoneTileAdapter(
+                              contactPhone: contact.mobilePhone!,
+                              contact: contact,
+                              enableTileFavorite: widget.enableTileFavorite,
+                              enableTileVoiceCall: widget.enableTileVoiceCall,
+                              enableTileVideoCall: widget.enableTileVideoCall,
+                              enableTileSms: widget.enableTileSms,
+                              enableTileChat: widget.enableTileChat,
+                              enableTileTransfer: widget.enableTileTransfer,
+                              enableTileCallLog: widget.enableTileCallLog,
+                              contactSmsNumbers: contactSmsNumbers,
+                              contactSourceId: contactSourceId,
+                              userSmsNumbers: userSmsNumbers,
+                              hasActiveCall: hasActiveCall,
+                              isBlingTransferInitiated: isBlingTransferInitiated,
+                              callRoutingState: callRoutingState,
+                              onFavoriteChanged: _onFavoriteChanged,
+                              onAudioPressed: _onAudioPressed,
+                              onVideoPressed: _onVideoPressed,
+                              onTransferPressed: _onTransferPressed,
+                              onSendSmsPressed: _onSendSmsPressed,
+                              onCallLogPressed: _onCallLogPressed,
+                              onNavigateToChatConversation: _navigateToChatConversation,
+                              onCallFromPressed: _onCallFromPressed,
                             ),
+
+                          if (contact.extensionPhone != null)
+                            ContactPhoneTileAdapter(
+                              contactPhone: contact.extensionPhone!,
+                              contact: contact,
+                              enableTileFavorite: widget.enableTileFavorite,
+                              enableTileVoiceCall: widget.enableTileVoiceCall,
+                              enableTileVideoCall: widget.enableTileVideoCall,
+                              enableTileSms: widget.enableTileSms,
+                              enableTileChat: widget.enableTileChat,
+                              enableTileTransfer: widget.enableTileTransfer,
+                              enableTileCallLog: widget.enableTileCallLog,
+                              contactSmsNumbers: contactSmsNumbers,
+                              contactSourceId: contactSourceId,
+                              userSmsNumbers: userSmsNumbers,
+                              hasActiveCall: hasActiveCall,
+                              isBlingTransferInitiated: isBlingTransferInitiated,
+                              callRoutingState: callRoutingState,
+                              onFavoriteChanged: _onFavoriteChanged,
+                              onAudioPressed: _onAudioPressed,
+                              onVideoPressed: _onVideoPressed,
+                              onTransferPressed: _onTransferPressed,
+                              onSendSmsPressed: _onSendSmsPressed,
+                              onCallLogPressed: _onCallLogPressed,
+                              onNavigateToChatConversation: _navigateToChatConversation,
+                              onCallFromPressed: _onCallFromPressed,
+                            ),
+
+                          for (final contactPhone in contact.additionalNumbers)
+                            ContactPhoneTileAdapter(
+                              contactPhone: contactPhone,
+                              contact: contact,
+                              enableTileFavorite: widget.enableTileFavorite,
+                              enableTileVoiceCall: widget.enableTileVoiceCall,
+                              enableTileVideoCall: widget.enableTileVideoCall,
+                              enableTileSms: widget.enableTileSms,
+                              enableTileChat: widget.enableTileChat,
+                              enableTileTransfer: widget.enableTileTransfer,
+                              enableTileCallLog: widget.enableTileCallLog,
+                              contactSmsNumbers: contactSmsNumbers,
+                              contactSourceId: contactSourceId,
+                              userSmsNumbers: userSmsNumbers,
+                              hasActiveCall: hasActiveCall,
+                              isBlingTransferInitiated: isBlingTransferInitiated,
+                              callRoutingState: callRoutingState,
+                              onFavoriteChanged: _onFavoriteChanged,
+                              onAudioPressed: _onAudioPressed,
+                              onVideoPressed: _onVideoPressed,
+                              onTransferPressed: _onTransferPressed,
+                              onSendSmsPressed: _onSendSmsPressed,
+                              onCallLogPressed: _onCallLogPressed,
+                              onNavigateToChatConversation: _navigateToChatConversation,
+                              onCallFromPressed: _onCallFromPressed,
+                            ),
+
                           for (final contactEmail in contact.emails)
                             ContactEmailTile(
                               address: contactEmail.address,

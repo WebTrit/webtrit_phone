@@ -1276,6 +1276,8 @@ class AppLocalizationsMapper {
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
+      'formatPhone': (style, main, ext) =>
+          localizations.formatPhone(style, main, ext),
       'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>
           localizations.login_Button_otpSigninVerifyRepeatInterval(seconds),
       'login_Button_signupVerifyRepeatInterval': (seconds) =>

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Numbers {
 
- String get main; String? get ext; List<String>? get additional; List<String>? get sms;
+ String? get main; String? get ext; List<String>? get additional; List<String>? get sms;
 /// Create a copy of Numbers
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $NumbersCopyWith<$Res>  {
   factory $NumbersCopyWith(Numbers value, $Res Function(Numbers) _then) = _$NumbersCopyWithImpl;
 @useResult
 $Res call({
- String main, String? ext, List<String>? additional, List<String>? sms
+ String? main, String? ext, List<String>? additional, List<String>? sms
 });
 
 
@@ -63,10 +63,10 @@ class _$NumbersCopyWithImpl<$Res>
 
 /// Create a copy of Numbers
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? main = null,Object? ext = freezed,Object? additional = freezed,Object? sms = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? main = freezed,Object? ext = freezed,Object? additional = freezed,Object? sms = freezed,}) {
   return _then(Numbers(
-main: null == main ? _self.main : main // ignore: cast_nullable_to_non_nullable
-as String,ext: freezed == ext ? _self.ext : ext // ignore: cast_nullable_to_non_nullable
+main: freezed == main ? _self.main : main // ignore: cast_nullable_to_non_nullable
+as String?,ext: freezed == ext ? _self.ext : ext // ignore: cast_nullable_to_non_nullable
 as String?,additional: freezed == additional ? _self.additional : additional // ignore: cast_nullable_to_non_nullable
 as List<String>?,sms: freezed == sms ? _self.sms : sms // ignore: cast_nullable_to_non_nullable
 as List<String>?,

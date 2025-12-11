@@ -15,7 +15,7 @@ mixin ExternalContactApiMapper {
       aliasName: contact.aliasName,
       number: numbers.main,
       ext: numbers.ext,
-      mobile: numbers.main,
+      additional: numbers.additional,
       smsNumbers: numbers.sms,
       email: contact.email,
     );
