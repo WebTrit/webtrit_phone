@@ -1,3 +1,4 @@
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -68,7 +69,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
         await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
           ContactPhoneDataCompanion(
             number: Value(externalContactNumber),
-            label: const Value('number'),
+            label: const Value(kContactMainLabel),
             contactId: Value(contactId),
           ),
         );
@@ -77,7 +78,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
         await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
           ContactPhoneDataCompanion(
             number: Value(externalContactExt),
-            label: const Value('ext'),
+            label: const Value(kContactExtLabel),
             contactId: Value(contactId),
           ),
         );
@@ -87,7 +88,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
           await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
             ContactPhoneDataCompanion(
               number: Value(externalSmsNumber),
-              label: const Value('sms'),
+              label: const Value(kContactSmsLabel),
               contactId: Value(contactId),
             ),
           );
@@ -98,7 +99,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
           await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
             ContactPhoneDataCompanion(
               number: Value(externalContactAdditionalNumber),
-              label: const Value('additional'),
+              label: const Value(kContactAdditionalLabel),
               contactId: Value(contactId),
             ),
           );

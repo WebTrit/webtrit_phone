@@ -53,3 +53,8 @@ const kPresenceActivityKeyAppointment = 'appointment';
 const kPresenceActivityKeyVacation = 'vacation';
 const kPresenceActivityKeyTravel = 'travel';
 const kPresenceActivityKeyInTransit = 'in-transit';
+
+const kContactMainLabel = 'number';
+const kContactExtLabel = 'ext';
+const kContactSmsLabel = 'sms';
+const kContactAdditionalLabel = 'additional';
