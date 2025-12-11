@@ -13,6 +13,7 @@ mixin ExternalContactApiMapper {
       firstName: contact.firstName,
       lastName: contact.lastName,
       aliasName: contact.aliasName,
+      // TODO: Maybe rename ExternalContact.number to ExternalContact.main.
       number: numbers.main,
       ext: numbers.ext,
       additional: numbers.additional,
