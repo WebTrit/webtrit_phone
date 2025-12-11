@@ -54,7 +54,14 @@ const kPresenceActivityKeyVacation = 'vacation';
 const kPresenceActivityKeyTravel = 'travel';
 const kPresenceActivityKeyInTransit = 'in-transit';
 
+/// Represents the primary or main phone number for a contact.
 const kContactMainLabel = 'number';
+
+/// Represents the PBX extension number for a contact.
 const kContactExtLabel = 'ext';
+
+/// Represents the phone number used for SMS messaging.
 const kContactSmsLabel = 'sms';
+
+/// Represents any additional phone number or contact method.
 const kContactAdditionalLabel = 'additional';
