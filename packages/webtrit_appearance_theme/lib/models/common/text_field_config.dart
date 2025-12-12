@@ -46,64 +46,71 @@ class TextFieldConfig with _$TextFieldConfig {
     /// Input masking configuration.
     this.mask,
 
-    /// Input behavior configuration.
-    this.behavior,
+    /// Configuration for the logical value and data transformation.
+    ///
+    /// This controls the **data lifecycle** rather than the visual appearance:
+    /// 1. **Initialization**: Sets the starting text state (see [InputValueConfig.initialValue]).
+    /// 2. **Submission**: Defines how raw user input is transformed before being emitted
+    ///    to business logic (see [InputValueConfig.includePrefixInData]).
+    this.inputValue,
   });
 
-  /// Input decoration (borders, hints, labels, etc.).
   @override
   final InputDecorationConfig? decoration;
 
-  /// Style for the text inside the field.
   @override
   final TextStyleConfig? style;
 
-  /// Text alignment inside the field.
-  ///
-  /// Supported values: `"left" | "right" | "center"`.
   @override
   final String textAlign;
 
-  /// Whether the blinking cursor is visible.
   @override
   final bool showCursor;
 
-  /// Keyboard type for this field.
-  ///
-  /// Supported values: `"none" | "number" | "text" | "phone" | "email" | "multiline"`.
   @override
   final String keyboardType;
 
   @override
   final MaskConfig? mask;
 
-  /// Describes how this field's value should be transformed/emitted.
   @override
-  final InputBehaviorConfig? behavior;
+  final InputValueConfig? inputValue;
 
-  /// Deserializes a [TextFieldConfig] from JSON.
   factory TextFieldConfig.fromJson(Map<String, Object?> json) => _$TextFieldConfigFromJson(json);
 
-  /// Serializes this [TextFieldConfig] to JSON.
   Map<String, Object?> toJson() => _$TextFieldConfigToJson(this);
 }
 
-/// Describes how the input value should be transformed between
-/// what the user sees and what is emitted/sent to business logic.
+/// Configuration for the value/data aspect of the input field.
+///
+/// This handles the "logical" side of the input: what the initial state is
+/// and how the final data should be formatted or transformed before emission.
 @freezed
 @JsonSerializable()
-class InputBehaviorConfig with _$InputBehaviorConfig {
-  const InputBehaviorConfig({
-    /// When `true`, prefixText is treated as part of the logical value
-    /// (included in submitted/emitted data). When `false`, prefix is visual-only.
+class InputValueConfig with _$InputValueConfig {
+  const InputValueConfig({
+    /// When `true`, [prefixText] is treated as part of the logical value.
+    ///
+    /// If `true`: Emitted value = prefix + user input.
+    /// If `false` (default): Emitted value = user input only.
     this.includePrefixInData,
+
+    /// The text value to pre-fill in the input field upon initialization.
+    ///
+    /// This sets the **initial state** of the text controller.
+    /// The user can edit or delete this text.
+    ///
+    /// This is NOT a placeholder (hint). This is real, mutable text.
+    this.initialValue,
   });
 
   @override
-  /// Whether [prefixText] should be included in the emitted value.
   final bool? includePrefixInData;
 
-  factory InputBehaviorConfig.fromJson(Map<String, Object?> json) => _$InputBehaviorConfigFromJson(json);
+  @override
+  final String? initialValue;
 
-  Map<String, Object?> toJson() => _$InputBehaviorConfigToJson(this);
+  factory InputValueConfig.fromJson(Map<String, Object?> json) => _$InputValueConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$InputValueConfigToJson(this);
 }
