@@ -12,7 +12,7 @@ class TextFieldStyle with Diagnosticable {
     this.keyboardType,
     this.cursorColor,
     this.mask,
-    this.behavior,
+    this.inputValue,
   });
 
   final InputDecoration? decoration;
@@ -22,7 +22,7 @@ class TextFieldStyle with Diagnosticable {
   final TextInputType? keyboardType;
   final Color? cursorColor;
   final InputMaskStyle? mask;
-  final InputBehavior? behavior;
+  final InputValue? inputValue;
 
   TextFieldStyle copyWith({
     InputDecoration? decoration,
@@ -32,7 +32,7 @@ class TextFieldStyle with Diagnosticable {
     TextInputType? keyboardType,
     Color? cursorColor,
     InputMaskStyle? mask,
-    InputBehavior? behavior,
+    InputValue? inputValue,
   }) {
     return TextFieldStyle(
       decoration: decoration ?? this.decoration,
@@ -42,7 +42,7 @@ class TextFieldStyle with Diagnosticable {
       keyboardType: keyboardType ?? this.keyboardType,
       cursorColor: cursorColor ?? this.cursorColor,
       mask: mask ?? this.mask,
-      behavior: behavior ?? this.behavior,
+      inputValue: inputValue ?? this.inputValue,
     );
   }
 
@@ -57,7 +57,7 @@ class TextFieldStyle with Diagnosticable {
       keyboardType: b.keyboardType ?? a.keyboardType,
       cursorColor: b.cursorColor ?? a.cursorColor,
       mask: b.mask ?? a.mask,
-      behavior: b.behavior ?? a.behavior,
+      inputValue: b.inputValue ?? a.inputValue,
     );
   }
 
@@ -72,7 +72,7 @@ class TextFieldStyle with Diagnosticable {
       keyboardType: t < 0.5 ? a?.keyboardType : b?.keyboardType,
       cursorColor: Color.lerp(a?.cursorColor, b?.cursorColor, t),
       mask: InputMaskStyle.lerp(a?.mask, b?.mask, t),
-      behavior: InputBehavior.lerp(a?.behavior, b?.behavior, t),
+      inputValue: InputValue.lerp(a?.inputValue, b?.inputValue, t),
     );
   }
 
@@ -87,24 +87,35 @@ class TextFieldStyle with Diagnosticable {
       ..add(DiagnosticsProperty<TextInputType?>('keyboardType', keyboardType))
       ..add(ColorProperty('cursorColor', cursorColor))
       ..add(DiagnosticsProperty<InputMaskStyle?>('mask', mask))
-      ..add(DiagnosticsProperty<InputBehavior?>('behavior', behavior));
+      ..add(DiagnosticsProperty<InputValue?>('inputValue', inputValue));
   }
 }
 
-class InputBehavior {
-  const InputBehavior({this.includePrefixInData});
+class InputValue {
+  const InputValue({this.includePrefixInData, this.initialValue});
 
-  /// Whether prefixText is included in the raw data sent outside
+  /// Whether prefixText is included in the raw data sent outside.
+  ///
+  /// * `true`: Emitted value = `prefixText` + `userInput`.
+  /// * `false` (default): Emitted value = `userInput`.
   final bool? includePrefixInData;
 
-  InputBehavior copyWith({bool? includePrefixInData, bool? normalizePhone, bool? trim, bool? emptyAsNull}) {
-    return InputBehavior(includePrefixInData: includePrefixInData ?? this.includePrefixInData);
-  }
+  /// The text value to pre-fill in the input field upon initialization.
+  ///
+  /// * Use this for **initial state** only (e.g. data from backend).
+  /// * This is NOT a placeholder/hint; it is mutable text the user can edit.
+  final String? initialValue;
 
-  static InputBehavior? lerp(InputBehavior? a, InputBehavior? b, double t) {
+  /// Linearly interpolates between two [InputValue]s.
+  ///
+  /// Since these are discrete configuration values (booleans, strings),
+  /// this method swaps between [a] and [b] at `t = 0.5`.
+  static InputValue? lerp(InputValue? a, InputValue? b, double t) {
     if (a == null && b == null) return null;
     if (t <= 0.0) return a ?? b;
     if (t >= 1.0) return b ?? a;
+
+    // Discrete interpolation: switch at 50%
     return t < 0.5 ? (a ?? b) : (b ?? a);
   }
 }

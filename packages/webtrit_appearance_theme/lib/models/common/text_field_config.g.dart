@@ -22,10 +22,10 @@ TextFieldConfig _$TextFieldConfigFromJson(Map<String, dynamic> json) =>
       mask: json['mask'] == null
           ? null
           : MaskConfig.fromJson(json['mask'] as Map<String, dynamic>),
-      behavior: json['behavior'] == null
+      inputValue: json['inputValue'] == null
           ? null
-          : InputBehaviorConfig.fromJson(
-              json['behavior'] as Map<String, dynamic>,
+          : InputValueConfig.fromJson(
+              json['inputValue'] as Map<String, dynamic>,
             ),
     );
 
@@ -37,14 +37,17 @@ Map<String, dynamic> _$TextFieldConfigToJson(TextFieldConfig instance) =>
       'showCursor': instance.showCursor,
       'keyboardType': instance.keyboardType,
       'mask': instance.mask?.toJson(),
-      'behavior': instance.behavior?.toJson(),
+      'inputValue': instance.inputValue?.toJson(),
     };
 
-InputBehaviorConfig _$InputBehaviorConfigFromJson(Map<String, dynamic> json) =>
-    InputBehaviorConfig(
+InputValueConfig _$InputValueConfigFromJson(Map<String, dynamic> json) =>
+    InputValueConfig(
       includePrefixInData: json['includePrefixInData'] as bool?,
+      initialValue: json['initialValue'] as String?,
     );
 
-Map<String, dynamic> _$InputBehaviorConfigToJson(
-  InputBehaviorConfig instance,
-) => <String, dynamic>{'includePrefixInData': instance.includePrefixInData};
+Map<String, dynamic> _$InputValueConfigToJson(InputValueConfig instance) =>
+    <String, dynamic>{
+      'includePrefixInData': instance.includePrefixInData,
+      'initialValue': instance.initialValue,
+    };
