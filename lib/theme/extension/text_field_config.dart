@@ -22,15 +22,15 @@ extension TextFieldConfigToStyle on TextFieldConfig {
       showCursor: showCursor,
       keyboardType: _mapKeyboardType(keyboardType),
       mask: mask != null ? _mapMask(mask) : null,
-      behavior: _mapBehavior(behavior),
+      inputValue: _mapInputValue(inputValue),
     );
 
     return TextFieldStyle.merge(base, styleFromConfig);
   }
 
-  InputBehavior? _mapBehavior(InputBehaviorConfig? config) {
+  InputValue? _mapInputValue(InputValueConfig? config) {
     if (config == null) return null;
-    return InputBehavior(includePrefixInData: config.includePrefixInData);
+    return InputValue(includePrefixInData: config.includePrefixInData, initialValue: config.initialValue);
   }
 
   InputMaskStyle? _mapMask(MaskConfig? config) {

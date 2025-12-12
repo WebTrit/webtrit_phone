@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/login/features/login_otp_signin/login_otp_signin.dart';
-import 'package:webtrit_phone/theme/styles/styles.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import '../theme_style_factory.dart';

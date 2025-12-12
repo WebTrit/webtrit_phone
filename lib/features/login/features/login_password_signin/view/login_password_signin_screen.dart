@@ -18,16 +18,36 @@ class LoginPasswordSigninScreen extends StatefulWidget {
 }
 
 class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
+  /// Formatter used to apply an optional mask to the reference input field.
+  /// The lazy \`MaskAutoCompletionType\` delays auto-completion until the user
+  /// has finished typing, avoiding premature insertion of mask characters.
   final _maskFormatter = MaskTextInputFormatter(type: MaskAutoCompletionType.lazy);
+
+  /// Whether the initial value from the style's input config has been applied to
+  /// the cubit. This ensures the initial value is only forwarded once during
+  /// the widget lifecycle (see `didChangeDependencies`).
+  bool _hasAppliedRefInitialValue = false;
+
+  LoginOtpSigninPageStyle? get _styles => Theme.of(context).extension<LoginOtpSigninPageStyles>()?.primary;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // Update the mask (always runs on dependency change)
+    _maskFormatter.updateFromConfig(_styles?.refInput?.mask);
 
-    final themeData = Theme.of(context);
-    final loginStyles = themeData.extension<LoginPasswordSigninPageStyles>()?.primary;
+    // Apply initial value (runs only once)
+    if (!_hasAppliedRefInitialValue) {
+      _applyInitialValue(_styles?.refInput?.inputValue);
+      _hasAppliedRefInitialValue = true;
+    }
+  }
 
-    _maskFormatter.updateFromConfig(loginStyles?.refInput?.mask);
+  /// Reads the initial reference value from the style configuration and
+  /// synchronizes it with the \`LoginCubit\` state.
+  void _applyInitialValue(InputValue? inputValue) {
+    final initialValue = inputValue?.initialValue;
+    if (initialValue != null) context.read<LoginCubit>().passwordSigninUserRefInputChanged(initialValue);
   }
 
   @override
@@ -67,7 +87,7 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
                 ExtendedTextFormField(
                   key: passwordUserInputKey,
                   enabled: !state.processing,
-                  includePrefixInData: userRefStyle?.behavior?.includePrefixInData ?? false,
+                  includePrefixInData: userRefStyle?.inputValue?.includePrefixInData ?? false,
                   initialValue: state.passwordSigninUserRefInput.value,
                   decoration: userRefDecoration.copyWith(
                     labelText: decorationLabelText,

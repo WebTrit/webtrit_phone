@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
+export 'package:webtrit_phone/theme/styles/text_field_style.dart';
+
 class LoginOtpSigninPageStyle with Diagnosticable {
   const LoginOtpSigninPageStyle({this.refInput});
 
