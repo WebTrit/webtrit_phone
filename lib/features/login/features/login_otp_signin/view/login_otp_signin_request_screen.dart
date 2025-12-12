@@ -19,7 +19,7 @@ class LoginOtpSigninRequestScreen extends StatefulWidget {
 
 class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScreen> {
   /// Formatter used to apply an optional mask to the reference input field.
-  /// The lazy \`MaskAutoCompletionType\` delays auto-completion until the user
+  /// The lazy `MaskAutoCompletionType` delays auto-completion until the user
   /// has finished typing, avoiding premature insertion of mask characters.
   final _maskFormatter = MaskTextInputFormatter(type: MaskAutoCompletionType.lazy);
 
@@ -44,7 +44,7 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
   }
 
   /// Reads the initial reference value from the style configuration and
-  /// synchronizes it with the \`LoginCubit\` state.
+  /// synchronizes it with the `LoginCubit` state.
   void _applyInitialValue(InputValue? inputValue) {
     final initialValue = inputValue?.initialValue;
 

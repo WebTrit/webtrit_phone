@@ -19,7 +19,7 @@ class LoginPasswordSigninScreen extends StatefulWidget {
 
 class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
   /// Formatter used to apply an optional mask to the reference input field.
-  /// The lazy \`MaskAutoCompletionType\` delays auto-completion until the user
+  /// The lazy `MaskAutoCompletionType` delays auto-completion until the user
   /// has finished typing, avoiding premature insertion of mask characters.
   final _maskFormatter = MaskTextInputFormatter(type: MaskAutoCompletionType.lazy);
 
@@ -28,7 +28,7 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
   /// the widget lifecycle (see `didChangeDependencies`).
   bool _hasAppliedRefInitialValue = false;
 
-  LoginOtpSigninPageStyle? get _styles => Theme.of(context).extension<LoginOtpSigninPageStyles>()?.primary;
+  LoginPasswordSigninPageStyle? get _styles => Theme.of(context).extension<LoginPasswordSigninPageStyles>()?.primary;
 
   @override
   void didChangeDependencies() {
@@ -44,7 +44,7 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
   }
 
   /// Reads the initial reference value from the style configuration and
-  /// synchronizes it with the \`LoginCubit\` state.
+  /// synchronizes it with the `LoginCubit` state.
   void _applyInitialValue(InputValue? inputValue) {
     final initialValue = inputValue?.initialValue;
     if (initialValue != null) context.read<LoginCubit>().passwordSigninUserRefInputChanged(initialValue);
