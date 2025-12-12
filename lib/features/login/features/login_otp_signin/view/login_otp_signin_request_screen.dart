@@ -47,8 +47,14 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
   /// synchronizes it with the `LoginCubit` state.
   void _applyInitialValue(InputValue? inputValue) {
     final initialValue = inputValue?.initialValue;
+    if (initialValue == null) return;
 
-    if (initialValue != null) context.read<LoginCubit>().otpSigninUserRefInputChanged(initialValue);
+    final cubit = context.read<LoginCubit>();
+    final currentValue = cubit.state.otpSigninUserRefInput.value;
+
+    if (currentValue.isEmpty) {
+      cubit.otpSigninUserRefInputChanged(initialValue);
+    }
   }
 
   @override

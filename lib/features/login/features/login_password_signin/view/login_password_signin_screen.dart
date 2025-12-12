@@ -47,7 +47,14 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
   /// synchronizes it with the `LoginCubit` state.
   void _applyInitialValue(InputValue? inputValue) {
     final initialValue = inputValue?.initialValue;
-    if (initialValue != null) context.read<LoginCubit>().passwordSigninUserRefInputChanged(initialValue);
+    if (initialValue == null) return;
+
+    final cubit = context.read<LoginCubit>();
+    final currentValue = cubit.state.passwordSigninUserRefInput.value;
+
+    if (currentValue.isEmpty) {
+      cubit.passwordSigninUserRefInputChanged(initialValue);
+    }
   }
 
   @override
