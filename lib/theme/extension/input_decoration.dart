@@ -3,8 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_appearance_theme/models/models.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
 
+/// The default font size for auxiliary text, such as helper and error messages.
+///
+/// This value (12.0) aligns with standard Material Design caption sizing and is
+/// used as the baseline for [helperStyle] and [errorStyle].
+const _smallFontSize = 12.0;
+
+/// The relative line height for auxiliary text.
+///
+/// A value of 1.2 ensures adequate vertical spacing for [helperStyle] and
+/// [errorStyle], improving readability for multi-line error or helper messages.
+const _smallHeight = 1.2;
+
+/// Extension methods for [InputDecorationConfig] to facilitate conversion
+/// to Flutter's [InputDecoration].
 extension InputDecorationConfigExtension on InputDecorationConfig {
+  /// Converts the configuration object into a material [InputDecoration].
+  ///
+  /// Requires a [ColorScheme] to resolve default colors and an optional
+  /// [baseStyle] to be used as a foundation for text styles.
   InputDecoration toInputDecoration({required ColorScheme colors, TextStyle? baseStyle}) {
+    // Map specific border configurations for different states
     final mappedBorder = _mapBorder(border, colors);
     final mappedEnabledBorder = _mapBorder(enabledBorder, colors);
     final mappedFocusedBorder = _mapBorder(focusedBorder, colors);
@@ -12,19 +31,47 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
     final mappedFocusedErrBorder = _mapBorder(focusedErrorBorder, colors);
     final mappedDisabledBorder = _mapBorder(disabledBorder, colors);
 
+    // Check if the main border type is 'none' to apply it globally if needed
     final noneEverywhere = border?.type == 'none';
 
+    // Derive default colors from the provided ColorScheme
     final onSurface = colors.onSurface;
     final onSurface50 = onSurface.withValues(alpha: 0.5);
     final onSurfaceVariant = colors.onSurfaceVariant;
     final errorColor = colors.error;
 
-    final hintStyleResult = _resolveStyle(hintStyle, baseStyle: baseStyle, color: onSurface50);
-    final prefixStyleResult = _resolveStyle(prefixStyle, baseStyle: baseStyle, color: onSurface);
-    final labelStyleResult = _resolveStyle(labelStyle, baseStyle: baseStyle, color: onSurface);
-    final helperStyleResult = _resolveStyle(helperStyle, baseStyle: baseStyle, color: onSurfaceVariant);
-    final errorStyleResult = _resolveStyle(errorStyle, baseStyle: baseStyle, color: errorColor);
-    final suffixStyleResult = _resolveStyle(suffixStyle, baseStyle: baseStyle, color: onSurface);
+    // Define a smaller base style for helper and error text
+    final smallBaseStyle =
+        baseStyle?.copyWith(fontSize: _smallFontSize, height: _smallHeight) ??
+        const TextStyle(fontSize: _smallFontSize, height: _smallHeight);
+
+    // Resolve text styles ONLY if the configuration is provided.
+    // If the config is null, pass null to InputDecoration so it uses
+    // the default Flutter theme styles.
+
+    final hintStyleResult = hintStyle != null
+        ? _resolveStyle(hintStyle, baseStyle: baseStyle, color: onSurface50)
+        : null;
+
+    final prefixStyleResult = prefixStyle != null
+        ? _resolveStyle(prefixStyle, baseStyle: baseStyle, color: onSurface)
+        : null;
+
+    final labelStyleResult = labelStyle != null
+        ? _resolveStyle(labelStyle, baseStyle: baseStyle, color: onSurface)
+        : null;
+
+    final suffixStyleResult = suffixStyle != null
+        ? _resolveStyle(suffixStyle, baseStyle: baseStyle, color: onSurface)
+        : null;
+
+    final helperStyleResult = helperStyle != null
+        ? _resolveStyle(helperStyle, baseStyle: smallBaseStyle, color: onSurfaceVariant)
+        : null;
+
+    final errorStyleResult = errorStyle != null
+        ? _resolveStyle(errorStyle, baseStyle: smallBaseStyle, color: errorColor)
+        : null;
 
     return InputDecoration(
       hintText: hintText,
@@ -39,7 +86,9 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
       suffixText: suffixText,
       suffixStyle: suffixStyleResult,
       fillColor: fillColor?.toColor(),
+      // If 'filled' is not explicitly set, assume true if a fillColor exists
       filled: filled ?? fillColor != null,
+      // Apply borders, handling the 'none' type logic
       border: noneEverywhere ? InputBorder.none : mappedBorder,
       enabledBorder: noneEverywhere ? InputBorder.none : (mappedEnabledBorder ?? mappedBorder),
       focusedBorder: noneEverywhere ? InputBorder.none : (mappedFocusedBorder ?? mappedBorder),
@@ -49,6 +98,7 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
     );
   }
 
+  /// Helper to merge a [TextStyleConfig] with a [baseStyle] and apply a specific [color].
   TextStyle _resolveStyle(TextStyleConfig? config, {TextStyle? baseStyle, Color? color}) {
     final base = baseStyle ?? const TextStyle();
 
@@ -58,6 +108,9 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
     return mergedStyle.copyWith(color: color);
   }
 
+  /// Helper to map a [BorderConfig] to a Flutter [InputBorder].
+  ///
+  /// Supports 'outline', 'underline', and 'none'.
   InputBorder? _mapBorder(BorderConfig? config, ColorScheme colors) {
     if (config == null) return null;
 
