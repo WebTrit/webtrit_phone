@@ -3,6 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_appearance_theme/models/models.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
 
+/// The default font size for auxiliary text, such as helper and error messages.
+///
+/// This value (12.0) aligns with standard Material Design caption sizing and is
+/// used as the baseline for [helperStyle] and [errorStyle].
+const _smallFontSize = 12.0;
+
+/// The relative line height for auxiliary text.
+///
+/// A value of 1.2 ensures adequate vertical spacing for [helperStyle] and
+/// [errorStyle], improving readability for multi-line error or helper messages.
+const _smallHeight = 1.2;
+
 /// Extension methods for [InputDecorationConfig] to facilitate conversion
 /// to Flutter's [InputDecoration].
 extension InputDecorationConfigExtension on InputDecorationConfig {
@@ -29,7 +41,9 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
     final errorColor = colors.error;
 
     // Define a smaller base style for helper and error text
-    final smallBaseStyle = baseStyle?.copyWith(fontSize: 12.0, height: 1.2) ?? const TextStyle(fontSize: 12.0);
+    final smallBaseStyle =
+        baseStyle?.copyWith(fontSize: _smallFontSize, height: _smallHeight) ??
+        const TextStyle(fontSize: _smallFontSize, height: _smallHeight);
 
     // Resolve text styles ONLY if the configuration is provided.
     // If the config is null, pass null to InputDecoration so it uses
