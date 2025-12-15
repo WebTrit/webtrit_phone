@@ -35,11 +35,13 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
     final contactPhones = alias(contactPhonesTable, 'contact_phones');
 
     final recentsQuery = callsQuery.join([
-      leftOuterJoin(sourcePhone, callLogsTable.number.equalsExp(sourcePhone.number), useColumns: false),
+      leftOuterJoin(sourcePhone, callLogsTable.number.equalsExp(sourcePhone.rawNumber), useColumns: false),
+      leftOuterJoin(sourcePhone, callLogsTable.number.equalsExp(sourcePhone.sanitizedNumber), useColumns: false),
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(sourcePhone.contactId)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(contactPhones, contactPhones.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.rawNumber)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.sanitizedNumber)),
     ]);
 
     return recentsQuery.watch().map(_rowsToRecent);
@@ -47,10 +49,12 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
 
   Future<RecentData> getRecentByCallId(int id) {
     final q = (select(callLogsTable)..where((t) => t.id.equals(id))).join([
-      leftOuterJoin(contactPhonesTable, contactPhonesTable.number.equalsExp(callLogsTable.number)),
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.rawNumber.equalsExp(callLogsTable.number)),
+      leftOuterJoin(contactPhonesTable, contactPhonesTable.sanitizedNumber.equalsExp(callLogsTable.number)),
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.rawNumber)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.sanitizedNumber)),
     ]);
     return q.get().then((rows) => _rowsToRecent(rows).first);
   }

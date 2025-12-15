@@ -1,6 +1,7 @@
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 abstract class ContactsLocalDataSource {
   Future<int> upsertContact(ExternalContact externalContact, ContactKind kind);
@@ -68,7 +69,8 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       if (externalContactNumber != null) {
         await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
           ContactPhoneDataCompanion(
-            number: Value(externalContactNumber),
+            rawNumber: Value(externalContactNumber),
+            sanitizedNumber: Value(externalContactNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
             label: const Value(kContactMainLabel),
             contactId: Value(contactId),
           ),
@@ -77,7 +79,8 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       if (externalContactExt != null) {
         await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
           ContactPhoneDataCompanion(
-            number: Value(externalContactExt),
+            rawNumber: Value(externalContactExt),
+            sanitizedNumber: Value(externalContactExt.replaceAll(RegExp(numberSanitizeRegex), '')),
             label: const Value(kContactExtLabel),
             contactId: Value(contactId),
           ),
@@ -87,7 +90,8 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
         for (final externalSmsNumber in externalSmsNumbers) {
           await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
             ContactPhoneDataCompanion(
-              number: Value(externalSmsNumber),
+              rawNumber: Value(externalSmsNumber),
+              sanitizedNumber: Value(externalSmsNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
               label: const Value(kContactSmsLabel),
               contactId: Value(contactId),
             ),
@@ -98,7 +102,8 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
         for (final externalContactAdditionalNumber in externalContactAdditional) {
           await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
             ContactPhoneDataCompanion(
-              number: Value(externalContactAdditionalNumber),
+              rawNumber: Value(externalContactAdditionalNumber),
+              sanitizedNumber: Value(externalContactAdditionalNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
               label: const Value(kContactAdditionalLabel),
               contactId: Value(contactId),
             ),

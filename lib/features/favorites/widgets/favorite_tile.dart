@@ -43,7 +43,7 @@ class FavoriteTile extends StatefulWidget {
 
 class _FavoriteTileState extends State<FavoriteTile> {
   late final tileKey = GlobalKey();
-  late final number = widget.favorite.number;
+  late final number = widget.favorite.rawNumber;
 
   List<PopupMenuEntry> get actions => [
     if (widget.onAudioCallPressed != null)
@@ -130,7 +130,7 @@ class _FavoriteTileState extends State<FavoriteTile> {
           PresenceViewSource.sipPresence => Text('$name ${contact.presenceInfo.primaryStatusIcon ?? ''}'),
           PresenceViewSource.contactInfo => Text(name),
         },
-        subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
+        subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.rawNumber}'),
         onTap: widget.onTap,
         onLongPress: onLongPress,
       ),

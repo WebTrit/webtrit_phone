@@ -188,6 +188,8 @@ class ChatCBGroupFillInfo extends ChatCBCommon {
 bool _searchMatcher(Contact contact, String searchFilterValue) {
   if (searchFilterValue.isEmpty) return true;
   matchName() => contact.maybeName?.toLowerCase().contains(searchFilterValue.toLowerCase()) ?? false;
-  matchPhone() => contact.phones.any((phone) => phone.number.contains(searchFilterValue));
+  matchPhone() => contact.phones.any(
+    (phone) => phone.rawNumber.contains(searchFilterValue) || phone.sanitizedNimber.contains(searchFilterValue),
+  );
   return matchName() || matchPhone();
 }

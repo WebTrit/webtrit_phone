@@ -11,7 +11,9 @@ class ContactPhonesTable extends Table {
 
   IntColumn get id => integer().autoIncrement()();
 
-  TextColumn get number => text()();
+  TextColumn get rawNumber => text()();
+
+  TextColumn get sanitizedNumber => text()();
 
   TextColumn get label => text()();
 
@@ -22,5 +24,5 @@ class ContactPhonesTable extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 
   @override
-  List<String> get customConstraints => ['UNIQUE(number, contact_id)'];
+  List<String> get customConstraints => ['UNIQUE(rawNumber, sanitizedNumber, contact_id)'];
 }

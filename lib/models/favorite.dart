@@ -5,15 +5,22 @@ import 'contact.dart';
 typedef FavoriteId = int;
 
 class Favorite extends Equatable {
-  const Favorite({required this.id, required this.number, required this.label, required this.contact});
+  const Favorite({
+    required this.id,
+    required this.rawNumber,
+    required this.sanitizedNumber,
+    required this.label,
+    required this.contact,
+  });
 
   final FavoriteId id;
-  final String number;
+  final String rawNumber;
+  final String sanitizedNumber;
   final String label;
   final Contact contact;
 
-  String get name => contact.maybeName ?? number;
+  String get name => contact.maybeName ?? rawNumber;
 
   @override
-  List<Object?> get props => [id, number, label, contact];
+  List<Object?> get props => [id, rawNumber, sanitizedNumber, label, contact];
 }

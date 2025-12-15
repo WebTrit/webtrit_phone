@@ -7,7 +7,8 @@ mixin FavoritesDriftMapper on ContactsDriftMapper {
   Favorite favoriteFromDrift(FavoriteWithContactData data) {
     return Favorite(
       id: data.favoriteData.id,
-      number: data.contactPhoneData.number,
+      rawNumber: data.contactPhoneData.rawNumber,
+      sanitizedNumber: data.contactPhoneData.sanitizedNumber,
       label: data.contactPhoneData.label,
       contact: contactFromDrift(
         data.contactData,

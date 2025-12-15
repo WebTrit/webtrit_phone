@@ -37,7 +37,7 @@ class KeypadViewState extends State<KeypadView> {
     super.initState();
     _controller = TextEditingController()
       ..addListener(() {
-        context.read<KeypadCubit>().getContactByPhoneNumber(_controller.text);
+        if (_controller.text.isNotEmpty) context.read<KeypadCubit>().getContactByPhoneNumber(_controller.text);
       });
     _focusNode = FocusNode();
   }
