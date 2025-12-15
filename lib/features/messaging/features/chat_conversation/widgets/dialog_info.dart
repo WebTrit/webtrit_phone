@@ -103,7 +103,7 @@ class _DialogInfoState extends State<DialogInfo> {
                               children: [
                                 for (ContactPhone contactPhone in contact?.phones ?? [])
                                   ListTile(
-                                    title: Text(contactPhone.number),
+                                    title: Text(contactPhone.rawNumber),
                                     trailing: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -114,7 +114,7 @@ class _DialogInfoState extends State<DialogInfo> {
                                             final callBloc = context.read<CallBloc>();
                                             callBloc.add(
                                               CallControlEvent.started(
-                                                number: contactPhone.number,
+                                                number: contactPhone.sanitizedNumber,
                                                 displayName: contact?.maybeName,
                                                 video: false,
                                               ),
@@ -129,7 +129,7 @@ class _DialogInfoState extends State<DialogInfo> {
                                             final callBloc = context.read<CallBloc>();
                                             callBloc.add(
                                               CallControlEvent.started(
-                                                number: contactPhone.number,
+                                                number: contactPhone.sanitizedNumber,
                                                 displayName: contact?.maybeName,
                                                 video: true,
                                               ),

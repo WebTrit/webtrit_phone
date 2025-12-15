@@ -56,11 +56,11 @@ class Contact extends Equatable {
   final List<PresenceInfo> presenceInfo;
 
   /// Computed getter for contact's PBX network `extension`.
-  late final String? extension = phones.firstWhereOrNull((element) => element.label == kContactExtLabel)?.number;
+  late final String? extension = phones.firstWhereOrNull((element) => element.label == kContactExtLabel)?.rawNumber;
 
   /// Computed getter for contact's first mobile phone number
   /// also known as the primary phone number or `main` number.
-  late final String? mobileNumber = phones.firstWhereOrNull((element) => element.label == kContactMainLabel)?.number;
+  late final String? mobileNumber = phones.firstWhereOrNull((element) => element.label == kContactMainLabel)?.rawNumber;
 
   /// Computed list for contact's of sms phone numbers
   /// suitable as list of number to which user can send sms messages.
@@ -69,7 +69,7 @@ class Contact extends Equatable {
   /// Otherwise, all the numbers are returned for phonebook contacts.
   late final List<String> smsNumbers = phones
       .where((phone) => (sourceType == ContactSourceType.local) || phone.label == kContactSmsLabel)
-      .map((phone) => phone.number)
+      .map((phone) => phone.rawNumber)
       .toList();
 
   /// Computed name of the contact in a single string if possible.

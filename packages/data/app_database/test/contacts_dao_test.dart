@@ -34,11 +34,21 @@ void main() {
     );
 
     await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-      ContactPhoneDataCompanion(contactId: Value(1), number: Value('1234567890'), label: Value('Home')),
+      ContactPhoneDataCompanion(
+        contactId: Value(1),
+        rawNumber: Value('1234567890'),
+        sanitizedNumber: Value('1234567890'),
+        label: Value('Home'),
+      ),
     );
 
     await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-      ContactPhoneDataCompanion(contactId: Value(2), number: Value('1234567890'), label: Value('Home')),
+      ContactPhoneDataCompanion(
+        contactId: Value(2),
+        rawNumber: Value('1234567890'),
+        sanitizedNumber: Value('1234567890'),
+        label: Value('Home'),
+      ),
     );
 
     await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
@@ -94,7 +104,8 @@ void main() {
       expect(likeContacts.first.emails.length, 1);
       expect(likeContacts.first.emails.first.address, 'taras@example.com');
       expect(likeContacts.first.phones.length, 1);
-      expect(likeContacts.first.phones.first.number, '1234567890');
+      expect(likeContacts.first.phones.first.rawNumber, '1234567890');
+      expect(likeContacts.first.phones.first.sanitizedNumber, '1234567890');
     });
 
     test('matching "шев"', () async {
@@ -107,7 +118,8 @@ void main() {
       expect(likeContacts.first.emails.length, 1);
       expect(likeContacts.first.emails.first.address, 'taras@example.com');
       expect(likeContacts.first.phones.length, 1);
-      expect(likeContacts.first.phones.first.number, '1234567890');
+      expect(likeContacts.first.phones.first.rawNumber, '1234567890');
+      expect(likeContacts.first.phones.first.sanitizedNumber, '1234567890');
     });
 
     test('all contacts', () async {
@@ -126,7 +138,8 @@ void main() {
 
       expect(fetchedContact, isNotNull);
       expect(fetchedContact!.phones, isNotEmpty);
-      expect(fetchedContact.phones.first.number == '1234567890', isTrue);
+      expect(fetchedContact.phones.first.rawNumber == '1234567890', isTrue);
+      expect(fetchedContact.phones.first.sanitizedNumber == '1234567890', isTrue);
       expect(fetchedContact.emails, isNotEmpty);
       expect(fetchedContact.emails.first.address == 'taras@example.com', isTrue);
       expect(fetchedContact.contact.lastName == 'Тарас Шевченко', isTrue);
@@ -166,7 +179,12 @@ void main() {
       );
 
       await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-        ContactPhoneDataCompanion(contactId: Value(contact2.id), number: Value('1234567890'), label: Value('Home')),
+        ContactPhoneDataCompanion(
+          contactId: Value(contact2.id),
+          rawNumber: Value('1234567890'),
+          sanitizedNumber: Value('1234567890'),
+          label: Value('Home'),
+        ),
       );
 
       await database.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
@@ -193,7 +211,8 @@ void main() {
       expect(insertedContact2.contact.lastName, 'Smith');
       expect(insertedContact2.contact.aliasName, 'JS');
       expect(insertedContact2.phones, hasLength(1));
-      expect(insertedContact2.phones.first.number, '1234567890');
+      expect(insertedContact2.phones.first.rawNumber, '1234567890');
+      expect(insertedContact2.phones.first.sanitizedNumber, '1234567890');
       expect(insertedContact2.emails, hasLength(1));
       expect(insertedContact2.emails.first.address, 'asd@qwe.main');
     });
@@ -595,14 +614,20 @@ void main() {
       );
 
       await database.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-        ContactPhoneDataCompanion(contactId: Value(contact.id), number: Value('911'), label: Value('Emergency')),
+        ContactPhoneDataCompanion(
+          contactId: Value(contact.id),
+          rawNumber: Value('911'),
+          sanitizedNumber: Value('911'),
+          label: Value('Emergency'),
+        ),
       );
 
       final fetched = await dao.getServiceContacts();
 
       expect(fetched.length, 1);
       expect(fetched.first.phones.length, 1);
-      expect(fetched.first.phones.first.number, '911');
+      expect(fetched.first.phones.first.rawNumber, '911');
+      expect(fetched.first.phones.first.sanitizedNumber, '911');
     });
   });
 }

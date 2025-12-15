@@ -24,14 +24,17 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
   Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) {
     return into(contactPhonesTable).insert(
       contactPhone,
-      onConflict: DoUpdate((_) => contactPhone, target: [contactPhonesTable.number, contactPhonesTable.contactId]),
+      onConflict: DoUpdate(
+        (_) => contactPhone,
+        target: [contactPhonesTable.rawNumber, contactPhonesTable.contactId],
+      ),
     );
   }
 
   Future<int> deleteOtherContactPhonesOfContactId(int id, Iterable<String> numbers) {
     return (delete(contactPhonesTable)
           ..where((t) => t.contactId.equals(id))
-          ..where((t) => t.number.isNotIn(numbers)))
+          ..where((t) => t.rawNumber.isNotIn(numbers) & t.sanitizedNumber.isNotIn(numbers)))
         .go();
   }
 }
