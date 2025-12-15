@@ -3,7 +3,8 @@ import 'package:webtrit_phone/models/models.dart';
 final dFavorites = [
   Favorite(
     id: 0,
-    number: '1234',
+    rawNumber: '1234',
+    sanitizedNumber: '1234',
     label: 'ext',
     contact: Contact(
       id: 0,
@@ -15,7 +16,8 @@ final dFavorites = [
   ),
   Favorite(
     id: 0,
-    number: '2345',
+    rawNumber: '2345',
+    sanitizedNumber: '2345',
     label: 'ext',
     contact: Contact(
       id: 0,
@@ -27,7 +29,8 @@ final dFavorites = [
   ),
   Favorite(
     id: 0,
-    number: '3456',
+    rawNumber: '3456',
+    sanitizedNumber: '3456',
     label: 'ext',
     contact: Contact(
       id: 0,
@@ -38,7 +41,8 @@ final dFavorites = [
   ),
   Favorite(
     id: 0,
-    number: '4567',
+    rawNumber: '4567',
+    sanitizedNumber: '4567',
     label: 'ext',
     contact: Contact(
       id: 0,
@@ -49,7 +53,8 @@ final dFavorites = [
   ),
   Favorite(
     id: 0,
-    number: '5678',
+    rawNumber: '5678',
+    sanitizedNumber: '5678',
     label: 'ext',
     contact: Contact(
       id: 0,
@@ -60,7 +65,8 @@ final dFavorites = [
   ),
   Favorite(
     id: 0,
-    number: '6789',
+    rawNumber: '6789',
+    sanitizedNumber: '6789',
     label: 'ext',
     contact: Contact(
       id: 0,

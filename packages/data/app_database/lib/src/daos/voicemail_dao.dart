@@ -42,7 +42,10 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     final contacts = db.contactsTable;
 
     final query = select(voicemail).join([
-      leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
+      leftOuterJoin(
+        contactPhones,
+        contactPhones.rawNumber.equalsExp(voicemail.sender) | contactPhones.sanitizedNumber.equalsExp(voicemail.sender),
+      ),
       leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
     ]);
 
@@ -61,7 +64,10 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     final contacts = db.contactsTable;
 
     final query = select(voicemail).join([
-      leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
+      leftOuterJoin(
+        contactPhones,
+        contactPhones.rawNumber.equalsExp(voicemail.sender) | contactPhones.sanitizedNumber.equalsExp(voicemail.sender),
+      ),
       leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
     ]);
 
