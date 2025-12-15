@@ -15,8 +15,7 @@ class SettingScreenScreenshot extends StatefulWidget {
   });
 
   @override
-  State<SettingScreenScreenshot> createState() =>
-      _SettingScreenScreenshotState();
+  State<SettingScreenScreenshot> createState() => _SettingScreenScreenshotState();
 }
 
 class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
@@ -36,17 +35,15 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
             pageBuilder: (context, _, __) {
               // Fetch sections for the settings screen using FeatureAccess, specifically used in the configurator project.
               // Fallback to default sections if FeatureAccess is not available.
-              final sections =
-                  context.read<FeatureAccess?>()?.settingsFeature.sections ??
-                      _defaultSections();
+              final sections = context.read<FeatureAccess?>()?.settingsFeature.sections ?? _defaultSections();
 
               return MultiBlocProvider(
                 providers: [
+                  BlocProvider<MicrophoneStatusBloc>(create: (_) => MockMicrophoneStatusBloc.initial(isGranted: true)),
                   BlocProvider<CallBloc>(
                     create: (context) => MockCallBloc.settingsScreen(),
                   ),
-                  BlocProvider<CallRoutingCubit>(
-                      create: (_) => MockCallRoutingCubit.initial()),
+                  BlocProvider<CallRoutingCubit>(create: (_) => MockCallRoutingCubit.initial()),
                   BlocProvider<SettingsBloc>(
                     create: (context) => MockSettingsBloc.settingsScreen(),
                   ),
