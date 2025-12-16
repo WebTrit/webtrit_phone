@@ -76,8 +76,8 @@ final dContactsRepository = [
     userRegistered: true,
     isCurrentUser: false,
     phones: const [
-      ContactPhone(id: 101, rawNumber: '+1234567890', sanitizedNimber: '+1234567890', label: 'mobile', favorite: true),
-      ContactPhone(id: 102, rawNumber: '1001', sanitizedNimber: '1001', label: 'ext', favorite: false),
+      ContactPhone(id: 101, rawNumber: '+1234567890', sanitizedNumber: '+1234567890', label: 'mobile', favorite: true),
+      ContactPhone(id: 102, rawNumber: '1001', sanitizedNumber: '1001', label: 'ext', favorite: false),
     ],
     emails: const [],
     thumbnail: null,
@@ -94,7 +94,7 @@ final dContactsRepository = [
     userRegistered: false,
     isCurrentUser: false,
     phones: const [
-      ContactPhone(id: 201, rawNumber: '+1987654321', sanitizedNimber: '+1987654321', label: 'mobile', favorite: true),
+      ContactPhone(id: 201, rawNumber: '+1987654321', sanitizedNumber: '+1987654321', label: 'mobile', favorite: true),
     ],
     emails: const [],
     thumbnail: Uint8List.fromList([0, 1, 2, 3]),

@@ -124,8 +124,11 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
-      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.rawNumber)),
-      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.sanitizedNumber)),
+      leftOuterJoin(
+        presenceInfoTable,
+        presenceInfoTable.number.equalsExp(contactPhonesTable.rawNumber) |
+            presenceInfoTable.number.equalsExp(contactPhonesTable.sanitizedNumber),
+      ),
     ]);
   }
 

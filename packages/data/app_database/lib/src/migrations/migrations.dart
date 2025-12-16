@@ -17,6 +17,7 @@ import 'migration_v15.dart';
 import 'migration_v16.dart';
 import 'migration_v17.dart';
 import 'migration_v18.dart';
+import 'migration_v19.dart';
 
 extension MigrationsSchemaVersion<T extends Migration> on Iterable<T> {
   int get schemaVersion => length + 1;
@@ -44,4 +45,5 @@ const migrations = <Migration>[
   MigrationV16(),
   MigrationV17(),
   MigrationV18(),
+  MigrationV19(),
 ];

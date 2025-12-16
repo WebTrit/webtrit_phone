@@ -16,7 +16,12 @@ class KeypadCubit extends Cubit<KeypadState> {
       super(const KeypadState());
 
   void getContactByPhoneNumber(String number) async {
-    final contact = await _contactsRepository.getContactByPhoneNumber(number);
-    emit(KeypadState(contact: contact));
+    if (number.isNotEmpty) {
+      final contact = await _contactsRepository.getContactByPhoneNumber(number);
+      emit(KeypadState(contact: contact));
+    }
+    else {
+      emit(KeypadState(contact: null));
+    }
   }
 }

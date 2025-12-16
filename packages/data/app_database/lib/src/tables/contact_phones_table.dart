@@ -24,5 +24,5 @@ class ContactPhonesTable extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 
   @override
-  List<String> get customConstraints => ['UNIQUE(rawNumber, sanitizedNumber, contact_id)'];
+  List<String> get customConstraints => ['UNIQUE(raw_number, contact_id)'];
 }

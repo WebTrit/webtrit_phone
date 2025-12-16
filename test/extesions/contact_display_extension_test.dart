@@ -14,20 +14,20 @@ void main() {
       final phones = [
         const ContactPhone(
           rawNumber: '0',
-          sanitizedNimber: '0',
+          sanitizedNumber: '0',
           label: kContactAdditionalLabel,
           id: 0,
           favorite: false,
         ),
         const ContactPhone(
           rawNumber: '1',
-          sanitizedNimber: '1',
+          sanitizedNumber: '1',
           label: kContactAdditionalLabel,
           id: 1,
           favorite: false,
         ),
-        const ContactPhone(rawNumber: '2', sanitizedNimber: '2', label: kContactMainLabel, id: 2, favorite: false),
-        const ContactPhone(rawNumber: '3', sanitizedNimber: '3', label: kContactExtLabel, id: 3, favorite: false),
+        const ContactPhone(rawNumber: '2', sanitizedNumber: '2', label: kContactMainLabel, id: 2, favorite: false),
+        const ContactPhone(rawNumber: '3', sanitizedNumber: '3', label: kContactExtLabel, id: 3, favorite: false),
       ];
       final contact = createContact(phones: phones);
 
@@ -41,9 +41,9 @@ void main() {
 
     test('should sort "others" alphabetically', () {
       final phones = [
-        const ContactPhone(rawNumber: '1', sanitizedNimber: '1', label: 'work', id: 0, favorite: false),
-        const ContactPhone(rawNumber: '2', sanitizedNimber: '2', label: kContactExtLabel, id: 1, favorite: false),
-        const ContactPhone(rawNumber: '3', sanitizedNimber: '3', label: 'home', id: 2, favorite: false),
+        const ContactPhone(rawNumber: '1', sanitizedNumber: '1', label: 'work', id: 0, favorite: false),
+        const ContactPhone(rawNumber: '2', sanitizedNumber: '2', label: kContactExtLabel, id: 1, favorite: false),
+        const ContactPhone(rawNumber: '3', sanitizedNumber: '3', label: 'home', id: 2, favorite: false),
       ];
       final contact = createContact(phones: phones);
 
@@ -56,8 +56,8 @@ void main() {
 
     test('should keep multiple phone numbers of the same priority', () {
       final phones = [
-        const ContactPhone(rawNumber: '101', sanitizedNimber: '101', label: kContactExtLabel, id: 0, favorite: false),
-        const ContactPhone(rawNumber: '102', sanitizedNimber: '102', label: kContactExtLabel, id: 1, favorite: false),
+        const ContactPhone(rawNumber: '101', sanitizedNumber: '101', label: kContactExtLabel, id: 0, favorite: false),
+        const ContactPhone(rawNumber: '102', sanitizedNumber: '102', label: kContactExtLabel, id: 1, favorite: false),
       ];
       final contact = createContact(phones: phones);
 
@@ -66,8 +66,8 @@ void main() {
       expect(sorted.length, 2, reason: 'Must not drop duplicate priority labels');
       expect(sorted[0].rawNumber, '101');
       expect(sorted[1].rawNumber, '102');
-      expect(sorted[0].sanitizedNimber, '101');
-      expect(sorted[1].sanitizedNimber, '102');
+      expect(sorted[0].sanitizedNumber, '101');
+      expect(sorted[1].sanitizedNumber, '102');
     });
   });
 }
