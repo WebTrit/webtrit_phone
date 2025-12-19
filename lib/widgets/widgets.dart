@@ -3,6 +3,7 @@ export 'agreement_checkbox.dart';
 export 'app_icon.dart';
 export 'back_button.dart';
 export 'circular_progress_template.dart';
+export 'configurable_theme_image.dart';
 export 'confirm_dialog.dart';
 export 'contact_info_builder.dart';
 export 'copy_to_clipboard.dart';
