@@ -1783,11 +1783,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_iceSettings_Section_noskip => 'Без фільтрації';
 
   @override
-  String get settings_iceSettings_Section_title => 'Фільтрація ice-кандидатів';
+  String get settings_iceSettings_Section_title => 'Фільтрація ICE-кандидатів';
 
   @override
   String get settings_iceSettings_Section_tooltip =>
-      'Фільтр ice-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею';
+      'Фільтр ICE-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Пропустити TCP-кандидатів';
