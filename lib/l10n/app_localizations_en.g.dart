@@ -1777,11 +1777,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_iceSettings_Section_noskip => 'No filtering';
 
   @override
-  String get settings_iceSettings_Section_title => 'Ice candidates filtering';
+  String get settings_iceSettings_Section_title => 'ICE candidates filtering';
 
   @override
   String get settings_iceSettings_Section_tooltip =>
-      'Filter ice candidates based on the network preferences may help to avoid network issues';
+      'Filter ICE candidates based on the network preferences may help to avoid network issues';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Skip TCP candidates';

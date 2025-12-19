@@ -42,13 +42,15 @@ class MainScreenScreenshot extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: _createMockBlocProviders(),
-        child: MainScreen(
-          body: AppBarParams(
-            systemNotificationsEnabled: true,
-            pullableCalls: const [],
-            child: _buildFlavorWidget(context, flavor, featureAccess),
+        child: Builder(
+          builder: (context) => MainScreen(
+            body: AppBarParams(
+              systemNotificationsEnabled: true,
+              pullableCalls: const [],
+              child: _buildFlavorWidget(context, flavor, featureAccess),
+            ),
+            bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
           ),
-          bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
         ),
       ),
     );
@@ -62,6 +64,7 @@ class MainScreenScreenshot extends StatelessWidget {
       BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
       BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
+      BlocProvider<MicrophoneStatusBloc>(create: (_) => MockMicrophoneStatusBloc.initial(isGranted: true)),
     ];
   }
 

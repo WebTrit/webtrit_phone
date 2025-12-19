@@ -1792,11 +1792,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_iceSettings_Section_noskip => 'Nessun filtro';
 
   @override
-  String get settings_iceSettings_Section_title => 'Filtraggio dei candidati al ghiaccio';
+  String get settings_iceSettings_Section_title => 'Filtraggio dei candidati ICE';
 
   @override
   String get settings_iceSettings_Section_tooltip =>
-      'Filtrare i candidati al ghiaccio in base alle preferenze di rete può aiutare a evitare problemi di rete';
+      'Filtrare i candidati ICE in base alle preferenze di rete può aiutare a evitare problemi di rete.';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Salta i candidati TCP';

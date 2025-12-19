@@ -3387,13 +3387,13 @@ abstract class AppLocalizations {
   /// No description provided for @settings_iceSettings_Section_title.
   ///
   /// In en, this message translates to:
-  /// **'Ice candidates filtering'**
+  /// **'ICE candidates filtering'**
   String get settings_iceSettings_Section_title;
 
   /// No description provided for @settings_iceSettings_Section_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Filter ice candidates based on the network preferences may help to avoid network issues'**
+  /// **'Filter ICE candidates based on the network preferences may help to avoid network issues'**
   String get settings_iceSettings_Section_tooltip;
 
   /// No description provided for @settings_iceSettings_Section_trfilter_skipTcp.
