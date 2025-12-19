@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 
-import '../theme/styles/theme_image_style.dart';
-
 class ConfigurableThemeImage extends StatelessWidget {
   const ConfigurableThemeImage({super.key, this.style, this.defaultScale = 0.5});
 
