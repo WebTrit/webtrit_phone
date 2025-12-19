@@ -42,11 +42,18 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
       return predicate;
     })
-    ..orderBy([
-      (t) => OrderingTerm.asc(t.lastName),
-      (t) => OrderingTerm.asc(t.firstName),
-      (t) => OrderingTerm.asc(t.aliasName),
-    ]);
+      ..orderBy([
+        (t) => OrderingTerm(
+            expression: CaseWhenExpression(
+              cases: [
+                CaseWhen(t.aliasName.isNotNull(), then: t.aliasName),
+                CaseWhen(t.firstName.isNotNull() & t.lastName.isNotNull(), then: t.firstName + const Constant(' ') + t.lastName),
+                CaseWhen(t.firstName.isNotNull(), then: t.firstName),
+              ],
+              orElse: t.lastName,
+            )
+        )
+      ]);
 
   SimpleSelectStatement<$ContactsTableTable, ContactData> _selectBySource(
     ContactSourceTypeEnum sourceType,
