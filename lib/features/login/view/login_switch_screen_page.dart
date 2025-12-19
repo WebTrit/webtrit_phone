@@ -55,7 +55,7 @@ class LoginSwitchScreenPage extends StatelessWidget {
               header: isLogoVisible
                   ? Column(
                       children: [
-                        OnboardingLogo(style: localStyle?.onboardingLogoStyle),
+                        ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
                         const SizedBox(height: kInset),
                       ],
                     )

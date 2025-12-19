@@ -205,7 +205,7 @@ case _:
 /// @nodoc
 mixin _$ImageRenderSpec {
 
- double? get scale; PaddingConfig? get padding;
+ double? get scale; PaddingConfig? get padding; AlignmentConfig? get alignment; BoxFitConfig? get fit;
 /// Create a copy of ImageRenderSpec
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -216,16 +216,16 @@ $ImageRenderSpecCopyWith<ImageRenderSpec> get copyWith => _$ImageRenderSpecCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImageRenderSpec&&(identical(other.scale, scale) || other.scale == scale)&&(identical(other.padding, padding) || other.padding == padding));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImageRenderSpec&&(identical(other.scale, scale) || other.scale == scale)&&(identical(other.padding, padding) || other.padding == padding)&&(identical(other.alignment, alignment) || other.alignment == alignment)&&(identical(other.fit, fit) || other.fit == fit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,scale,padding);
+int get hashCode => Object.hash(runtimeType,scale,padding,alignment,fit);
 
 @override
 String toString() {
-  return 'ImageRenderSpec(scale: $scale, padding: $padding)';
+  return 'ImageRenderSpec(scale: $scale, padding: $padding, alignment: $alignment, fit: $fit)';
 }
 
 
@@ -236,7 +236,7 @@ abstract mixin class $ImageRenderSpecCopyWith<$Res>  {
   factory $ImageRenderSpecCopyWith(ImageRenderSpec value, $Res Function(ImageRenderSpec) _then) = _$ImageRenderSpecCopyWithImpl;
 @useResult
 $Res call({
- double? scale, PaddingConfig? padding
+ double? scale, PaddingConfig? padding, AlignmentConfig? alignment, BoxFitConfig? fit
 });
 
 
@@ -253,11 +253,13 @@ class _$ImageRenderSpecCopyWithImpl<$Res>
 
 /// Create a copy of ImageRenderSpec
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? scale = freezed,Object? padding = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? scale = freezed,Object? padding = freezed,Object? alignment = freezed,Object? fit = freezed,}) {
   return _then(ImageRenderSpec(
 scale: freezed == scale ? _self.scale : scale // ignore: cast_nullable_to_non_nullable
 as double?,padding: freezed == padding ? _self.padding : padding // ignore: cast_nullable_to_non_nullable
-as PaddingConfig?,
+as PaddingConfig?,alignment: freezed == alignment ? _self.alignment : alignment // ignore: cast_nullable_to_non_nullable
+as AlignmentConfig?,fit: freezed == fit ? _self.fit : fit // ignore: cast_nullable_to_non_nullable
+as BoxFitConfig?,
   ));
 }
 

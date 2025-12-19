@@ -16,7 +16,7 @@ class LoginOtpSignInScreenshot extends StatelessWidget {
     final themeData = Theme.of(context);
 
     final LoginSwitchScreenStyles? loginPageStyles =
-        themeData.extension<LoginSwitchScreenStyles>();
+    themeData.extension<LoginSwitchScreenStyles>();
     final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
 
     return BlocProvider<LoginCubit>(
@@ -28,13 +28,13 @@ class LoginOtpSignInScreenshot extends StatelessWidget {
         ),
         header: Column(
           children: [
-            OnboardingLogo(style: localStyle?.onboardingLogoStyle),
-            SizedBox(height: kInset),
+            ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+            const SizedBox(height: kInset),
           ],
         ),
-        body: LoginOtpSigninRequestScreen(),
+        body: const LoginOtpSigninRequestScreen(),
         currentLoginType: LoginType.otpSignin,
-        supportedLoginTypes: [
+        supportedLoginTypes: const [
           LoginType.otpSignin,
           LoginType.passwordSignin,
           LoginType.signup,
