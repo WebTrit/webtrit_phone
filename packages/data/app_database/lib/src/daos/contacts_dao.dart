@@ -126,15 +126,13 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
       leftOuterJoin(
         presenceInfoTable,
-        presenceInfoTable.number.equalsExp(contactPhonesTable.rawNumber) |
-            presenceInfoTable.number.equalsExp(contactPhonesTable.sanitizedNumber),
-      ),
+        presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
   }
 
   Future<FullContactData?> getContactByPhoneNumber(String number) async {
     final query = _joinPhonesAndEmails(select(contactsTable))
-      ..where(contactPhonesTable.rawNumber.equals(number) | contactPhonesTable.sanitizedNumber.equals(number))
+      ..where(contactPhonesTable.number.equals(number))
       ..limit(1);
 
     return query.get().then(_gatherSingleContact);
@@ -158,7 +156,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Stream<FullContactData?> watchContactByPhoneNumber(String number) {
     final query = _joinPhonesAndEmails(select(contactsTable))
-      ..where(contactPhonesTable.rawNumber.equals(number) | contactPhonesTable.sanitizedNumber.equals(number))
+      ..where(contactPhonesTable.number.equals(number))
       ..limit(1);
 
     return query.watch().map(_gatherSingleContact);
@@ -167,9 +165,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
     final query = _joinPhonesAndEmails(select(contactsTable));
     query.where(
-      contactPhonesTable.rawNumber.regexp('.*$number', caseSensitive: false) |
-          contactPhonesTable.sanitizedNumber.regexp('.*$number', caseSensitive: false),
-    );
+      contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
     query.limit(1);
 
     return query.watch().map((data) => _gatherMultipleContacts(data).firstOrNull);
@@ -199,8 +195,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
                 contactsTable.lastName,
                 contactsTable.firstName,
                 contactsTable.aliasName,
-                contactPhonesTable.rawNumber,
-                contactPhonesTable.sanitizedNumber,
+                contactPhonesTable.number,
                 contactEmailsTable.address,
               ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e);
             })

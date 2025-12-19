@@ -128,14 +128,13 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
           await appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
             insertOrUpdateContactData.id,
-            localContact.phones.map((phone) => phone.rawNumber),
+            localContact.phones.map((phone) => phone.number),
           );
 
           for (final localContactPhone in localContact.phones) {
             await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
               ContactPhoneDataCompanion(
-                rawNumber: Value(localContactPhone.rawNumber),
-                sanitizedNumber: Value(localContactPhone.sanitizedNumber),
+                number: Value(localContactPhone.number),
                 label: Value(localContactPhone.label),
                 contactId: Value(insertOrUpdateContactData.id),
               ),

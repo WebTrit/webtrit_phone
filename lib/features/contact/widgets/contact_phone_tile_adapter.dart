@@ -71,7 +71,7 @@ class ContactPhoneTileAdapter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// Checks if the current phone number is configured for SMS/text messaging.
-    final isSmsEnabled = enableTileSms && contactSmsNumbers.contains(contactPhone.rawNumber);
+    final isSmsEnabled = enableTileSms && contactSmsNumbers.contains(contactPhone.number);
 
     /// Callback executed when the favorite status of the phone number is toggled.
     /// It is only enabled if [enableTileFavorite] is true.
@@ -114,7 +114,7 @@ class ContactPhoneTileAdapter extends StatelessWidget {
 
     /// Callback executed to navigate to the call history/log screen for this specific number.
     /// It is only enabled if [enableTileCallLog] is true.
-    final VoidCallback? callLogCallback = enableTileCallLog ? () => onCallLogPressed(contactPhone.rawNumber) : null;
+    final VoidCallback? callLogCallback = enableTileCallLog ? () => onCallLogPressed(contactPhone.number) : null;
 
     /// Callback used by the "Call From" menu to initiate a call, specifying a particular "From" number.
     /// This callback is always defined, as its availability is managed by the nested widget's UI logic.
@@ -124,7 +124,7 @@ class ContactPhoneTileAdapter extends StatelessWidget {
       key: ValueKey(contactPhone),
       child: ContactPhoneTile(
         key: contactPhoneTileKey,
-        number: contactPhone.rawNumber,
+        number: contactPhone.number,
         label: contactPhone.label,
         favorite: contactPhone.favorite,
         callNumbers: callRoutingState?.allNumbers ?? [],

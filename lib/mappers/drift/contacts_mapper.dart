@@ -56,8 +56,7 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
   ContactPhone contactPhoneFromDrift(ContactPhoneData data, {bool favorite = false}) {
     return ContactPhone(
       id: data.id,
-      rawNumber: data.rawNumber,
-      sanitizedNumber: data.sanitizedNumber,
+      number: data.number,
       label: data.label,
       favorite: favorite,
     );

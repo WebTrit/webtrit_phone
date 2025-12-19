@@ -47,7 +47,7 @@ class _ConversationsListState extends State<ConversationsList> {
                 .where((e) => e.isCurrentUser == false)
                 .map((e) => '${e.aliasName} + ${e.firstName} + ${e.lastName}'.toLowerCase())
                 .join(' ');
-            final contactPhones = contacts.expand((e) => e.phones).map((e) => e.rawNumber).join(' ');
+            final contactPhones = contacts.expand((e) => e.phones).map((e) => e.number).join(' ');
             final lastMessageText = message?.content ?? '';
 
             return groupName?.contains(search) == true ||

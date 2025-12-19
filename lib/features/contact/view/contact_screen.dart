@@ -178,20 +178,20 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   void _onAudioPressed(ContactPhone phone, Contact contact) {
-    _callController.createCall(destination: phone.rawNumber, displayName: contact.maybeName, video: false);
+    _callController.createCall(destination: phone.number, displayName: contact.maybeName, video: false);
   }
 
   void _onVideoPressed(ContactPhone phone, Contact contact) {
-    _callController.createCall(destination: phone.rawNumber, displayName: contact.maybeName, video: true);
+    _callController.createCall(destination: phone.number, displayName: contact.maybeName, video: true);
   }
 
   void _onTransferPressed(ContactPhone phone) {
-    _callController.submitTransfer(phone.rawNumber);
+    _callController.submitTransfer(phone.number);
     context.router.maybePop();
   }
 
   void _onCallFromPressed(ContactPhone phone, Contact contact, String fromNumber) {
-    _callController.createCall(destination: phone.rawNumber, displayName: contact.maybeName, fromNumber: fromNumber);
+    _callController.createCall(destination: phone.number, displayName: contact.maybeName, fromNumber: fromNumber);
   }
 
   void _onSendSmsPressed(ContactPhone phone, String? contactSourceId, List<String> userSmsNumbers) {
@@ -199,7 +199,7 @@ class _ContactScreenState extends State<ContactScreen> {
 
     final route = SmsConversationScreenPageRoute(
       firstNumber: userSmsNumbers.first,
-      secondNumber: phone.rawNumber,
+      secondNumber: phone.number,
       recipientId: contactSourceId,
     );
     context.router.navigate(route);

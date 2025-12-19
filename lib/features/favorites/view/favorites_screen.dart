@@ -121,7 +121,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               final contact = favorite.contact;
                               final contactSourceId = contact.sourceId;
                               final contactSmsNumbers = contact.smsNumbers;
-                              final canSendSms = contactSmsNumbers.contains(favorite.rawNumber);
+                              final canSendSms = contactSmsNumbers.contains(favorite.number);
 
                               return FavoriteTile(
                                 key: favoriteTileKey,
@@ -129,17 +129,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                 callNumbers: callRoutingState?.allNumbers ?? [],
                                 onTap: blingTransferInitiated
                                     ? () {
-                                        submitTransfer(destination: favorite.rawNumber);
+                                        submitTransfer(destination: favorite.number);
                                       }
                                     : () {
                                         _callController.createCall(
-                                          destination: favorite.rawNumber,
+                                          destination: favorite.number,
                                           displayName: favorite.name,
                                         );
                                       },
                                 onAudioCallPressed: () {
                                   _callController.createCall(
-                                    destination: favorite.rawNumber,
+                                    destination: favorite.number,
                                     displayName: favorite.name,
                                     video: false,
                                   );
@@ -147,7 +147,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                 onVideoCallPressed: widget.videoEnabled
                                     ? () {
                                         _callController.createCall(
-                                          destination: favorite.rawNumber,
+                                          destination: favorite.number,
                                           displayName: favorite.name,
                                           video: true,
                                         );
@@ -155,7 +155,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                     : null,
                                 onTransferPressed: widget.transferEnabled && hasActiveCall
                                     ? () {
-                                        submitTransfer(destination: favorite.rawNumber);
+                                        submitTransfer(destination: favorite.number);
                                       }
                                     : null,
                                 onChatPressed: widget.chatsEnabled && contact.canMessage
@@ -167,13 +167,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                     ? () {
                                         sendSms(
                                           userSmsNumbers: userSmsNumbers,
-                                          contactPhoneNumber: favorite.rawNumber,
+                                          contactPhoneNumber: favorite.number,
                                           contactSourceId: contactSourceId,
                                         );
                                       }
                                     : null,
                                 onViewContactPressed: () => openContact(contactId: contact.id),
-                                onCallLogPressed: () => openCallLog(number: favorite.rawNumber),
+                                onCallLogPressed: () => openCallLog(number: favorite.number),
                                 onDelete: () => delete(favorite: favorite),
                               );
                             },

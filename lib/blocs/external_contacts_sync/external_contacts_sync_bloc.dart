@@ -148,8 +148,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
           if (externalContactNumber != null) {
             await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
               ContactPhoneDataCompanion(
-                rawNumber: Value(externalContactNumber),
-                sanitizedNumber: Value(externalContactNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
+                number: Value(externalContactNumber),
                 label: const Value(kContactMainLabel),
                 contactId: Value(insertOrUpdateContactData.id),
               ),
@@ -158,8 +157,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
           if (externalContactExt != null) {
             await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
               ContactPhoneDataCompanion(
-                rawNumber: Value(externalContactExt),
-                sanitizedNumber: Value(externalContactExt.replaceAll(RegExp(numberSanitizeRegex), '')),
+                number: Value(externalContactExt),
                 label: const Value(kContactExtLabel),
                 contactId: Value(insertOrUpdateContactData.id),
               ),
@@ -169,8 +167,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             for (final externalSmsNumber in externalSmsNumbers) {
               await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
                 ContactPhoneDataCompanion(
-                  rawNumber: Value(externalSmsNumber),
-                  sanitizedNumber: Value(externalSmsNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
+                  number: Value(externalSmsNumber),
                   label: const Value(kContactSmsLabel),
                   contactId: Value(insertOrUpdateContactData.id),
                 ),
@@ -181,8 +178,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             for (final externalContactAdditionalNumber in externalContactAdditional) {
               await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
                 ContactPhoneDataCompanion(
-                  rawNumber: Value(externalContactAdditionalNumber),
-                  sanitizedNumber: Value(externalContactAdditionalNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
+                  number: Value(externalContactAdditionalNumber),
                   label: const Value(kContactAdditionalLabel),
                   contactId: Value(insertOrUpdateContactData.id),
                 ),

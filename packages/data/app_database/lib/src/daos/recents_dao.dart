@@ -37,8 +37,7 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
     final recentsQuery = callsQuery.join([
       leftOuterJoin(
         sourcePhone,
-        callLogsTable.number.equalsExp(sourcePhone.rawNumber) |
-            callLogsTable.number.equalsExp(sourcePhone.sanitizedNumber),
+        callLogsTable.number.equalsExp(sourcePhone.number),
         useColumns: false,
       ),
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(sourcePhone.contactId)),
@@ -46,8 +45,7 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
       leftOuterJoin(contactPhones, contactPhones.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(
         presenceInfoTable,
-        presenceInfoTable.number.equalsExp(contactPhonesTable.rawNumber) |
-            presenceInfoTable.number.equalsExp(contactPhonesTable.sanitizedNumber),
+        presenceInfoTable.number.equalsExp(contactPhonesTable.number),
       ),
     ]);
 
@@ -58,15 +56,13 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
     final q = (select(callLogsTable)..where((t) => t.id.equals(id))).join([
       leftOuterJoin(
         contactPhonesTable,
-        contactPhonesTable.rawNumber.equalsExp(callLogsTable.number) |
-            contactPhonesTable.sanitizedNumber.equalsExp(callLogsTable.number),
+        contactPhonesTable.number.equalsExp(callLogsTable.number),
       ),
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(
         presenceInfoTable,
-        presenceInfoTable.number.equalsExp(contactPhonesTable.rawNumber) |
-            presenceInfoTable.number.equalsExp(contactPhonesTable.sanitizedNumber),
+        presenceInfoTable.number.equalsExp(contactPhonesTable.number),
       ),
     ]);
     return q.get().then((rows) => _rowsToRecent(rows).first);

@@ -817,23 +817,10 @@ class $ContactPhonesTableTable extends ContactPhonesTable
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _rawNumberMeta = const VerificationMeta(
-    'rawNumber',
-  );
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
   @override
-  late final GeneratedColumn<String> rawNumber = GeneratedColumn<String>(
-    'raw_number',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _sanitizedNumberMeta = const VerificationMeta(
-    'sanitizedNumber',
-  );
-  @override
-  late final GeneratedColumn<String> sanitizedNumber = GeneratedColumn<String>(
-    'sanitized_number',
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+    'number',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -885,8 +872,7 @@ class $ContactPhonesTableTable extends ContactPhonesTable
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    rawNumber,
-    sanitizedNumber,
+    number,
     label,
     contactId,
     insertedAt,
@@ -907,24 +893,13 @@ class $ContactPhonesTableTable extends ContactPhonesTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('raw_number')) {
+    if (data.containsKey('number')) {
       context.handle(
-        _rawNumberMeta,
-        rawNumber.isAcceptableOrUnknown(data['raw_number']!, _rawNumberMeta),
+        _numberMeta,
+        number.isAcceptableOrUnknown(data['number']!, _numberMeta),
       );
     } else if (isInserting) {
-      context.missing(_rawNumberMeta);
-    }
-    if (data.containsKey('sanitized_number')) {
-      context.handle(
-        _sanitizedNumberMeta,
-        sanitizedNumber.isAcceptableOrUnknown(
-          data['sanitized_number']!,
-          _sanitizedNumberMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_sanitizedNumberMeta);
+      context.missing(_numberMeta);
     }
     if (data.containsKey('label')) {
       context.handle(
@@ -967,13 +942,9 @@ class $ContactPhonesTableTable extends ContactPhonesTable
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      rawNumber: attachedDatabase.typeMapping.read(
+      number: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}raw_number'],
-      )!,
-      sanitizedNumber: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}sanitized_number'],
+        data['${effectivePrefix}number'],
       )!,
       label: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -1003,16 +974,14 @@ class $ContactPhonesTableTable extends ContactPhonesTable
 class ContactPhoneData extends DataClass
     implements Insertable<ContactPhoneData> {
   final int id;
-  final String rawNumber;
-  final String sanitizedNumber;
+  final String number;
   final String label;
   final int contactId;
   final DateTime? insertedAt;
   final DateTime? updatedAt;
   const ContactPhoneData({
     required this.id,
-    required this.rawNumber,
-    required this.sanitizedNumber,
+    required this.number,
     required this.label,
     required this.contactId,
     this.insertedAt,
@@ -1022,8 +991,7 @@ class ContactPhoneData extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['raw_number'] = Variable<String>(rawNumber);
-    map['sanitized_number'] = Variable<String>(sanitizedNumber);
+    map['number'] = Variable<String>(number);
     map['label'] = Variable<String>(label);
     map['contact_id'] = Variable<int>(contactId);
     if (!nullToAbsent || insertedAt != null) {
@@ -1038,8 +1006,7 @@ class ContactPhoneData extends DataClass
   ContactPhoneDataCompanion toCompanion(bool nullToAbsent) {
     return ContactPhoneDataCompanion(
       id: Value(id),
-      rawNumber: Value(rawNumber),
-      sanitizedNumber: Value(sanitizedNumber),
+      number: Value(number),
       label: Value(label),
       contactId: Value(contactId),
       insertedAt: insertedAt == null && nullToAbsent
@@ -1058,8 +1025,7 @@ class ContactPhoneData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ContactPhoneData(
       id: serializer.fromJson<int>(json['id']),
-      rawNumber: serializer.fromJson<String>(json['rawNumber']),
-      sanitizedNumber: serializer.fromJson<String>(json['sanitizedNumber']),
+      number: serializer.fromJson<String>(json['number']),
       label: serializer.fromJson<String>(json['label']),
       contactId: serializer.fromJson<int>(json['contactId']),
       insertedAt: serializer.fromJson<DateTime?>(json['insertedAt']),
@@ -1071,8 +1037,7 @@ class ContactPhoneData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'rawNumber': serializer.toJson<String>(rawNumber),
-      'sanitizedNumber': serializer.toJson<String>(sanitizedNumber),
+      'number': serializer.toJson<String>(number),
       'label': serializer.toJson<String>(label),
       'contactId': serializer.toJson<int>(contactId),
       'insertedAt': serializer.toJson<DateTime?>(insertedAt),
@@ -1082,16 +1047,14 @@ class ContactPhoneData extends DataClass
 
   ContactPhoneData copyWith({
     int? id,
-    String? rawNumber,
-    String? sanitizedNumber,
+    String? number,
     String? label,
     int? contactId,
     Value<DateTime?> insertedAt = const Value.absent(),
     Value<DateTime?> updatedAt = const Value.absent(),
   }) => ContactPhoneData(
     id: id ?? this.id,
-    rawNumber: rawNumber ?? this.rawNumber,
-    sanitizedNumber: sanitizedNumber ?? this.sanitizedNumber,
+    number: number ?? this.number,
     label: label ?? this.label,
     contactId: contactId ?? this.contactId,
     insertedAt: insertedAt.present ? insertedAt.value : this.insertedAt,
@@ -1100,10 +1063,7 @@ class ContactPhoneData extends DataClass
   ContactPhoneData copyWithCompanion(ContactPhoneDataCompanion data) {
     return ContactPhoneData(
       id: data.id.present ? data.id.value : this.id,
-      rawNumber: data.rawNumber.present ? data.rawNumber.value : this.rawNumber,
-      sanitizedNumber: data.sanitizedNumber.present
-          ? data.sanitizedNumber.value
-          : this.sanitizedNumber,
+      number: data.number.present ? data.number.value : this.number,
       label: data.label.present ? data.label.value : this.label,
       contactId: data.contactId.present ? data.contactId.value : this.contactId,
       insertedAt: data.insertedAt.present
@@ -1117,8 +1077,7 @@ class ContactPhoneData extends DataClass
   String toString() {
     return (StringBuffer('ContactPhoneData(')
           ..write('id: $id, ')
-          ..write('rawNumber: $rawNumber, ')
-          ..write('sanitizedNumber: $sanitizedNumber, ')
+          ..write('number: $number, ')
           ..write('label: $label, ')
           ..write('contactId: $contactId, ')
           ..write('insertedAt: $insertedAt, ')
@@ -1128,22 +1087,14 @@ class ContactPhoneData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(
-    id,
-    rawNumber,
-    sanitizedNumber,
-    label,
-    contactId,
-    insertedAt,
-    updatedAt,
-  );
+  int get hashCode =>
+      Object.hash(id, number, label, contactId, insertedAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ContactPhoneData &&
           other.id == this.id &&
-          other.rawNumber == this.rawNumber &&
-          other.sanitizedNumber == this.sanitizedNumber &&
+          other.number == this.number &&
           other.label == this.label &&
           other.contactId == this.contactId &&
           other.insertedAt == this.insertedAt &&
@@ -1152,16 +1103,14 @@ class ContactPhoneData extends DataClass
 
 class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
   final Value<int> id;
-  final Value<String> rawNumber;
-  final Value<String> sanitizedNumber;
+  final Value<String> number;
   final Value<String> label;
   final Value<int> contactId;
   final Value<DateTime?> insertedAt;
   final Value<DateTime?> updatedAt;
   const ContactPhoneDataCompanion({
     this.id = const Value.absent(),
-    this.rawNumber = const Value.absent(),
-    this.sanitizedNumber = const Value.absent(),
+    this.number = const Value.absent(),
     this.label = const Value.absent(),
     this.contactId = const Value.absent(),
     this.insertedAt = const Value.absent(),
@@ -1169,20 +1118,17 @@ class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
   });
   ContactPhoneDataCompanion.insert({
     this.id = const Value.absent(),
-    required String rawNumber,
-    required String sanitizedNumber,
+    required String number,
     required String label,
     required int contactId,
     this.insertedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  }) : rawNumber = Value(rawNumber),
-       sanitizedNumber = Value(sanitizedNumber),
+  }) : number = Value(number),
        label = Value(label),
        contactId = Value(contactId);
   static Insertable<ContactPhoneData> custom({
     Expression<int>? id,
-    Expression<String>? rawNumber,
-    Expression<String>? sanitizedNumber,
+    Expression<String>? number,
     Expression<String>? label,
     Expression<int>? contactId,
     Expression<DateTime>? insertedAt,
@@ -1190,8 +1136,7 @@ class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (rawNumber != null) 'raw_number': rawNumber,
-      if (sanitizedNumber != null) 'sanitized_number': sanitizedNumber,
+      if (number != null) 'number': number,
       if (label != null) 'label': label,
       if (contactId != null) 'contact_id': contactId,
       if (insertedAt != null) 'inserted_at': insertedAt,
@@ -1201,8 +1146,7 @@ class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
 
   ContactPhoneDataCompanion copyWith({
     Value<int>? id,
-    Value<String>? rawNumber,
-    Value<String>? sanitizedNumber,
+    Value<String>? number,
     Value<String>? label,
     Value<int>? contactId,
     Value<DateTime?>? insertedAt,
@@ -1210,8 +1154,7 @@ class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
   }) {
     return ContactPhoneDataCompanion(
       id: id ?? this.id,
-      rawNumber: rawNumber ?? this.rawNumber,
-      sanitizedNumber: sanitizedNumber ?? this.sanitizedNumber,
+      number: number ?? this.number,
       label: label ?? this.label,
       contactId: contactId ?? this.contactId,
       insertedAt: insertedAt ?? this.insertedAt,
@@ -1225,11 +1168,8 @@ class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (rawNumber.present) {
-      map['raw_number'] = Variable<String>(rawNumber.value);
-    }
-    if (sanitizedNumber.present) {
-      map['sanitized_number'] = Variable<String>(sanitizedNumber.value);
+    if (number.present) {
+      map['number'] = Variable<String>(number.value);
     }
     if (label.present) {
       map['label'] = Variable<String>(label.value);
@@ -1250,8 +1190,7 @@ class ContactPhoneDataCompanion extends UpdateCompanion<ContactPhoneData> {
   String toString() {
     return (StringBuffer('ContactPhoneDataCompanion(')
           ..write('id: $id, ')
-          ..write('rawNumber: $rawNumber, ')
-          ..write('sanitizedNumber: $sanitizedNumber, ')
+          ..write('number: $number, ')
           ..write('label: $label, ')
           ..write('contactId: $contactId, ')
           ..write('insertedAt: $insertedAt, ')
@@ -12762,8 +12701,7 @@ typedef $$ContactsTableTableProcessedTableManager =
 typedef $$ContactPhonesTableTableCreateCompanionBuilder =
     ContactPhoneDataCompanion Function({
       Value<int> id,
-      required String rawNumber,
-      required String sanitizedNumber,
+      required String number,
       required String label,
       required int contactId,
       Value<DateTime?> insertedAt,
@@ -12772,8 +12710,7 @@ typedef $$ContactPhonesTableTableCreateCompanionBuilder =
 typedef $$ContactPhonesTableTableUpdateCompanionBuilder =
     ContactPhoneDataCompanion Function({
       Value<int> id,
-      Value<String> rawNumber,
-      Value<String> sanitizedNumber,
+      Value<String> number,
       Value<String> label,
       Value<int> contactId,
       Value<DateTime?> insertedAt,
@@ -12830,13 +12767,8 @@ class $$ContactPhonesTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get rawNumber => $composableBuilder(
-    column: $table.rawNumber,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get sanitizedNumber => $composableBuilder(
-    column: $table.sanitizedNumber,
+  ColumnFilters<String> get number => $composableBuilder(
+    column: $table.number,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -12893,13 +12825,8 @@ class $$ContactPhonesTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get rawNumber => $composableBuilder(
-    column: $table.rawNumber,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get sanitizedNumber => $composableBuilder(
-    column: $table.sanitizedNumber,
+  ColumnOrderings<String> get number => $composableBuilder(
+    column: $table.number,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -12954,13 +12881,8 @@ class $$ContactPhonesTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get rawNumber =>
-      $composableBuilder(column: $table.rawNumber, builder: (column) => column);
-
-  GeneratedColumn<String> get sanitizedNumber => $composableBuilder(
-    column: $table.sanitizedNumber,
-    builder: (column) => column,
-  );
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
 
   GeneratedColumn<String> get label =>
       $composableBuilder(column: $table.label, builder: (column) => column);
@@ -13031,16 +12953,14 @@ class $$ContactPhonesTableTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<String> rawNumber = const Value.absent(),
-                Value<String> sanitizedNumber = const Value.absent(),
+                Value<String> number = const Value.absent(),
                 Value<String> label = const Value.absent(),
                 Value<int> contactId = const Value.absent(),
                 Value<DateTime?> insertedAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
               }) => ContactPhoneDataCompanion(
                 id: id,
-                rawNumber: rawNumber,
-                sanitizedNumber: sanitizedNumber,
+                number: number,
                 label: label,
                 contactId: contactId,
                 insertedAt: insertedAt,
@@ -13049,16 +12969,14 @@ class $$ContactPhonesTableTableTableManager
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required String rawNumber,
-                required String sanitizedNumber,
+                required String number,
                 required String label,
                 required int contactId,
                 Value<DateTime?> insertedAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
               }) => ContactPhoneDataCompanion.insert(
                 id: id,
-                rawNumber: rawNumber,
-                sanitizedNumber: sanitizedNumber,
+                number: number,
                 label: label,
                 contactId: contactId,
                 insertedAt: insertedAt,

@@ -33,9 +33,7 @@ class FavoritesDao extends DatabaseAccessor<AppDatabase> with _$FavoritesDaoMixi
       leftOuterJoin(_contactPhones, _contactPhones.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(
         presenceInfoTable,
-        presenceInfoTable.number.equalsExp(_contactPhones.rawNumber) |
-            presenceInfoTable.number.equalsExp(_contactPhones.sanitizedNumber),
-      ),
+        presenceInfoTable.number.equalsExp(_contactPhones.number)),
     ]);
     return q.watch().map(_rowsToData);
   }

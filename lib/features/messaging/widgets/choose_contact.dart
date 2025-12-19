@@ -71,7 +71,7 @@ class _ChooseContactState extends State<ChooseContact> {
                     radius: 24,
                   ),
                   title: Text(contact.displayTitle),
-                  subtitle: Text(contact.phones.firstOrNull?.rawNumber ?? ''),
+                  subtitle: Text(contact.phones.firstOrNull?.number ?? ''),
                 );
               }).toList(),
             ),
