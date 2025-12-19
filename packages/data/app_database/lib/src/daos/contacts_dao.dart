@@ -124,9 +124,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
-      leftOuterJoin(
-        presenceInfoTable,
-        presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
   }
 
@@ -164,8 +162,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
     final query = _joinPhonesAndEmails(select(contactsTable));
-    query.where(
-      contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
     query.limit(1);
 
     return query.watch().map((data) => _gatherMultipleContacts(data).firstOrNull);

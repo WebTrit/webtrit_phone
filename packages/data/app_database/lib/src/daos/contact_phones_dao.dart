@@ -24,10 +24,7 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
   Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) {
     return into(contactPhonesTable).insert(
       contactPhone,
-      onConflict: DoUpdate(
-        (_) => contactPhone,
-        target: [contactPhonesTable.number, contactPhonesTable.contactId],
-      ),
+      onConflict: DoUpdate((_) => contactPhone, target: [contactPhonesTable.number, contactPhonesTable.contactId]),
     );
   }
 

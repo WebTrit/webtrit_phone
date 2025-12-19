@@ -5,12 +5,7 @@ import 'contact.dart';
 typedef FavoriteId = int;
 
 class Favorite extends Equatable {
-  const Favorite({
-    required this.id,
-    required this.number,
-    required this.label,
-    required this.contact,
-  });
+  const Favorite({required this.id, required this.number, required this.label, required this.contact});
 
   final FavoriteId id;
   final String number;

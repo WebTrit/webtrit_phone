@@ -1,12 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class ContactPhone extends Equatable {
-  const ContactPhone({
-    required this.id,
-    required this.number,
-    required this.label,
-    required this.favorite,
-  });
+  const ContactPhone({required this.id, required this.number, required this.label, required this.favorite});
 
   final int id;
   final String number;

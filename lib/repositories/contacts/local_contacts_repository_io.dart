@@ -82,6 +82,7 @@ class LocalContactsRepository implements ILocalContactsRepository {
             phones: contact.phones
                 .map(
                   (phone) => LocalContactPhone(
+                    // TODO: maybe store raw and sanitized versions together
                     number: phone.number.replaceAll(RegExp(numberSanitizeRegex), ''),
                     label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.name,
                   ),

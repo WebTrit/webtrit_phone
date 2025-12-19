@@ -5,9 +5,7 @@ sealed class SmsCBState with EquatableMixin {
   const SmsCBState();
 
   factory SmsCBState.initializing() => const SmsCBInitializing();
-
   factory SmsCBState.initializingError(Object error) => SmsCBInitializingError(error);
-
   factory SmsCBState.common(List<Contact> contacts) => SmsCBCommon(contacts);
 }
 
@@ -142,8 +140,6 @@ typedef RecipientCreds = ({String number, String? id});
 bool _searchMatcher(Contact contact, String searchFilterValue) {
   if (searchFilterValue.isEmpty) return true;
   matchName() => contact.maybeName?.toLowerCase().contains(searchFilterValue.toLowerCase()) ?? false;
-  matchPhone() => contact.phones.any(
-    (phone) => phone.number.contains(searchFilterValue),
-  );
+  matchPhone() => contact.phones.any((phone) => phone.number.contains(searchFilterValue));
   return matchName() || matchPhone();
 }

@@ -12,18 +12,8 @@ void main() {
 
     test('should prioritize Ext over Main, and Main over Additional', () {
       final phones = [
-        const ContactPhone(
-          number: '0',
-          label: kContactAdditionalLabel,
-          id: 0,
-          favorite: false,
-        ),
-        const ContactPhone(
-          number: '1',
-          label: kContactAdditionalLabel,
-          id: 1,
-          favorite: false,
-        ),
+        const ContactPhone(number: '0', label: kContactAdditionalLabel, id: 0, favorite: false),
+        const ContactPhone(number: '1', label: kContactAdditionalLabel, id: 1, favorite: false),
         const ContactPhone(number: '2', label: kContactMainLabel, id: 2, favorite: false),
         const ContactPhone(number: '3', label: kContactExtLabel, id: 3, favorite: false),
       ];
@@ -62,8 +52,6 @@ void main() {
       final sorted = contact.displayPhones;
 
       expect(sorted.length, 2, reason: 'Must not drop duplicate priority labels');
-      expect(sorted[0].number, '101');
-      expect(sorted[1].number, '102');
       expect(sorted[0].number, '101');
       expect(sorted[1].number, '102');
     });

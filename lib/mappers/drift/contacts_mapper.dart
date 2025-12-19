@@ -54,12 +54,7 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
   }
 
   ContactPhone contactPhoneFromDrift(ContactPhoneData data, {bool favorite = false}) {
-    return ContactPhone(
-      id: data.id,
-      number: data.number,
-      label: data.label,
-      favorite: favorite,
-    );
+    return ContactPhone(id: data.id, number: data.number, label: data.label, favorite: favorite);
   }
 
   ContactEmail contactEmailFromDrift(ContactEmailData data) {

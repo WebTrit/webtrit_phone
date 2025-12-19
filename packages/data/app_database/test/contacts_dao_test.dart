@@ -34,19 +34,11 @@ void main() {
     );
 
     await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-      ContactPhoneDataCompanion(
-        contactId: Value(1),
-        number: Value('1234567890'),
-        label: Value('Home'),
-      ),
+      ContactPhoneDataCompanion(contactId: Value(1), number: Value('1234567890'), label: Value('Home')),
     );
 
     await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-      ContactPhoneDataCompanion(
-        contactId: Value(2),
-        number: Value('1234567890'),
-        label: Value('Home'),
-      ),
+      ContactPhoneDataCompanion(contactId: Value(2), number: Value('1234567890'), label: Value('Home')),
     );
 
     await contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
@@ -174,11 +166,7 @@ void main() {
       );
 
       await contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-        ContactPhoneDataCompanion(
-          contactId: Value(contact2.id),
-          number: Value('1234567890'),
-          label: Value('Home'),
-        ),
+        ContactPhoneDataCompanion(contactId: Value(contact2.id), number: Value('1234567890'), label: Value('Home')),
       );
 
       await database.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
@@ -607,11 +595,7 @@ void main() {
       );
 
       await database.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-        ContactPhoneDataCompanion(
-          contactId: Value(contact.id),
-          number: Value('911'),
-          label: Value('Emergency'),
-        ),
+        ContactPhoneDataCompanion(contactId: Value(contact.id), number: Value('911'), label: Value('Emergency')),
       );
 
       final fetched = await dao.getServiceContacts();
