@@ -42,7 +42,7 @@ class LoginCoreUrlAssignScreen extends StatelessWidget {
             top: false,
             child: Column(
               children: [
-                OnboardingLogo(style: localStyle?.onboardingLogoStyle),
+                ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
