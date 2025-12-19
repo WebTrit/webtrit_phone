@@ -11,6 +11,7 @@
         "uri": "asset://assets/images/primary_onboarding_logo.svg",
         "render": {
           "scale": 0.42,
+          "alignment": "center",
           "padding": {
             "left": 0.0,
             "top": 0.0,
