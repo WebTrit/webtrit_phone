@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/styles/styles.dart';
-import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/theme/models/models.dart';
+import 'package:webtrit_phone/theme/extension/extension.dart';
 
 import '../theme_style_factory.dart';
 

@@ -15,8 +15,7 @@ class LoginSignUpVerifyScreenshot extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final LoginSwitchScreenStyles? loginPageStyles =
-        themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
     final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
 
     return BlocProvider<LoginCubit>(
@@ -28,14 +27,13 @@ class LoginSignUpVerifyScreenshot extends StatelessWidget {
         ),
         header: Column(
           children: [
-            OnboardingLogo(style: localStyle?.onboardingLogoStyle),
-            SizedBox(height: kInset),
+            ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+            const SizedBox(height: kInset),
           ],
         ),
-        body: LoginSignupVerifyScreen(
-            bodySafeAreaSides: SafeAreaSide.values.toSet()),
+        body: LoginSignupVerifyScreen(bodySafeAreaSides: SafeAreaSide.values.toSet()),
         currentLoginType: LoginType.signup,
-        supportedLoginTypes: [
+        supportedLoginTypes: const [
           LoginType.otpSignin,
           LoginType.passwordSignin,
           LoginType.signup,

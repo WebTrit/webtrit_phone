@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -54,8 +54,8 @@ class LoginSignUpScreenshot extends StatelessWidget {
         ),
         header: Column(
           children: [
-            OnboardingLogo(style: localStyle?.onboardingLogoStyle),
-            SizedBox(height: kInset),
+            ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+            const SizedBox(height: kInset),
           ],
         ),
         body: LoginSignupEmbeddedRequestScreen(
