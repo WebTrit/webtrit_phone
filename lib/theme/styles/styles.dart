@@ -1,4 +1,5 @@
 export 'app_bar_style.dart';
+export 'background_style.dart';
 export 'call_status_style.dart';
 export 'call_status_styles.dart';
 export 'input_mask_style.dart';
