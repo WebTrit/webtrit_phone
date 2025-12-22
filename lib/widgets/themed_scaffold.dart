@@ -126,7 +126,7 @@ class ThemedScaffold extends StatelessWidget {
     return switch (style) {
       GradientBackgroundStyle g => BoxDecoration(gradient: g.gradient),
       ImageBackgroundStyle i => BoxDecoration(
-        color: Colors.black, // Fallback color while image loads
+        color: Colors.transparent,
         image: DecorationImage(image: NetworkImage(i.imageUrl), fit: i.fit, opacity: i.opacity),
       ),
       _ => null,
