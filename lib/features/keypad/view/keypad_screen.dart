@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 import './keypad_view.dart';
 import 'keypad_screen_style.dart';
@@ -20,12 +21,19 @@ class KeypadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final effectiveStyle = style ?? themeData.extension<KeypadScreenStyles>()?.primary;
+    final background = effectiveStyle?.background;
+    final isComplexBackground = background?.isComplex ?? false;
 
-    final style = this.style ?? themeData.extension<KeypadScreenStyles>()?.primary;
-
-    return Scaffold(
-      appBar: MainAppBar(title: title, context: context),
-      body: KeypadView(videoEnabled: videoEnabled, transferEnabled: transferEnabled, style: style),
+    return ThemedScaffold(
+      background: effectiveStyle?.background,
+      appBar: MainAppBar(
+        title: title,
+        context: context,
+        backgroundColor: isComplexBackground ? Colors.transparent : null,
+        elevation: isComplexBackground ? 0 : null,
+      ),
+      body: KeypadView(videoEnabled: videoEnabled, transferEnabled: transferEnabled, style: effectiveStyle),
     );
   }
 }
