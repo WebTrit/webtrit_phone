@@ -15,8 +15,7 @@ class LoginPasswordSignInScreenshot extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final LoginSwitchScreenStyles? loginPageStyles =
-        themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
     final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
 
     return BlocProvider<LoginCubit>(
@@ -28,13 +27,13 @@ class LoginPasswordSignInScreenshot extends StatelessWidget {
         ),
         header: Column(
           children: [
-            OnboardingLogo(style: localStyle?.onboardingLogoStyle),
-            SizedBox(height: kInset),
+            ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+            const SizedBox(height: kInset),
           ],
         ),
-        body: LoginPasswordSigninScreen(),
+        body: const LoginPasswordSigninScreen(),
         currentLoginType: LoginType.passwordSignin,
-        supportedLoginTypes: [
+        supportedLoginTypes: const [
           LoginType.otpSignin,
           LoginType.passwordSignin,
           LoginType.signup,

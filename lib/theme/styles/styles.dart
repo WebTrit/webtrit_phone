@@ -14,3 +14,4 @@ export 'smart_indicator_style.dart';
 export 'snack_bar_style.dart';
 export 'snack_bar_styles.dart';
 export 'text_field_style.dart';
+export 'theme_image_style.dart';

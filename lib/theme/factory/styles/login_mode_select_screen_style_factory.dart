@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 import '../theme_style_factory.dart';
+import 'theme_image_style.dart';
 
 class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSelectScreenStyles> {
   LoginModeSelectScreenStyleFactory(this.config, this.colors);
@@ -13,23 +14,13 @@ class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSe
 
   @override
   LoginModeSelectScreenStyles create() {
-    final textStyleColor = colors.onPrimary;
-
-    final loginPageConfigUri = config?.mainLogo?.uri;
-    final primaryOnboardingLogoPath = loginPageConfigUri;
-    final widthFactor = config?.mainLogo?.render?.scale ?? 0.25;
-
-    final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
+    final pictureLogoStyle = ThemeImageStyleFactory(source: config?.mainLogo).create();
 
     return LoginModeSelectScreenStyles(
       primary: LoginModeSelectScreenStyle(
         systemUiOverlayStyle: config?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
-        onboardingPictureLogoStyle: OnboardingPictureLogoStyle(
-          picture: primaryOnboardingLogoPath?.toThemeSvgAsset(),
-          widthFactor: widthFactor,
-          textStyle: textStyle,
-          padding: config?.mainLogo?.render?.padding?.toEdgeInsets(),
-        ),
+        pictureLogoStyle: pictureLogoStyle,
+        onboardingTextStyle: TextStyle(color: colors.onPrimary, fontWeight: FontWeight.w600),
         signInTypeButton: config?.buttonSignupStyleType,
         signUpTypeButton: config?.buttonLoginStyleType,
       ),
