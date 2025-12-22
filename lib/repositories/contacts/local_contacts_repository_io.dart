@@ -63,7 +63,7 @@ class LocalContactsRepository implements ILocalContactsRepository {
         .where((contact) {
           if (Platform.isAndroid) {
             for (final account in contact.accounts) {
-              if (account.mimetypes.contains('vnd.android.cursor.item/phone_v2')) {
+              if (account.mimetypes.contains('vnd.android.cursor.item/phone_v2') || account.type == 'com.google') {
                 return true;
               }
             }
