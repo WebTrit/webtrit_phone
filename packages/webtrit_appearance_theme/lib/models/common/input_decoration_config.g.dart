@@ -79,18 +79,3 @@ Map<String, dynamic> _$InputDecorationConfigToJson(
   'focusedErrorBorder': instance.focusedErrorBorder?.toJson(),
   'disabledBorder': instance.disabledBorder?.toJson(),
 };
-
-BorderConfig _$BorderConfigFromJson(Map<String, dynamic> json) => BorderConfig(
-  type: json['type'] as String? ?? 'underline',
-  borderRadius: (json['borderRadius'] as num?)?.toDouble(),
-  borderColor: json['borderColor'] as String?,
-  borderWidth: (json['borderWidth'] as num?)?.toDouble(),
-);
-
-Map<String, dynamic> _$BorderConfigToJson(BorderConfig instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'borderRadius': instance.borderRadius,
-      'borderColor': instance.borderColor,
-      'borderWidth': instance.borderWidth,
-    };

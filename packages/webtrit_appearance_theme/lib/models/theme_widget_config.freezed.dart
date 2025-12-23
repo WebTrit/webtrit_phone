@@ -962,7 +962,7 @@ case _:
 /// @nodoc
 mixin _$BarWidgetConfig {
 
- BottomNavigationBarWidgetConfig get bottomNavigationBar; ExtTabBarWidgetConfig get extTabBar;
+ BottomNavigationBarWidgetConfig get bottomNavigationBar; AppBarConfig get appBarConfig; TabBarConfig get tabBarConfig;
 /// Create a copy of BarWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -973,16 +973,16 @@ $BarWidgetConfigCopyWith<BarWidgetConfig> get copyWith => _$BarWidgetConfigCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BarWidgetConfig&&(identical(other.bottomNavigationBar, bottomNavigationBar) || other.bottomNavigationBar == bottomNavigationBar)&&(identical(other.extTabBar, extTabBar) || other.extTabBar == extTabBar));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BarWidgetConfig&&(identical(other.bottomNavigationBar, bottomNavigationBar) || other.bottomNavigationBar == bottomNavigationBar)&&(identical(other.appBarConfig, appBarConfig) || other.appBarConfig == appBarConfig)&&(identical(other.tabBarConfig, tabBarConfig) || other.tabBarConfig == tabBarConfig));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,bottomNavigationBar,extTabBar);
+int get hashCode => Object.hash(runtimeType,bottomNavigationBar,appBarConfig,tabBarConfig);
 
 @override
 String toString() {
-  return 'BarWidgetConfig(bottomNavigationBar: $bottomNavigationBar, extTabBar: $extTabBar)';
+  return 'BarWidgetConfig(bottomNavigationBar: $bottomNavigationBar, appBarConfig: $appBarConfig, tabBarConfig: $tabBarConfig)';
 }
 
 
@@ -993,7 +993,7 @@ abstract mixin class $BarWidgetConfigCopyWith<$Res>  {
   factory $BarWidgetConfigCopyWith(BarWidgetConfig value, $Res Function(BarWidgetConfig) _then) = _$BarWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- BottomNavigationBarWidgetConfig bottomNavigationBar, ExtTabBarWidgetConfig extTabBar
+ BottomNavigationBarWidgetConfig bottomNavigationBar, AppBarConfig appBarConfig, TabBarConfig tabBarConfig
 });
 
 
@@ -1010,11 +1010,12 @@ class _$BarWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of BarWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? bottomNavigationBar = null,Object? extTabBar = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bottomNavigationBar = null,Object? appBarConfig = null,Object? tabBarConfig = null,}) {
   return _then(BarWidgetConfig(
 bottomNavigationBar: null == bottomNavigationBar ? _self.bottomNavigationBar : bottomNavigationBar // ignore: cast_nullable_to_non_nullable
-as BottomNavigationBarWidgetConfig,extTabBar: null == extTabBar ? _self.extTabBar : extTabBar // ignore: cast_nullable_to_non_nullable
-as ExtTabBarWidgetConfig,
+as BottomNavigationBarWidgetConfig,appBarConfig: null == appBarConfig ? _self.appBarConfig : appBarConfig // ignore: cast_nullable_to_non_nullable
+as AppBarConfig,tabBarConfig: null == tabBarConfig ? _self.tabBarConfig : tabBarConfig // ignore: cast_nullable_to_non_nullable
+as TabBarConfig,
   ));
 }
 
@@ -1526,7 +1527,7 @@ case _:
 /// @nodoc
 mixin _$GroupTitleListTileWidgetConfig {
 
- String? get backgroundColor; String? get textColor;
+ String? get backgroundColor; TextStyleConfig? get textStyle;
 /// Create a copy of GroupTitleListTileWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1537,16 +1538,16 @@ $GroupTitleListTileWidgetConfigCopyWith<GroupTitleListTileWidgetConfig> get copy
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupTitleListTileWidgetConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.textColor, textColor) || other.textColor == textColor));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupTitleListTileWidgetConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.textStyle, textStyle) || other.textStyle == textStyle));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,backgroundColor,textColor);
+int get hashCode => Object.hash(runtimeType,backgroundColor,textStyle);
 
 @override
 String toString() {
-  return 'GroupTitleListTileWidgetConfig(backgroundColor: $backgroundColor, textColor: $textColor)';
+  return 'GroupTitleListTileWidgetConfig(backgroundColor: $backgroundColor, textStyle: $textStyle)';
 }
 
 
@@ -1557,7 +1558,7 @@ abstract mixin class $GroupTitleListTileWidgetConfigCopyWith<$Res>  {
   factory $GroupTitleListTileWidgetConfigCopyWith(GroupTitleListTileWidgetConfig value, $Res Function(GroupTitleListTileWidgetConfig) _then) = _$GroupTitleListTileWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- String? backgroundColor, String? textColor
+ String? backgroundColor, TextStyleConfig? textStyle
 });
 
 
@@ -1574,11 +1575,11 @@ class _$GroupTitleListTileWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of GroupTitleListTileWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? textColor = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? textStyle = freezed,}) {
   return _then(GroupTitleListTileWidgetConfig(
 backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,textColor: freezed == textColor ? _self.textColor : textColor // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,textStyle: freezed == textStyle ? _self.textStyle : textStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,
   ));
 }
 
@@ -5470,6 +5471,835 @@ case _:
 }
 }
 
+}
+
+
+/// @nodoc
+mixin _$TabBarConfig {
+
+ String? get indicatorColor; String? get dividerColor; String? get labelColor; String? get unselectedLabelColor; String? get overlayColor; double? get dividerHeight; PaddingConfig? get labelPadding; TextStyleConfig? get labelStyle; TextStyleConfig? get unselectedLabelStyle; String? get indicatorSize; String? get tabAlignment; String? get indicatorAnimation; String? get splashFactory; BorderConfig? get indicatorBorder;
+/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TabBarConfigCopyWith<TabBarConfig> get copyWith => _$TabBarConfigCopyWithImpl<TabBarConfig>(this as TabBarConfig, _$identity);
+
+  /// Serializes this TabBarConfig to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TabBarConfig&&(identical(other.indicatorColor, indicatorColor) || other.indicatorColor == indicatorColor)&&(identical(other.dividerColor, dividerColor) || other.dividerColor == dividerColor)&&(identical(other.labelColor, labelColor) || other.labelColor == labelColor)&&(identical(other.unselectedLabelColor, unselectedLabelColor) || other.unselectedLabelColor == unselectedLabelColor)&&(identical(other.overlayColor, overlayColor) || other.overlayColor == overlayColor)&&(identical(other.dividerHeight, dividerHeight) || other.dividerHeight == dividerHeight)&&(identical(other.labelPadding, labelPadding) || other.labelPadding == labelPadding)&&(identical(other.labelStyle, labelStyle) || other.labelStyle == labelStyle)&&(identical(other.unselectedLabelStyle, unselectedLabelStyle) || other.unselectedLabelStyle == unselectedLabelStyle)&&(identical(other.indicatorSize, indicatorSize) || other.indicatorSize == indicatorSize)&&(identical(other.tabAlignment, tabAlignment) || other.tabAlignment == tabAlignment)&&(identical(other.indicatorAnimation, indicatorAnimation) || other.indicatorAnimation == indicatorAnimation)&&(identical(other.splashFactory, splashFactory) || other.splashFactory == splashFactory)&&(identical(other.indicatorBorder, indicatorBorder) || other.indicatorBorder == indicatorBorder));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,indicatorColor,dividerColor,labelColor,unselectedLabelColor,overlayColor,dividerHeight,labelPadding,labelStyle,unselectedLabelStyle,indicatorSize,tabAlignment,indicatorAnimation,splashFactory,indicatorBorder);
+
+@override
+String toString() {
+  return 'TabBarConfig(indicatorColor: $indicatorColor, dividerColor: $dividerColor, labelColor: $labelColor, unselectedLabelColor: $unselectedLabelColor, overlayColor: $overlayColor, dividerHeight: $dividerHeight, labelPadding: $labelPadding, labelStyle: $labelStyle, unselectedLabelStyle: $unselectedLabelStyle, indicatorSize: $indicatorSize, tabAlignment: $tabAlignment, indicatorAnimation: $indicatorAnimation, splashFactory: $splashFactory, indicatorBorder: $indicatorBorder)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TabBarConfigCopyWith<$Res>  {
+  factory $TabBarConfigCopyWith(TabBarConfig value, $Res Function(TabBarConfig) _then) = _$TabBarConfigCopyWithImpl;
+@useResult
+$Res call({
+ String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle, String? indicatorSize, String? tabAlignment, String? indicatorAnimation, String? splashFactory, BorderConfig? indicatorBorder
+});
+
+
+$PaddingConfigCopyWith<$Res>? get labelPadding;$TextStyleConfigCopyWith<$Res>? get labelStyle;$TextStyleConfigCopyWith<$Res>? get unselectedLabelStyle;$BorderConfigCopyWith<$Res>? get indicatorBorder;
+
+}
+/// @nodoc
+class _$TabBarConfigCopyWithImpl<$Res>
+    implements $TabBarConfigCopyWith<$Res> {
+  _$TabBarConfigCopyWithImpl(this._self, this._then);
+
+  final TabBarConfig _self;
+  final $Res Function(TabBarConfig) _then;
+
+/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? indicatorColor = freezed,Object? dividerColor = freezed,Object? labelColor = freezed,Object? unselectedLabelColor = freezed,Object? overlayColor = freezed,Object? dividerHeight = freezed,Object? labelPadding = freezed,Object? labelStyle = freezed,Object? unselectedLabelStyle = freezed,Object? indicatorSize = freezed,Object? tabAlignment = freezed,Object? indicatorAnimation = freezed,Object? splashFactory = freezed,Object? indicatorBorder = freezed,}) {
+  return _then(_self.copyWith(
+indicatorColor: freezed == indicatorColor ? _self.indicatorColor : indicatorColor // ignore: cast_nullable_to_non_nullable
+as String?,dividerColor: freezed == dividerColor ? _self.dividerColor : dividerColor // ignore: cast_nullable_to_non_nullable
+as String?,labelColor: freezed == labelColor ? _self.labelColor : labelColor // ignore: cast_nullable_to_non_nullable
+as String?,unselectedLabelColor: freezed == unselectedLabelColor ? _self.unselectedLabelColor : unselectedLabelColor // ignore: cast_nullable_to_non_nullable
+as String?,overlayColor: freezed == overlayColor ? _self.overlayColor : overlayColor // ignore: cast_nullable_to_non_nullable
+as String?,dividerHeight: freezed == dividerHeight ? _self.dividerHeight : dividerHeight // ignore: cast_nullable_to_non_nullable
+as double?,labelPadding: freezed == labelPadding ? _self.labelPadding : labelPadding // ignore: cast_nullable_to_non_nullable
+as PaddingConfig?,labelStyle: freezed == labelStyle ? _self.labelStyle : labelStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,unselectedLabelStyle: freezed == unselectedLabelStyle ? _self.unselectedLabelStyle : unselectedLabelStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,indicatorSize: freezed == indicatorSize ? _self.indicatorSize : indicatorSize // ignore: cast_nullable_to_non_nullable
+as String?,tabAlignment: freezed == tabAlignment ? _self.tabAlignment : tabAlignment // ignore: cast_nullable_to_non_nullable
+as String?,indicatorAnimation: freezed == indicatorAnimation ? _self.indicatorAnimation : indicatorAnimation // ignore: cast_nullable_to_non_nullable
+as String?,splashFactory: freezed == splashFactory ? _self.splashFactory : splashFactory // ignore: cast_nullable_to_non_nullable
+as String?,indicatorBorder: freezed == indicatorBorder ? _self.indicatorBorder : indicatorBorder // ignore: cast_nullable_to_non_nullable
+as BorderConfig?,
+  ));
+}
+/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PaddingConfigCopyWith<$Res>? get labelPadding {
+    if (_self.labelPadding == null) {
+    return null;
+  }
+
+  return $PaddingConfigCopyWith<$Res>(_self.labelPadding!, (value) {
+    return _then(_self.copyWith(labelPadding: value));
+  });
+}/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextStyleConfigCopyWith<$Res>? get labelStyle {
+    if (_self.labelStyle == null) {
+    return null;
+  }
+
+  return $TextStyleConfigCopyWith<$Res>(_self.labelStyle!, (value) {
+    return _then(_self.copyWith(labelStyle: value));
+  });
+}/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextStyleConfigCopyWith<$Res>? get unselectedLabelStyle {
+    if (_self.unselectedLabelStyle == null) {
+    return null;
+  }
+
+  return $TextStyleConfigCopyWith<$Res>(_self.unselectedLabelStyle!, (value) {
+    return _then(_self.copyWith(unselectedLabelStyle: value));
+  });
+}/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BorderConfigCopyWith<$Res>? get indicatorBorder {
+    if (_self.indicatorBorder == null) {
+    return null;
+  }
+
+  return $BorderConfigCopyWith<$Res>(_self.indicatorBorder!, (value) {
+    return _then(_self.copyWith(indicatorBorder: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [TabBarConfig].
+extension TabBarConfigPatterns on TabBarConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TabBarConfig value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TabBarConfig() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TabBarConfig value)  $default,){
+final _that = this;
+switch (_that) {
+case _TabBarConfig():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TabBarConfig value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TabBarConfig() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle,  String? indicatorSize,  String? tabAlignment,  String? indicatorAnimation,  String? splashFactory,  BorderConfig? indicatorBorder)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TabBarConfig() when $default != null:
+return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle,  String? indicatorSize,  String? tabAlignment,  String? indicatorAnimation,  String? splashFactory,  BorderConfig? indicatorBorder)  $default,) {final _that = this;
+switch (_that) {
+case _TabBarConfig():
+return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle,  String? indicatorSize,  String? tabAlignment,  String? indicatorAnimation,  String? splashFactory,  BorderConfig? indicatorBorder)?  $default,) {final _that = this;
+switch (_that) {
+case _TabBarConfig() when $default != null:
+return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _TabBarConfig implements TabBarConfig {
+  const _TabBarConfig({this.indicatorColor, this.dividerColor, this.labelColor, this.unselectedLabelColor, this.overlayColor, this.dividerHeight, this.labelPadding, this.labelStyle, this.unselectedLabelStyle, this.indicatorSize, this.tabAlignment, this.indicatorAnimation, this.splashFactory, this.indicatorBorder});
+  factory _TabBarConfig.fromJson(Map<String, dynamic> json) => _$TabBarConfigFromJson(json);
+
+@override final  String? indicatorColor;
+@override final  String? dividerColor;
+@override final  String? labelColor;
+@override final  String? unselectedLabelColor;
+@override final  String? overlayColor;
+@override final  double? dividerHeight;
+@override final  PaddingConfig? labelPadding;
+@override final  TextStyleConfig? labelStyle;
+@override final  TextStyleConfig? unselectedLabelStyle;
+@override final  String? indicatorSize;
+@override final  String? tabAlignment;
+@override final  String? indicatorAnimation;
+@override final  String? splashFactory;
+@override final  BorderConfig? indicatorBorder;
+
+/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TabBarConfigCopyWith<_TabBarConfig> get copyWith => __$TabBarConfigCopyWithImpl<_TabBarConfig>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$TabBarConfigToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TabBarConfig&&(identical(other.indicatorColor, indicatorColor) || other.indicatorColor == indicatorColor)&&(identical(other.dividerColor, dividerColor) || other.dividerColor == dividerColor)&&(identical(other.labelColor, labelColor) || other.labelColor == labelColor)&&(identical(other.unselectedLabelColor, unselectedLabelColor) || other.unselectedLabelColor == unselectedLabelColor)&&(identical(other.overlayColor, overlayColor) || other.overlayColor == overlayColor)&&(identical(other.dividerHeight, dividerHeight) || other.dividerHeight == dividerHeight)&&(identical(other.labelPadding, labelPadding) || other.labelPadding == labelPadding)&&(identical(other.labelStyle, labelStyle) || other.labelStyle == labelStyle)&&(identical(other.unselectedLabelStyle, unselectedLabelStyle) || other.unselectedLabelStyle == unselectedLabelStyle)&&(identical(other.indicatorSize, indicatorSize) || other.indicatorSize == indicatorSize)&&(identical(other.tabAlignment, tabAlignment) || other.tabAlignment == tabAlignment)&&(identical(other.indicatorAnimation, indicatorAnimation) || other.indicatorAnimation == indicatorAnimation)&&(identical(other.splashFactory, splashFactory) || other.splashFactory == splashFactory)&&(identical(other.indicatorBorder, indicatorBorder) || other.indicatorBorder == indicatorBorder));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,indicatorColor,dividerColor,labelColor,unselectedLabelColor,overlayColor,dividerHeight,labelPadding,labelStyle,unselectedLabelStyle,indicatorSize,tabAlignment,indicatorAnimation,splashFactory,indicatorBorder);
+
+@override
+String toString() {
+  return 'TabBarConfig(indicatorColor: $indicatorColor, dividerColor: $dividerColor, labelColor: $labelColor, unselectedLabelColor: $unselectedLabelColor, overlayColor: $overlayColor, dividerHeight: $dividerHeight, labelPadding: $labelPadding, labelStyle: $labelStyle, unselectedLabelStyle: $unselectedLabelStyle, indicatorSize: $indicatorSize, tabAlignment: $tabAlignment, indicatorAnimation: $indicatorAnimation, splashFactory: $splashFactory, indicatorBorder: $indicatorBorder)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TabBarConfigCopyWith<$Res> implements $TabBarConfigCopyWith<$Res> {
+  factory _$TabBarConfigCopyWith(_TabBarConfig value, $Res Function(_TabBarConfig) _then) = __$TabBarConfigCopyWithImpl;
+@override @useResult
+$Res call({
+ String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle, String? indicatorSize, String? tabAlignment, String? indicatorAnimation, String? splashFactory, BorderConfig? indicatorBorder
+});
+
+
+@override $PaddingConfigCopyWith<$Res>? get labelPadding;@override $TextStyleConfigCopyWith<$Res>? get labelStyle;@override $TextStyleConfigCopyWith<$Res>? get unselectedLabelStyle;@override $BorderConfigCopyWith<$Res>? get indicatorBorder;
+
+}
+/// @nodoc
+class __$TabBarConfigCopyWithImpl<$Res>
+    implements _$TabBarConfigCopyWith<$Res> {
+  __$TabBarConfigCopyWithImpl(this._self, this._then);
+
+  final _TabBarConfig _self;
+  final $Res Function(_TabBarConfig) _then;
+
+/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? indicatorColor = freezed,Object? dividerColor = freezed,Object? labelColor = freezed,Object? unselectedLabelColor = freezed,Object? overlayColor = freezed,Object? dividerHeight = freezed,Object? labelPadding = freezed,Object? labelStyle = freezed,Object? unselectedLabelStyle = freezed,Object? indicatorSize = freezed,Object? tabAlignment = freezed,Object? indicatorAnimation = freezed,Object? splashFactory = freezed,Object? indicatorBorder = freezed,}) {
+  return _then(_TabBarConfig(
+indicatorColor: freezed == indicatorColor ? _self.indicatorColor : indicatorColor // ignore: cast_nullable_to_non_nullable
+as String?,dividerColor: freezed == dividerColor ? _self.dividerColor : dividerColor // ignore: cast_nullable_to_non_nullable
+as String?,labelColor: freezed == labelColor ? _self.labelColor : labelColor // ignore: cast_nullable_to_non_nullable
+as String?,unselectedLabelColor: freezed == unselectedLabelColor ? _self.unselectedLabelColor : unselectedLabelColor // ignore: cast_nullable_to_non_nullable
+as String?,overlayColor: freezed == overlayColor ? _self.overlayColor : overlayColor // ignore: cast_nullable_to_non_nullable
+as String?,dividerHeight: freezed == dividerHeight ? _self.dividerHeight : dividerHeight // ignore: cast_nullable_to_non_nullable
+as double?,labelPadding: freezed == labelPadding ? _self.labelPadding : labelPadding // ignore: cast_nullable_to_non_nullable
+as PaddingConfig?,labelStyle: freezed == labelStyle ? _self.labelStyle : labelStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,unselectedLabelStyle: freezed == unselectedLabelStyle ? _self.unselectedLabelStyle : unselectedLabelStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,indicatorSize: freezed == indicatorSize ? _self.indicatorSize : indicatorSize // ignore: cast_nullable_to_non_nullable
+as String?,tabAlignment: freezed == tabAlignment ? _self.tabAlignment : tabAlignment // ignore: cast_nullable_to_non_nullable
+as String?,indicatorAnimation: freezed == indicatorAnimation ? _self.indicatorAnimation : indicatorAnimation // ignore: cast_nullable_to_non_nullable
+as String?,splashFactory: freezed == splashFactory ? _self.splashFactory : splashFactory // ignore: cast_nullable_to_non_nullable
+as String?,indicatorBorder: freezed == indicatorBorder ? _self.indicatorBorder : indicatorBorder // ignore: cast_nullable_to_non_nullable
+as BorderConfig?,
+  ));
+}
+
+/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PaddingConfigCopyWith<$Res>? get labelPadding {
+    if (_self.labelPadding == null) {
+    return null;
+  }
+
+  return $PaddingConfigCopyWith<$Res>(_self.labelPadding!, (value) {
+    return _then(_self.copyWith(labelPadding: value));
+  });
+}/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextStyleConfigCopyWith<$Res>? get labelStyle {
+    if (_self.labelStyle == null) {
+    return null;
+  }
+
+  return $TextStyleConfigCopyWith<$Res>(_self.labelStyle!, (value) {
+    return _then(_self.copyWith(labelStyle: value));
+  });
+}/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextStyleConfigCopyWith<$Res>? get unselectedLabelStyle {
+    if (_self.unselectedLabelStyle == null) {
+    return null;
+  }
+
+  return $TextStyleConfigCopyWith<$Res>(_self.unselectedLabelStyle!, (value) {
+    return _then(_self.copyWith(unselectedLabelStyle: value));
+  });
+}/// Create a copy of TabBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BorderConfigCopyWith<$Res>? get indicatorBorder {
+    if (_self.indicatorBorder == null) {
+    return null;
+  }
+
+  return $BorderConfigCopyWith<$Res>(_self.indicatorBorder!, (value) {
+    return _then(_self.copyWith(indicatorBorder: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$AppBarConfig {
+
+ bool get primary; bool get showBackButton; String? get backgroundColor; String? get foregroundColor; String? get shadowColor; String? get surfaceTintColor; double? get elevation; double? get scrolledUnderElevation; double? get titleSpacing; double? get leadingWidth; double? get toolbarHeight; bool? get centerTitle; IconThemeDataConfig? get iconTheme; IconThemeDataConfig? get actionsIconTheme; TextStyleConfig? get titleTextStyle; TextStyleConfig? get toolbarTextStyle; OverlayStyleModel? get systemOverlayStyle;
+/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AppBarConfigCopyWith<AppBarConfig> get copyWith => _$AppBarConfigCopyWithImpl<AppBarConfig>(this as AppBarConfig, _$identity);
+
+  /// Serializes this AppBarConfig to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppBarConfig&&(identical(other.primary, primary) || other.primary == primary)&&(identical(other.showBackButton, showBackButton) || other.showBackButton == showBackButton)&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.foregroundColor, foregroundColor) || other.foregroundColor == foregroundColor)&&(identical(other.shadowColor, shadowColor) || other.shadowColor == shadowColor)&&(identical(other.surfaceTintColor, surfaceTintColor) || other.surfaceTintColor == surfaceTintColor)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.scrolledUnderElevation, scrolledUnderElevation) || other.scrolledUnderElevation == scrolledUnderElevation)&&(identical(other.titleSpacing, titleSpacing) || other.titleSpacing == titleSpacing)&&(identical(other.leadingWidth, leadingWidth) || other.leadingWidth == leadingWidth)&&(identical(other.toolbarHeight, toolbarHeight) || other.toolbarHeight == toolbarHeight)&&(identical(other.centerTitle, centerTitle) || other.centerTitle == centerTitle)&&(identical(other.iconTheme, iconTheme) || other.iconTheme == iconTheme)&&(identical(other.actionsIconTheme, actionsIconTheme) || other.actionsIconTheme == actionsIconTheme)&&(identical(other.titleTextStyle, titleTextStyle) || other.titleTextStyle == titleTextStyle)&&(identical(other.toolbarTextStyle, toolbarTextStyle) || other.toolbarTextStyle == toolbarTextStyle)&&(identical(other.systemOverlayStyle, systemOverlayStyle) || other.systemOverlayStyle == systemOverlayStyle));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,primary,showBackButton,backgroundColor,foregroundColor,shadowColor,surfaceTintColor,elevation,scrolledUnderElevation,titleSpacing,leadingWidth,toolbarHeight,centerTitle,iconTheme,actionsIconTheme,titleTextStyle,toolbarTextStyle,systemOverlayStyle);
+
+@override
+String toString() {
+  return 'AppBarConfig(primary: $primary, showBackButton: $showBackButton, backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, shadowColor: $shadowColor, surfaceTintColor: $surfaceTintColor, elevation: $elevation, scrolledUnderElevation: $scrolledUnderElevation, titleSpacing: $titleSpacing, leadingWidth: $leadingWidth, toolbarHeight: $toolbarHeight, centerTitle: $centerTitle, iconTheme: $iconTheme, actionsIconTheme: $actionsIconTheme, titleTextStyle: $titleTextStyle, toolbarTextStyle: $toolbarTextStyle, systemOverlayStyle: $systemOverlayStyle)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AppBarConfigCopyWith<$Res>  {
+  factory $AppBarConfigCopyWith(AppBarConfig value, $Res Function(AppBarConfig) _then) = _$AppBarConfigCopyWithImpl;
+@useResult
+$Res call({
+ bool primary, bool showBackButton, String? backgroundColor, String? foregroundColor, String? shadowColor, String? surfaceTintColor, double? elevation, double? scrolledUnderElevation, double? titleSpacing, double? leadingWidth, double? toolbarHeight, bool? centerTitle, IconThemeDataConfig? iconTheme, IconThemeDataConfig? actionsIconTheme, TextStyleConfig? titleTextStyle, TextStyleConfig? toolbarTextStyle, OverlayStyleModel? systemOverlayStyle
+});
+
+
+$IconThemeDataConfigCopyWith<$Res>? get iconTheme;$IconThemeDataConfigCopyWith<$Res>? get actionsIconTheme;$TextStyleConfigCopyWith<$Res>? get titleTextStyle;$TextStyleConfigCopyWith<$Res>? get toolbarTextStyle;$OverlayStyleModelCopyWith<$Res>? get systemOverlayStyle;
+
+}
+/// @nodoc
+class _$AppBarConfigCopyWithImpl<$Res>
+    implements $AppBarConfigCopyWith<$Res> {
+  _$AppBarConfigCopyWithImpl(this._self, this._then);
+
+  final AppBarConfig _self;
+  final $Res Function(AppBarConfig) _then;
+
+/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? primary = null,Object? showBackButton = null,Object? backgroundColor = freezed,Object? foregroundColor = freezed,Object? shadowColor = freezed,Object? surfaceTintColor = freezed,Object? elevation = freezed,Object? scrolledUnderElevation = freezed,Object? titleSpacing = freezed,Object? leadingWidth = freezed,Object? toolbarHeight = freezed,Object? centerTitle = freezed,Object? iconTheme = freezed,Object? actionsIconTheme = freezed,Object? titleTextStyle = freezed,Object? toolbarTextStyle = freezed,Object? systemOverlayStyle = freezed,}) {
+  return _then(_self.copyWith(
+primary: null == primary ? _self.primary : primary // ignore: cast_nullable_to_non_nullable
+as bool,showBackButton: null == showBackButton ? _self.showBackButton : showBackButton // ignore: cast_nullable_to_non_nullable
+as bool,backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,foregroundColor: freezed == foregroundColor ? _self.foregroundColor : foregroundColor // ignore: cast_nullable_to_non_nullable
+as String?,shadowColor: freezed == shadowColor ? _self.shadowColor : shadowColor // ignore: cast_nullable_to_non_nullable
+as String?,surfaceTintColor: freezed == surfaceTintColor ? _self.surfaceTintColor : surfaceTintColor // ignore: cast_nullable_to_non_nullable
+as String?,elevation: freezed == elevation ? _self.elevation : elevation // ignore: cast_nullable_to_non_nullable
+as double?,scrolledUnderElevation: freezed == scrolledUnderElevation ? _self.scrolledUnderElevation : scrolledUnderElevation // ignore: cast_nullable_to_non_nullable
+as double?,titleSpacing: freezed == titleSpacing ? _self.titleSpacing : titleSpacing // ignore: cast_nullable_to_non_nullable
+as double?,leadingWidth: freezed == leadingWidth ? _self.leadingWidth : leadingWidth // ignore: cast_nullable_to_non_nullable
+as double?,toolbarHeight: freezed == toolbarHeight ? _self.toolbarHeight : toolbarHeight // ignore: cast_nullable_to_non_nullable
+as double?,centerTitle: freezed == centerTitle ? _self.centerTitle : centerTitle // ignore: cast_nullable_to_non_nullable
+as bool?,iconTheme: freezed == iconTheme ? _self.iconTheme : iconTheme // ignore: cast_nullable_to_non_nullable
+as IconThemeDataConfig?,actionsIconTheme: freezed == actionsIconTheme ? _self.actionsIconTheme : actionsIconTheme // ignore: cast_nullable_to_non_nullable
+as IconThemeDataConfig?,titleTextStyle: freezed == titleTextStyle ? _self.titleTextStyle : titleTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,toolbarTextStyle: freezed == toolbarTextStyle ? _self.toolbarTextStyle : toolbarTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,systemOverlayStyle: freezed == systemOverlayStyle ? _self.systemOverlayStyle : systemOverlayStyle // ignore: cast_nullable_to_non_nullable
+as OverlayStyleModel?,
+  ));
+}
+/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$IconThemeDataConfigCopyWith<$Res>? get iconTheme {
+    if (_self.iconTheme == null) {
+    return null;
+  }
+
+  return $IconThemeDataConfigCopyWith<$Res>(_self.iconTheme!, (value) {
+    return _then(_self.copyWith(iconTheme: value));
+  });
+}/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$IconThemeDataConfigCopyWith<$Res>? get actionsIconTheme {
+    if (_self.actionsIconTheme == null) {
+    return null;
+  }
+
+  return $IconThemeDataConfigCopyWith<$Res>(_self.actionsIconTheme!, (value) {
+    return _then(_self.copyWith(actionsIconTheme: value));
+  });
+}/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextStyleConfigCopyWith<$Res>? get titleTextStyle {
+    if (_self.titleTextStyle == null) {
+    return null;
+  }
+
+  return $TextStyleConfigCopyWith<$Res>(_self.titleTextStyle!, (value) {
+    return _then(_self.copyWith(titleTextStyle: value));
+  });
+}/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextStyleConfigCopyWith<$Res>? get toolbarTextStyle {
+    if (_self.toolbarTextStyle == null) {
+    return null;
+  }
+
+  return $TextStyleConfigCopyWith<$Res>(_self.toolbarTextStyle!, (value) {
+    return _then(_self.copyWith(toolbarTextStyle: value));
+  });
+}/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OverlayStyleModelCopyWith<$Res>? get systemOverlayStyle {
+    if (_self.systemOverlayStyle == null) {
+    return null;
+  }
+
+  return $OverlayStyleModelCopyWith<$Res>(_self.systemOverlayStyle!, (value) {
+    return _then(_self.copyWith(systemOverlayStyle: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [AppBarConfig].
+extension AppBarConfigPatterns on AppBarConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _AppBarConfig value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _AppBarConfig() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _AppBarConfig value)  $default,){
+final _that = this;
+switch (_that) {
+case _AppBarConfig():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _AppBarConfig value)?  $default,){
+final _that = this;
+switch (_that) {
+case _AppBarConfig() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool primary,  bool showBackButton,  String? backgroundColor,  String? foregroundColor,  String? shadowColor,  String? surfaceTintColor,  double? elevation,  double? scrolledUnderElevation,  double? titleSpacing,  double? leadingWidth,  double? toolbarHeight,  bool? centerTitle,  IconThemeDataConfig? iconTheme,  IconThemeDataConfig? actionsIconTheme,  TextStyleConfig? titleTextStyle,  TextStyleConfig? toolbarTextStyle,  OverlayStyleModel? systemOverlayStyle)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _AppBarConfig() when $default != null:
+return $default(_that.primary,_that.showBackButton,_that.backgroundColor,_that.foregroundColor,_that.shadowColor,_that.surfaceTintColor,_that.elevation,_that.scrolledUnderElevation,_that.titleSpacing,_that.leadingWidth,_that.toolbarHeight,_that.centerTitle,_that.iconTheme,_that.actionsIconTheme,_that.titleTextStyle,_that.toolbarTextStyle,_that.systemOverlayStyle);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool primary,  bool showBackButton,  String? backgroundColor,  String? foregroundColor,  String? shadowColor,  String? surfaceTintColor,  double? elevation,  double? scrolledUnderElevation,  double? titleSpacing,  double? leadingWidth,  double? toolbarHeight,  bool? centerTitle,  IconThemeDataConfig? iconTheme,  IconThemeDataConfig? actionsIconTheme,  TextStyleConfig? titleTextStyle,  TextStyleConfig? toolbarTextStyle,  OverlayStyleModel? systemOverlayStyle)  $default,) {final _that = this;
+switch (_that) {
+case _AppBarConfig():
+return $default(_that.primary,_that.showBackButton,_that.backgroundColor,_that.foregroundColor,_that.shadowColor,_that.surfaceTintColor,_that.elevation,_that.scrolledUnderElevation,_that.titleSpacing,_that.leadingWidth,_that.toolbarHeight,_that.centerTitle,_that.iconTheme,_that.actionsIconTheme,_that.titleTextStyle,_that.toolbarTextStyle,_that.systemOverlayStyle);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool primary,  bool showBackButton,  String? backgroundColor,  String? foregroundColor,  String? shadowColor,  String? surfaceTintColor,  double? elevation,  double? scrolledUnderElevation,  double? titleSpacing,  double? leadingWidth,  double? toolbarHeight,  bool? centerTitle,  IconThemeDataConfig? iconTheme,  IconThemeDataConfig? actionsIconTheme,  TextStyleConfig? titleTextStyle,  TextStyleConfig? toolbarTextStyle,  OverlayStyleModel? systemOverlayStyle)?  $default,) {final _that = this;
+switch (_that) {
+case _AppBarConfig() when $default != null:
+return $default(_that.primary,_that.showBackButton,_that.backgroundColor,_that.foregroundColor,_that.shadowColor,_that.surfaceTintColor,_that.elevation,_that.scrolledUnderElevation,_that.titleSpacing,_that.leadingWidth,_that.toolbarHeight,_that.centerTitle,_that.iconTheme,_that.actionsIconTheme,_that.titleTextStyle,_that.toolbarTextStyle,_that.systemOverlayStyle);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _AppBarConfig implements AppBarConfig {
+  const _AppBarConfig({this.primary = true, this.showBackButton = true, this.backgroundColor, this.foregroundColor, this.shadowColor, this.surfaceTintColor, this.elevation, this.scrolledUnderElevation, this.titleSpacing, this.leadingWidth, this.toolbarHeight, this.centerTitle, this.iconTheme, this.actionsIconTheme, this.titleTextStyle, this.toolbarTextStyle, this.systemOverlayStyle});
+  factory _AppBarConfig.fromJson(Map<String, dynamic> json) => _$AppBarConfigFromJson(json);
+
+@override@JsonKey() final  bool primary;
+@override@JsonKey() final  bool showBackButton;
+@override final  String? backgroundColor;
+@override final  String? foregroundColor;
+@override final  String? shadowColor;
+@override final  String? surfaceTintColor;
+@override final  double? elevation;
+@override final  double? scrolledUnderElevation;
+@override final  double? titleSpacing;
+@override final  double? leadingWidth;
+@override final  double? toolbarHeight;
+@override final  bool? centerTitle;
+@override final  IconThemeDataConfig? iconTheme;
+@override final  IconThemeDataConfig? actionsIconTheme;
+@override final  TextStyleConfig? titleTextStyle;
+@override final  TextStyleConfig? toolbarTextStyle;
+@override final  OverlayStyleModel? systemOverlayStyle;
+
+/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$AppBarConfigCopyWith<_AppBarConfig> get copyWith => __$AppBarConfigCopyWithImpl<_AppBarConfig>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$AppBarConfigToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppBarConfig&&(identical(other.primary, primary) || other.primary == primary)&&(identical(other.showBackButton, showBackButton) || other.showBackButton == showBackButton)&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.foregroundColor, foregroundColor) || other.foregroundColor == foregroundColor)&&(identical(other.shadowColor, shadowColor) || other.shadowColor == shadowColor)&&(identical(other.surfaceTintColor, surfaceTintColor) || other.surfaceTintColor == surfaceTintColor)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.scrolledUnderElevation, scrolledUnderElevation) || other.scrolledUnderElevation == scrolledUnderElevation)&&(identical(other.titleSpacing, titleSpacing) || other.titleSpacing == titleSpacing)&&(identical(other.leadingWidth, leadingWidth) || other.leadingWidth == leadingWidth)&&(identical(other.toolbarHeight, toolbarHeight) || other.toolbarHeight == toolbarHeight)&&(identical(other.centerTitle, centerTitle) || other.centerTitle == centerTitle)&&(identical(other.iconTheme, iconTheme) || other.iconTheme == iconTheme)&&(identical(other.actionsIconTheme, actionsIconTheme) || other.actionsIconTheme == actionsIconTheme)&&(identical(other.titleTextStyle, titleTextStyle) || other.titleTextStyle == titleTextStyle)&&(identical(other.toolbarTextStyle, toolbarTextStyle) || other.toolbarTextStyle == toolbarTextStyle)&&(identical(other.systemOverlayStyle, systemOverlayStyle) || other.systemOverlayStyle == systemOverlayStyle));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,primary,showBackButton,backgroundColor,foregroundColor,shadowColor,surfaceTintColor,elevation,scrolledUnderElevation,titleSpacing,leadingWidth,toolbarHeight,centerTitle,iconTheme,actionsIconTheme,titleTextStyle,toolbarTextStyle,systemOverlayStyle);
+
+@override
+String toString() {
+  return 'AppBarConfig(primary: $primary, showBackButton: $showBackButton, backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, shadowColor: $shadowColor, surfaceTintColor: $surfaceTintColor, elevation: $elevation, scrolledUnderElevation: $scrolledUnderElevation, titleSpacing: $titleSpacing, leadingWidth: $leadingWidth, toolbarHeight: $toolbarHeight, centerTitle: $centerTitle, iconTheme: $iconTheme, actionsIconTheme: $actionsIconTheme, titleTextStyle: $titleTextStyle, toolbarTextStyle: $toolbarTextStyle, systemOverlayStyle: $systemOverlayStyle)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$AppBarConfigCopyWith<$Res> implements $AppBarConfigCopyWith<$Res> {
+  factory _$AppBarConfigCopyWith(_AppBarConfig value, $Res Function(_AppBarConfig) _then) = __$AppBarConfigCopyWithImpl;
+@override @useResult
+$Res call({
+ bool primary, bool showBackButton, String? backgroundColor, String? foregroundColor, String? shadowColor, String? surfaceTintColor, double? elevation, double? scrolledUnderElevation, double? titleSpacing, double? leadingWidth, double? toolbarHeight, bool? centerTitle, IconThemeDataConfig? iconTheme, IconThemeDataConfig? actionsIconTheme, TextStyleConfig? titleTextStyle, TextStyleConfig? toolbarTextStyle, OverlayStyleModel? systemOverlayStyle
+});
+
+
+@override $IconThemeDataConfigCopyWith<$Res>? get iconTheme;@override $IconThemeDataConfigCopyWith<$Res>? get actionsIconTheme;@override $TextStyleConfigCopyWith<$Res>? get titleTextStyle;@override $TextStyleConfigCopyWith<$Res>? get toolbarTextStyle;@override $OverlayStyleModelCopyWith<$Res>? get systemOverlayStyle;
+
+}
+/// @nodoc
+class __$AppBarConfigCopyWithImpl<$Res>
+    implements _$AppBarConfigCopyWith<$Res> {
+  __$AppBarConfigCopyWithImpl(this._self, this._then);
+
+  final _AppBarConfig _self;
+  final $Res Function(_AppBarConfig) _then;
+
+/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? primary = null,Object? showBackButton = null,Object? backgroundColor = freezed,Object? foregroundColor = freezed,Object? shadowColor = freezed,Object? surfaceTintColor = freezed,Object? elevation = freezed,Object? scrolledUnderElevation = freezed,Object? titleSpacing = freezed,Object? leadingWidth = freezed,Object? toolbarHeight = freezed,Object? centerTitle = freezed,Object? iconTheme = freezed,Object? actionsIconTheme = freezed,Object? titleTextStyle = freezed,Object? toolbarTextStyle = freezed,Object? systemOverlayStyle = freezed,}) {
+  return _then(_AppBarConfig(
+primary: null == primary ? _self.primary : primary // ignore: cast_nullable_to_non_nullable
+as bool,showBackButton: null == showBackButton ? _self.showBackButton : showBackButton // ignore: cast_nullable_to_non_nullable
+as bool,backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,foregroundColor: freezed == foregroundColor ? _self.foregroundColor : foregroundColor // ignore: cast_nullable_to_non_nullable
+as String?,shadowColor: freezed == shadowColor ? _self.shadowColor : shadowColor // ignore: cast_nullable_to_non_nullable
+as String?,surfaceTintColor: freezed == surfaceTintColor ? _self.surfaceTintColor : surfaceTintColor // ignore: cast_nullable_to_non_nullable
+as String?,elevation: freezed == elevation ? _self.elevation : elevation // ignore: cast_nullable_to_non_nullable
+as double?,scrolledUnderElevation: freezed == scrolledUnderElevation ? _self.scrolledUnderElevation : scrolledUnderElevation // ignore: cast_nullable_to_non_nullable
+as double?,titleSpacing: freezed == titleSpacing ? _self.titleSpacing : titleSpacing // ignore: cast_nullable_to_non_nullable
+as double?,leadingWidth: freezed == leadingWidth ? _self.leadingWidth : leadingWidth // ignore: cast_nullable_to_non_nullable
+as double?,toolbarHeight: freezed == toolbarHeight ? _self.toolbarHeight : toolbarHeight // ignore: cast_nullable_to_non_nullable
+as double?,centerTitle: freezed == centerTitle ? _self.centerTitle : centerTitle // ignore: cast_nullable_to_non_nullable
+as bool?,iconTheme: freezed == iconTheme ? _self.iconTheme : iconTheme // ignore: cast_nullable_to_non_nullable
+as IconThemeDataConfig?,actionsIconTheme: freezed == actionsIconTheme ? _self.actionsIconTheme : actionsIconTheme // ignore: cast_nullable_to_non_nullable
+as IconThemeDataConfig?,titleTextStyle: freezed == titleTextStyle ? _self.titleTextStyle : titleTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,toolbarTextStyle: freezed == toolbarTextStyle ? _self.toolbarTextStyle : toolbarTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,systemOverlayStyle: freezed == systemOverlayStyle ? _self.systemOverlayStyle : systemOverlayStyle // ignore: cast_nullable_to_non_nullable
+as OverlayStyleModel?,
+  ));
+}
+
+/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$IconThemeDataConfigCopyWith<$Res>? get iconTheme {
+    if (_self.iconTheme == null) {
+    return null;
+  }
+
+  return $IconThemeDataConfigCopyWith<$Res>(_self.iconTheme!, (value) {
+    return _then(_self.copyWith(iconTheme: value));
+  });
+}/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$IconThemeDataConfigCopyWith<$Res>? get actionsIconTheme {
+    if (_self.actionsIconTheme == null) {
+    return null;
+  }
+
+  return $IconThemeDataConfigCopyWith<$Res>(_self.actionsIconTheme!, (value) {
+    return _then(_self.copyWith(actionsIconTheme: value));
+  });
+}/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextStyleConfigCopyWith<$Res>? get titleTextStyle {
+    if (_self.titleTextStyle == null) {
+    return null;
+  }
+
+  return $TextStyleConfigCopyWith<$Res>(_self.titleTextStyle!, (value) {
+    return _then(_self.copyWith(titleTextStyle: value));
+  });
+}/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TextStyleConfigCopyWith<$Res>? get toolbarTextStyle {
+    if (_self.toolbarTextStyle == null) {
+    return null;
+  }
+
+  return $TextStyleConfigCopyWith<$Res>(_self.toolbarTextStyle!, (value) {
+    return _then(_self.copyWith(toolbarTextStyle: value));
+  });
+}/// Create a copy of AppBarConfig
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OverlayStyleModelCopyWith<$Res>? get systemOverlayStyle {
+    if (_self.systemOverlayStyle == null) {
+    return null;
+  }
+
+  return $OverlayStyleModelCopyWith<$Res>(_self.systemOverlayStyle!, (value) {
+    return _then(_self.copyWith(systemOverlayStyle: value));
+  });
+}
 }
 
 // dart format on

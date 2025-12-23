@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'border_config.dart';
 import 'text_style_config.dart';
 
 part 'input_decoration_config.freezed.dart';
@@ -8,12 +9,12 @@ part 'input_decoration_config.g.dart';
 
 /// Declarative configuration for a [TextField]'s [InputDecoration].
 ///
-/// This class mirrors the options available in Flutter’s
+/// This class mirrors the options available in Flutter's
 /// [InputDecoration](https://api.flutter.dev/flutter/material/InputDecoration-class.html)
 /// and allows them to be expressed in JSON for dynamic theming or remote configuration.
 ///
 /// See also:
-/// - [Google Material Design – Text fields](https://m3.material.io/components/text-fields/overview)
+/// - [Google Material Design - Text fields](https://m3.material.io/components/text-fields/overview)
 @freezed
 @JsonSerializable(explicitToJson: true)
 class InputDecorationConfig with _$InputDecorationConfig {
@@ -136,41 +137,4 @@ class InputDecorationConfig with _$InputDecorationConfig {
   factory InputDecorationConfig.fromJson(Map<String, dynamic> json) => _$InputDecorationConfigFromJson(json);
 
   Map<String, dynamic> toJson() => _$InputDecorationConfigToJson(this);
-}
-
-/// Declarative configuration for input borders.
-///
-/// Mirrors Flutter’s [InputBorder] types such as [UnderlineInputBorder] and [OutlineInputBorder].
-@freezed
-@JsonSerializable(explicitToJson: true)
-class BorderConfig with _$BorderConfig {
-  const BorderConfig({
-    /// Border type: `'underline' | 'outline' | 'none'`.
-    this.type = 'underline',
-
-    /// Corner radius for outline borders.
-    this.borderRadius,
-
-    /// Border color (hex string, e.g. `#000000`).
-    this.borderColor,
-
-    /// Stroke width of the border.
-    this.borderWidth,
-  });
-
-  @override
-  final String type;
-
-  @override
-  final double? borderRadius;
-
-  @override
-  final String? borderColor;
-
-  @override
-  final double? borderWidth;
-
-  factory BorderConfig.fromJson(Map<String, dynamic> json) => _$BorderConfigFromJson(json);
-
-  Map<String, dynamic> toJson() => _$BorderConfigToJson(this);
 }

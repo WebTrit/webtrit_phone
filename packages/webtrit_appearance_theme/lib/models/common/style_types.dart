@@ -1,4 +1,4 @@
-enum BorderType { underline, outline, none }
+enum BorderTypeConfig { underline, outline, none }
 
 enum AlignmentConfig {
   topLeft,
