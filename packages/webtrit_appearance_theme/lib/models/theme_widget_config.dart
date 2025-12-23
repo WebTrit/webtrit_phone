@@ -695,6 +695,11 @@ class GradientColorsConfig with _$GradientColorsConfig {
   Map<String, Object?> toJson() => _$GradientColorsConfigToJson(this);
 }
 
+/// Defines default property values for descendant [TabBar] widgets.
+///
+/// This configuration maps to [TabBarThemeData] and is typically used to
+/// describe the overall [ThemeData.tabBarTheme]. Properties are null by default,
+/// allowing the widget to fall back to parent theme values.
 @freezed
 abstract class TabBarConfig with _$TabBarConfig {
   const factory TabBarConfig({
@@ -717,6 +722,11 @@ abstract class TabBarConfig with _$TabBarConfig {
   factory TabBarConfig.fromJson(Map<String, Object?> json) => _$TabBarConfigFromJson(json);
 }
 
+/// Defines default property values for descendant [AppBar] widgets.
+///
+/// This configuration maps to [AppBarThemeData] and is typically used to
+/// describe the overall [ThemeData.appBarTheme]. Properties are null by default,
+/// allowing the [AppBar] constructor to provide its own defaults.
 @freezed
 abstract class AppBarConfig with _$AppBarConfig {
   const factory AppBarConfig({
