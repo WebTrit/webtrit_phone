@@ -15,9 +15,12 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BorderConfig {
 
-/// Border type: [BorderTypeConfig.underline], [BorderTypeConfig.outline], or [BorderTypeConfig.none].
+/// Border type:
+/// - [`BorderTypeConfig.underline`]
+/// - [`BorderTypeConfig.outline`]
+/// - [`BorderTypeConfig.none`]
  BorderTypeConfig get type;/// Corner radius for outline borders.
- double? get borderRadius;/// Border color (hex string, e.g. #000000).
+ double? get borderRadius;/// Border color (hex string, e.g. `#000000`).
  String? get borderColor;/// Stroke width of the border.
  double? get borderWidth;
 /// Create a copy of BorderConfig
@@ -219,11 +222,14 @@ class _BorderConfig implements BorderConfig {
   const _BorderConfig({this.type = BorderTypeConfig.underline, this.borderRadius, this.borderColor, this.borderWidth});
   factory _BorderConfig.fromJson(Map<String, dynamic> json) => _$BorderConfigFromJson(json);
 
-/// Border type: [BorderTypeConfig.underline], [BorderTypeConfig.outline], or [BorderTypeConfig.none].
+/// Border type:
+/// - [`BorderTypeConfig.underline`]
+/// - [`BorderTypeConfig.outline`]
+/// - [`BorderTypeConfig.none`]
 @override@JsonKey() final  BorderTypeConfig type;
 /// Corner radius for outline borders.
 @override final  double? borderRadius;
-/// Border color (hex string, e.g. #000000).
+/// Border color (hex string, e.g. `#000000`).
 @override final  String? borderColor;
 /// Stroke width of the border.
 @override final  double? borderWidth;

@@ -27,10 +27,10 @@ class TabBarThemeDataFactory implements ThemeStyleFactory<TabBarThemeData> {
       labelPadding: config.labelPadding?.toEdgeInsets(),
       labelStyle: config.labelStyle?.toTextStyle(),
       unselectedLabelStyle: config.unselectedLabelStyle?.toTextStyle(),
-      indicatorSize: _mapIndicatorSize(config.indicatorSize),
-      tabAlignment: _mapTabAlignment(config.tabAlignment),
-      indicatorAnimation: _mapIndicatorAnimation(config.indicatorAnimation),
-      splashFactory: _mapSplashFactory(config.splashFactory),
+      indicatorSize: config.indicatorSize?.toTabBarIndicatorSize,
+      tabAlignment: config.tabAlignment?.toTabAlignment,
+      indicatorAnimation: config.indicatorAnimation?.toTabIndicatorAnimation,
+      splashFactory: config.splashFactory?.toInteractiveInkFeatureFactory,
     );
   }
 
@@ -76,35 +76,5 @@ class TabBarThemeDataFactory implements ThemeStyleFactory<TabBarThemeData> {
           color: fillColor,
         );
     }
-  }
-
-  TabBarIndicatorSize? _mapIndicatorSize(String? value) {
-    if (value == null) return null;
-    return value.toLowerCase() == 'label' ? TabBarIndicatorSize.label : TabBarIndicatorSize.tab;
-  }
-
-  TabAlignment? _mapTabAlignment(String? value) {
-    if (value == null) return null;
-    return switch (value.toLowerCase()) {
-      'start' => TabAlignment.start,
-      'startoffset' => TabAlignment.startOffset,
-      'fill' => TabAlignment.fill,
-      'center' => TabAlignment.center,
-      _ => null,
-    };
-  }
-
-  TabIndicatorAnimation? _mapIndicatorAnimation(String? value) {
-    if (value == null) return null;
-    return value.toLowerCase() == 'elastic' ? TabIndicatorAnimation.elastic : TabIndicatorAnimation.linear;
-  }
-
-  InteractiveInkFeatureFactory? _mapSplashFactory(String? value) {
-    return switch (value) {
-      'noSplash' => NoSplash.splashFactory,
-      'inkRipple' => InkRipple.splashFactory,
-      'inkSparkle' => InkSparkle.splashFactory,
-      _ => null,
-    };
   }
 }

@@ -712,10 +712,10 @@ abstract class TabBarConfig with _$TabBarConfig {
     PaddingConfig? labelPadding,
     TextStyleConfig? labelStyle,
     TextStyleConfig? unselectedLabelStyle,
-    String? indicatorSize,
-    String? tabAlignment,
-    String? indicatorAnimation,
-    String? splashFactory,
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? indicatorSize,
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? tabAlignment,
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? indicatorAnimation,
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? splashFactory,
     BorderConfig? indicatorBorder,
   }) = _TabBarConfig;
 

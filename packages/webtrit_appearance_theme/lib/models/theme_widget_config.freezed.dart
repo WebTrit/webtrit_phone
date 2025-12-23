@@ -5477,7 +5477,7 @@ case _:
 /// @nodoc
 mixin _$TabBarConfig {
 
- String? get indicatorColor; String? get dividerColor; String? get labelColor; String? get unselectedLabelColor; String? get overlayColor; double? get dividerHeight; PaddingConfig? get labelPadding; TextStyleConfig? get labelStyle; TextStyleConfig? get unselectedLabelStyle; String? get indicatorSize; String? get tabAlignment; String? get indicatorAnimation; String? get splashFactory; BorderConfig? get indicatorBorder;
+ String? get indicatorColor; String? get dividerColor; String? get labelColor; String? get unselectedLabelColor; String? get overlayColor; double? get dividerHeight; PaddingConfig? get labelPadding; TextStyleConfig? get labelStyle; TextStyleConfig? get unselectedLabelStyle;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? get indicatorSize;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? get tabAlignment;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? get indicatorAnimation;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? get splashFactory; BorderConfig? get indicatorBorder;
 /// Create a copy of TabBarConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -5510,7 +5510,7 @@ abstract mixin class $TabBarConfigCopyWith<$Res>  {
   factory $TabBarConfigCopyWith(TabBarConfig value, $Res Function(TabBarConfig) _then) = _$TabBarConfigCopyWithImpl;
 @useResult
 $Res call({
- String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle, String? indicatorSize, String? tabAlignment, String? indicatorAnimation, String? splashFactory, BorderConfig? indicatorBorder
+ String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? indicatorSize,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? tabAlignment,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? indicatorAnimation,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? splashFactory, BorderConfig? indicatorBorder
 });
 
 
@@ -5539,10 +5539,10 @@ as double?,labelPadding: freezed == labelPadding ? _self.labelPadding : labelPad
 as PaddingConfig?,labelStyle: freezed == labelStyle ? _self.labelStyle : labelStyle // ignore: cast_nullable_to_non_nullable
 as TextStyleConfig?,unselectedLabelStyle: freezed == unselectedLabelStyle ? _self.unselectedLabelStyle : unselectedLabelStyle // ignore: cast_nullable_to_non_nullable
 as TextStyleConfig?,indicatorSize: freezed == indicatorSize ? _self.indicatorSize : indicatorSize // ignore: cast_nullable_to_non_nullable
-as String?,tabAlignment: freezed == tabAlignment ? _self.tabAlignment : tabAlignment // ignore: cast_nullable_to_non_nullable
-as String?,indicatorAnimation: freezed == indicatorAnimation ? _self.indicatorAnimation : indicatorAnimation // ignore: cast_nullable_to_non_nullable
-as String?,splashFactory: freezed == splashFactory ? _self.splashFactory : splashFactory // ignore: cast_nullable_to_non_nullable
-as String?,indicatorBorder: freezed == indicatorBorder ? _self.indicatorBorder : indicatorBorder // ignore: cast_nullable_to_non_nullable
+as TabBarIndicatorSizeConfig?,tabAlignment: freezed == tabAlignment ? _self.tabAlignment : tabAlignment // ignore: cast_nullable_to_non_nullable
+as TabAlignmentConfig?,indicatorAnimation: freezed == indicatorAnimation ? _self.indicatorAnimation : indicatorAnimation // ignore: cast_nullable_to_non_nullable
+as TabIndicatorAnimationConfig?,splashFactory: freezed == splashFactory ? _self.splashFactory : splashFactory // ignore: cast_nullable_to_non_nullable
+as TabSplashFactoryConfig?,indicatorBorder: freezed == indicatorBorder ? _self.indicatorBorder : indicatorBorder // ignore: cast_nullable_to_non_nullable
 as BorderConfig?,
   ));
 }
@@ -5676,7 +5676,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle,  String? indicatorSize,  String? tabAlignment,  String? indicatorAnimation,  String? splashFactory,  BorderConfig? indicatorBorder)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabBarIndicatorSizeConfig? indicatorSize, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabAlignmentConfig? tabAlignment, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabIndicatorAnimationConfig? indicatorAnimation, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabSplashFactoryConfig? splashFactory,  BorderConfig? indicatorBorder)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TabBarConfig() when $default != null:
 return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
@@ -5697,7 +5697,7 @@ return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.u
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle,  String? indicatorSize,  String? tabAlignment,  String? indicatorAnimation,  String? splashFactory,  BorderConfig? indicatorBorder)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabBarIndicatorSizeConfig? indicatorSize, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabAlignmentConfig? tabAlignment, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabIndicatorAnimationConfig? indicatorAnimation, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabSplashFactoryConfig? splashFactory,  BorderConfig? indicatorBorder)  $default,) {final _that = this;
 switch (_that) {
 case _TabBarConfig():
 return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
@@ -5717,7 +5717,7 @@ return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.u
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle,  String? indicatorSize,  String? tabAlignment,  String? indicatorAnimation,  String? splashFactory,  BorderConfig? indicatorBorder)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabBarIndicatorSizeConfig? indicatorSize, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabAlignmentConfig? tabAlignment, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabIndicatorAnimationConfig? indicatorAnimation, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabSplashFactoryConfig? splashFactory,  BorderConfig? indicatorBorder)?  $default,) {final _that = this;
 switch (_that) {
 case _TabBarConfig() when $default != null:
 return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
@@ -5732,7 +5732,7 @@ return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.u
 @JsonSerializable()
 
 class _TabBarConfig implements TabBarConfig {
-  const _TabBarConfig({this.indicatorColor, this.dividerColor, this.labelColor, this.unselectedLabelColor, this.overlayColor, this.dividerHeight, this.labelPadding, this.labelStyle, this.unselectedLabelStyle, this.indicatorSize, this.tabAlignment, this.indicatorAnimation, this.splashFactory, this.indicatorBorder});
+  const _TabBarConfig({this.indicatorColor, this.dividerColor, this.labelColor, this.unselectedLabelColor, this.overlayColor, this.dividerHeight, this.labelPadding, this.labelStyle, this.unselectedLabelStyle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.indicatorSize, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.tabAlignment, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.indicatorAnimation, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.splashFactory, this.indicatorBorder});
   factory _TabBarConfig.fromJson(Map<String, dynamic> json) => _$TabBarConfigFromJson(json);
 
 @override final  String? indicatorColor;
@@ -5744,10 +5744,10 @@ class _TabBarConfig implements TabBarConfig {
 @override final  PaddingConfig? labelPadding;
 @override final  TextStyleConfig? labelStyle;
 @override final  TextStyleConfig? unselectedLabelStyle;
-@override final  String? indicatorSize;
-@override final  String? tabAlignment;
-@override final  String? indicatorAnimation;
-@override final  String? splashFactory;
+@override@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) final  TabBarIndicatorSizeConfig? indicatorSize;
+@override@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) final  TabAlignmentConfig? tabAlignment;
+@override@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) final  TabIndicatorAnimationConfig? indicatorAnimation;
+@override@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) final  TabSplashFactoryConfig? splashFactory;
 @override final  BorderConfig? indicatorBorder;
 
 /// Create a copy of TabBarConfig
@@ -5783,7 +5783,7 @@ abstract mixin class _$TabBarConfigCopyWith<$Res> implements $TabBarConfigCopyWi
   factory _$TabBarConfigCopyWith(_TabBarConfig value, $Res Function(_TabBarConfig) _then) = __$TabBarConfigCopyWithImpl;
 @override @useResult
 $Res call({
- String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle, String? indicatorSize, String? tabAlignment, String? indicatorAnimation, String? splashFactory, BorderConfig? indicatorBorder
+ String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? indicatorSize,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? tabAlignment,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? indicatorAnimation,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? splashFactory, BorderConfig? indicatorBorder
 });
 
 
@@ -5812,10 +5812,10 @@ as double?,labelPadding: freezed == labelPadding ? _self.labelPadding : labelPad
 as PaddingConfig?,labelStyle: freezed == labelStyle ? _self.labelStyle : labelStyle // ignore: cast_nullable_to_non_nullable
 as TextStyleConfig?,unselectedLabelStyle: freezed == unselectedLabelStyle ? _self.unselectedLabelStyle : unselectedLabelStyle // ignore: cast_nullable_to_non_nullable
 as TextStyleConfig?,indicatorSize: freezed == indicatorSize ? _self.indicatorSize : indicatorSize // ignore: cast_nullable_to_non_nullable
-as String?,tabAlignment: freezed == tabAlignment ? _self.tabAlignment : tabAlignment // ignore: cast_nullable_to_non_nullable
-as String?,indicatorAnimation: freezed == indicatorAnimation ? _self.indicatorAnimation : indicatorAnimation // ignore: cast_nullable_to_non_nullable
-as String?,splashFactory: freezed == splashFactory ? _self.splashFactory : splashFactory // ignore: cast_nullable_to_non_nullable
-as String?,indicatorBorder: freezed == indicatorBorder ? _self.indicatorBorder : indicatorBorder // ignore: cast_nullable_to_non_nullable
+as TabBarIndicatorSizeConfig?,tabAlignment: freezed == tabAlignment ? _self.tabAlignment : tabAlignment // ignore: cast_nullable_to_non_nullable
+as TabAlignmentConfig?,indicatorAnimation: freezed == indicatorAnimation ? _self.indicatorAnimation : indicatorAnimation // ignore: cast_nullable_to_non_nullable
+as TabIndicatorAnimationConfig?,splashFactory: freezed == splashFactory ? _self.splashFactory : splashFactory // ignore: cast_nullable_to_non_nullable
+as TabSplashFactoryConfig?,indicatorBorder: freezed == indicatorBorder ? _self.indicatorBorder : indicatorBorder // ignore: cast_nullable_to_non_nullable
 as BorderConfig?,
   ));
 }

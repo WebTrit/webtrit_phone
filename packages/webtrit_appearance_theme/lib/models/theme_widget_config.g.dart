@@ -597,32 +597,73 @@ _TabBarConfig _$TabBarConfigFromJson(
       : TextStyleConfig.fromJson(
           json['unselectedLabelStyle'] as Map<String, dynamic>,
         ),
-  indicatorSize: json['indicatorSize'] as String?,
-  tabAlignment: json['tabAlignment'] as String?,
-  indicatorAnimation: json['indicatorAnimation'] as String?,
-  splashFactory: json['splashFactory'] as String?,
+  indicatorSize: $enumDecodeNullable(
+    _$TabBarIndicatorSizeConfigEnumMap,
+    json['indicatorSize'],
+    unknownValue: JsonKey.nullForUndefinedEnumValue,
+  ),
+  tabAlignment: $enumDecodeNullable(
+    _$TabAlignmentConfigEnumMap,
+    json['tabAlignment'],
+    unknownValue: JsonKey.nullForUndefinedEnumValue,
+  ),
+  indicatorAnimation: $enumDecodeNullable(
+    _$TabIndicatorAnimationConfigEnumMap,
+    json['indicatorAnimation'],
+    unknownValue: JsonKey.nullForUndefinedEnumValue,
+  ),
+  splashFactory: $enumDecodeNullable(
+    _$TabSplashFactoryConfigEnumMap,
+    json['splashFactory'],
+    unknownValue: JsonKey.nullForUndefinedEnumValue,
+  ),
   indicatorBorder: json['indicatorBorder'] == null
       ? null
       : BorderConfig.fromJson(json['indicatorBorder'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$TabBarConfigToJson(_TabBarConfig instance) =>
-    <String, dynamic>{
-      'indicatorColor': instance.indicatorColor,
-      'dividerColor': instance.dividerColor,
-      'labelColor': instance.labelColor,
-      'unselectedLabelColor': instance.unselectedLabelColor,
-      'overlayColor': instance.overlayColor,
-      'dividerHeight': instance.dividerHeight,
-      'labelPadding': instance.labelPadding,
-      'labelStyle': instance.labelStyle,
-      'unselectedLabelStyle': instance.unselectedLabelStyle,
-      'indicatorSize': instance.indicatorSize,
-      'tabAlignment': instance.tabAlignment,
-      'indicatorAnimation': instance.indicatorAnimation,
-      'splashFactory': instance.splashFactory,
-      'indicatorBorder': instance.indicatorBorder,
-    };
+Map<String, dynamic> _$TabBarConfigToJson(
+  _TabBarConfig instance,
+) => <String, dynamic>{
+  'indicatorColor': instance.indicatorColor,
+  'dividerColor': instance.dividerColor,
+  'labelColor': instance.labelColor,
+  'unselectedLabelColor': instance.unselectedLabelColor,
+  'overlayColor': instance.overlayColor,
+  'dividerHeight': instance.dividerHeight,
+  'labelPadding': instance.labelPadding,
+  'labelStyle': instance.labelStyle,
+  'unselectedLabelStyle': instance.unselectedLabelStyle,
+  'indicatorSize': _$TabBarIndicatorSizeConfigEnumMap[instance.indicatorSize],
+  'tabAlignment': _$TabAlignmentConfigEnumMap[instance.tabAlignment],
+  'indicatorAnimation':
+      _$TabIndicatorAnimationConfigEnumMap[instance.indicatorAnimation],
+  'splashFactory': _$TabSplashFactoryConfigEnumMap[instance.splashFactory],
+  'indicatorBorder': instance.indicatorBorder,
+};
+
+const _$TabBarIndicatorSizeConfigEnumMap = {
+  TabBarIndicatorSizeConfig.tab: 'tab',
+  TabBarIndicatorSizeConfig.label: 'label',
+};
+
+const _$TabAlignmentConfigEnumMap = {
+  TabAlignmentConfig.start: 'start',
+  TabAlignmentConfig.startOffset: 'startOffset',
+  TabAlignmentConfig.fill: 'fill',
+  TabAlignmentConfig.center: 'center',
+};
+
+const _$TabIndicatorAnimationConfigEnumMap = {
+  TabIndicatorAnimationConfig.linear: 'linear',
+  TabIndicatorAnimationConfig.elastic: 'elastic',
+};
+
+const _$TabSplashFactoryConfigEnumMap = {
+  TabSplashFactoryConfig.noSplash: 'noSplash',
+  TabSplashFactoryConfig.inkRipple: 'inkRipple',
+  TabSplashFactoryConfig.inkSparkle: 'inkSparkle',
+};
 
 _AppBarConfig _$AppBarConfigFromJson(
   Map<String, dynamic> json,
