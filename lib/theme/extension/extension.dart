@@ -11,6 +11,8 @@ export 'logo_assets.dart';
 export 'outlined_button_styles.dart';
 export 'overlay_style.dart';
 export 'padding_config.dart';
+export 'page_background_config_extension.dart';
+export 'page_background_style.dart';
 export 'string_ext.dart';
 export 'text_button_styles.dart';
 export 'text_field_config.dart';

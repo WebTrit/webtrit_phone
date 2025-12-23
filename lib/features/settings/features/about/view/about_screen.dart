@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 import '../bloc/about_bloc.dart';
 
@@ -43,9 +44,16 @@ class _AboutScreenState extends State<AboutScreen> {
     return BlocBuilder<AboutBloc, AboutState>(
       builder: (context, state) {
         final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
+        final background = localStyle?.background;
+        final isComplexBackground = background?.isComplex ?? false;
 
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_about)),
+        return ThemedScaffold(
+          background: background,
+          appBar: AppBar(
+            title: Text(context.l10n.settings_ListViewTileTitle_about),
+            backgroundColor: isComplexBackground ? Colors.transparent : null,
+            elevation: isComplexBackground ? 0 : null,
+          ),
           body: Center(
             child: SingleChildScrollView(
               child: Column(

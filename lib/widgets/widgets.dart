@@ -28,6 +28,7 @@ export 'scroll_to_top.dart';
 export 'sized_circular_progress_indicator.dart';
 export 'tab_bar.dart';
 export 'text_buttons_table.dart';
+export 'themed_scaffold.dart';
 export 'transfer_bottom_navigation_bar.dart';
 export 'unfocuser.dart';
 export 'webview/webview.dart';
