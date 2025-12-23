@@ -5,23 +5,28 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../theme_style_factory.dart';
 
 class AppBarThemeDataFactory implements ThemeStyleFactory<AppBarTheme> {
-  AppBarThemeDataFactory(this.colors, this.config);
+  const AppBarThemeDataFactory(this.config);
 
-  final ColorScheme colors;
-  final ExtTabBarWidgetConfig config;
+  final AppBarConfig config;
 
   @override
   AppBarTheme create() {
-    final backgroundColor = config.backgroundColor?.toColor();
-    final foregroundColor = config.foregroundColor?.toColor();
-    const surfaceTintColor = Colors.white;
-
     return AppBarTheme(
-      backgroundColor: backgroundColor,
-      foregroundColor: foregroundColor,
-      surfaceTintColor: surfaceTintColor,
-      scrolledUnderElevation: 0.0,
-      centerTitle: true,
+      backgroundColor: config.backgroundColor?.toColor(),
+      foregroundColor: config.foregroundColor?.toColor(),
+      shadowColor: config.shadowColor?.toColor(),
+      surfaceTintColor: config.surfaceTintColor?.toColor(),
+      elevation: config.elevation,
+      scrolledUnderElevation: config.scrolledUnderElevation,
+      titleSpacing: config.titleSpacing,
+      leadingWidth: config.leadingWidth,
+      toolbarHeight: config.toolbarHeight,
+      centerTitle: config.centerTitle,
+      iconTheme: config.iconTheme?.toIconThemeData(),
+      actionsIconTheme: config.actionsIconTheme?.toIconThemeData(),
+      titleTextStyle: config.titleTextStyle?.toTextStyle(),
+      toolbarTextStyle: config.toolbarTextStyle?.toTextStyle(),
+      systemOverlayStyle: config.systemOverlayStyle?.toSystemUiOverlayStyle(),
     );
   }
 }

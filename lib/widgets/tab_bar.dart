@@ -10,7 +10,6 @@ class ExtTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     final height = this.height;
     final borderRadius = height == null ? null : BorderRadius.circular(height / 2);
     return SizedBox(
@@ -19,7 +18,6 @@ class ExtTabBar extends StatelessWidget {
       child: TabBar(
         tabs: tabs,
         controller: controller,
-        indicator: BoxDecoration(borderRadius: borderRadius, color: themeData.colorScheme.primary),
         indicatorSize: TabBarIndicatorSize.tab,
         splashBorderRadius: borderRadius,
       ),
