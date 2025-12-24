@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'common/leading_avatar_style_config.dart';
+import 'common/common.dart';
 import 'custom_color.dart';
 import 'features_config/metadata.dart';
 import 'resources/image_source.dart';
@@ -156,14 +156,18 @@ class GroupWidgetConfig with _$GroupWidgetConfig {
 class BarWidgetConfig with _$BarWidgetConfig {
   const BarWidgetConfig({
     this.bottomNavigationBar = const BottomNavigationBarWidgetConfig(),
-    this.extTabBar = const ExtTabBarWidgetConfig(),
+    this.appBarConfig = const AppBarConfig(),
+    this.tabBarConfig = const TabBarConfig(),
   });
 
   @override
   final BottomNavigationBarWidgetConfig bottomNavigationBar;
 
   @override
-  final ExtTabBarWidgetConfig extTabBar;
+  final AppBarConfig appBarConfig;
+
+  @override
+  final TabBarConfig tabBarConfig;
 
   factory BarWidgetConfig.fromJson(Map<String, Object?> json) => _$BarWidgetConfigFromJson(json);
 
@@ -220,13 +224,19 @@ class ExtTabBarWidgetConfig with _$ExtTabBarWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
-  const GroupTitleListTileWidgetConfig({this.backgroundColor, this.textColor});
+  const GroupTitleListTileWidgetConfig({
+    /// Background color in hex format.
+    this.backgroundColor,
+
+    /// Full text style configuration (font, size, color, etc.).
+    this.textStyle,
+  });
 
   @override
   final String? backgroundColor;
 
   @override
-  final String? textColor;
+  final TextStyleConfig? textStyle;
 
   factory GroupTitleListTileWidgetConfig.fromJson(Map<String, Object?> json) =>
       _$GroupTitleListTileWidgetConfigFromJson(json);
@@ -683,4 +693,61 @@ class GradientColorsConfig with _$GradientColorsConfig {
   factory GradientColorsConfig.fromJson(Map<String, Object?> json) => _$GradientColorsConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$GradientColorsConfigToJson(this);
+}
+
+/// Defines default property values for descendant [TabBar] widgets.
+///
+/// This configuration maps to [TabBarThemeData] and is typically used to
+/// describe the overall [ThemeData.tabBarTheme]. Properties are null by default,
+/// allowing the widget to fall back to parent theme values.
+@freezed
+abstract class TabBarConfig with _$TabBarConfig {
+  const factory TabBarConfig({
+    String? indicatorColor,
+    String? dividerColor,
+    String? labelColor,
+    String? unselectedLabelColor,
+    String? overlayColor,
+    double? dividerHeight,
+    PaddingConfig? labelPadding,
+    TextStyleConfig? labelStyle,
+    TextStyleConfig? unselectedLabelStyle,
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? indicatorSize,
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? tabAlignment,
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? indicatorAnimation,
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? splashFactory,
+    BorderConfig? indicatorBorder,
+  }) = _TabBarConfig;
+
+  factory TabBarConfig.fromJson(Map<String, Object?> json) => _$TabBarConfigFromJson(json);
+}
+
+/// Defines default property values for descendant [AppBar] widgets.
+///
+/// This configuration maps to [AppBarThemeData] and is typically used to
+/// describe the overall [ThemeData.appBarTheme]. Properties are null by default,
+/// allowing the [AppBar] constructor to provide its own defaults.
+@freezed
+abstract class AppBarConfig with _$AppBarConfig {
+  const factory AppBarConfig({
+    @Default(true) bool primary,
+    @Default(true) bool showBackButton,
+    String? backgroundColor,
+    String? foregroundColor,
+    String? shadowColor,
+    String? surfaceTintColor,
+    double? elevation,
+    double? scrolledUnderElevation,
+    double? titleSpacing,
+    double? leadingWidth,
+    double? toolbarHeight,
+    bool? centerTitle,
+    IconThemeDataConfig? iconTheme,
+    IconThemeDataConfig? actionsIconTheme,
+    TextStyleConfig? titleTextStyle,
+    TextStyleConfig? toolbarTextStyle,
+    OverlayStyleModel? systemOverlayStyle,
+  }) = _AppBarConfig;
+
+  factory AppBarConfig.fromJson(Map<String, Object?> json) => _$AppBarConfigFromJson(json);
 }

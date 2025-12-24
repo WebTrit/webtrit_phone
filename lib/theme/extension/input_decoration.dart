@@ -32,7 +32,7 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
     final mappedDisabledBorder = _mapBorder(disabledBorder, colors);
 
     // Check if the main border type is 'none' to apply it globally if needed
-    final noneEverywhere = border?.type == 'none';
+    final noneEverywhere = border?.type == BorderTypeConfig.none;
 
     // Derive default colors from the provided ColorScheme
     final onSurface = colors.onSurface;
@@ -114,7 +114,7 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
   InputBorder? _mapBorder(BorderConfig? config, ColorScheme colors) {
     if (config == null) return null;
 
-    if (config.type == 'none') {
+    if (config.type == BorderTypeConfig.none) {
       return InputBorder.none;
     }
 
@@ -122,12 +122,12 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
     final width = config.borderWidth ?? 1.0;
 
     switch (config.type) {
-      case 'outline':
+      case BorderTypeConfig.outline:
         return OutlineInputBorder(
           borderRadius: BorderRadius.circular(config.borderRadius ?? 4.0),
           borderSide: BorderSide(color: color, width: width),
         );
-      case 'underline':
+      case BorderTypeConfig.underline:
       default:
         return UnderlineInputBorder(
           borderSide: BorderSide(color: color, width: width),
