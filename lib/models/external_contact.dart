@@ -38,25 +38,6 @@ class ExternalContact extends Equatable {
   final List<String>? smsNumbers;
   final String? email;
 
-  @override
-  List<Object?> get props => [
-    id,
-    registered,
-    userRegistered,
-    isCurrentUser,
-    firstName,
-    lastName,
-    aliasName,
-    number,
-    ext,
-    additional != null ? EquatablePropToString.list(additional!) : null,
-    smsNumbers != null ? EquatablePropToString.list(smsNumbers!) : null,
-    email,
-  ];
-}
-
-/// Extension to provide a stable sourceId for ExternalContact
-extension ExternalContactExtensions on ExternalContact {
   /// Returns a stable, non-null sourceId for synchronization and deduplication purposes.
   /// Priority:
   ///   1. `id` (API-provided unique identifier)
@@ -84,4 +65,20 @@ extension ExternalContactExtensions on ExternalContact {
 
     return 'hash_$hash';
   }
+
+  @override
+  List<Object?> get props => [
+    id,
+    registered,
+    userRegistered,
+    isCurrentUser,
+    firstName,
+    lastName,
+    aliasName,
+    number,
+    ext,
+    additional != null ? EquatablePropToString.list(additional!) : null,
+    smsNumbers != null ? EquatablePropToString.list(smsNumbers!) : null,
+    email,
+  ];
 }
