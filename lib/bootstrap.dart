@@ -243,10 +243,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 /// Records background isolate errors to both the local logger and Firebase Crashlytics.
-void _recordBackgroundError(Object error, StackTrace stack, Logger logger) {
+Future<void> _recordBackgroundError(Object error, StackTrace stack, Logger logger) async {
   logger.severe('Unhandled background error', error, stack);
 
-  FirebaseCrashlytics.instance.recordFlutterFatalError(
+  await FirebaseCrashlytics.instance.recordFlutterFatalError(
     FlutterErrorDetails(
       exception: error,
       stack: stack,
