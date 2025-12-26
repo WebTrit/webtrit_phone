@@ -1429,7 +1429,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ///
       /// So for best compatibility, use existing senders and control them via .enabled or .replaceTrack
       if (audioSender != null && newAudioTrack != null) {
-        await audioSender.track?.stop();
         await audioSender.replaceTrack(newAudioTrack);
       } else if (newAudioTrack != null) {
         final audioSenderResult = await peerConnection.safeAddTrack(newAudioTrack, newLocalStream);
@@ -1437,7 +1436,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
 
       if (videoSender != null && newVideoTrack != null) {
-        await videoSender.track?.stop();
         await videoSender.replaceTrack(newVideoTrack);
       } else if (newVideoTrack != null) {
         final videoSenderResult = await peerConnection.safeAddTrack(newVideoTrack, newLocalStream);
