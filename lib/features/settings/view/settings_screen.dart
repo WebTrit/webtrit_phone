@@ -110,8 +110,8 @@ class SettingsScreen extends StatelessWidget {
                               return SettingsTile(
                                 title: context.parseL10n(item.titleL10n),
                                 icon: item.icon,
-                                iconColor: item.iconColor ?? style?.leadingIconsColor,
-                                textStyle: style?.itemTextStyle,
+                                iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                                textStyle: effectiveStyle?.itemTextStyle,
                                 showSeparator: showSeparators,
                                 onTap: () => _onItemTap(context, item),
                               );
@@ -122,8 +122,8 @@ class SettingsScreen extends StatelessWidget {
                             SettingsTile(
                               title: context.parseL10n(item.titleL10n),
                               icon: item.icon,
-                              iconColor: item.iconColor ?? style?.leadingIconsColor,
-                              textStyle: style?.itemTextStyle,
+                              iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                              textStyle: effectiveStyle?.itemTextStyle,
                               showSeparator: showSeparators,
                               onTap: () => _onItemTap(context, item),
                             ),
@@ -131,11 +131,11 @@ class SettingsScreen extends StatelessWidget {
                           SettingsTile(
                             title: context.parseL10n(item.titleL10n),
                             icon: item.icon,
-                            iconColor: item.iconColor ?? style?.leadingIconsColor,
+                            iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
                             trailing: item.flavor == SettingsFlavor.voicemail
                                 ? UnreadBadge(count: state.unreadVoicemailCount)
                                 : null,
-                            textStyle: style?.itemTextStyle,
+                            textStyle: effectiveStyle?.itemTextStyle,
                             showSeparator: showSeparators,
                             onTap: () => _onItemTap(context, item),
                           ),
