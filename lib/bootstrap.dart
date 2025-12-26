@@ -258,15 +258,9 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   _dHandleInspectPush(message.data, true);
 
   if (appPush is PendingCallPush && Platform.isAndroid) {
-    final appDatabase = await IsolateDatabase.create();
-    final contactsRepository = ContactsRepository(
-      appDatabase: appDatabase,
-      contactsRemoteDataSource: null,
-      contactsLocalDataSource: null,
-    );
-
-    final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
-    final displayName = contact?.maybeName ?? appPush.call.displayName;
+    /// Known issue: [SqliteException] with code 5 (database is locked) may occur
+    /// due to concurrent database access from multiple isolates.
+    final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
 
     AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
       appPush.call.id,
@@ -289,6 +283,33 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
       time: DateTime.now(),
     );
     await repo.set(activeMessagePush);
+  }
+}
+
+/// Attempts to resolve the contact name from the database, falling back to push data on error.
+///
+/// This process is susceptible to [SqliteException] with code 5 (database is locked)
+/// when multiple isolates (e.g., background FCM and main app) access the database
+/// concurrently. If any error occurs, the display name from the push payload is returned.
+Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
+  try {
+    final appDatabase = await IsolateDatabase.create();
+    final contactsRepository = ContactsRepository(
+      appDatabase: appDatabase,
+      contactsRemoteDataSource: null,
+      contactsLocalDataSource: null,
+    );
+
+    final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
+    return contact?.maybeName ?? appPush.call.displayName;
+  } catch (e, stackTrace) {
+    logger.severe(
+      'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
+      'Fallback to push display name will be used.',
+      e,
+      stackTrace,
+    );
+    return appPush.call.displayName;
   }
 }
 
