@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/styles/base_screen_style.dart';
 
-import '../widgets/group_title_list_tile.dart';
+import '../widgets/group_title_list_style.dart';
 
 /// Defines the visual styling for the settings screen.
 ///
