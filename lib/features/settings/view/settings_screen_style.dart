@@ -44,6 +44,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   final TextStyle? itemTextStyle;
 
   SettingScreenStyle copyWith({
+    BackgroundStyle? background,
     Color? leadingIconsColor,
     Color? logoutIconColor,
     Color? userIconColor,
@@ -53,6 +54,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     TextStyle? itemTextStyle,
   }) {
     return SettingScreenStyle(
+      background: background ?? this.background,
       leadingIconsColor: leadingIconsColor ?? this.leadingIconsColor,
       logoutIconColor: logoutIconColor ?? this.logoutIconColor,
       userIconColor: userIconColor ?? this.userIconColor,
@@ -68,19 +70,20 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     if (b == null) return a;
 
     return SettingScreenStyle(
+      background: b.background ?? a.background,
       leadingIconsColor: b.leadingIconsColor ?? a.leadingIconsColor,
       logoutIconColor: b.logoutIconColor ?? a.logoutIconColor,
       userIconColor: b.userIconColor ?? a.userIconColor,
       groupTitleListStyle: GroupTitleListStyle.merge(a.groupTitleListStyle, b.groupTitleListStyle),
       listViewPadding: b.listViewPadding ?? a.listViewPadding,
       showSeparators: b.showSeparators ?? a.showSeparators,
-      // Merge text styles to allow cascading properties
       itemTextStyle: a.itemTextStyle?.merge(b.itemTextStyle) ?? b.itemTextStyle,
     );
   }
 
   static SettingScreenStyle lerp(SettingScreenStyle? a, SettingScreenStyle? b, double t) {
     return SettingScreenStyle(
+      background: BaseScreenStyle.lerp(a?.background, b?.background, t),
       leadingIconsColor: Color.lerp(a?.leadingIconsColor, b?.leadingIconsColor, t),
       logoutIconColor: Color.lerp(a?.logoutIconColor, b?.logoutIconColor, t),
       userIconColor: Color.lerp(a?.userIconColor, b?.userIconColor, t),
@@ -95,6 +98,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
+      ..add(DiagnosticsProperty<BackgroundStyle?>('background', background))
       ..add(ColorProperty('leadingIconsColor', leadingIconsColor))
       ..add(ColorProperty('logoutIconColor', logoutIconColor))
       ..add(ColorProperty('userIconColor', userIconColor))
