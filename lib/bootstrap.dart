@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:logging/logging.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,7 +34,7 @@ Future<InstanceRegistry> bootstrap() async {
   final registry = InstanceRegistry();
 
   // External SDKs (Side effects only, don't need registration)
-  await _initFirebase();
+  await _initFirebaseApp();
   await _initFirebaseMessaging();
   await _initLocalPushs();
 
@@ -188,7 +191,7 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
 /// Initializes Firebase for background services. This initialization must be called in an isolate
 /// when Firebase components are used. For more details, refer to the Firebase documentation:
 /// https://firebase.google.com/docs/cloud-messaging/flutter/receive
-Future<void> _initFirebase() async {
+Future<void> _initFirebaseApp() async {
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
@@ -232,12 +235,28 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   runZonedGuarded(
     () => _handleBackgroundMessage(message, logger),
-    (error, stack) => logger.severe('Unhandled background error', error, stack),
+    (error, stack) => _recordBackgroundError(error, stack, logger),
+  );
+}
+
+/// Records background isolate errors to both the local logger and Firebase Crashlytics.
+void _recordBackgroundError(Object error, StackTrace stack, Logger logger) {
+  logger.severe('Unhandled background error', error, stack);
+
+  FirebaseCrashlytics.instance.recordFlutterFatalError(
+    FlutterErrorDetails(
+      exception: error,
+      stack: stack,
+      context: ErrorDescription('Firebase background handler logic failure'),
+    ),
   );
 }
 
 /// Core logic for processing background messages.
 Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) async {
+  /// Ensure Firebase services are initialized before configuring Crashlytics.
+  await _initFirebaseApp();
+
   // Cache remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
 
