@@ -233,7 +233,10 @@ Future<void> _initFirebaseMessaging() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final logger = Logger('_firebaseMessagingBackgroundHandler');
 
-  runZonedGuarded(
+  // Ensure Firebase services are initialized before configuring Crashlytics.
+  await _initFirebaseApp();
+
+  await runZonedGuarded(
     () => _handleBackgroundMessage(message, logger),
     (error, stack) => _recordBackgroundError(error, stack, logger),
   );
@@ -254,9 +257,6 @@ void _recordBackgroundError(Object error, StackTrace stack, Logger logger) {
 
 /// Core logic for processing background messages.
 Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) async {
-  /// Ensure Firebase services are initialized before configuring Crashlytics.
-  await _initFirebaseApp();
-
   // Cache remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
 
@@ -277,8 +277,8 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   _dHandleInspectPush(message.data, true);
 
   if (appPush is PendingCallPush && Platform.isAndroid) {
-    /// Known issue: [SqliteException] with code 5 (database is locked) may occur
-    /// due to concurrent database access from multiple isolates.
+    // Known issue: [SqliteException] with code 5 (database is locked) may occur
+    // due to concurrent database access from multiple isolates.
     final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
 
     AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
