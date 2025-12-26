@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'list_tile_separator.dart';
 
+/// A reusable settings list tile widget that combines a [ListTile]
+/// with an optional [ListTileSeparator] below it.
+///
+/// Displays a leading [Icon], a text [title], an optional [trailing]
+/// widget, and can show or hide the separator via [showSeparator].
 class SettingsTile extends StatelessWidget {
   const SettingsTile({
     required this.title,
