@@ -5,6 +5,11 @@ import 'package:webtrit_phone/theme/styles/base_screen_style.dart';
 
 import '../widgets/group_title_list_tile.dart';
 
+/// Defines the visual styling for the settings screen.
+///
+/// Extends [BaseScreenStyle] to provide specific configuration for settings
+/// items, including leading icon colors, logout and user icon colors, group
+/// title appearance, list padding, separators, and item text styles.
 class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   const SettingScreenStyle({
     super.background,
@@ -17,14 +22,22 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     this.itemTextStyle,
   });
 
+  /// The color for leading icons in settings items (excluding logout and user icons which have specific overrides).
   final Color? leadingIconsColor;
+
+  /// The color for the logout action icon in the settings list.
   final Color? logoutIconColor;
+
+  /// The color for the user/profile icon in the settings list.
   final Color? userIconColor;
 
   /// Style for group titles (text + background)
   final GroupTitleListStyle? groupTitleListStyle;
 
+  /// Padding around the settings list content.
   final EdgeInsetsGeometry? listViewPadding;
+
+  /// Whether to show separators between settings list items.
   final bool? showSeparators;
 
   /// Text style for list items
