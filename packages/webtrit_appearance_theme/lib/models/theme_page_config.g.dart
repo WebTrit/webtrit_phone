@@ -242,7 +242,7 @@ CallPageConfig _$CallPageConfigFromJson(
       : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
   appBarStyle: json['appBarStyle'] == null
       ? null
-      : AppBarStyleConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$CallPageConfigToJson(CallPageConfig instance) =>

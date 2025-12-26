@@ -39,12 +39,12 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
     );
   }
 
-  AppBarStyle _mapAppBarStyle(AppBarStyleConfig? cfg) {
+  AppBarStyle _mapAppBarStyle(AppBarConfig? cfg) {
     return AppBarStyle(
       backgroundColor: cfg?.backgroundColor?.toColor() ?? Colors.transparent,
       foregroundColor: cfg?.foregroundColor?.toColor() ?? colors.surface,
-      primary: false,
-      showBackButton: true,
+      primary: cfg?.primary ?? false,
+      showBackButton: cfg?.showBackButton ?? true,
     );
   }
 

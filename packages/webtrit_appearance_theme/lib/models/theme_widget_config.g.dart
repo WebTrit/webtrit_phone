@@ -577,9 +577,7 @@ Map<String, dynamic> _$GradientColorsConfigToJson(
   'colors': instance.colors.map((e) => e.toJson()).toList(),
 };
 
-_TabBarConfig _$TabBarConfigFromJson(
-  Map<String, dynamic> json,
-) => _TabBarConfig(
+TabBarConfig _$TabBarConfigFromJson(Map<String, dynamic> json) => TabBarConfig(
   indicatorColor: json['indicatorColor'] as String?,
   dividerColor: json['dividerColor'] as String?,
   labelColor: json['labelColor'] as String?,
@@ -623,7 +621,7 @@ _TabBarConfig _$TabBarConfigFromJson(
 );
 
 Map<String, dynamic> _$TabBarConfigToJson(
-  _TabBarConfig instance,
+  TabBarConfig instance,
 ) => <String, dynamic>{
   'indicatorColor': instance.indicatorColor,
   'dividerColor': instance.dividerColor,
@@ -631,15 +629,15 @@ Map<String, dynamic> _$TabBarConfigToJson(
   'unselectedLabelColor': instance.unselectedLabelColor,
   'overlayColor': instance.overlayColor,
   'dividerHeight': instance.dividerHeight,
-  'labelPadding': instance.labelPadding,
-  'labelStyle': instance.labelStyle,
-  'unselectedLabelStyle': instance.unselectedLabelStyle,
+  'labelPadding': instance.labelPadding?.toJson(),
+  'labelStyle': instance.labelStyle?.toJson(),
+  'unselectedLabelStyle': instance.unselectedLabelStyle?.toJson(),
   'indicatorSize': _$TabBarIndicatorSizeConfigEnumMap[instance.indicatorSize],
   'tabAlignment': _$TabAlignmentConfigEnumMap[instance.tabAlignment],
   'indicatorAnimation':
       _$TabIndicatorAnimationConfigEnumMap[instance.indicatorAnimation],
   'splashFactory': _$TabSplashFactoryConfigEnumMap[instance.splashFactory],
-  'indicatorBorder': instance.indicatorBorder,
+  'indicatorBorder': instance.indicatorBorder?.toJson(),
 };
 
 const _$TabBarIndicatorSizeConfigEnumMap = {
