@@ -304,6 +304,7 @@ class SettingsFeature {
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
           icon: item.icon.toIconData(),
+          iconColor: item.iconColor?.toColor(),
           data: _getEmbeddedDataResource(appConfig, embeddedResources, item, flavor, termsFeature),
           flavor: SettingsFlavor.values.byName(item.type),
         );

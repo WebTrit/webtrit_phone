@@ -11,31 +11,44 @@ import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../settings.dart';
 import '../widgets/widgets.dart';
 
+export 'settings_screen_style.dart';
+export 'settings_screen_styles.dart';
+
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, required this.sections});
+  const SettingsScreen({super.key, required this.sections, this.style});
 
   final List<SettingsSection> sections;
+  final SettingScreenStyle? style;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Scaffold(
+    final themeData = Theme.of(context);
+    final colorScheme = themeData.colorScheme;
+    final effectiveStyle = style ?? themeData.extension<SettingsScreenStyles>()?.primary;
+
+    final showSeparators = effectiveStyle?.showSeparators ?? true;
+    final background = effectiveStyle?.background;
+    final isComplexBackground = background?.isComplex == true;
+
+    return ThemedScaffold(
+      background: background,
       appBar: AppBar(
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
+        backgroundColor: isComplexBackground ? Colors.transparent : null,
+        elevation: isComplexBackground ? 0 : null,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
-            onPressed: () {
-              context.read<RegisterStatusCubit>().fetchStatus();
-            },
+            onPressed: () => _onRefreshTap(context),
           ),
         ],
       ),
@@ -43,208 +56,93 @@ class SettingsScreen extends StatelessWidget {
         builder: (context, state) {
           return Stack(
             children: [
-              ListView(
-                children: [
-                  const SizedBox(height: 16),
-                  BlocBuilder<UserInfoCubit, UserInfoState>(
-                    builder: (context, state) {
-                      return UserInfoListTile(info: state.userInfo);
-                    },
-                  ),
-                  BlocBuilder<SessionStatusCubit, SessionStatusState>(
-                    buildWhen: (previous, current) => previous.status != current.status,
-                    builder: (context, callState) {
-                      return SessionStatusListTile(
-                        status: callState.status,
-                        onTap: () => context.router.navigate(const DiagnosticScreenPageRoute()),
-                      );
-                    },
-                  ),
-                  const ListTileSeparator(),
-                  BlocBuilder<RegisterStatusCubit, RegisterStatus>(
-                    builder: (context, state) {
-                      return SwitchListTile(
-                        title: Text(context.l10n.settings_ListViewTileTitle_registered),
-                        value: state,
-                        onChanged: (value) => context.read<RegisterStatusCubit>().setStatus(value),
-                        secondary: const Icon(Icons.account_circle_outlined),
-                      );
-                    },
-                  ),
-                  const ListTileSeparator(),
-                  ListTile(
-                    key: settingsLogoutButtonKey,
-                    leading: const Icon(Icons.logout),
-                    title: Text(context.l10n.settings_ListViewTileTitle_logout),
-                    onTap: () async {
-                      final settingsBloc = context.read<SettingsBloc>();
-                      final logout = await ConfirmDialog.show(
-                        context,
-                        title: context.l10n.settings_LogoutConfirmDialog_title,
-                        content: context.l10n.settings_LogoutConfirmDialog_content,
-                      );
-                      if (logout == true) {
-                        settingsBloc.add(const SettingsLogouted());
-                      }
-                    },
-                  ),
-                  Column(
-                    children: [
-                      for (var section in sections)
-                        Column(
-                          children: [
-                            GroupTitleListTile(titleData: context.parseL10n(section.titleL10n)),
-                            ...[
-                              for (var item in section.items)
-                                if (item.flavor == SettingsFlavor.network)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(const NetworkScreenPageRoute()),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.language)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(const LanguageScreenPageRoute()),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.help)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(
-                                          HelpScreenPageRoute(initialUriQueryParam: item.data!.uri.toString()),
-                                        ),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.terms)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(EmbeddedScreenPageRoute(data: item.data!)),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.about)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(const AboutScreenPageRoute()),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.log)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(const LogRecordsConsoleScreenPageRoute()),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.deleteAccount)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => _deleteAccount(context),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.embedded)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(EmbeddedScreenPageRoute(data: item.data!)),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.mediaSettings)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(const MediaSettingsScreenPageRoute()),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.voicemail)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        trailing: UnreadBadge(count: state.unreadVoicemailCount),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(const VoicemailScreenPageRoute()),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  )
-                                else if (item.flavor == SettingsFlavor.callerId)
-                                  BlocBuilder<CallRoutingCubit, CallRoutingState?>(
-                                    builder: (context, state) {
-                                      if (state == null || state.additionalNumbers.isEmpty) return const SizedBox();
-
-                                      return Column(
-                                        children: [
-                                          ListTile(
-                                            leading: Icon(item.icon),
-                                            title: Text(context.parseL10n(item.titleL10n)),
-                                            onTap: () =>
-                                                context.router.navigate(const CallerIdSettingsScreenPageRoute()),
-                                          ),
-                                          const ListTileSeparator(),
-                                        ],
-                                      );
-                                    },
-                                  )
-                                else if (item.flavor == SettingsFlavor.presence &&
-                                    PresenceViewParams.of(context).viewSource == PresenceViewSource.sipPresence)
-                                  Column(
-                                    children: [
-                                      ListTile(
-                                        leading: Icon(item.icon),
-                                        title: Text(context.parseL10n(item.titleL10n)),
-                                        onTap: () => context.router.navigate(const PresenceSettingsScreenPageRoute()),
-                                      ),
-                                      const ListTileSeparator(),
-                                    ],
-                                  ),
-                            ],
-                          ],
+              SafeArea(
+                top: !isComplexBackground,
+                bottom: false,
+                child: ListView(
+                  padding: effectiveStyle?.listViewPadding ?? const EdgeInsets.only(top: 16),
+                  children: [
+                    BlocBuilder<UserInfoCubit, UserInfoState>(
+                      builder: (context, state) => UserInfoListTile(info: state.userInfo),
+                    ),
+                    BlocBuilder<SessionStatusCubit, SessionStatusState>(
+                      buildWhen: (previous, current) => previous.status != current.status,
+                      builder: (context, sessionState) =>
+                          SessionStatusListTile(status: sessionState.status, onTap: () => _onDiagnosticTap(context)),
+                    ),
+                    if (showSeparators) const ListTileSeparator(),
+                    BlocBuilder<RegisterStatusCubit, RegisterStatus>(
+                      builder: (context, registerState) => SwitchListTile(
+                        title: Text(
+                          context.l10n.settings_ListViewTileTitle_registered,
+                          style: effectiveStyle?.itemTextStyle,
                         ),
+                        value: registerState,
+                        onChanged: (value) => _onRegisterStatusChanged(context, value),
+                        secondary: Icon(
+                          Icons.account_circle_outlined,
+                          color: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
+                        ),
+                      ),
+                    ),
+                    if (showSeparators) const ListTileSeparator(),
+                    SettingsTile(
+                      key: settingsLogoutButtonKey,
+                      title: context.l10n.settings_ListViewTileTitle_logout,
+                      icon: Icons.logout,
+                      iconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
+                      textStyle: effectiveStyle?.itemTextStyle,
+                      showSeparator: showSeparators,
+                      onTap: () => _onLogoutTap(context),
+                    ),
+                    for (final section in sections) ...[
+                      GroupTitleListTile(
+                        titleData: context.parseL10n(section.titleL10n),
+                        style: effectiveStyle?.groupTitleListStyle,
+                      ),
+                      for (final item in section.items) ...[
+                        if (item.flavor == SettingsFlavor.callerId)
+                          BlocBuilder<CallRoutingCubit, CallRoutingState?>(
+                            builder: (context, routingState) {
+                              if (routingState == null || routingState.additionalNumbers.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
+                              return SettingsTile(
+                                title: context.parseL10n(item.titleL10n),
+                                icon: item.icon,
+                                iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                                textStyle: effectiveStyle?.itemTextStyle,
+                                showSeparator: showSeparators,
+                                onTap: () => _onItemTap(context, item),
+                              );
+                            },
+                          )
+                        else if (item.flavor == SettingsFlavor.presence) ...[
+                          if (PresenceViewParams.of(context).viewSource == PresenceViewSource.sipPresence)
+                            SettingsTile(
+                              title: context.parseL10n(item.titleL10n),
+                              icon: item.icon,
+                              iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                              textStyle: effectiveStyle?.itemTextStyle,
+                              showSeparator: showSeparators,
+                              onTap: () => _onItemTap(context, item),
+                            ),
+                        ] else
+                          SettingsTile(
+                            title: context.parseL10n(item.titleL10n),
+                            icon: item.icon,
+                            iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                            trailing: item.flavor == SettingsFlavor.voicemail
+                                ? UnreadBadge(count: state.unreadVoicemailCount)
+                                : null,
+                            textStyle: effectiveStyle?.itemTextStyle,
+                            showSeparator: showSeparators,
+                            onTap: () => _onItemTap(context, item),
+                          ),
+                      ],
                     ],
-                  ),
-                ],
+                  ],
+                ),
               ),
               if (state.progress) const AbsorbPointer(child: Center(child: CircularProgressIndicator())),
             ],
@@ -254,7 +152,54 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _deleteAccount(BuildContext context) async {
+  void _onRefreshTap(BuildContext context) => context.read<RegisterStatusCubit>().fetchStatus();
+
+  void _onDiagnosticTap(BuildContext context) => context.router.navigate(const DiagnosticScreenPageRoute());
+
+  void _onRegisterStatusChanged(BuildContext context, bool value) =>
+      context.read<RegisterStatusCubit>().setStatus(value);
+
+  void _onItemTap(BuildContext context, SettingItem item) {
+    switch (item.flavor) {
+      case SettingsFlavor.network:
+        context.router.navigate(const NetworkScreenPageRoute());
+      case SettingsFlavor.language:
+        context.router.navigate(const LanguageScreenPageRoute());
+      case SettingsFlavor.help:
+        context.router.navigate(HelpScreenPageRoute(initialUriQueryParam: item.data!.uri.toString()));
+      case SettingsFlavor.terms:
+      case SettingsFlavor.embedded:
+        context.router.navigate(EmbeddedScreenPageRoute(data: item.data!));
+      case SettingsFlavor.about:
+        context.router.navigate(const AboutScreenPageRoute());
+      case SettingsFlavor.log:
+        context.router.navigate(const LogRecordsConsoleScreenPageRoute());
+      case SettingsFlavor.deleteAccount:
+        _onDeleteAccountTap(context);
+      case SettingsFlavor.mediaSettings:
+        context.router.navigate(const MediaSettingsScreenPageRoute());
+      case SettingsFlavor.voicemail:
+        context.router.navigate(const VoicemailScreenPageRoute());
+      case SettingsFlavor.callerId:
+        context.router.navigate(const CallerIdSettingsScreenPageRoute());
+      case SettingsFlavor.presence:
+        context.router.navigate(const PresenceSettingsScreenPageRoute());
+    }
+  }
+
+  Future<void> _onLogoutTap(BuildContext context) async {
+    final settingsBloc = context.read<SettingsBloc>();
+    final logout = await ConfirmDialog.show(
+      context,
+      title: context.l10n.settings_LogoutConfirmDialog_title,
+      content: context.l10n.settings_LogoutConfirmDialog_content,
+    );
+    if (logout == true) {
+      settingsBloc.add(const SettingsLogouted());
+    }
+  }
+
+  Future<void> _onDeleteAccountTap(BuildContext context) async {
     final settingsBloc = context.read<SettingsBloc>();
     final deleteAccount = await ConfirmDialog.show(
       context,

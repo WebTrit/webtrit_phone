@@ -24,3 +24,4 @@ export 'outlined_button_style_factory.dart';
 export 'registered_status_style_factory.dart';
 export 'snack_bar_style_factory.dart';
 export 'text_button_style_factory.dart';
+export 'settings_screen_style_factory.dart';

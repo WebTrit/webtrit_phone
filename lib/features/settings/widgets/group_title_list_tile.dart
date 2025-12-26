@@ -11,7 +11,7 @@ class GroupTitleListTile extends StatelessWidget {
 
   final String titleData;
 
-  final GroutTitleListStyle? style;
+  final GroupTitleListStyle? style;
 
   @override
   Widget build(BuildContext context) {

@@ -98,6 +98,7 @@ class ThemeStyleFactoryProvider {
       config: loginPageScheme.passwordSignin,
       textTheme: createTextTheme(),
     );
+    final settingsScreenStyleFactory = SettingsScreenStyleFactory(colorScheme, pageConfig.settings);
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -130,6 +131,7 @@ class ThemeStyleFactoryProvider {
       loginSwitchScreenStyleFactory.create(),
       loginOtpSigninPageStyleFactory.create(),
       loginPasswordSigninPageStyleFactory.create(),
+      settingsScreenStyleFactory.create(),
     ].nonNulls.toList();
   }
 
