@@ -228,16 +228,16 @@ Future<void> _initFirebaseMessaging() async {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  final logger = Logger('_firebaseMessagingBackgroundHandler');
+
   runZonedGuarded(
-    () => _handleBackgroundMessage(message),
-    (error, stack) => Logger('_firebaseMessagingBackgroundHandler').severe('Unhandled background error', error, stack),
+    () => _handleBackgroundMessage(message, logger),
+    (error, stack) => logger.severe('Unhandled background error', error, stack),
   );
 }
 
 /// Core logic for processing background messages.
-Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-  final logger = Logger('_firebaseMessagingBackgroundHandler');
-
+Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) async {
   // Cache remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
 
