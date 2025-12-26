@@ -3,3 +3,4 @@ export 'list_tile_separator.dart';
 export 'session_status_list_tile.dart';
 export 'unread_badge.dart';
 export 'user_info_list_tile.dart';
+export 'settings_tile.dart';

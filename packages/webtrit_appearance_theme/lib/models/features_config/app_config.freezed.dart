@@ -3581,7 +3581,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigSettingsItem {
 
- bool get enabled; String get titleL10n; String get type; String get icon; String? get embeddedResourceId;
+ bool get enabled; String get titleL10n; String get type; String get icon; String? get iconColor; String? get embeddedResourceId;
 /// Create a copy of AppConfigSettingsItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3592,16 +3592,16 @@ $AppConfigSettingsItemCopyWith<AppConfigSettingsItem> get copyWith => _$AppConfi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigSettingsItem&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.type, type) || other.type == type)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.embeddedResourceId, embeddedResourceId) || other.embeddedResourceId == embeddedResourceId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigSettingsItem&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.type, type) || other.type == type)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.iconColor, iconColor) || other.iconColor == iconColor)&&(identical(other.embeddedResourceId, embeddedResourceId) || other.embeddedResourceId == embeddedResourceId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,titleL10n,type,icon,embeddedResourceId);
+int get hashCode => Object.hash(runtimeType,enabled,titleL10n,type,icon,iconColor,embeddedResourceId);
 
 @override
 String toString() {
-  return 'AppConfigSettingsItem(enabled: $enabled, titleL10n: $titleL10n, type: $type, icon: $icon, embeddedResourceId: $embeddedResourceId)';
+  return 'AppConfigSettingsItem(enabled: $enabled, titleL10n: $titleL10n, type: $type, icon: $icon, iconColor: $iconColor, embeddedResourceId: $embeddedResourceId)';
 }
 
 
@@ -3612,7 +3612,7 @@ abstract mixin class $AppConfigSettingsItemCopyWith<$Res>  {
   factory $AppConfigSettingsItemCopyWith(AppConfigSettingsItem value, $Res Function(AppConfigSettingsItem) _then) = _$AppConfigSettingsItemCopyWithImpl;
 @useResult
 $Res call({
- bool enabled, String titleL10n, String type, String icon,@IntToStringOptionalConverter() String? embeddedResourceId
+ bool enabled, String titleL10n, String type, String icon, String? iconColor,@IntToStringOptionalConverter() String? embeddedResourceId
 });
 
 
@@ -3629,13 +3629,14 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigSettingsItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? titleL10n = null,Object? type = null,Object? icon = null,Object? embeddedResourceId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? titleL10n = null,Object? type = null,Object? icon = null,Object? iconColor = freezed,Object? embeddedResourceId = freezed,}) {
   return _then(AppConfigSettingsItem(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,embeddedResourceId: freezed == embeddedResourceId ? _self.embeddedResourceId : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+as String,iconColor: freezed == iconColor ? _self.iconColor : iconColor // ignore: cast_nullable_to_non_nullable
+as String?,embeddedResourceId: freezed == embeddedResourceId ? _self.embeddedResourceId : embeddedResourceId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
