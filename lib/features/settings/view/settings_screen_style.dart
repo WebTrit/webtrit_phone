@@ -22,7 +22,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   final Color? userIconColor;
 
   /// Style for group titles (text + background)
-  final GroutTitleListStyle? groupTitleListStyle;
+  final GroupTitleListStyle? groupTitleListStyle;
 
   final EdgeInsetsGeometry? listViewPadding;
   final bool? showSeparators;
@@ -34,7 +34,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     Color? leadingIconsColor,
     Color? logoutIconColor,
     Color? userIconColor,
-    GroutTitleListStyle? groupTitleListStyle,
+    GroupTitleListStyle? groupTitleListStyle,
     EdgeInsetsGeometry? listViewPadding,
     bool? showSeparators,
     TextStyle? itemTextStyle,
@@ -58,7 +58,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
       leadingIconsColor: b.leadingIconsColor ?? a.leadingIconsColor,
       logoutIconColor: b.logoutIconColor ?? a.logoutIconColor,
       userIconColor: b.userIconColor ?? a.userIconColor,
-      groupTitleListStyle: GroutTitleListStyle.merge(a.groupTitleListStyle, b.groupTitleListStyle),
+      groupTitleListStyle: GroupTitleListStyle.merge(a.groupTitleListStyle, b.groupTitleListStyle),
       listViewPadding: b.listViewPadding ?? a.listViewPadding,
       showSeparators: b.showSeparators ?? a.showSeparators,
       // Merge text styles to allow cascading properties
@@ -71,7 +71,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
       leadingIconsColor: Color.lerp(a?.leadingIconsColor, b?.leadingIconsColor, t),
       logoutIconColor: Color.lerp(a?.logoutIconColor, b?.logoutIconColor, t),
       userIconColor: Color.lerp(a?.userIconColor, b?.userIconColor, t),
-      groupTitleListStyle: GroutTitleListStyle.lerp(a?.groupTitleListStyle, b?.groupTitleListStyle, t),
+      groupTitleListStyle: GroupTitleListStyle.lerp(a?.groupTitleListStyle, b?.groupTitleListStyle, t),
       listViewPadding: EdgeInsetsGeometry.lerp(a?.listViewPadding, b?.listViewPadding, t),
       showSeparators: t < 0.5 ? a?.showSeparators : b?.showSeparators,
       itemTextStyle: TextStyle.lerp(a?.itemTextStyle, b?.itemTextStyle, t),
@@ -85,7 +85,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
       ..add(ColorProperty('leadingIconsColor', leadingIconsColor))
       ..add(ColorProperty('logoutIconColor', logoutIconColor))
       ..add(ColorProperty('userIconColor', userIconColor))
-      ..add(DiagnosticsProperty<GroutTitleListStyle?>('groupTitleListStyle', groupTitleListStyle))
+      ..add(DiagnosticsProperty<GroupTitleListStyle?>('groupTitleListStyle', groupTitleListStyle))
       ..add(DiagnosticsProperty<EdgeInsetsGeometry?>('listViewPadding', listViewPadding))
       ..add(DiagnosticsProperty<bool?>('showSeparators', showSeparators))
       ..add(DiagnosticsProperty<TextStyle?>('itemTextStyle', itemTextStyle));
