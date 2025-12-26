@@ -701,25 +701,74 @@ class GradientColorsConfig with _$GradientColorsConfig {
 /// describe the overall [ThemeData.tabBarTheme]. Properties are null by default,
 /// allowing the widget to fall back to parent theme values.
 @freezed
-abstract class TabBarConfig with _$TabBarConfig {
-  const factory TabBarConfig({
-    String? indicatorColor,
-    String? dividerColor,
-    String? labelColor,
-    String? unselectedLabelColor,
-    String? overlayColor,
-    double? dividerHeight,
-    PaddingConfig? labelPadding,
-    TextStyleConfig? labelStyle,
-    TextStyleConfig? unselectedLabelStyle,
-    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? indicatorSize,
-    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? tabAlignment,
-    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? indicatorAnimation,
-    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? splashFactory,
-    BorderConfig? indicatorBorder,
-  }) = _TabBarConfig;
+@JsonSerializable(explicitToJson: true)
+class TabBarConfig with _$TabBarConfig {
+  const TabBarConfig({
+    this.indicatorColor,
+    this.dividerColor,
+    this.labelColor,
+    this.unselectedLabelColor,
+    this.overlayColor,
+    this.dividerHeight,
+    this.labelPadding,
+    this.labelStyle,
+    this.unselectedLabelStyle,
+    this.indicatorSize,
+    this.tabAlignment,
+    this.indicatorAnimation,
+    this.splashFactory,
+    this.indicatorBorder,
+  });
+
+  @override
+  final String? indicatorColor;
+
+  @override
+  final String? dividerColor;
+
+  @override
+  final String? labelColor;
+
+  @override
+  final String? unselectedLabelColor;
+
+  @override
+  final String? overlayColor;
+
+  @override
+  final double? dividerHeight;
+
+  @override
+  final PaddingConfig? labelPadding;
+
+  @override
+  final TextStyleConfig? labelStyle;
+
+  @override
+  final TextStyleConfig? unselectedLabelStyle;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final TabBarIndicatorSizeConfig? indicatorSize;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final TabAlignmentConfig? tabAlignment;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final TabIndicatorAnimationConfig? indicatorAnimation;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final TabSplashFactoryConfig? splashFactory;
+
+  @override
+  final BorderConfig? indicatorBorder;
 
   factory TabBarConfig.fromJson(Map<String, Object?> json) => _$TabBarConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$TabBarConfigToJson(this);
 }
 
 /// Defines default property values for descendant [AppBar] widgets.

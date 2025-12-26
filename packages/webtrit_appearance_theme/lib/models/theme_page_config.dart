@@ -226,7 +226,7 @@ class CallPageConfig with _$CallPageConfig implements BasePageConfig {
   final OverlayStyleModel? systemUiOverlayStyle;
 
   @override
-  final AppBarStyleConfig? appBarStyle;
+  final AppBarConfig? appBarStyle;
 
   @override
   final CallPageInfoConfig? callInfo;

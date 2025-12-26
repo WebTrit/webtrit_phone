@@ -1706,7 +1706,7 @@ case _:
 /// @nodoc
 mixin _$CallPageConfig {
 
- OverlayStyleModel? get systemUiOverlayStyle; AppBarStyleConfig? get appBarStyle; CallPageInfoConfig? get callInfo; CallPageActionsConfig? get actions; PageBackground? get background;
+ OverlayStyleModel? get systemUiOverlayStyle; AppBarConfig? get appBarStyle; CallPageInfoConfig? get callInfo; CallPageActionsConfig? get actions; PageBackground? get background;
 /// Create a copy of CallPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1737,7 +1737,7 @@ abstract mixin class $CallPageConfigCopyWith<$Res>  {
   factory $CallPageConfigCopyWith(CallPageConfig value, $Res Function(CallPageConfig) _then) = _$CallPageConfigCopyWithImpl;
 @useResult
 $Res call({
- OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo, CallPageActionsConfig? actions, PageBackground? background, AppBarStyleConfig? appBarStyle
+ OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo, CallPageActionsConfig? actions, PageBackground? background, AppBarConfig? appBarStyle
 });
 
 
@@ -1761,7 +1761,7 @@ as OverlayStyleModel?,callInfo: freezed == callInfo ? _self.callInfo : callInfo 
 as CallPageInfoConfig?,actions: freezed == actions ? _self.actions : actions // ignore: cast_nullable_to_non_nullable
 as CallPageActionsConfig?,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
 as PageBackground?,appBarStyle: freezed == appBarStyle ? _self.appBarStyle : appBarStyle // ignore: cast_nullable_to_non_nullable
-as AppBarStyleConfig?,
+as AppBarConfig?,
   ));
 }
 

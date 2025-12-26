@@ -5477,15 +5477,13 @@ case _:
 /// @nodoc
 mixin _$TabBarConfig {
 
- String? get indicatorColor; String? get dividerColor; String? get labelColor; String? get unselectedLabelColor; String? get overlayColor; double? get dividerHeight; PaddingConfig? get labelPadding; TextStyleConfig? get labelStyle; TextStyleConfig? get unselectedLabelStyle;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? get indicatorSize;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? get tabAlignment;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? get indicatorAnimation;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? get splashFactory; BorderConfig? get indicatorBorder;
+ String? get indicatorColor; String? get dividerColor; String? get labelColor; String? get unselectedLabelColor; String? get overlayColor; double? get dividerHeight; PaddingConfig? get labelPadding; TextStyleConfig? get labelStyle; TextStyleConfig? get unselectedLabelStyle; TabBarIndicatorSizeConfig? get indicatorSize; TabAlignmentConfig? get tabAlignment; TabIndicatorAnimationConfig? get indicatorAnimation; TabSplashFactoryConfig? get splashFactory; BorderConfig? get indicatorBorder;
 /// Create a copy of TabBarConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $TabBarConfigCopyWith<TabBarConfig> get copyWith => _$TabBarConfigCopyWithImpl<TabBarConfig>(this as TabBarConfig, _$identity);
 
-  /// Serializes this TabBarConfig to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -5510,11 +5508,11 @@ abstract mixin class $TabBarConfigCopyWith<$Res>  {
   factory $TabBarConfigCopyWith(TabBarConfig value, $Res Function(TabBarConfig) _then) = _$TabBarConfigCopyWithImpl;
 @useResult
 $Res call({
- String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? indicatorSize,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? tabAlignment,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? indicatorAnimation,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? splashFactory, BorderConfig? indicatorBorder
+ String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle, TabBarIndicatorSizeConfig? indicatorSize, TabAlignmentConfig? tabAlignment, TabIndicatorAnimationConfig? indicatorAnimation, TabSplashFactoryConfig? splashFactory, BorderConfig? indicatorBorder
 });
 
 
-$PaddingConfigCopyWith<$Res>? get labelPadding;$TextStyleConfigCopyWith<$Res>? get labelStyle;$TextStyleConfigCopyWith<$Res>? get unselectedLabelStyle;$BorderConfigCopyWith<$Res>? get indicatorBorder;
+
 
 }
 /// @nodoc
@@ -5528,7 +5526,7 @@ class _$TabBarConfigCopyWithImpl<$Res>
 /// Create a copy of TabBarConfig
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? indicatorColor = freezed,Object? dividerColor = freezed,Object? labelColor = freezed,Object? unselectedLabelColor = freezed,Object? overlayColor = freezed,Object? dividerHeight = freezed,Object? labelPadding = freezed,Object? labelStyle = freezed,Object? unselectedLabelStyle = freezed,Object? indicatorSize = freezed,Object? tabAlignment = freezed,Object? indicatorAnimation = freezed,Object? splashFactory = freezed,Object? indicatorBorder = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(TabBarConfig(
 indicatorColor: freezed == indicatorColor ? _self.indicatorColor : indicatorColor // ignore: cast_nullable_to_non_nullable
 as String?,dividerColor: freezed == dividerColor ? _self.dividerColor : dividerColor // ignore: cast_nullable_to_non_nullable
 as String?,labelColor: freezed == labelColor ? _self.labelColor : labelColor // ignore: cast_nullable_to_non_nullable
@@ -5546,55 +5544,7 @@ as TabSplashFactoryConfig?,indicatorBorder: freezed == indicatorBorder ? _self.i
 as BorderConfig?,
   ));
 }
-/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$PaddingConfigCopyWith<$Res>? get labelPadding {
-    if (_self.labelPadding == null) {
-    return null;
-  }
 
-  return $PaddingConfigCopyWith<$Res>(_self.labelPadding!, (value) {
-    return _then(_self.copyWith(labelPadding: value));
-  });
-}/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TextStyleConfigCopyWith<$Res>? get labelStyle {
-    if (_self.labelStyle == null) {
-    return null;
-  }
-
-  return $TextStyleConfigCopyWith<$Res>(_self.labelStyle!, (value) {
-    return _then(_self.copyWith(labelStyle: value));
-  });
-}/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TextStyleConfigCopyWith<$Res>? get unselectedLabelStyle {
-    if (_self.unselectedLabelStyle == null) {
-    return null;
-  }
-
-  return $TextStyleConfigCopyWith<$Res>(_self.unselectedLabelStyle!, (value) {
-    return _then(_self.copyWith(unselectedLabelStyle: value));
-  });
-}/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BorderConfigCopyWith<$Res>? get indicatorBorder {
-    if (_self.indicatorBorder == null) {
-    return null;
-  }
-
-  return $BorderConfigCopyWith<$Res>(_self.indicatorBorder!, (value) {
-    return _then(_self.copyWith(indicatorBorder: value));
-  });
-}
 }
 
 
@@ -5612,11 +5562,10 @@ extension TabBarConfigPatterns on TabBarConfig {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TabBarConfig value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _TabBarConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return orElse();
 
 }
@@ -5634,11 +5583,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TabBarConfig value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _TabBarConfig():
-return $default(_that);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -5655,11 +5603,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TabBarConfig value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _TabBarConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return null;
 
 }
@@ -5676,10 +5623,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabBarIndicatorSizeConfig? indicatorSize, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabAlignmentConfig? tabAlignment, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabIndicatorAnimationConfig? indicatorAnimation, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabSplashFactoryConfig? splashFactory,  BorderConfig? indicatorBorder)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _TabBarConfig() when $default != null:
-return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
+case _:
   return orElse();
 
 }
@@ -5697,10 +5643,9 @@ return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.u
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabBarIndicatorSizeConfig? indicatorSize, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabAlignmentConfig? tabAlignment, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabIndicatorAnimationConfig? indicatorAnimation, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabSplashFactoryConfig? splashFactory,  BorderConfig? indicatorBorder)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _TabBarConfig():
-return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -5717,158 +5662,14 @@ return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.u
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? indicatorColor,  String? dividerColor,  String? labelColor,  String? unselectedLabelColor,  String? overlayColor,  double? dividerHeight,  PaddingConfig? labelPadding,  TextStyleConfig? labelStyle,  TextStyleConfig? unselectedLabelStyle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabBarIndicatorSizeConfig? indicatorSize, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabAlignmentConfig? tabAlignment, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabIndicatorAnimationConfig? indicatorAnimation, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  TabSplashFactoryConfig? splashFactory,  BorderConfig? indicatorBorder)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _TabBarConfig() when $default != null:
-return $default(_that.indicatorColor,_that.dividerColor,_that.labelColor,_that.unselectedLabelColor,_that.overlayColor,_that.dividerHeight,_that.labelPadding,_that.labelStyle,_that.unselectedLabelStyle,_that.indicatorSize,_that.tabAlignment,_that.indicatorAnimation,_that.splashFactory,_that.indicatorBorder);case _:
+case _:
   return null;
 
 }
 }
 
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _TabBarConfig implements TabBarConfig {
-  const _TabBarConfig({this.indicatorColor, this.dividerColor, this.labelColor, this.unselectedLabelColor, this.overlayColor, this.dividerHeight, this.labelPadding, this.labelStyle, this.unselectedLabelStyle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.indicatorSize, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.tabAlignment, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.indicatorAnimation, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.splashFactory, this.indicatorBorder});
-  factory _TabBarConfig.fromJson(Map<String, dynamic> json) => _$TabBarConfigFromJson(json);
-
-@override final  String? indicatorColor;
-@override final  String? dividerColor;
-@override final  String? labelColor;
-@override final  String? unselectedLabelColor;
-@override final  String? overlayColor;
-@override final  double? dividerHeight;
-@override final  PaddingConfig? labelPadding;
-@override final  TextStyleConfig? labelStyle;
-@override final  TextStyleConfig? unselectedLabelStyle;
-@override@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) final  TabBarIndicatorSizeConfig? indicatorSize;
-@override@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) final  TabAlignmentConfig? tabAlignment;
-@override@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) final  TabIndicatorAnimationConfig? indicatorAnimation;
-@override@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) final  TabSplashFactoryConfig? splashFactory;
-@override final  BorderConfig? indicatorBorder;
-
-/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$TabBarConfigCopyWith<_TabBarConfig> get copyWith => __$TabBarConfigCopyWithImpl<_TabBarConfig>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$TabBarConfigToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TabBarConfig&&(identical(other.indicatorColor, indicatorColor) || other.indicatorColor == indicatorColor)&&(identical(other.dividerColor, dividerColor) || other.dividerColor == dividerColor)&&(identical(other.labelColor, labelColor) || other.labelColor == labelColor)&&(identical(other.unselectedLabelColor, unselectedLabelColor) || other.unselectedLabelColor == unselectedLabelColor)&&(identical(other.overlayColor, overlayColor) || other.overlayColor == overlayColor)&&(identical(other.dividerHeight, dividerHeight) || other.dividerHeight == dividerHeight)&&(identical(other.labelPadding, labelPadding) || other.labelPadding == labelPadding)&&(identical(other.labelStyle, labelStyle) || other.labelStyle == labelStyle)&&(identical(other.unselectedLabelStyle, unselectedLabelStyle) || other.unselectedLabelStyle == unselectedLabelStyle)&&(identical(other.indicatorSize, indicatorSize) || other.indicatorSize == indicatorSize)&&(identical(other.tabAlignment, tabAlignment) || other.tabAlignment == tabAlignment)&&(identical(other.indicatorAnimation, indicatorAnimation) || other.indicatorAnimation == indicatorAnimation)&&(identical(other.splashFactory, splashFactory) || other.splashFactory == splashFactory)&&(identical(other.indicatorBorder, indicatorBorder) || other.indicatorBorder == indicatorBorder));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,indicatorColor,dividerColor,labelColor,unselectedLabelColor,overlayColor,dividerHeight,labelPadding,labelStyle,unselectedLabelStyle,indicatorSize,tabAlignment,indicatorAnimation,splashFactory,indicatorBorder);
-
-@override
-String toString() {
-  return 'TabBarConfig(indicatorColor: $indicatorColor, dividerColor: $dividerColor, labelColor: $labelColor, unselectedLabelColor: $unselectedLabelColor, overlayColor: $overlayColor, dividerHeight: $dividerHeight, labelPadding: $labelPadding, labelStyle: $labelStyle, unselectedLabelStyle: $unselectedLabelStyle, indicatorSize: $indicatorSize, tabAlignment: $tabAlignment, indicatorAnimation: $indicatorAnimation, splashFactory: $splashFactory, indicatorBorder: $indicatorBorder)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$TabBarConfigCopyWith<$Res> implements $TabBarConfigCopyWith<$Res> {
-  factory _$TabBarConfigCopyWith(_TabBarConfig value, $Res Function(_TabBarConfig) _then) = __$TabBarConfigCopyWithImpl;
-@override @useResult
-$Res call({
- String? indicatorColor, String? dividerColor, String? labelColor, String? unselectedLabelColor, String? overlayColor, double? dividerHeight, PaddingConfig? labelPadding, TextStyleConfig? labelStyle, TextStyleConfig? unselectedLabelStyle,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabBarIndicatorSizeConfig? indicatorSize,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabAlignmentConfig? tabAlignment,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabIndicatorAnimationConfig? indicatorAnimation,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) TabSplashFactoryConfig? splashFactory, BorderConfig? indicatorBorder
-});
-
-
-@override $PaddingConfigCopyWith<$Res>? get labelPadding;@override $TextStyleConfigCopyWith<$Res>? get labelStyle;@override $TextStyleConfigCopyWith<$Res>? get unselectedLabelStyle;@override $BorderConfigCopyWith<$Res>? get indicatorBorder;
-
-}
-/// @nodoc
-class __$TabBarConfigCopyWithImpl<$Res>
-    implements _$TabBarConfigCopyWith<$Res> {
-  __$TabBarConfigCopyWithImpl(this._self, this._then);
-
-  final _TabBarConfig _self;
-  final $Res Function(_TabBarConfig) _then;
-
-/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? indicatorColor = freezed,Object? dividerColor = freezed,Object? labelColor = freezed,Object? unselectedLabelColor = freezed,Object? overlayColor = freezed,Object? dividerHeight = freezed,Object? labelPadding = freezed,Object? labelStyle = freezed,Object? unselectedLabelStyle = freezed,Object? indicatorSize = freezed,Object? tabAlignment = freezed,Object? indicatorAnimation = freezed,Object? splashFactory = freezed,Object? indicatorBorder = freezed,}) {
-  return _then(_TabBarConfig(
-indicatorColor: freezed == indicatorColor ? _self.indicatorColor : indicatorColor // ignore: cast_nullable_to_non_nullable
-as String?,dividerColor: freezed == dividerColor ? _self.dividerColor : dividerColor // ignore: cast_nullable_to_non_nullable
-as String?,labelColor: freezed == labelColor ? _self.labelColor : labelColor // ignore: cast_nullable_to_non_nullable
-as String?,unselectedLabelColor: freezed == unselectedLabelColor ? _self.unselectedLabelColor : unselectedLabelColor // ignore: cast_nullable_to_non_nullable
-as String?,overlayColor: freezed == overlayColor ? _self.overlayColor : overlayColor // ignore: cast_nullable_to_non_nullable
-as String?,dividerHeight: freezed == dividerHeight ? _self.dividerHeight : dividerHeight // ignore: cast_nullable_to_non_nullable
-as double?,labelPadding: freezed == labelPadding ? _self.labelPadding : labelPadding // ignore: cast_nullable_to_non_nullable
-as PaddingConfig?,labelStyle: freezed == labelStyle ? _self.labelStyle : labelStyle // ignore: cast_nullable_to_non_nullable
-as TextStyleConfig?,unselectedLabelStyle: freezed == unselectedLabelStyle ? _self.unselectedLabelStyle : unselectedLabelStyle // ignore: cast_nullable_to_non_nullable
-as TextStyleConfig?,indicatorSize: freezed == indicatorSize ? _self.indicatorSize : indicatorSize // ignore: cast_nullable_to_non_nullable
-as TabBarIndicatorSizeConfig?,tabAlignment: freezed == tabAlignment ? _self.tabAlignment : tabAlignment // ignore: cast_nullable_to_non_nullable
-as TabAlignmentConfig?,indicatorAnimation: freezed == indicatorAnimation ? _self.indicatorAnimation : indicatorAnimation // ignore: cast_nullable_to_non_nullable
-as TabIndicatorAnimationConfig?,splashFactory: freezed == splashFactory ? _self.splashFactory : splashFactory // ignore: cast_nullable_to_non_nullable
-as TabSplashFactoryConfig?,indicatorBorder: freezed == indicatorBorder ? _self.indicatorBorder : indicatorBorder // ignore: cast_nullable_to_non_nullable
-as BorderConfig?,
-  ));
-}
-
-/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$PaddingConfigCopyWith<$Res>? get labelPadding {
-    if (_self.labelPadding == null) {
-    return null;
-  }
-
-  return $PaddingConfigCopyWith<$Res>(_self.labelPadding!, (value) {
-    return _then(_self.copyWith(labelPadding: value));
-  });
-}/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TextStyleConfigCopyWith<$Res>? get labelStyle {
-    if (_self.labelStyle == null) {
-    return null;
-  }
-
-  return $TextStyleConfigCopyWith<$Res>(_self.labelStyle!, (value) {
-    return _then(_self.copyWith(labelStyle: value));
-  });
-}/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TextStyleConfigCopyWith<$Res>? get unselectedLabelStyle {
-    if (_self.unselectedLabelStyle == null) {
-    return null;
-  }
-
-  return $TextStyleConfigCopyWith<$Res>(_self.unselectedLabelStyle!, (value) {
-    return _then(_self.copyWith(unselectedLabelStyle: value));
-  });
-}/// Create a copy of TabBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BorderConfigCopyWith<$Res>? get indicatorBorder {
-    if (_self.indicatorBorder == null) {
-    return null;
-  }
-
-  return $BorderConfigCopyWith<$Res>(_self.indicatorBorder!, (value) {
-    return _then(_self.copyWith(indicatorBorder: value));
-  });
-}
 }
 
 
