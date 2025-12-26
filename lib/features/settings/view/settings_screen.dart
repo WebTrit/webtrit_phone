@@ -7,8 +7,8 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
-import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
+import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -22,7 +22,7 @@ export 'settings_screen_style.dart';
 export 'settings_screen_styles.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({required this.sections, this.style, super.key});
+  const SettingsScreen({super.key, required this.sections, this.style});
 
   final List<SettingsSection> sections;
   final SettingScreenStyle? style;
