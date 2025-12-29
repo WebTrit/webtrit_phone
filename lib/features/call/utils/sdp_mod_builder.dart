@@ -303,9 +303,9 @@ class SDPModBuilder {
   ///
   /// For example sdp's from Linksys942 that causes crash on Webrtc 0.12.11:
   /// ```v=0
-  /// o=- 74097 74097 IN IP4 194.9.14.108
+  /// o=- 74097 74097 IN IP4 1.2.3.4
   /// s=-
-  /// c=IN IP4 194.9.14.108
+  /// c=IN IP4 1.2.3.4
   /// t=0 0
   /// m=audio 16442 RTP/AVP 0 8 18 101
   /// a=rtpmap:0 PCMU/8000
@@ -318,9 +318,9 @@ class SDPModBuilder {
   /// ```
   /// or
   /// ```v=0
-  /// o=- 84645 84645 IN IP4 194.9.14.108
+  /// o=- 84645 84645 IN IP4 1.2.3.4
   /// s=-
-  /// c=IN IP4 194.9.14.108
+  /// c=IN IP4 1.2.3.4
   /// t=0 0
   /// m=audio 16444 RTP/AVP 0 8 2 101
   /// a=rtpmap:0 PCMU/8000
