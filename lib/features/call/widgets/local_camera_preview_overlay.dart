@@ -42,6 +42,7 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
   final WidgetBuilder? localePlaceholderBuilder;
 
   final Duration duration;
+
   final double smallerSide;
 
   @override
