@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -36,6 +37,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   /// Manages the visibility state of call controls (Compact vs. Expanded) and
   /// handles the auto-hide timer logic based on user activity and call state.
   late final CompactAutoResetController _compactController;
+
+  /// Controls the object fit mode (cover or contain) for the remote video stream.
+  RTCVideoViewObjectFit _videoFit = RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
 
   @override
   void initState() {
@@ -90,6 +94,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                         child: RTCStreamView(
                           stream: activeCall.remoteStream,
                           placeholderBuilder: widget.remotePlaceholderBuilder,
+                          fit: _videoFit,
                         ),
                       ),
                     ),
@@ -127,6 +132,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 backgroundColor: style?.appBar?.backgroundColor,
                                 foregroundColor: style?.appBar?.foregroundColor,
                                 primary: style?.appBar?.primary ?? false,
+                                actions: [
+                                  if (activeCall.remoteVideo)
+                                    IconButton(icon: Icon(_videoFit.toggleIcon), onPressed: _onVideoFitTogglePressed),
+                                ],
                               ),
                               Expanded(
                                 child: LayoutBuilder(
@@ -333,6 +342,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
         },
       ),
     );
+  }
+
+  void _onVideoFitTogglePressed() {
+    setState(() => _videoFit = _videoFit.toggled);
   }
 
   @override
