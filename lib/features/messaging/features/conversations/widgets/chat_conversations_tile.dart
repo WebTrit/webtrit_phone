@@ -162,9 +162,14 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
   }
 
   Widget subtitle() {
-    const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12, color: Colors.grey);
-    final lastMessage = widget.lastMessage;
     final theme = Theme.of(context);
+    final textStyle = TextStyle(
+      overflow: TextOverflow.ellipsis,
+      fontSize: 12,
+      color: theme.textTheme.bodyMedium?.color,
+      fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+    );
+    final lastMessage = widget.lastMessage;
 
     return Row(
       children: [
@@ -186,7 +191,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
                     child: ParsedText(
                       parse: TextMatchers.matchers(textStyle, theme.strongQuoteDecoration(true)),
                       regexOptions: const RegexOptions(multiLine: true, dotAll: true),
-                      style: textStyle.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
+                      style: textStyle,
                       text: lastMessage.content,
                       textWidthBasis: TextWidthBasis.longestLine,
                       maxLines: 1,

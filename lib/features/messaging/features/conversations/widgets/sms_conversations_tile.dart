@@ -103,9 +103,14 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
   }
 
   Widget subtitle(String? userNumber) {
-    const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12, color: Colors.grey);
-    final lastMessage = widget.lastMessage;
     final theme = Theme.of(context);
+    final textStyle = TextStyle(
+      overflow: TextOverflow.ellipsis,
+      fontSize: 12,
+      color: theme.textTheme.bodyMedium?.color,
+      fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+    );
+    final lastMessage = widget.lastMessage;
 
     return Row(
       children: [
@@ -114,7 +119,7 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
             child: ParsedText(
               parse: TextMatchers.matchers(textStyle, theme.strongQuoteDecoration(true)),
               regexOptions: const RegexOptions(multiLine: true, dotAll: true),
-              style: textStyle.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
+              style: textStyle,
               text: lastMessage.content,
               textWidthBasis: TextWidthBasis.longestLine,
               maxLines: 1,
