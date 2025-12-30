@@ -235,7 +235,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   ///
   /// The `&& video` check prevents displaying a "black square" when the video is
   /// logically muted (user intent), but the track remains technically active
-  /// (e.g., sending black frames to maintain the co
+  /// (e.g., sending black frames to maintain the connection).
   bool get cameraEnabled => localStream?.getVideoTracks().firstOrNull?.enabled == true && video;
 }
 

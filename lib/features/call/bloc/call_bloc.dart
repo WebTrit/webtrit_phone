@@ -1390,8 +1390,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///
   /// If its audiocall, try to upgrade to videocal using renegotiation
   /// by adding the tracks to the peer connection.
-  /// after succes [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
-  /// than [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
+  /// after success [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
+  /// then [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
   ///
   /// **Mute Implementation Note:**
   /// Currently, this method implements a **"Soft Mute"** strategy by toggling
