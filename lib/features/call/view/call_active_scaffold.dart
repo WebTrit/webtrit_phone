@@ -176,20 +176,14 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               cameraValue: activeCall.cameraEnabled,
                                               inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                               onCameraChanged: widget.callConfig.isVideoCallEnabled
-                                                  ? (bool value) {
-                                                      context.read<CallBloc>().add(
-                                                        CallControlEvent.cameraEnabled(activeCall.callId, value),
-                                                      );
-                                                      setState(() {});
-                                                    }
+                                                  ? (bool value) => context.read<CallBloc>().add(
+                                                      CallControlEvent.cameraEnabled(activeCall.callId, value),
+                                                    )
                                                   : null,
                                               mutedValue: activeCall.muted,
-                                              onMutedChanged: (bool value) {
-                                                context.read<CallBloc>().add(
-                                                  CallControlEvent.setMuted(activeCall.callId, value),
-                                                );
-                                                setState(() {});
-                                              },
+                                              onMutedChanged: (bool value) => context.read<CallBloc>().add(
+                                                CallControlEvent.setMuted(activeCall.callId, value),
+                                              ),
                                               audioDevice: widget.audioDevice,
                                               availableAudioDevices: widget.availableAudioDevices,
                                               onAudioDeviceChanged: (CallAudioDevice device) {
