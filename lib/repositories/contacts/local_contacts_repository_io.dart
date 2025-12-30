@@ -8,7 +8,10 @@ import 'local_contacts_repository.dart';
 
 class LocalContactsRepository implements ILocalContactsRepository {
   LocalContactsRepository() {
-    _controller = StreamController<List<Contact>>.broadcast(onListen: _onListenCallback, onCancel: _onCancelCallback);
+    _controller = StreamController<List<Contact>>.broadcast(
+      onListen: _onListenCallback,
+      onCancel: _onCancelCallback,
+    );
     _listenedCounter = 0;
   }
 
@@ -53,10 +56,11 @@ class LocalContactsRepository implements ILocalContactsRepository {
 
   Future<List<Contact>> _listContacts() async {
     final contacts = await FlutterContacts.getContacts(withProperties: true, withAccounts: true, withThumbnail: true);
-    return contacts.where((contact) {
+    return contacts
+        .where((contact) {
       if (Platform.isAndroid) {
         for (final account in contact.accounts) {
-          if (account.mimetypes.contains('vnd.android.cursor.item/phone_v2')) {
+          if (account.mimetypes.contains('vnd.android.cursor.item/phone_v2') || account.type == 'com.google') {
             return true;
           }
         }
@@ -64,6 +68,7 @@ class LocalContactsRepository implements ILocalContactsRepository {
       } else {
         return true;
       }
-    }).toList();
+    })
+        .toList();
   }
 }
