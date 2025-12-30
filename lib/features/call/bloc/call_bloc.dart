@@ -1390,8 +1390,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///
   /// If its audiocall, try to upgrade to videocal using renegotiation
   /// by adding the tracks to the peer connection.
-  /// after succes [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
-  /// than [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
+  /// after success [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
+  /// then [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
+  ///
+  /// **Mute Implementation Note:**
+  /// Currently, this method implements a **"Soft Mute"** strategy by toggling
+  /// [MediaStreamTrack.enabled] instead of a **"Hard Mute"** (changing
+  /// [RTCRtpTransceiver] direction to [TransceiverDirection.RecvOnly]).
+  ///
+  /// **Reason:** It was observed that switching to `RecvOnly` causes the server
+  /// to stop sending the *incoming* video stream to the client.
+  /// This behavior suggests that the server infrastructure might interpret the cessation
+  /// of outgoing RTP packets as a connection timeout or does not correctly handle
+  /// the session modification in the current configuration. "Soft Mute" avoids this
+  /// by keeping the channel active (sending black/empty frames).
   Future<void> _onCallControlEventCameraEnabled(_CallControlEventCameraEnabled event, Emitter<CallState> emit) async {
     final activeCall = state.retrieveActiveCall(event.callId);
     if (activeCall == null) return;

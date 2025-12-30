@@ -79,7 +79,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       ),
                     ),
                   ),
-                if (activeCall.localVideo)
+                if (activeCall.cameraEnabled)
                   AnimatedPositioned(
                     right: 10 + mediaQueryData.padding.right,
                     top: 10 + mediaQueryData.padding.top + (compact ? 0 : 100),
