@@ -63,18 +63,21 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
         onTap: isSwitchEnabled ? onSwitchCameraPressed : null,
         child: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(color: onTabGradient.withValues(alpha: 0.3)),
-              width: frameSize.width,
-              height: frameSize.height,
-              child: frontCamera == null
-                  ? null
-                  : RTCStreamView(
-                      key: callFrontCameraPreviewKey,
-                      stream: localStream,
-                      mirror: frontCamera!,
-                      placeholderBuilder: localePlaceholderBuilder,
-                    ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                decoration: BoxDecoration(color: onTabGradient.withValues(alpha: 0.3)),
+                width: frameSize.width,
+                height: frameSize.height,
+                child: frontCamera == null
+                    ? null
+                    : RTCStreamView(
+                        key: callFrontCameraPreviewKey,
+                        stream: localStream,
+                        mirror: frontCamera!,
+                        placeholderBuilder: localePlaceholderBuilder,
+                      ),
+              ),
             ),
             Positioned(
               top: 4,
