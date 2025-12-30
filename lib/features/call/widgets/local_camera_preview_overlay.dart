@@ -77,9 +77,8 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
                     ),
             ),
             Positioned(
-              left: 0,
-              right: 0,
-              bottom: 1,
+              top: 4,
+              right: 4,
               child: frontCamera == null
                   ? SizedCircularProgressIndicator(
                       size: switchCameraIconSize - 2.0,
@@ -87,7 +86,7 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
                       color: onTabGradient,
                       strokeWidth: 2.0,
                     )
-                  : Icon(Icons.switch_camera, size: switchCameraIconSize, color: onTabGradient),
+                  : Icon(Icons.flip_camera_ios, size: switchCameraIconSize, color: onTabGradient),
             ),
           ],
         ),
