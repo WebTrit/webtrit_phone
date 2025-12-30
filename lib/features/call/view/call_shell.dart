@@ -309,26 +309,39 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
       child: GestureDetector(
         onTap: widget.onTap,
         onPanStart: (details) {
+          // Sync state with actual render position before starting the drag
+          final startRect = _findCallCardRect();
           setState(() {
+            _offset = startRect.topLeft;
             _callCardPanning = true;
           });
         },
         onPanUpdate: (details) {
-          final callCardRect = _findCallCardRect(details.delta);
-          final translateX = _boundTranslateX(_activeRect, callCardRect);
-          final translateY = _boundTranslateY(_activeRect, callCardRect);
-          final offset = callCardRect.translate(translateX, translateY).topLeft;
+          if (_offset == null) return;
 
-          widget.onOffsetUpdate?.call(offset);
+          // Calculate new position based on state + delta (ignoring render lag)
+          final currentSize = _callCardKey.currentContext?.size ?? Size.zero;
+          final tentativeOffset = _offset! + details.delta;
+          final tentativeRect = tentativeOffset & currentSize;
+
+          final translateX = _boundTranslateX(_activeRect, tentativeRect);
+          final translateY = _boundTranslateY(_activeRect, tentativeRect);
+
+          final finalOffset = tentativeRect.translate(translateX, translateY).topLeft;
+
+          widget.onOffsetUpdate?.call(finalOffset);
           setState(() {
-            _offset = offset;
+            _offset = finalOffset;
           });
         },
         onPanEnd: (details) {
-          final callCardRect = _findCallCardRect();
-          final translateX = _stickTranslateX(_stickyRect, callCardRect);
-          final translateY = _boundTranslateY(_stickyRect, callCardRect);
-          final offset = callCardRect.translate(translateX, translateY).topLeft;
+          // Calculate snapping based on the final dragged position
+          final currentSize = _callCardKey.currentContext?.size ?? Size.zero;
+          final currentRect = (_offset ?? Offset.zero) & currentSize;
+
+          final translateX = _stickTranslateX(_stickyRect, currentRect);
+          final translateY = _boundTranslateY(_stickyRect, currentRect);
+          final offset = currentRect.translate(translateX, translateY).topLeft;
 
           widget.onOffsetUpdate?.call(offset);
           setState(() {
@@ -341,11 +354,15 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
     );
   }
 
-  Rect _findCallCardRect([Offset delta = Offset.zero]) {
-    final callCardRenderBox = _callCardKey.currentContext?.findRenderObject()! as RenderBox;
-    final offset = callCardRenderBox.localToGlobal(Offset.zero) + delta;
+  Rect _findCallCardRect() {
+    final callCardContext = _callCardKey.currentContext;
+    if (callCardContext == null) return Rect.zero;
+
+    final callCardRenderBox = callCardContext.findRenderObject() as RenderBox?;
+    if (callCardRenderBox == null || !callCardRenderBox.hasSize) return Rect.zero;
+
+    final offset = callCardRenderBox.localToGlobal(Offset.zero);
     final size = callCardRenderBox.size;
-    if (!callCardRenderBox.hasSize) return Rect.zero;
 
     return Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
   }
