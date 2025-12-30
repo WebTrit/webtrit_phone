@@ -149,7 +149,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
               ContactPhoneDataCompanion(
                 rawNumber: Value(externalContactNumber),
-                sanitizedNumber: Value(externalContactNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
+                sanitizedNumber: Value(_sanitizeNumber(externalContactNumber)),
                 label: const Value(kContactMainLabel),
                 contactId: Value(insertOrUpdateContactData.id),
               ),
@@ -159,7 +159,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
               ContactPhoneDataCompanion(
                 rawNumber: Value(externalContactExt),
-                sanitizedNumber: Value(externalContactExt.replaceAll(RegExp(numberSanitizeRegex), '')),
+                sanitizedNumber: Value(_sanitizeNumber(externalContactExt)),
                 label: const Value(kContactExtLabel),
                 contactId: Value(insertOrUpdateContactData.id),
               ),
@@ -170,7 +170,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
               await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
                 ContactPhoneDataCompanion(
                   rawNumber: Value(externalSmsNumber),
-                  sanitizedNumber: Value(externalSmsNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
+                  sanitizedNumber: Value(_sanitizeNumber(externalSmsNumber)),
                   label: const Value(kContactSmsLabel),
                   contactId: Value(insertOrUpdateContactData.id),
                 ),
@@ -182,7 +182,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
               await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
                 ContactPhoneDataCompanion(
                   rawNumber: Value(externalContactAdditionalNumber),
-                  sanitizedNumber: Value(externalContactAdditionalNumber.replaceAll(RegExp(numberSanitizeRegex), '')),
+                  sanitizedNumber: Value(_sanitizeNumber(externalContactAdditionalNumber)),
                   label: const Value(kContactAdditionalLabel),
                   contactId: Value(insertOrUpdateContactData.id),
                 ),
@@ -224,4 +224,6 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
       }
     }
   }
+
+  String _sanitizeNumber(String number) => number.replaceAll(RegExp(numberSanitizeRegex), '');
 }

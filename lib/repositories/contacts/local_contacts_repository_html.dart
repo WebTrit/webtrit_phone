@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:webtrit_phone/models/models.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 
 import 'local_contacts_repository.dart';
 
@@ -13,7 +13,7 @@ class LocalContactsRepository implements ILocalContactsRepository {
   }
 
   @override
-  Stream<List<LocalContact>> contacts() {
+  Stream<List<Contact>> contacts() {
     return const Stream.empty();
   }
 

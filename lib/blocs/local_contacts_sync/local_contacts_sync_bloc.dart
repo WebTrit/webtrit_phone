@@ -5,10 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/models/models.dart' hide Contact;
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -43,7 +44,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   final AsyncCallback isContactsPermissionGranted;
   final AsyncCallback requestContactPermission;
 
-  StreamSubscription<List<LocalContact>>? _contactsSubscription;
+  StreamSubscription<List<Contact>>? _contactsSubscription;
 
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
@@ -177,9 +178,40 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
     _logger.info('_initContactsSubscription: subscribing to contacts stream');
     _contactsSubscription = localContactsRepository.contacts().listen(
-      (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
+      (contacts) => add(_LocalContactsSyncUpdated(contacts: _convertToLocalContacts(contacts))),
       onError: (error, stackTrace) => _logger.warning('Contacts stream error', error, stackTrace),
     );
+  }
+
+  List<LocalContact> _convertToLocalContacts(List<Contact> contacts) {
+    return contacts
+        .map(
+          (contact) => LocalContact(
+            id: contact.id,
+            displayName: contact.displayName,
+            firstName: contact.name.first,
+            lastName: contact.name.last,
+            thumbnail: contact.thumbnail,
+            phones: contact.phones
+                .map(
+                  (phone) => LocalContactPhone(
+                    rawNumber: phone.number,
+                    sanitizedNumber: phone.number.replaceAll(RegExp(numberSanitizeRegex), ''),
+                    label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.name,
+                  ),
+                )
+                .toList(),
+            emails: contact.emails
+                .map(
+                  (email) => LocalContactEmail(
+                    address: email.address,
+                    label: email.label == EmailLabel.custom ? email.customLabel : email.label.name,
+                  ),
+                )
+                .toList(),
+          ),
+        )
+        .toList();
   }
 
   @override
