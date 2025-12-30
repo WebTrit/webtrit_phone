@@ -87,7 +87,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     switchCameraIconSize: switchCameraIconSize,
                     frontCamera: activeCall.frontCamera,
                     localStream: activeCall.localStream,
-                    localePlaceholderBuilder: widget.localePlaceholderBuilder,
+                    localPlaceholderBuilder: widget.localePlaceholderBuilder,
                     onSwitchCameraPressed: activeCall.frontCamera == null
                         ? null
                         : () => context.read<CallBloc>().add(CallControlEvent.cameraSwitched(activeCall.callId)),

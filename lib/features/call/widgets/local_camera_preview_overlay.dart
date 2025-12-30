@@ -18,7 +18,7 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
     required this.frontCamera,
     required this.localStream,
     required this.onSwitchCameraPressed,
-    required this.localePlaceholderBuilder,
+    required this.localPlaceholderBuilder,
     this.duration = kThemeChangeDuration,
     this.smallerSide = 90.0,
   });
@@ -39,7 +39,7 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
 
   final VoidCallback? onSwitchCameraPressed;
 
-  final WidgetBuilder? localePlaceholderBuilder;
+  final WidgetBuilder? localPlaceholderBuilder;
 
   final Duration duration;
 
@@ -76,7 +76,7 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
                         key: callFrontCameraPreviewKey,
                         stream: localStream,
                         mirror: frontCamera!,
-                        placeholderBuilder: localePlaceholderBuilder,
+                        placeholderBuilder: localPlaceholderBuilder,
                       ),
               ),
             ),
