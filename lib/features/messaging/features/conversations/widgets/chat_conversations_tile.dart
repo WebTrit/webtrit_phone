@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -161,26 +162,37 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
   }
 
   Widget subtitle() {
-    const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12);
+    const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12, color: Colors.grey);
     final lastMessage = widget.lastMessage;
+    final theme = Theme.of(context);
 
     return Row(
       children: [
         if (lastMessage != null)
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                ParticipantName(
-                  senderId: lastMessage.senderId,
-                  userId: widget.userId,
-                  style: textStyle,
-                  textMap: (name) => '$name:',
-                ),
+                if (widget.conversation.type == ChatType.group)
+                  ParticipantName(
+                    senderId: lastMessage.senderId,
+                    userId: widget.userId,
+                    style: textStyle,
+                    textMap: (name) => '$name:',
+                  ),
                 if (lastMessage.deletedAt != null)
                   Text(context.l10n.messaging_MessageView_deleted, style: textStyle, overflow: TextOverflow.ellipsis)
                 else
-                  Text(lastMessage.content, style: textStyle, overflow: TextOverflow.ellipsis),
+                  Flexible(
+                    child: ParsedText(
+                      parse: TextMatchers.matchers(textStyle, theme.strongQuoteDecoration(true)),
+                      regexOptions: const RegexOptions(multiLine: true, dotAll: true),
+                      style: textStyle.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
+                      text: lastMessage.content,
+                      textWidthBasis: TextWidthBasis.longestLine,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
               ],
             ),
           )

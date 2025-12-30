@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/text_matchers.dart';
 import 'package:webtrit_phone/widgets/leading_avatar.dart';
 
 class SmsConversationsTile extends StatefulWidget {
@@ -101,28 +103,22 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
   }
 
   Widget subtitle(String? userNumber) {
-    const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12);
+    const textStyle = TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12, color: Colors.grey);
     final lastMessage = widget.lastMessage;
+    final theme = Theme.of(context);
 
     return Row(
       children: [
         if (lastMessage != null)
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  lastMessage.fromPhoneNumber == userNumber
-                      ? context.l10n.messaging_Conversations_tile_you
-                      : lastMessage.fromPhoneNumber,
-                  style: textStyle,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (lastMessage.deletedAt != null)
-                  Text(context.l10n.messaging_MessageView_deleted, style: textStyle, overflow: TextOverflow.ellipsis)
-                else
-                  Text(lastMessage.content, style: textStyle, overflow: TextOverflow.ellipsis),
-              ],
+            child: ParsedText(
+              parse: TextMatchers.matchers(textStyle, theme.strongQuoteDecoration(true)),
+              regexOptions: const RegexOptions(multiLine: true, dotAll: true),
+              style: textStyle.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
+              text: lastMessage.content,
+              textWidthBasis: TextWidthBasis.longestLine,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           )
         else

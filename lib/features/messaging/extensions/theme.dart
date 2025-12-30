@@ -28,12 +28,22 @@ extension MsgViewExt on ThemeData {
     );
   }
 
-  BoxDecoration quoteDecoration(bool isMine) {
+  BoxDecoration roundQuoteDecoration(bool isMine) {
     return BoxDecoration(
       color: isMine
           ? colorScheme.primaryFixed.withValues(alpha: 0.5)
           : colorScheme.tertiaryFixed.withValues(alpha: 0.5),
       borderRadius: BorderRadius.circular(8),
+      border: Border(left: BorderSide(color: colorScheme.primaryFixed, width: 2)),
+    );
+  }
+
+  BoxDecoration strongQuoteDecoration(bool isMine) {
+    return BoxDecoration(
+      color: isMine
+          ? colorScheme.primaryFixed.withValues(alpha: 0.5)
+          : colorScheme.tertiaryFixed.withValues(alpha: 0.5),
+      borderRadius: BorderRadius.circular(0),
       border: Border(left: BorderSide(color: colorScheme.primaryFixed, width: 2)),
     );
   }
