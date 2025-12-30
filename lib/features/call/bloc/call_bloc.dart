@@ -237,31 +237,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final newRegistration = change.nextState.callServiceState.registration;
     final previousRegistration = change.currentState.callServiceState.registration;
 
-    if (newRegistration != previousRegistration) {
+    if (newRegistration != previousRegistration && newRegistration != null) {
       _logger.fine('_onRegistrationChange: $newRegistration to $previousRegistration');
 
-      final newRegistrationStatus = newRegistration?.status;
+      final newRegistrationStatus = newRegistration.status;
       final previousRegistrationStatus = previousRegistration?.status;
 
-      if (newRegistrationStatus?.isRegistered == true && previousRegistrationStatus?.isRegistered != true) {
+      if (previousRegistrationStatus?.isRegistered == false && newRegistrationStatus.isRegistered == true) {
         presenceSettingsRepository.resetLastSettingsSync();
         submitNotification(AppOnlineNotification());
       }
 
-      if (newRegistrationStatus?.isRegistered != true && previousRegistrationStatus?.isRegistered == true) {
+      if (previousRegistrationStatus?.isRegistered == true && newRegistrationStatus.isRegistered == false) {
         submitNotification(AppOfflineNotification());
       }
 
-      if (newRegistrationStatus?.isFailed == true || newRegistrationStatus?.isUnregistered == true) {
+      if (newRegistrationStatus.isFailed == true || newRegistrationStatus.isUnregistered == true) {
         add(const _ResetStateEvent.completeCalls());
       }
 
-      if (newRegistrationStatus?.isFailed == true) {
+      if (newRegistrationStatus.isFailed == true) {
         submitNotification(
           SipRegistrationFailedNotification(
-            knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration?.code),
-            systemCode: newRegistration?.code,
-            systemReason: newRegistration?.reason,
+            knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration.code),
+            systemCode: newRegistration.code,
+            systemReason: newRegistration.reason,
           ),
         );
       }
