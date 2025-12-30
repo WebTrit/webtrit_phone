@@ -332,7 +332,7 @@ class SDPModBuilder {
   /// a=sendrecv
   /// ```
   void removeUnknownProfiles(RTPCodecKind kind) {
-    final media = _getMedia(RTPCodecKind.audio);
+    final media = _getMedia(kind);
     if (media == null) return;
 
     final originalPayloads = [];
