@@ -80,24 +80,12 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
             child: Stack(
               children: [
                 if (activeCall.remoteVideo)
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: GestureDetector(
-                      onTap: activeCall.wasAccepted ? _compactController.toggle : null,
-                      behavior: HitTestBehavior.translucent,
-                      child: SizedBox(
-                        width: mediaQueryData.size.width,
-                        height: mediaQueryData.size.height,
-                        child: RTCStreamView(
-                          stream: activeCall.remoteStream,
-                          placeholderBuilder: widget.remotePlaceholderBuilder,
-                          fit: _videoFit,
-                        ),
-                      ),
-                    ),
+                  RemoteVideoViewOverlay(
+                    activeCallWasAccepted: activeCall.wasAccepted,
+                    remoteStream: activeCall.remoteStream,
+                    videoFit: _videoFit,
+                    onTap: _compactController.toggle,
+                    remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
                   ),
                 if (activeCall.cameraEnabled)
                   AnimatedBuilder(
