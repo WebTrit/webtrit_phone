@@ -87,6 +87,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                   child: Container(color: theme.canvasColor.withAlpha(150)),
                 ),
               ),
+              centerTitle: true,
               title: FadeIn(
                 child: Builder(
                   builder: (context) {
