@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -36,6 +37,16 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   /// Manages the visibility state of call controls (Compact vs. Expanded) and
   /// handles the auto-hide timer logic based on user activity and call state.
   late final CompactAutoResetController _compactController;
+
+  /// Controls the object fit mode (cover or contain) for the remote video stream.
+  ///
+  /// Consider moving this to a global state (e.g., BLoC or Some config provider).
+  RTCVideoViewObjectFit _videoFit = RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
+
+  /// Controls the visual style of the background when the video does not fill the screen.
+  ///
+  /// Consider moving this to a global state (e.g., BLoC or Some config provider).
+  VideoBackgroundMode _backgroundMode = VideoBackgroundMode.blur;
 
   @override
   void initState() {
@@ -76,23 +87,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
             child: Stack(
               children: [
                 if (activeCall.remoteVideo)
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: GestureDetector(
-                      onTap: activeCall.wasAccepted ? _compactController.toggle : null,
-                      behavior: HitTestBehavior.translucent,
-                      child: SizedBox(
-                        width: mediaQueryData.size.width,
-                        height: mediaQueryData.size.height,
-                        child: RTCStreamView(
-                          stream: activeCall.remoteStream,
-                          placeholderBuilder: widget.remotePlaceholderBuilder,
-                        ),
-                      ),
-                    ),
+                  RemoteVideoViewOverlay(
+                    activeCallWasAccepted: activeCall.wasAccepted,
+                    remoteStream: activeCall.remoteStream,
+                    videoFit: _videoFit,
+                    onTap: _compactController.toggle,
+                    remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
+                    backgroundMode: _backgroundMode,
                   ),
                 if (activeCall.cameraEnabled)
                   AnimatedBuilder(
@@ -127,6 +128,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 backgroundColor: style?.appBar?.backgroundColor,
                                 foregroundColor: style?.appBar?.foregroundColor,
                                 primary: style?.appBar?.primary ?? false,
+                                actions: [
+                                  if (activeCalls.shouldAutoCompact)
+                                    CallPopupMenuButton<void>(
+                                      items: _buildPopupMenuItems,
+                                      child: const Icon(Icons.more_vert),
+                                    ),
+                                ],
                               ),
                               Expanded(
                                 child: LayoutBuilder(
@@ -333,6 +341,37 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
         },
       ),
     );
+  }
+
+  /// Generates the list of menu items for the call options popup.
+  ///
+  /// The list always includes the video fit toggle. The background mode toggle
+  /// is conditionally added only when the video is in 'contain' mode, as the
+  /// background is not visible in 'cover' mode.
+  List<PopupMenuItem<void>> get _buildPopupMenuItems {
+    final iconColor = Theme.of(context).colorScheme.onSurface;
+
+    return [
+      CallPopupMenuItem(
+        onTap: _onVideoFitTogglePressed,
+        text: _videoFit.actionLabelL10n(context),
+        icon: Icon(_videoFit.actionIcon, color: iconColor),
+      ),
+      if (_videoFit.isContain)
+        CallPopupMenuItem(
+          onTap: _onBlurTogglePressed,
+          text: _backgroundMode.actionLabelL10n(context),
+          icon: Icon(_backgroundMode.actionIcon, color: iconColor),
+        ),
+    ];
+  }
+
+  void _onVideoFitTogglePressed() {
+    setState(() => _videoFit = _videoFit.toggled);
+  }
+
+  void _onBlurTogglePressed() {
+    setState(() => _backgroundMode = _backgroundMode.toggled);
   }
 
   @override

@@ -206,6 +206,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Зараз немає активних дзвінків';
 
   @override
+  String get call_videoBackground_actionLabel_disableBlur => 'Вимкнути розмиття';
+
+  @override
+  String get call_videoBackground_actionLabel_enableBlur => 'Увімкнути розмиття';
+
+  @override
+  String get call_videoView_actionLabel_cover => 'Заповнити';
+
+  @override
+  String get call_videoView_actionLabel_fit => 'Вмістити';
+
+  @override
   String get common_noInternetConnection_message =>
       'Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.';
 

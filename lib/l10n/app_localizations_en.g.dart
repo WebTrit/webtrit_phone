@@ -205,6 +205,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Currently, there is no active call';
 
   @override
+  String get call_videoBackground_actionLabel_disableBlur => 'Disable Blur';
+
+  @override
+  String get call_videoBackground_actionLabel_enableBlur => 'Enable Blur';
+
+  @override
+  String get call_videoView_actionLabel_cover => 'Cover';
+
+  @override
+  String get call_videoView_actionLabel_fit => 'Fit';
+
+  @override
   String get common_noInternetConnection_message =>
       'It seems you are not connected to the internet. Please check your connection and try again.';
 

@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class RTCStreamView extends StatefulWidget {
-  const RTCStreamView({required this.stream, this.mirror = false, this.placeholderBuilder, super.key});
+  const RTCStreamView({
+    required this.stream,
+    this.mirror = false,
+    this.placeholderBuilder,
+    this.fit = RTCVideoViewObjectFit.RTCVideoViewObjectFitContain,
+    super.key,
+  });
 
   final MediaStream? stream;
   final bool mirror;
+  final RTCVideoViewObjectFit fit;
   final Widget Function(BuildContext)? placeholderBuilder;
 
   @override
@@ -42,6 +49,11 @@ class _RTCStreamViewState extends State<RTCStreamView> {
 
   @override
   Widget build(BuildContext context) {
-    return RTCVideoView(renderer, mirror: widget.mirror, placeholderBuilder: widget.placeholderBuilder);
+    return RTCVideoView(
+      renderer,
+      mirror: widget.mirror,
+      placeholderBuilder: widget.placeholderBuilder,
+      objectFit: widget.fit,
+    );
   }
 }
