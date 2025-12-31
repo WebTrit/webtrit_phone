@@ -162,6 +162,14 @@ class AppLocalizationsMapper {
       'callStatus_ready': localizations.callStatus_ready,
       'call_ThumbnailAvatar_currentlyNoActiveCall':
           localizations.call_ThumbnailAvatar_currentlyNoActiveCall,
+      'call_videoBackground_actionLabel_disableBlur':
+          localizations.call_videoBackground_actionLabel_disableBlur,
+      'call_videoBackground_actionLabel_enableBlur':
+          localizations.call_videoBackground_actionLabel_enableBlur,
+      'call_videoView_actionLabel_cover':
+          localizations.call_videoView_actionLabel_cover,
+      'call_videoView_actionLabel_fit':
+          localizations.call_videoView_actionLabel_fit,
       'common_noInternetConnection_message':
           localizations.common_noInternetConnection_message,
       'common_noInternetConnection_retryButton':
@@ -339,6 +347,21 @@ class AppLocalizationsMapper {
           localizations.diagnosticScreen_permissionsGroup_title,
       'diagnosticScreen_pushNotificationService_title':
           localizations.diagnosticScreen_pushNotificationService_title,
+      'diagnosticReportDialogTitle': localizations.diagnosticReportDialogTitle,
+      'diagnosticReportDialogContent':
+          localizations.diagnosticReportDialogContent,
+      'diagnosticReportDialogIncludeSystemLogsSwitchTileTitle':
+          localizations.diagnosticReportDialogIncludeSystemLogsSwitchTileTitle,
+      'diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle': localizations
+          .diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle,
+      'diagnosticReportDialogAddNoteExpansionTileTitle':
+          localizations.diagnosticReportDialogAddNoteExpansionTileTitle,
+      'diagnosticReportDialogCommentTextFieldHintText':
+          localizations.diagnosticReportDialogCommentTextFieldHintText,
+      'diagnosticReportDialogCancelButtonLabel':
+          localizations.diagnosticReportDialogCancelButtonLabel,
+      'diagnosticReportDialogSendReportButtonLabel':
+          localizations.diagnosticReportDialogSendReportButtonLabel,
       'favorites_BodyCenter_empty': localizations.favorites_BodyCenter_empty,
       'favorites_DeleteConfirmDialog_content':
           localizations.favorites_DeleteConfirmDialog_content,
