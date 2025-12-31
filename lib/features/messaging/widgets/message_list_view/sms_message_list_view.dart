@@ -173,6 +173,8 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
                   outboxDeleteEntry: entry.outboxDeleteEntry,
                   userReadedUntil: entry.userReadedUntil,
                   membersReadedUntil: entry.membersReadedUntil,
+                  avatarViewMode: AvatarViewMode.none,
+                  nameViewMode: (entry.firstInSequence == true) ? NameViewMode.show : NameViewMode.none,
                   handleDelete: handleDelete,
                   onRendered: () {
                     final message = entry.message;
@@ -215,6 +217,8 @@ final class _MessageViewEntry extends _SmsMessageListViewEntry {
   final SmsOutboxMessageDeleteEntry? outboxDeleteEntry;
   final DateTime? userReadedUntil;
   final DateTime? membersReadedUntil;
+  final bool? lastInSequence;
+  final bool? firstInSequence;
 
   _MessageViewEntry({
     this.message,
@@ -222,6 +226,8 @@ final class _MessageViewEntry extends _SmsMessageListViewEntry {
     this.outboxDeleteEntry,
     this.userReadedUntil,
     this.membersReadedUntil,
+    this.lastInSequence,
+    this.firstInSequence,
   });
 }
 
@@ -271,6 +277,7 @@ _ComputeResult _computeList(_ComputeParams params) {
     final nextMessage = isLast ? null : messages[i - 1];
 
     var lastMsgOfTheDay = false;
+    var firstMsgOfTheDay = false;
 
     if (nextMessage != null) {
       final nextMsgDate = nextMessage.createdAt;
@@ -278,9 +285,23 @@ _ComputeResult _computeList(_ComputeParams params) {
       lastMsgOfTheDay = nextMsgDate.day != msgDate.day;
     }
 
+    if (i == messages.length - 1) {
+      firstMsgOfTheDay = true;
+    } else {
+      final prevMessage = messages[i + 1];
+      final prevMsgDate = prevMessage.createdAt;
+      final msgDate = message.createdAt;
+      firstMsgOfTheDay = prevMsgDate.day != msgDate.day;
+    }
+
     if (lastMsgOfTheDay) {
       entries.add(_DateViewEntry(date: message.createdAt));
     }
+
+    final lastInSequence = isLast || nextMessage!.fromPhoneNumber != message.fromPhoneNumber || lastMsgOfTheDay;
+
+    final firstInSequence =
+        i == messages.length - 1 || messages[i + 1].fromPhoneNumber != message.fromPhoneNumber || firstMsgOfTheDay;
 
     entries.add(
       _MessageViewEntry(
@@ -288,6 +309,8 @@ _ComputeResult _computeList(_ComputeParams params) {
         outboxDeleteEntry: deleteEntry,
         userReadedUntil: userReadedUntil,
         membersReadedUntil: membersReadedUntil,
+        lastInSequence: lastInSequence,
+        firstInSequence: firstInSequence,
       ),
     );
   }

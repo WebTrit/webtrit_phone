@@ -12,6 +12,10 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'message_body.dart';
 
+enum AvatarViewMode { none, space, show }
+
+enum NameViewMode { none, show }
+
 class ChatMessageView extends StatefulWidget {
   const ChatMessageView({
     super.key,
@@ -22,6 +26,8 @@ class ChatMessageView extends StatefulWidget {
     this.outboxDeleteEntry,
     this.userReadedUntil,
     this.membersReadedUntil,
+    this.avatarViewMode = AvatarViewMode.none,
+    this.nameViewMode = NameViewMode.none,
     required this.handleSetForReply,
     required this.handleSetForForward,
     required this.handleSetForEdit,
@@ -42,6 +48,12 @@ class ChatMessageView extends StatefulWidget {
   /// Timestamp of the last message read by the members
   /// Used to display the read status of the message sent by the user
   final DateTime? membersReadedUntil;
+
+  /// Controls the visibility of the sender's avatar in the message view
+  final AvatarViewMode avatarViewMode;
+
+  /// Controls the visibility of the sender's name in the message view
+  final NameViewMode nameViewMode;
 
   /// Callback function on popup menu reply item selected
   final Function(ChatMessage refMessage) handleSetForReply;
@@ -193,37 +205,42 @@ class _ChatMessageViewState extends State<ChatMessageView> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (!isMine) ...[
-              ContactInfoBuilder(
-                source: ContactSourceId(ContactSourceType.external, senderId),
-                builder: (context, contact) {
-                  return LeadingAvatar(
-                    username: contact?.displayTitle,
-                    thumbnail: contact?.thumbnail,
-                    thumbnailUrl: contact?.thumbnailUrl,
-                    radius: 20,
-                    registered: contact?.registered,
-                    presenceInfo: contact?.presenceInfo,
-                  );
-                },
-              ),
-              const SizedBox(width: 8),
+              if (widget.avatarViewMode == AvatarViewMode.show) ...[
+                ContactInfoBuilder(
+                  source: ContactSourceId(ContactSourceType.external, senderId),
+                  builder: (context, contact) {
+                    return LeadingAvatar(
+                      username: contact?.displayTitle,
+                      thumbnail: contact?.thumbnail,
+                      thumbnailUrl: contact?.thumbnailUrl,
+                      radius: 20,
+                      registered: contact?.registered,
+                      presenceInfo: contact?.presenceInfo,
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (widget.avatarViewMode == AvatarViewMode.space) const SizedBox(width: 48),
             ],
             Flexible(
               child: Container(
                 decoration: theme.messageDecoration(isMine, isViewedByUser),
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(8),
                 child: IntrinsicWidth(
                   child: Column(
                     key: bodyKey,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ParticipantName(
-                        senderId: senderId,
-                        userId: widget.userId,
-                        key: Key(senderId),
-                        style: theme.userNameStyle,
-                      ),
-                      const SizedBox(height: 4),
+                      if (widget.nameViewMode == NameViewMode.show) ...[
+                        ParticipantName(
+                          senderId: senderId,
+                          userId: widget.userId,
+                          key: Key(senderId),
+                          style: theme.userNameStyle,
+                        ),
+                        const SizedBox(height: 4),
+                      ],
                       if (isReply) ...[
                         ReplyQuote(userId: widget.userId, message: message!, isMine: isMine),
                         const SizedBox(height: 4),

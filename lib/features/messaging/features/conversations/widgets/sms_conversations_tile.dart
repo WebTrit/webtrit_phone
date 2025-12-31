@@ -45,7 +45,7 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Material(
         color: Theme.of(context).cardColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
@@ -85,7 +85,7 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
 
   Widget leading(String? recipientNumber) {
     final text = recipientNumber?.substring(recipientNumber.length - 2) ?? '';
-    return LeadingAvatar(username: text, radius: 24);
+    return LeadingAvatar(username: text, radius: 20);
   }
 
   Widget title(String? recipientNumber) {

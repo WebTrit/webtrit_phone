@@ -112,6 +112,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                 if (state is CVSReady) {
                   return ChatMessageListView(
                     userId: userId,
+                    isGroup: state.chat?.type == ChatType.group,
                     messages: state.messages,
                     outboxMessages: state.outboxMessages,
                     outboxMessageEdits: state.outboxMessageEdits,
@@ -155,7 +156,8 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
       source: ContactSourceId(ContactSourceType.external, participant),
       builder: (context, contact) {
         final presenceSource = PresenceViewParams.of(context).viewSource;
-        const nameTextStyle = TextStyle(fontSize: 20);
+        const nameTextStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
+        const noteTextStyle = TextStyle(fontSize: 10);
 
         return switch ((presenceSource, contact)) {
           (_, null) => Text(
@@ -164,23 +166,50 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
             overflow: TextOverflow.ellipsis,
             style: nameTextStyle,
           ),
-          (PresenceViewSource.contactInfo, Contact contact) => Column(
+          (PresenceViewSource.contactInfo, Contact contact) => Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(contact.displayTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: nameTextStyle),
-              if (contact.registered == true)
-                Text(context.l10n.messaging_ConversationScreen_titleAvailable, style: const TextStyle(fontSize: 12)),
+              LeadingAvatar(
+                username: contact.displayTitle,
+                thumbnail: contact.thumbnail,
+                thumbnailUrl: contact.thumbnailUrl,
+                registered: contact.registered,
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(contact.displayTitle, maxLines: 1, overflow: TextOverflow.fade, style: nameTextStyle),
+              ),
             ],
           ),
-          (PresenceViewSource.sipPresence, Contact contact) => Column(
+          (PresenceViewSource.sipPresence, Contact contact) => Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: nameTextStyle,
+              LeadingAvatar(
+                username: contact.displayTitle,
+                thumbnail: contact.thumbnail,
+                thumbnailUrl: contact.thumbnailUrl,
+                presenceInfo: contact.presenceInfo,
               ),
-              if (contact.presenceInfo.anyAvailable == true)
-                Text(context.l10n.messaging_ConversationScreen_titleAvailable, style: const TextStyle(fontSize: 12)),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Column(
+                  children: [
+                    Text(
+                      '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      style: nameTextStyle,
+                    ),
+                    if (contact.presenceInfo.primaryNote?.isNotEmpty ?? false)
+                      Text(
+                        '${contact.presenceInfo.primaryNote}',
+                        style: noteTextStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
         };
