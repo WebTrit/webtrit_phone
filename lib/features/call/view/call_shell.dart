@@ -153,7 +153,7 @@ class _CallShellState extends State<CallShell> {
   /// initial(last remembered since restart) flavor that final and not changed across the app router lifecycle.
   /// example redirect('') will always redirect to contacts page even if user was on the calls or chat page.
   ///
-  /// On iOS, using popUntil doesn't work when the app is collapsed because pushing routes isn’t allowed until the app resumes.
+  /// On iOS, using popUntil doesn't work when the app is collapsed because pushing routes isn`t allowed until the app resumes.
   /// As a result, popUntil is called too early, leaving the route not yet present in the stack once the app reopens.
   /// Using navigate with a path-based approach fixes this issue by properly restoring state and avoiding the redirect bug.
   ///
@@ -309,26 +309,71 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
       child: GestureDetector(
         onTap: widget.onTap,
         onPanStart: (details) {
+          // Sync state with actual render position before starting the drag
+          final startRect = _findCallCardRect();
+          // Validation: Prevent jumping to (0,0) if the render box is invalid or not found.
+          if (startRect.isEmpty) return;
+
           setState(() {
+            _offset = startRect.topLeft;
             _callCardPanning = true;
           });
         },
         onPanUpdate: (details) {
-          final callCardRect = _findCallCardRect(details.delta);
-          final translateX = _boundTranslateX(_activeRect, callCardRect);
-          final translateY = _boundTranslateY(_activeRect, callCardRect);
-          final offset = callCardRect.translate(translateX, translateY).topLeft;
+          // Guard: Ensure a valid base offset (set in onPanStart) is present before applying the delta.
+          if (_offset == null) return;
 
-          widget.onOffsetUpdate?.call(offset);
+          // Calculate new position based on state + delta (ignoring render lag)
+          final currentSize = _callCardKey.currentContext?.size;
+          if (currentSize == null || currentSize.isEmpty) {
+            // Size is not yet available; skip this update to avoid invalid bounds
+            return;
+          }
+
+          // Calculate the proposed new position by applying the user's drag delta to the current state.
+          final tentativeOffset = _offset! + details.delta;
+
+          // Create a rectangle for this proposed position to check for boundary collisions.
+          final tentativeRect = tentativeOffset & currentSize;
+
+          // Calculate correction offsets (if any) to ensure the widget stays within the screen's safe area (_activeRect).
+          final translateX = _boundTranslateX(_activeRect, tentativeRect);
+          final translateY = _boundTranslateY(_activeRect, tentativeRect);
+
+          // Apply the boundary corrections to the proposed rectangle to determine the final, valid top-left position.
+          final finalOffset = tentativeRect.translate(translateX, translateY).topLeft;
+
+          widget.onOffsetUpdate?.call(finalOffset);
           setState(() {
-            _offset = offset;
+            _offset = finalOffset;
           });
         },
         onPanEnd: (details) {
-          final callCardRect = _findCallCardRect();
-          final translateX = _stickTranslateX(_stickyRect, callCardRect);
-          final translateY = _boundTranslateY(_stickyRect, callCardRect);
-          final offset = callCardRect.translate(translateX, translateY).topLeft;
+          // Retrieve the render object to obtain the current size for snapping calculations.
+          final renderBox = _callCardKey.currentContext?.findRenderObject() as RenderBox?;
+          // Validation: If the widget is unmounted or has no size,
+          // snapping cannot be calculated correctly. Stop the panning state to reset animations.
+          if (renderBox == null || !renderBox.hasSize || renderBox.size.isEmpty) {
+            setState(() {
+              _callCardPanning = false;
+            });
+            return;
+          }
+
+          // Calculate snapping based on the final dragged position
+          final currentSize = renderBox.size;
+
+          // Construct the rectangle representing the widget's position at the moment of release.
+          // Use _offset (the last tracked position) combined with the widget's actual size.
+          final currentRect = (_offset ?? Offset.zero) & currentSize;
+
+          // Calculate the translation needed to snap the widget to the nearest side (horizontal)
+          // and ensure it stays within the safe vertical boundaries..
+          final translateX = _stickTranslateX(_stickyRect, currentRect);
+          final translateY = _boundTranslateY(_stickyRect, currentRect);
+
+          // Apply the calculated X (snap) and Y (bound) shifts to find the final top-left coordinate.
+          final offset = currentRect.translate(translateX, translateY).topLeft;
 
           widget.onOffsetUpdate?.call(offset);
           setState(() {
@@ -341,11 +386,15 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
     );
   }
 
-  Rect _findCallCardRect([Offset delta = Offset.zero]) {
-    final callCardRenderBox = _callCardKey.currentContext?.findRenderObject()! as RenderBox;
-    final offset = callCardRenderBox.localToGlobal(Offset.zero) + delta;
+  Rect _findCallCardRect() {
+    final callCardContext = _callCardKey.currentContext;
+    if (callCardContext == null) return Rect.zero;
+
+    final callCardRenderBox = callCardContext.findRenderObject() as RenderBox?;
+    if (callCardRenderBox == null || !callCardRenderBox.hasSize) return Rect.zero;
+
+    final offset = callCardRenderBox.localToGlobal(Offset.zero);
     final size = callCardRenderBox.size;
-    if (!callCardRenderBox.hasSize) return Rect.zero;
 
     return Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
   }
