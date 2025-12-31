@@ -39,7 +39,14 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   late final CompactAutoResetController _compactController;
 
   /// Controls the object fit mode (cover or contain) for the remote video stream.
+  ///
+  /// Consider moving this to a global state (e.g., BLoC or Some config provider).
   RTCVideoViewObjectFit _videoFit = RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
+
+  /// Controls whether the blurred background is rendered when the video fits the screen.
+  ///
+  /// Consider moving this to a global state (e.g., BLoC or Some config provider).
+  bool _enableBlurredBackground = true;
 
   @override
   void initState() {
@@ -86,6 +93,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     videoFit: _videoFit,
                     onTap: _compactController.toggle,
                     remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
+                    enableBlurredBackground: _enableBlurredBackground,
                   ),
                 if (activeCall.cameraEnabled)
                   AnimatedBuilder(
@@ -122,7 +130,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 primary: style?.appBar?.primary ?? false,
                                 actions: [
                                   if (activeCall.remoteVideo)
-                                    IconButton(icon: Icon(_videoFit.toggleIcon), onPressed: _onVideoFitTogglePressed),
+                                    PopupMenuButton<void>(
+                                      icon: const Icon(Icons.more_vert),
+                                      itemBuilder: _buildPopupMenuItems,
+                                    ),
                                 ],
                               ),
                               Expanded(
@@ -332,8 +343,37 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     );
   }
 
+  List<PopupMenuEntry<void>> _buildPopupMenuItems(BuildContext context) {
+    return [
+      PopupMenuItem(
+        onTap: _onVideoFitTogglePressed,
+        child: Row(
+          children: [
+            Icon(_videoFit.toggleIcon, color: Theme.of(context).iconTheme.color),
+            const SizedBox(width: 12),
+            Text(_videoFit == RTCVideoViewObjectFit.RTCVideoViewObjectFitContain ? 'Cover' : 'Fit'),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        onTap: _onBlurTogglePressed,
+        child: Row(
+          children: [
+            Icon(_enableBlurredBackground ? Icons.blur_off : Icons.blur_on, color: Theme.of(context).iconTheme.color),
+            const SizedBox(width: 12),
+            Text(_enableBlurredBackground ? 'Disable Blur' : 'Enable Blur'),
+          ],
+        ),
+      ),
+    ];
+  }
+
   void _onVideoFitTogglePressed() {
     setState(() => _videoFit = _videoFit.toggled);
+  }
+
+  void _onBlurTogglePressed() {
+    setState(() => _enableBlurredBackground = !_enableBlurredBackground);
   }
 
   @override
