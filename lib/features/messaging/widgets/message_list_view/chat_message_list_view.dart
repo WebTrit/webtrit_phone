@@ -18,6 +18,7 @@ import '../message_view/chat_message_view.dart';
 class ChatMessageListView extends StatefulWidget {
   const ChatMessageListView({
     required this.userId,
+    required this.isGroup,
     required this.messages,
     required this.fetchingHistory,
     required this.outboxMessages,
@@ -36,6 +37,7 @@ class ChatMessageListView extends StatefulWidget {
   });
 
   final String userId;
+  final bool isGroup;
   final List<ChatMessage> messages;
   final List<ChatOutboxMessageEntry> outboxMessages;
   final List<ChatOutboxMessageEditEntry> outboxMessageEdits;
@@ -216,6 +218,14 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                   outboxDeleteEntry: entry.outboxDeleteEntry,
                   userReadedUntil: entry.userReadedUntil,
                   membersReadedUntil: entry.membersReadedUntil,
+                  avatarViewMode: widget.isGroup
+                      ? (entry.lastInSequence == true)
+                            ? AvatarViewMode.show
+                            : AvatarViewMode.space
+                      : AvatarViewMode.none,
+                  nameViewMode: (widget.isGroup && entry.firstInSequence == true)
+                      ? NameViewMode.show
+                      : NameViewMode.none,
                   handleSetForReply: handleSetForReply,
                   handleSetForForward: handleSetForForward,
                   handleSetForEdit: handleSetForEdit,
@@ -329,6 +339,8 @@ final class _MessageViewEntry extends _ChatMessageListViewEntry {
   final ChatOutboxMessageDeleteEntry? outboxDeleteEntry;
   final DateTime? userReadedUntil;
   final DateTime? membersReadedUntil;
+  final bool? lastInSequence;
+  final bool? firstInSequence;
 
   _MessageViewEntry({
     this.message,
@@ -337,6 +349,8 @@ final class _MessageViewEntry extends _ChatMessageListViewEntry {
     this.outboxDeleteEntry,
     this.userReadedUntil,
     this.membersReadedUntil,
+    this.lastInSequence,
+    this.firstInSequence,
   });
 }
 
@@ -388,6 +402,7 @@ _ComputeResult _computeList(_ComputeParams params) {
     final nextMessage = isLast ? null : messages[i - 1];
 
     var lastMsgOfTheDay = false;
+    var firstMsgOfTheDay = false;
 
     if (nextMessage != null) {
       final nextMsgDate = nextMessage.createdAt;
@@ -395,9 +410,23 @@ _ComputeResult _computeList(_ComputeParams params) {
       lastMsgOfTheDay = nextMsgDate.day != msgDate.day;
     }
 
+    if (i == messages.length - 1) {
+      firstMsgOfTheDay = true;
+    } else {
+      final prevMessage = messages[i + 1];
+      final prevMsgDate = prevMessage.createdAt;
+      final msgDate = message.createdAt;
+      firstMsgOfTheDay = prevMsgDate.day != msgDate.day;
+    }
+
     if (lastMsgOfTheDay) {
       entries.add(_DateViewEntry(message.createdAt));
     }
+
+    final lastInSequence = isLast || nextMessage!.senderId != message.senderId || lastMsgOfTheDay;
+
+    final firstInSequence =
+        i == messages.length - 1 || messages[i + 1].senderId != message.senderId || firstMsgOfTheDay;
 
     entries.add(
       _MessageViewEntry(
@@ -406,6 +435,8 @@ _ComputeResult _computeList(_ComputeParams params) {
         outboxDeleteEntry: deleteEntry,
         userReadedUntil: userReadedUntil,
         membersReadedUntil: membersReadedUntil,
+        lastInSequence: lastInSequence,
+        firstInSequence: firstInSequence,
       ),
     );
   }

@@ -71,6 +71,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
               return Scaffold(
                 extendBodyBehindAppBar: true,
                 appBar: AppBar(
+                  centerTitle: true,
                   backgroundColor: theme.canvasColor.withAlpha(150),
                   flexibleSpace: ClipRect(
                     child: BackdropFilter(
