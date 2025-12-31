@@ -37,7 +37,7 @@ class RemoteVideoViewOverlay extends StatelessWidget {
   /// Affects whether the background blur effect is shown.
   final RTCVideoViewObjectFit videoFit;
 
-  /// Callback trigger when the user taps the video overlay.
+  /// Callback triggered when the user taps the video overlay.
   ///
   /// Only triggered if [activeCallWasAccepted] is true.
   final VoidCallback onTap;

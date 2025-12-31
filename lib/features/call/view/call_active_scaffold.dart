@@ -355,16 +355,17 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
           ],
         ),
       ),
-      PopupMenuItem(
-        onTap: _onBlurTogglePressed,
-        child: Row(
-          children: [
-            Icon(_enableBlurredBackground ? Icons.blur_off : Icons.blur_on, color: Theme.of(context).iconTheme.color),
-            const SizedBox(width: 12),
-            Text(_enableBlurredBackground ? 'Disable Blur' : 'Enable Blur'),
-          ],
+      if (_videoFit.isContain)
+        PopupMenuItem(
+          onTap: _onBlurTogglePressed,
+          child: Row(
+            children: [
+              Icon(_enableBlurredBackground ? Icons.blur_off : Icons.blur_on, color: Theme.of(context).iconTheme.color),
+              const SizedBox(width: 12),
+              Text(_enableBlurredBackground ? 'Disable Blur' : 'Enable Blur'),
+            ],
+          ),
         ),
-      ),
     ];
   }
 
