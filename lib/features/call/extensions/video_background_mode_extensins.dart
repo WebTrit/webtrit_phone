@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../widgets/widgets.dart';
 
+/// Extensions for [VideoBackgroundMode] to simplify UI logic and state toggling.
 extension VideoBackgroundModeExtension on VideoBackgroundMode {
-  /// Returns the label for the action button.
-  String get toggleLabel {
-    return this == VideoBackgroundMode.blur ? 'Disable Blur' : 'Enable Blur';
-  }
+  /// Returns `true` if the background mode is currently set to [VideoBackgroundMode.blur].
+  bool get isBlur => this == VideoBackgroundMode.blur;
 
-  /// Returns the icon for the action button.
-  IconData get toggleIcon {
-    return this == VideoBackgroundMode.blur ? Icons.blur_off : Icons.blur_on;
-  }
+  /// Returns `true` if the background mode is currently set to [VideoBackgroundMode.none].
+  bool get isNone => this == VideoBackgroundMode.none;
 
+  /// Returns the label describing the action to be taken when toggled.
+  String get actionLabel => isBlur ? 'Disable Blur' : 'Enable Blur';
+
+  /// Returns the icon representing the action to be taken when toggled.
+  IconData get actionIcon => isBlur ? Icons.blur_off : Icons.blur_on;
+
+  /// Returns the opposite background mode.
+  ///
   /// Switches between [VideoBackgroundMode.blur] and [VideoBackgroundMode.none].
-  VideoBackgroundMode get toggled {
-    return this == VideoBackgroundMode.blur ? VideoBackgroundMode.none : VideoBackgroundMode.blur;
-  }
+  VideoBackgroundMode get toggled => isBlur ? VideoBackgroundMode.none : VideoBackgroundMode.blur;
 }

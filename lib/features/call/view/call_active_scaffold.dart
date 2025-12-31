@@ -355,13 +355,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
       CallPopupMenuItem(
         onTap: _onVideoFitTogglePressed,
         text: _videoFit.actionLabel,
-        icon: Icon(_videoFit.toggleIcon, color: iconColor),
+        icon: Icon(_videoFit.actionIcon, color: iconColor),
       ),
       if (_videoFit.isContain)
         CallPopupMenuItem(
           onTap: _onBlurTogglePressed,
-          text: _backgroundMode.toggleLabel,
-          icon: Icon(_backgroundMode.toggleIcon, color: iconColor),
+          text: _backgroundMode.actionLabel,
+          icon: Icon(_backgroundMode.actionIcon, color: iconColor),
         ),
     ];
   }
