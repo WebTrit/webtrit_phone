@@ -311,6 +311,9 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
         onPanStart: (details) {
           // Sync state with actual render position before starting the drag
           final startRect = _findCallCardRect();
+          // Validation: Prevent jumping to (0,0) if the render box is invalid or not found.
+          if (startRect.isEmpty) return;
+
           setState(() {
             _offset = startRect.topLeft;
             _callCardPanning = true;
@@ -320,7 +323,12 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
           if (_offset == null) return;
 
           // Calculate new position based on state + delta (ignoring render lag)
-          final currentSize = _callCardKey.currentContext?.size ?? Size.zero;
+          final currentSize = _callCardKey.currentContext?.size;
+          if (currentSize == null || currentSize.isEmpty) {
+            // Size is not yet available; skip this update to avoid invalid bounds
+            return;
+          }
+
           final tentativeOffset = _offset! + details.delta;
           final tentativeRect = tentativeOffset & currentSize;
 
@@ -335,8 +343,18 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
           });
         },
         onPanEnd: (details) {
+          final renderBox = _callCardKey.currentContext?.findRenderObject() as RenderBox?;
+          // Validation: If the widget is unmounted or has no size,
+          // snapping cannot be calculated correctly. Stop the panning state to reset animations.
+          if (renderBox == null || !renderBox.hasSize || renderBox.size.isEmpty) {
+            setState(() {
+              _callCardPanning = false;
+            });
+            return;
+          }
+
           // Calculate snapping based on the final dragged position
-          final currentSize = _callCardKey.currentContext?.size ?? Size.zero;
+          final currentSize = renderBox.size;
           final currentRect = (_offset ?? Offset.zero) & currentSize;
 
           final translateX = _stickTranslateX(_stickyRect, currentRect);
