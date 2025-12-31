@@ -142,6 +142,22 @@
   "@callStatus_ready": {},
   "call_ThumbnailAvatar_currentlyNoActiveCall": "Currently, there is no active call",
   "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
+  "call_videoBackground_actionLabel_disableBlur": "Disable Blur",
+  "@call_videoBackground_actionLabel_disableBlur": {
+    "description": "Button label shown when the video background is currently blurred. Clicking this will turn off the blur effect."
+  },
+  "call_videoBackground_actionLabel_enableBlur": "Enable Blur",
+  "@call_videoBackground_actionLabel_enableBlur": {
+    "description": "Button label shown when the video background is normal (no blur). Clicking this will turn on the blur effect."
+  },
+  "call_videoView_actionLabel_cover": "Cover",
+  "@call_videoView_actionLabel_cover": {
+    "description": "Button label to switch the video view mode to 'Cover' (fills the entire area, potentially cropping edges). Shown when the video is currently in 'Fit' mode."
+  },
+  "call_videoView_actionLabel_fit": "Fit",
+  "@call_videoView_actionLabel_fit": {
+    "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
+  },
   "common_noInternetConnection_message": "It seems you are not connected to the internet. Please check your connection and try again.",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "Try Again",

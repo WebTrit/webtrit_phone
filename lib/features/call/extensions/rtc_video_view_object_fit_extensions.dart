@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
+
 /// Extensions for [RTCVideoViewObjectFit] to simplify UI logic and state toggling.
 extension RTCVideoViewObjectFitExtensions on RTCVideoViewObjectFit {
   /// Returns `true` if the fit mode is currently set to [RTCVideoViewObjectFit.RTCVideoViewObjectFitCover].
@@ -11,9 +13,9 @@ extension RTCVideoViewObjectFitExtensions on RTCVideoViewObjectFit {
   bool get isContain => this == RTCVideoViewObjectFit.RTCVideoViewObjectFitContain;
 
   /// Returns the label describing the action to be taken when toggled.
-  ///
-  /// Example: If currently [isContain], returns 'Cover'.
-  String get actionLabel => isContain ? 'Cover' : 'Fit';
+  String actionLabelL10n(BuildContext context) {
+    return isContain ? context.l10n.call_videoView_actionLabel_cover : context.l10n.call_videoView_actionLabel_fit;
+  }
 
   /// Returns the icon representing the action to be taken when toggled.
   ///

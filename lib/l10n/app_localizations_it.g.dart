@@ -207,6 +207,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Actualmente, no hay ninguna llamada activa';
 
   @override
+  String get call_videoBackground_actionLabel_disableBlur => 'Disabilita sfocatura';
+
+  @override
+  String get call_videoBackground_actionLabel_enableBlur => 'Abilita sfocatura';
+
+  @override
+  String get call_videoView_actionLabel_cover => 'Riempi';
+
+  @override
+  String get call_videoView_actionLabel_fit => 'Adatta';
+
+  @override
   String get common_noInternetConnection_message =>
       'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
 

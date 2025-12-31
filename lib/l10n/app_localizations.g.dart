@@ -477,6 +477,30 @@ abstract class AppLocalizations {
   /// **'Currently, there is no active call'**
   String get call_ThumbnailAvatar_currentlyNoActiveCall;
 
+  /// Button label shown when the video background is currently blurred. Clicking this will turn off the blur effect.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Blur'**
+  String get call_videoBackground_actionLabel_disableBlur;
+
+  /// Button label shown when the video background is normal (no blur). Clicking this will turn on the blur effect.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Blur'**
+  String get call_videoBackground_actionLabel_enableBlur;
+
+  /// Button label to switch the video view mode to 'Cover' (fills the entire area, potentially cropping edges). Shown when the video is currently in 'Fit' mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover'**
+  String get call_videoView_actionLabel_cover;
+
+  /// Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit'**
+  String get call_videoView_actionLabel_fit;
+
   /// No description provided for @common_noInternetConnection_message.
   ///
   /// In en, this message translates to:
