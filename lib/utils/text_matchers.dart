@@ -39,7 +39,6 @@ class TextMatchers {
       pattern: r'_[^_]+_',
       style: style,
       onTap: (_) {},
-
       renderText: ({required String str, required String pattern}) {
         return {'display': str.replaceAll('_', '')};
       },
@@ -51,7 +50,6 @@ class TextMatchers {
       pattern: r'~[^~]+~',
       style: style,
       onTap: (_) {},
-
       renderText: ({required String str, required String pattern}) {
         return {'display': str.replaceAll('~', '')};
       },
@@ -63,7 +61,6 @@ class TextMatchers {
       pattern: r'\+[^+]+\+',
       style: style,
       onTap: (_) {},
-
       renderText: ({required String str, required String pattern}) {
         return {'display': str.replaceAll('+', '')};
       },
@@ -75,7 +72,6 @@ class TextMatchers {
       pattern: r'`[^`]+`',
       style: style,
       onTap: (_) {},
-
       renderText: ({required String str, required String pattern}) {
         return {'display': str.replaceAll('`', '')};
       },
@@ -87,7 +83,6 @@ class TextMatchers {
       pattern: r'>[^\n]+',
       style: style,
       onTap: (_) {},
-
       renderWidget: ({required pattern, required text}) {
         return Container(
           decoration: quoteDecoration,
