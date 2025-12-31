@@ -6,3 +6,4 @@ export 'rtc_enities_string.dart';
 export 'rtc_video_view_object_fit_extensions.dart';
 export 'signaling_response_code_l10n.dart';
 export 'signaling_response_code_type_l10n.dart';
+export 'video_background_mode_extensins.dart';

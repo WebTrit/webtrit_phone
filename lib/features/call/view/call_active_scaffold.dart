@@ -43,10 +43,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   /// Consider moving this to a global state (e.g., BLoC or Some config provider).
   RTCVideoViewObjectFit _videoFit = RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
 
-  /// Controls whether the blurred background is rendered when the video fits the screen.
+  /// Controls the visual style of the background when the video does not fill the screen.
   ///
   /// Consider moving this to a global state (e.g., BLoC or Some config provider).
-  bool _enableBlurredBackground = true;
+  VideoBackgroundMode _backgroundMode = VideoBackgroundMode.blur;
 
   @override
   void initState() {
@@ -93,7 +93,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     videoFit: _videoFit,
                     onTap: _compactController.toggle,
                     remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
-                    enableBlurredBackground: _enableBlurredBackground,
+                    backgroundMode: _backgroundMode,
                   ),
                 if (activeCall.cameraEnabled)
                   AnimatedBuilder(
@@ -129,10 +129,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 foregroundColor: style?.appBar?.foregroundColor,
                                 primary: style?.appBar?.primary ?? false,
                                 actions: [
-                                  if (activeCall.remoteVideo)
-                                    PopupMenuButton<void>(
-                                      icon: const Icon(Icons.more_vert),
-                                      itemBuilder: _buildPopupMenuItems,
+                                  if (activeCalls.shouldAutoCompact)
+                                    CallPopupMenuButton<void>(
+                                      items: _buildPopupMenuItems,
+                                      child: const Icon(Icons.more_vert),
                                     ),
                                 ],
                               ),
@@ -343,28 +343,25 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     );
   }
 
-  List<PopupMenuEntry<void>> _buildPopupMenuItems(BuildContext context) {
+  /// Generates the list of menu items for the call options popup.
+  ///
+  /// The list always includes the video fit toggle. The background mode toggle
+  /// is conditionally added only when the video is in 'contain' mode, as the
+  /// background is not visible in 'cover' mode.
+  List<PopupMenuItem<void>> get _buildPopupMenuItems {
+    final iconColor = Theme.of(context).colorScheme.onSurface;
+
     return [
-      PopupMenuItem(
+      CallPopupMenuItem(
         onTap: _onVideoFitTogglePressed,
-        child: Row(
-          children: [
-            Icon(_videoFit.toggleIcon, color: Theme.of(context).iconTheme.color),
-            const SizedBox(width: 12),
-            Text(_videoFit == RTCVideoViewObjectFit.RTCVideoViewObjectFitContain ? 'Cover' : 'Fit'),
-          ],
-        ),
+        text: _videoFit.actionLabel,
+        icon: Icon(_videoFit.toggleIcon, color: iconColor),
       ),
       if (_videoFit.isContain)
-        PopupMenuItem(
+        CallPopupMenuItem(
           onTap: _onBlurTogglePressed,
-          child: Row(
-            children: [
-              Icon(_enableBlurredBackground ? Icons.blur_off : Icons.blur_on, color: Theme.of(context).iconTheme.color),
-              const SizedBox(width: 12),
-              Text(_enableBlurredBackground ? 'Disable Blur' : 'Enable Blur'),
-            ],
-          ),
+          text: _backgroundMode.toggleLabel,
+          icon: Icon(_backgroundMode.toggleIcon, color: iconColor),
         ),
     ];
   }
@@ -374,7 +371,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   }
 
   void _onBlurTogglePressed() {
-    setState(() => _enableBlurredBackground = !_enableBlurredBackground);
+    setState(() => _backgroundMode = _backgroundMode.toggled);
   }
 
   @override
