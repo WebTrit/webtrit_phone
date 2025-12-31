@@ -129,6 +129,8 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
   }
 
   Widget content(TextStyle style, ThemeData theme) {
+    final colorScheme = theme.colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -152,7 +154,14 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
         Divider(height: 12, color: style.color?.withAlpha(10)),
         ParsedText(
           text: widget.notification.content,
-          parse: TextMatchers.matchers(style),
+          parse: TextMatchers.matchers(
+            style,
+            BoxDecoration(
+              color: colorScheme.primaryFixed.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(0),
+              border: Border(left: BorderSide(color: colorScheme.primaryFixed, width: 2)),
+            ),
+          ),
           regexOptions: const RegexOptions(multiLine: true, dotAll: true),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
           textWidthBasis: TextWidthBasis.longestLine,

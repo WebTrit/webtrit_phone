@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:logging/logging.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,7 +34,7 @@ Future<InstanceRegistry> bootstrap() async {
   final registry = InstanceRegistry();
 
   // External SDKs (Side effects only, don't need registration)
-  await _initFirebase();
+  await _initFirebaseApp();
   await _initFirebaseMessaging();
   await _initLocalPushs();
 
@@ -188,7 +191,7 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
 /// Initializes Firebase for background services. This initialization must be called in an isolate
 /// when Firebase components are used. For more details, refer to the Firebase documentation:
 /// https://firebase.google.com/docs/cloud-messaging/flutter/receive
-Future<void> _initFirebase() async {
+Future<void> _initFirebaseApp() async {
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
@@ -230,6 +233,30 @@ Future<void> _initFirebaseMessaging() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final logger = Logger('_firebaseMessagingBackgroundHandler');
 
+  // Ensure Firebase services are initialized before configuring Crashlytics.
+  await _initFirebaseApp();
+
+  await runZonedGuarded(
+    () => _handleBackgroundMessage(message, logger),
+    (error, stack) => _recordBackgroundError(error, stack, logger),
+  );
+}
+
+/// Records background isolate errors to both the local logger and Firebase Crashlytics.
+Future<void> _recordBackgroundError(Object error, StackTrace stack, Logger logger) async {
+  logger.severe('Unhandled background error', error, stack);
+
+  await FirebaseCrashlytics.instance.recordFlutterFatalError(
+    FlutterErrorDetails(
+      exception: error,
+      stack: stack,
+      context: ErrorDescription('Firebase background handler logic failure'),
+    ),
+  );
+}
+
+/// Core logic for processing background messages.
+Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) async {
   // Cache remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
 
@@ -250,15 +277,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _dHandleInspectPush(message.data, true);
 
   if (appPush is PendingCallPush && Platform.isAndroid) {
-    final appDatabase = await IsolateDatabase.create();
-    final contactsRepository = ContactsRepository(
-      appDatabase: appDatabase,
-      contactsRemoteDataSource: null,
-      contactsLocalDataSource: null,
-    );
-
-    final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
-    final displayName = contact?.maybeName ?? appPush.call.displayName;
+    // Known issue: [SqliteException] with code 5 (database is locked) may occur
+    // due to concurrent database access from multiple isolates.
+    final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
 
     AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
       appPush.call.id,
@@ -281,6 +302,33 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       time: DateTime.now(),
     );
     await repo.set(activeMessagePush);
+  }
+}
+
+/// Attempts to resolve the contact name from the database, falling back to push data on error.
+///
+/// This process is susceptible to [SqliteException] with code 5 (database is locked)
+/// when multiple isolates (e.g., background FCM and main app) access the database
+/// concurrently. If any error occurs, the display name from the push payload is returned.
+Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
+  try {
+    final appDatabase = await IsolateDatabase.create();
+    final contactsRepository = ContactsRepository(
+      appDatabase: appDatabase,
+      contactsRemoteDataSource: null,
+      contactsLocalDataSource: null,
+    );
+
+    final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
+    return contact?.maybeName ?? appPush.call.displayName;
+  } catch (e, stackTrace) {
+    logger.severe(
+      'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
+      'Fallback to push display name will be used.',
+      e,
+      stackTrace,
+    );
+    return appPush.call.displayName;
   }
 }
 

@@ -1,8 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'common/common.dart';
 import 'features_config/elevated_button_style_type.dart';
 import 'features_config/metadata.dart';
-import 'common/common.dart';
+import 'pages/pages.dart';
 import 'resources/image_source.dart';
 import 'theme_widget_config.dart';
 
@@ -18,6 +19,7 @@ class ThemePageConfig with _$ThemePageConfig {
     this.about = const AboutPageConfig(),
     this.dialing = const CallPageConfig(),
     this.keypad = const KeypadPageConfig(),
+    this.settings = const SettingsPageConfig(),
   });
 
   @override
@@ -31,6 +33,9 @@ class ThemePageConfig with _$ThemePageConfig {
 
   @override
   final KeypadPageConfig keypad;
+
+  @override
+  final SettingsPageConfig settings;
 
   factory ThemePageConfig.fromJson(Map<String, Object?> json) => _$ThemePageConfigFromJson(json);
 
@@ -142,12 +147,13 @@ class LoginSignupVerifyScreenPageConfig with _$LoginSignupVerifyScreenPageConfig
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
+class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig implements BasePageConfig {
   const LoginModeSelectPageConfig({
     this.systemUiOverlayStyle,
     this.mainLogo,
     this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
     this.buttonSignupStyleType = ElevatedButtonStyleType.primary,
+    this.background,
   });
 
   @override
@@ -162,6 +168,9 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
   @override
   final ElevatedButtonStyleType buttonSignupStyleType;
 
+  @override
+  final PageBackground? background;
+
   factory LoginModeSelectPageConfig.fromJson(Map<String, Object?> json) => _$LoginModeSelectPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LoginModeSelectPageConfigToJson(this);
@@ -169,11 +178,14 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig {
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class LoginSwitchPageConfig with _$LoginSwitchPageConfig {
-  const LoginSwitchPageConfig({this.mainLogo});
+class LoginSwitchPageConfig with _$LoginSwitchPageConfig implements BasePageConfig {
+  const LoginSwitchPageConfig({this.mainLogo, this.background});
 
   @override
   final ImageSource? mainLogo;
+
+  @override
+  final PageBackground? background;
 
   factory LoginSwitchPageConfig.fromJson(Map<String, Object?> json) => _$LoginSwitchPageConfigFromJson(json);
 
@@ -183,14 +195,17 @@ class LoginSwitchPageConfig with _$LoginSwitchPageConfig {
 /// Declarative configuration for the **About Page**.
 @freezed
 @JsonSerializable(explicitToJson: true)
-class AboutPageConfig with _$AboutPageConfig {
-  const AboutPageConfig({this.mainLogo, this.metadata = const Metadata()});
+class AboutPageConfig with _$AboutPageConfig implements BasePageConfig {
+  const AboutPageConfig({this.mainLogo, this.metadata = const Metadata(), this.background});
 
   @override
   final ImageSource? mainLogo;
 
   @override
   final Metadata metadata;
+
+  @override
+  final PageBackground? background;
 
   factory AboutPageConfig.fromJson(Map<String, Object?> json) => _$AboutPageConfigFromJson(json);
 
@@ -204,20 +219,23 @@ class AboutPageConfig with _$AboutPageConfig {
 /// Declarative configuration for the **Call Screen**.
 @freezed
 @JsonSerializable(explicitToJson: true)
-class CallPageConfig with _$CallPageConfig {
-  const CallPageConfig({this.systemUiOverlayStyle, this.appBarStyle, this.callInfo, this.actions});
+class CallPageConfig with _$CallPageConfig implements BasePageConfig {
+  const CallPageConfig({this.systemUiOverlayStyle, this.callInfo, this.actions, this.background, this.appBarStyle});
 
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
 
   @override
-  final AppBarStyleConfig? appBarStyle;
+  final AppBarConfig? appBarStyle;
 
   @override
   final CallPageInfoConfig? callInfo;
 
   @override
   final CallPageActionsConfig? actions;
+
+  @override
+  final PageBackground? background;
 
   factory CallPageConfig.fromJson(Map<String, Object?> json) => _$CallPageConfigFromJson(json);
 
@@ -302,8 +320,15 @@ class CallPageInfoConfig with _$CallPageInfoConfig {
 /// Declarative configuration for the **Keypad Screen**.
 @freezed
 @JsonSerializable(explicitToJson: true)
-class KeypadPageConfig with _$KeypadPageConfig {
-  const KeypadPageConfig({this.systemUiOverlayStyle, this.textField, this.contactName, this.keypad, this.actionpad});
+class KeypadPageConfig with _$KeypadPageConfig implements BasePageConfig {
+  const KeypadPageConfig({
+    this.systemUiOverlayStyle,
+    this.textField,
+    this.contactName,
+    this.keypad,
+    this.actionpad,
+    this.background,
+  });
 
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
@@ -320,7 +345,49 @@ class KeypadPageConfig with _$KeypadPageConfig {
   @override
   final ActionPadWidgetConfig? actionpad;
 
+  @override
+  final PageBackground? background;
+
   factory KeypadPageConfig.fromJson(Map<String, Object?> json) => _$KeypadPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$KeypadPageConfigToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
+  const SettingsPageConfig({
+    this.leadingIconsColor,
+    this.userIconColor,
+    this.logoutIconColor,
+    this.groupTitleListTile,
+    this.showSeparators = true,
+    this.background,
+    this.itemTextStyle,
+  });
+
+  @override
+  final String? leadingIconsColor;
+
+  @override
+  final String? userIconColor;
+
+  @override
+  final String? logoutIconColor;
+
+  @override
+  final GroupTitleListTileWidgetConfig? groupTitleListTile;
+
+  @override
+  final bool showSeparators;
+
+  @override
+  final PageBackground? background;
+
+  @override
+  final TextStyleConfig? itemTextStyle;
+
+  factory SettingsPageConfig.fromJson(Map<String, Object?> json) => _$SettingsPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$SettingsPageConfigToJson(this);
 }

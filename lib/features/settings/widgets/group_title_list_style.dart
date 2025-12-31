@@ -1,22 +1,33 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class GroutTitleListStyle with Diagnosticable {
-  GroutTitleListStyle({this.textStyle, this.background});
+class GroupTitleListStyle with Diagnosticable {
+  const GroupTitleListStyle({this.textStyle, this.background});
 
   final TextStyle? textStyle;
   final Color? background;
 
-  static GroutTitleListStyle lerp(GroutTitleListStyle? a, GroutTitleListStyle? b, double t) {
-    final newTextStyle = TextStyle.lerp(a?.textStyle, b?.textStyle, t);
-    final newBackground = Color.lerp(a?.background, b?.background, t);
-    return GroutTitleListStyle(textStyle: newTextStyle, background: newBackground);
+  static GroupTitleListStyle? merge(GroupTitleListStyle? a, GroupTitleListStyle? b) {
+    if (a == null) return b;
+    if (b == null) return a;
+    return GroupTitleListStyle(
+      textStyle: a.textStyle?.merge(b.textStyle) ?? b.textStyle,
+      background: b.background ?? a.background,
+    );
+  }
+
+  static GroupTitleListStyle? lerp(GroupTitleListStyle? a, GroupTitleListStyle? b, double t) {
+    if (a == null && b == null) return null;
+    return GroupTitleListStyle(
+      textStyle: TextStyle.lerp(a?.textStyle, b?.textStyle, t),
+      background: Color.lerp(a?.background, b?.background, t),
+    );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<TextStyle?>('textStyle', textStyle));
-    properties.add(DiagnosticsProperty<Color?>('background', background));
+    properties.add(ColorProperty('background', background));
   }
 }

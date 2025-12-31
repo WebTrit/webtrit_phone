@@ -60,7 +60,7 @@ class ThemeStyleFactoryProvider {
     final outlinedButtonStyleFactory = OutlinedButtonStyleFactory(colorScheme);
     final registrationStatusStyleFactory = RegisteredStatusStyleFactory(colorScheme, registrationStatuses);
     final snackBarStyleFactory = SnackBarStyleFactory(colorScheme, snackBar);
-    final groupTitleListStyleFactory = GroupTitleListStyleFactory(groupTitleListTile);
+    final groupTitleListStyleFactory = GroupTitleListStyleFactory(colorScheme, groupTitleListTile);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
 
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect, colorScheme);
@@ -98,6 +98,7 @@ class ThemeStyleFactoryProvider {
       config: loginPageScheme.passwordSignin,
       textTheme: createTextTheme(),
     );
+    final settingsScreenStyleFactory = SettingsScreenStyleFactory(colorScheme, pageConfig.settings);
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -130,6 +131,7 @@ class ThemeStyleFactoryProvider {
       loginSwitchScreenStyleFactory.create(),
       loginOtpSigninPageStyleFactory.create(),
       loginPasswordSigninPageStyleFactory.create(),
+      settingsScreenStyleFactory.create(),
     ].nonNulls.toList();
   }
 
@@ -158,11 +160,11 @@ class ThemeStyleFactoryProvider {
   }
 
   TabBarThemeData createTabBarTheme() {
-    return TabBarThemeDataFactory(colorScheme, widgetConfig.bar.extTabBar).create();
+    return TabBarThemeDataFactory(colorScheme, widgetConfig.bar.tabBarConfig).create();
   }
 
   AppBarTheme createAppBarTheme() {
-    return AppBarThemeDataFactory(colorScheme, widgetConfig.bar.extTabBar).create();
+    return AppBarThemeDataFactory(widgetConfig.bar.appBarConfig).create();
   }
 
   InputDecorationTheme createInputDecorationTheme() {

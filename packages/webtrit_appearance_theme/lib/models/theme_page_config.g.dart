@@ -20,6 +20,11 @@ ThemePageConfig _$ThemePageConfigFromJson(Map<String, dynamic> json) =>
       keypad: json['keypad'] == null
           ? const KeypadPageConfig()
           : KeypadPageConfig.fromJson(json['keypad'] as Map<String, dynamic>),
+      settings: json['settings'] == null
+          ? const SettingsPageConfig()
+          : SettingsPageConfig.fromJson(
+              json['settings'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) =>
@@ -28,6 +33,7 @@ Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) =>
       'about': instance.about.toJson(),
       'dialing': instance.dialing.toJson(),
       'keypad': instance.keypad.toJson(),
+      'settings': instance.settings.toJson(),
     };
 
 LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) =>
@@ -155,6 +161,9 @@ LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
         json['buttonSignupStyleType'],
       ) ??
       ElevatedButtonStyleType.primary,
+  background: json['background'] == null
+      ? null
+      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
@@ -166,6 +175,7 @@ Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
       _$ElevatedButtonStyleTypeEnumMap[instance.buttonLoginStyleType]!,
   'buttonSignupStyleType':
       _$ElevatedButtonStyleTypeEnumMap[instance.buttonSignupStyleType]!,
+  'background': instance.background?.toJson(),
 };
 
 const _$ElevatedButtonStyleTypeEnumMap = {
@@ -181,11 +191,17 @@ LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(
   mainLogo: json['mainLogo'] == null
       ? null
       : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
+  background: json['background'] == null
+      ? null
+      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LoginSwitchPageConfigToJson(
   LoginSwitchPageConfig instance,
-) => <String, dynamic>{'mainLogo': instance.mainLogo?.toJson()};
+) => <String, dynamic>{
+  'mainLogo': instance.mainLogo?.toJson(),
+  'background': instance.background?.toJson(),
+};
 
 AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) =>
     AboutPageConfig(
@@ -195,12 +211,16 @@ AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) =>
       metadata: json['metadata'] == null
           ? const Metadata()
           : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+      background: json['background'] == null
+          ? null
+          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AboutPageConfigToJson(AboutPageConfig instance) =>
     <String, dynamic>{
       'mainLogo': instance.mainLogo?.toJson(),
       'metadata': instance.metadata.toJson(),
+      'background': instance.background?.toJson(),
     };
 
 CallPageConfig _$CallPageConfigFromJson(
@@ -211,15 +231,18 @@ CallPageConfig _$CallPageConfigFromJson(
       : OverlayStyleModel.fromJson(
           json['systemUiOverlayStyle'] as Map<String, dynamic>,
         ),
-  appBarStyle: json['appBarStyle'] == null
-      ? null
-      : AppBarStyleConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
   callInfo: json['callInfo'] == null
       ? null
       : CallPageInfoConfig.fromJson(json['callInfo'] as Map<String, dynamic>),
   actions: json['actions'] == null
       ? null
       : CallPageActionsConfig.fromJson(json['actions'] as Map<String, dynamic>),
+  background: json['background'] == null
+      ? null
+      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null
+      ? null
+      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$CallPageConfigToJson(CallPageConfig instance) =>
@@ -228,6 +251,7 @@ Map<String, dynamic> _$CallPageConfigToJson(CallPageConfig instance) =>
       'appBarStyle': instance.appBarStyle?.toJson(),
       'callInfo': instance.callInfo?.toJson(),
       'actions': instance.actions?.toJson(),
+      'background': instance.background?.toJson(),
     };
 
 CallPageActionsConfig _$CallPageActionsConfigFromJson(
@@ -349,6 +373,9 @@ KeypadPageConfig _$KeypadPageConfigFromJson(Map<String, dynamic> json) =>
           : ActionPadWidgetConfig.fromJson(
               json['actionpad'] as Map<String, dynamic>,
             ),
+      background: json['background'] == null
+          ? null
+          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) =>
@@ -358,4 +385,37 @@ Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) =>
       'contactName': instance.contactName?.toJson(),
       'keypad': instance.keypad?.toJson(),
       'actionpad': instance.actionpad?.toJson(),
+      'background': instance.background?.toJson(),
+    };
+
+SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) =>
+    SettingsPageConfig(
+      leadingIconsColor: json['leadingIconsColor'] as String?,
+      userIconColor: json['userIconColor'] as String?,
+      logoutIconColor: json['logoutIconColor'] as String?,
+      groupTitleListTile: json['groupTitleListTile'] == null
+          ? null
+          : GroupTitleListTileWidgetConfig.fromJson(
+              json['groupTitleListTile'] as Map<String, dynamic>,
+            ),
+      showSeparators: json['showSeparators'] as bool? ?? true,
+      background: json['background'] == null
+          ? null
+          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+      itemTextStyle: json['itemTextStyle'] == null
+          ? null
+          : TextStyleConfig.fromJson(
+              json['itemTextStyle'] as Map<String, dynamic>,
+            ),
+    );
+
+Map<String, dynamic> _$SettingsPageConfigToJson(SettingsPageConfig instance) =>
+    <String, dynamic>{
+      'leadingIconsColor': instance.leadingIconsColor,
+      'userIconColor': instance.userIconColor,
+      'logoutIconColor': instance.logoutIconColor,
+      'groupTitleListTile': instance.groupTitleListTile?.toJson(),
+      'showSeparators': instance.showSeparators,
+      'background': instance.background?.toJson(),
+      'itemTextStyle': instance.itemTextStyle?.toJson(),
     };

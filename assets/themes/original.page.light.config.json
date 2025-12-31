@@ -11,6 +11,7 @@
         "uri": "asset://assets/images/primary_onboarding_logo.svg",
         "render": {
           "scale": 0.42,
+          "alignment": "center",
           "padding": {
             "left": 0.0,
             "top": 0.0,
@@ -230,6 +231,55 @@
           "bottom": 0.0
         }
       }
+    },
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "settings": {
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "keypad": {
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
     }
   }
 }

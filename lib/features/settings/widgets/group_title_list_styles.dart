@@ -5,10 +5,10 @@ import 'package:webtrit_phone/features/settings/widgets/group_title_list_style.d
 class GroupTitleListStyles extends ThemeExtension<GroupTitleListStyles> {
   const GroupTitleListStyles({required this.primary});
 
-  final GroutTitleListStyle? primary;
+  final GroupTitleListStyle? primary;
 
   @override
-  ThemeExtension<GroupTitleListStyles> copyWith({GroutTitleListStyle? primary}) {
+  ThemeExtension<GroupTitleListStyles> copyWith({GroupTitleListStyle? primary}) {
     return GroupTitleListStyles(primary: primary ?? this.primary);
   }
 
@@ -18,6 +18,6 @@ class GroupTitleListStyles extends ThemeExtension<GroupTitleListStyles> {
       return this;
     }
 
-    return GroupTitleListStyles(primary: GroutTitleListStyle.lerp(primary, other.primary, t));
+    return GroupTitleListStyles(primary: GroupTitleListStyle.lerp(primary, other.primary, t));
   }
 }

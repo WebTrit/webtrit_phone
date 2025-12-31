@@ -2,21 +2,43 @@ import 'package:flutter/foundation.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 
-class AboutScreenStyle with Diagnosticable {
-  AboutScreenStyle({this.picture});
+class AboutScreenStyle extends BaseScreenStyle with Diagnosticable {
+  const AboutScreenStyle({super.background, this.pictureLogoStyle});
 
-  final ThemeSvgAsset? picture;
+  final ThemeImageStyle? pictureLogoStyle;
 
-  static AboutScreenStyle? lerp(AboutScreenStyle? a, AboutScreenStyle? b, double t) {
+  AboutScreenStyle copyWith({BackgroundStyle? background, ThemeImageStyle? pictureLogoStyle}) {
+    return AboutScreenStyle(
+      background: background ?? this.background,
+      pictureLogoStyle: pictureLogoStyle ?? this.pictureLogoStyle,
+    );
+  }
+
+  static AboutScreenStyle merge(AboutScreenStyle? a, AboutScreenStyle? b) {
+    if (a == null) return b ?? const AboutScreenStyle();
+    if (b == null) return a;
+
+    return AboutScreenStyle(
+      background: b.background ?? a.background,
+      pictureLogoStyle: ThemeImageStyle.merge(a.pictureLogoStyle, b.pictureLogoStyle),
+    );
+  }
+
+  static AboutScreenStyle lerp(AboutScreenStyle? a, AboutScreenStyle? b, double t) {
     if (identical(a, b)) {
-      return a;
+      return a ?? const AboutScreenStyle();
     }
-    return AboutScreenStyle(picture: t < 0.5 ? a?.picture : b?.picture);
+
+    return AboutScreenStyle(
+      background: BaseScreenStyle.lerp(a?.background, b?.background, t),
+      pictureLogoStyle: ThemeImageStyle.lerp(a?.pictureLogoStyle, b?.pictureLogoStyle, t),
+    );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ThemeSvgAsset?>('picture', picture));
+    properties.add(DiagnosticsProperty<BackgroundStyle?>('background', background));
+    properties.add(DiagnosticsProperty<ThemeImageStyle?>('pictureLogoStyle', pictureLogoStyle));
   }
 }

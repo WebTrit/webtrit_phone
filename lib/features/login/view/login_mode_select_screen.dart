@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
@@ -27,7 +28,11 @@ class LoginModeSelectScreen extends StatelessWidget {
     final Gradients? gradients = themeData.extension<Gradients>();
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     final LoginModeSelectScreenStyles? loginPageStyles = themeData.extension<LoginModeSelectScreenStyles>();
-    final LoginModeSelectScreenStyle? localStyle = style ?? loginPageStyles?.primary;
+
+    final localStyle = style ?? loginPageStyles?.primary;
+
+    final titleStyle = themeData.textTheme.displayMedium?.merge(localStyle?.onboardingTextStyle);
+    final dividerHeight = (titleStyle?.fontSize ?? 0) / 3;
 
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.processing != current.processing,
@@ -64,9 +69,15 @@ class LoginModeSelectScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Spacer(),
-                  OnboardingPictureLogo(
-                    text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
-                    style: localStyle?.onboardingPictureLogoStyle,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+                      if (appGreetingL10n != null) ...[
+                        SizedBox(height: dividerHeight),
+                        Text(context.parseL10n(appGreetingL10n!), style: titleStyle, textAlign: TextAlign.center),
+                      ],
+                    ],
                   ),
                   const Spacer(),
                   const Spacer(),

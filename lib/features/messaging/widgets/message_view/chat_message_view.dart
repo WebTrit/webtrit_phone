@@ -316,7 +316,7 @@ class _ReplyQuoteState extends State<ReplyQuote> {
 
         return Container(
           padding: const EdgeInsets.all(8),
-          decoration: theme.quoteDecoration(widget.isMine),
+          decoration: theme.roundQuoteDecoration(widget.isMine),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -360,7 +360,7 @@ class ForwartQuote extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: theme.quoteDecoration(isMine),
+      decoration: theme.roundQuoteDecoration(isMine),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

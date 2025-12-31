@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import '../widgets/onboarding_logo_style.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 class LoginSwitchScreenStyle with Diagnosticable {
-  LoginSwitchScreenStyle({this.systemUiOverlayStyle, this.onboardingLogoStyle});
+  LoginSwitchScreenStyle({this.systemUiOverlayStyle, this.pictureLogoStyle});
 
   final SystemUiOverlayStyle? systemUiOverlayStyle;
-  final OnboardingLogoStyle? onboardingLogoStyle;
+  final ThemeImageStyle? pictureLogoStyle;
 
   static LoginSwitchScreenStyle lerp(LoginSwitchScreenStyle? a, LoginSwitchScreenStyle? b, double t) {
     return LoginSwitchScreenStyle(
       systemUiOverlayStyle: b?.systemUiOverlayStyle ?? a?.systemUiOverlayStyle,
-      onboardingLogoStyle: OnboardingLogoStyle.lerp(a?.onboardingLogoStyle, b?.onboardingLogoStyle, t),
+      pictureLogoStyle: ThemeImageStyle.lerp(a?.pictureLogoStyle, b?.pictureLogoStyle, t),
     );
   }
 
@@ -20,6 +20,6 @@ class LoginSwitchScreenStyle with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<SystemUiOverlayStyle?>('systemUiOverlayStyle', systemUiOverlayStyle));
-    properties.add(DiagnosticsProperty<OnboardingLogoStyle?>('onboardingLogoStyle', onboardingLogoStyle));
+    properties.add(DiagnosticsProperty<ThemeImageStyle?>('pictureLogoStyle', pictureLogoStyle));
   }
 }

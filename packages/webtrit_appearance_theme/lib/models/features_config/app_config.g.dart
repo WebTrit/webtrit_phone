@@ -404,6 +404,7 @@ AppConfigSettingsItem _$AppConfigSettingsItemFromJson(
   titleL10n: json['titleL10n'] as String,
   type: json['type'] as String,
   icon: json['icon'] as String,
+  iconColor: json['iconColor'] as String?,
   embeddedResourceId: const IntToStringOptionalConverter().fromJson(
     json['embeddedResourceId'],
   ),
@@ -416,6 +417,7 @@ Map<String, dynamic> _$AppConfigSettingsItemToJson(
   'titleL10n': instance.titleL10n,
   'type': instance.type,
   'icon': instance.icon,
+  'iconColor': instance.iconColor,
   'embeddedResourceId': const IntToStringOptionalConverter().toJson(
     instance.embeddedResourceId,
   ),

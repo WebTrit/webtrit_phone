@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ThemePageConfig {
 
- LoginPageConfig get login; AboutPageConfig get about; CallPageConfig get dialing; KeypadPageConfig get keypad;
+ LoginPageConfig get login; AboutPageConfig get about; CallPageConfig get dialing; KeypadPageConfig get keypad; SettingsPageConfig get settings;
 /// Create a copy of ThemePageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $ThemePageConfigCopyWith<ThemePageConfig> get copyWith => _$ThemePageConfigCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ThemePageConfig&&(identical(other.login, login) || other.login == login)&&(identical(other.about, about) || other.about == about)&&(identical(other.dialing, dialing) || other.dialing == dialing)&&(identical(other.keypad, keypad) || other.keypad == keypad));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ThemePageConfig&&(identical(other.login, login) || other.login == login)&&(identical(other.about, about) || other.about == about)&&(identical(other.dialing, dialing) || other.dialing == dialing)&&(identical(other.keypad, keypad) || other.keypad == keypad)&&(identical(other.settings, settings) || other.settings == settings));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,login,about,dialing,keypad);
+int get hashCode => Object.hash(runtimeType,login,about,dialing,keypad,settings);
 
 @override
 String toString() {
-  return 'ThemePageConfig(login: $login, about: $about, dialing: $dialing, keypad: $keypad)';
+  return 'ThemePageConfig(login: $login, about: $about, dialing: $dialing, keypad: $keypad, settings: $settings)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $ThemePageConfigCopyWith<$Res>  {
   factory $ThemePageConfigCopyWith(ThemePageConfig value, $Res Function(ThemePageConfig) _then) = _$ThemePageConfigCopyWithImpl;
 @useResult
 $Res call({
- LoginPageConfig login, AboutPageConfig about, CallPageConfig dialing, KeypadPageConfig keypad
+ LoginPageConfig login, AboutPageConfig about, CallPageConfig dialing, KeypadPageConfig keypad, SettingsPageConfig settings
 });
 
 
@@ -63,13 +63,14 @@ class _$ThemePageConfigCopyWithImpl<$Res>
 
 /// Create a copy of ThemePageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? login = null,Object? about = null,Object? dialing = null,Object? keypad = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? login = null,Object? about = null,Object? dialing = null,Object? keypad = null,Object? settings = null,}) {
   return _then(ThemePageConfig(
 login: null == login ? _self.login : login // ignore: cast_nullable_to_non_nullable
 as LoginPageConfig,about: null == about ? _self.about : about // ignore: cast_nullable_to_non_nullable
 as AboutPageConfig,dialing: null == dialing ? _self.dialing : dialing // ignore: cast_nullable_to_non_nullable
 as CallPageConfig,keypad: null == keypad ? _self.keypad : keypad // ignore: cast_nullable_to_non_nullable
-as KeypadPageConfig,
+as KeypadPageConfig,settings: null == settings ? _self.settings : settings // ignore: cast_nullable_to_non_nullable
+as SettingsPageConfig,
   ));
 }
 
@@ -1140,7 +1141,7 @@ case _:
 /// @nodoc
 mixin _$LoginModeSelectPageConfig {
 
- OverlayStyleModel? get systemUiOverlayStyle; ImageSource? get mainLogo; ElevatedButtonStyleType get buttonLoginStyleType; ElevatedButtonStyleType get buttonSignupStyleType;
+ OverlayStyleModel? get systemUiOverlayStyle; ImageSource? get mainLogo; ElevatedButtonStyleType get buttonLoginStyleType; ElevatedButtonStyleType get buttonSignupStyleType; PageBackground? get background;
 /// Create a copy of LoginModeSelectPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1151,16 +1152,16 @@ $LoginModeSelectPageConfigCopyWith<LoginModeSelectPageConfig> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginModeSelectPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.buttonLoginStyleType, buttonLoginStyleType) || other.buttonLoginStyleType == buttonLoginStyleType)&&(identical(other.buttonSignupStyleType, buttonSignupStyleType) || other.buttonSignupStyleType == buttonSignupStyleType));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginModeSelectPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.buttonLoginStyleType, buttonLoginStyleType) || other.buttonLoginStyleType == buttonLoginStyleType)&&(identical(other.buttonSignupStyleType, buttonSignupStyleType) || other.buttonSignupStyleType == buttonSignupStyleType)&&(identical(other.background, background) || other.background == background));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,mainLogo,buttonLoginStyleType,buttonSignupStyleType);
+int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,mainLogo,buttonLoginStyleType,buttonSignupStyleType,background);
 
 @override
 String toString() {
-  return 'LoginModeSelectPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, mainLogo: $mainLogo, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType)';
+  return 'LoginModeSelectPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, mainLogo: $mainLogo, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType, background: $background)';
 }
 
 
@@ -1171,7 +1172,7 @@ abstract mixin class $LoginModeSelectPageConfigCopyWith<$Res>  {
   factory $LoginModeSelectPageConfigCopyWith(LoginModeSelectPageConfig value, $Res Function(LoginModeSelectPageConfig) _then) = _$LoginModeSelectPageConfigCopyWithImpl;
 @useResult
 $Res call({
- OverlayStyleModel? systemUiOverlayStyle, ImageSource? mainLogo, ElevatedButtonStyleType buttonLoginStyleType, ElevatedButtonStyleType buttonSignupStyleType
+ OverlayStyleModel? systemUiOverlayStyle, ImageSource? mainLogo, ElevatedButtonStyleType buttonLoginStyleType, ElevatedButtonStyleType buttonSignupStyleType, PageBackground? background
 });
 
 
@@ -1188,13 +1189,14 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of LoginModeSelectPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? mainLogo = freezed,Object? buttonLoginStyleType = null,Object? buttonSignupStyleType = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? mainLogo = freezed,Object? buttonLoginStyleType = null,Object? buttonSignupStyleType = null,Object? background = freezed,}) {
   return _then(LoginModeSelectPageConfig(
 systemUiOverlayStyle: freezed == systemUiOverlayStyle ? _self.systemUiOverlayStyle : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
 as OverlayStyleModel?,mainLogo: freezed == mainLogo ? _self.mainLogo : mainLogo // ignore: cast_nullable_to_non_nullable
 as ImageSource?,buttonLoginStyleType: null == buttonLoginStyleType ? _self.buttonLoginStyleType : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
 as ElevatedButtonStyleType,buttonSignupStyleType: null == buttonSignupStyleType ? _self.buttonSignupStyleType : buttonSignupStyleType // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonStyleType,
+as ElevatedButtonStyleType,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
+as PageBackground?,
   ));
 }
 
@@ -1329,7 +1331,7 @@ case _:
 /// @nodoc
 mixin _$LoginSwitchPageConfig {
 
- ImageSource? get mainLogo;
+ ImageSource? get mainLogo; PageBackground? get background;
 /// Create a copy of LoginSwitchPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1340,16 +1342,16 @@ $LoginSwitchPageConfigCopyWith<LoginSwitchPageConfig> get copyWith => _$LoginSwi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginSwitchPageConfig&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginSwitchPageConfig&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.background, background) || other.background == background));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,mainLogo);
+int get hashCode => Object.hash(runtimeType,mainLogo,background);
 
 @override
 String toString() {
-  return 'LoginSwitchPageConfig(mainLogo: $mainLogo)';
+  return 'LoginSwitchPageConfig(mainLogo: $mainLogo, background: $background)';
 }
 
 
@@ -1360,7 +1362,7 @@ abstract mixin class $LoginSwitchPageConfigCopyWith<$Res>  {
   factory $LoginSwitchPageConfigCopyWith(LoginSwitchPageConfig value, $Res Function(LoginSwitchPageConfig) _then) = _$LoginSwitchPageConfigCopyWithImpl;
 @useResult
 $Res call({
- ImageSource? mainLogo
+ ImageSource? mainLogo, PageBackground? background
 });
 
 
@@ -1377,10 +1379,11 @@ class _$LoginSwitchPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of LoginSwitchPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? mainLogo = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? mainLogo = freezed,Object? background = freezed,}) {
   return _then(LoginSwitchPageConfig(
 mainLogo: freezed == mainLogo ? _self.mainLogo : mainLogo // ignore: cast_nullable_to_non_nullable
-as ImageSource?,
+as ImageSource?,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
+as PageBackground?,
   ));
 }
 
@@ -1515,7 +1518,7 @@ case _:
 /// @nodoc
 mixin _$AboutPageConfig {
 
- ImageSource? get mainLogo; Metadata get metadata;
+ ImageSource? get mainLogo; Metadata get metadata; PageBackground? get background;
 /// Create a copy of AboutPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1526,16 +1529,16 @@ $AboutPageConfigCopyWith<AboutPageConfig> get copyWith => _$AboutPageConfigCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AboutPageConfig&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.metadata, metadata) || other.metadata == metadata));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AboutPageConfig&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.metadata, metadata) || other.metadata == metadata)&&(identical(other.background, background) || other.background == background));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,mainLogo,metadata);
+int get hashCode => Object.hash(runtimeType,mainLogo,metadata,background);
 
 @override
 String toString() {
-  return 'AboutPageConfig(mainLogo: $mainLogo, metadata: $metadata)';
+  return 'AboutPageConfig(mainLogo: $mainLogo, metadata: $metadata, background: $background)';
 }
 
 
@@ -1546,7 +1549,7 @@ abstract mixin class $AboutPageConfigCopyWith<$Res>  {
   factory $AboutPageConfigCopyWith(AboutPageConfig value, $Res Function(AboutPageConfig) _then) = _$AboutPageConfigCopyWithImpl;
 @useResult
 $Res call({
- ImageSource? mainLogo, Metadata metadata
+ ImageSource? mainLogo, Metadata metadata, PageBackground? background
 });
 
 
@@ -1563,11 +1566,12 @@ class _$AboutPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of AboutPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? mainLogo = freezed,Object? metadata = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? mainLogo = freezed,Object? metadata = null,Object? background = freezed,}) {
   return _then(AboutPageConfig(
 mainLogo: freezed == mainLogo ? _self.mainLogo : mainLogo // ignore: cast_nullable_to_non_nullable
 as ImageSource?,metadata: null == metadata ? _self.metadata : metadata // ignore: cast_nullable_to_non_nullable
-as Metadata,
+as Metadata,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
+as PageBackground?,
   ));
 }
 
@@ -1702,7 +1706,7 @@ case _:
 /// @nodoc
 mixin _$CallPageConfig {
 
- OverlayStyleModel? get systemUiOverlayStyle; AppBarStyleConfig? get appBarStyle; CallPageInfoConfig? get callInfo; CallPageActionsConfig? get actions;
+ OverlayStyleModel? get systemUiOverlayStyle; AppBarConfig? get appBarStyle; CallPageInfoConfig? get callInfo; CallPageActionsConfig? get actions; PageBackground? get background;
 /// Create a copy of CallPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1713,16 +1717,16 @@ $CallPageConfigCopyWith<CallPageConfig> get copyWith => _$CallPageConfigCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.appBarStyle, appBarStyle) || other.appBarStyle == appBarStyle)&&(identical(other.callInfo, callInfo) || other.callInfo == callInfo)&&(identical(other.actions, actions) || other.actions == actions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.appBarStyle, appBarStyle) || other.appBarStyle == appBarStyle)&&(identical(other.callInfo, callInfo) || other.callInfo == callInfo)&&(identical(other.actions, actions) || other.actions == actions)&&(identical(other.background, background) || other.background == background));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,appBarStyle,callInfo,actions);
+int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,appBarStyle,callInfo,actions,background);
 
 @override
 String toString() {
-  return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, appBarStyle: $appBarStyle, callInfo: $callInfo, actions: $actions)';
+  return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, appBarStyle: $appBarStyle, callInfo: $callInfo, actions: $actions, background: $background)';
 }
 
 
@@ -1733,7 +1737,7 @@ abstract mixin class $CallPageConfigCopyWith<$Res>  {
   factory $CallPageConfigCopyWith(CallPageConfig value, $Res Function(CallPageConfig) _then) = _$CallPageConfigCopyWithImpl;
 @useResult
 $Res call({
- OverlayStyleModel? systemUiOverlayStyle, AppBarStyleConfig? appBarStyle, CallPageInfoConfig? callInfo, CallPageActionsConfig? actions
+ OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo, CallPageActionsConfig? actions, PageBackground? background, AppBarConfig? appBarStyle
 });
 
 
@@ -1750,13 +1754,14 @@ class _$CallPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of CallPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? appBarStyle = freezed,Object? callInfo = freezed,Object? actions = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? callInfo = freezed,Object? actions = freezed,Object? background = freezed,Object? appBarStyle = freezed,}) {
   return _then(CallPageConfig(
 systemUiOverlayStyle: freezed == systemUiOverlayStyle ? _self.systemUiOverlayStyle : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
-as OverlayStyleModel?,appBarStyle: freezed == appBarStyle ? _self.appBarStyle : appBarStyle // ignore: cast_nullable_to_non_nullable
-as AppBarStyleConfig?,callInfo: freezed == callInfo ? _self.callInfo : callInfo // ignore: cast_nullable_to_non_nullable
+as OverlayStyleModel?,callInfo: freezed == callInfo ? _self.callInfo : callInfo // ignore: cast_nullable_to_non_nullable
 as CallPageInfoConfig?,actions: freezed == actions ? _self.actions : actions // ignore: cast_nullable_to_non_nullable
-as CallPageActionsConfig?,
+as CallPageActionsConfig?,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
+as PageBackground?,appBarStyle: freezed == appBarStyle ? _self.appBarStyle : appBarStyle // ignore: cast_nullable_to_non_nullable
+as AppBarConfig?,
   ));
 }
 
@@ -2274,7 +2279,7 @@ case _:
 /// @nodoc
 mixin _$KeypadPageConfig {
 
- OverlayStyleModel? get systemUiOverlayStyle; TextFieldConfig? get textField; TextFieldConfig? get contactName; KeypadStyleConfig? get keypad; ActionPadWidgetConfig? get actionpad;
+ OverlayStyleModel? get systemUiOverlayStyle; TextFieldConfig? get textField; TextFieldConfig? get contactName; KeypadStyleConfig? get keypad; ActionPadWidgetConfig? get actionpad; PageBackground? get background;
 /// Create a copy of KeypadPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2285,16 +2290,16 @@ $KeypadPageConfigCopyWith<KeypadPageConfig> get copyWith => _$KeypadPageConfigCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is KeypadPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.textField, textField) || other.textField == textField)&&(identical(other.contactName, contactName) || other.contactName == contactName)&&(identical(other.keypad, keypad) || other.keypad == keypad)&&(identical(other.actionpad, actionpad) || other.actionpad == actionpad));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KeypadPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.textField, textField) || other.textField == textField)&&(identical(other.contactName, contactName) || other.contactName == contactName)&&(identical(other.keypad, keypad) || other.keypad == keypad)&&(identical(other.actionpad, actionpad) || other.actionpad == actionpad)&&(identical(other.background, background) || other.background == background));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,textField,contactName,keypad,actionpad);
+int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,textField,contactName,keypad,actionpad,background);
 
 @override
 String toString() {
-  return 'KeypadPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, textField: $textField, contactName: $contactName, keypad: $keypad, actionpad: $actionpad)';
+  return 'KeypadPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, textField: $textField, contactName: $contactName, keypad: $keypad, actionpad: $actionpad, background: $background)';
 }
 
 
@@ -2305,7 +2310,7 @@ abstract mixin class $KeypadPageConfigCopyWith<$Res>  {
   factory $KeypadPageConfigCopyWith(KeypadPageConfig value, $Res Function(KeypadPageConfig) _then) = _$KeypadPageConfigCopyWithImpl;
 @useResult
 $Res call({
- OverlayStyleModel? systemUiOverlayStyle, TextFieldConfig? textField, TextFieldConfig? contactName, KeypadStyleConfig? keypad, ActionPadWidgetConfig? actionpad
+ OverlayStyleModel? systemUiOverlayStyle, TextFieldConfig? textField, TextFieldConfig? contactName, KeypadStyleConfig? keypad, ActionPadWidgetConfig? actionpad, PageBackground? background
 });
 
 
@@ -2322,14 +2327,15 @@ class _$KeypadPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of KeypadPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? textField = freezed,Object? contactName = freezed,Object? keypad = freezed,Object? actionpad = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? textField = freezed,Object? contactName = freezed,Object? keypad = freezed,Object? actionpad = freezed,Object? background = freezed,}) {
   return _then(KeypadPageConfig(
 systemUiOverlayStyle: freezed == systemUiOverlayStyle ? _self.systemUiOverlayStyle : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
 as OverlayStyleModel?,textField: freezed == textField ? _self.textField : textField // ignore: cast_nullable_to_non_nullable
 as TextFieldConfig?,contactName: freezed == contactName ? _self.contactName : contactName // ignore: cast_nullable_to_non_nullable
 as TextFieldConfig?,keypad: freezed == keypad ? _self.keypad : keypad // ignore: cast_nullable_to_non_nullable
 as KeypadStyleConfig?,actionpad: freezed == actionpad ? _self.actionpad : actionpad // ignore: cast_nullable_to_non_nullable
-as ActionPadWidgetConfig?,
+as ActionPadWidgetConfig?,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
+as PageBackground?,
   ));
 }
 
@@ -2338,6 +2344,198 @@ as ActionPadWidgetConfig?,
 
 /// Adds pattern-matching-related methods to [KeypadPageConfig].
 extension KeypadPageConfigPatterns on KeypadPageConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$SettingsPageConfig {
+
+ String? get leadingIconsColor; String? get userIconColor; String? get logoutIconColor; GroupTitleListTileWidgetConfig? get groupTitleListTile; bool get showSeparators; PageBackground? get background; TextStyleConfig? get itemTextStyle;
+/// Create a copy of SettingsPageConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SettingsPageConfigCopyWith<SettingsPageConfig> get copyWith => _$SettingsPageConfigCopyWithImpl<SettingsPageConfig>(this as SettingsPageConfig, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsPageConfig&&(identical(other.leadingIconsColor, leadingIconsColor) || other.leadingIconsColor == leadingIconsColor)&&(identical(other.userIconColor, userIconColor) || other.userIconColor == userIconColor)&&(identical(other.logoutIconColor, logoutIconColor) || other.logoutIconColor == logoutIconColor)&&(identical(other.groupTitleListTile, groupTitleListTile) || other.groupTitleListTile == groupTitleListTile)&&(identical(other.showSeparators, showSeparators) || other.showSeparators == showSeparators)&&(identical(other.background, background) || other.background == background)&&(identical(other.itemTextStyle, itemTextStyle) || other.itemTextStyle == itemTextStyle));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,leadingIconsColor,userIconColor,logoutIconColor,groupTitleListTile,showSeparators,background,itemTextStyle);
+
+@override
+String toString() {
+  return 'SettingsPageConfig(leadingIconsColor: $leadingIconsColor, userIconColor: $userIconColor, logoutIconColor: $logoutIconColor, groupTitleListTile: $groupTitleListTile, showSeparators: $showSeparators, background: $background, itemTextStyle: $itemTextStyle)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SettingsPageConfigCopyWith<$Res>  {
+  factory $SettingsPageConfigCopyWith(SettingsPageConfig value, $Res Function(SettingsPageConfig) _then) = _$SettingsPageConfigCopyWithImpl;
+@useResult
+$Res call({
+ String? leadingIconsColor, String? userIconColor, String? logoutIconColor, GroupTitleListTileWidgetConfig? groupTitleListTile, bool showSeparators, PageBackground? background, TextStyleConfig? itemTextStyle
+});
+
+
+
+
+}
+/// @nodoc
+class _$SettingsPageConfigCopyWithImpl<$Res>
+    implements $SettingsPageConfigCopyWith<$Res> {
+  _$SettingsPageConfigCopyWithImpl(this._self, this._then);
+
+  final SettingsPageConfig _self;
+  final $Res Function(SettingsPageConfig) _then;
+
+/// Create a copy of SettingsPageConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? leadingIconsColor = freezed,Object? userIconColor = freezed,Object? logoutIconColor = freezed,Object? groupTitleListTile = freezed,Object? showSeparators = null,Object? background = freezed,Object? itemTextStyle = freezed,}) {
+  return _then(SettingsPageConfig(
+leadingIconsColor: freezed == leadingIconsColor ? _self.leadingIconsColor : leadingIconsColor // ignore: cast_nullable_to_non_nullable
+as String?,userIconColor: freezed == userIconColor ? _self.userIconColor : userIconColor // ignore: cast_nullable_to_non_nullable
+as String?,logoutIconColor: freezed == logoutIconColor ? _self.logoutIconColor : logoutIconColor // ignore: cast_nullable_to_non_nullable
+as String?,groupTitleListTile: freezed == groupTitleListTile ? _self.groupTitleListTile : groupTitleListTile // ignore: cast_nullable_to_non_nullable
+as GroupTitleListTileWidgetConfig?,showSeparators: null == showSeparators ? _self.showSeparators : showSeparators // ignore: cast_nullable_to_non_nullable
+as bool,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
+as PageBackground?,itemTextStyle: freezed == itemTextStyle ? _self.itemTextStyle : itemTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [SettingsPageConfig].
+extension SettingsPageConfigPatterns on SettingsPageConfig {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

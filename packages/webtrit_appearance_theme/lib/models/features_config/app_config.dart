@@ -489,7 +489,11 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     this.enabled = true,
     required this.titleL10n,
     required this.type,
+    // TODO: Separate UI configuration from logical configuration.
+    // Move UI-only fields (e.g., `icon`, `iconColor`) into a dedicated UI/widget config so core config remains behavior/data focused.
     required this.icon,
+    // Optional hex color string for the icon (e.g., '#RRGGBB'). Consider moving to UI config.
+    this.iconColor,
 
     /// TODO: Migration workaround - accepts both int and string IDs.
     /// Remove [IntToStringConverter] once all JSONs use string IDs only.
@@ -507,6 +511,9 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
 
   @override
   final String icon;
+
+  @override
+  final String? iconColor;
 
   @override
   @IntToStringOptionalConverter()

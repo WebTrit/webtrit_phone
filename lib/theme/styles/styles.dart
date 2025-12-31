@@ -1,4 +1,6 @@
 export 'app_bar_style.dart';
+export 'background_style.dart';
+export 'base_screen_style.dart';
 export 'call_status_style.dart';
 export 'call_status_styles.dart';
 export 'input_mask_style.dart';
@@ -14,3 +16,4 @@ export 'smart_indicator_style.dart';
 export 'snack_bar_style.dart';
 export 'snack_bar_styles.dart';
 export 'text_field_style.dart';
+export 'theme_image_style.dart';

@@ -237,31 +237,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final newRegistration = change.nextState.callServiceState.registration;
     final previousRegistration = change.currentState.callServiceState.registration;
 
-    if (newRegistration != previousRegistration) {
+    if (newRegistration != previousRegistration && newRegistration != null) {
       _logger.fine('_onRegistrationChange: $newRegistration to $previousRegistration');
 
-      final newRegistrationStatus = newRegistration?.status;
+      final newRegistrationStatus = newRegistration.status;
       final previousRegistrationStatus = previousRegistration?.status;
 
-      if (newRegistrationStatus?.isRegistered == true && previousRegistrationStatus?.isRegistered != true) {
+      if (previousRegistrationStatus?.isRegistered == false && newRegistrationStatus.isRegistered == true) {
         presenceSettingsRepository.resetLastSettingsSync();
         submitNotification(AppOnlineNotification());
       }
 
-      if (newRegistrationStatus?.isRegistered != true && previousRegistrationStatus?.isRegistered == true) {
+      if (previousRegistrationStatus?.isRegistered == true && newRegistrationStatus.isRegistered == false) {
         submitNotification(AppOfflineNotification());
       }
 
-      if (newRegistrationStatus?.isFailed == true || newRegistrationStatus?.isUnregistered == true) {
+      if (newRegistrationStatus.isFailed == true || newRegistrationStatus.isUnregistered == true) {
         add(const _ResetStateEvent.completeCalls());
       }
 
-      if (newRegistrationStatus?.isFailed == true) {
+      if (newRegistrationStatus.isFailed == true) {
         submitNotification(
           SipRegistrationFailedNotification(
-            knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration?.code),
-            systemCode: newRegistration?.code,
-            systemReason: newRegistration?.reason,
+            knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration.code),
+            systemCode: newRegistration.code,
+            systemReason: newRegistration.reason,
           ),
         );
       }
@@ -1390,8 +1390,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///
   /// If its audiocall, try to upgrade to videocal using renegotiation
   /// by adding the tracks to the peer connection.
-  /// after succes [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
-  /// than [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
+  /// after success [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
+  /// then [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
+  ///
+  /// **Mute Implementation Note:**
+  /// Currently, this method implements a **"Soft Mute"** strategy by toggling
+  /// [MediaStreamTrack.enabled] instead of a **"Hard Mute"** (changing
+  /// [RTCRtpTransceiver] direction to [TransceiverDirection.RecvOnly]).
+  ///
+  /// **Reason:** It was observed that switching to `RecvOnly` causes the server
+  /// to stop sending the *incoming* video stream to the client.
+  /// This behavior suggests that the server infrastructure might interpret the cessation
+  /// of outgoing RTP packets as a connection timeout or does not correctly handle
+  /// the session modification in the current configuration. "Soft Mute" avoids this
+  /// by keeping the channel active (sending black/empty frames).
   Future<void> _onCallControlEventCameraEnabled(_CallControlEventCameraEnabled event, Emitter<CallState> emit) async {
     final activeCall = state.retrieveActiveCall(event.callId);
     if (activeCall == null) return;
@@ -1429,7 +1441,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ///
       /// So for best compatibility, use existing senders and control them via .enabled or .replaceTrack
       if (audioSender != null && newAudioTrack != null) {
-        await audioSender.track?.stop();
         await audioSender.replaceTrack(newAudioTrack);
       } else if (newAudioTrack != null) {
         final audioSenderResult = await peerConnection.safeAddTrack(newAudioTrack, newLocalStream);
@@ -1437,7 +1448,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
 
       if (videoSender != null && newVideoTrack != null) {
-        await videoSender.track?.stop();
         await videoSender.replaceTrack(newVideoTrack);
       } else if (newVideoTrack != null) {
         final videoSenderResult = await peerConnection.safeAddTrack(newVideoTrack, newLocalStream);
