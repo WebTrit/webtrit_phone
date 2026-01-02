@@ -219,6 +219,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_videoView_actionLabel_fit => 'Adatta';
 
   @override
+  String get cdrs_noRecentCalls_message => 'Nessuna chiamata recente';
+
+  @override
+  String get cdrs_noMissedCalls_message => 'Nessuna chiamata persa';
+
+  @override
   String get common_noInternetConnection_message =>
       'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
 
