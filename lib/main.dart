@@ -234,7 +234,9 @@ class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.detached) {
-      db.close();
+      // NOTE: `close()` is async and unawaited here; another isolate may open DB before it fully closes,
+      // potentially increasing lock contention (`database is locked`).
+      unawaited(db.close());
     }
   }
 }
