@@ -84,25 +84,14 @@ class RootApp extends StatelessWidget {
         Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
         Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
         Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
-
-        // Services
-
-        // `AppDatabase` is provided via Provider because some repositories/services are still created
-        // inside the widget tree and require DB access through `BuildContext`.
-        //
-        // Planned refactor:
-        // - Move creation of low-level dependencies (DB, storages, clients) to `bootstrap()`
-        //   (composition root / DI container).
-        // - Register them in `InstanceRegistry`.
-        // - Provide only higher-level objects (repositories, blocs/cubits, feature services) to the UI,
-        //   and stop exposing `AppDatabase` in the widget tree.
-        //
-        // `AppDatabaseLifecycleHolder` attaches a `WidgetsBindingObserver` and closes the database when
-        // the app is detached. Once the refactor is done, both providers should be removed.
+        // Provides a lifecycle-aware holder that attaches a WidgetsBindingObserver and owns the DB instance.
+        // This provider may stay lazy; it will be created when `AppDatabase` is first requested.
         Provider<AppDatabaseLifecycleHolder>(
           create: _createAppDatabaseLifecycleHolder,
           dispose: _disposeAppDatabaseLifecycleHolder,
         ),
+        // Provides `AppDatabase` by reading it from `AppDatabaseLifecycleHolder`.
+        // When this provider is read, it triggers creation of the holder first (provider is lazy).
         Provider<AppDatabase>(create: (context) => context.read<AppDatabaseLifecycleHolder>().db),
         Provider<ConnectivityService>(create: _createConnectivityService, dispose: _disposeConnectivityService),
       ],

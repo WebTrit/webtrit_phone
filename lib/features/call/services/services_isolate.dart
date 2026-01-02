@@ -109,5 +109,9 @@ Future<void> onSignalingSyncCallback(CallkeepServiceStatus status) async {
   _logger.info('onSignalingSyncCallback: $status');
 
   await _signalingForegroundIsolateManager?.sync(status);
+  // TODO: Implement a deterministic cleanup path for common dependencies (DB, storages, logger)
+  // for the signaling isolate. Unlike the push-notification flow, this callback currently has
+  // no explicit "releaseResources" event, so we need a reliable trigger (or idle-timeout) to
+  // call `_disposeCommonDependencies()` without breaking subsequent sync calls.
   return;
 }
