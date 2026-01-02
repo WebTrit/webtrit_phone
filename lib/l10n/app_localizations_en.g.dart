@@ -1517,6 +1517,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AboutText_AppVersion => 'App Version';
 
   @override
+  String get settings_AboutText_CoreVersion => 'WebTrit Cloud Backend version';
+
+  @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
 
   @override
