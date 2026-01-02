@@ -3,8 +3,11 @@ import 'package:webtrit_phone/environment_config.dart';
 
 class IsolateDatabase extends AppDatabase {
   IsolateDatabase(super.executor);
-  
+
   static Future<IsolateDatabase> create({required String directoryPath, String dbName = 'db.sqlite'}) async {
+    assert(directoryPath.isNotEmpty, 'directoryPath must not be empty');
+    assert(dbName.isNotEmpty, 'dbName must not be empty');
+
     try {
       final executor = createAppDatabaseConnection(
         directoryPath,
