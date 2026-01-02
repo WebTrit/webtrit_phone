@@ -301,9 +301,8 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
       time: DateTime.now(),
     );
 
-    await IsolateDatabase.use(
+    await AppDatabaseScope.use(
       directoryPath: appPath.applicationDocumentsPath,
-      onError: (e, st) => logger.severe('Failed to persist ActiveMessagePush', e, st),
       action: (db) async {
         final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
         await repo.set(activeMessagePush);
@@ -320,8 +319,9 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
   final appPath = await AppPath.init();
 
-  return IsolateDatabase.use<String>(
+  return AppDatabaseScope.tryUse(
     directoryPath: appPath.applicationDocumentsPath,
+    fallback: appPush.call.displayName,
     onError: (e, st) {
       logger.severe(
         'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
@@ -329,7 +329,6 @@ Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, L
         e,
         st,
       );
-      return appPush.call.displayName;
     },
     action: (db) async {
       final contactsRepository = ContactsRepository(
@@ -425,12 +424,10 @@ void workManagerDispatcher() {
       final appPath = await AppPath.init();
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      final result = await IsolateDatabase.use<bool>(
+      final result = await AppDatabaseScope.tryUse<bool>(
         directoryPath: appPath.applicationDocumentsPath,
-        onError: (e, st) {
-          logger.severe('System notifications task failed', e, st);
-          return true;
-        },
+        fallback: true,
+        onError: (e, st) => logger.severe('System notifications task failed', e, st),
         action: (db) async {
           final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
           final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);

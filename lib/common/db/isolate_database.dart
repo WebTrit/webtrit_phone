@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
@@ -7,14 +5,6 @@ import 'package:webtrit_phone/environment_config.dart';
 ///
 /// This helper does **not** cache database instances. Each call opens a new SQLite connection
 /// to the same database file.
-///
-/// Concurrency notes:
-/// - Opening multiple connections to the same SQLite file across isolates can increase the
-///   likelihood of `SqliteException: database is locked` if operations overlap.
-/// - Prefer short-lived access in background isolates (open > do work > close) using
-///   [IsolateDatabase.use] (or a `try/finally` close pattern).
-/// - For long-lived background services (e.g. CallKeep signaling isolates), keep a single
-///   connection for the lifetime of the service and close it on release/teardown.
 abstract final class IsolateDatabase {
   /// Opens a new [AppDatabase] instance for [directoryPath]/[dbName].
   ///
@@ -33,27 +23,6 @@ abstract final class IsolateDatabase {
       return AppDatabase(executor);
     } catch (e, stackTrace) {
       throw DatabaseInitializationException('Failed to initialize database: $e', stackTrace);
-    }
-  }
-
-  /// Opens DB, runs [action], and always closes DB afterwards.
-  ///
-  /// Recommended for background isolates to reduce the chance of lock contention and to
-  /// avoid leaving connections open.
-  static Future<T> use<T>({
-    required String directoryPath,
-    String dbName = 'db.sqlite',
-    required Future<T> Function(AppDatabase db) action,
-    FutureOr<T> Function(Object error, StackTrace stackTrace)? onError,
-  }) async {
-    final db = create(directoryPath: directoryPath, dbName: dbName);
-    try {
-      return await action(db);
-    } catch (e, st) {
-      if (onError != null) return await onError(e, st);
-      rethrow;
-    } finally {
-      await db.close();
     }
   }
 }
