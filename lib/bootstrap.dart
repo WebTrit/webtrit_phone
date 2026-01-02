@@ -291,8 +291,6 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 
   if (appPush is MessagePush) {
     final appPath = await AppPath.init();
-    final appDatabase = IsolateDatabase.create(directoryPath: appPath.applicationDocumentsPath);
-    final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: appDatabase);
 
     final activeMessagePush = ActiveMessagePush(
       notificationId: appPush.id,
@@ -302,7 +300,15 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
       body: appPush.body ?? '',
       time: DateTime.now(),
     );
-    await repo.set(activeMessagePush);
+
+    await IsolateDatabase.use(
+      directoryPath: appPath.applicationDocumentsPath,
+      onError: (e, st) => logger.severe('Failed to persist ActiveMessagePush', e, st),
+      action: (db) async {
+        final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
+        await repo.set(activeMessagePush);
+      },
+    );
   }
 }
 
@@ -312,26 +318,30 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 /// when multiple isolates (e.g., background FCM and main app) access the database
 /// concurrently. If any error occurs, the display name from the push payload is returned.
 Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
-  try {
-    final appPath = await AppPath.init();
-    final appDatabase = IsolateDatabase.create(directoryPath: appPath.applicationDocumentsPath);
-    final contactsRepository = ContactsRepository(
-      appDatabase: appDatabase,
-      contactsRemoteDataSource: null,
-      contactsLocalDataSource: null,
-    );
+  final appPath = await AppPath.init();
 
-    final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
-    return contact?.maybeName ?? appPush.call.displayName;
-  } catch (e, stackTrace) {
-    logger.severe(
-      'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
-      'Fallback to push display name will be used.',
-      e,
-      stackTrace,
-    );
-    return appPush.call.displayName;
-  }
+  return IsolateDatabase.use<String>(
+    directoryPath: appPath.applicationDocumentsPath,
+    onError: (e, st) {
+      logger.severe(
+        'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
+        'Fallback to push display name will be used.',
+        e,
+        st,
+      );
+      return appPush.call.displayName;
+    },
+    action: (db) async {
+      final contactsRepository = ContactsRepository(
+        appDatabase: db,
+        contactsRemoteDataSource: null,
+        contactsLocalDataSource: null,
+      );
+
+      final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
+      return contact?.maybeName ?? appPush.call.displayName;
+    },
+  );
 }
 
 Future _initLocalPushs() async {
@@ -393,31 +403,46 @@ void workManagerDispatcher() {
   Workmanager().executeTask((task, _) async {
     logger.info('Task execution started: $task');
 
-    if (task == kSystemNotificationsTask || task == kSystemNotificationsTaskId) {
-      // Skip execution if the app is in the foreground
-      final appLifecycle = await AppLifecycle.initSlave();
-      final currentState = appLifecycle.getLifecycleState();
-      if (currentState == AppLifecycleState.resumed) return Future.value(true);
+    if (task != kSystemNotificationsTask && task != kSystemNotificationsTaskId) {
+      return true;
+    }
 
+    // Skip execution if the app is in the foreground
+    final appLifecycle = await AppLifecycle.initSlave();
+    if (appLifecycle.getLifecycleState() == AppLifecycleState.resumed) return true;
+
+    try {
       // Init api and remote repository
       final storage = await SecureStorageImpl.init();
-      final (coreUrl, tenantId, token) = (storage.readCoreUrl(), storage.readTenantId(), storage.readToken());
-      if (coreUrl == null || tenantId == null || token == null) return Future.value(true);
+      final coreUrl = storage.readCoreUrl();
+      final tenantId = storage.readTenantId();
+      final token = storage.readToken();
+      if (coreUrl == null || tenantId == null || token == null) return true;
+
       final api = WebtritApiClient(Uri.parse(coreUrl), tenantId);
       final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token, const EmptySessionGuard());
 
-      // Init local database and repository
       final appPath = await AppPath.init();
-      final appDatabase = IsolateDatabase.create(directoryPath: appPath.applicationDocumentsPath);
-      final localRepo = SystemNotificationsLocalRepositoryDriftImpl(appDatabase);
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      // Initialize the background worker and execute task
-      final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
-      final result = await worker.execute();
+      final result = await IsolateDatabase.use<bool>(
+        directoryPath: appPath.applicationDocumentsPath,
+        onError: (e, st) {
+          logger.severe('System notifications task failed', e, st);
+          return true;
+        },
+        action: (db) async {
+          final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
+          final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
+          return worker.execute();
+        },
+      );
+
       logger.info('Task result: $result');
       return result;
+    } catch (e, st) {
+      logger.severe('Unhandled WorkManager task error', e, st);
+      return true;
     }
-    return true;
   });
 }

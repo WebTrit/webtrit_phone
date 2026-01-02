@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
@@ -18,6 +20,28 @@ abstract final class IsolateDatabase {
       return AppDatabase(executor);
     } catch (e, stackTrace) {
       throw DatabaseInitializationException('Failed to initialize database: $e', stackTrace);
+    }
+  }
+
+  /// Opens DB, runs [action], always closes DB.
+  ///
+  /// If [onError] is provided, it will be called and its return value will be used.
+  /// Otherwise the error is rethrown.
+  static Future<T> use<T>({
+    required String directoryPath,
+    String dbName = 'db.sqlite',
+    required Future<T> Function(AppDatabase db) action,
+    FutureOr<T> Function(Object error, StackTrace stackTrace)? onError,
+  }) async {
+    final db = create(directoryPath: directoryPath, dbName: dbName);
+
+    try {
+      return await action(db);
+    } catch (e, st) {
+      if (onError != null) return await onError(e, st);
+      rethrow;
+    } finally {
+      await db.close();
     }
   }
 }
