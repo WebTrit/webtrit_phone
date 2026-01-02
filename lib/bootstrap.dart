@@ -290,7 +290,8 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   }
 
   if (appPush is MessagePush) {
-    final appDatabase = await IsolateDatabase.create();
+    final appPath = await AppPath.init();
+    final appDatabase = await IsolateDatabase.create(directoryPath: appPath.applicationDocumentsPath);
     final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: appDatabase);
 
     final activeMessagePush = ActiveMessagePush(
@@ -312,7 +313,8 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 /// concurrently. If any error occurs, the display name from the push payload is returned.
 Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
   try {
-    final appDatabase = await IsolateDatabase.create();
+    final appPath = await AppPath.init();
+    final appDatabase = await IsolateDatabase.create(directoryPath: appPath.applicationDocumentsPath);
     final contactsRepository = ContactsRepository(
       appDatabase: appDatabase,
       contactsRemoteDataSource: null,
@@ -405,7 +407,8 @@ void workManagerDispatcher() {
       final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token, const EmptySessionGuard());
 
       // Init local database and repository
-      final appDatabase = await IsolateDatabase.create();
+      final appPath = await AppPath.init();
+      final appDatabase = await IsolateDatabase.create(directoryPath: appPath.applicationDocumentsPath);
       final localRepo = SystemNotificationsLocalRepositoryDriftImpl(appDatabase);
       final localPushRepo = LocalPushRepositoryFLNImpl();
 

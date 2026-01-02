@@ -16,6 +16,7 @@ SignalingForegroundIsolateManager? _signalingForegroundIsolateManager;
 
 RemoteConfigService? _remoteConfigService;
 
+AppPath? _appPath;
 DeviceInfo? _deviceInfo;
 PackageInfo? _packageInfo;
 AppLogger? _appLogger;
@@ -31,6 +32,7 @@ Future<void> _initializeCommonDependencies() async {
   _remoteConfigService ??= await DefaultRemoteCacheConfigService.init();
 
   // Data classes
+  _appPath ??= await AppPath.init();
   _appInfo ??= await AppInfo.init(const SharedPreferencesAppIdProvider());
   _deviceInfo ??= await DeviceInfoFactory.init();
   _packageInfo ??= await PackageInfoFactory.init();
@@ -39,7 +41,9 @@ Future<void> _initializeCommonDependencies() async {
   _appLogger ??= await AppLogger.init(_remoteConfigService!, _appLabelsProvider!);
   _appCertificates ??= await AppCertificates.init();
 
-  _callLogsRepository ??= CallLogsRepository(appDatabase: await IsolateDatabase.create());
+  _callLogsRepository ??= CallLogsRepository(
+    appDatabase: await IsolateDatabase.create(directoryPath: _appPath!.applicationDocumentsPath),
+  );
 }
 
 Future<void> _initializeSignalingDependencies() async {
