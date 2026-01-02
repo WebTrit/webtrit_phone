@@ -24,6 +24,7 @@ SecureStorage? _secureStorage;
 AppCertificates? _appCertificates;
 AppInfo? _appInfo;
 AppMetadataProvider? _appLabelsProvider;
+AppDatabase? _appDatabase;
 
 CallLogsRepository? _callLogsRepository;
 
@@ -41,9 +42,26 @@ Future<void> _initializeCommonDependencies() async {
   _appLogger ??= await AppLogger.init(_remoteConfigService!, _appLabelsProvider!);
   _appCertificates ??= await AppCertificates.init();
 
-  _callLogsRepository ??= CallLogsRepository(
-    appDatabase: IsolateDatabase.create(directoryPath: _appPath!.applicationDocumentsPath),
-  );
+  _appDatabase ??= IsolateDatabase.create(directoryPath: _appPath!.applicationDocumentsPath);
+  _callLogsRepository ??= CallLogsRepository(appDatabase: _appDatabase!);
+}
+
+Future<void> _disposeCommonDependencies() async {
+  await _pushNotificationIsolateManager?.close();
+  await _appDatabase?.close();
+
+  _appDatabase = null;
+  _pushNotificationIsolateManager = null;
+  _callLogsRepository = null;
+  _remoteConfigService = null;
+  _appPath = null;
+  _deviceInfo = null;
+  _packageInfo = null;
+  _appLogger = null;
+  _secureStorage = null;
+  _appCertificates = null;
+  _appInfo = null;
+  _appLabelsProvider = null;
 }
 
 Future<void> _initializeSignalingDependencies() async {
@@ -78,7 +96,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepPushNotificationSyncStatus s
     case CallkeepPushNotificationSyncStatus.synchronizeCallStatus:
       await _pushNotificationIsolateManager?.sync();
     case CallkeepPushNotificationSyncStatus.releaseResources:
-      await _pushNotificationIsolateManager?.close();
+      await _disposeCommonDependencies();
   }
 }
 
