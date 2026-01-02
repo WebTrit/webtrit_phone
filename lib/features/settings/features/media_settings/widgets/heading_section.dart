@@ -24,7 +24,7 @@ class HeadingSection extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.all(16),
             showDuration: const Duration(seconds: 10),
-            child: const Icon(Icons.info_outline),
+            child: const Icon(Icons.info_outline, color: Colors.black54,),
           ),
         ],
       ],
