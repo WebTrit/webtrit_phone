@@ -2,9 +2,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
 /// Helper for creating [AppDatabase] instances in different isolates.
-///
-/// This helper does **not** cache database instances. Each call opens a new SQLite connection
-/// to the same database file.
 abstract final class IsolateDatabase {
   /// Opens a new [AppDatabase] instance for [directoryPath]/[dbName].
   ///
