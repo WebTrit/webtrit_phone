@@ -109,6 +109,7 @@ class _AboutScreenState extends State<AboutScreen> {
                             style: themeData.textTheme.bodyMedium,
                           ),
                         ),
+                        Text(context.l10n.settings_AboutText_CoreVersion),
                         Stack(
                           alignment: AlignmentDirectional.center,
                           children: [

@@ -1255,6 +1255,8 @@
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "Версія додатка",
   "@settings_AboutText_AppVersion": {},
+  "settings_AboutText_CoreVersion": "Версія WebTrit Cloud Backend",
+  "@settings_AboutText_CoreVersion": {},
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {},
   "settings_AboutText_FCMPushNotificationToken": "Токен для Push-повідомлень FCM",

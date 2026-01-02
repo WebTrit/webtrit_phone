@@ -2892,6 +2892,12 @@ abstract class AppLocalizations {
   /// **'App Version'**
   String get settings_AboutText_AppVersion;
 
+  /// No description provided for @settings_AboutText_CoreVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'WebTrit Cloud Backend version'**
+  String get settings_AboutText_CoreVersion;
+
   /// No description provided for @settings_AboutText_CoreVersionUndefined.
   ///
   /// In en, this message translates to:
