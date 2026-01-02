@@ -426,7 +426,7 @@ void workManagerDispatcher() {
 
       final result = await AppDatabaseScope.tryUse<bool>(
         directoryPath: appPath.applicationDocumentsPath,
-        fallback: true,
+        fallback: false, // return false so WorkManager can retry on DB/worker failure
         onError: (e, st) => logger.severe('System notifications task failed', e, st),
         action: (db) async {
           final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
@@ -439,7 +439,9 @@ void workManagerDispatcher() {
       return result;
     } catch (e, st) {
       logger.severe('Unhandled WorkManager task error', e, st);
-      return true;
+      // Return `false` so WorkManager can retry according to its backoff policy.
+      // Returning `true` would mark the run as successful and may prevent retries.
+      return false;
     }
   });
 }
