@@ -19,6 +19,8 @@ class MediaSettingsScreen extends StatefulWidget {
 class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
   late final cubit = context.read<MediaSettingsCubit>();
 
+  late int openedTile = -1;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -56,11 +58,16 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
             spacing: 8,
             children: [
               ExpansionTile(
+                key: UniqueKey(),
+                initiallyExpanded: openedTile == 0,
                 title: HeadingSection(
                   title: l10n.settings_encoding_Section_preset_title,
                   tooltip: l10n.settings_encoding_Section_preset_tooltip,
                   icon: const Icon(Icons.segment_outlined),
                 ),
+                onExpansionChanged: (newState) => setState(() {
+                  openedTile = newState ? 0 : -1;
+                }),
                 children: [
                   const EncodingPresetContent(),
                   BlocBuilder<MediaSettingsCubit, MediaSettingsState>(
@@ -78,35 +85,55 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                 ],
               ),
               ExpansionTile(
+                key: UniqueKey(),
+                initiallyExpanded: openedTile == 1,
                 title: HeadingSection(
                   title: l10n.settings_audioProcessing_Section_title,
                   tooltip: l10n.settings_audioProcessing_Section_tooltip,
                   icon: const Icon(Icons.multitrack_audio),
                 ),
+                onExpansionChanged: (newState) => setState(() {
+                  openedTile = newState ? 1 : -1;
+                }),
                 children: const [AudioProcessingContent()],
               ),
               ExpansionTile(
+                key: UniqueKey(),
+                initiallyExpanded: openedTile == 2,
                 title: HeadingSection(
                   title: l10n.settings_videoCapturing_Section_title,
                   tooltip: l10n.settings_videoCapturing_Section_tooltip,
                   icon: const Icon(Icons.video_settings_rounded),
                 ),
+                onExpansionChanged: (newState) => setState(() {
+                  openedTile = newState ? 2 : -1;
+                }),
                 children: const [VideoCapturingContent()],
               ),
               ExpansionTile(
+                key: UniqueKey(),
+                initiallyExpanded: openedTile == 3,
                 title: HeadingSection(
                   title: l10n.settings_iceSettings_Section_title,
                   tooltip: l10n.settings_iceSettings_Section_tooltip,
                   icon: const Icon(Icons.bubble_chart),
                 ),
+                onExpansionChanged: (newState) => setState(() {
+                  openedTile = newState ? 3 : -1;
+                }),
                 children: const [IceSettingsContent()],
               ),
               ExpansionTile(
+                key: UniqueKey(),
+                initiallyExpanded: openedTile == 4,
                 title: HeadingSection(
                   title: l10n.settings_connectionSection_title,
                   tooltip: l10n.settings_connectionSection_tooltip,
                   icon: const Icon(Icons.sync_alt),
                 ),
+                onExpansionChanged: (newState) => setState(() {
+                  openedTile = newState ? 4 : -1;
+                }),
                 children: const [PeerConnectionSettingsContent()],
               ),
             ],
