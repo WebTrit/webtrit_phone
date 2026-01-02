@@ -1,10 +1,11 @@
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
-class IsolateDatabase extends AppDatabase {
-  IsolateDatabase(super.executor);
-
-  static Future<IsolateDatabase> create({required String directoryPath, String dbName = 'db.sqlite'}) async {
+/// Helper for creating [AppDatabase] instances for different isolates.
+///
+/// No caching is used. Each call creates a new database instance.
+abstract final class IsolateDatabase {
+  static AppDatabase create({required String directoryPath, String dbName = 'db.sqlite'}) {
     assert(directoryPath.isNotEmpty, 'directoryPath must not be empty');
     assert(dbName.isNotEmpty, 'dbName must not be empty');
 
@@ -14,7 +15,7 @@ class IsolateDatabase extends AppDatabase {
         dbName,
         logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
       );
-      return IsolateDatabase(executor);
+      return AppDatabase(executor);
     } catch (e, stackTrace) {
       throw DatabaseInitializationException('Failed to initialize database: $e', stackTrace);
     }

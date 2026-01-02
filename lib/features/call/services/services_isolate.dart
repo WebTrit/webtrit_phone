@@ -42,7 +42,7 @@ Future<void> _initializeCommonDependencies() async {
   _appCertificates ??= await AppCertificates.init();
 
   _callLogsRepository ??= CallLogsRepository(
-    appDatabase: await IsolateDatabase.create(directoryPath: _appPath!.applicationDocumentsPath),
+    appDatabase: IsolateDatabase.create(directoryPath: _appPath!.applicationDocumentsPath),
   );
 }
 

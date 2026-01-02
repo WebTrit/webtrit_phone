@@ -86,7 +86,24 @@ class RootApp extends StatelessWidget {
         Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
 
         // Services
-        Provider<AppDatabase>(create: _createAppDatabase, dispose: _disposeAppDatabase),
+
+        // `AppDatabase` is provided via Provider because some repositories/services are still created
+        // inside the widget tree and require DB access through `BuildContext`.
+        //
+        // Planned refactor:
+        // - Move creation of low-level dependencies (DB, storages, clients) to `bootstrap()`
+        //   (composition root / DI container).
+        // - Register them in `InstanceRegistry`.
+        // - Provide only higher-level objects (repositories, blocs/cubits, feature services) to the UI,
+        //   and stop exposing `AppDatabase` in the widget tree.
+        //
+        // `AppDatabaseLifecycleHolder` attaches a `WidgetsBindingObserver` and closes the database when
+        // the app is detached. Once the refactor is done, both providers should be removed.
+        Provider<AppDatabaseLifecycleHolder>(
+          create: _createAppDatabaseLifecycleHolder,
+          dispose: _disposeAppDatabaseLifecycleHolder,
+        ),
+        Provider<AppDatabase>(create: (context) => context.read<AppDatabaseLifecycleHolder>().db),
         Provider<ConnectivityService>(create: _createConnectivityService, dispose: _disposeConnectivityService),
       ],
       child: Builder(
@@ -185,22 +202,14 @@ class RootApp extends StatelessWidget {
     );
   }
 
-  AppDatabase _createAppDatabase(BuildContext _) {
-    final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
-      createAppDatabaseConnection(
-        instanceRegistry.get<AppPath>().applicationDocumentsPath,
-        'db.sqlite',
-        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-      ),
-    );
-    WidgetsBinding.instance.addObserver(appDatabase);
-    return appDatabase;
+  AppDatabaseLifecycleHolder _createAppDatabaseLifecycleHolder(BuildContext context) {
+    final db = IsolateDatabase.create(directoryPath: context.read<AppPath>().applicationDocumentsPath);
+
+    return AppDatabaseLifecycleHolder(db)..attach();
   }
 
-  void _disposeAppDatabase(BuildContext _, AppDatabase value) {
-    final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
-    WidgetsBinding.instance.removeObserver(appDatabase);
-    appDatabase.close();
+  Future<void> _disposeAppDatabaseLifecycleHolder(BuildContext _, AppDatabaseLifecycleHolder holder) async {
+    await holder.dispose();
   }
 
   ConnectivityService _createConnectivityService(BuildContext context) {
@@ -219,13 +228,24 @@ class RootApp extends StatelessWidget {
   }
 }
 
-class _AppDatabaseWithAppLifecycleStateObserver extends AppDatabase with WidgetsBindingObserver {
-  _AppDatabaseWithAppLifecycleStateObserver(super.e);
+class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
+  AppDatabaseLifecycleHolder(this.db);
+
+  final AppDatabase db;
+
+  void attach() => WidgetsBinding.instance.addObserver(this);
+
+  void detach() => WidgetsBinding.instance.removeObserver(this);
+
+  Future<void> dispose() async {
+    detach();
+    await db.close();
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.detached) {
-      close();
+      db.close();
     }
   }
 }
