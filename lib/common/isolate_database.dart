@@ -3,24 +3,15 @@ import 'package:webtrit_phone/environment_config.dart';
 
 class IsolateDatabase extends AppDatabase {
   IsolateDatabase(super.executor);
-
-  static IsolateDatabase? _instance;
-
+  
   static Future<IsolateDatabase> create({required String directoryPath, String dbName = 'db.sqlite'}) async {
-    if (_instance != null) return _instance!;
-
     try {
-      return Future.sync(() async {
-        if (_instance == null) {
-          final executor = createAppDatabaseConnection(
-            directoryPath,
-            dbName,
-            logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-          );
-          _instance = IsolateDatabase(executor);
-        }
-        return _instance!;
-      });
+      final executor = createAppDatabaseConnection(
+        directoryPath,
+        dbName,
+        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+      );
+      return IsolateDatabase(executor);
     } catch (e, stackTrace) {
       throw DatabaseInitializationException('Failed to initialize database: $e', stackTrace);
     }
