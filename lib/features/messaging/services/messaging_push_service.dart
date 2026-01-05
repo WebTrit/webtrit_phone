@@ -142,7 +142,7 @@ class MessagingPushService {
           notification.messageId,
           notification.title!,
           notification.body!,
-          payload: {'source': kLocalPushSourceSystemNotification, 'chatId': notification.conversationId.toString()},
+          payload: {'source': kLocalPushSourceMessaging, 'chatId': notification.conversationId.toString()},
         );
         localPushRepository.displayPush(localPush);
 
@@ -165,10 +165,7 @@ class MessagingPushService {
           notification.messageId,
           notification.title!,
           notification.body!,
-          payload: {
-            'source': kLocalPushSourceSystemNotification,
-            'smsConversationId': notification.conversationId.toString(),
-          },
+          payload: {'source': kLocalPushSourceMessaging, 'smsConversationId': notification.conversationId.toString()},
         );
         localPushRepository.displayPush(localPush);
 
