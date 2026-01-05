@@ -7,7 +7,7 @@ DatabaseConnection createAppDatabaseConnection(
   bool logStatements = false,
 
   /// Ignored on Web; provided for API compatibility with native platforms.
-  bool isWalEnabled = true,
+  bool? isWalEnabled = true,
 
   /// Ignored on Web; provided for API compatibility with native platforms.
   int? busyTimeoutMs = 5000,
