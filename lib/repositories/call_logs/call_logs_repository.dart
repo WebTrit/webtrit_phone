@@ -32,6 +32,15 @@ class CallLogsRepository with CallLogsDriftMapper {
   Future<void> deleteById(int id) async {
     await _appDatabase.callLogsDao.deleteCallLog(id);
   }
+
+  /// Retrieves all call log entries from the database without any filtering.
+  ///
+  /// This method is primarily used for testing verification (e.g., checking total row counts)
+  /// or scenarios where a complete history dump is required.
+  Future<List<CallLogEntry>> getAll() async {
+    final data = await _appDatabase.callLogsDao.getAllCallLogs();
+    return data.map(callLogEntryFromDrift).toList();
+  }
 }
 
 typedef NewCall = ({

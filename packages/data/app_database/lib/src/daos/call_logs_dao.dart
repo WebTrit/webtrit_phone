@@ -33,4 +33,9 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
   Future deleteCallLog(int id) {
     return (delete(callLogsTable)..where((t) => t.id.equals(id))).go();
   }
+
+  /// Returns all call logs stored in the database.
+  Future<List<CallLogData>> getAllCallLogs() {
+    return select(callLogsTable).get();
+  }
 }
