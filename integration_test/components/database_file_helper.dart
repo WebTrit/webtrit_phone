@@ -14,8 +14,13 @@ class DatabaseFileHelper {
       await _deleteFile(p.join(directoryPath, dbName));
       await _deleteFile(p.join(directoryPath, '$dbName$_walExtension'));
       await _deleteFile(p.join(directoryPath, '$dbName$_shmExtension'));
-    } catch (_) {
-      // Ignore cleanup errors during test teardown
+    } on FileSystemException catch (e, stackTrace) {
+      stderr.writeln('DatabaseFileHelper.deleteDatabaseFiles: FileSystemException while deleting database files: $e');
+      stderr.writeln(stackTrace);
+    } catch (e, stackTrace) {
+      stderr.writeln('DatabaseFileHelper.deleteDatabaseFiles: Unexpected error while deleting database files: $e');
+      stderr.writeln(stackTrace);
+      rethrow;
     }
   }
 

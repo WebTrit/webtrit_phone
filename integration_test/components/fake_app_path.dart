@@ -32,8 +32,9 @@ class FakeAppPath implements AppPath {
     if (_root.existsSync()) {
       try {
         _root.deleteSync(recursive: true);
-      } catch (_) {
-        // Ignore errors if file is locked
+      } catch (e, st) {
+        stderr.writeln('FakeAppPath.cleanup: failed to delete temporary directory at ${_root.path}: $e');
+        stderr.writeln(st);
       }
     }
   }
