@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
+
 class DatabaseFileHelper {
   static const _walExtension = '-wal';
   static const _shmExtension = '-shm';
@@ -9,9 +11,9 @@ class DatabaseFileHelper {
   /// Swallows any [FileSystemException] to ensure test teardown doesn't crash.
   static Future<void> deleteDatabaseFiles({required String directoryPath, required String dbName}) async {
     try {
-      await _deleteFile('$directoryPath/$dbName');
-      await _deleteFile('$directoryPath/$dbName$_walExtension');
-      await _deleteFile('$directoryPath/$dbName$_shmExtension');
+      await _deleteFile(p.join(directoryPath, dbName));
+      await _deleteFile(p.join(directoryPath, '$dbName$_walExtension'));
+      await _deleteFile(p.join(directoryPath, '$dbName$_shmExtension'));
     } catch (_) {
       // Ignore cleanup errors during test teardown
     }
