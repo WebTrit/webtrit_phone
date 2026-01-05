@@ -97,7 +97,7 @@ Future<void> _executeConcurrencyTest(
     ConcurrencyWorkerArgs(dbPath: dbPath, dbName: dbName, itemsToWrite: bgCount),
   );
   // Perform UI Writes
-  final uiFuture = _runMainWrites(mainRepository, uiCount);
+  final uiFuture = _performBatchWrites(mainRepository, count: uiCount);
 
   final bgSuccess = await bgFuture;
   final uiSuccess = await uiFuture;
@@ -107,15 +107,6 @@ Future<void> _executeConcurrencyTest(
   expect(uiSuccess, equals(uiCount), reason: 'UI writes mismatch');
   expect(bgSuccess, equals(bgCount), reason: 'BG writes mismatch');
   expect(logs.length, equals(bgCount + uiCount), reason: 'Total DB rows mismatch');
-}
-
-/// Helper wrapper to execute writes on the Main Isolate with error handling.
-Future<int> _runMainWrites(CallLogsRepository repository, int count) async {
-  try {
-    return await _performBatchWrites(repository, count: count);
-  } catch (e) {
-    fail('UI Write failed: $e');
-  }
 }
 
 /// Entry point for the background isolate.
@@ -145,9 +136,7 @@ Future<int> _performBatchWrites(CallLogsRepository repository, {required int cou
     await repository.add(call);
     successCount++;
 
-    if (count > 0) {
-      await Future.delayed(Duration(milliseconds: random.nextInt(5)));
-    }
+    await Future.delayed(Duration(milliseconds: random.nextInt(5)));
   }
   return successCount;
 }
