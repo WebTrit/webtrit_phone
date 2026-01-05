@@ -9,6 +9,7 @@ class HeadingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final textStyle = Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600);
 
     return Row(
@@ -24,7 +25,7 @@ class HeadingSection extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.all(16),
             showDuration: const Duration(seconds: 10),
-            child: const Icon(Icons.info_outline),
+            child: Icon(Icons.info_outline, color: colorScheme.onSurfaceVariant),
           ),
         ],
       ],
