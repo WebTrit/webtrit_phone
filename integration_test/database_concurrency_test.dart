@@ -13,7 +13,12 @@ import 'components/database_file_helper.dart';
 import 'components/fake_app_path.dart';
 import 'models/models.dart';
 
+/// Shared number used by all test writes so we can query one bucket and verify total rows.
 const _targetNumber = 'SHARED-NUMBER';
+
+/// Random delay after each write to increase operation interleaving.
+/// Tune this to make race/lock scenarios more likely.
+const int writeJitterMaxMs = 100;
 
 /// Integration tests for Database Concurrency & Locking.
 ///
@@ -139,7 +144,7 @@ Future<int> _performBatchWrites(CallLogsRepository repository, {required int cou
     await repository.add(call);
     successCount++;
 
-    await Future.delayed(Duration(milliseconds: random.nextInt(5)));
+    await Future.delayed(Duration(milliseconds: random.nextInt(writeJitterMaxMs)));
   }
   return successCount;
 }
