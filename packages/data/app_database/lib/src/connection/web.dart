@@ -10,7 +10,7 @@ DatabaseConnection createAppDatabaseConnection(
   bool isWalEnabled = true,
 
   /// Ignored on Web; provided for API compatibility with native platforms.
-  int? busyTimeoutMilliseconds = 5000,
+  int? busyTimeoutMs = 5000,
 }) {
   assert(path == null || path.isEmpty, 'path is not supported on web');
 

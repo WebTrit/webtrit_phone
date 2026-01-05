@@ -9,7 +9,7 @@ DatabaseConnection createAppDatabaseConnection(
   String name, {
   bool logStatements = false,
   bool isWalEnabled = true,
-  int? busyTimeoutMilliseconds = 5000,
+  int busyTimeoutMs = 5000,
 }) {
   return DatabaseConnection.delayed(
     Future.sync(() async {
@@ -26,8 +26,8 @@ DatabaseConnection createAppDatabaseConnection(
           }
 
           // Sets a timeout (in milliseconds) for waiting when the database is locked.
-          if (busyTimeoutMilliseconds != null) {
-            database.execute('PRAGMA busy_timeout=$busyTimeoutMilliseconds;');
+          if (busyTimeoutMs >= 0) {
+            database.execute('PRAGMA busy_timeout=$busyTimeoutMs;');
           }
         },
       );
