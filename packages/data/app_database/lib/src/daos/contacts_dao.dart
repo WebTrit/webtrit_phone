@@ -41,19 +41,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       }
 
       return predicate;
-    })
-      ..orderBy([
-        (t) => OrderingTerm(
-            expression: CaseWhenExpression(
-              cases: [
-                CaseWhen(t.aliasName.isNotNull(), then: t.aliasName),
-                CaseWhen(t.firstName.isNotNull() & t.lastName.isNotNull(), then: t.firstName + const Constant(' ') + t.lastName),
-                CaseWhen(t.firstName.isNotNull(), then: t.firstName),
-              ],
-              orElse: t.lastName,
-            )
-        )
-      ]);
+    });
 
   SimpleSelectStatement<$ContactsTableTable, ContactData> _selectBySource(
     ContactSourceTypeEnum sourceType,
@@ -206,6 +194,23 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
             .reduce((v, e) => v | e),
       );
     }
+
+    query.orderBy([
+      OrderingTerm(
+        expression: CaseWhenExpression(
+          cases: [
+            CaseWhen(contactsTable.aliasName.isNotNull(), then: contactsTable.aliasName),
+            CaseWhen(
+              contactsTable.firstName.isNotNull() & contactsTable.lastName.isNotNull(),
+              then: contactsTable.firstName + const Constant(' ') + contactsTable.lastName,
+            ),
+            CaseWhen(contactsTable.firstName.isNotNull(), then: contactsTable.firstName),
+            CaseWhen(contactsTable.lastName.isNotNull(), then: contactsTable.lastName),
+          ],
+          orElse: contactPhonesTable.number,
+        ),
+      ),
+    ]);
 
     return query.watch().map(_gatherMultipleContacts);
   }
