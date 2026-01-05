@@ -22,7 +22,8 @@ const _targetNumber = 'SHARED-NUMBER';
 /// (Main UI Isolate and Background Isolate).
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  final fakeAppPath = FakeAppPath();
+
+  late FakeAppPath fakeAppPath;
 
   group('Database Concurrency & Locking Tests', () {
     late String dbPath;
@@ -31,6 +32,7 @@ void main() {
     late CallLogsRepository mainRepository;
 
     setUp(() async {
+      fakeAppPath = FakeAppPath();
       dbPath = fakeAppPath.applicationDocumentsPath;
       dbName = 'test_db.sqlite';
 
@@ -44,6 +46,7 @@ void main() {
     tearDown(() async {
       await mainDb.close();
       await DatabaseFileHelper.deleteDatabaseFiles(directoryPath: dbPath, dbName: dbName);
+      fakeAppPath.cleanup();
     });
 
     testWidgets(

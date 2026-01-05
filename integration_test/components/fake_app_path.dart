@@ -26,4 +26,15 @@ class FakeAppPath implements AppPath {
 
   @override
   String get mediaCacheBasePath => '$temporaryPath/media_cache';
+
+  /// Deletes the temporary directory and all its contents.
+  void cleanup() {
+    if (_root.existsSync()) {
+      try {
+        _root.deleteSync(recursive: true);
+      } catch (_) {
+        // Ignore errors if file is locked
+      }
+    }
+  }
 }
