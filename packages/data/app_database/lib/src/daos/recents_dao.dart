@@ -29,7 +29,10 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
   Stream<List<RecentData>> watchLastRecents([Duration period = const Duration(days: 14)]) {
     final callsQuery = select(callLogsTable)
       ..where((t) => t.createdAt.isBiggerOrEqualValue(clock.agoBy(period)))
-      ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]);
+      ..orderBy([
+        (t) => OrderingTerm.desc(t.createdAt),
+        (t) => OrderingTerm.desc(t.hungUpAt.unixepoch),
+      ]);
 
     final sourcePhone = alias(contactPhonesTable, 'source_phone');
     final contactPhones = alias(contactPhonesTable, 'contact_phones');
