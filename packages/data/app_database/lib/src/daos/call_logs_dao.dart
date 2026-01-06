@@ -11,7 +11,10 @@ class CallLogsDao extends DatabaseAccessor<AppDatabase> with _$CallLogsDaoMixin 
   SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogs(Duration period) {
     return select(callLogsTable)
       ..where((t) => t.createdAt.isBiggerOrEqualValue(clock.agoBy(period)))
-      ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]);
+      ..orderBy([
+        (t) => OrderingTerm.desc(t.createdAt),
+        (t) => OrderingTerm.desc(t.acceptedAt),
+      ]);
   }
 
   SimpleSelectStatement<$CallLogsTableTable, CallLogData> _selectLastCallLogsByNumber(String number, Duration period) {
