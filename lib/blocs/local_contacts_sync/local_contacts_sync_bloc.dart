@@ -6,9 +6,9 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/equatable_prop_to_string.dart';
 
 part 'local_contacts_sync_event.dart';
 
