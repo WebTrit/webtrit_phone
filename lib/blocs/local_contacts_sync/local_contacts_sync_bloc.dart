@@ -21,8 +21,8 @@ typedef AsyncCallback = Future<bool> Function();
 class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSyncState> {
   LocalContactsSyncBloc({
     required this.localContactsRepository,
-    required this.contactsRepository,
     required this.contactsAgreementStatusRepository,
+    required this.contactsRepository,
     required this.isFeatureEnabled,
     required this.isAgreementAccepted,
     required this.isContactsPermissionGranted,

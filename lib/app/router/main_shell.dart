@@ -341,8 +341,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       final bloc = LocalContactsSyncBloc(
                         localContactsRepository: localContactsRepository,
-                        contactsRepository: context.read<ContactsRepository>(),
                         contactsAgreementStatusRepository: contactsAgreementStatusRepository,
+                        contactsRepository: context.read<ContactsRepository>(),
                         isFeatureEnabled: isFutureEnabled,
                         isAgreementAccepted: isAgreementAccepted,
                         isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
