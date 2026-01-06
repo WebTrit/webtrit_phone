@@ -41,8 +41,11 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       final updatedExternalContactsIds = contacts.map((c) => c.id).toSet();
       final delExternalContactsIds = syncedExternalContactsIds.difference(updatedExternalContactsIds);
 
-      for (final externalContactsId in delExternalContactsIds) {
-        await _appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.external, externalContactsId);
+      if (delExternalContactsIds.isNotEmpty) {
+        await _appDatabase.contactsDao.deleteContactsBySourceList(
+          ContactSourceTypeEnum.external,
+          delExternalContactsIds,
+        );
       }
 
       // Upsert: Update or Insert existing
@@ -59,9 +62,8 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       final updatedLocalContactsIds = contacts.map((c) => c.id).toSet();
       final delLocalContactsIds = syncedLocalContactsIds.difference(updatedLocalContactsIds);
 
-      // Delete removed contacts
-      for (final localContactsId in delLocalContactsIds) {
-        await _appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.local, localContactsId);
+      if (delLocalContactsIds.isNotEmpty) {
+        await _appDatabase.contactsDao.deleteContactsBySourceList(ContactSourceTypeEnum.local, delLocalContactsIds);
       }
 
       // Upsert new/updated contacts

@@ -251,4 +251,13 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
           ..where((t) => t.sourceId.isNull()))
         .go();
   }
+
+  Future<void> deleteContactsBySourceList(ContactSourceTypeEnum sourceType, Iterable<String> sourceIds) async {
+    if (sourceIds.isEmpty) return;
+
+    await (delete(contactsTable)
+          ..where((t) => t.sourceType.equalsValue(sourceType))
+          ..where((t) => t.sourceId.isIn(sourceIds)))
+        .go();
+  }
 }
