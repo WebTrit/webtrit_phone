@@ -1,8 +1,7 @@
 import 'package:webtrit_phone/models/models.dart';
 
 class ContactsFixtureFactory {
-  static ExternalContact createExternalContact(
-    int index, {
+  static ExternalContact createExternalContact({
     String? id,
     String? number,
     String? ext,
@@ -13,15 +12,14 @@ class ContactsFixtureFactory {
     List<String>? additional,
     bool isCurrentUser = false,
   }) {
-    final i = index.toString();
     return ExternalContact(
-      id: id ?? i,
-      number: number ?? '100$i',
+      id: id,
+      number: number ?? '100$id',
       ext: ext,
       firstName: firstName ?? 'External',
-      lastName: lastName ?? 'User $i',
-      aliasName: 'Alias $i',
-      email: email ?? 'external.$i@example.com',
+      lastName: lastName ?? 'User $id',
+      aliasName: 'Alias $id',
+      email: email ?? 'external.$id@example.com',
       registered: true,
       userRegistered: true,
       isCurrentUser: isCurrentUser,
@@ -30,23 +28,21 @@ class ContactsFixtureFactory {
     );
   }
 
-  static LocalContact createLocalContact(
-    int index, {
+  static LocalContact createLocalContact({
     String? id,
     String? firstName,
     String? lastName,
     List<LocalContactPhone>? phones,
     List<LocalContactEmail>? emails,
   }) {
-    final i = index.toString();
     return LocalContact(
-      id: id ?? 'local_$i',
+      id: id ?? 'local_$id',
       firstName: firstName ?? 'Local',
-      lastName: lastName ?? 'User $i',
-      displayName: 'Local Display $i',
+      lastName: lastName ?? 'User $id',
+      displayName: 'Local Display $id',
       thumbnail: null,
-      phones: phones ?? [LocalContactPhone(number: '300$i', label: 'mobile')],
-      emails: emails ?? [LocalContactEmail(address: 'local.$i@example.com', label: 'home')],
+      phones: phones ?? [LocalContactPhone(number: '300$id', label: 'mobile')],
+      emails: emails ?? [LocalContactEmail(address: 'local.$id@example.com', label: 'home')],
     );
   }
 }

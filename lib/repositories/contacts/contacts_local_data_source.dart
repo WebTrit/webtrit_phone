@@ -38,7 +38,10 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
         ContactSourceTypeEnum.external,
       );
 
-      final updatedExternalContactsIds = contacts.map((c) => c.id).toSet();
+      // Use `safeSourceId` because that is the value persisted in the database.
+      // If the API returns `id == null`, `safeSourceId` generates a stable identifier
+      // (derived from number/email), preventing incorrect deletions that would occur if `c.id` were used.
+      final updatedExternalContactsIds = contacts.map((c) => c.safeSourceId).toSet();
       final delExternalContactsIds = syncedExternalContactsIds.difference(updatedExternalContactsIds);
 
       if (delExternalContactsIds.isNotEmpty) {
