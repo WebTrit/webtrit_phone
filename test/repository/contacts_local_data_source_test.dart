@@ -38,10 +38,16 @@ void main() {
         expect(dbContact, isNotNull);
         expect(dbContact!.contact.sourceId, contact.id);
 
+        // Verify phones
         final phones = dbContact.phones;
         expect(phones.length, 2);
         expect(phones.any((p) => p.number == '1001' && p.label == kContactMainLabel), isTrue);
         expect(phones.any((p) => p.number == '2001' && p.label == kContactExtLabel), isTrue);
+
+        // Verify emails
+        final emails = dbContact.emails;
+        expect(emails.length, 1, reason: 'Should have exactly one email');
+        expect(emails.first.address, contact.email, reason: 'Email address should match');
       });
 
       test('updates existing contact and replaces phones', () async {
@@ -82,16 +88,26 @@ void main() {
     });
 
     group('syncExternalContacts', () {
-      test('inserts multiple contacts correctly', () async {
+      test('inserts multiple contacts correctly with details', () async {
         final contacts = [
-          ContactsFixtureFactory.createExternalContact(1),
-          ContactsFixtureFactory.createExternalContact(2),
+          ContactsFixtureFactory.createExternalContact(1, number: '1001', email: 'user1@test.com'),
+          ContactsFixtureFactory.createExternalContact(2, number: '1002', email: 'user2@test.com'),
         ];
 
         await dataSource.syncExternalContacts(contacts);
 
         final allContacts = await appDatabase.contactsDao.getAllContacts(ContactSourceTypeEnum.external);
         expect(allContacts.length, 2);
+
+        // Verify Contact 1 details
+        final contact1 = allContacts.firstWhere((c) => c.contact.sourceId == '1');
+        expect(contact1.phones.any((p) => p.number == '1001'), isTrue);
+        expect(contact1.emails.first.address, 'user1@test.com');
+
+        // Verify Contact 2 details
+        final contact2 = allContacts.firstWhere((c) => c.contact.sourceId == '2');
+        expect(contact2.phones.any((p) => p.number == '1002'), isTrue);
+        expect(contact2.emails.first.address, 'user2@test.com');
       });
 
       test('deletes contacts not present in the new list', () async {
