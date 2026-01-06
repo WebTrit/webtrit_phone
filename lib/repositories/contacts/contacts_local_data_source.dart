@@ -30,10 +30,10 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
   @override
   Future<void> syncExternalContacts(List<ExternalContact> contacts) async {
     await _appDatabase.transaction(() async {
-      // Cleanup legacy data
+      // Remove legacy or invalid external contacts that were previously stored without a proper sourceId,
+      // which may cause duplication or prevent accurate sync updates.
       await _appDatabase.contactsDao.deleteContactsWithNullSourceId(ContactSourceTypeEnum.external);
 
-      // Diffing: Find contacts to delete
       final syncedExternalContactsIds = await _appDatabase.contactsDao.getContactsSourceIds(
         ContactSourceTypeEnum.external,
       );
