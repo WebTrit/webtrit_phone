@@ -63,9 +63,20 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   }) async {
     _logger.finer('_onUpdated contacts count:${event.contacts.length}');
 
+    // Retrieve `UserInfo` separately because filtering requires the user's primary number.
+    // If obtaining `UserInfo` fails, treat it as a refresh failure and abort processing.
+    // Do not perform automatic retries for failures at this stage.
     try {
       userInfo ??= await userRepository.getInfo();
+    } catch (error) {
+      _logger.warning('_onUpdated userInfo error: ', error);
+      emit(const ExternalContactsSyncRefreshFailure());
+      return;
+    }
 
+    // Synchronize external contacts into the local contacts store.
+    // On transient database errors, retry the transaction up to 3 attempts with a short backoff.
+    try {
       final filteredContacts = event.contacts
           .where((externalContact) => externalContact.id != userInfo!.numbers.main)
           .toList();
@@ -79,6 +90,8 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
       if (retryCount < 3) {
         await Future<void>.delayed(const Duration(seconds: 1));
         if (isClosed) return;
+        // Provide the retrieved `userInfo` to the recursive retry
+        // to avoid redundant fetches and preserve the valid user context.
         await _onUpdated(event, emit, retryCount: retryCount + 1, userInfo: userInfo);
       } else {
         emit(const ExternalContactsSyncUpdateFailure());
