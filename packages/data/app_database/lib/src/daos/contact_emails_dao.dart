@@ -39,7 +39,13 @@ class ContactEmailsDao extends DatabaseAccessor<AppDatabase> with _$ContactEmail
   Future<void> insertContactEmailsBatch(List<ContactEmailDataCompanion> emails) {
     if (emails.isEmpty) return Future.value();
     return batch((batch) {
-      batch.insertAllOnConflictUpdate(contactEmailsTable, emails);
+      for (final email in emails) {
+        batch.insert(
+          contactEmailsTable,
+          email,
+          onConflict: DoUpdate((old) => email, target: [contactEmailsTable.address, contactEmailsTable.contactId]),
+        );
+      }
     });
   }
 }
