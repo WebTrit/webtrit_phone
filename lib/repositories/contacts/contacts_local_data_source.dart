@@ -48,10 +48,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
         );
       }
 
-      // Upsert: Update or Insert existing
-      for (final externalContact in contacts) {
-        await _upsertContactInternal(externalContact);
-      }
+      await Future.wait(contacts.map((externalContact) => _upsertContactInternal(externalContact)));
     });
   }
 
@@ -66,51 +63,63 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
         await _appDatabase.contactsDao.deleteContactsBySourceList(ContactSourceTypeEnum.local, delLocalContactsIds);
       }
 
-      // Upsert new/updated contacts
-      for (final localContact in contacts) {
-        final insertOrUpdateContactData = await _appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
-          ContactDataCompanion(
-            sourceType: const Value(ContactSourceTypeEnum.local),
-            sourceId: Value(localContact.id),
-            firstName: Value(localContact.firstName),
-            lastName: Value(localContact.lastName),
-            aliasName: Value(localContact.displayName),
-            thumbnail: Value(localContact.thumbnail),
-          ),
-        );
-
-        final contactId = insertOrUpdateContactData.id;
-
-        await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
-          contactId,
-          localContact.phones.map((phone) => phone.number),
-        );
-
-        for (final localContactPhone in localContact.phones) {
-          await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-            ContactPhoneDataCompanion(
-              number: Value(localContactPhone.number),
-              label: Value(localContactPhone.label),
-              contactId: Value(contactId),
+      await Future.wait(
+        contacts.map((localContact) async {
+          final insertOrUpdateContactData = await _appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
+            ContactDataCompanion(
+              sourceType: const Value(ContactSourceTypeEnum.local),
+              sourceId: Value(localContact.id),
+              firstName: Value(localContact.firstName),
+              lastName: Value(localContact.lastName),
+              aliasName: Value(localContact.displayName),
+              thumbnail: Value(localContact.thumbnail),
             ),
           );
-        }
 
-        await _appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
-          contactId,
-          localContact.emails.map((email) => email.address),
-        );
+          final contactId = insertOrUpdateContactData.id;
 
-        for (final localContactEmail in localContact.emails) {
-          await _appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
-            ContactEmailDataCompanion(
-              address: Value(localContactEmail.address),
-              label: Value(localContactEmail.label),
-              contactId: Value(contactId),
-            ),
+          // Prepare lists for batch inserts
+          final phoneCompanions = <ContactPhoneDataCompanion>[];
+          final emailCompanions = <ContactEmailDataCompanion>[];
+
+          // Cleanup old phones
+          await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
+            contactId,
+            localContact.phones.map((phone) => phone.number),
           );
-        }
-      }
+
+          for (final localContactPhone in localContact.phones) {
+            phoneCompanions.add(
+              ContactPhoneDataCompanion(
+                number: Value(localContactPhone.number),
+                label: Value(localContactPhone.label),
+                contactId: Value(contactId),
+              ),
+            );
+          }
+
+          // Cleanup old emails
+          await _appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
+            contactId,
+            localContact.emails.map((email) => email.address),
+          );
+
+          for (final localContactEmail in localContact.emails) {
+            emailCompanions.add(
+              ContactEmailDataCompanion(
+                address: Value(localContactEmail.address),
+                label: Value(localContactEmail.label),
+                contactId: Value(contactId),
+              ),
+            );
+          }
+
+          await Future.wait([
+            if (phoneCompanions.isNotEmpty) _appDatabase.contactPhonesDao.insertContactPhonesBatch(phoneCompanions),
+            if (emailCompanions.isNotEmpty) _appDatabase.contactEmailsDao.insertContactEmailsBatch(emailCompanions),
+          ]);
+        }),
+      );
     });
   }
 
@@ -155,10 +164,14 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       if (externalSmsNumbers != null) ...externalSmsNumbers,
     ];
 
+    // Cleanup old phones
     await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(contactId, externalContactNumbers);
 
+    // Prepare Batch List
+    final phoneCompanions = <ContactPhoneDataCompanion>[];
+
     if (externalContactNumber != null) {
-      await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+      phoneCompanions.add(
         ContactPhoneDataCompanion(
           number: Value(externalContactNumber),
           label: const Value(kContactMainLabel),
@@ -167,7 +180,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       );
     }
     if (externalContactExt != null) {
-      await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+      phoneCompanions.add(
         ContactPhoneDataCompanion(
           number: Value(externalContactExt),
           label: const Value(kContactExtLabel),
@@ -177,7 +190,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
     }
     if (externalSmsNumbers != null) {
       for (final externalSmsNumber in externalSmsNumbers) {
-        await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+        phoneCompanions.add(
           ContactPhoneDataCompanion(
             number: Value(externalSmsNumber),
             label: const Value(kContactSmsLabel),
@@ -188,7 +201,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
     }
     if (externalContactAdditional != null) {
       for (final externalContactAdditionalNumber in externalContactAdditional) {
-        await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+        phoneCompanions.add(
           ContactPhoneDataCompanion(
             number: Value(externalContactAdditionalNumber),
             label: const Value(kContactAdditionalLabel),
@@ -198,13 +211,15 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       }
     }
 
+    final emailCompanions = <ContactEmailDataCompanion>[];
     final externalContactEmail = externalContact.email;
-    final externalContactEmails = [if (externalContactEmail != null) externalContactEmail];
 
+    // Cleanup old emails
+    final externalContactEmails = [if (externalContactEmail != null) externalContactEmail];
     await _appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(contactId, externalContactEmails);
 
     if (externalContactEmail != null) {
-      await _appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
+      emailCompanions.add(
         ContactEmailDataCompanion(
           address: Value(externalContactEmail),
           label: const Value(''),
@@ -212,5 +227,10 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
         ),
       );
     }
+
+    await Future.wait([
+      if (phoneCompanions.isNotEmpty) _appDatabase.contactPhonesDao.insertContactPhonesBatch(phoneCompanions),
+      if (emailCompanions.isNotEmpty) _appDatabase.contactEmailsDao.insertContactEmailsBatch(emailCompanions),
+    ]);
   }
 }

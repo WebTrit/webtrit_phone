@@ -34,4 +34,11 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
           ..where((t) => t.number.isNotIn(numbers)))
         .go();
   }
+
+  Future<void> insertContactPhonesBatch(List<ContactPhoneDataCompanion> phones) {
+    if (phones.isEmpty) return Future.value();
+    return batch((batch) {
+      batch.insertAllOnConflictUpdate(contactPhonesTable, phones);
+    });
+  }
 }
