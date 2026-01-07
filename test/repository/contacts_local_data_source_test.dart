@@ -164,5 +164,33 @@ void main() {
       expect(allContacts.length, 1);
       expect(allContacts.first.contact.sourceId, 'number_unique_number_1');
     });
+
+    test('sanitizes phone numbers by removing non-digit characters before insertion', () async {
+      final localContact = ContactsFixtureFactory.createLocalContact(
+        id: 'sanitize_test_id',
+        phones: [
+          LocalContactPhone(number: '+1 (555) 010-9988', label: 'mobile'),
+          LocalContactPhone(number: '123-456', label: 'work'),
+          LocalContactPhone(number: '  00  ', label: 'other'),
+        ],
+      );
+
+      await dataSource.syncLocalContacts([localContact]);
+
+      final storedContact = await appDatabase.contactsDao.getContactBySource(
+        ContactSourceTypeEnum.local,
+        'sanitize_test_id',
+      );
+
+      expect(storedContact, isNotNull);
+      final phones = storedContact!.phones;
+
+      expect(phones.length, 3);
+
+      // Check that non-digit characters were removed
+      expect(phones.any((p) => p.number == '15550109988'), isTrue);
+      expect(phones.any((p) => p.number == '123456'), isTrue);
+      expect(phones.any((p) => p.number == '00'), isTrue);
+    });
   });
 }

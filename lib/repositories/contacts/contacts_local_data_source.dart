@@ -1,6 +1,7 @@
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 abstract class ContactsLocalDataSource {
   /// Upserts a single external contact.
@@ -18,7 +19,12 @@ abstract class ContactsLocalDataSource {
 class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
   ContactsLocalDataSourceImpl(this._appDatabase);
 
+  /// App-level database instance used for contact persistence and queries.
   final AppDatabase _appDatabase;
+
+  /// RegExp used to strip non-digit characters from phone numbers.
+  /// Pattern comes from `numberSanitizeRegex`.
+  final RegExp _numberRegExp = RegExp(numberSanitizeRegex);
 
   @override
   Future<int> upsertContact(ExternalContact externalContact, ContactKind kind) {
@@ -94,7 +100,8 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
           for (final localContactPhone in localContact.phones) {
             phoneCompanions.add(
               ContactPhoneDataCompanion(
-                number: Value(localContactPhone.number),
+                // TODO: maybe store raw and sanitized versions together
+                number: Value(_sanitizeNumber(localContactPhone.number)),
                 label: Value(localContactPhone.label),
                 contactId: Value(contactId),
               ),
@@ -236,4 +243,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       if (emailCompanions.isNotEmpty) _appDatabase.contactEmailsDao.insertContactEmailsBatch(emailCompanions),
     ]);
   }
+
+  /// Strip non-digit characters from `number`.
+  String _sanitizeNumber(String number) => number.replaceAll(_numberRegExp, '');
 }
