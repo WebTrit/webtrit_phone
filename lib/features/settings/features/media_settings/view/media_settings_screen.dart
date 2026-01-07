@@ -19,13 +19,14 @@ class MediaSettingsScreen extends StatefulWidget {
 class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
   late final cubit = context.read<MediaSettingsCubit>();
 
-  late int openedTile = -1;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = context.l10n;
+
+    final contentPadding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8);
+    final borderRadius = BorderRadius.circular(12.0);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,100 +42,82 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-        child: Theme(
-          data: theme.copyWith(
-            expansionTileTheme: ExpansionTileThemeData(
-              tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-              childrenPadding: const EdgeInsets.only(bottom: 24.0, left: 16.0, right: 16.0),
-              backgroundColor: colorScheme.surface,
-              collapsedBackgroundColor: colorScheme.surface,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-              collapsedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8,
+        padding: contentPadding,
+        child: ClipRRect(
+          borderRadius: borderRadius,
+          child: ExpansionPanelList.radio(
+            elevation: 0,
             children: [
-              ExpansionTile(
-                key: UniqueKey(),
-                initiallyExpanded: openedTile == 0,
-                title: HeadingSection(
+              ExpansionPanelRadio(
+                value: 0,
+                canTapOnHeader: true,
+                headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_encoding_Section_preset_title,
                   tooltip: l10n.settings_encoding_Section_preset_tooltip,
                   icon: const Icon(Icons.segment_outlined),
+                  selected: isExpanded,
                 ),
-                onExpansionChanged: (newState) => setState(() {
-                  openedTile = newState ? 0 : -1;
-                }),
-                children: [
-                  const EncodingPresetContent(),
-                  BlocBuilder<MediaSettingsCubit, MediaSettingsState>(
-                    buildWhen: (p, c) => p.encodingPreset != c.encodingPreset,
-                    builder: (context, state) {
-                      final encodingPreset = state.encodingPreset;
-
-                      if (encodingPreset == EncodingPreset.custom) {
-                        return const Column(children: [Divider(height: 24), EncodingCustomContent()]);
-                      }
-
-                      return const SizedBox();
-                    },
+                body: Padding(
+                  padding: contentPadding,
+                  child: Column(
+                    children: [
+                      const EncodingPresetContent(),
+                      BlocBuilder<MediaSettingsCubit, MediaSettingsState>(
+                        buildWhen: (p, c) => p.encodingPreset != c.encodingPreset,
+                        builder: (context, state) {
+                          if (state.encodingPreset == EncodingPreset.custom) {
+                            return const Column(children: [Divider(height: 24), EncodingCustomContent()]);
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-              ExpansionTile(
-                key: UniqueKey(),
-                initiallyExpanded: openedTile == 1,
-                title: HeadingSection(
+              ExpansionPanelRadio(
+                value: 1,
+                canTapOnHeader: true,
+                headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_audioProcessing_Section_title,
                   tooltip: l10n.settings_audioProcessing_Section_tooltip,
                   icon: const Icon(Icons.multitrack_audio),
+                  selected: isExpanded,
                 ),
-                onExpansionChanged: (newState) => setState(() {
-                  openedTile = newState ? 1 : -1;
-                }),
-                children: const [AudioProcessingContent()],
+                body: Padding(padding: contentPadding, child: AudioProcessingContent()),
               ),
-              ExpansionTile(
-                key: UniqueKey(),
-                initiallyExpanded: openedTile == 2,
-                title: HeadingSection(
+              ExpansionPanelRadio(
+                value: 2,
+                canTapOnHeader: true,
+                headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_videoCapturing_Section_title,
                   tooltip: l10n.settings_videoCapturing_Section_tooltip,
                   icon: const Icon(Icons.video_settings_rounded),
+                  selected: isExpanded,
                 ),
-                onExpansionChanged: (newState) => setState(() {
-                  openedTile = newState ? 2 : -1;
-                }),
-                children: const [VideoCapturingContent()],
+                body: Padding(padding: contentPadding, child: VideoCapturingContent()),
               ),
-              ExpansionTile(
-                key: UniqueKey(),
-                initiallyExpanded: openedTile == 3,
-                title: HeadingSection(
+              ExpansionPanelRadio(
+                value: 3,
+                canTapOnHeader: true,
+                headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_iceSettings_Section_title,
                   tooltip: l10n.settings_iceSettings_Section_tooltip,
                   icon: const Icon(Icons.bubble_chart),
+                  selected: isExpanded,
                 ),
-                onExpansionChanged: (newState) => setState(() {
-                  openedTile = newState ? 3 : -1;
-                }),
-                children: const [IceSettingsContent()],
+                body: Padding(padding: contentPadding, child: IceSettingsContent()),
               ),
-              ExpansionTile(
-                key: UniqueKey(),
-                initiallyExpanded: openedTile == 4,
-                title: HeadingSection(
+              ExpansionPanelRadio(
+                value: 4,
+                canTapOnHeader: true,
+                headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_connectionSection_title,
                   tooltip: l10n.settings_connectionSection_tooltip,
                   icon: const Icon(Icons.sync_alt),
+                  selected: isExpanded,
                 ),
-                onExpansionChanged: (newState) => setState(() {
-                  openedTile = newState ? 4 : -1;
-                }),
-                children: const [PeerConnectionSettingsContent()],
+                body: Padding(padding: contentPadding, child: PeerConnectionSettingsContent()),
               ),
             ],
           ),
