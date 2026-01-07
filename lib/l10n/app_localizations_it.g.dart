@@ -219,10 +219,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_videoView_actionLabel_fit => 'Adatta';
 
   @override
-  String get cdrs_noRecentCalls_message => 'Nessuna chiamata recente';
+  String get cdrs_noMissedCalls_message => 'Nessuna chiamata persa';
 
   @override
-  String get cdrs_noMissedCalls_message => 'Nessuna chiamata persa';
+  String get cdrs_noRecentCalls_message => 'Nessuna chiamata recente';
 
   @override
   String get common_noInternetConnection_message =>
@@ -516,6 +516,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnostic_pushTokenStatusType_success => 'Servizio configurato con successo';
 
   @override
+  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Aggiungi una nota (opzionale)';
+
+  @override
+  String get diagnosticReportDialogCancelButtonLabel => 'Annulla';
+
+  @override
+  String get diagnosticReportDialogCommentTextFieldHintText => 'Descrivi cosa è successo...';
+
+  @override
+  String get diagnosticReportDialogContent =>
+      'Questo rapporto contiene dettagli tecnici per aiutarci a identificare i problemi di connessione.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Richiede autorizzazioni extra.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Includi log di sistema';
+
+  @override
+  String get diagnosticReportDialogSendReportButtonLabel => 'Invia rapporto';
+
+  @override
+  String get diagnosticReportDialogTitle => 'Invia rapporto diagnostico';
+
+  @override
   String get diagnosticScreen_contacts_agreement_description =>
       'Consenti all\'app di accedere ai miei contatti per migliorare la mia esperienza utente.';
 
@@ -530,31 +555,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
-
-  @override
-  String get diagnosticReportDialogTitle => 'Invia rapporto diagnostico';
-
-  @override
-  String get diagnosticReportDialogContent =>
-      'Questo rapporto contiene dettagli tecnici per aiutarci a identificare i problemi di connessione.';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Includi log di sistema';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Richiede autorizzazioni extra.';
-
-  @override
-  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Aggiungi una nota (opzionale)';
-
-  @override
-  String get diagnosticReportDialogCommentTextFieldHintText => 'Descrivi cosa è successo...';
-
-  @override
-  String get diagnosticReportDialogCancelButtonLabel => 'Annulla';
-
-  @override
-  String get diagnosticReportDialogSendReportButtonLabel => 'Invia rapporto';
 
   @override
   String get favorites_BodyCenter_empty =>
@@ -1813,11 +1813,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_iceSettings_Section_noskip => 'Nessun filtro';
 
   @override
-  String get settings_iceSettings_Section_title => 'Filtraggio dei candidati ICE';
+  String get settings_iceSettings_Section_title => 'Filtraggio dei candidati al ghiaccio';
 
   @override
   String get settings_iceSettings_Section_tooltip =>
-      'Filtrare i candidati ICE in base alle preferenze di rete può aiutare a evitare problemi di rete.';
+      'Filtrare i candidati al ghiaccio in base alle preferenze di rete può aiutare a evitare problemi di rete';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Salta i candidati TCP';

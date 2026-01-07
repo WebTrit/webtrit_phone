@@ -217,10 +217,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_videoView_actionLabel_fit => 'Fit';
 
   @override
-  String get cdrs_noRecentCalls_message => 'No recent calls';
+  String get cdrs_noMissedCalls_message => 'No missed calls';
 
   @override
-  String get cdrs_noMissedCalls_message => 'No missed calls';
+  String get cdrs_noRecentCalls_message => 'No recent calls';
 
   @override
   String get common_noInternetConnection_message =>
@@ -512,6 +512,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnostic_pushTokenStatusType_success => 'Service successfully configured';
 
   @override
+  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Add a note (Optional)';
+
+  @override
+  String get diagnosticReportDialogCancelButtonLabel => 'Cancel';
+
+  @override
+  String get diagnosticReportDialogCommentTextFieldHintText => 'Describe what happened...';
+
+  @override
+  String get diagnosticReportDialogContent =>
+      'This report contains technical details to help us identify connection issues.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Requires extra permissions.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Include System Logs';
+
+  @override
+  String get diagnosticReportDialogSendReportButtonLabel => 'Send Report';
+
+  @override
+  String get diagnosticReportDialogTitle => 'Send Diagnostic Report';
+
+  @override
   String get diagnosticScreen_contacts_agreement_description =>
       'Allow the app to access my contacts to enhance my user experience.';
 
@@ -526,31 +551,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnosticScreen_pushNotificationService_title => 'Push notification service';
-
-  @override
-  String get diagnosticReportDialogTitle => 'Send Diagnostic Report';
-
-  @override
-  String get diagnosticReportDialogContent =>
-      'This report contains technical details to help us identify connection issues.';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Include System Logs';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Requires extra permissions.';
-
-  @override
-  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Add a note (Optional)';
-
-  @override
-  String get diagnosticReportDialogCommentTextFieldHintText => 'Describe what happened...';
-
-  @override
-  String get diagnosticReportDialogCancelButtonLabel => 'Cancel';
-
-  @override
-  String get diagnosticReportDialogSendReportButtonLabel => 'Send Report';
 
   @override
   String get favorites_BodyCenter_empty =>
@@ -1798,11 +1798,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_iceSettings_Section_noskip => 'No filtering';
 
   @override
-  String get settings_iceSettings_Section_title => 'ICE candidates filtering';
+  String get settings_iceSettings_Section_title => 'Ice candidates filtering';
 
   @override
   String get settings_iceSettings_Section_tooltip =>
-      'Filter ICE candidates based on the network preferences may help to avoid network issues';
+      'Filter ice candidates based on the network preferences may help to avoid network issues';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Skip TCP candidates';

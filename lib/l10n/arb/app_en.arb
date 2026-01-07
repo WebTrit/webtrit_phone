@@ -158,10 +158,10 @@
   "@call_videoView_actionLabel_fit": {
     "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
   },
-  "cdrs_noRecentCalls_message": "No recent calls",
-  "@cdrs_noRecentCalls_message": {},
   "cdrs_noMissedCalls_message": "No missed calls",
   "@cdrs_noMissedCalls_message": {},
+  "cdrs_noRecentCalls_message": "No recent calls",
+  "@cdrs_noRecentCalls_message": {},
   "common_noInternetConnection_message": "It seems you are not connected to the internet. Please check your connection and try again.",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "Try Again",
@@ -407,6 +407,38 @@
   "@diagnostic_pushTokenStatusType_progress": {},
   "diagnostic_pushTokenStatusType_success": "Service successfully configured",
   "@diagnostic_pushTokenStatusType_success": {},
+  "diagnosticReportDialogAddNoteExpansionTileTitle": "Add a note (Optional)",
+  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
+    "description": "Title for the expandable section where users can add manual comments."
+  },
+  "diagnosticReportDialogCancelButtonLabel": "Cancel",
+  "@diagnosticReportDialogCancelButtonLabel": {
+    "description": "Label for the button that closes the dialog without action."
+  },
+  "diagnosticReportDialogCommentTextFieldHintText": "Describe what happened...",
+  "@diagnosticReportDialogCommentTextFieldHintText": {
+    "description": "Placeholder hint text displayed inside the comment text field."
+  },
+  "diagnosticReportDialogContent": "This report contains technical details to help us identify connection issues.",
+  "@diagnosticReportDialogContent": {
+    "description": "The main body text explaining what the diagnostic report is for."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Requires extra permissions.",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
+    "description": "Subtitle text under the system logs switch indicating permission requirements."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Include System Logs",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
+    "description": "The label for the switch toggle that allows the user to attach system logs."
+  },
+  "diagnosticReportDialogSendReportButtonLabel": "Send Report",
+  "@diagnosticReportDialogSendReportButtonLabel": {
+    "description": "Label for the button that submits the diagnostic report."
+  },
+  "diagnosticReportDialogTitle": "Send Diagnostic Report",
+  "@diagnosticReportDialogTitle": {
+    "description": "The title shown at the top of the diagnostic report dialog."
+  },
   "diagnosticScreen_contacts_agreement_description": "Allow the app to access my contacts to enhance my user experience.",
   "@diagnosticScreen_contacts_agreement_description": {},
   "diagnosticScreen_contacts_agreement_group_title": "Agreement",
@@ -417,38 +449,6 @@
   "@diagnosticScreen_permissionsGroup_title": {},
   "diagnosticScreen_pushNotificationService_title": "Push notification service",
   "@diagnosticScreen_pushNotificationService_title": {},
-  "diagnosticReportDialogTitle": "Send Diagnostic Report",
-  "@diagnosticReportDialogTitle": {
-    "description": "The title shown at the top of the diagnostic report dialog."
-  },
-  "diagnosticReportDialogContent": "This report contains technical details to help us identify connection issues.",
-  "@diagnosticReportDialogContent": {
-    "description": "The main body text explaining what the diagnostic report is for."
-  },
-  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Include System Logs",
-  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
-    "description": "The label for the switch toggle that allows the user to attach system logs."
-  },
-  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Requires extra permissions.",
-  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
-    "description": "Subtitle text under the system logs switch indicating permission requirements."
-  },
-  "diagnosticReportDialogAddNoteExpansionTileTitle": "Add a note (Optional)",
-  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
-    "description": "Title for the expandable section where users can add manual comments."
-  },
-  "diagnosticReportDialogCommentTextFieldHintText": "Describe what happened...",
-  "@diagnosticReportDialogCommentTextFieldHintText": {
-    "description": "Placeholder hint text displayed inside the comment text field."
-  },
-  "diagnosticReportDialogCancelButtonLabel": "Cancel",
-  "@diagnosticReportDialogCancelButtonLabel": {
-    "description": "Label for the button that closes the dialog without action."
-  },
-  "diagnosticReportDialogSendReportButtonLabel": "Send Report",
-  "@diagnosticReportDialogSendReportButtonLabel": {
-    "description": "Label for the button that submits the diagnostic report."
-  },
   "favorites_BodyCenter_empty": "Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon",
   "@favorites_BodyCenter_empty": {},
   "favorites_DeleteConfirmDialog_content": "Are you sure you want to delete the current favorite number?",
@@ -1445,9 +1445,9 @@
   "@settings_iceSettings_Section_netfilter_title": {},
   "settings_iceSettings_Section_noskip": "No filtering",
   "@settings_iceSettings_Section_noskip": {},
-  "settings_iceSettings_Section_title": "ICE candidates filtering",
+  "settings_iceSettings_Section_title": "Ice candidates filtering",
   "@settings_iceSettings_Section_title": {},
-  "settings_iceSettings_Section_tooltip": "Filter ICE candidates based on the network preferences may help to avoid network issues",
+  "settings_iceSettings_Section_tooltip": "Filter ice candidates based on the network preferences may help to avoid network issues",
   "@settings_iceSettings_Section_tooltip": {},
   "settings_iceSettings_Section_trfilter_skipTcp": "Skip TCP candidates",
   "@settings_iceSettings_Section_trfilter_skipTcp": {},
