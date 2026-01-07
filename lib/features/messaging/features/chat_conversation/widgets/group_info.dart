@@ -8,7 +8,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
+import 'package:webtrit_phone/utils/view_params/view_params.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class GroupInfo extends StatefulWidget {
