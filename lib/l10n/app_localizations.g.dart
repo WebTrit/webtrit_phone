@@ -501,17 +501,17 @@ abstract class AppLocalizations {
   /// **'Fit'**
   String get call_videoView_actionLabel_fit;
 
-  /// No description provided for @cdrs_noRecentCalls_message.
-  ///
-  /// In en, this message translates to:
-  /// **'No recent calls'**
-  String get cdrs_noRecentCalls_message;
-
   /// No description provided for @cdrs_noMissedCalls_message.
   ///
   /// In en, this message translates to:
   /// **'No missed calls'**
   String get cdrs_noMissedCalls_message;
+
+  /// No description provided for @cdrs_noRecentCalls_message.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent calls'**
+  String get cdrs_noRecentCalls_message;
 
   /// No description provided for @common_noInternetConnection_message.
   ///
@@ -1053,6 +1053,54 @@ abstract class AppLocalizations {
   /// **'Service successfully configured'**
   String get diagnostic_pushTokenStatusType_success;
 
+  /// Title for the expandable section where users can add manual comments.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note (Optional)'**
+  String get diagnosticReportDialogAddNoteExpansionTileTitle;
+
+  /// Label for the button that closes the dialog without action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get diagnosticReportDialogCancelButtonLabel;
+
+  /// Placeholder hint text displayed inside the comment text field.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe what happened...'**
+  String get diagnosticReportDialogCommentTextFieldHintText;
+
+  /// The main body text explaining what the diagnostic report is for.
+  ///
+  /// In en, this message translates to:
+  /// **'This report contains technical details to help us identify connection issues.'**
+  String get diagnosticReportDialogContent;
+
+  /// Subtitle text under the system logs switch indicating permission requirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires extra permissions.'**
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle;
+
+  /// The label for the switch toggle that allows the user to attach system logs.
+  ///
+  /// In en, this message translates to:
+  /// **'Include System Logs'**
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle;
+
+  /// Label for the button that submits the diagnostic report.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Report'**
+  String get diagnosticReportDialogSendReportButtonLabel;
+
+  /// The title shown at the top of the diagnostic report dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Diagnostic Report'**
+  String get diagnosticReportDialogTitle;
+
   /// No description provided for @diagnosticScreen_contacts_agreement_description.
   ///
   /// In en, this message translates to:
@@ -1082,54 +1130,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Push notification service'**
   String get diagnosticScreen_pushNotificationService_title;
-
-  /// The title shown at the top of the diagnostic report dialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Diagnostic Report'**
-  String get diagnosticReportDialogTitle;
-
-  /// The main body text explaining what the diagnostic report is for.
-  ///
-  /// In en, this message translates to:
-  /// **'This report contains technical details to help us identify connection issues.'**
-  String get diagnosticReportDialogContent;
-
-  /// The label for the switch toggle that allows the user to attach system logs.
-  ///
-  /// In en, this message translates to:
-  /// **'Include System Logs'**
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle;
-
-  /// Subtitle text under the system logs switch indicating permission requirements.
-  ///
-  /// In en, this message translates to:
-  /// **'Requires extra permissions.'**
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle;
-
-  /// Title for the expandable section where users can add manual comments.
-  ///
-  /// In en, this message translates to:
-  /// **'Add a note (Optional)'**
-  String get diagnosticReportDialogAddNoteExpansionTileTitle;
-
-  /// Placeholder hint text displayed inside the comment text field.
-  ///
-  /// In en, this message translates to:
-  /// **'Describe what happened...'**
-  String get diagnosticReportDialogCommentTextFieldHintText;
-
-  /// Label for the button that closes the dialog without action.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get diagnosticReportDialogCancelButtonLabel;
-
-  /// Label for the button that submits the diagnostic report.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Report'**
-  String get diagnosticReportDialogSendReportButtonLabel;
 
   /// No description provided for @favorites_BodyCenter_empty.
   ///
@@ -3429,13 +3429,13 @@ abstract class AppLocalizations {
   /// No description provided for @settings_iceSettings_Section_title.
   ///
   /// In en, this message translates to:
-  /// **'ICE candidates filtering'**
+  /// **'Ice candidates filtering'**
   String get settings_iceSettings_Section_title;
 
   /// No description provided for @settings_iceSettings_Section_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Filter ICE candidates based on the network preferences may help to avoid network issues'**
+  /// **'Filter ice candidates based on the network preferences may help to avoid network issues'**
   String get settings_iceSettings_Section_tooltip;
 
   /// No description provided for @settings_iceSettings_Section_trfilter_skipTcp.

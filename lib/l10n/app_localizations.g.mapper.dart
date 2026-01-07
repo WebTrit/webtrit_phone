@@ -170,6 +170,8 @@ class AppLocalizationsMapper {
           localizations.call_videoView_actionLabel_cover,
       'call_videoView_actionLabel_fit':
           localizations.call_videoView_actionLabel_fit,
+      'cdrs_noMissedCalls_message': localizations.cdrs_noMissedCalls_message,
+      'cdrs_noRecentCalls_message': localizations.cdrs_noRecentCalls_message,
       'common_noInternetConnection_message':
           localizations.common_noInternetConnection_message,
       'common_noInternetConnection_retryButton':
@@ -337,6 +339,21 @@ class AppLocalizationsMapper {
           localizations.diagnostic_pushTokenStatusType_progress,
       'diagnostic_pushTokenStatusType_success':
           localizations.diagnostic_pushTokenStatusType_success,
+      'diagnosticReportDialogAddNoteExpansionTileTitle':
+          localizations.diagnosticReportDialogAddNoteExpansionTileTitle,
+      'diagnosticReportDialogCancelButtonLabel':
+          localizations.diagnosticReportDialogCancelButtonLabel,
+      'diagnosticReportDialogCommentTextFieldHintText':
+          localizations.diagnosticReportDialogCommentTextFieldHintText,
+      'diagnosticReportDialogContent':
+          localizations.diagnosticReportDialogContent,
+      'diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle': localizations
+          .diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle,
+      'diagnosticReportDialogIncludeSystemLogsSwitchTileTitle':
+          localizations.diagnosticReportDialogIncludeSystemLogsSwitchTileTitle,
+      'diagnosticReportDialogSendReportButtonLabel':
+          localizations.diagnosticReportDialogSendReportButtonLabel,
+      'diagnosticReportDialogTitle': localizations.diagnosticReportDialogTitle,
       'diagnosticScreen_contacts_agreement_description':
           localizations.diagnosticScreen_contacts_agreement_description,
       'diagnosticScreen_contacts_agreement_group_title':
@@ -347,21 +364,6 @@ class AppLocalizationsMapper {
           localizations.diagnosticScreen_permissionsGroup_title,
       'diagnosticScreen_pushNotificationService_title':
           localizations.diagnosticScreen_pushNotificationService_title,
-      'diagnosticReportDialogTitle': localizations.diagnosticReportDialogTitle,
-      'diagnosticReportDialogContent':
-          localizations.diagnosticReportDialogContent,
-      'diagnosticReportDialogIncludeSystemLogsSwitchTileTitle':
-          localizations.diagnosticReportDialogIncludeSystemLogsSwitchTileTitle,
-      'diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle': localizations
-          .diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle,
-      'diagnosticReportDialogAddNoteExpansionTileTitle':
-          localizations.diagnosticReportDialogAddNoteExpansionTileTitle,
-      'diagnosticReportDialogCommentTextFieldHintText':
-          localizations.diagnosticReportDialogCommentTextFieldHintText,
-      'diagnosticReportDialogCancelButtonLabel':
-          localizations.diagnosticReportDialogCancelButtonLabel,
-      'diagnosticReportDialogSendReportButtonLabel':
-          localizations.diagnosticReportDialogSendReportButtonLabel,
       'favorites_BodyCenter_empty': localizations.favorites_BodyCenter_empty,
       'favorites_DeleteConfirmDialog_content':
           localizations.favorites_DeleteConfirmDialog_content,
@@ -858,6 +860,8 @@ class AppLocalizationsMapper {
           localizations.settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion':
           localizations.settings_AboutText_AppVersion,
+      'settings_AboutText_CoreVersion':
+          localizations.settings_AboutText_CoreVersion,
       'settings_AboutText_CoreVersionUndefined':
           localizations.settings_AboutText_CoreVersionUndefined,
       'settings_AboutText_FCMPushNotificationToken':

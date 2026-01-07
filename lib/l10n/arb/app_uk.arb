@@ -22,7 +22,7 @@
   "@autoprovision_ReloginDialog_text": {},
   "autoprovision_ReloginDialog_title": "Підтвердження повторного входу",
   "@autoprovision_ReloginDialog_title": {},
-  "autoprovision_successSnackBar_used": "Ваші налаштування було успішно отримано, додаток готовий до використання",
+  "autoprovision_successSnackBar_used": "Ваші налаштування було успішно отримано, застосунок готовий до використання",
   "@autoprovision_successSnackBar_used": {},
   "call_CallActionsTooltip_accept": "Прийняти",
   "@call_CallActionsTooltip_accept": {},
@@ -143,13 +143,25 @@
   "call_ThumbnailAvatar_currentlyNoActiveCall": "Зараз немає активних дзвінків",
   "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
   "call_videoBackground_actionLabel_disableBlur": "Вимкнути розмиття",
+  "@call_videoBackground_actionLabel_disableBlur": {
+    "description": "Button label shown when the video background is currently blurred. Clicking this will turn off the blur effect."
+  },
   "call_videoBackground_actionLabel_enableBlur": "Увімкнути розмиття",
+  "@call_videoBackground_actionLabel_enableBlur": {
+    "description": "Button label shown when the video background is normal (no blur). Clicking this will turn on the blur effect."
+  },
   "call_videoView_actionLabel_cover": "Заповнити",
+  "@call_videoView_actionLabel_cover": {
+    "description": "Button label to switch the video view mode to 'Cover' (fills the entire area, potentially cropping edges). Shown when the video is currently in 'Fit' mode."
+  },
   "call_videoView_actionLabel_fit": "Вмістити",
-  "cdrs_noRecentCalls_message": "Немає останніх дзвінків",
-  "@cdrs_noRecentCalls_message": {},
+  "@call_videoView_actionLabel_fit": {
+    "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
+  },
   "cdrs_noMissedCalls_message": "Немає пропущених дзвінків",
   "@cdrs_noMissedCalls_message": {},
+  "cdrs_noRecentCalls_message": "Немає останніх дзвінків",
+  "@cdrs_noRecentCalls_message": {},
   "common_noInternetConnection_message": "Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "Спробуйте ще раз",
@@ -160,9 +172,9 @@
   "@common_problemWithLoadingPage": {},
   "contacts_agreement_button_text": "Продовжити",
   "@contacts_agreement_button_text": {},
-  "contacts_agreement_checkbox_text": "Я погоджуюсь дозволити додатку доступ до моїх контактів для покращення користувацького досвіду.",
+  "contacts_agreement_checkbox_text": "Я погоджуюсь дозволити застосунку доступ до моїх контактів для покращення досвіду користувача.",
   "@contacts_agreement_checkbox_text": {},
-  "contacts_agreement_description": "Цей додаток потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» додатку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо з додатку. \n\nЦі дані не збираються, не передаються та не поширюються за межами додатку.",
+  "contacts_agreement_description": "Цей застосунок потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» застосунку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо зі застосунку. \n\nЦі дані не збираються, не передаються та не поширюються за межами застосунку.",
   "@contacts_agreement_description": {},
   "contacts_agreement_title": "Збір даних",
   "@contacts_agreement_title": {},
@@ -319,21 +331,21 @@
   "@diagnostic_AppBar_title": {},
   "diagnostic_battery_groupTitle": "Батарея",
   "@diagnostic_battery_groupTitle": {},
-  "diagnostic_batteryMode_optimized_description": "Фонова активність додатка керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.",
+  "diagnostic_batteryMode_optimized_description": "Фонова активність застосунку керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.",
   "@diagnostic_batteryMode_optimized_description": {},
   "diagnostic_batteryMode_optimized_title": "Оптимізовано",
   "@diagnostic_batteryMode_optimized_title": {},
-  "diagnostic_batteryMode_restricted_description": "Фонова активність додатка обмежена для економії заряду батареї. Вхідні дзвінки можуть бути пропущені. ",
+  "diagnostic_batteryMode_restricted_description": "Фонова активність застосунку обмежена для економії заряду батареї. Вхідні дзвінки можуть бути пропущені. ",
   "@diagnostic_batteryMode_restricted_description": {},
   "diagnostic_batteryMode_restricted_title": "Обмежено",
   "@diagnostic_batteryMode_restricted_title": {},
-  "diagnostic_batteryMode_unknown_description": "Статус режиму батареї невідомий. Додаток може поводитися непередбачувано.",
+  "diagnostic_batteryMode_unknown_description": "Статус режиму батареї невідомий. Застосунок може поводитися непередбачувано.",
   "@diagnostic_batteryMode_unknown_description": {
     "description": "Shown in the Diagnostics > Battery section when the app cannot determine the current battery mode. Condition: system does not provide battery mode info, which may lead to unpredictable app behavior."
   },
   "diagnostic_batteryMode_unknown_title": "Невідомо",
   "@diagnostic_batteryMode_unknown_title": {},
-  "diagnostic_batteryMode_unrestricted_description": "Додаток має повний доступ для роботи у фоновому режимі без обмежень.",
+  "diagnostic_batteryMode_unrestricted_description": "Застосунок має повний доступ для роботи у фоновому режимі без обмежень.",
   "@diagnostic_batteryMode_unrestricted_description": {},
   "diagnostic_batteryMode_unrestricted_title": "Без обмежень",
   "@diagnostic_batteryMode_unrestricted_title": {},
@@ -341,11 +353,11 @@
   "@diagnostic_battery_navigate_section": {},
   "diagnostic_battery_tile_title": "Режим батареї",
   "@diagnostic_battery_tile_title": {},
-  "diagnostic_permission_camera_description": "Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.",
+  "diagnostic_permission_camera_description": "Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.",
   "@diagnostic_permission_camera_description": {},
   "diagnostic_permission_camera_title": "Камера",
   "@diagnostic_permission_camera_title": {},
-  "diagnostic_permission_contacts_description": "Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.",
+  "diagnostic_permission_contacts_description": "Цей застосунок потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.",
   "@diagnostic_permission_contacts_description": {},
   "diagnostic_permission_contacts_title": "Контакти",
   "@diagnostic_permission_contacts_title": {},
@@ -355,11 +367,11 @@
   "@diagnosticPermissionDetails_button_requestPermission": {},
   "diagnosticPermissionDetails_title_statusPermission": "Статус дозволу",
   "@diagnosticPermissionDetails_title_statusPermission": {},
-  "diagnostic_permission_microphone_description": "Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.",
+  "diagnostic_permission_microphone_description": "Цей застосунок потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.",
   "@diagnostic_permission_microphone_description": {},
   "diagnostic_permission_microphone_title": "Мікрофон",
   "@diagnostic_permission_microphone_title": {},
-  "diagnostic_permission_notification_description": "Дозволяє додатку активувати вхідні дзвінки.",
+  "diagnostic_permission_notification_description": "Дозволяє застосунку активувати вхідні дзвінки.",
   "@diagnostic_permission_notification_description": {},
   "diagnostic_permission_notification_title": "Сповіщення",
   "@diagnostic_permission_notification_title": {},
@@ -395,7 +407,39 @@
   "@diagnostic_pushTokenStatusType_progress": {},
   "diagnostic_pushTokenStatusType_success": "Службу успішно налаштовано",
   "@diagnostic_pushTokenStatusType_success": {},
-  "diagnosticScreen_contacts_agreement_description": "Дозвольте додатку отримати доступ до ваших контактів для покращення користувацького досвіду.",
+  "diagnosticReportDialogAddNoteExpansionTileTitle": "Додати примітку (необов’язково)",
+  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
+    "description": "Title for the expandable section where users can add manual comments."
+  },
+  "diagnosticReportDialogCancelButtonLabel": "Скасувати",
+  "@diagnosticReportDialogCancelButtonLabel": {
+    "description": "Label for the button that closes the dialog without action."
+  },
+  "diagnosticReportDialogCommentTextFieldHintText": "Опишіть, що трапилося...",
+  "@diagnosticReportDialogCommentTextFieldHintText": {
+    "description": "Placeholder hint text displayed inside the comment text field."
+  },
+  "diagnosticReportDialogContent": "Цей звіт містить технічні дані, які допоможуть нам виявити проблеми з підключенням.",
+  "@diagnosticReportDialogContent": {
+    "description": "The main body text explaining what the diagnostic report is for."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Потрібні додаткові дозволи.",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
+    "description": "Subtitle text under the system logs switch indicating permission requirements."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Додати системні логи",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
+    "description": "The label for the switch toggle that allows the user to attach system logs."
+  },
+  "diagnosticReportDialogSendReportButtonLabel": "Надіслати звіт",
+  "@diagnosticReportDialogSendReportButtonLabel": {
+    "description": "Label for the button that submits the diagnostic report."
+  },
+  "diagnosticReportDialogTitle": "Надіслати звіт про діагностику",
+  "@diagnosticReportDialogTitle": {
+    "description": "The title shown at the top of the diagnostic report dialog."
+  },
+  "diagnosticScreen_contacts_agreement_description": "Дозвольте застосунку отримати доступ до ваших контактів для покращення досвіду користувача.",
   "@diagnosticScreen_contacts_agreement_description": {},
   "diagnosticScreen_contacts_agreement_group_title": "Угода",
   "@diagnosticScreen_contacts_agreement_group_title": {},
@@ -405,38 +449,6 @@
   "@diagnosticScreen_permissionsGroup_title": {},
   "diagnosticScreen_pushNotificationService_title": "Служба push-сповіщень",
   "@diagnosticScreen_pushNotificationService_title": {},
-  "diagnosticReportDialogTitle": "Надіслати звіт про діагностику",
-  "@diagnosticReportDialogTitle": {
-    "description": "The title shown at the top of the diagnostic report dialog."
-  },
-  "diagnosticReportDialogContent": "Цей звіт містить технічні дані, які допоможуть нам виявити проблеми з підключенням.",
-  "@diagnosticReportDialogContent": {
-    "description": "The main body text explaining what the diagnostic report is for."
-  },
-  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Додати системні логи",
-  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
-    "description": "The label for the switch toggle that allows the user to attach system logs."
-  },
-  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Потрібні додаткові дозволи.",
-  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
-    "description": "Subtitle text under the system logs switch indicating permission requirements."
-  },
-  "diagnosticReportDialogAddNoteExpansionTileTitle": "Додати примітку (необов’язково)",
-  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
-    "description": "Title for the expandable section where users can add manual comments."
-  },
-  "diagnosticReportDialogCommentTextFieldHintText": "Опишіть, що трапилося...",
-  "@diagnosticReportDialogCommentTextFieldHintText": {
-    "description": "Placeholder hint text displayed inside the comment text field."
-  },
-  "diagnosticReportDialogCancelButtonLabel": "Скасувати",
-  "@diagnosticReportDialogCancelButtonLabel": {
-    "description": "Label for the button that closes the dialog without action."
-  },
-  "diagnosticReportDialogSendReportButtonLabel": "Надіслати звіт",
-  "@diagnosticReportDialogSendReportButtonLabel": {
-    "description": "Label for the button that submits the diagnostic report."
-  },
   "favorites_BodyCenter_empty": "Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку \"зірочка\"",
   "@favorites_BodyCenter_empty": {},
   "favorites_DeleteConfirmDialog_content": "Ви впевнені, що хочете видалити поточний обраний номер?",
@@ -567,11 +579,11 @@
   "@login_RequestFailurePhoneNotFoundError": {
     "description": "Shown during login or signup when the user provides a phone number that cannot be found in the system. Condition: the entered phone number does not exist or is not recognized by the backend."
   },
-  "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера додатка - сповістіть свого постачальника послуг",
+  "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг",
   "@login_RequestFailureUnconfiguredBundleIdError": {
     "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
   },
-  "login_SupportedLoginTypeMissedExceptionError": "Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим додатком",
+  "login_SupportedLoginTypeMissedExceptionError": "Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим застосунком",
   "@login_SupportedLoginTypeMissedExceptionError": {
     "description": "Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods."
   },
@@ -909,15 +921,15 @@
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
   },
-  "notifications_errorSnackBar_appOffline": "Ваш додаток зараз офлайн.",
+  "notifications_errorSnackBar_appOffline": "Ваш застосунок зараз офлайн.",
   "@notifications_errorSnackBar_appOffline": {
     "description": "Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions."
   },
-  "notifications_errorSnackBar_appOnline": "Ваш додаток онлайн.",
+  "notifications_errorSnackBar_appOnline": "Ваш застосунок онлайн.",
   "@notifications_errorSnackBar_appOnline": {
     "description": "Shown in a notification or snackbar when the application successfully reconnects and is online. Condition: the app transitions from offline/disconnected to an online state."
   },
-  "notifications_errorSnackBar_appUnregistered": "Вибачте, ваш додаток наразі відключений від серверів WebTrit і не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань і перемкніть вимикач стану онлайн у вимкнуте та знову в увімкнуте положення, щоб відновити з'єднання.",
+  "notifications_errorSnackBar_appUnregistered": "Вибачте, ваш застосунок наразі відключений від серверів WebTrit і не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань і перемкніть вимикач стану онлайн у вимкнуте та знову в увімкнуте положення, щоб відновити з'єднання.",
   "@notifications_errorSnackBar_appUnregistered": {
     "description": "Shown in a notification or snackbar (call screen or global) when the app is disconnected from the WebTrit core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings."
   },
@@ -941,7 +953,7 @@
   "@notifications_errorSnackBar_callUndefinedLine": {
     "description": "Shown in a snackbar when the user attempts to start a call but there is no outbound line available. Context: occurs at call initiation when no SIP/VoIP line is assigned or registered, all lines are disabled or busy, or the line was removed/disabled by an administrator; typical causes: unassigned or unregistered SIP line, account/line disabled, or concurrent channel limits."
   },
-  "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми",
+  "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи застосунку",
   "@notifications_errorSnackBar_callUserMedia": {
     "description": "Shown in a notification or snackbar when the app cannot access camera or microphone required for a call. Context: occurs when getUserMedia or platform permission check fails; typical causes include the user denying camera/microphone permission, OS-level restriction or revoked permission, missing runtime permission (Android), or the device hardware being busy or unavailable."
   },
@@ -1003,11 +1015,11 @@
   "@notifications_errorSnackBar_sipServiceUnavailable": {
     "description": "Shown in a notification or snackbar when authentication with the remote VoIP/SIP system fails or the service is unavailable. Typical causes: authentication rejection (invalid/expired credentials), remote service maintenance or outage, or transient network/TLS issues. Advise the user to verify account credentials, retry later, and contact their administrator or support if the problem persists."
   },
-  "notifications_messageSnackBar_appOffline": "Ваш додаток зараз офлайн.",
+  "notifications_messageSnackBar_appOffline": "Ваш застосунок зараз офлайн.",
   "@notifications_messageSnackBar_appOffline": {
     "description": "Shown in a non-error informational snackbar when the app transitions to offline. Typical causes: loss of network connectivity (airplane mode, Wi‑Fi or cellular drop), captive portal, or temporary carrier/Wi‑Fi outage. Suggest the user check their connection and retry."
   },
-  "notifications_successSnackBar_appOnline": "Ваш додаток онлайн.",
+  "notifications_successSnackBar_appOnline": "Ваш застосунок онлайн.",
   "@notifications_successSnackBar_appOnline": {},
   "numberActions_audioCall": "Aудіо дзвінок",
   "@numberActions_audioCall": {},
@@ -1045,17 +1057,17 @@
   "@permission_manageFullScreenNotificationInstructions_step2": {},
   "permission_manageFullScreenNotificationInstructions_step3": "Знайдіть і натисніть «Керування повноекранними намірами».\n",
   "@permission_manageFullScreenNotificationInstructions_step3": {},
-  "permission_manageFullScreenNotificationInstructions_step4": "Виберіть додаток, для якого потрібно керувати повноекранними сповіщеннями.",
+  "permission_manageFullScreenNotificationInstructions_step4": "Виберіть застосунок, для якого потрібно керувати повноекранними сповіщеннями.",
   "@permission_manageFullScreenNotificationInstructions_step4": {},
-  "permission_manageFullScreenNotificationInstructions_step5": "Увімкніть або вимкніть дозвіл для повноекранних сповіщень цього додатка.",
+  "permission_manageFullScreenNotificationInstructions_step5": "Увімкніть або вимкніть дозвіл для повноекранних сповіщень цього застосунку.",
   "@permission_manageFullScreenNotificationInstructions_step5": {},
   "permission_manageFullScreenNotificationPermissions": "Manage Full-Screen Notification Permissions",
   "@permission_manageFullScreenNotificationPermissions": {},
   "permission_manufacturer_Button_gotIt": "Зрозуміло",
   "@permission_manufacturer_Button_gotIt": {},
-  "permission_manufacturer_Button_toSettings": "Відкрийте налаштування програми",
+  "permission_manufacturer_Button_toSettings": "Відкрийте налаштування застосунку",
   "@permission_manufacturer_Button_toSettings": {},
-  "permission_manufacturer_Text_heading": "Щоб забезпечити найкращу взаємодію з користувачем, програмі потрібно вручну надати такі дозволи:",
+  "permission_manufacturer_Text_heading": "Щоб забезпечити найкращу взаємодію з користувачем, застосунку потрібно вручну надати такі дозволи:",
   "@permission_manufacturer_Text_heading": {},
   "permission_manufacturer_Text_trailing": "Дозволи можуть бути змінені в будь-який час у майбутньому.",
   "@permission_manufacturer_Text_trailing": {},
@@ -1063,7 +1075,7 @@
   "@permission_manufacturer_Text_xiaomi_tip1": {},
   "permission_manufacturer_Text_xiaomi_tip2": "Знайдіть і ввімкніть «Сповіщення на екрані блокування».",
   "@permission_manufacturer_Text_xiaomi_tip2": {},
-  "permission_Text_description": "Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.",
+  "permission_Text_description": "Для забезпечення найкращого досвіду користувача застосунок потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в застосунку.\n\nДозволи можуть бути змінені у майбутньому.",
   "@permission_Text_description": {},
   "persistentConnectionReminderContent": "Потрібно вручну запустити застосунок щонайменше один раз після перезавантаження телефону, щоб відновити постійне з'єднання й отримувати вхідні дзвінки.",
   "@persistentConnectionReminderContent": {
@@ -1257,7 +1269,7 @@
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_AppSessionIdentifier": "Ідентифікатор сесії застосунку",
   "@settings_AboutText_AppSessionIdentifier": {},
-  "settings_AboutText_AppVersion": "Версія додатка",
+  "settings_AboutText_AppVersion": "Версія застосунку",
   "@settings_AboutText_AppVersion": {},
   "settings_AboutText_CoreVersion": "Версія WebTrit Cloud Backend",
   "@settings_AboutText_CoreVersion": {},
@@ -1285,7 +1297,7 @@
   "@settings_audioProcessing_Section_NS_title": {},
   "settings_audioProcessing_Section_title": "Пре-обробка аудіо",
   "@settings_audioProcessing_Section_title": {},
-  "settings_audioProcessing_Section_tooltip": "Можна використовувати для налаштування якості аудіо для певних потреб або умов. Як-от студійний запис або зовнішній мікрофон. \n\nОбійти обробку голосу — повідомляє системі не застосовувати апаратну обробку голосу (потрібно перезапустити програму).",
+  "settings_audioProcessing_Section_tooltip": "Можна використовувати для налаштування якості аудіо для певних потреб або умов. Як-от студійний запис або зовнішній мікрофон. \n\nОбійти обробку голосу — повідомляє системі не застосовувати апаратну обробку голосу (потрібно перезапустити застосунок).",
   "@settings_audioProcessing_Section_tooltip": {},
   "settings_audioProcessing_Section_VP_title": "Обхід обробки голосу",
   "@settings_audioProcessing_Section_VP_title": {},
@@ -1433,9 +1445,9 @@
   "@settings_iceSettings_Section_netfilter_title": {},
   "settings_iceSettings_Section_noskip": "Без фільтрації",
   "@settings_iceSettings_Section_noskip": {},
-  "settings_iceSettings_Section_title": "Фільтрація ICE-кандидатів",
+  "settings_iceSettings_Section_title": "Фільтрація ice-кандидатів",
   "@settings_iceSettings_Section_title": {},
-  "settings_iceSettings_Section_tooltip": "Фільтр ICE-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею",
+  "settings_iceSettings_Section_tooltip": "Фільтр ice-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею",
   "@settings_iceSettings_Section_tooltip": {},
   "settings_iceSettings_Section_trfilter_skipTcp": "Пропустити TCP-кандидатів",
   "@settings_iceSettings_Section_trfilter_skipTcp": {},
@@ -1443,7 +1455,7 @@
   "@settings_iceSettings_Section_trfilter_skipUdp": {},
   "settings_iceSettings_Section_trfilter_title": "Транспортний протокол",
   "@settings_iceSettings_Section_trfilter_title": {},
-  "settings_ListViewTileTitle_about": "Про програму",
+  "settings_ListViewTileTitle_about": "Про застосунок",
   "@settings_ListViewTileTitle_about": {},
   "settings_ListViewTileTitle_accountDelete": "Видалити обліковий запис",
   "@settings_ListViewTileTitle_accountDelete": {},
@@ -1497,11 +1509,11 @@
   "@settings_network_fallbackCalls_title": {
     "description": "Title for fallback incoming calls section"
   },
-  "settings_network_incomingCallType_pushNotification_description": "Коли додаток не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер <brand> надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає додаток для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.",
+  "settings_network_incomingCallType_pushNotification_description": "Коли застосунок не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер <brand> надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає застосунок для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.",
   "@settings_network_incomingCallType_pushNotification_description": {},
   "settings_network_incomingCallType_pushNotification_title": "Push-сповіщення",
   "@settings_network_incomingCallType_pushNotification_title": {},
-  "settings_network_incomingCallType_socket_description": "Додаток продовжує працювати у фоновому режимі та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.",
+  "settings_network_incomingCallType_socket_description": "Застосунок продовжує працювати у фоновому режимі та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.",
   "@settings_network_incomingCallType_socket_description": {},
   "settings_network_incomingCallType_socket_title": "Постійне підключення до сервера",
   "@settings_network_incomingCallType_socket_title": {},
@@ -1515,17 +1527,17 @@
   "@settings_videoCapturing_Section_framerate_prefix": {},
   "settings_videoCapturing_Section_framerate_title": "Частота кадрів зображення",
   "@settings_videoCapturing_Section_framerate_title": {},
-  "settings_videoCapturing_Section_resolution_prefix": "вертикальних точйок: ",
+  "settings_videoCapturing_Section_resolution_prefix": "вертикальних точок: ",
   "@settings_videoCapturing_Section_resolution_prefix": {},
   "settings_videoCapturing_Section_resolution_title": "Роздільна здатність зображення",
   "@settings_videoCapturing_Section_resolution_title": {},
-  "settings_videoCapturing_Section_title": "Захват відео",
+  "settings_videoCapturing_Section_title": "Захоплення відео",
   "@settings_videoCapturing_Section_title": {},
   "settings_videoCapturing_Section_tooltip": "Можна використовувати для налаштування якості відео для певних потреб або умов.",
   "@settings_videoCapturing_Section_tooltip": {},
   "settings_videoOffer_option_ignore": "Відповідати без відео\nТрек не буде додано, якщо це не буде узгоджено пізніше.",
   "@settings_videoOffer_option_ignore": {},
-  "settings_videoOffer_option_includeInactive": "Включити неактивний відеотрек\nЗабезпечує сумісність із відеопропозиціями для майбутньої активації.",
+  "settings_videoOffer_option_includeInactive": "Увімкнути неактивний відеотрек\nЗабезпечує сумісність із відеопропозиціями для майбутньої активації.",
   "@settings_videoOffer_option_includeInactive": {},
   "settings_videoOffer_title": "Визначте, як цей пристрій реагує на пропозицію, що містить відео.",
   "@settings_videoOffer_title": {},
@@ -1625,7 +1637,7 @@
   "@signalingResponseCode_notFoundRoutesInReplyFromBE": {
     "description": "Shown when the backend does not return any routing information for the request. Condition: misconfigured routing tables or no available trunks."
   },
-  "signalingResponseCode_pluginNotFound": "Не знайдено необхідного компонента. Спробуйте перезапустити додаток.",
+  "signalingResponseCode_pluginNotFound": "Не знайдено необхідного компонента. Спробуйте перезапустити застосунок.",
   "@signalingResponseCode_pluginNotFound": {
     "description": "Shown when the requested Janus plugin is not found or unavailable. Cause: wrong plugin name, not loaded on server, or removed."
   },
@@ -1657,7 +1669,7 @@
   "@signalingResponseCodeType_callHangup": {
     "description": "Category for errors where the call is terminated. Causes include normal hangup, busy, declined, or signaling errors."
   },
-  "signalingResponseCodeType_plugin": "Не працює необхідна функція. Спробуйте перезапустити додаток.",
+  "signalingResponseCodeType_plugin": "Не працює необхідна функція. Спробуйте перезапустити застосунок.",
   "@signalingResponseCodeType_plugin": {
     "description": "Category for errors related to Janus plugins (attach, detach, plugin not found)."
   },
@@ -1665,7 +1677,7 @@
   "@signalingResponseCodeType_request": {
     "description": "Category for errors caused by malformed or unsupported requests in signaling."
   },
-  "signalingResponseCodeType_session": "Виникла проблема з вашою сесією. Будь ласка, увійдіть у систему знову або перезапустіть додаток.",
+  "signalingResponseCodeType_session": "Виникла проблема з вашою сесією. Будь ласка, увійдіть у систему знову або перезапустіть застосунок.",
   "@signalingResponseCodeType_session": {
     "description": "Category for errors related to sessions (session not found, session ID in use)."
   },
