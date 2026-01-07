@@ -77,6 +77,8 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
     // Synchronize external contacts into the local contacts store.
     // On transient database errors, retry the transaction up to 3 attempts with a short backoff.
     try {
+      // TODO: Clarify this filtering logic. Comparing `externalContact.id` with `userInfo.numbers.main` implies a type mismatch (ID vs Number).
+      // This might be related to the legacy change: "fix(api): remove overabundant SIP information from user information response" (2023-08-08).
       final filteredContacts = event.contacts
           .where((externalContact) => externalContact.id != userInfo!.numbers.main)
           .toList();
