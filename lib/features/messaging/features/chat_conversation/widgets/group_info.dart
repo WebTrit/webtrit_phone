@@ -8,6 +8,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class GroupInfo extends StatefulWidget {
@@ -49,26 +50,29 @@ class _GroupInfoState extends State<GroupInfo> {
   Future<void> onAddUser() async {
     final result = await showDialog<Contact>(
       context: context,
-      builder: (context) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-        child: Dialog(
-          insetPadding: const EdgeInsets.all(16),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ChooseContact(
-              contactsRepository: contactsRepository,
-              filter: (contact) {
-                final state = conversationCubit.state;
-                if (state is CVSReady) {
-                  final chat = state.chat;
-                  final members = chat?.members.map((m) => m.userId).toSet() ?? {};
-                  final isMe = contact.sourceId == widget.userId;
-                  final isMember = members.contains(contact.sourceId);
-                  final canMessage = contact.canMessage;
-                  return !isMe && !isMember && canMessage;
-                }
-                return false;
-              },
+      builder: (_) => PresenceViewParams(
+        viewSource: PresenceViewParams.of(context).viewSource,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+          child: Dialog(
+            insetPadding: const EdgeInsets.all(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: ChooseContact(
+                contactsRepository: contactsRepository,
+                filter: (contact) {
+                  final state = conversationCubit.state;
+                  if (state is CVSReady) {
+                    final chat = state.chat;
+                    final members = chat?.members.map((m) => m.userId).toSet() ?? {};
+                    final isMe = contact.sourceId == widget.userId;
+                    final isMember = members.contains(contact.sourceId);
+                    final canMessage = contact.canMessage;
+                    return !isMe && !isMember && canMessage;
+                  }
+                  return false;
+                },
+              ),
             ),
           ),
         ),
