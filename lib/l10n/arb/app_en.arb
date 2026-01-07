@@ -158,6 +158,10 @@
   "@call_videoView_actionLabel_fit": {
     "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
   },
+  "cdrs_noRecentCalls_message": "No recent calls",
+  "@cdrs_noRecentCalls_message": {},
+  "cdrs_noMissedCalls_message": "No missed calls",
+  "@cdrs_noMissedCalls_message": {},
   "common_noInternetConnection_message": "It seems you are not connected to the internet. Please check your connection and try again.",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "Try Again",

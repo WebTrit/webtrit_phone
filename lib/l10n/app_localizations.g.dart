@@ -501,6 +501,18 @@ abstract class AppLocalizations {
   /// **'Fit'**
   String get call_videoView_actionLabel_fit;
 
+  /// No description provided for @cdrs_noRecentCalls_message.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent calls'**
+  String get cdrs_noRecentCalls_message;
+
+  /// No description provided for @cdrs_noMissedCalls_message.
+  ///
+  /// In en, this message translates to:
+  /// **'No missed calls'**
+  String get cdrs_noMissedCalls_message;
+
   /// No description provided for @common_noInternetConnection_message.
   ///
   /// In en, this message translates to:

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'cdr_tile.dart';
@@ -105,7 +106,7 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state.records.isEmpty) {
-          return const Center(child: Text('No CDRs available'));
+          return Center(child: Text(context.l10n.cdrs_noMissedCalls_message));
         }
 
         return BlocBuilder<UserInfoCubit, UserInfoState>(
