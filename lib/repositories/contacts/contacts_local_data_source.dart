@@ -3,7 +3,16 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 abstract class ContactsLocalDataSource {
+  /// Upserts a single external contact.
+  /// Used for fetching details of a specific contact.
   Future<int> upsertContact(ExternalContact externalContact, ContactKind kind);
+
+  /// Synchronizes a list of external contacts.
+  /// Handles deletion of missing contacts and batch upsert of new/updated ones.
+  Future<void> syncExternalContacts(List<ExternalContact> contacts);
+
+  /// Synchronizes a list of local device contacts.
+  Future<void> syncLocalContacts(List<LocalContact> contacts);
 }
 
 class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
@@ -11,117 +20,220 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
 
   final AppDatabase _appDatabase;
 
-  // TODO: This logic almost is duplicated from ExternalContactsRepository.
-  // The plan is to refactor this and use a single source of truth for contact
-  // updates to avoid the current situation where every change needs to be
-  // synchronized in two places.
   @override
-  Future<int> upsertContact(ExternalContact externalContact, ContactKind kind) async {
+  Future<int> upsertContact(ExternalContact externalContact, ContactKind kind) {
     return _appDatabase.transaction(() async {
-      final insertOrUpdateContactData = await _appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
-        ContactDataCompanion(
-          sourceType: const Value(ContactSourceTypeEnum.external),
-          // Ensure a stable and unique sourceId for deduplication and upsert logic.
-          // Falls back to contact number, email, or a hashed identity if no API-provided ID is available.
-          sourceId: Value(externalContact.safeSourceId),
-          kind: Value(kind),
-          firstName: Value(externalContact.firstName),
-          lastName: Value(externalContact.lastName),
-          aliasName: Value(externalContact.aliasName),
-          registered: Value(externalContact.registered),
-          userRegistered: Value(externalContact.userRegistered),
-          isCurrentUser: Value(externalContact.isCurrentUser),
-        ),
+      return _upsertContactInternal(externalContact, kind: kind);
+    });
+  }
+
+  @override
+  Future<void> syncExternalContacts(List<ExternalContact> contacts) async {
+    await _appDatabase.transaction(() async {
+      // Remove legacy or invalid external contacts that were previously stored without a proper sourceId,
+      // which may cause duplication or prevent accurate sync updates.
+      await _appDatabase.contactsDao.deleteContactsWithNullSourceId(ContactSourceTypeEnum.external);
+
+      final syncedExternalContactsIds = await _appDatabase.contactsDao.getContactsSourceIds(
+        ContactSourceTypeEnum.external,
       );
 
-      final contactId = insertOrUpdateContactData.id;
+      // Use `safeSourceId` because that is the value persisted in the database.
+      // If the API returns `id == null`, `safeSourceId` generates a stable identifier
+      // (derived from number/email), preventing incorrect deletions that would occur if `c.id` were used.
+      final updatedExternalContactsIds = contacts.map((c) => c.safeSourceId).toSet();
+      final delExternalContactsIds = syncedExternalContactsIds.difference(updatedExternalContactsIds);
 
-      final externalContactNumber = externalContact.number;
-      // Some external accounts legitimately have `ext` equal to `number`
-      // (e.g. auto-provisioned users where the signup flow copies main into ext).
-      //
-      // In our local DB phone records are keyed by (contact_id, number), so each
-      // distinct phone number is stored only once. When we upsert phones, the last
-      // write "wins" for a given (contact_id, number) pair.
-      //
-      // If we insert both `number` and `ext` when they are the same value, the
-      // second upsert for label 'ext' overwrites the existing row that was created
-      // for label 'number'. As a result, the primary "number" entry disappears and
-      // the UI shows "Unknown" for the main number, while the same value is only
-      // visible under the 'ext' label.
-      //
-      // To avoid losing the main number label, when `ext` is identical to `number`
-      // we treat `ext` as absent and do not create a separate phone record for it.
-      final externalContactExt = externalContact.ext != externalContact.number ? externalContact.ext : null;
-      final externalContactAdditional = externalContact.additional;
-      final externalSmsNumbers = externalContact.smsNumbers;
-
-      final externalContactNumbers = [
-        if (externalContactNumber != null) externalContactNumber,
-        if (externalContactExt != null) externalContactExt,
-        if (externalContactAdditional != null) ...externalContactAdditional,
-        if (externalSmsNumbers != null) ...externalSmsNumbers,
-      ];
-
-      await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(contactId, externalContactNumbers);
-
-      if (externalContactNumber != null) {
-        await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-          ContactPhoneDataCompanion(
-            number: Value(externalContactNumber),
-            label: const Value(kContactMainLabel),
-            contactId: Value(contactId),
-          ),
-        );
-      }
-      if (externalContactExt != null) {
-        await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-          ContactPhoneDataCompanion(
-            number: Value(externalContactExt),
-            label: const Value(kContactExtLabel),
-            contactId: Value(contactId),
-          ),
-        );
-      }
-      if (externalSmsNumbers != null) {
-        for (final externalSmsNumber in externalSmsNumbers) {
-          await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-            ContactPhoneDataCompanion(
-              number: Value(externalSmsNumber),
-              label: const Value(kContactSmsLabel),
-              contactId: Value(contactId),
-            ),
-          );
-        }
-      }
-      if (externalContactAdditional != null) {
-        for (final externalContactAdditionalNumber in externalContactAdditional) {
-          await _appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-            ContactPhoneDataCompanion(
-              number: Value(externalContactAdditionalNumber),
-              label: const Value(kContactAdditionalLabel),
-              contactId: Value(contactId),
-            ),
-          );
-        }
-      }
-
-      final externalContactEmail = externalContact.email;
-      final externalContactEmails = [if (externalContactEmail != null) externalContactEmail];
-
-      await _appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(contactId, externalContactEmails);
-
-      if (externalContactEmail != null) {
-        await _appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
-          ContactEmailDataCompanion(
-            address: Value(externalContactEmail),
-            label: const Value(''),
-            contactId: Value(contactId),
-          ),
+      if (delExternalContactsIds.isNotEmpty) {
+        await _appDatabase.contactsDao.deleteContactsBySourceList(
+          ContactSourceTypeEnum.external,
+          delExternalContactsIds,
         );
       }
 
-      return contactId;
+      await Future.wait(contacts.map((externalContact) => _upsertContactInternal(externalContact)));
     });
+  }
+
+  @override
+  Future<void> syncLocalContacts(List<LocalContact> contacts) async {
+    await _appDatabase.transaction(() async {
+      final syncedLocalContactsIds = await _appDatabase.contactsDao.getContactsSourceIds(ContactSourceTypeEnum.local);
+      final updatedLocalContactsIds = contacts.map((c) => c.id).toSet();
+      final delLocalContactsIds = syncedLocalContactsIds.difference(updatedLocalContactsIds);
+
+      if (delLocalContactsIds.isNotEmpty) {
+        await _appDatabase.contactsDao.deleteContactsBySourceList(ContactSourceTypeEnum.local, delLocalContactsIds);
+      }
+
+      await Future.wait(
+        contacts.map((localContact) async {
+          final insertOrUpdateContactData = await _appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
+            ContactDataCompanion(
+              sourceType: const Value(ContactSourceTypeEnum.local),
+              sourceId: Value(localContact.id),
+              firstName: Value(localContact.firstName),
+              lastName: Value(localContact.lastName),
+              aliasName: Value(localContact.displayName),
+              thumbnail: Value(localContact.thumbnail),
+            ),
+          );
+
+          final contactId = insertOrUpdateContactData.id;
+
+          // Prepare lists for batch inserts
+          final phoneCompanions = <ContactPhoneDataCompanion>[];
+          final emailCompanions = <ContactEmailDataCompanion>[];
+
+          // Cleanup old phones
+          await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
+            contactId,
+            localContact.phones.map((phone) => phone.number),
+          );
+
+          for (final localContactPhone in localContact.phones) {
+            phoneCompanions.add(
+              ContactPhoneDataCompanion(
+                number: Value(localContactPhone.number),
+                label: Value(localContactPhone.label),
+                contactId: Value(contactId),
+              ),
+            );
+          }
+
+          // Cleanup old emails
+          await _appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
+            contactId,
+            localContact.emails.map((email) => email.address),
+          );
+
+          for (final localContactEmail in localContact.emails) {
+            emailCompanions.add(
+              ContactEmailDataCompanion(
+                address: Value(localContactEmail.address),
+                label: Value(localContactEmail.label),
+                contactId: Value(contactId),
+              ),
+            );
+          }
+
+          await Future.wait([
+            if (phoneCompanions.isNotEmpty) _appDatabase.contactPhonesDao.insertContactPhonesBatch(phoneCompanions),
+            if (emailCompanions.isNotEmpty) _appDatabase.contactEmailsDao.insertContactEmailsBatch(emailCompanions),
+          ]);
+        }),
+      );
+    });
+  }
+
+  /// Internal method to upsert a contact without creating a new transaction scope.
+  /// This allows it to be reused in both single [upsertContact] and batch [syncExternalContacts].
+  Future<int> _upsertContactInternal(ExternalContact externalContact, {ContactKind? kind}) async {
+    final insertOrUpdateContactData = await _appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
+      ContactDataCompanion(
+        sourceType: const Value(ContactSourceTypeEnum.external),
+        // Ensure a stable and unique sourceId for deduplication and upsert logic.
+        sourceId: Value(externalContact.safeSourceId),
+        // If kind is provided, update it; otherwise, leave it absent (Drift keeps existing value or uses default)
+        kind: kind != null ? Value(kind) : const Value.absent(),
+        firstName: Value(externalContact.firstName),
+        lastName: Value(externalContact.lastName),
+        aliasName: Value(externalContact.aliasName),
+        registered: Value(externalContact.registered),
+        userRegistered: Value(externalContact.userRegistered),
+        isCurrentUser: Value(externalContact.isCurrentUser),
+      ),
+    );
+
+    final contactId = insertOrUpdateContactData.id;
+    await _upsertExternalContactDetails(contactId, externalContact);
+
+    return contactId;
+  }
+
+  Future<void> _upsertExternalContactDetails(int contactId, ExternalContact externalContact) async {
+    final externalContactNumber = externalContact.number;
+    // Some external accounts legitimately have `ext` equal to `number`.
+    // To avoid losing the main number label, when `ext` is identical to `number`
+    // we treat `ext` as absent and do not create a separate phone record for it.
+    final externalContactExt = externalContact.ext != externalContact.number ? externalContact.ext : null;
+    final externalContactAdditional = externalContact.additional;
+    final externalSmsNumbers = externalContact.smsNumbers;
+
+    final externalContactNumbers = [
+      if (externalContactNumber != null) externalContactNumber,
+      if (externalContactExt != null) externalContactExt,
+      if (externalContactAdditional != null) ...externalContactAdditional,
+      if (externalSmsNumbers != null) ...externalSmsNumbers,
+    ];
+
+    // Cleanup old phones
+    await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(contactId, externalContactNumbers);
+
+    // Prepare Batch List
+    final phoneCompanions = <ContactPhoneDataCompanion>[];
+
+    if (externalContactNumber != null) {
+      phoneCompanions.add(
+        ContactPhoneDataCompanion(
+          number: Value(externalContactNumber),
+          label: const Value(kContactMainLabel),
+          contactId: Value(contactId),
+        ),
+      );
+    }
+    if (externalContactExt != null) {
+      phoneCompanions.add(
+        ContactPhoneDataCompanion(
+          number: Value(externalContactExt),
+          label: const Value(kContactExtLabel),
+          contactId: Value(contactId),
+        ),
+      );
+    }
+    if (externalSmsNumbers != null) {
+      for (final externalSmsNumber in externalSmsNumbers) {
+        phoneCompanions.add(
+          ContactPhoneDataCompanion(
+            number: Value(externalSmsNumber),
+            label: const Value(kContactSmsLabel),
+            contactId: Value(contactId),
+          ),
+        );
+      }
+    }
+    if (externalContactAdditional != null) {
+      for (final externalContactAdditionalNumber in externalContactAdditional) {
+        phoneCompanions.add(
+          ContactPhoneDataCompanion(
+            number: Value(externalContactAdditionalNumber),
+            label: const Value(kContactAdditionalLabel),
+            contactId: Value(contactId),
+          ),
+        );
+      }
+    }
+
+    final emailCompanions = <ContactEmailDataCompanion>[];
+    final externalContactEmail = externalContact.email;
+
+    // Cleanup old emails
+    final externalContactEmails = [if (externalContactEmail != null) externalContactEmail];
+    await _appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(contactId, externalContactEmails);
+
+    if (externalContactEmail != null) {
+      emailCompanions.add(
+        ContactEmailDataCompanion(
+          address: Value(externalContactEmail),
+          label: const Value(''),
+          contactId: Value(contactId),
+        ),
+      );
+    }
+
+    await Future.wait([
+      if (phoneCompanions.isNotEmpty) _appDatabase.contactPhonesDao.insertContactPhonesBatch(phoneCompanions),
+      if (emailCompanions.isNotEmpty) _appDatabase.contactEmailsDao.insertContactEmailsBatch(emailCompanions),
+    ]);
   }
 }

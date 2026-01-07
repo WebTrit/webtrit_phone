@@ -227,4 +227,23 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
   Future<int> removeContactPhoneFromFavorites(ContactPhone contactPhone) {
     return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
   }
+
+  /// Synchronizes a list of external contacts.
+  /// Handles deletion of missing contacts and batch upsert of new/updated ones.
+  Future<void> syncExternalContacts(List<ExternalContact> contacts) async {
+    if (_contactsLocalDataSource == null) {
+      throw StateError('ContactsLocalDataSource is not initialized for external contacts sync');
+    }
+
+    return _contactsLocalDataSource.syncExternalContacts(contacts);
+  }
+
+  /// Synchronizes a list of local device contacts.
+  Future<void> syncLocalContacts(List<LocalContact> contacts) async {
+    if (_contactsLocalDataSource == null) {
+      throw StateError('ContactsLocalDataSource is not initialized for local contacts sync');
+    }
+
+    return _contactsLocalDataSource.syncLocalContacts(contacts);
+  }
 }

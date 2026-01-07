@@ -1,16 +1,14 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
-
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 
-import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 part 'local_contacts_sync_event.dart';
 
@@ -23,8 +21,8 @@ typedef AsyncCallback = Future<bool> Function();
 class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSyncState> {
   LocalContactsSyncBloc({
     required this.localContactsRepository,
-    required this.appDatabase,
     required this.contactsAgreementStatusRepository,
+    required this.contactsRepository,
     required this.isFeatureEnabled,
     required this.isAgreementAccepted,
     required this.isContactsPermissionGranted,
@@ -36,7 +34,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   }
 
   final LocalContactsRepository localContactsRepository;
-  final AppDatabase appDatabase;
+  final ContactsRepository contactsRepository;
   final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final AsyncCallback isFeatureEnabled;
   final AsyncCallback isAgreementAccepted;
@@ -101,62 +99,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
     _logger.finer('_onUpdated contacts count:${event.contacts.length}');
 
     try {
-      await appDatabase.transaction(() async {
-        final localContacts = event.contacts;
-
-        final syncedLocalContactsIds = await appDatabase.contactsDao.getContactsSourceIds(ContactSourceTypeEnum.local);
-        final updatedLocalContactsIds = localContacts.map((localContact) => localContact.id).toSet();
-        final delLocalContactsIds = syncedLocalContactsIds.difference(updatedLocalContactsIds);
-
-        // to del
-        for (final localContactsId in delLocalContactsIds) {
-          await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.local, localContactsId);
-        }
-
-        // to add or update
-        for (final localContact in localContacts) {
-          final insertOrUpdateContactData = await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
-            ContactDataCompanion(
-              sourceType: const Value(ContactSourceTypeEnum.local),
-              sourceId: Value(localContact.id),
-              firstName: Value(localContact.firstName),
-              lastName: Value(localContact.lastName),
-              aliasName: Value(localContact.displayName),
-              thumbnail: Value(localContact.thumbnail),
-            ),
-          );
-
-          await appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
-            insertOrUpdateContactData.id,
-            localContact.phones.map((phone) => phone.number),
-          );
-
-          for (final localContactPhone in localContact.phones) {
-            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-              ContactPhoneDataCompanion(
-                number: Value(localContactPhone.number),
-                label: Value(localContactPhone.label),
-                contactId: Value(insertOrUpdateContactData.id),
-              ),
-            );
-          }
-
-          await appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
-            insertOrUpdateContactData.id,
-            localContact.emails.map((email) => email.address),
-          );
-
-          for (final localContactEmail in localContact.emails) {
-            await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
-              ContactEmailDataCompanion(
-                address: Value(localContactEmail.address),
-                label: Value(localContactEmail.label),
-                contactId: Value(insertOrUpdateContactData.id),
-              ),
-            );
-          }
-        }
-      });
+      await contactsRepository.syncLocalContacts(event.contacts);
       emit(const LocalContactsSyncSuccess());
     } on Exception catch (e) {
       _logger.warning('_onUpdated retry: $retryCount, error: ', e);

@@ -325,7 +325,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     lazy: false,
                     create: (context) {
                       final localContactsRepository = context.read<LocalContactsRepository>();
-                      final appDatabase = context.read<AppDatabase>();
                       final contactsAgreementStatusRepository = context.read<ContactsAgreementStatusRepository>();
                       final appPermissions = context.read<AppPermissions>();
 
@@ -342,8 +341,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       final bloc = LocalContactsSyncBloc(
                         localContactsRepository: localContactsRepository,
-                        appDatabase: appDatabase,
                         contactsAgreementStatusRepository: contactsAgreementStatusRepository,
+                        contactsRepository: context.read<ContactsRepository>(),
                         isFeatureEnabled: isFutureEnabled,
                         isAgreementAccepted: isAgreementAccepted,
                         isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
@@ -360,7 +359,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       return ExternalContactsSyncBloc(
                         userRepository: context.read<UserRepository>(),
                         externalContactsRepository: context.read<ExternalContactsRepository>(),
-                        appDatabase: context.read<AppDatabase>(),
+                        contactsRepository: context.read<ContactsRepository>(),
                       )..add(const ExternalContactsSyncStarted());
                     },
                   ),

@@ -1,3 +1,4 @@
+export 'contacts_fixture_factory.dart';
 export 'fake_connectivity_service.dart';
 export 'mock_active_call.dart';
 export 'mock_app_preferences.dart';
