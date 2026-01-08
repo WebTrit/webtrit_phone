@@ -8,6 +8,7 @@ class MockActiveCall extends Fake implements ActiveCall {
     this.wasHungUp = false,
     this.cameraEnabled = false,
     this.remoteVideo = false,
+    this.held = false,
   });
 
   @override
@@ -21,4 +22,7 @@ class MockActiveCall extends Fake implements ActiveCall {
 
   @override
   final bool remoteVideo;
+
+  @override
+  final bool held;
 }
