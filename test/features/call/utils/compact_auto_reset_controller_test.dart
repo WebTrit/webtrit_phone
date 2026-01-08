@@ -157,10 +157,13 @@ void main() {
       expect(calls.shouldAutoCompact, isFalse);
     });
 
-    test('Returns TRUE only for CallProcessingStatus.connected', () {
+    test('Returns TRUE only for CallProcessingStatus.connected on current call', () {
       // Loop through ALL statuses defined in the enum
       for (final status in CallProcessingStatus.values) {
-        final calls = [MockActiveCall(processingStatus: status, cameraEnabled: true, remoteVideo: true)];
+        // Explicit type definition fixes "subtype of orElse" error
+        final List<ActiveCall> calls = [
+          MockActiveCall(processingStatus: status, cameraEnabled: true, remoteVideo: true),
+        ];
 
         if (status == CallProcessingStatus.connected) {
           expect(calls.shouldAutoCompact, isTrue, reason: 'Status $status should allow compact mode');
@@ -170,8 +173,8 @@ void main() {
       }
     });
 
-    test('Returns false if any call was hung up', () {
-      final calls = [
+    test('Returns false if current call was hung up', () {
+      final List<ActiveCall> calls = [
         MockActiveCall(
           processingStatus: CallProcessingStatus.connected,
           wasHungUp: true,
@@ -182,8 +185,8 @@ void main() {
       expect(calls.shouldAutoCompact, isFalse);
     });
 
-    test('Returns true ONLY if cameraEnabled AND remoteVideo (Both active)', () {
-      final calls = [
+    test('Returns true ONLY if cameraEnabled AND remoteVideo (Both active on current call)', () {
+      final List<ActiveCall> calls = [
         MockActiveCall(processingStatus: CallProcessingStatus.connected, cameraEnabled: true, remoteVideo: true),
       ];
       expect(calls.shouldAutoCompact, isTrue);
@@ -192,7 +195,7 @@ void main() {
     test('Returns false if local camera is OFF (The "Black Void" prevention)', () {
       // UX Logic: If I turn off my camera, I must see the UI,
       // even if the remote side sends video (or black frames).
-      final calls = [
+      final List<ActiveCall> calls = [
         MockActiveCall(
           processingStatus: CallProcessingStatus.connected,
           cameraEnabled: false, // Local OFF
@@ -207,34 +210,52 @@ void main() {
     });
 
     test('Returns false if remote video is OFF', () {
-      final calls = [
+      final List<ActiveCall> calls = [
         MockActiveCall(processingStatus: CallProcessingStatus.connected, cameraEnabled: true, remoteVideo: false),
       ];
       expect(calls.shouldAutoCompact, isFalse);
     });
 
-    test('Multi-call: Returns true if all connected and at least one has full video', () {
-      final calls = [
-        // Call 1: Audio only (Connected)
-        MockActiveCall(processingStatus: CallProcessingStatus.connected, cameraEnabled: false, remoteVideo: false),
-        // Call 2: Video (Connected & Full Video)
-        MockActiveCall(processingStatus: CallProcessingStatus.connected, cameraEnabled: true, remoteVideo: true),
-      ];
-      expect(calls.shouldAutoCompact, isTrue);
-    });
-
-    test('Multi-call: Returns false if ANY call is not connected', () {
-      final calls = [
-        // Call 1: Still ringing
+    test('Multi-call: Returns false if current call is Audio, even if background call is Video', () {
+      final List<ActiveCall> calls = [
+        // Background Call: Video (Held)
         MockActiveCall(
-          processingStatus: CallProcessingStatus.outgoingRinging,
+          processingStatus: CallProcessingStatus.connected,
+          cameraEnabled: true,
+          remoteVideo: true,
+          held: true,
+        ),
+        // Current Call: Audio (Active, Not Held)
+        MockActiveCall(
+          processingStatus: CallProcessingStatus.connected,
           cameraEnabled: false,
           remoteVideo: false,
+          held: false,
         ),
-        // Call 2: Connected Video
-        MockActiveCall(processingStatus: CallProcessingStatus.connected, cameraEnabled: true, remoteVideo: true),
       ];
+      // Logic: 'current' resolves to the Audio call. Audio call => No Compact.
       expect(calls.shouldAutoCompact, isFalse);
+    });
+
+    test('Multi-call: Returns true if current call is Video, regardless of background call', () {
+      final List<ActiveCall> calls = [
+        // Background Call: Audio (Held)
+        MockActiveCall(
+          processingStatus: CallProcessingStatus.connected,
+          cameraEnabled: false,
+          remoteVideo: false,
+          held: true,
+        ),
+        // Current Call: Video (Active, Not Held)
+        MockActiveCall(
+          processingStatus: CallProcessingStatus.connected,
+          cameraEnabled: true,
+          remoteVideo: true,
+          held: false,
+        ),
+      ];
+      // Logic: 'current' resolves to the Video call. Video call => Compact.
+      expect(calls.shouldAutoCompact, isTrue);
     });
   });
 }

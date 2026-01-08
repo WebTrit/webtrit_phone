@@ -5,15 +5,15 @@ extension ActiveCallListAutoCompact on List<ActiveCall> {
   /// Determines whether UI controls should auto-compact (auto-hide / Compact Mode)
   /// based on the current call state.
   bool get shouldAutoCompact {
-    var hasAnyVideo = false;
+    if (isEmpty) return false;
 
-    for (final c in this) {
-      if (c.wasHungUp) return false;
-      if (c.processingStatus != CallProcessingStatus.connected) return false;
+    // Consider only the foreground active call (the call currently shown to the user).
+    // Keep auto-compact disabled for audio-only foreground calls, even if a call on another line has video.
+    final activeCall = current;
 
-      hasAnyVideo = hasAnyVideo || (c.cameraEnabled && c.remoteVideo);
-    }
+    if (activeCall.wasHungUp) return false;
+    if (activeCall.processingStatus != CallProcessingStatus.connected) return false;
 
-    return hasAnyVideo;
+    return activeCall.cameraEnabled && activeCall.remoteVideo;
   }
 }
