@@ -18,7 +18,7 @@ class PermissionTips extends StatelessWidget {
   final String title;
   final List<String> instruction;
   final VoidCallback onGoToAppSettings;
-  final VoidCallback onPop;
+  final VoidCallback? onPop;
 
   @override
   Widget build(BuildContext context) {

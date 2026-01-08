@@ -36,6 +36,7 @@ class EmbeddedTabPage extends StatelessWidget {
 
     final customPrivateGatewayRepository = context.read<PrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
+    final appMetadataProvider = context.read<AppMetadataProvider>();
     final cubit = _createCubit(data.data!.payload, customPrivateGatewayRepository, secureStorage);
 
     final tabsRouter = AutoTabsRouter.of(context);
@@ -58,14 +59,17 @@ class EmbeddedTabPage extends StatelessWidget {
                 return Center(child: Text('Failed to load content: ${snapshot.error}'));
               } else if (snapshot.hasData) {
                 final content = snapshot.data!;
+
                 return resource is NetworkResourceLoader
                     ? EmbeddedScreen(
                         initialUri: data.data!.uri,
+                        userAgent: appMetadataProvider.userAgent,
                         mediaQueryMetricsData: context.mediaQueryMetrics,
-                        deviceInfoData: context.read<AppLabelsProvider>().build(),
+                        deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                         appBar: _buildAppBar(context, data.titleL10n),
                         pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
-                        connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
+                        connectivityRecoveryStrategyBuilder: () =>
+                            _createConnectivityRecoveryStrategy(context, data.data!),
                         shouldForwardPop: tabActive,
                         // TODO: Use embedded configuration option to enable/disable log capture.
                         enableLogCapture: true,
@@ -76,11 +80,13 @@ class EmbeddedTabPage extends StatelessWidget {
                           mimeType: 'text/html',
                           encoding: Encoding.getByName('utf-8'),
                         ),
+                        userAgent: appMetadataProvider.userAgent,
                         mediaQueryMetricsData: context.mediaQueryMetrics,
-                        deviceInfoData: context.read<AppLabelsProvider>().build(),
+                        deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                         appBar: _buildAppBar(context, data.titleL10n),
                         pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
-                        connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data.data!),
+                        connectivityRecoveryStrategyBuilder: () =>
+                            _createConnectivityRecoveryStrategy(context, data.data!),
                         shouldForwardPop: tabActive,
                         // TODO: Use embedded configuration option to enable/disable log capture.
                         enableLogCapture: true,
@@ -117,13 +123,17 @@ class EmbeddedTabPage extends StatelessWidget {
     return DefaultPayloadInjectionStrategy(initialPayload: payload);
   }
 
-  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {
+  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(BuildContext context, EmbeddedData data) {
+    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+
     return ConnectivityRecoveryStrategy.create(
       initialUri: data.uri,
       type: data.reconnectStrategy,
       connectivityStream: Connectivity().onConnectivityChanged,
-      connectivityCheckerBuilder: () =>
-          const DefaultConnectivityChecker(connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL),
+      connectivityCheckerBuilder: () => DefaultConnectivityChecker(
+        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+        createHttpRequestExecutor: executor,
+      ),
     );
   }
 }

@@ -440,4 +440,169 @@ void main() {
       expect(finalContacts, isEmpty);
     });
   });
+
+  group('ContactKind Tests', () {
+    test('Contact defaults to ContactKind.visible when kind is not provided', () async {
+      final initialVisibleContacts = await database.contactsDao.getAllContacts(null);
+      final initialVisibleCount = initialVisibleContacts.length;
+
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Abi'),
+          lastName: Value('Gail'),
+        ),
+      );
+
+      final currentContacts = await database.contactsDao.getAllContacts(null);
+
+      expect(currentContacts.length, initialVisibleCount + 1);
+
+      final newContact = currentContacts.firstWhere((c) => c.contact.firstName == 'Abi');
+      expect(newContact.contact.kind, ContactKind.visible);
+    });
+
+    test('getAllContacts filters based on kind', () async {
+      final initialVisibleContacts = await database.contactsDao.getAllContacts(null);
+      final initialVisibleCount = initialVisibleContacts.length;
+
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Abi'),
+          lastName: Value('Gail'),
+          kind: Value(ContactKind.visible),
+        ),
+      );
+
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Davis'),
+          lastName: Value('Charles'),
+          kind: Value(ContactKind.service),
+        ),
+      );
+
+      final visibleContacts = await database.contactsDao.getAllContacts(null);
+      expect(visibleContacts.length, initialVisibleCount + 1);
+      expect(visibleContacts.first.contact.firstName, 'Abi');
+      expect(visibleContacts.first.contact.kind, ContactKind.visible);
+
+      final serviceContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.service);
+      expect(serviceContacts.length, 1);
+      expect(serviceContacts.first.contact.firstName, 'Davis');
+      expect(serviceContacts.first.contact.kind, ContactKind.service);
+    });
+
+    test('getServiceContacts returns only service contacts', () async {
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Abi'),
+          kind: Value(ContactKind.visible),
+        ),
+      );
+
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          firstName: Value('Davis'),
+          kind: Value(ContactKind.service),
+        ),
+      );
+
+      final result = await database.contactsDao.getServiceContacts();
+
+      expect(result.length, 1);
+
+      expect(result.first.contact.firstName, 'Davis');
+      expect(result.first.contact.kind, ContactKind.service);
+    });
+
+    test('getServiceContacts returns only visible contacts', () async {
+      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+      final initialVisibleCount = initialVisibleContacts.length;
+
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Abi'),
+          lastName: Value('Gail'),
+          kind: Value(ContactKind.visible),
+        ),
+      );
+
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Davis'),
+          lastName: Value('Charles'),
+          kind: Value(ContactKind.service),
+        ),
+      );
+
+      final result = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+
+      expect(result.length, initialVisibleCount + 1);
+
+      expect(result.any((c) => c.contact.firstName == 'Abi'), isTrue);
+      expect(result.any((c) => c.contact.firstName == 'Davis'), isFalse);
+    });
+
+    test('watchAllContacts respects kind parameter', () async {
+      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+      final initialVisibleCount = initialVisibleContacts.length;
+
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Wilson'),
+          kind: Value(ContactKind.visible),
+        ),
+      );
+
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Moore'),
+          kind: Value(ContactKind.service),
+        ),
+      );
+
+      final visibleStream = database.contactsDao.watchAllContacts();
+      final visibleList = await visibleStream.first;
+
+      expect(visibleList.length, initialVisibleCount + 1);
+      expect(visibleList.first.contact.firstName, 'Wilson');
+
+      final serviceStream = database.contactsDao.watchAllContacts(null, null, ContactKind.service);
+      final serviceList = await serviceStream.first;
+
+      expect(serviceList.length, 1);
+      expect(serviceList.first.contact.firstName, 'Moore');
+    });
+
+    test('Service contacts persist phones and emails correctly', () async {
+      final dao = database.contactsDao;
+
+      final contact = await dao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          firstName: Value('Harris'),
+          kind: Value(ContactKind.service),
+        ),
+      );
+
+      await database.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+        ContactPhoneDataCompanion(contactId: Value(contact.id), number: Value('911'), label: Value('Emergency')),
+      );
+
+      final fetched = await dao.getServiceContacts();
+
+      expect(fetched.length, 1);
+      expect(fetched.first.phones.length, 1);
+      expect(fetched.first.phones.first.number, '911');
+    });
+  });
 }

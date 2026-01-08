@@ -20,8 +20,8 @@ void main() {
   const contactBNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_NUMBER;
 
   patrolTest('Should show contacts list, search it and add to favorites', ($) async {
-    await bootstrap();
-    await pumpRootAndWaitUntilVisible($);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
     // Login if not.
     if ($(LoginModeSelectScreen).visible) {

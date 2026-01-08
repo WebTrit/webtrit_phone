@@ -43,7 +43,7 @@ class DefaultNumberForm extends StatelessWidget {
               isCollapsed: true,
             ),
             dropdownMenuEntries: [
-              DropdownMenuEntry<String?>(value: null, label: state.mainNumber),
+              if (state.mainNumber != null) DropdownMenuEntry<String?>(value: null, label: state.mainNumber!),
               for (final n in state.additionalNumbers) DropdownMenuEntry<String>(value: n, label: n),
             ],
             onSelected: (value) {

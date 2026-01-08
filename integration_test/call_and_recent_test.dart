@@ -21,8 +21,8 @@ void main() {
   const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
 
   patrolTest('Should make simple call and verify recents', ($) async {
-    await bootstrap();
-    await pumpRootAndWaitUntilVisible($);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
     // Login if not.
     if ($(LoginModeSelectScreen).visible) {

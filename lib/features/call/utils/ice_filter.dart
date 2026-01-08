@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/ice_settings.dart';
+import 'package:webtrit_phone/repositories/ice_settings/ice_settings_repository.dart';
 
 final _logger = Logger('IceFilter');
 
@@ -22,13 +22,13 @@ abstract class IceFilter {
 ///
 /// can be used to filter ICE candidates based on transport and network type.
 class FilterWithAppSettings implements IceFilter {
-  FilterWithAppSettings(this._prefs);
+  FilterWithAppSettings(this._iceSettingsRepository);
 
-  final AppPreferences _prefs;
+  final IceSettingsRepository _iceSettingsRepository;
 
   @override
   bool filter(RTCIceCandidate candidate) {
-    final settings = _prefs.getIceSettings();
+    final settings = _iceSettingsRepository.getIceSettings();
     final candidateString = candidate.candidate;
 
     final transportFilter = settings.iceTransportFilter;

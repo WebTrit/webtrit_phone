@@ -10,7 +10,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/features/login/login.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import '../widgets/widgets.dart';
@@ -19,6 +18,7 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
   const LoginSignupEmbeddedRequestScreen({
     super.key,
     required this.initialUrl,
+    required this.userAgent,
     required this.mediaQueryMetricsData,
     required this.deviceInfoData,
     required this.connectivityRecoveryStrategyBuilder,
@@ -26,6 +26,7 @@ class LoginSignupEmbeddedRequestScreen extends StatefulWidget {
   });
 
   final Uri initialUrl;
+  final String userAgent;
   final MediaQueryMetrics? mediaQueryMetricsData;
   final Map<String, String>? deviceInfoData;
 
@@ -91,7 +92,7 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
           webViewController: _webViewController,
           connectivityRecoveryStrategy: _connectivityRecoveryStrategy,
           showToolbar: false,
-          userAgent: UserAgent.of(context),
+          userAgent: widget.userAgent,
           pageInjectionStrategies: _pageInjectionStrategies,
           jSChannelStrategies: _jSChannelStrategies,
           onUrlChange: (_) => _updateCanGoBack(),

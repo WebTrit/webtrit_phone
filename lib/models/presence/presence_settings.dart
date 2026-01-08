@@ -1,9 +1,4 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
-
-import 'package:webtrit_phone/data/device_info.dart';
-import 'package:webtrit_phone/data/package_info.dart';
 
 import 'presence_activity.dart';
 
@@ -28,12 +23,12 @@ class PresenceSettings extends Equatable {
   final PresenceActivity? activity;
   final bool dndMode;
 
-  factory PresenceSettings.blank() {
+  factory PresenceSettings.blank({required String device}) {
     return PresenceSettings(
       available: true,
       note: '',
       statusIcon: null,
-      device: _device,
+      device: device,
       timeOffsetMin: _timeOffsetMin,
       timestamp: _timestamp,
       activity: null,
@@ -46,7 +41,7 @@ class PresenceSettings extends Equatable {
       available: available,
       note: note,
       statusIcon: statusIcon,
-      device: _device,
+      device: device,
       timeOffsetMin: _timeOffsetMin,
       timestamp: _timestamp,
       activity: activity,
@@ -59,7 +54,7 @@ class PresenceSettings extends Equatable {
       available: available,
       note: note,
       statusIcon: statusIcon,
-      device: _device,
+      device: device,
       timeOffsetMin: _timeOffsetMin,
       timestamp: _timestamp,
       activity: activity,
@@ -72,7 +67,7 @@ class PresenceSettings extends Equatable {
       available: available,
       note: note,
       statusIcon: statusIcon,
-      device: _device,
+      device: device,
       timeOffsetMin: _timeOffsetMin,
       timestamp: _timestamp,
       activity: activity,
@@ -85,7 +80,7 @@ class PresenceSettings extends Equatable {
       available: available,
       note: note,
       statusIcon: statusIcon,
-      device: _device,
+      device: device,
       timeOffsetMin: _timeOffsetMin,
       timestamp: _timestamp,
       activity: activity,
@@ -98,7 +93,7 @@ class PresenceSettings extends Equatable {
       available: available,
       note: note,
       statusIcon: statusIcon,
-      device: _device,
+      device: device,
       timeOffsetMin: _timeOffsetMin,
       timestamp: _timestamp,
       activity: activity,
@@ -116,12 +111,6 @@ class PresenceSettings extends Equatable {
   }
 
   static int get _timeOffsetMin => DateTime.now().timeZoneOffset.inMinutes;
+
   static DateTime get _timestamp => DateTime.now();
-  static String get _device {
-    final platform = Platform.operatingSystem;
-    final deviceInfo = DeviceInfoFactory.instance.model;
-    final appName = PackageInfoFactory.instance.appName;
-    final version = PackageInfoFactory.instance.version;
-    return '$appName v$version on $deviceInfo ($platform)';
-  }
 }

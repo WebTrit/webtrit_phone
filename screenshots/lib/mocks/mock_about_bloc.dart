@@ -10,11 +10,8 @@ class MockAboutBloc extends MockBloc<AboutEvent, AboutState> implements AboutBlo
   static AboutState _defaultState({bool progress = false, Version? coreVersion}) => AboutState(
         progress: false,
         embeddedLinks: const [],
-        appName: 'WebTrit Phone',
         packageName: 'com.webtrit.phone',
-        storeBuildVersion: '1.2.3',
-        storeBuildNumber: '456',
-        appVersion: '1.2.3+456',
+        userAgent: 'WebTrit/0.0.0 (Pixel 9; Android: 16)',
         appIdentifier: 'com.webtrit.phone',
         coreUrl: Uri.parse('https://core.example.com'),
         fcmPushToken: 'fcm-token-demo',

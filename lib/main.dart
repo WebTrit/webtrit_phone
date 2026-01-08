@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/bootstrap.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -25,7 +26,7 @@ void main() {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      await bootstrap();
+      final instanceRegistry = await bootstrap();
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -42,7 +43,12 @@ void main() {
       Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
 
       Bloc.observer = AppBlocObserver();
-      runApp(const RootApp());
+
+      final appDocDir = await getApplicationDocumentsPath();
+      final String baseLogDirectoryPath = '$appDocDir/logs';
+      final String baseLogFilePath = '$baseLogDirectoryPath/app_logs.log';
+
+      runApp(RootApp(instanceRegistry: instanceRegistry, baseLogFilePath: baseLogFilePath));
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
@@ -54,129 +60,162 @@ void main() {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key});
+  const RootApp({super.key, required this.instanceRegistry, required this.baseLogFilePath});
+
+  final InstanceRegistry instanceRegistry;
+  final String baseLogFilePath;
 
   @override
   Widget build(BuildContext context) {
-    final sessionCleanupWorker = SessionCleanupWorker();
-
     return MultiProvider(
       providers: [
-        Provider<AppInfo>(
-          create: (context) {
-            return AppInfo();
-          },
-        ),
-        Provider<AppThemes>(
-          create: (context) {
-            return AppThemes();
-          },
-        ),
-        Provider<PlatformInfo>(
-          create: (context) {
-            return PlatformInfo();
-          },
-        ),
-        Provider<PackageInfo>(
-          create: (context) {
-            return PackageInfoFactory.instance;
-          },
-        ),
-        Provider<DeviceInfo>(
-          create: (context) {
-            return DeviceInfoFactory.instance;
-          },
-        ),
-        Provider<AppPreferences>(
-          create: (context) {
-            return AppPreferencesFactory.instance;
-          },
-        ),
-        Provider<FeatureAccess>(
-          create: (context) {
-            return FeatureAccess();
-          },
-        ),
-        Provider<SecureStorage>(
-          create: (context) {
-            return SecureStorage();
-          },
-        ),
-        Provider<AppDatabase>(
-          create: (context) {
-            final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
-              createAppDatabaseConnection(
-                AppPath().applicationDocumentsPath,
-                'db.sqlite',
-                logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-              ),
-            );
-            WidgetsBinding.instance.addObserver(appDatabase);
-            return appDatabase;
-          },
-          dispose: (context, value) {
-            final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
-            WidgetsBinding.instance.removeObserver(appDatabase);
-            appDatabase.close();
-          },
-        ),
-        Provider<AppPermissions>(
-          create: (context) {
-            return AppPermissions();
-          },
-        ),
-        Provider<AppLogger>(
-          create: (context) {
-            return AppLogger();
-          },
-        ),
-        Provider<AppTime>(
-          create: (context) {
-            return AppTime();
-          },
-        ),
-        Provider<AppPath>(
-          create: (context) {
-            return AppPath();
-          },
-        ),
+        Provider<AppInfo>(create: (_) => instanceRegistry.get()),
+        Provider<AppThemes>(create: (_) => instanceRegistry.get()),
+        Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
+        Provider<DeviceInfo>(create: (_) => instanceRegistry.get()),
+        Provider<AppPreferences>(create: (_) => instanceRegistry.get()),
+        Provider<FeatureAccess>(create: (_) => instanceRegistry.get()),
+        Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
+        Provider<AppPermissions>(create: (_) => instanceRegistry.get()),
+        Provider<AppLogger>(create: (_) => instanceRegistry.get()),
+        Provider<AppTime>(create: (_) => instanceRegistry.get()),
+        Provider<AppPath>(create: (_) => instanceRegistry.get()),
+        Provider<AppCertificates>(create: (_) => instanceRegistry.get()),
+        Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
+        Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
+        Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
+
         // Services
-        Provider<ConnectivityService>(
-          create: (context) {
-            return ConnectivityServiceImpl(
-              connectivityChecker: const DefaultConnectivityChecker(
-                connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
-              ),
-            );
-          },
-          dispose: (context, value) => value.dispose(),
-        ),
-        Provider<AppLabelsProvider>(
-          create: (context) {
-            return DefaultAppLabelsProvider();
-          },
-        ),
+        Provider<AppDatabase>(create: _createAppDatabase, dispose: _disposeAppDatabase),
+        Provider<ConnectivityService>(create: _createConnectivityService, dispose: _disposeConnectivityService),
       ],
       child: Builder(
         builder: (context) {
+          final prefs = context.read<AppPreferences>();
+          final database = context.read<AppDatabase>();
+          final webtritApiClientFactory = context.read<WebtritApiClientFactory>();
+          final appMetadataProvider = context.read<AppMetadataProvider>();
+          final presenceDeviceName = appMetadataProvider.userAgent;
+
+          final systemInfoRepository = instanceRegistry.get<SystemInfoRepository>();
+
+          final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
+          final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs, presenceDeviceName);
+          final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(prefs);
+          final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(prefs);
+          final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(prefs);
+          final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(prefs);
+          final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(prefs);
+          final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(prefs);
+          final encodingPresetRepository = EncodingPresetRepositoryPrefsImpl(prefs);
+          final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(prefs);
+          final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(prefs);
+          final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(prefs);
+          final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(prefs);
+          final encodingSettingsRepository = EncodingSettingsRepositoryPrefsImpl(prefs);
+          final localeRepository = LocaleRepositoryPrefsImpl(prefs);
+          final themeModeRepository = ThemeModeRepositoryPrefsImpl(prefs);
+          final autocompleteHistoryRepository = AutocompleteHistoryRepositoryPrefsImpl(prefs);
+
+          final sessionRepository = SessionRepositoryImpl(
+            secureStorage: context.read<SecureStorage>(),
+            sessionCleanupWorker: instanceRegistry.get<SessionCleanupWorker>(),
+            apiClientFactory: webtritApiClientFactory,
+
+            /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here
+            onLogout: () async {
+              await database.deleteEverything(); // TODO: clear using repos instead of direct access
+              await systemInfoRepository.clear();
+              await registerStatusRepository.clear();
+              await presenceSettingsRepository.clear();
+              await activeMainFlavorRepository.clear();
+              await callerIdSettingsRepository.clear();
+              await activeRecentsVisibilityFilterRepository.clear();
+              await activeContactSourceTypeRepository.clear();
+              await audioProcessingSettingsRepository.clear();
+              await encodingPresetRepository.clear();
+              await iceSettingsRepository.clear();
+              await incomingCallTypeRepository.clear();
+              await peerConnectionSettingsRepository.clear();
+              await videoCapturingSettingsRepository.clear();
+              await encodingSettingsRepository.clear();
+              await localeRepository.clear();
+              await themeModeRepository.clear();
+            },
+          );
+
           return MultiRepositoryProvider(
             providers: [
-              RepositoryProvider.value(value: LogRecordsRepository()..attachToLogger(Logger.root)),
-              RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
-              RepositoryProvider<SessionRepository>.value(
-                value: SessionRepositoryImpl(
-                  secureStorage: context.read<SecureStorage>(),
-                  appPreferences: context.read<AppPreferences>(),
-                  appDatabase: context.read<AppDatabase>(),
-                  sessionCleanupWorker: sessionCleanupWorker,
-                ),
+              RepositoryProvider<LogRecordsRepository>(
+                create: (_) => instanceRegistry.get(),
+                dispose: disposeIfDisposable,
               ),
+              RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
+              RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
+              RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
+              RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
+              RepositoryProvider<SessionRepository>.value(value: sessionRepository),
+              RepositoryProvider<CallerIdSettingsRepository>.value(value: callerIdSettingsRepository),
+              RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
+              RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
+                value: activeRecentsVisibilityFilterRepository,
+              ),
+              RepositoryProvider<ActiveContactSourceTypeRepository>.value(value: activeContactSourceTypeRepository),
+              RepositoryProvider<AudioProcessingSettingsRepository>.value(value: audioProcessingSettingsRepository),
+              RepositoryProvider<ContactsAgreementStatusRepository>.value(value: instanceRegistry.get()),
+              RepositoryProvider<EncodingPresetRepository>.value(value: encodingPresetRepository),
+              RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
+              RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
+              RepositoryProvider<PeerConnectionSettingsRepository>.value(value: peerConnectionSettingsRepository),
+              RepositoryProvider<VideoCapturingSettingsRepository>.value(value: videoCapturingSettingsRepository),
+              RepositoryProvider<EncodingSettingsRepository>.value(value: encodingSettingsRepository),
+              RepositoryProvider<LocaleRepository>.value(value: localeRepository),
+              RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
+              RepositoryProvider<AutocompleteHistoryRepository>.value(value: autocompleteHistoryRepository),
+              RepositoryProvider<SystemInfoRepository>(
+                create: (_) => instanceRegistry.get(),
+                dispose: disposeIfDisposable,
+              ),
+              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get(), dispose: disposeIfDisposable),
             ],
             child: const App(),
           );
         },
       ),
     );
+  }
+
+  AppDatabase _createAppDatabase(BuildContext _) {
+    final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
+      createAppDatabaseConnection(
+        instanceRegistry.get<AppPath>().applicationDocumentsPath,
+        'db.sqlite',
+        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+      ),
+    );
+    WidgetsBinding.instance.addObserver(appDatabase);
+    return appDatabase;
+  }
+
+  void _disposeAppDatabase(BuildContext _, AppDatabase value) {
+    final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
+    WidgetsBinding.instance.removeObserver(appDatabase);
+    appDatabase.close();
+  }
+
+  ConnectivityService _createConnectivityService(BuildContext context) {
+    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+
+    return ConnectivityServiceImpl(
+      connectivityChecker: DefaultConnectivityChecker(
+        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+        createHttpRequestExecutor: executor,
+      ),
+    );
+  }
+
+  void _disposeConnectivityService(BuildContext _, ConnectivityService value) {
+    value.dispose();
   }
 }
 

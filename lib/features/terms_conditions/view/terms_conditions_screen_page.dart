@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 @RoutePage()
@@ -16,7 +18,12 @@ class TermsConditionsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widget = TermsConditionsScreen(initialUri: Uri.parse(initialUriQueryParam ?? kBlankUri));
+    final appMetadataProvider = context.read<AppMetadataProvider>();
+
+    final widget = TermsConditionsScreen(
+      initialUri: Uri.parse(initialUriQueryParam ?? kBlankUri),
+      userAgent: appMetadataProvider.userAgent,
+    );
     return widget;
   }
 }

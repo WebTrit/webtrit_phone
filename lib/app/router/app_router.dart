@@ -40,7 +40,7 @@ class AppRouter extends RootStackRouter {
 
   Session get session => _appBloc.state.session;
 
-  bool get appPermissionsDenied => _appPermissions.isDenied;
+  Future<bool> get appPermissionsDenied => _appPermissions.isDenied;
 
   /// Indicates whether the user agreement is unaccepted.
   ///
@@ -255,10 +255,10 @@ class AppRouter extends RootStackRouter {
     }
   }
 
-  void onPermissionsScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+  Future<void> onPermissionsScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) async {
     _logger.fine(_onNavigationLoggerMessage('onPermissionsScreenPageRouteGuardNavigation', resolver));
 
-    if (appPermissionsDenied) {
+    if (await appPermissionsDenied) {
       resolver.next(true);
     } else {
       resolver.next(false);
@@ -288,7 +288,7 @@ class AppRouter extends RootStackRouter {
     }
   }
 
-  void onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+  Future<void> onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) async {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
     if (session.isLoggedIn) {
@@ -301,7 +301,7 @@ class AppRouter extends RootStackRouter {
       } else if (appContactsAgreementUnaccepted && localContactsSourceTypeEnabled) {
         resolver.next(false);
         router.replaceAll([const ContactsAgreementScreenPageRoute()]);
-      } else if (appPermissionsDenied) {
+      } else if (await appPermissionsDenied) {
         resolver.next(false);
         router.replaceAll([const PermissionsScreenPageRoute()]);
       } else {

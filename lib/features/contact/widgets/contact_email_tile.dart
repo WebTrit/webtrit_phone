@@ -22,14 +22,13 @@ class ContactEmailTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [IconButton(splashRadius: 24, icon: const Icon(Icons.email), onPressed: onEmailPressed)],
-      ),
       title: CopyToClipboard(data: address, child: Text(address)),
       subtitle: label.isEmpty ? null : Text(label),
       onTap: onTap,
       onLongPress: onLongPress,
+      trailing: onEmailPressed != null
+          ? IconButton(splashRadius: 24, icon: const Icon(Icons.email), onPressed: onEmailPressed)
+          : null,
     );
   }
 }

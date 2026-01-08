@@ -42,6 +42,11 @@ const int _kUndefinedLine = -1;
 
 final _logger = Logger('CallBloc');
 
+/// A callback function type for handling diagnostic reports for call request errors.
+/// It takes the [callId] of the failed call and the specific [CallkeepCallRequestError]
+/// as parameters, allowing for detailed error logging or reporting.
+typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallRequestError error);
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final String coreUrl;
   final String tenantId;
@@ -53,7 +58,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final UserRepository userRepository;
   final SessionRepository sessionRepository;
   final LinesStateRepository linesStateRepository;
-  final PresenceRepository presenceRepository;
+  final PresenceInfoRepository presenceInfoRepository;
+  final PresenceSettingsRepository presenceSettingsRepository;
   final Function(Notification) submitNotification;
 
   final Callkeep callkeep;
@@ -69,6 +75,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallErrorReporter callErrorReporter;
   final bool sipPresenceEnabled;
   final VoidCallback? onCallEnded;
+  final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
@@ -90,7 +97,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callLogsRepository,
     required this.callPullRepository,
     required this.linesStateRepository,
-    required this.presenceRepository,
+    required this.presenceInfoRepository,
+    required this.presenceSettingsRepository,
     required this.sessionRepository,
     required this.userRepository,
     required this.submitNotification,
@@ -100,6 +108,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.contactNameResolver,
     required this.callErrorReporter,
     required this.sipPresenceEnabled,
+    required this.onDiagnosticReportRequested,
     this.sdpMunger,
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
@@ -235,7 +244,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final previousRegistrationStatus = previousRegistration?.status;
 
       if (newRegistrationStatus?.isRegistered == true && previousRegistrationStatus?.isRegistered != true) {
-        presenceRepository.resetLastSettingsSync();
+        presenceSettingsRepository.resetLastSettingsSync();
         submitNotification(AppOnlineNotification());
       }
 
@@ -516,11 +525,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final input = devices.where((d) => d.kind == 'audioinput').toList();
       _logger.info('Devices change - out:${output.map((e) => e.str).toList()}, in:${input.map((e) => e.str).toList()}');
 
-      final current = CallAudioDevice.fromMediaOutput(output.first);
       final available = [
         CallAudioDevice(type: CallAudioDeviceType.speaker),
         ...input.map(CallAudioDevice.fromMediaInput),
       ];
+
+      CallAudioDevice current;
+
+      if (output.isNotEmpty) {
+        current = CallAudioDevice.fromMediaOutput(output.first);
+      } else {
+        // Fallback behavior for iOS when out:[]
+        // We prioritize the Earpiece (Receiver) if available (derived from MicrophoneBuiltIn),
+        // otherwise fallback to the first available device (which is Speaker based on the list above).
+        current = available.firstWhere(
+          (device) => device.type == CallAudioDeviceType.earpiece,
+          orElse: () => available.first,
+        );
+
+        _logger.warning(
+          'No "audiooutput" devices reported. Fallback selected: ${current.name} (type: ${current.type})',
+        );
+      }
+
       emit(state.copyWith(availableAudioDevices: available, audioDevice: current));
     }
   }
@@ -1257,9 +1284,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final Uri telLaunchUri = Uri(scheme: 'tel', path: event.handle.value);
         launchUrl(telLaunchUri);
       } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+        _logger.warning('__onCallControlEventStarted selfManagedPhoneAccountNotRegistered');
         submitNotification(const CallErrorRegisteringSelfManagedPhoneAccountNotification());
       } else {
         _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
+        onDiagnosticReportRequested(callId, callkeepError);
       }
       emit(state.copyWithPopActiveCall(callId));
 
@@ -2591,6 +2620,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   @override
+  // Handles incoming call notifications from the native side.
+  // On iOS, this is triggered via PushKit when a push is received.
+  //
+  // On Android, this method is currently not used. Call state synchronization
+  // from the background is handled by `CallkeepConnections`. A future refactoring
+  // could unify this logic so that both platforms use this delegate method.
+  //
+  // On Android, this is now fully feasible because after the recent callback
+  // improvement we can reliably detect when the bloc is ready.
+  //
+  // PDelegateFlutterApi.setUp(null);
+  // _api.onDelegateSet();
+  //
+  // TODO: Unify incoming-call handling for both iOS and Android so that
+  // this method becomes the shared entry point. This may require removing
+  // `CallkeepConnections` and adjusting the method signature.
   void didPushIncomingCall(
     CallkeepHandle handle,
     String? displayName,
@@ -2841,13 +2886,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _assingNumberPresence(String number, List<SignalingPresenceInfo> data) async {
     final presenceInfo = data.map(SignalingPresenceInfoMapper.fromSignaling).toList();
-    presenceRepository.setNumberPresence(number, presenceInfo);
+    presenceInfoRepository.setNumberPresence(number, presenceInfo);
   }
 
   Future<void> syncPresenceSettings() async {
     final now = DateTime.now();
-    final lastSync = presenceRepository.lastSettingsSync;
-    final presenceSettings = presenceRepository.presenceSettings;
+    final lastSync = presenceSettingsRepository.lastSettingsSync;
+    final presenceSettings = presenceSettingsRepository.presenceSettings;
 
     final canUpdate = state.callServiceState.status == CallStatus.ready;
     bool shouldUpdate = false;
@@ -2868,7 +2913,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             settings: SignalingPresenceSettingsMapper.toSignaling(presenceSettings),
           ),
         );
-        presenceRepository.updateLastSettingsSync(now);
+        presenceSettingsRepository.updateLastSettingsSync(now);
         _logger.fine('Presence settings updated at $now');
       } on Exception catch (e, s) {
         _logger.warning('Failed to update presence settings', e, s);

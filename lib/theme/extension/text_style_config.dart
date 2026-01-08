@@ -5,7 +5,6 @@ import 'package:webtrit_phone/theme/extension/extension.dart';
 
 extension TextStyleConfigExtension on TextStyleConfig {
   TextStyle toTextStyle({
-    required Color fallbackColor,
     String? defaultFontFamily,
     double? defaultFontSize,
     FontWeight? defaultFontWeight,
@@ -21,7 +20,7 @@ extension TextStyleConfigExtension on TextStyleConfig {
       fontSize: fontSize ?? defaultFontSize,
       fontWeight: fontWeight?.toFontWeight() ?? defaultFontWeight ?? FontWeight.normal,
       fontStyle: fontStyle?.value == 'italic' ? FontStyle.italic : defaultFontStyle,
-      color: color?.toColor() ?? fallbackColor,
+      color: color?.toColor(),
       letterSpacing: letterSpacing ?? defaultLetterSpacing,
       wordSpacing: wordSpacing ?? defaultWordSpacing,
       height: height ?? defaultHeight,

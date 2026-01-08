@@ -8,6 +8,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../models/models.dart';
 
@@ -18,23 +19,16 @@ part 'autoprovision_state.dart';
 final _logger = Logger('AutoprovisionCubit');
 
 class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMapper {
-  AutoprovisionCubit({
-    required this.appInfo,
-    required this.packageInfo,
-    required this.platformInfo,
-    required this.config,
-  }) : super(AutoprovisionState.initial());
+  AutoprovisionCubit({required this.appInfo, required this.packageInfo, required this.config})
+    : super(AutoprovisionState.initial());
 
   final AutoprovisionConfig config;
   final AppInfo appInfo;
   final PackageInfo packageInfo;
-  final PlatformInfo platformInfo;
 
   String get _identifier => appInfo.identifier;
 
   String get _bundleId => packageInfo.packageName;
-
-  AppType get _appType => platformInfo.appType;
 
   WebtritApiClient _apiClient(String coreUrl, String tenantId) {
     return WebtritApiClient(Uri.parse(coreUrl), tenantId, connectionTimeout: kApiClientConnectionTimeout);
@@ -55,7 +49,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
 
     final credentials = SessionAutoProvisionCredential(
       bundleId: _bundleId,
-      type: _appType,
+      type: PlatformInfo.appType,
       identifier: _identifier,
       configToken: config.configToken,
     );

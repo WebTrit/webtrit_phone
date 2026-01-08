@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webtrit_phone/data/data.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -27,6 +27,7 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO(Serdun): Implement directly in LoginEmbedded
     final resource = ResourceLoader.fromUri(embeddedData.uri.toString());
+    final appMetadataProvider = context.read<AppMetadataProvider>();
 
     final locale = Localizations.localeOf(context);
 
@@ -42,17 +43,19 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
           return resource is NetworkResourceLoader
               ? LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.parse(content),
+                  userAgent: appMetadataProvider.userAgent,
                   mediaQueryMetricsData: context.mediaQueryMetrics,
-                  deviceInfoData: context.read<AppLabelsProvider>().build(),
+                  deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
-                  connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
+                  connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(context, embeddedData),
                 )
               : LoginSignupEmbeddedRequestScreen(
                   initialUrl: Uri.dataFromString(content, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')),
+                  userAgent: appMetadataProvider.userAgent,
                   mediaQueryMetricsData: context.mediaQueryMetrics,
-                  deviceInfoData: context.read<AppLabelsProvider>().build(),
+                  deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                   pageInjectionStrategyBuilder: _createInjectionStrategy(locale),
-                  connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(embeddedData),
+                  connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(context, embeddedData),
                 );
         } else {
           return const Center(child: Text('Unexpected error occurred.'));
@@ -68,13 +71,17 @@ class LoginSignupEmbeddedRequestScreenPage extends StatelessWidget {
     );
   }
 
-  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {
+  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(BuildContext context, EmbeddedData data) {
+    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+
     return ConnectivityRecoveryStrategy.create(
       initialUri: data.uri,
       type: data.reconnectStrategy,
       connectivityStream: Connectivity().onConnectivityChanged,
-      connectivityCheckerBuilder: () =>
-          const DefaultConnectivityChecker(connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL),
+      connectivityCheckerBuilder: () => DefaultConnectivityChecker(
+        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+        createHttpRequestExecutor: executor,
+      ),
     );
   }
 }

@@ -20,8 +20,8 @@ void main() {
   const accountMainNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
 
   patrolTest('Should show correct profile data and perform sip registration', ($) async {
-    await bootstrap();
-    await pumpRootAndWaitUntilVisible($);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
     // Login if not.
     if ($(LoginModeSelectScreen).visible) {

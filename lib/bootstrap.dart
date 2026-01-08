@@ -11,6 +11,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -25,40 +27,147 @@ import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSy
 import 'app/session/session.dart';
 import 'firebase_options.dart';
 
-Future<void> bootstrap() async {
+Future<InstanceRegistry> bootstrap() async {
+  final registry = InstanceRegistry();
+
+  // External SDKs (Side effects only, don't need registration)
   await _initFirebase();
   await _initFirebaseMessaging();
   await _initLocalPushs();
 
+  // Initialize Components
+
+  // App Info & Device Data
+
+  final packageInfo = await PackageInfoFactory.init();
+  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  final deviceInfo = await DeviceInfoFactory.init();
+
+  // Storages
+  final secureStorage = await SecureStorageImpl.init();
+  final appPreferences = await AppPreferencesImpl.init();
+
+  // Network clients
+  final appCertificates = await AppCertificates.init();
+  final apiClientFactory = WebtritApiClientFactory(
+    trustedCertificates: appCertificates.trustedCertificates,
+    getTenantId: () => secureStorage.readTenantId() ?? '',
+    getCoreUrl: () =>
+        Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
+  );
+
+  // Core infrastructure
+  final appThemes = await AppThemes.init();
+
+  // Repositories
+  final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferences);
+  final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
+  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
+  final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
+  final systemInfoRepository = SystemInfoRepositoryImpl(
+    localDatasource: systemInfoLocalDatasource,
+    remoteDatasource: systemInfoRemoteDatasource,
+  );
+  final authRepository = AuthRepositoryImpl(
+    apiClientFactory: apiClientFactory,
+    systemInfoRemoteDatasource: systemInfoRemoteDatasource,
+    appIdentifier: appInfo.identifier,
+    appBundleId: packageInfo.packageName,
+  );
+
+  // Logic / Features
+  final coreSupport = CoreSupportImpl(() => systemInfoLocalDatasource.getSystemInfo());
+  final featureAccess = FeatureAccess.init(
+    appThemes.appConfig,
+    appThemes.embeddedResources,
+    activeMainFlavorRepository,
+    coreSupport,
+  );
+
+  // Utilities - Capturing instances that were previously just `await Class.init()`
+  final pushEnvironment = await PushEnvironment.init();
+  final appPath = await AppPath.init();
+  final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
+  final appTime = await AppTime.init();
+  final appLabels = await DefaultAppMetadataProvider.init(
+    packageInfo,
+    deviceInfo,
+    appInfo,
+    secureStorage,
+    featureAccess,
+  );
+
+  // Background workers (assuming SessionCleanupWorker is still a side-effect init)
+  final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
+
   // Remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
   final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
+  final appLogger = await AppLogger.init(remoteFirebaseConfigService, appLabels);
+  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
+    ..attachToLogger(Logger.root);
 
-  // Initialization order is crucial for proper app setup
+  final appLifecycle = await AppLifecycle.initMaster();
 
-  final appThemes = await AppThemes.init();
+  // Register instances into the Registry
 
-  final appPreferences = await AppPreferencesFactory.init();
-  final featureAccess = FeatureAccess.init(appThemes.appConfig, appThemes.embeddedResources, appPreferences);
-  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
-  final deviceInfo = await DeviceInfoFactory.init();
-  final packageInfo = await PackageInfoFactory.init();
-  final secureStorage = await SecureStorage.init();
-  final appLabels = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
+  // Configuration & Info
+  registry.register<AppThemes>(appThemes);
+  registry.register<AppInfo>(appInfo);
+  registry.register<PackageInfo>(packageInfo);
+  registry.register<DeviceInfo>(deviceInfo);
+  registry.register<AppPath>(appPath);
+  registry.register<AppTime>(appTime);
+  // TODO: Replace direct injection with a future service that will take on some of the work from PushTokensBloc
+  registry.register<PushEnvironment>(pushEnvironment);
 
-  await AppPath.init();
-  await AppPermissions.init(featureAccess);
-  await AppCertificates.init();
-  await AppTime.init();
-  await SessionCleanupWorker.init();
-  await AppLogger.init(remoteFirebaseConfigService, appLabels);
-  await AppLifecycle.initMaster();
+  // Repositories & Storage
+  registry.register<AppPreferences>(appPreferences);
+  registry.register<SecureStorage>(secureStorage);
+  registry.register<SystemInfoRepository>(systemInfoRepository);
+  registry.register<ActiveMainFlavorRepository>(activeMainFlavorRepository);
+  registry.register<AuthRepository>(authRepository);
+  registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
 
-  await _initCallkeep(appPreferences, featureAccess);
+  // Logic & Features
+  registry.register<CoreSupport>(coreSupport);
+  registry.register<FeatureAccess>(featureAccess);
+  registry.register<AppMetadataProvider>(appLabels);
+  registry.register<AppPermissions>(appPermissions);
+  registry.register<AppCertificates>(appCertificates);
+  registry.register<AppLogger>(appLogger);
+  registry.register<LogRecordsRepository>(appLoggerRepository);
+  registry.register<AppLifecycle>(appLifecycle);
+  registry.register<SessionCleanupWorker>(sessionCleanupWorker);
+
+  // Network clients
+  registry.register<WebtritApiClientFactory>(apiClientFactory);
+
+  // Final side-effect initializations that rely on registered components
+  await _initCallkeep(featureAccess);
   await _initWorkManager();
+
+  return registry;
 }
 
-Future<void> _initCallkeep(AppPreferences appPreferences, FeatureAccess featureAccess) async {
+/// Initializes [AppPermissions] with an exclusion callback.
+///
+/// This function creates a callback that combines permissions to be excluded based on feature access
+/// and the user's agreement status for contacts. This allows for dynamically determining which
+/// permissions should be excluded, for example, if a feature is disabled or the user has not consented
+/// to contact access.
+Future<AppPermissions> _createAppPermissions(
+  FeatureAccess featureAccess,
+  ContactsAgreementStatusRepository repository,
+) async {
+  return AppPermissions.init(
+    // Pass the callback directly. It captures the 'featureAccess' and 'repository'
+    // variables and evaluates them only when the callback is triggered.
+    () => [...featureAccess.excludedPermissions, ...repository.getContactsAgreementStatus().excludedPermissions],
+  );
+}
+
+Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   if (!Platform.isAndroid) return;
 
   AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);
@@ -128,8 +237,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final appInfo = await AppInfo.init(const SharedPreferencesAppIdProvider());
   final deviceInfo = await DeviceInfoFactory.init();
   final packageInfo = await PackageInfoFactory.init();
-  final secureStorage = await SecureStorage.init();
-  final appLabelsProvider = await DefaultAppLabelsProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
+  final secureStorage = await SecureStorageImpl.init();
+  final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
   await AppLogger.init(remoteCacheConfigService, appLabelsProvider);
 
@@ -142,7 +251,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   if (appPush is PendingCallPush && Platform.isAndroid) {
     final appDatabase = await IsolateDatabase.create();
-    final contactsRepository = ContactsRepository(appDatabase: appDatabase);
+    final contactsRepository = ContactsRepository(
+      appDatabase: appDatabase,
+      contactsRemoteDataSource: null,
+      contactsLocalDataSource: null,
+    );
 
     final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
     final displayName = contact?.maybeName ?? appPush.call.displayName;
@@ -237,7 +350,7 @@ void workManagerDispatcher() {
       if (currentState == AppLifecycleState.resumed) return Future.value(true);
 
       // Init api and remote repository
-      final storage = await SecureStorage.init();
+      final storage = await SecureStorageImpl.init();
       final (coreUrl, tenantId, token) = (storage.readCoreUrl(), storage.readTenantId(), storage.readToken());
       if (coreUrl == null || tenantId == null || token == null) return Future.value(true);
       final api = WebtritApiClient(Uri.parse(coreUrl), tenantId);

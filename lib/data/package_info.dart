@@ -11,14 +11,9 @@ abstract class PackageInfo {
 }
 
 class PackageInfoFactory {
-  static late PackageInfo _instance;
-
   static Future<PackageInfo> init() async {
-    _instance = PackageInfoImpl(await plugin.PackageInfo.fromPlatform());
-    return _instance;
+    return PackageInfoImpl(await plugin.PackageInfo.fromPlatform());
   }
-
-  static PackageInfo get instance => _instance;
 }
 
 class PackageInfoImpl implements PackageInfo {

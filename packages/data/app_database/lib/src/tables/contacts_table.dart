@@ -2,6 +2,8 @@ import 'package:drift/drift.dart';
 
 enum ContactSourceTypeEnum { local, external }
 
+enum ContactKind { visible, service }
+
 @DataClassName('ContactData')
 class ContactsTable extends Table {
   @override
@@ -10,6 +12,8 @@ class ContactsTable extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   IntColumn get sourceType => intEnum<ContactSourceTypeEnum>()();
+
+  IntColumn get kind => intEnum<ContactKind>().withDefault(Constant(ContactKind.visible.index))();
 
   TextColumn get sourceId => text().nullable()();
 

@@ -13,9 +13,10 @@ mixin ExternalContactApiMapper {
       firstName: contact.firstName,
       lastName: contact.lastName,
       aliasName: contact.aliasName,
+      // TODO: Maybe rename ExternalContact.number to ExternalContact.main.
       number: numbers.main,
       ext: numbers.ext,
-      mobile: numbers.main,
+      additional: numbers.additional,
       smsNumbers: numbers.sms,
       email: contact.email,
     );

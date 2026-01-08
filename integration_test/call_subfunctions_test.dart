@@ -25,8 +25,8 @@ void main() {
   patrolTest('Should make call and verify sub actions e.g minimize, hold, switch to video, speaker, mute etc', (
     $,
   ) async {
-    await bootstrap();
-    await pumpRootAndWaitUntilVisible($);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
     // Login if not.
     if ($(LoginModeSelectScreen).visible) {

@@ -8,15 +8,12 @@ import 'package:webtrit_phone/common/common.dart';
 final Logger _logger = Logger('AppInfo');
 
 class AppInfo {
-  static late AppInfo _instance;
-
   static Future<AppInfo> init(AppIdProvider appIdProvider) async {
     final id = await appIdProvider.getId();
 
     String? appVersion = await getAppVersion();
 
-    _instance = AppInfo._(appIdProvider, id, appVersion);
-    return _instance;
+    return AppInfo._(appIdProvider, id, appVersion);
   }
 
   static Future<String?> getAppVersion() async {
@@ -30,10 +27,6 @@ class AppInfo {
     }
   }
 
-  factory AppInfo() {
-    return _instance;
-  }
-
   AppInfo._(this.appInfo, this._identifier, this._appVersion) {
     appInfo.onIdChange.listen((String id) {
       _identifier = id;
@@ -44,7 +37,7 @@ class AppInfo {
 
   String _identifier;
 
-  String? _appVersion;
+  final String? _appVersion;
 
   String get identifier => _identifier;
 

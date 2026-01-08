@@ -1,5 +1,5 @@
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/models/video_capturing_settings.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 /// Builds WebRTC video constraints for the call.
 abstract class VideoConstraintsBuilder {
@@ -12,13 +12,13 @@ abstract class VideoConstraintsBuilder {
 /// functionality to create video constraints that are tailored to the specific
 /// settings and requirements of the application.
 class VideoConstraintsWithAppSettingsBuilder implements VideoConstraintsBuilder {
-  VideoConstraintsWithAppSettingsBuilder(this._prefs);
+  VideoConstraintsWithAppSettingsBuilder(this._videoCapturingSettingsRepository);
 
-  final AppPreferences _prefs;
+  final VideoCapturingSettingsRepository _videoCapturingSettingsRepository;
 
   @override
   Map<String, String> build() {
-    final settings = _prefs.getVideoCapturingSettings();
+    final settings = _videoCapturingSettingsRepository.getVideoCapturingSettings();
     final resolution = settings.resolution;
     final framerate = settings.framerate;
 

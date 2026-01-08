@@ -5,7 +5,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
@@ -17,67 +16,46 @@ import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../contact.dart';
+import '../extensions/extensions.dart';
 
 final _logger = Logger('ContactScreen');
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({
     super.key,
-    required this.favoriteEnabled,
-    required this.transferEnabled,
-    required this.videoEnabled,
-    required this.chatsEnabled,
-    required this.smsEnabled,
-    required this.cdrsEnabled,
+    required this.enableAppBarChat,
+    required this.enableTileFavorite,
+    required this.enableTileVoiceCall,
+    required this.enableTileVideoCall,
+    required this.enableTileSms,
+    required this.enableTileChat,
+    required this.enableTileTransfer,
+    required this.enableTileCallLog,
+    required this.enableTileEmail,
+    required this.useCdrsForHistory,
   });
 
-  final bool favoriteEnabled;
-  final bool transferEnabled;
-  final bool videoEnabled;
-  final bool chatsEnabled;
-  final bool smsEnabled;
-  final bool cdrsEnabled;
+  final bool enableAppBarChat;
+  final bool enableTileFavorite;
+  final bool enableTileVoiceCall;
+  final bool enableTileVideoCall;
+  final bool enableTileSms;
+  final bool enableTileChat;
+  final bool enableTileTransfer;
+  final bool enableTileCallLog;
+  final bool enableTileEmail;
+  final bool useCdrsForHistory;
 
   @override
   State<ContactScreen> createState() => _ContactScreenState();
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-  // TODO(Serdun): Think about moving this to a controller or bloc.
   late final CallController _callController = CallController(
     callBloc: context.read<CallBloc>(),
     callRoutingCubit: context.read<CallRoutingCubit>(),
     notificationsBloc: context.read<NotificationsBloc>(),
   );
-
-  void toggleFavorite({required bool isFavorite, required ContactPhone contactPhone}) {
-    if (isFavorite) {
-      context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
-    } else {
-      context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
-    }
-  }
-
-  void sendSms({
-    required List<String> userSmsNumbers,
-    required String contactPhoneNumber,
-    required String? contactSourceId,
-  }) {
-    final route = SmsConversationScreenPageRoute(
-      firstNumber: userSmsNumbers.first,
-      secondNumber: contactPhoneNumber,
-      recipientId: contactSourceId!,
-    );
-    context.router.navigate(route);
-  }
-
-  void openCallLog({required String number}) {
-    if (widget.cdrsEnabled) {
-      context.router.navigate(NumberCdrsScreenPageRoute(number: number));
-    } else {
-      context.router.navigate(CallLogScreenPageRoute(number: number));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +71,11 @@ class _ContactScreenState extends State<ContactScreen> {
           builder: (context, state) {
             final contact = state.contact;
             if (contact == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
+
             final contactSourceId = contact.sourceId;
             final contactSmsNumbers = contact.smsNumbers;
+
+            final displayPhones = contact.displayPhones;
 
             return BlocBuilder<CallBloc, CallState>(
               buildWhen: (previous, current) =>
@@ -103,20 +84,17 @@ class _ContactScreenState extends State<ContactScreen> {
               builder: (context, callState) {
                 final email = contact.emails.firstOrNull?.address;
                 final hasActiveCall = callState.activeCalls.isNotEmpty;
+                final isBlingTransferInitiated = callState.isBlingTransferInitiated;
 
                 return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                   builder: (context, callRoutingState) {
                     return Scaffold(
                       appBar: AppBar(
                         actions: [
-                          if (widget.chatsEnabled && contact.canMessage)
+                          if (widget.enableAppBarChat && contact.canMessage)
                             IconButton(
                               icon: Icon(Icons.message, color: colorScheme.onSurface),
-                              onPressed: () {
-                                context.router.navigate(
-                                  ChatConversationScreenPageRoute(participantId: contact.sourceId),
-                                );
-                              },
+                              onPressed: () => _navigateToChatConversation(contact),
                             ),
                         ],
                       ),
@@ -138,66 +116,37 @@ class _ContactScreenState extends State<ContactScreen> {
                             textAlign: TextAlign.center,
                           ),
                           const Divider(height: 16),
-                          for (final contactPhone in contact.phones)
-                            SizedBox(
-                              key: ValueKey(contactPhone),
-                              child: ContactPhoneTile(
-                                key: contactPhoneTileKey,
-                                number: contactPhone.number,
-                                label: contactPhone.label,
-                                favorite: contactPhone.favorite,
-                                callNumbers: callRoutingState?.allNumbers ?? [],
-                                onFavoriteChanged: widget.favoriteEnabled
-                                    ? (isFavorite) {
-                                        toggleFavorite(isFavorite: isFavorite, contactPhone: contactPhone);
-                                      }
-                                    : null,
-                                onAudioPressed: () => _callController.createCall(
-                                  destination: contactPhone.number,
-                                  displayName: contact.maybeName,
-                                  video: false,
-                                ),
-                                onVideoPressed: widget.videoEnabled
-                                    ? () => _callController.createCall(
-                                        destination: contactPhone.number,
-                                        displayName: contact.maybeName,
-                                        video: true,
-                                      )
-                                    : null,
-                                onTransferPressed: widget.transferEnabled && hasActiveCall
-                                    ? () {
-                                        _callController.submitTransfer(contactPhone.number);
-                                        context.router.maybePop();
-                                      }
-                                    : null,
-                                onInitiatedTransferPressed: widget.transferEnabled && callState.isBlingTransferInitiated
-                                    ? () {
-                                        _callController.submitTransfer(contactPhone.number);
-                                        context.router.maybePop();
-                                      }
-                                    : null,
-                                onSendSmsPressed: widget.smsEnabled && contactSmsNumbers.contains(contactPhone.number)
-                                    ? () => sendSms(
-                                        userSmsNumbers: userSmsNumbers,
-                                        contactPhoneNumber: contactPhone.number,
-                                        contactSourceId: contactSourceId,
-                                      )
-                                    : null,
-                                onCallLogPressed: () => openCallLog(number: contactPhone.number),
-                                onCallFrom: (fromNumber) => _callController.createCall(
-                                  destination: contactPhone.number,
-                                  displayName: contact.maybeName,
-                                  fromNumber: fromNumber,
-                                ),
-                              ),
+                          for (final contactPhone in displayPhones)
+                            ContactPhoneTileAdapter(
+                              contactPhone: contactPhone,
+                              contact: contact,
+                              enableTileFavorite: widget.enableTileFavorite,
+                              enableTileVoiceCall: widget.enableTileVoiceCall,
+                              enableTileVideoCall: widget.enableTileVideoCall,
+                              enableTileSms: widget.enableTileSms,
+                              enableTileChat: widget.enableTileChat,
+                              enableTileTransfer: widget.enableTileTransfer,
+                              enableTileCallLog: widget.enableTileCallLog,
+                              contactSmsNumbers: contactSmsNumbers,
+                              contactSourceId: contactSourceId,
+                              userSmsNumbers: userSmsNumbers,
+                              hasActiveCall: hasActiveCall,
+                              isBlingTransferInitiated: isBlingTransferInitiated,
+                              callRoutingState: callRoutingState,
+                              onFavoriteChanged: _onFavoriteChanged,
+                              onAudioPressed: _onAudioPressed,
+                              onVideoPressed: _onVideoPressed,
+                              onTransferPressed: _onTransferPressed,
+                              onSendSmsPressed: _onSendSmsPressed,
+                              onCallLogPressed: _onCallLogPressed,
+                              onNavigateToChatConversation: _navigateToChatConversation,
+                              onCallFromPressed: _onCallFromPressed,
                             ),
                           for (final contactEmail in contact.emails)
                             ContactEmailTile(
                               address: contactEmail.address,
                               label: contactEmail.label,
-                              onEmailPressed: () {
-                                context.read<ContactBloc>().add(ContactEmailSend(contactEmail));
-                              },
+                              onEmailPressed: widget.enableTileEmail ? () => _onEmailPressed(contactEmail) : null,
                             ),
                           if (presenceSource == PresenceViewSource.sipPresence &&
                               contact.sourceType == ContactSourceType.external) ...[
@@ -220,9 +169,58 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 
-  /// Called when the contact is deleted outside of the app.
-  ///
-  /// Logs the event and safely attempts to close the screen.
+  void _onFavoriteChanged(bool isFavorite, ContactPhone contactPhone) {
+    if (isFavorite) {
+      context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
+    } else {
+      context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
+    }
+  }
+
+  void _onAudioPressed(ContactPhone phone, Contact contact) {
+    _callController.createCall(destination: phone.number, displayName: contact.maybeName, video: false);
+  }
+
+  void _onVideoPressed(ContactPhone phone, Contact contact) {
+    _callController.createCall(destination: phone.number, displayName: contact.maybeName, video: true);
+  }
+
+  void _onTransferPressed(ContactPhone phone) {
+    _callController.submitTransfer(phone.number);
+    context.router.maybePop();
+  }
+
+  void _onCallFromPressed(ContactPhone phone, Contact contact, String fromNumber) {
+    _callController.createCall(destination: phone.number, displayName: contact.maybeName, fromNumber: fromNumber);
+  }
+
+  void _onSendSmsPressed(ContactPhone phone, String? contactSourceId, List<String> userSmsNumbers) {
+    if (userSmsNumbers.isEmpty) return;
+
+    final route = SmsConversationScreenPageRoute(
+      firstNumber: userSmsNumbers.first,
+      secondNumber: phone.number,
+      recipientId: contactSourceId,
+    );
+    context.router.navigate(route);
+  }
+
+  void _onCallLogPressed(String number) {
+    if (widget.useCdrsForHistory) {
+      context.router.navigate(NumberCdrsScreenPageRoute(number: number));
+    } else {
+      context.router.navigate(CallLogScreenPageRoute(number: number));
+    }
+  }
+
+  void _navigateToChatConversation(Contact contact) {
+    context.router.navigate(ChatConversationScreenPageRoute(participantId: contact.sourceId));
+  }
+
+  void _onEmailPressed(ContactEmail email) {
+    context.read<ContactBloc>().add(ContactEmailSend(email));
+  }
+
   void _onContactDeleted() {
     _logger.info('Contact was deleted, popping screen');
     context.router.maybePop();

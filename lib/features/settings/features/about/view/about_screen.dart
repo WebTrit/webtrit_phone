@@ -57,18 +57,10 @@ class _AboutScreenState extends State<AboutScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (logo != null) logo.svg(height: logoHeight),
-                  Text(state.appName, style: themeData.textTheme.displaySmall, textAlign: TextAlign.center),
+                  SizedBox(height: delimiterHeight),
                   Text(state.packageName),
-                  SizedBox(height: delimiterHeight),
-                  Text(context.l10n.settings_AboutText_AppVersion),
-                  GestureDetector(
-                    onTap: _multiTapLoggingTrigger.tap,
-                    child: Text(state.appVersion, style: themeData.textTheme.titleLarge),
-                  ),
-                  SizedBox(height: delimiterHeight),
-                  Text(context.l10n.settings_AboutText_StoreVersion),
-                  Text(state.storeVersion, style: themeData.textTheme.titleLarge),
-                  SizedBox(height: delimiterHeight),
+                  GestureDetector(onTap: _multiTapLoggingTrigger.tap, child: Text(state.userAgent)),
+                  SizedBox(height: delimiterHeight / 2),
                   CopyToClipboard(
                     data: state.appIdentifier,
                     child: Text(context.l10n.settings_AboutText_AppSessionIdentifier),
@@ -82,7 +74,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  SizedBox(height: delimiterHeight),
+                  SizedBox(height: delimiterHeight / 2),
                   CopyToClipboard(
                     data: state.fcmPushToken,
                     child: Text(context.l10n.settings_AboutText_FCMPushNotificationToken),
@@ -96,7 +88,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  SizedBox(height: delimiterHeight),
+                  SizedBox(height: delimiterHeight / 2),
                   CopyToClipboard(
                     data: state.coreUrl.toString(),
                     child: Text(state.coreUrl.toString(), textAlign: TextAlign.center),

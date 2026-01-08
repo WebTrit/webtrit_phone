@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
@@ -9,17 +10,76 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class LoginPasswordSigninScreen extends StatelessWidget {
+class LoginPasswordSigninScreen extends StatefulWidget {
   const LoginPasswordSigninScreen({super.key});
+
+  @override
+  State<LoginPasswordSigninScreen> createState() => _LoginPasswordSigninScreenState();
+}
+
+class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
+  /// Formatter used to apply an optional mask to the reference input field.
+  /// The lazy `MaskAutoCompletionType` delays auto-completion until the user
+  /// has finished typing, avoiding premature insertion of mask characters.
+  final _maskFormatter = MaskTextInputFormatter(type: MaskAutoCompletionType.lazy);
+
+  /// Whether the initial value from the style's input config has been applied to
+  /// the cubit. This ensures the initial value is only forwarded once during
+  /// the widget lifecycle (see `didChangeDependencies`).
+  bool _hasAppliedRefInitialValue = false;
+
+  LoginPasswordSigninPageStyle? get _styles => Theme.of(context).extension<LoginPasswordSigninPageStyles>()?.primary;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Update the mask (always runs on dependency change)
+    _maskFormatter.updateFromConfig(_styles?.refInput?.mask);
+
+    // Apply initial value (runs only once)
+    if (!_hasAppliedRefInitialValue) {
+      _applyInitialValue(_styles?.refInput?.inputValue);
+      _hasAppliedRefInitialValue = true;
+    }
+  }
+
+  /// Reads the initial reference value from the style configuration and
+  /// synchronizes it with the `LoginCubit` state.
+  void _applyInitialValue(InputValue? inputValue) {
+    final initialValue = inputValue?.initialValue;
+    if (initialValue == null) return;
+
+    final cubit = context.read<LoginCubit>();
+    final currentValue = cubit.state.passwordSigninUserRefInput.value;
+
+    if (currentValue.isEmpty) {
+      cubit.passwordSigninUserRefInputChanged(initialValue);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+    final elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
+    final loginStyles = themeData.extension<LoginPasswordSigninPageStyles>()?.primary;
+
+    final userRefStyle = loginStyles?.refInput;
+    final passwordStyle = loginStyles?.passwordInput;
+
+    final maskConfig = userRefStyle?.mask;
+
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         final passwordSigninPreDescriptionText = context.l10n.login_Text_passwordSigninPreDescription;
         final passwordSigninPostDescriptionText = context.l10n.login_Text_passwordSigninPostDescription;
+
+        final userRefDecoration = userRefStyle?.decoration ?? const InputDecoration();
+        final passwordDecoration = passwordStyle?.decoration ?? const InputDecoration();
+
+        final decorationLabelText = context.parseL10n(
+          userRefDecoration.labelText,
+          fallback: context.l10n.login_TextFieldLabelText_passwordSigninUserRef,
+        );
 
         return Padding(
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
@@ -31,17 +91,23 @@ class LoginPasswordSigninScreen extends StatelessWidget {
                   Description(text: passwordSigninPreDescriptionText),
                   const SizedBox(height: kInset / 2),
                 ],
-                TextFormField(
+                ExtendedTextFormField(
                   key: passwordUserInputKey,
                   enabled: !state.processing,
+                  includePrefixInData: userRefStyle?.inputValue?.includePrefixInData ?? false,
                   initialValue: state.passwordSigninUserRefInput.value,
-                  decoration: InputDecoration(
-                    labelText: context.l10n.login_TextFieldLabelText_passwordSigninUserRef,
-                    helperText: '', // reserve space for validator message
+                  decoration: userRefDecoration.copyWith(
+                    labelText: decorationLabelText,
+                    helperText: '',
+                    // reserve space for validator message
                     errorText: state.passwordSigninUserRefInput.displayError?.l10n(context),
                     errorMaxLines: 3,
+                    hintText: userRefDecoration.hintText ?? maskConfig?.pattern,
                   ),
-                  keyboardType: TextInputType.emailAddress,
+                  inputFormatters: maskConfig != null ? [_maskFormatter] : [],
+                  style: userRefStyle?.textStyle,
+                  textAlign: userRefStyle?.textAlign ?? TextAlign.start,
+                  keyboardType: userRefStyle?.keyboardType ?? TextInputType.text,
                   autofillHints: const [AutofillHints.email, AutofillHints.telephoneNumber],
                   onChanged: context.read<LoginCubit>().passwordSigninUserRefInputChanged,
                   onFieldSubmitted: !state.passwordSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
@@ -50,9 +116,10 @@ class LoginPasswordSigninScreen extends StatelessWidget {
                   key: passwordPasswordInputKey,
                   enabled: !state.processing,
                   initialValue: state.passwordSigninPasswordInput.value,
-                  decoration: InputDecoration(
+                  decoration: passwordDecoration.copyWith(
                     labelText: context.l10n.login_TextFieldLabelText_passwordSigninPassword,
-                    helperText: '', // reserve space for validator message
+                    helperText: '',
+                    // reserve space for validator message
                     errorText: state.passwordSigninPasswordInput.displayError?.l10n(context),
                     errorMaxLines: 3,
                     suffixIcon: IconButton(
@@ -65,8 +132,10 @@ class LoginPasswordSigninScreen extends StatelessWidget {
                           : context.read<LoginCubit>().passwordSigninPasswordInputObscureTextToggled,
                     ),
                   ),
+                  style: passwordStyle?.textStyle,
+                  textAlign: passwordStyle?.textAlign ?? TextAlign.start,
                   obscureText: state.passwordSigninPasswordInputObscureText,
-                  keyboardType: TextInputType.visiblePassword,
+                  keyboardType: passwordStyle?.keyboardType ?? TextInputType.visiblePassword,
                   autofillHints: const [AutofillHints.password],
                   onChanged: context.read<LoginCubit>().passwordSigninPasswordInputChanged,
                   onFieldSubmitted: !state.passwordSigninPasswordInput.isValid ? null : (_) => _onSubmitted(context),

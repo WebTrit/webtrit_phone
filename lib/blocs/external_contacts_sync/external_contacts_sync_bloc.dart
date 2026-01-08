@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -113,14 +114,29 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
           );
 
           final externalContactNumber = externalContact.number;
-          final externalContactExt = externalContact.ext;
-          final externalContactMobile = externalContact.mobile;
+          // Some external accounts legitimately have `ext` equal to `number`
+          // (e.g. auto-provisioned users where the signup flow copies main into ext).
+          //
+          // In our local DB phone records are keyed by (contact_id, number), so each
+          // distinct phone number is stored only once. When we upsert phones, the last
+          // write "wins" for a given (contact_id, number) pair.
+          //
+          // If we insert both `number` and `ext` when they are the same value, the
+          // second upsert for label 'ext' overwrites the existing row that was created
+          // for label 'number'. As a result, the primary "number" entry disappears and
+          // the UI shows "Unknown" for the main number, while the same value is only
+          // visible under the 'ext' label.
+          //
+          // To avoid losing the main number label, when `ext` is identical to `number`
+          // we treat `ext` as absent and do not create a separate phone record for it.
+          final externalContactExt = externalContact.ext != externalContact.number ? externalContact.ext : null;
+          final externalContactAdditional = externalContact.additional;
           final externalSmsNumbers = externalContact.smsNumbers;
 
           final externalContactNumbers = [
             if (externalContactNumber != null) externalContactNumber,
             if (externalContactExt != null) externalContactExt,
-            if (externalContactMobile != null) externalContactMobile,
+            if (externalContactAdditional != null) ...externalContactAdditional,
             if (externalSmsNumbers != null) ...externalSmsNumbers,
           ];
 
@@ -133,7 +149,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
               ContactPhoneDataCompanion(
                 number: Value(externalContactNumber),
-                label: const Value('number'),
+                label: const Value(kContactMainLabel),
                 contactId: Value(insertOrUpdateContactData.id),
               ),
             );
@@ -142,16 +158,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
             await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
               ContactPhoneDataCompanion(
                 number: Value(externalContactExt),
-                label: const Value('ext'),
-                contactId: Value(insertOrUpdateContactData.id),
-              ),
-            );
-          }
-          if (externalContactMobile != null) {
-            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-              ContactPhoneDataCompanion(
-                number: Value(externalContactMobile),
-                label: const Value('mobile'),
+                label: const Value(kContactExtLabel),
                 contactId: Value(insertOrUpdateContactData.id),
               ),
             );
@@ -161,7 +168,18 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
               await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
                 ContactPhoneDataCompanion(
                   number: Value(externalSmsNumber),
-                  label: const Value('sms'),
+                  label: const Value(kContactSmsLabel),
+                  contactId: Value(insertOrUpdateContactData.id),
+                ),
+              );
+            }
+          }
+          if (externalContactAdditional != null) {
+            for (final externalContactAdditionalNumber in externalContactAdditional) {
+              await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+                ContactPhoneDataCompanion(
+                  number: Value(externalContactAdditionalNumber),
+                  label: const Value(kContactAdditionalLabel),
                   contactId: Value(insertOrUpdateContactData.id),
                 ),
               );
@@ -201,40 +219,5 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
         emit(const ExternalContactsSyncUpdateFailure());
       }
     }
-  }
-}
-
-/// Extension to provide a stable sourceId for ExternalContact
-extension ExternalContactExtensions on ExternalContact {
-  /// Returns a stable, non-null sourceId for synchronization and deduplication purposes.
-  /// Priority:
-  ///   1. `id` (API-provided unique identifier)
-  ///   2. `number`, `mobile`, `email`
-  ///   3. deterministic hash of name/email
-  ///   4. fallback hash for anonymous or incomplete contacts (e.g. empty fields)
-  String get safeSourceId {
-    if (id?.trim().isNotEmpty ?? false) {
-      return id!;
-    }
-
-    if (number?.trim().isNotEmpty ?? false) {
-      return 'number_${number!.trim()}';
-    }
-
-    if (mobile?.trim().isNotEmpty ?? false) {
-      return 'mobile_${mobile!.trim()}';
-    }
-
-    if (email?.trim().isNotEmpty ?? false) {
-      return 'email_${email!.trim()}';
-    }
-
-    // Generate a deterministic fallback sourceId based on contact's name and email.
-    // Ensures stable identity across syncs when no ID, number, mobile, or email is available.
-    // May still produce collisions if fields are empty or identical across multiple contacts.
-    final stableKey = '${firstName ?? ''}_${lastName ?? ''}_${email ?? ''}'.toLowerCase().trim();
-    final hash = stableKey.hashCode;
-
-    return 'hash_$hash';
   }
 }

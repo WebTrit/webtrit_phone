@@ -22,20 +22,18 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     required this.notificationsBloc,
     required AppInfo appInfo,
     required PackageInfo packageInfo,
+    required AppMetadataProvider appMetadataProvider,
     required SecureStorage secureStorage,
     required EmbeddedFeature embeddedFeature,
     required this.infoRepository,
   }) : super(
          AboutState(
-           appName: packageInfo.appName,
            packageName: packageInfo.packageName,
-           storeBuildVersion: packageInfo.version,
-           storeBuildNumber: packageInfo.buildNumber,
-           appVersion: appInfo.version,
            appIdentifier: appInfo.identifier,
            fcmPushToken: secureStorage.readFCMPushToken(),
            embeddedLinks: embeddedFeature.embeddedResources.map((e) => e.uri.toString()).toList(),
-           coreUrl: infoRepository.coreUrl,
+           coreUrl: infoRepository.getCoreUrl(),
+           userAgent: appMetadataProvider.userAgent,
          ),
        ) {
     on<AboutStarted>(_onStarted, transformer: restartable());
@@ -47,8 +45,8 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
   void _onStarted(AboutStarted event, Emitter<AboutState> emit) async {
     emit(state.copyWith(progress: true));
     try {
-      final systemInfo = await infoRepository.getInfo();
-      final coreVersion = systemInfo.core.version;
+      final systemInfo = await infoRepository.getSystemInfo();
+      final coreVersion = systemInfo?.core.version;
 
       if (emit.isDone) return;
 

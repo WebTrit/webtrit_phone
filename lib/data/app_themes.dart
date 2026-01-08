@@ -12,8 +12,6 @@ import 'package:webtrit_phone/theme/theme.dart';
 final Logger _logger = Logger('AppThemes');
 
 class AppThemes {
-  static late AppThemes _instance;
-
   static const _fontPreloadTimeout = Duration(seconds: 3);
 
   static Future<AppThemes> init() async {
@@ -56,8 +54,7 @@ class AppThemes {
 
     await _preloadFonts(themeWidgetLightConfig, themeWidgetDarkConfig);
 
-    _instance = AppThemes._(themes, appConfig, embeddedResources);
-    return _instance;
+    return AppThemes._(themes, appConfig, embeddedResources);
   }
 
   // TODO(offline-fonts): In the future, run flutter pub run google_fonts:update
@@ -89,10 +86,6 @@ class AppThemes {
 
   static Future<dynamic> _getJson(String path) async {
     return jsonDecode(await rootBundle.loadString(path));
-  }
-
-  factory AppThemes() {
-    return _instance;
   }
 
   AppThemes._(this.values, this.appConfig, this.embeddedResources);

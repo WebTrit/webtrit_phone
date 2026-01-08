@@ -11,10 +11,6 @@ import 'package:webtrit_phone/app/assets.gen.dart';
 class AppCertificates {
   AppCertificates._(this._trustedCertificates);
 
-  factory AppCertificates() => _instance;
-
-  static late AppCertificates _instance;
-
   final TrustedCertificates _trustedCertificates;
 
   /// Returns the list of ssl certificates and their passwords.
@@ -28,8 +24,7 @@ class AppCertificates {
     final credentials = await _loadCredentials(credentialsPath);
     final certificates = await Future.wait(certificatePaths.map((it) => _prepareCertificate(it, credentials)));
 
-    _instance = AppCertificates._(TrustedCertificates(certificates: certificates));
-    return _instance;
+    return AppCertificates._(TrustedCertificates(certificates: certificates));
   }
 
   /// Loads certificate bytes from assets using the provided path and credentials.

@@ -4,10 +4,10 @@ import 'package:flutter/foundation.dart';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/data/app_preferences.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -49,8 +49,6 @@ final Logger _logger = Logger('FeatureAccess');
 
 // TODO(Serdun): Replace direct usage of AppConfig.embeddedResources with EmbeddedFeature.embeddedResources
 class FeatureAccess {
-  static late FeatureAccess _instance;
-
   FeatureAccess._(
     this.embeddedFeature,
     this.loginFeature,
@@ -58,6 +56,7 @@ class FeatureAccess {
     this.settingsFeature,
     this.callFeature,
     this.messagingFeature,
+    this.contactsFeature,
     this.termsFeature,
     this.systemNotificationsFeature,
     this.sipPresenceFeature,
@@ -69,31 +68,42 @@ class FeatureAccess {
   final SettingsFeature settingsFeature;
   final CallFeature callFeature;
   final MessagingFeature messagingFeature;
+  final ContactsFeature contactsFeature;
   final TermsFeature termsFeature;
   final SystemNotificationsFeature systemNotificationsFeature;
   final SipPresenceFeature sipPresenceFeature;
 
-  static FeatureAccess init(AppConfig appConfig, List<EmbeddedResource> embeddedResources, AppPreferences preferences) {
+  static FeatureAccess init(
+    AppConfig appConfig,
+    List<EmbeddedResource> embeddedResources,
+    ActiveMainFlavorRepository activeMainFlavorRepository,
+    CoreSupport coreSupport,
+  ) {
     try {
-      final coreSupport = CoreSupport.fromPrefs(preferences);
+      // Initialize basic features
+      final embeddedFeature = EmbeddedFeature.fromConfig(embeddedResources);
 
-      final embeddedFeature = _tryConfigureEmbeddedFeature(embeddedResources);
-      final customLoginFeature = _tryEnableCustomLoginFeature(appConfig, embeddedFeature.embeddedResources);
-      final bottomMenuManager = _tryConfigureBottomMenuFeature(appConfig, preferences, embeddedFeature);
-      final settingsFeature = _tryConfigureSettingsFeature(appConfig, embeddedResources, coreSupport);
-      final callFeature = _tryConfigureCallFeature(appConfig, preferences);
-      final messagingFeature = _tryConfigureMessagingFeature(appConfig, coreSupport);
-      final termsFeature = _tryConfigureTermsFeature(embeddedResources);
-      final systemNotificationsFeature = _tryConfigureSystemNotificationsFeature(coreSupport, appConfig);
-      final sipPresenceFeature = _tryConfigureSipPresenceFeature(coreSupport, appConfig);
+      // Initialize dependent features
+      // Note: TermsFeature must be initialized before SettingsFeature because Settings might fallback to Terms config.
+      final termsFeature = TermsFeature.fromConfig(embeddedResources);
 
-      _instance = FeatureAccess._(
+      final customLoginFeature = LoginFeature.fromConfig(appConfig, embeddedFeature.embeddedResources);
+      final bottomMenuManager = BottomMenuFeature.fromConfig(appConfig, activeMainFlavorRepository, embeddedFeature);
+      final settingsFeature = SettingsFeature.fromConfig(appConfig, embeddedResources, coreSupport, termsFeature);
+      final callFeature = CallFeature.fromConfig(appConfig);
+      final messagingFeature = MessagingFeature.fromConfig(appConfig, coreSupport);
+      final contactsFeature = ContactsFeature.fromConfig(appConfig);
+      final systemNotificationsFeature = SystemNotificationsFeature.fromConfig(coreSupport, appConfig);
+      final sipPresenceFeature = SipPresenceFeature.fromConfig(coreSupport, appConfig);
+
+      return FeatureAccess._(
         embeddedFeature,
         customLoginFeature,
         bottomMenuManager,
         settingsFeature,
         callFeature,
         messagingFeature,
+        contactsFeature,
         termsFeature,
         systemNotificationsFeature,
         sipPresenceFeature,
@@ -102,14 +112,70 @@ class FeatureAccess {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
       rethrow;
     }
-    return _instance;
+  }
+}
+
+class LoginFeature {
+  final String? titleL10n;
+  final List<LoginModeAction> actions;
+  final EmbeddedData? launchLoginPage;
+
+  LoginFeature({required this.titleL10n, required this.actions, required this.launchLoginPage});
+
+  // TODO(Serdun): Refactor login configuration to separate concerns more cleanly.
+  // Currently, modeSelectActions control both the launch screen and the buttons on the login_mode_select_screen,
+  // which leads to unclear and tightly coupled logic.
+  factory LoginFeature.fromConfig(AppConfig appConfig, List<EmbeddedData> embeddedData) {
+    final rawButtons = appConfig.loginConfig.modeSelect.actions.where((button) => button.enabled);
+    final buttons = <LoginModeAction>[];
+
+    for (var actions in rawButtons) {
+      final loginFlavor = LoginFlavor.values.byName(actions.type);
+      final loginEmbeddedData = embeddedData.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
+
+      if (loginEmbeddedData != null && loginFlavor == LoginFlavor.embedded) {
+        buttons.add(
+          LoginEmbeddedModeButton(
+            titleL10n: actions.titleL10n,
+            flavor: loginFlavor,
+            customLoginFeature: loginEmbeddedData,
+          ),
+        );
+      } else if (loginFlavor == LoginFlavor.login) {
+        buttons.add(LoginDefaultModeAction(titleL10n: actions.titleL10n, flavor: loginFlavor));
+      }
+    }
+
+    return LoginFeature(
+      titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
+      actions: buttons,
+      launchLoginPage: embeddedData.firstWhereOrNull(
+        (it) => it.id == appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId,
+      ),
+    );
   }
 
-  factory FeatureAccess() => _instance;
+  List<LoginEmbeddedModeButton> get embeddedConfigurations => actions.whereType<LoginEmbeddedModeButton>().toList();
 
-  static BottomMenuFeature _tryConfigureBottomMenuFeature(
+  bool get hasEmbeddedPage => embeddedConfigurations.isNotEmpty;
+
+  List<LoginModeAction> get launchButtons => actions.toList();
+}
+
+class BottomMenuFeature {
+  BottomMenuFeature(List<BottomMenuTab> tabs, this._activeMainFlavorRepository, {bool cacheSelectedTab = true})
+    : _tabs = List.unmodifiable(tabs) {
+    final savedFlavor = cacheSelectedTab ? _activeMainFlavorRepository.getActiveMainFlavor() : null;
+    _activeTab = _findInitialTab(savedFlavor);
+  }
+
+  final List<BottomMenuTab> _tabs;
+  final ActiveMainFlavorRepository _activeMainFlavorRepository;
+  late BottomMenuTab _activeTab;
+
+  factory BottomMenuFeature.fromConfig(
     AppConfig appConfig,
-    AppPreferences preferences,
+    ActiveMainFlavorRepository activeMainFlavorRepository,
     EmbeddedFeature embeddedFeature,
   ) {
     final bottomMenu = appConfig.mainConfig.bottomMenu;
@@ -127,7 +193,7 @@ class FeatureAccess {
       throw Exception('No enabled tabs found in bottom menu configuration');
     }
 
-    return BottomMenuFeature(bottomMenuTabs, preferences, cacheSelectedTab: bottomMenu.cacheSelectedTab);
+    return BottomMenuFeature(bottomMenuTabs, activeMainFlavorRepository, cacheSelectedTab: bottomMenu.cacheSelectedTab);
   }
 
   static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, List<EmbeddedData> embeddedResources) {
@@ -178,10 +244,50 @@ class FeatureAccess {
     );
   }
 
-  static SettingsFeature _tryConfigureSettingsFeature(
+  List<BottomMenuTab> get tabs => _tabs;
+
+  List<EmbeddedBottomMenuTab> get embeddedTabs => _tabs.whereType<EmbeddedBottomMenuTab>().toList(growable: false);
+
+  BottomMenuTab get activeTab => _activeTab;
+
+  int get activeIndex => _tabs.indexOf(_activeTab);
+
+  /// Returns the first enabled tab of the specified type [T], or `null` if no such tab exists.
+  T? getTabEnabled<T extends BottomMenuTab>() {
+    final tab = _tabs.firstWhereOrNull((tab) => tab is T && tab.enabled);
+    return tab is T ? tab : null;
+  }
+
+  /// Returns the embedded tab with the specified [id].
+  EmbeddedBottomMenuTab getEmbeddedTabById(String id) {
+    return embeddedTabs.firstWhere((tab) => tab.id == id);
+  }
+
+  /// Sets the active tab to [newTab] and persists the selection in preferences.
+  set activeFlavor(BottomMenuTab newTab) {
+    _activeTab = newTab;
+    _activeMainFlavorRepository.setActiveMainFlavor(newTab.flavor);
+  }
+
+  /// Finds the initial tab to be selected based on the saved flavor or the initial flag.
+  BottomMenuTab _findInitialTab(MainFlavor? savedFlavor) {
+    return _tabs.firstWhereOrNull((tab) => tab.flavor == savedFlavor) ??
+        _tabs.firstWhereOrNull((tab) => tab.initial) ??
+        _tabs.first;
+  }
+}
+
+class SettingsFeature {
+  SettingsFeature(this._sections, this._coreSupport);
+
+  final List<SettingsSection> _sections;
+  final CoreSupport _coreSupport;
+
+  factory SettingsFeature.fromConfig(
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
     CoreSupport coreSupport,
+    TermsFeature termsFeature,
   ) {
     final settingSections = <SettingsSection>[];
 
@@ -198,7 +304,7 @@ class FeatureAccess {
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
           icon: item.icon.toIconData(),
-          data: _getEmbeddedDataResource(appConfig, embeddedResources, item, flavor),
+          data: _getEmbeddedDataResource(appConfig, embeddedResources, item, flavor, termsFeature),
           flavor: SettingsFlavor.values.byName(item.type),
         );
 
@@ -231,13 +337,14 @@ class FeatureAccess {
     List<EmbeddedResource> embeddedResources,
     AppConfigSettingsItem item,
     SettingsFlavor flavor,
+    TermsFeature termsFeature,
   ) {
     // Retrieve the embedded resource URL by matching the provided item ID.
     var embeddedDataResource = embeddedResources.firstWhereOrNull((resource) => resource.id == item.embeddedResourceId);
 
     // If no direct match is found and the flavor is 'terms', attempt to fetch the privacy policy resource.
     if (embeddedDataResource?.uriOrNull == null && flavor == SettingsFlavor.terms) {
-      return _tryConfigureTermsFeature(embeddedResources).configData;
+      return termsFeature.configData;
     }
 
     // If strategy is not provided, default to hard reload.
@@ -257,40 +364,37 @@ class FeatureAccess {
         : null;
   }
 
-  // TODO(Serdun): Refactor login configuration to separate concerns more cleanly.
-  // Currently, modeSelectActions control both the launch screen and the buttons on the login_mode_select_screen,
-  // which leads to unclear and tightly coupled logic.
-  static LoginFeature _tryEnableCustomLoginFeature(AppConfig appConfig, List<EmbeddedData> embeddedData) {
-    final rawButtons = appConfig.loginConfig.modeSelect.actions.where((button) => button.enabled);
-    final buttons = <LoginModeAction>[];
+  List<SettingsSection> get sections => List.unmodifiable(_sections);
 
-    for (var actions in rawButtons) {
-      final loginFlavor = LoginFlavor.values.byName(actions.type);
-      final loginEmbeddedData = embeddedData.firstWhereOrNull((dto) => dto.id == actions.embeddedId);
+  bool get isVoicemailsEnabled => _sections.any((section) {
+    return section.items.any((item) {
+      return item.flavor == SettingsFlavor.voicemail && _coreSupport.supportsVoicemail;
+    });
+  });
+}
 
-      if (loginEmbeddedData != null && loginFlavor == LoginFlavor.embedded) {
-        buttons.add(
-          LoginEmbeddedModeButton(
-            titleL10n: actions.titleL10n,
-            flavor: loginFlavor,
-            customLoginFeature: loginEmbeddedData,
-          ),
-        );
-      } else if (loginFlavor == LoginFlavor.login) {
-        buttons.add(LoginDefaultModeAction(titleL10n: actions.titleL10n, flavor: loginFlavor));
-      }
-    }
+class CallFeature {
+  CallFeature({
+    required this.callConfig,
+    required this.encoding,
+    required this.peerConnection,
+    required this.callTriggerConfig,
+  });
 
-    return LoginFeature(
-      titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
-      actions: buttons,
-      launchLoginPage: embeddedData.firstWhereOrNull(
-        (it) => it.id == appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId,
-      ),
-    );
-  }
+  final CallConfig callConfig;
+  final EncodingConfig encoding;
+  final PeerConnectionSettings peerConnection;
 
-  static CallFeature _tryConfigureCallFeature(AppConfig appConfig, AppPreferences preferences) {
+  /// Configuration for how incoming calls are triggered.
+  ///
+  /// This controls which triggering mechanisms are available and which one is currently active.
+  /// It also defines fallback behavior via SMS if supported.
+  ///
+  /// Note: This setting affects **UI-level visibility and selection** of triggering methods,
+  /// not the underlying signaling implementation.
+  final CallTriggerConfig callTriggerConfig;
+
+  factory CallFeature.fromConfig(AppConfig appConfig) {
     final callConfig = appConfig.callConfig;
 
     final transferConfig = appConfig.callConfig.transfer;
@@ -341,16 +445,68 @@ class FeatureAccess {
       ),
     );
   }
+}
 
-  static MessagingFeature _tryConfigureMessagingFeature(AppConfig appConfig, CoreSupport coreSupport) {
+class MessagingFeature {
+  MessagingFeature(this._coreSupport, {bool tabEnabled = false, bool groupChatButtonEnabled = true})
+    : _tabEnabled = tabEnabled,
+      _groupChatSupport = groupChatButtonEnabled;
+
+  final CoreSupport _coreSupport;
+  final bool _tabEnabled;
+  final bool _groupChatSupport;
+
+  factory MessagingFeature.fromConfig(AppConfig appConfig, CoreSupport coreSupport) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
       (tab) => tab.maybeWhen(messaging: (enabled, _, _, _) => enabled, orElse: () => false),
     );
 
-    return MessagingFeature(coreSupport, tabEnabled: tabEnabled);
+    return MessagingFeature(
+      coreSupport,
+      tabEnabled: tabEnabled,
+      groupChatButtonEnabled: appConfig.messaging.chats.groupChatButtonEnabled,
+    );
   }
 
-  static TermsFeature _tryConfigureTermsFeature(List<EmbeddedResource> embeddedResources) {
+  /// Check if the SMS messaging feature is supported by remote system.
+  bool get coreSmsSupport => _coreSupport.supportsSms;
+
+  /// Check if the internal messaging feature is supported by remote system.
+  bool get coreChatsSupport => _coreSupport.supportsChats;
+
+  /// Check if the messaging tab is enabled within the app configuration.
+  bool get tabEnabled => _tabEnabled;
+
+  /// Check if any messaging feature is enabled.
+  /// This is used to determine if messaging services should be initialized or can be skipped.
+  bool get anyMessagingEnabled => (coreSmsSupport || coreChatsSupport) && tabEnabled;
+
+  /// Check if the SMS messaging feature is enabled and supported by remote system.
+  /// This is used to determine if SMS messaging UI components should be displayed or hidden.
+  bool get smsPresent => coreSmsSupport && tabEnabled;
+
+  /// Check if the internal messaging feature is enabled and supported by remote system.
+  /// This is used to determine if internal messaging UI components should be displayed or hidden.
+  bool get chatsPresent => coreChatsSupport && tabEnabled;
+
+  /// Check if the group chat functionality is enabled.
+  bool get groupChatSupport => _groupChatSupport;
+}
+
+/// Represents the configuration of the terms and privacy policy feature in the app.
+/// The `TermsFeature` class is responsible for assigning the correct terms resource, either from
+/// a provided embedded resource ID or by searching for a resource of type `terms`.
+///
+/// Configuration Scheme:
+/// 1. **Embedded Resource**: The `TermsFeature` looks for an embedded resource of type `terms`
+///    to assign the privacy policy. If the embedded resource is not explicitly provided in `AppConfig`,
+///    it will be searched in the embedded resources by type.
+class TermsFeature {
+  final EmbeddedData configData;
+
+  TermsFeature(this.configData);
+
+  factory TermsFeature.fromConfig(List<EmbeddedResource> embeddedResources) {
     // Attempt to find the terms resource from the embedded resources list.
     final termsResource = embeddedResources.firstWhereOrNull((resource) => resource.type == EmbeddedResourceType.terms);
 
@@ -375,8 +531,14 @@ class FeatureAccess {
       ),
     );
   }
+}
 
-  static EmbeddedFeature _tryConfigureEmbeddedFeature(List<EmbeddedResource> embeddedResources) {
+class EmbeddedFeature {
+  final List<EmbeddedData> embeddedResources;
+
+  EmbeddedFeature(this.embeddedResources);
+
+  factory EmbeddedFeature.fromConfig(List<EmbeddedResource> embeddedResources) {
     final embeddedData = embeddedResources.map((resource) {
       // If strategy is not provided, default to hard reload.
       final reconnectStrategy = resource.reconnectStrategy != null
@@ -393,162 +555,6 @@ class FeatureAccess {
 
     return EmbeddedFeature(embeddedData);
   }
-
-  static SystemNotificationsFeature _tryConfigureSystemNotificationsFeature(
-    CoreSupport coreSupport,
-    AppConfig appConfig,
-  ) {
-    final enabled = appConfig.mainConfig.systemNotificationsEnabled;
-    return SystemNotificationsFeature(coreSupport, enabled);
-  }
-
-  static SipPresenceFeature _tryConfigureSipPresenceFeature(CoreSupport coreSupport, AppConfig appConfig) {
-    final enabled = appConfig.mainConfig.sipPresenceEnabled;
-    return SipPresenceFeature(coreSupport, enabled);
-  }
-}
-
-class LoginFeature {
-  final String? titleL10n;
-  final List<LoginModeAction> actions;
-  final EmbeddedData? launchLoginPage;
-
-  LoginFeature({required this.titleL10n, required this.actions, required this.launchLoginPage});
-
-  List<LoginEmbeddedModeButton> get embeddedConfigurations => actions.whereType<LoginEmbeddedModeButton>().toList();
-
-  bool get hasEmbeddedPage => embeddedConfigurations.isNotEmpty;
-
-  List<LoginModeAction> get launchButtons => actions.toList();
-}
-
-class BottomMenuFeature {
-  BottomMenuFeature(List<BottomMenuTab> tabs, this._appPreferences, {bool cacheSelectedTab = true})
-    : _tabs = List.unmodifiable(tabs) {
-    final savedFlavor = cacheSelectedTab ? _appPreferences.getActiveMainFlavor() : null;
-    _activeTab = _findInitialTab(savedFlavor);
-  }
-
-  final List<BottomMenuTab> _tabs;
-  final AppPreferences _appPreferences;
-  late BottomMenuTab _activeTab;
-
-  List<BottomMenuTab> get tabs => _tabs;
-
-  List<EmbeddedBottomMenuTab> get embeddedTabs => _tabs.whereType<EmbeddedBottomMenuTab>().toList(growable: false);
-
-  BottomMenuTab get activeTab => _activeTab;
-
-  int get activeIndex => _tabs.indexOf(_activeTab);
-
-  /// Returns the first enabled tab of the specified type [T], or `null` if no such tab exists.
-  T? getTabEnabled<T extends BottomMenuTab>() {
-    final tab = _tabs.firstWhereOrNull((tab) => tab is T && tab.enabled);
-    return tab is T ? tab : null;
-  }
-
-  /// Returns the embedded tab with the specified [id].
-  EmbeddedBottomMenuTab getEmbeddedTabById(String id) {
-    return embeddedTabs.firstWhere((tab) => tab.id == id);
-  }
-
-  /// Sets the active tab to [newTab] and persists the selection in preferences.
-  set activeFlavor(BottomMenuTab newTab) {
-    _activeTab = newTab;
-    _appPreferences.setActiveMainFlavor(newTab.flavor);
-  }
-
-  /// Finds the initial tab to be selected based on the saved flavor or the initial flag.
-  BottomMenuTab _findInitialTab(MainFlavor? savedFlavor) {
-    return _tabs.firstWhereOrNull((tab) => tab.flavor == savedFlavor) ??
-        _tabs.firstWhereOrNull((tab) => tab.initial) ??
-        _tabs.first;
-  }
-}
-
-class SettingsFeature {
-  SettingsFeature(this._sections, this._coreSupport);
-
-  final List<SettingsSection> _sections;
-  final CoreSupport _coreSupport;
-
-  List<SettingsSection> get sections => List.unmodifiable(_sections);
-
-  bool get isVoicemailsEnabled => _sections.any((section) {
-    return section.items.any((item) {
-      return item.flavor == SettingsFlavor.voicemail && _coreSupport.supportsVoicemail;
-    });
-  });
-}
-
-class CallFeature {
-  CallFeature({
-    required this.callConfig,
-    required this.encoding,
-    required this.peerConnection,
-    required this.callTriggerConfig,
-  });
-
-  final CallConfig callConfig;
-  final EncodingConfig encoding;
-  final PeerConnectionSettings peerConnection;
-
-  /// Configuration for how incoming calls are triggered.
-  ///
-  /// This controls which triggering mechanisms are available and which one is currently active.
-  /// It also defines fallback behavior via SMS if supported.
-  ///
-  /// Note: This setting affects **UI-level visibility and selection** of triggering methods,
-  /// not the underlying signaling implementation.
-  final CallTriggerConfig callTriggerConfig;
-}
-
-class MessagingFeature {
-  MessagingFeature(this._coreSupport, {bool tabEnabled = false}) : _tabEnabled = tabEnabled;
-
-  final CoreSupport _coreSupport;
-  final bool _tabEnabled;
-
-  /// Check if the SMS messaging feature is supported by remote system.
-  bool get coreSmsSupport => _coreSupport.supportsSms;
-
-  /// Check if the internal messaging feature is supported by remote system.
-  bool get coreChatsSupport => _coreSupport.supportsChats;
-
-  /// Check if the messaging tab is enabled within the app configuration.
-  bool get tabEnabled => _tabEnabled;
-
-  /// Check if any messaging feature is enabled.
-  /// This is used to determine if messaging services should be initialized or can be skipped.
-  bool get anyMessagingEnabled => (coreSmsSupport || coreChatsSupport) && tabEnabled;
-
-  /// Check if the SMS messaging feature is enabled and supported by remote system.
-  /// This is used to determine if SMS messaging UI components should be displayed or hidden.
-  bool get smsPresent => coreSmsSupport && tabEnabled;
-
-  /// Check if the internal messaging feature is enabled and supported by remote system.
-  /// This is used to determine if internal messaging UI components should be displayed or hidden.
-  bool get chatsPresent => coreChatsSupport && tabEnabled;
-}
-
-/// Represents the configuration of the terms and privacy policy feature in the app.
-/// The `TermsFeature` class is responsible for assigning the correct terms resource, either from
-/// a provided embedded resource ID or by searching for a resource of type `terms`.
-///
-/// Configuration Scheme:
-/// 1. **Embedded Resource**: The `TermsFeature` looks for an embedded resource of type `terms`
-///    to assign the privacy policy. If the embedded resource is not explicitly provided in `AppConfig`,
-///    it will be searched in the embedded resources by type.
-class TermsFeature {
-  final EmbeddedData configData;
-
-  TermsFeature(this.configData);
-}
-
-class EmbeddedFeature {
-  final List<EmbeddedData> embeddedResources;
-
-  EmbeddedFeature(this.embeddedResources);
 }
 
 class SystemNotificationsFeature {
@@ -556,6 +562,11 @@ class SystemNotificationsFeature {
 
   final bool enabled;
   final CoreSupport _coreSupport;
+
+  factory SystemNotificationsFeature.fromConfig(CoreSupport coreSupport, AppConfig appConfig) {
+    final enabled = appConfig.mainConfig.systemNotificationsEnabled;
+    return SystemNotificationsFeature(coreSupport, enabled);
+  }
 
   bool get coreSystemSupport => _coreSupport.supportsSystemNotifications;
 
@@ -574,8 +585,60 @@ class SipPresenceFeature {
   final CoreSupport _coreSupport;
   final bool enabled;
 
+  factory SipPresenceFeature.fromConfig(CoreSupport coreSupport, AppConfig appConfig) {
+    final enabled = appConfig.mainConfig.sipPresenceEnabled;
+    return SipPresenceFeature(coreSupport, enabled);
+  }
+
   /// Check if the SIP presence feature is enabled and supported by the remote system.
   bool get sipPresenceSupport => enabled && _coreSupport.supportsSipPresence;
+}
+
+/// Manages contact-related features, such as actions available on the contact details screen.
+class ContactsFeature {
+  /// Creates an instance of [ContactsFeature] with a given [detailsConfig].
+  const ContactsFeature({required this.detailsConfig});
+
+  /// The configuration for the contact details screen.
+  final ContactDetailsConfig detailsConfig;
+
+  static const Set<ContactAction> _defaultAppBarActions = {ContactAction.chat};
+
+  static const Set<ContactAction> _defaultEmailActions = {ContactAction.sendEmail};
+
+  static final Map<String, ContactAction> _actionByName = ContactAction.values.asNameMap();
+
+  /// Creates a [ContactsFeature] from the given [appConfig].
+  ///
+  /// It parses the actions defined in the contacts configuration for different UI elements.
+  /// If the config is null or contains invalid values, it falls back to defined defaults.
+  factory ContactsFeature.fromConfig(AppConfig appConfig) {
+    final detailsDto = appConfig.contacts.details;
+
+    // Pre-calculate the default "All except chat" for phone tiles
+    // to avoid recalculating it on every instantiation.
+    final defaultPhoneActions = ContactAction.values.where((action) => action != ContactAction.chat).toSet();
+
+    return ContactsFeature(
+      detailsConfig: ContactDetailsConfig(
+        appBarActions: _parseActions(detailsDto.actions.appBar, fallback: _defaultAppBarActions),
+        phoneTileActions: _parseActions(detailsDto.actions.phoneTile, fallback: defaultPhoneActions),
+        emailTileActions: _parseActions(detailsDto.actions.emailTile, fallback: _defaultEmailActions),
+      ),
+    );
+  }
+
+  /// Parses a list of raw action strings into a set of [ContactAction] enums.
+  ///
+  /// Returns [fallback] if [rawActions] is null.
+  /// Invalid strings inside [rawActions] are ignored.
+  static Set<ContactAction> _parseActions(List<String>? rawActions, {required Set<ContactAction> fallback}) {
+    if (rawActions == null) return fallback;
+
+    final parsed = rawActions.map((e) => _actionByName[e]).whereType<ContactAction>().toSet();
+
+    return parsed;
+  }
 }
 
 /// Provides a centralized way to check whether specific [FeatureFlag]s are enabled.

@@ -47,13 +47,12 @@ class LogRecordsConsoleScreen extends StatelessWidget {
       ),
       body: BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
         builder: (context, state) {
-          final logRecordsFormatter = context.read<LogRecordsConsoleCubit>().logRecordsFormatter;
           switch (state) {
             case LogRecordsConsoleStateSuccess(:final logRecords):
               return ListView.separated(
                 itemBuilder: (context, index) {
                   final logRecord = logRecords[index];
-                  return Text(logRecordsFormatter.format(logRecord), maxLines: 100);
+                  return Text(logRecord, maxLines: 100);
                 },
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: state.logRecords.length,

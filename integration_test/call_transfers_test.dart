@@ -21,8 +21,8 @@ void main() {
   const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
 
   patrolTest('Should make blind and attended transfers', ($) async {
-    await bootstrap();
-    await pumpRootAndWaitUntilVisible($);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
     // Login if not.
     if ($(LoginModeSelectScreen).visible) {

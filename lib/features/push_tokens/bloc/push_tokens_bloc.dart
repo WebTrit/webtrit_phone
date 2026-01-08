@@ -30,6 +30,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     required this.secureStorage,
     required this.firebaseMessaging,
     required this.callkeep,
+    required this.pushEnvironment,
   }) : super(PushTokensState.initial()) {
     _onTokenRefreshSubscription = firebaseMessaging.onTokenRefresh.listen((fcmToken) {
       add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
@@ -45,6 +46,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   final SecureStorage secureStorage;
   final FirebaseMessaging firebaseMessaging;
   final Callkeep callkeep;
+  final PushEnvironment pushEnvironment;
 
   late StreamSubscription _onTokenRefreshSubscription;
 
@@ -106,16 +108,30 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     }
   }
 
+  // If PushSystemAvailability status is unknown then it will retry in case if google_api_availability package could not get status because of vendor.
+  // In other statuses except of updating an success it will stop retrying.
   Future<void> _retrieveAndStoreFcmToken() async {
     const vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
 
+    final initialStatus = await pushEnvironment.getAvailability();
+
+    if (initialStatus.isTerminal) {
+      _logger.warning('GMS status is terminal ($initialStatus). Aborting.');
+      return;
+    }
+
     final fcmToken = await _backoffRetries.execute<String?>(
-      (attempt) async {
-        _logger.fine('_retrieveAndStoreFcmToken attempt $attempt');
-        return await firebaseMessaging.getToken(vapidKey: vapidKey);
-      },
-      shouldRetry: (e, attempt) {
-        add(PushTokensEventError('Failed to retrieve FCM token: $e at attempt $attempt'));
+      (_) => firebaseMessaging.getToken(vapidKey: vapidKey),
+      shouldRetry: (e, attempt) async {
+        _logger.warning('Attempt $attempt failed: $e');
+
+        final retryStatus = await pushEnvironment.getAvailability();
+
+        if (retryStatus.isTerminal) {
+          _logger.warning('Stopping retries. GMS became terminal: $retryStatus');
+          return false;
+        }
+
         return true;
       },
     );
@@ -129,10 +145,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   Future<void> _retrieveAndStoreApnsToken() async {
     final apnsToken = await _backoffRetries.execute<String?>(
-      (attempt) async {
-        _logger.fine('_retrieveAndStoreApnsToken attempt $attempt');
-        return await firebaseMessaging.getAPNSToken();
-      },
+      (attempt) => firebaseMessaging.getAPNSToken(),
       shouldRetry: (e, attempt) {
         add(PushTokensEventError('Failed to retrieve APNS token: $e at attempt $attempt'));
         return true;

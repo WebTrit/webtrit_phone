@@ -19,18 +19,23 @@ class SpecialPermission extends StatelessWidget {
   final CallkeepSpecialPermissions specialPermissions;
 
   final VoidCallback onGoToAppSettings;
-  final VoidCallback onPop;
+  final VoidCallback? onPop;
 
   @override
   Widget build(BuildContext context) {
-    switch (specialPermissions) {
-      case CallkeepSpecialPermissions.fullScreenIntent:
-        return PermissionTips(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) return;
+      },
+      child: switch (specialPermissions) {
+        CallkeepSpecialPermissions.fullScreenIntent => PermissionTips(
           title: context.l10n.permission_manageFullScreenNotificationPermissions,
           instruction: specialPermissions.tips(context),
           onGoToAppSettings: onGoToAppSettings,
           onPop: onPop,
-        );
-    }
+        ),
+      },
+    );
   }
 }

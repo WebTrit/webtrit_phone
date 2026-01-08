@@ -14,7 +14,7 @@ version: 0.0.0+000000000
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 # app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
-app_version: 1.11.0+2
+app_version: 1.12.0
 
 environment:
   sdk: ^3.8.0
@@ -52,6 +52,7 @@ dependencies:
   formz: ^0.8.0
   freezed_annotation: ^3.1.0
   google_fonts: ^6.3.2
+  google_api_availability: ^5.0.1
   intl: any
   json_annotation: ^4.9.0
   just_audio: ^0.10.5
@@ -91,6 +92,7 @@ dependencies:
   country_code_picker: ^3.4.1
   icon_decoration: ^2.1.0
   emoji_picker_flutter: ^4.3.0
+  mask_text_input_formatter: ^2.9.0
 
   webtrit_api:
     path: ./packages/webtrit_api

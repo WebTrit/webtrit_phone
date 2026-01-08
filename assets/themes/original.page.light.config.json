@@ -28,10 +28,56 @@
         "render": {
           "scale": 0.25,
           "padding": {
-            "left": 0.0,
-            "top": 128.0,
-            "right": 0.0,
-            "bottom": 0.0
+            "left": 0,
+            "top": 80,
+            "right": 0,
+            "bottom": 24
+          }
+        }
+      }
+    },
+    "otpSignin": {
+      "_refTextField": {
+        "keyboardType": "phone",
+        "textAlign": "left",
+        "decoration": {
+          "labelText": "login_TextFieldLabelText_otpSigninUserRef",
+          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation. If the key is missing or cannot be resolved, the default label for this input will be used automatically. If omitted entirely, the value is treated as plain text for single-language setups.",
+          "_prefixText": "123",
+          "_hintText": "XXXXXXXXX"
+        },
+        "inputValue": {
+          "_includePrefixInData": true,
+          "_initialValue": "380",
+          "__initialValue": "The string value used to pre-fill the text field when the screen is initialized. This is typically used to set a default country code or prefix that the user can modify."
+        },
+        "_mask": {
+          "pattern": "+380 (##) ###-##-##",
+          "filter": {
+            "#": "[0-9]"
+          }
+        }
+      }
+    },
+    "passwordSignin": {
+      "_refTextField": {
+        "keyboardType": "phone",
+        "textAlign": "left",
+        "decoration": {
+          "labelText": "login_TextFieldLabelText_passwordSigninUserRef",
+          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation. If the key is missing or cannot be resolved, the default label for this input will be used automatically. If omitted entirely, the value is treated as plain text for single-language setups.",
+          "_prefixText": "123",
+          "_hintText": "XXXXXXXXX"
+        },
+        "inputValue": {
+          "_includePrefixInData": false,
+          "_initialValue": "380",
+          "__initialValue": "The string value used to pre-fill the text field when the screen is initialized. This is typically used to set a default country code or prefix that the user can modify."
+        },
+        "_mask": {
+          "pattern": "+380 (##) ###-##-##",
+          "filter": {
+            "#": "[0-9]"
           }
         }
       }

@@ -16,6 +16,17 @@ part 'chat_conversation_builder_state.dart';
 
 final _logger = Logger('ChatConversationBuilderCubit');
 
+/// A configuration class for the chat conversation builder feature.
+///
+/// This class encapsulates settings that control the behavior of the chat
+/// conversation builder, such as enabling or disabling group chats.
+class ChatConversationBuilderConfig {
+  ChatConversationBuilderConfig({required this.enableGroupChats});
+
+  /// A flag indicating whether group chats are enabled.
+  final bool enableGroupChats;
+}
+
 class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
   ChatConversationBuilderCubit(
     this.client,
@@ -25,6 +36,7 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
     required this.openGroup,
     required this.submitNotification,
     this.contactfilter = _defaultContactFilter,
+    required this.chatConversationBuilderConfig,
   }) : super(ChatCBState.initializing()) {
     /// Initialize the contacts subscription.
     _contactsSub = _contactsSubFactory;
@@ -48,6 +60,9 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
   /// The filter of contact that able to involve in the chat conversation or invite to the group.
   final bool Function(Contact) contactfilter;
 
+  /// Specific configuration for the chat conversation builder feature.
+  final ChatConversationBuilderConfig chatConversationBuilderConfig;
+
   late final StreamSubscription _contactsSub;
 
   StreamSubscription get _contactsSubFactory {
@@ -66,7 +81,9 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
 
     /// Initialize builder state with the contacts list filtered by the provided filter
     /// If the state is already initialized update the contacts list using covariant copyWith method
-    state is ChatCBCommon ? emit(state.copyWith(contacts: filtered)) : emit(ChatCBState.common(filtered));
+    state is ChatCBCommon
+        ? emit(state.copyWith(contacts: filtered))
+        : emit(ChatCBState.common(filtered, enableGroupChats: chatConversationBuilderConfig.enableGroupChats));
   }
 
   /// Handles the confirmation of dialog creation for a given contact.

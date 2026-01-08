@@ -62,8 +62,22 @@ TextDecorationConfig _$TextDecorationConfigFromJson(
   types:
       (json['types'] as List<dynamic>?)?.map((e) => e as String).toList() ??
       const [],
+  hint: json['hint'] as String?,
+  hintStyle: json['hintStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['hintStyle'] as Map<String, dynamic>),
+  prefixText: json['prefixText'] as String?,
+  prefixStyle: json['prefixStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['prefixStyle'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$TextDecorationConfigToJson(
   TextDecorationConfig instance,
-) => <String, dynamic>{'types': instance.types};
+) => <String, dynamic>{
+  'types': instance.types,
+  'hint': instance.hint,
+  'hintStyle': instance.hintStyle?.toJson(),
+  'prefixText': instance.prefixText,
+  'prefixStyle': instance.prefixStyle?.toJson(),
+};

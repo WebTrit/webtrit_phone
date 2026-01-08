@@ -9,23 +9,17 @@ import 'package:webtrit_phone/utils/utils.dart';
 final _logger = Logger('SessionCleanupWorker');
 
 class SessionCleanupWorker {
-  static late SessionCleanupWorker _instance;
-
-  static Future<SessionCleanupWorker> init() async {
+  static SessionCleanupWorker init(WebtritApiClientFactory apiClientFactory) {
     final requestStorage = RequestStorage();
-    _instance = SessionCleanupWorker._(requestStorage);
-    return _instance;
+    return SessionCleanupWorker._(requestStorage, apiClientFactory);
   }
 
-  factory SessionCleanupWorker() {
-    return _instance;
-  }
-
-  SessionCleanupWorker._(this._requestStorage) {
+  SessionCleanupWorker._(this._requestStorage, this.apiClientFactory) {
     _initConnectivityListener();
   }
 
   final RequestStorage _requestStorage;
+  final WebtritApiClientFactory apiClientFactory;
 
   void _initConnectivityListener() {
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) async {
@@ -72,7 +66,8 @@ class SessionCleanupWorker {
     final token = sessionData[RequestStorage.tokenKey];
 
     try {
-      await defaultCreateWebtritApiClient(uri.toString(), '').deleteSession(token);
+      // Omit the tenantId parameter (pass null) - the tenant ID is already encoded in the `uri`.
+      await apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(uri), tenantId: '').deleteSession(token);
       await _requestStorage.removeFailedSession(key);
     } catch (e) {
       _logger.severe('Session retry failed: $e');

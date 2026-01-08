@@ -6,18 +6,16 @@ import 'package:logging/logging.dart';
 final Logger _logger = Logger('AppTime');
 
 class AppTime {
-  static late final AppTime _instance;
-
   static Future<AppTime> init() async {
     final is24HourFormat = await _determine24HourFormat();
 
     final shortDateFormat = is24HourFormat ? DateFormat.Hm() : DateFormat.jms();
     final detailDateFormat = is24HourFormat ? DateFormat.yMMMd().add_Hm() : DateFormat.yMMMd().add_jms();
+    final fileNameDateFormat = DateFormat('yyyy-MM-dd_HH-mm-ss');
 
     _logger.info('Initialized with format: $is24HourFormat');
 
-    _instance = AppTime._(is24HourFormat, shortDateFormat, detailDateFormat);
-    return _instance;
+    return AppTime._(is24HourFormat, shortDateFormat, detailDateFormat, fileNameDateFormat);
   }
 
   static Future<bool> _determine24HourFormat() async {
@@ -31,14 +29,16 @@ class AppTime {
     }
   }
 
-  factory AppTime() => _instance;
-
-  AppTime._(this._is24HourFormat, this.shortDateFormat, this.fullDateFormat);
+  AppTime._(this._is24HourFormat, this.shortDateFormat, this.fullDateFormat, this.fileNameDateFormat);
 
   final bool _is24HourFormat;
 
   final DateFormat shortDateFormat;
   final DateFormat fullDateFormat;
+
+  /// A format specifically designed for generating safe filenames.
+  /// Pattern: `yyyy-MM-dd_HH-mm-ss`
+  final DateFormat fileNameDateFormat;
 
   bool get is24HourFormat => _is24HourFormat;
 

@@ -36,11 +36,37 @@ class MainAppBar extends AppBar {
                         height: kMinInteractiveDimension,
                       ),
                       padding: const EdgeInsets.all(2),
-                      icon: LeadingAvatar(
-                        username: info?.name ?? info?.numbers.main,
-                        thumbnailUrl: gravatarThumbnailUrl(info?.email),
-                        radius: kMinInteractiveDimension / 2,
-                        showLoading: true,
+                      icon: Stack(
+                        clipBehavior: Clip.none,
+                        children: <Widget>[
+                          LeadingAvatar(
+                            username: info?.name ?? info?.numbers.main,
+                            thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                            radius: kMinInteractiveDimension / 2,
+                            showLoading: true,
+                          ),
+                          BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
+                            builder: (context, microphoneStatusState) {
+                              return Visibility(
+                                visible:
+                                    microphoneStatusState.microphonePermissionGranted != null &&
+                                    !microphoneStatusState.microphonePermissionGranted!,
+                                child: Positioned(
+                                  right: -8,
+                                  top: -2,
+                                  child: Container(
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.error,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(Icons.mic_off, color: Colors.white, size: 14),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                       onPressed: () {
                         context.router.navigate(const SettingsRouterPageRoute());

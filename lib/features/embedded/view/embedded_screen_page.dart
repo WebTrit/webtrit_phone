@@ -35,6 +35,7 @@ class EmbeddedScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final selfConfigRepository = context.readOrNull<PrivateGatewayRepository>();
     final secureStorage = context.read<SecureStorage>();
+    final appMetadataProvider = context.read<AppMetadataProvider>();
     final cubit = _createCubit(selfConfigRepository, secureStorage);
 
     if (selfConfigRepository == null) {
@@ -54,16 +55,18 @@ class EmbeddedScreenPage extends StatelessWidget {
           return Center(child: Text('Failed to load content: ${snapshot.error}'));
         } else if (snapshot.hasData) {
           final content = snapshot.data!;
+
           return resource is NetworkResourceLoader
               ? BlocProvider(
                   create: (_) => cubit,
                   child: EmbeddedScreen(
                     initialUri: data.uri,
+                    userAgent: appMetadataProvider.userAgent,
                     mediaQueryMetricsData: context.mediaQueryMetrics,
-                    deviceInfoData: context.read<AppLabelsProvider>().build(),
+                    deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                     appBar: _buildAppBar(context),
                     pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
-                    connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
+                    connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(context, data),
                     // TODO: Use embedded configuration option to enable/disable log capture.
                     enableLogCapture: true,
                   ),
@@ -76,11 +79,12 @@ class EmbeddedScreenPage extends StatelessWidget {
                       mimeType: 'text/html',
                       encoding: Encoding.getByName('utf-8'),
                     ),
+                    userAgent: appMetadataProvider.userAgent,
                     mediaQueryMetricsData: context.mediaQueryMetrics,
-                    deviceInfoData: context.read<AppLabelsProvider>().build(),
+                    deviceInfoData: context.read<AppMetadataProvider>().logLabels,
                     appBar: _buildAppBar(context),
                     pageInjectionStrategyBuilder: () => _defaultPageInjectionStrategy(cubit.state.payload),
-                    connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(data),
+                    connectivityRecoveryStrategyBuilder: () => _createConnectivityRecoveryStrategy(context, data),
                     // TODO: Use embedded configuration option to enable/disable log capture.
                     enableLogCapture: true,
                   ),
@@ -109,13 +113,17 @@ class EmbeddedScreenPage extends StatelessWidget {
     return DefaultPayloadInjectionStrategy(initialPayload: payload);
   }
 
-  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(EmbeddedData data) {
+  ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(BuildContext context, EmbeddedData data) {
+    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+
     return ConnectivityRecoveryStrategy.create(
       initialUri: data.uri,
       type: data.reconnectStrategy,
       connectivityStream: Connectivity().onConnectivityChanged,
-      connectivityCheckerBuilder: () =>
-          const DefaultConnectivityChecker(connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL),
+      connectivityCheckerBuilder: () => DefaultConnectivityChecker(
+        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
+        createHttpRequestExecutor: executor,
+      ),
     );
   }
 }
