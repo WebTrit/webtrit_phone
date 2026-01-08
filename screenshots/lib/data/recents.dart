@@ -16,6 +16,7 @@ final dMockRecentCallHistory = [
     contact: Contact(
       id: 1,
       sourceType: ContactSourceType.local,
+      kind: ContactKind.visible,
       sourceId: '1',
       firstName: 'Thomas',
       lastName: 'Anderson',
@@ -34,6 +35,7 @@ final dMockRecentCallHistory = [
     contact: Contact(
       id: 2,
       sourceType: ContactSourceType.local,
+      kind: ContactKind.visible,
       sourceId: '2',
       firstName: 'Thomas',
       lastName: 'Anderson',
@@ -52,6 +54,7 @@ final dMockRecentCallHistory = [
     contact: Contact(
       id: 3,
       sourceType: ContactSourceType.local,
+      kind: ContactKind.visible,
       sourceId: '3',
       firstName: 'Dion',
       lastName: 'Dames',
@@ -70,6 +73,7 @@ final dMockRecentCallHistory = [
     contact: Contact(
       id: 4,
       sourceType: ContactSourceType.external,
+      kind: ContactKind.visible,
       sourceId: '4',
       firstName: 'Stuart',
       lastName: 'Peterson',
@@ -88,6 +92,7 @@ final dMockRecentCallHistory = [
     contact: Contact(
       id: 5,
       sourceType: ContactSourceType.external,
+      kind: ContactKind.visible,
       sourceId: '5',
       firstName: 'Alex',
       lastName: 'Bloom',

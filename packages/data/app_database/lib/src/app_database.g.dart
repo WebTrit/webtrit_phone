@@ -35,15 +35,15 @@ class $ContactsTableTable extends ContactsTable
         $ContactsTableTable.$convertersourceType,
       );
   @override
-  late final GeneratedColumnWithTypeConverter<ContactKind, int> kind =
+  late final GeneratedColumnWithTypeConverter<ContactKindTypeEnum, int> kind =
       GeneratedColumn<int>(
         'kind',
         aliasedName,
         false,
         type: DriftSqlType.int,
         requiredDuringInsert: false,
-        defaultValue: Constant(ContactKind.visible.index),
-      ).withConverter<ContactKind>($ContactsTableTable.$converterkind);
+        defaultValue: Constant(ContactKindTypeEnum.visible.index),
+      ).withConverter<ContactKindTypeEnum>($ContactsTableTable.$converterkind);
   static const VerificationMeta _sourceIdMeta = const VerificationMeta(
     'sourceId',
   );
@@ -337,14 +337,14 @@ class $ContactsTableTable extends ContactsTable
   $convertersourceType = const EnumIndexConverter<ContactSourceTypeEnum>(
     ContactSourceTypeEnum.values,
   );
-  static JsonTypeConverter2<ContactKind, int, int> $converterkind =
-      const EnumIndexConverter<ContactKind>(ContactKind.values);
+  static JsonTypeConverter2<ContactKindTypeEnum, int, int> $converterkind =
+      const EnumIndexConverter<ContactKindTypeEnum>(ContactKindTypeEnum.values);
 }
 
 class ContactData extends DataClass implements Insertable<ContactData> {
   final int id;
   final ContactSourceTypeEnum sourceType;
-  final ContactKind kind;
+  final ContactKindTypeEnum kind;
   final String? sourceId;
   final String? firstName;
   final String? lastName;
@@ -507,7 +507,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
   ContactData copyWith({
     int? id,
     ContactSourceTypeEnum? sourceType,
-    ContactKind? kind,
+    ContactKindTypeEnum? kind,
     Value<String?> sourceId = const Value.absent(),
     Value<String?> firstName = const Value.absent(),
     Value<String?> lastName = const Value.absent(),
@@ -623,7 +623,7 @@ class ContactData extends DataClass implements Insertable<ContactData> {
 class ContactDataCompanion extends UpdateCompanion<ContactData> {
   final Value<int> id;
   final Value<ContactSourceTypeEnum> sourceType;
-  final Value<ContactKind> kind;
+  final Value<ContactKindTypeEnum> kind;
   final Value<String?> sourceId;
   final Value<String?> firstName;
   final Value<String?> lastName;
@@ -699,7 +699,7 @@ class ContactDataCompanion extends UpdateCompanion<ContactData> {
   ContactDataCompanion copyWith({
     Value<int>? id,
     Value<ContactSourceTypeEnum>? sourceType,
-    Value<ContactKind>? kind,
+    Value<ContactKindTypeEnum>? kind,
     Value<String?>? sourceId,
     Value<String?>? firstName,
     Value<String?>? lastName,
@@ -12225,7 +12225,7 @@ typedef $$ContactsTableTableCreateCompanionBuilder =
     ContactDataCompanion Function({
       Value<int> id,
       required ContactSourceTypeEnum sourceType,
-      Value<ContactKind> kind,
+      Value<ContactKindTypeEnum> kind,
       Value<String?> sourceId,
       Value<String?> firstName,
       Value<String?> lastName,
@@ -12241,7 +12241,7 @@ typedef $$ContactsTableTableUpdateCompanionBuilder =
     ContactDataCompanion Function({
       Value<int> id,
       Value<ContactSourceTypeEnum> sourceType,
-      Value<ContactKind> kind,
+      Value<ContactKindTypeEnum> kind,
       Value<String?> sourceId,
       Value<String?> firstName,
       Value<String?> lastName,
@@ -12311,11 +12311,11 @@ class $$ContactsTableTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<ContactKind, ContactKind, int> get kind =>
-      $composableBuilder(
-        column: $table.kind,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
+  ColumnWithTypeConverterFilters<ContactKindTypeEnum, ContactKindTypeEnum, int>
+  get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
 
   ColumnFilters<String> get sourceId => $composableBuilder(
     column: $table.sourceId,
@@ -12486,7 +12486,7 @@ class $$ContactsTableTableAnnotationComposer
         builder: (column) => column,
       );
 
-  GeneratedColumnWithTypeConverter<ContactKind, int> get kind =>
+  GeneratedColumnWithTypeConverter<ContactKindTypeEnum, int> get kind =>
       $composableBuilder(column: $table.kind, builder: (column) => column);
 
   GeneratedColumn<String> get sourceId =>
@@ -12584,7 +12584,7 @@ class $$ContactsTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<ContactSourceTypeEnum> sourceType = const Value.absent(),
-                Value<ContactKind> kind = const Value.absent(),
+                Value<ContactKindTypeEnum> kind = const Value.absent(),
                 Value<String?> sourceId = const Value.absent(),
                 Value<String?> firstName = const Value.absent(),
                 Value<String?> lastName = const Value.absent(),
@@ -12614,7 +12614,7 @@ class $$ContactsTableTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required ContactSourceTypeEnum sourceType,
-                Value<ContactKind> kind = const Value.absent(),
+                Value<ContactKindTypeEnum> kind = const Value.absent(),
                 Value<String?> sourceId = const Value.absent(),
                 Value<String?> firstName = const Value.absent(),
                 Value<String?> lastName = const Value.absent(),

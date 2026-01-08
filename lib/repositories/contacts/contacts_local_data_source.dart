@@ -6,7 +6,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 abstract class ContactsLocalDataSource {
   /// Upserts a single external contact.
   /// Used for fetching details of a specific contact.
-  Future<int> upsertContact(ExternalContact externalContact, ContactKind kind);
+  Future<int> upsertContact(ExternalContact externalContact, ContactKindTypeEnum kind);
 
   /// Synchronizes a list of external contacts.
   /// Handles deletion of missing contacts and batch upsert of new/updated ones.
@@ -27,7 +27,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
   final RegExp _numberRegExp = RegExp(numberSanitizeRegex);
 
   @override
-  Future<int> upsertContact(ExternalContact externalContact, ContactKind kind) {
+  Future<int> upsertContact(ExternalContact externalContact, ContactKindTypeEnum kind) {
     return _appDatabase.transaction(() async {
       return _upsertContactInternal(externalContact, kind: kind);
     });
@@ -135,7 +135,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
 
   /// Internal method to upsert a contact without creating a new transaction scope.
   /// This allows it to be reused in both single [upsertContact] and batch [syncExternalContacts].
-  Future<int> _upsertContactInternal(ExternalContact externalContact, {ContactKind? kind}) async {
+  Future<int> _upsertContactInternal(ExternalContact externalContact, {ContactKindTypeEnum? kind}) async {
     final insertOrUpdateContactData = await _appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
       ContactDataCompanion(
         sourceType: const Value(ContactSourceTypeEnum.external),

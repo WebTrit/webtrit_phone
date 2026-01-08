@@ -7,7 +7,7 @@ import 'package:webtrit_phone/models/models.dart';
 void main() {
   group('ContactDisplayExtension', () {
     Contact createContact({List<ContactPhone> phones = const [], int id = 1, bool favorite = false}) {
-      return Contact(id: id, sourceType: ContactSourceType.local, phones: phones);
+      return Contact(id: id, sourceType: ContactSourceType.local, kind: ContactKind.visible, phones: phones);
     }
 
     test('should prioritize Ext over Main, and Main over Additional', () {
