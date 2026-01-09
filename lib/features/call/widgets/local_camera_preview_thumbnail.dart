@@ -23,7 +23,6 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
     required this.frontCamera,
     required this.localStream,
     required this.onSwitchCameraPressed,
-    required this.localPlaceholderBuilder,
     this.smallerSide = ThumbnailLayout.defaultSmallerSide,
   });
 
@@ -44,9 +43,6 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
 
   /// Tap callback for switching the camera. If `null`, switching is disabled.
   final VoidCallback? onSwitchCameraPressed;
-
-  /// Placeholder builder shown by [StreamThumbnail] when stream is not ready.
-  final WidgetBuilder localPlaceholderBuilder;
 
   /// The smaller side of the preview; the other side is derived from aspect ratio.
   final double smallerSide;
@@ -81,7 +77,10 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
                 key: callFrontCameraPreviewKey,
                 stream: hasFrontCamera ? localStream : null,
                 mirror: frontCamera ?? false,
-                placeholderBuilder: localPlaceholderBuilder,
+                placeholderBuilder: (context) => Shimmer(
+                  baseColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+                  highlightColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.15),
+                ),
               ),
               Positioned(top: 8, right: 8, child: indicatorWidget),
             ],

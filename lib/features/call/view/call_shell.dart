@@ -10,7 +10,6 @@ import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/contacts/contacts_repository.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-import 'package:webtrit_phone/widgets/shimmer.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
 import '../call.dart';
@@ -211,7 +210,6 @@ class _CallShellState extends State<CallShell> {
             switchCameraIconSize: switchCameraIconSize,
             frontCamera: activeCall.frontCamera,
             localStream: activeCall.localStream,
-            localPlaceholderBuilder: (_) => const Shimmer(),
             onSwitchCameraPressed: activeCall.frontCamera == null
                 ? null
                 : () => callBloc.add(CallControlEvent.cameraSwitched(activeCall.callId)),

@@ -26,7 +26,6 @@ class CallActiveThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final frameSize = ThumbnailLayout.calcFrameSize(orientation: orientation, smallerSide: smallerSide);
-
     final hasRemoteVideo = activeCall.remoteStream?.getVideoTracks().isNotEmpty ?? false;
 
     return SizedBox.fromSize(
@@ -37,14 +36,28 @@ class CallActiveThumbnail extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           child: StreamThumbnail(
             stream: activeCall.remoteStream,
-            placeholderBuilder: (context) => const Shimmer(),
-            overlayBuilder: hasRemoteVideo
-                ? null
-                : (context) => _AvatarOverlay(activeCall: activeCall, contactResolver: contactResolver),
+            placeholderBuilder: (context) => _buildPlaceholder(context),
+            overlayBuilder: hasRemoteVideo ? null : (context) => _buildAvatarOverlay(),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildPlaceholder(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isAccepted = activeCall.wasAccepted;
+
+    return Shimmer(
+      duration: isAccepted ? const Duration(seconds: 5) : const Duration(milliseconds: 1500),
+      baseColor: isAccepted ? colorScheme.primaryContainer.withValues(alpha: 0.2) : colorScheme.surfaceContainerHighest,
+      highlightColor: isAccepted ? colorScheme.primary.withValues(alpha: 0.4) : Colors.white,
+    );
+  }
+
+  Widget _buildAvatarOverlay() {
+    return _AvatarOverlay(activeCall: activeCall, contactResolver: contactResolver);
   }
 }
 
@@ -56,25 +69,26 @@ class _AvatarOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayName = activeCall.displayName ?? '';
     final number = activeCall.handle.value;
 
     return Padding(
       padding: const EdgeInsets.all(8),
       child: FutureBuilder<Contact?>(
         future: contactResolver?.resolve(number),
-        builder: (context, snapshot) {
-          final contact = snapshot.data;
-          final resolvedName = contact?.maybeName ?? displayName;
-
-          return LeadingAvatar(
-            radius: 24,
-            username: resolvedName,
-            thumbnailUrl: contact?.thumbnailUrl,
-            placeholderIcon: Icons.phone_in_talk_outlined,
-          );
-        },
+        builder: (context, snapshot) => _buildAvatar(context, snapshot.data),
       ),
+    );
+  }
+
+  Widget _buildAvatar(BuildContext context, Contact? contact) {
+    final displayName = activeCall.displayName ?? '';
+    final resolvedName = contact?.maybeName ?? displayName;
+
+    return LeadingAvatar(
+      radius: 24,
+      username: resolvedName,
+      thumbnailUrl: contact?.thumbnailUrl,
+      placeholderIcon: Icons.phone_in_talk_outlined,
     );
   }
 }
