@@ -7,29 +7,20 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'rtc_stream_view.dart';
 
-/// A Local-camera preview shown on top of the call screen.
+/// A Local-camera preview intended to be used within a draggable overlay.
 ///
-/// This widget renders a small video thumbnail for the local [localStream]
+/// This widget renders a video thumbnail for the local [localStream]
 /// (typically the front/back camera stream) and overlays a camera-switch control.
+/// It calculates its own size based on the [orientation] and stream aspect ratio.
 class LocalCameraPreviewOverlay extends StatelessWidget {
   /// Creates a [LocalCameraPreviewOverlay].
   const LocalCameraPreviewOverlay({
     super.key,
 
-    /// Whether the call UI is in compact mode.
-    ///
-    /// When `true`, the preview moves closer to the top edge.
-    required this.compact,
-
     /// The current device orientation.
     ///
     /// Used to compute preview width/height depending on how the screen is rotated.
     required this.orientation,
-
-    /// Safe-area padding (e.g., notches, system bars).
-    ///
-    /// The overlay positions itself relative to these insets.
-    required this.padding,
 
     /// Color used for the preview background tint and icon/progress indicator.
     required this.onTabGradient,
@@ -51,7 +42,6 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
 
     /// Callback invoked when the user taps the overlay to switch cameras.
     ///
-    /// This is injected to keep UI independent from state management (DI).
     /// If `null`, switching is disabled.
     required this.onSwitchCameraPressed,
 
@@ -60,23 +50,14 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
     /// Passed through to [RTCStreamView] as `placeholderBuilder`.
     required this.localPlaceholderBuilder,
 
-    /// Animation duration for repositioning.
-    this.duration = kThemeChangeDuration,
-
     /// The smaller side (in logical pixels) of the preview.
     ///
     /// The other side is computed using the stream aspect ratio.
     this.smallerSide = 90.0,
   });
 
-  /// Whether the call UI is in compact mode (affects overlay vertical offset).
-  final bool compact;
-
   /// Current device orientation (affects computed preview dimensions).
   final Orientation orientation;
-
-  /// Safe-area padding for positioning within notches/system bars.
-  final EdgeInsets padding;
 
   /// Color used for background tint and overlay icon/progress indicator.
   final Color onTabGradient;
@@ -94,120 +75,65 @@ class LocalCameraPreviewOverlay extends StatelessWidget {
   final VoidCallback? onSwitchCameraPressed;
 
   /// Placeholder builder shown by [RTCStreamView] when stream is not ready.
-  final WidgetBuilder? localPlaceholderBuilder;
-
-  /// Animation duration used by [AnimatedPositioned].
-  final Duration duration;
+  final WidgetBuilder localPlaceholderBuilder;
 
   /// The smaller side of the preview; the other side is derived from aspect ratio.
   final double smallerSide;
 
   @override
   Widget build(BuildContext context) {
-    final isSwitchEnabled = frontCamera != null && onSwitchCameraPressed != null;
+    final frameSize = _calcFrameSize(orientation: orientation, smallerSide: smallerSide);
 
-    final Size frameSize = _calcFrameSize(
-      orientation: orientation,
-      smallerSide: smallerSide,
-      videoWidth: _safeVideoWidth(localStream),
-      videoHeight: _safeVideoHeight(localStream),
-    );
+    final hasFrontCamera = frontCamera != null;
+    final isSwitchEnabled = hasFrontCamera && onSwitchCameraPressed != null;
 
-    return AnimatedPositioned(
-      right: 10 + padding.right,
-      top: 10 + padding.top + (compact ? 0 : 100),
-      duration: duration,
-      child: GestureDetector(
-        onTap: isSwitchEnabled ? onSwitchCameraPressed : null,
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                decoration: BoxDecoration(color: onTabGradient.withValues(alpha: 0.3)),
-                width: frameSize.width,
-                height: frameSize.height,
-                child: frontCamera == null
-                    ? null
-                    : RTCStreamView(
-                        key: callFrontCameraPreviewKey,
-                        stream: localStream,
-                        mirror: frontCamera!,
-                        placeholderBuilder: localPlaceholderBuilder,
-                      ),
-              ),
-            ),
-            Positioned(
-              top: 4,
-              right: 4,
-              child: frontCamera == null
-                  ? SizedCircularProgressIndicator(
-                      size: switchCameraIconSize - 2.0,
-                      outerSize: switchCameraIconSize,
-                      color: onTabGradient,
-                      strokeWidth: 2.0,
-                    )
-                  : Icon(Icons.flip_camera_ios, size: switchCameraIconSize, color: onTabGradient),
-            ),
-          ],
+    final indicatorWidget = !hasFrontCamera
+        ? SizedCircularProgressIndicator(
+            size: switchCameraIconSize - 2,
+            outerSize: switchCameraIconSize,
+            color: onTabGradient,
+            strokeWidth: 2,
+          )
+        : Icon(Icons.flip_camera_ios, size: switchCameraIconSize, color: onTabGradient);
+
+    return SizedBox.fromSize(
+      size: frameSize,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: isSwitchEnabled ? onSwitchCameraPressed : null,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (!hasFrontCamera) localPlaceholderBuilder(context),
+              if (hasFrontCamera && localStream != null)
+                RTCStreamView(
+                  key: callFrontCameraPreviewKey,
+                  stream: localStream,
+                  mirror: frontCamera!,
+                  fit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+                  placeholderBuilder: localPlaceholderBuilder,
+                ),
+              Positioned(top: 4, right: 4, child: indicatorWidget),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  /// Computes the preview frame size based on orientation and video aspect ratio.
-  ///
-  /// - [smallerSide] is kept fixed.
-  /// - The other side is derived from `videoWidth / videoHeight`.
-  /// - The aspect ratio is clamped to avoid extreme sizes when track settings are absent/invalid.
-  static Size _calcFrameSize({
-    required Orientation orientation,
-    required double smallerSide,
-    required double videoWidth,
-    required double videoHeight,
-  }) {
-    final safeH = videoHeight <= 0 ? 1.0 : videoHeight;
-    final aspectRatio = videoWidth / safeH;
+  /// Computes the preview frame size based on orientation and a fixed 16:9 aspect ratio.
+  static Size _calcFrameSize({required Orientation orientation, required double smallerSide}) {
+    // Standard aspect ratio for mobile cameras (16:9).
+    // Using a fixed constant ensures the UI does not jitter during stream loading.
+    const aspectRatio = 16.0 / 9.0;
 
-    final safeAspect = aspectRatio.isFinite ? aspectRatio.clamp(0.5, 3.0) : 1.5;
-
-    final biggerSide = smallerSide * safeAspect;
+    final biggerSide = smallerSide * aspectRatio;
 
     final frameWidth = orientation == Orientation.portrait ? smallerSide : biggerSide;
     final frameHeight = orientation == Orientation.portrait ? biggerSide : smallerSide;
 
     return Size(frameWidth, frameHeight);
-  }
-
-  /// Reads the video track width from [MediaStream.getVideoTracks] settings.
-  ///
-  /// Returns a sensible fallback (1080) if:
-  /// - stream or track is missing,
-  /// - settings don't contain `width`,
-  /// - an exception occurs.
-  static double _safeVideoWidth(MediaStream? localStream) {
-    try {
-      final track = localStream?.getVideoTracks().first;
-      final w = track?.getSettings()['width'];
-      return (w is num) ? w.toDouble() : 1080.0;
-    } catch (_) {
-      return 1080.0;
-    }
-  }
-
-  /// Reads the video track height from [MediaStream.getVideoTracks] settings.
-  ///
-  /// Returns a sensible fallback (720) if:
-  /// - stream or track is missing,
-  /// - settings don't contain `height`,
-  /// - an exception occurs.
-  static double _safeVideoHeight(MediaStream? localStream) {
-    try {
-      final track = localStream?.getVideoTracks().first;
-      final h = track?.getSettings()['height'];
-      return (h is num) ? h.toDouble() : 720.0;
-    } catch (_) {
-      return 720.0;
-    }
   }
 }
