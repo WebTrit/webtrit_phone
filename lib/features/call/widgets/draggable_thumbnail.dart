@@ -108,10 +108,10 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
 
     if (_offset != null && !_dragging) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final callCardRect = _findCallCardRect();
-        final translateX = _lastStickTranslateX(_stickyRect, callCardRect);
-        final translateY = _boundTranslateY(_stickyRect, callCardRect);
-        final offset = callCardRect.translate(translateX, translateY).topLeft;
+        final thumbnailRect = _findThumbnailRect();
+        final translateX = _lastStickTranslateX(_stickyRect, thumbnailRect);
+        final translateY = _boundTranslateY(_stickyRect, thumbnailRect);
+        final offset = thumbnailRect.translate(translateX, translateY).topLeft;
 
         if (_offset != offset) {
           widget.onOffsetUpdate?.call(offset);
@@ -159,7 +159,7 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
         onTap: widget.onTap,
         onPanStart: (details) {
           // Sync state with actual render position before starting the drag
-          final startRect = _findCallCardRect();
+          final startRect = _findThumbnailRect();
           // Validation: Prevent jumping to (0,0) if the render box is invalid or not found.
           if (startRect.isEmpty) return;
 
@@ -235,15 +235,15 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
     );
   }
 
-  Rect _findCallCardRect() {
-    final callCardContext = _thumbnailKey.currentContext;
-    if (callCardContext == null) return Rect.zero;
+  Rect _findThumbnailRect() {
+    final thumbnailContext = _thumbnailKey.currentContext;
+    if (thumbnailContext == null) return Rect.zero;
 
-    final callCardRenderBox = callCardContext.findRenderObject() as RenderBox?;
-    if (callCardRenderBox == null || !callCardRenderBox.hasSize) return Rect.zero;
+    final thumbnailRenderBox = thumbnailContext.findRenderObject() as RenderBox?;
+    if (thumbnailRenderBox == null || !thumbnailRenderBox.hasSize) return Rect.zero;
 
-    final offset = callCardRenderBox.localToGlobal(Offset.zero);
-    final size = callCardRenderBox.size;
+    final offset = thumbnailRenderBox.localToGlobal(Offset.zero);
+    final size = thumbnailRenderBox.size;
 
     return Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
   }
