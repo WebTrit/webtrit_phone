@@ -117,10 +117,17 @@ class _CallShellState extends State<CallShell> {
   }
 
   void _updateOverlayContent(BuildContext context, CallState state, StackRouter router) {
+    final hasActiveCalls = state.activeCalls.isNotEmpty;
+
+    if (!hasActiveCalls || state.display == CallDisplay.none || state.display == CallDisplay.noneScreen) {
+      _hideOverlay();
+      return;
+    }
+
     switch (state.display) {
       case CallDisplay.overlay:
         _showActiveCallThumbnail(context, state, router);
-        break;
+        return;
 
       case CallDisplay.screen:
         final activeCall = state.activeCalls.current;
@@ -129,16 +136,21 @@ class _CallShellState extends State<CallShell> {
         } else {
           _hideOverlay();
         }
-        break;
+        return;
 
-      case CallDisplay.noneScreen:
       case CallDisplay.none:
-        _hideOverlay();
-        break;
+      case CallDisplay.noneScreen:
+        // already handled above
+        return;
     }
   }
 
   void _showActiveCallThumbnail(BuildContext context, CallState state, StackRouter router) {
+    if (state.activeCalls.isEmpty) {
+      _hideOverlay();
+      return;
+    }
+
     final viewSource = PresenceViewParams.of(context).viewSource;
     final activeCall = state.activeCalls.current;
     final orientation = MediaQuery.of(context).orientation;
@@ -164,8 +176,16 @@ class _CallShellState extends State<CallShell> {
       context,
       child: BlocBuilder<CallBloc, CallState>(
         bloc: callBloc,
-        buildWhen: (previous, current) => previous.activeCalls.current != current.activeCalls.current,
+        // Safety check: ensure lists are not empty before accessing .current using short-circuit evaluation
+        buildWhen: (previous, current) =>
+            previous.activeCalls.isEmpty ||
+            current.activeCalls.isEmpty ||
+            previous.activeCalls.current != current.activeCalls.current,
         builder: (context, state) {
+          if (state.activeCalls.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
           final activeCall = state.activeCalls.current;
           final orientation = MediaQuery.of(context).orientation;
 
