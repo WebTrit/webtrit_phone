@@ -144,11 +144,11 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   }
 
   Widget _buildPresenceIndicator(LeadingAvatarStyle style) {
-    final rs = Theme.of(context).extension<PresenceStatusStyles>()?.primary;
+    final colorScheme = Theme.of(context).colorScheme;
     final anyAvailable = widget.presenceInfo?.anyAvailable ?? false;
     final color = anyAvailable
-        ? (style.presenceBadge?.availableColor ?? rs?.available)
-        : (style.presenceBadge?.unavailableColor ?? rs?.unavailable);
+        ? (style.presenceBadge?.availableColor ?? colorScheme.tertiary)
+        : (style.presenceBadge?.unavailableColor ?? colorScheme.onSurfaceVariant);
 
     final primaryActivity = widget.presenceInfo?.primaryActivity;
 
