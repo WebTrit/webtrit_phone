@@ -6,55 +6,25 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../utils/utils.dart';
-import 'rtc_stream_view.dart';
+import 'stream_thumbnail.dart';
 
-/// A Local-camera preview intended to be used within a draggable overlay.
+/// Local camera preview thumbnail intended for use inside a draggable overlay.
 ///
-/// This widget renders a video thumbnail for the local [localStream]
-/// (typically the front/back camera stream) and overlays a camera-switch control.
-/// It calculates its own size based on the [orientation] and stream aspect ratio.
+/// Displays the provided local WebRTC [localStream] (front or rear camera)
+/// using [StreamThumbnail], and overlays a camera-switch control. The widget
+/// adapts to the current [orientation] and exposes a tap callback to switch cameras.
 class LocalCameraPreviewThumbnail extends StatelessWidget {
   /// Creates a [LocalCameraPreviewThumbnail].
   const LocalCameraPreviewThumbnail({
     super.key,
-
-    /// The current device orientation.
-    ///
-    /// Used to compute preview width/height depending on how the screen is rotated.
     required this.orientation,
-
-    /// Color used for the preview background tint and icon/progress indicator.
     required this.onTabGradient,
-
-    /// Size of the camera-switch icon (and progress indicator outer size).
     required this.switchCameraIconSize,
-
-    /// Indicates whether the preview should be mirrored.
-    ///
-    /// - `true`: mirror the preview (common for front camera).
-    /// - `false`: do not mirror (common for back camera).
-    /// - `null`: switching is unavailable yet; shows a loader instead of video.
     required this.frontCamera,
-
-    /// The local WebRTC media stream to display.
-    ///
-    /// When `null`, no video is rendered (placeholder/empty).
     required this.localStream,
-
-    /// Callback invoked when the user taps the overlay to switch cameras.
-    ///
-    /// If `null`, switching is disabled.
     required this.onSwitchCameraPressed,
-
-    /// Builder used when the local stream cannot be rendered yet.
-    ///
-    /// Passed through to [RTCStreamView] as `placeholderBuilder`.
     required this.localPlaceholderBuilder,
-
-    /// The smaller side (in logical pixels) of the preview.
-    ///
-    /// The other side is computed using the stream aspect ratio.
-    this.smallerSide = 90.0,
+    this.smallerSide = ThumbnailLayout.defaultSmallerSide,
   });
 
   /// Current device orientation (affects computed preview dimensions).
@@ -75,7 +45,7 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
   /// Tap callback for switching the camera. If `null`, switching is disabled.
   final VoidCallback? onSwitchCameraPressed;
 
-  /// Placeholder builder shown by [RTCStreamView] when stream is not ready.
+  /// Placeholder builder shown by [StreamThumbnail] when stream is not ready.
   final WidgetBuilder localPlaceholderBuilder;
 
   /// The smaller side of the preview; the other side is derived from aspect ratio.
@@ -107,16 +77,13 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              if (!hasFrontCamera) localPlaceholderBuilder(context),
-              if (hasFrontCamera && localStream != null)
-                RTCStreamView(
-                  key: callFrontCameraPreviewKey,
-                  stream: localStream,
-                  mirror: frontCamera!,
-                  fit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-                  placeholderBuilder: localPlaceholderBuilder,
-                ),
-              Positioned(top: 4, right: 4, child: indicatorWidget),
+              StreamThumbnail(
+                key: callFrontCameraPreviewKey,
+                stream: hasFrontCamera ? localStream : null,
+                mirror: frontCamera ?? false,
+                placeholderBuilder: localPlaceholderBuilder,
+              ),
+              Positioned(top: 8, right: 8, child: indicatorWidget),
             ],
           ),
         ),
