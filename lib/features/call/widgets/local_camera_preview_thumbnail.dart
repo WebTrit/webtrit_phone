@@ -12,9 +12,9 @@ import 'rtc_stream_view.dart';
 /// This widget renders a video thumbnail for the local [localStream]
 /// (typically the front/back camera stream) and overlays a camera-switch control.
 /// It calculates its own size based on the [orientation] and stream aspect ratio.
-class LocalCameraPreviewOverlay extends StatelessWidget {
-  /// Creates a [LocalCameraPreviewOverlay].
-  const LocalCameraPreviewOverlay({
+class LocalCameraPreviewThumbnail extends StatelessWidget {
+  /// Creates a [LocalCameraPreviewThumbnail].
+  const LocalCameraPreviewThumbnail({
     super.key,
 
     /// The current device orientation.

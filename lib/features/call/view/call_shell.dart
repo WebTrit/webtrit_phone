@@ -167,7 +167,7 @@ class _CallShellState extends State<CallShell> {
           final activeCall = state.activeCalls.current;
           final orientation = MediaQuery.of(context).orientation;
 
-          return LocalCameraPreviewOverlay(
+          return LocalCameraPreviewThumbnail(
             orientation: orientation,
             onTabGradient: themeData.colorScheme.surface,
             switchCameraIconSize: switchCameraIconSize,
