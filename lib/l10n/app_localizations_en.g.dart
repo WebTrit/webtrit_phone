@@ -1304,16 +1304,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presence_infoView_available => 'Available:';
 
   @override
-  String get presence_infoView_available_false => 'No';
+  String get presence_infoView_available_false => 'Unreachable';
 
   @override
-  String get presence_infoView_available_true => 'Yes';
+  String get presence_infoView_available_true => 'Available';
 
   @override
   String get presence_infoView_client => 'Client:';
 
   @override
   String get presence_infoView_device => 'Device:';
+
+  @override
+  String get presence_infoView_localTime => 'Local Time:';
 
   @override
   String get presence_infoView_note => 'Note:';
@@ -2278,4 +2281,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Try again';
+
+  @override
+  String agoTicker_secondsAgo(int seconds) {
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: '$seconds seconds ago',
+      one: '$seconds second ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_minutesAgo(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minutes ago',
+      one: '$minutes minute ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_hoursAgo(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(hours, locale: localeName, other: '$hours hours ago', one: '$hours hour ago');
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_daysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(days, locale: localeName, other: '$days days ago', one: '$days day ago');
+    return '$_temp0';
+  }
 }

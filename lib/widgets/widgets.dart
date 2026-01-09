@@ -1,4 +1,5 @@
 export 'acknowledge_dialog.dart';
+export 'ago_ticker.dart';
 export 'agreement_checkbox.dart';
 export 'app_icon.dart';
 export 'back_button.dart';

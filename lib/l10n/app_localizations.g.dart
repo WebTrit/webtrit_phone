@@ -2505,13 +2505,13 @@ abstract class AppLocalizations {
   /// No description provided for @presence_infoView_available_false.
   ///
   /// In en, this message translates to:
-  /// **'No'**
+  /// **'Unreachable'**
   String get presence_infoView_available_false;
 
   /// No description provided for @presence_infoView_available_true.
   ///
   /// In en, this message translates to:
-  /// **'Yes'**
+  /// **'Available'**
   String get presence_infoView_available_true;
 
   /// No description provided for @presence_infoView_client.
@@ -2525,6 +2525,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Device:'**
   String get presence_infoView_device;
+
+  /// No description provided for @presence_infoView_localTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Time:'**
+  String get presence_infoView_localTime;
 
   /// No description provided for @presence_infoView_note.
   ///
@@ -4301,6 +4307,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get webview_sslError_tryAgain;
+
+  /// Elapsed time relative to now, shown in seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds, plural, one{{seconds} second ago} other{{seconds} seconds ago}}'**
+  String agoTicker_secondsAgo(int seconds);
+
+  /// Elapsed time relative to now, shown in minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, one{{minutes} minute ago} other{{minutes} minutes ago}}'**
+  String agoTicker_minutesAgo(int minutes);
+
+  /// Elapsed time relative to now, shown in hours.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours, plural, one{{hours} hour ago} other{{hours} hours ago}}'**
+  String agoTicker_hoursAgo(int hours);
+
+  /// Elapsed time relative to now, shown in days.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, one{{days} day ago} other{{days} days ago}}'**
+  String agoTicker_daysAgo(int days);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
