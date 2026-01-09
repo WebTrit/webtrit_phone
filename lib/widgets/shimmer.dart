@@ -4,10 +4,10 @@ class Shimmer extends StatefulWidget {
   const Shimmer({super.key});
 
   @override
-  State<Shimmer> createState() => _AdaptiveShimmerLoaderState();
+  State<Shimmer> createState() => _ShimmerState();
 }
 
-class _AdaptiveShimmerLoaderState extends State<Shimmer> with SingleTickerProviderStateMixin {
+class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
   @override
