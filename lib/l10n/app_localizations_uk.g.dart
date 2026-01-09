@@ -1310,16 +1310,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get presence_infoView_available => 'Доступний:';
 
   @override
-  String get presence_infoView_available_false => 'Ні';
+  String get presence_infoView_available_false => 'Недоступний';
 
   @override
-  String get presence_infoView_available_true => 'Так';
+  String get presence_infoView_available_true => 'Доступний';
 
   @override
   String get presence_infoView_client => 'Клієнт:';
 
   @override
   String get presence_infoView_device => 'Пристрій:';
+
+  @override
+  String get presence_infoView_localTime => 'Місцевий час:';
 
   @override
   String get presence_infoView_note => 'Примітка:';
@@ -2290,4 +2293,56 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Спробувати ще раз';
+
+  @override
+  String agoTicker_secondsAgo(int seconds) {
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: '$seconds секунд тому',
+      many: '$seconds секунд тому',
+      few: '$seconds секунди тому',
+      one: '$seconds секунду тому',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_minutesAgo(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes хвилин тому',
+      many: '$minutes хвилин тому',
+      few: '$minutes хвилини тому',
+      one: '$minutes хвилину тому',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_hoursAgo(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: '$hours годин тому',
+      many: '$hours годин тому',
+      few: '$hours години тому',
+      one: '$hours годину тому',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_daysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days днів тому',
+      many: '$days днів тому',
+      few: '$days дні тому',
+      one: '$days день тому',
+    );
+    return '$_temp0';
+  }
 }
