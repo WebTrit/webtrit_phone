@@ -18,8 +18,6 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
   const LocalCameraPreviewThumbnail({
     super.key,
     required this.orientation,
-    required this.onTabGradient,
-    required this.switchCameraIconSize,
     required this.frontCamera,
     required this.localStream,
     required this.onSwitchCameraPressed,
@@ -28,12 +26,6 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
 
   /// Current device orientation (affects computed preview dimensions).
   final Orientation orientation;
-
-  /// Color used for background tint and overlay icon/progress indicator.
-  final Color onTabGradient;
-
-  /// Camera switch icon size (also used by the loading indicator).
-  final double switchCameraIconSize;
 
   /// Whether to mirror the local preview; `null` indicates camera state is loading.
   final bool? frontCamera;
@@ -54,14 +46,17 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
     final hasFrontCamera = frontCamera != null;
     final isSwitchEnabled = hasFrontCamera && onSwitchCameraPressed != null;
 
+    final themeData = Theme.of(context);
+    final switchCameraIconSize = themeData.textTheme.titleMedium?.fontSize ?? 16.0;
+
     final indicatorWidget = !hasFrontCamera
         ? SizedCircularProgressIndicator(
             size: switchCameraIconSize - 2,
             outerSize: switchCameraIconSize,
-            color: onTabGradient,
+            color: themeData.colorScheme.surface,
             strokeWidth: 2,
           )
-        : Icon(Icons.flip_camera_ios, size: switchCameraIconSize, color: onTabGradient);
+        : Icon(Icons.flip_camera_ios, size: switchCameraIconSize, color: themeData.colorScheme.surface);
 
     return SizedBox.fromSize(
       size: frameSize,

@@ -183,8 +183,6 @@ class _CallShellState extends State<CallShell> {
   }
 
   void _showLocalCameraPreview(BuildContext context, CallState state) {
-    final themeData = Theme.of(context);
-    final switchCameraIconSize = themeData.textTheme.titleMedium!.fontSize!;
     final callBloc = context.read<CallBloc>();
 
     _thumbnailManager.show(
@@ -206,8 +204,6 @@ class _CallShellState extends State<CallShell> {
 
           return LocalCameraPreviewThumbnail(
             orientation: orientation,
-            onTabGradient: themeData.colorScheme.surface,
-            switchCameraIconSize: switchCameraIconSize,
             frontCamera: activeCall.frontCamera,
             localStream: activeCall.localStream,
             onSwitchCameraPressed: activeCall.frontCamera == null
