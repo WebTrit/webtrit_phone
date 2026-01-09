@@ -86,8 +86,8 @@ class _CallShellState extends State<CallShell> {
   bool _shouldListenToVideoChanges(CallState previous, CallState current) {
     if (current.display != CallDisplay.screen) return false;
 
-    final prevVideo = previous.activeCalls.isEmpty ? false : previous.activeCalls.current.video;
-    final currVideo = current.activeCalls.isEmpty ? false : current.activeCalls.current.video;
+    final prevVideo = previous.activeCalls.isEmpty ? false : previous.activeCalls.current.cameraEnabled;
+    final currVideo = current.activeCalls.isEmpty ? false : current.activeCalls.current.cameraEnabled;
 
     return prevVideo != currVideo;
   }
@@ -128,7 +128,7 @@ class _CallShellState extends State<CallShell> {
 
       case CallDisplay.screen:
         final activeCall = state.activeCalls.current;
-        if (activeCall.video) {
+        if (activeCall.cameraEnabled) {
           _showLocalCameraPreview(context, state);
         } else {
           _hideOverlay();
