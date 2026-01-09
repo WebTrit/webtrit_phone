@@ -8,6 +8,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
@@ -27,7 +28,7 @@ class CallShell extends StatefulWidget {
 }
 
 class _CallShellState extends State<CallShell> {
-  CallActiveThumbnail? _avatar;
+  late final ThumbnailOverlayManager _thumbnailManager = ThumbnailOverlayManager(stickyPadding: widget.stickyPadding);
 
   @override
   Widget build(BuildContext context) {
@@ -74,24 +75,25 @@ class _CallShellState extends State<CallShell> {
 
   /// Creates (if needed) and inserts the [CallActiveThumbnail] overlay.
   void _showThumbnailAvatar(BuildContext context, CallState state, StackRouter router) {
-    final avatar =
-        _avatar ??
-        CallActiveThumbnail(
-          stickyPadding: widget.stickyPadding,
-          onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
-        );
+    // Capture viewSource while we have access to the Shell context
+    final viewSource = PresenceViewParams.of(context).viewSource;
+    final activeCall = state.activeCalls.current;
 
-    _avatar = avatar;
-
-    if (!avatar.inserted) {
-      avatar.insert(context, state);
-    }
+    _thumbnailManager.show(
+      context,
+      child: CallActiveThumbnail(
+        activeCall: activeCall,
+        onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
+      ),
+      contextWrapper: (context, child) {
+        return PresenceViewParams(viewSource: viewSource, child: child);
+      },
+    );
   }
 
-  /// Removes the avatar from the UI and clears the reference.
+  /// Removes the avatar from the UI.
   void _resetThumbnailAvatar() {
     _removeThumbnailAvatar();
-    _avatar = null;
   }
 
   /// Listens for transitions to and from [CallDisplay.screen] to manage
@@ -123,17 +125,12 @@ class _CallShellState extends State<CallShell> {
   }
 
   void _removeThumbnailAvatar() {
-    final avatar = _avatar;
-    if (avatar != null) {
-      if (avatar.inserted) {
-        avatar.remove();
-      }
-    }
+    _thumbnailManager.hide();
   }
 
   @override
   void dispose() {
-    _removeThumbnailAvatar();
+    _thumbnailManager.dispose();
     super.dispose();
   }
 
