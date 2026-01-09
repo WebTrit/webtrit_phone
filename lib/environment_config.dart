@@ -117,12 +117,9 @@ class EnvironmentConfig {
 
   static const CONNECTIVITY_CHECK_URL__NAME = 'WEBTRIT_APP_CONNECTIVITY_CHECK_URL';
 
-  // URL used to check internet connectivity. Defaults to Google (204).
-  // Should return a quick 200/204 response.
-  static const CONNECTIVITY_CHECK_URL = String.fromEnvironment(
-    CONNECTIVITY_CHECK_URL__NAME,
-    defaultValue: 'https://www.google.com/generate_204',
-  );
+  static const CONNECTIVITY_CHECK_URL = bool.hasEnvironment(CONNECTIVITY_CHECK_URL__NAME)
+      ? String.fromEnvironment(CONNECTIVITY_CHECK_URL__NAME)
+      : null;
 
   static const USER_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME = 'WEBTRIT_APP_USER_REPOSITORY_POLLING_INTERVAL_SECONDS';
   static const USER_REPOSITORY_POLLING_INTERVAL_SECONDS = int.fromEnvironment(
