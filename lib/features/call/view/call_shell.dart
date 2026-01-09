@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
+import 'package:webtrit_phone/repositories/contacts/contacts_repository.dart';
+import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/app/constants.dart';
 
 import '../call.dart';
-import 'call_active_thumbnail.dart';
 
 class CallShell extends StatefulWidget {
-  const CallShell({
-    super.key,
-    this.stickyPadding = const EdgeInsets.symmetric(horizontal: kMinInteractiveDimension / 4),
-    required this.child,
-  });
+  const CallShell({required this.child, this.stickyPadding = kStickyOverlayPadding, super.key});
 
-  final EdgeInsets stickyPadding;
   final Widget child;
+  final EdgeInsets stickyPadding;
 
   @override
   State<CallShell> createState() => _CallShellState();
 }
 
 class _CallShellState extends State<CallShell> {
-  ThumbnailAvatar? _avatar;
+  late final ThumbnailOverlayManager _thumbnailManager = ThumbnailOverlayManager(stickyPadding: widget.stickyPadding);
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(listeners: [callDisplayListener(), callScreenDisplayListener()], child: widget.child);
+    return MultiBlocListener(
+      listeners: [_callDisplayListener(), _callScreenDisplayListener(), _callVideoListener()],
+      child: widget.child,
+    );
   }
 
   /// Listens to [CallState.display] changes and manages related UI transitions.
@@ -40,48 +40,11 @@ class _CallShellState extends State<CallShell> {
   /// Handles:
   /// - Orientation updates via [OrientationsBloc].
   /// - Navigation between main and call screens.
-  /// - Showing or removing the floating [ThumbnailAvatar] overlay.
-  BlocListener<CallBloc, CallState> callDisplayListener() {
+  /// - Showing or removing the floating thumbnail overlay via [_updateOverlayContent].
+  BlocListener<CallBloc, CallState> _callDisplayListener() {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
-      listener: (context, state) async {
-        final router = context.router;
-
-        final orientationsBloc = context.read<OrientationsBloc>();
-        if (state.display == CallDisplay.screen) {
-          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
-        } else {
-          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
-        }
-
-        final callScreenActive = router.isRouteActive(CallScreenPageRoute.name);
-        final callScreenShouldDisplay = state.display == CallDisplay.screen;
-
-        if (callScreenShouldDisplay && !callScreenActive) _openCallScreen(router, state.activeCalls.isNotEmpty);
-        if (!callScreenShouldDisplay && callScreenActive) _backToMainScreen(router);
-
-        if (state.display == CallDisplay.overlay) {
-          final avatar = _avatar;
-          if (avatar != null) {
-            if (!avatar.inserted) {
-              avatar.insert(context, state);
-            }
-          } else {
-            final avatar = ThumbnailAvatar(
-              stickyPadding: widget.stickyPadding,
-              onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
-            );
-            _avatar = avatar;
-            avatar.insert(context, state);
-          }
-        } else {
-          _removeThumbnailAvatar();
-        }
-
-        if (state.display == CallDisplay.none) {
-          _avatar = null;
-        }
-      },
+      listener: (context, state) => _onCallDisplayChanged(context, state),
     );
   }
 
@@ -92,351 +55,213 @@ class _CallShellState extends State<CallShell> {
   ///   normal screen and lockscreen settings.
   /// - When leaving the call screen, it enables showing the activity
   ///   over the lock screen if needed.
-  BlocListener<CallBloc, CallState> callScreenDisplayListener() {
+  BlocListener<CallBloc, CallState> _callScreenDisplayListener() {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) =>
           previous.display != current.display &&
           (previous.display == CallDisplay.screen || current.display == CallDisplay.screen),
-      listener: (context, state) async {
-        final isCallScreen = state.display == CallDisplay.screen;
-
-        if (isCallScreen) {
-          // Entering call screen - restore normal flags
-          AndroidCallkeepUtils.activityControl.showOverLockscreen();
-          AndroidCallkeepUtils.activityControl.wakeScreenOnShow();
-        } else {
-          // Leaving call screen - keep visible over lock screen
-          AndroidCallkeepUtils.activityControl.showOverLockscreen(false);
-          AndroidCallkeepUtils.activityControl.wakeScreenOnShow(false);
-        }
-      },
+      listener: (context, state) => _onCallScreenDisplayChanged(state),
     );
   }
 
-  void _removeThumbnailAvatar() {
-    final avatar = _avatar;
-    if (avatar != null) {
-      if (avatar.inserted) {
-        avatar.remove();
-      }
+  BlocListener<CallBloc, CallState> _callVideoListener() {
+    return BlocListener<CallBloc, CallState>(
+      listenWhen: _shouldListenToVideoChanges,
+      listener: (context, state) => _updateOverlayContent(context, state, context.router),
+    );
+  }
+
+  void _onCallDisplayChanged(BuildContext context, CallState state) {
+    final router = context.router;
+    _updateOrientations(context, state.display);
+    _handleNavigation(router, state);
+    _updateOverlayContent(context, state, router);
+  }
+
+  void _onCallScreenDisplayChanged(CallState state) {
+    final isCallScreen = state.display == CallDisplay.screen;
+    _updateLockscreenBehavior(isCallScreen);
+  }
+
+  bool _shouldListenToVideoChanges(CallState previous, CallState current) {
+    if (current.display != CallDisplay.screen) return false;
+
+    final prevCall = previous.activeCalls.isEmpty ? null : previous.activeCalls.current;
+    final currCall = current.activeCalls.isEmpty ? null : current.activeCalls.current;
+
+    return (prevCall?.isCameraActive ?? false) != (currCall?.isCameraActive ?? false);
+  }
+
+  void _updateOrientations(BuildContext context, CallDisplay display) {
+    final orientationsBloc = context.read<OrientationsBloc>();
+    if (display == CallDisplay.screen) {
+      orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
+    } else {
+      orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
     }
   }
 
-  @override
-  void dispose() {
-    _removeThumbnailAvatar();
-    super.dispose();
+  void _handleNavigation(StackRouter router, CallState state) {
+    final callScreenActive = router.isRouteActive(CallScreenPageRoute.name);
+    final callScreenShouldDisplay = state.display == CallDisplay.screen;
+
+    if (callScreenShouldDisplay && !callScreenActive) {
+      _openCallScreen(router, state.activeCalls.isNotEmpty);
+    }
+    if (!callScreenShouldDisplay && callScreenActive) {
+      _backToMainScreen(router);
+    }
+  }
+
+  void _updateOverlayContent(BuildContext context, CallState state, StackRouter router) {
+    final hasActiveCalls = state.activeCalls.isNotEmpty;
+
+    if (!hasActiveCalls || state.display == CallDisplay.none || state.display == CallDisplay.noneScreen) {
+      _hideOverlay();
+      return;
+    }
+
+    switch (state.display) {
+      case CallDisplay.overlay:
+        _showActiveCallThumbnail(context, state, router);
+        break;
+
+      case CallDisplay.screen:
+        final activeCall = state.activeCalls.current;
+        if (activeCall.isCameraActive) {
+          _showLocalCameraPreview(context, state);
+        } else {
+          _hideOverlay();
+        }
+        break;
+
+      case CallDisplay.none:
+      case CallDisplay.noneScreen:
+        // Handled by the initial guard clause.
+        break;
+    }
+  }
+
+  void _showActiveCallThumbnail(BuildContext context, CallState state, StackRouter router) {
+    if (state.activeCalls.isEmpty) {
+      _hideOverlay();
+      return;
+    }
+
+    final viewSource = PresenceViewParams.of(context).viewSource;
+    final callBloc = context.read<CallBloc>();
+    final contactResolver = DefaultContactResolver(contactsRepository: context.read<ContactsRepository>());
+
+    _thumbnailManager.show(
+      context,
+      child: BlocBuilder<CallBloc, CallState>(
+        bloc: callBloc,
+        buildWhen: (previous, current) =>
+            previous.activeCalls.isEmpty ||
+            current.activeCalls.isEmpty ||
+            previous.activeCalls.current != current.activeCalls.current,
+        builder: (context, state) {
+          if (state.activeCalls.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
+          final activeCall = state.activeCalls.current;
+          final orientation = MediaQuery.of(context).orientation;
+
+          return PresenceViewParams(
+            viewSource: viewSource,
+            child: CallActiveThumbnail(
+              activeCall: activeCall,
+              orientation: orientation,
+              onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
+              contactResolver: contactResolver,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showLocalCameraPreview(BuildContext context, CallState state) {
+    final callBloc = context.read<CallBloc>();
+
+    _thumbnailManager.show(
+      context,
+      child: BlocBuilder<CallBloc, CallState>(
+        bloc: callBloc,
+        // Safety check: ensure lists are not empty before accessing .current using short-circuit evaluation
+        buildWhen: (previous, current) =>
+            previous.activeCalls.isEmpty ||
+            current.activeCalls.isEmpty ||
+            previous.activeCalls.current != current.activeCalls.current,
+        builder: (context, state) {
+          if (state.activeCalls.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
+          final activeCall = state.activeCalls.current;
+          final orientation = MediaQuery.of(context).orientation;
+
+          return LocalCameraPreviewThumbnail(
+            orientation: orientation,
+            frontCamera: activeCall.frontCamera,
+            localStream: activeCall.localStream,
+            onSwitchCameraPressed: activeCall.frontCamera == null
+                ? null
+                : () => callBloc.add(CallControlEvent.cameraSwitched(activeCall.callId)),
+          );
+        },
+      ),
+    );
+  }
+
+  void _hideOverlay() {
+    _thumbnailManager.hide();
+  }
+
+  void _updateLockscreenBehavior(bool isCallScreen) {
+    if (isCallScreen) {
+      AndroidCallkeepUtils.activityControl.showOverLockscreen();
+      AndroidCallkeepUtils.activityControl.wakeScreenOnShow();
+    } else {
+      AndroidCallkeepUtils.activityControl.showOverLockscreen(false);
+      AndroidCallkeepUtils.activityControl.wakeScreenOnShow(false);
+    }
   }
 
   void _openCallScreen(StackRouter router, bool hasActiveCalls) {
     if (hasActiveCalls) {
       // Use navigate to prevent duplicating CallScreenPageRoute in the stack.
-      // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute, navigate ensures CallScreenPageRoute is not added again.
+      // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute,
+      // navigate ensures CallScreenPageRoute is not added again.
       router.navigate(const CallScreenPageRoute());
     } else {
-      // Handle scenario where no active call exists, ensuring the listener is properly removed and the thumbnail is correctly managed.
-      _removeThumbnailAvatar();
-
+      _hideOverlay();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.call_ThumbnailAvatar_currentlyNoActiveCall), backgroundColor: Colors.grey),
       );
     }
   }
 
-  /// Pops the stack until the main screen is reached.
-  /// This is useful when the user is on a different route branch like LogRecordsConsoleScreenPageRoute.
-  /// Uses only on programmatic back navigation, for events like `transferring`.
-  /// But if user back manually using the back button hi'll be just popped to the previous screen.
+  /// Programmatic back navigation to the main screen.
   ///
-  /// router.navigate(const MainScreenPageRoute()) didnt used to avoid bug
-  /// that triggers redirect('') from empty MainScreenPageRoute subroute to
-  /// initial(last remembered since restart) flavor that final and not changed across the app router lifecycle.
-  /// example redirect('') will always redirect to contacts page even if user was on the calls or chat page.
+  /// Uses [StackRouter.navigatePath] to `MainShellRoute` instead of `popUntil`.
+  /// This avoids issues on iOS where `popUntil` executes prematurely while the app
+  /// is backgrounded, and prevents router redirects bug associated with empty sub-routes.
   ///
-  /// On iOS, using popUntil doesn't work when the app is collapsed because pushing routes isn`t allowed until the app resumes.
-  /// As a result, popUntil is called too early, leaving the route not yet present in the stack once the app reopens.
-  /// Using navigate with a path-based approach fixes this issue by properly restoring state and avoiding the redirect bug.
-  ///
-  /// MainShellRoute uses MainShellRoute.name as its path.
+  /// Detailed Context:
+  /// 1. `router.navigate(const MainScreenPageRoute())` wasn't used to avoid a bug that triggers
+  ///    redirect('') from an empty MainScreenPageRoute subroute to the initial (last remembered) flavor.
+  /// 2. On iOS, using `popUntil` doesn't work when the app is collapsed because pushing routes isn't
+  ///    allowed until the app resumes. As a result, `popUntil` is called too early.
+  /// 3. Using `navigatePath` with a path-based approach fixes this by properly restoring state.
   void _backToMainScreen(StackRouter router) {
     router.navigatePath(MainShellRoute.name);
   }
-}
-
-class ThumbnailAvatar {
-  ThumbnailAvatar({required this.stickyPadding, this.onTap});
-
-  final EdgeInsets stickyPadding;
-  final GestureTapCallback? onTap;
-  Offset? _offset;
-  OverlayEntry? _entry;
-
-  bool get inserted => _entry != null;
-
-  void insert(BuildContext context, CallState state) {
-    assert(_entry == null);
-
-    final activeCall = state.activeCalls.current;
-
-    final entry = OverlayEntry(
-      builder: (_) {
-        return PresenceViewParams(
-          viewSource: PresenceViewParams.of(context).viewSource,
-          child: DraggableThumbnail(
-            stickyPadding: stickyPadding,
-            initialOffset: _offset,
-            onOffsetUpdate: (offset) {
-              _offset = offset;
-            },
-            onTap: onTap,
-            child: CallActiveThumbnail(activeCall: activeCall),
-          ),
-        );
-      },
-    );
-    _entry = entry;
-    Overlay.of(context).insert(entry);
-  }
-
-  void remove() {
-    assert(_entry != null);
-
-    _entry!.remove();
-    _entry = null;
-  }
-}
-
-enum StickySide { left, right }
-
-class DraggableThumbnail extends StatefulWidget {
-  const DraggableThumbnail({
-    super.key,
-    required this.child,
-    required this.stickyPadding,
-    this.initialStickySide = StickySide.right,
-    this.initialOffset,
-    this.onOffsetUpdate,
-    this.onTap,
-  });
-
-  final Widget child;
-  final EdgeInsets stickyPadding;
-  final StickySide initialStickySide;
-  final Offset? initialOffset;
-  final void Function(Offset details)? onOffsetUpdate;
-  final GestureTapCallback? onTap;
 
   @override
-  State<DraggableThumbnail> createState() => _DraggableThumbnailState();
-}
-
-class _DraggableThumbnailState extends State<DraggableThumbnail> {
-  final _callCardKey = GlobalKey();
-  bool _callCardPanning = false;
-
-  late EdgeInsets _mediaQueryPadding;
-  late Size _mediaQuerySize;
-  late Rect _activeRect;
-  late Rect _stickyRect;
-  StickySide? _lastStickySide;
-  Offset? _offset;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _offset = widget.initialOffset;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _mediaQueryPadding = MediaQuery.paddingOf(context);
-    _mediaQuerySize = MediaQuery.sizeOf(context);
-    _activeRect = _mediaQueryPadding.deflateRect(Offset.zero & _mediaQuerySize);
-    _stickyRect = widget.stickyPadding.deflateRect(_activeRect);
-
-    if (_offset != null && !_callCardPanning) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final callCardRect = _findCallCardRect();
-        final translateX = _lastStickTranslateX(_stickyRect, callCardRect);
-        final translateY = _boundTranslateY(_stickyRect, callCardRect);
-        final offset = callCardRect.translate(translateX, translateY).topLeft;
-
-        if (_offset != offset) {
-          widget.onOffsetUpdate?.call(offset);
-          setState(() {
-            _offset = offset;
-          });
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double? left, top, right;
-    {
-      final offset = _offset;
-      if (offset == null) {
-        final initialPadding = widget.stickyPadding + _mediaQueryPadding;
-        switch (widget.initialStickySide) {
-          case StickySide.left:
-            left = initialPadding.left;
-            top = initialPadding.top;
-            right = null;
-
-          case StickySide.right:
-            left = null;
-            top = initialPadding.top;
-            right = initialPadding.right;
-        }
-      } else {
-        left = offset.dx;
-        top = offset.dy;
-        right = null;
-      }
-    }
-
-    return AnimatedPositioned(
-      key: _callCardKey,
-      left: left,
-      top: top,
-      right: right,
-      curve: Curves.ease,
-      duration: _callCardPanning ? Duration.zero : kRadialReactionDuration,
-      child: GestureDetector(
-        onTap: widget.onTap,
-        onPanStart: (details) {
-          // Sync state with actual render position before starting the drag
-          final startRect = _findCallCardRect();
-          // Validation: Prevent jumping to (0,0) if the render box is invalid or not found.
-          if (startRect.isEmpty) return;
-
-          setState(() {
-            _offset = startRect.topLeft;
-            _callCardPanning = true;
-          });
-        },
-        onPanUpdate: (details) {
-          // Guard: Ensure a valid base offset (set in onPanStart) is present before applying the delta.
-          if (_offset == null) return;
-
-          // Calculate new position based on state + delta (ignoring render lag)
-          final currentSize = _callCardKey.currentContext?.size;
-          if (currentSize == null || currentSize.isEmpty) {
-            // Size is not yet available; skip this update to avoid invalid bounds
-            return;
-          }
-
-          // Calculate the proposed new position by applying the user's drag delta to the current state.
-          final tentativeOffset = _offset! + details.delta;
-
-          // Create a rectangle for this proposed position to check for boundary collisions.
-          final tentativeRect = tentativeOffset & currentSize;
-
-          // Calculate correction offsets (if any) to ensure the widget stays within the screen's safe area (_activeRect).
-          final translateX = _boundTranslateX(_activeRect, tentativeRect);
-          final translateY = _boundTranslateY(_activeRect, tentativeRect);
-
-          // Apply the boundary corrections to the proposed rectangle to determine the final, valid top-left position.
-          final finalOffset = tentativeRect.translate(translateX, translateY).topLeft;
-
-          widget.onOffsetUpdate?.call(finalOffset);
-          setState(() {
-            _offset = finalOffset;
-          });
-        },
-        onPanEnd: (details) {
-          // Retrieve the render object to obtain the current size for snapping calculations.
-          final renderBox = _callCardKey.currentContext?.findRenderObject() as RenderBox?;
-          // Validation: If the widget is unmounted or has no size,
-          // snapping cannot be calculated correctly. Stop the panning state to reset animations.
-          if (renderBox == null || !renderBox.hasSize || renderBox.size.isEmpty) {
-            setState(() {
-              _callCardPanning = false;
-            });
-            return;
-          }
-
-          // Calculate snapping based on the final dragged position
-          final currentSize = renderBox.size;
-
-          // Construct the rectangle representing the widget's position at the moment of release.
-          // Use _offset (the last tracked position) combined with the widget's actual size.
-          final currentRect = (_offset ?? Offset.zero) & currentSize;
-
-          // Calculate the translation needed to snap the widget to the nearest side (horizontal)
-          // and ensure it stays within the safe vertical boundaries..
-          final translateX = _stickTranslateX(_stickyRect, currentRect);
-          final translateY = _boundTranslateY(_stickyRect, currentRect);
-
-          // Apply the calculated X (snap) and Y (bound) shifts to find the final top-left coordinate.
-          final offset = currentRect.translate(translateX, translateY).topLeft;
-
-          widget.onOffsetUpdate?.call(offset);
-          setState(() {
-            _offset = offset;
-            _callCardPanning = false;
-          });
-        },
-        child: widget.child,
-      ),
-    );
-  }
-
-  Rect _findCallCardRect() {
-    final callCardContext = _callCardKey.currentContext;
-    if (callCardContext == null) return Rect.zero;
-
-    final callCardRenderBox = callCardContext.findRenderObject() as RenderBox?;
-    if (callCardRenderBox == null || !callCardRenderBox.hasSize) return Rect.zero;
-
-    final offset = callCardRenderBox.localToGlobal(Offset.zero);
-    final size = callCardRenderBox.size;
-
-    return Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
-  }
-
-  double _stickTranslateX(Rect stickyRect, Rect translateRect) {
-    if (translateRect.center.dx < stickyRect.center.dx) {
-      _lastStickySide = StickySide.left;
-      return stickyRect.left - translateRect.left;
-    } else {
-      _lastStickySide = StickySide.right;
-      return stickyRect.right - translateRect.right;
-    }
-  }
-
-  double _lastStickTranslateX(Rect stickyRect, Rect translateRect) {
-    switch (_lastStickySide) {
-      case StickySide.left:
-        return stickyRect.left - translateRect.left;
-      case StickySide.right:
-        return stickyRect.right - translateRect.right;
-      default:
-        return 0;
-    }
-  }
-
-  double _boundTranslateX(Rect boundRect, Rect translateRect) {
-    if (boundRect.left > translateRect.left) {
-      return boundRect.left - translateRect.left;
-    } else if (boundRect.right < translateRect.right) {
-      return boundRect.right - translateRect.right;
-    } else {
-      return 0;
-    }
-  }
-
-  double _boundTranslateY(Rect boundRect, Rect translateRect) {
-    if (boundRect.top > translateRect.top) {
-      return boundRect.top - translateRect.top;
-    } else if (boundRect.bottom < translateRect.bottom) {
-      return boundRect.bottom - translateRect.bottom;
-    } else {
-      return 0;
-    }
+  void dispose() {
+    _thumbnailManager.dispose();
+    super.dispose();
   }
 }

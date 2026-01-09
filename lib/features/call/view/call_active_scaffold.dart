@@ -72,9 +72,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     final themeData = Theme.of(context);
     final Gradients? gradients = themeData.extension<Gradients>();
-    final onTabGradient = themeData.colorScheme.surface;
-    final textTheme = themeData.textTheme;
-    final switchCameraIconSize = textTheme.titleMedium!.fontSize!;
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
 
     final style = themeData.extension<CallScreenStyles>()?.primary;
@@ -94,23 +91,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     onTap: _compactController.toggle,
                     remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
                     backgroundMode: _backgroundMode,
-                  ),
-                if (activeCall.cameraEnabled)
-                  AnimatedBuilder(
-                    animation: _compactController,
-                    builder: (context, _) => LocalCameraPreviewOverlay(
-                      compact: _compactController.compact,
-                      orientation: orientation,
-                      padding: mediaQueryData.padding,
-                      onTabGradient: onTabGradient,
-                      switchCameraIconSize: switchCameraIconSize,
-                      frontCamera: activeCall.frontCamera,
-                      localStream: activeCall.localStream,
-                      localPlaceholderBuilder: widget.localePlaceholderBuilder,
-                      onSwitchCameraPressed: activeCall.frontCamera == null
-                          ? null
-                          : () => context.read<CallBloc>().add(CallControlEvent.cameraSwitched(activeCall.callId)),
-                    ),
                   ),
                 AnimatedBuilder(
                   animation: _compactController,
@@ -181,7 +161,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               remoteVideo: activeCall.remoteVideo,
                                               wasAccepted: activeCall.wasAccepted,
                                               wasHungUp: activeCall.wasHungUp,
-                                              cameraValue: activeCall.cameraEnabled,
+                                              cameraValue: activeCall.isCameraActive,
                                               inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                               onCameraChanged: widget.callConfig.isVideoCallEnabled
                                                   ? (bool value) => context.read<CallBloc>().add(

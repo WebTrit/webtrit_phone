@@ -6,7 +6,7 @@ class MockActiveCall extends Fake implements ActiveCall {
   MockActiveCall({
     this.processingStatus = CallProcessingStatus.connected,
     this.wasHungUp = false,
-    this.cameraEnabled = false,
+    this.isCameraActive = false,
     this.remoteVideo = false,
     this.held = false,
   });
@@ -18,7 +18,7 @@ class MockActiveCall extends Fake implements ActiveCall {
   final bool wasHungUp;
 
   @override
-  final bool cameraEnabled;
+  final bool isCameraActive;
 
   @override
   final bool remoteVideo;
