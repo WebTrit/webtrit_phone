@@ -8,7 +8,6 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
@@ -28,7 +27,7 @@ class CallShell extends StatefulWidget {
 }
 
 class _CallShellState extends State<CallShell> {
-  ThumbnailAvatar? _avatar;
+  CallActiveThumbnail? _avatar;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _CallShellState extends State<CallShell> {
   /// Handles:
   /// - Orientation updates via [OrientationsBloc].
   /// - Navigation between main and call screens.
-  /// - Showing or removing the floating [ThumbnailAvatar] overlay.
+  /// - Showing or removing the floating [CallActiveThumbnail] overlay.
   BlocListener<CallBloc, CallState> callDisplayListener() {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
@@ -73,11 +72,11 @@ class _CallShellState extends State<CallShell> {
     );
   }
 
-  /// Creates (if needed) and inserts the [ThumbnailAvatar] overlay.
+  /// Creates (if needed) and inserts the [CallActiveThumbnail] overlay.
   void _showThumbnailAvatar(BuildContext context, CallState state, StackRouter router) {
     final avatar =
         _avatar ??
-        ThumbnailAvatar(
+        CallActiveThumbnail(
           stickyPadding: widget.stickyPadding,
           onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
         );
@@ -170,48 +169,5 @@ class _CallShellState extends State<CallShell> {
   /// MainShellRoute uses MainShellRoute.name as its path.
   void _backToMainScreen(StackRouter router) {
     router.navigatePath(MainShellRoute.name);
-  }
-}
-
-class ThumbnailAvatar {
-  ThumbnailAvatar({required this.stickyPadding, this.onTap});
-
-  final EdgeInsets stickyPadding;
-  final GestureTapCallback? onTap;
-  Offset? _offset;
-  OverlayEntry? _entry;
-
-  bool get inserted => _entry != null;
-
-  void insert(BuildContext context, CallState state) {
-    assert(_entry == null);
-
-    final activeCall = state.activeCalls.current;
-
-    final entry = OverlayEntry(
-      builder: (_) {
-        return PresenceViewParams(
-          viewSource: PresenceViewParams.of(context).viewSource,
-          child: DraggableThumbnail(
-            stickyPadding: stickyPadding,
-            initialOffset: _offset,
-            onOffsetUpdate: (offset) {
-              _offset = offset;
-            },
-            onTap: onTap,
-            child: CallActiveThumbnail(activeCall: activeCall),
-          ),
-        );
-      },
-    );
-    _entry = entry;
-    Overlay.of(context).insert(entry);
-  }
-
-  void remove() {
-    assert(_entry != null);
-
-    _entry!.remove();
-    _entry = null;
   }
 }
