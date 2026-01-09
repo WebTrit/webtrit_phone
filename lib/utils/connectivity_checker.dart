@@ -12,16 +12,38 @@ abstract class ConnectivityChecker {
 }
 
 class DefaultConnectivityChecker implements ConnectivityChecker {
-  const DefaultConnectivityChecker({required this.connectivityCheckUrl, required this.createHttpRequestExecutor});
+  const DefaultConnectivityChecker({required this.apiClient});
+
+  /// API client instance.
+  final WebtritApiClient apiClient;
+
+  @override
+  Future<bool> checkConnection() async {
+    _logger.finest('Checking connectivity via API client.');
+    try {
+      await apiClient.healthCheck();
+      _logger.finest('API connectivity check successful.');
+      return true;
+    } catch (_) {
+      _logger.finest('API connectivity check failed.');
+      return false;
+    }
+  }
+
+  @override
+  Future<void> dispose() async {
+    apiClient.close();
+  }
+}
+
+class CustomConnectivityChecker implements ConnectivityChecker {
+  const CustomConnectivityChecker({required this.connectivityCheckUrl, required this.createHttpRequestExecutor});
 
   /// Connectivity check URL.
-  final String? connectivityCheckUrl;
+  final String connectivityCheckUrl;
 
   /// HTTP request executor instance.
   final HttpRequestExecutor createHttpRequestExecutor;
-
-  /// Default URL used for connectivity checks if no custom URL is provided.
-  String get _defaultUrlProvider => 'https://www.google.com/generate_204';
 
   @override
   Future<bool> checkConnection() async {
@@ -31,14 +53,12 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
       return false;
     }
 
-    final url = connectivityCheckUrl ?? _defaultUrlProvider;
-
     try {
-      await createHttpRequestExecutor.execute(method: 'GET', url: url);
-      _logger.finest('Connectivity check successful with URL: $url');
+      await createHttpRequestExecutor.execute(method: 'GET', url: connectivityCheckUrl);
+      _logger.finest('Connectivity check successful with URL: $connectivityCheckUrl');
       return true;
     } catch (_) {
-      _logger.finest('Connectivity check failed with URL: $url');
+      _logger.finest('Connectivity check failed with URL: $connectivityCheckUrl');
       return false;
     }
   }

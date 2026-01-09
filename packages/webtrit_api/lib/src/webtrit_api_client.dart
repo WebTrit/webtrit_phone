@@ -249,6 +249,15 @@ class WebtritApiClient {
     return _httpClientExecute('delete', pathSegments, token, null, options: options);
   }
 
+  Future<bool> healthCheck({RequestOptions options = const RequestOptions()}) async {
+    try {
+      await _httpClientExecuteGet(['health-check'], null, null, requestOptions: options);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<SystemInfo> getSystemInfo({RequestOptions options = const RequestOptions()}) async {
     final responseJson = await _httpClientExecuteGet(['system-info'], null, null, requestOptions: options);
 

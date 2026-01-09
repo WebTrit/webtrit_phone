@@ -202,14 +202,18 @@ class RootApp extends StatelessWidget {
   }
 
   ConnectivityService _createConnectivityService(BuildContext context) {
-    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+    final customUrl = EnvironmentConfig.CONNECTIVITY_CHECK_URL;
+    final apiFactory = context.read<WebtritApiClientFactory>();
 
-    return ConnectivityServiceImpl(
-      connectivityChecker: DefaultConnectivityChecker(
-        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
-        createHttpRequestExecutor: executor,
+    final connectivityChecker = switch (customUrl) {
+      String url => CustomConnectivityChecker(
+        connectivityCheckUrl: url,
+        createHttpRequestExecutor: apiFactory.createHttpRequestExecutor(),
       ),
-    );
+      null => DefaultConnectivityChecker(apiClient: apiFactory.createWebtritApiClient()),
+    };
+
+    return ConnectivityServiceImpl(connectivityChecker: connectivityChecker);
   }
 
   void _disposeConnectivityService(BuildContext _, ConnectivityService value) {
