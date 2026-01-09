@@ -141,11 +141,13 @@ class _CallShellState extends State<CallShell> {
   void _showActiveCallThumbnail(BuildContext context, CallState state, StackRouter router) {
     final viewSource = PresenceViewParams.of(context).viewSource;
     final activeCall = state.activeCalls.current;
+    final orientation = MediaQuery.of(context).orientation;
 
     final content = PresenceViewParams(
       viewSource: viewSource,
       child: CallActiveThumbnail(
         activeCall: activeCall,
+        orientation: orientation,
         onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
       ),
     );

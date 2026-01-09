@@ -5,6 +5,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../utils/utils.dart';
 import 'rtc_stream_view.dart';
 
 /// A Local-camera preview intended to be used within a draggable overlay.
@@ -82,7 +83,7 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final frameSize = _calcFrameSize(orientation: orientation, smallerSide: smallerSide);
+    final frameSize = ThumbnailLayout.calcFrameSize(orientation: orientation, smallerSide: smallerSide);
 
     final hasFrontCamera = frontCamera != null;
     final isSwitchEnabled = hasFrontCamera && onSwitchCameraPressed != null;
@@ -121,19 +122,5 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// Computes the preview frame size based on orientation and a fixed 16:9 aspect ratio.
-  static Size _calcFrameSize({required Orientation orientation, required double smallerSide}) {
-    // Standard aspect ratio for mobile cameras (16:9).
-    // Using a fixed constant ensures the UI does not jitter during stream loading.
-    const aspectRatio = 16.0 / 9.0;
-
-    final biggerSide = smallerSide * aspectRatio;
-
-    final frameWidth = orientation == Orientation.portrait ? smallerSide : biggerSide;
-    final frameHeight = orientation == Orientation.portrait ? biggerSide : smallerSide;
-
-    return Size(frameWidth, frameHeight);
   }
 }
