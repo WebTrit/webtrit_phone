@@ -18,7 +18,7 @@ void main() {
 
     testWidgets('adapts to Light Theme colors correctly', (tester) async {
       final lightTheme = ThemeData.light();
-      final expectedBaseColor = lightTheme.colorScheme.onSurface.withValues(alpha: 0.05);
+      final expectedBaseColor = lightTheme.colorScheme.surfaceContainerHighest;
 
       await tester.pumpWidget(
         MaterialApp(
@@ -28,20 +28,17 @@ void main() {
       );
 
       // Verify that the first rect is painted with the calculated light theme base color.
-      // The ShimmerPainter draws two rects:
-      // 1. The base background (solid color).
-      // 2. The shimmer overlay (shader).
       expect(
         find.byType(Shimmer),
         paints..rect(color: expectedBaseColor),
-        reason: 'Should paint the base background using the light theme onSurface color with 0.05 alpha',
+        reason: 'Should paint the base background using the light theme surfaceContainerHighest color',
       );
     });
 
     testWidgets('adapts to Dark Theme colors correctly', (tester) async {
       // Setup Dark Theme
       final darkTheme = ThemeData.dark();
-      final expectedBaseColor = darkTheme.colorScheme.onSurface.withValues(alpha: 0.05);
+      final expectedBaseColor = darkTheme.colorScheme.surfaceContainerHighest;
 
       await tester.pumpWidget(
         MaterialApp(
@@ -54,7 +51,7 @@ void main() {
       expect(
         find.byType(Shimmer),
         paints..rect(color: expectedBaseColor),
-        reason: 'Should paint the base background using the dark theme onSurface color with 0.05 alpha',
+        reason: 'Should paint the base background using the dark theme surfaceContainerHighest color',
       );
     });
 
