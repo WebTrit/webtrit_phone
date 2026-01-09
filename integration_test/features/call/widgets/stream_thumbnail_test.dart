@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -166,6 +168,47 @@ void main() {
 
       expect(rtcView.objectFit, RTCVideoViewObjectFit.RTCVideoViewObjectFitContain);
       expect(rtcView.mirror, true);
+    });
+
+    testWidgets('does not crash if disposed before renderer initializes', (tester) async {
+      // Create a Completer to control when the "native" side responds.
+      final completer = Completer<Map<String, dynamic>>();
+      const channel = MethodChannel('FlutterWebRTC.Method');
+
+      // Intercept the channel call using the modern API.
+      // We pass the channel object as the first argument.
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, (MethodCall methodCall) async {
+        if (methodCall.method == 'createVideoRenderer') {
+          // Instead of returning immediately, we return the completer's future.
+          // This keeps the _initializeRenderer() method in a "pending" state.
+          return completer.future;
+        }
+        return null;
+      });
+
+      // Mount the widget.
+      // This triggers initState -> _initializeRenderer(), which halts waiting for the completer.
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: StreamThumbnail(stream: mockStream)),
+        ),
+      );
+
+      // Do NOT call pumpAndSettle() here, as we are intentionally "stuck" in initialization.
+
+      // Unmount the widget immediately.
+      // This triggers dispose(). At this moment, the renderer is NOT initialized yet.
+      // Without your fix, accessing `_renderer.srcObject` here would crash.
+      await tester.pumpWidget(const SizedBox());
+
+      // Verify no exception was thrown.
+      expect(tester.takeException(), isNull);
+
+      // Cleanup: Complete the future to release any pending awaits and avoid test leaks.
+      completer.complete({'textureId': 1});
+
+      // Reset the mock handler to null (or restore original behavior if needed).
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
     });
   });
 }

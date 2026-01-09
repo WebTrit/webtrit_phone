@@ -38,7 +38,8 @@ class StreamThumbnail extends StatefulWidget {
 }
 
 class _StreamThumbnailState extends State<StreamThumbnail> {
-  late final RTCVideoRenderer _renderer = RTCVideoRenderer();
+  final RTCVideoRenderer _renderer = RTCVideoRenderer();
+  bool _isRendererInitialized = false;
 
   @override
   void initState() {
@@ -56,11 +57,14 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
 
   Future<void> _initializeRenderer() async {
     await _renderer.initialize();
+    _isRendererInitialized = true;
     if (mounted) _updateSrcObject();
   }
 
   void _updateSrcObject() {
-    setState(() => _renderer.srcObject = widget.stream);
+    if (_isRendererInitialized) {
+      setState(() => _renderer.srcObject = widget.stream);
+    }
   }
 
   @override
@@ -88,7 +92,10 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
 
   @override
   void dispose() {
-    _renderer.srcObject = null;
+    // Prevent "Call initialize before setting the stream" error
+    // by checking initialization status before accessing srcObject.
+    if (_isRendererInitialized) _renderer.srcObject = null;
+
     _renderer.dispose();
     super.dispose();
   }
