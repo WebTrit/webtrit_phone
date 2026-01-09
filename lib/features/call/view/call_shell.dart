@@ -60,29 +60,39 @@ class _CallShellState extends State<CallShell> {
         if (callScreenShouldDisplay && !callScreenActive) _openCallScreen(router, state.activeCalls.isNotEmpty);
         if (!callScreenShouldDisplay && callScreenActive) _backToMainScreen(router);
 
-        if (state.display == CallDisplay.overlay) {
-          final avatar = _avatar;
-          if (avatar != null) {
-            if (!avatar.inserted) {
-              avatar.insert(context, state);
-            }
-          } else {
-            final avatar = ThumbnailAvatar(
-              stickyPadding: widget.stickyPadding,
-              onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
-            );
-            _avatar = avatar;
-            avatar.insert(context, state);
-          }
-        } else {
-          _removeThumbnailAvatar();
-        }
-
-        if (state.display == CallDisplay.none) {
-          _avatar = null;
+        switch (state.display) {
+          case CallDisplay.overlay:
+            _showThumbnailAvatar(context, state, router);
+          case CallDisplay.screen:
+          case CallDisplay.noneScreen:
+            _removeThumbnailAvatar();
+          case CallDisplay.none:
+            _resetThumbnailAvatar();
         }
       },
     );
+  }
+
+  /// Creates (if needed) and inserts the [ThumbnailAvatar] overlay.
+  void _showThumbnailAvatar(BuildContext context, CallState state, StackRouter router) {
+    final avatar =
+        _avatar ??
+        ThumbnailAvatar(
+          stickyPadding: widget.stickyPadding,
+          onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
+        );
+
+    _avatar = avatar;
+
+    if (!avatar.inserted) {
+      avatar.insert(context, state);
+    }
+  }
+
+  /// Removes the avatar from the UI and clears the reference.
+  void _resetThumbnailAvatar() {
+    _removeThumbnailAvatar();
+    _avatar = null;
   }
 
   /// Listens for transitions to and from [CallDisplay.screen] to manage
