@@ -25,6 +25,7 @@ export 'progress_overlay.dart';
 export 'safe_network_image.dart';
 export 'scroll_to_bottom.dart';
 export 'scroll_to_top.dart';
+export 'sip_presence_indicator.dart';
 export 'sized_circular_progress_indicator.dart';
 export 'tab_bar.dart';
 export 'text_buttons_table.dart';

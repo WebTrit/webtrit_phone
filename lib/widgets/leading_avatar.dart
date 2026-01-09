@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:icon_decoration/icon_decoration.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
+import 'package:webtrit_phone/widgets/sip_presence_indicator.dart';
 
 import '../utils/utils.dart';
 import 'safe_network_image.dart';
@@ -135,7 +135,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
           if (presenceSource == PresenceViewSource.contactInfo && widget.registered != null)
             Positioned.fromRect(rect: _registeredRect, child: _registeredIndicator(_style)),
           if (presenceSource == PresenceViewSource.sipPresence && widget.presenceInfo != null)
-            Positioned.fromRect(rect: _presenceRect, child: _buildPresenceIndicator(_style)),
+            Positioned.fromRect(rect: _presenceRect, child: _buildPresenceIndicator(_style, widget.presenceInfo!)),
           if (widget.smart) Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme)),
           if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
@@ -143,55 +143,8 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     );
   }
 
-  Widget _buildPresenceIndicator(LeadingAvatarStyle style) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final anyAvailable = widget.presenceInfo?.anyAvailable ?? false;
-    final color = anyAvailable
-        ? (style.presenceBadge?.availableColor ?? colorScheme.tertiary)
-        : (style.presenceBadge?.unavailableColor ?? colorScheme.onSurfaceVariant);
-
-    final primaryActivity = widget.presenceInfo?.primaryActivity;
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-            border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 2),
-          ),
-        ),
-        if (primaryActivity != null)
-          Positioned(
-            top: -_presenceRect.width * 0.2,
-            right: 0,
-            child: DecoratedIcon(
-              decoration: IconDecoration(
-                border: IconBorder(color: Theme.of(context).scaffoldBackgroundColor, width: 2.5),
-              ),
-              icon: Icon(
-                switch (primaryActivity) {
-                  PresenceActivity.busy => Icons.event_busy,
-                  PresenceActivity.doNotDisturb => Icons.phone_disabled_rounded,
-                  PresenceActivity.sleeping => Icons.nights_stay_rounded,
-                  PresenceActivity.permanentAbsence => Icons.person_off_rounded,
-                  PresenceActivity.onThePhone => Icons.phone_in_talk_rounded,
-                  PresenceActivity.meal => Icons.restaurant,
-                  PresenceActivity.meeting => Icons.calendar_month,
-                  PresenceActivity.appointment => Icons.diversity_3_sharp,
-                  PresenceActivity.vacation => Icons.beach_access,
-                  PresenceActivity.travel => Icons.flight,
-                  PresenceActivity.inTransit => Icons.drive_eta,
-                  PresenceActivity.away => Icons.directions_walk,
-                },
-                color: color,
-                size: _presenceRect.width * 0.6,
-              ),
-            ),
-          ),
-      ],
-    );
+  Widget _buildPresenceIndicator(LeadingAvatarStyle style, List<PresenceInfo> presenceInfo) {
+    return SipPresenceIndicator(presenceInfo: presenceInfo, presenceRect: _presenceRect);
   }
 
   Widget _buildAvatarContent(double diameter, LeadingAvatarStyle style) {
