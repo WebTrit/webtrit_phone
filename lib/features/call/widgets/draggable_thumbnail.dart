@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
+/// Defines the horizontal side of the screen that the thumbnail should snap to
+/// when it is released.
+///
+/// - [StickySide.left] snaps the thumbnail to the left edge of the screen.
+/// - [StickySide.right] snaps the thumbnail to the right edge of the screen.
 enum StickySide { left, right }
 
+/// A widget that enables its [child] to be dragged freely within the safe
+/// area and snaps horizontally to the nearest screen edge upon release.
+///
+/// Designed to be used as a direct child of a [Stack]; it depends on
+/// [AnimatedPositioned] for animated layout and coordinate management.
 class DraggableThumbnail extends StatefulWidget {
   const DraggableThumbnail({
     super.key,

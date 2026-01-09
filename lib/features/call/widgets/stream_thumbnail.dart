@@ -26,7 +26,11 @@ class StreamThumbnail extends StatefulWidget {
   /// Builder for UI overlay displayed on top of the video.
   final WidgetBuilder? overlayBuilder;
 
+  /// How the video is fitted inside the thumbnail.
+  /// Defaults to `RTCVideoViewObjectFit.RTCVideoViewObjectFitCover`.
   final RTCVideoViewObjectFit objectFit;
+
+  /// If true, mirror the video horizontally (useful for local/self view).
   final bool mirror;
 
   @override

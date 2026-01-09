@@ -224,7 +224,7 @@ class _CallShellState extends State<CallShell> {
   ///    redirect('') from an empty MainScreenPageRoute subroute to the initial (last remembered) flavor.
   /// 2. On iOS, using `popUntil` doesn't work when the app is collapsed because pushing routes isn't
   ///    allowed until the app resumes. As a result, `popUntil` is called too early.
-  /// 3. Using `Maps` with a path-based approach fixes this by properly restoring state.
+  /// 3. Using `navigatePath` with a path-based approach fixes this by properly restoring state.
   void _backToMainScreen(StackRouter router) {
     router.navigatePath(MainShellRoute.name);
   }
