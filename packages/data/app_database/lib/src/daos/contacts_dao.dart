@@ -27,7 +27,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   SimpleSelectStatement<$ContactsTableTable, ContactData> _selectAllContacts({
     ContactSourceTypeEnum? sourceType,
-    ContactKind? kind = ContactKind.visible,
+    ContactKindTypeEnum? kind = ContactKindTypeEnum.visible,
   }) => select(contactsTable)
     ..where((t) {
       Expression<bool> predicate = const Constant(true);
@@ -165,7 +165,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Future<List<FullContactData>> getAllContacts(
     ContactSourceTypeEnum? sourceType, {
-    ContactKind kind = ContactKind.visible,
+    ContactKindTypeEnum kind = ContactKindTypeEnum.visible,
   }) async {
     final query = _joinPhonesAndEmails(_selectAllContacts(sourceType: sourceType, kind: kind));
     final rows = await query.get();
@@ -175,7 +175,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   Stream<List<FullContactData>> watchAllContacts([
     Iterable<String>? searchBits,
     ContactSourceTypeEnum? sourceType,
-    ContactKind kind = ContactKind.visible,
+    ContactKindTypeEnum kind = ContactKindTypeEnum.visible,
   ]) {
     final query = _joinPhonesAndEmails(_selectAllContacts(sourceType: sourceType, kind: kind));
 
@@ -216,7 +216,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   }
 
   Future<List<FullContactData>> getServiceContacts() async {
-    return getAllContacts(null, kind: ContactKind.service);
+    return getAllContacts(null, kind: ContactKindTypeEnum.service);
   }
 
   Future<Set<String>> getContactsSourceIds(ContactSourceTypeEnum sourceType, {ContactKind? kind}) async {

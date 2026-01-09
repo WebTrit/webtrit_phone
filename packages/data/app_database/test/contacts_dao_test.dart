@@ -441,8 +441,8 @@ void main() {
     });
   });
 
-  group('ContactKind Tests', () {
-    test('Contact defaults to ContactKind.visible when kind is not provided', () async {
+  group('ContactKindTypeEnum Tests', () {
+    test('Contact defaults to ContactKindTypeEnum.visible when kind is not provided', () async {
       final initialVisibleContacts = await database.contactsDao.getAllContacts(null);
       final initialVisibleCount = initialVisibleContacts.length;
 
@@ -459,7 +459,7 @@ void main() {
       expect(currentContacts.length, initialVisibleCount + 1);
 
       final newContact = currentContacts.firstWhere((c) => c.contact.firstName == 'Abi');
-      expect(newContact.contact.kind, ContactKind.visible);
+      expect(newContact.contact.kind, ContactKindTypeEnum.visible);
     });
 
     test('getAllContacts filters based on kind', () async {
@@ -471,7 +471,7 @@ void main() {
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Abi'),
           lastName: Value('Gail'),
-          kind: Value(ContactKind.visible),
+          kind: Value(ContactKindTypeEnum.visible),
         ),
       );
 
@@ -480,19 +480,19 @@ void main() {
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Davis'),
           lastName: Value('Charles'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
       final visibleContacts = await database.contactsDao.getAllContacts(null);
       expect(visibleContacts.length, initialVisibleCount + 1);
       expect(visibleContacts.first.contact.firstName, 'Abi');
-      expect(visibleContacts.first.contact.kind, ContactKind.visible);
+      expect(visibleContacts.first.contact.kind, ContactKindTypeEnum.visible);
 
-      final serviceContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.service);
+      final serviceContacts = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.service);
       expect(serviceContacts.length, 1);
       expect(serviceContacts.first.contact.firstName, 'Davis');
-      expect(serviceContacts.first.contact.kind, ContactKind.service);
+      expect(serviceContacts.first.contact.kind, ContactKindTypeEnum.service);
     });
 
     test('getServiceContacts returns only service contacts', () async {
@@ -500,7 +500,7 @@ void main() {
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Abi'),
-          kind: Value(ContactKind.visible),
+          kind: Value(ContactKindTypeEnum.visible),
         ),
       );
 
@@ -508,7 +508,7 @@ void main() {
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.external),
           firstName: Value('Davis'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
@@ -517,11 +517,11 @@ void main() {
       expect(result.length, 1);
 
       expect(result.first.contact.firstName, 'Davis');
-      expect(result.first.contact.kind, ContactKind.service);
+      expect(result.first.contact.kind, ContactKindTypeEnum.service);
     });
 
     test('getServiceContacts returns only visible contacts', () async {
-      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.visible);
       final initialVisibleCount = initialVisibleContacts.length;
 
       await database.contactsDao.insertOnUniqueConflictUpdateContact(
@@ -529,7 +529,7 @@ void main() {
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Abi'),
           lastName: Value('Gail'),
-          kind: Value(ContactKind.visible),
+          kind: Value(ContactKindTypeEnum.visible),
         ),
       );
 
@@ -538,11 +538,11 @@ void main() {
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Davis'),
           lastName: Value('Charles'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
-      final result = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+      final result = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.visible);
 
       expect(result.length, initialVisibleCount + 1);
 
@@ -551,14 +551,14 @@ void main() {
     });
 
     test('watchAllContacts respects kind parameter', () async {
-      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.visible);
       final initialVisibleCount = initialVisibleContacts.length;
 
       await database.contactsDao.insertOnUniqueConflictUpdateContact(
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Wilson'),
-          kind: Value(ContactKind.visible),
+          kind: Value(ContactKindTypeEnum.visible),
         ),
       );
 
@@ -566,7 +566,7 @@ void main() {
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Moore'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
@@ -576,7 +576,7 @@ void main() {
       expect(visibleList.length, initialVisibleCount + 1);
       expect(visibleList.first.contact.firstName, 'Wilson');
 
-      final serviceStream = database.contactsDao.watchAllContacts(null, null, ContactKind.service);
+      final serviceStream = database.contactsDao.watchAllContacts(null, null, ContactKindTypeEnum.service);
       final serviceList = await serviceStream.first;
 
       expect(serviceList.length, 1);
@@ -590,7 +590,7 @@ void main() {
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Harris'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 

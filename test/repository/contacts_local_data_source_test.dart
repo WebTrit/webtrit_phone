@@ -28,7 +28,7 @@ void main() {
       test('inserts new external contact with phones and emails', () async {
         final contact = ContactsFixtureFactory.createExternalContact(id: '1', number: '1001', ext: '2001');
 
-        await dataSource.upsertContact(contact, ContactKind.visible);
+        await dataSource.upsertContact(contact, ContactKindTypeEnum.visible);
 
         final dbContact = await appDatabase.contactsDao.getContactBySource(
           ContactSourceTypeEnum.external,
@@ -50,14 +50,14 @@ void main() {
 
       test('updates existing contact and replaces phones', () async {
         final contactInitial = ContactsFixtureFactory.createExternalContact(id: '1', number: '1001', ext: '2001');
-        await dataSource.upsertContact(contactInitial, ContactKind.visible);
+        await dataSource.upsertContact(contactInitial, ContactKindTypeEnum.visible);
 
         final dbContactInitial = await appDatabase.contactsDao.getContactBySource(ContactSourceTypeEnum.external, '1');
         expect(dbContactInitial!.phones.length, 2);
 
         final contactUpdated = ContactsFixtureFactory.createExternalContact(id: '1', number: '9999');
 
-        await dataSource.upsertContact(contactUpdated, ContactKind.visible);
+        await dataSource.upsertContact(contactUpdated, ContactKindTypeEnum.visible);
 
         final dbContact = await appDatabase.contactsDao.getContactBySource(ContactSourceTypeEnum.external, '1');
 
@@ -68,7 +68,7 @@ void main() {
       test('does not create duplicate phone if ext equals number', () async {
         final contact = ContactsFixtureFactory.createExternalContact(id: '1', number: '1001', ext: '1001');
 
-        await dataSource.upsertContact(contact, ContactKind.visible);
+        await dataSource.upsertContact(contact, ContactKindTypeEnum.visible);
 
         final dbContact = await appDatabase.contactsDao.getContactBySource(ContactSourceTypeEnum.external, '1');
 

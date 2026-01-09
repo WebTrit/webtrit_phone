@@ -14,10 +14,13 @@ typedef ContactId = int;
 
 const contactIdPathParameterName = 'contactId';
 
+enum ContactKind { visible, service }
+
 class Contact extends Equatable {
   Contact({
     required this.id,
     required this.sourceType,
+    required this.kind,
     this.sourceId,
     this.registered,
     this.userRegistered,
@@ -34,6 +37,7 @@ class Contact extends Equatable {
 
   final ContactId id;
   final ContactSourceType sourceType;
+  final ContactKind kind;
   final String? sourceId;
 
   /// SIP Registered status
@@ -96,6 +100,7 @@ class Contact extends Equatable {
   List<Object?> get props => [
     id,
     sourceType,
+    kind,
     sourceId,
     registered,
     userRegistered,

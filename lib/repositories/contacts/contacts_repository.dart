@@ -158,7 +158,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
 
     try {
       final contact = await contactsRemoteDataSource.getContact(sourceId);
-      await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
+      await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKindTypeEnum.service);
       // No need to return data here; the database watcher will automatically emit the updated contact.
       externalContactFetchCompleter.complete();
     } catch (e, s) {

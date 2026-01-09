@@ -23,6 +23,7 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
     return Contact(
       id: contactData.id,
       sourceType: contactData.sourceType.toModel(),
+      kind: ContactKind.values.byName(contactData.kind.name),
       sourceId: contactData.sourceId,
       registered: contactData.registered,
       userRegistered: contactData.userRegistered,

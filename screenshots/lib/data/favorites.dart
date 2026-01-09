@@ -8,6 +8,7 @@ final dFavorites = [
     contact: Contact(
       id: 0,
       sourceType: ContactSourceType.external,
+      kind: ContactKind.visible,
       sourceId: '',
       registered: true,
       aliasName: 'Thomas Anderson',
@@ -20,6 +21,7 @@ final dFavorites = [
     contact: Contact(
       id: 0,
       sourceType: ContactSourceType.external,
+      kind: ContactKind.visible,
       sourceId: '',
       registered: false,
       aliasName: 'Anna Collins',
@@ -32,6 +34,7 @@ final dFavorites = [
     contact: Contact(
       id: 0,
       sourceType: ContactSourceType.external,
+      kind: ContactKind.visible,
       sourceId: '',
       aliasName: 'Lawrence Brown',
     ),
@@ -43,6 +46,7 @@ final dFavorites = [
     contact: Contact(
       id: 0,
       sourceType: ContactSourceType.external,
+      kind: ContactKind.visible,
       sourceId: '',
       aliasName: 'Ruth Jenkins',
     ),
@@ -54,6 +58,7 @@ final dFavorites = [
     contact: Contact(
       id: 0,
       sourceType: ContactSourceType.external,
+      kind: ContactKind.visible,
       sourceId: '',
       aliasName: 'Beverly Nelson',
     ),
@@ -65,6 +70,7 @@ final dFavorites = [
     contact: Contact(
       id: 0,
       sourceType: ContactSourceType.external,
+      kind: ContactKind.visible,
       sourceId: '',
       aliasName: 'Randy Jones',
     ),
