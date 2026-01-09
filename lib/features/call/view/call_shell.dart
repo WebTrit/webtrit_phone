@@ -10,15 +10,12 @@ import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/shimmer.dart';
+import 'package:webtrit_phone/app/constants.dart';
 
 import '../call.dart';
 
 class CallShell extends StatefulWidget {
-  const CallShell({
-    required this.child,
-    this.stickyPadding = const EdgeInsets.symmetric(horizontal: kMinInteractiveDimension / 4),
-    super.key,
-  });
+  const CallShell({required this.child, this.stickyPadding = kStickyOverlayPadding, super.key});
 
   final Widget child;
   final EdgeInsets stickyPadding;
