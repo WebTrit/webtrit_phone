@@ -13,21 +13,66 @@ enum StickySide { left, right }
 /// Designed to be used as a direct child of a [Stack]; it depends on
 /// [AnimatedPositioned] for animated layout and coordinate management.
 class DraggableThumbnail extends StatefulWidget {
+  /// Creates a [DraggableThumbnail].
+  ///
+  /// The [child] and [stickyPadding] parameters are required.
   const DraggableThumbnail({
     super.key,
+
+    /// The widget displayed inside the draggable thumbnail.
+    ///
+    /// This is the visual content (for example, a video preview or avatar) that
+    /// the user sees and can drag around.
     required this.child,
+
+    /// Padding that defines the draggable and sticky area around the edges.
+    ///
+    /// The thumbnail will not move beyond the bounds given by this padding and
+    /// will snap to the left or right side within these insets.
     required this.stickyPadding,
+
+    /// The horizontal side the thumbnail should stick to by default.
+    ///
+    /// Used when no explicit [initialOffset] is provided, or as a fallback
+    /// side when the widget needs to decide which edge to snap to.
     this.initialStickySide = StickySide.right,
+
+    /// The initial offset of the thumbnail relative to the top-left corner.
+    ///
+    /// If provided, this offset determines the starting position of the
+    /// thumbnail before any drag operations. If omitted, [initialStickySide]
+    /// and [stickyPadding] are used to compute a default position.
     this.initialOffset,
+
+    /// Callback invoked whenever the thumbnail's offset is updated.
+    ///
+    /// The [Offset] contains the current position of the thumbnail, which can
+    /// be used to persist or react to its location.
     this.onOffsetUpdate,
+
+    /// Callback invoked when the thumbnail is tapped.
+    ///
+    /// This is triggered in addition to the drag interaction and can be used
+    /// to, for example, maximize or open the related content.
     this.onTap,
   });
 
+  /// The widget displayed inside the draggable thumbnail.
   final Widget child;
+
+  /// Padding that constrains where the thumbnail can be dragged and stick.
   final EdgeInsets stickyPadding;
+
+  /// The horizontal side to which the thumbnail prefers to stick initially.
   final StickySide initialStickySide;
+
+  /// The initial position of the thumbnail, if explicitly provided.
   final Offset? initialOffset;
+
+  /// Called whenever the thumbnail's offset changes as a result of dragging.
   final void Function(Offset details)? onOffsetUpdate;
+
+  /// Called when the thumbnail is tapped.
   final GestureTapCallback? onTap;
 
   @override
@@ -35,8 +80,8 @@ class DraggableThumbnail extends StatefulWidget {
 }
 
 class _DraggableThumbnailState extends State<DraggableThumbnail> {
-  final _callCardKey = GlobalKey();
-  bool _callCardPanning = false;
+  final _thumbnailKey = GlobalKey();
+  bool _dragging = false;
 
   late EdgeInsets _mediaQueryPadding;
   late Size _mediaQuerySize;
@@ -61,7 +106,7 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
     _activeRect = _mediaQueryPadding.deflateRect(Offset.zero & _mediaQuerySize);
     _stickyRect = widget.stickyPadding.deflateRect(_activeRect);
 
-    if (_offset != null && !_callCardPanning) {
+    if (_offset != null && !_dragging) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final callCardRect = _findCallCardRect();
         final translateX = _lastStickTranslateX(_stickyRect, callCardRect);
@@ -104,12 +149,12 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
     }
 
     return AnimatedPositioned(
-      key: _callCardKey,
+      key: _thumbnailKey,
       left: left,
       top: top,
       right: right,
       curve: Curves.ease,
-      duration: _callCardPanning ? Duration.zero : kRadialReactionDuration,
+      duration: _dragging ? Duration.zero : kRadialReactionDuration,
       child: GestureDetector(
         onTap: widget.onTap,
         onPanStart: (details) {
@@ -120,7 +165,7 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
 
           setState(() {
             _offset = startRect.topLeft;
-            _callCardPanning = true;
+            _dragging = true;
           });
         },
         onPanUpdate: (details) {
@@ -128,7 +173,7 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
           if (_offset == null) return;
 
           // Calculate new position based on state + delta (ignoring render lag)
-          final currentSize = _callCardKey.currentContext?.size;
+          final currentSize = _thumbnailKey.currentContext?.size;
           if (currentSize == null || currentSize.isEmpty) {
             // Size is not yet available; skip this update to avoid invalid bounds
             return;
@@ -154,12 +199,12 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
         },
         onPanEnd: (details) {
           // Retrieve the render object to obtain the current size for snapping calculations.
-          final renderBox = _callCardKey.currentContext?.findRenderObject() as RenderBox?;
+          final renderBox = _thumbnailKey.currentContext?.findRenderObject() as RenderBox?;
           // Validation: If the widget is unmounted or has no size,
           // snapping cannot be calculated correctly. Stop the panning state to reset animations.
           if (renderBox == null || !renderBox.hasSize || renderBox.size.isEmpty) {
             setState(() {
-              _callCardPanning = false;
+              _dragging = false;
             });
             return;
           }
@@ -172,7 +217,7 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
           final currentRect = (_offset ?? Offset.zero) & currentSize;
 
           // Calculate the translation needed to snap the widget to the nearest side (horizontal)
-          // and ensure it stays within the safe vertical boundaries..
+          // and ensure it stays within the safe vertical boundaries.
           final translateX = _stickTranslateX(_stickyRect, currentRect);
           final translateY = _boundTranslateY(_stickyRect, currentRect);
 
@@ -182,7 +227,7 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
           widget.onOffsetUpdate?.call(offset);
           setState(() {
             _offset = offset;
-            _callCardPanning = false;
+            _dragging = false;
           });
         },
         child: widget.child,
@@ -191,7 +236,7 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
   }
 
   Rect _findCallCardRect() {
-    final callCardContext = _callCardKey.currentContext;
+    final callCardContext = _thumbnailKey.currentContext;
     if (callCardContext == null) return Rect.zero;
 
     final callCardRenderBox = callCardContext.findRenderObject() as RenderBox?;
