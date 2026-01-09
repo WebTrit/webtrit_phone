@@ -8,6 +8,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/repositories/contacts/contacts_repository.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/shimmer.dart';
 import 'package:webtrit_phone/app/constants.dart';
@@ -149,19 +150,37 @@ class _CallShellState extends State<CallShell> {
     }
 
     final viewSource = PresenceViewParams.of(context).viewSource;
-    final activeCall = state.activeCalls.current;
-    final orientation = MediaQuery.of(context).orientation;
+    final callBloc = context.read<CallBloc>();
+    final contactResolver = DefaultContactResolver(contactsRepository: context.read<ContactsRepository>());
 
-    final content = PresenceViewParams(
-      viewSource: viewSource,
-      child: CallActiveThumbnail(
-        activeCall: activeCall,
-        orientation: orientation,
-        onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
+    _thumbnailManager.show(
+      context,
+      child: BlocBuilder<CallBloc, CallState>(
+        bloc: callBloc,
+        buildWhen: (previous, current) =>
+            previous.activeCalls.isEmpty ||
+            current.activeCalls.isEmpty ||
+            previous.activeCalls.current != current.activeCalls.current,
+        builder: (context, state) {
+          if (state.activeCalls.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
+          final activeCall = state.activeCalls.current;
+          final orientation = MediaQuery.of(context).orientation;
+
+          return PresenceViewParams(
+            viewSource: viewSource,
+            child: CallActiveThumbnail(
+              activeCall: activeCall,
+              orientation: orientation,
+              onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
+              contactResolver: contactResolver,
+            ),
+          );
+        },
       ),
     );
-
-    _thumbnailManager.show(context, child: content);
   }
 
   void _showLocalCameraPreview(BuildContext context, CallState state) {
