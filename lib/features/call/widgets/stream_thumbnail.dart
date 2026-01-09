@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
-/// A widget that renders a WebRTC [MediaStream] within a thumbnail container.
+/// A responsive widget that renders a WebRTC [MediaStream].
 ///
 /// This widget handles the initialization and disposal of the [RTCVideoRenderer].
-/// It automatically adjusts its dimensions based on the video's aspect ratio
-/// (portrait vs landscape) to either 90x120 or 120x90.
+/// It fills the constraints provided by its parent (e.g., a specific [SizedBox]).
 class StreamThumbnail extends StatefulWidget {
   const StreamThumbnail({
-    required this.stream,
     super.key,
+    required this.stream,
     this.placeholderBuilder,
     this.overlayBuilder,
     this.objectFit = RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
@@ -69,24 +68,18 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<RTCVideoValue>(
-      valueListenable: _renderer,
-      builder: (context, value, child) => _ThumbnailSizer(value: value, child: child!),
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            RTCVideoView(
-              _renderer,
-              objectFit: widget.objectFit,
-              mirror: widget.mirror,
-              placeholderBuilder: widget.placeholderBuilder,
-            ),
-            if (widget.overlayBuilder != null) widget.overlayBuilder!(context),
-          ],
+    return Stack(
+      fit: StackFit.expand,
+      alignment: AlignmentDirectional.center,
+      children: [
+        RTCVideoView(
+          _renderer,
+          objectFit: widget.objectFit,
+          mirror: widget.mirror,
+          placeholderBuilder: widget.placeholderBuilder,
         ),
-      ),
+        if (widget.overlayBuilder != null) widget.overlayBuilder!(context),
+      ],
     );
   }
 
@@ -98,19 +91,5 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
 
     _renderer.dispose();
     super.dispose();
-  }
-}
-
-class _ThumbnailSizer extends StatelessWidget {
-  const _ThumbnailSizer({required this.value, required this.child});
-
-  final RTCVideoValue value;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final isPortrait = !value.renderVideo || value.aspectRatio < 1;
-
-    return SizedBox(width: isPortrait ? 90 : 120, height: isPortrait ? 120 : 90, child: child);
   }
 }
