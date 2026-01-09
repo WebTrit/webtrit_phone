@@ -219,7 +219,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return getAllContacts(null, kind: ContactKindTypeEnum.service);
   }
 
-  Future<Set<String>> getContactsSourceIds(ContactSourceTypeEnum sourceType, {ContactKind? kind}) async {
+  Future<Set<String>> getContactsSourceIds(ContactSourceTypeEnum sourceType, {ContactKindTypeEnum? kind}) async {
     final query = selectOnly(contactsTable);
     query.addColumns([contactsTable.id, contactsTable.sourceId, contactsTable.sourceType]);
     query.where(contactsTable.sourceType.equals(sourceType.index));
