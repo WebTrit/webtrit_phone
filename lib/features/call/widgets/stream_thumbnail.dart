@@ -5,13 +5,11 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 /// A responsive widget that renders a WebRTC [MediaStream].
 ///
 /// This widget handles the initialization and disposal of the [RTCVideoRenderer].
-/// It fills the constraints provided by its parent (e.g., a specific [SizedBox]).
 class StreamThumbnail extends StatefulWidget {
   const StreamThumbnail({
     super.key,
     required this.stream,
     this.placeholderBuilder,
-    this.overlayBuilder,
     this.objectFit = RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
     this.mirror = false,
   });
@@ -22,11 +20,7 @@ class StreamThumbnail extends StatefulWidget {
   /// Builder for the placeholder shown when video is unavailable.
   final WidgetBuilder? placeholderBuilder;
 
-  /// Builder for UI overlay displayed on top of the video.
-  final WidgetBuilder? overlayBuilder;
-
   /// How the video is fitted inside the thumbnail.
-  /// Defaults to `RTCVideoViewObjectFit.RTCVideoViewObjectFitCover`.
   final RTCVideoViewObjectFit objectFit;
 
   /// If true, mirror the video horizontally (useful for local/self view).
@@ -68,27 +62,17 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      alignment: AlignmentDirectional.center,
-      children: [
-        RTCVideoView(
-          _renderer,
-          objectFit: widget.objectFit,
-          mirror: widget.mirror,
-          placeholderBuilder: widget.placeholderBuilder,
-        ),
-        if (widget.overlayBuilder != null) widget.overlayBuilder!(context),
-      ],
+    return RTCVideoView(
+      _renderer,
+      objectFit: widget.objectFit,
+      mirror: widget.mirror,
+      placeholderBuilder: widget.placeholderBuilder,
     );
   }
 
   @override
   void dispose() {
-    // Prevent "Call initialize before setting the stream" error
-    // by checking initialization status before accessing srcObject.
     if (_isRendererInitialized) _renderer.srcObject = null;
-
     _renderer.dispose();
     super.dispose();
   }

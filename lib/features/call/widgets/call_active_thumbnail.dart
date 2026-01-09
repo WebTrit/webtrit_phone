@@ -34,30 +34,38 @@ class CallActiveThumbnail extends StatelessWidget {
         onTap: onTap,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: StreamThumbnail(
-            stream: activeCall.remoteStream,
-            placeholderBuilder: (context) => _buildPlaceholder(context),
-            overlayBuilder: hasRemoteVideo ? null : (context) => _buildAvatarOverlay(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              StreamThumbnail(
+                stream: activeCall.remoteStream,
+                placeholderBuilder: (context) {
+                  final theme = Theme.of(context);
+                  final colorScheme = theme.colorScheme;
+                  final isAccepted = activeCall.wasAccepted;
+
+                  final duration = isAccepted ? const Duration(milliseconds: 2500) : const Duration(milliseconds: 1500);
+
+                  final baseAlpha = 0.75;
+                  final highlightAlpha = 0.95;
+
+                  final baseColor = isAccepted
+                      ? colorScheme.primary.withValues(alpha: baseAlpha)
+                      : colorScheme.surfaceContainerHighest.withValues(alpha: highlightAlpha);
+
+                  final highlightColor = isAccepted
+                      ? colorScheme.surface.withValues(alpha: baseAlpha)
+                      : colorScheme.surface.withValues(alpha: highlightAlpha);
+
+                  return Shimmer(duration: duration, baseColor: baseColor, highlightColor: highlightColor);
+                },
+              ),
+              if (!hasRemoteVideo) _AvatarOverlay(activeCall: activeCall, contactResolver: contactResolver),
+            ],
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildPlaceholder(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final isAccepted = activeCall.wasAccepted;
-
-    return Shimmer(
-      duration: isAccepted ? const Duration(seconds: 5) : const Duration(milliseconds: 1500),
-      baseColor: isAccepted ? colorScheme.primaryContainer.withValues(alpha: 0.2) : colorScheme.surfaceContainerHighest,
-      highlightColor: isAccepted ? colorScheme.primary.withValues(alpha: 0.4) : Colors.white,
-    );
-  }
-
-  Widget _buildAvatarOverlay() {
-    return _AvatarOverlay(activeCall: activeCall, contactResolver: contactResolver);
   }
 }
 
@@ -75,20 +83,18 @@ class _AvatarOverlay extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: FutureBuilder<Contact?>(
         future: contactResolver?.resolve(number),
-        builder: (context, snapshot) => _buildAvatar(context, snapshot.data),
+        builder: (context, snapshot) {
+          final displayName = activeCall.displayName ?? '';
+          final resolvedName = snapshot.data?.maybeName ?? displayName;
+
+          return LeadingAvatar(
+            radius: 24,
+            username: resolvedName,
+            thumbnailUrl: snapshot.data?.thumbnailUrl,
+            placeholderIcon: Icons.phone_in_talk_outlined,
+          );
+        },
       ),
-    );
-  }
-
-  Widget _buildAvatar(BuildContext context, Contact? contact) {
-    final displayName = activeCall.displayName ?? '';
-    final resolvedName = contact?.maybeName ?? displayName;
-
-    return LeadingAvatar(
-      radius: 24,
-      username: resolvedName,
-      thumbnailUrl: contact?.thumbnailUrl,
-      placeholderIcon: Icons.phone_in_talk_outlined,
     );
   }
 }

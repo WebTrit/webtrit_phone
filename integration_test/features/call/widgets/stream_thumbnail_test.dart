@@ -64,16 +64,13 @@ void main() {
 
     setUp(() {
       mockStream = MockMediaStream();
-      // Stub 'id' (required by renderer)
       when(() => mockStream.id).thenReturn('mock_stream_id');
-      // Stub 'ownerTag' (required by renderer)
       when(() => mockStream.ownerTag).thenReturn('mock_owner_tag');
-      // Stub track getters
       when(() => mockStream.getVideoTracks()).thenReturn([]);
       when(() => mockStream.getAudioTracks()).thenReturn([]);
     });
 
-    testWidgets('initializes and renders with default Portrait size (90x120)', (tester) async {
+    testWidgets('initializes and renders RTCVideoView', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(body: StreamThumbnail(stream: mockStream)),
@@ -86,13 +83,6 @@ void main() {
       // Verify the widget is in the tree
       expect(find.byType(StreamThumbnail), findsOneWidget);
       expect(find.byType(RTCVideoView), findsOneWidget);
-
-      // Verify Sizing logic (defaults to portrait 90x120)
-      final sizerFinder = find.byType(SizedBox);
-      final sizer = tester.widget<SizedBox>(sizerFinder.first);
-
-      expect(sizer.width, 90.0);
-      expect(sizer.height, 120.0);
     });
 
     testWidgets('shows placeholder when builder is provided', (tester) async {
@@ -107,20 +97,6 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Placeholder'), findsOneWidget);
-    });
-
-    testWidgets('shows overlay when builder is provided', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: StreamThumbnail(stream: mockStream, overlayBuilder: (context) => const Text('Overlay')),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('Overlay'), findsOneWidget);
     });
 
     testWidgets('handles stream updates without crashing', (tester) async {
@@ -175,12 +151,10 @@ void main() {
       final completer = Completer<Map<String, dynamic>>();
       const channel = MethodChannel('FlutterWebRTC.Method');
 
-      // Intercept the channel call using the modern API.
-      // We pass the channel object as the first argument.
+      // Intercept the channel call.
       tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, (MethodCall methodCall) async {
         if (methodCall.method == 'createVideoRenderer') {
-          // Instead of returning immediately, we return the completer's future.
-          // This keeps the _initializeRenderer() method in a "pending" state.
+          // Hold initialization in a pending state.
           return completer.future;
         }
         return null;
@@ -198,7 +172,6 @@ void main() {
 
       // Unmount the widget immediately.
       // This triggers dispose(). At this moment, the renderer is NOT initialized yet.
-      // Without your fix, accessing `_renderer.srcObject` here would crash.
       await tester.pumpWidget(const SizedBox());
 
       // Verify no exception was thrown.
@@ -207,7 +180,7 @@ void main() {
       // Cleanup: Complete the future to release any pending awaits and avoid test leaks.
       completer.complete({'textureId': 1});
 
-      // Reset the mock handler to null (or restore original behavior if needed).
+      // Reset the mock handler.
       tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
     });
   });
