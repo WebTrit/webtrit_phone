@@ -162,7 +162,7 @@ void main() {
       for (final status in CallProcessingStatus.values) {
         // Explicit type definition fixes "subtype of orElse" error
         final List<ActiveCall> calls = [
-          MockActiveCall(processingStatus: status, cameraEnabled: true, remoteVideo: true),
+          MockActiveCall(processingStatus: status, isCameraActive: true, remoteVideo: true),
         ];
 
         if (status == CallProcessingStatus.connected) {
@@ -178,7 +178,7 @@ void main() {
         MockActiveCall(
           processingStatus: CallProcessingStatus.connected,
           wasHungUp: true,
-          cameraEnabled: true,
+          isCameraActive: true,
           remoteVideo: true,
         ),
       ];
@@ -187,7 +187,7 @@ void main() {
 
     test('Returns true ONLY if cameraEnabled AND remoteVideo (Both active on current call)', () {
       final List<ActiveCall> calls = [
-        MockActiveCall(processingStatus: CallProcessingStatus.connected, cameraEnabled: true, remoteVideo: true),
+        MockActiveCall(processingStatus: CallProcessingStatus.connected, isCameraActive: true, remoteVideo: true),
       ];
       expect(calls.shouldAutoCompact, isTrue);
     });
@@ -198,7 +198,7 @@ void main() {
       final List<ActiveCall> calls = [
         MockActiveCall(
           processingStatus: CallProcessingStatus.connected,
-          cameraEnabled: false, // Local OFF
+          isCameraActive: false, // Local OFF
           remoteVideo: true, // Remote ON
         ),
       ];
@@ -211,7 +211,7 @@ void main() {
 
     test('Returns false if remote video is OFF', () {
       final List<ActiveCall> calls = [
-        MockActiveCall(processingStatus: CallProcessingStatus.connected, cameraEnabled: true, remoteVideo: false),
+        MockActiveCall(processingStatus: CallProcessingStatus.connected, isCameraActive: true, remoteVideo: false),
       ];
       expect(calls.shouldAutoCompact, isFalse);
     });
@@ -221,14 +221,14 @@ void main() {
         // Background Call: Video (Held)
         MockActiveCall(
           processingStatus: CallProcessingStatus.connected,
-          cameraEnabled: true,
+          isCameraActive: true,
           remoteVideo: true,
           held: true,
         ),
         // Current Call: Audio (Active, Not Held)
         MockActiveCall(
           processingStatus: CallProcessingStatus.connected,
-          cameraEnabled: false,
+          isCameraActive: false,
           remoteVideo: false,
           held: false,
         ),
@@ -242,14 +242,14 @@ void main() {
         // Background Call: Audio (Held)
         MockActiveCall(
           processingStatus: CallProcessingStatus.connected,
-          cameraEnabled: false,
+          isCameraActive: false,
           remoteVideo: false,
           held: true,
         ),
         // Current Call: Video (Active, Not Held)
         MockActiveCall(
           processingStatus: CallProcessingStatus.connected,
-          cameraEnabled: true,
+          isCameraActive: true,
           remoteVideo: true,
           held: false,
         ),

@@ -161,7 +161,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               remoteVideo: activeCall.remoteVideo,
                                               wasAccepted: activeCall.wasAccepted,
                                               wasHungUp: activeCall.wasHungUp,
-                                              cameraValue: activeCall.cameraEnabled,
+                                              cameraValue: activeCall.isCameraActive,
                                               inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                               onCameraChanged: widget.callConfig.isVideoCallEnabled
                                                   ? (bool value) => context.read<CallBloc>().add(

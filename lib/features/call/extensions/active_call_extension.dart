@@ -14,6 +14,6 @@ extension ActiveCallListAutoCompact on List<ActiveCall> {
     if (activeCall.wasHungUp) return false;
     if (activeCall.processingStatus != CallProcessingStatus.connected) return false;
 
-    return activeCall.cameraEnabled && activeCall.remoteVideo;
+    return activeCall.isCameraActive && activeCall.remoteVideo;
   }
 }

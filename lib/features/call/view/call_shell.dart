@@ -86,10 +86,10 @@ class _CallShellState extends State<CallShell> {
   bool _shouldListenToVideoChanges(CallState previous, CallState current) {
     if (current.display != CallDisplay.screen) return false;
 
-    final prevVideo = previous.activeCalls.isEmpty ? false : previous.activeCalls.current.cameraEnabled;
-    final currVideo = current.activeCalls.isEmpty ? false : current.activeCalls.current.cameraEnabled;
+    final prevCall = previous.activeCalls.isEmpty ? null : previous.activeCalls.current;
+    final currCall = current.activeCalls.isEmpty ? null : current.activeCalls.current;
 
-    return prevVideo != currVideo;
+    return (prevCall?.isCameraActive ?? false) != (currCall?.isCameraActive ?? false);
   }
 
   void _updateOrientations(BuildContext context, CallDisplay display) {
@@ -124,21 +124,21 @@ class _CallShellState extends State<CallShell> {
     switch (state.display) {
       case CallDisplay.overlay:
         _showActiveCallThumbnail(context, state, router);
-        return;
+        break;
 
       case CallDisplay.screen:
         final activeCall = state.activeCalls.current;
-        if (activeCall.cameraEnabled) {
+        if (activeCall.isCameraActive) {
           _showLocalCameraPreview(context, state);
         } else {
           _hideOverlay();
         }
-        return;
+        break;
 
       case CallDisplay.none:
       case CallDisplay.noneScreen:
-        // already handled above
-        return;
+        // Handled by the initial guard clause.
+        break;
     }
   }
 
