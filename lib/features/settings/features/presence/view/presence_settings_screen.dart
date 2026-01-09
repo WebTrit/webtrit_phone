@@ -10,8 +10,7 @@ import 'package:webtrit_phone/extensions/presence_activity.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/widgets/back_button.dart';
-import 'package:webtrit_phone/widgets/leading_avatar.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../cubit/presence_settings_cubit.dart';
 import '../models/presence_settings_preset.dart';
@@ -52,60 +51,73 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                     children: [
                       Text(l10n.presence_settings_presets_title, style: titleStyle),
                       Spacer(),
-                      DropdownMenu<PresenceSettingsPreset?>(
-                        controller: TextEditingController(),
-                        dropdownMenuEntries: presets
-                            .map(
-                              (e) => DropdownMenuEntry(
-                                value: e,
-                                label: e.name,
-                                labelWidget: Row(
-                                  children: [
-                                    LeadingAvatar(
-                                      username: 'User',
-                                      presenceInfo: [
-                                        PresenceInfo(
-                                          id: 'id',
-                                          available: e.available,
-                                          note: e.note,
-                                          activities: [if (e.activity != null) e.activity!],
-                                          statusIcon: null,
-                                          device: 'device',
-                                          timeOffsetMin: 0,
-                                          timestamp: DateTime.now(),
+                      LimitedBox(
+                        maxWidth: 250,
+                        child: DropdownMenu<PresenceSettingsPreset?>(
+                          controller: TextEditingController(),
+                          dropdownMenuEntries: presets
+                              .map(
+                                (e) => DropdownMenuEntry(
+                                  value: e,
+                                  label: e.name,
+                                  labelWidget: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: SipPresenceIndicator(
+                                          presenceInfo: [
+                                            PresenceInfo(
+                                              id: 'id',
+                                              available: e.available,
+                                              note: e.note,
+                                              activities: [if (e.activity != null) e.activity!],
+                                              statusIcon: null,
+                                              device: 'device',
+                                              timeOffsetMin: 0,
+                                              timestamp: DateTime.now(),
+                                            ),
+                                          ],
+                                          presenceRect: Rect.fromLTWH(0, 0, 16, 16),
                                         ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(e.name),
-                                  ],
+                                      ),
+                                      SizedBox(width: 8),
+                                      Flexible(
+                                        child: Text(
+                                          e.name,
+                                          style: TextStyle(fontSize: 14),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                        initialSelection: presets.firstWhereOrNull(
-                          (element) =>
-                              element.available == state.available &&
-                              element.note == state.note &&
-                              element.activity == state.activity &&
-                              element.dndMode == state.dndMode,
-                        ),
-                        onSelected: (value) {
-                          if (value == null) return;
-                          final update = state
-                              .copyWithAvailable(value.available)
-                              .copyWithNote(value.note)
-                              .copyWithActivity(value.activity)
-                              .copyWithDndMode(value.dndMode);
-                          cubit.setPresenceSettings(update);
-                          setState(() => equalKey = UniqueKey());
-                        },
-                        label: Text(l10n.presence_settings_presets_label),
-                        menuStyle: MenuStyle(backgroundColor: WidgetStateProperty.all(colorScheme.surfaceBright)),
-                        inputDecorationTheme: InputDecorationTheme(
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                          isCollapsed: true,
+                              )
+                              .toList(),
+                          initialSelection: presets.firstWhereOrNull(
+                            (element) =>
+                                element.available == state.available &&
+                                element.note == state.note &&
+                                element.activity == state.activity &&
+                                element.dndMode == state.dndMode,
+                          ),
+                          onSelected: (value) {
+                            if (value == null) return;
+                            final update = state
+                                .copyWithAvailable(value.available)
+                                .copyWithNote(value.note)
+                                .copyWithActivity(value.activity)
+                                .copyWithDndMode(value.dndMode);
+                            cubit.setPresenceSettings(update);
+                            setState(() => equalKey = UniqueKey());
+                          },
+                          label: Text(l10n.presence_settings_presets_label),
+                          menuStyle: MenuStyle(backgroundColor: WidgetStateProperty.all(colorScheme.surfaceBright)),
+                          inputDecorationTheme: InputDecorationTheme(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            isCollapsed: true,
+                          ),
                         ),
                       ),
                     ],
