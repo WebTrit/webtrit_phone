@@ -12,7 +12,10 @@ class ThumbnailOverlayManager {
   /// The padding used to constrain the draggable area within the overlay.
   final EdgeInsets stickyPadding;
 
+  /// Last known position of the draggable thumbnail; preserved between show/hide.
   Offset? _lastOffset;
+
+  /// Currently inserted overlay entry for the thumbnail, or null when hidden.
   OverlayEntry? _entry;
 
   /// Drives the content of the active overlay, allowing updates without
@@ -29,8 +32,9 @@ class ThumbnailOverlayManager {
   void show(BuildContext context, {required Widget child}) {
     _contentNotifier.value = child;
 
+    // If the entry already exists, ValueListenableBuilder inside it
+    // will handle the UI update automatically.
     if (_entry != null) {
-      _entry!.markNeedsBuild();
       return;
     }
 
