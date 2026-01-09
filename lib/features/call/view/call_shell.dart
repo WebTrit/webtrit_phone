@@ -12,7 +12,6 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/shimmer.dart';
 
 import '../call.dart';
-import 'call_active_thumbnail.dart';
 
 class CallShell extends StatefulWidget {
   const CallShell({

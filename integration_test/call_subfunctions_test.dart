@@ -5,7 +5,7 @@ import 'package:patrol/patrol.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/bootstrap.dart';
-import 'package:webtrit_phone/features/call/view/call_active_thumbnail.dart';
+import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
