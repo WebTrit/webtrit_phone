@@ -43,6 +43,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: SingleChildScrollView(
+              clipBehavior: Clip.none, // if width <=370dp it clips dropdown hint
               child: Column(
                 key: equalKey,
                 crossAxisAlignment: CrossAxisAlignment.start,
