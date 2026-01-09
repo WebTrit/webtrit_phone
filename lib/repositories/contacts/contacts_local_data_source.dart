@@ -42,7 +42,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
 
       final syncedExternalContactsIds = await _appDatabase.contactsDao.getContactsSourceIds(
         ContactSourceTypeEnum.external,
-        kind: ContactKind.visible,
+        kind: ContactKindTypeEnum.visible,
       );
 
       // Use `safeSourceId` because that is the value persisted in the database.
@@ -59,7 +59,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
       }
 
       await Future.wait(
-        contacts.map((externalContact) => _upsertContactInternal(externalContact, kind: ContactKind.visible)),
+        contacts.map((externalContact) => _upsertContactInternal(externalContact, kind: ContactKindTypeEnum.visible)),
       );
     });
   }
