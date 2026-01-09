@@ -2,29 +2,32 @@ import 'package:flutter/material.dart';
 
 import 'draggable_thumbnail.dart';
 
-/// Function type allowing the overlay content to be wrapped with additional widgets.
-typedef OverlayContextWrapper = Widget Function(BuildContext context, Widget child);
-
+/// Manages the lifecycle and state of a draggable thumbnail overlay.
+///
+/// This class handles inserting the [OverlayEntry], updating its content,
+/// and preserving the thumbnail's position across different show/hide sessions.
 class ThumbnailOverlayManager {
   ThumbnailOverlayManager({required this.stickyPadding});
 
+  /// The padding used to constrain the draggable area within the overlay.
   final EdgeInsets stickyPadding;
 
   Offset? _lastOffset;
   OverlayEntry? _entry;
 
-  OverlayContextWrapper? _currentWrapper;
-  final ValueNotifier<Widget?> _contentNotifier = ValueNotifier(null);
+  /// Drives the content of the active overlay, allowing updates without
+  /// removing and re-inserting the [OverlayEntry].
+  final ValueNotifier<Widget?> _contentNotifier = ValueNotifier<Widget?>(null);
 
+  /// Whether the overlay entry is currently inserted in the view hierarchy.
   bool get isShowing => _entry != null;
 
-  /// Shows the overlay.
+  /// Displays the provided [child] in an overlay.
   ///
-  /// [child] is the visual content (e.g., avatar).
-  /// [contextWrapper] is an optional function to inject dependencies.
-  void show(BuildContext context, {required Widget child, OverlayContextWrapper? contextWrapper}) {
+  /// If the overlay is already active, this updates the content without
+  /// re-inserting the entry, preventing flickering.
+  void show(BuildContext context, {required Widget child}) {
     _contentNotifier.value = child;
-    _currentWrapper = contextWrapper;
 
     if (_entry != null) {
       _entry!.markNeedsBuild();
@@ -37,7 +40,6 @@ class ThumbnailOverlayManager {
         stickyPadding: stickyPadding,
         initialOffset: _lastOffset,
         onOffsetUpdate: _updateOffset,
-        wrapper: _currentWrapper,
       ),
     );
 
@@ -45,16 +47,19 @@ class ThumbnailOverlayManager {
     Overlay.of(context).insert(entry);
   }
 
+  /// Removes the overlay entry from the view hierarchy.
+  ///
+  /// The last known position of the thumbnail is preserved for the next usage.
   void hide() {
     final entry = _entry;
     if (entry != null) {
       entry.remove();
       _entry = null;
       _contentNotifier.value = null;
-      _currentWrapper = null;
     }
   }
 
+  /// Hides the overlay and releases resources used by the content notifier.
   void dispose() {
     hide();
     _contentNotifier.dispose();
@@ -69,14 +74,12 @@ class _ThumbnailOverlayContent extends StatelessWidget {
     required this.stickyPadding,
     required this.onOffsetUpdate,
     this.initialOffset,
-    this.wrapper,
   });
 
   final ValueNotifier<Widget?> contentNotifier;
   final EdgeInsets stickyPadding;
   final ValueChanged<Offset> onOffsetUpdate;
   final Offset? initialOffset;
-  final OverlayContextWrapper? wrapper;
 
   @override
   Widget build(BuildContext context) {
@@ -87,19 +90,12 @@ class _ThumbnailOverlayContent extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        final draggable = DraggableThumbnail(
+        return DraggableThumbnail(
           stickyPadding: stickyPadding,
           initialOffset: initialOffset,
           onOffsetUpdate: onOffsetUpdate,
           child: content,
         );
-
-        final localWrapper = wrapper;
-        if (localWrapper != null) {
-          return localWrapper(context, draggable);
-        }
-
-        return draggable;
       },
     );
   }

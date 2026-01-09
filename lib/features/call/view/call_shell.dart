@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
+import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/shimmer.dart';
 
 import '../call.dart';
 import 'call_active_thumbnail.dart';
 
 class CallShell extends StatefulWidget {
   const CallShell({
-    super.key,
-    this.stickyPadding = const EdgeInsets.symmetric(horizontal: kMinInteractiveDimension / 4),
     required this.child,
+    this.stickyPadding = const EdgeInsets.symmetric(horizontal: kMinInteractiveDimension / 4),
+    super.key,
   });
 
-  final EdgeInsets stickyPadding;
   final Widget child;
+  final EdgeInsets stickyPadding;
 
   @override
   State<CallShell> createState() => _CallShellState();
@@ -32,7 +33,10 @@ class _CallShellState extends State<CallShell> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(listeners: [callDisplayListener(), callScreenDisplayListener()], child: widget.child);
+    return MultiBlocListener(
+      listeners: [_callDisplayListener(), _callScreenDisplayListener(), _callVideoListener()],
+      child: widget.child,
+    );
   }
 
   /// Listens to [CallState.display] changes and manages related UI transitions.
@@ -40,60 +44,12 @@ class _CallShellState extends State<CallShell> {
   /// Handles:
   /// - Orientation updates via [OrientationsBloc].
   /// - Navigation between main and call screens.
-  /// - Showing or removing the floating [CallActiveThumbnail] overlay.
-  BlocListener<CallBloc, CallState> callDisplayListener() {
+  /// - Showing or removing the floating thumbnail overlay via [_updateOverlayContent].
+  BlocListener<CallBloc, CallState> _callDisplayListener() {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) => previous.display != current.display,
-      listener: (context, state) async {
-        final router = context.router;
-
-        final orientationsBloc = context.read<OrientationsBloc>();
-        if (state.display == CallDisplay.screen) {
-          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
-        } else {
-          orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
-        }
-
-        final callScreenActive = router.isRouteActive(CallScreenPageRoute.name);
-        final callScreenShouldDisplay = state.display == CallDisplay.screen;
-
-        if (callScreenShouldDisplay && !callScreenActive) _openCallScreen(router, state.activeCalls.isNotEmpty);
-        if (!callScreenShouldDisplay && callScreenActive) _backToMainScreen(router);
-
-        switch (state.display) {
-          case CallDisplay.overlay:
-            _showThumbnailAvatar(context, state, router);
-          case CallDisplay.screen:
-          case CallDisplay.noneScreen:
-            _removeThumbnailAvatar();
-          case CallDisplay.none:
-            _resetThumbnailAvatar();
-        }
-      },
+      listener: (context, state) => _onCallDisplayChanged(context, state),
     );
-  }
-
-  /// Creates (if needed) and inserts the [CallActiveThumbnail] overlay.
-  void _showThumbnailAvatar(BuildContext context, CallState state, StackRouter router) {
-    // Capture viewSource while we have access to the Shell context
-    final viewSource = PresenceViewParams.of(context).viewSource;
-    final activeCall = state.activeCalls.current;
-
-    _thumbnailManager.show(
-      context,
-      child: CallActiveThumbnail(
-        activeCall: activeCall,
-        onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
-      ),
-      contextWrapper: (context, child) {
-        return PresenceViewParams(viewSource: viewSource, child: child);
-      },
-    );
-  }
-
-  /// Removes the avatar from the UI.
-  void _resetThumbnailAvatar() {
-    _removeThumbnailAvatar();
   }
 
   /// Listens for transitions to and from [CallDisplay.screen] to manage
@@ -103,68 +59,178 @@ class _CallShellState extends State<CallShell> {
   ///   normal screen and lockscreen settings.
   /// - When leaving the call screen, it enables showing the activity
   ///   over the lock screen if needed.
-  BlocListener<CallBloc, CallState> callScreenDisplayListener() {
+  BlocListener<CallBloc, CallState> _callScreenDisplayListener() {
     return BlocListener<CallBloc, CallState>(
       listenWhen: (previous, current) =>
           previous.display != current.display &&
           (previous.display == CallDisplay.screen || current.display == CallDisplay.screen),
-      listener: (context, state) async {
-        final isCallScreen = state.display == CallDisplay.screen;
-
-        if (isCallScreen) {
-          // Entering call screen - restore normal flags
-          AndroidCallkeepUtils.activityControl.showOverLockscreen();
-          AndroidCallkeepUtils.activityControl.wakeScreenOnShow();
-        } else {
-          // Leaving call screen - keep visible over lock screen
-          AndroidCallkeepUtils.activityControl.showOverLockscreen(false);
-          AndroidCallkeepUtils.activityControl.wakeScreenOnShow(false);
-        }
-      },
+      listener: (context, state) => _onCallScreenDisplayChanged(state),
     );
   }
 
-  void _removeThumbnailAvatar() {
+  BlocListener<CallBloc, CallState> _callVideoListener() {
+    return BlocListener<CallBloc, CallState>(
+      listenWhen: _shouldListenToVideoChanges,
+      listener: (context, state) => _updateOverlayContent(context, state, context.router),
+    );
+  }
+
+  void _onCallDisplayChanged(BuildContext context, CallState state) {
+    final router = context.router;
+    _updateOrientations(context, state.display);
+    _handleNavigation(router, state);
+    _updateOverlayContent(context, state, router);
+  }
+
+  void _onCallScreenDisplayChanged(CallState state) {
+    final isCallScreen = state.display == CallDisplay.screen;
+    _updateLockscreenBehavior(isCallScreen);
+  }
+
+  bool _shouldListenToVideoChanges(CallState previous, CallState current) {
+    if (current.display != CallDisplay.screen) return false;
+
+    final prevVideo = previous.activeCalls.isEmpty ? false : previous.activeCalls.current.video;
+    final currVideo = current.activeCalls.isEmpty ? false : current.activeCalls.current.video;
+
+    return prevVideo != currVideo;
+  }
+
+  void _updateOrientations(BuildContext context, CallDisplay display) {
+    final orientationsBloc = context.read<OrientationsBloc>();
+    if (display == CallDisplay.screen) {
+      orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
+    } else {
+      orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
+    }
+  }
+
+  void _handleNavigation(StackRouter router, CallState state) {
+    final callScreenActive = router.isRouteActive(CallScreenPageRoute.name);
+    final callScreenShouldDisplay = state.display == CallDisplay.screen;
+
+    if (callScreenShouldDisplay && !callScreenActive) {
+      _openCallScreen(router, state.activeCalls.isNotEmpty);
+    }
+    if (!callScreenShouldDisplay && callScreenActive) {
+      _backToMainScreen(router);
+    }
+  }
+
+  void _updateOverlayContent(BuildContext context, CallState state, StackRouter router) {
+    switch (state.display) {
+      case CallDisplay.overlay:
+        _showActiveCallThumbnail(context, state, router);
+        break;
+
+      case CallDisplay.screen:
+        final activeCall = state.activeCalls.current;
+        if (activeCall.video) {
+          _showLocalCameraPreview(context, state);
+        } else {
+          _hideOverlay();
+        }
+        break;
+
+      case CallDisplay.noneScreen:
+      case CallDisplay.none:
+        _hideOverlay();
+        break;
+    }
+  }
+
+  void _showActiveCallThumbnail(BuildContext context, CallState state, StackRouter router) {
+    final viewSource = PresenceViewParams.of(context).viewSource;
+    final activeCall = state.activeCalls.current;
+
+    final content = PresenceViewParams(
+      viewSource: viewSource,
+      child: CallActiveThumbnail(
+        activeCall: activeCall,
+        onTap: () => _openCallScreen(router, state.activeCalls.isNotEmpty),
+      ),
+    );
+
+    _thumbnailManager.show(context, child: content);
+  }
+
+  void _showLocalCameraPreview(BuildContext context, CallState state) {
+    final themeData = Theme.of(context);
+    final switchCameraIconSize = themeData.textTheme.titleMedium!.fontSize!;
+    final callBloc = context.read<CallBloc>();
+
+    _thumbnailManager.show(
+      context,
+      child: BlocBuilder<CallBloc, CallState>(
+        bloc: callBloc,
+        buildWhen: (previous, current) => previous.activeCalls.current != current.activeCalls.current,
+        builder: (context, state) {
+          final activeCall = state.activeCalls.current;
+          final orientation = MediaQuery.of(context).orientation;
+
+          return LocalCameraPreviewOverlay(
+            orientation: orientation,
+            onTabGradient: themeData.colorScheme.surface,
+            switchCameraIconSize: switchCameraIconSize,
+            frontCamera: activeCall.frontCamera,
+            localStream: activeCall.localStream,
+            localPlaceholderBuilder: (_) => const Shimmer(),
+            onSwitchCameraPressed: activeCall.frontCamera == null
+                ? null
+                : () => callBloc.add(CallControlEvent.cameraSwitched(activeCall.callId)),
+          );
+        },
+      ),
+    );
+  }
+
+  void _hideOverlay() {
     _thumbnailManager.hide();
   }
 
-  @override
-  void dispose() {
-    _thumbnailManager.dispose();
-    super.dispose();
+  void _updateLockscreenBehavior(bool isCallScreen) {
+    if (isCallScreen) {
+      AndroidCallkeepUtils.activityControl.showOverLockscreen();
+      AndroidCallkeepUtils.activityControl.wakeScreenOnShow();
+    } else {
+      AndroidCallkeepUtils.activityControl.showOverLockscreen(false);
+      AndroidCallkeepUtils.activityControl.wakeScreenOnShow(false);
+    }
   }
 
   void _openCallScreen(StackRouter router, bool hasActiveCalls) {
     if (hasActiveCalls) {
       // Use navigate to prevent duplicating CallScreenPageRoute in the stack.
-      // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute, navigate ensures CallScreenPageRoute is not added again.
+      // For example, if the user is on a different route branch like LogRecordsConsoleScreenPageRoute,
+      // navigate ensures CallScreenPageRoute is not added again.
       router.navigate(const CallScreenPageRoute());
     } else {
-      // Handle scenario where no active call exists, ensuring the listener is properly removed and the thumbnail is correctly managed.
-      _removeThumbnailAvatar();
-
+      _hideOverlay();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.call_ThumbnailAvatar_currentlyNoActiveCall), backgroundColor: Colors.grey),
       );
     }
   }
 
-  /// Pops the stack until the main screen is reached.
-  /// This is useful when the user is on a different route branch like LogRecordsConsoleScreenPageRoute.
-  /// Uses only on programmatic back navigation, for events like `transferring`.
-  /// But if user back manually using the back button hi'll be just popped to the previous screen.
+  /// Programmatic back navigation to the main screen.
   ///
-  /// router.navigate(const MainScreenPageRoute()) didnt used to avoid bug
-  /// that triggers redirect('') from empty MainScreenPageRoute subroute to
-  /// initial(last remembered since restart) flavor that final and not changed across the app router lifecycle.
-  /// example redirect('') will always redirect to contacts page even if user was on the calls or chat page.
+  /// Uses [StackRouter.navigatePath] to `MainShellRoute` instead of `popUntil`.
+  /// This avoids issues on iOS where `popUntil` executes prematurely while the app
+  /// is backgrounded, and prevents router redirects bug associated with empty sub-routes.
   ///
-  /// On iOS, using popUntil doesn't work when the app is collapsed because pushing routes isn`t allowed until the app resumes.
-  /// As a result, popUntil is called too early, leaving the route not yet present in the stack once the app reopens.
-  /// Using navigate with a path-based approach fixes this issue by properly restoring state and avoiding the redirect bug.
-  ///
-  /// MainShellRoute uses MainShellRoute.name as its path.
+  /// Detailed Context:
+  /// 1. `router.navigate(const MainScreenPageRoute())` wasn't used to avoid a bug that triggers
+  ///    redirect('') from an empty MainScreenPageRoute subroute to the initial (last remembered) flavor.
+  /// 2. On iOS, using `popUntil` doesn't work when the app is collapsed because pushing routes isn't
+  ///    allowed until the app resumes. As a result, `popUntil` is called too early.
+  /// 3. Using `Maps` with a path-based approach fixes this by properly restoring state.
   void _backToMainScreen(StackRouter router) {
     router.navigatePath(MainShellRoute.name);
+  }
+
+  @override
+  void dispose() {
+    _thumbnailManager.dispose();
+    super.dispose();
   }
 }
