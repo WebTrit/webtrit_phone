@@ -1,1 +1,1 @@
-enum PreferredOrientation { regular, call }
+enum PreferredOrientation { portrait, auto }
