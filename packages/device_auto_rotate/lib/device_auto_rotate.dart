@@ -25,6 +25,12 @@ class DeviceAutoRotate {
       return Stream.value(true).asBroadcastStream();
     }
 
-    return _eventChannel.receiveBroadcastStream().map((event) => event as bool).handleError((_) => true);
+    return _eventChannel
+        .receiveBroadcastStream()
+        .map((event) => event as bool)
+        // Return `true` (allow rotation) on error as a safe default.
+        // If the platform channel fails, allowing rotation lets the OS manage orientation
+        // rather than risking an unintended lock into portrait mode.
+        .handleError((_) => true);
   }
 }
