@@ -1,14 +1,20 @@
 import 'package:flutter/services.dart';
 
-Future<void> setRegularPreferredOrientations() {
-  return SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+/// All supported device orientations.
+const _allOrientations = [
+  DeviceOrientation.portraitUp,
+  DeviceOrientation.portraitDown,
+  DeviceOrientation.landscapeLeft,
+  DeviceOrientation.landscapeRight,
+];
+
+/// Portrait-only orientations.
+const _portraitOrientations = [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown];
+
+Future<void> setPortraitPreferredOrientations() {
+  return SystemChrome.setPreferredOrientations(_portraitOrientations);
 }
 
-Future<void> setCallPreferredOrientations() {
-  return SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+Future<void> setAllPreferredOrientations() {
+  return SystemChrome.setPreferredOrientations(_allOrientations);
 }

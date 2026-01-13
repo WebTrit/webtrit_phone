@@ -95,9 +95,9 @@ class _CallShellState extends State<CallShell> {
   void _updateOrientations(BuildContext context, CallDisplay display) {
     final orientationsBloc = context.read<OrientationsBloc>();
     if (display == CallDisplay.screen) {
-      orientationsBloc.add(const OrientationsChanged(PreferredOrientation.call));
+      orientationsBloc.add(const OrientationsChanged(PreferredOrientation.auto));
     } else {
-      orientationsBloc.add(const OrientationsChanged(PreferredOrientation.regular));
+      orientationsBloc.add(const OrientationsChanged(PreferredOrientation.portrait));
     }
   }
 
