@@ -110,6 +110,8 @@ dependencies:
     path: ./packages/data/app_database
   webtrit_appearance_theme:
     path: ./packages/webtrit_appearance_theme
+  device_auto_rotate:
+    path: ./packages/device_auto_rotate
 
 dev_dependencies:
   integration_test:
