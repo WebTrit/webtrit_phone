@@ -4,6 +4,8 @@ export 'compact_auto_reset_controller.dart';
 export 'contact_name_resolver.dart';
 export 'contact_resolver.dart';
 export 'ice_filter.dart';
+export 'peer_connection_factory.dart';
+export 'peer_connection_manager.dart';
 export 'peer_connection_policy_applier.dart';
 export 'sdp_mod_builder.dart';
 export 'sdp_munger.dart';

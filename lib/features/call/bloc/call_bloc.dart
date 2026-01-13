@@ -85,7 +85,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Timer? _signalingClientReconnectTimer;
   Timer? _presenceInfoSyncTimer;
 
-  final _peerConnectionCompleters = <String, Completer<RTCPeerConnection>>{};
+  late final PeerConnectionManager _peerConnectionManager;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -116,8 +116,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.peerConnectionPolicyApplier,
     SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
     this.onCallEnded,
+    PeerConnectionManager? peerConnectionManager,
   }) : super(const CallState()) {
     _signalingClientFactory = signalingClientFactory;
+    _peerConnectionManager =
+        peerConnectionManager ?? PeerConnectionManager(retrieveTimeout: kPeerConnectionRetrieveTimeout);
 
     on<CallStarted>(_onCallStarted, transformer: sequential());
     on<_AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());
@@ -167,6 +170,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await _stopRingbackSound();
 
+    await _peerConnectionManager.dispose();
+
     await super.close();
   }
 
@@ -204,17 +209,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final currentActiveCallUuids = Set.from(change.currentState.activeCalls.map((e) => e.callId));
     final nextActiveCallUuids = Set.from(change.nextState.activeCalls.map((e) => e.callId));
+
     for (final removeUuid in currentActiveCallUuids.difference(nextActiveCallUuids)) {
-      assert(_peerConnectionCompleters.containsKey(removeUuid) == true);
-      _logger.finer(() => 'Remove peerConnection completer with uuid: $removeUuid');
-      _peerConnectionCompleters.remove(removeUuid);
+      _peerConnectionManager.disposePeerConnection(removeUuid).ignore();
     }
+
     for (final addUuid in nextActiveCallUuids.difference(currentActiveCallUuids)) {
-      assert(_peerConnectionCompleters.containsKey(addUuid) == false);
-      _logger.finer(() => 'Add peerConnection completer with uuid: $addUuid');
-      final completer = Completer<RTCPeerConnection>();
-      completer.future.ignore(); // prevent escalating possible error that was not awaited to the error zone level
-      _peerConnectionCompleters[addUuid] = completer;
+      _peerConnectionManager.add(addUuid);
     }
 
     final currentProcessingStatuses = Set.from(
@@ -325,86 +326,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning('Unexpected error during account info refresh', e, st);
     }
   }
-
-  //
-
-  void _peerConnectionComplete(String callId, RTCPeerConnection peerConnection) {
-    try {
-      _logger.finer(() => 'Complete peerConnection completer with callId: $callId');
-      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-      peerConnectionCompleter.complete(peerConnection);
-    } catch (e) {
-      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
-      _logger.warning('_peerConnectionComplete: $e');
-    }
-  }
-
-  void _peerConnectionCompleteError(String callId, Object error, [StackTrace? stackTrace]) {
-    try {
-      _logger.finer(() => 'CompleteError peerConnection completer with callId: $callId');
-      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-      peerConnectionCompleter.completeError(error, stackTrace);
-    } catch (e) {
-      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
-      _logger.warning('_peerConnectionCompleteError: $e');
-    }
-  }
-
-  void _peerConnectionConditionalCompleteError(String callId, Object error, [StackTrace? stackTrace]) {
-    try {
-      final peerConnectionCompleter = _peerConnectionCompleters[callId]!;
-      if (peerConnectionCompleter.isCompleted) {
-        _logger.finer(
-          () => 'ConditionalCompleteError peerConnection completer with callId: $callId - already completed',
-        );
-      } else {
-        _logger.finer(() => 'ConditionalCompleteError peerConnection completer with callId: $callId');
-        peerConnectionCompleter.completeError(error, stackTrace);
-      }
-    } catch (e) {
-      // Handle the exception for correct functionality, for example, when the peer connection has already been completed.
-      _logger.warning('_peerConnectionConditionalCompleteError: $e');
-    }
-  }
-
-  Future<RTCPeerConnection?> _peerConnectionRetrieve(String callId, [bool allowWaiting = true]) async {
-    final peerConnectionCompleter = _peerConnectionCompleters[callId];
-    if (peerConnectionCompleter == null) {
-      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - null');
-      return null;
-    }
-
-    try {
-      if (!peerConnectionCompleter.isCompleted) {
-        if (allowWaiting) {
-          _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - waiting');
-        } else {
-          _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - cancelling');
-          throw UncompletedPeerConnectionException(
-            'Peer connection completer is not completed and waiting is not allowed',
-          );
-        }
-      }
-
-      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - awaiting with timeout');
-
-      final peerConnection = await peerConnectionCompleter.future.timeout(
-        kPeerConnectionRetrieveTimeout,
-        onTimeout: () => throw TimeoutException('Timeout while retrieving peer connection for callId: $callId'),
-      );
-
-      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - value received');
-      return peerConnection;
-    } on UncompletedPeerConnectionException catch (e) {
-      _logger.info('Uncompleted peer connection completer with callId: $callId - error', e);
-      return null;
-    } catch (e, stackTrace) {
-      _logger.finer(() => 'Retrieve peerConnection completer with callId: $callId - error', e, stackTrace);
-      return null;
-    }
-  }
-
-  //
 
   void _reconnectInitiated([Duration delay = kSignalingClientFastReconnectDelay, bool force = false]) {
     _signalingClientReconnectTimer?.cancel();
@@ -585,7 +506,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       await state.performOnActiveCall(event.callId, (activeCall) async {
-        await (await _peerConnectionRetrieve(activeCall.callId))?.close();
+        // Retrieve PC via manager and close it
+        await _peerConnectionManager.disposePeerConnection(activeCall.callId);
+
         await callkeep.reportEndCall(
           activeCall.callId,
           activeCall.displayName ?? activeCall.handle.value,
@@ -962,7 +885,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final jsep = event.jsep;
     if (jsep != null) {
-      final peerConnection = await _peerConnectionRetrieve(event.callId);
+      final peerConnection = await _peerConnectionManager.retrieve(event.callId);
       if (peerConnection == null) {
         _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
       } else {
@@ -998,11 +921,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     emit(state.copyWithMappedActiveCall(event.callId, (_) => call!));
 
-    final pc = await _peerConnectionRetrieve(event.callId);
-    if (jsep != null && pc != null) {
+    final peerConnection = await _peerConnectionManager.retrieve(event.callId);
+    if (jsep != null && peerConnection != null) {
       final remoteDescription = jsep.toDescription();
       sdpSanitizer?.apply(remoteDescription);
-      await pc.setRemoteDescription(remoteDescription);
+      await peerConnection.setRemoteDescription(remoteDescription);
     }
   }
 
@@ -1044,7 +967,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
         }
 
-        await (await _peerConnectionRetrieve(event.callId, false))?.close();
+        // Updated: Delegate disposal to manager.
+        // This handles closing the connection and removing the completer.
+        await _peerConnectionManager.disposePeerConnection(event.callId);
+
         await call.localStream?.dispose();
 
         emit(state.copyWithPopActiveCall(event.callId));
@@ -1088,7 +1014,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final remoteDescription = jsep.toDescription();
         sdpSanitizer?.apply(remoteDescription);
         await state.performOnActiveCall(event.callId, (activeCall) async {
-          final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
+          final peerConnection = await _peerConnectionManager.retrieve(event.callId);
           if (peerConnection == null) {
             _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
           } else {
@@ -1115,7 +1041,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } catch (e, s) {
       callErrorReporter.handle(e, s, '__onCallSignalingEventUpdating && jsep error:');
 
-      _peerConnectionCompleteError(event.callId, e);
+      _peerConnectionManager.completeError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
     }
   }
@@ -1420,7 +1346,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final peerConnection = await _peerConnectionRetrieve(event.callId);
+    final peerConnection = await _peerConnectionManager.retrieve(event.callId);
     if (peerConnection == null) return;
 
     try {
@@ -1776,7 +1702,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       event.fail();
 
-      _peerConnectionCompleteError(event.callId, e, stackTrace);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
 
       emit(state.copyWithPopActiveCall(event.callId));
 
@@ -1822,7 +1748,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // In other cases setLocalDescription is called first; here it's delayed to avoid ICE race
       await peerConnection.setLocalDescription(localDescription);
 
-      _peerConnectionComplete(event.callId, peerConnection);
+      _peerConnectionManager.complete(event.callId, peerConnection);
 
       await callkeep.reportConnectingOutgoingCall(event.callId);
 
@@ -1831,13 +1757,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingOfferSent);
         }),
       );
-    } catch (e, s) {
+    } catch (e, stackTrace) {
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
-      callErrorReporter.handle(e, s, '__onCallPerformEventStarted error:');
+      callErrorReporter.handle(e, stackTrace, '__onCallPerformEventStarted error:');
 
       await _stopRingbackSound();
-      _peerConnectionCompleteError(event.callId, e);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
 
       add(_ResetStateEvent.completeCall(event.callId));
     }
@@ -1938,9 +1864,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ),
       );
 
-      _peerConnectionComplete(event.callId, peerConnection);
-    } catch (e, s) {
-      _peerConnectionCompleteError(event.callId, e);
+      _peerConnectionManager.complete(event.callId, peerConnection);
+    } catch (e, stackTrace) {
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
 
       _addToRecents(call!);
@@ -1949,7 +1875,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final declineRequest = DeclineRequest(transaction: declineId, line: call.line, callId: call.callId);
       _signalingClient?.execute(declineRequest).ignore();
 
-      callErrorReporter.handle(e, s, '__onCallPerformEventAnswered error:');
+      callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
     }
   }
 
@@ -2005,7 +1931,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Need to close peer connection after executing [HangupRequest]
       // to prevent "Simulate a "hangup" coming from the application"
       // because of "No WebRTC media anymore".
-      await (await _peerConnectionRetrieve(activeCall.callId))?.close();
+      await _peerConnectionManager.disposePeerConnection(activeCall.callId);
       await activeCall.localStream?.dispose();
     });
 
@@ -2042,10 +1968,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return activeCall.copyWith(held: event.onHold);
         }),
       );
-    } catch (e, s) {
-      callErrorReporter.handle(e, s, '__onCallPerformEventSetHeld error');
+    } catch (e, stackTrace) {
+      callErrorReporter.handle(e, stackTrace, '__onCallPerformEventSetHeld error');
 
-      _peerConnectionCompleteError(event.callId, e);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+
       add(_ResetStateEvent.completeCall(event.callId));
     }
   }
@@ -2071,7 +1998,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     event.fulfill();
 
     await state.performOnActiveCall(event.callId, (activeCall) async {
-      final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
+      final peerConnection = await _peerConnectionManager.retrieve(event.callId);
       if (peerConnection == null) {
         _logger.warning('__onCallPerformEventSentDTMF: peerConnection is null - most likely some permissions issue');
       } else {
@@ -2151,10 +2078,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             return _signalingClient?.execute(iceTrickleRequest);
           }
         });
-      } catch (e, s) {
-        callErrorReporter.handle(e, s, '__onPeerConnectionEventIceGatheringStateChanged error');
+      } catch (e, stackTrace) {
+        callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceGatheringStateChanged error');
 
-        _peerConnectionCompleteError(event.callId, e);
+        _peerConnectionManager.completeError(event.callId, e, stackTrace);
+
         add(_ResetStateEvent.completeCall(event.callId));
       }
     }
@@ -2167,7 +2095,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (event.state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
       try {
         await state.performOnActiveCall(event.callId, (activeCall) async {
-          final peerConnection = await _peerConnectionRetrieve(activeCall.callId);
+          final peerConnection = await _peerConnectionManager.retrieve(event.callId);
           if (peerConnection == null) {
             _logger.warning(
               '__onPeerConnectionEventIceConnectionStateChanged: peerConnection is null - most likely some state issue',
@@ -2190,10 +2118,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             await _signalingClient?.execute(updateRequest);
           }
         });
-      } catch (e, s) {
-        callErrorReporter.handle(e, s, '__onPeerConnectionEventIceConnectionStateChanged error');
+      } catch (e, stackTrace) {
+        callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceConnectionStateChanged error');
 
-        _peerConnectionCompleteError(event.callId, e);
+        _peerConnectionManager.completeError(event.callId, e, stackTrace);
+
         add(_ResetStateEvent.completeCall(event.callId));
       }
     }
@@ -2219,10 +2148,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return _signalingClient?.execute(iceTrickleRequest);
         }
       });
-    } catch (e, s) {
-      callErrorReporter.handle(e, s, '__onPeerConnectionEventIceCandidateIdentified error');
+    } catch (e, stackTrace) {
+      callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceCandidateIdentified error');
 
-      _peerConnectionCompleteError(event.callId, e);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+
       add(_ResetStateEvent.completeCall(event.callId));
     }
   }
@@ -2349,7 +2279,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         continue activeCallsLoop;
       }
 
-      _peerConnectionConditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
+      _peerConnectionManager.conditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
 
       add(
         _CallSignalingEvent.hangup(
@@ -2745,103 +2675,62 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return callPerformEvent.future;
   }
 
-  Future<RTCPeerConnection> _createPeerConnection(String callId, int? lineId) async {
-    final peerConnection = await createPeerConnection({
-      'iceServers': [
-        {'url': 'stun:stun.l.google.com:19302'},
-      ],
-    }, {});
-    final logger = Logger(peerConnection.toString());
+  Future<RTCPeerConnection> _createPeerConnection(String callId, int? lineId) {
+    return _peerConnectionManager.createPeerConnection(
+      callId,
+      observer: PeerConnectionObserver(
+        onSignalingState: (state) => add(_PeerConnectionEvent.signalingStateChanged(callId, state)),
+        onConnectionState: (state) => add(_PeerConnectionEvent.connectionStateChanged(callId, state)),
+        onIceGatheringState: (state) => add(_PeerConnectionEvent.iceGatheringStateChanged(callId, state)),
+        onIceConnectionState: (state) => add(_PeerConnectionEvent.iceConnectionStateChanged(callId, state)),
+        onIceCandidate: (candidate) => add(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
+        onAddStream: (stream) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
+        onRemoveStream: (stream) => add(_PeerConnectionEvent.streamRemoved(callId, stream)),
+        onRenegotiationNeeded: (pc) => _handleRenegotiationNeeded(callId, lineId, pc),
+      ),
+    );
+  }
 
-    return peerConnection
-      ..onSignalingState = (signalingState) {
-        logger.fine(() => 'onSignalingState state: ${signalingState.name}');
+  Future<void> _handleRenegotiationNeeded(String callId, int? lineId, RTCPeerConnection peerConnection) async {
+    // TODO(Serdun): Handle renegotiation needed
+    // This implementation does not handle all possible signaling states.
+    // Specifically, if the current state is `have-remote-offer`, calling
+    // setLocalDescription with an offer will throw:
+    //   WEBRTC_SET_LOCAL_DESCRIPTION_ERROR: Failed to set local offer sdp: Called in wrong state: have-remote-offer
+    //
+    // Known case: when CalleeVideoOfferPolicy.includeInactiveTrack is used,
+    // the callee may trigger onRenegotiationNeeded before the current remote offer is processed.
+    // This causes a race where the local peer is still in 'have-remote-offer' state,
+    // leading to the above error. Currently this does not severely affect behavior,
+    // since the offer includes only an inactive track, but it should still be handled correctly.
+    //
+    // Proper handling should include:
+    // - Waiting until the signaling state becomes 'stable' before creating and setting a new offer
+    // - Avoiding renegotiation if a remote offer is currently being processed
+    // - Ensuring renegotiation is coordinated and state-aware
 
-        add(_PeerConnectionEvent.signalingStateChanged(callId, signalingState));
-      }
-      ..onConnectionState = (connectionState) {
-        logger.fine(() => 'onConnectionState state: ${connectionState.name}');
+    final pcState = peerConnection.signalingState;
+    _logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
+    if (pcState != null) {
+      final localDescription = await peerConnection.createOffer({});
+      sdpMunger?.apply(localDescription);
 
-        add(_PeerConnectionEvent.connectionStateChanged(callId, connectionState));
-      }
-      ..onIceGatheringState = (iceGatheringState) {
-        logger.fine(() => 'onIceGatheringState state: ${iceGatheringState.name}');
+      // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+      // localDescription should be set before sending the offer to transition into have-local-offer state.
+      await peerConnection.setLocalDescription(localDescription);
 
-        add(_PeerConnectionEvent.iceGatheringStateChanged(callId, iceGatheringState));
+      try {
+        final updateRequest = UpdateRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: lineId,
+          callId: callId,
+          jsep: localDescription.toMap(),
+        );
+        await _signalingClient?.execute(updateRequest);
+      } catch (e, s) {
+        callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
       }
-      ..onIceConnectionState = (iceConnectionState) {
-        logger.fine(() => 'onIceConnectionState state: ${iceConnectionState.name}');
-
-        add(_PeerConnectionEvent.iceConnectionStateChanged(callId, iceConnectionState));
-      }
-      ..onIceCandidate = (candidate) {
-        logger.fine(() => 'onIceCandidate candidate: ${candidate.str}');
-
-        add(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate));
-      }
-      ..onAddStream = (stream) {
-        logger.fine(() => 'onAddStream stream: ${stream.str}');
-
-        add(_PeerConnectionEvent.streamAdded(callId, stream));
-      }
-      ..onRemoveStream = (stream) {
-        logger.fine(() => 'onRemoveStream stream: ${stream.str}');
-
-        add(_PeerConnectionEvent.streamRemoved(callId, stream));
-      }
-      ..onAddTrack = (stream, track) {
-        logger.fine(() => 'onAddTrack stream: ${stream.str} track: ${track.str}');
-      }
-      ..onRemoveTrack = (stream, track) {
-        logger.fine(() => 'onRemoveTrack stream: ${stream.str} track: ${track.str}');
-      }
-      ..onDataChannel = (channel) {
-        logger.fine(() => 'onDataChannel channel: $channel');
-      }
-      ..onRenegotiationNeeded = () async {
-        // TODO(Serdun): Handle renegotiation needed
-        // This implementation does not handle all possible signaling states.
-        // Specifically, if the current state is `have-remote-offer`, calling
-        // setLocalDescription with an offer will throw:
-        //   WEBRTC_SET_LOCAL_DESCRIPTION_ERROR: Failed to set local offer sdp: Called in wrong state: have-remote-offer
-        //
-        // Known case: when CalleeVideoOfferPolicy.includeInactiveTrack is used,
-        // the callee may trigger onRenegotiationNeeded before the current remote offer is processed.
-        // This causes a race where the local peer is still in 'have-remote-offer' state,
-        // leading to the above error. Currently this does not severely affect behavior,
-        // since the offer includes only an inactive track, but it should still be handled correctly.
-        //
-        // Proper handling should include:
-        // - Waiting until the signaling state becomes 'stable' before creating and setting a new offer
-        // - Avoiding renegotiation if a remote offer is currently being processed
-        // - Ensuring renegotiation is coordinated and state-aware
-
-        final pcState = peerConnection.signalingState;
-        logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
-        if (pcState != null) {
-          final localDescription = await peerConnection.createOffer({});
-          sdpMunger?.apply(localDescription);
-
-          // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
-          // localDescription should be set before sending the offer to transition into have-local-offer state.
-          await peerConnection.setLocalDescription(localDescription);
-
-          try {
-            final updateRequest = UpdateRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: lineId,
-              callId: callId,
-              jsep: localDescription.toMap(),
-            );
-            await _signalingClient?.execute(updateRequest);
-          } catch (e, s) {
-            callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
-          }
-        }
-      }
-      ..onTrack = (event) {
-        logger.fine(() => 'onTrack ${event.str}');
-      };
+    }
   }
 
   void _addToRecents(ActiveCall activeCall) {
