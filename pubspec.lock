@@ -366,6 +366,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
+  device_auto_rotate:
+    dependency: "direct main"
+    description:
+      path: "packages/device_auto_rotate"
+      relative: true
+    source: path
+    version: "0.0.1"
   device_info_plus:
     dependency: "direct main"
     description:
