@@ -211,7 +211,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final nextActiveCallUuids = Set.from(change.nextState.activeCalls.map((e) => e.callId));
 
     for (final removeUuid in currentActiveCallUuids.difference(nextActiveCallUuids)) {
-      _peerConnectionManager.disposePeerConnection(removeUuid).ignore();
+      _peerConnectionManager.disposePeerConnection(removeUuid).catchError((error, stackTrace) {
+        _logger.warning('Error disposing peer connection for $removeUuid', error, stackTrace);
+      });
     }
 
     for (final addUuid in nextActiveCallUuids.difference(currentActiveCallUuids)) {
