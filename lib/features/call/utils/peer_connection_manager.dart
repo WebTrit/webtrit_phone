@@ -79,6 +79,9 @@ final class PeerConnectionManager {
       }
     }
 
+    // Delegates creation to the factory.
+    // The factory instance encapsulates the configuration (e.g. ICE servers)
+    // ensuring consistency across all connections managed by this instance.
     final peerConnection = await factory.create();
 
     final pcLogger = Logger(peerConnection.toString());
