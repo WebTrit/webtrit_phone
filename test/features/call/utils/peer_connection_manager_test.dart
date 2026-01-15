@@ -26,7 +26,7 @@ void main() {
     mockFactory = MockPeerConnectionFactory();
     mockPC = MockRTCPeerConnection();
 
-    when(() => mockFactory.create(any(), any())).thenAnswer((_) async => mockPC);
+    when(() => mockFactory.create()).thenAnswer((_) async => mockPC);
     when(() => mockPC.close()).thenAnswer((_) async {});
 
     manager = PeerConnectionManager(factory: mockFactory, retrieveTimeout: kShortTimeout);
@@ -48,7 +48,7 @@ void main() {
     test('createPeerConnection() calls factory and returns PC', () async {
       const observer = PeerConnectionObserver();
       final pc = await manager.createPeerConnection(kTestUuid, observer: observer);
-      verify(() => mockFactory.create(any(), any())).called(1);
+      verify(() => mockFactory.create()).called(1);
       expect(pc, equals(mockPC));
     });
 
@@ -241,7 +241,10 @@ void main() {
       expect(createCompleted, isTrue);
 
       // Verify factory called ONCE (only for the new creation)
-      verify(() => mockFactory.create(any(), any())).called(1);
+      verify(() => mockFactory.create()).called(1);
+
+      // Verify the old connection was explicitly closed
+      verify(() => mockPC.close()).called(1);
     });
 
     test('dispose() returns even if pc.close() hangs (Safety Timeout)', () async {
