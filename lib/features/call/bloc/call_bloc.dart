@@ -120,7 +120,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingClientFactory = signalingClientFactory;
     _peerConnectionManager =
-        peerConnectionManager ?? PeerConnectionManager(retrieveTimeout: kPeerConnectionRetrieveTimeout);
+        peerConnectionManager ??
+        PeerConnectionManager(
+          retrieveTimeout: kPeerConnectionRetrieveTimeout,
+          monitorDelegatesFactory: (callId, logger) => [
+            LoggingRtpTrafficMonitorDelegate(
+              logger: logger,
+              // TODO: Add an audio LogScope and finish monitor configuration:
+              // - Decide audio scope(s) (inbound/outbound) and included StatsField values.
+              // - Add configurable controls to enable/disable scopes and set per-scope log level.
+              scopes: [
+                const LogScope(
+                  kind: MediaKind.video,
+                  direction: RtpDirection.inbound,
+                  allowedFields: StatsField.values,
+                ),
+              ],
+            ),
+          ],
+        );
 
     on<CallStarted>(_onCallStarted, transformer: sequential());
     on<_AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());
