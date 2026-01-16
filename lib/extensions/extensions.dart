@@ -11,6 +11,7 @@ export 'duration.dart';
 export 'feature_access.dart';
 export 'iterable.dart';
 export 'locale.dart';
+export 'logger_extensions.dart';
 export 'main_flavor.dart';
 export 'media_query_metrics_extensions.dart';
 export 'messaging_socket_exception.dart';
