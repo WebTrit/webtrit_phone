@@ -2,13 +2,18 @@ import 'dart:async';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 
 import 'peer_connection_factory.dart';
+import 'rtp_traffic_monitor.dart';
 
-final _logger = Logger('PeerConnectionManager');
+const _logNamespace = 'PeerConnectionManager';
+final _logger = Logger('$_logNamespace.Manager');
 
 /// Alias for the call unique identifier to make signatures clearer.
 typedef CallId = String;
+
+typedef RtpMonitorDelegatesFactory = List<RtpTrafficMonitorDelegate> Function(CallId callId, Logger logger);
 
 /// Internal state container for managing the lifecycle of a single WebRTC connection.
 ///
@@ -24,6 +29,15 @@ class _ConnectionState {
   /// Allows [dispose] to close the connection synchronously without waiting
   /// for the [completer] if it is pending.
   RTCPeerConnection? connection;
+
+  /// Optional per-call video flow monitor.
+  RtpTrafficMonitor? rtpTrafficMonitor;
+
+  /// Stops the monitor
+  void stopRtpTrafficMonitor() {
+    rtpTrafficMonitor?.stop();
+    rtpTrafficMonitor = null;
+  }
 }
 
 /// Manages the lifecycle of [RTCPeerConnection] instances.
@@ -32,10 +46,12 @@ class _ConnectionState {
 final class PeerConnectionManager {
   PeerConnectionManager({
     this.factory = const DefaultPeerConnectionFactory(),
+    this.monitorDelegatesFactory,
     Duration retrieveTimeout = const Duration(seconds: 5),
   }) : _retrieveTimeout = retrieveTimeout;
 
   final PeerConnectionFactory factory;
+  final RtpMonitorDelegatesFactory? monitorDelegatesFactory;
   final Duration _retrieveTimeout;
 
   final _states = <CallId, _ConnectionState>{};
@@ -84,7 +100,9 @@ final class PeerConnectionManager {
     // ensuring consistency across all connections managed by this instance.
     final peerConnection = await factory.create();
 
-    final pcLogger = Logger(peerConnection.toString());
+    // Create a scoped logger for the PeerConnection itself
+    // Structure: WebRTC.PC.<CallId>
+    final pcLogger = Logger('$_logNamespace.PC.$callId');
 
     return peerConnection
       ..onSignalingState = ((s) => _onSignalingState(s, observer, pcLogger))
@@ -119,6 +137,9 @@ final class PeerConnectionManager {
 
     state.connection = pc;
     state.completer.complete(pc);
+
+    _initializeRtpMonitor(callId, state, pc);
+
     _logger.finer(() => 'complete($callId): completed');
   }
 
@@ -129,6 +150,9 @@ final class PeerConnectionManager {
       _logger.finer(() => 'completeError($callId): skipped');
       return;
     }
+
+    // Stop monitor if it was started.
+    state.stopRtpTrafficMonitor();
 
     state.completer.completeError(error, st);
     _logger.finer(() => 'completeError($callId): completed with error: $error');
@@ -214,8 +238,37 @@ final class PeerConnectionManager {
     }
   }
 
+  void _initializeRtpMonitor(CallId callId, _ConnectionState state, RTCPeerConnection pc) {
+    try {
+      state.stopRtpTrafficMonitor();
+
+      if (monitorDelegatesFactory == null) return;
+
+      final monitorLogger = Logger('$_logNamespace.Monitor.$callId');
+
+      final delegates = monitorDelegatesFactory!(callId, monitorLogger);
+
+      if (delegates.isEmpty) return;
+
+      final monitor = RtpTrafficMonitor(
+        peerConnection: pc,
+        delegates: delegates,
+        checkInterval: const Duration(seconds: 2),
+      );
+
+      state.rtpTrafficMonitor = monitor;
+      monitor.start();
+
+      _logger.finer(() => 'VideoFlowMonitor started for $callId');
+    } catch (e, st) {
+      _logger.warning('Failed to start RTP monitor for $callId', e, st);
+    }
+  }
+
   /// Helper method that performs the actual disposal logic.
   Future<void> _performDispose(_ConnectionState state, CallId callId) async {
+    state.stopRtpTrafficMonitor();
+
     final pc = state.connection;
     if (pc != null) {
       await _closePeerConnectionSafely(pc, callId);
@@ -262,7 +315,20 @@ final class PeerConnectionManager {
   }
 
   void _onAddStream(MediaStream s, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onAddStream stream: ${s.toString()}');
+    final streamData = {
+      'streamId': s.id,
+      'videoTracks': s
+          .getVideoTracks()
+          .map((t) => {'id': t.id, 'enabled': t.enabled, 'kind': t.kind, 'label': t.label})
+          .toList(),
+      'audioTracks': s
+          .getAudioTracks()
+          .map((t) => {'id': t.id, 'enabled': t.enabled, 'kind': t.kind, 'label': t.label})
+          .toList(),
+    };
+
+    l.logPretty('onAddStream', streamData);
+
     o.onAddStream?.call(s);
   }
 
