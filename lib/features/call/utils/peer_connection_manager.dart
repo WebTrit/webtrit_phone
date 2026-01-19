@@ -259,7 +259,7 @@ final class PeerConnectionManager {
       state.rtpTrafficMonitor = monitor;
       monitor.start();
 
-      _logger.finer(() => 'VideoFlowMonitor started for $callId');
+      _logger.finer(() => 'RtpTrafficMonitor started for $callId');
     } catch (e, st) {
       _logger.warning('Failed to start RTP monitor for $callId', e, st);
     }

@@ -72,8 +72,6 @@ class LoggingRtpTrafficMonitorDelegate implements RtpTrafficMonitorDelegate {
     if (prettyPrintData) {
       _logDetails(context, report, scope);
     }
-
-    _checkWarnings(context, metrics);
   }
 
   LogScope? _findMatchingScope(RtpTrafficContext context) {
@@ -121,11 +119,5 @@ class LoggingRtpTrafficMonitorDelegate implements RtpTrafficMonitorDelegate {
     }
 
     return filteredData;
-  }
-
-  void _checkWarnings(RtpTrafficContext context, RtpTrafficMetrics metrics) {
-    if (context.kind == MediaKind.video && metrics.deltaFrames == 0 && metrics.isFlowing) {
-      logger.warning('[VIDEO WARNING] Bytes are flowing, but frames are frozen (decoding/encoding issue)!');
-    }
   }
 }

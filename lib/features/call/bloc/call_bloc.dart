@@ -126,7 +126,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           monitorDelegatesFactory: (callId, logger) => [
             LoggingRtpTrafficMonitorDelegate(
               logger: logger,
-              // TODO: Add an audio LogScope and finish monitor configuration:
+              // NOTE: Audio LogScope configuration is incomplete; when extending monitor configuration:
               // - Decide audio scope(s) (inbound/outbound) and included StatsField values.
               // - Add configurable controls to enable/disable scopes and set per-scope log level.
               scopes: [
