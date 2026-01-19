@@ -55,7 +55,7 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
   }
 
   void _updateSrcObject() {
-    if (_isRendererInitialized) {
+    if (_isRendererInitialized && _renderer.textureId != null) {
       setState(() => _renderer.srcObject = widget.stream);
     }
   }
