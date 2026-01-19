@@ -105,18 +105,18 @@ final class PeerConnectionManager {
     final pcLogger = Logger('$_logNamespace.PC.$callId');
 
     return peerConnection
-      ..onSignalingState = ((s) => _onSignalingState(s, observer, pcLogger))
-      ..onConnectionState = ((s) => _onConnectionState(s, observer, pcLogger))
-      ..onIceGatheringState = ((s) => _onIceGatheringState(s, observer, pcLogger))
-      ..onIceConnectionState = ((s) => _onIceConnectionState(s, observer, pcLogger))
-      ..onIceCandidate = ((c) => _onIceCandidate(c, observer, pcLogger))
-      ..onAddStream = ((s) => _onAddStream(s, observer, pcLogger))
-      ..onRemoveStream = ((s) => _onRemoveStream(s, observer, pcLogger))
-      ..onAddTrack = ((s, t) => _onAddTrack(s, t, observer, pcLogger))
-      ..onRemoveTrack = ((s, t) => _onRemoveTrack(s, t, observer, pcLogger))
-      ..onDataChannel = ((c) => _onDataChannel(c, observer, pcLogger))
+      ..onSignalingState = ((signalingState) => _onSignalingState(signalingState, observer, pcLogger))
+      ..onConnectionState = ((signalingState) => _onConnectionState(signalingState, observer, pcLogger))
+      ..onIceGatheringState = ((signalingState) => _onIceGatheringState(signalingState, observer, pcLogger))
+      ..onIceConnectionState = ((signalingState) => _onIceConnectionState(signalingState, observer, pcLogger))
+      ..onIceCandidate = ((iceCandidate) => _onIceCandidate(iceCandidate, observer, pcLogger))
+      ..onAddStream = ((mediaStream) => _onAddStream(mediaStream, observer, pcLogger))
+      ..onRemoveStream = ((mediaStream) => _onRemoveStream(mediaStream, observer, pcLogger))
+      ..onAddTrack = ((mediaStream, mediaTrack) => _onAddTrack(mediaStream, mediaTrack, observer, pcLogger))
+      ..onRemoveTrack = ((mediaStream, mediaTrack) => _onRemoveTrack(mediaStream, mediaTrack, observer, pcLogger))
+      ..onDataChannel = ((dataChannel) => _onDataChannel(dataChannel, observer, pcLogger))
       ..onRenegotiationNeeded = (() => _onRenegotiationNeeded(peerConnection, observer, pcLogger))
-      ..onTrack = ((e) => _onTrack(e, observer, pcLogger));
+      ..onTrack = ((trackEvent) => _onTrack(trackEvent, observer, pcLogger));
   }
 
   /// Completes the barrier for [callId] with the created [pc].
@@ -238,7 +238,7 @@ final class PeerConnectionManager {
     }
   }
 
-  void _initializeRtpMonitor(CallId callId, _ConnectionState state, RTCPeerConnection pc) {
+  void _initializeRtpMonitor(CallId callId, _ConnectionState state, RTCPeerConnection peerConnection) {
     try {
       state.stopRtpTrafficMonitor();
 
@@ -251,7 +251,7 @@ final class PeerConnectionManager {
       if (delegates.isEmpty) return;
 
       final monitor = RtpTrafficMonitor(
-        peerConnection: pc,
+        peerConnection: peerConnection,
         delegates: delegates,
         checkInterval: const Duration(seconds: 2),
       );
@@ -269,9 +269,9 @@ final class PeerConnectionManager {
   Future<void> _performDispose(_ConnectionState state, CallId callId) async {
     state.stopRtpTrafficMonitor();
 
-    final pc = state.connection;
-    if (pc != null) {
-      await _closePeerConnectionSafely(pc, callId);
+    final peerConnection = state.connection;
+    if (peerConnection != null) {
+      await _closePeerConnectionSafely(peerConnection, callId);
     }
 
     if (!state.completer.isCompleted) {
@@ -280,48 +280,48 @@ final class PeerConnectionManager {
     }
   }
 
-  Future<void> _closePeerConnectionSafely(RTCPeerConnection pc, CallId callId) async {
+  Future<void> _closePeerConnectionSafely(RTCPeerConnection peerConnection, CallId callId) async {
     try {
-      await pc.close();
-      _logger.finer(() => 'disposePeerConnection($callId): pc closed');
+      await peerConnection.close();
+      _logger.finer(() => 'disposePeerConnection($callId): peerConnection closed');
     } catch (e, st) {
-      _logger.warning('disposePeerConnection($callId): pc.close failed', e, st);
+      _logger.warning('disposePeerConnection($callId): peerConnection.close failed', e, st);
     }
   }
 
-  void _onSignalingState(RTCSignalingState s, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onSignalingState state: ${s.name}');
-    o.onSignalingState?.call(s);
+  void _onSignalingState(RTCSignalingState signalingState, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onSignalingState state: ${signalingState.name}');
+    observer.onSignalingState?.call(signalingState);
   }
 
-  void _onConnectionState(RTCPeerConnectionState s, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onConnectionState state: ${s.name}');
-    o.onConnectionState?.call(s);
+  void _onConnectionState(RTCPeerConnectionState signalingState, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onConnectionState state: ${signalingState.name}');
+    observer.onConnectionState?.call(signalingState);
   }
 
-  void _onIceGatheringState(RTCIceGatheringState s, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onIceGatheringState state: ${s.name}');
-    o.onIceGatheringState?.call(s);
+  void _onIceGatheringState(RTCIceGatheringState signalingState, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onIceGatheringState state: ${signalingState.name}');
+    observer.onIceGatheringState?.call(signalingState);
   }
 
-  void _onIceConnectionState(RTCIceConnectionState s, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onIceConnectionState state: ${s.name}');
-    o.onIceConnectionState?.call(s);
+  void _onIceConnectionState(RTCIceConnectionState signalingState, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onIceConnectionState state: ${signalingState.name}');
+    observer.onIceConnectionState?.call(signalingState);
   }
 
-  void _onIceCandidate(RTCIceCandidate c, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onIceCandidate candidate: ${c.toString()}');
-    o.onIceCandidate?.call(c);
+  void _onIceCandidate(RTCIceCandidate iceCandidate, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onIceCandidate candidate: $iceCandidate');
+    observer.onIceCandidate?.call(iceCandidate);
   }
 
-  void _onAddStream(MediaStream s, PeerConnectionObserver o, Logger l) {
+  void _onAddStream(MediaStream mediaStream, PeerConnectionObserver observer, Logger l) {
     final streamData = {
-      'streamId': s.id,
-      'videoTracks': s
+      'streamId': mediaStream.id,
+      'videoTracks': mediaStream
           .getVideoTracks()
           .map((t) => {'id': t.id, 'enabled': t.enabled, 'kind': t.kind, 'label': t.label})
           .toList(),
-      'audioTracks': s
+      'audioTracks': mediaStream
           .getAudioTracks()
           .map((t) => {'id': t.id, 'enabled': t.enabled, 'kind': t.kind, 'label': t.label})
           .toList(),
@@ -329,37 +329,37 @@ final class PeerConnectionManager {
 
     l.logPretty('onAddStream', streamData);
 
-    o.onAddStream?.call(s);
+    observer.onAddStream?.call(mediaStream);
   }
 
-  void _onRemoveStream(MediaStream s, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onRemoveStream stream: ${s.toString()}');
-    o.onRemoveStream?.call(s);
+  void _onRemoveStream(MediaStream mediaStream, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onRemoveStream stream: $mediaStream');
+    observer.onRemoveStream?.call(mediaStream);
   }
 
-  void _onAddTrack(MediaStream s, MediaStreamTrack t, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onAddTrack stream: ${s.toString()} track: ${t.toString()}');
-    o.onAddTrack?.call(s, t);
+  void _onAddTrack(MediaStream stream, MediaStreamTrack mediaTrack, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onAddTrack stream: $stream track: $mediaTrack');
+    observer.onAddTrack?.call(stream, mediaTrack);
   }
 
-  void _onRemoveTrack(MediaStream s, MediaStreamTrack t, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onRemoveTrack stream: ${s.toString()} track: ${t.toString()}');
-    o.onRemoveTrack?.call(s, t);
+  void _onRemoveTrack(MediaStream stream, MediaStreamTrack mediaTrack, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onRemoveTrack stream: $stream track: $mediaTrack');
+    observer.onRemoveTrack?.call(stream, mediaTrack);
   }
 
-  void _onDataChannel(RTCDataChannel c, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onDataChannel channel: $c');
-    o.onDataChannel?.call(c);
+  void _onDataChannel(RTCDataChannel dataChannel, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onDataChannel channel: $observer');
+    observer.onDataChannel?.call(dataChannel);
   }
 
-  void _onRenegotiationNeeded(RTCPeerConnection pc, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onRenegotiationNeeded');
-    o.onRenegotiationNeeded?.call(pc);
+  void _onRenegotiationNeeded(RTCPeerConnection peerConnection, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onRenegotiationNeeded');
+    observer.onRenegotiationNeeded?.call(peerConnection);
   }
 
-  void _onTrack(RTCTrackEvent e, PeerConnectionObserver o, Logger l) {
-    l.fine(() => 'onTrack ${e.toString()}');
-    o.onTrack?.call(e);
+  void _onTrack(RTCTrackEvent trackEvent, PeerConnectionObserver observer, Logger logger) {
+    logger.fine(() => 'onTrack $trackEvent');
+    observer.onTrack?.call(trackEvent);
   }
 }
 
