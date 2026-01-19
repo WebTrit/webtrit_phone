@@ -34,6 +34,8 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
   final RTCVideoRenderer _renderer = RTCVideoRenderer();
   bool _isRendererInitialized = false;
 
+  bool get _canRender => _isRendererInitialized && _renderer.textureId != null;
+
   @override
   void initState() {
     super.initState();
@@ -55,7 +57,7 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
   }
 
   void _updateSrcObject() {
-    if (_isRendererInitialized && _renderer.textureId != null) {
+    if (_canRender) {
       setState(() => _renderer.srcObject = widget.stream);
     }
   }
@@ -72,7 +74,7 @@ class _StreamThumbnailState extends State<StreamThumbnail> {
 
   @override
   void dispose() {
-    if (_isRendererInitialized) _renderer.srcObject = null;
+    if (_canRender) _renderer.srcObject = null;
     _renderer.dispose();
     super.dispose();
   }
