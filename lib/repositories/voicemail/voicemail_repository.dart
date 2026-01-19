@@ -134,13 +134,6 @@ class VoicemailRepositoryImpl
     _fetchingCompleter = Completer<void>();
 
     try {
-      final cachedVoicemails = await _appDatabase.voicemailDao.getVoicemailsWithContacts().then((dataList) {
-        return dataList.map(_voicemailFromDriftWithContact).toList();
-      });
-
-      if (cachedVoicemails.isNotEmpty) {
-        _updatesController?.add(cachedVoicemails);
-      }
 
       final remoteItems = await _webtritApiClient.getUserVoicemailList(_token, locale: localeCode);
 
@@ -257,7 +250,7 @@ class VoicemailRepositoryImpl
     await _appDatabase.voicemailDao.updateVoicemail(previousVoicemail);
 
     try {
-      await _webtritApiClient.updateUserVoicemail(_token, messageId, seen: seen, locale: localeCode);
+      unawaited(_webtritApiClient.updateUserVoicemail(_token, messageId, seen: seen, locale: localeCode));
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
       rethrow;
