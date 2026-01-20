@@ -19,21 +19,27 @@ class VoicemailTile extends StatelessWidget {
     super.key,
     required this.voicemail,
     required this.displayName,
+    required this.selected,
     required this.onCall,
     required this.onDeleted,
     required this.onToggleSeenStatus,
+    required this.onLongPress,
+    required this.onTap,
     this.thumbnail,
     this.thumbnailUrl,
   });
 
   final Voicemail voicemail;
   final String displayName;
+  final bool selected;
   final Uint8List? thumbnail;
   final Uri? thumbnailUrl;
 
   final void Function(Voicemail) onCall;
   final void Function(Voicemail) onDeleted;
   final void Function(Voicemail) onToggleSeenStatus;
+  final void Function(Voicemail) onLongPress;
+  final void Function(Voicemail)? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -75,20 +81,51 @@ class VoicemailTile extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-              PopupMenuItem(
-                value: _VoicemailMenuAction.delete,
-                child: ListTile(
-                  leading: Icon(Icons.delete, color: colorScheme.error),
-                  title: Text(context.l10n.voicemail_Label_delete),
+                Text(dateFormat.format(DateTime.parse(voicemail.date))),
+              ],
+            ),
+            selected: selected,
+            selectedTileColor: colorScheme.secondaryContainer,
+            trailing: PopupMenuButton<_VoicemailMenuAction>(
+              padding: EdgeInsets.zero,
+              position: PopupMenuPosition.under,
+              onSelected: _onPopupMenuSelected,
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: _VoicemailMenuAction.call,
+                  child: ListTile(leading: const Icon(Icons.call), title: Text(context.l10n.voicemail_Label_call)),
                 ),
-              ),
-            ],
-            child: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.onSurface),
+                PopupMenuItem(
+                  value: _VoicemailMenuAction.toggleSeenStatus,
+                  child: ListTile(
+                    leading: const Icon(Icons.voicemail),
+                    title: Row(
+                      children: [
+                        if (voicemail.seen) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
+                        const SizedBox(width: 4),
+                        Text(
+                          voicemail.seen
+                              ? context.l10n.voicemail_Label_markAsNew
+                              : context.l10n.voicemail_Label_markAsHeard,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: _VoicemailMenuAction.delete,
+                  child: ListTile(
+                    leading: Icon(Icons.delete, color: colorScheme.error),
+                    title: Text(context.l10n.voicemail_Label_delete),
+                  ),
+                ),
+              ],
+              child: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.onSurface),
+            ),
           ),
-        ),
-        AudioView(path: voicemail.url!, onPlaybackStarted: _onPlaybackStarted),
-      ],
+          AudioView(path: voicemail.url!, onPlaybackStarted: _onPlaybackStarted),
+        ],
+      ),
     );
   }
 

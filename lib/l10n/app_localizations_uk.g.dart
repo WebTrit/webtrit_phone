@@ -2223,7 +2223,14 @@ class AppLocalizationsUk extends AppLocalizations {
       'Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?';
 
   @override
+  String get voicemail_Dialog_deleteSelectedContent =>
+      'Обрані голосові повідомлення будуть остаточно видалені. Чи хочете ви продовжити?';
+
+  @override
   String get voicemail_Dialog_deleteSingleTitle => 'Видалити голосове повідомлення?';
+
+  @override
+  String get voicemail_Dialog_deleteSelectedTitle => 'Видалити обрані голосові повідомлення?';
 
   @override
   String get voicemail_Label_call => 'Дзвінок';

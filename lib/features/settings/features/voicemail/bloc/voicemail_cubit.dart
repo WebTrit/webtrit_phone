@@ -65,6 +65,17 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     }
   }
 
+  void removeSelectedVoicemails() async {
+    try {
+      _safeEmit(state.copyWith(status: VoicemailStatus.loading));
+      await _repository.removeMultipleVoicemails(state.selectedVoicemailsIds);
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
+    } catch (e) {
+      onSubmitNotification(DefaultErrorNotification(e));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
+    }
+  }
+
   void removeVoicemail(String messageId) async {
     try {
       _safeEmit(state.copyWith(status: VoicemailStatus.loading));
@@ -90,6 +101,18 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void startCall(Voicemail voicemail) {
     onCallStarted(voicemail.sender);
+  }
+
+  void saveSelectedVoicemail(Voicemail voicemail) {
+    final selectedVoicemailsIds = List.of(state.selectedVoicemailsIds);
+
+    if (selectedVoicemailsIds.contains(voicemail.id)) {
+      selectedVoicemailsIds.remove(voicemail.id);
+    } else {
+      selectedVoicemailsIds.add(voicemail.id);
+    }
+
+    _safeEmit(state.copyWith(selectedVoicemailsIds: selectedVoicemailsIds));
   }
 
   /// Safely emits a new state if the cubit is not closed.

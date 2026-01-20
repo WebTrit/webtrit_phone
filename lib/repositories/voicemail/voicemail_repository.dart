@@ -49,6 +49,8 @@ abstract class VoicemailRepository implements Refreshable {
   /// Emits updates whenever the voicemail list changes.
   /// If the repository is disabled, an empty stream is returned.
   Stream<List<Voicemail>> watchVoicemails();
+
+  Future<void> removeMultipleVoicemails(List<String> messagesIds);
 }
 
 final _logger = Logger('VoicemailRepository');
@@ -318,6 +320,23 @@ class VoicemailRepositoryImpl
   Future<void> refresh() {
     return fetchVoicemails();
   }
+
+  @override
+  Future<void> removeMultipleVoicemails(List<String> messagesIds) async {
+    if (_fetchingCompleter != null) {
+      await _fetchingCompleter!.future;
+    }
+
+    for (final messageId in messagesIds) {
+      try {
+        await removeVoicemail(messageId);
+        await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+      } catch (e, st) {
+        _logger.warning('Failed to remove voicemail with id $messageId', e, st);
+        rethrow;
+      }
+    }
+  }
 }
 
 /// A no-op implementation of [VoicemailRepository] used when voicemail functionality
@@ -353,4 +372,7 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   Future<void> refresh() => Future.value();
+
+  @override
+  Future<void> removeMultipleVoicemails(List<String> messagesIds) => Future.value();
 }
