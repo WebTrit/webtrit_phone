@@ -46,46 +46,20 @@ class VoicemailTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final dateFormat = context.read<VoicemailScreenContext>().dateFormat;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: LeadingAvatar(username: displayName, thumbnail: thumbnail, thumbnailUrl: thumbnailUrl),
-          title: Text(voicemail.displaySender),
-          subtitle: _VoicemailSubtitle(voicemail: voicemail, dateFormat: dateFormat),
-          trailing: PopupMenuButton<_VoicemailMenuAction>(
-            padding: EdgeInsets.zero,
-            position: PopupMenuPosition.under,
-            onSelected: _onPopupMenuSelected,
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: _VoicemailMenuAction.call,
-                child: ListTile(leading: const Icon(Icons.call), title: Text(context.l10n.voicemail_Label_call)),
-              ),
-              PopupMenuItem(
-                value: _VoicemailMenuAction.toggleSeenStatus,
-                enabled: !voicemail.status.isUnknown,
-                child: ListTile(
-                  leading: const Icon(Icons.voicemail),
-                  title: Row(
-                    children: [
-                      const SizedBox(width: 4),
-                      if (voicemail.status.isRead) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
-                      Text(
-                        voicemail.status.isRead
-                            ? context.l10n.voicemail_Label_markAsNew
-                            : context.l10n.voicemail_Label_markAsHeard,
-                      ),
-                    ],
-                  ),
-                ),
-                Text(dateFormat.format(DateTime.parse(voicemail.date))),
-              ],
-            ),
+    return GestureDetector(
+      onLongPress: () => onLongPress(voicemail),
+      onTap: onTap != null ? () => onTap!(voicemail) : null,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            contentPadding: EdgeInsets.zero,
             selected: selected,
             selectedTileColor: colorScheme.secondaryContainer,
+            leading: LeadingAvatar(username: displayName, thumbnail: thumbnail, thumbnailUrl: thumbnailUrl),
+            title: Text(voicemail.displaySender),
+            subtitle: _VoicemailSubtitle(voicemail: voicemail, dateFormat: dateFormat),
             trailing: PopupMenuButton<_VoicemailMenuAction>(
               padding: EdgeInsets.zero,
               position: PopupMenuPosition.under,
@@ -97,14 +71,15 @@ class VoicemailTile extends StatelessWidget {
                 ),
                 PopupMenuItem(
                   value: _VoicemailMenuAction.toggleSeenStatus,
+                  enabled: !voicemail.status.isUnknown,
                   child: ListTile(
                     leading: const Icon(Icons.voicemail),
                     title: Row(
                       children: [
-                        if (voicemail.seen) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
                         const SizedBox(width: 4),
+                        if (voicemail.status.isRead) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
                         Text(
-                          voicemail.seen
+                          voicemail.status.isRead
                               ? context.l10n.voicemail_Label_markAsNew
                               : context.l10n.voicemail_Label_markAsHeard,
                         ),
