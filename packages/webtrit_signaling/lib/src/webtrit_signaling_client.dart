@@ -271,7 +271,15 @@ class WebtritSignalingClient {
   void _addData(dynamic data) {
     _logger.fine(() => '_addData add: $data');
 
-    _wsc.sink.add(data);
+    try {
+      if (_wsc.closeCode != null) {
+        throw StateError('Cannot add event after closing (detected via closeCode)');
+      }
+
+      _wsc.sink.add(data);
+    } on StateError catch (e) {
+      throw WebtritSignalingBadStateException(_id, e);
+    }
   }
 
   void _cleanupTransactions(int? code, String? reason) {
@@ -301,9 +309,23 @@ class WebtritSignalingClient {
       final elapsed = await _executeKeepaliveTransaction(defaultExecuteTransactionTimeoutDuration);
       _logger.finest('handshake keepalive latency: $elapsed');
 
-      _startKeepaliveTimer();
+      if (_wsc.closeCode == null) {
+        _startKeepaliveTimer();
+      }
     } on WebtritSignalingTransactionTimeoutException catch (e, stackTrace) {
       _onError(WebtritSignalingKeepaliveTransactionTimeoutException(e.id, e.transactionId), stackTrace);
+    } on WebtritSignalingBadStateException {
+      _logger.fine('Keepalive stopped gracefully due to closed socket.');
+      // Catches the specific exception thrown when attempting to write to a closed socket.
+      // This indicates a race condition where the Keepalive timer triggered shortly after
+      // the socket was closed but before the timer could be cancelled.
+      //
+      // Since the socket is already in a terminal state, the standard disconnection
+      // handlers (onDone/onDisconnect) are responsible for the lifecycle management.
+      // Reporting this as an error would be redundant and potentially misleading.
+      //
+      // Gracefully terminate the recursive Keepalive loop here.
+      return;
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     }
