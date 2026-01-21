@@ -6,6 +6,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 import 'diagnostic_models.dart';
 import 'diagnostic_strategy.dart';
+import 'diagnostic_type_label_extensions.dart';
 
 final _logger = Logger('DiagnosticService');
 
@@ -102,30 +103,12 @@ class DiagnosticServiceImpl implements DiagnosticService {
     };
   }
 
-  /// Converts a [DiagnosticType] enum value into a human-readable string.
-  ///
-  /// This is used to create a more readable identifier for the type in the
-  /// report's group title.
-  String _getReadableTypeName(DiagnosticType type) {
-    return switch (type) {
-      DiagnosticType.androidCallkeep => 'AndroidCallKeep',
-    };
-  }
-
   /// Builds a structured group title for the error report.
-  ///
-  /// This title is used to group similar reports in the reporting service (e.g., Crashlytics).
-  /// It includes a standard prefix, the names of the diagnostic types being reported (sorted for consistency),
-  /// and a timestamp to ensure uniqueness.
   String _buildErrorGroup(List<DiagnosticType> types) {
     const prefix = 'UserReport';
-    final sortedTypes = List<DiagnosticType>.from(types)..sort((a, b) => a.index.compareTo(b.index));
-    final typesStr = sortedTypes.map(_getReadableTypeName).join('_');
-    // NOTE: A timestamp is explicitly included to ensure that every user-submitted diagnostic
-    // report creates a unique issue in Crashlytics. This guarantees a notification
-    // for every new user feedback submission, preventing them from being silently
-    // folded into a single existing issue.
-    return '$prefix.$typesStr.${DateTime.now()}';
+    final sortedTypes = List<DiagnosticType>.of(types)..sort((a, b) => a.index.compareTo(b.index));
+    final typesStr = sortedTypes.map((t) => t.label).join('_');
+    return '$prefix.$typesStr';
   }
 
   @override
