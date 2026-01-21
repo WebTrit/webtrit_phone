@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -49,13 +49,13 @@ class VoicemailTile extends StatelessWidget {
           title: Text(voicemail.displaySender),
           subtitle: Row(
             children: [
-              Visibility(
-                visible: !voicemail.seen,
-                child: Padding(
+              if (!voicemail.status.isRead)
+                Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  child: CircleIndicator(color: voicemail.seen ? colorScheme.onSurface : colorScheme.tertiary),
+                  child: voicemail.status.isUnknown
+                      ? SizedCircularProgressIndicator(size: 8, color: colorScheme.tertiary, strokeWidth: 1)
+                      : CircleIndicator(color: colorScheme.tertiary),
                 ),
-              ),
               Text(dateFormat.format(DateTime.parse(voicemail.date))),
             ],
           ),
@@ -74,10 +74,10 @@ class VoicemailTile extends StatelessWidget {
                   leading: const Icon(Icons.voicemail),
                   title: Row(
                     children: [
-                      if (voicemail.seen) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
                       const SizedBox(width: 4),
+                      if (voicemail.status.isRead) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
                       Text(
-                        voicemail.seen
+                        voicemail.status.isRead
                             ? context.l10n.voicemail_Label_markAsNew
                             : context.l10n.voicemail_Label_markAsHeard,
                       ),
@@ -102,8 +102,8 @@ class VoicemailTile extends StatelessWidget {
   }
 
   void _onPlaybackStarted() {
-    if (!voicemail.seen) {
-      onToggleSeenStatus.call(voicemail);
+    if (voicemail.status.isUnread) {
+      onToggleSeenStatus(voicemail);
     }
   }
 
