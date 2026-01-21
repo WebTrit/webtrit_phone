@@ -52,6 +52,15 @@ class WebtritSignalingTransactionTimeoutException extends WebtritSignalingTransa
   const WebtritSignalingTransactionTimeoutException(super.id, super.transactionId);
 }
 
+class WebtritSignalingBadStateException extends WebtritSignalingException {
+  const WebtritSignalingBadStateException(super.id, this.error);
+
+  final StateError error;
+
+  @override
+  String toString() => '${super.toString()}, stateError: $error';
+}
+
 class WebtritSignalingKeepaliveTransactionTimeoutException extends WebtritSignalingTransactionTimeoutException {
   const WebtritSignalingKeepaliveTransactionTimeoutException(super.id, super.transactionId);
 }
