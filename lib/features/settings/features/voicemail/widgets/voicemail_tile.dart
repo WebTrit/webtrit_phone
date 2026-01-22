@@ -60,6 +60,7 @@ class VoicemailTile extends StatelessWidget {
               ),
               PopupMenuItem(
                 value: _VoicemailMenuAction.toggleSeenStatus,
+                enabled: !voicemail.status.isUnknown,
                 child: ListTile(
                   leading: const Icon(Icons.voicemail),
                   title: Row(
