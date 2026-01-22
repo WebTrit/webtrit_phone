@@ -1,3 +1,16 @@
+/// Represents the synchronization or read status of the voicemail.
+enum ReadStatus {
+  read,
+  unread,
+  unknown;
+
+  bool get isRead => this == ReadStatus.read;
+
+  bool get isUnread => this == ReadStatus.unread;
+
+  bool get isUnknown => this == ReadStatus.unknown;
+}
+
 class Voicemail {
   Voicemail(
     this.id,
@@ -6,7 +19,7 @@ class Voicemail {
     this.sender,
     this.displaySender,
     this.receiver,
-    this.seen,
+    this.status,
     this.size,
     this.type,
     this.url,
@@ -18,7 +31,7 @@ class Voicemail {
   final String sender;
   final String displaySender;
   final String receiver;
-  final bool seen;
+  final ReadStatus status;
   final int size;
   final String type;
   final String? url;

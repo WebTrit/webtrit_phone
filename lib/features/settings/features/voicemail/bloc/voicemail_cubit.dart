@@ -61,7 +61,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
-      emit(state.copyWith(status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     }
   }
 
@@ -79,7 +79,8 @@ class VoicemailCubit extends Cubit<VoicemailState> {
   void toggleSeenStatus(Voicemail voicemail) async {
     try {
       _safeEmit(state.copyWith(status: VoicemailStatus.loading));
-      await _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
+      final markAsSeen = !voicemail.status.isRead;
+      await _repository.updateVoicemailSeenStatus(voicemail.id, markAsSeen);
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
