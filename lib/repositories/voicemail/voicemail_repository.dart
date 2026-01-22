@@ -134,13 +134,8 @@ class VoicemailRepositoryImpl
     _fetchingCompleter = Completer<void>();
 
     try {
-      final cachedVoicemails = await _appDatabase.voicemailDao.getVoicemailsWithContacts().then((dataList) {
-        return dataList.map((it) => _voicemailFromDriftWithContact(it, readStatus: ReadStatus.unknown)).toList();
-      });
-
-      if (cachedVoicemails.isNotEmpty) {
-        _updatesController?.add(cachedVoicemails);
-      }
+      /// Emit unknown status to indicate sync in progress
+      await _emitCachedVoicemails(status: ReadStatus.unknown);
 
       final remoteItems = await _webtritApiClient.getUserVoicemailList(_token, locale: localeCode);
 
@@ -158,10 +153,27 @@ class VoicemailRepositoryImpl
       rethrow;
     } catch (e, st) {
       _logger.warning('Failed to fetch voicemails', e, st);
+
+      /// Revert to the actual cached status from database on failure
+      await _emitCachedVoicemails();
+
       _fetchingCompleter?.completeError(e, st);
       rethrow;
     } finally {
       _fetchingCompleter = null;
+    }
+  }
+
+  /// Retrieves local voicemails and pushes them to the stream controller.
+  ///
+  /// If [status] is provided, it overrides the items' actual status.
+  /// Otherwise, uses the status stored in the database.
+  Future<void> _emitCachedVoicemails({ReadStatus? status}) async {
+    final dataList = await _appDatabase.voicemailDao.getVoicemailsWithContacts();
+    final items = dataList.map((it) => _voicemailFromDriftWithContact(it, readStatus: status)).toList();
+
+    if (items.isNotEmpty) {
+      _updatesController?.add(items);
     }
   }
 
