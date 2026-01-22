@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 
@@ -47,18 +48,7 @@ class VoicemailTile extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           leading: LeadingAvatar(username: displayName, thumbnail: thumbnail, thumbnailUrl: thumbnailUrl),
           title: Text(voicemail.displaySender),
-          subtitle: Row(
-            children: [
-              if (!voicemail.status.isRead)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: voicemail.status.isUnknown
-                      ? SizedCircularProgressIndicator(size: 8, color: colorScheme.tertiary, strokeWidth: 1)
-                      : CircleIndicator(color: colorScheme.tertiary),
-                ),
-              Text(dateFormat.format(DateTime.parse(voicemail.date))),
-            ],
-          ),
+          subtitle: _VoicemailSubtitle(voicemail: voicemail, dateFormat: dateFormat),
           trailing: PopupMenuButton<_VoicemailMenuAction>(
             padding: EdgeInsets.zero,
             position: PopupMenuPosition.under,
@@ -102,9 +92,7 @@ class VoicemailTile extends StatelessWidget {
   }
 
   void _onPlaybackStarted() {
-    if (voicemail.status.isUnread) {
-      onToggleSeenStatus(voicemail);
-    }
+    if (voicemail.status.isUnread) onToggleSeenStatus(voicemail);
   }
 
   void _onPopupMenuSelected(_VoicemailMenuAction action) {
@@ -119,6 +107,50 @@ class VoicemailTile extends StatelessWidget {
         onDeleted(voicemail);
         break;
     }
+  }
+}
+
+/// A widget that displays the voicemail's timestamp and a dynamic unread status indicator.
+/// It uses an [AnimatedSwitcher] to transition between an empty state, a loading indicator
+/// for unknown statuses, and a solid circle for unread messages
+class _VoicemailSubtitle extends StatelessWidget {
+  const _VoicemailSubtitle({required this.voicemail, required this.dateFormat});
+
+  final Voicemail voicemail;
+  final DateFormat dateFormat;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Row(
+      children: [
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (child, animation) => SizeTransition(
+            sizeFactor: animation,
+            axis: Axis.horizontal,
+            axisAlignment: -1,
+            child: FadeTransition(opacity: animation, child: child),
+          ),
+          child: voicemail.status.isRead
+              ? const SizedBox.shrink()
+              : Padding(
+                  key: const ValueKey('unread_indicator'),
+                  padding: const EdgeInsets.only(right: 8),
+                  child: voicemail.status.isUnknown
+                      ? SizedCircularProgressIndicator(
+                          size: 8,
+                          outerSize: 10,
+                          color: colorScheme.tertiary,
+                          strokeWidth: 1,
+                        )
+                      : CircleIndicator(color: colorScheme.tertiary),
+                ),
+        ),
+        Text(dateFormat.format(DateTime.parse(voicemail.date))),
+      ],
+    );
   }
 }
 
