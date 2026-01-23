@@ -8,14 +8,15 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
 import '../models/jsep_value.dart';
 
 abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   IsolateManager({
     required this.callLogsRepository,
+    required this.localPushRepository,
     required this.storage,
     required this.certificates,
     required this.logger,
@@ -23,6 +24,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   final Logger logger;
   final CallLogsRepository callLogsRepository;
+  final LocalPushRepository localPushRepository;
   final SecureStorage storage;
   final TrustedCertificates certificates;
 
@@ -60,11 +62,34 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   }
 
   void _handleHangupCall(HangupEvent event, NewCall call) async {
+    logger.info('Hangup event: $event');
+
+    await _showMissedCallNotification(event, call);
+    await _logCall(call);
+    await endCallOnService(event.callId);
+  }
+
+  Future<void> _logCall(NewCall call) async {
     try {
-      logger.info('Ending call: ${event.callId} - ${call.number}');
-      await endCallOnService(event.callId);
+      await callLogsRepository.add(call);
     } catch (e) {
-      _handleExceptions(e);
+      logger.severe('Failed to add call log', e);
+    }
+  }
+
+  Future<void> _showMissedCallNotification(HangupEvent event, NewCall call) async {
+    try {
+      await localPushRepository.displayPush(
+        AppLocalPush(
+          event.callId.hashCode,
+          // TODO: Add localization
+          'Missed Call',
+          call.username ?? 'Unknown',
+          payload: {'callId': event.callId, 'type': 'missed_call'},
+        ),
+      );
+    } catch (e) {
+      logger.severe('Failed to show missed call notification', e);
     }
   }
 
@@ -99,33 +124,6 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  @override
-  Future<void> performReceivedCall(
-    String callId,
-    String number,
-    DateTime createdTime,
-    String? displayName,
-    DateTime? acceptedTime,
-    DateTime? hungUpTime, {
-    bool video = false,
-  }) async {
-    final NewCall call = (
-      direction: CallDirection.incoming,
-      number: number,
-      video: video,
-      username: displayName,
-      createdTime: createdTime,
-      acceptedTime: acceptedTime,
-      hungUpTime: hungUpTime,
-    );
-    try {
-      logger.info('Adding call log: $callId');
-      await callLogsRepository.add(call);
-    } catch (e) {
-      logger.severe('Failed to add call log', e);
-    }
-  }
-
   void _handleExceptions(Object e) {
     logger.severe(e);
   }
@@ -134,6 +132,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 class PushNotificationIsolateManager extends IsolateManager {
   PushNotificationIsolateManager({
     required super.callLogsRepository,
+    required super.localPushRepository,
     required BackgroundPushNotificationService callkeep,
     required super.storage,
     required super.certificates,
@@ -171,6 +170,7 @@ class PushNotificationIsolateManager extends IsolateManager {
 class SignalingForegroundIsolateManager extends IsolateManager {
   SignalingForegroundIsolateManager({
     required super.callLogsRepository,
+    required super.localPushRepository,
     required BackgroundSignalingService callkeep,
     required super.storage,
     required super.certificates,
