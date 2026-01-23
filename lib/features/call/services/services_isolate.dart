@@ -3,15 +3,11 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/features/call/services/signaling_foreground_isolate_manager.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import 'push_notification_isolate_manager.dart';
-
-// TODO (Serdun): Refactor PushNotificationIsolateManager and SignalingForegroundIsolateManager into a single manager to reduce code duplication.
+import 'isolate_manager.dart';
 
 PushNotificationIsolateManager? _pushNotificationIsolateManager;
-
 SignalingForegroundIsolateManager? _signalingForegroundIsolateManager;
 
 RemoteConfigService? _remoteConfigService;
@@ -29,10 +25,8 @@ AppDatabase? _appDatabase;
 CallLogsRepository? _callLogsRepository;
 
 Future<void> _initializeCommonDependencies() async {
-  // Cache remote configuration
   _remoteConfigService ??= await DefaultRemoteCacheConfigService.init();
 
-  // Data classes
   _appPath ??= await AppPath.init();
   _appInfo ??= await AppInfo.init(const SharedPreferencesAppIdProvider());
   _deviceInfo ??= await DeviceInfoFactory.init();
@@ -48,10 +42,12 @@ Future<void> _initializeCommonDependencies() async {
 
 Future<void> _disposeCommonDependencies() async {
   await _pushNotificationIsolateManager?.close();
+  await _signalingForegroundIsolateManager?.close();
   await _appDatabase?.close();
 
   _appDatabase = null;
   _pushNotificationIsolateManager = null;
+  _signalingForegroundIsolateManager = null;
   _callLogsRepository = null;
   _remoteConfigService = null;
   _appPath = null;
@@ -70,6 +66,7 @@ Future<void> _initializeSignalingDependencies() async {
     callkeep: BackgroundSignalingService(),
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
+    logger: Logger('SignalingForegroundIsolateManager'),
   );
 }
 
@@ -79,6 +76,7 @@ Future<void> _initializePushNotificationDependencies() async {
     callkeep: BackgroundPushNotificationService(),
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
+    logger: Logger('PushNotificationIsolateManager'),
   );
 }
 
