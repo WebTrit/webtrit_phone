@@ -194,9 +194,9 @@ class SignalingForegroundIsolateManager extends IsolateManager {
         status.lifecycleEvent == CallkeepLifecycleEvent.onDestroy);
 
     if (isAppInBackground && !mainSignalingStatus) {
-      signalingManager.launch();
+      await signalingManager.launch();
     } else {
-      signalingManager.dispose();
+      await signalingManager.dispose();
     }
   }
 
