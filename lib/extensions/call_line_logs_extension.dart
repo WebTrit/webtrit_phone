@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
+// TODO: Add unit tests
 extension CallLineLogsExtension on Iterable<Line?> {
   /// Finds the first event of type [T] inside the CallEventLog wrappers.
   T? findEvent<T extends CallEvent>(String callId) {
@@ -13,6 +14,7 @@ extension CallLineLogsExtension on Iterable<Line?> {
   }
 }
 
+//TODO: Add unit tests
 extension IncomingCallVideoExtension on IncomingCallEvent {
   /// Returns true if the JSEP payload contains a video media description.
   bool get isVideo {
