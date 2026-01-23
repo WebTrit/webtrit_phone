@@ -97,7 +97,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepPushNotificationSyncStatus s
 
   switch (status) {
     case CallkeepPushNotificationSyncStatus.synchronizeCallStatus:
-      await _pushNotificationIsolateManager?.sync();
+      await _pushNotificationIsolateManager?.launchSignaling();
     case CallkeepPushNotificationSyncStatus.releaseResources:
       await _disposeCommonDependencies();
   }
@@ -111,7 +111,7 @@ Future<void> onSignalingSyncCallback(CallkeepServiceStatus status) async {
 
   _logger.info('onSignalingSyncCallback: $status');
 
-  await _signalingForegroundIsolateManager?.sync(status);
+  await _signalingForegroundIsolateManager?.handleLifecycleStatus(status);
   // TODO: Implement a deterministic cleanup path for common dependencies (DB, storages, logger)
   // for the signaling isolate. Unlike the push-notification flow, this callback currently has
   // no explicit "releaseResources" event, so we need a reliable trigger (or idle-timeout) to
