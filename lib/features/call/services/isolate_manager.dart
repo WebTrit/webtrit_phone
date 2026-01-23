@@ -13,8 +13,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../models/jsep_value.dart';
 
-abstract class NotificationIsolateManager implements CallkeepBackgroundServiceDelegate {
-  NotificationIsolateManager({
+abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
+  IsolateManager({
     required this.callLogsRepository,
     required this.storage,
     required this.certificates,
@@ -131,7 +131,7 @@ abstract class NotificationIsolateManager implements CallkeepBackgroundServiceDe
   }
 }
 
-class PushNotificationIsolateManager extends NotificationIsolateManager {
+class PushNotificationIsolateManager extends IsolateManager {
   PushNotificationIsolateManager({
     required super.callLogsRepository,
     required BackgroundPushNotificationService callkeep,
@@ -168,7 +168,7 @@ class PushNotificationIsolateManager extends NotificationIsolateManager {
   }
 }
 
-class SignalingForegroundIsolateManager extends NotificationIsolateManager {
+class SignalingForegroundIsolateManager extends IsolateManager {
   SignalingForegroundIsolateManager({
     required super.callLogsRepository,
     required BackgroundSignalingService callkeep,
