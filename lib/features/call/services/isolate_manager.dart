@@ -48,10 +48,10 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
       token: storage.readToken() ?? '',
       certificates: certificates,
       enableReconnect: enableReconnect,
-      onError: _handleSignalingError,
-      onHangupCall: _handleHangupCall,
-      onUnregistered: _handleUnregisteredEvent,
-      onNoActiveLines: _handleAvoidLines,
+      onError: _onSignalingError,
+      onHangupCall: _onHangupCall,
+      onUnregistered: _onUnregistered,
+      onNoActiveLines: _onNoActiveLines,
       onIncomingCall: onIncomingCall,
       onDisconnect: onDisconnect,
     );
@@ -61,7 +61,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     return signalingManager.dispose();
   }
 
-  void _handleHangupCall(HangupEvent event, NewCall call) async {
+  void _onHangupCall(HangupEvent event, NewCall call) async {
     logger.info('Hangup event: $event');
 
     await _showMissedCallNotification(event, call);
@@ -95,23 +95,23 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   // Default behavior: End calls on signaling error.
   // This is used by PushNotificationIsolateManager.
-  void _handleSignalingError(Object error, [StackTrace? stackTrace]) async {
+  void _onSignalingError(Object error, [StackTrace? stackTrace]) async {
     try {
       await endCallsOnService();
     } catch (e) {
-      _handleExceptions(e);
+      logger.severe(e);
     }
   }
 
-  void _handleAvoidLines() async {
+  void _onNoActiveLines() async {
     await endCallsOnService();
   }
 
-  void _handleUnregisteredEvent(UnregisteredEvent event) async {
+  void _onUnregistered(UnregisteredEvent event) async {
     try {
       await endCallsOnService();
     } catch (e) {
-      _handleExceptions(e);
+      logger.severe(e);
     }
   }
 
@@ -120,12 +120,8 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     try {
       await signalingManager.declineCall(callId);
     } catch (e) {
-      _handleExceptions(e);
+      logger.severe(e);
     }
-  }
-
-  void _handleExceptions(Object e) {
-    logger.severe(e);
   }
 }
 
@@ -137,26 +133,26 @@ class PushNotificationIsolateManager extends IsolateManager {
     required super.storage,
     required super.certificates,
     required super.logger,
-  }) : _callkeep = callkeep {
+  }) : _pushService = callkeep {
     initSignaling(enableReconnect: false);
-    _callkeep.setBackgroundServiceDelegate(this);
+    _pushService.setBackgroundServiceDelegate(this);
   }
 
-  final BackgroundPushNotificationService _callkeep;
+  final BackgroundPushNotificationService _pushService;
 
-  Future<void> sync() async {
+  Future<void> launchSignaling() async {
     logger.info('Starting background call event service');
     return signalingManager.launch();
   }
 
   @override
   Future<void> endCallOnService(String callId) {
-    return _callkeep.endCall(callId);
+    return _pushService.endCall(callId);
   }
 
   @override
   Future<void> endCallsOnService() {
-    return _callkeep.endCalls();
+    return _pushService.endCalls();
   }
 
   @override
@@ -175,14 +171,14 @@ class SignalingForegroundIsolateManager extends IsolateManager {
     required super.storage,
     required super.certificates,
     required super.logger,
-  }) : _callkeep = callkeep {
-    initSignaling(enableReconnect: true, onIncomingCall: _handleIncomingCall, onDisconnect: _handleSignalingDisconnect);
-    _callkeep.setBackgroundServiceDelegate(this);
+  }) : _signalingService = callkeep {
+    initSignaling(enableReconnect: true, onIncomingCall: _onIncomingCall, onDisconnect: _onSignalingDisconnect);
+    _signalingService.setBackgroundServiceDelegate(this);
   }
 
-  final BackgroundSignalingService _callkeep;
+  final BackgroundSignalingService _signalingService;
 
-  Future<void> sync(CallkeepServiceStatus status) async {
+  Future<void> handleLifecycleStatus(CallkeepServiceStatus status) async {
     logger.info('onStart: $status');
 
     final mainSignalingStatus =
@@ -202,41 +198,41 @@ class SignalingForegroundIsolateManager extends IsolateManager {
 
   @override
   Future<void> endCallOnService(String callId) {
-    return _callkeep.endCall(callId);
+    return _signalingService.endCall(callId);
   }
 
   @override
   Future<void> endCallsOnService() {
-    return _callkeep.endCalls();
+    return _signalingService.endCalls();
   }
 
   @override
-  void _handleSignalingError(Object error, [StackTrace? stackTrace]) async {
+  void _onSignalingError(Object error, [StackTrace? stackTrace]) async {
     try {
       logger.info('Signaling error: $error');
     } catch (e) {
-      _handleExceptions(e);
+      logger.severe(e);
     }
   }
 
-  void _handleIncomingCall(IncomingCallEvent event) {
+  void _onIncomingCall(IncomingCallEvent event) {
     try {
-      _callkeep.incomingCall(
+      _signalingService.incomingCall(
         event.callId,
         CallkeepHandle.number(event.caller),
         displayName: event.callerDisplayName,
         hasVideo: JsepValue.fromOptional(event.jsep)?.hasVideo ?? false,
       );
     } catch (e) {
-      _handleExceptions(e);
+      logger.severe(e);
     }
   }
 
-  void _handleSignalingDisconnect(int? code, String? reason) async {
+  void _onSignalingDisconnect(int? code, String? reason) async {
     try {
       logger.info('Signaling disconnect: $code, $reason');
     } catch (e) {
-      _handleExceptions(e);
+      logger.severe(e);
     }
   }
 
