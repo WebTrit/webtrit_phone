@@ -21,6 +21,7 @@ AppCertificates? _appCertificates;
 AppInfo? _appInfo;
 AppMetadataProvider? _appLabelsProvider;
 AppDatabase? _appDatabase;
+LocalPushRepository? _localPushRepository;
 
 CallLogsRepository? _callLogsRepository;
 
@@ -35,6 +36,7 @@ Future<void> _initializeCommonDependencies() async {
   _appLabelsProvider ??= await DefaultAppMetadataProvider.init(_packageInfo!, _deviceInfo!, _appInfo!, _secureStorage!);
   _appLogger ??= await AppLogger.init(_remoteConfigService!, _appLabelsProvider!);
   _appCertificates ??= await AppCertificates.init();
+  _localPushRepository ??= LocalPushRepositoryFLNImpl();
 
   _appDatabase ??= IsolateDatabase.create(directoryPath: _appPath!.applicationDocumentsPath);
   _callLogsRepository ??= CallLogsRepository(appDatabase: _appDatabase!);
@@ -49,6 +51,7 @@ Future<void> _disposeCommonDependencies() async {
   _pushNotificationIsolateManager = null;
   _signalingForegroundIsolateManager = null;
   _callLogsRepository = null;
+  _localPushRepository = null;
   _remoteConfigService = null;
   _appPath = null;
   _deviceInfo = null;
@@ -63,6 +66,7 @@ Future<void> _disposeCommonDependencies() async {
 Future<void> _initializeSignalingDependencies() async {
   _signalingForegroundIsolateManager ??= SignalingForegroundIsolateManager(
     callLogsRepository: _callLogsRepository!,
+    localPushRepository: _localPushRepository!,
     callkeep: BackgroundSignalingService(),
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
@@ -73,6 +77,7 @@ Future<void> _initializeSignalingDependencies() async {
 Future<void> _initializePushNotificationDependencies() async {
   _pushNotificationIsolateManager ??= PushNotificationIsolateManager(
     callLogsRepository: _callLogsRepository!,
+    localPushRepository: _localPushRepository!,
     callkeep: BackgroundPushNotificationService(),
     storage: _secureStorage!,
     certificates: _appCertificates!.trustedCertificates,
