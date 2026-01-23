@@ -59,9 +59,9 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     return signalingManager.dispose();
   }
 
-  void _handleHangupCall(HangupEvent event) async {
+  void _handleHangupCall(HangupEvent event, NewCall call) async {
     try {
-      logger.info('Ending call: ${event.callId}');
+      logger.info('Ending call: ${event.callId} - ${call.number}');
       await endCallOnService(event.callId);
     } catch (e) {
       _handleExceptions(e);
