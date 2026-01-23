@@ -4,8 +4,12 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
+
+import '../models/models.dart';
 
 final _logger = Logger('SignalingManager');
 
@@ -37,7 +41,7 @@ class SignalingManager {
   final String token;
 
   final void Function(IncomingCallEvent)? onIncomingCall;
-  final void Function(HangupEvent)? onHangupCall;
+  final void Function(HangupEvent, NewCall call)? onHangupCall;
   final void Function(UnregisteredEvent)? onUnregistered;
   final void Function(List<Line>)? onHandshake;
   final void Function(Object error, StackTrace? stack)? onError;
@@ -53,6 +57,9 @@ class SignalingManager {
   bool _isConnected = false;
 
   final List<_PendingRequest> _pendingRequests = [];
+
+  // Workaround: Captures the initialization time to serve as a fallback timestamp for call logs, pending better data propagation from CallKeep.
+  final DateTime _initialConnectionTime = DateTime.now();
 
   Future<void> launch() async {
     await _connectClient();
@@ -251,7 +258,19 @@ class SignalingManager {
         onIncomingCall?.call(event);
         break;
       case HangupEvent _:
-        onHangupCall?.call(event);
+        _logger.info('Hangup event: $_lines');
+
+        final incomingEventLog = _lines.findEvent<IncomingCallEvent>(event.callId);
+
+        onHangupCall?.call(event, (
+          direction: CallDirection.incoming,
+          number: incomingEventLog?.caller ?? 'unknown',
+          video: incomingEventLog?.isVideo ?? false,
+          username: incomingEventLog?.callerDisplayName ?? 'Unknown',
+          createdTime: _initialConnectionTime,
+          acceptedTime: null,
+          hungUpTime: DateTime.now(),
+        ));
         break;
       case UnregisteredEvent():
         onUnregistered?.call(event);
