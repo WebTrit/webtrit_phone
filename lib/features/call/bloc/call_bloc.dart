@@ -123,21 +123,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         peerConnectionManager ??
         PeerConnectionManager(
           retrieveTimeout: kPeerConnectionRetrieveTimeout,
-          monitorDelegatesFactory: (callId, logger) => [
-            LoggingRtpTrafficMonitorDelegate(
-              logger: logger,
-              // NOTE: Audio LogScope configuration is incomplete; when extending monitor configuration:
-              // - Decide audio scope(s) (inbound/outbound) and included StatsField values.
-              // - Add configurable controls to enable/disable scopes and set per-scope log level.
-              scopes: [
-                const LogScope(
-                  kind: MediaKind.video,
-                  direction: RtpDirection.inbound,
-                  allowedFields: StatsField.values,
-                ),
-              ],
-            ),
-          ],
+          monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
         );
 
     on<CallStarted>(_onCallStarted, transformer: sequential());
