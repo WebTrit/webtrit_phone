@@ -2701,12 +2701,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   @override
-  @Deprecated('Used performAudioDeviceSet instead')
-  Future<bool> performSetSpeaker(String callId, bool enabled) {
-    return Future.value(true);
-  }
-
-  @override
   Future<bool> performAudioDeviceSet(String callId, CallkeepAudioDevice device) {
     final callDevice = CallAudioDevice.fromCallkeep(device);
     return _perform(_CallPerformEvent.audioDeviceSet(callId, callDevice));
