@@ -25,13 +25,18 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
           appBar: AppBar(
             title: Text(context.l10n.voicemail_Widget_screenTitle),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: state.items.isNotEmpty
-                    ? state.isMultipleVoicemailsSelection
-                          ? () => _onDeleteSelectedVoicemails()
-                          : () => _onDeleteAllVoicemails()
-                    : null,
+              Badge(
+                alignment: AlignmentDirectional.topCenter,
+                isLabelVisible: state.isMultipleVoicemailsSelection,
+                label: Text(state.selectedVoicemailsIds.length.toString()),
+                child: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: state.items.isNotEmpty
+                      ? () => state.isMultipleVoicemailsSelection
+                            ? _onDeleteSelectedVoicemails()
+                            : _onDeleteAllVoicemails()
+                      : null,
+                ),
               ),
             ],
           ),
