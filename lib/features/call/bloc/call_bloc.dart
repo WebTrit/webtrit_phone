@@ -875,6 +875,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// So the answering method [__onCallPerformEventAnswered] will wait until offer and line is assigned
   /// to the [ActiveCall] by logic below, do not change status in that case.
   Future<void> __onCallSignalingEventIncoming(_CallSignalingEventIncoming event, Emitter<CallState> emit) async {
+    _logger.infoPretty(event.jsep?.sdp, tag: '__onCallSignalingEventIncoming');
+
     final video = event.jsep?.hasVideo ?? false;
     final handle = CallkeepHandle.number(event.caller);
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
@@ -1800,6 +1802,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       final localDescription = await peerConnection.createOffer({});
       sdpMunger?.apply(localDescription);
+      _logger.infoPretty(localDescription.sdp, tag: '__onCallPerformEventStarted');
 
       // Need to initiate outgoing call before set localDescription to avoid races
       // between [OutgoingCallRequest] and [IceTrickleRequest]s.
