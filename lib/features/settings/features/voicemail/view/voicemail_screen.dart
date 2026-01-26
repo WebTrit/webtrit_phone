@@ -25,9 +25,18 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
           appBar: AppBar(
             title: Text(context.l10n.voicemail_Widget_screenTitle),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: state.items.isNotEmpty ? () => _onDeleteAllVoicemails() : null,
+              Badge(
+                alignment: AlignmentDirectional.topCenter,
+                isLabelVisible: state.isMultipleVoicemailsSelection,
+                label: Text(state.selectedVoicemailsIds.length.toString()),
+                child: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: state.items.isNotEmpty
+                      ? () => state.isMultipleVoicemailsSelection
+                            ? _onDeleteSelectedVoicemails()
+                            : _onDeleteAllVoicemails()
+                      : null,
+                ),
               ),
             ],
           ),
@@ -53,7 +62,12 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
               return Stack(
                 children: [
                   if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
-                  if (state.isVoicemailsExists) VoicemailListView(items: state.items),
+                  if (state.isVoicemailsExists)
+                    VoicemailListView(
+                      items: state.items,
+                      selectedVoicemailsIds: state.selectedVoicemailsIds,
+                      isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
+                    ),
                 ],
               );
             },
@@ -80,29 +94,53 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
       context.read<VoicemailCubit>().removeAllVoicemails();
     }
   }
+
+  void _onDeleteSelectedVoicemails() async {
+    final confirmed =
+        (await ConfirmDialog.showDangerous(
+          context,
+          title: context.l10n.voicemail_Dialog_deleteSelectedTitle,
+          content: context.l10n.voicemail_Dialog_deleteSelectedContent,
+        )) ??
+        false;
+
+    if (confirmed && mounted) {
+      context.read<VoicemailCubit>().removeSelectedVoicemails();
+    }
+  }
 }
 
 class VoicemailListView extends StatelessWidget {
-  const VoicemailListView({super.key, required this.items});
+  const VoicemailListView({
+    super.key,
+    required this.items,
+    required this.selectedVoicemailsIds,
+    required this.isMultipleVoicemailsSelection,
+  });
 
   final List<Voicemail> items;
+  final List<String> selectedVoicemailsIds;
+  final bool isMultipleVoicemailsSelection;
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<VoicemailCubit>();
+    final colorScheme = Theme.of(context).colorScheme;
 
     return ListView.separated(
-      padding: const EdgeInsets.all(16),
       itemCount: items.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 8),
+      separatorBuilder: (_, _) => Divider(color: colorScheme.surfaceContainerHigh, height: 1),
       itemBuilder: (context, index) {
         final item = items[index];
         return VoicemailTile(
           voicemail: item,
           displayName: item.displaySender,
+          selected: selectedVoicemailsIds.contains(item.id),
           onDeleted: (it) => _onDeleteVoicemail(context, it),
           onToggleSeenStatus: (it) => cubit.toggleSeenStatus(it),
           onCall: (it) => cubit.startCall(it),
+          onLongPress: (it) => cubit.saveSelectedVoicemail(it),
+          onTap: isMultipleVoicemailsSelection ? (it) => cubit.saveSelectedVoicemail(it) : null,
         );
       },
     );

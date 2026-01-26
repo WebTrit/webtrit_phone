@@ -2232,7 +2232,14 @@ class AppLocalizationsIt extends AppLocalizations {
       'Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?';
 
   @override
+  String get voicemail_Dialog_deleteSelectedContent =>
+      'I messaggi vocali selezionati verranno eliminati definitivamente. Vuoi continuare?';
+
+  @override
   String get voicemail_Dialog_deleteSingleTitle => 'Eliminare il messaggio vocale?';
+
+  @override
+  String get voicemail_Dialog_deleteSelectedTitle => 'Eliminare i messaggi vocali selezionati?';
 
   @override
   String get voicemail_Label_call => 'Chiama';

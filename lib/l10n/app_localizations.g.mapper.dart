@@ -761,6 +761,7 @@ class AppLocalizationsMapper {
           localizations.presence_infoView_available_true,
       'presence_infoView_client': localizations.presence_infoView_client,
       'presence_infoView_device': localizations.presence_infoView_device,
+      'presence_infoView_localTime': localizations.presence_infoView_localTime,
       'presence_infoView_note': localizations.presence_infoView_note,
       'presence_infoView_statusIcon':
           localizations.presence_infoView_statusIcon,
@@ -1268,8 +1269,12 @@ class AppLocalizationsMapper {
           localizations.voicemail_Description_notSupported,
       'voicemail_Dialog_deleteSingleContent':
           localizations.voicemail_Dialog_deleteSingleContent,
+      'voicemail_Dialog_deleteSelectedContent':
+          localizations.voicemail_Dialog_deleteSelectedContent,
       'voicemail_Dialog_deleteSingleTitle':
           localizations.voicemail_Dialog_deleteSingleTitle,
+      'voicemail_Dialog_deleteSelectedTitle':
+          localizations.voicemail_Dialog_deleteSelectedTitle,
       'voicemail_Label_call': localizations.voicemail_Label_call,
       'voicemail_Label_delete': localizations.voicemail_Label_delete,
       'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
@@ -1372,6 +1377,12 @@ class AppLocalizationsMapper {
           localizations.user_agreement_description(appName),
       'webview_defaultError_details': (description, code) =>
           localizations.webview_defaultError_details(description, code),
+      'agoTicker_secondsAgo': (seconds) =>
+          localizations.agoTicker_secondsAgo(seconds),
+      'agoTicker_minutesAgo': (minutes) =>
+          localizations.agoTicker_minutesAgo(minutes),
+      'agoTicker_hoursAgo': (hours) => localizations.agoTicker_hoursAgo(hours),
+      'agoTicker_daysAgo': (days) => localizations.agoTicker_daysAgo(days),
     };
   }
 }

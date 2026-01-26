@@ -2211,7 +2211,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'This voicemail will be permanently deleted. Do you want to continue?';
 
   @override
+  String get voicemail_Dialog_deleteSelectedContent =>
+      'Selected voicemails will be permanently deleted. Do you want to continue?';
+
+  @override
   String get voicemail_Dialog_deleteSingleTitle => 'Delete voicemail?';
+
+  @override
+  String get voicemail_Dialog_deleteSelectedTitle => 'Delete selected voicemails?';
 
   @override
   String get voicemail_Label_call => 'Call';

@@ -174,7 +174,7 @@ class AudioSlider extends StatelessWidget {
           inactiveColor: colorScheme.onSurface.withValues(alpha: 0.1),
         ),
         Transform.translate(
-          offset: const Offset(0, 24),
+          offset: const Offset(0, 18),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -183,13 +183,13 @@ class AudioSlider extends StatelessWidget {
                 children: [
                   Text(
                     _formatDuration(clampedPosition),
-                    style: textTheme.labelMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
+                    style: textTheme.labelSmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
                   ),
                 ],
               ),
               Text(
                 _formatDuration(duration),
-                style: textTheme.labelMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
+                style: textTheme.labelSmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
               ),
             ],
           ),

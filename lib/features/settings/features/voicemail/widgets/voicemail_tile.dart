@@ -9,6 +9,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../extensions/extensions.dart';
 import '../models/models.dart';
 
 import 'audio_view.dart';
@@ -19,78 +20,83 @@ class VoicemailTile extends StatelessWidget {
     super.key,
     required this.voicemail,
     required this.displayName,
+    required this.selected,
     required this.onCall,
     required this.onDeleted,
     required this.onToggleSeenStatus,
+    required this.onLongPress,
+    required this.onTap,
     this.thumbnail,
     this.thumbnailUrl,
   });
 
   final Voicemail voicemail;
   final String displayName;
+  final bool selected;
   final Uint8List? thumbnail;
   final Uri? thumbnailUrl;
 
   final void Function(Voicemail) onCall;
   final void Function(Voicemail) onDeleted;
   final void Function(Voicemail) onToggleSeenStatus;
+  final void Function(Voicemail) onLongPress;
+  final void Function(Voicemail)? onTap;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final dateFormat = context.read<VoicemailScreenContext>().dateFormat;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: LeadingAvatar(username: displayName, thumbnail: thumbnail, thumbnailUrl: thumbnailUrl),
-          title: Text(voicemail.displaySender),
-          subtitle: _VoicemailSubtitle(voicemail: voicemail, dateFormat: dateFormat),
-          trailing: PopupMenuButton<_VoicemailMenuAction>(
-            padding: EdgeInsets.zero,
-            position: PopupMenuPosition.under,
-            onSelected: _onPopupMenuSelected,
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: _VoicemailMenuAction.call,
-                child: ListTile(leading: const Icon(Icons.call), title: Text(context.l10n.voicemail_Label_call)),
-              ),
-              PopupMenuItem(
-                value: _VoicemailMenuAction.toggleSeenStatus,
-                enabled: !voicemail.status.isUnknown,
-                child: ListTile(
-                  leading: const Icon(Icons.voicemail),
-                  title: Row(
-                    children: [
-                      const SizedBox(width: 4),
-                      if (voicemail.status.isRead) Icon(Icons.circle, size: 8, color: colorScheme.tertiary),
-                      Text(
-                        voicemail.status.isRead
-                            ? context.l10n.voicemail_Label_markAsNew
-                            : context.l10n.voicemail_Label_markAsHeard,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              PopupMenuItem(
-                value: _VoicemailMenuAction.delete,
-                child: ListTile(
-                  leading: Icon(Icons.delete, color: colorScheme.error),
-                  title: Text(context.l10n.voicemail_Label_delete),
-                ),
-              ),
-            ],
-            child: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.onSurface),
-          ),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onLongPress: () => onLongPress(voicemail),
+      onTap: onTap != null ? () => onTap!(voicemail) : null,
+      child: PlainListTile(
+        contentPadding: EdgeInsetsGeometry.all(16),
+        selected: selected,
+        selectedTileColor: colorScheme.primaryContainer.withValues(alpha: .5),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        leading: LeadingAvatar(username: displayName, thumbnail: thumbnail, thumbnailUrl: thumbnailUrl),
+        title: Text(voicemail.displaySender),
+        subtitle: _VoicemailSubtitle(voicemail: voicemail, dateFormat: dateFormat),
+        bottom: AudioView(path: voicemail.url!, onPlaybackStarted: _onPlaybackStarted),
+        trailing: PopupMenuButton<_VoicemailMenuAction>(
+          padding: EdgeInsets.zero,
+          position: PopupMenuPosition.under,
+          onSelected: _onPopupMenuSelected,
+          itemBuilder: (context) => _buildMenuItems(context, colorScheme),
+          child: Icon(Icons.more_vert, color: colorScheme.onSurface),
         ),
-        AudioView(path: voicemail.url!, onPlaybackStarted: _onPlaybackStarted),
-      ],
+      ),
     );
   }
+
+  List<PopupMenuEntry<_VoicemailMenuAction>> _buildMenuItems(BuildContext context, ColorScheme colorScheme) => [
+    PopupMenuItem(
+      value: _VoicemailMenuAction.call,
+      child: ListTile(leading: const Icon(Icons.call), title: Text(context.l10n.voicemail_Label_call)),
+    ),
+    PopupMenuItem(
+      value: _VoicemailMenuAction.toggleSeenStatus,
+      enabled: !voicemail.status.isUnknown,
+      child: ListTile(
+        leading: const Icon(Icons.voicemail),
+        title: Badge(
+          isLabelVisible: voicemail.status.showBadge,
+          backgroundColor: colorScheme.tertiary,
+          label: null,
+          child: Text(voicemail.status.toggleActionLabelL10n(context)),
+        ),
+      ),
+    ),
+    PopupMenuItem(
+      value: _VoicemailMenuAction.delete,
+      child: ListTile(
+        leading: Icon(Icons.delete, color: colorScheme.error),
+        title: Text(context.l10n.voicemail_Label_delete),
+      ),
+    ),
+  ];
 
   void _onPlaybackStarted() {
     if (voicemail.status.isUnread) onToggleSeenStatus(voicemail);

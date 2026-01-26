@@ -4170,11 +4170,23 @@ abstract class AppLocalizations {
   /// **'This voicemail will be permanently deleted. Do you want to continue?'**
   String get voicemail_Dialog_deleteSingleContent;
 
+  /// No description provided for @voicemail_Dialog_deleteSelectedContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected voicemails will be permanently deleted. Do you want to continue?'**
+  String get voicemail_Dialog_deleteSelectedContent;
+
   /// No description provided for @voicemail_Dialog_deleteSingleTitle.
   ///
   /// In en, this message translates to:
   /// **'Delete voicemail?'**
   String get voicemail_Dialog_deleteSingleTitle;
+
+  /// No description provided for @voicemail_Dialog_deleteSelectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete selected voicemails?'**
+  String get voicemail_Dialog_deleteSelectedTitle;
 
   /// No description provided for @voicemail_Label_call.
   ///
