@@ -120,11 +120,11 @@ class VoicemailListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<VoicemailCubit>();
+    final colorScheme = Theme.of(context).colorScheme;
 
     return ListView.separated(
-      padding: const EdgeInsets.all(16),
       itemCount: items.length,
-      separatorBuilder: (_, _) => const Divider(height: 32),
+      separatorBuilder: (_, _) => Divider(color: colorScheme.surfaceContainerHigh, height: 1),
       itemBuilder: (context, index) {
         final item = items[index];
         return VoicemailTile(
