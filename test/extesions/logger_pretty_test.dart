@@ -97,5 +97,14 @@ void main() {
       expect(message, isNot(contains('Line 49')));
       expect(message.length, lessThan(longGeneratedText.length));
     });
+
+    test('Should handle null data safely', () {
+      logger.infoPretty(null);
+
+      expect(emittedLogs.length, 1);
+      final message = emittedLogs.first.message;
+
+      expect(message, contains('[TestLogger]: null'));
+    });
   });
 }
