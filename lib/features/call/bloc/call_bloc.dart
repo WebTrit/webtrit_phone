@@ -115,16 +115,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.iceFilter,
     this.peerConnectionPolicyApplier,
     SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
+    required PeerConnectionManager peerConnectionManager,
     this.onCallEnded,
-    PeerConnectionManager? peerConnectionManager,
   }) : super(const CallState()) {
     _signalingClientFactory = signalingClientFactory;
-    _peerConnectionManager =
-        peerConnectionManager ??
-        PeerConnectionManager(
-          retrieveTimeout: kPeerConnectionRetrieveTimeout,
-          monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
-        );
+    _peerConnectionManager = peerConnectionManager;
 
     on<CallStarted>(_onCallStarted, transformer: sequential());
     on<_AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());

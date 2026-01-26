@@ -404,6 +404,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       // If CDRs feature is disabled, the worker will be null and no sync will be performed
                       final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
 
+                      final peerConnectionManager = PeerConnectionManager(
+                        retrieveTimeout: kPeerConnectionRetrieveTimeout,
+                        monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
+                      );
+
                       return CallBloc(
                         coreUrl: appBloc.state.session.coreUrl!,
                         tenantId: appBloc.state.session.tenantId,
@@ -439,6 +444,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           DiagnosticType.androidCallkeepOnly,
                           extras: {'callId': id, 'error': error.name},
                         ),
+                        peerConnectionManager: peerConnectionManager,
                       )..add(const CallStarted());
                     },
                   ),
