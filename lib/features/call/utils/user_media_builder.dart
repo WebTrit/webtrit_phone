@@ -33,11 +33,6 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
         await Helper.setAppleAudioConfiguration(
           AppleAudioConfiguration(appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
         );
-
-        // REMOVED: await Helper.setSpeakerphoneOn(video);
-        // Reason: Calling this forcibly overrides the audio route, causing sound
-        // to play via speaker even when headphones are connected on iOS.
-        // AppleAudioConfiguration handles the default routing correctly.
       }
 
       return localStream;

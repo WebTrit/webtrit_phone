@@ -292,6 +292,58 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (change.nextState.activeCalls.length < change.currentState.activeCalls.length) {
       onCallEnded?.call();
     }
+
+    /// Manages global side effects triggered by call lifecycle transitions.
+    /// Key responsibility:
+    /// - **iOS Audio Reset:** On the start of the *first* call, it forces the
+    ///   audio route back to the Receiver (Earpiece). This prevents the "sticky speaker"
+    ///   issue where iOS remembers the Speaker output from a previous session.
+    _handleCallLifecycleTransitions(
+      previousCalls: change.currentState.activeCalls,
+      currentCalls: change.nextState.activeCalls,
+    );
+  }
+
+  /// Analyzes changes in the active call list to trigger specific lifecycle hooks.
+  ///
+  /// This method identifies keys transitions:
+  /// * **First Call Started (`0 -> 1`):** A cold start of the calling session.
+  ///     Crucial for initializing hardware resources (e.g., resetting speaker output on iOS).
+  /// * **Last Call Ended (`N -> 0`):** The termination of the calling session.
+  ///     Used for global cleanup and resource release.
+  void _handleCallLifecycleTransitions({
+    required List<ActiveCall> previousCalls,
+    required List<ActiveCall> currentCalls,
+  }) {
+    final wasEmpty = previousCalls.isEmpty;
+    final isEmpty = currentCalls.isEmpty;
+
+    if (wasEmpty && !isEmpty) {
+      _onFirstCallStarted();
+    }
+
+    if (!wasEmpty && isEmpty) {
+      _onLastCallEnded();
+    }
+  }
+
+  /// Triggered when the first active call is established (0 -> 1 active calls).
+  ///
+  /// * **iOS:** Forces the audio output to the Receiver (Earpiece) via `Helper.setSpeakerphoneOn(false)`.
+  ///   This is a critical hard-reset to fix the "sticky speaker" issue where iOS
+  ///   retains the speaker route from a previous, unrelated session.
+  void _onFirstCallStarted() {
+    _logger.info(() => 'Lifecycle: First call started');
+    if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
+  }
+
+  /// Triggered when the last remaining active call ends (N -> 0 active calls).
+  ///
+  /// * **iOS:** Resets audio output to the default Receiver state to ensure clean state
+  ///   for future calls, preventing state bleeding between sessions.
+  void _onLastCallEnded() {
+    _logger.info(() => 'Lifecycle: Last call ended');
+    if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
   }
 
   void _handleSignalingSessionError({required CallServiceState previous, required CallServiceState current}) {
