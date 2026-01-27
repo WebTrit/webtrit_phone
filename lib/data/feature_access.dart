@@ -8,7 +8,6 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -72,13 +71,13 @@ class FeatureAccess extends Equatable {
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
 
-  static FeatureAccess init(
+  static FeatureAccess create(
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
-    ActiveMainFlavorRepository activeMainFlavorRepository,
-    CoreSupport coreSupport,
+    WebtritSystemInfo? systemInfo,
   ) {
     try {
+      final coreSupportSnapshot = CoreSupportImpl(() => systemInfo);
       // Initialize basic features
       final embeddedConfig = EmbeddedMapper.map(embeddedResources);
 
@@ -88,12 +87,12 @@ class FeatureAccess extends Equatable {
 
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
       final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig);
-      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
+      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupportSnapshot, termsConfig);
       final callConfig = CallMapper.map(appConfig);
-      final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
+      final messagingConfig = MessagingMapper.map(appConfig, coreSupportSnapshot);
       final contactsConfig = ContactsMapper.map(appConfig);
-      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig);
-      final sipPresenceConfig = SipPresenceMapper.map(coreSupport, appConfig);
+      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupportSnapshot, appConfig);
+      final sipPresenceConfig = SipPresenceMapper.map(coreSupportSnapshot, appConfig);
 
       return FeatureAccess._(
         embeddedConfig,

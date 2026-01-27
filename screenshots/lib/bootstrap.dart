@@ -10,7 +10,6 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
 
@@ -21,12 +20,9 @@ Future<AppContext> bootstrap() async {
   final packageInfo = await PackageInfoFactory.init();
   final deviceInfo = await DeviceInfoFactory.init();
   final secureStorage = await SecureStorageImpl.init();
-  final appPreferences = await AppPreferencesImpl.init();
   final appInfo = await AppInfo.init(SharedPreferencesAppIdProvider());
 
-  final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
   final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
-  final coreSupport = CoreSupportImpl(() => systemInfoLocalRepository.getSystemInfo());
 
   final mockAppMetadataProvider = await DefaultAppMetadataProvider.init(
     packageInfo,
@@ -35,11 +31,10 @@ Future<AppContext> bootstrap() async {
     secureStorage,
   );
 
-  final featureAccess = FeatureAccess.init(
+  final featureAccess = FeatureAccess.create(
     appThemes.appConfig,
     appThemes.embeddedResources,
-    activeMainFlavorRepository,
-    coreSupport,
+    systemInfoLocalRepository.getSystemInfo(),
   );
 
   final appBloc = MockAppBloc.allScreen(

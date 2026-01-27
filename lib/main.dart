@@ -71,7 +71,22 @@ class RootApp extends StatelessWidget {
         Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
         Provider<DeviceInfo>(create: (_) => instanceRegistry.get()),
         Provider<AppPreferences>(create: (_) => instanceRegistry.get()),
-        Provider<FeatureAccess>(create: (_) => instanceRegistry.get()),
+
+        /// Provides reactive [FeatureAccess] configuration that updates with system info changes.
+        ///
+        /// Uses pre-calculated bootstrap data for immediate rendering and regenerates
+        /// immutable snapshots whenever [SystemInfoRepository.infoStream] emits.
+        StreamProvider<FeatureAccess>(
+          initialData: instanceRegistry.get<FeatureAccess>(),
+          create: (context) => instanceRegistry.get<SystemInfoRepository>().infoStream.map(
+            (newSystemInfo) => FeatureAccess.create(
+              instanceRegistry.get<AppThemes>().appConfig,
+              instanceRegistry.get<AppThemes>().embeddedResources,
+              newSystemInfo,
+            ),
+          ),
+          updateShouldNotify: (previous, next) => true,
+        ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
         Provider<AppPermissions>(create: (_) => instanceRegistry.get()),
         Provider<AppLogger>(create: (_) => instanceRegistry.get()),
