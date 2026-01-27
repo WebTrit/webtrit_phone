@@ -10,7 +10,6 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/app/app.dart';
-import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -41,8 +40,6 @@ void main() {
       };
 
       Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
-
-      Bloc.observer = AppBlocObserver();
 
       final appDocDir = await getApplicationDocumentsPath();
       final String baseLogDirectoryPath = '$appDocDir/logs';
