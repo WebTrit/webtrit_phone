@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/data/feature_access.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -15,42 +16,52 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 enum TabType { chat, sms }
 
+sealed class TabsState {
+  const TabsState(this.groupChatsEnabled);
+  final bool groupChatsEnabled;
+  TabType get loogingAtTab;
+}
+
+final class SingleTabState extends TabsState {
+  const SingleTabState(this.tab, super.groupChatsEnabled);
+
+  final TabType tab;
+
+  @override
+  TabType get loogingAtTab => tab;
+}
+
+final class DualTabState extends TabsState {
+  const DualTabState(this.selectedTab, super.groupChatsEnabled);
+
+  final TabType selectedTab;
+
+  @override
+  TabType get loogingAtTab => selectedTab;
+
+  DualTabState copyWith({TabType? selectedTab}) {
+    return DualTabState(selectedTab ?? this.selectedTab, groupChatsEnabled);
+  }
+}
+
 class ConversationsScreen extends StatefulWidget {
-  const ConversationsScreen({super.key, this.title, this.enableGroupChats = true});
+  const ConversationsScreen({super.key, required this.title, required this.initialTabsState});
 
-  final Widget? title;
-
-  final bool enableGroupChats;
+  final Widget title;
+  final TabsState initialTabsState;
 
   @override
   State<ConversationsScreen> createState() => _ConversationsScreenState();
 }
 
-class _ConversationsScreenState extends State<ConversationsScreen> {
+class _ConversationsScreenState extends State<ConversationsScreen> with SingleTickerProviderStateMixin {
   late final messagingBloc = context.read<MessagingBloc>();
   late final chatsRepository = context.read<ChatsRepository>();
   late final smsRepository = context.read<SmsRepository>();
   late final contactsRepository = context.read<ContactsRepository>();
   late final notificationsBloc = context.read<NotificationsBloc>();
 
-  late final messagingFeature = context.read<FeatureAccess>().messagingConfig;
-  late final chatsEnabled = messagingFeature.chatsPresent;
-  late final smsEnabled = messagingFeature.smsPresent;
-
-  late TabType? selectedTab = chatsEnabled
-      ? TabType.chat
-      : smsEnabled
-      ? TabType.sms
-      : null;
-
-  void onFloatingButton() {
-    if (selectedTab == TabType.chat) {
-      onNewChatConversation();
-    }
-    if (selectedTab == TabType.sms) {
-      onNewSmsConversation();
-    }
-  }
+  late TabsState tabsState = widget.initialTabsState;
 
   Future<void> onNewChatConversation() async {
     showModalBottomSheet(
@@ -62,7 +73,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           messagingBloc.state.client,
           chatsRepository,
           contactsRepository,
-          chatConversationBuilderConfig: ChatConversationBuilderConfig(enableGroupChats: widget.enableGroupChats),
+          chatConversationBuilderConfig: ChatConversationBuilderConfig(enableGroupChats: tabsState.groupChatsEnabled),
           openDialog: (contact) async {
             Navigator.of(context).pop();
             await Future.delayed(const Duration(milliseconds: 300));
@@ -123,32 +134,61 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final tabsStateIt = tabsState;
 
-    return Scaffold(
-      appBar: MainAppBar(title: widget.title, context: context),
-      body: MessagingStateWrapper(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            if (chatsEnabled && smsEnabled && selectedTab != null) ...[
-              TabButtonsBar(selectedTab!, onChange: (t) => setState(() => selectedTab = t)),
-              const SizedBox(height: 10),
-            ],
-            Expanded(child: ConversationsList(selectedTab: selectedTab)),
-          ],
+    return Unfocuser(
+      child: Scaffold(
+        appBar: MainAppBar(
+          title: widget.title,
+          context: context,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(
+              kMainAppBarBottomSearchHeight + (tabsStateIt is DualTabState ? kMainAppBarBottomTabHeight : 0.0),
+            ),
+            child: Column(
+              children: [
+                if (tabsStateIt is DualTabState) ...[
+                  TabButtons(
+                    selectedTab: tabsStateIt.selectedTab,
+                    onTabSelected: (tab) => setState(() => tabsState = tabsStateIt.copyWith(selectedTab: tab)),
+                  ),
+                  SizedBox(height: 8),
+                ],
+                IgnoreUnfocuser(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: kMainAppBarBottomPaddingGap),
+                    child: ClearedTextField(
+                      onChanged: (value) {
+                        context.readOrNull<ChatConversationsCubit>()?.updateSearch(value);
+                        context.readOrNull<SmsConversationsCubit>()?.updateSearch(value);
+                      },
+                      onSubmitted: (value) => {},
+                      iconConstraints: const BoxConstraints.expand(
+                        width: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
+                        height: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+              ],
+            ),
+          ),
         ),
-      ),
-      floatingActionButton: Builder(
-        builder: (context) {
-          if (selectedTab == null) return const SizedBox();
-
-          return FloatingActionButton(
-            backgroundColor: colorScheme.primary,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-            onPressed: onFloatingButton,
-            child: Icon(Icons.add, color: colorScheme.onPrimary),
-          );
-        },
+        body: MessagingStateWrapper(child: ConversationsList(selectedTab: tabsState.loogingAtTab)),
+        floatingActionButton: Builder(
+          builder: (context) {
+            return FloatingActionButton(
+              backgroundColor: colorScheme.primary,
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
+              onPressed: switch (tabsState.loogingAtTab) {
+                TabType.chat => onNewChatConversation,
+                TabType.sms => onNewSmsConversation,
+              },
+              child: Icon(Icons.add, color: colorScheme.onPrimary),
+            );
+          },
+        ),
       ),
     );
   }

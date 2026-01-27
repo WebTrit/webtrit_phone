@@ -4,8 +4,7 @@ import 'package:webtrit_phone/features/features.dart';
 
 import '../data/data.dart';
 
-class MockSmsConversationsCubit extends MockCubit<SmsConversationsState>
-    implements SmsConversationsCubit {
+class MockSmsConversationsCubit extends MockCubit<SmsConversationsState> implements SmsConversationsCubit {
   MockSmsConversationsCubit();
 
   factory MockSmsConversationsCubit.initial() {
@@ -22,21 +21,15 @@ class MockSmsConversationsCubit extends MockCubit<SmsConversationsState>
     final mock = MockSmsConversationsCubit();
 
     final testConversationsWithMessages = [
-      (
-        dConversationsMockSmsConversationsCubit[0],
-        dMessagesMockSmsConversationsCubit[0]
-      ),
-      (
-        dConversationsMockSmsConversationsCubit[1],
-        dMessagesMockSmsConversationsCubit[1]
-      ),
+      (dConversationsMockSmsConversationsCubit[0], dMessagesMockSmsConversationsCubit[0]),
+      (dConversationsMockSmsConversationsCubit[1], dMessagesMockSmsConversationsCubit[1]),
     ];
 
     whenListen(
       mock,
       Stream.fromIterable([
         SmsConversationsState.initial(),
-        SmsConversationsState(testConversationsWithMessages, false),
+        SmsConversationsState(testConversationsWithMessages, testConversationsWithMessages, false),
       ]),
       initialState: SmsConversationsState.initial(),
     );
@@ -49,7 +42,7 @@ class MockSmsConversationsCubit extends MockCubit<SmsConversationsState>
       mock,
       Stream.fromIterable([
         SmsConversationsState.initial(),
-        SmsConversationsState([], false),
+        SmsConversationsState([], [], false),
       ]),
       initialState: SmsConversationsState.initial(),
     );
