@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -16,8 +15,7 @@ class ConversationsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Consider moving the logic for checking messaging features into the MessagingBloc to maintain a single source of truth.
-    final messagingFeature = context.read<FeatureAccess>().messagingConfig;
+    final messagingFeature = context.read<MessagingBloc>().state.messagingConfig;
     final chatsEnabled = messagingFeature.chatsPresent;
     final smsEnabled = messagingFeature.smsPresent;
     final groupChatsEnabled = messagingFeature.groupChatSupport;
