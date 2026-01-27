@@ -16,7 +16,7 @@ class SettingsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settingsFeature = context.read<FeatureAccess>().settingsFeature;
+    final settingsFeature = context.read<FeatureAccess>().settingsConfig;
 
     final widget = SettingsScreen(sections: settingsFeature.sections);
 

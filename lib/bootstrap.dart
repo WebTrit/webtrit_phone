@@ -177,7 +177,7 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
 
   // If the fallback incoming call trigger via SMS is enabled in the feature access config
-  if (featureAccess.callFeature.callTriggerConfig.smsFallback.enabled) {
+  if (featureAccess.callConfig.triggerConfig.smsFallback.enabled) {
     // Configure Android CallKeep to process incoming SMS messages
     // - prefix: filters SMS messages by required prefix
     // - regexPattern: extracts callId, handle, displayName, and hasVideo from the SMS body

@@ -5,7 +5,7 @@ typedef FeatureResolver = bool Function(FeatureFlag);
 
 extension FeatureAccessResolver on FeatureAccess {
   FeatureResolver _toResolver() {
-    final map = <FeatureFlag, bool Function()>{FeatureFlag.voicemail: () => settingsFeature.isVoicemailsEnabled};
+    final map = <FeatureFlag, bool Function()>{FeatureFlag.voicemail: () => settingsConfig.isVoicemailsEnabled};
 
     return (FeatureFlag key) => map[key]?.call() ?? false;
   }
@@ -15,10 +15,10 @@ extension FeatureAccessResolver on FeatureAccess {
   }
 
   List<Permission> get excludedPermissions {
-    final sourceTypes = bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
+    final sourceTypes = bottomMenuConfig.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
 
     final hasLocalContacts = sourceTypes?.contains(ContactSourceType.local) ?? false;
-    final isSmsFallbackEnabled = callFeature.callTriggerConfig.smsFallback.enabled;
+    final isSmsFallbackEnabled = callConfig.triggerConfig.smsFallback.enabled;
 
     return [if (!hasLocalContacts) Permission.contacts, if (!isSmsFallbackEnabled) Permission.sms];
   }

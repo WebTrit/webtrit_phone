@@ -18,9 +18,9 @@ class LoginModeSelectScreenScreenshot extends StatelessWidget {
     return BlocProvider<LoginCubit>(
       create: (context) => MockLoginCubit.loginModeSelectScreen(),
       child: LoginModeSelectScreen(
-        appGreetingL10n: context.read<FeatureAccess?>()?.loginFeature.titleL10n,
+        appGreetingL10n: context.read<FeatureAccess?>()?.loginConfig.titleL10n,
         launchButtons:
-            context.read<FeatureAccess?>()?.loginFeature.launchButtons ?? [],
+            context.read<FeatureAccess?>()?.loginConfig.launchButtons ?? [],
       ),
     );
   }

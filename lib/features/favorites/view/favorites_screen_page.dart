@@ -18,14 +18,14 @@ class FavoritesScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
 
-    final cdrsEnabled = featureAccess.bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs;
+    final cdrsEnabled = featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs;
 
     final widget = FavoritesScreen(
       title: const Text(EnvironmentConfig.APP_NAME),
-      transferEnabled: featureAccess.callFeature.callConfig.isBlindTransferEnabled,
-      videoEnabled: featureAccess.callFeature.callConfig.isVideoCallEnabled,
-      chatsEnabled: featureAccess.messagingFeature.chatsPresent,
-      smssEnabled: featureAccess.messagingFeature.smsPresent,
+      transferEnabled: featureAccess.callConfig.capabilities.isBlindTransferEnabled,
+      videoEnabled: featureAccess.callConfig.capabilities.isVideoCallEnabled,
+      chatsEnabled: featureAccess.messagingConfig.chatsPresent,
+      smssEnabled: featureAccess.messagingConfig.smsPresent,
       cdrsEnabled: cdrsEnabled ?? false,
     );
     final provider = BlocProvider(

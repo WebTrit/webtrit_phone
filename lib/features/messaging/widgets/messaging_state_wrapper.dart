@@ -10,7 +10,7 @@ class MessagingStateWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final messagingFeature = context.read<FeatureAccess>().messagingFeature;
+    final messagingFeature = context.read<FeatureAccess>().messagingConfig;
 
     return Column(
       children: [

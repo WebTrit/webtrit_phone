@@ -25,7 +25,7 @@ class CallActiveScaffold extends StatefulWidget {
   final List<ActiveCall> activeCalls;
   final CallAudioDevice? audioDevice;
   final List<CallAudioDevice> availableAudioDevices;
-  final CallConfig callConfig;
+  final CallCapabilitiesConfig callConfig;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 

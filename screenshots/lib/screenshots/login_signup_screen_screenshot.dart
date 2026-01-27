@@ -33,7 +33,7 @@ class LoginSignUpScreenshot extends StatelessWidget {
 
     final sections = context
         .watch<FeatureAccess?>()
-        ?.loginFeature
+        ?.loginConfig
         .actions
         .firstWhereOrNull((element) => element.flavor == LoginFlavor.embedded);
 

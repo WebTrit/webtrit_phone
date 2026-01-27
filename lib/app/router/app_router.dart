@@ -11,6 +11,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/resolvers/resolvers.dart';
 
 import 'deeplinks.dart';
 
@@ -29,14 +30,16 @@ class AppRouter extends RootStackRouter {
     this._launchEmbeddedData,
     this._bottomMenuFeature,
     this._featureChecker,
+    this._initialTabResolver,
   );
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
   final FeatureChecker _featureChecker;
+  final InitialTabResolver _initialTabResolver;
 
   final EmbeddedData? _launchEmbeddedData;
-  final BottomMenuFeature _bottomMenuFeature;
+  final BottomMenuConfig _bottomMenuFeature;
 
   Session get session => _appBloc.state.session;
 
@@ -58,7 +61,7 @@ class AppRouter extends RootStackRouter {
   /// Retrieves the initial tab  for the main screen.
   ///
   /// This getter determines the initial tab to display on the main screen
-  BottomMenuTab get _mainInitialTab => _bottomMenuFeature.activeTab;
+  BottomMenuTab get _mainInitialTab => _initialTabResolver.resolve();
 
   @override
   List<AutoRoute> get routes => [

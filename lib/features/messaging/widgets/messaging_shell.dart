@@ -20,7 +20,7 @@ class MessagingShell extends StatefulWidget {
 
 class _MessagingShellState extends State<MessagingShell> {
   late final messagingBloc = context.read<MessagingBloc>();
-  late final messagingFeature = context.read<FeatureAccess>().messagingFeature;
+  late final messagingFeature = context.read<FeatureAccess>().messagingConfig;
 
   MessagingPushService? pushService;
 
