@@ -27,19 +27,38 @@ class AppRouter extends RootStackRouter {
   AppRouter(
     this._appBloc,
     this._appPermissions,
-    this._launchEmbeddedData,
-    this._bottomMenuFeature,
-    this._featureChecker,
-    this._initialTabResolver,
-  );
+    EmbeddedData? launchEmbeddedData,
+    BottomMenuConfig bottomMenuFeature,
+    InitialTabResolver initialTabResolver,
+    FeatureChecker featureChecker,
+  ) {
+    _launchEmbeddedData = launchEmbeddedData;
+    _bottomMenuFeature = bottomMenuFeature;
+    _initialTabResolver = initialTabResolver;
+    _featureChecker = featureChecker;
+  }
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
-  final FeatureChecker _featureChecker;
-  final InitialTabResolver _initialTabResolver;
 
-  final EmbeddedData? _launchEmbeddedData;
-  final BottomMenuConfig _bottomMenuFeature;
+  late EmbeddedData? _launchEmbeddedData;
+  late BottomMenuConfig _bottomMenuFeature;
+
+  late InitialTabResolver _initialTabResolver;
+  late FeatureChecker _featureChecker;
+
+  /// Updates dependencies dynamically without recreating the router
+  void updateConfiguration(
+    EmbeddedData? launchEmbeddedData,
+    BottomMenuConfig bottomMenuFeature,
+    InitialTabResolver initialTabResolver,
+    FeatureChecker featureChecker,
+  ) {
+    _launchEmbeddedData = launchEmbeddedData;
+    _bottomMenuFeature = bottomMenuFeature;
+    _initialTabResolver = initialTabResolver;
+    _featureChecker = featureChecker;
+  }
 
   Session get session => _appBloc.state.session;
 
