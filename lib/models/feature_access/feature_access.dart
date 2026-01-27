@@ -1,7 +1,16 @@
+export 'bottom_menu_config.dart';
 export 'bottom_menu_feature.dart';
 export 'call_config.dart';
+export 'contact_details_config.dart';
+export 'contacts_config.dart';
+export 'embedded_config.dart';
 export 'encoding_config.dart';
 export 'feature_flag.dart';
+export 'login_config.dart';
 export 'login_mode_action.dart';
+export 'messaging_config.dart';
+export 'settings_config.dart';
 export 'settings_feature.dart';
-export 'contact_details_config.dart';
+export 'sip_presence_config.dart';
+export 'system_notifications_config.dart';
+export 'terms_config.dart';

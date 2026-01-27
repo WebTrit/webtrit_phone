@@ -31,7 +31,7 @@ class EmbeddedTabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
+    final bottomMenuManager = context.read<FeatureAccess>().bottomMenuConfig;
     final data = bottomMenuManager.getEmbeddedTabById(id);
 
     final customPrivateGatewayRepository = context.read<PrivateGatewayRepository>();

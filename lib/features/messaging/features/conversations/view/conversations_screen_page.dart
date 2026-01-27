@@ -17,7 +17,7 @@ class ConversationsScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: Consider moving the logic for checking messaging features into the MessagingBloc to maintain a single source of truth.
-    final messagingFeature = context.read<FeatureAccess>().messagingFeature;
+    final messagingFeature = context.read<FeatureAccess>().messagingConfig;
     final chatsEnabled = messagingFeature.chatsPresent;
     final enableGroupChats = messagingFeature.groupChatSupport;
     final smsEnabled = messagingFeature.smsPresent;

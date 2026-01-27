@@ -35,7 +35,7 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
             pageBuilder: (context, _, __) {
               // Fetch sections for the settings screen using FeatureAccess, specifically used in the configurator project.
               // Fallback to default sections if FeatureAccess is not available.
-              final sections = context.read<FeatureAccess?>()?.settingsFeature.sections ?? _defaultSections();
+              final sections = context.read<FeatureAccess?>()?.settingsConfig.sections ?? _defaultSections();
 
               return MultiBlocProvider(
                 providers: [

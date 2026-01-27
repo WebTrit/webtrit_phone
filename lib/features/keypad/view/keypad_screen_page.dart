@@ -19,8 +19,8 @@ class KeypadScreenPage extends StatelessWidget {
 
     final widget = KeypadScreen(
       title: const Text(EnvironmentConfig.APP_NAME),
-      videoEnabled: featureAccess.callFeature.callConfig.isVideoCallEnabled,
-      transferEnabled: featureAccess.callFeature.callConfig.isBlindTransferEnabled,
+      videoEnabled: featureAccess.callConfig.capabilities.isVideoCallEnabled,
+      transferEnabled: featureAccess.callConfig.capabilities.isBlindTransferEnabled,
     );
     final provider = BlocProvider(create: (context) => KeypadCubit(context.read<ContactsRepository>()), child: widget);
     return provider;
