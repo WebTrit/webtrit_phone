@@ -36,7 +36,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     this._smsRepository,
     this._smsOutboxRepository,
     this._submitNotification,
-  ) : super(MessagingState.initial(_client)) {
+  ) : super(MessagingState.initial(_client, _messagingConfig)) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
     on<Disconnect>(_onDisconnect);

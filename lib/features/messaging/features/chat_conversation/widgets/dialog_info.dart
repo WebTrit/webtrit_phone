@@ -4,17 +4,25 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class DialogInfo extends StatefulWidget {
-  const DialogInfo(this.userId, this.participantId, {super.key});
+  const DialogInfo(
+    this.userId,
+    this.participantId, {
+    required this.isAudioCallEnabled,
+    required this.isVideoCallEnabled,
+    super.key,
+  });
 
   final String userId;
   final String participantId;
+  final bool isAudioCallEnabled;
+  final bool isVideoCallEnabled;
 
   @override
   State<DialogInfo> createState() => _DialogInfoState();
@@ -110,31 +118,22 @@ class _DialogInfoState extends State<DialogInfo> {
                           ),
                           const SizedBox(height: 24),
                           if (contact != null && contact.kind == ContactKind.visible) ...[
-                            Divider(),
+                            const Divider(),
                             Expanded(
                               child: ListView(
                                 children: [
                                   for (ContactPhone contactPhone in contact.phones)
                                     ListTile(
+                                      contentPadding: EdgeInsets.zero,
                                       title: Text(contactPhone.number),
                                       trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            splashRadius: 24,
-                                            icon: const Icon(Icons.call),
-                                            onPressed: () => _onCall(contactPhone, contact, false),
-                                          ),
-                                          IconButton(
-                                            splashRadius: 24,
-                                            icon: const Icon(Icons.videocam),
-                                            onPressed: () => _onCall(contactPhone, contact, true),
-                                          ),
-                                        ],
+                                        children: _buildCallActions(contactPhone, contact),
                                       ),
                                     ),
                                   for (ContactEmail contactEmail in contact.emails)
                                     ListTile(
+                                      contentPadding: EdgeInsets.zero,
                                       title: Text(contactEmail.address),
                                       trailing: IconButton(
                                         splashRadius: 24,
@@ -147,7 +146,7 @@ class _DialogInfoState extends State<DialogInfo> {
                             ),
                             const SizedBox(height: 8),
                           ] else
-                            Spacer(),
+                            const Spacer(),
                         ],
                       ),
                     );
@@ -169,5 +168,23 @@ class _DialogInfoState extends State<DialogInfo> {
         return const Center(child: CircularProgressIndicator());
       },
     );
+  }
+
+  /// Returns a list of call action buttons based on provided configuration.
+  List<Widget> _buildCallActions(ContactPhone contactPhone, Contact contact) {
+    return [
+      if (widget.isAudioCallEnabled)
+        IconButton(
+          splashRadius: 24,
+          icon: const Icon(Icons.call),
+          onPressed: () => _onCall(contactPhone, contact, false),
+        ),
+      if (widget.isVideoCallEnabled)
+        IconButton(
+          splashRadius: 24,
+          icon: const Icon(Icons.videocam),
+          onPressed: () => _onCall(contactPhone, contact, true),
+        ),
+    ];
   }
 }
