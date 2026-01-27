@@ -195,9 +195,8 @@ class MainScreenScreenshot extends StatelessWidget {
             BlocProvider<UnreadCountCubit>(create: (_) => MockUnreadCountCubit.withUnreadMessages()),
           ],
           child: const ConversationsScreen(
-            title: Text(
-              EnvironmentConfig.APP_NAME,
-            ),
+            title: Text(EnvironmentConfig.APP_NAME),
+            initialTabsState: SingleTabState(TabType.chat, true),
           ),
         );
     }

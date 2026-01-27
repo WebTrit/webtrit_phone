@@ -19,9 +19,13 @@ class ConversationsScreenPage extends StatelessWidget {
     // TODO: Consider moving the logic for checking messaging features into the MessagingBloc to maintain a single source of truth.
     final messagingFeature = context.read<FeatureAccess>().messagingFeature;
     final chatsEnabled = messagingFeature.chatsPresent;
-    final enableGroupChats = messagingFeature.groupChatSupport;
     final smsEnabled = messagingFeature.smsPresent;
+    final groupChatsEnabled = messagingFeature.groupChatSupport;
+    final screenTitle = Text(EnvironmentConfig.APP_NAME);
 
+    // Guard for cases where neither chats nor SMS features are available in core
+    // but app configured to show messaging tab.
+    if (!chatsEnabled && !smsEnabled) return ConversationsScreenUnsupported(title: screenTitle);
     final widget = MultiBlocProvider(
       providers: [
         Provider(create: (context) => ('stub', 123)),
@@ -32,16 +36,25 @@ class ConversationsScreenPage extends StatelessWidget {
               context.read<MessagingBloc>().state.client,
               context.read<ChatsRepository>(),
               context.read<ContactsRepository>(),
-            ),
+            )..init(),
           ),
         if (smsEnabled)
           BlocProvider(
             key: const Key('sms_conversations_cubit'),
             create: (context) =>
-                SmsConversationsCubit(context.read<MessagingBloc>().state.client, context.read<SmsRepository>()),
+                SmsConversationsCubit(context.read<MessagingBloc>().state.client, context.read<SmsRepository>())
+                  ..init(),
           ),
       ],
-      child: ConversationsScreen(title: Text(EnvironmentConfig.APP_NAME), enableGroupChats: enableGroupChats),
+      child: ConversationsScreen(
+        title: screenTitle,
+        initialTabsState: switch ((chatsEnabled, smsEnabled)) {
+          (true, true) => DualTabState(TabType.chat, groupChatsEnabled),
+          (true, false) => SingleTabState(TabType.chat, groupChatsEnabled),
+          (false, true) => SingleTabState(TabType.sms, false),
+          (false, false) => throw Exception('At least one tab must be enabled, check screen page logic above'),
+        },
+      ),
     );
 
     return widget;
