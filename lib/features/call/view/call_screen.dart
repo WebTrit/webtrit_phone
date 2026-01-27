@@ -17,10 +17,10 @@ class CallScreen extends StatefulWidget {
     super.key,
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
-    this.callConfig = const CallConfig(),
+    this.callConfig = const CallCapabilitiesConfig(),
   });
 
-  final CallConfig callConfig;
+  final CallCapabilitiesConfig callConfig;
 
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;

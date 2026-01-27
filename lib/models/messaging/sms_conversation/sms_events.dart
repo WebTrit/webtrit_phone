@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'smss.dart';
+import 'sms.dart';
 
 sealed class SmsEvent {
   int get conversationId;
@@ -10,6 +10,7 @@ sealed class SmsEvent {
 
 class SmsConversationUpdate extends SmsEvent with EquatableMixin {
   const SmsConversationUpdate(this.conversation);
+
   final SmsConversation conversation;
 
   @override
@@ -37,6 +38,7 @@ class SmsConversationRemove extends SmsEvent with EquatableMixin {
 
 class SmsMessageUpdate extends SmsEvent with EquatableMixin {
   const SmsMessageUpdate(this.message);
+
   final SmsMessage message;
 
   @override
@@ -51,6 +53,7 @@ class SmsMessageUpdate extends SmsEvent with EquatableMixin {
 
 class SmsReadCursorUpdate extends SmsEvent with EquatableMixin {
   const SmsReadCursorUpdate(this.cursor);
+
   final SmsMessageReadCursor cursor;
 
   @override

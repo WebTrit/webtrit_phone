@@ -172,7 +172,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
-            final isVoicemailsEnabled = featureAccess.settingsFeature.isVoicemailsEnabled;
+            final isVoicemailsEnabled = featureAccess.settingsConfig.isVoicemailsEnabled;
 
             if (isVoicemailsEnabled) {
               return VoicemailRepositoryImpl(
@@ -266,7 +266,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               dispose: (context, service) => service.dispose(),
               lazy: false,
             ),
-            if (featureAccess.bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
+            if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
               Provider<CdrsSyncWorker>(
                 create: (context) =>
                     CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
@@ -329,7 +329,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final appPermissions = context.read<AppPermissions>();
 
                       Future<bool> isFutureEnabled() async {
-                        final contactTab = featureAccess.bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
+                        final contactTab = featureAccess.bottomMenuConfig.getTabEnabled<ContactsBottomMenuTab>();
                         final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
                         return contactSourceTypes.contains(ContactSourceType.local);
                       }
@@ -375,8 +375,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final encodingSettingsRepository = context.read<EncodingSettingsRepository>();
                       final diagnosticService = context.read<DiagnosticService>();
 
-                      final encodingConfig = featureAccess.callFeature.encoding;
-                      final peerConnectionConfig = featureAccess.callFeature.peerConnection;
+                      final encodingConfig = featureAccess.callConfig.encoding;
+                      final peerConnectionConfig = featureAccess.callConfig.peerConnection;
 
                       // Initialize media builder with app-configured audio/video constraints
                       // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
@@ -403,6 +403,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       // Try to get CDRs sync worker to trigger immediate sync after call ends
                       // If CDRs feature is disabled, the worker will be null and no sync will be performed
                       final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
+
+                      final peerConnectionManager = PeerConnectionManager(
+                        retrieveTimeout: kPeerConnectionRetrieveTimeout,
+                        monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
+                      );
 
                       return CallBloc(
                         coreUrl: appBloc.state.session.coreUrl!,
@@ -433,12 +438,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         ),
                         iceFilter: FilterWithAppSettings(iceSettingsRepository),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
-                        sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
+                        sipPresenceEnabled: featureAccess.sipPresenceConfig.sipPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
                         onDiagnosticReportRequested: (id, error) => diagnosticService.request(
                           DiagnosticType.androidCallkeepOnly,
                           extras: {'callId': id, 'error': error.name},
                         ),
+                        peerConnectionManager: peerConnectionManager,
                       )..add(const CallStarted());
                     },
                   ),
@@ -450,7 +456,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       return MessagingBloc(
                         session.userId,
                         createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
-                        featureAccess.messagingFeature,
+                        featureAccess.messagingConfig,
                         context.read<ChatsRepository>(),
                         context.read<ChatsOutboxRepository>(),
                         context.read<SmsRepository>(),
@@ -520,7 +526,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       ],
                       child: Builder(
                         builder: (context) {
-                          final sipPresenceFeature = featureAccess.sipPresenceFeature;
+                          final sipPresenceFeature = featureAccess.sipPresenceConfig;
 
                           return PresenceViewParams(
                             viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
@@ -562,12 +568,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// - [UserRepository]: polled every 10 seconds to keep user data up to date.
   /// - [SystemInfoRepository]: polled every 5 minutes to refresh system information.
   /// - [VoicemailRepository]: polled every 5 minutes, but only if the voicemail feature is enabled
-  ///   in [FeatureAccess.settingsFeature].
+  ///   in [FeatureAccess.settingsConfig].
   ///
   /// This method centralizes the polling configuration, so changes in polling logic or intervals
   /// can be made here without touching the [Provider] or [PollingService] setup.
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
-    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
+    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.isVoicemailsEnabled;
 
     return [
       PollingRegistration(
@@ -598,12 +604,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   ///
   /// Current registrations:
   /// - [VoicemailRepository]: refreshed when going online, but only if the voicemail feature
-  ///   is enabled in [FeatureAccess.settingsFeature].
+  ///   is enabled in [FeatureAccess.settingsConfig].
   ///
   /// This method centralizes the connectivity recovery configuration, so changes in
   /// registration logic can be made here without touching the [Provider] or service setup.
   List<ConnectivityRecoveryRegistration> _connectivityRecoveryRegistrations(BuildContext context) {
-    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
+    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.isVoicemailsEnabled;
 
     return [if (isVoicemailsEnabled) ConnectivityRecoveryRegistration.refreshable(context.read<VoicemailRepository>())];
   }

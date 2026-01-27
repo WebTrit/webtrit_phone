@@ -54,7 +54,7 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
     final token = _secureStorage.readToken();
     final coreUrl = _secureStorage.readCoreUrl();
     final tenantId = _secureStorage.readTenantId();
-    final urls = _featureAccess?.embeddedFeature.embeddedResources.map((e) => e.uri.toString()).toList();
+    final urls = _featureAccess?.embeddedConfig.embeddedResources.map((e) => e.uri.toString()).toList();
 
     return <String, String>{
       'app': _packageInfo.appName,

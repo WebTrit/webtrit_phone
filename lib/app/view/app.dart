@@ -13,6 +13,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/resolvers/resolvers.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -39,12 +40,19 @@ class _AppState extends State<App> {
       sessionRepository: context.read<SessionRepository>(),
       appInfo: context.read<AppInfo>(),
     );
+
+    final initialTabResolver = BottomMenuInitialTabResolver(
+      config: featureAccess.bottomMenuConfig,
+      repository: context.read<ActiveMainFlavorRepository>(),
+    );
+
     appRouter = AppRouter(
       appBloc,
       context.read<AppPermissions>(),
-      featureAccess.loginFeature.launchLoginPage,
-      featureAccess.bottomMenuFeature,
+      featureAccess.loginConfig.launchLoginPage,
+      featureAccess.bottomMenuConfig,
       featureAccess.toChecker(),
+      initialTabResolver,
     );
   }
 

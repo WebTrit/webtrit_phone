@@ -1,3 +1,32 @@
+import '../call/call_trigger_config.dart';
+import '../peer_connection_settings.dart';
+
+import 'encoding_config.dart';
+
+/// Configuration for call-related features, including encoding,
+/// transfer capabilities, and PeerConnection settings.
+class CallConfig {
+  const CallConfig({
+    required this.capabilities,
+    required this.encoding,
+    required this.peerConnection,
+    required this.triggerConfig,
+  });
+
+  final CallCapabilitiesConfig capabilities;
+  final EncodingConfig encoding;
+  final PeerConnectionSettings peerConnection;
+
+  /// Configuration for how incoming calls are triggered.
+  ///
+  /// This controls which triggering mechanisms are available and which one is currently active.
+  /// It also defines fallback behavior via SMS if supported.
+  ///
+  /// Note: This setting affects **UI-level visibility and selection** of triggering methods,
+  /// not the underlying signaling implementation.
+  final CallTriggerConfig triggerConfig;
+}
+
 /// UI-level configuration for call features.
 ///
 /// Controls visibility of call-related UI elements (e.g., video toggle, transfer buttons).
@@ -5,8 +34,8 @@
 ///
 /// Note: Incoming video calls or feature negotiation (e.g., via SDP) are not affected.
 /// To apply restrictions on protocol level, integrate with `SDPMunger` or similar logic.
-class CallConfig {
-  const CallConfig({
+class CallCapabilitiesConfig {
+  const CallCapabilitiesConfig({
     this.isVideoCallEnabled = true,
     this.isAudioToVideoSwitchEnabled = true,
     this.isBlindTransferEnabled = true,

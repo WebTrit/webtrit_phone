@@ -50,5 +50,24 @@ void main() {
       expect(voicemails.where((voicemail) => voicemail.seen).length, 3);
       expect(voicemails.where((voicemail) => !voicemail.seen).length, 1);
     });
+  
+    test('deleteMultipleVoicemails', () async {
+      final firstVoicemail = VoicemailsFixtureFactory.createVoicemail(id: '1');
+      final secondVoicemail = VoicemailsFixtureFactory.createVoicemail(id: '2');
+      final thirdVoicemail = VoicemailsFixtureFactory.createVoicemail(id: '3');
+
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(firstVoicemail);
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(secondVoicemail);
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(thirdVoicemail);
+
+      var voicemails = await appDatabase.voicemailDao.getAllVoicemails();
+      expect(voicemails.length, 3);
+
+      await dataSource.removeMultipleVoicemails(['1', '3']);
+
+      voicemails = await appDatabase.voicemailDao.getAllVoicemails();
+      expect(voicemails.length, 1);
+      expect(voicemails.first.id, '2');
+    });
   });
 }

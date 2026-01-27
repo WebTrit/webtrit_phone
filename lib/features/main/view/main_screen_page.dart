@@ -29,10 +29,10 @@ class MainScreenPage extends StatelessWidget {
     const appDemoFlow = EnvironmentConfig.CORE_URL == null;
 
     final featureAccess = context.read<FeatureAccess>();
-    final bottomMenuManager = featureAccess.bottomMenuFeature;
+    final bottomMenuManager = featureAccess.bottomMenuConfig;
     final tabs = bottomMenuManager.tabs;
 
-    final systemNotificationsFeature = featureAccess.systemNotificationsFeature;
+    final systemNotificationsFeature = featureAccess.systemNotificationsConfig;
     final systemNotificationsEnabled = systemNotificationsFeature.systemNotificationsSupport;
 
     final autoTabsRouter = AutoTabsRouter(
@@ -65,11 +65,8 @@ class MainScreenPage extends StatelessWidget {
                   // e.g router.navigate(const MainScreenPageRoute(['favorites']));
                   currentIndex: tabsRouter.activeIndex,
                   items: _buildNavBarItems(context, tabs),
-                  onTap: (index) {
-                    final activeTab = tabs[index];
-                    bottomMenuManager.activeFlavor = activeTab;
-                    tabsRouter.setActiveIndex(bottomMenuManager.activeIndex);
-                  },
+                  onTap: (index) =>
+                      BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
                   // items: navBarItems,
                 ),
               )
@@ -136,5 +133,24 @@ class MainScreenPage extends StatelessWidget {
       if (flavor == MainFlavor.messaging) icon = MessagingFlavorOverlay(child: icon);
       return BottomNavigationBarItem(key: flavor.toNavBarKey(), icon: icon, label: label);
     }).toList();
+  }
+}
+
+/// Handles the logic for bottom menu tab interactions and persistence.
+abstract final class BottomMenuTabHandler {
+  /// Processes a tab tap by persisting the selection and updating the UI router.
+  static void handleTap(
+    BuildContext context, {
+    required int index,
+    required List<BottomMenuTab> tabs,
+    required TabsRouter tabsRouter,
+  }) {
+    final tappedTab = tabs[index];
+
+    // Persist the selection to the repository
+    context.read<ActiveMainFlavorRepository>().setActiveMainFlavor(tappedTab.flavor);
+
+    // Update the actual UI state via AutoRoute
+    tabsRouter.setActiveIndex(index);
   }
 }

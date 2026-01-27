@@ -508,12 +508,26 @@ Map<String, dynamic> _$AppConfigSmsToJson(AppConfigSms instance) =>
 AppConfigChats _$AppConfigChatsFromJson(Map<String, dynamic> json) =>
     AppConfigChats(
       groupChatButtonEnabled: json['groupChatButtonEnabled'] as bool? ?? true,
+      contactInfo: json['contactInfo'] == null
+          ? const ChatContactInfo()
+          : ChatContactInfo.fromJson(
+              json['contactInfo'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$AppConfigChatsToJson(AppConfigChats instance) =>
     <String, dynamic>{
       'groupChatButtonEnabled': instance.groupChatButtonEnabled,
+      'contactInfo': instance.contactInfo.toJson(),
     };
+
+ChatContactInfo _$ChatContactInfoFromJson(Map<String, dynamic> json) =>
+    ChatContactInfo(
+      showVideoButtonAction: json['showVideoButtonAction'] as bool? ?? true,
+    );
+
+Map<String, dynamic> _$ChatContactInfoToJson(ChatContactInfo instance) =>
+    <String, dynamic>{'showVideoButtonAction': instance.showVideoButtonAction};
 
 FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
     FavoritesTabScheme(

@@ -7,13 +7,21 @@ enum VoicemailStatus { loading, loaded, featureNotSupported }
 // Remove this mixin once that indirect dependency is eliminated.
 @freezed
 class VoicemailState with _$VoicemailState, DiagnosticableTreeMixin {
-  const VoicemailState({this.status = VoicemailStatus.loading, this.items = const [], this.error});
+  const VoicemailState({
+    this.status = VoicemailStatus.loading,
+    this.items = const [],
+    this.selectedVoicemailsIds = const [],
+    this.error,
+  });
 
   @override
   final VoicemailStatus status;
 
   @override
   final List<Voicemail> items;
+
+  @override
+  final List<String> selectedVoicemailsIds;
 
   @override
   final DefaultErrorNotification? error;
@@ -35,4 +43,6 @@ class VoicemailState with _$VoicemailState, DiagnosticableTreeMixin {
 
   /// Status to show when the user is loading the list of voicemails and there are items available.
   bool get isVoicemailsExists => items.isNotEmpty;
+
+  bool get isMultipleVoicemailsSelection => selectedVoicemailsIds.isNotEmpty;
 }

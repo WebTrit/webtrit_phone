@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'about_bloc.freezed.dart';
@@ -24,14 +25,14 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     required PackageInfo packageInfo,
     required AppMetadataProvider appMetadataProvider,
     required SecureStorage secureStorage,
-    required EmbeddedFeature embeddedFeature,
+    required EmbeddedConfig embeddedConfig,
     required this.infoRepository,
   }) : super(
          AboutState(
            packageName: packageInfo.packageName,
            appIdentifier: appInfo.identifier,
            fcmPushToken: secureStorage.readFCMPushToken(),
-           embeddedLinks: embeddedFeature.embeddedResources.map((e) => e.uri.toString()).toList(),
+           embeddedLinks: embeddedConfig.embeddedResources.map((e) => e.uri.toString()).toList(),
            coreUrl: infoRepository.getCoreUrl(),
            userAgent: appMetadataProvider.userAgent,
          ),

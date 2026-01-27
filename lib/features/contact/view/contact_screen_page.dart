@@ -19,10 +19,10 @@ class ContactScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
 
-    final contactsConfig = featureAccess.contactsFeature.detailsConfig;
-    final callConfig = featureAccess.callFeature.callConfig;
-    final messagingFeature = featureAccess.messagingFeature;
-    final bottomMenuFeature = featureAccess.bottomMenuFeature;
+    final contactsConfig = featureAccess.contactsConfig.detailsConfig;
+    final callConfig = featureAccess.callConfig.capabilities;
+    final messagingFeature = featureAccess.messagingConfig;
+    final bottomMenuFeature = featureAccess.bottomMenuConfig;
 
     final canChat = messagingFeature.chatsPresent;
     final canSms = messagingFeature.smsPresent;

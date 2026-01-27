@@ -40,7 +40,12 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
           value: conversationCubit,
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: DialogInfo(userId, state.credentials.participantId!),
+            child: DialogInfo(
+              userId,
+              state.credentials.participantId!,
+              isAudioCallEnabled: true,
+              isVideoCallEnabled: messagingBloc.state.messagingConfig.contactInfoVideoCallSupport,
+            ),
           ),
         ),
       );
