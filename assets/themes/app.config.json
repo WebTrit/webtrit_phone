@@ -267,7 +267,7 @@
     "chats": {
       "groupChatButtonEnabled": true,
       "contactInfo": {
-        "showVideoButtonAction": false
+        "showVideoButtonAction": true
       }
     }
   }
