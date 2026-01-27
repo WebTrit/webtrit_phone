@@ -366,7 +366,7 @@ abstract final class MessagingMapper {
       coreChatsSupport: coreSupport.supportsChats,
       tabEnabled: tabEnabled,
       groupChatSupport: appConfig.messaging.chats.groupChatButtonEnabled,
-      contactInfoVideoCallSupport: true,
+      contactInfoVideoCallSupport: appConfig.messaging.chats.contactInfo.showVideoButtonAction,
     );
   }
 }

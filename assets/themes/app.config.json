@@ -265,7 +265,10 @@
   "messaging": {
     "sms": {},
     "chats": {
-      "groupChatButtonEnabled": true
+      "groupChatButtonEnabled": true,
+      "contactInfo": {
+        "showVideoButtonAction": false
+      }
     }
   }
 }

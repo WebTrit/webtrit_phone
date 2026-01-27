@@ -612,12 +612,28 @@ class AppConfigSms with _$AppConfigSms {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigChats with _$AppConfigChats {
-  const AppConfigChats({this.groupChatButtonEnabled = true});
+  const AppConfigChats({this.groupChatButtonEnabled = true, this.contactInfo = const ChatContactInfo()});
 
   @override
   final bool groupChatButtonEnabled;
 
+  @override
+  final ChatContactInfo contactInfo;
+
   factory AppConfigChats.fromJson(Map<String, Object?> json) => _$AppConfigChatsFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigChatsToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class ChatContactInfo with _$ChatContactInfo {
+  const ChatContactInfo({this.showVideoButtonAction = true});
+
+  @override
+  final bool showVideoButtonAction;
+
+  factory ChatContactInfo.fromJson(Map<String, Object?> json) => _$ChatContactInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$ChatContactInfoToJson(this);
 }
