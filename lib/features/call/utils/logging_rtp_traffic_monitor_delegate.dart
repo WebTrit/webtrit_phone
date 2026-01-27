@@ -36,8 +36,6 @@ class LoggingRtpTrafficMonitorDelegate implements RtpTrafficMonitorDelegate {
   }
 
   void _logDetails(RtpTrafficContext context, StatsReport report) {
-    final tag = '${context.kind.name} ${context.direction.name}-rtp data';
-
-    logger.logPretty(tag, report.values, level: Level.INFO);
+    logger.logPretty(report.values, tag: '${context.kind.name} ${context.direction.name}-rtp data', level: Level.INFO);
   }
 }

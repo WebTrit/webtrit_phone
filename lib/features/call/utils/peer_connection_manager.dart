@@ -314,7 +314,7 @@ final class PeerConnectionManager {
     observer.onIceCandidate?.call(iceCandidate);
   }
 
-  void _onAddStream(MediaStream mediaStream, PeerConnectionObserver observer, Logger l) {
+  void _onAddStream(MediaStream mediaStream, PeerConnectionObserver observer, Logger logger) {
     final streamData = {
       'streamId': mediaStream.id,
       'videoTracks': mediaStream
@@ -326,8 +326,7 @@ final class PeerConnectionManager {
           .map((t) => {'id': t.id, 'enabled': t.enabled, 'kind': t.kind, 'label': t.label})
           .toList(),
     };
-
-    l.logPretty('onAddStream', streamData);
+    logger.logPretty(streamData, tag: 'onAddStream');
 
     observer.onAddStream?.call(mediaStream);
   }
