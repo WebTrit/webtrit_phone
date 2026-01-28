@@ -78,7 +78,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
-  StreamSubscription<PendingCall>? _pendingCallHandlerSubscription;
 
   late final SignalingClientFactory _signalingClientFactory;
   WebtritSignalingClient? _signalingClient;
@@ -158,8 +157,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     navigator.mediaDevices.ondevicechange = null;
 
     await _connectivityChangedSubscription?.cancel();
-
-    await _pendingCallHandlerSubscription?.cancel();
 
     _signalingClientReconnectTimer?.cancel();
 
