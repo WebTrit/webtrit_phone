@@ -248,6 +248,7 @@ abstract final class SettingsMapper {
     TermsConfig termsConfig,
   ) {
     final settingSections = <SettingsSection>[];
+    bool hasVoicemail = false;
 
     for (final section in appConfig.settingsConfig.sections.where((s) => s.enabled)) {
       final items = <SettingItem>[];
@@ -257,6 +258,10 @@ abstract final class SettingsMapper {
 
         if (!_isFeatureSupportedByPlatform(flavor)) continue;
         if (!_isFeatureSupportedByCore(flavor, coreSupport)) continue;
+
+        if (flavor == SettingsFlavor.voicemail) {
+          hasVoicemail = true;
+        }
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
@@ -274,7 +279,7 @@ abstract final class SettingsMapper {
       }
     }
 
-    return SettingsConfig(sections: List.unmodifiable(settingSections));
+    return SettingsConfig(voicemailsEnabled: hasVoicemail, sections: List.unmodifiable(settingSections));
   }
 
   // TODO (Serdun): Move platform-specific configuration to a separate config file.
