@@ -59,7 +59,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _cancelSubscriptions();
-    _player.dispose();
+    _player.stopAndDispose();
     super.dispose();
   }
 
@@ -189,7 +189,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     if (_error != null) {
-      return _AudioErrorView(onRetry: _initialize);
+      return _AudioErrorView(onRetry: () => unawaited(_initialize()));
     }
 
     if (_isLoading) {
