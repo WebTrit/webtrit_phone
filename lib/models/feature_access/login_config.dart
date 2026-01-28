@@ -1,10 +1,11 @@
-import '../embedded/embedded_data.dart';
+import 'package:equatable/equatable.dart';
 
+import '../embedded/embedded_data.dart';
 import 'login_mode_action.dart';
 
 /// Configuration for the login feature, defining UI titles and available login actions.
-class LoginConfig {
-  const LoginConfig({required this.titleL10n, required this.actions, required this.launchLoginPage});
+class LoginConfig extends Equatable {
+  const LoginConfig({required this.actions, required this.titleL10n, this.launchLoginPage});
 
   final String? titleL10n;
   final List<LoginModeAction> actions;
@@ -18,4 +19,7 @@ class LoginConfig {
 
   /// Returns all available login actions.
   List<LoginModeAction> get launchButtons => actions.toList();
+
+  @override
+  List<Object?> get props => [titleL10n, actions, launchLoginPage];
 }

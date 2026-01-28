@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:logging/logging.dart';
@@ -46,8 +47,8 @@ final Logger _logger = Logger('FeatureAccess');
 ///
 /// 6. **TermsFeature**: Configures access to privacy policy and terms resources. It retrieves the privacy policy URL
 ///    from embedded resources and assigns it to the appropriate settings item when needed.
-class FeatureAccess {
-  FeatureAccess._(
+class FeatureAccess extends Equatable {
+  const FeatureAccess._(
     this.embeddedConfig,
     this.loginConfig,
     this.bottomMenuConfig,
@@ -111,6 +112,20 @@ class FeatureAccess {
       rethrow;
     }
   }
+
+  @override
+  List<Object?> get props => [
+    embeddedConfig,
+    loginConfig,
+    bottomMenuConfig,
+    settingsConfig,
+    callConfig,
+    messagingConfig,
+    contactsConfig,
+    termsConfig,
+    systemNotificationsConfig,
+    sipPresenceConfig,
+  ];
 }
 
 /// Mapper responsible for constructing [LoginConfig] from application configuration.

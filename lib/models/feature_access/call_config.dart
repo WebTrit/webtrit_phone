@@ -1,11 +1,12 @@
+import 'package:equatable/equatable.dart';
+
 import '../call/call_trigger_config.dart';
 import '../peer_connection_settings.dart';
-
 import 'encoding_config.dart';
 
 /// Configuration for call-related features, including encoding,
 /// transfer capabilities, and PeerConnection settings.
-class CallConfig {
+class CallConfig extends Equatable {
   const CallConfig({
     required this.capabilities,
     required this.encoding,
@@ -18,13 +19,10 @@ class CallConfig {
   final PeerConnectionSettings peerConnection;
 
   /// Configuration for how incoming calls are triggered.
-  ///
-  /// This controls which triggering mechanisms are available and which one is currently active.
-  /// It also defines fallback behavior via SMS if supported.
-  ///
-  /// Note: This setting affects **UI-level visibility and selection** of triggering methods,
-  /// not the underlying signaling implementation.
   final CallTriggerConfig triggerConfig;
+
+  @override
+  List<Object?> get props => [capabilities, encoding, peerConnection, triggerConfig];
 }
 
 /// UI-level configuration for call features.
@@ -34,7 +32,7 @@ class CallConfig {
 ///
 /// Note: Incoming video calls or feature negotiation (e.g., via SDP) are not affected.
 /// To apply restrictions on protocol level, integrate with `SDPMunger` or similar logic.
-class CallCapabilitiesConfig {
+class CallCapabilitiesConfig extends Equatable {
   const CallCapabilitiesConfig({
     this.isVideoCallEnabled = true,
     this.isAudioToVideoSwitchEnabled = true,
@@ -61,4 +59,12 @@ class CallCapabilitiesConfig {
   ///
   /// If `true`, the user can talk to the recipient before transferring the call.
   final bool isAttendedTransferEnabled;
+
+  @override
+  List<Object?> get props => [
+    isVideoCallEnabled,
+    isAudioToVideoSwitchEnabled,
+    isBlindTransferEnabled,
+    isAttendedTransferEnabled,
+  ];
 }

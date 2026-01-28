@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import 'embedded_payload_data.dart';
 
 /// Defines the strategy for handling reconnections in an embedded resource context.
@@ -15,8 +17,8 @@ enum ReconnectStrategy {
   hardReload,
 }
 
-class EmbeddedData {
-  EmbeddedData({
+class EmbeddedData extends Equatable {
+  const EmbeddedData({
     required this.id,
     required this.uri,
     required this.reconnectStrategy,
@@ -46,4 +48,7 @@ class EmbeddedData {
 
   /// Attributes
   final Map<String, dynamic> attributes;
+
+  @override
+  List<Object?> get props => [id, uri, payload, enableConsoleLogCapture, reconnectStrategy, titleL10n, attributes];
 }

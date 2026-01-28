@@ -1,9 +1,11 @@
-import 'package:webtrit_phone/models/feature_access/settings_feature.dart';
+import 'package:equatable/equatable.dart';
 
 import '../settings_flavor.dart';
 
+import 'settings_feature.dart';
+
 /// Configuration for the app settings screen, organized into sections and items.
-class SettingsConfig {
+class SettingsConfig extends Equatable {
   const SettingsConfig({required List<SettingsSection> sections}) : _sections = sections;
 
   final List<SettingsSection> _sections;
@@ -15,4 +17,7 @@ class SettingsConfig {
   bool get isVoicemailsEnabled {
     return _sections.any((section) => section.items.any((item) => item.flavor == SettingsFlavor.voicemail));
   }
+
+  @override
+  List<Object?> get props => [_sections, isVoicemailsEnabled];
 }
