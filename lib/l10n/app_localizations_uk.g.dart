@@ -2233,6 +2233,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Dialog_deleteSelectedTitle => 'Видалити обрані голосові повідомлення?';
 
   @override
+  String get voicemail_Label_playbackError => 'Помилка відтворення';
+
+  @override
   String get voicemail_Label_call => 'Дзвінок';
 
   @override

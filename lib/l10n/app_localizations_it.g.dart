@@ -2242,6 +2242,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Dialog_deleteSelectedTitle => 'Eliminare i messaggi vocali selezionati?';
 
   @override
+  String get voicemail_Label_playbackError => 'Riproduzione non riuscita';
+
+  @override
   String get voicemail_Label_call => 'Chiama';
 
   @override

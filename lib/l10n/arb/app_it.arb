@@ -1845,6 +1845,8 @@
   "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Dialog_deleteSelectedTitle": "Eliminare i messaggi vocali selezionati?",
   "@voicemail_Dialog_deleteSelectedTitle": {},
+  "voicemail_Label_playbackError": "Riproduzione non riuscita",
+  "@voicemail_Label_playbackError": {},
   "voicemail_Label_call": "Chiama",
   "@voicemail_Label_call": {},
   "voicemail_Label_delete": "Elimina",

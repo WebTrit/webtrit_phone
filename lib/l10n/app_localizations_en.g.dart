@@ -2221,6 +2221,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voicemail_Dialog_deleteSelectedTitle => 'Delete selected voicemails?';
 
   @override
+  String get voicemail_Label_playbackError => 'Playback failed';
+
+  @override
   String get voicemail_Label_call => 'Call';
 
   @override
