@@ -78,13 +78,13 @@ Future<InstanceRegistry> bootstrap() async {
     appBundleId: packageInfo.packageName,
   );
 
-  // Logic / Features
-  final coreSupport = CoreSupportImpl(() => systemInfoLocalDatasource.getSystemInfo());
-  final featureAccess = FeatureAccess.init(
+  // Initialize the immutable feature configuration snapshot.
+  // This instance serves as the `initialData` for the `StreamProvider`, ensuring the UI
+  // has valid feature flags immediately during the first frame, before the SystemInfo stream emits.
+  final featureAccess = FeatureAccess.create(
     appThemes.appConfig,
     appThemes.embeddedResources,
-    activeMainFlavorRepository,
-    coreSupport,
+    systemInfoLocalDatasource.getSystemInfo(),
   );
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
@@ -133,7 +133,6 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
 
   // Logic & Features
-  registry.register<CoreSupport>(coreSupport);
   registry.register<FeatureAccess>(featureAccess);
   registry.register<AppMetadataProvider>(appLabels);
   registry.register<AppPermissions>(appPermissions);

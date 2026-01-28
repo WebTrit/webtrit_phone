@@ -51,8 +51,27 @@ class _AppState extends State<App> {
       context.read<AppPermissions>(),
       featureAccess.loginConfig.launchLoginPage,
       featureAccess.bottomMenuConfig,
-      featureAccess.toChecker(),
       initialTabResolver,
+      featureAccess.checker,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final featureAccess = context.watch<FeatureAccess>();
+
+    final initialTabResolver = BottomMenuInitialTabResolver(
+      config: featureAccess.bottomMenuConfig,
+      repository: context.read<ActiveMainFlavorRepository>(),
+    );
+
+    appRouter.updateConfiguration(
+      featureAccess.loginConfig.launchLoginPage,
+      featureAccess.bottomMenuConfig,
+      initialTabResolver,
+      featureAccess.checker,
     );
   }
 

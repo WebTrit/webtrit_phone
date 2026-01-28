@@ -8,7 +8,6 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -72,13 +71,13 @@ class FeatureAccess extends Equatable {
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
 
-  static FeatureAccess init(
+  static FeatureAccess create(
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
-    ActiveMainFlavorRepository activeMainFlavorRepository,
-    CoreSupport coreSupport,
+    WebtritSystemInfo? systemInfo,
   ) {
     try {
+      final coreSupportSnapshot = CoreSupportImpl(() => systemInfo);
       // Initialize basic features
       final embeddedConfig = EmbeddedMapper.map(embeddedResources);
 
@@ -88,12 +87,12 @@ class FeatureAccess extends Equatable {
 
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
       final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig);
-      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
+      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupportSnapshot, termsConfig);
       final callConfig = CallMapper.map(appConfig);
-      final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
+      final messagingConfig = MessagingMapper.map(appConfig, coreSupportSnapshot);
       final contactsConfig = ContactsMapper.map(appConfig);
-      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig);
-      final sipPresenceConfig = SipPresenceMapper.map(coreSupport, appConfig);
+      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupportSnapshot, appConfig);
+      final sipPresenceConfig = SipPresenceMapper.map(coreSupportSnapshot, appConfig);
 
       return FeatureAccess._(
         embeddedConfig,
@@ -249,6 +248,7 @@ abstract final class SettingsMapper {
     TermsConfig termsConfig,
   ) {
     final settingSections = <SettingsSection>[];
+    bool hasVoicemail = false;
 
     for (final section in appConfig.settingsConfig.sections.where((s) => s.enabled)) {
       final items = <SettingItem>[];
@@ -258,6 +258,10 @@ abstract final class SettingsMapper {
 
         if (!_isFeatureSupportedByPlatform(flavor)) continue;
         if (!_isFeatureSupportedByCore(flavor, coreSupport)) continue;
+
+        if (flavor == SettingsFlavor.voicemail) {
+          hasVoicemail = true;
+        }
 
         final settingItem = SettingItem(
           titleL10n: item.titleL10n,
@@ -275,7 +279,7 @@ abstract final class SettingsMapper {
       }
     }
 
-    return SettingsConfig(sections: List.unmodifiable(settingSections));
+    return SettingsConfig(voicemailsEnabled: hasVoicemail, sections: List.unmodifiable(settingSections));
   }
 
   // TODO (Serdun): Move platform-specific configuration to a separate config file.
@@ -498,25 +502,21 @@ abstract final class ContactsMapper {
   }
 }
 
-/// Provides a centralized way to check whether specific [FeatureFlag]s are enabled.
-///
-/// The [FeatureChecker] itself does not contain the logic for determining
-/// if a feature is enabled or disabled. Instead, it relies on the injected
-/// [FeatureResolver] function to evaluate the state of a given [FeatureFlag].
-///
-/// This allows feature availability logic to be configured and maintained
-/// in one place (e.g., [FeatureAccess]), while consumers of [FeatureChecker]
-/// only need to call [isEnabled] to check if a feature should be accessible.
 class FeatureChecker {
-  /// Creates a new [FeatureChecker] with the given [_resolver].
-  ///
-  /// The [_resolver] is a function that maps a [FeatureFlag] to `true`
-  /// (enabled) or `false` (disabled).
-  FeatureChecker(this._resolver);
+  const FeatureChecker(this._access);
 
-  /// A resolver function that determines whether a [FeatureFlag] is enabled.
-  final FeatureResolver _resolver;
+  final FeatureAccess _access;
 
   /// Returns `true` if the given [feature] is enabled, otherwise `false`.
-  bool isEnabled(FeatureFlag feature) => _resolver(feature);
+  bool isEnabled(FeatureFlag feature) {
+    final isEnabled = _resolve(feature);
+    _logger.fine('Feature flag resolution: $feature = $isEnabled');
+    return isEnabled;
+  }
+
+  bool _resolve(FeatureFlag feature) {
+    return switch (feature) {
+      FeatureFlag.voicemail => _access.settingsConfig.voicemailsEnabled,
+    };
+  }
 }
