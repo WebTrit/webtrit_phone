@@ -419,7 +419,10 @@ class _CallActionsState extends State<CallActions> {
                 onSelected: onAudioDeviceChanged,
                 child: IgnorePointer(
                   child: TextButton(
-                    onPressed: null,
+                    /// Use an empty callback instead of null to prevent the button from
+                    /// entering the 'disabled' state, which would override the custom
+                    /// style with default disabled theme colors.
+                    onPressed: () {},
                     style: widget.style?.speaker,
                     child: Icon(switch (audioDevice?.type) {
                       CallAudioDeviceType.speaker => Icons.volume_up,
