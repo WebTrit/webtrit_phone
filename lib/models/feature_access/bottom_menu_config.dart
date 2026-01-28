@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
 
 import '../main_flavor.dart';
@@ -5,7 +7,7 @@ import '../main_flavor.dart';
 import 'bottom_menu_feature.dart';
 
 /// Static configuration for the bottom navigation menu.
-class BottomMenuConfig {
+class BottomMenuConfig extends Equatable {
   const BottomMenuConfig({required List<BottomMenuTab> tabs}) : _tabs = tabs;
 
   final List<BottomMenuTab> _tabs;
@@ -33,4 +35,7 @@ class BottomMenuConfig {
         _tabs.firstWhereOrNull((tab) => tab.initial) ??
         _tabs.first;
   }
+
+  @override
+  List<Object?> get props => [_tabs];
 }

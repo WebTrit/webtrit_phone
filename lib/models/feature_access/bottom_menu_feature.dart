@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+import 'package:equatable/equatable.dart';
 
 import '../contact_source_type.dart';
-import '../main_flavor.dart';
 import '../embedded/embedded.dart';
+import '../main_flavor.dart';
 
-sealed class BottomMenuTab {
+sealed class BottomMenuTab extends Equatable {
   const BottomMenuTab({
     required this.enabled,
     required this.initial,
@@ -29,18 +31,7 @@ sealed class BottomMenuTab {
   };
 
   @override
-  bool operator ==(Object other) =>
-      other.runtimeType == runtimeType &&
-      other is BottomMenuTab &&
-      other.enabled == enabled &&
-      other.initial == initial &&
-      other.flavor == flavor &&
-      other.titleL10n == titleL10n &&
-      other.icon == icon &&
-      other.data == data;
-
-  @override
-  int get hashCode => Object.hash(enabled, initial, flavor, titleL10n, icon, data);
+  List<Object?> get props => [enabled, initial, titleL10n, icon, data, flavor];
 }
 
 final class FavoritesBottomMenuTab extends BottomMenuTab {
@@ -101,22 +92,28 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
 
   @override
   String get routePath => '${super.routePath}${useCdrs ? '/$cdrsSegment' : ''}';
+
+  @override
+  List<Object?> get props => [...super.props, useCdrs];
 }
 
 final class ContactsBottomMenuTab extends BottomMenuTab {
-  const ContactsBottomMenuTab({
-    required this.contactSourceTypes,
+  ContactsBottomMenuTab({
+    required List<ContactSourceType> contactSourceTypes,
     required super.enabled,
     required super.initial,
     required super.titleL10n,
     required super.icon,
     super.data,
-  });
+  }) : contactSourceTypes = List.unmodifiable(contactSourceTypes);
 
   final List<ContactSourceType> contactSourceTypes;
 
   @override
   MainFlavor get flavor => MainFlavor.contacts;
+
+  @override
+  List<Object?> get props => [...super.props, contactSourceTypes];
 }
 
 final class EmbeddedBottomMenuTab extends BottomMenuTab {
@@ -136,4 +133,7 @@ final class EmbeddedBottomMenuTab extends BottomMenuTab {
 
   @override
   ({String flavor, String? embeddedId}) get pathParts => (flavor: MainFlavor.embedded.name, embeddedId: id);
+
+  @override
+  List<Object?> get props => [...super.props, id];
 }

@@ -1,5 +1,7 @@
+import 'package:equatable/equatable.dart';
+
 /// Represents the calculated feature flags for the messaging module.
-class MessagingConfig {
+class MessagingConfig extends Equatable {
   const MessagingConfig({
     required this.coreSmsSupport,
     required this.coreChatsSupport,
@@ -25,4 +27,13 @@ class MessagingConfig {
   /// Check if the internal messaging feature is enabled and supported by remote system.
   /// This is used to determine if internal messaging UI components should be displayed or hidden.
   bool get chatsPresent => coreChatsSupport && tabEnabled;
+
+  @override
+  List<Object?> get props => [
+    coreSmsSupport,
+    coreChatsSupport,
+    tabEnabled,
+    groupChatSupport,
+    contactInfoVideoCallSupport,
+  ];
 }
