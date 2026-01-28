@@ -227,7 +227,7 @@ class AppRouter extends RootStackRouter {
                   path: 'voicemail',
                   guards: [
                     FeatureGuard(
-                      isAllowed: _featureChecker.isEnabled(FeatureFlag.voicemail),
+                      shouldAllow: () => _featureChecker.isEnabled(FeatureFlag.voicemail),
                       onDenied: UndefinedScreenPageRoute(undefinedType: UndefinedType.stackScreenNotSupported),
                     ),
                   ],
@@ -378,14 +378,14 @@ Object _onNavigationLoggerMessage(String callbackName, NavigationResolver resolv
 }
 
 class FeatureGuard implements AutoRouteGuard {
-  FeatureGuard({required this.isAllowed, this.onDenied});
+  FeatureGuard({required this.shouldAllow, this.onDenied});
 
-  final bool isAllowed;
+  final bool Function() shouldAllow;
   final PageRouteInfo? onDenied;
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    if (isAllowed) {
+    if (shouldAllow()) {
       resolver.next(true);
     } else {
       resolver.next(false);
