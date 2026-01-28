@@ -148,6 +148,17 @@ class WebtritApiClient {
             _ => ErrorResponse.fromJson(responseDataJson),
           };
 
+          // Handle session_missing specifically
+          if (httpResponse.statusCode == 401 && error?.code == 'session_missing') {
+            throw SessionMissingException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              token: token,
+              error: error,
+            );
+          }
+
           // Map 422 with code="refresh_token_invalid" to UnauthorizedException.
           // This ensures higher layers can handle expired/invalid sessions in a unified way
           // (e.g., trigger global logout or token refresh).

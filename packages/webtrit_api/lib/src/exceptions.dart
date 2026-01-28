@@ -58,3 +58,16 @@ class UnauthorizedException extends RequestFailure {
         '${code != null ? ', code: $code' : ''})';
   }
 }
+
+class SessionMissingException extends RequestFailure {
+  SessionMissingException({
+    required super.url,
+    required super.requestId,
+    required super.statusCode,
+    super.token,
+    super.error,
+  });
+
+  @override
+  String toString() => 'SessionMissingException(statusCode: $statusCode, requestId: $requestId, url: $url)';
+}
