@@ -52,7 +52,7 @@ class _AppState extends State<App> {
       featureAccess.loginConfig.launchLoginPage,
       featureAccess.bottomMenuConfig,
       initialTabResolver,
-      featureAccess.toChecker(),
+      featureAccess.checker,
     );
   }
 
@@ -71,7 +71,7 @@ class _AppState extends State<App> {
       featureAccess.loginConfig.launchLoginPage,
       featureAccess.bottomMenuConfig,
       initialTabResolver,
-      featureAccess.toChecker(),
+      featureAccess.checker,
     );
   }
 
