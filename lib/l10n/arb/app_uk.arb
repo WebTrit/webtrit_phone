@@ -1845,6 +1845,8 @@
   "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Dialog_deleteSelectedTitle": "Видалити обрані голосові повідомлення?",
   "@voicemail_Dialog_deleteSelectedTitle": {},
+  "voicemail_Label_playbackError": "Помилка відтворення",
+  "@voicemail_Label_playbackError": {},
   "voicemail_Label_call": "Дзвінок",
   "@voicemail_Label_call": {},
   "voicemail_Label_delete": "Видалити",

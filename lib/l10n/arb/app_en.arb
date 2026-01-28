@@ -1845,6 +1845,8 @@
   "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Dialog_deleteSelectedTitle": "Delete selected voicemails?",
   "@voicemail_Dialog_deleteSelectedTitle": {},
+  "voicemail_Label_playbackError": "Playback failed",
+  "@voicemail_Label_playbackError": {},
   "voicemail_Label_call": "Call",
   "@voicemail_Label_call": {},
   "voicemail_Label_delete": "Delete",

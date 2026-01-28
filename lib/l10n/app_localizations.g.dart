@@ -4188,6 +4188,12 @@ abstract class AppLocalizations {
   /// **'Delete selected voicemails?'**
   String get voicemail_Dialog_deleteSelectedTitle;
 
+  /// No description provided for @voicemail_Label_playbackError.
+  ///
+  /// In en, this message translates to:
+  /// **'Playback failed'**
+  String get voicemail_Label_playbackError;
+
   /// No description provided for @voicemail_Label_call.
   ///
   /// In en, this message translates to:

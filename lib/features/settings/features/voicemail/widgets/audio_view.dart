@@ -3,16 +3,22 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../models/models.dart';
+import 'audio_player_interface.dart';
+
+final _logger = Logger('AudioView');
 
 class AudioView extends StatefulWidget {
-  const AudioView({super.key, required this.path, this.onPlaybackStarted});
+  const AudioView({required this.path, super.key, this.onPlaybackStarted});
 
   final String path;
 
@@ -26,175 +32,213 @@ class AudioView extends StatefulWidget {
 class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
   final _player = AudioPlayer();
 
-  late final StreamSubscription _playbackSub;
+  StreamSubscription<PlaybackEvent>? _playbackSub;
+  StreamSubscription<PlayerState>? _playerStateSub;
+
   late final String _cachePath;
   late final Map<String, String>? _headers;
   late final Uri _uri;
+
+  bool _isLoading = true;
+  Object? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    final voicemailContext = context.read<VoicemailScreenContext>();
+    _cachePath = voicemailContext.mediaCacheBasePath;
+    _headers = voicemailContext.mediaHeaders;
+    _uri = Uri.parse(widget.path);
+
+    _initialize();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cancelSubscriptions();
+    _player.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _player.stop();
+    }
+  }
+
+  Future<void> _initialize() async {
+    try {
+      _setLoadingState();
+
+      // Cancel previous subscriptions if retrying
+      _cancelSubscriptions();
+
+      await _setupAudioSession();
+      if (!mounted) return;
+
+      await _player.setAudioSource(_createAudioSource());
+      if (!mounted) return;
+
+      _playbackSub = _player.playbackEventStream.listen(_onPlaybackEvent, onError: _handleError);
+
+      _playerStateSub = _player.playerStateStream.listen(_onPlayerStateChanged);
+
+      _setSuccessState();
+    } catch (e, s) {
+      _handleError(e, s);
+    }
+  }
+
+  void _cancelSubscriptions() {
+    _playbackSub?.cancel();
+    _playerStateSub?.cancel();
+    _playbackSub = null;
+    _playerStateSub = null;
+  }
+
+  void _setLoadingState() {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+        _error = null;
+      });
+    }
+  }
+
+  void _setSuccessState() {
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _handleError(Object e, [StackTrace? stackTrace]) {
+    _logger.warning('Playback error for $_uri', e, stackTrace);
+
+    if (!mounted) return;
+
+    _player.stop();
+    _cancelSubscriptions();
+
+    setState(() {
+      _error = e;
+      _isLoading = false;
+    });
+  }
+
+  void _onPlaybackEvent(PlaybackEvent event) {
+    if (mounted) setState(() {});
+  }
+
+  void _onPlayerStateChanged(PlayerState state) {
+    if (state.processingState == ProcessingState.completed) {
+      _resetPlayer();
+    }
+  }
+
+  void _resetPlayer() {
+    _player.stop();
+    _player.seek(Duration.zero);
+  }
 
   Future<void> _setupAudioSession() async {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
   }
 
-  File? _cacheFile() {
+  AudioSource _createAudioSource() {
+    if (widget.path.isLocalPath) {
+      return AudioSource.uri(_uri);
+    }
+
+    return LockCachingAudioSource(_uri, headers: _headers, cacheFile: _getCacheFile());
+  }
+
+  File? _getCacheFile() {
     // Do not provide a custom cacheFile on iOS:
     // just_audio internally handles caching on iOS, and supplying a custom file
     // may lead to PlayerException (-11828) if the file is not yet created or invalid.
+
     if (widget.path.isLocalPath || Platform.isIOS) return null;
-    return File('$_cachePath${_uri.path}');
+
+    // Safer path construction: use the filename from the URI,
+    // ensuring we don't accidentally create invalid directory structures.
+    final fileName = _uri.pathSegments.lastWhere((element) => element.isNotEmpty, orElse: () => 'audio_temp');
+
+    return File(path.join(_cachePath, fileName));
   }
 
-  AudioSource _audioSource() {
-    if (widget.path.isLocalPath) {
-      return AudioSource.uri(_uri);
-    } else {
-      return LockCachingAudioSource(_uri, headers: _headers, cacheFile: _cacheFile());
+  Future<void> _handleTogglePlayback() async {
+    try {
+      if (_player.playing) {
+        await _player.pause();
+      } else {
+        widget.onPlaybackStarted?.call();
+        await _player.play();
+      }
+    } catch (e) {
+      _handleError(e);
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    _cachePath = context.read<VoicemailScreenContext>().mediaCacheBasePath;
-    _headers = context.read<VoicemailScreenContext>().mediaHeaders;
-    _uri = Uri.parse(widget.path);
-    _initialize();
-  }
-
-  // TODO(Serdun): Sync with Vladislav manager
-  Future<void> _initialize() async {
-    await _setupAudioSession();
-    await _player.setAudioSource(_audioSource());
-
-    _playbackSub = _player.playbackEventStream.listen((_) {
-      if (mounted) setState(() {});
-    });
-
-    _player.playerStateStream.listen((state) {
-      if (state.processingState == ProcessingState.completed) {
-        _player.stop();
-        _player.seek(Duration.zero);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _playbackSub.cancel();
-    _player.stopAndDispose();
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) _player.stop();
-  }
+  void _handleSeek(Duration position) => _player.seek(position);
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: EdgeInsets.zero,
-      child: StreamBuilder<Duration>(
-        stream: _player.positionStream,
-        builder: (context, snapshot) {
-          final position = snapshot.data ?? Duration.zero;
-          final duration = _player.duration ?? Duration.zero;
-
-          final clampedPosition = position > duration ? duration : position;
-
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: _togglePlayback,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: colorScheme.primary),
-                  child: Icon(_player.playing ? Icons.pause : Icons.play_arrow, color: colorScheme.onPrimary, size: 24),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: AudioSlider(
-                  position: clampedPosition,
-                  duration: duration,
-                  onSeek: (newPosition) => _player.seek(newPosition),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  Future<void> _togglePlayback() async {
-    if (_player.playing) {
-      await _player.pause();
-    } else {
-      widget.onPlaybackStarted?.call();
-      await _player.play();
+    if (_error != null) {
+      return _AudioErrorView(onRetry: _initialize);
     }
+
+    if (_isLoading) {
+      return const _AudioLoadingView();
+    }
+
+    return AudioPlayerInterface(player: _player, onToggle: _handleTogglePlayback, onSeek: _handleSeek);
   }
 }
 
-class AudioSlider extends StatelessWidget {
-  const AudioSlider({super.key, required this.position, required this.duration, required this.onSeek});
-
-  final Duration position;
-  final Duration duration;
-  final ValueChanged<Duration> onSeek;
-
-  String _formatDuration(Duration d) {
-    final minutes = d.inMinutes;
-    final seconds = d.inSeconds % 60;
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
-  }
+class _AudioLoadingView extends StatelessWidget {
+  const _AudioLoadingView();
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final clampedPosition = position > duration ? duration : position;
+    return SizedBox(
+      height: 40,
+      child: Center(child: LinearProgressIndicator(color: colorScheme.primaryContainer)),
+    );
+  }
+}
 
-    return Stack(
-      children: [
-        Slider(
-          padding: EdgeInsets.zero,
-          value: clampedPosition.inMilliseconds.toDouble(),
-          max: duration.inMilliseconds.toDouble().clamp(1.0, double.infinity),
-          onChanged: (value) => onSeek(Duration(milliseconds: value.toInt())),
-          activeColor: colorScheme.primary,
-          inactiveColor: colorScheme.onSurface.withValues(alpha: 0.1),
-        ),
-        Transform.translate(
-          offset: const Offset(0, 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    _formatDuration(clampedPosition),
-                    style: textTheme.labelSmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
-                  ),
-                ],
-              ),
-              Text(
-                _formatDuration(duration),
-                style: textTheme.labelSmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5)),
-              ),
-            ],
+class _AudioErrorView extends StatelessWidget {
+  const _AudioErrorView({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return SizedBox(
+      height: 40,
+      child: Row(
+        children: [
+          Icon(Icons.error_outline, color: colorScheme.error),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              context.l10n.voicemail_Label_playbackError,
+              style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.error),
+            ),
           ),
-        ),
-      ],
+          IconButton(onPressed: onRetry, icon: const Icon(Icons.refresh)),
+        ],
+      ),
     );
   }
 }
