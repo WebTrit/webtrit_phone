@@ -185,7 +185,8 @@ class _CallActionsState extends State<CallActions> {
     final actionPadIconSize = themeData.textTheme.headlineMedium!.fontSize;
     final popupMenuIconSize = themeData.textTheme.bodyLarge!.fontSize;
 
-    // final style = CallScreenActionsStyle.merge(widget.style, Theme.of(context).extension<CallActionsStyles>()?.primary);
+    // States
+    final isAudioSelected = audioDevice?.type != CallAudioDeviceType.earpiece;
 
     // Keypad
     final foregroundColor =
@@ -419,7 +420,11 @@ class _CallActionsState extends State<CallActions> {
                 onSelected: onAudioDeviceChanged,
                 child: IgnorePointer(
                   child: TextButton(
-                    onPressed: null,
+                    /// Use an empty callback instead of null to prevent the button from
+                    /// entering the 'disabled' state, which would override the custom
+                    /// style with default disabled theme colors.
+                    onPressed: () {},
+                    statesController: _speakerStatesController..update(WidgetState.selected, isAudioSelected),
                     style: widget.style?.speaker,
                     child: Icon(switch (audioDevice?.type) {
                       CallAudioDeviceType.speaker => Icons.volume_up,
