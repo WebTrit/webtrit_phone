@@ -1,8 +1,6 @@
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-typedef FeatureResolver = bool Function(FeatureFlag);
-
 extension FeatureAccessResolver on FeatureAccess {
   FeatureChecker get checker => FeatureChecker(this);
 
