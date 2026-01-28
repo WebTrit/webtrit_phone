@@ -98,14 +98,14 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
 }
 
 final class ContactsBottomMenuTab extends BottomMenuTab {
-  const ContactsBottomMenuTab({
-    required this.contactSourceTypes,
+  ContactsBottomMenuTab({
+    required List<ContactSourceType> contactSourceTypes,
     required super.enabled,
     required super.initial,
     required super.titleL10n,
     required super.icon,
     super.data,
-  });
+  }) : contactSourceTypes = List.unmodifiable(contactSourceTypes);
 
   final List<ContactSourceType> contactSourceTypes;
 

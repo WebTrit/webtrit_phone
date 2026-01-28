@@ -18,15 +18,16 @@ enum ReconnectStrategy {
 }
 
 class EmbeddedData extends Equatable {
-  const EmbeddedData({
+  EmbeddedData({
     required this.id,
     required this.uri,
     required this.reconnectStrategy,
     this.titleL10n,
-    this.payload = const [],
+    List<EmbeddedPayloadData> payload = const [],
     this.enableConsoleLogCapture = false,
-    this.attributes = const {},
-  });
+    Map<String, dynamic> attributes = const {},
+  }) : _payload = List.unmodifiable(payload),
+       _attributes = Map.unmodifiable(attributes);
 
   /// The URI representing either a local asset file path or a remote URL.
   final String id;
@@ -34,8 +35,10 @@ class EmbeddedData extends Equatable {
   /// The unique identifier for the embedded resource, used to link it with other features or components.
   final Uri uri;
 
+  final List<EmbeddedPayloadData> _payload;
+
   /// The list of payload data to be passed to the embedded resource.
-  final List<EmbeddedPayloadData> payload;
+  List<EmbeddedPayloadData> get payload => _payload;
 
   /// The flag to enable capturing `console.*` logs from inside the WebView.
   final bool enableConsoleLogCapture;
@@ -46,9 +49,11 @@ class EmbeddedData extends Equatable {
   /// The key to use to look up the localized title.
   final String? titleL10n;
 
+  final Map<String, dynamic> _attributes;
+
   /// Attributes
-  final Map<String, dynamic> attributes;
+  Map<String, dynamic> get attributes => _attributes;
 
   @override
-  List<Object?> get props => [id, uri, payload, enableConsoleLogCapture, reconnectStrategy, titleL10n, attributes];
+  List<Object?> get props => [id, uri, _payload, enableConsoleLogCapture, reconnectStrategy, titleL10n, _attributes];
 }

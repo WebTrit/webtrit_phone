@@ -6,7 +6,7 @@ import 'settings_feature.dart';
 
 /// Configuration for the app settings screen, organized into sections and items.
 class SettingsConfig extends Equatable {
-  const SettingsConfig({required List<SettingsSection> sections}) : _sections = sections;
+  SettingsConfig({required List<SettingsSection> sections}) : _sections = List.unmodifiable(sections);
 
   final List<SettingsSection> _sections;
 
@@ -19,5 +19,5 @@ class SettingsConfig extends Equatable {
   }
 
   @override
-  List<Object?> get props => [_sections, isVoicemailsEnabled];
+  List<Object?> get props => [_sections];
 }

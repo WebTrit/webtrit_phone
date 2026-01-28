@@ -4,7 +4,7 @@ import '../embedded/embedded_data.dart';
 
 /// Container for processed embedded resources data.
 class EmbeddedConfig extends Equatable {
-  const EmbeddedConfig(this.embeddedResources);
+  EmbeddedConfig(List<EmbeddedData> embeddedResources) : embeddedResources = List.unmodifiable(embeddedResources);
 
   final List<EmbeddedData> embeddedResources;
 

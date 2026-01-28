@@ -5,7 +5,7 @@ import '../embedded/embedded.dart';
 import '../settings_flavor.dart';
 
 class SettingsSection extends Equatable {
-  const SettingsSection({required this.titleL10n, required this.items});
+  SettingsSection({required this.titleL10n, required List<SettingItem> items}) : items = List.unmodifiable(items);
 
   final String titleL10n;
   final List<SettingItem> items;

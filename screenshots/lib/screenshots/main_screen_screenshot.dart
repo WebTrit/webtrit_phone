@@ -83,7 +83,7 @@ class MainScreenScreenshot extends StatelessWidget {
         icon: Icons.history,
         useCdrs: false,
       ),
-      const ContactsBottomMenuTab(
+      ContactsBottomMenuTab(
         enabled: true,
         initial: false,
         titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
