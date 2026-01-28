@@ -56,6 +56,8 @@ void main() {
   );
 }
 
+final _logger = Logger('RootApp');
+
 class RootApp extends StatelessWidget {
   const RootApp({super.key, required this.instanceRegistry, required this.baseLogFilePath});
 
@@ -78,14 +80,15 @@ class RootApp extends StatelessWidget {
         /// immutable snapshots whenever [SystemInfoRepository.infoStream] emits.
         StreamProvider<FeatureAccess>(
           initialData: instanceRegistry.get<FeatureAccess>(),
-          create: (context) => instanceRegistry.get<SystemInfoRepository>().infoStream.map(
-            (newSystemInfo) => FeatureAccess.create(
+          create: (context) => instanceRegistry.get<SystemInfoRepository>().infoStream.map((newSystemInfo) {
+            _logger.info('Emitting FeatureAccess from system info: $newSystemInfo');
+            return FeatureAccess.create(
               instanceRegistry.get<AppThemes>().appConfig,
               instanceRegistry.get<AppThemes>().embeddedResources,
               newSystemInfo,
-            ),
-          ),
-          updateShouldNotify: (previous, next) => true,
+            );
+          }),
+          updateShouldNotify: (previous, next) => previous != next,
         ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
         Provider<AppPermissions>(create: (_) => instanceRegistry.get()),

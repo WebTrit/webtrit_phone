@@ -60,7 +60,7 @@ class _AppState extends State<App> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final featureAccess = context.read<FeatureAccess>();
+    final featureAccess = context.watch<FeatureAccess>();
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,
