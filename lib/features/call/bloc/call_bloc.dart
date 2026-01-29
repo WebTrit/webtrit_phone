@@ -130,7 +130,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_HandshakeSignalingEventState>(_onHandshakeSignalingEventState, transformer: sequential());
     on<_CallSignalingEvent>(_onCallSignalingEvent, transformer: sequential());
     on<_CallPushEventIncoming>(_onCallPushEventIncoming, transformer: sequential());
-    on<CallControlEvent>(_onCallControlEvent, transformer: sequential());
+    on<CallControlEvent>(_onCallControlEvent, transformer: droppable());
     on<_CallPerformEvent>(_onCallPerformEvent, transformer: sequential());
     on<_PeerConnectionEvent>(_onPeerConnectionEvent, transformer: sequential());
     on<CallScreenEvent>(_onCallScreenEvent, transformer: sequential());
