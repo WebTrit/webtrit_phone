@@ -76,6 +76,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     final style = themeData.extension<CallScreenStyles>()?.primary;
 
+    final bloc = context.read<CallBloc>();
+
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -164,27 +166,24 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               cameraValue: activeCall.isCameraActive,
                                               inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                               onCameraChanged: widget.callConfig.isVideoCallEnabled
-                                                  ? (bool value) => context.read<CallBloc>().add(
+                                                  ? (bool value) => bloc.add(
                                                       CallControlEvent.cameraEnabled(activeCall.callId, value),
                                                     )
                                                   : null,
                                               mutedValue: activeCall.muted,
-                                              onMutedChanged: (bool value) => context.read<CallBloc>().add(
-                                                CallControlEvent.setMuted(activeCall.callId, value),
-                                              ),
+                                              onMutedChanged: (bool value) =>
+                                                  bloc.add(CallControlEvent.setMuted(activeCall.callId, value)),
                                               audioDevice: widget.audioDevice,
                                               availableAudioDevices: widget.availableAudioDevices,
                                               onAudioDeviceChanged: (CallAudioDevice device) {
-                                                context.read<CallBloc>().add(
-                                                  CallControlEvent.audioDeviceSet(activeCall.callId, device),
-                                                );
+                                                bloc.add(CallControlEvent.audioDeviceSet(activeCall.callId, device));
                                               },
                                               transferableCalls: heldCalls,
                                               onBlindTransferInitiated: widget.callConfig.isBlindTransferEnabled
                                                   ? (!activeCall.wasAccepted || activeTransfer != null
                                                         ? null
                                                         : () {
-                                                            context.read<CallBloc>().add(
+                                                            bloc.add(
                                                               CallControlEvent.blindTransferInitiated(
                                                                 activeCall.callId,
                                                               ),
@@ -196,7 +195,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                   ? (!activeCall.wasAccepted || activeTransfer != null
                                                         ? null
                                                         : () {
-                                                            context.read<CallBloc>().add(
+                                                            bloc.add(
                                                               CallControlEvent.attendedTransferInitiated(
                                                                 activeCall.callId,
                                                               ),
@@ -208,7 +207,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                   ? (!activeCall.wasAccepted || activeTransfer != null
                                                         ? null
                                                         : (ActiveCall referorCall) {
-                                                            context.read<CallBloc>().add(
+                                                            bloc.add(
                                                               CallControlEvent.attendedTransferSubmitted(
                                                                 referorCall: referorCall,
                                                                 replaceCall: activeCall,
@@ -218,19 +217,15 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                   : null,
                                               heldValue: activeCall.held,
                                               onHeldChanged: (bool value) {
-                                                context.read<CallBloc>().add(
-                                                  CallControlEvent.setHeld(activeCall.callId, value),
-                                                );
+                                                bloc.add(CallControlEvent.setHeld(activeCall.callId, value));
                                               },
                                               onSwapPressed: activeCalls.length == 2
                                                   ? () {
                                                       // TODO maybe introduce particular event with particular callkeep method
-                                                      context.read<CallBloc>().add(
-                                                        CallControlEvent.setHeld(activeCall.callId, true),
-                                                      );
+                                                      bloc.add(CallControlEvent.setHeld(activeCall.callId, true));
                                                       for (final otherActiveCall in activeCalls) {
                                                         if (otherActiveCall.callId != activeCall.callId) {
-                                                          context.read<CallBloc>().add(
+                                                          bloc.add(
                                                             CallControlEvent.setHeld(otherActiveCall.callId, false),
                                                           );
                                                         }
@@ -238,21 +233,17 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                     }
                                                   : null,
                                               onHangupPressed: () {
-                                                context.read<CallBloc>().add(CallControlEvent.ended(activeCall.callId));
+                                                bloc.add(CallControlEvent.ended(activeCall.callId));
                                               },
                                               onHangupAndAcceptPressed: activeCalls.length > 1
                                                   ? () {
                                                       // TODO maybe introduce particular event with particular callkeep method
                                                       for (final otherActiveCall in activeCalls) {
                                                         if (otherActiveCall.callId != activeCall.callId) {
-                                                          context.read<CallBloc>().add(
-                                                            CallControlEvent.ended(otherActiveCall.callId),
-                                                          );
+                                                          bloc.add(CallControlEvent.ended(otherActiveCall.callId));
                                                         }
                                                       }
-                                                      context.read<CallBloc>().add(
-                                                        CallControlEvent.answered(activeCall.callId),
-                                                      );
+                                                      bloc.add(CallControlEvent.answered(activeCall.callId));
                                                     }
                                                   : null,
                                               onHoldAndAcceptPressed: activeCalls.length > 1
@@ -260,25 +251,21 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                       // TODO maybe introduce particular event with particular callkeep method
                                                       for (final otherActiveCall in activeCalls) {
                                                         if (otherActiveCall.callId != activeCall.callId) {
-                                                          context.read<CallBloc>().add(
+                                                          bloc.add(
                                                             CallControlEvent.setHeld(otherActiveCall.callId, true),
                                                           );
                                                         }
                                                       }
-                                                      context.read<CallBloc>().add(
-                                                        CallControlEvent.answered(activeCall.callId),
-                                                      );
+                                                      bloc.add(CallControlEvent.answered(activeCall.callId));
                                                     }
                                                   : null,
                                               onAcceptPressed: () {
-                                                context.read<CallBloc>().add(
-                                                  CallControlEvent.answered(activeCall.callId),
-                                                );
+                                                bloc.add(CallControlEvent.answered(activeCall.callId));
                                               },
                                               onApproveTransferPressed:
                                                   activeTransfer is AttendedTransferConfirmationRequested
                                                   ? () {
-                                                      context.read<CallBloc>().add(
+                                                      bloc.add(
                                                         CallControlEvent.attendedRequestApproved(
                                                           referId: activeTransfer.referId,
                                                           referTo: activeTransfer.referTo,
@@ -289,7 +276,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               onDeclineTransferPressed:
                                                   activeTransfer is AttendedTransferConfirmationRequested
                                                   ? () {
-                                                      context.read<CallBloc>().add(
+                                                      bloc.add(
                                                         CallControlEvent.attendedRequestDeclined(
                                                           callId: activeCall.callId,
                                                           referId: activeTransfer.referId,
@@ -298,9 +285,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                     }
                                                   : null,
                                               onKeyPressed: (value) {
-                                                context.read<CallBloc>().add(
-                                                  CallControlEvent.sentDTMF(activeCall.callId, value),
-                                                );
+                                                bloc.add(CallControlEvent.sentDTMF(activeCall.callId, value));
                                               },
                                             ),
                                           ],
