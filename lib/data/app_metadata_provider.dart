@@ -22,6 +22,8 @@ abstract class AppMetadataProvider {
   /// Format: `AppName_AppVersion_Identifier_Model_StoreVersion_BuildNumber_OS_OSVersion`
   /// Note: Spaces in the metadata are replaced with underscores.
   String get exportFilenamePrefix;
+
+  String get deviceManufacturer;
 }
 
 class DefaultAppMetadataProvider implements AppMetadataProvider {
@@ -77,6 +79,11 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
   @override
   String get userAgent {
     return '${_packageInfo.appName}/${_appInfo.version} (${_deviceInfo.model}; ${_deviceInfo.systemName}: ${_deviceInfo.systemVersion})';
+  }
+
+  @override
+  String get deviceManufacturer {
+    return _deviceInfo.manufacturer;
   }
 
   @override

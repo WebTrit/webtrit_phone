@@ -120,6 +120,10 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Додаткові параметри",
   "@call_settings_additional_options": {},
+  "call_SystemErrorDialog_description": "Дзвінки тимчасово недоступні через системну помилку. Будь ласка, перезавантажте телефон.",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "Системна помилка.",
+  "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Незареєстровано",
   "@callStatus_appUnregistered": {
     "description": "Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."

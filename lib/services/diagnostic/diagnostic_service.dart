@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
+import 'package:webtrit_phone/data/app_metadata_provider.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -29,16 +31,31 @@ abstract class DiagnosticService {
 /// [DiagnosticStrategy] implementations based on the requested [DiagnosticType]s.
 /// It handles user interaction via a dialog, aggregates data, and sends it for reporting.
 class DiagnosticServiceImpl implements DiagnosticService {
-  DiagnosticServiceImpl({required this.dialogLauncher, required List<DiagnosticStrategy> strategies})
-    : _strategies = {for (var strategy in strategies) strategy.type: strategy};
+  DiagnosticServiceImpl({
+    required this.dialogLauncher,
+    required List<DiagnosticStrategy> strategies,
+    required this.appMetadataProvider,
+    required this.rebootLauncher,
+  }) : _strategies = {for (var strategy in strategies) strategy.type: strategy};
 
   final DiagnosticDialogLauncher dialogLauncher;
 
   final Map<DiagnosticType, DiagnosticStrategy> _strategies;
 
+  final AppMetadataProvider appMetadataProvider;
+
+  final VoidCallback rebootLauncher;
+
   @override
   Future<void> request(List<DiagnosticType> types, {Map<String, String>? extras}) async {
     if (types.isEmpty) return;
+
+    if (extras != null &&
+        extras['error'] == 'timeout' &&
+        appMetadataProvider.deviceManufacturer.toLowerCase() == 'xiaomi') {
+      rebootLauncher();
+      return;
+    }
 
     // Show the dialog to get user's comment and consent for advanced logs.
     final dialogResult = await dialogLauncher.call();

@@ -186,6 +186,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_settings_additional_options => 'Opzioni aggiuntive';
 
   @override
+  String get call_SystemErrorDialog_description =>
+      'Le chiamate non sono temporaneamente disponibili a causa di un errore di sistema. Riavvia il telefono.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'Errore di sistema.';
+
+  @override
   String get callStatus_appUnregistered => 'Non registrato';
 
   @override

@@ -184,6 +184,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_settings_additional_options => 'Additional options';
 
   @override
+  String get call_SystemErrorDialog_description =>
+      'Calls are temporarily unavailable due to a system error. Please reboot your phone.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'System Error.';
+
+  @override
   String get callStatus_appUnregistered => 'Unregistered';
 
   @override
