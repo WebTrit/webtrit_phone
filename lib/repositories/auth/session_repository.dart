@@ -138,9 +138,11 @@ class SessionRepositoryImpl implements SessionRepository {
       _logger.fine('Remote session already revoked or never existed', e, st);
     } on UnauthorizedException catch (e, st) {
       _logger.fine('Remote session already revoked or never existed', e, st);
+    } on SessionMissingException catch (e, st) {
+      _logger.fine('Remote session already revoked', e, st);
     } on RequestFailure catch (e, st) {
-      sessionCleanupWorker?.saveFailedSession(e.url, token: token);
       _logger.warning('Queued token revoke retry', e, st);
+      sessionCleanupWorker?.saveFailedSession(e.url, token: token);
       rethrow;
     } catch (e, st) {
       _logger.severe('Unexpected error during remote revoke', e, st);
