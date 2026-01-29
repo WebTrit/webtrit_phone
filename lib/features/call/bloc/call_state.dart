@@ -8,7 +8,6 @@ class CallState with _$CallState {
     this.linesCount = 0,
     this.activeCalls = const [],
     this.minimized,
-    this.speakerOnBeforeMinimize,
     this.audioDevice,
     this.availableAudioDevices = const [],
   });
@@ -27,9 +26,6 @@ class CallState with _$CallState {
 
   @override
   final bool? minimized;
-
-  @override
-  final bool? speakerOnBeforeMinimize;
 
   @override
   final CallAudioDevice? audioDevice;
@@ -149,6 +145,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     this.failure,
     this.localStream,
     this.remoteStream,
+    this.speakerOnBeforeMinimize,
   });
 
   @override
@@ -216,6 +213,9 @@ class ActiveCall with _$ActiveCall implements CallEntry {
 
   @override
   final MediaStream? remoteStream;
+
+  @override
+  final bool? speakerOnBeforeMinimize;
 
   @override
   bool get isIncoming => direction == CallDirection.incoming;
