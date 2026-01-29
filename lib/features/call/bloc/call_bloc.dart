@@ -1479,14 +1479,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventBlindTransferInitiated event,
     Emitter<CallState> emit,
   ) async {
-    var newState = state.copyWith(
-      minimized: true,
-      speakerOnBeforeMinimize: state.audioDevice?.type == CallAudioDeviceType.speaker,
-    );
+    final isSpeakerOn = state.audioDevice?.type == CallAudioDeviceType.speaker;
+
+    var newState = state.copyWith(minimized: true);
+
     await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
-      return activeCall.copyWith(transfer: const Transfer.blindTransferInitiated());
+      return activeCall.copyWith(
+        transfer: const Transfer.blindTransferInitiated(),
+        speakerOnBeforeMinimize: isSpeakerOn,
+      );
     });
 
     emit(newState);
@@ -1498,9 +1501,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventAttendedTransferInitiated event,
     Emitter<CallState> emit,
   ) async {
-    emit(
-      state.copyWith(minimized: true, speakerOnBeforeMinimize: state.audioDevice?.type == CallAudioDeviceType.speaker),
-    );
+    final isSpeakerOn = state.audioDevice?.type == CallAudioDeviceType.speaker;
+
+    var newState = state.copyWith(minimized: true);
+
+    newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
+      return activeCall.copyWith(speakerOnBeforeMinimize: isSpeakerOn);
+    });
+
+    emit(newState);
+
     await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
   }
 
@@ -1543,8 +1553,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         proximityEnabled: state.shouldListenToProximity,
       );
 
-      if (state.speakerOnBeforeMinimize == true) {
-        add(CallControlEvent.audioDeviceSet(state.activeCalls.current.callId, state.availableAudioDevices.getSpeaker));
+      final callBeingTransferred = state.retrieveActiveCall(callId);
+
+      if (callBeingTransferred?.speakerOnBeforeMinimize == true) {
+        add(CallControlEvent.audioDeviceSet(callId, state.availableAudioDevices.getSpeaker));
       }
 
       // After request succesfully submitted, transfer flow will continue
@@ -2265,13 +2277,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(newState);
 
-      await callkeep.reportUpdateCall(
-        state.activeCalls.current.callId,
-        proximityEnabled: state.shouldListenToProximity,
-      );
+      final currentCall = state.activeCalls.current;
 
-      if (state.speakerOnBeforeMinimize == true) {
-        add(CallControlEvent.audioDeviceSet(state.activeCalls.current.callId, state.availableAudioDevices.getSpeaker));
+      await callkeep.reportUpdateCall(currentCall.callId, proximityEnabled: state.shouldListenToProximity);
+
+      if (currentCall.speakerOnBeforeMinimize == true) {
+        add(CallControlEvent.audioDeviceSet(currentCall.callId, state.availableAudioDevices.getSpeaker));
       }
     } else {
       _logger.warning('__onCallScreenEventDidPush: activeCalls is empty');
@@ -2283,16 +2294,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.info('__onCallScreenEventDidPop: shouldMinimize: $shouldMinimize');
 
     if (shouldMinimize) {
+      final currentCallId = state.activeCalls.current.callId;
+      final isSpeakerOn = state.audioDevice?.type == CallAudioDeviceType.speaker;
+
       emit(
-        state.copyWith(
-          minimized: true,
-          speakerOnBeforeMinimize: state.audioDevice?.type == CallAudioDeviceType.speaker,
-        ),
+        state
+            .copyWithMappedActiveCall(currentCallId, (call) {
+              return call.copyWith(speakerOnBeforeMinimize: isSpeakerOn);
+            })
+            .copyWith(minimized: true),
       );
-      await callkeep.reportUpdateCall(
-        state.activeCalls.current.callId,
-        proximityEnabled: state.shouldListenToProximity,
-      );
+
+      await callkeep.reportUpdateCall(currentCallId, proximityEnabled: state.shouldListenToProximity);
     }
   }
 
