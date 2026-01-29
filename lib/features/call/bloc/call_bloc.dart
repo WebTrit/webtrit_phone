@@ -13,6 +13,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:async/async.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -130,7 +131,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_HandshakeSignalingEventState>(_onHandshakeSignalingEventState, transformer: sequential());
     on<_CallSignalingEvent>(_onCallSignalingEvent, transformer: sequential());
     on<_CallPushEventIncoming>(_onCallPushEventIncoming, transformer: sequential());
-    on<CallControlEvent>(_onCallControlEvent, transformer: droppable());
+    on<CallControlEvent>(
+      _onCallControlEvent,
+      transformer: (events, mapper) => StreamGroup.merge([
+        droppable<CallControlEvent>().call(events.where((e) => e is _CallControlEventStarted), mapper),
+        sequential<CallControlEvent>().call(events.where((e) => e is! _CallControlEventStarted), mapper),
+      ]),
+    );
     on<_CallPerformEvent>(_onCallPerformEvent, transformer: sequential());
     on<_PeerConnectionEvent>(_onPeerConnectionEvent, transformer: sequential());
     on<CallScreenEvent>(_onCallScreenEvent, transformer: sequential());
