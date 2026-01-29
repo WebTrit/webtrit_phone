@@ -11,8 +11,8 @@ upload:
     - file: lib/l10n/arb/app_it.arb
       locale_code: it
   params:
-    overwrite: true
-    reviewed: true
+    overwrite: false
+    reviewed: false
     tag_added:
       - added
     tag_removed:
