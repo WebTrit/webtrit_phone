@@ -244,6 +244,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_settings_additional_options => 'Додаткові параметри';
 
   @override
+  String get call_SystemErrorDialog_description =>
+      'Дзвінки тимчасово недоступні через системну помилку. Будь ласка, перезавантажте телефон.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'Системна помилка.';
+
+  @override
   String get callStatus_appUnregistered => 'Незареєстровано';
 
   @override

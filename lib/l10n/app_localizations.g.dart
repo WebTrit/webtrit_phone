@@ -459,6 +459,18 @@ abstract class AppLocalizations {
   /// **'Additional options'**
   String get call_settings_additional_options;
 
+  /// No description provided for @call_SystemErrorDialog_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls are temporarily unavailable due to a system error. Please reboot your phone.'**
+  String get call_SystemErrorDialog_description;
+
+  /// No description provided for @call_SystemErrorDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'System Error.'**
+  String get call_SystemErrorDialog_title;
+
   /// Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists.
   ///
   /// In en, this message translates to:

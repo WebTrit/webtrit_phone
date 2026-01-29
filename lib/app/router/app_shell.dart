@@ -10,6 +10,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -76,6 +77,7 @@ class AppShell extends StatelessWidget {
   DiagnosticService _createDiagnosticService(BuildContext context) {
     final appPermissions = context.read<AppPermissions>();
     final diagnostics = AndroidCallkeepUtils.diagnostics;
+    final appMetadataProvider = context.read<AppMetadataProvider>();
 
     Future<DiagnosticReportOptions?> showDiagnosticDialog() async {
       // AppShell is the root widget, so it persists for the entire app session.
@@ -88,9 +90,24 @@ class AppShell extends StatelessWidget {
       return showDialog<DiagnosticReportOptions>(context: context, builder: (_) => const DiagnosticReportDialog());
     }
 
+    void showRebootRequiredDialog() {
+      showDialog(context: context, builder: (_) => AlertDialog(
+        title: Text(context.l10n.call_SystemErrorDialog_title),
+        content: Text(context.l10n.call_SystemErrorDialog_description),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.alertDialogActions_ok),
+          ),
+        ],
+      ));
+    }
+
     return DiagnosticServiceImpl(
       strategies: [AndroidCallkeepDiagnosticStrategy(appPermissions: appPermissions, callkeepDiagnostics: diagnostics)],
       dialogLauncher: showDiagnosticDialog,
+      appMetadataProvider: appMetadataProvider,
+      rebootLauncher: showRebootRequiredDialog,
     );
   }
 }
