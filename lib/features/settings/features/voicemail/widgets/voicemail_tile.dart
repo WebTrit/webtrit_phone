@@ -65,7 +65,7 @@ class VoicemailTile extends StatelessWidget {
           position: PopupMenuPosition.under,
           onSelected: _onPopupMenuSelected,
           itemBuilder: (context) => _buildMenuItems(context, colorScheme),
-          child: Icon(Icons.more_vert, color: colorScheme.onSurface),
+          icon: Icon(Icons.more_vert, color: colorScheme.onSurface),
         ),
       ),
     );
