@@ -55,11 +55,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   @override
   void initState() {
     super.initState();
-    // Synchronize the auto-hide logic with the initial call list configuration.
-    _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
-
     // Cache the CallBloc reference to avoid context lookups in callbacks.
     _callBloc = context.read<CallBloc>();
+
+    // Synchronize the auto-hide logic with the initial call list configuration.
+    _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
   }
 
   @override
