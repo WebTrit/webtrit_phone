@@ -162,6 +162,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 
     final padding = widget.loadingPadding ?? style.loadingOverlay?.padding ?? EdgeInsets.zero;
     final strokeWidth = style.loadingOverlay?.strokeWidth ?? 1.0;
+    final color = style.initialsTextStyle?.color;
 
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
@@ -176,7 +177,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               height: kMinInteractiveDimension,
               child: Padding(
                 padding: padding,
-                child: CircularProgressIndicator(strokeWidth: strokeWidth),
+                child: CircularProgressIndicator(strokeWidth: strokeWidth, color: color),
               ),
             ),
     );
@@ -197,6 +198,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   Widget _placeholder(double diameter, LeadingAvatarStyle style) {
     final username = widget.username;
     final icon = style.placeholderIcon ?? widget.placeholderIcon;
+    final color = style.initialsTextStyle?.color;
 
     if (username != null) {
       final defaultTs = TextStyle(fontSize: diameter * 0.35, fontWeight: FontWeight.bold);
@@ -212,7 +214,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
       );
     }
 
-    return Icon(icon, size: diameter * 0.5);
+    return Icon(icon, size: diameter * 0.5, color: color);
   }
 
   Widget _registeredIndicator(LeadingAvatarStyle style) {
@@ -232,10 +234,11 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     final bg = style.smartIndicator?.backgroundColor ?? scheme.surfaceContainerLowest;
     final icon = style.smartIndicator?.icon ?? Icons.person;
     final sizeFactor = style.smartIndicator?.sizeFactor ?? 0.4;
+    final color = style.initialsTextStyle?.color;
 
     return CircleAvatar(
       backgroundColor: bg,
-      child: Icon(icon, size: diameter * sizeFactor * 0.9),
+      child: Icon(icon, size: diameter * sizeFactor * 0.9, color: color),
     );
   }
 }
