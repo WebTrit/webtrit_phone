@@ -1275,6 +1275,8 @@ class AppLocalizationsMapper {
           localizations.voicemail_Dialog_deleteSingleTitle,
       'voicemail_Dialog_deleteSelectedTitle':
           localizations.voicemail_Dialog_deleteSelectedTitle,
+      'voicemail_Label_playbackError':
+          localizations.voicemail_Label_playbackError,
       'voicemail_Label_call': localizations.voicemail_Label_call,
       'voicemail_Label_delete': localizations.voicemail_Label_delete,
       'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
