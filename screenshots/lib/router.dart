@@ -17,8 +17,7 @@ class AppPairingContent extends StatelessWidget {
       title: 'WebTrit App Pairing',
       onGenerateRoute: (settings) {
         final uri = Uri.parse(settings.name ?? '/0');
-        final indexStr =
-            uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '0';
+        final indexStr = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '0';
         final index = int.tryParse(indexStr) ?? 0;
         return MaterialPageRoute(
           builder: (_) => IndexInputScreen(index: index),
@@ -109,6 +108,12 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ScreenshotApp(
         appBloc: appBloc,
         child: const SettingScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: MediaSettingsScreenScreenshot(
+          initialOpenSection: 1,
+        ),
       ),
       ScreenshotApp(
         appBloc: appBloc,

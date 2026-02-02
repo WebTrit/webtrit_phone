@@ -10,7 +10,9 @@ import 'components/components.dart';
 import '../media_settings.dart';
 
 class MediaSettingsScreen extends StatefulWidget {
-  const MediaSettingsScreen({super.key});
+  const MediaSettingsScreen({super.key, this.initialOpenSection});
+
+  final int? initialOpenSection;
 
   @override
   State<MediaSettingsScreen> createState() => _MediaSettingsScreenState();
@@ -47,6 +49,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
           borderRadius: borderRadius,
           child: ExpansionPanelList.radio(
             elevation: 0,
+            initialOpenPanelValue: widget.initialOpenSection,
             children: [
               ExpansionPanelRadio(
                 value: 0,
