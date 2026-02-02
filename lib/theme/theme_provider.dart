@@ -121,6 +121,7 @@ class ThemeProvider extends InheritedWidget {
       textSelectionTheme: style.createTextSelectionThemeData(),
       inputDecorationTheme: style.createInputDecorationTheme(),
       extensions: style.createThemeExtensions(),
+      progressIndicatorTheme: style.createProgressIndicatorThemeData(),
     );
   }
 
