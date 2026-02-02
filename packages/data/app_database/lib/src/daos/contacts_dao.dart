@@ -199,13 +199,13 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       OrderingTerm(
         expression: CaseWhenExpression(
           cases: [
-            CaseWhen(contactsTable.aliasName.isNotNull(), then: contactsTable.aliasName),
+            CaseWhen(contactsTable.aliasName.isNotNull(), then: contactsTable.aliasName.trim().collate(Collate.noCase)),
             CaseWhen(
               contactsTable.firstName.isNotNull() & contactsTable.lastName.isNotNull(),
-              then: contactsTable.firstName + const Constant(' ') + contactsTable.lastName,
+              then: contactsTable.firstName.trim().collate(Collate.noCase) + const Constant(' ') + contactsTable.lastName.trim().collate(Collate.noCase),
             ),
-            CaseWhen(contactsTable.firstName.isNotNull(), then: contactsTable.firstName),
-            CaseWhen(contactsTable.lastName.isNotNull(), then: contactsTable.lastName),
+            CaseWhen(contactsTable.firstName.isNotNull(), then: contactsTable.firstName.trim().collate(Collate.noCase)),
+            CaseWhen(contactsTable.lastName.isNotNull(), then: contactsTable.lastName.trim().collate(Collate.noCase)),
           ],
           orElse: contactPhonesTable.number,
         ),
