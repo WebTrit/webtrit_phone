@@ -67,7 +67,8 @@ class _AboutScreenState extends State<AboutScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(state.packageName),
-                        GestureDetector(onTap: _multiTapLoggingTrigger.tap, child: Text(state.userAgent)),
+                        GestureDetector(onTap: _multiTapLoggingTrigger.tap, child: Text(state.appInfo)),
+                        GestureDetector(onTap: _multiTapLoggingTrigger.tap, child: Text(state.deviceInfo)),
                         SizedBox(height: delimiterHeight / 2),
                         CopyToClipboard(
                           data: state.appIdentifier,
@@ -97,10 +98,6 @@ class _AboutScreenState extends State<AboutScreen> {
                           ),
                         ),
                         SizedBox(height: delimiterHeight / 2),
-                        CopyToClipboard(
-                          data: state.coreUrl.toString(),
-                          child: Text(state.coreUrl.toString(), textAlign: TextAlign.center),
-                        ),
                         TextButton.icon(
                           onPressed: () => _showEmbeddedLinksDialog(context, state.embeddedLinks),
                           icon: const Icon(Icons.link),
@@ -126,6 +123,10 @@ class _AboutScreenState extends State<AboutScreen> {
                                 strokeWidth: 2,
                               ),
                           ],
+                        ),
+                        CopyToClipboard(
+                          data: state.coreUrl.toString(),
+                          child: Text(state.coreUrl.toString(), textAlign: TextAlign.center),
                         ),
                       ],
                     ),

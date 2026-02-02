@@ -35,6 +35,8 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
            embeddedLinks: embeddedConfig.embeddedResources.map((e) => e.uri.toString()).toList(),
            coreUrl: infoRepository.getCoreUrl(),
            userAgent: appMetadataProvider.userAgent,
+           appInfo: appMetadataProvider.appInfo,
+           deviceInfo: appMetadataProvider.deviceInfo,
          ),
        ) {
     on<AboutStarted>(_onStarted, transformer: restartable());
