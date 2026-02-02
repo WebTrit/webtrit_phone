@@ -4,6 +4,7 @@ export 'elevated_button_theme_data_factory.dart';
 export 'input_decoration_theme_data_factory.dart';
 export 'list_tile_theme_data_factory.dart';
 export 'outlined_button_theme_fata_factory.dart';
+export 'progress_indicator_theme_data_factory.dart';
 export 'snack_bar_theme_data_factory.dart';
 export 'tab_bar_theme_data_factory.dart';
 export 'text_button_theme_data_factory.dart';

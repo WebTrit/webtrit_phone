@@ -178,4 +178,8 @@ class ThemeStyleFactoryProvider {
   TextTheme createTextTheme() {
     return TextThemeDataFactory(colorScheme, widgetConfig.fonts, seedThemeData).create();
   }
+
+  ProgressIndicatorThemeData createProgressIndicatorThemeData() {
+    return ProgressIndicatorThemeDataFactory(colorScheme).create();
+  }
 }
