@@ -54,6 +54,10 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 0,
                 canTapOnHeader: true,
+                // TODO: Remove this override once proper Dark Theme JSON is implemented.
+                // Currently, we force a light background because the existing JSON config
+                // provides dark text, causing visibility issues (black-on-black) in system Dark Mode.
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_encoding_Section_preset_title,
                   tooltip: l10n.settings_encoding_Section_preset_tooltip,
@@ -81,6 +85,10 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 1,
                 canTapOnHeader: true,
+                // TODO: Remove this override once proper Dark Theme JSON is implemented.
+                // Currently, we force a light background because the existing JSON config
+                // provides dark text, causing visibility issues (black-on-black) in system Dark Mode.
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_audioProcessing_Section_title,
                   tooltip: l10n.settings_audioProcessing_Section_tooltip,
@@ -92,6 +100,10 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 2,
                 canTapOnHeader: true,
+                // TODO: Remove this override once proper Dark Theme JSON is implemented.
+                // Currently, we force a light background because the existing JSON config
+                // provides dark text, causing visibility issues (black-on-black) in system Dark Mode.
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_videoCapturing_Section_title,
                   tooltip: l10n.settings_videoCapturing_Section_tooltip,
@@ -103,6 +115,10 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 3,
                 canTapOnHeader: true,
+                // TODO: Remove this override once proper Dark Theme JSON is implemented.
+                // Currently, we force a light background because the existing JSON config
+                // provides dark text, causing visibility issues (black-on-black) in system Dark Mode.
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_iceSettings_Section_title,
                   tooltip: l10n.settings_iceSettings_Section_tooltip,
@@ -114,6 +130,10 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 4,
                 canTapOnHeader: true,
+                // TODO: Remove this override once proper Dark Theme JSON is implemented.
+                // Currently, we force a light background because the existing JSON config
+                // provides dark text, causing visibility issues (black-on-black) in system Dark Mode.
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_connectionSection_title,
                   tooltip: l10n.settings_connectionSection_tooltip,
