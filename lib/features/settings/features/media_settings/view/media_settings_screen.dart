@@ -54,6 +54,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 0,
                 canTapOnHeader: true,
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_encoding_Section_preset_title,
                   tooltip: l10n.settings_encoding_Section_preset_tooltip,
@@ -81,6 +82,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 1,
                 canTapOnHeader: true,
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_audioProcessing_Section_title,
                   tooltip: l10n.settings_audioProcessing_Section_tooltip,
@@ -92,6 +94,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 2,
                 canTapOnHeader: true,
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_videoCapturing_Section_title,
                   tooltip: l10n.settings_videoCapturing_Section_tooltip,
@@ -103,6 +106,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 3,
                 canTapOnHeader: true,
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_iceSettings_Section_title,
                   tooltip: l10n.settings_iceSettings_Section_tooltip,
@@ -114,6 +118,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
               ExpansionPanelRadio(
                 value: 4,
                 canTapOnHeader: true,
+                backgroundColor: colorScheme.surfaceContainer,
                 headerBuilder: (_, isExpanded) => HeadingSection(
                   title: l10n.settings_connectionSection_title,
                   tooltip: l10n.settings_connectionSection_tooltip,
