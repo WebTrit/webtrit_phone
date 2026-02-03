@@ -11,6 +11,9 @@ part 'theme_page_config.freezed.dart';
 
 part 'theme_page_config.g.dart';
 
+/// Defines the theme override mode for pages.
+enum ThemeModeOverride { auto, light, dark }
+
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ThemePageConfig with _$ThemePageConfig {
@@ -20,6 +23,11 @@ class ThemePageConfig with _$ThemePageConfig {
     this.dialing = const CallPageConfig(),
     this.keypad = const KeypadPageConfig(),
     this.settings = const SettingsPageConfig(),
+    this.contacts = const ContactsPageConfig(),
+    this.embedded = const EmbeddedPageConfig(),
+    this.favorites = const FavoritesPageConfig(),
+    this.conversations = const ConversationsPageConfig(),
+    this.recents = const RecentsPageConfig(),
   });
 
   @override
@@ -37,9 +45,44 @@ class ThemePageConfig with _$ThemePageConfig {
   @override
   final SettingsPageConfig settings;
 
+  @override
+  final ContactsPageConfig contacts;
+
+  @override
+  final EmbeddedPageConfig embedded;
+
+  @override
+  final FavoritesPageConfig favorites;
+
+  @override
+  final ConversationsPageConfig conversations;
+
+  @override
+  final RecentsPageConfig recents;
+
   factory ThemePageConfig.fromJson(Map<String, Object?> json) => _$ThemePageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ThemePageConfigToJson(this);
+}
+
+/// Configuration for forcing a specific theme mode (Light/Dark) on a screen.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class ThemeOverrideConfig with _$ThemeOverrideConfig {
+  const ThemeOverrideConfig({this.mode = ThemeModeOverride.auto, this.applyToAppBar = false});
+
+  /// The target mode to force (e.g., ensure screen is always Dark).
+  @override
+  final ThemeModeOverride mode;
+
+  /// If true (default), the AppBar adopts the [mode].
+  /// If false, the AppBar keeps the global theme.
+  @override
+  final bool applyToAppBar;
+
+  factory ThemeOverrideConfig.fromJson(Map<String, Object?> json) => _$ThemeOverrideConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ThemeOverrideConfigToJson(this);
 }
 
 /// Declarative configuration for the **Login Page**.
@@ -328,6 +371,7 @@ class KeypadPageConfig with _$KeypadPageConfig implements BasePageConfig {
     this.keypad,
     this.actionpad,
     this.background,
+    this.themeOverride = const ThemeOverrideConfig(),
   });
 
   @override
@@ -348,6 +392,10 @@ class KeypadPageConfig with _$KeypadPageConfig implements BasePageConfig {
   @override
   final PageBackground? background;
 
+  /// Configuration to force override the theme mode (e.g., force Dark mode).
+  @override
+  final ThemeOverrideConfig themeOverride;
+
   factory KeypadPageConfig.fromJson(Map<String, Object?> json) => _$KeypadPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$KeypadPageConfigToJson(this);
@@ -357,6 +405,7 @@ class KeypadPageConfig with _$KeypadPageConfig implements BasePageConfig {
 @JsonSerializable(explicitToJson: true)
 class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   const SettingsPageConfig({
+    this.themeOverride = const ThemeOverrideConfig(),
     this.leadingIconsColor,
     this.userIconColor,
     this.logoutIconColor,
@@ -365,6 +414,10 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
     this.background,
     this.itemTextStyle,
   });
+
+  /// Configuration to force override the theme mode.
+  @override
+  final ThemeOverrideConfig themeOverride;
 
   @override
   final String? leadingIconsColor;
@@ -390,4 +443,89 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   factory SettingsPageConfig.fromJson(Map<String, Object?> json) => _$SettingsPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$SettingsPageConfigToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class ContactsPageConfig with _$ContactsPageConfig implements BasePageConfig {
+  const ContactsPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+
+  /// Configuration to force override the theme mode.
+  @override
+  final ThemeOverrideConfig themeOverride;
+
+  @override
+  final PageBackground? background;
+
+  factory ContactsPageConfig.fromJson(Map<String, Object?> json) => _$ContactsPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ContactsPageConfigToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class EmbeddedPageConfig with _$EmbeddedPageConfig implements BasePageConfig {
+  const EmbeddedPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+
+  /// Configuration to force override the theme mode.
+  @override
+  final ThemeOverrideConfig themeOverride;
+
+  @override
+  final PageBackground? background;
+
+  factory EmbeddedPageConfig.fromJson(Map<String, Object?> json) => _$EmbeddedPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$EmbeddedPageConfigToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class FavoritesPageConfig with _$FavoritesPageConfig implements BasePageConfig {
+  const FavoritesPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+
+  /// Configuration to force override the theme mode.
+  @override
+  final ThemeOverrideConfig themeOverride;
+
+  @override
+  final PageBackground? background;
+
+  factory FavoritesPageConfig.fromJson(Map<String, Object?> json) => _$FavoritesPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$FavoritesPageConfigToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class ConversationsPageConfig with _$ConversationsPageConfig implements BasePageConfig {
+  const ConversationsPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+
+  /// Configuration to force override the theme mode.
+  @override
+  final ThemeOverrideConfig themeOverride;
+
+  @override
+  final PageBackground? background;
+
+  factory ConversationsPageConfig.fromJson(Map<String, Object?> json) => _$ConversationsPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ConversationsPageConfigToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class RecentsPageConfig with _$RecentsPageConfig implements BasePageConfig {
+  const RecentsPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+
+  /// Configuration to force override the theme mode.
+  @override
+  final ThemeOverrideConfig themeOverride;
+
+  @override
+  final PageBackground? background;
+
+  factory RecentsPageConfig.fromJson(Map<String, Object?> json) => _$RecentsPageConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$RecentsPageConfigToJson(this);
 }
