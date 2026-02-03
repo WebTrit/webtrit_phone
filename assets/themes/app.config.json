@@ -1,4 +1,10 @@
 {
+  "supported": [
+    {
+      "type": "themeMode",
+      "mode": "light"
+    }
+  ],
   "loginConfig": {
     "common": {
       "fullScreenLaunchEmbeddedResourceId": null
