@@ -249,6 +249,12 @@
     }
   },
   "settings": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "_background": {
       "type": "gradient",
       "colors": [
@@ -266,6 +272,127 @@
     }
   },
   "keypad": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "contacts": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "favorites": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "conversations": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "recents": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "embedded": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "_background": {
       "type": "gradient",
       "colors": [

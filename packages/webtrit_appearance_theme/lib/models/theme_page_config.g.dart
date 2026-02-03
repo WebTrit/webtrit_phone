@@ -6,26 +6,42 @@ part of 'theme_page_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ThemePageConfig _$ThemePageConfigFromJson(Map<String, dynamic> json) =>
-    ThemePageConfig(
-      login: json['login'] == null
-          ? const LoginPageConfig()
-          : LoginPageConfig.fromJson(json['login'] as Map<String, dynamic>),
-      about: json['about'] == null
-          ? const AboutPageConfig()
-          : AboutPageConfig.fromJson(json['about'] as Map<String, dynamic>),
-      dialing: json['dialing'] == null
-          ? const CallPageConfig()
-          : CallPageConfig.fromJson(json['dialing'] as Map<String, dynamic>),
-      keypad: json['keypad'] == null
-          ? const KeypadPageConfig()
-          : KeypadPageConfig.fromJson(json['keypad'] as Map<String, dynamic>),
-      settings: json['settings'] == null
-          ? const SettingsPageConfig()
-          : SettingsPageConfig.fromJson(
-              json['settings'] as Map<String, dynamic>,
-            ),
-    );
+ThemePageConfig _$ThemePageConfigFromJson(
+  Map<String, dynamic> json,
+) => ThemePageConfig(
+  login: json['login'] == null
+      ? const LoginPageConfig()
+      : LoginPageConfig.fromJson(json['login'] as Map<String, dynamic>),
+  about: json['about'] == null
+      ? const AboutPageConfig()
+      : AboutPageConfig.fromJson(json['about'] as Map<String, dynamic>),
+  dialing: json['dialing'] == null
+      ? const CallPageConfig()
+      : CallPageConfig.fromJson(json['dialing'] as Map<String, dynamic>),
+  keypad: json['keypad'] == null
+      ? const KeypadPageConfig()
+      : KeypadPageConfig.fromJson(json['keypad'] as Map<String, dynamic>),
+  settings: json['settings'] == null
+      ? const SettingsPageConfig()
+      : SettingsPageConfig.fromJson(json['settings'] as Map<String, dynamic>),
+  contacts: json['contacts'] == null
+      ? const ContactsPageConfig()
+      : ContactsPageConfig.fromJson(json['contacts'] as Map<String, dynamic>),
+  embedded: json['embedded'] == null
+      ? const EmbeddedPageConfig()
+      : EmbeddedPageConfig.fromJson(json['embedded'] as Map<String, dynamic>),
+  favorites: json['favorites'] == null
+      ? const FavoritesPageConfig()
+      : FavoritesPageConfig.fromJson(json['favorites'] as Map<String, dynamic>),
+  conversations: json['conversations'] == null
+      ? const ConversationsPageConfig()
+      : ConversationsPageConfig.fromJson(
+          json['conversations'] as Map<String, dynamic>,
+        ),
+  recents: json['recents'] == null
+      ? const RecentsPageConfig()
+      : RecentsPageConfig.fromJson(json['recents'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) =>
     <String, dynamic>{
@@ -34,7 +50,33 @@ Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) =>
       'dialing': instance.dialing.toJson(),
       'keypad': instance.keypad.toJson(),
       'settings': instance.settings.toJson(),
+      'contacts': instance.contacts.toJson(),
+      'embedded': instance.embedded.toJson(),
+      'favorites': instance.favorites.toJson(),
+      'conversations': instance.conversations.toJson(),
+      'recents': instance.recents.toJson(),
     };
+
+ThemeOverrideConfig _$ThemeOverrideConfigFromJson(Map<String, dynamic> json) =>
+    ThemeOverrideConfig(
+      mode:
+          $enumDecodeNullable(_$ThemeModeOverrideEnumMap, json['mode']) ??
+          ThemeModeOverride.auto,
+      applyToAppBar: json['applyToAppBar'] as bool? ?? true,
+    );
+
+Map<String, dynamic> _$ThemeOverrideConfigToJson(
+  ThemeOverrideConfig instance,
+) => <String, dynamic>{
+  'mode': _$ThemeModeOverrideEnumMap[instance.mode]!,
+  'applyToAppBar': instance.applyToAppBar,
+};
+
+const _$ThemeModeOverrideEnumMap = {
+  ThemeModeOverride.auto: 'auto',
+  ThemeModeOverride.light: 'light',
+  ThemeModeOverride.dark: 'dark',
+};
 
 LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) =>
     LoginPageConfig(
@@ -376,6 +418,11 @@ KeypadPageConfig _$KeypadPageConfigFromJson(Map<String, dynamic> json) =>
       background: json['background'] == null
           ? null
           : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+      themeOverride: json['themeOverride'] == null
+          ? const ThemeOverrideConfig()
+          : ThemeOverrideConfig.fromJson(
+              json['themeOverride'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) =>
@@ -386,10 +433,16 @@ Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) =>
       'keypad': instance.keypad?.toJson(),
       'actionpad': instance.actionpad?.toJson(),
       'background': instance.background?.toJson(),
+      'themeOverride': instance.themeOverride.toJson(),
     };
 
 SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) =>
     SettingsPageConfig(
+      themeOverride: json['themeOverride'] == null
+          ? const ThemeOverrideConfig()
+          : ThemeOverrideConfig.fromJson(
+              json['themeOverride'] as Map<String, dynamic>,
+            ),
       leadingIconsColor: json['leadingIconsColor'] as String?,
       userIconColor: json['userIconColor'] as String?,
       logoutIconColor: json['logoutIconColor'] as String?,
@@ -411,6 +464,7 @@ SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$SettingsPageConfigToJson(SettingsPageConfig instance) =>
     <String, dynamic>{
+      'themeOverride': instance.themeOverride.toJson(),
       'leadingIconsColor': instance.leadingIconsColor,
       'userIconColor': instance.userIconColor,
       'logoutIconColor': instance.logoutIconColor,
@@ -418,4 +472,97 @@ Map<String, dynamic> _$SettingsPageConfigToJson(SettingsPageConfig instance) =>
       'showSeparators': instance.showSeparators,
       'background': instance.background?.toJson(),
       'itemTextStyle': instance.itemTextStyle?.toJson(),
+    };
+
+ContactsPageConfig _$ContactsPageConfigFromJson(Map<String, dynamic> json) =>
+    ContactsPageConfig(
+      themeOverride: json['themeOverride'] == null
+          ? const ThemeOverrideConfig()
+          : ThemeOverrideConfig.fromJson(
+              json['themeOverride'] as Map<String, dynamic>,
+            ),
+      background: json['background'] == null
+          ? null
+          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ContactsPageConfigToJson(ContactsPageConfig instance) =>
+    <String, dynamic>{
+      'themeOverride': instance.themeOverride.toJson(),
+      'background': instance.background?.toJson(),
+    };
+
+EmbeddedPageConfig _$EmbeddedPageConfigFromJson(Map<String, dynamic> json) =>
+    EmbeddedPageConfig(
+      themeOverride: json['themeOverride'] == null
+          ? const ThemeOverrideConfig()
+          : ThemeOverrideConfig.fromJson(
+              json['themeOverride'] as Map<String, dynamic>,
+            ),
+      background: json['background'] == null
+          ? null
+          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$EmbeddedPageConfigToJson(EmbeddedPageConfig instance) =>
+    <String, dynamic>{
+      'themeOverride': instance.themeOverride.toJson(),
+      'background': instance.background?.toJson(),
+    };
+
+FavoritesPageConfig _$FavoritesPageConfigFromJson(Map<String, dynamic> json) =>
+    FavoritesPageConfig(
+      themeOverride: json['themeOverride'] == null
+          ? const ThemeOverrideConfig()
+          : ThemeOverrideConfig.fromJson(
+              json['themeOverride'] as Map<String, dynamic>,
+            ),
+      background: json['background'] == null
+          ? null
+          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$FavoritesPageConfigToJson(
+  FavoritesPageConfig instance,
+) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
+  'background': instance.background?.toJson(),
+};
+
+ConversationsPageConfig _$ConversationsPageConfigFromJson(
+  Map<String, dynamic> json,
+) => ConversationsPageConfig(
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(
+          json['themeOverride'] as Map<String, dynamic>,
+        ),
+  background: json['background'] == null
+      ? null
+      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$ConversationsPageConfigToJson(
+  ConversationsPageConfig instance,
+) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
+  'background': instance.background?.toJson(),
+};
+
+RecentsPageConfig _$RecentsPageConfigFromJson(Map<String, dynamic> json) =>
+    RecentsPageConfig(
+      themeOverride: json['themeOverride'] == null
+          ? const ThemeOverrideConfig()
+          : ThemeOverrideConfig.fromJson(
+              json['themeOverride'] as Map<String, dynamic>,
+            ),
+      background: json['background'] == null
+          ? null
+          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$RecentsPageConfigToJson(RecentsPageConfig instance) =>
+    <String, dynamic>{
+      'themeOverride': instance.themeOverride.toJson(),
+      'background': instance.background?.toJson(),
     };

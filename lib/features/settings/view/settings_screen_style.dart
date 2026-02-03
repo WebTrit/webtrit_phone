@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/theme/styles/base_screen_style.dart';
+import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/themed_scaffold.dart';
 
 import '../widgets/group_title_list_style.dart';
 
@@ -13,6 +14,8 @@ import '../widgets/group_title_list_style.dart';
 class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   const SettingScreenStyle({
     super.background,
+    this.contentThemeOverride,
+    this.applyToAppBar,
     this.leadingIconsColor,
     this.logoutIconColor,
     this.userIconColor,
@@ -21,6 +24,9 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     this.showSeparators,
     this.itemTextStyle,
   });
+
+  final ContentThemeOverride? contentThemeOverride;
+  final bool? applyToAppBar;
 
   /// The color for leading icons in settings items (excluding logout and user icons which have specific overrides).
   final Color? leadingIconsColor;
@@ -45,6 +51,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
 
   SettingScreenStyle copyWith({
     BackgroundStyle? background,
+    ContentThemeOverride? contentThemeOverride,
+    bool? applyToAppBar,
     Color? leadingIconsColor,
     Color? logoutIconColor,
     Color? userIconColor,
@@ -55,6 +63,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   }) {
     return SettingScreenStyle(
       background: background ?? this.background,
+      contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
+      applyToAppBar: applyToAppBar ?? this.applyToAppBar,
       leadingIconsColor: leadingIconsColor ?? this.leadingIconsColor,
       logoutIconColor: logoutIconColor ?? this.logoutIconColor,
       userIconColor: userIconColor ?? this.userIconColor,
@@ -71,6 +81,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
 
     return SettingScreenStyle(
       background: b.background ?? a.background,
+      contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
+      applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
       leadingIconsColor: b.leadingIconsColor ?? a.leadingIconsColor,
       logoutIconColor: b.logoutIconColor ?? a.logoutIconColor,
       userIconColor: b.userIconColor ?? a.userIconColor,
@@ -84,6 +96,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   static SettingScreenStyle lerp(SettingScreenStyle? a, SettingScreenStyle? b, double t) {
     return SettingScreenStyle(
       background: BaseScreenStyle.lerp(a?.background, b?.background, t),
+      contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
+      applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
       leadingIconsColor: Color.lerp(a?.leadingIconsColor, b?.leadingIconsColor, t),
       logoutIconColor: Color.lerp(a?.logoutIconColor, b?.logoutIconColor, t),
       userIconColor: Color.lerp(a?.userIconColor, b?.userIconColor, t),
@@ -99,6 +113,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty<BackgroundStyle?>('background', background))
+      ..add(EnumProperty<ContentThemeOverride?>('contentThemeOverride', contentThemeOverride))
+      ..add(DiagnosticsProperty<bool?>('applyToAppBar', applyToAppBar))
       ..add(ColorProperty('leadingIconsColor', leadingIconsColor))
       ..add(ColorProperty('logoutIconColor', logoutIconColor))
       ..add(ColorProperty('userIconColor', userIconColor))

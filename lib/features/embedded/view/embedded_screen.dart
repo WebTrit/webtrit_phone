@@ -8,8 +8,12 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+// TODO: Move this widget to a common directory.
 import '../../login/features/login_signup/widgets/widgets.dart';
 import '../bloc/embedded_cubit.dart';
+
+import 'embedded_screen_style.dart';
+import 'embedded_screen_styles.dart';
 
 final _logger = Logger('EmbeddedScreen');
 
@@ -24,6 +28,7 @@ class EmbeddedScreen extends StatefulWidget {
     required this.pageInjectionStrategyBuilder,
     this.shouldForwardPop = true,
     this.enableLogCapture = true,
+    this.style,
     super.key,
   });
 
@@ -44,6 +49,8 @@ class EmbeddedScreen extends StatefulWidget {
 
   /// If true, the pop action will be forwarded to the WebView if backstack is available.
   final bool shouldForwardPop;
+
+  final EmbeddedScreenStyle? style;
 
   @override
   State<EmbeddedScreen> createState() => _EmbeddedScreenState();
@@ -77,7 +84,13 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final themeData = Theme.of(context);
+    final effectiveStyle = widget.style ?? themeData.extension<EmbeddedScreenStyles>()?.primary;
+
+    return ThemedScaffold(
+      background: effectiveStyle?.background,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
       appBar: widget.appBar,
       body: BlocConsumer<EmbeddedCubit, EmbeddedState>(
         builder: (context, state) {

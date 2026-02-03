@@ -37,8 +37,15 @@ class SettingsScreen extends StatelessWidget {
     final background = effectiveStyle?.background;
     final isComplexBackground = background?.isComplex == true;
 
+    // Calculate top padding to prevent content from going under the AppBar
+    // when using a complex background (which extends body behind app bar).
+    final mediaQuery = MediaQuery.of(context);
+    final topPadding = isComplexBackground ? (kToolbarHeight + mediaQuery.padding.top) : 0.0;
+
     return ThemedScaffold(
       background: background,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
       appBar: AppBar(
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
@@ -60,7 +67,9 @@ class SettingsScreen extends StatelessWidget {
                 top: !isComplexBackground,
                 bottom: false,
                 child: ListView(
-                  padding: effectiveStyle?.listViewPadding ?? const EdgeInsets.only(top: 16),
+                  padding: (effectiveStyle?.listViewPadding ?? const EdgeInsets.only(top: 16)).add(
+                    EdgeInsets.only(top: topPadding),
+                  ),
                   children: [
                     BlocBuilder<UserInfoCubit, UserInfoState>(
                       builder: (context, state) => UserInfoListTile(info: state.userInfo),

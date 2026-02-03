@@ -20,3 +20,4 @@ export 'text_button_styles.dart';
 export 'text_field_config.dart';
 export 'text_style_config.dart';
 export 'theme_json_serializable.dart';
+export 'theme_mode_override_extension.dart';
