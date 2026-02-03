@@ -120,7 +120,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
 
-    return Scaffold(
+    return ThemedScaffold(
       appBar: MainAppBar(
         title: widget.title,
         bottom: PreferredSize(

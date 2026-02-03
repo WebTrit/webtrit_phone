@@ -89,7 +89,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ThemedScaffold(
       appBar: MainAppBar(title: widget.title, context: context),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {

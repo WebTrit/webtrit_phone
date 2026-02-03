@@ -137,7 +137,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
     final tabsStateIt = tabsState;
 
     return Unfocuser(
-      child: Scaffold(
+      child: ThemedScaffold(
         appBar: MainAppBar(
           title: widget.title,
           context: context,

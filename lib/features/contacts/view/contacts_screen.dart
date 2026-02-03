@@ -107,7 +107,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
       ),
     );
     return Unfocuser(
-      child: Scaffold(
+      child: ThemedScaffold(
         appBar: MainAppBar(
           title: widget.title,
           bottom: PreferredSize(

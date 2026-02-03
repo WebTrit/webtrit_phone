@@ -77,7 +77,7 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ThemedScaffold(
       appBar: widget.appBar,
       body: BlocConsumer<EmbeddedCubit, EmbeddedState>(
         builder: (context, state) {
