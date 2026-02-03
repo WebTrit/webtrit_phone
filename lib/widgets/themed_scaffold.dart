@@ -53,8 +53,8 @@ class ThemedScaffold extends StatelessWidget {
   /// Determines if the theme brightness should be forced to Light or Dark.
   final ContentThemeOverride? contentThemeOverride;
 
-  /// If true, the [appBar] will ignore the [contentThemeOverride] and keep
-  /// the parent context's theme.
+  /// If true, the [contentThemeOverride] is applied to the entire Scaffold (including [appBar]).
+  /// If false, it is applied only to the [body], allowing the [appBar] to retain the global theme.
   final bool applyToAppBar;
 
   final PreferredSizeWidget? appBar;

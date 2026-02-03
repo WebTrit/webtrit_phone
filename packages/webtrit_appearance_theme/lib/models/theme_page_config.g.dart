@@ -62,7 +62,7 @@ ThemeOverrideConfig _$ThemeOverrideConfigFromJson(Map<String, dynamic> json) =>
       mode:
           $enumDecodeNullable(_$ThemeModeOverrideEnumMap, json['mode']) ??
           ThemeModeOverride.auto,
-      applyToAppBar: json['applyToAppBar'] as bool? ?? false,
+      applyToAppBar: json['applyToAppBar'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$ThemeOverrideConfigToJson(

@@ -69,7 +69,7 @@ class ThemePageConfig with _$ThemePageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ThemeOverrideConfig with _$ThemeOverrideConfig {
-  const ThemeOverrideConfig({this.mode = ThemeModeOverride.auto, this.applyToAppBar = false});
+  const ThemeOverrideConfig({this.mode = ThemeModeOverride.auto, this.applyToAppBar = true});
 
   /// The target mode to force (e.g., ensure screen is always Dark).
   @override
