@@ -10,6 +10,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import '../bloc/about_bloc.dart';
+import '../widgets/widgets.dart';
 
 import 'about_screen_style.dart';
 import 'about_screen_styles.dart';
@@ -40,103 +41,89 @@ class _AboutScreenState extends State<AboutScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final localStyle = widget.style ?? themeData.extension<AboutScreenStyles>()?.primary;
+    final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
+    final background = localStyle?.background;
+    final isComplexBackground = background?.isComplex ?? false;
 
-    return BlocBuilder<AboutBloc, AboutState>(
-      builder: (context, state) {
-        final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
-        final background = localStyle?.background;
-        final isComplexBackground = background?.isComplex ?? false;
-
-        return ThemedScaffold(
-          background: background,
-          appBar: AppBar(
-            title: Text(context.l10n.settings_ListViewTileTitle_about),
-            backgroundColor: isComplexBackground ? Colors.transparent : null,
-            elevation: isComplexBackground ? 0 : null,
-          ),
-          body: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ConfigurableThemeImage(style: localStyle?.pictureLogoStyle, defaultScale: 0.25),
-                  SizedBox(height: delimiterHeight),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(state.packageName),
-                        GestureDetector(onTap: _multiTapLoggingTrigger.tap, child: Text(state.appInfo)),
-                        GestureDetector(onTap: _multiTapLoggingTrigger.tap, child: Text(state.deviceInfo)),
-                        SizedBox(height: delimiterHeight / 2),
-                        CopyToClipboard(
-                          data: state.appIdentifier,
-                          child: Text(context.l10n.settings_AboutText_AppSessionIdentifier),
-                        ),
-                        CopyToClipboard(
-                          data: state.appIdentifier,
-                          child: Text(
-                            state.appIdentifier,
-                            style: themeData.textTheme.labelSmall,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        SizedBox(height: delimiterHeight / 2),
-                        CopyToClipboard(
-                          data: state.fcmPushToken,
-                          child: Text(context.l10n.settings_AboutText_FCMPushNotificationToken),
-                        ),
-                        CopyToClipboard(
-                          data: state.fcmPushToken,
-                          child: Text(
-                            state.fcmPushToken ?? '-',
-                            style: themeData.textTheme.labelSmall,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        SizedBox(height: delimiterHeight / 2),
-                        TextButton.icon(
-                          onPressed: () => _showEmbeddedLinksDialog(context, state.embeddedLinks),
-                          icon: const Icon(Icons.link),
-                          label: Text(
-                            context.l10n.settings_AboutText_ApplicationEmbeddedLinks,
-                            style: themeData.textTheme.bodyMedium,
-                          ),
-                        ),
-                        Text(context.l10n.settings_AboutText_CoreVersion),
-                        Stack(
-                          alignment: AlignmentDirectional.center,
+    return ThemedScaffold(
+      background: background,
+      appBar: AppBar(
+        title: Text(context.l10n.settings_ListViewTileTitle_about),
+        backgroundColor: isComplexBackground ? Colors.transparent : null,
+        elevation: isComplexBackground ? 0 : null,
+      ),
+      body: BlocBuilder<AboutBloc, AboutState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              state.progress
-                                  ? ''
-                                  : (state.coreVersion ?? context.l10n.settings_AboutText_CoreVersionUndefined)
-                                        .toString(),
-                              style: themeData.textTheme.bodyMedium,
-                            ),
-                            if (state.progress)
-                              SizedCircularProgressIndicator(
-                                size: themeData.textTheme.bodyMedium!.fontSize!,
-                                strokeWidth: 2,
+                            ConfigurableThemeImage(style: localStyle?.pictureLogoStyle, defaultScale: 0.25),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: delimiterHeight),
+                                  Text(state.packageName, textAlign: TextAlign.center),
+                                  GestureDetector(
+                                    onTap: _multiTapLoggingTrigger.tap,
+                                    behavior: HitTestBehavior.translucent,
+                                    child: Column(
+                                      children: [
+                                        Text(state.appInfo, textAlign: TextAlign.center),
+                                        Text(state.deviceInfo, textAlign: TextAlign.center),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: delimiterHeight / 2),
+                                  InfoTile(
+                                    label: context.l10n.settings_AboutText_AppSessionIdentifier,
+                                    value: state.appIdentifier,
+                                  ),
+                                  SizedBox(height: delimiterHeight / 2),
+                                  InfoTile(
+                                    label: context.l10n.settings_AboutText_FCMPushNotificationToken,
+                                    value: state.fcmPushToken,
+                                  ),
+                                  SizedBox(height: delimiterHeight / 2),
+                                  CoreInfoTile(
+                                    coreUrl: state.coreUrl,
+                                    coreVersion: state.coreVersion,
+                                    progress: state.progress,
+                                  ),
+                                ],
                               ),
+                            ),
                           ],
                         ),
-                        CopyToClipboard(
-                          data: state.coreUrl.toString(),
-                          child: Text(state.coreUrl.toString(), textAlign: TextAlign.center),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ),
-        );
-      },
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                child: TextButton.icon(
+                  onPressed: () => _showEmbeddedLinksDialog(context, state.embeddedLinks),
+                  icon: const Icon(Icons.link),
+                  label: Text(
+                    context.l10n.settings_AboutText_ApplicationEmbeddedLinks,
+                    style: themeData.textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -144,7 +131,7 @@ class _AboutScreenState extends State<AboutScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(context.l10n.settings_AboutText_ApplicationEmbeddedLinks),
+        title: Text(context.l10n.settings_AboutText_ApplicationEmbeddedLinks, textAlign: TextAlign.center),
         content: SizedBox(
           width: double.maxFinite,
           child: ListView.builder(
@@ -152,7 +139,9 @@ class _AboutScreenState extends State<AboutScreen> {
             itemCount: links.length,
             itemBuilder: (context, index) => CopyToClipboard(
               data: links[index],
-              child: ListTile(title: Text(links[index], style: Theme.of(context).textTheme.bodySmall)),
+              child: ListTile(
+                title: Text(links[index], style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
+              ),
             ),
           ),
         ),
