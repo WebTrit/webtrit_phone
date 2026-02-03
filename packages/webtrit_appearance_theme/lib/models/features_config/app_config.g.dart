@@ -27,6 +27,11 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
   messaging: json['messaging'] == null
       ? const AppConfigMessaging()
       : AppConfigMessaging.fromJson(json['messaging'] as Map<String, dynamic>),
+  supported:
+      (json['supported'] as List<dynamic>?)
+          ?.map((e) => SupportedFeature.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
@@ -36,6 +41,7 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'callConfig': instance.callConfig.toJson(),
   'contacts': instance.contacts.toJson(),
   'messaging': instance.messaging.toJson(),
+  'supported': instance.supported.map((e) => e.toJson()).toList(),
 };
 
 AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>

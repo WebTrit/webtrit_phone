@@ -1,5 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:webtrit_appearance_theme/converters/converters.dart';
+
+import 'supported_feature.dart';
 
 part 'app_config.freezed.dart';
 
@@ -15,6 +18,9 @@ class AppConfig with _$AppConfig {
     this.callConfig = const AppConfigCall(),
     this.contacts = const AppConfigContacts(),
     this.messaging = const AppConfigMessaging(),
+
+    /// List of enabled features and global app configurations.
+    this.supported = const [],
   });
 
   @override
@@ -34,6 +40,9 @@ class AppConfig with _$AppConfig {
 
   @override
   final AppConfigMessaging messaging;
+
+  @override
+  final List<SupportedFeature> supported;
 
   factory AppConfig.fromJson(Map<String, Object?> json) => _$AppConfigFromJson(json);
 

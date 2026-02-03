@@ -210,7 +210,7 @@ case _:
 /// @nodoc
 mixin _$ThemeOverrideConfig {
 
- ThemeModeOverride get mode; bool get applyToAppBar;
+ ThemeModeConfig get mode; bool get applyToAppBar;
 /// Create a copy of ThemeOverrideConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -241,7 +241,7 @@ abstract mixin class $ThemeOverrideConfigCopyWith<$Res>  {
   factory $ThemeOverrideConfigCopyWith(ThemeOverrideConfig value, $Res Function(ThemeOverrideConfig) _then) = _$ThemeOverrideConfigCopyWithImpl;
 @useResult
 $Res call({
- ThemeModeOverride mode, bool applyToAppBar
+ ThemeModeConfig mode, bool applyToAppBar
 });
 
 
@@ -261,7 +261,7 @@ class _$ThemeOverrideConfigCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? mode = null,Object? applyToAppBar = null,}) {
   return _then(ThemeOverrideConfig(
 mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
-as ThemeModeOverride,applyToAppBar: null == applyToAppBar ? _self.applyToAppBar : applyToAppBar // ignore: cast_nullable_to_non_nullable
+as ThemeModeConfig,applyToAppBar: null == applyToAppBar ? _self.applyToAppBar : applyToAppBar // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
