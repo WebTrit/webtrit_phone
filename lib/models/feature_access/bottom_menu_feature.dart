@@ -2,8 +2,6 @@ import 'package:flutter/widgets.dart';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:webtrit_phone/theme/theme.dart';
-
 import '../contact_source_type.dart';
 import '../embedded/embedded.dart';
 import '../main_flavor.dart';
@@ -14,7 +12,6 @@ sealed class BottomMenuTab extends Equatable {
     required this.initial,
     required this.titleL10n,
     required this.icon,
-    this.contentThemeOverride = ThemeModeOverride.auto,
     this.data,
   });
 
@@ -22,7 +19,6 @@ sealed class BottomMenuTab extends Equatable {
   final bool initial;
   final String titleL10n;
   final IconData icon;
-  final ThemeModeOverride contentThemeOverride;
   final EmbeddedData? data;
 
   MainFlavor get flavor;
@@ -35,7 +31,7 @@ sealed class BottomMenuTab extends Equatable {
   };
 
   @override
-  List<Object?> get props => [enabled, initial, titleL10n, icon, contentThemeOverride, data, flavor];
+  List<Object?> get props => [enabled, initial, titleL10n, icon, data, flavor];
 }
 
 final class FavoritesBottomMenuTab extends BottomMenuTab {
@@ -44,7 +40,6 @@ final class FavoritesBottomMenuTab extends BottomMenuTab {
     required super.initial,
     required super.titleL10n,
     required super.icon,
-    super.contentThemeOverride,
     super.data,
   });
 
@@ -71,7 +66,6 @@ final class MessagingBottomMenuTab extends BottomMenuTab {
     required super.initial,
     required super.titleL10n,
     required super.icon,
-    super.contentThemeOverride,
     super.data,
   });
 
@@ -88,7 +82,6 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
     required super.initial,
     required super.titleL10n,
     required super.icon,
-    super.contentThemeOverride,
     super.data,
   });
 
@@ -111,7 +104,6 @@ final class ContactsBottomMenuTab extends BottomMenuTab {
     required super.initial,
     required super.titleL10n,
     required super.icon,
-    super.contentThemeOverride,
     super.data,
   }) : contactSourceTypes = List.unmodifiable(contactSourceTypes);
 
@@ -131,7 +123,6 @@ final class EmbeddedBottomMenuTab extends BottomMenuTab {
     required super.initial,
     required super.titleL10n,
     required super.icon,
-    super.contentThemeOverride,
     super.data,
   });
 
