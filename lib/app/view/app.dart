@@ -85,6 +85,8 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     final isDeepLinkEnabled = EnvironmentConfig.APP_LINK_DOMAIN.isNotEmpty;
 
+    final featureAccess = context.watch<FeatureAccess>();
+
     final materialApp = BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
       builder: (context, state) {
@@ -98,13 +100,16 @@ class _AppState extends State<App> {
                 previous.effectiveThemeMode != current.effectiveThemeMode,
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
+              final forcedMode = featureAccess.supportedConfig.themeMode;
+              final finalThemeMode = forcedMode == ThemeMode.system ? state.effectiveThemeMode : forcedMode;
+
               return MaterialApp.router(
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 // restorationScopeId: 'App', // TODO: temporary comment to prevent AppShell's AutoRouter placeholder blink - additional investigation necessary
                 title: EnvironmentConfig.APP_NAME,
-                themeMode: state.effectiveThemeMode,
+                themeMode: finalThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
                 routerConfig: appRouter.config(
