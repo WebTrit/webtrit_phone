@@ -1,412 +1,92 @@
 {
-  "login": {
-    "modeSelect": {
-      "systemUiOverlayStyle": {
-        "statusBarIconBrightness": "light",
-        "statusBarBrightness": "dark",
-        "systemNavigationBarColor": "#000000",
-        "systemNavigationBarIconBrightness": "light"
-      },
-      "mainLogo": {
-        "uri": "asset://assets/images/primary_onboarding_logo_dark.svg",
-        "render": {
-          "scale": 0.42,
-          "alignment": "center",
-          "padding": {
-            "left": 0.0,
-            "top": 0.0,
-            "right": 0.0,
-            "bottom": 0.0
-          }
-        }
-      },
-      "buttonLoginStyleType": "neutralOnDark",
-      "buttonSignupStyleType": "neutralOnDark"
-    },
-    "switchPage": {
-      "mainLogo": {
-        "uri": "asset://assets/images/secondary_onboarding_logo_dark.svg",
-        "render": {
-          "scale": 0.25,
-          "padding": {
-            "left": 0,
-            "top": 80,
-            "right": 0,
-            "bottom": 24
-          }
-        }
-      }
-    },
-    "otpSignin": {
-      "_refTextField": {
-        "keyboardType": "phone",
-        "textAlign": "left",
-        "decoration": {
-          "labelText": "login_TextFieldLabelText_otpSigninUserRef",
-          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation.",
-          "_prefixText": "123",
-          "_hintText": "XXXXXXXXX"
-        },
-        "inputValue": {
-          "_includePrefixInData": true,
-          "_initialValue": "380",
-          "__initialValue": "The string value used to pre-fill the text field when the screen is initialized."
-        },
-        "_mask": {
-          "pattern": "+380 (##) ###-##-##",
-          "filter": {
-            "#": "[0-9]"
-          }
-        }
-      }
-    },
-    "passwordSignin": {
-      "_refTextField": {
-        "keyboardType": "phone",
-        "textAlign": "left",
-        "decoration": {
-          "labelText": "login_TextFieldLabelText_passwordSigninUserRef",
-          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation.",
-          "_prefixText": "123",
-          "_hintText": "XXXXXXXXX"
-        },
-        "inputValue": {
-          "_includePrefixInData": false,
-          "_initialValue": "380",
-          "__initialValue": "The string value used to pre-fill the text field when the screen is initialized."
-        },
-        "_mask": {
-          "pattern": "+380 (##) ###-##-##",
-          "filter": {
-            "#": "[0-9]"
-          }
-        }
-      }
-    },
-    "otpSigninVerify": {
-      "countdownRepeatIntervalSeconds": 30
-    },
-    "signupVerify": {
-      "countdownRepeatIntervalSeconds": 30
-    }
+  "fonts": {
+    "fontFamily": "Montserrat"
   },
-  "dialing": {
-    "systemUiOverlayStyle": {
-      "statusBarIconBrightness": "light",
-      "statusBarBrightness": "dark",
-      "systemNavigationBarColor": "#000000",
-      "systemNavigationBarIconBrightness": "light"
+  "imageAssets": {
+    "defaultPlaceholderImage": {
+      "uri": "asset://assets/images/secondary_onboarding_logo_dark.svg"
     },
-    "appBarStyle": {
-      "backgroundColor": null,
-      "foregroundColor": null,
-      "primary": false
-    },
-    "callInfo": {
-      "usernameTextStyle": {
-        "fontSize": 24,
-        "fontWeight": {
-          "weight": 400
-        },
-        "color": "#E2E2E2"
-      },
-      "numberTextStyle": {
-        "fontSize": 20,
-        "fontWeight": {
-          "weight": 400
-        },
-        "color": "#C0C2BE"
-      },
-      "callStatusTextStyle": {
+    "leadingAvatarStyle": {
+      "backgroundColor": "#3C4750",
+      "radius": 20.0,
+      "initialsTextStyle": {
+        "fontFamily": "Montserrat",
         "fontSize": 16,
         "fontWeight": {
-          "weight": 400
+          "weight": 700
         },
-        "color": "#C0C2BE",
-        "fontFeatures": [
-          "tabularFigures"
-        ]
+        "color": "#D1E4F5"
       },
-      "processingStatusTextStyle": {
-        "fontSize": 14,
-        "fontWeight": {
-          "weight": 500
-        },
-        "color": "#C0C2BE"
-      }
-    },
-    "actions": {
-      "callStart": {
-        "backgroundColor": "#B8E078",
-        "foregroundColor": "#000000",
-        "textColor": "#000000",
-        "iconColor": "#000000",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#8E918F",
-        "disabledIconColor": "#8E918F"
+      "placeholderIcon": {
+        "codePoint": "0xe497",
+        "fontFamily": "MaterialIcons",
+        "matchTextDirection": false
       },
-      "hangup": {
-        "backgroundColor": "#FF897D",
-        "foregroundColor": "#690005",
-        "textColor": "#690005",
-        "iconColor": "#690005",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#8E918F",
-        "disabledIconColor": "#8E918F"
-      },
-      "transfer": {
-        "backgroundColor": "#A5C6E4",
-        "foregroundColor": "#092D4A",
-        "textColor": "#092D4A",
-        "iconColor": "#092D4A",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#8E918F",
-        "disabledIconColor": "#8E918F"
-      },
-      "camera": {
-        "backgroundColor": "#33FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#1AFFFFFF",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      },
-      "muted": {
-        "backgroundColor": "#33FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#1AFFFFFF",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      },
-      "speaker": {
-        "backgroundColor": "#33FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#1AFFFFFF",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      },
-      "held": {
-        "backgroundColor": "#33FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#1AFFFFFF",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      },
-      "swap": {
-        "backgroundColor": "#33FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#1AFFFFFF",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      },
-      "key": {
-        "backgroundColor": "#33FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#1AFFFFFF",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      }
-    }
-  },
-  "about": {
-    "mainLogo": {
-      "uri": "asset://assets/images/secondary_onboarding_logo_dark.svg",
-      "render": {
-        "scale": 0.25,
+      "loading": {
+        "showByDefault": false,
         "padding": {
-          "left": 0.0,
-          "top": 48.0,
-          "right": 0.0,
-          "bottom": 0.0
-        }
+          "left": 2.0,
+          "top": 2.0,
+          "right": 2.0,
+          "bottom": 2.0
+        },
+        "strokeWidth": 1.0
+      },
+      "smartIndicator": {
+        "backgroundColor": "#1D2022",
+        "icon": {
+          "codePoint": "0xe491",
+          "fontFamily": "MaterialIcons",
+          "matchTextDirection": false
+        },
+        "sizeFactor": 0.4
+      },
+      "registeredBadge": {
+        "registeredColor": null,
+        "unregisteredColor": null,
+        "sizeFactor": 0.2
+      },
+      "presenceBadge": {
+        "availableColor": null,
+        "unavailableColor": null,
+        "sizeFactor": 0.325
       }
-    },
-    "_background": {
-      "type": "gradient",
-      "colors": [
-        "#162533",
-        "#000000"
-      ],
-      "stops": [
-        0.0,
-        1.0
-      ],
-      "beginX": 0.0,
-      "beginY": 0.0,
-      "endX": 0.0,
-      "endY": 1.0
     }
   },
-  "settings": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
-    "_themeOverride": {
-      "mode": "dark",
-      "applyToAppBar": false
-    },
-    "__background": "Defines the visual background of the screen.",
-    "_background": {
-      "type": "gradient",
-      "colors": [
-        "#162533",
-        "#000000"
-      ],
-      "stops": [
-        0.0,
-        1.0
-      ],
-      "beginX": 0.0,
-      "beginY": 0.0,
-      "endX": 0.0,
-      "endY": 1.0
+  "dialog": {
+    "snackBar": {
+      "successBackgroundColor": "#B8E078",
+      "errorBackgroundColor": "#FF897D",
+      "infoBackgroundColor": "#8E918F",
+      "warningBackgroundColor": "#FFB59D"
     }
   },
-  "keypad": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
-    "_themeOverride": {
-      "mode": "dark",
-      "applyToAppBar": false
+  "statuses": {
+    "registrationStatuses": {
+      "online": "#B8E078",
+      "offline": "#37393B"
     },
-    "__background": "Defines the visual background of the screen.",
-    "background": {
-      "type": "gradient",
-      "colors": [
-        "#162533",
-        "#000000"
-      ],
-      "stops": [
-        0.0,
-        1.0
-      ],
-      "beginX": 0.0,
-      "beginY": 0.0,
-      "endX": 0.0,
-      "endY": 1.0
+    "calStatuses": {
+      "connectivityNone": "#FF897D",
+      "connectError": "#FF897D",
+      "appUnregistered": "#8E918F",
+      "connectIssue": "#FF897D",
+      "inProgress": "#A5C6E4",
+      "ready": "#B8E078"
     }
   },
-  "contacts": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
-    "_themeOverride": {
-      "mode": "dark",
-      "applyToAppBar": false
-    },
-    "__background": "Defines the visual background of the screen.",
-    "_background": {
-      "type": "gradient",
+  "decorationConfig": {
+    "primaryGradientColorsConfig": {
       "colors": [
-        "#162533",
-        "#000000"
-      ],
-      "stops": [
-        0.0,
-        1.0
-      ],
-      "beginX": 0.0,
-      "beginY": 0.0,
-      "endX": 0.0,
-      "endY": 1.0
-    }
-  },
-  "favorites": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
-    "_themeOverride": {
-      "mode": "dark",
-      "applyToAppBar": false
-    },
-    "__background": "Defines the visual background of the screen.",
-    "_background": {
-      "type": "gradient",
-      "colors": [
-        "#162533",
-        "#000000"
-      ],
-      "stops": [
-        0.0,
-        1.0
-      ],
-      "beginX": 0.0,
-      "beginY": 0.0,
-      "endX": 0.0,
-      "endY": 1.0
-    }
-  },
-  "conversations": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
-    "_themeOverride": {
-      "mode": "dark",
-      "applyToAppBar": false
-    },
-    "__background": "Defines the visual background of the screen.",
-    "_background": {
-      "type": "gradient",
-      "colors": [
-        "#162533",
-        "#000000"
-      ],
-      "stops": [
-        0.0,
-        1.0
-      ],
-      "beginX": 0.0,
-      "beginY": 0.0,
-      "endX": 0.0,
-      "endY": 1.0
-    }
-  },
-  "recents": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
-    "_themeOverride": {
-      "mode": "dark",
-      "applyToAppBar": false
-    },
-    "__background": "Defines the visual background of the screen.",
-    "_background": {
-      "type": "gradient",
-      "colors": [
-        "#162533",
-        "#000000"
-      ],
-      "stops": [
-        0.0,
-        1.0
-      ],
-      "beginX": 0.0,
-      "beginY": 0.0,
-      "endX": 0.0,
-      "endY": 1.0
-    }
-  },
-  "embedded": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
-    "_themeOverride": {
-      "mode": "dark",
-      "applyToAppBar": false
-    },
-    "__background": "Defines the visual background of the screen.",
-    "_background": {
-      "type": "gradient",
-      "colors": [
-        "#162533",
-        "#000000"
-      ],
-      "stops": [
-        0.0,
-        1.0
-      ],
-      "beginX": 0.0,
-      "beginY": 0.0,
-      "endX": 0.0,
-      "endY": 1.0
+        {
+          "color": "#1F618F",
+          "blend": true
+        },
+        {
+          "color": "#000000",
+          "blend": true
+        }
+      ]
     }
   }
 }
