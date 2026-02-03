@@ -1,8 +1,15 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
-      run: flutter analyze
+    format:
+      glob: "*.dart"
+      exclude: "(\\.g|\\.freezed)\\.dart$"
+      run: dart format --output=none --set-exit-if-changed {staged_files}
+
+commit-msg:
+  commands:
+    commit-msg-check:
+      run: bash tool/scripts/commit-msg-check.sh
 
 pre-push:
   parallel: true
@@ -13,8 +20,3 @@ pre-push:
       run: flutter analyze
     test:
       run: flutter test
-
-commit-msg:
-  commands:
-    commit-msg-check:
-      run: bash tool/scripts/commit-msg-check.sh
