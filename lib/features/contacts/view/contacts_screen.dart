@@ -7,20 +7,31 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../call/call.dart';
 import '../contacts.dart';
 
+export 'contacts_screen_styles.dart';
+export 'contacts_screen_style.dart';
+
 typedef ContactSourceTypeWidgetBuilder = Widget Function(BuildContext context, ContactSourceType sourceType);
 
 class ContactsScreen extends StatefulWidget {
-  const ContactsScreen({super.key, required this.sourceTypes, required this.sourceTypeWidgetBuilder, this.title});
+  const ContactsScreen({
+    super.key,
+    required this.sourceTypes,
+    required this.sourceTypeWidgetBuilder,
+    this.title,
+    this.style,
+  });
 
   final List<ContactSourceType> sourceTypes;
   final ContactSourceTypeWidgetBuilder sourceTypeWidgetBuilder;
 
   final Widget? title;
+  final ContactsScreenStyle? style;
 
   @override
   State<ContactsScreen> createState() => _ContactsScreenState();
@@ -60,6 +71,11 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final effectiveStyle = widget.style ?? themeData.extension<ContactsScreenStyles>()?.primary;
+    final background = effectiveStyle?.background;
+    final isComplexBackground = background?.isComplex ?? false;
+
     final mediaQueryData = MediaQuery.of(context);
 
     final tabBar = widget.sourceTypes.length <= 1
@@ -108,8 +124,13 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
     );
     return Unfocuser(
       child: ThemedScaffold(
+        background: effectiveStyle?.background,
+        contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+        applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
         appBar: MainAppBar(
           title: widget.title,
+          backgroundColor: isComplexBackground ? Colors.transparent : null,
+          elevation: isComplexBackground ? 0 : null,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,

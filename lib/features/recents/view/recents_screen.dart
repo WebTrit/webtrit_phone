@@ -10,9 +10,12 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/features/recents/view/recents_screen_style.dart';
+import 'package:webtrit_phone/features/recents/view/recents_screen_styles.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../call/call.dart';
@@ -27,6 +30,7 @@ class RecentsScreen extends StatefulWidget {
     required this.videoEnabled,
     required this.chatsEnabled,
     required this.smssEnabled,
+    this.style,
   });
 
   final List<RecentsVisibilityFilter> recentsFilters;
@@ -36,6 +40,7 @@ class RecentsScreen extends StatefulWidget {
   final bool smssEnabled;
 
   final Widget? title;
+  final RecentsScreenStyle? style;
 
   @override
   State<RecentsScreen> createState() => _RecentsScreenState();
@@ -118,11 +123,21 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final effectiveStyle = widget.style ?? themeData.extension<RecentsScreenStyles>()?.primary;
+    final background = effectiveStyle?.background;
+    final isComplexBackground = background?.isComplex ?? false;
+
     final mediaQueryData = MediaQuery.of(context);
 
     return ThemedScaffold(
+      background: effectiveStyle?.background,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
       appBar: MainAppBar(
         title: widget.title,
+        backgroundColor: isComplexBackground ? Colors.transparent : null,
+        elevation: isComplexBackground ? 0 : null,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(

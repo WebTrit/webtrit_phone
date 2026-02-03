@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/theme/factory/styles/conversations_screen_style_factory.dart';
+import 'package:webtrit_phone/theme/factory/styles/embedded_screen_style_factory.dart';
+import 'package:webtrit_phone/theme/factory/styles/favorites_screen_style_factory.dart';
+import 'package:webtrit_phone/theme/factory/styles/recents_screen_style_factory.dart';
 
 import './styles/styles.dart';
 import '../models/models.dart';
@@ -99,6 +103,11 @@ class ThemeStyleFactoryProvider {
       textTheme: createTextTheme(),
     );
     final settingsScreenStyleFactory = SettingsScreenStyleFactory(colorScheme, pageConfig.settings);
+    final contactsScreenStyleFactory = ContactsScreenStyleFactory(colorScheme, pageConfig.contacts);
+    final recentsScreenStyleFactory = RecentsScreenStyleFactory(colorScheme, pageConfig.recents);
+    final favoritesScreenStyleFactory = FavoritesScreenStyleFactory(colorScheme, pageConfig.favorites);
+    final conversationsScreenStyleFactory = ConversationsScreenStyleFactory(colorScheme, pageConfig.conversations);
+    final embeddedScreenStyleFactory = EmbeddedScreenStyleFactory(colorScheme, pageConfig.embedded);
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -132,6 +141,11 @@ class ThemeStyleFactoryProvider {
       loginOtpSigninPageStyleFactory.create(),
       loginPasswordSigninPageStyleFactory.create(),
       settingsScreenStyleFactory.create(),
+      contactsScreenStyleFactory.create(),
+      recentsScreenStyleFactory.create(),
+      favoritesScreenStyleFactory.create(),
+      conversationsScreenStyleFactory.create(),
+      embeddedScreenStyleFactory.create(),
     ].nonNulls.toList();
   }
 

@@ -18,7 +18,7 @@ class ThemedScaffold extends StatelessWidget {
     required this.body,
     this.background,
     this.contentThemeOverride = ContentThemeOverride.auto,
-    this.ignoreAppBarOverride = false,
+    this.applyToAppBar = true,
     this.appBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
@@ -51,11 +51,11 @@ class ThemedScaffold extends StatelessWidget {
   final BackgroundStyle? background;
 
   /// Determines if the theme brightness should be forced to Light or Dark.
-  final ContentThemeOverride contentThemeOverride;
+  final ContentThemeOverride? contentThemeOverride;
 
   /// If true, the [appBar] will ignore the [contentThemeOverride] and keep
   /// the parent context's theme.
-  final bool ignoreAppBarOverride;
+  final bool applyToAppBar;
 
   final PreferredSizeWidget? appBar;
   final Widget? floatingActionButton;
@@ -108,9 +108,8 @@ class ThemedScaffold extends StatelessWidget {
       );
     }
 
-    // Apply theme override specifically to the body if the AppBar should be ignored.
-    // This allows the AppBar to retain the global theme while the content changes.
-    if (shouldOverride && ignoreAppBarOverride && overrideTheme != null) {
+    // Apply theme override ONLY to body if applyToAppBar is FALSE.
+    if (shouldOverride && !applyToAppBar && overrideTheme != null) {
       currentBody = Theme(data: overrideTheme, child: currentBody);
     }
 
@@ -141,9 +140,8 @@ class ThemedScaffold extends StatelessWidget {
       restorationId: restorationId,
     );
 
-    // Apply theme override to the entire Scaffold (including AppBar)
-    // if ignoreAppBarOverride is false.
-    if (shouldOverride && !ignoreAppBarOverride && overrideTheme != null) {
+    // Apply theme override to WHOLE Scaffold (including AppBar) if applyToAppBar is TRUE.
+    if (shouldOverride && applyToAppBar && overrideTheme != null) {
       scaffold = Theme(data: overrideTheme, child: scaffold);
     }
 

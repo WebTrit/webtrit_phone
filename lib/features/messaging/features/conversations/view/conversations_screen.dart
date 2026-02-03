@@ -12,13 +12,19 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+import 'conversations_screen_style.dart';
+import 'conversations_screen_styles.dart';
 
 enum TabType { chat, sms }
 
 sealed class TabsState {
   const TabsState(this.groupChatsEnabled);
+
   final bool groupChatsEnabled;
+
   TabType get loogingAtTab;
 }
 
@@ -45,10 +51,11 @@ final class DualTabState extends TabsState {
 }
 
 class ConversationsScreen extends StatefulWidget {
-  const ConversationsScreen({super.key, required this.title, required this.initialTabsState});
+  const ConversationsScreen({super.key, required this.title, required this.initialTabsState, this.style});
 
   final Widget title;
   final TabsState initialTabsState;
+  final ConversationsScreenStyle? style;
 
   @override
   State<ConversationsScreen> createState() => _ConversationsScreenState();
@@ -132,15 +139,24 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final themeData = Theme.of(context);
+    final effectiveStyle = widget.style ?? themeData.extension<ConversationsScreenStyles>()?.primary;
+    final background = effectiveStyle?.background;
+    final isComplexBackground = background?.isComplex ?? false;
+
+    final colorScheme = themeData.colorScheme;
     final tabsStateIt = tabsState;
 
     return Unfocuser(
       child: ThemedScaffold(
+        background: effectiveStyle?.background,
+        contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+        applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
         appBar: MainAppBar(
           title: widget.title,
           context: context,
+          backgroundColor: isComplexBackground ? Colors.transparent : null,
+          elevation: isComplexBackground ? 0 : null,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               kMainAppBarBottomSearchHeight + (tabsStateIt is DualTabState ? kMainAppBarBottomTabHeight : 0.0),
@@ -152,7 +168,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                     selectedTab: tabsStateIt.selectedTab,
                     onTabSelected: (tab) => setState(() => tabsState = tabsStateIt.copyWith(selectedTab: tab)),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                 ],
                 IgnoreUnfocuser(
                   child: Padding(
@@ -170,7 +186,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                     ),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
               ],
             ),
           ),

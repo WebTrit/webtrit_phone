@@ -39,6 +39,8 @@ class SettingsScreen extends StatelessWidget {
 
     return ThemedScaffold(
       background: background,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
       appBar: AppBar(
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),

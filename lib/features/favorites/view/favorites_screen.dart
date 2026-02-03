@@ -13,9 +13,12 @@ import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/favorite.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../favorites.dart';
+import 'favorites_screen_style.dart';
+import 'favorites_screen_styles.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({
@@ -26,6 +29,7 @@ class FavoritesScreen extends StatefulWidget {
     required this.chatsEnabled,
     required this.smssEnabled,
     required this.cdrsEnabled,
+    this.style,
   });
 
   final Widget? title;
@@ -34,6 +38,7 @@ class FavoritesScreen extends StatefulWidget {
   final bool chatsEnabled;
   final bool smssEnabled;
   final bool cdrsEnabled;
+  final FavoritesScreenStyle? style;
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
@@ -89,8 +94,21 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final effectiveStyle = widget.style ?? themeData.extension<FavoritesScreenStyles>()?.primary;
+    final background = effectiveStyle?.background;
+    final isComplexBackground = background?.isComplex ?? false;
+
     return ThemedScaffold(
-      appBar: MainAppBar(title: widget.title, context: context),
+      background: effectiveStyle?.background,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      appBar: MainAppBar(
+        title: widget.title,
+        context: context,
+        backgroundColor: isComplexBackground ? Colors.transparent : null,
+        elevation: isComplexBackground ? 0 : null,
+      ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           final favorites = state.favorites;
