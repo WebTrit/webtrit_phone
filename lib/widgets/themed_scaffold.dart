@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 
-/// A wrapper around [Scaffold] that applies custom [BackgroundStyle] configurations.
+/// Defines how the content theme should be overridden within the scaffold.
+enum ContentThemeOverride { auto, light, dark }
+
+/// A wrapper around [Scaffold] that provides enhanced theming and background capabilities.
 ///
-/// This widget handles complex background logic (Gradients, Images) by wrapping
-/// the body in a decorated Container and automatically adjusting properties
-/// like [extendBodyBehindAppBar] to ensure visual consistency.
+/// This widget allows for:
+/// - Custom background styles (Solid, Gradient, Image) via [BackgroundStyle].
+/// - automatic theme mode overriding (forcing light or dark mode) for the content
+///   or the entire scaffold.
 class ThemedScaffold extends StatelessWidget {
   const ThemedScaffold({
     super.key,
     required this.body,
     this.background,
+    this.contentThemeOverride = ContentThemeOverride.auto,
+    this.ignoreAppBarOverride = false,
     this.appBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
@@ -37,13 +44,18 @@ class ThemedScaffold extends StatelessWidget {
     this.restorationId,
   });
 
+  /// The primary content of the scaffold.
   final Widget body;
 
-  /// Defines the background style (Solid, Gradient, or Image).
-  ///
-  /// If provided, this may override [backgroundColor] or force
-  /// [extendBodyBehindAppBar] to true depending on the specific style.
+  /// Configuration for the scaffold's background (e.g., Gradient, Image).
   final BackgroundStyle? background;
+
+  /// Determines if the theme brightness should be forced to Light or Dark.
+  final ContentThemeOverride contentThemeOverride;
+
+  /// If true, the [appBar] will ignore the [contentThemeOverride] and keep
+  /// the parent context's theme.
+  final bool ignoreAppBarOverride;
 
   final PreferredSizeWidget? appBar;
   final Widget? floatingActionButton;
@@ -71,32 +83,43 @@ class ThemedScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determines the scaffold background color.
-    // If [SolidBackgroundStyle] is used, it takes precedence over the fallback [backgroundColor].
-    // Complex styles (Gradient/Image) are handled via Container decoration, so this remains null/fallback.
-    final scaffoldColor = switch (background) {
+    final shouldOverride = contentThemeOverride != ContentThemeOverride.auto;
+    final overrideTheme = shouldOverride ? _resolveThemeOverride(context) : null;
+
+    final scaffoldBackgroundColor = switch (background) {
       SolidBackgroundStyle s => s.color,
       _ => backgroundColor,
     };
 
-    // Automatically extends the body behind the AppBar if a complex background
-    // (Gradient or Image) is present. This prevents a visual disconnect (e.g., a white strip)
-    // at the top of the screen.
     final effectiveExtendBodyBehindAppBar =
         extendBodyBehindAppBar || (background is GradientBackgroundStyle || background is ImageBackgroundStyle);
 
     final boxDecoration = _resolveBoxDecoration(background);
 
-    return Scaffold(
-      backgroundColor: scaffoldColor,
+    Widget currentBody = body;
+
+    // Apply background decoration if available
+    if (boxDecoration != null) {
+      currentBody = Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: boxDecoration,
+        child: currentBody,
+      );
+    }
+
+    // Apply theme override specifically to the body if the AppBar should be ignored.
+    // This allows the AppBar to retain the global theme while the content changes.
+    if (shouldOverride && ignoreAppBarOverride && overrideTheme != null) {
+      currentBody = Theme(data: overrideTheme, child: currentBody);
+    }
+
+    Widget scaffold = Scaffold(
+      backgroundColor: scaffoldBackgroundColor,
       extendBody: extendBody,
       extendBodyBehindAppBar: effectiveExtendBodyBehindAppBar,
       appBar: appBar,
-      // If a complex decoration exists, wrap the body in a Container to apply it.
-      // Otherwise, render the body directly to avoid unnecessary nesting.
-      body: boxDecoration != null
-          ? Container(width: double.infinity, height: double.infinity, decoration: boxDecoration, child: body)
-          : body,
+      body: currentBody,
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: floatingActionButtonLocation,
       floatingActionButtonAnimator: floatingActionButtonAnimator,
@@ -117,11 +140,16 @@ class ThemedScaffold extends StatelessWidget {
       endDrawerEnableOpenDragGesture: endDrawerEnableOpenDragGesture,
       restorationId: restorationId,
     );
+
+    // Apply theme override to the entire Scaffold (including AppBar)
+    // if ignoreAppBarOverride is false.
+    if (shouldOverride && !ignoreAppBarOverride && overrideTheme != null) {
+      scaffold = Theme(data: overrideTheme, child: scaffold);
+    }
+
+    return scaffold;
   }
 
-  /// Converts the [BackgroundStyle] into a standard Flutter [BoxDecoration].
-  ///
-  /// Returns null for [SolidBackgroundStyle] as that is handled by the Scaffold's [backgroundColor].
   BoxDecoration? _resolveBoxDecoration(BackgroundStyle? style) {
     return switch (style) {
       GradientBackgroundStyle g => BoxDecoration(gradient: g.gradient),
@@ -131,5 +159,40 @@ class ThemedScaffold extends StatelessWidget {
       ),
       _ => null,
     };
+  }
+
+  ThemeData _resolveThemeOverride(BuildContext context) {
+    final currentTheme = Theme.of(context);
+    final targetBrightness = contentThemeOverride == ContentThemeOverride.light ? Brightness.light : Brightness.dark;
+
+    final newColorScheme = ColorScheme.fromSeed(
+      seedColor: currentTheme.colorScheme.primary,
+      brightness: targetBrightness,
+    );
+
+    final newTextTheme = currentTheme.textTheme.apply(
+      bodyColor: newColorScheme.onSurface,
+      displayColor: newColorScheme.onSurface,
+      decorationColor: newColorScheme.onSurface,
+    );
+
+    final newIconTheme = currentTheme.iconTheme.copyWith(color: newColorScheme.onSurface);
+
+    // If ignoreAppBarOverride is false, we need to ensure the SystemUI overlay matches
+    // the new brightness target.
+    final overlayStyle = targetBrightness == Brightness.light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+
+    return currentTheme.copyWith(
+      brightness: targetBrightness,
+      colorScheme: newColorScheme,
+      textTheme: newTextTheme,
+      iconTheme: newIconTheme,
+      scaffoldBackgroundColor: newColorScheme.surface,
+      appBarTheme: currentTheme.appBarTheme.copyWith(
+        systemOverlayStyle: overlayStyle,
+        backgroundColor: Colors.transparent,
+        foregroundColor: newColorScheme.onSurface,
+      ),
+    );
   }
 }
