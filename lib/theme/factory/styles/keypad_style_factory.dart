@@ -36,36 +36,26 @@ class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
     // Number defaults (headlineLarge)
     final defaultNumberFontSize = textTheme.headlineLarge?.fontSize ?? 32.0;
     final defaultNumberFontWeight = textTheme.headlineLarge?.fontWeight ?? FontWeight.w400;
-    final defaultNumberColor = textTheme.headlineLarge?.color ?? colors.onSurface;
 
     // Subtext defaults(bodyMedium)
     final defaultSubFontSize = textTheme.bodyMedium?.fontSize ?? 14.0;
     final defaultSubFontWeight = textTheme.bodyMedium?.fontWeight ?? FontWeight.w400;
-    final defaultSubColor = (textTheme.bodyMedium?.color ?? colors.onSurface).withValues(alpha: 0.6);
 
     return KeypadStyles(
       primary: KeypadStyle(
         keyStyle: KeypadKeyStyle(
           textStyle:
-              config?.textStyle
-                  ?.toTextStyle(defaultFontSize: defaultNumberFontSize, defaultFontWeight: defaultNumberFontWeight)
-                  .copyWith(color: defaultNumberColor) ??
-              TextStyle(
-                fontSize: defaultNumberFontSize,
-                fontWeight: defaultNumberFontWeight,
-                color: defaultNumberColor,
-                height: 1.125,
-              ),
+              config?.textStyle?.toTextStyle(
+                defaultFontSize: defaultNumberFontSize,
+                defaultFontWeight: defaultNumberFontWeight,
+              ) ??
+              TextStyle(fontSize: defaultNumberFontSize, fontWeight: defaultNumberFontWeight, height: 1.125),
           subtextStyle:
-              config?.subtextStyle
-                  ?.toTextStyle(defaultFontSize: defaultSubFontSize, defaultFontWeight: defaultSubFontWeight)
-                  .copyWith(color: defaultSubColor) ??
-              TextStyle(
-                fontSize: defaultSubFontSize,
-                fontWeight: defaultSubFontWeight,
-                color: defaultSubColor,
-                height: 1.428,
-              ),
+              config?.subtextStyle?.toTextStyle(
+                defaultFontSize: defaultSubFontSize,
+                defaultFontWeight: defaultSubFontWeight,
+              ) ??
+              TextStyle(fontSize: defaultSubFontSize, fontWeight: defaultSubFontWeight, height: 1.428),
         ),
       ),
     );

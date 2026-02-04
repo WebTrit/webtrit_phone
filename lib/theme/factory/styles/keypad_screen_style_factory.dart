@@ -22,7 +22,6 @@ class KeypadScreenStyleFactory implements ThemeStyleFactory<KeypadScreenStyles> 
 
   @override
   KeypadScreenStyles create() {
-    final themeData = ThemeData(colorScheme: colors);
     final backgroundStyle = config.background?.toStyle();
 
     return KeypadScreenStyles(
@@ -30,10 +29,9 @@ class KeypadScreenStyleFactory implements ThemeStyleFactory<KeypadScreenStyles> 
         background: backgroundStyle,
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
-        inputField: config.textField?.toStyle(colors: colors, theme: themeData),
+        inputField: config.textField?.toStyle(colors: colors),
         contactNameField: config.contactName?.toStyle(
           colors: colors,
-          theme: themeData,
           base: const TextFieldStyle(textAlign: TextAlign.center, showCursor: false, keyboardType: TextInputType.none),
         ),
         keypadStyle: KeypadStyleFactory(colors, config: config.keypad, textTheme: textTheme).create().primary,
