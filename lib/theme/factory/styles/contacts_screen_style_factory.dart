@@ -20,7 +20,7 @@ class ContactsScreenStyleFactory implements ThemeStyleFactory<ContactsScreenStyl
     return ContactsScreenStyles(
       primary: ContactsScreenStyle(
         background: backgroundStyle,
-        contentThemeOverride: config.themeOverride.mode.toContentThemeOverride(),
+        contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
       ),
     );

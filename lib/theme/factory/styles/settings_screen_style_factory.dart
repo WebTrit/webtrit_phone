@@ -25,7 +25,7 @@ class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyl
     final groupTitleListStyle = GroupTitleListStyleFactory(colors, config?.groupTitleListTile).create().primary;
 
     // Resolve theme override values safely
-    final contentThemeOverride = config?.themeOverride.mode.toContentThemeOverride();
+    final contentThemeOverride = config?.themeOverride.mode.toThemeMode();
     final applyToAppBar = config?.themeOverride.applyToAppBar;
 
     return SettingsScreenStyles(

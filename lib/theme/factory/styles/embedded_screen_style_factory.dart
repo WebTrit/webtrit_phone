@@ -21,7 +21,7 @@ class EmbeddedScreenStyleFactory implements ThemeStyleFactory<EmbeddedScreenStyl
     return EmbeddedScreenStyles(
       primary: EmbeddedScreenStyle(
         background: backgroundStyle,
-        contentThemeOverride: config.themeOverride.mode.toContentThemeOverride(),
+        contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
       ),
     );

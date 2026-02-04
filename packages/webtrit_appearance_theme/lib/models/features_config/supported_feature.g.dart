@@ -10,7 +10,7 @@ SupportedThemeMode _$SupportedThemeModeFromJson(Map<String, dynamic> json) =>
     SupportedThemeMode(
       mode:
           $enumDecodeNullable(_$ThemeModeConfigEnumMap, json['mode']) ??
-          ThemeModeConfig.auto,
+          ThemeModeConfig.system,
       $type: json['type'] as String?,
     );
 
@@ -21,7 +21,7 @@ Map<String, dynamic> _$SupportedThemeModeToJson(SupportedThemeMode instance) =>
     };
 
 const _$ThemeModeConfigEnumMap = {
-  ThemeModeConfig.auto: 'auto',
+  ThemeModeConfig.system: 'system',
   ThemeModeConfig.light: 'light',
   ThemeModeConfig.dark: 'dark',
 };

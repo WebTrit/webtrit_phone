@@ -28,7 +28,7 @@ class KeypadScreenStyleFactory implements ThemeStyleFactory<KeypadScreenStyles> 
     return KeypadScreenStyles(
       primary: KeypadScreenStyle(
         background: backgroundStyle,
-        contentThemeOverride: config.themeOverride.mode.toContentThemeOverride(),
+        contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
         inputField: config.textField?.toStyle(colors: colors, theme: themeData),
         contactNameField: config.contactName?.toStyle(

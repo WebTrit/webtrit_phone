@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/widgets/themed_scaffold.dart';
 
 import '../widgets/actionpad_style.dart';
 import '../widgets/keypad_style.dart';
@@ -23,7 +23,7 @@ class KeypadScreenStyle extends BaseScreenStyle with Diagnosticable {
   });
 
   /// Overrides the theme brightness (Light/Dark) for the screen content.
-  final ContentThemeOverride? contentThemeOverride;
+  final ThemeMode? contentThemeOverride;
 
   /// If true, the AppBar will ignore the [contentThemeOverride] and keep the global theme.
   final bool? applyToAppBar;
@@ -43,7 +43,7 @@ class KeypadScreenStyle extends BaseScreenStyle with Diagnosticable {
   /// Creates a copy of this style with the given fields replaced with the new values.
   KeypadScreenStyle copyWith({
     BackgroundStyle? background,
-    ContentThemeOverride? contentThemeOverride,
+    ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
     TextFieldStyle? inputField,
     TextFieldStyle? contactNameField,
@@ -95,7 +95,7 @@ class KeypadScreenStyle extends BaseScreenStyle with Diagnosticable {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty<BackgroundStyle?>('background', background))
-      ..add(EnumProperty<ContentThemeOverride?>('contentThemeOverride', contentThemeOverride))
+      ..add(EnumProperty<ThemeMode?>('contentThemeOverride', contentThemeOverride))
       ..add(DiagnosticsProperty<bool?>('applyToAppBar', applyToAppBar))
       ..add(DiagnosticsProperty<TextFieldStyle?>('inputField', inputField))
       ..add(DiagnosticsProperty<TextFieldStyle?>('contactNameField', contactNameField))

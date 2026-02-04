@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 
-/// Defines how the content theme should be overridden within the scaffold.
-enum ContentThemeOverride { auto, light, dark }
-
 /// A wrapper around [Scaffold] that provides enhanced theming and background capabilities.
 ///
 /// This widget allows for:
@@ -17,7 +14,7 @@ class ThemedScaffold extends StatelessWidget {
     super.key,
     required this.body,
     this.background,
-    this.contentThemeOverride = ContentThemeOverride.auto,
+    this.contentThemeOverride = ThemeMode.system,
     this.applyToAppBar = true,
     this.appBar,
     this.floatingActionButton,
@@ -51,7 +48,7 @@ class ThemedScaffold extends StatelessWidget {
   final BackgroundStyle? background;
 
   /// Determines if the theme brightness should be forced to Light or Dark.
-  final ContentThemeOverride? contentThemeOverride;
+  final ThemeMode? contentThemeOverride;
 
   /// If true, the [contentThemeOverride] is applied to the entire Scaffold (including [appBar]).
   /// If false, it is applied only to the [body], allowing the [appBar] to retain the global theme.
@@ -83,7 +80,8 @@ class ThemedScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shouldOverride = contentThemeOverride != ContentThemeOverride.auto;
+    final effectiveContentThemeOverride = contentThemeOverride ?? ThemeMode.system;
+    final shouldOverride = effectiveContentThemeOverride != ThemeMode.system;
     final overrideTheme = shouldOverride ? _resolveThemeOverride(context) : null;
 
     final scaffoldBackgroundColor = switch (background) {
@@ -161,7 +159,7 @@ class ThemedScaffold extends StatelessWidget {
 
   ThemeData _resolveThemeOverride(BuildContext context) {
     final currentTheme = Theme.of(context);
-    final targetBrightness = contentThemeOverride == ContentThemeOverride.light ? Brightness.light : Brightness.dark;
+    final targetBrightness = contentThemeOverride == ThemeMode.light ? Brightness.light : Brightness.dark;
 
     final newColorScheme = ColorScheme.fromSeed(
       seedColor: currentTheme.colorScheme.primary,

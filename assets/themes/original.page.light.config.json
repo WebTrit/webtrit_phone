@@ -249,7 +249,7 @@
     }
   },
   "settings": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
       "applyToAppBar": false
@@ -272,7 +272,7 @@
     }
   },
   "keypad": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
       "applyToAppBar": false
@@ -295,7 +295,7 @@
     }
   },
   "contacts": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
       "applyToAppBar": false
@@ -318,7 +318,7 @@
     }
   },
   "favorites": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
       "applyToAppBar": false
@@ -341,7 +341,7 @@
     }
   },
   "conversations": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
       "applyToAppBar": false
@@ -364,7 +364,7 @@
     }
   },
   "recents": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
       "applyToAppBar": false
@@ -387,7 +387,7 @@
     }
   },
   "embedded": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (auto/light/dark) and 'applyToAppBar' (bool).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
       "applyToAppBar": false

@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/widgets/themed_scaffold.dart';
 
 import '../widgets/group_title_list_style.dart';
 
@@ -25,7 +24,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     this.itemTextStyle,
   });
 
-  final ContentThemeOverride? contentThemeOverride;
+  final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
 
   /// The color for leading icons in settings items (excluding logout and user icons which have specific overrides).
@@ -51,7 +50,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
 
   SettingScreenStyle copyWith({
     BackgroundStyle? background,
-    ContentThemeOverride? contentThemeOverride,
+    ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
     Color? leadingIconsColor,
     Color? logoutIconColor,
@@ -113,7 +112,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty<BackgroundStyle?>('background', background))
-      ..add(EnumProperty<ContentThemeOverride?>('contentThemeOverride', contentThemeOverride))
+      ..add(EnumProperty<ThemeMode?>('contentThemeOverride', contentThemeOverride))
       ..add(DiagnosticsProperty<bool?>('applyToAppBar', applyToAppBar))
       ..add(ColorProperty('leadingIconsColor', leadingIconsColor))
       ..add(ColorProperty('logoutIconColor', logoutIconColor))

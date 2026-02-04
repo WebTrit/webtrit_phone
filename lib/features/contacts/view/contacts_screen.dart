@@ -125,7 +125,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
     return Unfocuser(
       child: ThemedScaffold(
         background: effectiveStyle?.background,
-        contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+        contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
         applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
         appBar: MainAppBar(
           title: widget.title,

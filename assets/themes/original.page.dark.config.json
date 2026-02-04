@@ -43,14 +43,14 @@
         "textAlign": "left",
         "decoration": {
           "labelText": "login_TextFieldLabelText_otpSigninUserRef",
-          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation.",
+          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation. If the key is missing or cannot be resolved, the default label for this input will be used automatically. If omitted entirely, the value is treated as plain text for single-language setups.",
           "_prefixText": "123",
           "_hintText": "XXXXXXXXX"
         },
         "inputValue": {
           "_includePrefixInData": true,
           "_initialValue": "380",
-          "__initialValue": "The string value used to pre-fill the text field when the screen is initialized."
+          "__initialValue": "The string value used to pre-fill the text field when the screen is initialized. This is typically used to set a default country code or prefix that the user can modify."
         },
         "_mask": {
           "pattern": "+380 (##) ###-##-##",
@@ -66,14 +66,14 @@
         "textAlign": "left",
         "decoration": {
           "labelText": "login_TextFieldLabelText_passwordSigninUserRef",
-          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation.",
+          "__labelText": "Text used as the label or prefix in the TextField. Use an ARB key to enable translation. If the key is missing or cannot be resolved, the default label for this input will be used automatically. If omitted entirely, the value is treated as plain text for single-language setups.",
           "_prefixText": "123",
           "_hintText": "XXXXXXXXX"
         },
         "inputValue": {
           "_includePrefixInData": false,
           "_initialValue": "380",
-          "__initialValue": "The string value used to pre-fill the text field when the screen is initialized."
+          "__initialValue": "The string value used to pre-fill the text field when the screen is initialized. This is typically used to set a default country code or prefix that the user can modify."
         },
         "_mask": {
           "pattern": "+380 (##) ###-##-##",
@@ -249,12 +249,12 @@
     }
   },
   "settings": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "dark",
       "applyToAppBar": false
     },
-    "__background": "Defines the visual background of the screen.",
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "_background": {
       "type": "gradient",
       "colors": [
@@ -272,12 +272,12 @@
     }
   },
   "keypad": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "dark",
       "applyToAppBar": false
     },
-    "__background": "Defines the visual background of the screen.",
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "background": {
       "type": "gradient",
       "colors": [
@@ -295,12 +295,12 @@
     }
   },
   "contacts": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "dark",
       "applyToAppBar": false
     },
-    "__background": "Defines the visual background of the screen.",
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "_background": {
       "type": "gradient",
       "colors": [
@@ -318,12 +318,12 @@
     }
   },
   "favorites": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "dark",
       "applyToAppBar": false
     },
-    "__background": "Defines the visual background of the screen.",
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "_background": {
       "type": "gradient",
       "colors": [
@@ -341,12 +341,12 @@
     }
   },
   "conversations": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "dark",
       "applyToAppBar": false
     },
-    "__background": "Defines the visual background of the screen.",
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "_background": {
       "type": "gradient",
       "colors": [
@@ -364,12 +364,12 @@
     }
   },
   "recents": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "dark",
       "applyToAppBar": false
     },
-    "__background": "Defines the visual background of the screen.",
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "_background": {
       "type": "gradient",
       "colors": [
@@ -387,12 +387,12 @@
     }
   },
   "embedded": {
-    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark).",
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "dark",
       "applyToAppBar": false
     },
-    "__background": "Defines the visual background of the screen.",
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
     "_background": {
       "type": "gradient",
       "colors": [

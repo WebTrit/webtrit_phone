@@ -1,1 +1,1 @@
-enum ThemeModeConfig { auto, light, dark }
+enum ThemeModeConfig { system, light, dark }
