@@ -1333,7 +1333,7 @@ case _:
 /// @nodoc
 mixin _$LoginModeSelectPageConfig {
 
- OverlayStyleModel? get systemUiOverlayStyle; ImageSource? get mainLogo; ElevatedButtonStyleType get buttonLoginStyleType; ElevatedButtonStyleType get buttonSignupStyleType; PageBackground? get background;
+ ThemeOverrideConfig get themeOverride; OverlayStyleModel? get systemUiOverlayStyle; ImageSource? get mainLogo; ElevatedButtonStyleType get buttonLoginStyleType; ElevatedButtonStyleType get buttonSignupStyleType; PageBackground? get background;
 /// Create a copy of LoginModeSelectPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1344,16 +1344,16 @@ $LoginModeSelectPageConfigCopyWith<LoginModeSelectPageConfig> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginModeSelectPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.buttonLoginStyleType, buttonLoginStyleType) || other.buttonLoginStyleType == buttonLoginStyleType)&&(identical(other.buttonSignupStyleType, buttonSignupStyleType) || other.buttonSignupStyleType == buttonSignupStyleType)&&(identical(other.background, background) || other.background == background));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginModeSelectPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.buttonLoginStyleType, buttonLoginStyleType) || other.buttonLoginStyleType == buttonLoginStyleType)&&(identical(other.buttonSignupStyleType, buttonSignupStyleType) || other.buttonSignupStyleType == buttonSignupStyleType)&&(identical(other.background, background) || other.background == background));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,mainLogo,buttonLoginStyleType,buttonSignupStyleType,background);
+int get hashCode => Object.hash(runtimeType,themeOverride,systemUiOverlayStyle,mainLogo,buttonLoginStyleType,buttonSignupStyleType,background);
 
 @override
 String toString() {
-  return 'LoginModeSelectPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, mainLogo: $mainLogo, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType, background: $background)';
+  return 'LoginModeSelectPageConfig(themeOverride: $themeOverride, systemUiOverlayStyle: $systemUiOverlayStyle, mainLogo: $mainLogo, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType, background: $background)';
 }
 
 
@@ -1364,7 +1364,7 @@ abstract mixin class $LoginModeSelectPageConfigCopyWith<$Res>  {
   factory $LoginModeSelectPageConfigCopyWith(LoginModeSelectPageConfig value, $Res Function(LoginModeSelectPageConfig) _then) = _$LoginModeSelectPageConfigCopyWithImpl;
 @useResult
 $Res call({
- OverlayStyleModel? systemUiOverlayStyle, ImageSource? mainLogo, ElevatedButtonStyleType buttonLoginStyleType, ElevatedButtonStyleType buttonSignupStyleType, PageBackground? background
+ ThemeOverrideConfig themeOverride, OverlayStyleModel? systemUiOverlayStyle, ImageSource? mainLogo, ElevatedButtonStyleType buttonLoginStyleType, ElevatedButtonStyleType buttonSignupStyleType, PageBackground? background
 });
 
 
@@ -1381,9 +1381,10 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of LoginModeSelectPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? mainLogo = freezed,Object? buttonLoginStyleType = null,Object? buttonSignupStyleType = null,Object? background = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? themeOverride = null,Object? systemUiOverlayStyle = freezed,Object? mainLogo = freezed,Object? buttonLoginStyleType = null,Object? buttonSignupStyleType = null,Object? background = freezed,}) {
   return _then(LoginModeSelectPageConfig(
-systemUiOverlayStyle: freezed == systemUiOverlayStyle ? _self.systemUiOverlayStyle : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
+themeOverride: null == themeOverride ? _self.themeOverride : themeOverride // ignore: cast_nullable_to_non_nullable
+as ThemeOverrideConfig,systemUiOverlayStyle: freezed == systemUiOverlayStyle ? _self.systemUiOverlayStyle : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
 as OverlayStyleModel?,mainLogo: freezed == mainLogo ? _self.mainLogo : mainLogo // ignore: cast_nullable_to_non_nullable
 as ImageSource?,buttonLoginStyleType: null == buttonLoginStyleType ? _self.buttonLoginStyleType : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
 as ElevatedButtonStyleType,buttonSignupStyleType: null == buttonSignupStyleType ? _self.buttonSignupStyleType : buttonSignupStyleType // ignore: cast_nullable_to_non_nullable
@@ -1523,7 +1524,7 @@ case _:
 /// @nodoc
 mixin _$LoginSwitchPageConfig {
 
- ImageSource? get mainLogo; PageBackground? get background;
+ ThemeOverrideConfig get themeOverride; ImageSource? get mainLogo; PageBackground? get background;
 /// Create a copy of LoginSwitchPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1534,16 +1535,16 @@ $LoginSwitchPageConfigCopyWith<LoginSwitchPageConfig> get copyWith => _$LoginSwi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginSwitchPageConfig&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.background, background) || other.background == background));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginSwitchPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.background, background) || other.background == background));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,mainLogo,background);
+int get hashCode => Object.hash(runtimeType,themeOverride,mainLogo,background);
 
 @override
 String toString() {
-  return 'LoginSwitchPageConfig(mainLogo: $mainLogo, background: $background)';
+  return 'LoginSwitchPageConfig(themeOverride: $themeOverride, mainLogo: $mainLogo, background: $background)';
 }
 
 
@@ -1554,7 +1555,7 @@ abstract mixin class $LoginSwitchPageConfigCopyWith<$Res>  {
   factory $LoginSwitchPageConfigCopyWith(LoginSwitchPageConfig value, $Res Function(LoginSwitchPageConfig) _then) = _$LoginSwitchPageConfigCopyWithImpl;
 @useResult
 $Res call({
- ImageSource? mainLogo, PageBackground? background
+ ImageSource? mainLogo, PageBackground? background, ThemeOverrideConfig themeOverride
 });
 
 
@@ -1571,11 +1572,12 @@ class _$LoginSwitchPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of LoginSwitchPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? mainLogo = freezed,Object? background = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? mainLogo = freezed,Object? background = freezed,Object? themeOverride = null,}) {
   return _then(LoginSwitchPageConfig(
 mainLogo: freezed == mainLogo ? _self.mainLogo : mainLogo // ignore: cast_nullable_to_non_nullable
 as ImageSource?,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
-as PageBackground?,
+as PageBackground?,themeOverride: null == themeOverride ? _self.themeOverride : themeOverride // ignore: cast_nullable_to_non_nullable
+as ThemeOverrideConfig,
   ));
 }
 

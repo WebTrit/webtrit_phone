@@ -189,12 +189,16 @@ class LoginSignupVerifyScreenPageConfig with _$LoginSignupVerifyScreenPageConfig
 @JsonSerializable(explicitToJson: true)
 class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig implements BasePageConfig {
   const LoginModeSelectPageConfig({
+    this.themeOverride = const ThemeOverrideConfig(),
     this.systemUiOverlayStyle,
     this.mainLogo,
     this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
     this.buttonSignupStyleType = ElevatedButtonStyleType.primary,
     this.background,
   });
+
+  @override
+  final ThemeOverrideConfig themeOverride;
 
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
@@ -219,7 +223,11 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig implements Base
 @freezed
 @JsonSerializable(explicitToJson: true)
 class LoginSwitchPageConfig with _$LoginSwitchPageConfig implements BasePageConfig {
-  const LoginSwitchPageConfig({this.mainLogo, this.background});
+  const LoginSwitchPageConfig({this.mainLogo, this.background, this.themeOverride = const ThemeOverrideConfig()});
+
+  /// Configuration to force override the theme mode.
+  @override
+  final ThemeOverrideConfig themeOverride;
 
   @override
   final ImageSource? mainLogo;

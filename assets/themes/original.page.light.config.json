@@ -1,6 +1,27 @@
 {
   "login": {
     "modeSelect": {
+      "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+      "_themeOverride": {
+        "mode": "dark",
+        "applyToAppBar": false
+      },
+      "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+      "_background": {
+        "type": "gradient",
+        "colors": [
+          "#162533",
+          "#000000"
+        ],
+        "stops": [
+          0.0,
+          1.0
+        ],
+        "beginX": 0.0,
+        "beginY": 0.0,
+        "endX": 0.0,
+        "endY": 1.0
+      },
       "systemUiOverlayStyle": {
         "statusBarIconBrightness": "dark",
         "statusBarBrightness": "light",
@@ -24,6 +45,27 @@
       "buttonSignupStyleType": "neutralOnDark"
     },
     "switchPage": {
+      "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+      "_themeOverride": {
+        "mode": "dark",
+        "applyToAppBar": false
+      },
+      "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+      "_background": {
+        "type": "gradient",
+        "colors": [
+          "#162533",
+          "#000000"
+        ],
+        "stops": [
+          0.0,
+          1.0
+        ],
+        "beginX": 0.0,
+        "beginY": 0.0,
+        "endX": 0.0,
+        "endY": 1.0
+      },
       "mainLogo": {
         "uri": "asset://assets/images/secondary_onboarding_logo.svg",
         "render": {

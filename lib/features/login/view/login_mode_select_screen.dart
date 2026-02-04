@@ -40,7 +40,9 @@ class LoginModeSelectScreen extends StatelessWidget {
         // TODO(Serdun): Looks like we can move logic with enabling demo mode to the app config
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
 
-        return Scaffold(
+        return ThemedScaffold(
+          contentThemeOverride: localStyle?.contentThemeOverride,
+          applyToAppBar: localStyle?.applyToAppBar ?? true,
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             backgroundColor: Colors.transparent,

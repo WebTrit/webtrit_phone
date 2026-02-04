@@ -16,6 +16,12 @@ class LoginSwitchScreenStyleFactory implements ThemeStyleFactory<LoginSwitchScre
   LoginSwitchScreenStyles create() {
     final pictureLogoStyle = ThemeImageStyleFactory(source: config?.mainLogo).create();
 
-    return LoginSwitchScreenStyles(primary: LoginSwitchScreenStyle(pictureLogoStyle: pictureLogoStyle));
+    return LoginSwitchScreenStyles(
+      primary: LoginSwitchScreenStyle(
+        contentThemeOverride: config?.themeOverride.mode.toThemeMode(),
+        applyToAppBar: config?.themeOverride.applyToAppBar,
+        pictureLogoStyle: pictureLogoStyle,
+      ),
+    );
   }
 }
