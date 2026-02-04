@@ -533,7 +533,7 @@ abstract final class SupportedMapper {
             as SupportedVideoCall;
 
     final configThemeMode = switch (themeFeature.mode) {
-      ThemeModeConfig.auto => ThemeMode.system,
+      ThemeModeConfig.system => ThemeMode.system,
       ThemeModeConfig.light => ThemeMode.light,
       ThemeModeConfig.dark => ThemeMode.dark,
     };

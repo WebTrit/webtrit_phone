@@ -201,7 +201,7 @@ return videoCall(_that.enabled);case _:
 @JsonSerializable()
 
 class SupportedThemeMode implements SupportedFeature {
-  const SupportedThemeMode({this.mode = ThemeModeConfig.auto, final  String? $type}): $type = $type ?? 'themeMode';
+  const SupportedThemeMode({this.mode = ThemeModeConfig.system, final  String? $type}): $type = $type ?? 'themeMode';
   factory SupportedThemeMode.fromJson(Map<String, dynamic> json) => _$SupportedThemeModeFromJson(json);
 
 @JsonKey() final  ThemeModeConfig mode;
