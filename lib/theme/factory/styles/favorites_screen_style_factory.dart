@@ -22,7 +22,7 @@ class FavoritesScreenStyleFactory implements ThemeStyleFactory<FavoritesScreenSt
     return FavoritesScreenStyles(
       primary: FavoritesScreenStyle(
         background: backgroundStyle,
-        contentThemeOverride: config.themeOverride.mode.toContentThemeOverride(),
+        contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
       ),
     );

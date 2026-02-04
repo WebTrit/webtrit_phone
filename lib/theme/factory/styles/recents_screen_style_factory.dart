@@ -21,7 +21,7 @@ class RecentsScreenStyleFactory implements ThemeStyleFactory<RecentsScreenStyles
     return RecentsScreenStyles(
       primary: RecentsScreenStyle(
         background: backgroundStyle,
-        contentThemeOverride: config.themeOverride.mode.toContentThemeOverride(),
+        contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
       ),
     );
