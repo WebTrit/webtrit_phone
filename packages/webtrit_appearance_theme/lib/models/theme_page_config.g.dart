@@ -183,6 +183,11 @@ Map<String, dynamic> _$LoginSignupVerifyScreenPageConfigToJson(
 LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
   Map<String, dynamic> json,
 ) => LoginModeSelectPageConfig(
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(
+          json['themeOverride'] as Map<String, dynamic>,
+        ),
   systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
       ? null
       : OverlayStyleModel.fromJson(
@@ -211,6 +216,7 @@ LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
 Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
   LoginModeSelectPageConfig instance,
 ) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
   'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
   'mainLogo': instance.mainLogo?.toJson(),
   'buttonLoginStyleType':
@@ -236,11 +242,17 @@ LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(
   background: json['background'] == null
       ? null
       : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(
+          json['themeOverride'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$LoginSwitchPageConfigToJson(
   LoginSwitchPageConfig instance,
 ) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
   'mainLogo': instance.mainLogo?.toJson(),
   'background': instance.background?.toJson(),
 };

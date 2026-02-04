@@ -18,6 +18,8 @@ class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSe
 
     return LoginModeSelectScreenStyles(
       primary: LoginModeSelectScreenStyle(
+        contentThemeOverride: config?.themeOverride.mode.toThemeMode(),
+        applyToAppBar: config?.themeOverride.applyToAppBar,
         systemUiOverlayStyle: config?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
         pictureLogoStyle: pictureLogoStyle,
         onboardingTextStyle: TextStyle(color: colors.onPrimary, fontWeight: FontWeight.w600),
