@@ -150,7 +150,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
     return Unfocuser(
       child: ThemedScaffold(
         background: effectiveStyle?.background,
-        contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+        contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
         applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
         appBar: MainAppBar(
           title: widget.title,

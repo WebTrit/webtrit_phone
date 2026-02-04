@@ -132,7 +132,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
 
     return ThemedScaffold(
       background: effectiveStyle?.background,
-      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
       appBar: MainAppBar(
         title: widget.title,

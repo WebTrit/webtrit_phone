@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/widgets/themed_scaffold.dart';
 
 class ConversationsScreenStyle extends BaseScreenStyle with Diagnosticable {
   const ConversationsScreenStyle({super.background, this.contentThemeOverride, this.applyToAppBar});
 
-  final ContentThemeOverride? contentThemeOverride;
+  final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
 
   ConversationsScreenStyle copyWith({
     BackgroundStyle? background,
-    ContentThemeOverride? contentThemeOverride,
+    ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
   }) {
     return ConversationsScreenStyle(
@@ -45,7 +45,7 @@ class ConversationsScreenStyle extends BaseScreenStyle with Diagnosticable {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty<BackgroundStyle?>('background', background))
-      ..add(EnumProperty<ContentThemeOverride?>('contentThemeOverride', contentThemeOverride))
+      ..add(EnumProperty<ThemeMode?>('contentThemeOverride', contentThemeOverride))
       ..add(DiagnosticsProperty<bool?>('applyToAppBar', applyToAppBar));
   }
 }

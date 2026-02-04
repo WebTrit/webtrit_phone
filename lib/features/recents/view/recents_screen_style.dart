@@ -1,19 +1,15 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/widgets/themed_scaffold.dart';
 
 class RecentsScreenStyle extends BaseScreenStyle with Diagnosticable {
   const RecentsScreenStyle({super.background, this.contentThemeOverride, this.applyToAppBar});
 
-  final ContentThemeOverride? contentThemeOverride;
+  final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
 
-  RecentsScreenStyle copyWith({
-    BackgroundStyle? background,
-    ContentThemeOverride? contentThemeOverride,
-    bool? applyToAppBar,
-  }) {
+  RecentsScreenStyle copyWith({BackgroundStyle? background, ThemeMode? contentThemeOverride, bool? applyToAppBar}) {
     return RecentsScreenStyle(
       background: background ?? this.background,
       contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
@@ -45,7 +41,7 @@ class RecentsScreenStyle extends BaseScreenStyle with Diagnosticable {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty<BackgroundStyle?>('background', background))
-      ..add(EnumProperty<ContentThemeOverride?>('contentThemeOverride', contentThemeOverride))
+      ..add(EnumProperty<ThemeMode?>('contentThemeOverride', contentThemeOverride))
       ..add(DiagnosticsProperty<bool?>('applyToAppBar', applyToAppBar));
   }
 }

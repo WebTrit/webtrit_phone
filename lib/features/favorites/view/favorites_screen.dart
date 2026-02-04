@@ -101,7 +101,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
     return ThemedScaffold(
       background: effectiveStyle?.background,
-      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ContentThemeOverride.auto,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
       appBar: MainAppBar(
         title: widget.title,
