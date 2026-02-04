@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:logging/logging.dart';
 
@@ -58,6 +59,7 @@ class FeatureAccess extends Equatable {
     this.termsConfig,
     this.systemNotificationsConfig,
     this.sipPresenceConfig,
+    this.supportedConfig,
   );
 
   final EmbeddedConfig embeddedConfig;
@@ -70,6 +72,7 @@ class FeatureAccess extends Equatable {
   final TermsConfig termsConfig;
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
+  final SupportedConfig supportedConfig;
 
   static FeatureAccess create(
     AppConfig appConfig,
@@ -93,6 +96,7 @@ class FeatureAccess extends Equatable {
       final contactsConfig = ContactsMapper.map(appConfig);
       final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupportSnapshot, appConfig);
       final sipPresenceConfig = SipPresenceMapper.map(coreSupportSnapshot, appConfig);
+      final supportedConfig = SupportedMapper.map(appConfig.supported);
 
       return FeatureAccess._(
         embeddedConfig,
@@ -105,6 +109,7 @@ class FeatureAccess extends Equatable {
         termsConfig,
         systemNotificationsConfig,
         sipPresenceConfig,
+        supportedConfig,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -499,6 +504,41 @@ abstract final class ContactsMapper {
     final parsed = rawActions.map((e) => _actionByName[e]).whereType<ContactAction>().toSet();
 
     return parsed.isEmpty ? fallback : parsed;
+  }
+}
+
+/// Mapper responsible for constructing [SupportedConfig] from the raw list of [SupportedFeature].
+///
+/// This mapper parses the polymorphic list of features and maps them into a structured
+/// configuration object. It handles the resolution logic for each feature:
+///
+/// 1. **Theme Resolution**: Searches for [SupportedThemeMode]. If missing,
+///    it defaults to [ThemeModeConfig.system] (Standard Behavior).
+///
+/// 2. **Video Call Resolution**: Searches for [SupportedVideoCall]. If missing,
+///    it defaults to `false` (disabled), adhering to a "whitelist" approach where
+///    features must be explicitly enabled.
+abstract final class SupportedMapper {
+  /// Maps a list of [SupportedFeature]s to a [SupportedConfig].
+  static SupportedConfig map(List<SupportedFeature> supportedFeatures) {
+    final themeFeature =
+        supportedFeatures.firstWhere((e) => e is SupportedThemeMode, orElse: () => const SupportedFeature.themeMode())
+            as SupportedThemeMode;
+
+    final videoCallFeature =
+        supportedFeatures.firstWhere(
+              (e) => e is SupportedVideoCall,
+              orElse: () => const SupportedFeature.videoCall(enabled: false),
+            )
+            as SupportedVideoCall;
+
+    final configThemeMode = switch (themeFeature.mode) {
+      ThemeModeConfig.auto => ThemeMode.system,
+      ThemeModeConfig.light => ThemeMode.light,
+      ThemeModeConfig.dark => ThemeMode.dark,
+    };
+
+    return SupportedConfig(themeMode: configThemeMode, isVideoCallEnabled: videoCallFeature.enabled);
   }
 }
 

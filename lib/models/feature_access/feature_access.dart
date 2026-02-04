@@ -12,5 +12,6 @@ export 'messaging_config.dart';
 export 'settings_config.dart';
 export 'settings_feature.dart';
 export 'sip_presence_config.dart';
+export 'supported_feature.dart';
 export 'system_notifications_config.dart';
 export 'terms_config.dart';

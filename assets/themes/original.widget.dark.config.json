@@ -4,18 +4,18 @@
   },
   "imageAssets": {
     "defaultPlaceholderImage": {
-      "uri": "asset://assets/images/secondary_onboarding_logo.svg"
+      "uri": "asset://assets/images/secondary_onboarding_logo_dark.svg"
     },
     "leadingAvatarStyle": {
-      "backgroundColor": "#EEF3F6",
+      "backgroundColor": "#3C4750",
       "radius": 20.0,
       "initialsTextStyle": {
         "fontFamily": "Montserrat",
-        "fontSize": null,
+        "fontSize": 16,
         "fontWeight": {
           "weight": 700
         },
-        "color": "#1F618F"
+        "color": "#D1E4F5"
       },
       "placeholderIcon": {
         "codePoint": "0xe497",
@@ -33,7 +33,7 @@
         "strokeWidth": 1.0
       },
       "smartIndicator": {
-        "backgroundColor": "#F8FBFD",
+        "backgroundColor": "#1D2022",
         "icon": {
           "codePoint": "0xe491",
           "fontFamily": "MaterialIcons",
@@ -49,41 +49,41 @@
       "presenceBadge": {
         "availableColor": null,
         "unavailableColor": null,
-        "sizeFactor": 0.325 
+        "sizeFactor": 0.325
       }
     }
   },
   "dialog": {
     "snackBar": {
-      "successBackgroundColor": "#75B943",
-      "errorBackgroundColor": "#E74C3C",
-      "infoBackgroundColor": "#494949",
-      "warningBackgroundColor": "#F95A14"
+      "successBackgroundColor": "#B8E078",
+      "errorBackgroundColor": "#FF897D",
+      "infoBackgroundColor": "#8E918F",
+      "warningBackgroundColor": "#FFB59D"
     }
   },
   "statuses": {
     "registrationStatuses": {
-      "online": "#75B943",
-      "offline": "#EEF3F6"
+      "online": "#B8E078",
+      "offline": "#37393B"
     },
     "calStatuses": {
-      "connectivityNone": "#E74C3C",
-      "connectError": "#E74C3C",
-      "appUnregistered": "#494949",
-      "connectIssue": "#E74C3C",
-      "inProgress": "#123752",
-      "ready": "#75B943"
+      "connectivityNone": "#FF897D",
+      "connectError": "#FF897D",
+      "appUnregistered": "#8E918F",
+      "connectIssue": "#FF897D",
+      "inProgress": "#A5C6E4",
+      "ready": "#B8E078"
     }
   },
   "decorationConfig": {
     "primaryGradientColorsConfig": {
       "colors": [
         {
-          "color": "#5CACE3",
+          "color": "#1F618F",
           "blend": true
         },
         {
-          "color": "#123752",
+          "color": "#000000",
           "blend": true
         }
       ]

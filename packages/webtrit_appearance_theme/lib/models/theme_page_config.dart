@@ -11,9 +11,6 @@ part 'theme_page_config.freezed.dart';
 
 part 'theme_page_config.g.dart';
 
-/// Defines the theme override mode for pages.
-enum ThemeModeOverride { auto, light, dark }
-
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ThemePageConfig with _$ThemePageConfig {
@@ -69,11 +66,11 @@ class ThemePageConfig with _$ThemePageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ThemeOverrideConfig with _$ThemeOverrideConfig {
-  const ThemeOverrideConfig({this.mode = ThemeModeOverride.auto, this.applyToAppBar = true});
+  const ThemeOverrideConfig({this.mode = ThemeModeConfig.auto, this.applyToAppBar = true});
 
   /// The target mode to force (e.g., ensure screen is always Dark).
   @override
-  final ThemeModeOverride mode;
+  final ThemeModeConfig mode;
 
   /// If true (default), the AppBar adopts the [mode].
   /// If false, the AppBar keeps the global theme.

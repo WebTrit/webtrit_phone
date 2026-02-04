@@ -60,22 +60,22 @@ Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) =>
 ThemeOverrideConfig _$ThemeOverrideConfigFromJson(Map<String, dynamic> json) =>
     ThemeOverrideConfig(
       mode:
-          $enumDecodeNullable(_$ThemeModeOverrideEnumMap, json['mode']) ??
-          ThemeModeOverride.auto,
+          $enumDecodeNullable(_$ThemeModeConfigEnumMap, json['mode']) ??
+          ThemeModeConfig.auto,
       applyToAppBar: json['applyToAppBar'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$ThemeOverrideConfigToJson(
   ThemeOverrideConfig instance,
 ) => <String, dynamic>{
-  'mode': _$ThemeModeOverrideEnumMap[instance.mode]!,
+  'mode': _$ThemeModeConfigEnumMap[instance.mode]!,
   'applyToAppBar': instance.applyToAppBar,
 };
 
-const _$ThemeModeOverrideEnumMap = {
-  ThemeModeOverride.auto: 'auto',
-  ThemeModeOverride.light: 'light',
-  ThemeModeOverride.dark: 'dark',
+const _$ThemeModeConfigEnumMap = {
+  ThemeModeConfig.auto: 'auto',
+  ThemeModeConfig.light: 'light',
+  ThemeModeConfig.dark: 'dark',
 };
 
 LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) =>
