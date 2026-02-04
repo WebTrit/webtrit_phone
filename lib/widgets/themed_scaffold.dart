@@ -80,7 +80,8 @@ class ThemedScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shouldOverride = contentThemeOverride != ThemeMode.system;
+    final effectiveContentThemeOverride = contentThemeOverride ?? ThemeMode.system;
+    final shouldOverride = effectiveContentThemeOverride != ThemeMode.system;
     final overrideTheme = shouldOverride ? _resolveThemeOverride(context) : null;
 
     final scaffoldBackgroundColor = switch (background) {
