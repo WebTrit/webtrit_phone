@@ -13,6 +13,65 @@ class AppLocalizationsUk extends AppLocalizations {
       'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
 
   @override
+  String agoTicker_daysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days днів тому',
+      many: '$days днів тому',
+      few: '$days дні тому',
+      one: '$days день тому',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_hoursAgo(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: '$hours годин тому',
+      many: '$hours годин тому',
+      few: '$hours години тому',
+      one: '$hours годину тому',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_minutesAgo(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes хвилин тому',
+      many: '$minutes хвилин тому',
+      few: '$minutes хвилини тому',
+      one: '$minutes хвилину тому',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_secondsAgo(num seconds) {
+    final intl.NumberFormat secondsNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String secondsString = secondsNumberFormat.format(seconds);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: '$secondsString секунд тому',
+      many: '$secondsString секунд тому',
+      few: '$secondsString секунди тому',
+      one: '$secondsString секунду тому',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get alertDialogActions_no => 'Ні';
 
   @override
@@ -2219,21 +2278,18 @@ class AppLocalizationsUk extends AppLocalizations {
       'Функція голосової пошти не підтримується у вашій системі. Зверніться до адміністратора для отримання додаткової інформації.';
 
   @override
-  String get voicemail_Dialog_deleteSingleContent =>
-      'Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?';
-
-  @override
   String get voicemail_Dialog_deleteSelectedContent =>
       'Обрані голосові повідомлення будуть остаточно видалені. Чи хочете ви продовжити?';
-
-  @override
-  String get voicemail_Dialog_deleteSingleTitle => 'Видалити голосове повідомлення?';
 
   @override
   String get voicemail_Dialog_deleteSelectedTitle => 'Видалити обрані голосові повідомлення?';
 
   @override
-  String get voicemail_Label_playbackError => 'Помилка відтворення';
+  String get voicemail_Dialog_deleteSingleContent =>
+      'Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Видалити голосове повідомлення?';
 
   @override
   String get voicemail_Label_call => 'Дзвінок';
@@ -2256,6 +2312,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get voicemail_Label_markAsNew => 'Позначити як нове';
+
+  @override
+  String get voicemail_Label_playbackError => 'Помилка відтворення';
 
   @override
   String get voicemail_Label_retry => 'Спробувати ще раз';
@@ -2303,56 +2362,4 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Спробувати ще раз';
-
-  @override
-  String agoTicker_secondsAgo(int seconds) {
-    String _temp0 = intl.Intl.pluralLogic(
-      seconds,
-      locale: localeName,
-      other: '$seconds секунд тому',
-      many: '$seconds секунд тому',
-      few: '$seconds секунди тому',
-      one: '$seconds секунду тому',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String agoTicker_minutesAgo(int minutes) {
-    String _temp0 = intl.Intl.pluralLogic(
-      minutes,
-      locale: localeName,
-      other: '$minutes хвилин тому',
-      many: '$minutes хвилин тому',
-      few: '$minutes хвилини тому',
-      one: '$minutes хвилину тому',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String agoTicker_hoursAgo(int hours) {
-    String _temp0 = intl.Intl.pluralLogic(
-      hours,
-      locale: localeName,
-      other: '$hours годин тому',
-      many: '$hours годин тому',
-      few: '$hours години тому',
-      one: '$hours годину тому',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String agoTicker_daysAgo(int days) {
-    String _temp0 = intl.Intl.pluralLogic(
-      days,
-      locale: localeName,
-      other: '$days днів тому',
-      many: '$days днів тому',
-      few: '$days дні тому',
-      one: '$days день тому',
-    );
-    return '$_temp0';
-  }
 }

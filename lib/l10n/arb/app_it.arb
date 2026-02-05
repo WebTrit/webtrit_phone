@@ -4,6 +4,43 @@
   "@account_selfCarePasswordExpired_message": {
     "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
   },
+  "agoTicker_daysAgo": "{days, plural, zero{} one{{days} giorno fa} other{{days} giorni fa}}",
+  "@agoTicker_daysAgo": {
+    "description": "Elapsed time relative to now, shown in days.",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_hoursAgo": "{hours, plural, zero{} one{{hours} ora fa} other{{hours} ore fa}}",
+  "@agoTicker_hoursAgo": {
+    "description": "Elapsed time relative to now, shown in hours.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_minutesAgo": "{minutes, plural, zero{} one{{minutes} minuto fa} other{{minutes} minuti fa}}",
+  "@agoTicker_minutesAgo": {
+    "description": "Elapsed time relative to now, shown in minutes.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_secondsAgo": "{seconds, plural, zero{} one{{seconds} secondo fa} other{{seconds} secondi fa}}",
+  "@agoTicker_secondsAgo": {
+    "description": "Elapsed time relative to now, shown in seconds.",
+    "placeholders": {
+      "seconds": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
   "alertDialogActions_no": "No",
   "@alertDialogActions_no": {},
   "alertDialogActions_ok": "Ok",
@@ -1837,16 +1874,14 @@
   "@validationBlankError": {},
   "voicemail_Description_notSupported": "La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l'amministratore per maggiori informazioni.",
   "@voicemail_Description_notSupported": {},
-  "voicemail_Dialog_deleteSingleContent": "Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?",
-  "@voicemail_Dialog_deleteSingleContent": {},
   "voicemail_Dialog_deleteSelectedContent": "I messaggi vocali selezionati verranno eliminati definitivamente. Vuoi continuare?",
   "@voicemail_Dialog_deleteSelectedContent": {},
-  "voicemail_Dialog_deleteSingleTitle": "Eliminare il messaggio vocale?",
-  "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Dialog_deleteSelectedTitle": "Eliminare i messaggi vocali selezionati?",
   "@voicemail_Dialog_deleteSelectedTitle": {},
-  "voicemail_Label_playbackError": "Riproduzione non riuscita",
-  "@voicemail_Label_playbackError": {},
+  "voicemail_Dialog_deleteSingleContent": "Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?",
+  "@voicemail_Dialog_deleteSingleContent": {},
+  "voicemail_Dialog_deleteSingleTitle": "Eliminare il messaggio vocale?",
+  "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Label_call": "Chiama",
   "@voicemail_Label_call": {},
   "voicemail_Label_delete": "Elimina",
@@ -1861,6 +1896,8 @@
   "@voicemail_Label_markAsHeard": {},
   "voicemail_Label_markAsNew": "Segna come nuovo",
   "@voicemail_Label_markAsNew": {},
+  "voicemail_Label_playbackError": "Riproduzione non riuscita",
+  "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "Riprova",
   "@voicemail_Label_retry": {},
   "voicemail_Title_notSupported": "Funzionalità non supportata",
@@ -1924,41 +1961,5 @@
   "webview_sslError_tryAgain": "Riprova",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
-  },
-  "agoTicker_secondsAgo": "{seconds, plural, one{{seconds} secondo fa} other{{seconds} secondi fa}}",
-  "@agoTicker_secondsAgo": {
-    "description": "Elapsed time relative to now, shown in seconds.",
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_minutesAgo": "{minutes, plural, one{{minutes} minuto fa} other{{minutes} minuti fa}}",
-  "@agoTicker_minutesAgo": {
-    "description": "Elapsed time relative to now, shown in minutes.",
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_hoursAgo": "{hours, plural, one{{hours} ora fa} other{{hours} ore fa}}",
-  "@agoTicker_hoursAgo": {
-    "description": "Elapsed time relative to now, shown in hours.",
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_daysAgo": "{days, plural, one{{days} giorno fa} other{{days} giorni fa}}",
-  "@agoTicker_daysAgo": {
-    "description": "Elapsed time relative to now, shown in days.",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
   }
 }

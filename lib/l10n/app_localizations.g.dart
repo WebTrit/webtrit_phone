@@ -99,6 +99,30 @@ abstract class AppLocalizations {
   /// **'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.'**
   String get account_selfCarePasswordExpired_message;
 
+  /// Elapsed time relative to now, shown in days.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, zero{} one{{days} day ago} other{{days} days ago}}'**
+  String agoTicker_daysAgo(int days);
+
+  /// Elapsed time relative to now, shown in hours.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours, plural, zero{} one{{hours} hour ago} other{{hours} hours ago}}'**
+  String agoTicker_hoursAgo(int hours);
+
+  /// Elapsed time relative to now, shown in minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, zero{} one{{minutes} minute ago} other{{minutes} minutes ago}}'**
+  String agoTicker_minutesAgo(int minutes);
+
+  /// Elapsed time relative to now, shown in seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds, plural, zero{Just now} one{{seconds} second ago} other{{seconds} seconds ago}}'**
+  String agoTicker_secondsAgo(num seconds);
+
   /// No description provided for @alertDialogActions_no.
   ///
   /// In en, this message translates to:
@@ -4164,23 +4188,11 @@ abstract class AppLocalizations {
   /// **'Voicemail feature are not supported in your core. Please contact your administrator for more information.'**
   String get voicemail_Description_notSupported;
 
-  /// No description provided for @voicemail_Dialog_deleteSingleContent.
-  ///
-  /// In en, this message translates to:
-  /// **'This voicemail will be permanently deleted. Do you want to continue?'**
-  String get voicemail_Dialog_deleteSingleContent;
-
   /// No description provided for @voicemail_Dialog_deleteSelectedContent.
   ///
   /// In en, this message translates to:
   /// **'Selected voicemails will be permanently deleted. Do you want to continue?'**
   String get voicemail_Dialog_deleteSelectedContent;
-
-  /// No description provided for @voicemail_Dialog_deleteSingleTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete voicemail?'**
-  String get voicemail_Dialog_deleteSingleTitle;
 
   /// No description provided for @voicemail_Dialog_deleteSelectedTitle.
   ///
@@ -4188,11 +4200,17 @@ abstract class AppLocalizations {
   /// **'Delete selected voicemails?'**
   String get voicemail_Dialog_deleteSelectedTitle;
 
-  /// No description provided for @voicemail_Label_playbackError.
+  /// No description provided for @voicemail_Dialog_deleteSingleContent.
   ///
   /// In en, this message translates to:
-  /// **'Playback failed'**
-  String get voicemail_Label_playbackError;
+  /// **'This voicemail will be permanently deleted. Do you want to continue?'**
+  String get voicemail_Dialog_deleteSingleContent;
+
+  /// No description provided for @voicemail_Dialog_deleteSingleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete voicemail?'**
+  String get voicemail_Dialog_deleteSingleTitle;
 
   /// No description provided for @voicemail_Label_call.
   ///
@@ -4235,6 +4253,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mark as new'**
   String get voicemail_Label_markAsNew;
+
+  /// No description provided for @voicemail_Label_playbackError.
+  ///
+  /// In en, this message translates to:
+  /// **'Playback failed'**
+  String get voicemail_Label_playbackError;
 
   /// No description provided for @voicemail_Label_retry.
   ///
@@ -4325,30 +4349,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get webview_sslError_tryAgain;
-
-  /// Elapsed time relative to now, shown in seconds.
-  ///
-  /// In en, this message translates to:
-  /// **'{seconds, plural, one{{seconds} second ago} other{{seconds} seconds ago}}'**
-  String agoTicker_secondsAgo(int seconds);
-
-  /// Elapsed time relative to now, shown in minutes.
-  ///
-  /// In en, this message translates to:
-  /// **'{minutes, plural, one{{minutes} minute ago} other{{minutes} minutes ago}}'**
-  String agoTicker_minutesAgo(int minutes);
-
-  /// Elapsed time relative to now, shown in hours.
-  ///
-  /// In en, this message translates to:
-  /// **'{hours, plural, one{{hours} hour ago} other{{hours} hours ago}}'**
-  String agoTicker_hoursAgo(int hours);
-
-  /// Elapsed time relative to now, shown in days.
-  ///
-  /// In en, this message translates to:
-  /// **'{days, plural, one{{days} day ago} other{{days} days ago}}'**
-  String agoTicker_daysAgo(int days);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

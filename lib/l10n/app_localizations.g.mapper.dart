@@ -1267,16 +1267,14 @@ class AppLocalizationsMapper {
       'validationBlankError': localizations.validationBlankError,
       'voicemail_Description_notSupported':
           localizations.voicemail_Description_notSupported,
-      'voicemail_Dialog_deleteSingleContent':
-          localizations.voicemail_Dialog_deleteSingleContent,
       'voicemail_Dialog_deleteSelectedContent':
           localizations.voicemail_Dialog_deleteSelectedContent,
-      'voicemail_Dialog_deleteSingleTitle':
-          localizations.voicemail_Dialog_deleteSingleTitle,
       'voicemail_Dialog_deleteSelectedTitle':
           localizations.voicemail_Dialog_deleteSelectedTitle,
-      'voicemail_Label_playbackError':
-          localizations.voicemail_Label_playbackError,
+      'voicemail_Dialog_deleteSingleContent':
+          localizations.voicemail_Dialog_deleteSingleContent,
+      'voicemail_Dialog_deleteSingleTitle':
+          localizations.voicemail_Dialog_deleteSingleTitle,
       'voicemail_Label_call': localizations.voicemail_Label_call,
       'voicemail_Label_delete': localizations.voicemail_Label_delete,
       'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
@@ -1285,6 +1283,8 @@ class AppLocalizationsMapper {
       'voicemail_Label_empty': localizations.voicemail_Label_empty,
       'voicemail_Label_markAsHeard': localizations.voicemail_Label_markAsHeard,
       'voicemail_Label_markAsNew': localizations.voicemail_Label_markAsNew,
+      'voicemail_Label_playbackError':
+          localizations.voicemail_Label_playbackError,
       'voicemail_Label_retry': localizations.voicemail_Label_retry,
       'voicemail_Title_notSupported':
           localizations.voicemail_Title_notSupported,
@@ -1306,6 +1306,12 @@ class AppLocalizationsMapper {
       'webview_sslError_message': localizations.webview_sslError_message,
       'webview_sslError_title': localizations.webview_sslError_title,
       'webview_sslError_tryAgain': localizations.webview_sslError_tryAgain,
+      'agoTicker_daysAgo': (days) => localizations.agoTicker_daysAgo(days),
+      'agoTicker_hoursAgo': (hours) => localizations.agoTicker_hoursAgo(hours),
+      'agoTicker_minutesAgo': (minutes) =>
+          localizations.agoTicker_minutesAgo(minutes),
+      'agoTicker_secondsAgo': (seconds) =>
+          localizations.agoTicker_secondsAgo(seconds),
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>
@@ -1379,12 +1385,6 @@ class AppLocalizationsMapper {
           localizations.user_agreement_description(appName),
       'webview_defaultError_details': (description, code) =>
           localizations.webview_defaultError_details(description, code),
-      'agoTicker_secondsAgo': (seconds) =>
-          localizations.agoTicker_secondsAgo(seconds),
-      'agoTicker_minutesAgo': (minutes) =>
-          localizations.agoTicker_minutesAgo(minutes),
-      'agoTicker_hoursAgo': (hours) => localizations.agoTicker_hoursAgo(hours),
-      'agoTicker_daysAgo': (days) => localizations.agoTicker_daysAgo(days),
     };
   }
 }
