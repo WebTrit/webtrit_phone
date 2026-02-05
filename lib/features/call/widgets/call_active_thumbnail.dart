@@ -28,40 +28,44 @@ class CallActiveThumbnail extends StatelessWidget {
     final frameSize = ThumbnailLayout.calcFrameSize(orientation: orientation, smallerSide: smallerSide);
     final hasRemoteVideo = activeCall.remoteStream?.getVideoTracks().isNotEmpty ?? false;
 
-    return SizedBox.fromSize(
-      size: frameSize,
-      child: GestureDetector(
-        onTap: onTap,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              StreamThumbnail(
-                stream: activeCall.remoteStream,
-                placeholderBuilder: (context) {
-                  final theme = Theme.of(context);
-                  final colorScheme = theme.colorScheme;
-                  final isAccepted = activeCall.wasAccepted;
+    return Card(
+      child: SizedBox.fromSize(
+        size: frameSize,
+        child: GestureDetector(
+          onTap: onTap,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                StreamThumbnail(
+                  stream: activeCall.remoteStream,
+                  placeholderBuilder: (context) {
+                    final theme = Theme.of(context);
+                    final colorScheme = theme.colorScheme;
+                    final isAccepted = activeCall.wasAccepted;
 
-                  final duration = isAccepted ? const Duration(milliseconds: 2500) : const Duration(milliseconds: 1500);
+                    final duration = isAccepted
+                        ? const Duration(milliseconds: 2500)
+                        : const Duration(milliseconds: 1500);
 
-                  final baseAlpha = 0.75;
-                  final highlightAlpha = 0.95;
+                    final baseAlpha = 0.75;
+                    final highlightAlpha = 0.95;
 
-                  final baseColor = isAccepted
-                      ? colorScheme.primary.withValues(alpha: baseAlpha)
-                      : colorScheme.surfaceContainerHighest.withValues(alpha: highlightAlpha);
+                    final baseColor = isAccepted
+                        ? colorScheme.primary.withValues(alpha: baseAlpha)
+                        : colorScheme.surfaceContainerHighest.withValues(alpha: highlightAlpha);
 
-                  final highlightColor = isAccepted
-                      ? colorScheme.surface.withValues(alpha: baseAlpha)
-                      : colorScheme.surface.withValues(alpha: highlightAlpha);
+                    final highlightColor = isAccepted
+                        ? colorScheme.surface.withValues(alpha: baseAlpha)
+                        : colorScheme.surface.withValues(alpha: highlightAlpha);
 
-                  return Shimmer(duration: duration, baseColor: baseColor, highlightColor: highlightColor);
-                },
-              ),
-              if (!hasRemoteVideo) _AvatarOverlay(activeCall: activeCall, contactResolver: contactResolver),
-            ],
+                    return Shimmer(duration: duration, baseColor: baseColor, highlightColor: highlightColor);
+                  },
+                ),
+                if (!hasRemoteVideo) _AvatarOverlay(activeCall: activeCall, contactResolver: contactResolver),
+              ],
+            ),
           ),
         ),
       ),
