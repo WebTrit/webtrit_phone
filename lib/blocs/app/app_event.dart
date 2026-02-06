@@ -26,10 +26,10 @@ sealed class AppEvent extends Equatable {
 /// Updates the application state with the provided [session] and optionally
 /// preloads [systemInfo] into the corresponding repository.
 class AppLoggedIn extends AppEvent {
+  const AppLoggedIn({required this.session, this.systemInfo});
+
   final Session session;
   final WebtritSystemInfo? systemInfo;
-
-  const AppLoggedIn({required this.session, this.systemInfo});
 
   @override
   List<Object?> get props => [session, systemInfo];
@@ -96,9 +96,9 @@ class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
 /// Transitions the application state to [AppLifecycleStatus.teardown], forcing the
 /// [MainShell] to unmount before resource disposal begins.
 class AppLogoutRequested extends AppEvent {
-  final AppLogoutReason reason;
-
   const AppLogoutRequested({this.reason = AppLogoutReason.userRequest});
+
+  final AppLogoutReason reason;
 
   @override
   List<Object?> get props => [reason];
