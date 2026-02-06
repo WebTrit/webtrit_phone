@@ -73,10 +73,23 @@ class SessionRepositoryImpl implements SessionRepository {
 
     _logger.info('Saving session for user: ${session.userId}');
     _currentSession = session;
+
     await secureStorage.writeUserId(session.userId);
     await secureStorage.writeTenantId(session.tenantId);
-    if (session.coreUrl != null) await secureStorage.writeCoreUrl(session.coreUrl!);
-    if (session.token != null) await secureStorage.writeToken(session.token!);
+
+    // Explicitly update or delete coreUrl based on new session data
+    if (session.coreUrl != null) {
+      await secureStorage.writeCoreUrl(session.coreUrl!);
+    } else {
+      await secureStorage.deleteCoreUrl();
+    }
+
+    // Explicitly update or delete token based on new session data
+    if (session.token != null) {
+      await secureStorage.writeToken(session.token!);
+    } else {
+      await secureStorage.deleteToken();
+    }
   }
 
   @override
