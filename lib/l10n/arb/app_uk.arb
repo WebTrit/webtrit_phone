@@ -4,6 +4,43 @@
   "@account_selfCarePasswordExpired_message": {
     "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
   },
+  "agoTicker_daysAgo": "{days, plural, zero{} one{{days} день тому} few{{days} дні тому} many{{days} днів тому} other{{days} днів тому}}",
+  "@agoTicker_daysAgo": {
+    "description": "Elapsed time relative to now, shown in days.",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_hoursAgo": "{hours, plural, zero{} one{{hours} годину тому} few{{hours} години тому} many{{hours} годин тому} other{{hours} годин тому}}",
+  "@agoTicker_hoursAgo": {
+    "description": "Elapsed time relative to now, shown in hours.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_minutesAgo": "{minutes, plural, zero{} one{{minutes} хвилину тому} few{{minutes} хвилини тому} many{{minutes} хвилин тому} other{{minutes} хвилин тому}}",
+  "@agoTicker_minutesAgo": {
+    "description": "Elapsed time relative to now, shown in minutes.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_secondsAgo": "{seconds, plural, zero{} one{{seconds} секунду тому} few{{seconds} секунди тому} many{{seconds} секунд тому} other{{seconds} секунд тому}}",
+  "@agoTicker_secondsAgo": {
+    "description": "Elapsed time relative to now, shown in seconds.",
+    "placeholders": {
+      "seconds": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
   "alertDialogActions_no": "Ні",
   "@alertDialogActions_no": {},
   "alertDialogActions_ok": "Ок",
@@ -1837,16 +1874,14 @@
   "@validationBlankError": {},
   "voicemail_Description_notSupported": "Функція голосової пошти не підтримується у вашій системі. Зверніться до адміністратора для отримання додаткової інформації.",
   "@voicemail_Description_notSupported": {},
-  "voicemail_Dialog_deleteSingleContent": "Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?",
-  "@voicemail_Dialog_deleteSingleContent": {},
   "voicemail_Dialog_deleteSelectedContent": "Обрані голосові повідомлення будуть остаточно видалені. Чи хочете ви продовжити?",
   "@voicemail_Dialog_deleteSelectedContent": {},
-  "voicemail_Dialog_deleteSingleTitle": "Видалити голосове повідомлення?",
-  "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Dialog_deleteSelectedTitle": "Видалити обрані голосові повідомлення?",
   "@voicemail_Dialog_deleteSelectedTitle": {},
-  "voicemail_Label_playbackError": "Помилка відтворення",
-  "@voicemail_Label_playbackError": {},
+  "voicemail_Dialog_deleteSingleContent": "Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?",
+  "@voicemail_Dialog_deleteSingleContent": {},
+  "voicemail_Dialog_deleteSingleTitle": "Видалити голосове повідомлення?",
+  "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Label_call": "Дзвінок",
   "@voicemail_Label_call": {},
   "voicemail_Label_delete": "Видалити",
@@ -1861,6 +1896,8 @@
   "@voicemail_Label_markAsHeard": {},
   "voicemail_Label_markAsNew": "Позначити як нове",
   "@voicemail_Label_markAsNew": {},
+  "voicemail_Label_playbackError": "Помилка відтворення",
+  "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "Спробувати ще раз",
   "@voicemail_Label_retry": {},
   "voicemail_Title_notSupported": "Функція не підтримується",
@@ -1924,41 +1961,5 @@
   "webview_sslError_tryAgain": "Спробувати ще раз",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
-  },
-  "agoTicker_secondsAgo": "{seconds, plural, one{{seconds} секунду тому} few{{seconds} секунди тому} many{{seconds} секунд тому} other{{seconds} секунд тому}}",
-  "@agoTicker_secondsAgo": {
-    "description": "Elapsed time relative to now, shown in seconds.",
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_minutesAgo": "{minutes, plural, one{{minutes} хвилину тому} few{{minutes} хвилини тому} many{{minutes} хвилин тому} other{{minutes} хвилин тому}}",
-  "@agoTicker_minutesAgo": {
-    "description": "Elapsed time relative to now, shown in minutes.",
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_hoursAgo": "{hours, plural, one{{hours} годину тому} few{{hours} години тому} many{{hours} годин тому} other{{hours} годин тому}}",
-  "@agoTicker_hoursAgo": {
-    "description": "Elapsed time relative to now, shown in hours.",
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_daysAgo": "{days, plural, one{{days} день тому} few{{days} дні тому} many{{days} днів тому} other{{days} днів тому}}",
-  "@agoTicker_daysAgo": {
-    "description": "Elapsed time relative to now, shown in days.",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
   }
 }

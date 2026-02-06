@@ -4,6 +4,43 @@
   "@account_selfCarePasswordExpired_message": {
     "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
   },
+  "agoTicker_daysAgo": "{days, plural, zero{} one{{days} day ago} other{{days} days ago}}",
+  "@agoTicker_daysAgo": {
+    "description": "Elapsed time relative to now, shown in days.",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_hoursAgo": "{hours, plural, zero{} one{{hours} hour ago} other{{hours} hours ago}}",
+  "@agoTicker_hoursAgo": {
+    "description": "Elapsed time relative to now, shown in hours.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_minutesAgo": "{minutes, plural, zero{} one{{minutes} minute ago} other{{minutes} minutes ago}}",
+  "@agoTicker_minutesAgo": {
+    "description": "Elapsed time relative to now, shown in minutes.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_secondsAgo": "{seconds, plural, zero{Just now} one{{seconds} second ago} other{{seconds} seconds ago}}",
+  "@agoTicker_secondsAgo": {
+    "description": "Elapsed time relative to now, shown in seconds.",
+    "placeholders": {
+      "seconds": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
   "alertDialogActions_no": "No",
   "@alertDialogActions_no": {},
   "alertDialogActions_ok": "Ok",
@@ -1837,16 +1874,14 @@
   "@validationBlankError": {},
   "voicemail_Description_notSupported": "Voicemail feature are not supported in your core. Please contact your administrator for more information.",
   "@voicemail_Description_notSupported": {},
-  "voicemail_Dialog_deleteSingleContent": "This voicemail will be permanently deleted. Do you want to continue?",
-  "@voicemail_Dialog_deleteSingleContent": {},
   "voicemail_Dialog_deleteSelectedContent": "Selected voicemails will be permanently deleted. Do you want to continue?",
   "@voicemail_Dialog_deleteSelectedContent": {},
-  "voicemail_Dialog_deleteSingleTitle": "Delete voicemail?",
-  "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Dialog_deleteSelectedTitle": "Delete selected voicemails?",
   "@voicemail_Dialog_deleteSelectedTitle": {},
-  "voicemail_Label_playbackError": "Playback failed",
-  "@voicemail_Label_playbackError": {},
+  "voicemail_Dialog_deleteSingleContent": "This voicemail will be permanently deleted. Do you want to continue?",
+  "@voicemail_Dialog_deleteSingleContent": {},
+  "voicemail_Dialog_deleteSingleTitle": "Delete voicemail?",
+  "@voicemail_Dialog_deleteSingleTitle": {},
   "voicemail_Label_call": "Call",
   "@voicemail_Label_call": {},
   "voicemail_Label_delete": "Delete",
@@ -1861,6 +1896,8 @@
   "@voicemail_Label_markAsHeard": {},
   "voicemail_Label_markAsNew": "Mark as new",
   "@voicemail_Label_markAsNew": {},
+  "voicemail_Label_playbackError": "Playback failed",
+  "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "Try again",
   "@voicemail_Label_retry": {},
   "voicemail_Title_notSupported": "Feature not supported",
@@ -1924,41 +1961,5 @@
   "webview_sslError_tryAgain": "Try again",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
-  },
-  "agoTicker_secondsAgo": "{seconds, plural, one{{seconds} second ago} other{{seconds} seconds ago}}",
-  "@agoTicker_secondsAgo": {
-    "description": "Elapsed time relative to now, shown in seconds.",
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_minutesAgo": "{minutes, plural, one{{minutes} minute ago} other{{minutes} minutes ago}}",
-  "@agoTicker_minutesAgo": {
-    "description": "Elapsed time relative to now, shown in minutes.",
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_hoursAgo": "{hours, plural, one{{hours} hour ago} other{{hours} hours ago}}",
-  "@agoTicker_hoursAgo": {
-    "description": "Elapsed time relative to now, shown in hours.",
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
-  "agoTicker_daysAgo": "{days, plural, one{{days} day ago} other{{days} days ago}}",
-  "@agoTicker_daysAgo": {
-    "description": "Elapsed time relative to now, shown in days.",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
   }
 }

@@ -13,6 +13,57 @@ class AppLocalizationsIt extends AppLocalizations {
       'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
 
   @override
+  String agoTicker_daysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days giorni fa',
+      one: '$days giorno fa',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_hoursAgo(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: '$hours ore fa',
+      one: '$hours ora fa',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_minutesAgo(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minuti fa',
+      one: '$minutes minuto fa',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_secondsAgo(num seconds) {
+    final intl.NumberFormat secondsNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String secondsString = secondsNumberFormat.format(seconds);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: '$secondsString secondi fa',
+      one: '$secondsString secondo fa',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get alertDialogActions_no => 'No';
 
   @override
@@ -2228,21 +2279,18 @@ class AppLocalizationsIt extends AppLocalizations {
       'La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l\'amministratore per maggiori informazioni.';
 
   @override
-  String get voicemail_Dialog_deleteSingleContent =>
-      'Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?';
-
-  @override
   String get voicemail_Dialog_deleteSelectedContent =>
       'I messaggi vocali selezionati verranno eliminati definitivamente. Vuoi continuare?';
-
-  @override
-  String get voicemail_Dialog_deleteSingleTitle => 'Eliminare il messaggio vocale?';
 
   @override
   String get voicemail_Dialog_deleteSelectedTitle => 'Eliminare i messaggi vocali selezionati?';
 
   @override
-  String get voicemail_Label_playbackError => 'Riproduzione non riuscita';
+  String get voicemail_Dialog_deleteSingleContent =>
+      'Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?';
+
+  @override
+  String get voicemail_Dialog_deleteSingleTitle => 'Eliminare il messaggio vocale?';
 
   @override
   String get voicemail_Label_call => 'Chiama';
@@ -2265,6 +2313,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get voicemail_Label_markAsNew => 'Segna come nuovo';
+
+  @override
+  String get voicemail_Label_playbackError => 'Riproduzione non riuscita';
 
   @override
   String get voicemail_Label_retry => 'Riprova';
@@ -2313,38 +2364,4 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Riprova';
-
-  @override
-  String agoTicker_secondsAgo(int seconds) {
-    String _temp0 = intl.Intl.pluralLogic(
-      seconds,
-      locale: localeName,
-      other: '$seconds secondi fa',
-      one: '$seconds secondo fa',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String agoTicker_minutesAgo(int minutes) {
-    String _temp0 = intl.Intl.pluralLogic(
-      minutes,
-      locale: localeName,
-      other: '$minutes minuti fa',
-      one: '$minutes minuto fa',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String agoTicker_hoursAgo(int hours) {
-    String _temp0 = intl.Intl.pluralLogic(hours, locale: localeName, other: '$hours ore fa', one: '$hours ora fa');
-    return '$_temp0';
-  }
-
-  @override
-  String agoTicker_daysAgo(int days) {
-    String _temp0 = intl.Intl.pluralLogic(days, locale: localeName, other: '$days giorni fa', one: '$days giorno fa');
-    return '$_temp0';
-  }
 }
