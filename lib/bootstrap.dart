@@ -59,6 +59,9 @@ Future<InstanceRegistry> bootstrap() async {
         Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
   );
 
+  // Background workers (assuming SessionCleanupWorker is still a side-effect init)
+  final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
+
   // Core infrastructure
   final appThemes = await AppThemes.init();
 
@@ -76,6 +79,11 @@ Future<InstanceRegistry> bootstrap() async {
     systemInfoRemoteDatasource: systemInfoRemoteDatasource,
     appIdentifier: appInfo.identifier,
     appBundleId: packageInfo.packageName,
+  );
+  final sessionRepository = SessionRepositoryImpl(
+    secureStorage: secureStorage,
+    sessionCleanupWorker: sessionCleanupWorker,
+    apiClientFactory: apiClientFactory,
   );
 
   // Initialize the immutable feature configuration snapshot.
@@ -99,9 +107,6 @@ Future<InstanceRegistry> bootstrap() async {
     secureStorage,
     featureAccess,
   );
-
-  // Background workers (assuming SessionCleanupWorker is still a side-effect init)
-  final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
 
   // Remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
@@ -131,6 +136,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<ActiveMainFlavorRepository>(activeMainFlavorRepository);
   registry.register<AuthRepository>(authRepository);
   registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
+  registry.register<SessionRepository>(sessionRepository);
 
   // Logic & Features
   registry.register<FeatureAccess>(featureAccess);
