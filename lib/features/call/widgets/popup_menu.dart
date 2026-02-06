@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
 
-class CallPopupMenuButton<T> extends PopupMenuButton<T> {
-  CallPopupMenuButton({super.key, super.onSelected, super.child, super.offset, required List<PopupMenuItem<T>> items})
-    : super(
-        itemBuilder: (context) => items,
+class CallPopupMenuButton<T> extends StatelessWidget {
+  const CallPopupMenuButton({super.key, this.onSelected, this.child, this.offset = Offset.zero, required this.items});
+
+  final PopupMenuItemSelected<T>? onSelected;
+  final Widget? child;
+  final Offset offset;
+  final List<PopupMenuItem<T>> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashFactory: NoSplash.splashFactory,
+      ),
+      child: PopupMenuButton<T>(
+        onSelected: onSelected,
+        offset: offset,
         elevation: 4,
         padding: EdgeInsets.zero,
+        splashRadius: 0,
+        itemBuilder: (context) => items,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-      );
+        child: child,
+      ),
+    );
+  }
 }
 
 class CallPopupMenuItem<T> extends PopupMenuItem<T> {
