@@ -1961,5 +1961,9 @@
   "webview_sslError_tryAgain": "Riprova",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
+  },
+  "session_Teardown_progressText": "Disconnessione in corso...",
+  "@session_Teardown_progressText": {
+    "description": "Messaggio di stato visualizzato durante la pulizia dei dati della sessione."
   }
 }

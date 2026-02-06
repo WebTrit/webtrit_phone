@@ -2364,4 +2364,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Riprova';
+
+  @override
+  String get session_Teardown_progressText => 'Disconnessione in corso...';
 }

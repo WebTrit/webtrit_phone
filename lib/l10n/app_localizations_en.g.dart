@@ -2342,4 +2342,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Try again';
+
+  @override
+  String get session_Teardown_progressText => 'Signing out...';
 }

@@ -1306,6 +1306,8 @@ class AppLocalizationsMapper {
       'webview_sslError_message': localizations.webview_sslError_message,
       'webview_sslError_title': localizations.webview_sslError_title,
       'webview_sslError_tryAgain': localizations.webview_sslError_tryAgain,
+      'session_Teardown_progressText':
+          localizations.session_Teardown_progressText,
       'agoTicker_daysAgo': (days) => localizations.agoTicker_daysAgo(days),
       'agoTicker_hoursAgo': (hours) => localizations.agoTicker_hoursAgo(hours),
       'agoTicker_minutesAgo': (minutes) =>

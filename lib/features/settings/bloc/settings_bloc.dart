@@ -57,7 +57,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
-    await sessionRepository.logout();
+    appBloc.add(const AppLogoutRequested());
   }
 
   FutureOr<void> _onAccountDeleted(SettingsAccountDeleted event, Emitter<SettingsState> emit) async {
@@ -67,8 +67,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     try {
       await userRepository.delete();
 
-      await sessionRepository.logout();
-
+      appBloc.add(const AppLogoutRequested());
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));

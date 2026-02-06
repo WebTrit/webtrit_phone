@@ -18,19 +18,15 @@ part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
 
+typedef LoginSuccessCallback = void Function(Session session, WebtritSystemInfo systemInfo);
+
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({
-    required this.authRepository,
-    required this.notificationsBloc,
-    required this.sessionRepository,
-    required this.systemInfoRepository,
-  }) : super(const LoginState());
+  LoginCubit({required this.authRepository, required this.notificationsBloc, required this.onLoginSuccess})
+    : super(const LoginState());
 
   final AuthRepository authRepository;
 
-  final SystemInfoRepository systemInfoRepository;
-
-  final SessionRepository sessionRepository;
+  final LoginSuccessCallback onLoginSuccess;
 
   final NotificationsBloc notificationsBloc;
 
@@ -58,14 +54,13 @@ class LoginCubit extends Cubit<LoginState> {
     super.onChange(change);
   }
 
-  /// Finalizes the authentication flow by persisting the session.
+  /// Finalizes the authentication flow by delegating session and system information
+  /// to the [onLoginSuccess] callback.
   ///
-  /// First, this hydrates the [SystemInfoRepository] with the fresh [WebtritSystemInfo]
-  /// captured during login. This ensures the data is immediately available on the main screen,
-  /// preventing redundant network requests.
-  ///
-  /// Then, it saves the [Session] via [SessionRepository]. This state change is observed
-  /// by [AppBloc], effectively triggering navigation to the application's main screen.
+  /// This method extracts verified credentials and system configuration from the
+  /// current [state] and passes them to the parent orchestrator. This ensures
+  /// atomic persistence and state synchronization across the application's
+  /// core repositories before transitioning to the authenticated lifecycle.
   void _saveSession(LoginState state) {
     final systemInfo = state.systemInfo!;
     final coreUrl = state.coreUrl!;
@@ -73,8 +68,7 @@ class LoginCubit extends Cubit<LoginState> {
     final token = state.token!;
     final userId = state.userId!;
 
-    systemInfoRepository.preload(systemInfo);
-    sessionRepository.save(Session(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId));
+    onLoginSuccess(Session(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId), systemInfo);
   }
 
   void launchLinkableElement(LinkableElement link) async {

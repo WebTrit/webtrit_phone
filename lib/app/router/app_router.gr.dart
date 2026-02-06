@@ -1480,6 +1480,22 @@ class SystemNotificationsPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TeardownScreenPage]
+class TeardownScreenPageRoute extends PageRouteInfo<void> {
+  const TeardownScreenPageRoute({List<PageRouteInfo>? children})
+    : super(TeardownScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'TeardownScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return TeardownScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [TermsConditionsScreenPage]
 class TermsConditionsScreenPageRoute
     extends PageRouteInfo<TermsConditionsScreenPageRouteArgs> {

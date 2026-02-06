@@ -4349,6 +4349,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get webview_sslError_tryAgain;
+
+  /// Status message displayed while the application is performing cleanup during the logout process.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing out...'**
+  String get session_Teardown_progressText;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

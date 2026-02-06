@@ -257,6 +257,11 @@ class AppRouter extends RootStackRouter {
             ),
           ],
         ),
+        AutoRoute.guarded(
+          page: TeardownScreenPageRoute.page,
+          path: 'teardown',
+          onNavigation: onTeardownScreenGuardNavigation,
+        ),
         AutoRoute(page: TermsConditionsScreenPageRoute.page, path: 'terms-conditions'),
         AutoRoute(page: ErrorDetailsScreenPageRoute.page, path: 'error-details'),
         AutoRoute(page: LogRecordsConsoleScreenPageRoute.page, path: 'log-records-console'),
@@ -310,48 +315,98 @@ class AppRouter extends RootStackRouter {
     }
   }
 
+  /// Orchestrates navigation logic for the application's main shell.
+  ///
+  /// Evaluates the current [AppLifecycleStatus] and enforces access control based on
+  /// authentication state, legal agreements, and required system permissions.
   Future<void> onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) async {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
-    if (session.isLoggedIn) {
-      final contactsSourceTypes = _bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
-      final localContactsSourceTypeEnabled = contactsSourceTypes?.contains(ContactSourceType.local) == true;
+    final state = _appBloc.state;
 
-      if (appUserAgreementUnaccepted) {
-        resolver.next(false);
-        router.replaceAll([const UserAgreementScreenPageRoute()]);
-      } else if (appContactsAgreementUnaccepted && localContactsSourceTypeEnabled) {
-        resolver.next(false);
-        router.replaceAll([const ContactsAgreementScreenPageRoute()]);
-      } else if (await appPermissionsDenied) {
-        resolver.next(false);
-        router.replaceAll([const PermissionsScreenPageRoute()]);
-      } else {
-        resolver.overrideNext(
-          children: [
-            MainScreenPageRoute(
-              children: [
-                switch (_mainInitialTab) {
-                  // Recents tab can be either with CDRs or standard
-                  RecentsBottomMenuTab(useCdrs: true) => const RecentCdrsRouterPageRoute(),
-                  RecentsBottomMenuTab() => const RecentsRouterPageRoute(),
-                  // Contacts tab
-                  ContactsBottomMenuTab() => const ContactsRouterPageRoute(),
-                  // Embedded tab
-                  EmbeddedBottomMenuTab(id: final id) => EmbeddedTabPageRoute(id: id),
-                  // Other standard tabs
-                  FavoritesBottomMenuTab() => const FavoritesRouterPageRoute(),
-                  KeypadBottomMenuTab() => const KeypadScreenPageRoute(),
-                  MessagingBottomMenuTab() => const ConversationsScreenPageRoute(),
-                },
-              ],
-            ),
-          ],
-        );
-      }
-    } else {
+    // Intercept the navigation if a teardown sequence is active.
+    // Replacing the route ensures MainShell is unmounted and its resources are released.
+    if (state.status == AppLifecycleStatus.teardown) {
+      resolver.next(false);
+      router.replaceAll([const TeardownScreenPageRoute()]);
+      return;
+    }
+
+    // Redirect to authentication flow if the user is not logged in.
+    if (state.status != AppLifecycleStatus.authenticated) {
       resolver.next(false);
       router.replaceAll([LoginRouterPageRoute(launchEmbeddedData: _launchEmbeddedData)]);
+      return;
+    }
+
+    // Enforce mandatory legal agreements and system permissions.
+    final contactsSourceTypes = _bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes;
+    final isLocalContactsEnabled = contactsSourceTypes?.contains(ContactSourceType.local) ?? false;
+
+    if (appUserAgreementUnaccepted) {
+      resolver.next(false);
+      router.replaceAll([const UserAgreementScreenPageRoute()]);
+      return;
+    }
+
+    if (appContactsAgreementUnaccepted && isLocalContactsEnabled) {
+      resolver.next(false);
+      router.replaceAll([const ContactsAgreementScreenPageRoute()]);
+      return;
+    }
+
+    if (await appPermissionsDenied) {
+      resolver.next(false);
+      router.replaceAll([const PermissionsScreenPageRoute()]);
+      return;
+    }
+
+    // Authorization and requirements finalized. Resolve to MainScreen with the designated initial tab.
+    resolver.overrideNext(
+      children: [
+        MainScreenPageRoute(
+          children: [
+            switch (_mainInitialTab) {
+              // Recents tab can be either with CDRs or standard
+              RecentsBottomMenuTab(useCdrs: true) => const RecentCdrsRouterPageRoute(),
+              RecentsBottomMenuTab() => const RecentsRouterPageRoute(),
+              // Contacts tab
+              ContactsBottomMenuTab() => const ContactsRouterPageRoute(),
+              // Embedded tab
+              EmbeddedBottomMenuTab(id: final id) => EmbeddedTabPageRoute(id: id),
+              // Other standard tabs
+              FavoritesBottomMenuTab() => const FavoritesRouterPageRoute(),
+              KeypadBottomMenuTab() => const KeypadScreenPageRoute(),
+              MessagingBottomMenuTab() => const ConversationsScreenPageRoute(),
+            },
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// Manages route stability during the teardown process.
+  ///
+  /// Allows access to the teardown screen only while the app is in the
+  /// teardown lifecycle state. Otherwise, redirects to the appropriate
+  /// route (e.g. MainShell when authenticated, Login when unauthenticated).
+  void onTeardownScreenGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onTeardownScreenGuardNavigation', resolver));
+
+    final state = _appBloc.state;
+
+    if (state.status == AppLifecycleStatus.teardown) {
+      // Actively tearing down: allow navigation to the teardown screen.
+      resolver.next(true);
+    } else if (state.status == AppLifecycleStatus.unauthenticated) {
+      // Teardown finalized or user not authenticated: proceed to login.
+      resolver.next(false);
+      router.replaceAll([LoginRouterPageRoute(launchEmbeddedData: _launchEmbeddedData)]);
+    } else {
+      // For any other state (e.g. authenticated), prevent teardown access
+      // and return the user to the main application shell.
+      resolver.next(false);
+      router.replaceAll([const MainShellRoute()]);
     }
   }
 

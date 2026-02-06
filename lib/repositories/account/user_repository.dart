@@ -32,13 +32,17 @@ class UserRepository implements Refreshable {
       if (newInfo != _lastInfo) _updatesController.add(newInfo);
       _lastInfo = newInfo;
       return newInfo;
-    } on UnauthorizedException catch (e, st) {
+    } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
-      _logger.warning('_gatherUserInfo: unauthorized', e, st);
+      _logger.info('_gatherUserInfo: unauthorized', e);
       rethrow;
-    } on UserNotFoundException catch (e, st) {
+    } on UserNotFoundException catch (e) {
       _sessionGuard.onUnauthorized(e);
-      _logger.warning('_gatherUserInfo: user not found', e, st);
+      _logger.info('_gatherUserInfo: user not found', e);
+      rethrow;
+    } on SessionMissingException catch (e) {
+      _sessionGuard.onUnauthorized(e);
+      _logger.info('_gatherUserInfo: session missing', e);
       rethrow;
     } catch (e, stackTrace) {
       _logger.warning('_gatherUserInfo', e, stackTrace);
