@@ -2362,4 +2362,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Спробувати ще раз';
+
+  @override
+  String get session_Teardown_progressText => 'Вихід із системи...';
 }

@@ -1961,5 +1961,9 @@
   "webview_sslError_tryAgain": "Try again",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
+  },
+  "session_Teardown_progressText": "Signing out...",
+  "@session_Teardown_progressText": {
+    "description": "Status message displayed while the application is performing cleanup during the logout process."
   }
 }

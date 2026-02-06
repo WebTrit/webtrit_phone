@@ -1961,5 +1961,9 @@
   "webview_sslError_tryAgain": "Спробувати ще раз",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
+  },
+  "session_Teardown_progressText": "Вихід із системи...",
+  "@session_Teardown_progressText": {
+    "description": "Статусне повідомлення під час очищення даних сесії."
   }
 }

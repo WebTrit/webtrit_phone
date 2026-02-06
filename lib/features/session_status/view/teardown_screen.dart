@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 final _logger = Logger('TeardownScreen');
 
@@ -26,7 +27,7 @@ class _TeardownScreenState extends State<TeardownScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _logger.fine('TeardownScreen.addPostFrameCallback');
-        context.read<AppBloc>().add(AppCleanupRequested());
+        context.read<AppBloc>().add(const AppCleanupRequested());
       } else {
         _logger.fine('TeardownScreen.addPostFrameCallback: widget is not mounted');
       }
@@ -35,11 +36,15 @@ class _TeardownScreenState extends State<TeardownScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [CircularProgressIndicator(), SizedBox(height: 16), Text('Signing out...')],
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text(context.l10n.session_Teardown_progressText),
+          ],
         ),
       ),
     );
