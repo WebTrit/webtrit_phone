@@ -38,7 +38,27 @@ class _AppState extends State<App> {
       themeModeRepository: context.read<ThemeModeRepository>(),
       appThemes: context.read<AppThemes>(),
       sessionRepository: context.read<SessionRepository>(),
+      systemInfoRepository: context.read<SystemInfoRepository>(),
       appInfo: context.read<AppInfo>(),
+      userSessionCleanupResolver: RepositoryUserSessionCleanupResolver(
+        systemInfoRepository: context.read<SystemInfoRepository>(),
+        registerStatusRepository: context.read<RegisterStatusRepository>(),
+        presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
+        activeMainFlavorRepository: context.read<ActiveMainFlavorRepository>(),
+        callerIdSettingsRepository: context.read<CallerIdSettingsRepository>(),
+        activeRecentsVisibilityFilterRepository: context.read<ActiveRecentsVisibilityFilterRepository>(),
+        activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>(),
+        audioProcessingSettingsRepository: context.read<AudioProcessingSettingsRepository>(),
+        encodingPresetRepository: context.read<EncodingPresetRepository>(),
+        iceSettingsRepository: context.read<IceSettingsRepository>(),
+        incomingCallTypeRepository: context.read<IncomingCallTypeRepository>(),
+        peerConnectionSettingsRepository: context.read<PeerConnectionSettingsRepository>(),
+        videoCapturingSettingsRepository: context.read<VideoCapturingSettingsRepository>(),
+        encodingSettingsRepository: context.read<EncodingSettingsRepository>(),
+        localeRepository: context.read<LocaleRepository>(),
+        themeModeRepository: context.read<ThemeModeRepository>(),
+        appDatabase: context.read<AppDatabase>(),
+      ),
     );
 
     final initialTabResolver = BottomMenuInitialTabResolver(

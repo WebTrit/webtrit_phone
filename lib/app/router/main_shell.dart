@@ -419,7 +419,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
-                        sessionRepository: context.read<SessionRepository>(),
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,
@@ -445,6 +444,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           extras: {'callId': id, 'error': error.name},
                         ),
                         peerConnectionManager: peerConnectionManager,
+                        onSessionInvalidated: () => appBloc.add(const AppLogoutRequested()),
                       )..add(const CallStarted());
                     },
                   ),

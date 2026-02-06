@@ -48,6 +48,11 @@ final _logger = Logger('CallBloc');
 /// as parameters, allowing for detailed error logging or reporting.
 typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallRequestError error);
 
+/// Callback triggered when the signaling session is determined to be invalid
+/// (e.g., session revoked remotely, expired, or deleted), requiring a forced
+/// application-level logout to resolve the state.
+typedef SignalingSessionInvalidatedCallback = void Function();
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final String coreUrl;
   final String tenantId;
@@ -57,11 +62,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallLogsRepository callLogsRepository;
   final CallPullRepository callPullRepository;
   final UserRepository userRepository;
-  final SessionRepository sessionRepository;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
   final Function(Notification) submitNotification;
+
+  /// Callback invoked when the signaling client reports a critical session error
+  /// (e.g. [SignalingDisconnectCode.sessionMissedError]), indicating the
+  /// current session is no longer valid on the server.
+  final SignalingSessionInvalidatedCallback onSessionInvalidated;
 
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
@@ -99,7 +108,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.linesStateRepository,
     required this.presenceInfoRepository,
     required this.presenceSettingsRepository,
-    required this.sessionRepository,
+    required this.onSessionInvalidated,
     required this.userRepository,
     required this.submitNotification,
     required this.callkeep,
@@ -365,9 +374,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _logger.info('Signaling session listener: session is missing ${current.lastSignalingDisconnectCode}');
 
         unawaited(_notifyAccountErrorSafely());
-        sessionRepository.logout().catchError((e, st) {
-          _logger.warning('Logout failed after sessionMissedError', e, st);
-        });
+        onSessionInvalidated();
       }
     }
   }

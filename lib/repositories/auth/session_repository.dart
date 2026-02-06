@@ -33,12 +33,7 @@ abstract class SessionRepository {
 }
 
 class SessionRepositoryImpl implements SessionRepository {
-  SessionRepositoryImpl({
-    required this.secureStorage,
-    this.sessionCleanupWorker,
-    required this.apiClientFactory,
-    this.onLogout,
-  }) {
+  SessionRepositoryImpl({required this.secureStorage, this.sessionCleanupWorker, required this.apiClientFactory}) {
     _currentSession = _loadFromStorage();
     _sessionController.add(_currentSession);
   }
@@ -46,7 +41,6 @@ class SessionRepositoryImpl implements SessionRepository {
   final SecureStorage secureStorage;
   final WebtritApiClientFactory apiClientFactory;
   final SessionCleanupWorker? sessionCleanupWorker;
-  final Future<void> Function()? onLogout;
 
   final _sessionController = StreamController<Session?>.broadcast();
   Session? _currentSession;
@@ -113,7 +107,6 @@ class SessionRepositoryImpl implements SessionRepository {
     if (session == null || !session.isLoggedIn) return;
 
     await clean();
-    if (onLogout != null) await onLogout!();
 
     unawaited(_revokeRemoteWithLogging(session));
   }

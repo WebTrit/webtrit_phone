@@ -14,6 +14,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/resolvers/resolvers.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -33,11 +34,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.appInfo,
     required this.localeRepository,
     required this.themeModeRepository,
+    required this.userSessionCleanupResolver,
+    required this.systemInfoRepository,
     required AppThemes appThemes,
   }) : super(
          AppState(
-           /// Important to manage routing and navigation in AppRouter
            session: sessionRepository.getCurrent() ?? const Session(),
+           status: (sessionRepository.getCurrent()?.isLoggedIn ?? false)
+               ? AppLifecycleStatus.authenticated
+               : AppLifecycleStatus.unauthenticated,
            themeSettings: appThemes.values.first.settings,
            themeMode: themeModeRepository.getThemeMode(),
            locale: localeRepository.getLocale(),
@@ -45,12 +50,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
            contactsAgreementStatus: contactsAgreementStatusRepository.getContactsAgreementStatus(),
          ),
        ) {
+    on<AppLogined>(_onLogined);
     on<_SessionUpdated>(_onSessionUpdated, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
     on<AppAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
-
+    on<AppLogoutRequested>(_onLogoutRequested, transformer: droppable());
+    on<AppCleanupRequested>(_onCleanupRequested, transformer: droppable());
     _subscribeSession();
   }
 
@@ -60,21 +67,36 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AppInfo appInfo;
   final LocaleRepository localeRepository;
   final ThemeModeRepository themeModeRepository;
+  final UserSessionCleanupResolver userSessionCleanupResolver;
+  final SystemInfoRepository systemInfoRepository;
 
   late final StreamSubscription<Session?> _sessionSub;
 
   @override
   void onChange(Change<AppState> change) {
     /// Trigger when user transitions from logged out to logged in
-    if (!change.currentState.session.isLoggedIn && change.nextState.session.isLoggedIn) {
+    if (change.currentState.status != AppLifecycleStatus.authenticated &&
+        change.nextState.status == AppLifecycleStatus.authenticated) {
       _onSessionLoggedIn(change.nextState.session);
     }
 
-    /// Trigger when user transitions from logged in to logged out
-    if (change.currentState.session.isLoggedIn && !change.nextState.session.isLoggedIn) {
+    /// Trigger when user transitions from logged in to logged out (or teardown)
+    if (change.currentState.status == AppLifecycleStatus.authenticated &&
+        change.nextState.status != AppLifecycleStatus.authenticated) {
       _onSessionLoggedOut(change.currentState.session);
     }
     super.onChange(change);
+  }
+
+  Future<void> _onLogined(AppLogined event, Emitter<AppState> emit) async {
+    final systemInfo = event.systemInfo;
+    if (systemInfo != null) {
+      systemInfoRepository.preload(systemInfo);
+    }
+
+    await sessionRepository.save(event.session);
+
+    emit(state.copyWith(status: AppLifecycleStatus.authenticated, session: event.session));
   }
 
   void _onSessionLoggedIn(Session session) {
@@ -95,12 +117,49 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _subscribeSession() {
     _sessionSub = sessionRepository.watch().listen(
       (session) => add(_SessionUpdated(session)),
-      onError: (e, st) => _logger.severe('authSessionRepository.watch', e, st),
+      onError: (e, st) => _logger.severe('sessionRepository.watch', e, st),
     );
   }
 
-  void _onSessionUpdated(_SessionUpdated event, Emitter<AppState> emit) async {
-    emit(state.copyWith(session: event.session ?? const Session()));
+  Future<void> _onSessionUpdated(_SessionUpdated event, Emitter<AppState> emit) async {
+    final session = event.session ?? const Session();
+
+    if (state.status == AppLifecycleStatus.teardown && session.isLoggedIn) {
+      _logger.fine('Ignoring session update while in teardown');
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        session: session,
+        status: session.isLoggedIn ? AppLifecycleStatus.authenticated : AppLifecycleStatus.unauthenticated,
+      ),
+    );
+  }
+
+  Future<void> _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) async {
+    _logger.info('Logout requested. Initiating safe teardown sequence.');
+
+    /// Transition to [AppLifecycleStatus.teardown] to trigger router re-evaluation.
+    /// This forces the removal of the MainShell from the widget tree, ensuring
+    /// all database connections and background workers are disposed of before data cleanup.
+    emit(state.copyWith(status: AppLifecycleStatus.teardown));
+  }
+
+  Future<void> _onCleanupRequested(AppCleanupRequested event, Emitter<AppState> emit) async {
+    _logger.info('UI teardown complete. Initiating comprehensive resource cleanup.');
+
+    try {
+      /// Proceed with database and repository clearing now that the UI is unmounted
+      /// and all underlying connections are released.
+      await userSessionCleanupResolver.resolve();
+    } catch (e, st) {
+      _logger.severe('Resource cleanup failed during teardown', e, st);
+    }
+
+    /// Revoke the active session. This transitions the application state to
+    /// [AppLifecycleStatus.unauthenticated], triggering the final redirect to Login.
+    await sessionRepository.logout();
   }
 
   void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {
@@ -135,7 +194,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (error is RequestFailure) {
       if (error.statusCode == HttpStatus.unauthorized) {
         if (state.session.isLoggedIn && state.session.token == error.token) {
-          sessionRepository.logout();
+          add(AppLogoutRequested());
         }
       }
     }

@@ -18,19 +18,15 @@ part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
 
+typedef LoginSuccessCallback = void Function(Session session, WebtritSystemInfo systemInfo);
+
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({
-    required this.authRepository,
-    required this.notificationsBloc,
-    required this.sessionRepository,
-    required this.systemInfoRepository,
-  }) : super(const LoginState());
+  LoginCubit({required this.authRepository, required this.notificationsBloc, required this.onLoginSuccess})
+    : super(const LoginState());
 
   final AuthRepository authRepository;
 
-  final SystemInfoRepository systemInfoRepository;
-
-  final SessionRepository sessionRepository;
+  final LoginSuccessCallback onLoginSuccess;
 
   final NotificationsBloc notificationsBloc;
 
@@ -73,8 +69,7 @@ class LoginCubit extends Cubit<LoginState> {
     final token = state.token!;
     final userId = state.userId!;
 
-    systemInfoRepository.preload(systemInfo);
-    sessionRepository.save(Session(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId));
+    onLoginSuccess(Session(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId), systemInfo);
   }
 
   void launchLinkableElement(LinkableElement link) async {

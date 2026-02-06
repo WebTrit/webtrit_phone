@@ -7,6 +7,17 @@ sealed class AppEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+/// Event dispatched to finalize the authentication process.
+///
+/// Updates the application state with the provided [session] and optionally
+/// preloads [systemInfo] into the corresponding repository.
+class AppLogined extends AppEvent {
+  final Session session;
+  final WebtritSystemInfo? systemInfo;
+
+  const AppLogined({required this.session, this.systemInfo});
+}
+
 class _SessionUpdated extends AppEvent {
   const _SessionUpdated(this.session);
 
@@ -67,4 +78,16 @@ class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
 
   @override
   List<Object?> get props => [status];
+}
+
+/// Triggered to initiate the user logout process by transitioning the app
+/// into a teardown state to safely unmount the primary UI.
+class AppLogoutRequested extends AppEvent {
+  const AppLogoutRequested();
+}
+
+/// Triggered after the UI has stabilized in teardown mode to perform
+/// the actual clearing of local databases, repositories, and session data.
+class AppCleanupRequested extends AppEvent {
+  const AppCleanupRequested();
 }

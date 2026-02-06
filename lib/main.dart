@@ -106,12 +106,9 @@ class RootApp extends StatelessWidget {
       child: Builder(
         builder: (context) {
           final prefs = context.read<AppPreferences>();
-          final database = context.read<AppDatabase>();
           final webtritApiClientFactory = context.read<WebtritApiClientFactory>();
           final appMetadataProvider = context.read<AppMetadataProvider>();
           final presenceDeviceName = appMetadataProvider.userAgent;
-
-          final systemInfoRepository = instanceRegistry.get<SystemInfoRepository>();
 
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
           final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs, presenceDeviceName);
@@ -135,27 +132,6 @@ class RootApp extends StatelessWidget {
             secureStorage: context.read<SecureStorage>(),
             sessionCleanupWorker: instanceRegistry.get<SessionCleanupWorker>(),
             apiClientFactory: webtritApiClientFactory,
-
-            /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here
-            onLogout: () async {
-              await database.deleteEverything(); // TODO: clear using repos instead of direct access
-              await systemInfoRepository.clear();
-              await registerStatusRepository.clear();
-              await presenceSettingsRepository.clear();
-              await activeMainFlavorRepository.clear();
-              await callerIdSettingsRepository.clear();
-              await activeRecentsVisibilityFilterRepository.clear();
-              await activeContactSourceTypeRepository.clear();
-              await audioProcessingSettingsRepository.clear();
-              await encodingPresetRepository.clear();
-              await iceSettingsRepository.clear();
-              await incomingCallTypeRepository.clear();
-              await peerConnectionSettingsRepository.clear();
-              await videoCapturingSettingsRepository.clear();
-              await encodingSettingsRepository.clear();
-              await localeRepository.clear();
-              await themeModeRepository.clear();
-            },
           );
 
           return MultiRepositoryProvider(

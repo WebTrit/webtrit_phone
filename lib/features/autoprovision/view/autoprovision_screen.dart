@@ -91,11 +91,11 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       }
 
       // Login with the new session
-      await sessionRepository.save(session);
+      appBloc.add(AppLogined(session: session));
       await appBloc.stream.firstWhere((element) => element.session.token == token);
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
-      await sessionRepository.save(session);
+      appBloc.add(AppLogined(session: session));
       await appBloc.stream.firstWhere((element) => element.session.token == token);
       // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }
