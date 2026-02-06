@@ -445,7 +445,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         ),
                         peerConnectionManager: peerConnectionManager,
                         onSessionInvalidated: () =>
-                            appBloc.add(AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
+                            appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
                       )..add(const CallStarted());
                     },
                   ),

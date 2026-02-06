@@ -90,10 +90,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       systemInfoRepository.preload(systemInfo);
     }
 
-    // 1. Persist session to storage (syncs disk)
+    // Persist session to storage (syncs disk)
     await sessionRepository.save(event.session);
 
-    // 2. Explicitly update bloc state (syncs UI)
+    // Explicitly update bloc state (syncs UI)
     emit(state.copyWith(status: AppLifecycleStatus.authenticated, session: event.session));
   }
 
@@ -180,7 +180,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (error is RequestFailure) {
       if (error.statusCode == HttpStatus.unauthorized) {
         if (state.session.isLoggedIn && state.session.token == error.token) {
-          add(AppLogoutRequested());
+          add(const AppLogoutRequested());
         }
       }
     }
