@@ -113,31 +113,39 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future<void> _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) async {
-    _logger.info('Logout requested. Initiating safe teardown sequence.');
-
-    /// Transition to [AppLifecycleStatus.teardown] to trigger router re-evaluation.
-    /// This forces the removal of the MainShell from the widget tree, ensuring
-    /// all database connections and background workers are disposed of before data cleanup.
-    emit(state.copyWith(status: AppLifecycleStatus.teardown));
+    _logger.info('Logout requested. Reason: ${event.reason}. Initiating safe teardown sequence.');
+    emit(state.copyWith(status: AppLifecycleStatus.teardown, logoutReason: event.reason));
   }
 
   Future<void> _onCleanupRequested(AppCleanupRequested event, Emitter<AppState> emit) async {
-    _logger.info('UI teardown complete. Initiating comprehensive resource cleanup.');
+    _logger.info('UI teardown complete. Initiating cleanup.');
 
     try {
-      /// Proceed with database and repository clearing now that the UI is unmounted
-      /// and all underlying connections are released.
       await userSessionCleanupResolver.resolve();
     } catch (e, st) {
-      _logger.severe('Resource cleanup failed during teardown', e, st);
+      _logger.severe('Resource cleanup failed', e, st);
     }
 
-    /// Revoke the active session.
-    await sessionRepository.logout();
+    // Determine the logout reason (defaulting to userRequest if null)
+    final reason = state.logoutReason ?? AppLogoutReason.userRequest;
+    final currentSession = sessionRepository.getCurrent();
 
-    /// Explicitly transition the application state to [AppLifecycleStatus.unauthenticated].
-    /// Since we removed the stream subscription, we must manually update the state here.
-    emit(state.copyWith(status: AppLifecycleStatus.unauthenticated, session: const Session()));
+    // Determine if we should attempt to revoke the session on the server.
+    // We skip this only for 'sessionMissed' because the socket error (4201)
+    // guarantees the session is already terminated.
+    final shouldRevokeRemote = reason == AppLogoutReason.userRequest || reason == AppLogoutReason.serverRejection;
+
+    if (shouldRevokeRemote && currentSession != null && currentSession.isLoggedIn) {
+      _logger.info('Revoking remote session. Reason: $reason');
+      unawaited(sessionRepository.revokeSession(currentSession));
+    } else {
+      _logger.info('Skipping remote revoke. Reason: $reason');
+    }
+
+    // Always perform local cleanup
+    await sessionRepository.clean();
+
+    emit(state.copyWith(status: AppLifecycleStatus.unauthenticated, session: const Session(), logoutReason: null));
   }
 
   void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {

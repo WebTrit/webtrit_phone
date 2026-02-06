@@ -81,7 +81,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
 
       // Logout if the session exists
       if (appBloc.state.session.isLoggedIn) {
-        await sessionRepository.logout();
+        appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
         await appBloc.stream.firstWhere((element) => !element.session.isLoggedIn);
       }
 

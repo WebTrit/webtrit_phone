@@ -69,7 +69,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
     _sessionGuard = RouterLogoutSessionGuard(
       performLogout: () {
-        context.read<SessionRepository>().logout();
+        context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
       },
       onPreLogout: () {
         final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
@@ -444,7 +444,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           extras: {'callId': id, 'error': error.name},
                         ),
                         peerConnectionManager: peerConnectionManager,
-                        onSessionInvalidated: () => appBloc.add(const AppLogoutRequested()),
+                        onSessionInvalidated: () =>
+                            appBloc.add(AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
                       )..add(const CallStarted());
                     },
                   ),

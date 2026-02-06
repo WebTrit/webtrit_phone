@@ -18,13 +18,14 @@ abstract class SessionRepository {
   /// Updates in-memory state immediately, then writes to storage asynchronously.
   Future<void> save(Session session);
 
-  /// Logout user locally (clears data) and revokes remote session asynchronously.
-  Future<void> logout();
-
   /// Clears all local app/session data.
   ///
   /// Updates in-memory state immediately to prevent race conditions.
   Future<void> clean();
+
+  /// Revokes the session on the server (API Call).
+  /// This does NOT clear local data.
+  Future<void> revokeSession(Session session);
 }
 
 class SessionRepositoryImpl implements SessionRepository {
@@ -66,34 +67,16 @@ class SessionRepositoryImpl implements SessionRepository {
 
   @override
   Future<void> save(Session session) async {
-    final isReLogin = _effectiveSession.isLoggedIn;
-
-    // If a user is re-logging in, ensure the old session is cleaned up first.
-    // Note: logout() cleans memory, but we immediately overwrite it below.
-    if (isReLogin) {
-      await logout();
+    if (_effectiveSession.isLoggedIn) {
+      await clean();
     }
 
     _logger.info('Saving session for user: ${session.userId}');
-
-    // Update in-memory state immediately (Memory First strategy).
     _currentSession = session;
-
-    // Persist to storage asynchronously.
     await secureStorage.writeUserId(session.userId);
     await secureStorage.writeTenantId(session.tenantId);
-
-    if (session.coreUrl != null) {
-      await secureStorage.writeCoreUrl(session.coreUrl!);
-    } else {
-      await secureStorage.deleteCoreUrl();
-    }
-
-    if (session.token != null) {
-      await secureStorage.writeToken(session.token!);
-    } else {
-      await secureStorage.deleteToken();
-    }
+    if (session.coreUrl != null) await secureStorage.writeCoreUrl(session.coreUrl!);
+    if (session.token != null) await secureStorage.writeToken(session.token!);
   }
 
   @override
@@ -109,17 +92,31 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   @override
-  Future<void> logout() async {
-    // Capture the session before cleaning for the remote revoke call.
-    // Uses _effectiveSession to ensure we have the token even if memory was cleared.
-    final sessionToRevoke = _effectiveSession;
+  Future<void> revokeSession(Session session) async {
+    if (!session.isLoggedIn) return;
 
-    // Clear local data (memory + disk).
-    await clean();
+    final client = apiClientFactory.createWebtritApiClient(
+      coreUrl: Uri.parse(session.coreUrl!),
+      tenantId: session.tenantId,
+    );
 
-    // Fire-and-forget remote revocation.
-    if (sessionToRevoke.isLoggedIn) {
-      unawaited(_revokeRemoteWithLogging(sessionToRevoke));
+    try {
+      await client.deleteSession(session.token!, options: RequestOptions.withExtraRetries());
+    } on UserNotFoundException catch (e) {
+      _logger.fine('Remote session already revoked (UserNotFound)', e);
+    } on UnauthorizedException catch (e) {
+      _logger.fine('Remote session already revoked (Unauthorized)', e);
+    } on SessionMissingException catch (e) {
+      _logger.fine('Remote session already revoked (SessionMissing)', e);
+    } on RequestFailure catch (e, st) {
+      if (e.statusCode == 401) {
+        _logger.fine('Remote session already revoked (401)', e);
+      } else {
+        _logger.warning('Remote revoke failed, queuing retry', e, st);
+        sessionCleanupWorker?.saveFailedSession(e.url, token: session.token!);
+      }
+    } catch (e, st) {
+      _logger.severe('Unexpected error during remote revoke', e, st);
     }
   }
 
@@ -130,38 +127,5 @@ class SessionRepositoryImpl implements SessionRepository {
       tenantId: secureStorage.readTenantId() ?? '',
       userId: secureStorage.readUserId() ?? '',
     );
-  }
-
-  Future<void> _revokeRemoteWithLogging(Session session) async {
-    try {
-      await _revokeRemote(session);
-    } catch (e, st) {
-      _logger.severe('Uncaught error during remote revoke', e, st);
-    }
-  }
-
-  Future<void> _revokeRemote(Session s) async {
-    final coreUrl = s.coreUrl;
-    final token = s.token;
-    if (coreUrl == null || token == null) return;
-
-    final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: s.tenantId);
-
-    try {
-      await client.deleteSession(token, options: RequestOptions.withExtraRetries());
-    } on UserNotFoundException catch (e, st) {
-      _logger.fine('Remote session already revoked or never existed (UserNotFound)', e, st);
-    } on UnauthorizedException catch (e, st) {
-      _logger.fine('Remote session already revoked or never existed (Unauthorized)', e, st);
-    } on SessionMissingException catch (e, st) {
-      _logger.fine('Remote session already revoked (SessionMissing)', e, st);
-    } on RequestFailure catch (e, st) {
-      // If it's a network issue or server error (5xx), queue it for later.
-      _logger.warning('Queued token revoke retry due to RequestFailure', e, st);
-      sessionCleanupWorker?.saveFailedSession(e.url, token: token);
-      rethrow;
-    } catch (e, st) {
-      _logger.severe('Unexpected error during remote revoke', e, st);
-    }
   }
 }

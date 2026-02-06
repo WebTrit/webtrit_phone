@@ -6,6 +6,7 @@ enum AppLifecycleStatus { unauthenticated, authenticated, teardown }
 sealed class AppState with _$AppState {
   const factory AppState({
     @Default(AppLifecycleStatus.unauthenticated) AppLifecycleStatus status,
+    @Default(null) AppLogoutReason? logoutReason,
     @Default(Session()) Session session,
     required ThemeSettings themeSettings,
     required ThemeMode themeMode,

@@ -1,5 +1,19 @@
 part of 'app_bloc.dart';
 
+enum AppLogoutReason {
+  /// The user manually initiated the logout process through the UI.
+  /// Requires both remote session revocation and local data cleanup.
+  userRequest,
+
+  /// The signaling was lost due to an expired or invalid session (e.g., Error 4201).
+  /// Requires only local data cleanup as the server has already terminated the session.
+  sessionMissed,
+
+  /// The server explicitly rejected a request due to authentication.
+  /// Requires both remote session revocation and local data cleanup.
+  serverRejection,
+}
+
 sealed class AppEvent extends Equatable {
   const AppEvent();
 
@@ -16,6 +30,9 @@ class AppLoggedIn extends AppEvent {
   final WebtritSystemInfo? systemInfo;
 
   const AppLoggedIn({required this.session, this.systemInfo});
+
+  @override
+  List<Object?> get props => [session, systemInfo];
 }
 
 class AppThemeSettingsChanged extends AppEvent {
@@ -73,25 +90,29 @@ class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
 
 /// Initiates the application logout sequence.
 ///
-/// Can be triggered manually by the user or automatically upon session invalidation
-/// (e.g., via signaling socket errors or API unauthorized responses).
+/// Accepts an [AppLogoutReason] to define the context of the logout (e.g., manual user request
+/// or system invalidation), which determines the subsequent cleanup strategy.
 ///
-/// Triggers the transition to [AppLifecycleStatus.teardown], forcing the
-/// [MainShell] to unmount before any data cleanup begins.
+/// Transitions the application state to [AppLifecycleStatus.teardown], forcing the
+/// [MainShell] to unmount before resource disposal begins.
 class AppLogoutRequested extends AppEvent {
-  const AppLogoutRequested();
+  final AppLogoutReason reason;
+
+  const AppLogoutRequested({this.reason = AppLogoutReason.userRequest});
+
+  @override
+  List<Object?> get props => [reason];
 }
 
-/// Triggered exclusively by the teardown UI after the widget tree has stabilized.
+/// Finalizes the logout process by releasing resources and clearing session data.
 ///
-/// This event executes the critical cleanup of local databases and repositories.
-/// It must **only** be dispatched when the app is already in [AppLifecycleStatus.teardown]
-/// and the main UI has been unmounted to prevent database locking errors.
+/// Dispatched exclusively by the teardown UI after the widget tree has stabilized
+/// to prevent database lock contention.
 ///
-/// **Sequence:**
-/// 1. [AppLogoutRequested] transitions state to teardown.
-/// 2. Router displays the teardown screen.
-/// 3. Teardown screen dispatches this event to finalize cleanup.
+/// This handler conditionally attempts remote session revocation based on the
+/// [AppLogoutReason] stored in the state:
+/// * **userRequest / serverRejection**: Revokes the remote session before local cleanup.
+/// * **sessionMissed**: Skips remote revocation since the session is already terminated.
 class AppCleanupRequested extends AppEvent {
   const AppCleanupRequested();
 }

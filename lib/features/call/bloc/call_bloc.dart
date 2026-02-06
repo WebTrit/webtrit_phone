@@ -383,12 +383,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _notifyAccountErrorSafely() async {
     try {
       await userRepository.getInfo(true);
-    } on RequestFailure catch (e, st) {
+    } on RequestFailure catch (e) {
       final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
+      _logger.warning('Account error code: $errorCode');
+
       if (errorCode != null) {
         submitNotification(AccountErrorNotification(errorCode));
       } else {
-        _logger.fine('Account error code not mapped: ${e.error?.code}', e, st);
+        _logger.fine('Account error code not mapped: ${e.error?.code}', e);
       }
     } catch (e, st) {
       _logger.warning('Unexpected error during account info refresh', e, st);
