@@ -387,20 +387,26 @@ class AppRouter extends RootStackRouter {
 
   /// Manages route stability during the teardown process.
   ///
-  /// Holds the user on the teardown screen until cleanup is finalized,
-  /// then redirects to the authentication flow.
+  /// Allows access to the teardown screen only while the app is in the
+  /// teardown lifecycle state. Otherwise, redirects to the appropriate
+  /// route (e.g. MainShell when authenticated, Login when unauthenticated).
   void onTeardownScreenGuardNavigation(NavigationResolver resolver, StackRouter router) {
     _logger.fine(_onNavigationLoggerMessage('onTeardownScreenGuardNavigation', resolver));
 
     final state = _appBloc.state;
 
-    if (state.status == AppLifecycleStatus.unauthenticated) {
-      // Teardown finalized. Proceed to login.
+    if (state.status == AppLifecycleStatus.teardown) {
+      // Actively tearing down: allow navigation to the teardown screen.
+      resolver.next(true);
+    } else if (state.status == AppLifecycleStatus.unauthenticated) {
+      // Teardown finalized or user not authenticated: proceed to login.
       resolver.next(false);
       router.replaceAll([LoginRouterPageRoute(launchEmbeddedData: _launchEmbeddedData)]);
     } else {
-      // Sustain teardown screen during active cleanup.
-      resolver.next(true);
+      // For any other state (e.g. authenticated), prevent teardown access
+      // and return the user to the main application shell.
+      resolver.next(false);
+      router.replaceAll([const MainShellRoute()]);
     }
   }
 
