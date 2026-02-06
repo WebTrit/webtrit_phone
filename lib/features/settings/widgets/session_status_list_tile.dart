@@ -42,20 +42,21 @@ class SessionStatusListTile extends StatelessWidget {
               BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
                 builder: (context, microphoneStatusState) {
                   return Visibility(
-                    visible: microphoneStatusState.microphonePermissionGranted != null &&
+                    visible:
+                        microphoneStatusState.microphonePermissionGranted != null &&
                         !microphoneStatusState.microphonePermissionGranted!,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: ShapeDecoration(color: Theme.of(context).colorScheme.error, shape: StadiumBorder()),
+                      decoration: ShapeDecoration(color: themeData.colorScheme.error, shape: const StadiumBorder()),
                       child: Row(
                         spacing: 5,
                         children: [
-                          Icon(Icons.warning_amber, color: Colors.white, size: 14,),
+                          Icon(Icons.warning_amber, color: themeData.colorScheme.onError, size: 14),
                           Flexible(
                             child: Text(
                               context.l10n.settings_missingMicrophoneIndicator_title,
-                              style: TextStyle(color: Colors.white, fontSize: 12),
+                              style: themeData.textTheme.bodySmall?.copyWith(color: themeData.colorScheme.onError),
                             ),
                           ),
                         ],
