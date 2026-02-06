@@ -257,10 +257,10 @@ class AppRouter extends RootStackRouter {
             ),
           ],
         ),
-        AutoRoute(
+        AutoRoute.guarded(
           page: TeardownScreenPageRoute.page,
           path: 'teardown',
-          guards: [CallbackGuard(onTeardownScreenGuardNavigation)],
+          onNavigation: onTeardownScreenGuardNavigation,
         ),
         AutoRoute(page: TermsConditionsScreenPageRoute.page, path: 'terms-conditions'),
         AutoRoute(page: ErrorDetailsScreenPageRoute.page, path: 'error-details'),
@@ -461,16 +461,5 @@ class FeatureGuard implements AutoRouteGuard {
         resolver.redirectUntil(onDenied!);
       }
     }
-  }
-}
-
-class CallbackGuard extends AutoRouteGuard {
-  final void Function(NavigationResolver resolver, StackRouter router) callback;
-
-  CallbackGuard(this.callback);
-
-  @override
-  void onNavigation(NavigationResolver resolver, StackRouter router) {
-    callback(resolver, router);
   }
 }

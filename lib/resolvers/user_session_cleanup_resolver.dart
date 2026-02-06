@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+
+final _logger = Logger('UserSessionCleanupResolver');
 
 /// Contract for resolving the cleanup of the user session.
 abstract interface class UserSessionCleanupResolver {
@@ -51,25 +55,48 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
 
   @override
   Future<void> resolve() async {
+    // Orchestrate parallel cleanup across all repositories using a "Best Effort" strategy.
+    // The .suppressError() extension ensures that a failure in a single repository
+    // does not abort the collective cleanup, maintaining maximum state consistency
+    // during the teardown sequence.
     await Future.wait([
-      systemInfoRepository.clear(),
-      registerStatusRepository.clear(),
-      presenceSettingsRepository.clear(),
-      activeMainFlavorRepository.clear(),
-      callerIdSettingsRepository.clear(),
-      activeRecentsVisibilityFilterRepository.clear(),
-      activeContactSourceTypeRepository.clear(),
-      audioProcessingSettingsRepository.clear(),
-      encodingPresetRepository.clear(),
-      iceSettingsRepository.clear(),
-      incomingCallTypeRepository.clear(),
-      peerConnectionSettingsRepository.clear(),
-      videoCapturingSettingsRepository.clear(),
-      encodingSettingsRepository.clear(),
-      localeRepository.clear(),
-      themeModeRepository.clear(),
+      systemInfoRepository.clear().suppressError('systemInfoRepository'),
+      registerStatusRepository.clear().suppressError('registerStatusRepository'),
+      presenceSettingsRepository.clear().suppressError('presenceSettingsRepository'),
+      activeMainFlavorRepository.clear().suppressError('activeMainFlavorRepository'),
+      callerIdSettingsRepository.clear().suppressError('callerIdSettingsRepository'),
+      activeRecentsVisibilityFilterRepository.clear().suppressError('activeRecentsVisibilityFilterRepository'),
+      activeContactSourceTypeRepository.clear().suppressError('activeContactSourceTypeRepository'),
+      audioProcessingSettingsRepository.clear().suppressError('audioProcessingSettingsRepository'),
+      encodingPresetRepository.clear().suppressError('encodingPresetRepository'),
+      iceSettingsRepository.clear().suppressError('iceSettingsRepository'),
+      incomingCallTypeRepository.clear().suppressError('incomingCallTypeRepository'),
+      peerConnectionSettingsRepository.clear().suppressError('peerConnectionSettingsRepository'),
+      videoCapturingSettingsRepository.clear().suppressError('videoCapturingSettingsRepository'),
+      encodingSettingsRepository.clear().suppressError('encodingSettingsRepository'),
+      localeRepository.clear().suppressError('localeRepository'),
+      themeModeRepository.clear().suppressError('themeModeRepository'),
     ]);
 
-    await appDatabase.deleteEverything();
+    // Finalize the teardown by decommissioning the local database.
+    // Wrapped in a try-catch block to ensure the logout sequence completes
+    // regardless of potential storage corruption or file access issues.
+    try {
+      await appDatabase.deleteEverything();
+    } catch (e, st) {
+      _logger.severe('Failed to clear AppDatabase', e, st);
+    }
+  }
+}
+
+/// Extension to handle errors gracefully for cleanup tasks, ensuring
+/// the "Best Effort" strategy for the teardown process.
+extension _SafeFuture on Future<void> {
+  Future<void> suppressError(String name) async {
+    try {
+      await this;
+    } catch (e, st) {
+      _logger.warning('Failed to clear $name', e, st);
+    }
   }
 }
