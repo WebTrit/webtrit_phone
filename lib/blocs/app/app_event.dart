@@ -18,15 +18,6 @@ class AppLoggedIn extends AppEvent {
   const AppLoggedIn({required this.session, this.systemInfo});
 }
 
-class _SessionUpdated extends AppEvent {
-  const _SessionUpdated(this.session);
-
-  final Session? session;
-
-  @override
-  List<Object?> get props => [session];
-}
-
 class AppThemeSettingsChanged extends AppEvent {
   const AppThemeSettingsChanged(this.value);
 

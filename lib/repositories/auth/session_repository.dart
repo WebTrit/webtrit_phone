@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -11,51 +10,76 @@ import 'package:webtrit_phone/utils/utils.dart';
 final _logger = Logger('SessionRepository');
 
 abstract class SessionRepository {
-  bool get isSignedIn;
-
-  /// Emits current session and all further updates.
-  Stream<Session?> watch();
-
-  /// Re-read session from storage and emit if changed.
-  Future<void> reload();
-
-  /// Persist a session (overwrites storage) and emit updated value.
-  Future<void> save(Session session);
-
-  /// Return current session snapshot from storage.
+  /// Returns the current in-memory session snapshot.
   Session? getCurrent();
 
-  /// Logout user locally and revoke remote session asynchronously.
+  /// Persists a session.
+  ///
+  /// Updates in-memory state immediately, then writes to storage asynchronously.
+  Future<void> save(Session session);
+
+  /// Logout user locally (clears data) and revokes remote session asynchronously.
   Future<void> logout();
 
-  /// Clear all local app/session data and emit updated value.
+  /// Clears all local app/session data.
+  ///
+  /// Updates in-memory state immediately to prevent race conditions.
   Future<void> clean();
 }
 
 class SessionRepositoryImpl implements SessionRepository {
   SessionRepositoryImpl({required this.secureStorage, this.sessionCleanupWorker, required this.apiClientFactory}) {
+    // Initialize in-memory cache immediately on startup.
     _currentSession = _loadFromStorage();
-    _sessionController.add(_currentSession);
   }
 
   final SecureStorage secureStorage;
   final WebtritApiClientFactory apiClientFactory;
   final SessionCleanupWorker? sessionCleanupWorker;
 
-  final _sessionController = StreamController<Session?>.broadcast();
+  /// The single source of truth for the session state in memory.
   Session? _currentSession;
 
-  @override
-  Stream<Session?> watch() => _sessionController.stream;
+  /// Smart getter that attempts to restore the session from storage
+  /// if the in-memory cache is empty (e.g. after a Hot Restart).
+  Session get _effectiveSession {
+    // Capture local reference to prevent race conditions and redundant field access
+    final current = _currentSession;
+
+    if (current != null && current.isLoggedIn) {
+      return current;
+    }
+
+    final fromStorage = _loadFromStorage();
+
+    if (fromStorage.isLoggedIn) {
+      _logger.info('Restored lost session from storage: ${fromStorage.userId}');
+      _currentSession = fromStorage;
+      return fromStorage;
+    }
+
+    return current ?? const Session();
+  }
 
   @override
-  bool get isSignedIn => _currentSession?.isLoggedIn ?? false;
+  Session? getCurrent() => _effectiveSession;
 
   @override
   Future<void> save(Session session) async {
-    final isReLogin = _currentSession?.isLoggedIn ?? false;
-    if (isReLogin) await logout();
+    final isReLogin = _effectiveSession.isLoggedIn;
 
+    // If a user is re-logging in, ensure the old session is cleaned up first.
+    // Note: logout() cleans memory, but we immediately overwrite it below.
+    if (isReLogin) {
+      await logout();
+    }
+
+    _logger.info('Saving session for user: ${session.userId}');
+
+    // Update in-memory state immediately (Memory First strategy).
+    _currentSession = session;
+
+    // Persist to storage asynchronously.
     await secureStorage.writeUserId(session.userId);
     await secureStorage.writeTenantId(session.tenantId);
 
@@ -70,12 +94,34 @@ class SessionRepositoryImpl implements SessionRepository {
     } else {
       await secureStorage.deleteToken();
     }
-
-    _updateCurrent(_loadFromStorage());
   }
 
   @override
-  Session? getCurrent() => _currentSession;
+  Future<void> clean() async {
+    // Clear in-memory state immediately.
+    _currentSession = const Session();
+
+    // Clear storage asynchronously.
+    await secureStorage.deleteCoreUrl();
+    await secureStorage.deleteTenantId();
+    await secureStorage.deleteToken();
+    await secureStorage.deleteUserId();
+  }
+
+  @override
+  Future<void> logout() async {
+    // Capture the session before cleaning for the remote revoke call.
+    // Uses _effectiveSession to ensure we have the token even if memory was cleared.
+    final sessionToRevoke = _effectiveSession;
+
+    // Clear local data (memory + disk).
+    await clean();
+
+    // Fire-and-forget remote revocation.
+    if (sessionToRevoke.isLoggedIn) {
+      unawaited(_revokeRemoteWithLogging(sessionToRevoke));
+    }
+  }
 
   Session _loadFromStorage() {
     return Session(
@@ -84,31 +130,6 @@ class SessionRepositoryImpl implements SessionRepository {
       tenantId: secureStorage.readTenantId() ?? '',
       userId: secureStorage.readUserId() ?? '',
     );
-  }
-
-  void _updateCurrent(Session newSession) {
-    _currentSession = newSession;
-    _sessionController.add(_currentSession);
-  }
-
-  @override
-  Future<void> clean() async {
-    await secureStorage.deleteCoreUrl();
-    await secureStorage.deleteTenantId();
-    await secureStorage.deleteToken();
-    await secureStorage.deleteUserId();
-
-    _updateCurrent(_loadFromStorage());
-  }
-
-  @override
-  Future<void> logout() async {
-    final session = _currentSession;
-    if (session == null || !session.isLoggedIn) return;
-
-    await clean();
-
-    unawaited(_revokeRemoteWithLogging(session));
   }
 
   Future<void> _revokeRemoteWithLogging(Session session) async {
@@ -125,29 +146,22 @@ class SessionRepositoryImpl implements SessionRepository {
     if (coreUrl == null || token == null) return;
 
     final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: s.tenantId);
+
     try {
       await client.deleteSession(token, options: RequestOptions.withExtraRetries());
     } on UserNotFoundException catch (e, st) {
-      _logger.fine('Remote session already revoked or never existed', e, st);
+      _logger.fine('Remote session already revoked or never existed (UserNotFound)', e, st);
     } on UnauthorizedException catch (e, st) {
-      _logger.fine('Remote session already revoked or never existed', e, st);
+      _logger.fine('Remote session already revoked or never existed (Unauthorized)', e, st);
     } on SessionMissingException catch (e, st) {
-      _logger.fine('Remote session already revoked', e, st);
+      _logger.fine('Remote session already revoked (SessionMissing)', e, st);
     } on RequestFailure catch (e, st) {
-      _logger.warning('Queued token revoke retry', e, st);
+      // If it's a network issue or server error (5xx), queue it for later.
+      _logger.warning('Queued token revoke retry due to RequestFailure', e, st);
       sessionCleanupWorker?.saveFailedSession(e.url, token: token);
       rethrow;
     } catch (e, st) {
       _logger.severe('Unexpected error during remote revoke', e, st);
     }
-  }
-
-  @override
-  Future<void> reload() async {
-    _updateCurrent(_loadFromStorage());
-  }
-
-  Future<void> dispose() async {
-    await _sessionController.close();
   }
 }

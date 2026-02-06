@@ -51,14 +51,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
          ),
        ) {
     on<AppLoggedIn>(_onLoggedIn);
-    on<_SessionUpdated>(_onSessionUpdated, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
     on<AppAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
     on<AppLogoutRequested>(_onLogoutRequested, transformer: droppable());
     on<AppCleanupRequested>(_onCleanupRequested, transformer: droppable());
-    _subscribeSession();
   }
 
   final UserAgreementStatusRepository userAgreementStatusRepository;
@@ -69,8 +67,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final ThemeModeRepository themeModeRepository;
   final UserSessionCleanupResolver userSessionCleanupResolver;
   final SystemInfoRepository systemInfoRepository;
-
-  late final StreamSubscription<Session?> _sessionSub;
 
   @override
   void onChange(Change<AppState> change) {
@@ -94,8 +90,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       systemInfoRepository.preload(systemInfo);
     }
 
+    // 1. Persist session to storage (syncs disk)
     await sessionRepository.save(event.session);
 
+    // 2. Explicitly update bloc state (syncs UI)
     emit(state.copyWith(status: AppLifecycleStatus.authenticated, session: event.session));
   }
 
@@ -112,29 +110,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onSessionLoggedOut(Session session) {
     _logger.info('User logged out: ${session.userId}');
-  }
-
-  void _subscribeSession() {
-    _sessionSub = sessionRepository.watch().listen(
-      (session) => add(_SessionUpdated(session)),
-      onError: (e, st) => _logger.severe('sessionRepository.watch', e, st),
-    );
-  }
-
-  Future<void> _onSessionUpdated(_SessionUpdated event, Emitter<AppState> emit) async {
-    final session = event.session ?? const Session();
-
-    if (state.status == AppLifecycleStatus.teardown && session.isLoggedIn) {
-      _logger.fine('Ignoring session update while in teardown');
-      return;
-    }
-
-    emit(
-      state.copyWith(
-        session: session,
-        status: session.isLoggedIn ? AppLifecycleStatus.authenticated : AppLifecycleStatus.unauthenticated,
-      ),
-    );
   }
 
   Future<void> _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) async {
@@ -157,9 +132,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       _logger.severe('Resource cleanup failed during teardown', e, st);
     }
 
-    /// Revoke the active session. This transitions the application state to
-    /// [AppLifecycleStatus.unauthenticated], triggering the final redirect to Login.
+    /// Revoke the active session.
     await sessionRepository.logout();
+
+    /// Explicitly transition the application state to [AppLifecycleStatus.unauthenticated].
+    /// Since we removed the stream subscription, we must manually update the state here.
+    emit(state.copyWith(status: AppLifecycleStatus.unauthenticated, session: const Session()));
   }
 
   void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {
@@ -215,11 +193,5 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> __onContactsUserAgreementStatus(_ContactsAppAgreementUpdate event, Emitter<AppState> emit) async {
     await contactsAgreementStatusRepository.setContactsAgreementStatus(event.status);
     emit(state.copyWith(contactsAgreementStatus: event.status));
-  }
-
-  @override
-  Future<void> close() async {
-    await _sessionSub.cancel();
-    return super.close();
   }
 }
