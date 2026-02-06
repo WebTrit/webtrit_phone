@@ -92,7 +92,7 @@ class LoginRouterPage extends StatelessWidget {
       notificationsBloc: context.read<NotificationsBloc>(),
       authRepository: context.read<AuthRepository>(),
       onLoginSuccess: (session, systemInfo) =>
-          context.read<AppBloc>().add(AppLogined(session: session, systemInfo: systemInfo)),
+          context.read<AppBloc>().add(AppLoggedIn(session: session, systemInfo: systemInfo)),
     );
     if (_launchEmbeddedData != null) {
       login.setEmbedded(_launchEmbeddedData);

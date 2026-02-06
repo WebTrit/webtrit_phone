@@ -50,7 +50,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
            contactsAgreementStatus: contactsAgreementStatusRepository.getContactsAgreementStatus(),
          ),
        ) {
-    on<AppLogined>(_onLogined);
+    on<AppLoggedIn>(_onLoggedIn);
     on<_SessionUpdated>(_onSessionUpdated, transformer: sequential());
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
@@ -88,7 +88,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     super.onChange(change);
   }
 
-  Future<void> _onLogined(AppLogined event, Emitter<AppState> emit) async {
+  Future<void> _onLoggedIn(AppLoggedIn event, Emitter<AppState> emit) async {
     final systemInfo = event.systemInfo;
     if (systemInfo != null) {
       systemInfoRepository.preload(systemInfo);

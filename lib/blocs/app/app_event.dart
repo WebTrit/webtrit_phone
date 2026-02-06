@@ -11,11 +11,11 @@ sealed class AppEvent extends Equatable {
 ///
 /// Updates the application state with the provided [session] and optionally
 /// preloads [systemInfo] into the corresponding repository.
-class AppLogined extends AppEvent {
+class AppLoggedIn extends AppEvent {
   final Session session;
   final WebtritSystemInfo? systemInfo;
 
-  const AppLogined({required this.session, this.systemInfo});
+  const AppLoggedIn({required this.session, this.systemInfo});
 }
 
 class _SessionUpdated extends AppEvent {
@@ -80,14 +80,27 @@ class _ContactsAppAgreementUpdate extends AppAgreementAccepted {
   List<Object?> get props => [status];
 }
 
-/// Triggered to initiate the user logout process by transitioning the app
-/// into a teardown state to safely unmount the primary UI.
+/// Initiates the application logout sequence.
+///
+/// Can be triggered manually by the user or automatically upon session invalidation
+/// (e.g., via signaling socket errors or API unauthorized responses).
+///
+/// Triggers the transition to [AppLifecycleStatus.teardown], forcing the
+/// [MainShell] to unmount before any data cleanup begins.
 class AppLogoutRequested extends AppEvent {
   const AppLogoutRequested();
 }
 
-/// Triggered after the UI has stabilized in teardown mode to perform
-/// the actual clearing of local databases, repositories, and session data.
+/// Triggered exclusively by the teardown UI after the widget tree has stabilized.
+///
+/// This event executes the critical cleanup of local databases and repositories.
+/// It must **only** be dispatched when the app is already in [AppLifecycleStatus.teardown]
+/// and the main UI has been unmounted to prevent database locking errors.
+///
+/// **Sequence:**
+/// 1. [AppLogoutRequested] transitions state to teardown.
+/// 2. Router displays the teardown screen.
+/// 3. Teardown screen dispatches this event to finalize cleanup.
 class AppCleanupRequested extends AppEvent {
   const AppCleanupRequested();
 }

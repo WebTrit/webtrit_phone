@@ -11,6 +11,6 @@ class TeardownScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TeardownScreen();
+    return const TeardownScreen();
   }
 }
