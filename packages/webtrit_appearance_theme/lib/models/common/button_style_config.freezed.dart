@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ButtonStyleConfig {
 
- TextStyleConfig? get textStyle; String? get backgroundColor; String? get foregroundColor; String? get overlayColor; String? get shadowColor; String? get surfaceTintColor; double? get elevation; EdgeInsetsConfig? get padding; SizeConfig? get minimumSize; SizeConfig? get fixedSize; SizeConfig? get maximumSize; String? get iconColor; double? get iconSize; BorderSideConfig? get side; ShapeBorderConfig? get shape; VisualDensityConfig? get visualDensity; int? get animationDuration;
+ TextStyleConfig? get textStyle; String? get backgroundColor; String? get foregroundColor; String? get disabledBackgroundColor; String? get disabledForegroundColor; String? get disabledIconColor; String? get disabledShadowColor; String? get overlayColor; String? get shadowColor; String? get surfaceTintColor; double? get elevation; EdgeInsetsConfig? get padding; SizeConfig? get minimumSize; SizeConfig? get fixedSize; SizeConfig? get maximumSize; String? get iconColor; double? get iconSize; BorderSideConfig? get side; ShapeBorderConfig? get shape; VisualDensityConfig? get visualDensity; int? get animationDuration;
 /// Create a copy of ButtonStyleConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $ButtonStyleConfigCopyWith<ButtonStyleConfig> get copyWith => _$ButtonStyleConfi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ButtonStyleConfig&&(identical(other.textStyle, textStyle) || other.textStyle == textStyle)&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.foregroundColor, foregroundColor) || other.foregroundColor == foregroundColor)&&(identical(other.overlayColor, overlayColor) || other.overlayColor == overlayColor)&&(identical(other.shadowColor, shadowColor) || other.shadowColor == shadowColor)&&(identical(other.surfaceTintColor, surfaceTintColor) || other.surfaceTintColor == surfaceTintColor)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.padding, padding) || other.padding == padding)&&(identical(other.minimumSize, minimumSize) || other.minimumSize == minimumSize)&&(identical(other.fixedSize, fixedSize) || other.fixedSize == fixedSize)&&(identical(other.maximumSize, maximumSize) || other.maximumSize == maximumSize)&&(identical(other.iconColor, iconColor) || other.iconColor == iconColor)&&(identical(other.iconSize, iconSize) || other.iconSize == iconSize)&&(identical(other.side, side) || other.side == side)&&(identical(other.shape, shape) || other.shape == shape)&&(identical(other.visualDensity, visualDensity) || other.visualDensity == visualDensity)&&(identical(other.animationDuration, animationDuration) || other.animationDuration == animationDuration));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ButtonStyleConfig&&(identical(other.textStyle, textStyle) || other.textStyle == textStyle)&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.foregroundColor, foregroundColor) || other.foregroundColor == foregroundColor)&&(identical(other.disabledBackgroundColor, disabledBackgroundColor) || other.disabledBackgroundColor == disabledBackgroundColor)&&(identical(other.disabledForegroundColor, disabledForegroundColor) || other.disabledForegroundColor == disabledForegroundColor)&&(identical(other.disabledIconColor, disabledIconColor) || other.disabledIconColor == disabledIconColor)&&(identical(other.disabledShadowColor, disabledShadowColor) || other.disabledShadowColor == disabledShadowColor)&&(identical(other.overlayColor, overlayColor) || other.overlayColor == overlayColor)&&(identical(other.shadowColor, shadowColor) || other.shadowColor == shadowColor)&&(identical(other.surfaceTintColor, surfaceTintColor) || other.surfaceTintColor == surfaceTintColor)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.padding, padding) || other.padding == padding)&&(identical(other.minimumSize, minimumSize) || other.minimumSize == minimumSize)&&(identical(other.fixedSize, fixedSize) || other.fixedSize == fixedSize)&&(identical(other.maximumSize, maximumSize) || other.maximumSize == maximumSize)&&(identical(other.iconColor, iconColor) || other.iconColor == iconColor)&&(identical(other.iconSize, iconSize) || other.iconSize == iconSize)&&(identical(other.side, side) || other.side == side)&&(identical(other.shape, shape) || other.shape == shape)&&(identical(other.visualDensity, visualDensity) || other.visualDensity == visualDensity)&&(identical(other.animationDuration, animationDuration) || other.animationDuration == animationDuration));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,textStyle,backgroundColor,foregroundColor,overlayColor,shadowColor,surfaceTintColor,elevation,padding,minimumSize,fixedSize,maximumSize,iconColor,iconSize,side,shape,visualDensity,animationDuration);
+int get hashCode => Object.hashAll([runtimeType,textStyle,backgroundColor,foregroundColor,disabledBackgroundColor,disabledForegroundColor,disabledIconColor,disabledShadowColor,overlayColor,shadowColor,surfaceTintColor,elevation,padding,minimumSize,fixedSize,maximumSize,iconColor,iconSize,side,shape,visualDensity,animationDuration]);
 
 @override
 String toString() {
-  return 'ButtonStyleConfig(textStyle: $textStyle, backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, overlayColor: $overlayColor, shadowColor: $shadowColor, surfaceTintColor: $surfaceTintColor, elevation: $elevation, padding: $padding, minimumSize: $minimumSize, fixedSize: $fixedSize, maximumSize: $maximumSize, iconColor: $iconColor, iconSize: $iconSize, side: $side, shape: $shape, visualDensity: $visualDensity, animationDuration: $animationDuration)';
+  return 'ButtonStyleConfig(textStyle: $textStyle, backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, disabledBackgroundColor: $disabledBackgroundColor, disabledForegroundColor: $disabledForegroundColor, disabledIconColor: $disabledIconColor, disabledShadowColor: $disabledShadowColor, overlayColor: $overlayColor, shadowColor: $shadowColor, surfaceTintColor: $surfaceTintColor, elevation: $elevation, padding: $padding, minimumSize: $minimumSize, fixedSize: $fixedSize, maximumSize: $maximumSize, iconColor: $iconColor, iconSize: $iconSize, side: $side, shape: $shape, visualDensity: $visualDensity, animationDuration: $animationDuration)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $ButtonStyleConfigCopyWith<$Res>  {
   factory $ButtonStyleConfigCopyWith(ButtonStyleConfig value, $Res Function(ButtonStyleConfig) _then) = _$ButtonStyleConfigCopyWithImpl;
 @useResult
 $Res call({
- TextStyleConfig? textStyle, String? backgroundColor, String? foregroundColor, String? overlayColor, String? shadowColor, String? surfaceTintColor, double? elevation, EdgeInsetsConfig? padding, SizeConfig? minimumSize, SizeConfig? fixedSize, SizeConfig? maximumSize, String? iconColor, double? iconSize, BorderSideConfig? side, ShapeBorderConfig? shape, VisualDensityConfig? visualDensity, int? animationDuration
+ TextStyleConfig? textStyle, String? backgroundColor, String? foregroundColor, String? overlayColor, String? shadowColor, String? surfaceTintColor, double? elevation, EdgeInsetsConfig? padding, SizeConfig? minimumSize, SizeConfig? fixedSize, SizeConfig? maximumSize, String? iconColor, double? iconSize, BorderSideConfig? side, ShapeBorderConfig? shape, VisualDensityConfig? visualDensity, int? animationDuration, String? disabledBackgroundColor, String? disabledForegroundColor, String? disabledIconColor, String? disabledShadowColor
 });
 
 
@@ -63,7 +63,7 @@ class _$ButtonStyleConfigCopyWithImpl<$Res>
 
 /// Create a copy of ButtonStyleConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? textStyle = freezed,Object? backgroundColor = freezed,Object? foregroundColor = freezed,Object? overlayColor = freezed,Object? shadowColor = freezed,Object? surfaceTintColor = freezed,Object? elevation = freezed,Object? padding = freezed,Object? minimumSize = freezed,Object? fixedSize = freezed,Object? maximumSize = freezed,Object? iconColor = freezed,Object? iconSize = freezed,Object? side = freezed,Object? shape = freezed,Object? visualDensity = freezed,Object? animationDuration = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? textStyle = freezed,Object? backgroundColor = freezed,Object? foregroundColor = freezed,Object? overlayColor = freezed,Object? shadowColor = freezed,Object? surfaceTintColor = freezed,Object? elevation = freezed,Object? padding = freezed,Object? minimumSize = freezed,Object? fixedSize = freezed,Object? maximumSize = freezed,Object? iconColor = freezed,Object? iconSize = freezed,Object? side = freezed,Object? shape = freezed,Object? visualDensity = freezed,Object? animationDuration = freezed,Object? disabledBackgroundColor = freezed,Object? disabledForegroundColor = freezed,Object? disabledIconColor = freezed,Object? disabledShadowColor = freezed,}) {
   return _then(ButtonStyleConfig(
 textStyle: freezed == textStyle ? _self.textStyle : textStyle // ignore: cast_nullable_to_non_nullable
 as TextStyleConfig?,backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
@@ -82,7 +82,11 @@ as double?,side: freezed == side ? _self.side : side // ignore: cast_nullable_to
 as BorderSideConfig?,shape: freezed == shape ? _self.shape : shape // ignore: cast_nullable_to_non_nullable
 as ShapeBorderConfig?,visualDensity: freezed == visualDensity ? _self.visualDensity : visualDensity // ignore: cast_nullable_to_non_nullable
 as VisualDensityConfig?,animationDuration: freezed == animationDuration ? _self.animationDuration : animationDuration // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,disabledBackgroundColor: freezed == disabledBackgroundColor ? _self.disabledBackgroundColor : disabledBackgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,disabledForegroundColor: freezed == disabledForegroundColor ? _self.disabledForegroundColor : disabledForegroundColor // ignore: cast_nullable_to_non_nullable
+as String?,disabledIconColor: freezed == disabledIconColor ? _self.disabledIconColor : disabledIconColor // ignore: cast_nullable_to_non_nullable
+as String?,disabledShadowColor: freezed == disabledShadowColor ? _self.disabledShadowColor : disabledShadowColor // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

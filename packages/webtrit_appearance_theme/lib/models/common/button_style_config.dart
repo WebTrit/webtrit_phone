@@ -63,6 +63,18 @@ class ButtonStyleConfig with _$ButtonStyleConfig {
 
     /// The duration of animated changes in milliseconds.
     this.animationDuration,
+
+    /// The button's background fill color in hex format when the button is disabled.
+    this.disabledBackgroundColor,
+
+    /// The color for the button's text/icon descendants in hex format when the button is disabled.
+    this.disabledForegroundColor,
+
+    /// The icon's color in hex format when the button is disabled.
+    this.disabledIconColor,
+
+    /// The shadow color in hex format when the button is disabled.
+    this.disabledShadowColor,
   });
 
   /// The style for a button's text descendants.
@@ -76,6 +88,22 @@ class ButtonStyleConfig with _$ButtonStyleConfig {
   /// The color for the button's text/icon descendants in hex format.
   @override
   final String? foregroundColor;
+
+  /// The button's background fill color in hex format when the button is disabled.
+  @override
+  final String? disabledBackgroundColor;
+
+  /// The color for the button's text/icon descendants in hex format when the button is disabled.
+  @override
+  final String? disabledForegroundColor;
+
+  /// The icon's color in hex format when the button is disabled.
+  @override
+  final String? disabledIconColor;
+
+  /// The shadow color in hex format when the button is disabled.
+  @override
+  final String? disabledShadowColor;
 
   /// The highlight color for states (focused, hovered, pressed) in hex format.
   @override

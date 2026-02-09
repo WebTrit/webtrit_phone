@@ -43,6 +43,10 @@ ButtonStyleConfig _$ButtonStyleConfigFromJson(Map<String, dynamic> json) =>
               json['visualDensity'] as Map<String, dynamic>,
             ),
       animationDuration: (json['animationDuration'] as num?)?.toInt(),
+      disabledBackgroundColor: json['disabledBackgroundColor'] as String?,
+      disabledForegroundColor: json['disabledForegroundColor'] as String?,
+      disabledIconColor: json['disabledIconColor'] as String?,
+      disabledShadowColor: json['disabledShadowColor'] as String?,
     );
 
 Map<String, dynamic> _$ButtonStyleConfigToJson(ButtonStyleConfig instance) =>
@@ -50,6 +54,10 @@ Map<String, dynamic> _$ButtonStyleConfigToJson(ButtonStyleConfig instance) =>
       'textStyle': instance.textStyle?.toJson(),
       'backgroundColor': instance.backgroundColor,
       'foregroundColor': instance.foregroundColor,
+      'disabledBackgroundColor': instance.disabledBackgroundColor,
+      'disabledForegroundColor': instance.disabledForegroundColor,
+      'disabledIconColor': instance.disabledIconColor,
+      'disabledShadowColor': instance.disabledShadowColor,
       'overlayColor': instance.overlayColor,
       'shadowColor': instance.shadowColor,
       'surfaceTintColor': instance.surfaceTintColor,
