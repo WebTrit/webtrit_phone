@@ -1,4 +1,6 @@
 export 'border_config.dart';
+export 'button_style_config.dart';
+export 'geometry_config.dart';
 export 'icon_data_config.dart';
 export 'icon_theme_data_config.dart';
 export 'input_decoration_config.dart';

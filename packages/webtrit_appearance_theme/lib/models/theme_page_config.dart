@@ -223,9 +223,13 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig implements Base
 @freezed
 @JsonSerializable(explicitToJson: true)
 class LoginSwitchPageConfig with _$LoginSwitchPageConfig implements BasePageConfig {
-  const LoginSwitchPageConfig({this.mainLogo, this.background, this.themeOverride = const ThemeOverrideConfig()});
+  const LoginSwitchPageConfig({
+    this.mainLogo,
+    this.background,
+    this.themeOverride = const ThemeOverrideConfig(),
+    this.segmentButtonStyle,
+  });
 
-  /// Configuration to force override the theme mode.
   @override
   final ThemeOverrideConfig themeOverride;
 
@@ -234,6 +238,9 @@ class LoginSwitchPageConfig with _$LoginSwitchPageConfig implements BasePageConf
 
   @override
   final PageBackground? background;
+
+  @override
+  final ButtonStyleConfig? segmentButtonStyle;
 
   factory LoginSwitchPageConfig.fromJson(Map<String, Object?> json) => _$LoginSwitchPageConfigFromJson(json);
 
