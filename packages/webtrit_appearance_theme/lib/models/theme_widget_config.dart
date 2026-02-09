@@ -80,10 +80,10 @@ class FontsConfig with _$FontsConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ButtonWidgetConfig with _$ButtonWidgetConfig {
-  const ButtonWidgetConfig({this.primaryElevatedButton = const ElevatedButtonWidgetConfig()});
+  const ButtonWidgetConfig({this.primaryElevatedButton});
 
   @override
-  final ElevatedButtonWidgetConfig primaryElevatedButton;
+  final ButtonStyleConfig? primaryElevatedButton;
 
   factory ButtonWidgetConfig.fromJson(Map<String, Object?> json) => _$ButtonWidgetConfigFromJson(json);
 

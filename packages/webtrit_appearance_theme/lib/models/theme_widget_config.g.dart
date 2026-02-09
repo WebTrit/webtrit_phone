@@ -72,15 +72,15 @@ Map<String, dynamic> _$FontsConfigToJson(FontsConfig instance) =>
 ButtonWidgetConfig _$ButtonWidgetConfigFromJson(Map<String, dynamic> json) =>
     ButtonWidgetConfig(
       primaryElevatedButton: json['primaryElevatedButton'] == null
-          ? const ElevatedButtonWidgetConfig()
-          : ElevatedButtonWidgetConfig.fromJson(
+          ? null
+          : ButtonStyleConfig.fromJson(
               json['primaryElevatedButton'] as Map<String, dynamic>,
             ),
     );
 
 Map<String, dynamic> _$ButtonWidgetConfigToJson(ButtonWidgetConfig instance) =>
     <String, dynamic>{
-      'primaryElevatedButton': instance.primaryElevatedButton.toJson(),
+      'primaryElevatedButton': instance.primaryElevatedButton?.toJson(),
     };
 
 ElevatedButtonWidgetConfig _$ElevatedButtonWidgetConfigFromJson(

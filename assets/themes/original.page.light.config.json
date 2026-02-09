@@ -77,6 +77,12 @@
             "bottom": 24
           }
         }
+      },
+      "segmentButtonStyle": {
+        "shape": {
+          "type": "rounded",
+          "borderRadius": 4.0
+        }
       }
     },
     "otpSignin": {

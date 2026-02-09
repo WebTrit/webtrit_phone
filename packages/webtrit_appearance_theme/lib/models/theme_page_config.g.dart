@@ -247,6 +247,11 @@ LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(
       : ThemeOverrideConfig.fromJson(
           json['themeOverride'] as Map<String, dynamic>,
         ),
+  segmentButtonStyle: json['segmentButtonStyle'] == null
+      ? null
+      : ButtonStyleConfig.fromJson(
+          json['segmentButtonStyle'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$LoginSwitchPageConfigToJson(
@@ -255,6 +260,7 @@ Map<String, dynamic> _$LoginSwitchPageConfigToJson(
   'themeOverride': instance.themeOverride.toJson(),
   'mainLogo': instance.mainLogo?.toJson(),
   'background': instance.background?.toJson(),
+  'segmentButtonStyle': instance.segmentButtonStyle?.toJson(),
 };
 
 AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) =>

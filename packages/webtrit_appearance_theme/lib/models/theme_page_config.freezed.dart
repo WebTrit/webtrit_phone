@@ -1524,7 +1524,7 @@ case _:
 /// @nodoc
 mixin _$LoginSwitchPageConfig {
 
- ThemeOverrideConfig get themeOverride; ImageSource? get mainLogo; PageBackground? get background;
+ ThemeOverrideConfig get themeOverride; ImageSource? get mainLogo; PageBackground? get background; ButtonStyleConfig? get segmentButtonStyle;
 /// Create a copy of LoginSwitchPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1535,16 +1535,16 @@ $LoginSwitchPageConfigCopyWith<LoginSwitchPageConfig> get copyWith => _$LoginSwi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginSwitchPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.background, background) || other.background == background));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginSwitchPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.background, background) || other.background == background)&&(identical(other.segmentButtonStyle, segmentButtonStyle) || other.segmentButtonStyle == segmentButtonStyle));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,themeOverride,mainLogo,background);
+int get hashCode => Object.hash(runtimeType,themeOverride,mainLogo,background,segmentButtonStyle);
 
 @override
 String toString() {
-  return 'LoginSwitchPageConfig(themeOverride: $themeOverride, mainLogo: $mainLogo, background: $background)';
+  return 'LoginSwitchPageConfig(themeOverride: $themeOverride, mainLogo: $mainLogo, background: $background, segmentButtonStyle: $segmentButtonStyle)';
 }
 
 
@@ -1555,7 +1555,7 @@ abstract mixin class $LoginSwitchPageConfigCopyWith<$Res>  {
   factory $LoginSwitchPageConfigCopyWith(LoginSwitchPageConfig value, $Res Function(LoginSwitchPageConfig) _then) = _$LoginSwitchPageConfigCopyWithImpl;
 @useResult
 $Res call({
- ImageSource? mainLogo, PageBackground? background, ThemeOverrideConfig themeOverride
+ ImageSource? mainLogo, PageBackground? background, ThemeOverrideConfig themeOverride, ButtonStyleConfig? segmentButtonStyle
 });
 
 
@@ -1572,12 +1572,13 @@ class _$LoginSwitchPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of LoginSwitchPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? mainLogo = freezed,Object? background = freezed,Object? themeOverride = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? mainLogo = freezed,Object? background = freezed,Object? themeOverride = null,Object? segmentButtonStyle = freezed,}) {
   return _then(LoginSwitchPageConfig(
 mainLogo: freezed == mainLogo ? _self.mainLogo : mainLogo // ignore: cast_nullable_to_non_nullable
 as ImageSource?,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
 as PageBackground?,themeOverride: null == themeOverride ? _self.themeOverride : themeOverride // ignore: cast_nullable_to_non_nullable
-as ThemeOverrideConfig,
+as ThemeOverrideConfig,segmentButtonStyle: freezed == segmentButtonStyle ? _self.segmentButtonStyle : segmentButtonStyle // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig?,
   ));
 }
 

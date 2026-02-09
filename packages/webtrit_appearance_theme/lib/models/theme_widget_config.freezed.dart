@@ -397,7 +397,7 @@ case _:
 /// @nodoc
 mixin _$ButtonWidgetConfig {
 
- ElevatedButtonWidgetConfig get primaryElevatedButton;
+ ButtonStyleConfig? get primaryElevatedButton;
 /// Create a copy of ButtonWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -428,7 +428,7 @@ abstract mixin class $ButtonWidgetConfigCopyWith<$Res>  {
   factory $ButtonWidgetConfigCopyWith(ButtonWidgetConfig value, $Res Function(ButtonWidgetConfig) _then) = _$ButtonWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- ElevatedButtonWidgetConfig primaryElevatedButton
+ ButtonStyleConfig? primaryElevatedButton
 });
 
 
@@ -445,10 +445,10 @@ class _$ButtonWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of ButtonWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? primaryElevatedButton = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? primaryElevatedButton = freezed,}) {
   return _then(ButtonWidgetConfig(
-primaryElevatedButton: null == primaryElevatedButton ? _self.primaryElevatedButton : primaryElevatedButton // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,
+primaryElevatedButton: freezed == primaryElevatedButton ? _self.primaryElevatedButton : primaryElevatedButton // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig?,
   ));
 }
 

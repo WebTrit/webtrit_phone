@@ -21,6 +21,7 @@ class LoginSwitchScreenStyleFactory implements ThemeStyleFactory<LoginSwitchScre
         contentThemeOverride: config?.themeOverride.mode.toThemeMode(),
         applyToAppBar: config?.themeOverride.applyToAppBar,
         pictureLogoStyle: pictureLogoStyle,
+        segmentButtonStyle: config?.segmentButtonStyle?.toButtonStyle(),
       ),
     );
   }
