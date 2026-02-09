@@ -71,6 +71,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
 
   late TabController _tabController;
   late final List<TabType> _tabs;
+  late int _currentIndex;
 
   @override
   void initState() {
@@ -83,12 +84,9 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
     };
 
     final initialIndex = _tabs.indexOf(initialTabsState.loogingAtTab);
+    _currentIndex = initialIndex == -1 ? 0 : initialIndex;
 
-    _tabController = TabController(
-      initialIndex: initialIndex == -1 ? 0 : initialIndex,
-      length: _tabs.length,
-      vsync: this,
-    );
+    _tabController = TabController(initialIndex: _currentIndex, length: _tabs.length, vsync: this);
     _tabController.addListener(_tabControllerListener);
   }
 
@@ -100,8 +98,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
   }
 
   void _tabControllerListener() {
-    if (!_tabController.indexIsChanging) {
-      setState(() {});
+    if (_tabController.index != _currentIndex) {
+      setState(() {
+        _currentIndex = _tabController.index;
+      });
     }
   }
 
@@ -203,7 +203,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                       TabType.chat => unreadCountState.chatsWithUnreadCount,
                       TabType.sms => unreadCountState.smsConversationsWithUnreadCount,
                     };
-                    final isActive = _tabController.index == _tabs.indexOf(tabType);
+                    final isActive = _currentIndex == _tabs.indexOf(tabType);
 
                     return Tab(
                       child: Row(
@@ -272,7 +272,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
             return FloatingActionButton(
               backgroundColor: colorScheme.primary,
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-              onPressed: switch (_tabs[_tabController.index]) {
+              onPressed: switch (_tabs[_currentIndex]) {
                 TabType.chat => onNewChatConversation,
                 TabType.sms => onNewSmsConversation,
               },
