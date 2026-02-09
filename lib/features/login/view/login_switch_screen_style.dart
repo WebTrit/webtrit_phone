@@ -10,24 +10,28 @@ class LoginSwitchScreenStyle with Diagnosticable {
     this.pictureLogoStyle,
     this.contentThemeOverride,
     this.applyToAppBar,
+    this.segmentButtonStyle,
   });
 
   final SystemUiOverlayStyle? systemUiOverlayStyle;
   final ThemeImageStyle? pictureLogoStyle;
   final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
+  final ButtonStyle? segmentButtonStyle;
 
   LoginSwitchScreenStyle copyWith({
     SystemUiOverlayStyle? systemUiOverlayStyle,
     ThemeImageStyle? pictureLogoStyle,
     ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
+    ButtonStyle? segmentButtonStyle,
   }) {
     return LoginSwitchScreenStyle(
       systemUiOverlayStyle: systemUiOverlayStyle ?? this.systemUiOverlayStyle,
       pictureLogoStyle: pictureLogoStyle ?? this.pictureLogoStyle,
       contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
       applyToAppBar: applyToAppBar ?? this.applyToAppBar,
+      segmentButtonStyle: segmentButtonStyle ?? this.segmentButtonStyle,
     );
   }
 
@@ -40,6 +44,7 @@ class LoginSwitchScreenStyle with Diagnosticable {
       pictureLogoStyle: ThemeImageStyle.merge(a.pictureLogoStyle, b.pictureLogoStyle),
       contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
       applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
+      segmentButtonStyle: a.segmentButtonStyle?.merge(b.segmentButtonStyle) ?? b.segmentButtonStyle,
     );
   }
 
@@ -49,6 +54,7 @@ class LoginSwitchScreenStyle with Diagnosticable {
       pictureLogoStyle: ThemeImageStyle.lerp(a?.pictureLogoStyle, b?.pictureLogoStyle, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
+      segmentButtonStyle: ButtonStyle.lerp(a?.segmentButtonStyle, b?.segmentButtonStyle, t),
     );
   }
 
@@ -59,5 +65,6 @@ class LoginSwitchScreenStyle with Diagnosticable {
     properties.add(DiagnosticsProperty<ThemeImageStyle?>('pictureLogoStyle', pictureLogoStyle));
     properties.add(EnumProperty<ThemeMode?>('contentThemeOverride', contentThemeOverride));
     properties.add(DiagnosticsProperty<bool?>('applyToAppBar', applyToAppBar));
+    properties.add(DiagnosticsProperty<ButtonStyle?>('segmentButtonStyle', segmentButtonStyle));
   }
 }

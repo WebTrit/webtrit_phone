@@ -1,6 +1,7 @@
 export 'alignment_config_extension.dart';
 export 'box_fit_config_extension.dart';
 export 'brightness.dart';
+export 'button_style_config.dart';
 export 'color_scheme_config.dart';
 export 'custom_color.dart';
 export 'elevated_button_styles.dart';
