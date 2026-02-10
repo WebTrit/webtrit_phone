@@ -6,66 +6,56 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../theme_style_factory.dart';
 
 class ActionPadStyleFactory implements ThemeStyleFactory<ActionpadStyles> {
-  ActionPadStyleFactory(this.colors, this.config);
+  ActionPadStyleFactory(this.colors, this.config, this.defaultFontFamily);
 
   final ColorScheme colors;
   final ActionPadWidgetConfig? config;
+  final String? defaultFontFamily;
 
   @override
   ActionpadStyles create() {
-    const disabledColorOpacity = 0.4;
+    const defaultScale = 0.75;
+    const callStartScale = 1.0;
 
-    final defaultCallDisabledIconColor = colors.surface.withValues(alpha: disabledColorOpacity);
-
-    final callStartForegroundColor = config?.callStart.foregroundColor?.toColor() ?? colors.onTertiary;
-    final callStartBackgroundColor = config?.callStart.backgroundColor?.toColor() ?? colors.tertiary;
-    final callStartIconColor = config?.callStart.iconColor?.toColor() ?? colors.surface;
-    final callStartDisabledIconColor = config?.callStart.disabledIconColor?.toColor() ?? defaultCallDisabledIconColor;
-
-    final callTransferForegroundColor = config?.callTransfer.foregroundColor?.toColor() ?? colors.onSecondary;
-    final callTransferBackgroundColor = config?.callTransfer.backgroundColor?.toColor() ?? colors.secondary;
-    final callTransferIconColor = config?.callTransfer.iconColor?.toColor() ?? colors.surface;
-    final callTransferDisabledIconColor =
-        config?.callTransfer.disabledIconColor?.toColor() ?? defaultCallDisabledIconColor;
-
-    final backspacePressedStyleForegroundColor =
-        config?.backspacePressed.foregroundColor?.toColor() ?? colors.onSecondary;
-    final backspacePressedStyleBackgroundColor = config?.backspacePressed.backgroundColor?.toColor();
-    final backspacePressedStyleIconColor = config?.backspacePressed.iconColor?.toColor() ?? colors.onSurface;
-    final backspacePressedStyleDisabledIconColor =
-        config?.backspacePressed.disabledIconColor?.toColor() ?? colors.surface;
-
-    final callStartStyle = TextButton.styleFrom(
-      foregroundColor: callStartForegroundColor,
-      backgroundColor: callStartBackgroundColor,
-      disabledForegroundColor: colors.onTertiary.withValues(alpha: disabledColorOpacity),
-      iconColor: callStartIconColor,
-      disabledIconColor: callStartDisabledIconColor,
+    final filledStyle = TextButton.styleFrom(
       padding: EdgeInsets.zero,
+      foregroundColor: colors.onSecondary,
+      backgroundColor: colors.secondary,
+      iconColor: colors.surface,
+      disabledForegroundColor: colors.onSurface.withValues(alpha: 0.38),
+      disabledIconColor: colors.onSurface.withValues(alpha: 0.38),
+      disabledBackgroundColor: colors.onSurface.withValues(alpha: 0.12),
     );
 
-    final callTransferStyle = TextButton.styleFrom(
-      foregroundColor: callTransferForegroundColor,
-      backgroundColor: callTransferBackgroundColor,
-      disabledForegroundColor: colors.secondary.withValues(alpha: disabledColorOpacity),
-      iconColor: callTransferIconColor,
-      disabledIconColor: callTransferDisabledIconColor,
+    final backspaceStyle = TextButton.styleFrom(
       padding: EdgeInsets.zero,
-    );
-
-    final backspacePressedStyle = TextButton.styleFrom(
-      foregroundColor: backspacePressedStyleForegroundColor,
-      backgroundColor: backspacePressedStyleBackgroundColor,
-      iconColor: backspacePressedStyleIconColor,
-      disabledIconColor: backspacePressedStyleDisabledIconColor,
+      foregroundColor: colors.onSurface,
+      backgroundColor: Colors.transparent,
+      iconColor: colors.surface,
+      disabledForegroundColor: colors.onSurface.withValues(alpha: 0.38),
+      disabledIconColor: colors.onSurface.withValues(alpha: 0.38),
     );
 
     return ActionpadStyles(
       primary: ActionpadStyle(
-        callStart: callStartStyle,
-        callTransfer: callTransferStyle,
-        backspacePressed: backspacePressedStyle,
+        primary: _resolveStyle(source: config?.callStart, fallback: filledStyle, scale: callStartScale),
+        secondary: _resolveStyle(source: config?.callTransfer, fallback: filledStyle, scale: defaultScale),
+        backspace: _resolveStyle(source: config?.backspacePressed, fallback: backspaceStyle, scale: defaultScale),
       ),
     );
+  }
+
+  ScaleButtonStyle _resolveStyle({
+    required ButtonStyle fallback,
+    required double scale,
+    ButtonStyleConfig? source,
+    bool checkTransparency = true,
+  }) {
+    final style = source?.toButtonStyle(defaultFontFamily: defaultFontFamily).merge(fallback) ?? fallback;
+
+    final backgroundColor = style.backgroundColor?.resolve({});
+    final isTransparent = checkTransparency && (backgroundColor == null || backgroundColor.a == 0);
+
+    return ScaleButtonStyle(style: style, scale: isTransparent ? 1 : scale);
   }
 }

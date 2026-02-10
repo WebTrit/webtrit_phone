@@ -57,10 +57,10 @@ class Actionpad extends StatelessWidget {
           Visibility(
             visible: onInitiatedTransferPressed == null,
             child: Transform.scale(
-              scale: .75,
+              scale: localStyle?.secondary?.scale ?? 1.0,
               child: TextButton(
                 onPressed: actionsEnabled ? () {} : null,
-                style: localStyle?.callStart,
+                style: localStyle?.secondary?.style,
                 child: PopupMenuButton(
                   enabled: actionsEnabled,
                   child: Icon(Icons.more_vert, size: iconSize),
@@ -86,34 +86,43 @@ class Actionpad extends StatelessWidget {
           Visibility(
             visible: onInitiatedTransferPressed == null && onVideoCallPressed != null,
             child: Transform.scale(
-              scale: .75,
+              scale: localStyle?.secondary?.scale ?? 1.0,
               child: TextButton(
                 key: actionPadVideoCallKey,
                 onPressed: actionsEnabled ? onVideoCallPressed : null,
-                style: localStyle?.callStart,
+                style: localStyle?.secondary?.style,
                 child: Icon(Icons.videocam, size: iconSize),
               ),
             ),
           ),
         if (onInitiatedTransferPressed != null)
-          TextButton(
-            onPressed: actionsEnabled ? onInitiatedTransferPressed : null,
-            style: localStyle?.callTransfer,
-            child: Icon(Icons.phone_forwarded, size: iconSize),
+          Transform.scale(
+            scale: localStyle?.primary?.scale ?? 1.0,
+            child: TextButton(
+              onPressed: actionsEnabled ? onInitiatedTransferPressed : null,
+              style: localStyle?.primary?.style,
+              child: Icon(Icons.phone_forwarded, size: iconSize),
+            ),
           )
         else
-          TextButton(
-            key: actionPadStartKey,
-            onPressed: actionsEnabled ? onAudioCallPressed : null,
-            style: localStyle?.callStart,
-            child: Icon(Icons.call, size: iconSize),
+          Transform.scale(
+            scale: localStyle?.primary?.scale ?? 1.0,
+            child: TextButton(
+              key: actionPadStartKey,
+              onPressed: actionsEnabled ? onAudioCallPressed : null,
+              style: localStyle?.primary?.style,
+              child: Icon(Icons.call, size: iconSize),
+            ),
           ),
-        TextButton(
-          key: actionPadBackspaceKey,
-          onPressed: actionsEnabled ? onBackspacePressed : null,
-          onLongPress: actionsEnabled ? onBackspaceLongPress : null,
-          style: localStyle?.backspacePressed,
-          child: const Icon(Icons.backspace_outlined),
+        Transform.scale(
+          scale: localStyle?.backspace?.scale ?? 1.0,
+          child: TextButton(
+            key: actionPadBackspaceKey,
+            onPressed: actionsEnabled ? onBackspacePressed : null,
+            onLongPress: actionsEnabled ? onBackspaceLongPress : null,
+            style: localStyle?.backspace?.style,
+            child: const Icon(Icons.backspace_outlined),
+          ),
         ),
       ],
     );

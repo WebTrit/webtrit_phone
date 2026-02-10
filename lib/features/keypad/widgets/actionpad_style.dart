@@ -2,41 +2,41 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ActionpadStyle with Diagnosticable {
-  const ActionpadStyle({this.callTransfer, this.callStart, this.backspacePressed});
+  const ActionpadStyle({this.primary, this.secondary, this.backspace});
 
-  final ButtonStyle? callTransfer;
-  final ButtonStyle? callStart;
-  final ButtonStyle? backspacePressed;
+  /// The main action button style (usually center: Audio Call, Transfer Confirm).
+  final ScaleButtonStyle? primary;
 
-  ActionpadStyle copyWith({ButtonStyle? callTransfer, ButtonStyle? callStart, ButtonStyle? backspacePressed}) {
+  /// The secondary action button style (usually left: Video Call, Options Menu).
+  final ScaleButtonStyle? secondary;
+
+  /// The backspace button style (usually right).
+  final ScaleButtonStyle? backspace;
+
+  ActionpadStyle copyWith({ScaleButtonStyle? primary, ScaleButtonStyle? secondary, ScaleButtonStyle? backspace}) {
     return ActionpadStyle(
-      callTransfer: callTransfer ?? this.callTransfer,
-      callStart: callStart ?? this.callStart,
-      backspacePressed: backspacePressed ?? this.backspacePressed,
+      primary: primary ?? this.primary,
+      secondary: secondary ?? this.secondary,
+      backspace: backspace ?? this.backspace,
     );
   }
 
   static ActionpadStyle merge(ActionpadStyle? a, ActionpadStyle? b) {
     if (a == null) return b ?? const ActionpadStyle();
     if (b == null) return a;
-    return ActionpadStyle(
-      callTransfer: _mergeButtonStyles(a.callTransfer, b.callTransfer),
-      callStart: _mergeButtonStyles(a.callStart, b.callStart),
-      backspacePressed: _mergeButtonStyles(a.backspacePressed, b.backspacePressed),
-    );
-  }
 
-  static ButtonStyle? _mergeButtonStyles(ButtonStyle? a, ButtonStyle? b) {
-    if (a == null) return b;
-    if (b == null) return a;
-    return a.merge(b);
+    return ActionpadStyle(
+      primary: ScaleButtonStyle.merge(a.primary, b.primary),
+      secondary: ScaleButtonStyle.merge(a.secondary, b.secondary),
+      backspace: ScaleButtonStyle.merge(a.backspace, b.backspace),
+    );
   }
 
   static ActionpadStyle lerp(ActionpadStyle? a, ActionpadStyle? b, double t) {
     return ActionpadStyle(
-      callTransfer: ButtonStyle.lerp(a?.callTransfer, b?.callTransfer, t),
-      callStart: ButtonStyle.lerp(a?.callStart, b?.callStart, t),
-      backspacePressed: ButtonStyle.lerp(a?.backspacePressed, b?.backspacePressed, t),
+      primary: ScaleButtonStyle.lerp(a?.primary, b?.primary, t),
+      secondary: ScaleButtonStyle.lerp(a?.secondary, b?.secondary, t),
+      backspace: ScaleButtonStyle.lerp(a?.backspace, b?.backspace, t),
     );
   }
 
@@ -44,8 +44,40 @@ class ActionpadStyle with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty<ButtonStyle?>('callTransfer', callTransfer))
-      ..add(DiagnosticsProperty<ButtonStyle?>('callStart', callStart))
-      ..add(DiagnosticsProperty<ButtonStyle?>('backspacePressed', backspacePressed));
+      ..add(DiagnosticsProperty<ScaleButtonStyle?>('primary', primary))
+      ..add(DiagnosticsProperty<ScaleButtonStyle?>('secondary', secondary))
+      ..add(DiagnosticsProperty<ScaleButtonStyle?>('backspace', backspace));
+  }
+}
+
+class ScaleButtonStyle with Diagnosticable {
+  const ScaleButtonStyle({this.style, this.scale = 1.0});
+
+  final ButtonStyle? style;
+  final double scale;
+
+  /// Merges two ScaleButtonStyle objects.
+  /// The [style] is merged using ButtonStyle.merge.
+  /// The [scale] from [b] takes precedence over [a] if [b] is not null.
+  static ScaleButtonStyle? merge(ScaleButtonStyle? a, ScaleButtonStyle? b) {
+    if (a == null) return b;
+    if (b == null) return a;
+    return ScaleButtonStyle(style: a.style?.merge(b.style) ?? b.style, scale: b.scale);
+  }
+
+  static ScaleButtonStyle? lerp(ScaleButtonStyle? a, ScaleButtonStyle? b, double t) {
+    if (a == null && b == null) return null;
+    return ScaleButtonStyle(
+      style: ButtonStyle.lerp(a?.style, b?.style, t),
+      scale: Tween<double>(begin: a?.scale ?? 1.0, end: b?.scale ?? 1.0).transform(t),
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty<ButtonStyle?>('style', style))
+      ..add(DoubleProperty('scale', scale));
   }
 }
