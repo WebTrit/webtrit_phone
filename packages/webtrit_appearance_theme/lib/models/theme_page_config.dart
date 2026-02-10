@@ -415,6 +415,29 @@ class KeypadPageConfig with _$KeypadPageConfig implements BasePageConfig {
 
 @freezed
 @JsonSerializable(explicitToJson: true)
+class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
+  const ActionPadWidgetConfig({
+    this.callStart = const ButtonStyleConfig(),
+    this.callTransfer = const ButtonStyleConfig(),
+    this.backspacePressed = const ButtonStyleConfig(),
+  });
+
+  @override
+  final ButtonStyleConfig callStart;
+
+  @override
+  final ButtonStyleConfig callTransfer;
+
+  @override
+  final ButtonStyleConfig backspacePressed;
+
+  factory ActionPadWidgetConfig.fromJson(Map<String, Object?> json) => _$ActionPadWidgetConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$ActionPadWidgetConfigToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
 class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   const SettingsPageConfig({
     this.themeOverride = const ThemeOverrideConfig(),

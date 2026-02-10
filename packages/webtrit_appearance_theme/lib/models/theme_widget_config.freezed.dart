@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ThemeWidgetConfig {
 
- FontsConfig get fonts; ButtonWidgetConfig get button; GroupWidgetConfig? get group; BarWidgetConfig get bar; ImageAssetsConfig get imageAssets; InputWidgetConfig get input; TextWidgetConfig get text; DialogWidgetConfig get dialog; ActionPadWidgetConfig get actionPad; StatusesWidgetConfig get statuses; DecorationConfig get decorationConfig;
+ FontsConfig get fonts; ButtonWidgetConfig get button; GroupWidgetConfig? get group; BarWidgetConfig get bar; ImageAssetsConfig get imageAssets; InputWidgetConfig get input; TextWidgetConfig get text; DialogWidgetConfig get dialog; StatusesWidgetConfig get statuses; DecorationConfig get decorationConfig;
 /// Create a copy of ThemeWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $ThemeWidgetConfigCopyWith<ThemeWidgetConfig> get copyWith => _$ThemeWidgetConfi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ThemeWidgetConfig&&(identical(other.fonts, fonts) || other.fonts == fonts)&&(identical(other.button, button) || other.button == button)&&(identical(other.group, group) || other.group == group)&&(identical(other.bar, bar) || other.bar == bar)&&(identical(other.imageAssets, imageAssets) || other.imageAssets == imageAssets)&&(identical(other.input, input) || other.input == input)&&(identical(other.text, text) || other.text == text)&&(identical(other.dialog, dialog) || other.dialog == dialog)&&(identical(other.actionPad, actionPad) || other.actionPad == actionPad)&&(identical(other.statuses, statuses) || other.statuses == statuses)&&(identical(other.decorationConfig, decorationConfig) || other.decorationConfig == decorationConfig));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ThemeWidgetConfig&&(identical(other.fonts, fonts) || other.fonts == fonts)&&(identical(other.button, button) || other.button == button)&&(identical(other.group, group) || other.group == group)&&(identical(other.bar, bar) || other.bar == bar)&&(identical(other.imageAssets, imageAssets) || other.imageAssets == imageAssets)&&(identical(other.input, input) || other.input == input)&&(identical(other.text, text) || other.text == text)&&(identical(other.dialog, dialog) || other.dialog == dialog)&&(identical(other.statuses, statuses) || other.statuses == statuses)&&(identical(other.decorationConfig, decorationConfig) || other.decorationConfig == decorationConfig));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,fonts,button,group,bar,imageAssets,input,text,dialog,actionPad,statuses,decorationConfig);
+int get hashCode => Object.hash(runtimeType,fonts,button,group,bar,imageAssets,input,text,dialog,statuses,decorationConfig);
 
 @override
 String toString() {
-  return 'ThemeWidgetConfig(fonts: $fonts, button: $button, group: $group, bar: $bar, imageAssets: $imageAssets, input: $input, text: $text, dialog: $dialog, actionPad: $actionPad, statuses: $statuses, decorationConfig: $decorationConfig)';
+  return 'ThemeWidgetConfig(fonts: $fonts, button: $button, group: $group, bar: $bar, imageAssets: $imageAssets, input: $input, text: $text, dialog: $dialog, statuses: $statuses, decorationConfig: $decorationConfig)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $ThemeWidgetConfigCopyWith<$Res>  {
   factory $ThemeWidgetConfigCopyWith(ThemeWidgetConfig value, $Res Function(ThemeWidgetConfig) _then) = _$ThemeWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- FontsConfig fonts, ButtonWidgetConfig button, GroupWidgetConfig? group, BarWidgetConfig bar, ImageAssetsConfig imageAssets, InputWidgetConfig input, TextWidgetConfig text, DialogWidgetConfig dialog, ActionPadWidgetConfig actionPad, StatusesWidgetConfig statuses, DecorationConfig decorationConfig
+ FontsConfig fonts, ButtonWidgetConfig button, GroupWidgetConfig? group, BarWidgetConfig bar, ImageAssetsConfig imageAssets, InputWidgetConfig input, TextWidgetConfig text, DialogWidgetConfig dialog, StatusesWidgetConfig statuses, DecorationConfig decorationConfig
 });
 
 
@@ -63,7 +63,7 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of ThemeWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? fonts = null,Object? button = null,Object? group = freezed,Object? bar = null,Object? imageAssets = null,Object? input = null,Object? text = null,Object? dialog = null,Object? actionPad = null,Object? statuses = null,Object? decorationConfig = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? fonts = null,Object? button = null,Object? group = freezed,Object? bar = null,Object? imageAssets = null,Object? input = null,Object? text = null,Object? dialog = null,Object? statuses = null,Object? decorationConfig = null,}) {
   return _then(ThemeWidgetConfig(
 fonts: null == fonts ? _self.fonts : fonts // ignore: cast_nullable_to_non_nullable
 as FontsConfig,button: null == button ? _self.button : button // ignore: cast_nullable_to_non_nullable
@@ -73,8 +73,7 @@ as BarWidgetConfig,imageAssets: null == imageAssets ? _self.imageAssets : imageA
 as ImageAssetsConfig,input: null == input ? _self.input : input // ignore: cast_nullable_to_non_nullable
 as InputWidgetConfig,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as TextWidgetConfig,dialog: null == dialog ? _self.dialog : dialog // ignore: cast_nullable_to_non_nullable
-as DialogWidgetConfig,actionPad: null == actionPad ? _self.actionPad : actionPad // ignore: cast_nullable_to_non_nullable
-as ActionPadWidgetConfig,statuses: null == statuses ? _self.statuses : statuses // ignore: cast_nullable_to_non_nullable
+as DialogWidgetConfig,statuses: null == statuses ? _self.statuses : statuses // ignore: cast_nullable_to_non_nullable
 as StatusesWidgetConfig,decorationConfig: null == decorationConfig ? _self.decorationConfig : decorationConfig // ignore: cast_nullable_to_non_nullable
 as DecorationConfig,
   ));
@@ -4226,194 +4225,6 @@ as String,
 
 /// Adds pattern-matching-related methods to [SnackBarWidgetConfig].
 extension SnackBarWidgetConfigPatterns on SnackBarWidgetConfig {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-
-/// @nodoc
-mixin _$ActionPadWidgetConfig {
-
- ElevatedButtonWidgetConfig get callStart; ElevatedButtonWidgetConfig get callTransfer; ElevatedButtonWidgetConfig get backspacePressed;
-/// Create a copy of ActionPadWidgetConfig
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$ActionPadWidgetConfigCopyWith<ActionPadWidgetConfig> get copyWith => _$ActionPadWidgetConfigCopyWithImpl<ActionPadWidgetConfig>(this as ActionPadWidgetConfig, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActionPadWidgetConfig&&(identical(other.callStart, callStart) || other.callStart == callStart)&&(identical(other.callTransfer, callTransfer) || other.callTransfer == callTransfer)&&(identical(other.backspacePressed, backspacePressed) || other.backspacePressed == backspacePressed));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,callStart,callTransfer,backspacePressed);
-
-@override
-String toString() {
-  return 'ActionPadWidgetConfig(callStart: $callStart, callTransfer: $callTransfer, backspacePressed: $backspacePressed)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $ActionPadWidgetConfigCopyWith<$Res>  {
-  factory $ActionPadWidgetConfigCopyWith(ActionPadWidgetConfig value, $Res Function(ActionPadWidgetConfig) _then) = _$ActionPadWidgetConfigCopyWithImpl;
-@useResult
-$Res call({
- ElevatedButtonWidgetConfig callStart, ElevatedButtonWidgetConfig callTransfer, ElevatedButtonWidgetConfig backspacePressed
-});
-
-
-
-
-}
-/// @nodoc
-class _$ActionPadWidgetConfigCopyWithImpl<$Res>
-    implements $ActionPadWidgetConfigCopyWith<$Res> {
-  _$ActionPadWidgetConfigCopyWithImpl(this._self, this._then);
-
-  final ActionPadWidgetConfig _self;
-  final $Res Function(ActionPadWidgetConfig) _then;
-
-/// Create a copy of ActionPadWidgetConfig
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? callStart = null,Object? callTransfer = null,Object? backspacePressed = null,}) {
-  return _then(ActionPadWidgetConfig(
-callStart: null == callStart ? _self.callStart : callStart // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,callTransfer: null == callTransfer ? _self.callTransfer : callTransfer // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,backspacePressed: null == backspacePressed ? _self.backspacePressed : backspacePressed // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [ActionPadWidgetConfig].
-extension ActionPadWidgetConfigPatterns on ActionPadWidgetConfig {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

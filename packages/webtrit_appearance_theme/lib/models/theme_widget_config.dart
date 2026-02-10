@@ -21,7 +21,6 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     this.input = const InputWidgetConfig(),
     this.text = const TextWidgetConfig(),
     this.dialog = const DialogWidgetConfig(),
-    this.actionPad = const ActionPadWidgetConfig(),
     this.statuses = const StatusesWidgetConfig(),
     this.decorationConfig = const DecorationConfig(),
   });
@@ -49,9 +48,6 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
 
   @override
   final DialogWidgetConfig dialog;
-
-  @override
-  final ActionPadWidgetConfig actionPad;
 
   @override
   final StatusesWidgetConfig statuses;
@@ -573,29 +569,6 @@ class SnackBarWidgetConfig with _$SnackBarWidgetConfig {
   factory SnackBarWidgetConfig.fromJson(Map<String, Object?> json) => _$SnackBarWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$SnackBarWidgetConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
-class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
-  const ActionPadWidgetConfig({
-    this.callStart = const ElevatedButtonWidgetConfig(),
-    this.callTransfer = const ElevatedButtonWidgetConfig(),
-    this.backspacePressed = const ElevatedButtonWidgetConfig(),
-  });
-
-  @override
-  final ElevatedButtonWidgetConfig callStart;
-
-  @override
-  final ElevatedButtonWidgetConfig callTransfer;
-
-  @override
-  final ElevatedButtonWidgetConfig backspacePressed;
-
-  factory ActionPadWidgetConfig.fromJson(Map<String, Object?> json) => _$ActionPadWidgetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$ActionPadWidgetConfigToJson(this);
 }
 
 @freezed

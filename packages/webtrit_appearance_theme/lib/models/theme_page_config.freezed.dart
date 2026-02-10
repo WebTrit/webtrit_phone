@@ -2664,6 +2664,194 @@ case _:
 
 
 /// @nodoc
+mixin _$ActionPadWidgetConfig {
+
+ ButtonStyleConfig get callStart; ButtonStyleConfig get callTransfer; ButtonStyleConfig get backspacePressed;
+/// Create a copy of ActionPadWidgetConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ActionPadWidgetConfigCopyWith<ActionPadWidgetConfig> get copyWith => _$ActionPadWidgetConfigCopyWithImpl<ActionPadWidgetConfig>(this as ActionPadWidgetConfig, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActionPadWidgetConfig&&(identical(other.callStart, callStart) || other.callStart == callStart)&&(identical(other.callTransfer, callTransfer) || other.callTransfer == callTransfer)&&(identical(other.backspacePressed, backspacePressed) || other.backspacePressed == backspacePressed));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,callStart,callTransfer,backspacePressed);
+
+@override
+String toString() {
+  return 'ActionPadWidgetConfig(callStart: $callStart, callTransfer: $callTransfer, backspacePressed: $backspacePressed)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ActionPadWidgetConfigCopyWith<$Res>  {
+  factory $ActionPadWidgetConfigCopyWith(ActionPadWidgetConfig value, $Res Function(ActionPadWidgetConfig) _then) = _$ActionPadWidgetConfigCopyWithImpl;
+@useResult
+$Res call({
+ ButtonStyleConfig callStart, ButtonStyleConfig callTransfer, ButtonStyleConfig backspacePressed
+});
+
+
+
+
+}
+/// @nodoc
+class _$ActionPadWidgetConfigCopyWithImpl<$Res>
+    implements $ActionPadWidgetConfigCopyWith<$Res> {
+  _$ActionPadWidgetConfigCopyWithImpl(this._self, this._then);
+
+  final ActionPadWidgetConfig _self;
+  final $Res Function(ActionPadWidgetConfig) _then;
+
+/// Create a copy of ActionPadWidgetConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? callStart = null,Object? callTransfer = null,Object? backspacePressed = null,}) {
+  return _then(ActionPadWidgetConfig(
+callStart: null == callStart ? _self.callStart : callStart // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,callTransfer: null == callTransfer ? _self.callTransfer : callTransfer // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,backspacePressed: null == backspacePressed ? _self.backspacePressed : backspacePressed // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ActionPadWidgetConfig].
+extension ActionPadWidgetConfigPatterns on ActionPadWidgetConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
 mixin _$SettingsPageConfig {
 
  ThemeOverrideConfig get themeOverride; String? get leadingIconsColor; String? get userIconColor; String? get logoutIconColor; GroupTitleListTileWidgetConfig? get groupTitleListTile; bool get showSeparators; PageBackground? get background; TextStyleConfig? get itemTextStyle;

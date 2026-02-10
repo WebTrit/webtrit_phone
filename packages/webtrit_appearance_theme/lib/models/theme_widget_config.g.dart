@@ -33,11 +33,6 @@ ThemeWidgetConfig _$ThemeWidgetConfigFromJson(
   dialog: json['dialog'] == null
       ? const DialogWidgetConfig()
       : DialogWidgetConfig.fromJson(json['dialog'] as Map<String, dynamic>),
-  actionPad: json['actionPad'] == null
-      ? const ActionPadWidgetConfig()
-      : ActionPadWidgetConfig.fromJson(
-          json['actionPad'] as Map<String, dynamic>,
-        ),
   statuses: json['statuses'] == null
       ? const StatusesWidgetConfig()
       : StatusesWidgetConfig.fromJson(json['statuses'] as Map<String, dynamic>),
@@ -58,7 +53,6 @@ Map<String, dynamic> _$ThemeWidgetConfigToJson(ThemeWidgetConfig instance) =>
       'input': instance.input.toJson(),
       'text': instance.text.toJson(),
       'dialog': instance.dialog.toJson(),
-      'actionPad': instance.actionPad.toJson(),
       'statuses': instance.statuses.toJson(),
       'decorationConfig': instance.decorationConfig.toJson(),
     };
@@ -461,34 +455,6 @@ Map<String, dynamic> _$SnackBarWidgetConfigToJson(
   'errorBackgroundColor': instance.errorBackgroundColor,
   'infoBackgroundColor': instance.infoBackgroundColor,
   'warningBackgroundColor': instance.warningBackgroundColor,
-};
-
-ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(
-  Map<String, dynamic> json,
-) => ActionPadWidgetConfig(
-  callStart: json['callStart'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['callStart'] as Map<String, dynamic>,
-        ),
-  callTransfer: json['callTransfer'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['callTransfer'] as Map<String, dynamic>,
-        ),
-  backspacePressed: json['backspacePressed'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['backspacePressed'] as Map<String, dynamic>,
-        ),
-);
-
-Map<String, dynamic> _$ActionPadWidgetConfigToJson(
-  ActionPadWidgetConfig instance,
-) => <String, dynamic>{
-  'callStart': instance.callStart.toJson(),
-  'callTransfer': instance.callTransfer.toJson(),
-  'backspacePressed': instance.backspacePressed.toJson(),
 };
 
 StatusesWidgetConfig _$StatusesWidgetConfigFromJson(
