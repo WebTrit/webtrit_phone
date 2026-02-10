@@ -5,10 +5,11 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../theme_style_factory.dart';
 
 class TabBarThemeDataFactory implements ThemeStyleFactory<TabBarThemeData> {
-  const TabBarThemeDataFactory(this.colors, this.config);
+  const TabBarThemeDataFactory(this.colors, this.config, this.defaultFontFamily);
 
   final ColorScheme colors;
   final TabBarConfig config;
+  final String? defaultFontFamily;
 
   @override
   TabBarThemeData create() {
@@ -25,8 +26,8 @@ class TabBarThemeDataFactory implements ThemeStyleFactory<TabBarThemeData> {
       indicator: _createIndicator(config),
       dividerHeight: config.dividerHeight,
       labelPadding: config.labelPadding?.toEdgeInsets(),
-      labelStyle: config.labelStyle?.toTextStyle(),
-      unselectedLabelStyle: config.unselectedLabelStyle?.toTextStyle(),
+      labelStyle: config.labelStyle?.toTextStyle(defaultFontFamily: defaultFontFamily),
+      unselectedLabelStyle: config.unselectedLabelStyle?.toTextStyle(defaultFontFamily: defaultFontFamily),
       indicatorSize: config.indicatorSize?.toTabBarIndicatorSize,
       tabAlignment: config.tabAlignment?.toTabAlignment,
       indicatorAnimation: config.indicatorAnimation?.toTabIndicatorAnimation,

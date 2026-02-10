@@ -14,11 +14,12 @@ import 'action_pad_style_factory.dart';
 import 'keypad_style_factory.dart';
 
 class KeypadScreenStyleFactory implements ThemeStyleFactory<KeypadScreenStyles> {
-  KeypadScreenStyleFactory(this.colors, {required this.config, required this.textTheme});
+  KeypadScreenStyleFactory(this.colors, this.defaultFontFamily, {required this.config, required this.textTheme});
 
   final ColorScheme colors;
   final KeypadPageConfig config;
   final TextTheme textTheme;
+  final String? defaultFontFamily;
 
   @override
   KeypadScreenStyles create() {
@@ -29,12 +30,18 @@ class KeypadScreenStyleFactory implements ThemeStyleFactory<KeypadScreenStyles> 
         background: backgroundStyle,
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
-        inputField: config.textField?.toStyle(colors: colors),
+        inputField: config.textField?.toStyle(colors: colors, defaultFontFamily: defaultFontFamily),
         contactNameField: config.contactName?.toStyle(
           colors: colors,
+          defaultFontFamily: defaultFontFamily,
           base: const TextFieldStyle(textAlign: TextAlign.center, showCursor: false, keyboardType: TextInputType.none),
         ),
-        keypadStyle: KeypadStyleFactory(colors, config: config.keypad, textTheme: textTheme).create().primary,
+        keypadStyle: KeypadStyleFactory(
+          colors,
+          defaultFontFamily,
+          config: config.keypad,
+          textTheme: textTheme,
+        ).create().primary,
         actionpadStyle: ActionPadStyleFactory(colors, config.actionpad).create().primary,
       ),
     );

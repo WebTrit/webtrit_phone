@@ -5,7 +5,7 @@ import 'package:webtrit_phone/theme/extension/extension.dart';
 
 extension TextStyleConfigExtension on TextStyleConfig {
   TextStyle toTextStyle({
-    String? defaultFontFamily,
+    required String? defaultFontFamily,
     double? defaultFontSize,
     FontWeight? defaultFontWeight,
     FontStyle defaultFontStyle = FontStyle.normal,

@@ -4,9 +4,11 @@ import 'package:webtrit_appearance_theme/models/models.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
 
 extension ButtonStyleConfigExtension on ButtonStyleConfig {
-  ButtonStyle toButtonStyle() {
+  ButtonStyle toButtonStyle({required String? defaultFontFamily}) {
     return ButtonStyle(
-      textStyle: textStyle != null ? WidgetStateProperty.all(textStyle!.toTextStyle()) : null,
+      textStyle: textStyle != null
+          ? WidgetStateProperty.all(textStyle!.toTextStyle(defaultFontFamily: defaultFontFamily))
+          : null,
       backgroundColor: _resolveColor(backgroundColor, disabledBackgroundColor),
       foregroundColor: _resolveColor(foregroundColor, disabledForegroundColor),
       overlayColor: overlayColor != null ? WidgetStateProperty.all(overlayColor!.toColor()) : null,

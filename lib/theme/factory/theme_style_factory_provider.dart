@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:logging/logging.dart';
+
 import 'package:webtrit_phone/theme/factory/styles/conversations_screen_style_factory.dart';
 import 'package:webtrit_phone/theme/factory/styles/embedded_screen_style_factory.dart';
 import 'package:webtrit_phone/theme/factory/styles/favorites_screen_style_factory.dart';
@@ -9,21 +12,39 @@ import '../models/models.dart';
 
 import 'theme_data/theme_data.dart';
 
-// TODO(Serdun): Decompose correctly common widget styles configurations from t;he page styles configurations
+final _logger = Logger('ThemeStyleFactoryProvider');
+
+// TODO(Serdun): Decompose correctly common widget styles configurations from the page styles configurations
 class ThemeStyleFactoryProvider {
   ThemeStyleFactoryProvider({
     required this.colorScheme,
     required this.widgetConfig,
     required this.pageConfig,
     required this.seedThemeData,
-  });
+  }) {
+    defaultTextTheme = TextThemeDataFactory(colorScheme, widgetConfig.fonts, seedThemeData).create();
+  }
 
+  /// The color scheme used as a basis for all themed components.
   final ColorScheme colorScheme;
+
+  /// Configuration for common widget styles across the application.
   final ThemeWidgetConfig widgetConfig;
+
+  /// Configuration for page-specific styles.
   final ThemePageConfig pageConfig;
+
+  /// The seed theme data used to inherit base styles.
   final ThemeData seedThemeData;
 
+  /// The default text theme derived from the color scheme and widget configuration.
+  late final TextTheme defaultTextTheme;
+
   List<ThemeExtension> createThemeExtensions() {
+    final defaultFontFamily = defaultTextTheme.bodyMedium?.fontFamily;
+
+    _logger.info('Default font family: $defaultFontFamily');
+
     // Page schema
     final loginPageScheme = pageConfig.login;
     final callPageScheme = pageConfig.dialing;
@@ -55,7 +76,7 @@ class ThemeStyleFactoryProvider {
     final confirmDialogStylesProvider = ConfirmDialogStyleFactory(colorScheme, textButtonStyle, confirmDialog);
     final inputDecorationStyleFactory = InputDecorationStyleFactory(colorScheme);
     final callStatusStyleFactory = CallStatusStyleFactory(colorScheme, callStatuses);
-    final elevatedButtonStyleFactory = ElevatedButtonStyleFactory(colorScheme, elevatedButton);
+    final elevatedButtonStyleFactory = ElevatedButtonStyleFactory(colorScheme, elevatedButton, defaultFontFamily);
     final textButtonStyleFactory = TextButtonStyleFactory(colorScheme);
     // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
     // ignore: deprecated_member_use_from_same_package
@@ -64,24 +85,31 @@ class ThemeStyleFactoryProvider {
     final outlinedButtonStyleFactory = OutlinedButtonStyleFactory(colorScheme);
     final registrationStatusStyleFactory = RegisteredStatusStyleFactory(colorScheme, registrationStatuses);
     final snackBarStyleFactory = SnackBarStyleFactory(colorScheme, snackBar);
-    final groupTitleListStyleFactory = GroupTitleListStyleFactory(colorScheme, groupTitleListTile);
+    final groupTitleListStyleFactory = GroupTitleListStyleFactory(colorScheme, groupTitleListTile, defaultFontFamily);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
 
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect, colorScheme);
     final leadingAvatarStyleFactory = LeadingAvatarStyleFactory(
       colorScheme,
       widgetConfig.imageAssets.leadingAvatarStyle,
+      defaultFontFamily,
     );
-    final keypadStyleFactory = KeypadStyleFactory(colorScheme, config: null, textTheme: createTextTheme());
+    final keypadStyleFactory = KeypadStyleFactory(
+      colorScheme,
+      defaultFontFamily,
+      config: null,
+      textTheme: defaultTextTheme,
+    );
     final embeddedRequestErrorDialogFactory = EmbeddedRequestErrorDialogFactory(imageAssetsConfig);
 
     // Screen-specific styles
     final aboutScreenStyleFactory = AboutScreenStyleFactory(pageConfig.about);
-    final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, callActions);
+    final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, callActions, defaultFontFamily);
     final keypadScreenStyleFactory = KeypadScreenStyleFactory(
       colorScheme,
+      defaultFontFamily,
       config: pageConfig.keypad,
-      textTheme: createTextTheme(),
+      textTheme: defaultTextTheme,
     );
     final loginOtpSigninVerifyScreenStyleFactory = LoginOtpSigninVerifyScreenStyleFactory(
       colorScheme,
@@ -91,18 +119,24 @@ class ThemeStyleFactoryProvider {
       colorScheme,
       loginPageScheme.signupVerify,
     );
-    final loginSwitchScreenStyleFactory = LoginSwitchScreenStyleFactory(loginPageScheme.switchPage, colorScheme);
+    final loginSwitchScreenStyleFactory = LoginSwitchScreenStyleFactory(
+      loginPageScheme.switchPage,
+      colorScheme,
+      defaultFontFamily,
+    );
     final loginOtpSigninPageStyleFactory = LoginOtpSigninPageStyleFactory(
       colorScheme,
+      defaultFontFamily,
       config: loginPageScheme.otpSignin,
-      textTheme: createTextTheme(),
+      textTheme: defaultTextTheme,
     );
     final loginPasswordSigninPageStyleFactory = LoginPasswordSigninPageStyleFactory(
       colorScheme,
+      defaultFontFamily,
       config: loginPageScheme.passwordSignin,
-      textTheme: createTextTheme(),
+      textTheme: defaultTextTheme,
     );
-    final settingsScreenStyleFactory = SettingsScreenStyleFactory(colorScheme, pageConfig.settings);
+    final settingsScreenStyleFactory = SettingsScreenStyleFactory(colorScheme, pageConfig.settings, defaultFontFamily);
     final contactsScreenStyleFactory = ContactsScreenStyleFactory(colorScheme, pageConfig.contacts);
     final recentsScreenStyleFactory = RecentsScreenStyleFactory(colorScheme, pageConfig.recents);
     final favoritesScreenStyleFactory = FavoritesScreenStyleFactory(colorScheme, pageConfig.favorites);
@@ -174,11 +208,15 @@ class ThemeStyleFactoryProvider {
   }
 
   TabBarThemeData createTabBarTheme() {
-    return TabBarThemeDataFactory(colorScheme, widgetConfig.bar.tabBarConfig).create();
+    return TabBarThemeDataFactory(
+      colorScheme,
+      widgetConfig.bar.tabBarConfig,
+      defaultTextTheme.bodyMedium?.fontFamily,
+    ).create();
   }
 
   AppBarTheme createAppBarTheme() {
-    return AppBarThemeDataFactory(widgetConfig.bar.appBarConfig).create();
+    return AppBarThemeDataFactory(widgetConfig.bar.appBarConfig, defaultTextTheme.bodyMedium?.fontFamily).create();
   }
 
   InputDecorationTheme createInputDecorationTheme() {
@@ -187,10 +225,6 @@ class ThemeStyleFactoryProvider {
 
   TextSelectionThemeData createTextSelectionThemeData() {
     return TextSelectionThemeDataFactory(colorScheme, widgetConfig.text.selection).create();
-  }
-
-  TextTheme createTextTheme() {
-    return TextThemeDataFactory(colorScheme, widgetConfig.fonts, seedThemeData).create();
   }
 
   ProgressIndicatorThemeData createProgressIndicatorThemeData() {
