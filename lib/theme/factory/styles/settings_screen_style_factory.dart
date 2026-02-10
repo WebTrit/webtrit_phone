@@ -10,19 +10,24 @@ import '../theme_style_factory.dart';
 import 'group_title_list_styles.dart';
 
 class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyles> {
-  SettingsScreenStyleFactory(this.colors, this.config);
+  SettingsScreenStyleFactory(this.colors, this.config, this.defaultFontFamily);
 
   final ColorScheme colors;
   final SettingsPageConfig? config;
+  final String? defaultFontFamily;
 
   @override
   SettingsScreenStyles create() {
     final leadingIconsColor = config?.leadingIconsColor?.toColor();
     final logoutIconColor = config?.logoutIconColor?.toColor();
     final userIconColor = config?.userIconColor?.toColor();
-    final itemTextStyle = config?.itemTextStyle?.toTextStyle();
+    final itemTextStyle = config?.itemTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
     final backgroundStyle = config?.background?.toStyle();
-    final groupTitleListStyle = GroupTitleListStyleFactory(colors, config?.groupTitleListTile).create().primary;
+    final groupTitleListStyle = GroupTitleListStyleFactory(
+      colors,
+      config?.groupTitleListTile,
+      defaultFontFamily,
+    ).create().primary;
 
     // Resolve theme override values safely
     final contentThemeOverride = config?.themeOverride.mode.toThemeMode();

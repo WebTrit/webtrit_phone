@@ -5,16 +5,17 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../theme_style_factory.dart';
 
 class GroupTitleListStyleFactory implements ThemeStyleFactory<GroupTitleListStyles> {
-  GroupTitleListStyleFactory(this.colors, this.config);
+  GroupTitleListStyleFactory(this.colors, this.config, this.defaultFontFamily);
 
   final ColorScheme colors;
   final GroupTitleListTileWidgetConfig? config;
+  final String? defaultFontFamily;
 
   @override
   GroupTitleListStyles create() {
     final backgroundColor = config?.backgroundColor?.toColor() ?? colors.surface;
 
-    final textStyle = config?.textStyle?.toTextStyle();
+    final textStyle = config?.textStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
 
     return GroupTitleListStyles(
       primary: GroupTitleListStyle(textStyle: textStyle, background: backgroundColor),

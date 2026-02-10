@@ -10,10 +10,16 @@ extension TextFieldConfigToStyle on TextFieldConfig {
   /// The [theme] parameter determines the text color strategy:
   /// - If provided, the text style explicitly uses [colors.onSurface].
   /// - If null, the color remains undefined to allow inheritance from the active context.
-  TextFieldStyle toStyle({required ColorScheme colors, ThemeData? theme, TextFieldStyle? base}) {
+  TextFieldStyle toStyle({
+    required ColorScheme colors,
+    required String? defaultFontFamily,
+    ThemeData? theme,
+    TextFieldStyle? base,
+  }) {
     final baseTextStyle = base?.textStyle ?? theme?.textTheme.bodyLarge ?? const TextStyle();
 
     final configTextStyle = style?.toTextStyle(
+      defaultFontFamily: defaultFontFamily,
       defaultFontSize: baseTextStyle.fontSize,
       defaultFontWeight: baseTextStyle.fontWeight,
     );
@@ -21,7 +27,11 @@ extension TextFieldConfigToStyle on TextFieldConfig {
     final effectiveTextStyle = baseTextStyle.merge(configTextStyle);
 
     final styleFromConfig = TextFieldStyle(
-      decoration: decoration?.toInputDecoration(colors: colors, baseStyle: effectiveTextStyle),
+      decoration: decoration?.toInputDecoration(
+        colors: colors,
+        defaultFontFamily: defaultFontFamily,
+        baseStyle: effectiveTextStyle,
+      ),
       textStyle: theme != null ? effectiveTextStyle.copyWith(color: colors.onSurface) : effectiveTextStyle,
       textAlign: _mapTextAlign(textAlign),
       showCursor: showCursor,

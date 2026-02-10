@@ -6,11 +6,17 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../theme_style_factory.dart';
 
 class LoginPasswordSigninPageStyleFactory implements ThemeStyleFactory<LoginPasswordSigninPageStyles> {
-  LoginPasswordSigninPageStyleFactory(this.colors, {required this.config, required this.textTheme});
+  LoginPasswordSigninPageStyleFactory(
+    this.colors,
+    this.defaultFontFamily, {
+    required this.config,
+    required this.textTheme,
+  });
 
   final ColorScheme colors;
   final LoginPasswordSigninPageConfig? config;
   final TextTheme textTheme;
+  final String? defaultFontFamily;
 
   @override
   LoginPasswordSigninPageStyles create() {
@@ -30,8 +36,18 @@ class LoginPasswordSigninPageStyleFactory implements ThemeStyleFactory<LoginPass
 
     return LoginPasswordSigninPageStyles(
       primary: LoginPasswordSigninPageStyle(
-        refInput: config?.refTextField?.toStyle(colors: colors, theme: themeData, base: baseTextFieldStyle),
-        passwordInput: config?.passwordTextField?.toStyle(colors: colors, theme: themeData, base: baseTextFieldStyle),
+        refInput: config?.refTextField?.toStyle(
+          colors: colors,
+          defaultFontFamily: defaultFontFamily,
+          theme: themeData,
+          base: baseTextFieldStyle,
+        ),
+        passwordInput: config?.passwordTextField?.toStyle(
+          colors: colors,
+          defaultFontFamily: defaultFontFamily,
+          theme: themeData,
+          base: baseTextFieldStyle,
+        ),
       ),
     );
   }

@@ -25,11 +25,12 @@ import '../theme_style_factory.dart';
 /// inside widgets (e.g. `merge(theme.textTheme.headlineLarge)`),
 /// so that the final computed sizes are always respected.
 class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
-  KeypadStyleFactory(this.colors, {required this.config, required this.textTheme});
+  KeypadStyleFactory(this.colors, this.defaultFontFamily, {required this.config, required this.textTheme});
 
   final ColorScheme colors;
   final KeypadStyleConfig? config;
   final TextTheme textTheme;
+  final String? defaultFontFamily;
 
   @override
   KeypadStyles create() {
@@ -46,12 +47,14 @@ class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
         keyStyle: KeypadKeyStyle(
           textStyle:
               config?.textStyle?.toTextStyle(
+                defaultFontFamily: defaultFontFamily,
                 defaultFontSize: defaultNumberFontSize,
                 defaultFontWeight: defaultNumberFontWeight,
               ) ??
               TextStyle(fontSize: defaultNumberFontSize, fontWeight: defaultNumberFontWeight, height: 1.125),
           subtextStyle:
               config?.subtextStyle?.toTextStyle(
+                defaultFontFamily: defaultFontFamily,
                 defaultFontSize: defaultSubFontSize,
                 defaultFontWeight: defaultSubFontWeight,
               ) ??

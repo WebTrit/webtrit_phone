@@ -15,10 +15,11 @@ const double kDisabledOpacity = 0.40;
 final _logger = Logger('CallScreenStyleFactory');
 
 class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
-  CallScreenStyleFactory(this.colors, this.pageConfig, this.legacyCallActionsConfig);
+  CallScreenStyleFactory(this.colors, this.pageConfig, this.legacyCallActionsConfig, this.defaultFontFamily);
 
   final ColorScheme colors;
   final CallPageConfig? pageConfig;
+  final String? defaultFontFamily;
 
   // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
   // ignore: deprecated_member_use
@@ -54,10 +55,10 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
       return null;
     }
 
-    final userInfoTextStyle = cfg.usernameTextStyle?.toTextStyle();
-    final numberTextStyle = cfg.numberTextStyle?.toTextStyle();
-    final callStatusTextStyle = cfg.callStatusTextStyle?.toTextStyle();
-    final processingStatusTextStyle = cfg.processingStatusTextStyle?.toTextStyle();
+    final userInfoTextStyle = cfg.usernameTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
+    final numberTextStyle = cfg.numberTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
+    final callStatusTextStyle = cfg.callStatusTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
+    final processingStatusTextStyle = cfg.processingStatusTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
 
     return CallInfoStyle(
       userInfo: _mergeWithDefaultTextStyle(

@@ -22,7 +22,11 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
   ///
   /// Requires a [ColorScheme] to resolve default colors and an optional
   /// [baseStyle] to be used as a foundation for text styles.
-  InputDecoration toInputDecoration({required ColorScheme colors, TextStyle? baseStyle}) {
+  InputDecoration toInputDecoration({
+    required ColorScheme colors,
+    required String? defaultFontFamily,
+    TextStyle? baseStyle,
+  }) {
     // Map specific border configurations for different states
     final mappedBorder = _mapBorder(border, colors);
     final mappedEnabledBorder = _mapBorder(enabledBorder, colors);
@@ -50,27 +54,32 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
     // the default Flutter theme styles.
 
     final hintStyleResult = hintStyle != null
-        ? _resolveStyle(hintStyle, baseStyle: baseStyle, color: onSurface50)
+        ? _resolveStyle(hintStyle, defaultFontFamily: defaultFontFamily, baseStyle: baseStyle, color: onSurface50)
         : null;
 
     final prefixStyleResult = prefixStyle != null
-        ? _resolveStyle(prefixStyle, baseStyle: baseStyle, color: onSurface)
+        ? _resolveStyle(prefixStyle, defaultFontFamily: defaultFontFamily, baseStyle: baseStyle, color: onSurface)
         : null;
 
     final labelStyleResult = labelStyle != null
-        ? _resolveStyle(labelStyle, baseStyle: baseStyle, color: onSurface)
+        ? _resolveStyle(labelStyle, defaultFontFamily: defaultFontFamily, baseStyle: baseStyle, color: onSurface)
         : null;
 
     final suffixStyleResult = suffixStyle != null
-        ? _resolveStyle(suffixStyle, baseStyle: baseStyle, color: onSurface)
+        ? _resolveStyle(suffixStyle, defaultFontFamily: defaultFontFamily, baseStyle: baseStyle, color: onSurface)
         : null;
 
     final helperStyleResult = helperStyle != null
-        ? _resolveStyle(helperStyle, baseStyle: smallBaseStyle, color: onSurfaceVariant)
+        ? _resolveStyle(
+            helperStyle,
+            defaultFontFamily: defaultFontFamily,
+            baseStyle: smallBaseStyle,
+            color: onSurfaceVariant,
+          )
         : null;
 
     final errorStyleResult = errorStyle != null
-        ? _resolveStyle(errorStyle, baseStyle: smallBaseStyle, color: errorColor)
+        ? _resolveStyle(errorStyle, defaultFontFamily: defaultFontFamily, baseStyle: smallBaseStyle, color: errorColor)
         : null;
 
     return InputDecoration(
@@ -99,10 +108,15 @@ extension InputDecorationConfigExtension on InputDecorationConfig {
   }
 
   /// Helper to merge a [TextStyleConfig] with a [baseStyle] and apply a specific [color].
-  TextStyle _resolveStyle(TextStyleConfig? config, {TextStyle? baseStyle, Color? color}) {
+  TextStyle _resolveStyle(
+    TextStyleConfig? config, {
+    required String? defaultFontFamily,
+    TextStyle? baseStyle,
+    Color? color,
+  }) {
     final base = baseStyle ?? const TextStyle();
 
-    final custom = config?.toTextStyle();
+    final custom = config?.toTextStyle(defaultFontFamily: defaultFontFamily);
     final mergedStyle = custom != null ? base.merge(custom) : base;
 
     return mergedStyle.copyWith(color: color);

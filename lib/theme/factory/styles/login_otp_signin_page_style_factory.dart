@@ -6,11 +6,12 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../theme_style_factory.dart';
 
 class LoginOtpSigninPageStyleFactory implements ThemeStyleFactory<LoginOtpSigninPageStyles> {
-  LoginOtpSigninPageStyleFactory(this.colors, {required this.config, required this.textTheme});
+  LoginOtpSigninPageStyleFactory(this.colors, this.defaultFontFamily, {required this.config, required this.textTheme});
 
   final ColorScheme colors;
   final LoginOtpSigninPageConfig? config;
   final TextTheme textTheme;
+  final String? defaultFontFamily;
 
   @override
   LoginOtpSigninPageStyles create() {
@@ -27,7 +28,12 @@ class LoginOtpSigninPageStyleFactory implements ThemeStyleFactory<LoginOtpSignin
       ),
     );
 
-    final inputRef = config?.refTextField?.toStyle(colors: colors, theme: themeData, base: baseTextFieldStyle);
+    final inputRef = config?.refTextField?.toStyle(
+      colors: colors,
+      defaultFontFamily: defaultFontFamily,
+      theme: themeData,
+      base: baseTextFieldStyle,
+    );
 
     return LoginOtpSigninPageStyles(primary: LoginOtpSigninPageStyle(refInput: inputRef));
   }
