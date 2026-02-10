@@ -19,9 +19,7 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
       primary: LeadingAvatarStyle(
         backgroundColor: _bgColor(),
         radius: config?.radius,
-        initialsTextStyle: config?.initialsTextStyle
-            ?.toTextStyle(defaultFontFamily: defaultFontFamily)
-            .copyWith(color: config?.initialsTextStyle?.color?.toColor() ?? colors.onSecondaryContainer),
+        initialsTextStyle: _mapInitialsTextStyle(config?.initialsTextStyle),
         placeholderIcon: null,
         loadingOverlay: _mapLoading(config?.loading),
         smartIndicator: _mapSmart(config?.smartIndicator),
@@ -29,6 +27,14 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
         presenceBadge: _mapPresence(config?.presenceBadge),
       ),
     );
+  }
+
+  TextStyle? _mapInitialsTextStyle(TextStyleConfig? config) {
+    if (config == null) return null;
+
+    return config
+        .toTextStyle(defaultFontFamily: defaultFontFamily)
+        .copyWith(color: config.color?.toColor() ?? colors.onSecondaryContainer);
   }
 
   Color _bgColor() => config?.backgroundColor?.toColor() ?? colors.secondaryContainer;

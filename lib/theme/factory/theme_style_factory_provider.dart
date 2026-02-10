@@ -43,7 +43,7 @@ class ThemeStyleFactoryProvider {
   List<ThemeExtension> createThemeExtensions() {
     final defaultFontFamily = defaultTextTheme.bodyMedium?.fontFamily;
 
-    _logger.info('Default font family: $defaultFontFamily');
+    _logger.finer('Default font family: $defaultFontFamily');
 
     // Page schema
     final loginPageScheme = pageConfig.login;
