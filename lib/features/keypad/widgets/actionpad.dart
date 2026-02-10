@@ -50,6 +50,7 @@ class Actionpad extends StatelessWidget {
     final optionsAvaliable = onTransferPressed != null || callNumbers.length > 1;
 
     return TextButtonsTable(
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       minimumSize: Size.square(minimumDimension),
       children: [
         if (optionsAvaliable)
