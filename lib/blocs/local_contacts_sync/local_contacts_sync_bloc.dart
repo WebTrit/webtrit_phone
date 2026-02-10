@@ -6,9 +6,9 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
-import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 part 'local_contacts_sync_event.dart';
 
@@ -46,17 +46,23 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
 
-    if (!(await isFeatureEnabled())) {
+    final featureEnabled = await isFeatureEnabled();
+    if (isClosed) return;
+    if (!featureEnabled) {
       emit(const ContactsFeatureDisabledException());
       return;
     }
 
-    if (!(await isAgreementAccepted())) {
+    final agreementAccepted = await isAgreementAccepted();
+    if (isClosed) return;
+    if (!agreementAccepted) {
       emit(const ContactsAgreementMissingException());
       return;
     }
 
-    if (!await requestContactPermission()) {
+    final permissionGranted = await requestContactPermission();
+    if (isClosed) return;
+    if (!permissionGranted) {
       emit(const LocalContactsSyncPermissionFailure());
       return;
     }
@@ -69,17 +75,23 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onRefreshed');
 
-    if (!(await isFeatureEnabled())) {
+    final featureEnabled = await isFeatureEnabled();
+    if (isClosed) return;
+    if (!featureEnabled) {
       emit(const ContactsFeatureDisabledException());
       return;
     }
 
-    if (!(await isAgreementAccepted())) {
+    final agreementAccepted = await isAgreementAccepted();
+    if (isClosed) return;
+    if (!agreementAccepted) {
       emit(const ContactsAgreementMissingException());
       return;
     }
 
-    if (!await isContactsPermissionGranted()) {
+    final permissionGranted = await isContactsPermissionGranted();
+    if (isClosed) return;
+    if (!permissionGranted) {
       emit(const LocalContactsSyncPermissionFailure());
       return;
     }
@@ -91,16 +103,20 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
       await localContactsRepository.load();
     } catch (error) {
       _logger.warning('_onRefreshed error: ', error);
-      emit(const LocalContactsSyncRefreshFailure());
+      if (!isClosed) emit(const LocalContactsSyncRefreshFailure());
     }
   }
 
-  Future _onUpdated(_LocalContactsSyncUpdated event, Emitter<LocalContactsSyncState> emit, {int retryCount = 0}) async {
+  Future<void> _onUpdated(
+    _LocalContactsSyncUpdated event,
+    Emitter<LocalContactsSyncState> emit, {
+    int retryCount = 0,
+  }) async {
     _logger.finer('_onUpdated contacts count:${event.contacts.length}');
 
     try {
       await contactsRepository.syncLocalContacts(event.contacts);
-      emit(const LocalContactsSyncSuccess());
+      if (!isClosed) emit(const LocalContactsSyncSuccess());
     } on Exception catch (e) {
       _logger.warning('_onUpdated retry: $retryCount, error: ', e);
 
@@ -109,7 +125,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
         if (isClosed) return;
         await _onUpdated(event, emit, retryCount: retryCount + 1);
       } else {
-        emit(const LocalContactsSyncUpdateFailure());
+        if (!isClosed) emit(const LocalContactsSyncUpdateFailure());
       }
     }
   }
@@ -118,10 +134,9 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
     if (_contactsSubscription != null) return;
 
     _logger.info('_initContactsSubscription: subscribing to contacts stream');
-    _contactsSubscription = localContactsRepository.contacts().listen(
-      (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
-      onError: (error, stackTrace) => _logger.warning('Contacts stream error', error, stackTrace),
-    );
+    _contactsSubscription = localContactsRepository.contacts().listen((contacts) {
+      if (!isClosed) add(_LocalContactsSyncUpdated(contacts: contacts));
+    }, onError: (error, stackTrace) => _logger.warning('Contacts stream error', error, stackTrace));
   }
 
   @override
