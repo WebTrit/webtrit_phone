@@ -10,6 +10,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -68,7 +69,41 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
   late final contactsRepository = context.read<ContactsRepository>();
   late final notificationsBloc = context.read<NotificationsBloc>();
 
-  late TabsState tabsState = widget.initialTabsState;
+  late TabController _tabController;
+  late final List<TabType> _tabs;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialTabsState = widget.initialTabsState;
+
+    _tabs = switch (initialTabsState) {
+      SingleTabState s => [s.tab],
+      DualTabState _ => [TabType.chat, TabType.sms],
+    };
+
+    final initialIndex = _tabs.indexOf(initialTabsState.loogingAtTab);
+    _currentIndex = initialIndex == -1 ? 0 : initialIndex;
+
+    _tabController = TabController(initialIndex: _currentIndex, length: _tabs.length, vsync: this);
+    _tabController.addListener(_tabControllerListener);
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_tabControllerListener);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _tabControllerListener() {
+    if (_tabController.index != _currentIndex) {
+      setState(() {
+        _currentIndex = _tabController.index;
+      });
+    }
+  }
 
   Future<void> onNewChatConversation() async {
     showModalBottomSheet(
@@ -80,7 +115,9 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
           messagingBloc.state.client,
           chatsRepository,
           contactsRepository,
-          chatConversationBuilderConfig: ChatConversationBuilderConfig(enableGroupChats: tabsState.groupChatsEnabled),
+          chatConversationBuilderConfig: ChatConversationBuilderConfig(
+            enableGroupChats: widget.initialTabsState.groupChatsEnabled,
+          ),
           openDialog: (contact) async {
             Navigator.of(context).pop();
             await Future.delayed(const Duration(milliseconds: 300));
@@ -145,7 +182,67 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
     final isComplexBackground = background?.isComplex ?? false;
 
     final colorScheme = themeData.colorScheme;
-    final tabsStateIt = tabsState;
+    final mediaQueryData = MediaQuery.of(context);
+
+    final tabBar = _tabs.length <= 1
+        ? null
+        : Padding(
+            padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
+            child: BlocBuilder<UnreadCountCubit, UnreadCountState>(
+              builder: (context, unreadCountState) {
+                return ExtTabBar(
+                  controller: _tabController,
+                  width: mediaQueryData.size.width * 0.75,
+                  height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
+                  tabs: _tabs.map((tabType) {
+                    final title = switch (tabType) {
+                      TabType.chat => context.l10n.messaging_ConversationsScreen_messages_title,
+                      TabType.sms => context.l10n.messaging_ConversationsScreen_smses_title,
+                    };
+                    final count = switch (tabType) {
+                      TabType.chat => unreadCountState.chatsWithUnreadCount,
+                      TabType.sms => unreadCountState.smsConversationsWithUnreadCount,
+                    };
+                    final isActive = _currentIndex == _tabs.indexOf(tabType);
+
+                    return Tab(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(title),
+                          if (count > 0) ...[
+                            const SizedBox(width: 4),
+                            UnreadBadge(count: count, isActive: isActive, colorScheme: colorScheme),
+                          ],
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
+          );
+
+    final search = Padding(
+      padding: const EdgeInsets.only(
+        left: kMainAppBarBottomPaddingGap,
+        right: kMainAppBarBottomPaddingGap,
+        bottom: kMainAppBarBottomPaddingGap,
+      ),
+      child: IgnoreUnfocuser(
+        child: ClearedTextField(
+          onChanged: (value) {
+            context.readOrNull<ChatConversationsCubit>()?.updateSearch(value);
+            context.readOrNull<SmsConversationsCubit>()?.updateSearch(value);
+          },
+          onSubmitted: (value) => {},
+          iconConstraints: const BoxConstraints.expand(
+            width: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
+            height: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
+          ),
+        ),
+      ),
+    );
 
     return Unfocuser(
       child: ThemedScaffold(
@@ -159,45 +256,23 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
           elevation: isComplexBackground ? 0 : null,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
-              kMainAppBarBottomSearchHeight + (tabsStateIt is DualTabState ? kMainAppBarBottomTabHeight : 0.0),
+              (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
             ),
-            child: Column(
-              children: [
-                if (tabsStateIt is DualTabState) ...[
-                  TabButtons(
-                    selectedTab: tabsStateIt.selectedTab,
-                    onTabSelected: (tab) => setState(() => tabsState = tabsStateIt.copyWith(selectedTab: tab)),
-                  ),
-                  const SizedBox(height: 8),
-                ],
-                IgnoreUnfocuser(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: kMainAppBarBottomPaddingGap),
-                    child: ClearedTextField(
-                      onChanged: (value) {
-                        context.readOrNull<ChatConversationsCubit>()?.updateSearch(value);
-                        context.readOrNull<SmsConversationsCubit>()?.updateSearch(value);
-                      },
-                      onSubmitted: (value) => {},
-                      iconConstraints: const BoxConstraints.expand(
-                        width: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
-                        height: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
-            ),
+            child: Column(children: [if (tabBar != null) tabBar, search]),
           ),
         ),
-        body: MessagingStateWrapper(child: ConversationsList(selectedTab: tabsState.loogingAtTab)),
+        body: MessagingStateWrapper(
+          child: TabBarView(
+            controller: _tabController,
+            children: [for (final tab in _tabs) ConversationsList(selectedTab: tab)],
+          ),
+        ),
         floatingActionButton: Builder(
           builder: (context) {
             return FloatingActionButton(
               backgroundColor: colorScheme.primary,
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-              onPressed: switch (tabsState.loogingAtTab) {
+              onPressed: switch (_tabs[_currentIndex]) {
                 TabType.chat => onNewChatConversation,
                 TabType.sms => onNewSmsConversation,
               },
