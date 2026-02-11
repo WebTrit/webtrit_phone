@@ -454,6 +454,32 @@ Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) =>
       'themeOverride': instance.themeOverride.toJson(),
     };
 
+ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(
+  Map<String, dynamic> json,
+) => ActionPadWidgetConfig(
+  callStart: json['callStart'] == null
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['callStart'] as Map<String, dynamic>),
+  callTransfer: json['callTransfer'] == null
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(
+          json['callTransfer'] as Map<String, dynamic>,
+        ),
+  backspacePressed: json['backspacePressed'] == null
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(
+          json['backspacePressed'] as Map<String, dynamic>,
+        ),
+);
+
+Map<String, dynamic> _$ActionPadWidgetConfigToJson(
+  ActionPadWidgetConfig instance,
+) => <String, dynamic>{
+  'callStart': instance.callStart.toJson(),
+  'callTransfer': instance.callTransfer.toJson(),
+  'backspacePressed': instance.backspacePressed.toJson(),
+};
+
 SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) =>
     SettingsPageConfig(
       themeOverride: json['themeOverride'] == null

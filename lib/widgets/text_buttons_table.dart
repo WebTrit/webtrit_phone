@@ -13,15 +13,24 @@ class TextButtonsTable extends StatelessWidget {
     this.keyButtonsInTableRowCount = 3,
     this.style,
     required this.children,
+    this.defaultVerticalAlignment = TableCellVerticalAlignment.top,
   }) : assert(children.length % keyButtonsInTableRowCount == 0);
 
+  /// The list of widgets to display as buttons in the table.
   final List<Widget> children;
 
+  /// The minimum size of the buttons in the table.
+  /// This parameter is deprecated, use [style.minimumSize] instead.
   @Deprecated('Use style.minimumSize instead')
   final Size? minimumSize;
 
+  /// The number of buttons to display in each row of the table.
   final int keyButtonsInTableRowCount;
 
+  /// The default vertical alignment of the table cells.
+  final TableCellVerticalAlignment defaultVerticalAlignment;
+
+  /// The style to apply to the text buttons table.
   final TextButtonsTableStyle? style;
 
   @override
@@ -53,7 +62,7 @@ class TextButtonsTable extends StatelessWidget {
           minimumSize: minimumSize ?? merged.minimumSize,
         ).merge(merged.buttonStyle).merge(textButtonThemeData.style),
       ),
-      child: Table(children: tableRows),
+      child: Table(children: tableRows, defaultVerticalAlignment: defaultVerticalAlignment),
     );
   }
 }

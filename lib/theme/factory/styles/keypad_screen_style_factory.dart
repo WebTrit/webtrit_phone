@@ -42,7 +42,7 @@ class KeypadScreenStyleFactory implements ThemeStyleFactory<KeypadScreenStyles> 
           config: config.keypad,
           textTheme: textTheme,
         ).create().primary,
-        actionpadStyle: ActionPadStyleFactory(colors, config.actionpad).create().primary,
+        actionpadStyle: ActionPadStyleFactory(colors, config.actionpad, defaultFontFamily).create().primary,
       ),
     );
   }

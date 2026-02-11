@@ -57,7 +57,6 @@ class ThemeStyleFactoryProvider {
     final primaryGradientColorsConfig = widgetConfig.decorationConfig.primaryGradientColorsConfig;
     final confirmDialog = widgetConfig.dialog.confirmDialog;
     final snackBar = widgetConfig.dialog.snackBar;
-    final actionPad = widgetConfig.actionPad;
     final callStatuses = widgetConfig.statuses.callStatuses;
     final registrationStatuses = widgetConfig.statuses.registrationStatuses;
     final elevatedButton = widgetConfig.button.primaryElevatedButton;
@@ -71,7 +70,6 @@ class ThemeStyleFactoryProvider {
     final textButtonStyle = TextButtonStyleFactory(colorScheme).create();
 
     // Specific widget styles
-    final actionPadStyleFactory = ActionPadStyleFactory(colorScheme, actionPad);
     final appIconStylesProvider = AppIconStyleFactory(colorScheme, appIconConfig);
     final confirmDialogStylesProvider = ConfirmDialogStyleFactory(colorScheme, textButtonStyle, confirmDialog);
     final inputDecorationStyleFactory = InputDecorationStyleFactory(colorScheme);
@@ -147,7 +145,6 @@ class ThemeStyleFactoryProvider {
       textButtonStyle,
       appIconStylesProvider.create(),
       confirmDialogStylesProvider.create(),
-      actionPadStyleFactory.create(),
       inputDecorationStyleFactory.create(),
       callStatusStyleFactory.create(),
       elevatedButtonStyleFactory.create(),
