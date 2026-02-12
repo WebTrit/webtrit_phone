@@ -1,21 +1,24 @@
-import 'package:logging/logging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final _logger = Logger('FirebaseRemoteConfigService');
 
+/// Base interface for remote configuration.
 abstract class RemoteConfigService {
   String? getString(String key);
 
   bool? getBool(String key);
 }
 
+/// Interface for caching remote configuration values locally.
 abstract class RemoteCacheConfigService extends RemoteConfigService {
   Future<void> cacheString(String key, String value);
 
   Future<void> cacheBool(String key, bool value);
 }
 
+/// Implementation of [RemoteConfigService] using Firebase Remote Config.
 class FirebaseRemoteConfigService implements RemoteConfigService {
   FirebaseRemoteConfigService(this._cacheService, this._remoteConfig);
 
@@ -29,10 +32,7 @@ class FirebaseRemoteConfigService implements RemoteConfigService {
       RemoteConfigSettings(fetchTimeout: const Duration(seconds: 30), minimumFetchInterval: const Duration(hours: 24)),
     );
 
-    await remoteConfig.fetchAndActivate().catchError((error) {
-      _logger.severe('Error fetching remote config: $error');
-      return false;
-    });
+    await remoteConfig.fetchAndActivate().catchError(_handleFetchError);
 
     return FirebaseRemoteConfigService(cache, remoteConfig);
   }
@@ -40,22 +40,35 @@ class FirebaseRemoteConfigService implements RemoteConfigService {
   @override
   String? getString(String key) {
     final value = _remoteConfig.getString(key);
-    _cacheService.cacheString(key, value);
-    return value;
+
+    if (value.isNotEmpty) {
+      _cacheService.cacheString(key, value);
+      return value;
+    }
+
+    return _cacheService.getString(key);
   }
 
   @override
   bool? getBool(String key) {
     final value = _remoteConfig.getBool(key);
+
     _cacheService.cacheBool(key, value);
+
     return value;
+  }
+
+  static bool _handleFetchError(Object error) {
+    _logger.severe('Error fetching remote config: $error');
+    return false;
   }
 }
 
+/// Implementation of [RemoteCacheConfigService] using SharedPreferences.
 class DefaultRemoteCacheConfigService implements RemoteCacheConfigService {
-  final SharedPreferences _sharedPreferences;
-
   DefaultRemoteCacheConfigService(this._sharedPreferences);
+
+  final SharedPreferences _sharedPreferences;
 
   static Future<RemoteCacheConfigService> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -64,22 +77,20 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService {
   }
 
   @override
-  String? getString(String key) {
-    return _sharedPreferences.getString(key);
-  }
+  String? getString(String key) => _sharedPreferences.getString(key);
 
   @override
-  bool? getBool(String key) {
-    return _sharedPreferences.getBool(key);
-  }
+  bool? getBool(String key) => _sharedPreferences.getBool(key);
 
   @override
   Future<void> cacheString(String key, String value) async {
+    if (_sharedPreferences.getString(key) == value) return;
     await _sharedPreferences.setString(key, value);
   }
 
   @override
   Future<void> cacheBool(String key, bool value) async {
+    if (_sharedPreferences.getBool(key) == value) return;
     await _sharedPreferences.setBool(key, value);
   }
 }
