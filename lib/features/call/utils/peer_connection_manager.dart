@@ -48,12 +48,36 @@ final class PeerConnectionManager {
     this.factory = const DefaultPeerConnectionFactory(),
     this.monitorDelegatesFactory,
     Duration retrieveTimeout = const Duration(seconds: 5),
-  }) : _retrieveTimeout = retrieveTimeout;
+    Duration monitorCheckInterval = const Duration(seconds: 15),
+    Duration disposalTimeout = const Duration(seconds: 2),
+  }) : _retrieveTimeout = retrieveTimeout,
+       _monitorCheckInterval = monitorCheckInterval,
+       _disposalTimeout = disposalTimeout;
 
+  /// The factory used to create [RTCPeerConnection] instances.
   final PeerConnectionFactory factory;
+
+  /// Optional factory for creating [RtpTrafficMonitorDelegate] instances.
   final RtpMonitorDelegatesFactory? monitorDelegatesFactory;
+
+  /// The maximum duration to wait for a [RTCPeerConnection] to be retrieved.
   final Duration _retrieveTimeout;
 
+  /// The interval at which the [RtpTrafficMonitor] checks for RTP traffic.
+  ///
+  /// Defaults to **15 seconds** to balance diagnostic depth with logging efficiency.
+  ///
+  /// This interval prevents log storage exhaustion (quota management):
+  /// * At 15s: ~40 logs/min (~0.18MB/min) per call.
+  ///
+  /// A 15s window is sufficient to detect network quality trends (jitter, packet loss)
+  /// without overwhelming the log management system during high-concurrency periods.
+  final Duration _monitorCheckInterval;
+
+  /// The maximum duration to wait for all connections to dispose.
+  final Duration _disposalTimeout;
+
+  /// Stores the [_ConnectionState] for each active call, keyed by [CallId].
   final _states = <CallId, _ConnectionState>{};
 
   /// Tracks active disposal futures.
@@ -229,7 +253,7 @@ final class PeerConnectionManager {
       _logger.finer('dispose(): waiting for ${allFutures.length} connections to close...');
 
       // Wait for all with a timeout to prevent deadlocks on Bloc close
-      await Future.wait(allFutures).timeout(const Duration(seconds: 2));
+      await Future.wait(allFutures).timeout(_disposalTimeout);
 
       _logger.finer('dispose(): done gracefully');
     } catch (e) {
@@ -253,7 +277,7 @@ final class PeerConnectionManager {
       final monitor = RtpTrafficMonitor(
         peerConnection: peerConnection,
         delegates: delegates,
-        checkInterval: const Duration(seconds: 2),
+        checkInterval: _monitorCheckInterval,
       );
 
       state.rtpTrafficMonitor = monitor;
