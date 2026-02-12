@@ -87,6 +87,10 @@ Future<InstanceRegistry> bootstrap() async {
     apiClientFactory: apiClientFactory,
   );
 
+  // Remote configuration
+  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+
   // Initialize the immutable feature configuration snapshot.
   // This instance serves as the `initialData` for the `StreamProvider`, ensuring the UI
   // has valid feature flags immediately during the first frame, before the SystemInfo stream emits.
@@ -94,6 +98,7 @@ Future<InstanceRegistry> bootstrap() async {
     appThemes.appConfig,
     appThemes.embeddedResources,
     systemInfoLocalDatasource.getSystemInfo(),
+    cachedRemoteConfigService,
   );
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
@@ -109,9 +114,7 @@ Future<InstanceRegistry> bootstrap() async {
     featureAccess,
   );
 
-  // Remote configuration
-  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+  // Logger
   final appLogger = await AppLogger.init(cachedRemoteConfigService, appLabels);
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
     ..attachToLogger(Logger.root);
@@ -151,6 +154,7 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Network clients
   registry.register<WebtritApiClientFactory>(apiClientFactory);
+  registry.register<RemoteConfigService>(cachedRemoteConfigService);
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);

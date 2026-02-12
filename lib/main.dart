@@ -168,13 +168,16 @@ class RootApp extends StatelessWidget {
     );
   }
 
-  /// Creates a stream of [FeatureAccess] by mapping [SystemInfoRepository.infoStream]
-  /// with current application theme configurations.
+  /// Creates a stream of [FeatureAccess] that updates when either
+  /// [SystemInfoRepository] or [RemoteConfigService] emits a change.
   Stream<FeatureAccess> _createFeatureAccessStream(BuildContext context) {
     final appThemes = instanceRegistry.get<AppThemes>();
-    return instanceRegistry.get<SystemInfoRepository>().infoStream.map((info) {
-      _logger.info('Emitting FeatureAccess from system info: $info');
-      return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, info);
+    final systemInfoRepo = instanceRegistry.get<SystemInfoRepository>();
+    final remoteConfigService = instanceRegistry.get<RemoteConfigService>();
+
+    return StreamUtils.combineLatest2(systemInfoRepo.infoStream, remoteConfigService.onConfigUpdated, (systemInfo, _) {
+      _logger.info('Emitting FeatureAccess from system info: $systemInfo');
+      return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, systemInfo, remoteConfigService);
     });
   }
 

@@ -31,11 +31,8 @@ Future<AppContext> bootstrap() async {
     secureStorage,
   );
 
-  final featureAccess = FeatureAccess.create(
-    appThemes.appConfig,
-    appThemes.embeddedResources,
-    systemInfoLocalRepository.getSystemInfo(),
-  );
+  final featureAccess = FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources,
+      systemInfoLocalRepository.getSystemInfo(), MockCacheConfigService());
 
   final appBloc = MockAppBloc.allScreen(
     themeSettings: appThemes.values.first.settings,

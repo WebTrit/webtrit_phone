@@ -9,6 +9,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -78,6 +79,7 @@ class FeatureAccess extends Equatable {
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
     WebtritSystemInfo? systemInfo,
+    RemoteConfigService remoteConfig,
   ) {
     try {
       final coreSupportSnapshot = CoreSupportImpl(() => systemInfo);
@@ -91,11 +93,11 @@ class FeatureAccess extends Equatable {
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
       final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig);
       final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupportSnapshot, termsConfig);
-      final callConfig = CallMapper.map(appConfig);
+      final callConfig = CallMapper.map(appConfig, remoteConfig);
       final messagingConfig = MessagingMapper.map(appConfig, coreSupportSnapshot);
       final contactsConfig = ContactsMapper.map(appConfig);
-      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupportSnapshot, appConfig);
-      final sipPresenceConfig = SipPresenceMapper.map(coreSupportSnapshot, appConfig);
+      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupportSnapshot, appConfig, remoteConfig);
+      final sipPresenceConfig = SipPresenceMapper.map(coreSupportSnapshot, appConfig, remoteConfig);
       final supportedConfig = SupportedMapper.map(appConfig.supported);
 
       return FeatureAccess._(
@@ -328,7 +330,7 @@ abstract final class SettingsMapper {
 /// and environment settings.
 abstract final class CallMapper {
   /// Maps [AppConfig] to [CallCapabilitiesConfig].
-  static CallConfig map(AppConfig appConfig) {
+  static CallConfig map(AppConfig appConfig, RemoteConfigService remoteConfig) {
     final rawCallConfig = appConfig.callConfig;
     final transferConfig = rawCallConfig.transfer;
     final encodingConfig = rawCallConfig.encoding;
@@ -340,9 +342,12 @@ abstract final class CallMapper {
       (section) => section.items.any((item) => item.type == SettingsFlavor.mediaSettings.name && item.enabled),
     );
 
+    // Apply remote overrides
+    final isVideoEnabled = remoteConfig.getBool('feature_video_call_enabled') ?? rawCallConfig.videoEnabled;
+
     return CallConfig(
       capabilities: CallCapabilitiesConfig(
-        isVideoCallEnabled: rawCallConfig.videoEnabled,
+        isVideoCallEnabled: isVideoEnabled,
         isBlindTransferEnabled: transferConfig.enableBlindTransfer,
         isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
       ),
@@ -450,12 +455,14 @@ abstract final class EmbeddedMapper {
 /// Mapper responsible for evaluating system notification support based on config and core capabilities.
 abstract final class SystemNotificationsMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SystemNotificationsConfig].
-  static SystemNotificationsConfig map(CoreSupport coreSupport, AppConfig appConfig) {
-    final enabled = appConfig.mainConfig.systemNotificationsEnabled;
+  static SystemNotificationsConfig map(CoreSupport coreSupport, AppConfig appConfig, RemoteConfigService remoteConfig) {
+    // Apply remote overrides
+    final isEnabled =
+        remoteConfig.getBool('feature_system_notifications_enabled') ?? appConfig.mainConfig.systemNotificationsEnabled;
 
     return SystemNotificationsConfig(
-      systemNotificationsSupport: enabled && coreSupport.supportsSystemNotifications,
-      systemNotificationsPushSupport: enabled && coreSupport.supportsSystemPushNotifications,
+      systemNotificationsSupport: isEnabled && coreSupport.supportsSystemNotifications,
+      systemNotificationsPushSupport: isEnabled && coreSupport.supportsSystemPushNotifications,
     );
   }
 }
@@ -463,11 +470,12 @@ abstract final class SystemNotificationsMapper {
 /// Mapper responsible for evaluating SIP presence support based on config and core capabilities.
 abstract final class SipPresenceMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SipPresenceConfig].
-  static SipPresenceConfig map(CoreSupport coreSupport, AppConfig appConfig) {
-    final enabled = appConfig.mainConfig.sipPresenceEnabled;
+  static SipPresenceConfig map(CoreSupport coreSupport, AppConfig appConfig, RemoteConfigService remoteConfig) {
+    // Apply remote overrides
+    final isEnabled = remoteConfig.getBool('feature_sip_presence_enabled') ?? appConfig.mainConfig.sipPresenceEnabled;
     final coreSupportEnabled = coreSupport.supportsSipPresence;
 
-    return SipPresenceConfig(sipPresenceSupport: enabled && coreSupportEnabled);
+    return SipPresenceConfig(sipPresenceSupport: isEnabled && coreSupportEnabled);
   }
 }
 

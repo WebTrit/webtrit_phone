@@ -16,6 +16,7 @@ export 'path_provider/path_provider.dart';
 export 'performance_timer.dart';
 export 'platform_info.dart';
 export 'regexes.dart';
+export 'stream_utils.dart';
 export 'string_phone_utils.dart';
 export 'text_matchers.dart';
 export 'ttl_cache.dart';
