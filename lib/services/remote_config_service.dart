@@ -1,26 +1,32 @@
 import 'dart:async';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final _logger = Logger('FirebaseRemoteConfigService');
+import 'package:webtrit_phone/extensions/extensions.dart';
 
-/// Read-only interface representing the state of configuration at a specific moment.
+final _logger = Logger('RemoteConfigService');
+
+/// Read-only snapshot of the configuration values at a specific moment.
+///
+/// This class is decoupled from the Firebase SDK and can be safely used
+/// in any part of the application, including background isolates and tests.
 class RemoteConfigSnapshot {
-  final Map<String, RemoteConfigValue> _remoteValues;
+  final Map<String, String> _values;
   final RemoteCacheConfigService _localCache;
 
-  RemoteConfigSnapshot(this._remoteValues, this._localCache);
+  RemoteConfigSnapshot(this._values, this._localCache);
 
   /// Returns the configuration value for the given [key] as a [String].
   ///
   /// It prioritizes the value from the remote configuration. If the remote value
   /// is not available or empty, it falls back to the local cache.
   String? getString(String key) {
-    if (_remoteValues.containsKey(key)) {
-      final value = _remoteValues[key]!.asString();
-      if (value.isNotEmpty) return value;
+    final remoteValue = _values[key];
+    if (remoteValue != null && remoteValue.isNotEmpty) {
+      return remoteValue;
     }
     return _localCache.getString(key);
   }
@@ -30,8 +36,9 @@ class RemoteConfigSnapshot {
   /// It prioritizes the value from the remote configuration. If the remote value
   /// is not available, it falls back to the local cache.
   bool? getBool(String key) {
-    if (_remoteValues.containsKey(key)) {
-      return _remoteValues[key]!.asBool();
+    final remoteValue = _values[key];
+    if (remoteValue != null) {
+      return remoteValue.toBool();
     }
     return _localCache.getBool(key);
   }
@@ -44,6 +51,9 @@ abstract class RemoteConfigService {
 
   /// Emits an event with a new snapshot when the configuration is updated and activated.
   Stream<RemoteConfigSnapshot> get onConfigUpdated;
+
+  /// Refreshes the configuration by fetching from the remote source.
+  Future<void> refresh();
 }
 
 /// Interface for caching remote configuration values locally.
@@ -59,10 +69,25 @@ abstract class RemoteCacheConfigService {
 
 /// Implementation of [RemoteConfigService] using Firebase Remote Config.
 class CachedRemoteConfigService implements RemoteConfigService {
-  CachedRemoteConfigService(this._cacheService, this._remoteConfig);
+  CachedRemoteConfigService(this._cacheService, this._remoteConfig) {
+    _onConfigUpdatedSubscription = _remoteConfig.onConfigUpdated.listen((event) async {
+      _logger.info('Remote config update signal received. Updated keys: ${event.updatedKeys}');
+      try {
+        await _remoteConfig.activate();
+        final snapshot = _createSnapshot();
+        _controller.add(snapshot);
+        unawaited(_updateCache(snapshot));
+      } catch (e, stackTrace) {
+        _logger.warning('Failed to activate remote config update', e, stackTrace);
+      }
+    });
+  }
 
   final FirebaseRemoteConfig _remoteConfig;
   final RemoteCacheConfigService _cacheService;
+
+  final _controller = StreamController<RemoteConfigSnapshot>.broadcast();
+  StreamSubscription? _onConfigUpdatedSubscription;
 
   static Future<CachedRemoteConfigService> init(RemoteCacheConfigService cache) async {
     final remoteConfig = FirebaseRemoteConfig.instance;
@@ -70,46 +95,69 @@ class CachedRemoteConfigService implements RemoteConfigService {
     await remoteConfig.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(seconds: 30),
-        minimumFetchInterval: const Duration(seconds: 10),
+        minimumFetchInterval: kDebugMode ? const Duration(seconds: 10) : const Duration(hours: 12),
       ),
     );
 
     await remoteConfig.fetchAndActivate().catchError(_handleFetchError);
 
-    return CachedRemoteConfigService(cache, remoteConfig);
+    final service = CachedRemoteConfigService(cache, remoteConfig);
+    // Initial cache synchronization
+    unawaited(service._updateCache(service.snapshot));
+
+    return service;
   }
 
   @override
   RemoteConfigSnapshot get snapshot => _createSnapshot();
 
   @override
-  Stream<RemoteConfigSnapshot> get onConfigUpdated {
-    return _remoteConfig.onConfigUpdated.asyncMap((newSnapshot) async {
-      _logger.fine('Remote config updated: $newSnapshot');
+  Stream<RemoteConfigSnapshot> get onConfigUpdated => _controller.stream;
 
-      try {
-        await _remoteConfig.activate();
-        return _createSnapshot();
-      } catch (e, stackTrace) {
-        _logger.warning('Failed to activate remote config update', e, stackTrace);
-        // Return current snapshot in case of error to keep the stream alive
-        return snapshot;
+  @override
+  Future<void> refresh() async {
+    try {
+      final updated = await _remoteConfig.fetchAndActivate();
+      if (updated) {
+        final snapshot = _createSnapshot();
+        _controller.add(snapshot);
+        await _updateCache(snapshot);
       }
-    });
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to refresh remote config', e, stackTrace);
+    }
   }
 
   RemoteConfigSnapshot _createSnapshot() {
     final remoteValues = _remoteConfig.getAll();
+    final Map<String, String> plainValues = {};
 
-    // Eagerly update local cache with fresh remote values
     for (final entry in remoteValues.entries) {
       final value = entry.value.asString();
       if (value.isNotEmpty) {
-        _cacheService.cacheString(entry.key, value);
+        plainValues[entry.key] = value;
       }
     }
 
-    return RemoteConfigSnapshot(remoteValues, _cacheService);
+    return RemoteConfigSnapshot(plainValues, _cacheService);
+  }
+
+  /// Synchronizes the provided [snapshot] with the local cache storage.
+  Future<void> _updateCache(RemoteConfigSnapshot snapshot) async {
+    try {
+      final futures = snapshot._values.entries.map((entry) {
+        return _cacheService.cacheString(entry.key, entry.value);
+      });
+      await Future.wait(futures);
+      _logger.fine('Local cache synchronized successfully.');
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to synchronize local cache', e, stackTrace);
+    }
+  }
+
+  void dispose() {
+    _onConfigUpdatedSubscription?.cancel();
+    _controller.close();
   }
 
   static bool _handleFetchError(Object error) {
@@ -130,7 +178,6 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService, Remot
 
   static Future<DefaultRemoteCacheConfigService> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-
     return DefaultRemoteCacheConfigService(sharedPreferences);
   }
 
@@ -139,6 +186,9 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService, Remot
 
   @override
   Stream<RemoteConfigSnapshot> get onConfigUpdated => const Stream.empty();
+
+  @override
+  Future<void> refresh() async {}
 
   @override
   String? getString(String key) {
@@ -153,15 +203,8 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService, Remot
   @override
   bool? getBool(String key) {
     final value = _sharedPreferences.get(key);
-
-    // Handle true booleans
     if (value is bool) return value;
-
-    // Handle "true"/"false" strings (since CachedRemoteConfigService stores everything as strings)
-    if (value is String) {
-      return value.toLowerCase() == 'true';
-    }
-
+    if (value is String) return value.toBool();
     return null;
   }
 

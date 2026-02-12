@@ -37,3 +37,14 @@ extension StringExtension on String {
     return split(' ').first;
   }
 }
+
+extension RemoteConfigStringParsing on String? {
+  /// Parses the string into a boolean based on common Remote Config patterns.
+  bool? toBool() {
+    if (this == null) return null;
+    final normalized = this!.toLowerCase().trim();
+    if (normalized == 'true' || normalized == '1') return true;
+    if (normalized == 'false' || normalized == '0') return false;
+    return null;
+  }
+}
