@@ -4,6 +4,5 @@ export 'disposable.dart';
 export 'instance_registry.dart';
 export 'logging/logging.dart';
 export 'refreshable.dart';
-export 'remote_config/remote_config.dart';
 export 'signaling_manager.dart';
 export 'suspendable.dart';
