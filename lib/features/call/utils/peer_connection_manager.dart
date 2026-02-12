@@ -48,7 +48,7 @@ final class PeerConnectionManager {
     this.factory = const DefaultPeerConnectionFactory(),
     this.monitorDelegatesFactory,
     Duration retrieveTimeout = const Duration(seconds: 5),
-    Duration monitorCheckInterval = const Duration(seconds: 2),
+    Duration monitorCheckInterval = const Duration(seconds: 15),
     Duration disposalTimeout = const Duration(seconds: 2),
   }) : _retrieveTimeout = retrieveTimeout,
        _monitorCheckInterval = monitorCheckInterval,
@@ -64,6 +64,14 @@ final class PeerConnectionManager {
   final Duration _retrieveTimeout;
 
   /// The interval at which the [RtpTrafficMonitor] checks for RTP traffic.
+  ///
+  /// Defaults to **15 seconds** to balance diagnostic depth with logging efficiency.
+  ///
+  /// This interval prevents log storage exhaustion (quota management):
+  /// * At 15s: ~40 logs/min (~0.18MB/min) per call.
+  ///
+  /// A 15s window is sufficient to detect network quality trends (jitter, packet loss)
+  /// without overwhelming the log management system during high-concurrency periods.
   final Duration _monitorCheckInterval;
 
   /// The maximum duration to wait for all connections to dispose.
