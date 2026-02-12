@@ -175,9 +175,15 @@ class RootApp extends StatelessWidget {
     final systemInfoRepo = instanceRegistry.get<SystemInfoRepository>();
     final remoteConfigService = instanceRegistry.get<RemoteConfigService>();
 
-    return StreamUtils.combineLatest2(systemInfoRepo.infoStream, remoteConfigService.onConfigUpdated, (systemInfo, _) {
+    return StreamUtils.combineLatest2(systemInfoRepo.infoStream, remoteConfigService.onConfigUpdated, (
+      systemInfo,
+      remoteConfigSnapshot,
+    ) {
       _logger.info('Emitting FeatureAccess from system info: $systemInfo');
-      return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, systemInfo, remoteConfigService);
+
+      final actualSnapshot = remoteConfigSnapshot ?? remoteConfigService.snapshot;
+
+      return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, systemInfo, actualSnapshot);
     });
   }
 

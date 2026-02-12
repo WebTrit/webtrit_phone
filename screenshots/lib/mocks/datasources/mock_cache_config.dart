@@ -20,7 +20,4 @@ class MockCacheConfigService implements RemoteCacheConfigService {
   String? getString(String key) {
     return null;
   }
-
-  @override
-  Stream<void> get onConfigUpdated => const Stream.empty();
 }

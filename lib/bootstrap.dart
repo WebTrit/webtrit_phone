@@ -98,7 +98,7 @@ Future<InstanceRegistry> bootstrap() async {
     appThemes.appConfig,
     appThemes.embeddedResources,
     systemInfoLocalDatasource.getSystemInfo(),
-    cachedRemoteConfigService,
+    cachedRemoteConfigService.snapshot,
   );
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
@@ -115,7 +115,7 @@ Future<InstanceRegistry> bootstrap() async {
   );
 
   // Logger
-  final appLogger = await AppLogger.init(cachedRemoteConfigService, appLabels);
+  final appLogger = await AppLogger.init(cachedRemoteConfigService.snapshot, appLabels);
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
     ..attachToLogger(Logger.root);
 
@@ -277,7 +277,7 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   final secureStorage = await SecureStorageImpl.init();
   final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
-  await AppLogger.init(remoteCacheConfigService, appLabelsProvider);
+  await AppLogger.init(remoteCacheConfigService.snapshot, appLabelsProvider);
 
   final appPush = AppRemotePush.fromFCM(message);
 

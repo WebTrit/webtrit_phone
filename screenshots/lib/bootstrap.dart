@@ -10,6 +10,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
 
@@ -31,8 +32,14 @@ Future<AppContext> bootstrap() async {
     secureStorage,
   );
 
-  final featureAccess = FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources,
-      systemInfoLocalRepository.getSystemInfo(), MockCacheConfigService());
+  final mockSnapshot = RemoteConfigSnapshot(const {}, MockCacheConfigService());
+
+  final featureAccess = FeatureAccess.create(
+    appThemes.appConfig,
+    appThemes.embeddedResources,
+    systemInfoLocalRepository.getSystemInfo(),
+    mockSnapshot,
+  );
 
   final appBloc = MockAppBloc.allScreen(
     themeSettings: appThemes.values.first.settings,

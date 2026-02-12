@@ -79,7 +79,7 @@ class FeatureAccess extends Equatable {
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
     WebtritSystemInfo? systemInfo,
-    RemoteConfigService remoteConfig,
+    RemoteConfigSnapshot remoteConfig,
   ) {
     try {
       final coreSupportSnapshot = CoreSupportImpl(() => systemInfo);
@@ -330,7 +330,7 @@ abstract final class SettingsMapper {
 /// and environment settings.
 abstract final class CallMapper {
   /// Maps [AppConfig] to [CallCapabilitiesConfig].
-  static CallConfig map(AppConfig appConfig, RemoteConfigService remoteConfig) {
+  static CallConfig map(AppConfig appConfig, RemoteConfigSnapshot remoteConfig) {
     final rawCallConfig = appConfig.callConfig;
     final transferConfig = rawCallConfig.transfer;
     final encodingConfig = rawCallConfig.encoding;
@@ -455,7 +455,11 @@ abstract final class EmbeddedMapper {
 /// Mapper responsible for evaluating system notification support based on config and core capabilities.
 abstract final class SystemNotificationsMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SystemNotificationsConfig].
-  static SystemNotificationsConfig map(CoreSupport coreSupport, AppConfig appConfig, RemoteConfigService remoteConfig) {
+  static SystemNotificationsConfig map(
+    CoreSupport coreSupport,
+    AppConfig appConfig,
+    RemoteConfigSnapshot remoteConfig,
+  ) {
     // Apply remote overrides
     final isEnabled =
         remoteConfig.getBool('feature_system_notifications_enabled') ?? appConfig.mainConfig.systemNotificationsEnabled;
@@ -470,7 +474,7 @@ abstract final class SystemNotificationsMapper {
 /// Mapper responsible for evaluating SIP presence support based on config and core capabilities.
 abstract final class SipPresenceMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SipPresenceConfig].
-  static SipPresenceConfig map(CoreSupport coreSupport, AppConfig appConfig, RemoteConfigService remoteConfig) {
+  static SipPresenceConfig map(CoreSupport coreSupport, AppConfig appConfig, RemoteConfigSnapshot remoteConfig) {
     // Apply remote overrides
     final isEnabled = remoteConfig.getBool('feature_sip_presence_enabled') ?? appConfig.mainConfig.sipPresenceEnabled;
     final coreSupportEnabled = coreSupport.supportsSipPresence;

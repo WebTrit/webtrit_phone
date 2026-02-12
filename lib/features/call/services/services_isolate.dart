@@ -36,7 +36,7 @@ Future<void> _initializeCommonDependencies() async {
   _packageInfo ??= await PackageInfoFactory.init();
   _secureStorage = await SecureStorageImpl.init();
   _appLabelsProvider ??= await DefaultAppMetadataProvider.init(_packageInfo!, _deviceInfo!, _appInfo!, _secureStorage!);
-  _appLogger ??= await AppLogger.init(_remoteConfigService!, _appLabelsProvider!);
+  _appLogger ??= await AppLogger.init(_remoteConfigService!.snapshot, _appLabelsProvider!);
   _appCertificates ??= await AppCertificates.init();
   _localPushRepository ??= LocalPushRepositoryFLNImpl();
 
