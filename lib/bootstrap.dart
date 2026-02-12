@@ -100,6 +100,11 @@ Future<InstanceRegistry> bootstrap() async {
     systemInfoLocalDatasource.getSystemInfo(),
     cachedRemoteConfigService.snapshot,
   );
+  final featureAccessStreamFactory = FeatureAccessStreamFactory(
+    appThemes: appThemes,
+    systemInfoRepository: systemInfoRepository,
+    remoteConfigService: cachedRemoteConfigService,
+  );
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
   final pushEnvironment = await PushEnvironment.init();
@@ -144,6 +149,7 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Logic & Features
   registry.register<FeatureAccess>(featureAccess);
+  registry.register<FeatureAccessStreamFactory>(featureAccessStreamFactory);
   registry.register<AppMetadataProvider>(appLabels);
   registry.register<AppPermissions>(appPermissions);
   registry.register<AppCertificates>(appCertificates);
