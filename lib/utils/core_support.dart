@@ -51,7 +51,10 @@ class CoreSupportImpl extends Equatable implements CoreSupport {
   bool get supportsSipPresence => _has(kSipPresenceFeatureFlag);
 
   @override
-  List<Object?> get props => [_flags];
+  List<Object?> get props {
+    final sortedFlags = _flags.toList()..sort();
+    return [List.unmodifiable(sortedFlags)];
+  }
 }
 
 class CoreSupportFactory {
