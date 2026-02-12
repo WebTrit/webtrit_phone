@@ -111,8 +111,8 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
-  final appLogger = await AppLogger.init(remoteFirebaseConfigService, appLabels);
+  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+  final appLogger = await AppLogger.init(cachedRemoteConfigService, appLabels);
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
     ..attachToLogger(Logger.root);
 

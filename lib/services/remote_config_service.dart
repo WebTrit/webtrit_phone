@@ -19,13 +19,13 @@ abstract class RemoteCacheConfigService extends RemoteConfigService {
 }
 
 /// Implementation of [RemoteConfigService] using Firebase Remote Config.
-class FirebaseRemoteConfigService implements RemoteConfigService {
-  FirebaseRemoteConfigService(this._cacheService, this._remoteConfig);
+class CachedRemoteConfigService implements RemoteConfigService {
+  CachedRemoteConfigService(this._cacheService, this._remoteConfig);
 
   final FirebaseRemoteConfig _remoteConfig;
   final RemoteCacheConfigService _cacheService;
 
-  static Future<FirebaseRemoteConfigService> init(RemoteCacheConfigService cache) async {
+  static Future<CachedRemoteConfigService> init(RemoteCacheConfigService cache) async {
     final remoteConfig = FirebaseRemoteConfig.instance;
 
     await remoteConfig.setConfigSettings(
@@ -34,7 +34,7 @@ class FirebaseRemoteConfigService implements RemoteConfigService {
 
     await remoteConfig.fetchAndActivate().catchError(_handleFetchError);
 
-    return FirebaseRemoteConfigService(cache, remoteConfig);
+    return CachedRemoteConfigService(cache, remoteConfig);
   }
 
   @override
