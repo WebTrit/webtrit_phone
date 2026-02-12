@@ -168,22 +168,32 @@ class RootApp extends StatelessWidget {
     );
   }
 
-  /// Creates a stream of [FeatureAccess] that updates when either
-  /// [SystemInfoRepository] or [RemoteConfigService] emits a change.
-  Stream<FeatureAccess> _createFeatureAccessStream(BuildContext context) {
+  /// Creates a stream of [FeatureAccess] that asynchronously preloads initial data
+  /// and then listens for updates from both SystemInfo and RemoteConfig.
+  Stream<FeatureAccess> _createFeatureAccessStream(BuildContext context) async* {
     final appThemes = instanceRegistry.get<AppThemes>();
     final systemInfoRepo = instanceRegistry.get<SystemInfoRepository>();
     final remoteConfigService = instanceRegistry.get<RemoteConfigService>();
 
-    return StreamUtils.combineLatest2(systemInfoRepo.infoStream, remoteConfigService.onConfigUpdated, (
+    final initialSystemInfo = await systemInfoRepo.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly);
+
+    yield FeatureAccess.create(
+      appThemes.appConfig,
+      appThemes.embeddedResources,
+      initialSystemInfo,
+      remoteConfigService.snapshot,
+    );
+
+    yield* StreamUtils.combineLatest2(systemInfoRepo.infoStream, remoteConfigService.onConfigUpdated, (
       systemInfo,
       remoteConfigSnapshot,
     ) {
-      _logger.info('Emitting FeatureAccess from system info: $systemInfo');
-
+      final actualSystemInfo = systemInfo ?? initialSystemInfo;
       final actualSnapshot = remoteConfigSnapshot ?? remoteConfigService.snapshot;
 
-      return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, systemInfo, actualSnapshot);
+      _logger.info('Updating FeatureAccess from reactive stream');
+
+      return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, actualSystemInfo, actualSnapshot);
     });
   }
 
