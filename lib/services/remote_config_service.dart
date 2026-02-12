@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,9 +8,14 @@ final _logger = Logger('FirebaseRemoteConfigService');
 
 /// Base interface for remote configuration.
 abstract class RemoteConfigService {
+  /// Returns the remote configuration value for the given [key] as a [String].
   String? getString(String key);
 
+  /// Returns the remote configuration value for the given [key] as a [bool].
   bool? getBool(String key);
+
+  /// Emits an event when the configuration is updated and activated.
+  Stream<void> get onConfigUpdated;
 }
 
 /// Interface for caching remote configuration values locally.
@@ -58,6 +65,17 @@ class CachedRemoteConfigService implements RemoteConfigService {
     return value;
   }
 
+  @override
+  Stream<void> get onConfigUpdated {
+    return _remoteConfig.onConfigUpdated.asyncMap((event) async {
+      try {
+        await _remoteConfig.activate();
+      } catch (e, stackTrace) {
+        _logger.warning('Failed to activate remote config update', e, stackTrace);
+      }
+    });
+  }
+
   static bool _handleFetchError(Object error) {
     _logger.severe('Error fetching remote config: $error');
     return false;
@@ -81,6 +99,9 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService {
 
   @override
   bool? getBool(String key) => _sharedPreferences.getBool(key);
+
+  @override
+  Stream<void> get onConfigUpdated => const Stream.empty();
 
   @override
   Future<void> cacheString(String key, String value) async {
