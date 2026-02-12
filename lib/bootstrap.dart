@@ -91,20 +91,15 @@ Future<InstanceRegistry> bootstrap() async {
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
   final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
 
-  // Initialize the immutable feature configuration snapshot.
-  // This instance serves as the `initialData` for the `StreamProvider`, ensuring the UI
-  // has valid feature flags immediately during the first frame, before the SystemInfo stream emits.
-  final featureAccess = FeatureAccess.create(
-    appThemes.appConfig,
-    appThemes.embeddedResources,
-    systemInfoLocalDatasource.getSystemInfo(),
-    cachedRemoteConfigService.snapshot,
-  );
   final featureAccessStreamFactory = FeatureAccessStreamFactory(
     appThemes: appThemes,
     systemInfoRepository: systemInfoRepository,
     remoteConfigService: cachedRemoteConfigService,
   );
+  // Initialize the immutable feature configuration snapshot.
+  // This instance serves as the `initialData` for the `StreamProvider`, ensuring the UI
+  // has valid feature flags immediately during the first frame.
+  final featureAccess = await featureAccessStreamFactory.getInitialSnapshot();
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
   final pushEnvironment = await PushEnvironment.init();

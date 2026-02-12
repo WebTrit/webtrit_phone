@@ -1,20 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/core_support.dart';
-
-import '../mocks/mocks.dart';
 
 void main() {
   CoreSupport createCoreSupportWithFlags(List<String> flags) {
-    final jsonInfo = SystemInfoBuilder(adapterSupported: flags).build();
-
-    final mockPrefs = MockSecureStorage(initialData: {'system-info': jsonInfo});
-
-    final systemInfoRepository = SystemInfoLocalRepositoryPrefsImpl(mockPrefs);
-
-    return CoreSupportImpl(() => systemInfoRepository.getSystemInfo());
+    return CoreSupportImpl(flags);
   }
 
   group('CoreSupport Feature Flags', () {
