@@ -29,7 +29,7 @@ import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSy
 
 import 'app/session/session.dart';
 import 'firebase_options.dart';
-import 'services/remote_config_service.dart';
+import 'services/services.dart';
 
 Future<InstanceRegistry> bootstrap() async {
   final registry = InstanceRegistry();

@@ -74,6 +74,10 @@ class CachedRemoteConfigService implements RemoteConfigService {
       _logger.info('Remote config update signal received. Updated keys: ${event.updatedKeys}');
       try {
         await _remoteConfig.activate();
+
+        // Guard against calling add/unawaited logic after the service is disposed.
+        if (_controller.isClosed) return;
+
         final snapshot = _createSnapshot();
         _controller.add(snapshot);
         unawaited(_updateCache(snapshot));
@@ -118,7 +122,7 @@ class CachedRemoteConfigService implements RemoteConfigService {
   Future<void> refresh() async {
     try {
       final updated = await _remoteConfig.fetchAndActivate();
-      if (updated) {
+      if (updated && !_controller.isClosed) {
         final snapshot = _createSnapshot();
         _controller.add(snapshot);
         await _updateCache(snapshot);
@@ -192,7 +196,6 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService, Remot
 
   @override
   String? getString(String key) {
-    // Avoids TypeError if the key was previously stored as a bool/int.
     try {
       return _sharedPreferences.getString(key);
     } catch (_) {
@@ -210,14 +213,11 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService, Remot
 
   @override
   Future<void> cacheString(String key, String value) async {
-    // Directly write the value without reading first to prevent TypeErrors
-    // if the key previously held a different type (e.g., bool).
     await _sharedPreferences.setString(key, value);
   }
 
   @override
   Future<void> cacheBool(String key, bool value) async {
-    // Directly write the value without reading first to prevent TypeErrors.
     await _sharedPreferences.setBool(key, value);
   }
 }
