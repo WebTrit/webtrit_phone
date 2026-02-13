@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'diagnostic_models.dart';
@@ -13,7 +12,10 @@ import 'diagnostic_type_label_extensions.dart';
 
 final _logger = Logger('DiagnosticService');
 
-const _manufacturersRequiringReboot = {'xiaomi', 'huawei'};
+const _errorExtraKey = 'error';
+
+/// Corresponds to the string representation of `CallkeepCallRequestError.timeout`.
+const _timeoutErrorValue = 'timeout';
 
 /// A service responsible for collecting and reporting diagnostic information.
 ///
@@ -36,60 +38,87 @@ abstract class DiagnosticService {
 class DiagnosticServiceImpl implements DiagnosticService {
   DiagnosticServiceImpl({
     required this.dialogLauncher,
-    required List<DiagnosticStrategy> strategies,
-    required this.deviceInfo,
     required this.rebootLauncher,
+    required this.errorLauncher,
+    required List<DiagnosticStrategy> strategies,
   }) : _strategies = {for (var strategy in strategies) strategy.type: strategy};
 
   final DiagnosticDialogLauncher dialogLauncher;
 
+  final AsyncCallback rebootLauncher;
+
+  final AsyncCallback errorLauncher;
+
   final Map<DiagnosticType, DiagnosticStrategy> _strategies;
-
-  final DeviceInfo deviceInfo;
-
-  final VoidCallback rebootLauncher;
 
   @override
   Future<void> request(List<DiagnosticType> types, {Map<String, String>? extras}) async {
     if (types.isEmpty) return;
 
-    if (extras != null &&
-        extras['error'] == 'timeout' &&
-        _manufacturersRequiringReboot.contains(deviceInfo.manufacturer.toLowerCase())) {
-      rebootLauncher();
-      return;
-    }
+    final isHandled = await _handleSystemIssues(extras);
+    if (isHandled) return;
 
-    // Show the dialog to get user's comment and consent for advanced logs.
     final dialogResult = await dialogLauncher.call();
+    if (dialogResult == null) return;
 
-    // This part of the code accumulates all logs from all strategies.
-    // `aggregatedResults` will store the diagnostic data collected from each strategy,
-    // while `errors` will capture any issues encountered during the collection process.
     final aggregatedResults = <String, dynamic>{};
     final errors = <String, String>{};
 
     for (final type in types) {
       final strategy = _strategies[type];
-
       if (strategy == null) {
-        final errorMsg = 'No strategy registered for type: $type';
-        errors[type.name] = errorMsg;
-        _logger.warning(errorMsg);
+        _logMissingStrategy(type, errors);
         continue;
       }
 
-      try {
-        final includeAdvancedLogs = dialogResult?.includeAdvancedLogs ?? false;
-        final data = await strategy.collectReport(includeAdvancedLogs: includeAdvancedLogs);
-        aggregatedResults.addAll(data);
-      } catch (e, s) {
-        final errorMsg = 'Strategy ${type.name} failed: $e';
-        errors[type.name] = errorMsg;
-        _logger.severe(errorMsg, e, s);
-      }
+      await _collectStrategyData(strategy, dialogResult, aggregatedResults, errors);
     }
 
+    await _sendReport(types, dialogResult, aggregatedResults, errors, extras);
+  }
+
+  Future<bool> _handleSystemIssues(Map<String, String>? extras) async {
+    final error = extras?[_errorExtraKey];
+
+    if (error == _timeoutErrorValue) {
+      await rebootLauncher();
+      return true;
+    } else if (error != null) {
+      await errorLauncher();
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _collectStrategyData(
+    DiagnosticStrategy strategy,
+    DiagnosticReportOptions dialogResult,
+    Map<String, dynamic> results,
+    Map<String, String> errors,
+  ) async {
+    try {
+      final data = await strategy.collectReport(includeAdvancedLogs: dialogResult.includeAdvancedLogs);
+      results.addAll(data);
+    } catch (e, s) {
+      final errorMsg = 'Strategy ${strategy.type.name} failed: $e';
+      errors[strategy.type.name] = errorMsg;
+      _logger.severe(errorMsg, e, s);
+    }
+  }
+
+  void _logMissingStrategy(DiagnosticType type, Map<String, String> errors) {
+    final errorMsg = 'No strategy registered for type: $type';
+    errors[type.name] = errorMsg;
+    _logger.warning(errorMsg);
+  }
+
+  Future<void> _sendReport(
+    List<DiagnosticType> types,
+    DiagnosticReportOptions dialogResult,
+    Map<String, dynamic> results,
+    Map<String, String> errors,
+    Map<String, String>? extras,
+  ) async {
     final metadata = _buildMetadata(dialogResult, errors);
     final groupTitle = _buildErrorGroup(types);
 
@@ -97,15 +126,14 @@ class DiagnosticServiceImpl implements DiagnosticService {
       await CrashlyticsUtils.reportServiceError(
         errorDescription: 'User Feedback / Diagnostic Report',
         errorGroup: groupTitle,
-        userComment: dialogResult?.comment ?? 'Not provided',
+        userComment: dialogResult.comment ?? 'Not provided',
         extras: extras ?? {},
-        diagnostics: aggregatedResults,
+        diagnostics: results,
         metadata: metadata,
         isFatal: true,
       );
-      _logger.info('Diagnostic report sent successfully: $groupTitle');
     } catch (e, s) {
-      _logger.severe('Failed to send diagnostic report to Crashlytics', e, s);
+      _logger.severe('Failed to send diagnostic report', e, s);
     }
   }
 
@@ -114,11 +142,11 @@ class DiagnosticServiceImpl implements DiagnosticService {
   /// This map contains information about the reporting process itself, such as
   /// a timestamp, user-provided details from the dialog, and any internal errors
   /// that occurred during data collection.
-  Map<String, dynamic> _buildMetadata(DiagnosticReportOptions? dialogResult, Map<String, String> errors) {
+  Map<String, dynamic> _buildMetadata(DiagnosticReportOptions dialogResult, Map<String, String> errors) {
     return {
       'timestamp': DateTime.now().toUtc().toIso8601String(),
-      'user_comment': dialogResult?.comment,
-      'include_advanced_logs': dialogResult?.includeAdvancedLogs,
+      'user_comment': dialogResult.comment,
+      'include_advanced_logs': dialogResult.includeAdvancedLogs,
       if (errors.isNotEmpty) 'internal_errors': errors,
     };
   }
