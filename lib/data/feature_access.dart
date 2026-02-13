@@ -152,6 +152,7 @@ class FeatureAccess extends Equatable {
     termsConfig,
     systemNotificationsConfig,
     sipPresenceConfig,
+    monitoringConfig,
     supportedConfig,
     coreSupport,
     overrides,
