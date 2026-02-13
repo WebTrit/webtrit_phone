@@ -37,9 +37,10 @@ abstract final class FeatureOverridesFactory {
   static FeatureOverrides create(RemoteConfigSnapshot snapshot) {
     final monitorIntervalSec = int.tryParse(snapshot.getString(_kMonitorCheckIntervalKey) ?? '');
     Duration? monitorCheckInterval;
-    if (monitorIntervalSec != null && monitorIntervalSec > 0) {
+    if (monitorIntervalSec != null) {
       monitorCheckInterval = Duration(seconds: monitorIntervalSec);
     }
+
     return FeatureOverrides(
       isVideoCallEnabled: snapshot.getBool(_kVideoCallEnabledKey),
       isSystemNotificationsEnabled: snapshot.getBool(_kSystemNotificationsEnabledKey),
