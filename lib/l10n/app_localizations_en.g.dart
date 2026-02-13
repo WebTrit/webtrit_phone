@@ -235,6 +235,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_settings_additional_options => 'Additional options';
 
   @override
+  String get call_SystemErrorDialog_description =>
+      'To resume making calls, a phone restart is required. This will resolve a temporary system error.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'System Error';
+
+  @override
   String get callStatus_appUnregistered => 'Unregistered';
 
   @override

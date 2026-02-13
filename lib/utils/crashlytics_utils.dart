@@ -61,7 +61,7 @@ class CrashlyticsUtils {
   /// gets grouped and reported correctly in Crashlytics.
   static Future<void> reportServiceError({
     required String errorDescription,
-    required String userComment,
+    required String comment,
     required Map<String, dynamic> diagnostics,
     required Map<String, dynamic> metadata,
     required Map<String, dynamic> extras,
@@ -70,9 +70,9 @@ class CrashlyticsUtils {
   }) async {
     final crashlytics = FirebaseCrashlytics.instance;
 
-    if (userComment.isNotEmpty) {
-      _setSafeCustomKey('user_report_comment', userComment);
-      crashlytics.log('User Diagnostic Comment: $userComment');
+    if (comment.isNotEmpty) {
+      _setSafeCustomKey('report_comment', comment);
+      crashlytics.log('Diagnostic Comment: $comment');
     }
 
     if (diagnostics.isNotEmpty) {

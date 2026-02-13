@@ -157,6 +157,10 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Opzioni aggiuntive",
   "@call_settings_additional_options": {},
+  "call_SystemErrorDialog_description": "Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "Errore di sistema",
+  "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Non registrato",
   "@callStatus_appUnregistered": {
     "description": "Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."

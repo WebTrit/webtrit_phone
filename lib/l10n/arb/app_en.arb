@@ -157,6 +157,10 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Additional options",
   "@call_settings_additional_options": {},
+  "call_SystemErrorDialog_description": "To resume making calls, a phone restart is required. This will resolve a temporary system error.",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "System Error",
+  "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Unregistered",
   "@callStatus_appUnregistered": {
     "description": "Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."
