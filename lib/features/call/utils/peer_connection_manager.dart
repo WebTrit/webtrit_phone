@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
+
 import 'package:webtrit_phone/extensions/extensions.dart';
 
 import 'peer_connection_factory.dart';
@@ -61,7 +62,7 @@ final class PeerConnectionManager {
   final RtpMonitorDelegatesFactory? monitorDelegatesFactory;
 
   /// The maximum duration to wait for a [RTCPeerConnection] to be retrieved.
-  final Duration _retrieveTimeout;
+  Duration _retrieveTimeout;
 
   /// The interval at which the [RtpTrafficMonitor] checks for RTP traffic.
   ///
@@ -72,10 +73,10 @@ final class PeerConnectionManager {
   ///
   /// A 15s window is sufficient to detect network quality trends (jitter, packet loss)
   /// without overwhelming the log management system during high-concurrency periods.
-  final Duration _monitorCheckInterval;
+  Duration _monitorCheckInterval;
 
   /// The maximum duration to wait for all connections to dispose.
-  final Duration _disposalTimeout;
+  Duration _disposalTimeout;
 
   /// Stores the [_ConnectionState] for each active call, keyed by [CallId].
   final _states = <CallId, _ConnectionState>{};
@@ -85,6 +86,22 @@ final class PeerConnectionManager {
   /// Acts as a "Disposal Barrier": [createPeerConnection] checks this map
   /// to ensure hardware resources are released before creating a new connection.
   final _pendingDisposals = <CallId, Future<void>>{};
+
+  /// Updates configuration parameters for future connections.
+  void updateConfig({Duration? retrieveTimeout, Duration? monitorCheckInterval, Duration? disposalTimeout}) {
+    if (retrieveTimeout != null) {
+      _retrieveTimeout = retrieveTimeout;
+    }
+
+    if (disposalTimeout != null) {
+      _disposalTimeout = disposalTimeout;
+    }
+
+    if (monitorCheckInterval != null && _monitorCheckInterval != monitorCheckInterval) {
+      _monitorCheckInterval = monitorCheckInterval;
+      _logger.info('RTP monitor interval updated to $_monitorCheckInterval for future calls');
+    }
+  }
 
   /// Reserves a slot for a call. Must be called before [retrieve].
   void add(CallId callId) {

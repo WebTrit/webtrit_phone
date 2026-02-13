@@ -62,6 +62,7 @@ class FeatureAccess extends Equatable {
     this.supportedConfig,
     this.coreSupport,
     this.overrides,
+    this.monitoringConfig,
   );
 
   final EmbeddedConfig embeddedConfig;
@@ -74,6 +75,7 @@ class FeatureAccess extends Equatable {
   final TermsConfig termsConfig;
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
+  final MonitoringConfig monitoringConfig;
 
   /// Represents the set of features explicitly supported and configured within the application's static [AppConfig].
   /// This includes features like theme mode and video call capabilities as defined in the application's build-time configuration.
@@ -112,6 +114,7 @@ class FeatureAccess extends Equatable {
       final contactsConfig = ContactsMapper.map(appConfig);
       final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
       final sipPresenceConfig = SipPresenceMapper.map(coreSupport, appConfig, featureOverrides);
+      final monitoringConfig = MonitoringMapper.map(appConfig, featureOverrides);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
 
@@ -129,6 +132,7 @@ class FeatureAccess extends Equatable {
         supportedConfig,
         coreSupport,
         featureOverrides,
+        monitoringConfig,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -148,6 +152,7 @@ class FeatureAccess extends Equatable {
     termsConfig,
     systemNotificationsConfig,
     sipPresenceConfig,
+    monitoringConfig,
     supportedConfig,
     coreSupport,
     overrides,
@@ -570,6 +575,25 @@ abstract final class SupportedMapper {
     };
 
     return SupportedConfig(themeMode: configThemeMode, isVideoCallEnabled: videoCallFeature.enabled);
+  }
+}
+
+abstract final class MonitoringMapper {
+  static const _defaultInterval = Duration(seconds: 15);
+
+  static MonitoringConfig map(AppConfig appConfig, FeatureOverrides overrides) {
+    if (overrides.monitorCheckInterval != null) {
+      return MonitoringConfig(monitorCheckInterval: overrides.monitorCheckInterval!);
+    }
+
+    final monitorFeature =
+        appConfig.supported.firstWhereOrNull((e) => e is SupportedMonitorConfig) as SupportedMonitorConfig?;
+
+    if (monitorFeature != null) {
+      return MonitoringConfig(monitorCheckInterval: Duration(seconds: monitorFeature.checkIntervalSec));
+    }
+
+    return const MonitoringConfig(monitorCheckInterval: _defaultInterval);
   }
 }
 

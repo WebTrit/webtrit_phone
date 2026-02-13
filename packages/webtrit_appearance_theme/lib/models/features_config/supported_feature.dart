@@ -13,5 +13,11 @@ sealed class SupportedFeature with _$SupportedFeature {
 
   const factory SupportedFeature.videoCall({@Default(true) bool enabled}) = SupportedVideoCall;
 
+  /// Configuration for RTC monitoring intervals.
+  ///
+  /// [checkIntervalSec] defines how often the [RtpTrafficMonitor] checks for traffic.
+  /// Defaults to 15 seconds.
+  const factory SupportedFeature.monitorConfig({@Default(15) int checkIntervalSec}) = SupportedMonitorConfig;
+
   factory SupportedFeature.fromJson(Map<String, Object?> json) => _$SupportedFeatureFromJson(json);
 }

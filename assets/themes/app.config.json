@@ -3,6 +3,10 @@
     {
       "type": "themeMode",
       "mode": "light"
+    },
+    {
+      "type": "monitorConfig",
+      "checkIntervalSec": 15
     }
   ],
   "loginConfig": {

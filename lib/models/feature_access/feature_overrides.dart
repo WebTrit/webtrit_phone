@@ -8,12 +8,14 @@ class FeatureOverrides extends Equatable {
     this.isSystemNotificationsEnabled,
     this.isSipPresenceEnabled,
     this.isVoicemailEnabled,
+    this.monitorCheckInterval,
   });
 
   final bool? isVideoCallEnabled;
   final bool? isSystemNotificationsEnabled;
   final bool? isSipPresenceEnabled;
   final bool? isVoicemailEnabled;
+  final Duration? monitorCheckInterval;
 
   @override
   List<Object?> get props => [
@@ -21,6 +23,7 @@ class FeatureOverrides extends Equatable {
     isSystemNotificationsEnabled,
     isSipPresenceEnabled,
     isVoicemailEnabled,
+    monitorCheckInterval,
   ];
 }
 
@@ -29,13 +32,21 @@ abstract final class FeatureOverridesFactory {
   static const _kSystemNotificationsEnabledKey = 'feature_system_notifications_enabled';
   static const _kSipPresenceEnabledKey = 'feature_sip_presence_enabled';
   static const _kVoicemailEnabledKey = 'feature_voicemail_enabled';
+  static const _kMonitorCheckIntervalKey = 'feature_monitor_check_interval_sec';
 
   static FeatureOverrides create(RemoteConfigSnapshot snapshot) {
+    final monitorIntervalSec = int.tryParse(snapshot.getString(_kMonitorCheckIntervalKey) ?? '');
+    Duration? monitorCheckInterval;
+    if (monitorIntervalSec != null) {
+      monitorCheckInterval = Duration(seconds: monitorIntervalSec);
+    }
+
     return FeatureOverrides(
       isVideoCallEnabled: snapshot.getBool(_kVideoCallEnabledKey),
       isSystemNotificationsEnabled: snapshot.getBool(_kSystemNotificationsEnabledKey),
       isSipPresenceEnabled: snapshot.getBool(_kSipPresenceEnabledKey),
       isVoicemailEnabled: snapshot.getBool(_kVoicemailEnabledKey),
+      monitorCheckInterval: monitorCheckInterval,
     );
   }
 }

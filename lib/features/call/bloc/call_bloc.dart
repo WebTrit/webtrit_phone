@@ -150,6 +150,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_CallPerformEvent>(_onCallPerformEvent, transformer: sequential());
     on<_PeerConnectionEvent>(_onPeerConnectionEvent, transformer: sequential());
     on<CallScreenEvent>(_onCallScreenEvent, transformer: sequential());
+    on<CallConfigEvent>(_onConfigEvent, transformer: sequential());
 
     navigator.mediaDevices.ondevicechange = (event) {
       add(const _NavigatorMediaDevicesChange());
@@ -2322,6 +2323,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       await callkeep.reportUpdateCall(currentCallId, proximityEnabled: state.shouldListenToProximity);
+    }
+  }
+
+  void _onConfigEvent(CallConfigEvent event, Emitter<CallState> emit) {
+    switch (event) {
+      case _CallConfigEventUpdated(monitorCheckInterval: final interval):
+        _logger.info('Updating PeerConnectionManager configuration: monitorCheckInterval=$interval');
+        _peerConnectionManager.updateConfig(monitorCheckInterval: interval);
     }
   }
 

@@ -23,6 +23,10 @@ SupportedFeature _$SupportedFeatureFromJson(
           return SupportedVideoCall.fromJson(
             json
           );
+                case 'monitorConfig':
+          return SupportedMonitorConfig.fromJson(
+            json
+          );
         
           default:
             throw CheckedFromJsonException(
@@ -81,12 +85,13 @@ extension SupportedFeaturePatterns on SupportedFeature {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SupportedThemeMode value)?  themeMode,TResult Function( SupportedVideoCall value)?  videoCall,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SupportedThemeMode value)?  themeMode,TResult Function( SupportedVideoCall value)?  videoCall,TResult Function( SupportedMonitorConfig value)?  monitorConfig,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that);case _:
+return videoCall(_that);case SupportedMonitorConfig() when monitorConfig != null:
+return monitorConfig(_that);case _:
   return orElse();
 
 }
@@ -104,12 +109,13 @@ return videoCall(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SupportedThemeMode value)  themeMode,required TResult Function( SupportedVideoCall value)  videoCall,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SupportedThemeMode value)  themeMode,required TResult Function( SupportedVideoCall value)  videoCall,required TResult Function( SupportedMonitorConfig value)  monitorConfig,}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that);case SupportedVideoCall():
-return videoCall(_that);}
+return videoCall(_that);case SupportedMonitorConfig():
+return monitorConfig(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -123,12 +129,13 @@ return videoCall(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SupportedThemeMode value)?  themeMode,TResult? Function( SupportedVideoCall value)?  videoCall,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SupportedThemeMode value)?  themeMode,TResult? Function( SupportedVideoCall value)?  videoCall,TResult? Function( SupportedMonitorConfig value)?  monitorConfig,}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that);case _:
+return videoCall(_that);case SupportedMonitorConfig() when monitorConfig != null:
+return monitorConfig(_that);case _:
   return null;
 
 }
@@ -145,11 +152,12 @@ return videoCall(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( int checkIntervalSec)?  monitorConfig,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that.enabled);case _:
+return videoCall(_that.enabled);case SupportedMonitorConfig() when monitorConfig != null:
+return monitorConfig(_that.checkIntervalSec);case _:
   return orElse();
 
 }
@@ -167,11 +175,12 @@ return videoCall(_that.enabled);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( int checkIntervalSec)  monitorConfig,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that.mode);case SupportedVideoCall():
-return videoCall(_that.enabled);}
+return videoCall(_that.enabled);case SupportedMonitorConfig():
+return monitorConfig(_that.checkIntervalSec);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -185,11 +194,12 @@ return videoCall(_that.enabled);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( int checkIntervalSec)?  monitorConfig,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that.enabled);case _:
+return videoCall(_that.enabled);case SupportedMonitorConfig() when monitorConfig != null:
+return monitorConfig(_that.checkIntervalSec);case _:
   return null;
 
 }
@@ -337,6 +347,79 @@ class _$SupportedVideoCallCopyWithImpl<$Res>
   return _then(SupportedVideoCall(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,
+  ));
+}
+
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class SupportedMonitorConfig implements SupportedFeature {
+  const SupportedMonitorConfig({this.checkIntervalSec = 15, final  String? $type}): $type = $type ?? 'monitorConfig';
+  factory SupportedMonitorConfig.fromJson(Map<String, dynamic> json) => _$SupportedMonitorConfigFromJson(json);
+
+@JsonKey() final  int checkIntervalSec;
+
+@JsonKey(name: 'type')
+final String $type;
+
+
+/// Create a copy of SupportedFeature
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SupportedMonitorConfigCopyWith<SupportedMonitorConfig> get copyWith => _$SupportedMonitorConfigCopyWithImpl<SupportedMonitorConfig>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$SupportedMonitorConfigToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedMonitorConfig&&(identical(other.checkIntervalSec, checkIntervalSec) || other.checkIntervalSec == checkIntervalSec));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,checkIntervalSec);
+
+@override
+String toString() {
+  return 'SupportedFeature.monitorConfig(checkIntervalSec: $checkIntervalSec)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SupportedMonitorConfigCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
+  factory $SupportedMonitorConfigCopyWith(SupportedMonitorConfig value, $Res Function(SupportedMonitorConfig) _then) = _$SupportedMonitorConfigCopyWithImpl;
+@useResult
+$Res call({
+ int checkIntervalSec
+});
+
+
+
+
+}
+/// @nodoc
+class _$SupportedMonitorConfigCopyWithImpl<$Res>
+    implements $SupportedMonitorConfigCopyWith<$Res> {
+  _$SupportedMonitorConfigCopyWithImpl(this._self, this._then);
+
+  final SupportedMonitorConfig _self;
+  final $Res Function(SupportedMonitorConfig) _then;
+
+/// Create a copy of SupportedFeature
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? checkIntervalSec = null,}) {
+  return _then(SupportedMonitorConfig(
+checkIntervalSec: null == checkIntervalSec ? _self.checkIntervalSec : checkIntervalSec // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
