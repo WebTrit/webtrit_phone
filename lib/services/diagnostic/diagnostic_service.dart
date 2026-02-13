@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:logging/logging.dart';
-import 'package:webtrit_phone/data/data.dart';
 
+import 'package:logging/logging.dart';
+
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'diagnostic_models.dart';
@@ -11,6 +12,8 @@ import 'diagnostic_strategy.dart';
 import 'diagnostic_type_label_extensions.dart';
 
 final _logger = Logger('DiagnosticService');
+
+const _manufacturersRequiringReboot = {'xiaomi', 'huawei'};
 
 /// A service responsible for collecting and reporting diagnostic information.
 ///
@@ -50,7 +53,9 @@ class DiagnosticServiceImpl implements DiagnosticService {
   Future<void> request(List<DiagnosticType> types, {Map<String, String>? extras}) async {
     if (types.isEmpty) return;
 
-    if (extras != null && extras['error'] == 'timeout' && deviceInfo.manufacturer.toLowerCase() == 'xiaomi') {
+    if (extras != null &&
+        extras['error'] == 'timeout' &&
+        _manufacturersRequiringReboot.contains(deviceInfo.manufacturer.toLowerCase())) {
       rebootLauncher();
       return;
     }
