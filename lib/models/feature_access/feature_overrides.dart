@@ -42,7 +42,9 @@ abstract final class FeatureOverridesFactory {
       isSystemNotificationsEnabled: snapshot.getBool(_kSystemNotificationsEnabledKey),
       isSipPresenceEnabled: snapshot.getBool(_kSipPresenceEnabledKey),
       isVoicemailEnabled: snapshot.getBool(_kVoicemailEnabledKey),
-      monitorCheckInterval: monitorIntervalSec != null ? Duration(seconds: monitorIntervalSec) : null,
+      monitorCheckInterval: monitorIntervalSec != null && monitorIntervalSec > 0
+          ? Duration(seconds: monitorIntervalSec)
+          : null,
     );
   }
 }
