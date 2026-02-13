@@ -1039,3 +1039,20 @@ class _CallScreenEventDidPush extends CallScreenEvent {
 class _CallScreenEventDidPop extends CallScreenEvent {
   const _CallScreenEventDidPop();
 }
+
+// call configuration events
+
+sealed class CallConfigEvent extends CallEvent {
+  const CallConfigEvent();
+
+  const factory CallConfigEvent.updated({required Duration monitorCheckInterval}) = _CallConfigEventUpdated;
+}
+
+class _CallConfigEventUpdated extends CallConfigEvent {
+  const _CallConfigEventUpdated({required this.monitorCheckInterval});
+
+  final Duration monitorCheckInterval;
+
+  @override
+  List<Object?> get props => [monitorCheckInterval];
+}

@@ -377,6 +377,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       final encodingConfig = featureAccess.callConfig.encoding;
                       final peerConnectionConfig = featureAccess.callConfig.peerConnection;
+                      final monitorInterval = featureAccess.monitoringConfig.monitorCheckInterval;
 
                       // Initialize media builder with app-configured audio/video constraints
                       // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
@@ -406,6 +407,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       final peerConnectionManager = PeerConnectionManager(
                         retrieveTimeout: kPeerConnectionRetrieveTimeout,
+                        monitorCheckInterval: monitorInterval,
                         monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
                       );
 
@@ -534,13 +536,15 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                               true => PresenceViewSource.sipPresence,
                               false => PresenceViewSource.contactInfo,
                             },
-                            child: CallShell(
-                              child: MessagingShell(
-                                child: SystemNotificationsShell(
-                                  child: AutoRouter(
-                                    navigatorObservers: () => [
-                                      MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                                    ],
+                            child: CallConfigSynchronizer(
+                              child: CallShell(
+                                child: MessagingShell(
+                                  child: SystemNotificationsShell(
+                                    child: AutoRouter(
+                                      navigatorObservers: () => [
+                                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

@@ -34,3 +34,17 @@ SupportedVideoCall _$SupportedVideoCallFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$SupportedVideoCallToJson(SupportedVideoCall instance) =>
     <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};
+
+SupportedMonitorConfig _$SupportedMonitorConfigFromJson(
+  Map<String, dynamic> json,
+) => SupportedMonitorConfig(
+  checkIntervalSec: (json['checkIntervalSec'] as num?)?.toInt() ?? 15,
+  $type: json['type'] as String?,
+);
+
+Map<String, dynamic> _$SupportedMonitorConfigToJson(
+  SupportedMonitorConfig instance,
+) => <String, dynamic>{
+  'checkIntervalSec': instance.checkIntervalSec,
+  'type': instance.$type,
+};
