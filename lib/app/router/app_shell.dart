@@ -79,15 +79,15 @@ class AppShell extends StatelessWidget {
     return DiagnosticServiceImpl(
       strategies: [AndroidCallkeepDiagnosticStrategy(appPermissions: appPermissions, callkeepDiagnostics: diagnostics)],
       dialogLauncher: () => _showDiagnosticDialog(context),
-      rebootLauncher: () => _showSystemErrorDialog(context, showDescription: true),
-      errorLauncher: () => _showSystemErrorDialog(context, showDescription: false),
+      rebootLauncher: () => _showSystemErrorDialog(context),
+      errorLauncher: () => _showDiagnosticDialog(context),
     );
   }
 
-  /// AppShell is the root widget, so it persists for the entire app session.
-  /// While a rebuild allows the context to remain valid, an unmount (e.g., app termination) invalidates it.
-  /// We check `mounted` to prevent crashes in such edge cases, simply skipping the dialog if the context is detached.
   Future<DiagnosticReportOptions?> _showDiagnosticDialog(BuildContext context) async {
+    /// AppShell is the root widget, so it persists for the entire app session.
+    /// While a rebuild allows the context to remain valid, an unmount (e.g., app termination) invalidates it.
+    /// We check `mounted` to prevent crashes in such edge cases, simply skipping the dialog if the context is detached.
     if (!context.mounted) {
       _logger.warning('Context is detached, skipping diagnostic dialog.');
       return null;
@@ -95,25 +95,20 @@ class AppShell extends StatelessWidget {
     return showDialog<DiagnosticReportOptions>(context: context, builder: (_) => const DiagnosticReportDialog());
   }
 
-  Future<void> _showSystemErrorDialog(BuildContext context, {required bool showDescription}) async {
+  Future<void> _showSystemErrorDialog(BuildContext context) async {
     if (!context.mounted) return;
-    return showDialog(
-      context: context,
-      builder: (_) => SystemErrorDialog(showDescription: showDescription),
-    );
+    return showDialog(context: context, builder: (_) => const SystemErrorDialog());
   }
 }
 
 class SystemErrorDialog extends StatelessWidget {
-  const SystemErrorDialog({super.key, required this.showDescription});
-
-  final bool showDescription;
+  const SystemErrorDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(context.l10n.call_SystemErrorDialog_title),
-      content: showDescription ? Text(context.l10n.call_SystemErrorDialog_description) : null,
+      content: Text(context.l10n.call_SystemErrorDialog_description),
       actions: [
         TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.alertDialogActions_ok)),
       ],
