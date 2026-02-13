@@ -29,6 +29,7 @@ import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSy
 
 import 'app/session/session.dart';
 import 'firebase_options.dart';
+import 'services/services.dart';
 
 Future<InstanceRegistry> bootstrap() async {
   final registry = InstanceRegistry();
@@ -86,14 +87,19 @@ Future<InstanceRegistry> bootstrap() async {
     apiClientFactory: apiClientFactory,
   );
 
+  // Remote configuration
+  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+
+  final featureAccessStreamFactory = FeatureAccessStreamFactory(
+    appThemes: appThemes,
+    systemInfoRepository: systemInfoRepository,
+    remoteConfigService: cachedRemoteConfigService,
+  );
   // Initialize the immutable feature configuration snapshot.
   // This instance serves as the `initialData` for the `StreamProvider`, ensuring the UI
-  // has valid feature flags immediately during the first frame, before the SystemInfo stream emits.
-  final featureAccess = FeatureAccess.create(
-    appThemes.appConfig,
-    appThemes.embeddedResources,
-    systemInfoLocalDatasource.getSystemInfo(),
-  );
+  // has valid feature flags immediately during the first frame.
+  final featureAccess = await featureAccessStreamFactory.getInitialSnapshot();
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
   final pushEnvironment = await PushEnvironment.init();
@@ -108,10 +114,8 @@ Future<InstanceRegistry> bootstrap() async {
     featureAccess,
   );
 
-  // Remote configuration
-  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
-  final appLogger = await AppLogger.init(remoteFirebaseConfigService, appLabels);
+  // Logger
+  final appLogger = await AppLogger.init(cachedRemoteConfigService.snapshot, appLabels);
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
     ..attachToLogger(Logger.root);
 
@@ -140,6 +144,7 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Logic & Features
   registry.register<FeatureAccess>(featureAccess);
+  registry.register<FeatureAccessStreamFactory>(featureAccessStreamFactory);
   registry.register<AppMetadataProvider>(appLabels);
   registry.register<AppPermissions>(appPermissions);
   registry.register<AppCertificates>(appCertificates);
@@ -150,6 +155,7 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Network clients
   registry.register<WebtritApiClientFactory>(apiClientFactory);
+  registry.register<RemoteConfigService>(cachedRemoteConfigService);
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);
@@ -272,7 +278,7 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   final secureStorage = await SecureStorageImpl.init();
   final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
-  await AppLogger.init(remoteCacheConfigService, appLabelsProvider);
+  await AppLogger.init(remoteCacheConfigService.snapshot, appLabelsProvider);
 
   final appPush = AppRemotePush.fromFCM(message);
 

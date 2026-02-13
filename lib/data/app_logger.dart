@@ -6,13 +6,14 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 import 'app_metadata_provider.dart';
 
 final _logger = Logger('AppLogger');
 
 class AppLogger {
-  static Future<AppLogger> init(RemoteConfigService remoteConfigService, AppMetadataProvider labelsProvider) async {
+  static Future<AppLogger> init(RemoteConfigSnapshot remoteConfigSnapshot, AppMetadataProvider labelsProvider) async {
     hierarchicalLoggingEnabled = true;
 
     final localLogLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
@@ -32,7 +33,7 @@ class AppLogger {
     // Configure remote logging for Logz.io with an anonymizing formatter.
     // If additional logging services are added in the future, consider extracting these settings
     // into a dedicated logging configuration module to improve maintainability and separation of concerns.
-    final remoteLoggingServices = _createRemoteLoggingServices(remoteConfigService, logzioLogLevel);
+    final remoteLoggingServices = _createRemoteLoggingServices(remoteConfigSnapshot, logzioLogLevel);
 
     for (var it in remoteLoggingServices) {
       it.initialize(labelsProvider.logLabels);
@@ -43,8 +44,8 @@ class AppLogger {
     return AppLogger._(remoteLoggingServices, labelsProvider);
   }
 
-  static List<RemoteLoggingService> _createRemoteLoggingServices(RemoteConfigService configService, Level minLevel) {
-    final isEnabled = configService.getBool('firebaseRemoteLogging') ?? false;
+  static List<RemoteLoggingService> _createRemoteLoggingServices(RemoteConfigSnapshot configSnapshot, Level minLevel) {
+    final isEnabled = configSnapshot.getBool('firebaseRemoteLogging') ?? false;
 
     const logzioUrl = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
     const logzioToken = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;

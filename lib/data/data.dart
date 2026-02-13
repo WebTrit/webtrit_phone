@@ -12,6 +12,7 @@ export 'app_themes.dart';
 export 'app_time.dart';
 export 'device_info.dart';
 export 'feature_access.dart';
+export 'feature_access_stream_factory.dart';
 export 'package_info.dart';
 export 'push_environment.dart';
 export 'secure_storage.dart';

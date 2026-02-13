@@ -60,6 +60,8 @@ class FeatureAccess extends Equatable {
     this.systemNotificationsConfig,
     this.sipPresenceConfig,
     this.supportedConfig,
+    this.coreSupport,
+    this.overrides,
   );
 
   final EmbeddedConfig embeddedConfig;
@@ -72,15 +74,29 @@ class FeatureAccess extends Equatable {
   final TermsConfig termsConfig;
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
+
+  /// Represents the set of features explicitly supported and configured within the application's static [AppConfig].
+  /// This includes features like theme mode and video call capabilities as defined in the application's build-time configuration.
   final SupportedConfig supportedConfig;
+
+  /// Provides information about the underlying platform and system capabilities.
+  /// This determines if certain features, such as voicemail, SMS, chats, system notifications,
+  /// and SIP presence, are fundamentally supported by the device's operating system or environment.
+  final CoreSupport coreSupport;
+
+  /// Contains feature flags and configurations retrieved from a remote source,
+  /// such as Firebase Remote Config. These overrides can dynamically enable or disable
+  /// features at runtime, potentially modifying or extending the behavior defined
+  /// by [supportedConfig] and [coreSupport].
+  final FeatureOverrides overrides;
 
   static FeatureAccess create(
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
-    WebtritSystemInfo? systemInfo,
+    CoreSupport coreSupport,
+    FeatureOverrides featureOverrides,
   ) {
     try {
-      final coreSupportSnapshot = CoreSupportImpl(() => systemInfo);
       // Initialize basic features
       final embeddedConfig = EmbeddedMapper.map(embeddedResources);
 
@@ -90,12 +106,13 @@ class FeatureAccess extends Equatable {
 
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
       final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig);
-      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupportSnapshot, termsConfig);
-      final callConfig = CallMapper.map(appConfig);
-      final messagingConfig = MessagingMapper.map(appConfig, coreSupportSnapshot);
+      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
+      final callConfig = CallMapper.map(appConfig, featureOverrides);
+      final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
       final contactsConfig = ContactsMapper.map(appConfig);
-      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupportSnapshot, appConfig);
-      final sipPresenceConfig = SipPresenceMapper.map(coreSupportSnapshot, appConfig);
+      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
+      final sipPresenceConfig = SipPresenceMapper.map(coreSupport, appConfig, featureOverrides);
+
       final supportedConfig = SupportedMapper.map(appConfig.supported);
 
       return FeatureAccess._(
@@ -110,6 +127,8 @@ class FeatureAccess extends Equatable {
         systemNotificationsConfig,
         sipPresenceConfig,
         supportedConfig,
+        coreSupport,
+        featureOverrides,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -129,6 +148,9 @@ class FeatureAccess extends Equatable {
     termsConfig,
     systemNotificationsConfig,
     sipPresenceConfig,
+    supportedConfig,
+    coreSupport,
+    overrides,
   ];
 }
 
@@ -328,7 +350,7 @@ abstract final class SettingsMapper {
 /// and environment settings.
 abstract final class CallMapper {
   /// Maps [AppConfig] to [CallCapabilitiesConfig].
-  static CallConfig map(AppConfig appConfig) {
+  static CallConfig map(AppConfig appConfig, FeatureOverrides featureOverrides) {
     final rawCallConfig = appConfig.callConfig;
     final transferConfig = rawCallConfig.transfer;
     final encodingConfig = rawCallConfig.encoding;
@@ -340,9 +362,12 @@ abstract final class CallMapper {
       (section) => section.items.any((item) => item.type == SettingsFlavor.mediaSettings.name && item.enabled),
     );
 
+    // Apply remote overrides
+    final isVideoEnabled = featureOverrides.isVideoCallEnabled ?? rawCallConfig.videoEnabled;
+
     return CallConfig(
       capabilities: CallCapabilitiesConfig(
-        isVideoCallEnabled: rawCallConfig.videoEnabled,
+        isVideoCallEnabled: isVideoEnabled,
         isBlindTransferEnabled: transferConfig.enableBlindTransfer,
         isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
       ),
@@ -450,12 +475,17 @@ abstract final class EmbeddedMapper {
 /// Mapper responsible for evaluating system notification support based on config and core capabilities.
 abstract final class SystemNotificationsMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SystemNotificationsConfig].
-  static SystemNotificationsConfig map(CoreSupport coreSupport, AppConfig appConfig) {
-    final enabled = appConfig.mainConfig.systemNotificationsEnabled;
+  static SystemNotificationsConfig map(
+    CoreSupport coreSupport,
+    AppConfig appConfig,
+    FeatureOverrides featureOverrides,
+  ) {
+    // Apply remote overrides
+    final isEnabled = featureOverrides.isSystemNotificationsEnabled ?? appConfig.mainConfig.systemNotificationsEnabled;
 
     return SystemNotificationsConfig(
-      systemNotificationsSupport: enabled && coreSupport.supportsSystemNotifications,
-      systemNotificationsPushSupport: enabled && coreSupport.supportsSystemPushNotifications,
+      systemNotificationsSupport: isEnabled && coreSupport.supportsSystemNotifications,
+      systemNotificationsPushSupport: isEnabled && coreSupport.supportsSystemPushNotifications,
     );
   }
 }
@@ -463,11 +493,12 @@ abstract final class SystemNotificationsMapper {
 /// Mapper responsible for evaluating SIP presence support based on config and core capabilities.
 abstract final class SipPresenceMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SipPresenceConfig].
-  static SipPresenceConfig map(CoreSupport coreSupport, AppConfig appConfig) {
-    final enabled = appConfig.mainConfig.sipPresenceEnabled;
+  static SipPresenceConfig map(CoreSupport coreSupport, AppConfig appConfig, FeatureOverrides featureOverrides) {
+    // Apply remote overrides
+    final isEnabled = featureOverrides.isSipPresenceEnabled ?? appConfig.mainConfig.sipPresenceEnabled;
     final coreSupportEnabled = coreSupport.supportsSipPresence;
 
-    return SipPresenceConfig(sipPresenceSupport: enabled && coreSupportEnabled);
+    return SipPresenceConfig(sipPresenceSupport: isEnabled && coreSupportEnabled);
   }
 }
 

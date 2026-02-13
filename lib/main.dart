@@ -56,8 +56,6 @@ void main() {
   );
 }
 
-final _logger = Logger('RootApp');
-
 class RootApp extends StatelessWidget {
   const RootApp({super.key, required this.instanceRegistry, required this.baseLogFilePath});
 
@@ -73,14 +71,12 @@ class RootApp extends StatelessWidget {
         Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
         Provider<DeviceInfo>(create: (_) => instanceRegistry.get()),
         Provider<AppPreferences>(create: (_) => instanceRegistry.get()),
-
-        /// Provides reactive [FeatureAccess] configuration synchronized with [SystemInfoRepository].
-        ///
-        /// Initializes with bootstrap data and updates via [_createFeatureAccessStream]
-        /// whenever system information changes.
+        // Provides reactive [FeatureAccess] configuration synchronized with [SystemInfoRepository] and [RemoteConfigService].
+        //
+        // Initializes with bootstrap data and updates whenever system information or remote configuration changes.
         StreamProvider<FeatureAccess>(
           initialData: instanceRegistry.get<FeatureAccess>(),
-          create: (context) => _createFeatureAccessStream(context),
+          create: (_) => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
@@ -166,16 +162,6 @@ class RootApp extends StatelessWidget {
         },
       ),
     );
-  }
-
-  /// Creates a stream of [FeatureAccess] by mapping [SystemInfoRepository.infoStream]
-  /// with current application theme configurations.
-  Stream<FeatureAccess> _createFeatureAccessStream(BuildContext context) {
-    final appThemes = instanceRegistry.get<AppThemes>();
-    return instanceRegistry.get<SystemInfoRepository>().infoStream.map((info) {
-      _logger.info('Emitting FeatureAccess from system info: $info');
-      return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, info);
-    });
   }
 
   AppDatabaseLifecycleHolder _createAppDatabaseLifecycleHolder(BuildContext context) {

@@ -1,0 +1,155 @@
+import 'dart:async';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:async/async.dart';
+
+import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
+
+import '../mocks/mocks.dart';
+import '../helpers/helpers.dart';
+
+void main() {
+  late MockAppThemes mockAppThemes;
+  late MockSystemInfoRepository mockSystemInfoRepository;
+  late MockRemoteConfigService mockRemoteConfigService;
+  late MockRemoteConfigSnapshot mockSnapshot;
+  late FeatureAccessStreamFactory factory;
+
+  late StreamController<WebtritSystemInfo> systemInfoController;
+  late StreamController<RemoteConfigSnapshot> remoteConfigController;
+
+  setUpAll(() {
+    registerFallbackValue(FetchPolicy.cacheOnly);
+    registerFallbackValue(createMockSystemInfo());
+  });
+
+  setUp(() {
+    mockAppThemes = MockAppThemes();
+    mockSystemInfoRepository = MockSystemInfoRepository();
+    mockRemoteConfigService = MockRemoteConfigService();
+    mockSnapshot = MockRemoteConfigSnapshot();
+
+    systemInfoController = StreamController<WebtritSystemInfo>.broadcast();
+    remoteConfigController = StreamController<RemoteConfigSnapshot>.broadcast();
+
+    final mockAppConfig = createMockAppConfig();
+    final mockTermsResource = createMockTermsResource();
+
+    when(() => mockAppThemes.appConfig).thenReturn(mockAppConfig);
+    when(() => mockAppThemes.embeddedResources).thenReturn([mockTermsResource]);
+
+    when(() => mockRemoteConfigService.snapshot).thenReturn(mockSnapshot);
+    when(() => mockRemoteConfigService.onConfigUpdated).thenAnswer((_) => remoteConfigController.stream);
+    when(() => mockSnapshot.getBool(any())).thenReturn(null);
+
+    when(() => mockSystemInfoRepository.infoStream).thenAnswer((_) => systemInfoController.stream);
+
+    factory = FeatureAccessStreamFactory(
+      appThemes: mockAppThemes,
+      systemInfoRepository: mockSystemInfoRepository,
+      remoteConfigService: mockRemoteConfigService,
+    );
+  });
+
+  tearDown(() {
+    systemInfoController.close();
+    remoteConfigController.close();
+  });
+
+  group('FeatureAccessStreamFactory', () {
+    test('getInitialSnapshot fetches from cache and uses current remote snapshot', () async {
+      final cachedSystemInfo = createMockSystemInfo();
+
+      when(
+        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+      ).thenAnswer((_) async => cachedSystemInfo);
+
+      final result = await factory.getInitialSnapshot();
+
+      expect(result, isA<FeatureAccess>());
+      verify(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly)).called(1);
+    });
+
+    test('create() stream emits initial snapshot first', () async {
+      final cachedSystemInfo = createMockSystemInfo();
+
+      when(
+        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+      ).thenAnswer((_) async => cachedSystemInfo);
+
+      final stream = factory.create();
+      final queue = StreamQueue(stream);
+
+      final firstEmission = await queue.next;
+      expect(firstEmission, isA<FeatureAccess>());
+
+      await queue.cancel();
+    });
+
+    test('create() emits update when SystemInfo stream emits', () async {
+      final cachedSystemInfo = createMockSystemInfo();
+      final newSystemInfo = createMockSystemInfo();
+
+      when(
+        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+      ).thenAnswer((_) async => cachedSystemInfo);
+
+      final stream = factory.create();
+      final queue = StreamQueue(stream);
+
+      await queue.next;
+
+      systemInfoController.add(newSystemInfo);
+
+      final secondEmission = await queue.next;
+      expect(secondEmission, isA<FeatureAccess>());
+
+      await queue.cancel();
+    });
+
+    test('create() emits update when RemoteConfig stream emits', () async {
+      final cachedSystemInfo = createMockSystemInfo();
+      final newRemoteSnapshot = MockRemoteConfigSnapshot();
+      when(() => newRemoteSnapshot.getBool(any())).thenReturn(true);
+
+      when(
+        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+      ).thenAnswer((_) async => cachedSystemInfo);
+
+      final stream = factory.create();
+      final queue = StreamQueue(stream);
+
+      await queue.next;
+
+      remoteConfigController.add(newRemoteSnapshot);
+
+      final secondEmission = await queue.next;
+      expect(secondEmission, isA<FeatureAccess>());
+      expect(secondEmission.overrides.isVideoCallEnabled, isTrue);
+
+      await queue.cancel();
+    });
+
+    test('create() handles missing SystemInfo (null cache) gracefully', () async {
+      when(
+        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+      ).thenAnswer((_) async => null);
+      when(() => mockSnapshot.getBool(any())).thenReturn(true);
+
+      final stream = factory.create();
+      final queue = StreamQueue(stream);
+
+      final result = await queue.next;
+
+      expect(result, isA<FeatureAccess>());
+      expect(result.coreSupport.supportsVoicemail, isFalse);
+      expect(result.overrides.isVideoCallEnabled, isTrue);
+
+      await queue.cancel();
+    });
+  });
+}
