@@ -15,7 +15,7 @@ sealed class SupportedFeature with _$SupportedFeature {
 
   /// Configuration for RTC monitoring intervals.
   ///
-  /// [checkInterval] defines how often the [RtpTrafficMonitor] checks for traffic.
+  /// [checkIntervalSec] defines how often the [RtpTrafficMonitor] checks for traffic.
   /// Defaults to 15 seconds.
   const factory SupportedFeature.monitorConfig({@Default(15) int checkIntervalSec}) = SupportedMonitorConfig;
 
