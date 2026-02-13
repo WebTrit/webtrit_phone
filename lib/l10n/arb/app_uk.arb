@@ -159,7 +159,7 @@
   "@call_settings_additional_options": {},
   "call_SystemErrorDialog_description": "Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.",
   "@call_SystemErrorDialog_description": {},
-  "call_SystemErrorDialog_title": "Системна помилка.",
+  "call_SystemErrorDialog_title": "Системна помилка",
   "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Незареєстровано",
   "@callStatus_appUnregistered": {

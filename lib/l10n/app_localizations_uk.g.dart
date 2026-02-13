@@ -248,7 +248,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.';
 
   @override
-  String get call_SystemErrorDialog_title => 'Системна помилка.';
+  String get call_SystemErrorDialog_title => 'Системна помилка';
 
   @override
   String get callStatus_appUnregistered => 'Незареєстровано';

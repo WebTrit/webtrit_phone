@@ -159,7 +159,7 @@
   "@call_settings_additional_options": {},
   "call_SystemErrorDialog_description": "Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.",
   "@call_SystemErrorDialog_description": {},
-  "call_SystemErrorDialog_title": "Errore di sistema.",
+  "call_SystemErrorDialog_title": "Errore di sistema",
   "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Non registrato",
   "@callStatus_appUnregistered": {
