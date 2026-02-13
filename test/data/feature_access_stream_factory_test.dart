@@ -152,4 +152,56 @@ void main() {
       await queue.cancel();
     });
   });
+
+  test('create() emits update with correct monitorCheckInterval from RemoteConfig', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+
+    when(() => newRemoteSnapshot.getString('feature_monitor_check_interval_sec')).thenReturn('30');
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final stream = factory.create();
+    final queue = StreamQueue(stream);
+
+    await queue.next;
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    final secondEmission = await queue.next;
+
+    expect(secondEmission.monitoringConfig.monitorCheckInterval, const Duration(seconds: 30));
+    expect(secondEmission.overrides.monitorCheckInterval, const Duration(seconds: 30));
+
+    await queue.cancel();
+  });
+
+  test('create() ignores invalid monitorCheckInterval (0 or string) from RemoteConfig', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+
+    when(() => newRemoteSnapshot.getString('feature_monitor_check_interval_sec')).thenReturn('0');
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final stream = factory.create();
+    final queue = StreamQueue(stream);
+
+    await queue.next;
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    final secondEmission = await queue.next;
+
+    expect(secondEmission.overrides.monitorCheckInterval, isNull);
+    expect(secondEmission.monitoringConfig.monitorCheckInterval, const Duration(seconds: 15));
+
+    await queue.cancel();
+  });
 }
