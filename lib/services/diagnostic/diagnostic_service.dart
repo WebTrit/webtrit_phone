@@ -14,7 +14,7 @@ final _logger = Logger('DiagnosticService');
 
 const _errorExtraKey = 'error';
 
-/// Corresponds to the string representation of `CallkeepCallRequestError.timeout`.
+/// Corresponds to the string representation of [CallkeepCallRequestError.timeout].
 const _timeoutErrorValue = 'timeout';
 
 /// A service responsible for collecting and reporting diagnostic information.
@@ -47,7 +47,7 @@ class DiagnosticServiceImpl implements DiagnosticService {
 
   final AsyncCallback rebootLauncher;
 
-  final AsyncCallback errorLauncher;
+  final DiagnosticDialogLauncher errorLauncher;
 
   final Map<DiagnosticType, DiagnosticStrategy> _strategies;
 
@@ -55,11 +55,8 @@ class DiagnosticServiceImpl implements DiagnosticService {
   Future<void> request(List<DiagnosticType> types, {Map<String, String>? extras}) async {
     if (types.isEmpty) return;
 
-    final isHandled = await _handleSystemIssues(extras);
-    if (isHandled) return;
-
-    final dialogResult = await dialogLauncher.call();
-    if (dialogResult == null) return;
+    final options = await _getDiagnosticOptions(extras);
+    if (options == null) return;
 
     final aggregatedResults = <String, dynamic>{};
     final errors = <String, String>{};
@@ -71,33 +68,33 @@ class DiagnosticServiceImpl implements DiagnosticService {
         continue;
       }
 
-      await _collectStrategyData(strategy, dialogResult, aggregatedResults, errors);
+      await _collectStrategyData(strategy, options, aggregatedResults, errors);
     }
 
-    await _sendReport(types, dialogResult, aggregatedResults, errors, extras);
+    await _sendReport(types, options, aggregatedResults, errors, extras);
   }
 
-  Future<bool> _handleSystemIssues(Map<String, String>? extras) async {
+  Future<DiagnosticReportOptions?> _getDiagnosticOptions(Map<String, String>? extras) async {
     final error = extras?[_errorExtraKey];
 
     if (error == _timeoutErrorValue) {
       await rebootLauncher();
-      return true;
+      return const DiagnosticReportOptions(comment: 'Automatic report: Timeout error', includeAdvancedLogs: false);
     } else if (error != null) {
-      await errorLauncher();
-      return true;
+      return await errorLauncher();
+    } else {
+      return await dialogLauncher();
     }
-    return false;
   }
 
   Future<void> _collectStrategyData(
     DiagnosticStrategy strategy,
-    DiagnosticReportOptions dialogResult,
+    DiagnosticReportOptions options,
     Map<String, dynamic> results,
     Map<String, String> errors,
   ) async {
     try {
-      final data = await strategy.collectReport(includeAdvancedLogs: dialogResult.includeAdvancedLogs);
+      final data = await strategy.collectReport(includeAdvancedLogs: options.includeAdvancedLogs);
       results.addAll(data);
     } catch (e, s) {
       final errorMsg = 'Strategy ${strategy.type.name} failed: $e';
@@ -114,19 +111,19 @@ class DiagnosticServiceImpl implements DiagnosticService {
 
   Future<void> _sendReport(
     List<DiagnosticType> types,
-    DiagnosticReportOptions dialogResult,
+    DiagnosticReportOptions options,
     Map<String, dynamic> results,
     Map<String, String> errors,
     Map<String, String>? extras,
   ) async {
-    final metadata = _buildMetadata(dialogResult, errors);
+    final metadata = _buildMetadata(options, errors);
     final groupTitle = _buildErrorGroup(types);
 
     try {
       await CrashlyticsUtils.reportServiceError(
         errorDescription: 'User Feedback / Diagnostic Report',
         errorGroup: groupTitle,
-        userComment: dialogResult.comment ?? 'Not provided',
+        comment: options.comment ?? 'Not provided',
         extras: extras ?? {},
         diagnostics: results,
         metadata: metadata,
@@ -140,13 +137,13 @@ class DiagnosticServiceImpl implements DiagnosticService {
   /// Builds a metadata map to be included in the diagnostic report.
   ///
   /// This map contains information about the reporting process itself, such as
-  /// a timestamp, user-provided details from the dialog, and any internal errors
+  /// a timestamp, provided details, and any internal errors
   /// that occurred during data collection.
-  Map<String, dynamic> _buildMetadata(DiagnosticReportOptions dialogResult, Map<String, String> errors) {
+  Map<String, dynamic> _buildMetadata(DiagnosticReportOptions options, Map<String, String> errors) {
     return {
       'timestamp': DateTime.now().toUtc().toIso8601String(),
-      'user_comment': dialogResult.comment,
-      'include_advanced_logs': dialogResult.includeAdvancedLogs,
+      'comment': options.comment,
+      'include_advanced_logs': options.includeAdvancedLogs,
       if (errors.isNotEmpty) 'internal_errors': errors,
     };
   }
