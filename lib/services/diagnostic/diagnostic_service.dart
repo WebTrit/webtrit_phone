@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
-import 'package:webtrit_phone/data/app_metadata_provider.dart';
+import 'package:webtrit_phone/data/data.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -34,7 +34,7 @@ class DiagnosticServiceImpl implements DiagnosticService {
   DiagnosticServiceImpl({
     required this.dialogLauncher,
     required List<DiagnosticStrategy> strategies,
-    required this.appMetadataProvider,
+    required this.deviceInfo,
     required this.rebootLauncher,
   }) : _strategies = {for (var strategy in strategies) strategy.type: strategy};
 
@@ -42,7 +42,7 @@ class DiagnosticServiceImpl implements DiagnosticService {
 
   final Map<DiagnosticType, DiagnosticStrategy> _strategies;
 
-  final AppMetadataProvider appMetadataProvider;
+  final DeviceInfo deviceInfo;
 
   final VoidCallback rebootLauncher;
 
@@ -50,9 +50,7 @@ class DiagnosticServiceImpl implements DiagnosticService {
   Future<void> request(List<DiagnosticType> types, {Map<String, String>? extras}) async {
     if (types.isEmpty) return;
 
-    if (extras != null &&
-        extras['error'] == 'timeout' &&
-        appMetadataProvider.deviceManufacturer.toLowerCase() == 'xiaomi') {
+    if (extras != null && extras['error'] == 'timeout' && deviceInfo.manufacturer.toLowerCase() == 'xiaomi') {
       rebootLauncher();
       return;
     }
