@@ -157,7 +157,7 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Opzioni aggiuntive",
   "@call_settings_additional_options": {},
-  "call_SystemErrorDialog_description": "Le chiamate non sono temporaneamente disponibili a causa di un errore di sistema. Riavvia il telefono.",
+  "call_SystemErrorDialog_description": "Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.",
   "@call_SystemErrorDialog_description": {},
   "call_SystemErrorDialog_title": "Errore di sistema.",
   "@call_SystemErrorDialog_title": {},

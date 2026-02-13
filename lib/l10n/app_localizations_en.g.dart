@@ -236,10 +236,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get call_SystemErrorDialog_description =>
-      'Calls are temporarily unavailable due to a system error. Please reboot your phone.';
+      'To resume making calls, a phone restart is required. This will resolve a temporary system error.';
 
   @override
-  String get call_SystemErrorDialog_title => 'System Error.';
+  String get call_SystemErrorDialog_title => 'System Error';
 
   @override
   String get callStatus_appUnregistered => 'Unregistered';

@@ -157,9 +157,9 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Additional options",
   "@call_settings_additional_options": {},
-  "call_SystemErrorDialog_description": "Calls are temporarily unavailable due to a system error. Please reboot your phone.",
+  "call_SystemErrorDialog_description": "To resume making calls, a phone restart is required. This will resolve a temporary system error.",
   "@call_SystemErrorDialog_description": {},
-  "call_SystemErrorDialog_title": "System Error.",
+  "call_SystemErrorDialog_title": "System Error",
   "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Unregistered",
   "@callStatus_appUnregistered": {

@@ -157,7 +157,7 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Додаткові параметри",
   "@call_settings_additional_options": {},
-  "call_SystemErrorDialog_description": "Дзвінки тимчасово недоступні через системну помилку. Будь ласка, перезавантажте телефон.",
+  "call_SystemErrorDialog_description": "Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.",
   "@call_SystemErrorDialog_description": {},
   "call_SystemErrorDialog_title": "Системна помилка.",
   "@call_SystemErrorDialog_title": {},

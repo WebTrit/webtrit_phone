@@ -238,7 +238,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get call_SystemErrorDialog_description =>
-      'Le chiamate non sono temporaneamente disponibili a causa di un errore di sistema. Riavvia il telefono.';
+      'Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.';
 
   @override
   String get call_SystemErrorDialog_title => 'Errore di sistema.';

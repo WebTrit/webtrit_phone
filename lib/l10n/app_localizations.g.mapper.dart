@@ -154,6 +154,10 @@ class AppLocalizationsMapper {
           localizations.callPullBadge_pickupButtonTitle,
       'call_settings_additional_options':
           localizations.call_settings_additional_options,
+      'call_SystemErrorDialog_description':
+          localizations.call_SystemErrorDialog_description,
+      'call_SystemErrorDialog_title':
+          localizations.call_SystemErrorDialog_title,
       'callStatus_appUnregistered': localizations.callStatus_appUnregistered,
       'callStatus_connectError': localizations.callStatus_connectError,
       'callStatus_connectIssue': localizations.callStatus_connectIssue,
