@@ -77,7 +77,7 @@ class AppShell extends StatelessWidget {
   DiagnosticService _createDiagnosticService(BuildContext context) {
     final appPermissions = context.read<AppPermissions>();
     final diagnostics = AndroidCallkeepUtils.diagnostics;
-    final appMetadataProvider = context.read<AppMetadataProvider>();
+    final deviceInfo = context.read<DeviceInfo>();
 
     Future<DiagnosticReportOptions?> showDiagnosticDialog() async {
       // AppShell is the root widget, so it persists for the entire app session.
@@ -91,22 +91,22 @@ class AppShell extends StatelessWidget {
     }
 
     void showRebootRequiredDialog() {
-      showDialog(context: context, builder: (_) => AlertDialog(
-        title: Text(context.l10n.call_SystemErrorDialog_title),
-        content: Text(context.l10n.call_SystemErrorDialog_description),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.alertDialogActions_ok),
-          ),
-        ],
-      ));
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(context.l10n.call_SystemErrorDialog_title),
+          content: Text(context.l10n.call_SystemErrorDialog_description),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.alertDialogActions_ok)),
+          ],
+        ),
+      );
     }
 
     return DiagnosticServiceImpl(
       strategies: [AndroidCallkeepDiagnosticStrategy(appPermissions: appPermissions, callkeepDiagnostics: diagnostics)],
       dialogLauncher: showDiagnosticDialog,
-      appMetadataProvider: appMetadataProvider,
+      deviceInfo: deviceInfo,
       rebootLauncher: showRebootRequiredDialog,
     );
   }
