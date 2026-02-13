@@ -6,7 +6,7 @@
     },
     {
       "type": "monitorConfig",
-      "checkInterval": 15
+      "checkIntervalSec": 15
     }
   ],
   "loginConfig": {
