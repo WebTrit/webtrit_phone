@@ -83,6 +83,15 @@ class RtpTrafficMonitor {
 
   void start() {
     _timer?.cancel();
+
+    /// Prevents execution if interval is zero or negative.
+    /// Note: An explicit boolean flag (e.g., isEnabled) could be added
+    /// for more granular control via Remote Config in the future.
+    if (checkInterval <= Duration.zero) {
+      _logger.info('RTP monitoring is disabled via configuration.');
+      return;
+    }
+
     _timer = Timer.periodic(checkInterval, (_) => _checkStats());
   }
 
