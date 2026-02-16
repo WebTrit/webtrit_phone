@@ -5,6 +5,24 @@ import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+/// A controller for [HistoryAutocompleteField] to manually trigger saving to history.
+class HistoryAutocompleteController {
+  VoidCallback? _saveCallback;
+
+  /// Saves the current input value to the history.
+  void saveToHistory() {
+    _saveCallback?.call();
+  }
+
+  void _attach(VoidCallback callback) {
+    _saveCallback = callback;
+  }
+
+  void _detach() {
+    _saveCallback = null;
+  }
+}
+
 /// A [TextFormField] that provides autocomplete suggestions from a
 /// persistent local history and integrates with system autofill.
 class HistoryAutocompleteField extends StatefulWidget {
@@ -12,6 +30,7 @@ class HistoryAutocompleteField extends StatefulWidget {
     super.key,
     required this.storageKey,
     required this.labelText,
+    this.controller,
     this.maxItems = 8,
     this.initialValue,
     this.errorText,
@@ -28,6 +47,9 @@ class HistoryAutocompleteField extends StatefulWidget {
 
   /// The label for the [InputDecoration].
   final String labelText;
+
+  /// Optional controller to trigger history save manually.
+  final HistoryAutocompleteController? controller;
 
   /// The maximum number of history items to keep.
   final int maxItems;
@@ -69,11 +91,17 @@ class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialValue);
+    widget.controller?._attach(_saveToHistory);
   }
 
   @override
   void didUpdateWidget(HistoryAutocompleteField oldWidget) {
     super.didUpdateWidget(oldWidget);
+
+    if (widget.controller != oldWidget.controller) {
+      oldWidget.controller?._detach();
+      widget.controller?._attach(_saveToHistory);
+    }
 
     if (widget.initialValue != oldWidget.initialValue && widget.initialValue != _controller.text) {
       final newText = widget.initialValue ?? '';
@@ -84,6 +112,7 @@ class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
 
   @override
   void dispose() {
+    widget.controller?._detach();
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -97,12 +126,26 @@ class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
     return history.where((item) => item.toLowerCase().contains(query.toLowerCase())).toList();
   }
 
-  void _handleSubmit() {
+  void _saveToHistory() {
     final currentValue = _controller.text;
-    FocusScope.of(context).unfocus();
     TextInput.finishAutofillContext(shouldSave: true);
     _historyRepository.addToHistory(widget.storageKey, currentValue, maxItems: widget.maxItems);
+  }
+
+  void _handleSubmit() {
+    FocusScope.of(context).unfocus();
+    if (widget.controller == null) _saveToHistory();
     widget.onSubmit?.call();
+  }
+
+  void _handleSelection(String selection) {
+    _controller.text = selection;
+    widget.onChanged?.call(selection);
+  }
+
+  void _onInternalFieldSubmitted(VoidCallback onFieldSubmitted) {
+    onFieldSubmitted();
+    _handleSubmit();
   }
 
   @override
@@ -111,59 +154,51 @@ class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
       textEditingController: _controller,
       focusNode: _focusNode,
       optionsBuilder: _getSuggestions,
-      onSelected: (String selection) {
-        _controller.text = selection;
-        widget.onChanged?.call(selection);
-      },
+      onSelected: _handleSelection,
       fieldViewBuilder:
           (
             BuildContext context,
             TextEditingController textEditingController,
             FocusNode focusNode,
             VoidCallback onFieldSubmitted,
-          ) {
-            return AutofillGroup(
-              child: TextFormField(
-                controller: textEditingController,
-                focusNode: focusNode,
-                enabled: widget.enabled,
-                decoration: InputDecoration(
-                  labelText: widget.labelText,
-                  helperText: '',
-                  errorText: widget.errorText,
-                  errorMaxLines: 3,
-                ),
-                keyboardType: widget.keyboardType,
-                textInputAction: widget.textInputAction,
-                autofillHints: widget.autofillHints,
-                autocorrect: false,
-                onChanged: widget.onChanged,
-                onFieldSubmitted: (_) {
-                  onFieldSubmitted();
-                  _handleSubmit();
-                },
+          ) => AutofillGroup(
+            child: TextFormField(
+              controller: textEditingController,
+              focusNode: focusNode,
+              enabled: widget.enabled,
+              decoration: InputDecoration(
+                labelText: widget.labelText,
+                helperText: '',
+                errorText: widget.errorText,
+                errorMaxLines: 3,
               ),
-            );
-          },
-      optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Card(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 240),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: options.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final String option = options.elementAt(index);
-                  return ListTile(dense: true, title: Text(option), onTap: () => onSelected(option));
-                },
+              keyboardType: widget.keyboardType,
+              textInputAction: widget.textInputAction,
+              autofillHints: widget.autofillHints,
+              autocorrect: false,
+              onChanged: widget.onChanged,
+              onFieldSubmitted: (_) => _onInternalFieldSubmitted(onFieldSubmitted),
+            ),
+          ),
+      optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<String> onSelected, Iterable<String> options) =>
+          Align(
+            alignment: Alignment.topLeft,
+            child: Card(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 240),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: options.length,
+                  itemBuilder: (BuildContext context, int index) => ListTile(
+                    dense: true,
+                    title: Text(options.elementAt(index)),
+                    onTap: () => onSelected(options.elementAt(index)),
+                  ),
+                ),
               ),
             ),
           ),
-        );
-      },
     );
   }
 }
