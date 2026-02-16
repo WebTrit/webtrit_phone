@@ -485,8 +485,14 @@ abstract final class SystemNotificationsMapper {
     AppConfig appConfig,
     FeatureOverrides featureOverrides,
   ) {
+    final supportedFeature = appConfig.supported.whereType<SupportedSystemNotifications>().firstOrNull;
+
+    // TODO: Migrate client configurations first before fully removing this property.
+    // ignore: deprecated_member_use_from_same_package, deprecated_member_use
+    final baseEnabled = supportedFeature?.enabled ?? appConfig.mainConfig.systemNotificationsEnabled;
+
     // Apply remote overrides
-    final isEnabled = featureOverrides.isSystemNotificationsEnabled ?? appConfig.mainConfig.systemNotificationsEnabled;
+    final isEnabled = featureOverrides.isSystemNotificationsEnabled ?? baseEnabled;
 
     return SystemNotificationsConfig(
       systemNotificationsSupport: isEnabled && coreSupport.supportsSystemNotifications,
@@ -499,8 +505,14 @@ abstract final class SystemNotificationsMapper {
 abstract final class SipPresenceMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SipPresenceConfig].
   static SipPresenceConfig map(CoreSupport coreSupport, AppConfig appConfig, FeatureOverrides featureOverrides) {
+    final supportedFeature = appConfig.supported.whereType<SupportedSipPresence>().firstOrNull;
+
+    // TODO: Migrate client configurations first before fully removing this property.
+    // ignore: deprecated_member_use_from_same_package, deprecated_member_use
+    final baseEnabled = supportedFeature?.enabled ?? appConfig.mainConfig.sipPresenceEnabled;
+
     // Apply remote overrides
-    final isEnabled = featureOverrides.isSipPresenceEnabled ?? appConfig.mainConfig.sipPresenceEnabled;
+    final isEnabled = featureOverrides.isSipPresenceEnabled ?? baseEnabled;
     final coreSupportEnabled = coreSupport.supportsSipPresence;
 
     return SipPresenceConfig(sipPresenceSupport: isEnabled && coreSupportEnabled);

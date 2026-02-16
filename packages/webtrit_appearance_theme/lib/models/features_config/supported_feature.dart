@@ -19,5 +19,9 @@ sealed class SupportedFeature with _$SupportedFeature {
   /// Defaults to 15 seconds.
   const factory SupportedFeature.monitorConfig({@Default(15) int checkIntervalSec}) = SupportedMonitorConfig;
 
+  const factory SupportedFeature.systemNotifications({@Default(true) bool enabled}) = SupportedSystemNotifications;
+
+  const factory SupportedFeature.sipPresence({@Default(false) bool enabled}) = SupportedSipPresence;
+
   factory SupportedFeature.fromJson(Map<String, Object?> json) => _$SupportedFeatureFromJson(json);
 }
