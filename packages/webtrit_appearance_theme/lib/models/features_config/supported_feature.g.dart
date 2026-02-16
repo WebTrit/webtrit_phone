@@ -48,3 +48,25 @@ Map<String, dynamic> _$SupportedMonitorConfigToJson(
   'checkIntervalSec': instance.checkIntervalSec,
   'type': instance.$type,
 };
+
+SupportedSystemNotifications _$SupportedSystemNotificationsFromJson(
+  Map<String, dynamic> json,
+) => SupportedSystemNotifications(
+  enabled: json['enabled'] as bool? ?? true,
+  $type: json['type'] as String?,
+);
+
+Map<String, dynamic> _$SupportedSystemNotificationsToJson(
+  SupportedSystemNotifications instance,
+) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};
+
+SupportedSipPresence _$SupportedSipPresenceFromJson(
+  Map<String, dynamic> json,
+) => SupportedSipPresence(
+  enabled: json['enabled'] as bool? ?? false,
+  $type: json['type'] as String?,
+);
+
+Map<String, dynamic> _$SupportedSipPresenceToJson(
+  SupportedSipPresence instance,
+) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};
