@@ -134,7 +134,7 @@ class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
 
   void _handleSubmit() {
     FocusScope.of(context).unfocus();
-    _saveToHistory();
+    if (widget.controller == null) _saveToHistory();
     widget.onSubmit?.call();
   }
 
