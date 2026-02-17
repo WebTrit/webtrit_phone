@@ -5,7 +5,9 @@ import 'package:logging/logging.dart';
 
 enum RtpDirection {
   inbound('inbound-rtp'),
-  outbound('outbound-rtp');
+  outbound('outbound-rtp'),
+  remoteInbound('remote-inbound-rtp'),
+  remoteOutbound('remote-outbound-rtp');
 
   const RtpDirection(this.value);
 
@@ -154,6 +156,10 @@ class RtpTrafficMonitor {
       (RtpDirection.inbound, _) => ('bytesReceived', null),
       (RtpDirection.outbound, MediaKind.video) => ('bytesSent', 'framesEncoded'),
       (RtpDirection.outbound, _) => ('bytesSent', null),
+      (RtpDirection.remoteInbound, MediaKind.video) => ('bytesReceived', 'framesDecoded'),
+      (RtpDirection.remoteInbound, _) => ('bytesReceived', null),
+      (RtpDirection.remoteOutbound, MediaKind.video) => ('bytesSent', 'framesEncoded'),
+      (RtpDirection.remoteOutbound, _) => ('bytesSent', null),
     };
 
     final currentBytes = _safeParseNum(report.values[byteKey]);
