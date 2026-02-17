@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../extensions/extensions.dart';
 import '../bloc/network_cubit.dart';
+import '../models/incoming_call_type_model.dart';
 import '../widgets/widgets.dart';
 
 class NetworkScreen extends StatefulWidget {
@@ -44,20 +46,26 @@ class _NetworkScreenState extends State<NetworkScreen> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: state.incomingCallTypeModels.length,
-                  itemBuilder: (context, index) {
-                    final item = state.incomingCallTypeModels[index];
-                    return ListTile(
-                      selected: item.selected,
-                      title: Text(item.incomingCallType.titleL10n(context)),
-                      trailing: InfoTooltip(message: item.incomingCallType.descriptionL10n(context)),
-                      leading: Check(selected: item.selected),
-                      onTap: () => _cubit.selectIncomingCallType(item),
-                    );
+                RadioGroup<IncomingCallTypeModel?>(
+                  groupValue: state.incomingCallTypeModels.firstWhereOrNull((value) => value.selected),
+                  onChanged: (value) {
+                    if (value == null) return;
+
+                    _cubit.selectIncomingCallType(value);
                   },
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: state.incomingCallTypeModels.length,
+                    itemBuilder: (context, index) {
+                      final item = state.incomingCallTypeModels[index];
+                      return RadioListTile<IncomingCallTypeModel?>(
+                        value: item,
+                        title: Text(item.incomingCallType.titleL10n(context)),
+                        secondary: InfoTooltip(message: item.incomingCallType.descriptionL10n(context)),
+                      );
+                    },
+                  ),
                 ),
                 ListTile(
                   title: Text(
@@ -66,8 +74,12 @@ class _NetworkScreenState extends State<NetworkScreen> {
                   ),
                   trailing: InfoTooltip(message: context.l10n.settings_network_fallbackCalls_description),
                 ),
-                ListTile(
-                  leading: Check(selected: state.smsFallbackEnabled, enabled: _cubit.smsFallbackAvailable),
+                CheckboxListTile(
+                  value: state.smsFallbackEnabled,
+                  enabled: _cubit.smsFallbackAvailable,
+                  controlAffinity: ListTileControlAffinity.leading,
+                  visualDensity: VisualDensity.compact,
+                  onChanged: (value) {},
                   title: Text(
                     context.l10n.settings_network_smsFallback_toggle,
                     style: Theme.of(context).textTheme.titleMedium,

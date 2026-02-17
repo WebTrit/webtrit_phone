@@ -1953,14 +1953,14 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_network_fallbackCalls_description =>
-      'Увімкніть резервний виклик через спеціально сформатоване SMS';
+      'Якщо push-сповіщення про виклик не доходять, застосунок отримає спеціальне SMS та покаже екран вхідного дзвінка.';
 
   @override
   String get settings_network_fallbackCalls_title => 'Резервні вхідні дзвінки';
 
   @override
   String get settings_network_incomingCallType_pushNotification_description =>
-      'Коли застосунок не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер <brand> надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає застосунок для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.';
+      'Коли застосунок не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає застосунок для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.';
 
   @override
   String get settings_network_incomingCallType_pushNotification_title => 'Push-сповіщення';
@@ -1973,10 +1973,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_network_incomingCallType_socket_title => 'Постійне підключення до сервера';
 
   @override
-  String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
+  String get settings_network_incomingCallType_title => 'Отримання вхідних дзвінків';
 
   @override
-  String get settings_network_smsFallback_toggle => 'Резерв через SMS';
+  String get settings_network_smsFallback_toggle => 'SMS як резервний канал';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'кадрів: ';

@@ -1540,7 +1540,7 @@
   "@settings_LogoutConfirmDialog_title": {},
   "settings_missingMicrophoneIndicator_title": "Autorizzazione microfono mancante. Impossibile effettuare chiamate.",
   "@settings_missingMicrophoneIndicator_title": {},
-  "settings_network_fallbackCalls_description": "Abilita l'attivazione delle chiamate in entrata di riserva tramite SMS formattati appositamente",
+  "settings_network_fallbackCalls_description": "Se le notifiche push relative alle chiamate non arrivano, l'applicazione riceverà un SMS speciale e mostrerà la schermata delle chiamate in arrivo.",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"
   },
@@ -1556,9 +1556,9 @@
   "@settings_network_incomingCallType_socket_description": {},
   "settings_network_incomingCallType_socket_title": "Connessione Persistente al Server",
   "@settings_network_incomingCallType_socket_title": {},
-  "settings_network_incomingCallType_title": "Tipo di chiamata in entrata",
+  "settings_network_incomingCallType_title": "Ricezione delle chiamate in entrata",
   "@settings_network_incomingCallType_title": {},
-  "settings_network_smsFallback_toggle": "Riserva tramite SMS",
+  "settings_network_smsFallback_toggle": "SMS come canale di riserva",
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },
