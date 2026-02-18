@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // L10nMapperGenerator
@@ -29,17 +29,41 @@ extension AppLocalizationsExtension on AppLocalizations {
 }
 
 class L10nHelper {
-  static String parseL10n(
+  // Cache to store localization maps per locale
+  static final Map<String, Map<String, dynamic>> _cache = {};
+
+  static String? parseL10n(
     AppLocalizations localizations,
     String translationKey, {
     List<Object>? arguments,
   }) {
-    const mapper = AppLocalizationsMapper();
-    final object = mapper.toLocalizationMap(localizations)[translationKey];
+    // Get or create cached map for this locale
+    final localeName = localizations.localeName;
+    final cachedMap = _cache[localeName];
+
+    final map =
+        cachedMap ??
+        () {
+          const mapper = AppLocalizationsMapper();
+          final newMap = mapper.toLocalizationMap(localizations);
+          _cache[localeName] = newMap;
+          return newMap;
+        }();
+
+    final object = map[translationKey];
     if (object is String || object == null) return object;
     assert(arguments != null, 'Arguments should not be null!');
     assert(arguments!.isNotEmpty, 'Arguments should not be empty!');
     return Function.apply(object, arguments);
+  }
+
+  /// Clear the cache for a specific locale or all locales
+  static void clearCache([String? localeName]) {
+    if (localeName != null) {
+      _cache.remove(localeName);
+    } else {
+      _cache.clear();
+    }
   }
 }
 
@@ -984,18 +1008,28 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_preset,
       'settings_encoding_Section_preset_balance':
           localizations.settings_encoding_Section_preset_balance,
+      'settings_encoding_Section_preset_balance_tooltip':
+          localizations.settings_encoding_Section_preset_balance_tooltip,
       'settings_encoding_Section_preset_bypass':
           localizations.settings_encoding_Section_preset_bypass,
+      'settings_encoding_Section_preset_bypass_tooltip':
+          localizations.settings_encoding_Section_preset_bypass_tooltip,
       'settings_encoding_Section_preset_custom':
           localizations.settings_encoding_Section_preset_custom,
+      'settings_encoding_Section_preset_custom_tooltip':
+          localizations.settings_encoding_Section_preset_custom_tooltip,
       'settings_encoding_Section_preset_default':
           localizations.settings_encoding_Section_preset_default,
+      'settings_encoding_Section_preset_default_tooltip':
+          localizations.settings_encoding_Section_preset_default_tooltip,
       'settings_encoding_Section_preset_eco':
           localizations.settings_encoding_Section_preset_eco,
-      'settings_encoding_Section_preset_full_flex':
-          localizations.settings_encoding_Section_preset_full_flex,
+      'settings_encoding_Section_preset_eco_tooltip':
+          localizations.settings_encoding_Section_preset_eco_tooltip,
       'settings_encoding_Section_preset_quality':
           localizations.settings_encoding_Section_preset_quality,
+      'settings_encoding_Section_preset_quality_tooltip':
+          localizations.settings_encoding_Section_preset_quality_tooltip,
       'settings_encoding_Section_preset_title':
           localizations.settings_encoding_Section_preset_title,
       'settings_encoding_Section_preset_tooltip':

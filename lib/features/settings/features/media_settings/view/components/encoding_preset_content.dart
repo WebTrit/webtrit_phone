@@ -28,7 +28,6 @@ class EncodingPresetContent extends StatelessWidget {
                   EncodingPreset.eco => context.l10n.settings_encoding_Section_preset_eco,
                   EncodingPreset.balance => context.l10n.settings_encoding_Section_preset_balance,
                   EncodingPreset.quality => context.l10n.settings_encoding_Section_preset_quality,
-                  EncodingPreset.fullFlex => context.l10n.settings_encoding_Section_preset_full_flex,
                   EncodingPreset.custom => context.l10n.settings_encoding_Section_preset_custom,
                   EncodingPreset.bypass => context.l10n.settings_encoding_Section_preset_bypass,
                 });
@@ -36,6 +35,16 @@ class EncodingPresetContent extends StatelessWidget {
               options: EncodingPreset.values,
               selected: encodingPreset,
               onSelect: (option) => cubit.setEncodingPreset(option),
+              buildOptionTooltipMessage: (option) {
+                return switch (option) {
+                  null => context.l10n.settings_encoding_Section_preset_default_tooltip,
+                  EncodingPreset.eco => context.l10n.settings_encoding_Section_preset_eco_tooltip,
+                  EncodingPreset.balance => context.l10n.settings_encoding_Section_preset_balance_tooltip,
+                  EncodingPreset.quality => context.l10n.settings_encoding_Section_preset_quality_tooltip,
+                  EncodingPreset.custom => context.l10n.settings_encoding_Section_preset_custom_tooltip,
+                  EncodingPreset.bypass => context.l10n.settings_encoding_Section_preset_bypass_tooltip,
+                };
+              },
             ),
           ],
         );

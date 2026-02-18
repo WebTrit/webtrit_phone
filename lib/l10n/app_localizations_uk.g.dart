@@ -1783,25 +1783,44 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_preset => 'Налаштування';
 
   @override
-  String get settings_encoding_Section_preset_balance => 'Баланс';
+  String get settings_encoding_Section_preset_balance => 'Збалансований';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Без втручання';
+  String get settings_encoding_Section_preset_balance_tooltip => 'Збалансовує якість дзвінків і використання даних.';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Низька пропускна здатність';
+
+  @override
+  String get settings_encoding_Section_preset_bypass_tooltip =>
+      'Використовує менше інтернет-даних і краще працює при повільному або нестабільному з\'єднанні.';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
 
   @override
-  String get settings_encoding_Section_preset_default => 'Стандарт';
+  String get settings_encoding_Section_preset_custom_tooltip => 'Вручну налаштовуйте параметри якості дзвінка.';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Єко';
+  String get settings_encoding_Section_preset_default => 'Рекомендовано';
 
   @override
-  String get settings_encoding_Section_preset_full_flex => 'Максимум';
+  String get settings_encoding_Section_preset_default_tooltip =>
+      'Стандартні налаштування якості медіа, обрані для цієї програми. Підходить для більшості дзвінків.';
 
   @override
-  String get settings_encoding_Section_preset_quality => 'Якість';
+  String get settings_encoding_Section_preset_eco => 'Режим сумісності';
+
+  @override
+  String get settings_encoding_Section_preset_eco_tooltip =>
+      'Пропускає застосування налаштувань якості медіа та використовує незмінену конфігурацію дзвінка. Допомагає вирішити проблеми сумісності.';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Найкраща якість';
+
+  @override
+  String get settings_encoding_Section_preset_quality_tooltip =>
+      'Забезпечує найкращу якість аудіо та відео. Вимагає швидкого та стабільного інтернет-з\'єднання.';
 
   @override
   String get settings_encoding_Section_preset_title => 'Конфігурації кодування медіа';

@@ -1769,25 +1769,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_preset => 'Preset';
 
   @override
-  String get settings_encoding_Section_preset_balance => 'Balance';
+  String get settings_encoding_Section_preset_balance => 'Balanced';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Bypass';
+  String get settings_encoding_Section_preset_balance_tooltip => 'Balances call quality with data usage.';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Low bandwidth';
+
+  @override
+  String get settings_encoding_Section_preset_bypass_tooltip =>
+      'Uses less internet data and works better on slow or unstable connections.';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Custom';
 
   @override
-  String get settings_encoding_Section_preset_default => 'Default';
+  String get settings_encoding_Section_preset_custom_tooltip => 'Manually adjust call quality settings.';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Eco';
+  String get settings_encoding_Section_preset_default => 'Recommended';
 
   @override
-  String get settings_encoding_Section_preset_full_flex => 'Full Flex';
+  String get settings_encoding_Section_preset_default_tooltip =>
+      'The default media quality settings chosen for this application. Works well for most calls';
 
   @override
-  String get settings_encoding_Section_preset_quality => 'Quality';
+  String get settings_encoding_Section_preset_eco => 'Compatibility mode';
+
+  @override
+  String get settings_encoding_Section_preset_eco_tooltip =>
+      'Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Best quality';
+
+  @override
+  String get settings_encoding_Section_preset_quality_tooltip =>
+      'Provides the best audio and video quality. Requires a fast and stable internet connection.';
 
   @override
   String get settings_encoding_Section_preset_title => 'Media encoding configs';
