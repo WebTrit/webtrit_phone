@@ -157,10 +157,6 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Additional options",
   "@call_settings_additional_options": {},
-  "call_SystemErrorDialog_description": "To resume making calls, a phone restart is required. This will resolve a temporary system error.",
-  "@call_SystemErrorDialog_description": {},
-  "call_SystemErrorDialog_title": "System Error",
-  "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Unregistered",
   "@callStatus_appUnregistered": {
     "description": "Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."
@@ -181,6 +177,10 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Connection established",
   "@callStatus_ready": {},
+  "call_SystemErrorDialog_description": "To resume making calls, a phone restart is required. This will resolve a temporary system error.",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "System Error",
+  "@call_SystemErrorDialog_title": {},
   "call_ThumbnailAvatar_currentlyNoActiveCall": "Currently, there is no active call",
   "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
   "call_videoBackground_actionLabel_disableBlur": "Disable Blur",
@@ -1308,6 +1308,10 @@
   "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
+  "session_Teardown_progressText": "Signing out...",
+  "@session_Teardown_progressText": {
+    "description": "Status message displayed while the application is performing cleanup during the logout process."
+  },
   "settings_AboutText_ApplicationEmbeddedLinks": "Application embedded links",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_AppSessionIdentifier": "Application session identifier",
@@ -1450,6 +1454,8 @@
   "@settings_encoding_Section_preset_eco": {},
   "settings_encoding_Section_preset_eco_tooltip": "Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.",
   "@settings_encoding_Section_preset_eco_tooltip": {},
+  "settings_encoding_Section_preset_full_flex": "Full Flex",
+  "@settings_encoding_Section_preset_full_flex": {},
   "settings_encoding_Section_preset_quality": "Best quality",
   "@settings_encoding_Section_preset_quality": {},
   "settings_encoding_Section_preset_quality_tooltip": "Provides the best audio and video quality. Requires a fast and stable internet connection.",
@@ -1975,9 +1981,5 @@
   "webview_sslError_tryAgain": "Try again",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
-  },
-  "session_Teardown_progressText": "Signing out...",
-  "@session_Teardown_progressText": {
-    "description": "Status message displayed while the application is performing cleanup during the logout process."
   }
 }

@@ -157,10 +157,6 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Opzioni aggiuntive",
   "@call_settings_additional_options": {},
-  "call_SystemErrorDialog_description": "Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.",
-  "@call_SystemErrorDialog_description": {},
-  "call_SystemErrorDialog_title": "Errore di sistema",
-  "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Non registrato",
   "@callStatus_appUnregistered": {
     "description": "Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."
@@ -181,6 +177,10 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Connessione stabilita",
   "@callStatus_ready": {},
+  "call_SystemErrorDialog_description": "Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "Errore di sistema",
+  "@call_SystemErrorDialog_title": {},
   "call_ThumbnailAvatar_currentlyNoActiveCall": "Actualmente, no hay ninguna llamada activa",
   "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
   "call_videoBackground_actionLabel_disableBlur": "Disabilita sfocatura",
@@ -1308,6 +1308,10 @@
   "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Problema con la configurazione del servizio di notifiche push",
   "@sessionStatus_pushNotificationServiceProblem": {},
+  "session_Teardown_progressText": "Disconnessione in corso...",
+  "@session_Teardown_progressText": {
+    "description": "Status message displayed while the application is performing cleanup during the logout process."
+  },
   "settings_AboutText_ApplicationEmbeddedLinks": "Collegamenti incorporati dell'applicazione",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_AppSessionIdentifier": "Identificatore della sessione dell'applicazione",
@@ -1450,6 +1454,8 @@
   "@settings_encoding_Section_preset_eco": {},
   "settings_encoding_Section_preset_eco_tooltip": "Ignora l'applicazione delle impostazioni di qualità multimediale e utilizza una configurazione di chiamata non modificata. Aiuta a risolvere i problemi di compatibilità.",
   "@settings_encoding_Section_preset_eco_tooltip": {},
+  "settings_encoding_Section_preset_full_flex": "Alta fedeltà",
+  "@settings_encoding_Section_preset_full_flex": {},
   "settings_encoding_Section_preset_quality": "Migliore qualità",
   "@settings_encoding_Section_preset_quality": {},
   "settings_encoding_Section_preset_quality_tooltip": "Fornisce la migliore qualità audio e video. Richiede una connessione Internet veloce e stabile.",
@@ -1975,9 +1981,5 @@
   "webview_sslError_tryAgain": "Riprova",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
-  },
-  "session_Teardown_progressText": "Disconnessione in corso...",
-  "@session_Teardown_progressText": {
-    "description": "Messaggio di stato visualizzato durante la pulizia dei dati della sessione."
   }
 }

@@ -459,18 +459,6 @@ abstract class AppLocalizations {
   /// **'Additional options'**
   String get call_settings_additional_options;
 
-  /// No description provided for @call_SystemErrorDialog_description.
-  ///
-  /// In en, this message translates to:
-  /// **'To resume making calls, a phone restart is required. This will resolve a temporary system error.'**
-  String get call_SystemErrorDialog_description;
-
-  /// No description provided for @call_SystemErrorDialog_title.
-  ///
-  /// In en, this message translates to:
-  /// **'System Error'**
-  String get call_SystemErrorDialog_title;
-
   /// Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists.
   ///
   /// In en, this message translates to:
@@ -506,6 +494,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connection established'**
   String get callStatus_ready;
+
+  /// No description provided for @call_SystemErrorDialog_description.
+  ///
+  /// In en, this message translates to:
+  /// **'To resume making calls, a phone restart is required. This will resolve a temporary system error.'**
+  String get call_SystemErrorDialog_description;
+
+  /// No description provided for @call_SystemErrorDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'System Error'**
+  String get call_SystemErrorDialog_title;
 
   /// No description provided for @call_ThumbnailAvatar_currentlyNoActiveCall.
   ///
@@ -2928,6 +2928,12 @@ abstract class AppLocalizations {
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
 
+  /// Status message displayed while the application is performing cleanup during the logout process.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing out...'**
+  String get session_Teardown_progressText;
+
   /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
   ///
   /// In en, this message translates to:
@@ -3353,6 +3359,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.'**
   String get settings_encoding_Section_preset_eco_tooltip;
+
+  /// No description provided for @settings_encoding_Section_preset_full_flex.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Flex'**
+  String get settings_encoding_Section_preset_full_flex;
 
   /// No description provided for @settings_encoding_Section_preset_quality.
   ///
@@ -4391,12 +4403,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get webview_sslError_tryAgain;
-
-  /// Status message displayed while the application is performing cleanup during the logout process.
-  ///
-  /// In en, this message translates to:
-  /// **'Signing out...'**
-  String get session_Teardown_progressText;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

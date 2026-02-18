@@ -235,13 +235,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_settings_additional_options => 'Additional options';
 
   @override
-  String get call_SystemErrorDialog_description =>
-      'To resume making calls, a phone restart is required. This will resolve a temporary system error.';
-
-  @override
-  String get call_SystemErrorDialog_title => 'System Error';
-
-  @override
   String get callStatus_appUnregistered => 'Unregistered';
 
   @override
@@ -258,6 +251,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Connection established';
+
+  @override
+  String get call_SystemErrorDialog_description =>
+      'To resume making calls, a phone restart is required. This will resolve a temporary system error.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'System Error';
 
   @override
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Currently, there is no active call';
@@ -1575,6 +1575,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
 
   @override
+  String get session_Teardown_progressText => 'Signing out...';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Application embedded links';
 
   @override
@@ -1800,6 +1803,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settings_encoding_Section_preset_eco_tooltip =>
       'Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Full Flex';
 
   @override
   String get settings_encoding_Section_preset_quality => 'Best quality';
@@ -2368,7 +2374,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Try again';
-
-  @override
-  String get session_Teardown_progressText => 'Signing out...';
 }

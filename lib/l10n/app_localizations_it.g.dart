@@ -237,13 +237,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_settings_additional_options => 'Opzioni aggiuntive';
 
   @override
-  String get call_SystemErrorDialog_description =>
-      'Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.';
-
-  @override
-  String get call_SystemErrorDialog_title => 'Errore di sistema';
-
-  @override
   String get callStatus_appUnregistered => 'Non registrato';
 
   @override
@@ -260,6 +253,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Connessione stabilita';
+
+  @override
+  String get call_SystemErrorDialog_description =>
+      'Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'Errore di sistema';
 
   @override
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Actualmente, no hay ninguna llamada activa';
@@ -1590,6 +1590,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Problema con la configurazione del servizio di notifiche push';
 
   @override
+  String get session_Teardown_progressText => 'Disconnessione in corso...';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Collegamenti incorporati dell\'applicazione';
 
   @override
@@ -1817,6 +1820,9 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get settings_encoding_Section_preset_eco_tooltip =>
       'Ignora l\'applicazione delle impostazioni di qualità multimediale e utilizza una configurazione di chiamata non modificata. Aiuta a risolvere i problemi di compatibilità.';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Alta fedeltà';
 
   @override
   String get settings_encoding_Section_preset_quality => 'Migliore qualità';
@@ -2392,7 +2398,4 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Riprova';
-
-  @override
-  String get session_Teardown_progressText => 'Disconnessione in corso...';
 }
