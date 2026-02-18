@@ -1777,25 +1777,46 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_preset => 'Preimpostato';
 
   @override
-  String get settings_encoding_Section_preset_balance => 'Bilancia';
+  String get settings_encoding_Section_preset_balance => 'Bilanciato';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Bypass';
+  String get settings_encoding_Section_preset_balance_tooltip =>
+      'Bilancia la qualità delle chiamate con l\'utilizzo dei dati.';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Banda larga ridotta';
+
+  @override
+  String get settings_encoding_Section_preset_bypass_tooltip =>
+      'Utilizza meno dati Internet e funziona meglio con connessioni lente o instabili.';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Costume';
 
   @override
-  String get settings_encoding_Section_preset_default => 'Predefinito';
+  String get settings_encoding_Section_preset_custom_tooltip =>
+      'Regola manualmente le impostazioni di qualità delle chiamate.';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Eco';
+  String get settings_encoding_Section_preset_default => 'Consigliato';
 
   @override
-  String get settings_encoding_Section_preset_full_flex => 'Alta fedeltà';
+  String get settings_encoding_Section_preset_default_tooltip =>
+      'Impostazioni predefinite della qualità multimediale scelte per questa applicazione. Funziona bene per la maggior parte delle chiamate';
 
   @override
-  String get settings_encoding_Section_preset_quality => 'Qualità';
+  String get settings_encoding_Section_preset_eco => 'Modalità compatibilità';
+
+  @override
+  String get settings_encoding_Section_preset_eco_tooltip =>
+      'Ignora l\'applicazione delle impostazioni di qualità multimediale e utilizza una configurazione di chiamata non modificata. Aiuta a risolvere i problemi di compatibilità.';
+
+  @override
+  String get settings_encoding_Section_preset_quality => 'Migliore qualità';
+
+  @override
+  String get settings_encoding_Section_preset_quality_tooltip =>
+      'Fornisce la migliore qualità audio e video. Richiede una connessione Internet veloce e stabile.';
 
   @override
   String get settings_encoding_Section_preset_title => 'Configurazioni di codifica multimediale';

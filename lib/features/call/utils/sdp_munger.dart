@@ -49,7 +49,6 @@ class ModifyWithEncodingSettings implements SDPMunger {
       EncodingPreset.eco => EncodingSettings.eco(),
       EncodingPreset.balance => EncodingSettings.balance(),
       EncodingPreset.quality => EncodingSettings.quality(),
-      EncodingPreset.fullFlex => EncodingSettings.fullFlex(),
       EncodingPreset.custom => _encodingSettingsRepository.getEncodingSettings(),
       EncodingPreset.bypass => EncodingSettings.blank(),
     };

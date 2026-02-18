@@ -3285,14 +3285,26 @@ abstract class AppLocalizations {
   /// No description provided for @settings_encoding_Section_preset_balance.
   ///
   /// In en, this message translates to:
-  /// **'Balance'**
+  /// **'Balanced'**
   String get settings_encoding_Section_preset_balance;
+
+  /// No description provided for @settings_encoding_Section_preset_balance_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Balances call quality with data usage.'**
+  String get settings_encoding_Section_preset_balance_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_bypass.
   ///
   /// In en, this message translates to:
-  /// **'Bypass'**
+  /// **'Low bandwidth'**
   String get settings_encoding_Section_preset_bypass;
+
+  /// No description provided for @settings_encoding_Section_preset_bypass_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses less internet data and works better on slow or unstable connections.'**
+  String get settings_encoding_Section_preset_bypass_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_custom.
   ///
@@ -3300,29 +3312,47 @@ abstract class AppLocalizations {
   /// **'Custom'**
   String get settings_encoding_Section_preset_custom;
 
+  /// No description provided for @settings_encoding_Section_preset_custom_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Manually adjust call quality settings.'**
+  String get settings_encoding_Section_preset_custom_tooltip;
+
   /// No description provided for @settings_encoding_Section_preset_default.
   ///
   /// In en, this message translates to:
-  /// **'Default'**
+  /// **'Recommended'**
   String get settings_encoding_Section_preset_default;
+
+  /// No description provided for @settings_encoding_Section_preset_default_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'The default media quality settings chosen for this application. Works well for most calls'**
+  String get settings_encoding_Section_preset_default_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_eco.
   ///
   /// In en, this message translates to:
-  /// **'Eco'**
+  /// **'Compatibility mode'**
   String get settings_encoding_Section_preset_eco;
 
-  /// No description provided for @settings_encoding_Section_preset_full_flex.
+  /// No description provided for @settings_encoding_Section_preset_eco_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Full Flex'**
-  String get settings_encoding_Section_preset_full_flex;
+  /// **'Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.'**
+  String get settings_encoding_Section_preset_eco_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_quality.
   ///
   /// In en, this message translates to:
-  /// **'Quality'**
+  /// **'Best quality'**
   String get settings_encoding_Section_preset_quality;
+
+  /// No description provided for @settings_encoding_Section_preset_quality_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Provides the best audio and video quality. Requires a fast and stable internet connection.'**
+  String get settings_encoding_Section_preset_quality_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_title.
   ///
