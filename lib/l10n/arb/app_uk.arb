@@ -157,10 +157,6 @@
   "@callPullBadge_pickupButtonTitle": {},
   "call_settings_additional_options": "Додаткові параметри",
   "@call_settings_additional_options": {},
-  "call_SystemErrorDialog_description": "Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.",
-  "@call_SystemErrorDialog_description": {},
-  "call_SystemErrorDialog_title": "Системна помилка",
-  "@call_SystemErrorDialog_title": {},
   "callStatus_appUnregistered": "Незареєстровано",
   "@callStatus_appUnregistered": {
     "description": "Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."
@@ -181,6 +177,10 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Підключення встановлено",
   "@callStatus_ready": {},
+  "call_SystemErrorDialog_description": "Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "Системна помилка",
+  "@call_SystemErrorDialog_title": {},
   "call_ThumbnailAvatar_currentlyNoActiveCall": "Зараз немає активних дзвінків",
   "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
   "call_videoBackground_actionLabel_disableBlur": "Вимкнути розмиття",
@@ -1308,6 +1308,10 @@
   "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Проблема з налаштуванням служби пуш-сповіщень",
   "@sessionStatus_pushNotificationServiceProblem": {},
+  "session_Teardown_progressText": "Вихід із системи...",
+  "@session_Teardown_progressText": {
+    "description": "Status message displayed while the application is performing cleanup during the logout process."
+  },
   "settings_AboutText_ApplicationEmbeddedLinks": "Вбудовані посилання застосунку",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_AppSessionIdentifier": "Ідентифікатор сесії застосунку",
@@ -1450,6 +1454,8 @@
   "@settings_encoding_Section_preset_eco": {},
   "settings_encoding_Section_preset_eco_tooltip": "Пропускає застосування налаштувань якості медіа та використовує незмінену конфігурацію дзвінка. Допомагає вирішити проблеми сумісності.",
   "@settings_encoding_Section_preset_eco_tooltip": {},
+  "settings_encoding_Section_preset_full_flex": "Максимум",
+  "@settings_encoding_Section_preset_full_flex": {},
   "settings_encoding_Section_preset_quality": "Найкраща якість",
   "@settings_encoding_Section_preset_quality": {},
   "settings_encoding_Section_preset_quality_tooltip": "Забезпечує найкращу якість аудіо та відео. Вимагає швидкого та стабільного інтернет-з'єднання.",
@@ -1975,9 +1981,5 @@
   "webview_sslError_tryAgain": "Спробувати ще раз",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
-  },
-  "session_Teardown_progressText": "Вихід із системи...",
-  "@session_Teardown_progressText": {
-    "description": "Статусне повідомлення під час очищення даних сесії."
   }
 }

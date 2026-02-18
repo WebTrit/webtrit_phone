@@ -244,13 +244,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_settings_additional_options => 'Додаткові параметри';
 
   @override
-  String get call_SystemErrorDialog_description =>
-      'Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.';
-
-  @override
-  String get call_SystemErrorDialog_title => 'Системна помилка';
-
-  @override
   String get callStatus_appUnregistered => 'Незареєстровано';
 
   @override
@@ -267,6 +260,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get callStatus_ready => 'Підключення встановлено';
+
+  @override
+  String get call_SystemErrorDialog_description =>
+      'Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'Системна помилка';
 
   @override
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Зараз немає активних дзвінків';
@@ -1589,6 +1589,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
 
   @override
+  String get session_Teardown_progressText => 'Вихід із системи...';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Вбудовані посилання застосунку';
 
   @override
@@ -1814,6 +1817,9 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get settings_encoding_Section_preset_eco_tooltip =>
       'Пропускає застосування налаштувань якості медіа та використовує незмінену конфігурацію дзвінка. Допомагає вирішити проблеми сумісності.';
+
+  @override
+  String get settings_encoding_Section_preset_full_flex => 'Максимум';
 
   @override
   String get settings_encoding_Section_preset_quality => 'Найкраща якість';
@@ -2388,7 +2394,4 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Спробувати ще раз';
-
-  @override
-  String get session_Teardown_progressText => 'Вихід із системи...';
 }
