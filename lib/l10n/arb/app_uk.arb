@@ -1554,7 +1554,7 @@
   "@settings_LogoutConfirmDialog_title": {},
   "settings_missingMicrophoneIndicator_title": "Відсутній дозвіл на використання мікрофона. Неможливо здійснювати дзвінки.",
   "@settings_missingMicrophoneIndicator_title": {},
-  "settings_network_fallbackCalls_description": "Увімкніть резервний виклик через спеціально сформатоване SMS",
+  "settings_network_fallbackCalls_description": "Якщо push-сповіщення про виклик не доходять, застосунок отримає спеціальне SMS та покаже екран вхідного дзвінка.",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"
   },
@@ -1562,7 +1562,7 @@
   "@settings_network_fallbackCalls_title": {
     "description": "Title for fallback incoming calls section"
   },
-  "settings_network_incomingCallType_pushNotification_description": "Коли застосунок не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер <brand> надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає застосунок для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.",
+  "settings_network_incomingCallType_pushNotification_description": "Коли застосунок не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає застосунок для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.",
   "@settings_network_incomingCallType_pushNotification_description": {},
   "settings_network_incomingCallType_pushNotification_title": "Push-сповіщення",
   "@settings_network_incomingCallType_pushNotification_title": {},
@@ -1570,9 +1570,9 @@
   "@settings_network_incomingCallType_socket_description": {},
   "settings_network_incomingCallType_socket_title": "Постійне підключення до сервера",
   "@settings_network_incomingCallType_socket_title": {},
-  "settings_network_incomingCallType_title": "Тип вхідного дзвінка",
+  "settings_network_incomingCallType_title": "Отримання вхідних дзвінків",
   "@settings_network_incomingCallType_title": {},
-  "settings_network_smsFallback_toggle": "Резерв через SMS",
+  "settings_network_smsFallback_toggle": "SMS як резервний канал",
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },

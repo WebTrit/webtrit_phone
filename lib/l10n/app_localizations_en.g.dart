@@ -1964,7 +1964,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_network_fallbackCalls_description =>
-      'Enable fallback incoming call triggering via specially formatted SMS';
+      'If push notifications about calls are not received, the app will receive a special SMS and display the incoming call screen.';
 
   @override
   String get settings_network_fallbackCalls_title => 'Fallback Incoming Calls';
@@ -1984,10 +1984,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_network_incomingCallType_socket_title => 'Persistent Connection to the Server';
 
   @override
-  String get settings_network_incomingCallType_title => 'Incoming Call Type';
+  String get settings_network_incomingCallType_title => 'Incoming Call Delivery';
 
   @override
-  String get settings_network_smsFallback_toggle => 'SMS Fallback';
+  String get settings_network_smsFallback_toggle => 'SMS as a backup channel';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'frames: ';

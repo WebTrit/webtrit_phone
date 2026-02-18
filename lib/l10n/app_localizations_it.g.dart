@@ -1982,7 +1982,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_network_fallbackCalls_description =>
-      'Abilita l\'attivazione delle chiamate in entrata di riserva tramite SMS formattati appositamente';
+      'Se le notifiche push relative alle chiamate non arrivano, l\'applicazione riceverà un SMS speciale e mostrerà la schermata delle chiamate in arrivo.';
 
   @override
   String get settings_network_fallbackCalls_title => 'Chiamate in entrata di riserva';
@@ -2002,10 +2002,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_network_incomingCallType_socket_title => 'Connessione Persistente al Server';
 
   @override
-  String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
+  String get settings_network_incomingCallType_title => 'Ricezione delle chiamate in entrata';
 
   @override
-  String get settings_network_smsFallback_toggle => 'Riserva tramite SMS';
+  String get settings_network_smsFallback_toggle => 'SMS come canale di riserva';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'cornici: ';

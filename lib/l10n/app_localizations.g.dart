@@ -3669,7 +3669,7 @@ abstract class AppLocalizations {
   /// Tooltip description for fallback SMS-based call trigger
   ///
   /// In en, this message translates to:
-  /// **'Enable fallback incoming call triggering via specially formatted SMS'**
+  /// **'If push notifications about calls are not received, the app will receive a special SMS and display the incoming call screen.'**
   String get settings_network_fallbackCalls_description;
 
   /// Title for fallback incoming calls section
@@ -3705,13 +3705,13 @@ abstract class AppLocalizations {
   /// No description provided for @settings_network_incomingCallType_title.
   ///
   /// In en, this message translates to:
-  /// **'Incoming Call Type'**
+  /// **'Incoming Call Delivery'**
   String get settings_network_incomingCallType_title;
 
   /// Toggle label for enabling SMS fallback
   ///
   /// In en, this message translates to:
-  /// **'SMS Fallback'**
+  /// **'SMS as a backup channel'**
   String get settings_network_smsFallback_toggle;
 
   /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
