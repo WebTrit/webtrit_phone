@@ -61,7 +61,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     return signalingManager.dispose();
   }
 
-  void _onHangupCall(HangupEvent event, NewCall call) async {
+  void _onHangupCall(CallEvent event, NewCall call) async {
     logger.info('Hangup event: $event');
 
     await _showMissedCallNotification(event, call);
@@ -77,7 +77,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  Future<void> _showMissedCallNotification(HangupEvent event, NewCall call) async {
+  Future<void> _showMissedCallNotification(CallEvent event, NewCall call) async {
     try {
       await localPushRepository.displayPush(
         AppLocalPush(

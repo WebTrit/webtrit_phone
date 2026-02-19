@@ -41,7 +41,7 @@ class SignalingManager {
   final String token;
 
   final void Function(IncomingCallEvent)? onIncomingCall;
-  final void Function(HangupEvent, NewCall call)? onHangupCall;
+  final void Function(CallEvent, NewCall call)? onHangupCall;
   final void Function(UnregisteredEvent)? onUnregistered;
   final void Function(List<Line>)? onHandshake;
   final void Function(Object error, StackTrace? stack)? onError;
@@ -128,6 +128,8 @@ class SignalingManager {
 
   void _monitorConnectivity() {
     _logger.info('Monitoring connectivity...');
+
+    _connectivitySubscription?.cancel();
 
     Timer? connectivityTimeout;
     int connectivityNoneCounter = 0;
@@ -267,6 +269,19 @@ class SignalingManager {
           number: incomingEventLog?.caller ?? 'unknown',
           video: incomingEventLog?.isVideo ?? false,
           username: incomingEventLog?.callerDisplayName ?? 'Unknown',
+          createdTime: _initialConnectionTime,
+          acceptedTime: null,
+          hungUpTime: DateTime.now(),
+        ));
+        break;
+      case MissedCallEvent():
+        _logger.info('Missed call event: $_lines');
+
+        onHangupCall?.call(event, (
+          direction: CallDirection.incoming,
+          number: event.caller,
+          video: false,
+          username: event.callerDisplayName ?? event.caller,
           createdTime: _initialConnectionTime,
           acceptedTime: null,
           hungUpTime: DateTime.now(),
