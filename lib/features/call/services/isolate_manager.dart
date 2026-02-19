@@ -30,6 +30,8 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   late final SignalingManager signalingManager;
 
+  Completer<void>? _pendingSettlement;
+
   /// Abstract methods to abstract the difference between services
   Future<void> endCallOnService(String callId);
 
@@ -58,15 +60,29 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   }
 
   Future<void> close() async {
+    final settlement = _pendingSettlement;
+    if (settlement != null) {
+      try {
+        await settlement.future.timeout(const Duration(seconds: 10));
+      } catch (_) {
+        logger.warning('Timed out waiting for call settlement before close');
+      }
+    }
     return signalingManager.dispose();
   }
 
   void _onHangupCall(CallEvent event, NewCall call) async {
     logger.info('Hangup event: $event');
 
-    await _showMissedCallNotification(event, call);
-    await _logCall(call);
-    await endCallOnService(event.callId);
+    final settlement = _pendingSettlement ??= Completer<void>();
+    try {
+      await _showMissedCallNotification(event, call);
+      await _logCall(call);
+      await endCallOnService(event.callId);
+    } finally {
+      if (!settlement.isCompleted) settlement.complete();
+      _pendingSettlement = null;
+    }
   }
 
   Future<void> _logCall(NewCall call) async {
@@ -117,10 +133,13 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   @override
   void performEndCall(String callId) async {
+    _pendingSettlement ??= Completer<void>();
     try {
       await signalingManager.declineCall(callId);
     } catch (e) {
       logger.severe(e);
+      _pendingSettlement?.complete();
+      _pendingSettlement = null;
     }
   }
 }
