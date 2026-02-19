@@ -658,4 +658,32 @@ class WebtritApiClient {
 
     return CdrHistoryResponse.fromJson(responseJson as Map<String, dynamic>);
   }
+
+  Future<CallerIdSettings> getCallerIdSettings(String token, {RequestOptions options = const RequestOptions()}) async {
+    final responseJson = await _httpClientExecuteGet(
+      ['user', 'settings', 'caller-id'],
+      null,
+      token,
+      requestOptions: options,
+    );
+
+    return CallerIdSettings.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<CallerIdSettings> updateCallerIdSettings(
+    String token,
+    CallerIdSettings settings, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final requestJson = settings.toJson();
+
+    final responseJson = await _httpClientExecutePost(
+      ['user', 'settings', 'caller-id'],
+      null,
+      token,
+      requestJson,
+      options: options,
+    );
+    return CallerIdSettings.fromJson(responseJson as Map<String, dynamic>);
+  }
 }
