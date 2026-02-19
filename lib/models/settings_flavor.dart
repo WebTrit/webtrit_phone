@@ -1,6 +1,7 @@
 enum SettingsFlavor {
   network,
   language,
+  themeMode,
   help,
   terms,
   about,
