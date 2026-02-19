@@ -200,3 +200,30 @@ sync-run-configs:
 
 run-core:
 	$(MAKE) -f makefile.shared run
+
+# ===========================
+#  Copilot Workspace Helpers
+# ===========================
+
+# Branch names used for fixing Copilot automated branches
+OLD_BRANCH ?=
+NEW_BRANCH ?=
+
+.PHONY: rename-copilot-branch fix-copilot-api
+
+## Rename branch locally and remotely (useful for fixing Copilot branches)
+rename-copilot-branch:
+	@if [ -z "$(OLD_BRANCH)" ] || [ -z "$(NEW_BRANCH)" ]; then \
+		echo "Error: OLD_BRANCH and NEW_BRANCH variables are required."; \
+		echo "Example: make rename-copilot-branch OLD_BRANCH=copilot/fix NEW_BRANCH=fix/api"; \
+		exit 1; \
+	fi
+	@echo "Fetching origin..."
+	git fetch origin
+	@echo "Creating and checking out $(NEW_BRANCH) from origin/$(OLD_BRANCH)..."
+	git checkout -b $(NEW_BRANCH) origin/$(OLD_BRANCH)
+	@echo "Pushing $(NEW_BRANCH) to origin..."
+	git push origin -u $(NEW_BRANCH)
+	@echo "Removing $(OLD_BRANCH) from origin..."
+	git push origin --delete $(OLD_BRANCH)
+	@echo "Branch successfully renamed and linked!"
