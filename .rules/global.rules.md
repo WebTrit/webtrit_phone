@@ -71,3 +71,13 @@ comments to describe the sections.
 * **Reusability:** To reduce duplication, sub-features can utilize l10n variables declared in their
   parent/main feature.
 * **Global Terms:** General terms (e.g., Yes, No, Ok, Cancel) can be placed in the global namespace.
+
+## 7. GIT FLOW & CONVENTIONAL COMMITS
+
+* **Branching:** Use specific prefixes: `feature/`, `refactor/`, `fix/`, `chore/`, `build/`,
+  `style/`, `docs/`, `release/`.
+* **Commits:** Strictly follow Conventional Commits.
+    * Allowed types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `style`, `ci`, `perf`,
+      `build`, `revert`.
+    * Example: `feat(ui): implement custom card widget`.
+* **No Cyrillic:** This applies to branch names and commit messages as well. English only.

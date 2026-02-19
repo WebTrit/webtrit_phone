@@ -1,0 +1,58 @@
+name: Git Lint
+
+on:
+  pull_request:
+    branches: [ main, dev, develop ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate Branch Name
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          echo "🔍 Checking branch name: $BRANCH"
+          
+          REGEX="^(feature|refactor|fix|chore|build|style|docs|release)/.+$"
+          
+          if [[ ! "$BRANCH" =~ $REGEX ]]; then
+            echo "❌ Invalid branch name: '$BRANCH'"
+            echo "💡 Use: feature/name, fix/bug-name, etc."
+            exit 1
+          fi
+          echo "✅ Branch name is valid."
+
+      - name: Validate Commit Messages
+        run: |
+          echo "🔍 Checking commit messages in PR..."
+          
+          COMMITS=$(git log --no-merges --pretty=%B origin/${{ github.base_ref }}..HEAD)
+          
+          REGEX="^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\(.+\))?:\ .+"
+          
+          CYRILLIC_REGEX='[а-яА-ЯёЁіІїЇєЄ]'
+
+          while IFS= read -r MSG; do
+            if [ -z "$MSG" ]; then continue; fi
+          
+            echo "💬 Testing: $MSG"
+          
+            if [[ ! "$MSG" =~ $REGEX ]]; then
+              echo "❌ Invalid format: '$MSG'"
+              echo "💡 Use: feat(scope): description"
+              exit 1
+            fi
+          
+            if [[ "$MSG" =~ $CYRILLIC_REGEX ]]; then
+              echo "❌ Cyrillic detected in: '$MSG'"
+              echo "💡 Use English only for commit messages."
+              exit 1
+            fi
+          done <<< "$COMMITS"
+          
+          echo "✅ All commit messages are valid."
