@@ -1,77 +1,77 @@
-# Embedded Resources
+# Embedded Resources Configuration
 
 ## Overview
 
-This documentation describes how to integrate embedded web pages into the **WebTrit Call App** using
-a WebView. These pages can extend the app with client-specific features. Embedded pages are
-configured via `app.embedded.config.json`, and can appear as a bottom menu tab, settings item or a login flow.
+This document describes how to integrate embedded web pages into the **WebTrit Call App**. These
+pages, rendered in a
+`WebView`, can extend the application with client-specific features and are configured in
+`app.embedded.config.json`.
+They can be launched as a bottom menu tab, a settings item, or as part of a custom login flow.
+
+## Table of Contents
+
+- [Resource Definition](#resource-definition)
+    - [Structure](#structure)
+    - [Example](#example)
+- [Data Injection (from App to Web)](#data-injection-from-app-to-web)
+    - [JavaScript Hooks](#javascript-hooks)
+    - [Injection Order & Timing](#injection-order--timing)
+    - [Payload Injection](#payload-injection)
+    - [MediaQuery Injection](#mediaquery-injection)
+    - [Device & App Info Injection](#device--app-info-injection)
+- [JavaScript Channels (from Web to App)](#javascript-channels-from-web-to-app)
+    - [Console Log Capture Channel](#console-log-capture-channel)
+    - [Reload Channel](#reload-channel)
+- [Advanced Features](#advanced-features)
+    - [Connectivity Recovery](#connectivity-recovery)
+    - [External Navigation Protocol](#external-navigation-protocol)
+- [Best Practices](#best-practices)
 
 ---
 
-## Example Embedded Resources Definition
+## Resource Definition
+
+An embedded resource is defined by an object with a unique `id` and a `uri`. It can also include
+configurations for data
+payloads, connectivity, and native UI elements like the toolbar.
+
+### Structure
+
+| Key                       | Type            | Description                                                                                            |
+|---------------------------|-----------------|--------------------------------------------------------------------------------------------------------|
+| `id`                      | `string`        | A unique identifier for the resource.                                                                  |
+| `uri`                     | `string`        | The URL of the web page to load.                                                                       |
+| `type`                    | `string?`       | Optional type specifier (e.g., `terms`).                                                               |
+| `payload`                 | `List<string>?` | A list of data keys to be injected into the page (see [Payload Injection](#payload-injection)).        |
+| `toolbar`                 | `object?`       | Configuration for the native toolbar displayed above the `WebView`.                                    |
+| `reconnectStrategy`       | `string?`       | The strategy for handling network interruptions (see [Connectivity Recovery](#connectivity-recovery)). |
+| `enableConsoleLogCapture` | `bool?`         | If `true`, captures `console.*` messages from the web page.                                            |
+
+### Example
+
+The following demonstrates a list of `embeddedResources`, as it would appear in
+`app.embedded.config.json`.
 
 ```json
 {
   "embeddedResources": [
     {
-      "id": "example_embedded_login",
-      "uri": "https://webtrit-app.web.app/example/example_embedded_login.html",
-      "toolbar": {
-        "titleL10n": "login_requestCredentials_title"
-      }
-    },
-    {
-      "id": "example_embedded_payload_data",
-      "uri": "https://webtrit-app.web.app/example/example_embedded_payload_data.html",
+      "id": "example_spa",
+      "uri": "https://webtrit-app.web.app/example/example_embedded_spa.html",
+      "enableConsoleLogCapture": true,
+      "reconnectStrategy": "notifyOnly",
       "payload": [
-        "coreToken"
+        "coreToken",
+        "userId"
       ]
     },
     {
-      "id": "example_embedded_call",
-      "uri": "https://webtrit-app.web.app/example/example_embedded_call.html"
-    },
-    {
-      "id": "privacy-policy-for-webtrit-app",
+      "id": "privacy-policy",
       "uri": "https://webtrit.com/legal/privacy-policy-for-webtrit-app/",
       "type": "terms",
       "toolbar": {
         "titleL10n": "settings_ListViewTileTitle_termsConditions"
       }
-    },
-    {
-      "id": "example_embedded_registration",
-      "uri": "https://webtrit-app.web.app/example/example_embedded_registration.html",
-      "toolbar": {
-        "titleL10n": "login_requestCredentials_title"
-      }
-    },
-    {
-      "id": "example_embedded_statistics",
-      "uri": "https://webtrit-app.web.app/example/example_embedded_statistics.html",
-      "toolbar": {
-        "titleL10n": "login_requestCredentials_title"
-      }
-    },
-    {
-      "id": "example_embedded_rating",
-      "uri": "https://webtrit-app.web.app/example/example_embedded_rating.html",
-      "toolbar": {
-        "titleL10n": "login_requestCredentials_title"
-      }
-    },
-    {
-      "id": "example_embedded_media_query",
-      "uri": "https://webtrit-app.web.app/example/example_embedded_media_query.html"
-    },
-    {
-      "id": "example_embedded_spa",
-      "uri": "https://webtrit-app.web.app/example/example_embedded_spa.html",
-      "enableConsoleLogCapture": true,
-      "reconnectStrategy": "notifyOnly",
-      "payload": [
-        "coreToken"
-      ]
     }
   ]
 }
@@ -79,23 +79,35 @@ configured via `app.embedded.config.json`, and can appear as a bottom menu tab, 
 
 ---
 
-## Definition of the Embedded Page Resource
+## Data Injection (from App to Web)
 
-```json
-{
-  "id": "example_embedded_payload_data",
-  "uri": "https://webtrit-app.web.app/example/example_embedded_payload_data.html",
-  "payload": [
-    "coreToken"
-  ]
-}
-```
+The application can inject various types of data into a loaded web page, enabling the page to become
+context-aware. This
+is achieved by calling global JavaScript functions (hooks) on the `window` object.
 
----
+### JavaScript Hooks
 
-## Payload Injection
+The web page must implement these global functions to receive data from the app.
 
-The `payload` field defines which dynamic data will be injected into the embedded web page.
+| Function             | Payload Description                          |
+|----------------------|----------------------------------------------|
+| `onPayloadDataReady` | Business-level data like tokens and user ID. |
+| `onMediaQueryReady`  | Device screen metrics and theme info.        |
+| `onDeviceInfoReady`  | Application and device identification data.  |
+
+### Injection Order & Timing
+
+- The app injects data only after the page has loaded successfully, plus a short debounce (~500 ms).
+  No data is injected if the page fails to load.
+- Injections occur in a specific order:
+    1. Console log wrapper (if enabled)
+    2. MediaQuery data
+    3. Device/App info
+    4. Business payload
+
+### Payload Injection
+
+The `payload` field in the resource definition specifies which dynamic business data to inject.
 
 **Supported values**:
 
@@ -103,24 +115,16 @@ The `payload` field defines which dynamic data will be injected into the embedde
 - `coreToken`
 - `externalPageToken`
 
-If any of the requested payload values are unavailable (e.g., `externalPageToken`), they are fetched
-automatically from the server before the page is loaded.
+If a requested value is unavailable (e.g., `externalPageToken`), the app will fetch it from the
+server before loading the page.
 
-### JavaScript Entry Point
-
-Once the page is fully loaded and ready, the app executes JavaScript to deliver the payload. This is
-the single point of integration for web developers:
+**Hook & Example Payload:**
 
 ```javascript
-if (typeof window.onPayloadDataReady === 'function') {
-	window.onPayloadDataReady(payload);
+function onPayloadDataReady(payload) {
+  console.log('Business payload received:', payload);
 }
 ```
-
-The `payload` is a key-value object, passed as the first and only argument to
-`window.onPayloadDataReady`.
-
-### Example Payload
 
 ```json
 {
@@ -134,37 +138,20 @@ The `payload` is a key-value object, passed as the first and only argument to
 }
 ```
 
-### Required Integration by Web Developers
+### MediaQuery Injection
 
-Implement the following function in your embedded page:
+The app injects native context details, allowing the web page to adapt to the device's UI, such as
+safe areas and the
+system theme.
 
-```javascript
-function onPayloadDataReady(payload) {
-	// Handle injected data from the app
-	console.log(payload);
-}
-```
-
----
-
-## MediaQuery Injection
-
-When an embedded page is fully loaded, the app also injects **media query data** from the native
-context. This allows the web page to adjust its layout based on platform-specific UI insets and
-theming (e.g., status bar height, gesture area, dark mode).
-
-### JavaScript Entry Point
+**Hook & Example Payload:**
 
 ```javascript
-if (typeof window.onMediaQueryReady === 'function') {
-	window.onMediaQueryReady(payload);
+function onMediaQueryReady(payload) {
+  document.body.style.paddingTop = `${payload.topSafeInset}px`;
+  document.body.style.paddingBottom = `${payload.bottomSafeInset}px`;
 }
 ```
-
-> **Note:** Earlier docs sometimes referenced the misspelled hook `onMediaQuaryReady`. The correct
-> name is **`onMediaQueryReady`**.
-
-### Example Payload
 
 ```json
 {
@@ -175,238 +162,111 @@ if (typeof window.onMediaQueryReady === 'function') {
 }
 ```
 
-- `brightness`: `"light"` or `"dark"` depending on the system theme
-- `devicePixelRatio`: the screen's pixel density
-- `topSafeInset`: top system inset (e.g., status bar or notch)
-- `bottomSafeInset`: bottom system inset (e.g., system gesture area)
+### Device & App Info Injection
 
-### Required Integration by Web Developers
+Injects high-level identifiers for the app and device.
 
-```javascript
-function onMediaQueryReady(payload) {
-	// Apply padding to avoid native UI overlap
-	document.body.style.paddingTop = `${payload.topSafeInset}px`;
-	document.body.style.paddingBottom = `${payload.bottomSafeInset}px`;
-
-	// Optional: adjust theme
-	if (payload.brightness === 'dark') {
-		document.body.style.backgroundColor = '#121212';
-		document.body.style.color = '#ffffff';
-	}
-
-	console.log('MediaQuery info received:', payload);
-}
-```
-
----
-
-## Device / App Info Injection (Optional)
-
-If enabled, the app can inject high-level device/app labels (e.g., app name/version, OS, model,
-store version, tenant/core URL).
-
-### JavaScript Entry Point
+**Hook & Example Payload:**
 
 ```javascript
-if (typeof window.onDeviceInfoReady === 'function') {
-	window.onDeviceInfoReady(payload);
+function onDeviceInfoReady(payload) {
+  console.log('Device info received:', payload);
 }
 ```
-
-### Example (shape may vary per build)
 
 ```json
 {
   "app": "WebTrit Phone",
   "appVersion": "1.8.0",
-  "appSessionIdentifier": "a1b2c3...",
-  "storeVersion": "1.8.0",
-  "packageName": "com.example.webtrit",
-  "buildNumber": "123",
   "manufacturer": "Google",
   "model": "Pixel 7",
   "os": "Android",
   "osVersion": "14",
-  "authorization": "authorized",
-  "embeddedUrls": "https://example.com, https://help.example.com",
-  "coreUrl": "https://core.example.com",
-  "tenantId": "tenant-42"
+  "coreUrl": "https://core.example.com"
 }
 ```
 
 ---
 
-## Injection Order & Timing
+## JavaScript Channels (from Web to App)
 
-- The app waits for **successful page load** and a short debounce (~**500 ms**) to avoid racing with
-  late subresource loads.
-- If load ends with error — **no injection** occurs.
-- **Order of injections** (when enabled):
-    1. Console log wrapper (to capture logs from subsequent injections)
-    2. MediaQuery
-    3. Device/App Info
-    4. Business Payload(s) / Custom payloads
-
----
-
-## JavaScript Channels
-
-JS channels allow the page to **send events to the native app** via
-`window.<ChannelName>.postMessage(...)`. Messages must be JSON strings with fields `event` and (
-optional) `data`:
+JS channels allow the web page to send events to the native app via
+`window.<ChannelName>.postMessage()`. The message
+must be a JSON string with an `event` and an optional `data` field.
 
 ```json
 {
-  "event": "<EVENT_NAME>",
-  "data": {
-  }
+  "event": "EVENT_NAME",
+  "data": {}
 }
 ```
 
 ### Console Log Capture Channel
 
-- **Channel name:** `WebtritConsoleLogChannel`
-- **What it does:** When enabled, the app injects a console wrapper that forwards
-  `console.log/info/warn/error/debug` into the native logs, while preserving them in the browser
-  console.
-- **Event values:** `LOG`, `INFO`, `WARN`, `ERROR`, `DEBUG`
-- **Message format:**
-  ```json
-  { "event": "INFO", "data": { "message": "...", "args": [ ] } }
-  ```
-
-> **How to enable:** per embedded resource set `"enableConsoleLogCapture": true` in the app config.
-
-> **Web page changes required:** **none** — you just keep using `console.*`.
+- **Channel:** `WebtritConsoleLogChannel`
+- **Enablement:** Set `enableConsoleLogCapture: true` in the resource definition.
+- **Description:** Forwards `console.log/info/warn/error/debug` messages to the native logs. No
+  changes are required on the web page; continue using `console` as usual.
 
 ### Reload Channel
 
-- **Channel name:** `WebtritPageReloadChannel`
-- **Supported event:** `reload`
-- **Behavior in the app:** incoming reload requests are debounced (default ~5 s) and rate-limited (
-  default up to 10 reloads per minute).
+- **Channel:** `WebtritPageReloadChannel`
+- **Event:** `reload`
+- **Description:** Allows the web page to request a native reload. The app debounces and rate-limits
+  these requests.
 
-**Web page example:**
+**Example:**
 
 ```javascript
 function requestNativeReload() {
-	const ch = window.WebtritPageReloadChannel || globalThis.WebtritPageReloadChannel;
-	if (ch && typeof ch.postMessage === 'function') {
-		ch.postMessage(JSON.stringify({event: 'reload'}));
-	}
+  if (window.WebtritPageReloadChannel) {
+    window.WebtritPageReloadChannel.postMessage(JSON.stringify({ event: 'reload' }));
+  }
 }
 ```
 
 ---
 
-## Connectivity Recovery Strategies
+## Advanced Features
 
-The embedded WebView integration supports configurable **Reconnect Strategies** via the
-`ReconnectStrategy` enum:
+### Connectivity Recovery
 
-- `none` – no reconnection logic, shows fallback error screen.
-- `notifyOnly` – does not reload the page, but calls `window.onWebTritReconnect?.()` when internet
-  is restored (if the page had loaded successfully at least once).
-- `softReload` – retries `WebView.reload()` until success or max attempts.
-- `hardReload` – reloads the original URI forcibly (`loadRequest(initialUri)`), useful for non-SPA
-  pages.
+The `reconnectStrategy` field in the resource definition controls how the `WebView` handles network
+interruptions.
 
-### When is Error Screen Shown?
+**Strategies:**
 
-- The page has **never** loaded successfully (for any strategy).
-- The strategy is **not** `notifyOnly` and a load fails.
+- `none`: Shows a fallback error screen.
+- `notifyOnly`: (Default) Does not reload. Calls the `window.onWebTritReconnect()` JavaScript hook
+  when connectivity is restored, allowing SPAs to handle reconnection internally.
+- `softReload`: Retries `WebView.reload()`.
+- `hardReload`: Reloads the original URI forcibly.
 
-### JavaScript Reconnect Hook (notifyOnly)
-
-```javascript
-if (typeof window.onWebTritReconnect === 'function') {
-	window.onWebTritReconnect();
-}
-```
-
----
-
-## External Navigation Protocol
-
-To open links **outside of the embedded WebView** (e.g., in the system browser), use an internal
-scheme handled by the app.
-
-### Default Behavior (in-WebView)
-
-```html
-
-<li><a href="https://webtrit.com">Home</a></li>
-```
-
-### External Browser Navigation
-
-```html
-
-<li><a href="app://openInExternalBrowser?url=https://webtrit.com">Home</a></li>
-```
-
-- `app://` — internal instruction to the WebTrit app
-- `openInExternalBrowser` — command that triggers external navigation
-- `url` — target URL to be opened in the browser (must be a valid absolute URL)
-
-**Use Case Example**
-
-```html
-<a href="app://openInExternalBrowser?url=https://www.webtrit.com">Visit Webtrit Website</a>
-```
-
----
-
-## WebView Behavior
-
-- JavaScript is injected **only after** confirming that the WebView has successfully loaded (plus
-  debounce).
-- Errors during load trigger the fallback UI with a reload option.
-
----
-
-## Use Cases
-
-- Custom client dashboards
-- Authorization flows
-- Embedded help pages or forms
-
----
-
-## Security & Robustness Recommendations
-
-- Send only **JSON strings** via JS-channels: `{ "event": "...", "data": { ... } }`.
-- Avoid spamming the `WebtritPageReloadChannel` — excessive requests will be **rate-limited**.
-- Prefer `notifyOnly` for SPA pages to manage your own reconnection logic.
-- Keep to the **correct hook names** (`onMediaQueryReady`, not `onMediaQuaryReady`).
-
----
-
-## Configuration of Reconnect Strategy
-
-To configure which strategy the app should use for your embedded page, add the `reconnectStrategy`
-key to the embedded resource definition:
+To set a strategy, add it to the resource definition:
 
 ```json
 {
-  "id": 2,
-  "uri": "https://example.com",
-  "payload": [
-    "coreToken"
-  ],
-  "reconnectStrategy": "notifyOnly",
-  "enableConsoleLogCapture": true
+  "id": "example_spa",
+  "uri": "...",
+  "reconnectStrategy": "notifyOnly"
 }
 ```
 
-**Possible values:** `"none" | "notifyOnly" | "softReload" | "hardReload"`  
-**Default:** `"notifyOnly"`
+### External Navigation Protocol
+
+To open a link in the system's external browser instead of within the `WebView`, use the `app://`
+custom URL scheme.
+
+- **In-WebView (Standard):** `<a href="https://webtrit.com">Home</a>`
+- **External Browser:** `<a href="app://openInExternalBrowser?url=https://webtrit.com">Home</a>`
 
 ---
 
-## Summary
+## Best Practices
 
-By declaring embedded resources and referencing them in app config, clients can extend the WebTrit
-app with dynamic web content that securely receives contextual data like tokens or user IDs. The app
-ensures robust error handling, retry logic, structured two-way communication via JavaScript hooks
-and channels, and optional console log capture for diagnostics.
+- Always check that JS hooks and channels (`window.on...`, `window.Webtrit...Channel`) exist before
+  using them.
+- Send only valid JSON strings via channels.
+- Use the `notifyOnly` reconnect strategy for Single-Page Applications (SPAs) to manage reconnection
+  state internally.
+- Avoid spamming the `WebtritPageReloadChannel`, as requests are rate-limited.
