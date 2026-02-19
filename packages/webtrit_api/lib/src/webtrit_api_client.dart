@@ -661,7 +661,7 @@ class WebtritApiClient {
 
   Future<CallerIdSettings> getCallerIdSettings(String token, {RequestOptions options = const RequestOptions()}) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'settings', 'caller-id'],
+      ['user', 'preferences', 'caller-id'],
       null,
       token,
       requestOptions: options,
@@ -678,7 +678,7 @@ class WebtritApiClient {
     final requestJson = settings.toJson();
 
     final responseJson = await _httpClientExecutePost(
-      ['user', 'settings', 'caller-id'],
+      ['user', 'preferences', 'caller-id'],
       null,
       token,
       requestJson,
