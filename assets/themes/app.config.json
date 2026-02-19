@@ -2,7 +2,7 @@
   "supported": [
     {
       "type": "themeMode",
-      "mode": "light"
+      "mode": "system"
     },
     {
       "type": "monitorConfig",
@@ -148,6 +148,12 @@
             "type": "language",
             "titleL10n": "settings_ListViewTileTitle_language",
             "icon": "0xe366"
+          },
+          {
+            "enabled": true,
+            "type": "themeMode",
+            "titleL10n": "settings_ListViewTileTitle_themeMode",
+            "icon": "0xe1a9"
           },
           {
             "enabled": false,
