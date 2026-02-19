@@ -47,3 +47,12 @@ Before finalizing a task and creating a Pull Request:
 2. **Verify Logic:** Ensure all multi-line logic in widgets/services is extracted to private
    methods.
 3. **Check Imports:** Ensure imports are grouped and sorted as defined in `.rules/global.rules.md`.
+
+### FORBIDDEN BEHAVIOR
+
+- **DO NOT** use the default `copilot/` prefix for branches. It is strictly forbidden.
+- You MUST only use the prefixes: `feature/`, `refactor/`, `fix/`, `chore/`, `build/`, `style/`,
+  `docs/`, `release/`.
+- If you find yourself on a branch starting with `copilot/`, you MUST rename it immediately to
+  follow the pattern: `^(feature|refactor|fix|chore|build|style|docs|release)/.+$` before making any
+  commits.
