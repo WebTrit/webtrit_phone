@@ -109,15 +109,27 @@ class SignalingManager {
     }
 
     for (final activeLine in _lines.whereType<Line>()) {
-      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+      final callEvents = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent);
+      final incomingEvent = callEvents.whereType<IncomingCallEvent>().firstOrNull;
+      final terminatingEvent = callEvents.where((e) => e is HangupEvent || e is MissedCallEvent).firstOrNull;
 
-      if (callEvent != null) {
-        if (callEvent is IncomingCallEvent) {
-          onIncomingCall?.call(callEvent);
-          return;
-        }
-      } else {
-        _logger.info('No call event found');
+      if (incomingEvent != null && terminatingEvent != null) {
+        _logger.info('Call already ended in handshake: $terminatingEvent');
+        onHangupCall?.call(terminatingEvent, (
+          direction: CallDirection.incoming,
+          number: incomingEvent.caller,
+          video: incomingEvent.isVideo,
+          username: incomingEvent.callerDisplayName ?? incomingEvent.caller,
+          createdTime: _initialConnectionTime,
+          acceptedTime: null,
+          hungUpTime: DateTime.now(),
+        ));
+        return;
+      }
+
+      if (incomingEvent != null) {
+        onIncomingCall?.call(incomingEvent);
+        return;
       }
     }
 
