@@ -174,6 +174,8 @@ class SettingsScreen extends StatelessWidget {
         context.router.navigate(const NetworkScreenPageRoute());
       case SettingsFlavor.language:
         context.router.navigate(const LanguageScreenPageRoute());
+      case SettingsFlavor.themeMode:
+        context.router.navigate(const ThemeModeScreenPageRoute());
       case SettingsFlavor.help:
         context.router.navigate(HelpScreenPageRoute(initialUriQueryParam: item.data!.uri.toString()));
       case SettingsFlavor.terms:
