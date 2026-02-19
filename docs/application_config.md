@@ -1,15 +1,21 @@
-# Setup App Configuration
+# Application Configuration
+
+This document outlines the main application configuration, which controls high-level features,
+navigation structure, and screen-specific behaviors.
 
 ## Table of Contents
 
-- [Login Screen Configuration](#login-screen-configuration)
-- [Setup Main Configuration](#setup-main-configuration)
-- [Bottom Menu Configuration](#bottom-menu-configuration)
-- [Setup Call Configuration](#setup-call-configuration)
-- [Transfer Configuration](#transfer-configuration)
-- [Setup Settings Configuration](#setup-settings-configuration)
-- [Settings Sections](#settings-sections)
-- [Settings Items](#settings-items)
+- [Login Configuration](#login-configuration)
+    - [Login Common](#login-common)
+    - [Login Mode Select](#login-mode-select)
+- [Main Configuration](#main-configuration)
+    - [Bottom Menu Configuration](#bottom-menu-configuration)
+    - [Tab Variants](#tab-variants)
+- [Call Configuration](#call-configuration)
+    - [Transfer Configuration](#transfer-configuration)
+- [Settings Configuration](#settings-configuration)
+    - [Settings Sections](#settings-sections)
+    - [Settings Items](#settings-items)
 - [Embedded Pages](#embedded-pages)
 
 ---
@@ -70,14 +76,10 @@ Each `AppConfigModeSelectAction` includes:
 
 ---
 
-# Setup Main Configuration
+## Main Configuration
 
-The **main configuration** defines the bottom navigation structure and core feature availability for
+The `mainConfig` section defines the bottom navigation structure and core feature availability for
 the application.
-
----
-
-## Structure
 
 ```json
 {
@@ -140,14 +142,12 @@ the application.
 }
 ```
 
----
+### Bottom Menu Configuration
 
-## Bottom Menu Configuration
-
-Each entry in the `tabs` array defines a **navigation tab** within the app’s main bottom bar.  
+Each entry in the `tabs` array defines a **navigation tab** within the app’s main bottom bar.
 The configuration is parsed into `BottomMenuTabScheme` union variants depending on the `type` value.
 
-### Common Fields
+#### Common Fields
 
 | Field       | Type     | Default | Description                                                                                                  |
 |-------------|----------|---------|--------------------------------------------------------------------------------------------------------------|
@@ -159,7 +159,7 @@ The configuration is parsed into `BottomMenuTabScheme` union variants depending 
 
 ---
 
-## Tab Variants
+### Tab Variants
 
 ### **FavoritesTabScheme**
 
@@ -253,17 +253,14 @@ Embedded web resource tab.
 - `embeddedResourceId`: reference to a resource from the `embeddedResources` array in the root
   configuration.
 
----
+### Notes
 
-## Notes
+- The `type` field acts as a discriminator for parsing `BottomMenuTabScheme` variants. Unrecognized
+  values will cause deserialization to fail.
+- Tabs can be reordered or disabled, and the UI will adapt dynamically.
+- `cacheSelectedTab: true` enables the app to remember the last active tab across sessions.
 
-- `type` acts as a discriminator for `BottomMenuTabScheme` union parsing.
-- Any unrecognized `type` will cause deserialization to fail, so ensure it matches one of the known
-  variants.
-- You can reorder or disable tabs freely; the app dynamically adapts to the provided configuration.
-- `cacheSelectedTab: true` means the app remembers the last active tab across sessions.
-
-## Setup Call Configuration
+## Call Configuration
 
 ```json
 {
@@ -280,12 +277,12 @@ Embedded web resource tab.
 - `videoEnabled`: Enables video calls
 - `transfer`: Call forwarding settings
 
-## Transfer Configuration
+### Transfer Configuration
 
-- `enableBlindTransfer`: Enables blind call transfer
-- `enableAttendedTransfer`: Enables attended call transfer
+- `enableBlindTransfer`: Enables blind call transfer.
+- `enableAttendedTransfer`: Enables attended call transfer.
 
-## Setup Settings Configuration
+## Settings Configuration
 
 ### Settings Sections
 

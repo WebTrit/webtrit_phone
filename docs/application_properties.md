@@ -27,7 +27,8 @@ The following `make` commands are available to facilitate application configurat
 
 ## Renaming the Application
 
-To update the package name, bundle ID, and application name for Android and iOS, run the following command:
+To update the package name, bundle ID, and application name for Android and iOS, run the following
+command:
 
 ```sh
 make rename-package PACKAGE_NAME=com.webtrit.newapp BUNDLE_ID=com.webtrit.newapp ANDROID_APP_NAME="WebTrit" IOS_APP_NAME="WebTrit"
@@ -35,7 +36,9 @@ make rename-package PACKAGE_NAME=com.webtrit.newapp BUNDLE_ID=com.webtrit.newapp
 
 ## Script Dependencies
 
-This script is based on the [`package_rename`](https://pub.dev/packages/package_rename) package, which facilitates renaming default fields for each platform project within the WebTrit Phone application.
+This script is based on the [`package_rename`](https://pub.dev/packages/package_rename) package,
+which facilitates renaming default fields for each platform project within the WebTrit Phone
+application.
 
 ## Using `package_rename` Directly
 

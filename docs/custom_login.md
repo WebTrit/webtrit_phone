@@ -2,83 +2,60 @@
 
 ## Overview
 
-This documentation describes how to use a custom sign-up flow for a custom login page, demonstrating an example with
-OTP. The communication between the web page and the Flutter app is facilitated through the `WebtritLoginChannel`
+This document describes how to implement a custom login/sign-up page using a `WebView`.
+Communication between the custom
+web page and the Flutter application is handled via the `WebtritLoginChannel` JavaScript channel,
+allowing the web UI to
+securely transmit user data to the app for authentication.
+
+An example HTML file is available here: [custom_signup.html](../assets/themes/custom_signup.html)
+
+## Table of Contents
+
+- [Communication Protocol](#communication-protocol)
+    - [JavaScript Channel](#javascript-channel)
+    - [From Flutter to Web: Page Initialization](#from-flutter-to-web-page-initialization)
+    - [From Web to Flutter: Sending User Data](#from-web-to-flutter-sending-user-data)
+- [Example Implementation](#example-implementation)
+- [Flutter-Side Handling](#flutter-side-handling)
+- [Integration](#integration)
+
+---
+
+## Communication Protocol
+
+The interaction between the web page and the Flutter app follows a clear protocol built around a
 JavaScript channel.
 
-[Example HTML for Custom Signup](../assets/themes/custom_signup.html)
+### JavaScript Channel
 
-## Web Page & JavaScript Communication
+All communication is facilitated through the `WebtritLoginChannel` object, which is injected into
+the `WebView`'s
+JavaScript context by the Flutter app. This channel exposes a `postMessage()` method for sending
+data from the web page
+to the app.
 
-The web page can have any UI and input fields for collecting data. At the end of the flow, for example, when the user
-submits a form, all collected data should be sent to the Flutter app using the `WebtritLoginChannel` in a structured
-JSON format. This ensures seamless communication between the web page and the Flutter app, allowing the app to process
-and act upon the received data.
+### From Flutter to Web: Page Initialization
 
-The Flutter app listens to the `WebtritLoginChannel` for messages sent from the web page. These messages contain a
-structured JSON object with user-provided data. The app processes this information, extracts relevant values, and
-initiates authentication using the provided credentials or other required data.
+After the web page is loaded, the Flutter app can call the global JavaScript function
+`initializePage(initData)` to pass
+initial data, such as localization settings or pre-filled form values.
 
-## HTML Structure
+**Function Signature:** `initializePage(initData)`
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OTP Login</title>
-</head>
-<body>
-<div class="form-container">
-  <p class="description" id="descriptionText">
-    Enter your email to receive a one-time password (OTP) for login.
-  </p>
-  <div class="form-group">
-    <label for="email" id="emailLabel">Email</label>
-    <input id="email" name="email" required>
-  </div>
-</div>
-<button class="fixed-button" id="submitButton" onclick="handleLogin()">
-  <span class="button-text" id="submitButtonText">Submit</span>
-  <div class="spinner"></div>
-</button>
-<script>
-  function handleLogin() {
-    const email = document.getElementById("email").value;
-    if (!email) {
-      alert("Please enter your email.");
-      return;
-    }
-    const json = {
-      event: "signup", // For now, this should always be 'signup'
-      data: {
-        email: email, // Here can be any key-value pairs
-        key1: "value1",
-        key2: "value2"
-      }
-    };
-    WebtritLoginChannel.postMessage(JSON.stringify(json));
-  }
-</script>
-</body>
-</html>
-```
+- **`initData`**: An object containing initialization data. Common keys include:
+    - `locale`: The current language setting of the app (e.g., `"en"`).
+    - `prefillEmail`: An email address to pre-populate in an input field.
 
-## Functions to Implement in JavaScript
+It is the responsibility of the web page to implement this function to handle the incoming data.
 
-### `initializePage(initData)`
-
-- This function is called after the initial rendering to apply initialization data from the mobile
-  app, such as the current locale or optional prefilled values.
-- The function expects an object with at least the `locale` key, but can also include other keys (
-  e.g., `prefillEmail`).
+**Example Implementation:**
 
 ```javascript
 function initializePage(initData) {
   const { locale, prefillEmail } = initData || {};
   if (locale) {
-    // apply translations based on locale
+    // Apply translations based on the locale
   }
   if (prefillEmail) {
     document.getElementById("email").value = prefillEmail;
@@ -86,7 +63,7 @@ function initializePage(initData) {
 }
 ```
 
-**Example call from Flutter:**
+**Example Call from Flutter:**
 
 ```dart
 
@@ -97,80 +74,137 @@ final script = '''
 ''';
 ```
 
-## JSON Structure
+### From Web to Flutter: Sending User Data
 
-The JSON structure sent from the web page to the Flutter app follows a predefined format. This structure consists of two
-main parts:
+When the user completes an action (e.g., submitting a form), the web page must gather the data and
+send it to the
+Flutter app by calling `WebtritLoginChannel.postMessage()`. The message must be a stringified JSON
+object with a
+specific structure.
 
-- **`event`**: A string that specifies the type of action being performed. For now, it should always be set to `signup`.
-- **`data`**: An object containing key-value pairs representing user-submitted data. If the `tenant_id` key is included,
-  it will be automatically used to modify the API request URL in the format `core-url/tenant/{tenant_id}/api/v1/user`.
+**JSON Payload Structure:**
 
-### Example JSON Structure
+- **`event`**: A string identifying the action. Currently, this must always be `"signup"`.
+- **`data`**: An object containing the key-value pairs of user-submitted data.
+
+A special key, `tenant_id`, can be included in the `data` object. If present, the app will modify
+the API request URL
+to `core-url/tenant/{tenant_id}/api/v1/user`.
+
+**Example JSON Payload:**
 
 ```json
 {
   "event": "signup",
-  // This should always be 'signup'
   "data": {
     "email": "user@example.com",
-    // Required: User email for authentication
     "key1": "value1",
-    // Additional key-value pairs can be included
-    "key2": "value2",
-    // Optional: tenant_id key to modify API request URL
     "tenant_id": "d1bbfa00-0298-4667-ba81-9c432a416a10"
-    // Optional: If present, modifies API request URL
   }
 }
 ```
 
-## Sending Data from Web Page to Flutter
+---
 
-To send data from the web page to the Flutter app, use the `WebtritLoginChannel`. This ensures seamless communication
-between the WebView and the Flutter application. The data should be structured in JSON format and sent using the
-`postMessage()` function.
+## Example Implementation
 
-```javascript
-const json = {
-  event: "signup", // For now, this should always be 'signup'
-  data: {
-    email: email, // Here can be any key-value pairs
-    key1: "value1",
-    key2: "value2"
-  }
-};
-WebtritLoginChannel.postMessage(JSON.stringify(json));
+Below is a minimal HTML structure demonstrating how to collect an email and send it to the Flutter
+app. This example
+also includes the `initializePage` function for handling data from Flutter.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Login</title>
+</head>
+<body>
+<div class="form-container">
+    <p class="description" id="descriptionText">
+        Enter your email to receive a one-time password (OTP) for login.
+    </p>
+    <div class="form-group">
+        <label for="email" id="emailLabel">Email</label>
+        <input id="email" name="email" required>
+    </div>
+</div>
+<button class="fixed-button" id="submitButton" onclick="handleLogin()">
+    <span class="button-text" id="submitButtonText">Submit</span>
+    <div class="spinner"></div>
+</button>
+
+<script>
+    function handleLogin() {
+      const email = document.getElementById("email").value;
+      if (!email) {
+        alert("Please enter your email.");
+        return;
+      }
+      const payload = {
+        event: "signup", // For now, this should always be 'signup'
+        data: {
+          email: email, // Here can be any key-value pairs
+          key1: "value1",
+          key2: "value2"
+        }
+      };
+  
+      if (window.WebtritLoginChannel) {
+        WebtritLoginChannel.postMessage(JSON.stringify(payload));
+      } else {
+        console.error("WebtritLoginChannel not found.");
+      }
+    }
+  
+    function initializePage(initData) {
+      const { locale, prefillEmail } = initData || {};
+      if (locale) {
+        // apply translations based on locale
+      }
+      if (prefillEmail) {
+        document.getElementById("email").value = prefillEmail;
+      }
+    }
+</script>
+</body>
+</html>
 ```
 
-## Handling Data in Flutter After Receiving `postMessage()`
+---
 
-1. **Receiving the Message:**
+## Flutter-Side Handling
 
-- The Flutter WebView registers a JavaScript channel named `WebtritLoginChannel`.
-- When the web page calls `postMessage()`, the Flutter app captures the message in `_onJavaScriptMessageReceived`.
+When the Flutter app receives a message from the web page via `postMessage()`, it performs the
+following steps:
 
-2. **Parsing the Data:**
+1. **Receiving the Message**
+   The Flutter `WebView` has a registered JavaScript channel named `WebtritLoginChannel`. Its
+   message handler is
+   triggered when `postMessage()` is called from JavaScript.
 
-- The message is parsed as a JSON object.
-- The `event` field is checked to determine the type of request (currently, it should always be `signup`).
-- The `data` field, which contains user-submitted information, is extracted.
+2. **Parsing the Data**
+   The incoming message (a JSON string) is parsed into a Dart `Map`. The app verifies the `event`
+   key (expecting
+   `signup`) and extracts the `data` object.
 
-3. **Handling the Request:**
+3. **Handling the API Request**
+   The key-value pairs from the `data` object are sent as the body of a `POST` request to the
+   `api/v1/user` endpoint.
+   If a `tenant_id` key is present in the `data` object, the request URL is modified to:
+   `core-url/tenant/{tenant_id}/api/v1/user`
 
-- If the event is `signup`, all received key-value pairs are appended to a POST request to `POST api/v1/user`.
-- If the `tenant_id` key is present in `data`, it modifies the API request endpoint to:
-  ```plaintext
-  core-url/tenant/{tenant_id}/api/v1/user
-  ```
+4. **Result Handling & Navigation**
+   After processing the API response, the app navigates the user from the custom login `WebView` to
+   the appropriate
+   native screen, such as an OTP verification page or a success screen.
 
-4. **Result Handling:**
+---
 
-- The response from the API is processed, and the user is navigated from the custom login page to the next native
-  screen, such as the OTP verification screen or a success screen.
+## Integration
 
-## Configuring WebView in the App
-
-For detailed instructions on configuring WebView and integrating this HTML into your project, refer to *
-*[Features](feature_configuration.md)**.
+For detailed instructions on configuring the `WebView` component and integrating custom HTML files
+into your project,
+please refer to the **[Features](feature_configuration.md)** documentation.
 
