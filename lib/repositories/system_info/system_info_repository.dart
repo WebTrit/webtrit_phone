@@ -30,6 +30,13 @@ abstract interface class SystemInfoRepository implements Refreshable, Disposable
   /// or only use the cache. Typically used during login or initial setup flows.
   Future<WebtritSystemInfo?> getSystemInfo({FetchPolicy fetchPolicy = FetchPolicy.cacheFirst});
 
+  /// Returns cached system info explicitly.
+  /// Throws a [StateError] if no cached value exists.
+  ///
+  /// Attention: Use this method only on logged-in routes
+  /// or it will throw an exception if called before the system info has been initially loaded and cached.
+  WebtritSystemInfo getLocalSystemInfo();
+
   /// Preloads the repository with fresh data obtained from an external source
   /// (e.g., during the login flow).
   ///
@@ -83,6 +90,17 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   }
 
   @override
+  WebtritSystemInfo getLocalSystemInfo() {
+    final localInfo = localDatasource.getSystemInfo();
+    if (localInfo == null) {
+      throw StateError(
+        'No system info in cache, ensure getLocalSystemInfo() has been called on logged-in routes after the initial system info load',
+      );
+    }
+    return localInfo;
+  }
+
+  @override
   Future<void> preload(WebtritSystemInfo info) async {
     _logger.info('Preloading system info from external source');
     await _updateSystemInfo(info);
@@ -95,7 +113,7 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   /// via [_getNetworkSystemInfoPolicy].
   Future<WebtritSystemInfo?> _getCacheFirstSystemInfoPolicy() async {
     _logger.fine('Fetching system info from cache first');
-    final localInfo = await _getLocalSystemInfoOrNull();
+    final localInfo = _getLocalSystemInfoOrNull();
     if (localInfo != null) {
       return localInfo;
     }
@@ -120,7 +138,7 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   /// Does not perform any network requests. If no cached value exists,
   /// returns `null`. Useful for lightweight reads where stale data is
   /// acceptable or when operating in offline mode.
-  Future<WebtritSystemInfo?> _getCacheSystemInfoPolicy() async {
+  WebtritSystemInfo? _getCacheSystemInfoPolicy() {
     _logger.fine('Fetching system info from cache only');
     return _getLocalSystemInfoOrNull();
   }
@@ -137,7 +155,7 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
     }
   }
 
-  Future<WebtritSystemInfo?> _getLocalSystemInfoOrNull() async {
+  WebtritSystemInfo? _getLocalSystemInfoOrNull() {
     try {
       final localInfo = localDatasource.getSystemInfo();
       if (localInfo == null) {

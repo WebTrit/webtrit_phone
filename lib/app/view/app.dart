@@ -45,7 +45,6 @@ class _AppState extends State<App> {
         registerStatusRepository: context.read<RegisterStatusRepository>(),
         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
         activeMainFlavorRepository: context.read<ActiveMainFlavorRepository>(),
-        callerIdSettingsRepository: context.read<CallerIdSettingsRepository>(),
         activeRecentsVisibilityFilterRepository: context.read<ActiveRecentsVisibilityFilterRepository>(),
         activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>(),
         audioProcessingSettingsRepository: context.read<AudioProcessingSettingsRepository>(),

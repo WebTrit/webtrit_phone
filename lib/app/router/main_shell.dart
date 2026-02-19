@@ -161,6 +161,21 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             sessionGuard: _sessionGuard,
           ),
         ),
+        RepositoryProvider<CallerIdSettingsRepository>(
+          create: (context) {
+            final core = context.read<SystemInfoRepository>().getLocalSystemInfo().core;
+            final remoteSettingsSupport = core.supportsRemoteCallerIdSettings;
+            if (remoteSettingsSupport) {
+              return CallerIdSettingsRepositoryRemoteImpl(
+                context.read<WebtritApiClient>(),
+                context.read<AppBloc>().state.session.token!,
+              );
+            } else {
+              return CallerIdSettingsRepositoryPrefsImpl(context.read<AppPreferences>());
+            }
+          },
+          dispose: (repo) => repo.clear(),
+        ),
         RepositoryProvider<PrivateGatewayRepository>(
           create: (context) => CustomPrivateGatewayRepository(
             context.read<WebtritApiClient>(),
@@ -579,6 +594,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// can be made here without touching the [Provider] or [PollingService] setup.
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
+    final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
 
     return [
       PollingRegistration(
@@ -597,6 +613,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         PollingRegistration(
           listener: context.read<VoicemailRepository>(),
           interval: const Duration(seconds: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
+      if (cliSettingsRepository is CallerIdSettingsRepositoryRemoteImpl)
+        PollingRegistration(
+          listener: cliSettingsRepository,
+          interval: const Duration(seconds: EnvironmentConfig.CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
     ];
   }
