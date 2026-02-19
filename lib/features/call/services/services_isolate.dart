@@ -91,7 +91,10 @@ final _logger = Logger('BackgroundCallIsolate');
 
 // Called by the Flutter engine when the signaling service is started.
 @pragma('vm:entry-point')
-Future<void> onPushNotificationSyncCallback(CallkeepPushNotificationSyncStatus status) async {
+Future<void> onPushNotificationSyncCallback(
+  CallkeepPushNotificationSyncStatus status,
+  CallkeepIncomingCallMetadata? metadata,
+) async {
   await _initializeCommonDependencies();
   await _initializePushNotificationDependencies();
 
@@ -99,7 +102,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepPushNotificationSyncStatus s
 
   switch (status) {
     case CallkeepPushNotificationSyncStatus.synchronizeCallStatus:
-      await _pushNotificationIsolateManager?.launchSignaling();
+      await _pushNotificationIsolateManager?.launchSignaling(metadata);
     case CallkeepPushNotificationSyncStatus.releaseResources:
       await _disposeCommonDependencies();
   }
@@ -107,7 +110,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepPushNotificationSyncStatus s
 
 // Called by the Flutter engine when the signaling service is triggered.
 @pragma('vm:entry-point')
-Future<void> onSignalingSyncCallback(CallkeepServiceStatus status) async {
+Future<void> onSignalingSyncCallback(CallkeepServiceStatus status, CallkeepIncomingCallMetadata? metadata) async {
   await _initializeCommonDependencies();
   await _initializeSignalingDependencies();
 

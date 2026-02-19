@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -84,13 +85,18 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
           event.callId.hashCode,
           // TODO: Add localization
           'Missed Call',
-          call.username ?? 'Unknown',
+          getDisplayNameForMissedCall(event, call) ?? 'Unknown',
           payload: {'callId': event.callId, 'type': 'missed_call'},
         ),
       );
     } catch (e) {
       logger.severe('Failed to show missed call notification', e);
     }
+  }
+
+  @protected
+  String? getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
+    return call.username;
   }
 
   // Default behavior: End calls on signaling error.
@@ -139,8 +145,10 @@ class PushNotificationIsolateManager extends IsolateManager {
   }
 
   final BackgroundPushNotificationService _pushService;
+  CallkeepIncomingCallMetadata? _metadata;
 
-  Future<void> launchSignaling() async {
+  Future<void> launchSignaling(CallkeepIncomingCallMetadata? metadata) async {
+    _metadata = metadata;
     logger.info('Starting background call event service');
     return signalingManager.launch();
   }
@@ -160,6 +168,15 @@ class PushNotificationIsolateManager extends IsolateManager {
     if (!(await signalingManager.hasNetworkConnection())) {
       throw Exception('Not connected');
     }
+  }
+
+  @override
+  @protected
+  String? getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
+    if (_metadata?.callId == event.callId && _metadata!.displayName?.isNotEmpty == true) {
+      return _metadata!.displayName;
+    }
+    return super.getDisplayNameForMissedCall(event, call);
   }
 }
 
