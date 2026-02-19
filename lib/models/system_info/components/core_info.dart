@@ -22,4 +22,9 @@ class CoreInfo with EquatableMixin {
   bool verifyVersionStr(String constraintString) {
     return verifyVersion(VersionConstraint.parse(constraintString));
   }
+
+  bool get supportsRemoteCallerIdSettings {
+    // Remote caller ID settings support was added in 0.23.0-alpha.2
+    return verifyVersionStr('>=0.23.0-alpha.2 <2.0.0');
+  }
 }

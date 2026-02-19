@@ -108,7 +108,6 @@ class RootApp extends StatelessWidget {
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
           final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs, presenceDeviceName);
           final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(prefs);
-          final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(prefs);
           final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(prefs);
           final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(prefs);
           final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(prefs);
@@ -134,7 +133,6 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
               RepositoryProvider<SessionRepository>.value(value: instanceRegistry.get<SessionRepository>()),
-              RepositoryProvider<CallerIdSettingsRepository>.value(value: callerIdSettingsRepository),
               RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
               RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
                 value: activeRecentsVisibilityFilterRepository,
