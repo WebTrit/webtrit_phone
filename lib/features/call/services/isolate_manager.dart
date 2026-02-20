@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -85,7 +84,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
           event.callId.hashCode,
           // TODO: Add localization
           'Missed Call',
-          getDisplayNameForMissedCall(event, call) ?? 'Unknown',
+          _getDisplayNameForMissedCall(event, call) ?? 'Unknown',
           payload: {'callId': event.callId, 'type': 'missed_call'},
         ),
       );
@@ -94,8 +93,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  @protected
-  String? getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
+  String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
     return call.username;
   }
 
@@ -153,7 +151,7 @@ class PushNotificationIsolateManager extends IsolateManager {
 
   Future<void> launchSignaling(CallkeepIncomingCallMetadata? metadata) async {
     _metadata = metadata;
-    logger.info('Starting background call event service');
+    logger.info('Starting background call event service: $metadata');
     return signalingManager.launch();
   }
 
@@ -175,12 +173,17 @@ class PushNotificationIsolateManager extends IsolateManager {
   }
 
   @override
-  @protected
-  String? getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
+  String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
+    final signalingName = super._getDisplayNameForMissedCall(event, call);
+    if (signalingName?.isNotEmpty == true) {
+      return signalingName;
+    }
+
     if (_metadata?.callId == event.callId && _metadata!.displayName?.isNotEmpty == true) {
       return _metadata!.displayName;
     }
-    return super.getDisplayNameForMissedCall(event, call);
+
+    return signalingName;
   }
 }
 
