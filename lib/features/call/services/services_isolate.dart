@@ -4,7 +4,6 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
@@ -40,11 +39,9 @@ Future<void> _initializeCommonDependencies() async {
   _appLabelsProvider ??= await DefaultAppMetadataProvider.init(_packageInfo!, _deviceInfo!, _appInfo!, _secureStorage!);
   final isolateOverrides = FeatureOverridesFactory.create(_remoteConfigService!.snapshot);
   final isolateLoggingConfig = LoggingMapper.mapFromOverridesOnly(isolateOverrides);
-  final logzioLogLevel = Level.LEVELS.firstWhere((l) => l.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
   _appLogger ??= await AppLogger.init(
     isolateLoggingConfig.logLevel,
-    logzioLogLevel,
-    LogzioLoggingService.fromEnvironment(isolateLoggingConfig.remoteLoggingEnabled, logzioLogLevel),
+    LogzioLoggingService.fromEnvironment(isolateLoggingConfig.remoteLoggingEnabled),
     _appLabelsProvider!,
   );
   _appCertificates ??= await AppCertificates.init();

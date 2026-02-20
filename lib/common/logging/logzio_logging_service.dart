@@ -12,12 +12,14 @@ final _logger = Logger('LogzioLoggingService');
 class LogzioLoggingService implements RemoteLoggingService {
   LogzioLoggingService({required this.url, required this.token, required this.bufferSize, required this.minLevel});
 
-  static LogzioLoggingService? fromEnvironment(bool enabled, Level minLevel) {
+  static LogzioLoggingService? fromEnvironment(bool enabled) {
     if (!enabled) return null;
 
     const url = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
     const token = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
     if (url == null || token == null) return null;
+
+    final minLevel = Level.LEVELS.firstWhere((l) => l.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
 
     return LogzioLoggingService(
       url: url,

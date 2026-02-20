@@ -13,7 +13,6 @@ final _logger = Logger('AppLogger');
 class AppLogger {
   static Future<AppLogger> init(
     Level logLevel,
-    Level logzioLogLevel,
     LogzioLoggingService? logzioService,
     AppMetadataProvider labelsProvider,
   ) async {
@@ -27,21 +26,20 @@ class AppLogger {
 
     logzioService?.initialize(labelsProvider.logLabels);
 
-    final instance = AppLogger._(logzioService, labelsProvider, logzioLogLevel);
+    final instance = AppLogger._(logzioService, labelsProvider);
     instance.applyConfig(logLevel);
 
     return instance;
   }
 
-  AppLogger._(this._logzioService, this._labelsProvider, this._logzioLogLevel);
+  AppLogger._(this._logzioService, this._labelsProvider);
 
   final LogzioLoggingService? _logzioService;
   final AppMetadataProvider _labelsProvider;
-  final Level _logzioLogLevel;
 
   void applyConfig(Level logLevel) {
     Logger.root.level = logLevel;
-    EquatableConfig.stringify = logLevel <= Level.FINE || _logzioLogLevel <= Level.FINE;
+    EquatableConfig.stringify = logLevel <= Level.FINE || (_logzioService?.minLevel ?? Level.OFF) <= Level.FINE;
     _logger.info('AppLogger log level applied: $logLevel');
   }
 
