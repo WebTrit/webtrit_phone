@@ -81,7 +81,7 @@ class _AppState extends State<App> {
 
     final featureAccess = context.watch<FeatureAccess>();
 
-    context.read<AppLogger>().applyConfig(featureAccess.loggingConfig);
+    context.read<AppLogger>().applyConfig(featureAccess.loggingConfig.logLevel);
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,

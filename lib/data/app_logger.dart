@@ -30,7 +30,7 @@ class AppLogger {
     }
 
     final instance = AppLogger._(remoteLoggingServices, labelsProvider);
-    instance.applyConfig(loggingConfig);
+    instance.applyConfig(loggingConfig.logLevel);
 
     return instance;
   }
@@ -56,11 +56,11 @@ class AppLogger {
   final List<RemoteLoggingService> _remoteLoggingServices;
   final AppMetadataProvider _labelsProvider;
 
-  void applyConfig(LoggingConfig config) {
+  void applyConfig(Level logLevel) {
     final logzioLogLevel = Level.LEVELS.firstWhere((l) => l.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
-    Logger.root.level = config.logLevel;
-    EquatableConfig.stringify = config.logLevel <= Level.FINE || logzioLogLevel <= Level.FINE;
-    _logger.info('AppLogger log level applied: ${config.logLevel}');
+    Logger.root.level = logLevel;
+    EquatableConfig.stringify = logLevel <= Level.FINE || logzioLogLevel <= Level.FINE;
+    _logger.info('AppLogger log level applied: $logLevel');
   }
 
   /// Allows regenerating labels when coreUrl and tenantId are available.
