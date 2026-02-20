@@ -115,9 +115,11 @@ Future<InstanceRegistry> bootstrap() async {
   );
 
   // Logger
+  final logzioLogLevel = Level.LEVELS.firstWhere((l) => l.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
   final appLogger = await AppLogger.init(
     featureAccess.loggingConfig.logLevel,
-    featureAccess.loggingConfig.remoteLoggingEnabled,
+    logzioLogLevel,
+    _buildRemoteLoggingServices(featureAccess.loggingConfig.remoteLoggingEnabled, logzioLogLevel),
     appLabels,
   );
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
@@ -284,7 +286,13 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 
   final overrides = FeatureOverridesFactory.create(remoteCacheConfigService.snapshot);
   final loggingConfig = LoggingMapper.mapFromOverridesOnly(overrides);
-  await AppLogger.init(loggingConfig.logLevel, loggingConfig.remoteLoggingEnabled, appLabelsProvider);
+  final logzioLogLevel = Level.LEVELS.firstWhere((l) => l.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
+  await AppLogger.init(
+    loggingConfig.logLevel,
+    logzioLogLevel,
+    _buildRemoteLoggingServices(loggingConfig.remoteLoggingEnabled, logzioLogLevel),
+    appLabelsProvider,
+  );
 
   final appPush = AppRemotePush.fromFCM(message);
 
@@ -406,6 +414,20 @@ Future<void> _dShowInspectLocalPush({required String title, required String body
       ),
     ),
   );
+}
+
+List<RemoteLoggingService> _buildRemoteLoggingServices(bool remoteLoggingEnabled, Level minLevel) {
+  if (!remoteLoggingEnabled) return [];
+
+  const logzioUrl = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
+  const logzioToken = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
+  final logzioBufferSize = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_BUFFER_SIZE;
+
+  if (logzioUrl != null && logzioToken != null) {
+    return [LogzioLoggingService(url: logzioUrl, token: logzioToken, bufferSize: logzioBufferSize, minLevel: minLevel)];
+  }
+
+  return [];
 }
 
 Future<void> _initWorkManager() async {
