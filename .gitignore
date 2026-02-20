@@ -48,3 +48,6 @@ app.*.map.json
 /tool/configs/localizely_token.txt
 makefile.shared
 .env
+
+# Agents
+.aider*
