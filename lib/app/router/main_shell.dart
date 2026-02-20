@@ -392,7 +392,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       final encodingConfig = featureAccess.callConfig.encoding;
                       final peerConnectionConfig = featureAccess.callConfig.peerConnection;
-                      final monitorInterval = featureAccess.monitoringConfig.monitorCheckInterval;
+                      final monitorInterval = featureAccess.loggingConfig.monitorCheckInterval;
 
                       // Initialize media builder with app-configured audio/video constraints
                       // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.

@@ -173,7 +173,7 @@ void main() {
 
     final secondEmission = await queue.next;
 
-    expect(secondEmission.monitoringConfig.monitorCheckInterval, const Duration(seconds: 30));
+    expect(secondEmission.loggingConfig.monitorCheckInterval, const Duration(seconds: 30));
     expect(secondEmission.overrides.monitorCheckInterval, const Duration(seconds: 30));
 
     await queue.cancel();
@@ -200,7 +200,7 @@ void main() {
     final secondEmission = await queue.next;
 
     expect(secondEmission.overrides.monitorCheckInterval, Duration.zero);
-    expect(secondEmission.monitoringConfig.monitorCheckInterval, Duration.zero);
+    expect(secondEmission.loggingConfig.monitorCheckInterval, Duration.zero);
 
     await queue.cancel();
   });
@@ -226,7 +226,7 @@ void main() {
     final secondEmission = await queue.next;
 
     expect(secondEmission.overrides.monitorCheckInterval, isNull);
-    expect(secondEmission.monitoringConfig.monitorCheckInterval, const Duration(seconds: 15));
+    expect(secondEmission.loggingConfig.monitorCheckInterval, const Duration(seconds: 15));
 
     await queue.cancel();
   });

@@ -6,6 +6,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/services/services.dart';
 
 import 'app_metadata_provider.dart';
@@ -16,7 +17,8 @@ class AppLogger {
   static Future<AppLogger> init(RemoteConfigSnapshot remoteConfigSnapshot, AppMetadataProvider labelsProvider) async {
     hierarchicalLoggingEnabled = true;
 
-    final localLogLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
+    final localLogLevel = _resolveLogLevel(remoteConfigSnapshot) ??
+        Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
     final logzioLogLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
 
     Logger.root.clearListeners();
@@ -42,6 +44,12 @@ class AppLogger {
     _logger.info('Initializing AppLogger with local log level: $localLogLevel, remote log level: $logzioLogLevel');
 
     return AppLogger._(remoteLoggingServices, labelsProvider);
+  }
+
+  static Level? _resolveLogLevel(RemoteConfigSnapshot snapshot) {
+    final name = snapshot.getString(FeatureOverridesFactory.kLogLevelKey);
+    if (name == null) return null;
+    return Level.LEVELS.where((l) => l.name == name).firstOrNull;
   }
 
   static List<RemoteLoggingService> _createRemoteLoggingServices(RemoteConfigSnapshot configSnapshot, Level minLevel) {
