@@ -13,11 +13,15 @@ sealed class SupportedFeature with _$SupportedFeature {
 
   const factory SupportedFeature.videoCall({@Default(true) bool enabled}) = SupportedVideoCall;
 
-  /// Configuration for RTC monitoring intervals.
+  /// Configuration for logging and RTC monitoring.
   ///
+  /// [logLevel] controls the application log level. Defaults to 'INFO'.
   /// [checkIntervalSec] defines how often the [RtpTrafficMonitor] checks for traffic.
   /// Defaults to 15 seconds.
-  const factory SupportedFeature.monitorConfig({@Default(15) int checkIntervalSec}) = SupportedMonitorConfig;
+  const factory SupportedFeature.loggingConfig({
+    @Default('INFO') String logLevel,
+    @Default(15) int checkIntervalSec,
+  }) = SupportedLoggingConfig;
 
   const factory SupportedFeature.systemNotifications({@Default(true) bool enabled}) = SupportedSystemNotifications;
 

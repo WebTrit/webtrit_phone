@@ -23,8 +23,8 @@ SupportedFeature _$SupportedFeatureFromJson(
           return SupportedVideoCall.fromJson(
             json
           );
-                case 'monitorConfig':
-          return SupportedMonitorConfig.fromJson(
+                case 'loggingConfig':
+          return SupportedLoggingConfig.fromJson(
             json
           );
                 case 'systemNotifications':
@@ -93,13 +93,13 @@ extension SupportedFeaturePatterns on SupportedFeature {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SupportedThemeMode value)?  themeMode,TResult Function( SupportedVideoCall value)?  videoCall,TResult Function( SupportedMonitorConfig value)?  monitorConfig,TResult Function( SupportedSystemNotifications value)?  systemNotifications,TResult Function( SupportedSipPresence value)?  sipPresence,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SupportedThemeMode value)?  themeMode,TResult Function( SupportedVideoCall value)?  videoCall,TResult Function( SupportedLoggingConfig value)?  loggingConfig,TResult Function( SupportedSystemNotifications value)?  systemNotifications,TResult Function( SupportedSipPresence value)?  sipPresence,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that);case SupportedMonitorConfig() when monitorConfig != null:
-return monitorConfig(_that);case SupportedSystemNotifications() when systemNotifications != null:
+return videoCall(_that);case SupportedLoggingConfig() when loggingConfig != null:
+return loggingConfig(_that);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that);case SupportedSipPresence() when sipPresence != null:
 return sipPresence(_that);case _:
   return orElse();
@@ -119,13 +119,13 @@ return sipPresence(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SupportedThemeMode value)  themeMode,required TResult Function( SupportedVideoCall value)  videoCall,required TResult Function( SupportedMonitorConfig value)  monitorConfig,required TResult Function( SupportedSystemNotifications value)  systemNotifications,required TResult Function( SupportedSipPresence value)  sipPresence,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SupportedThemeMode value)  themeMode,required TResult Function( SupportedVideoCall value)  videoCall,required TResult Function( SupportedLoggingConfig value)  loggingConfig,required TResult Function( SupportedSystemNotifications value)  systemNotifications,required TResult Function( SupportedSipPresence value)  sipPresence,}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that);case SupportedVideoCall():
-return videoCall(_that);case SupportedMonitorConfig():
-return monitorConfig(_that);case SupportedSystemNotifications():
+return videoCall(_that);case SupportedLoggingConfig():
+return loggingConfig(_that);case SupportedSystemNotifications():
 return systemNotifications(_that);case SupportedSipPresence():
 return sipPresence(_that);}
 }
@@ -141,13 +141,13 @@ return sipPresence(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SupportedThemeMode value)?  themeMode,TResult? Function( SupportedVideoCall value)?  videoCall,TResult? Function( SupportedMonitorConfig value)?  monitorConfig,TResult? Function( SupportedSystemNotifications value)?  systemNotifications,TResult? Function( SupportedSipPresence value)?  sipPresence,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SupportedThemeMode value)?  themeMode,TResult? Function( SupportedVideoCall value)?  videoCall,TResult? Function( SupportedLoggingConfig value)?  loggingConfig,TResult? Function( SupportedSystemNotifications value)?  systemNotifications,TResult? Function( SupportedSipPresence value)?  sipPresence,}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that);case SupportedMonitorConfig() when monitorConfig != null:
-return monitorConfig(_that);case SupportedSystemNotifications() when systemNotifications != null:
+return videoCall(_that);case SupportedLoggingConfig() when loggingConfig != null:
+return loggingConfig(_that);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that);case SupportedSipPresence() when sipPresence != null:
 return sipPresence(_that);case _:
   return null;
@@ -166,12 +166,12 @@ return sipPresence(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( int checkIntervalSec)?  monitorConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  sipPresence,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel, int checkIntervalSec)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  sipPresence,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that.enabled);case SupportedMonitorConfig() when monitorConfig != null:
-return monitorConfig(_that.checkIntervalSec);case SupportedSystemNotifications() when systemNotifications != null:
+return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
+return loggingConfig(_that.logLevel,_that.checkIntervalSec);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that.enabled);case SupportedSipPresence() when sipPresence != null:
 return sipPresence(_that.enabled);case _:
   return orElse();
@@ -191,12 +191,12 @@ return sipPresence(_that.enabled);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( int checkIntervalSec)  monitorConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  sipPresence,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel, int checkIntervalSec)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  sipPresence,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that.mode);case SupportedVideoCall():
-return videoCall(_that.enabled);case SupportedMonitorConfig():
-return monitorConfig(_that.checkIntervalSec);case SupportedSystemNotifications():
+return videoCall(_that.enabled);case SupportedLoggingConfig():
+return loggingConfig(_that.logLevel,_that.checkIntervalSec);case SupportedSystemNotifications():
 return systemNotifications(_that.enabled);case SupportedSipPresence():
 return sipPresence(_that.enabled);}
 }
@@ -212,12 +212,12 @@ return sipPresence(_that.enabled);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( int checkIntervalSec)?  monitorConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  sipPresence,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel, int checkIntervalSec)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  sipPresence,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that.enabled);case SupportedMonitorConfig() when monitorConfig != null:
-return monitorConfig(_that.checkIntervalSec);case SupportedSystemNotifications() when systemNotifications != null:
+return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
+return loggingConfig(_that.logLevel,_that.checkIntervalSec);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that.enabled);case SupportedSipPresence() when sipPresence != null:
 return sipPresence(_that.enabled);case _:
   return null;
@@ -376,9 +376,11 @@ as bool,
 /// @nodoc
 @JsonSerializable()
 
-class SupportedMonitorConfig implements SupportedFeature {
-  const SupportedMonitorConfig({this.checkIntervalSec = 15, final  String? $type}): $type = $type ?? 'monitorConfig';
-  factory SupportedMonitorConfig.fromJson(Map<String, dynamic> json) => _$SupportedMonitorConfigFromJson(json);
+class SupportedLoggingConfig implements SupportedFeature {
+  const SupportedLoggingConfig({this.logLevel = 'INFO', this.checkIntervalSec = 15, final  String? $type}): $type = $type ?? 'loggingConfig';
+  factory SupportedLoggingConfig.fromJson(Map<String, dynamic> json) => _$SupportedLoggingConfigFromJson(json);
+
+@JsonKey() final  String logLevel;
 
 @JsonKey() final  int checkIntervalSec;
 
@@ -390,36 +392,36 @@ final String $type;
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SupportedMonitorConfigCopyWith<SupportedMonitorConfig> get copyWith => _$SupportedMonitorConfigCopyWithImpl<SupportedMonitorConfig>(this, _$identity);
+$SupportedLoggingConfigCopyWith<SupportedLoggingConfig> get copyWith => _$SupportedLoggingConfigCopyWithImpl<SupportedLoggingConfig>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$SupportedMonitorConfigToJson(this, );
+  return _$SupportedLoggingConfigToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedMonitorConfig&&(identical(other.checkIntervalSec, checkIntervalSec) || other.checkIntervalSec == checkIntervalSec));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedLoggingConfig&&(identical(other.logLevel, logLevel) || other.logLevel == logLevel)&&(identical(other.checkIntervalSec, checkIntervalSec) || other.checkIntervalSec == checkIntervalSec));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,checkIntervalSec);
+int get hashCode => Object.hash(runtimeType,logLevel,checkIntervalSec);
 
 @override
 String toString() {
-  return 'SupportedFeature.monitorConfig(checkIntervalSec: $checkIntervalSec)';
+  return 'SupportedFeature.loggingConfig(logLevel: $logLevel, checkIntervalSec: $checkIntervalSec)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SupportedMonitorConfigCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
-  factory $SupportedMonitorConfigCopyWith(SupportedMonitorConfig value, $Res Function(SupportedMonitorConfig) _then) = _$SupportedMonitorConfigCopyWithImpl;
+abstract mixin class $SupportedLoggingConfigCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
+  factory $SupportedLoggingConfigCopyWith(SupportedLoggingConfig value, $Res Function(SupportedLoggingConfig) _then) = _$SupportedLoggingConfigCopyWithImpl;
 @useResult
 $Res call({
- int checkIntervalSec
+ String logLevel, int checkIntervalSec
 });
 
 
@@ -427,17 +429,19 @@ $Res call({
 
 }
 /// @nodoc
-class _$SupportedMonitorConfigCopyWithImpl<$Res>
-    implements $SupportedMonitorConfigCopyWith<$Res> {
-  _$SupportedMonitorConfigCopyWithImpl(this._self, this._then);
+class _$SupportedLoggingConfigCopyWithImpl<$Res>
+    implements $SupportedLoggingConfigCopyWith<$Res> {
+  _$SupportedLoggingConfigCopyWithImpl(this._self, this._then);
 
-  final SupportedMonitorConfig _self;
-  final $Res Function(SupportedMonitorConfig) _then;
+  final SupportedLoggingConfig _self;
+  final $Res Function(SupportedLoggingConfig) _then;
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? checkIntervalSec = null,}) {
-  return _then(SupportedMonitorConfig(
+@pragma('vm:prefer-inline') $Res call({Object? logLevel = null,Object? checkIntervalSec = null,}) {
+  return _then(SupportedLoggingConfig(
+logLevel: null == logLevel ? _self.logLevel : logLevel // ignore: cast_nullable_to_non_nullable
+as String,
 checkIntervalSec: null == checkIntervalSec ? _self.checkIntervalSec : checkIntervalSec // ignore: cast_nullable_to_non_nullable
 as int,
   ));
