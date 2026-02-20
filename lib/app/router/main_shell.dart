@@ -472,13 +472,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final session = context.read<AppBloc>().state.session;
 
                       return MessagingBloc(
-                        session.userId,
                         createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
                         featureAccess.messagingConfig,
                         context.read<ChatsRepository>(),
                         context.read<ChatsOutboxRepository>(),
                         context.read<SmsRepository>(),
                         context.read<SmsOutboxRepository>(),
+                        context.read<SessionRepository>(),
                         (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
                       );
                     },
@@ -486,9 +486,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                   BlocProvider<UnreadCountCubit>(
                     create: (context) {
                       return UnreadCountCubit(
-                        userId: context.read<AppBloc>().state.session.userId,
                         chatsRepository: context.read<ChatsRepository>(),
                         smsRepository: context.read<SmsRepository>(),
+                        sessionRepository: context.read<SessionRepository>(),
                       )..init();
                     },
                   ),

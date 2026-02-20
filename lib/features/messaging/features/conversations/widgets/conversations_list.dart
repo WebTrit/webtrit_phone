@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -16,7 +15,7 @@ class ConversationsList extends StatefulWidget {
 }
 
 class _ConversationsListState extends State<ConversationsList> {
-  late final userId = context.read<AppBloc>().state.session.userId;
+  late final messagingBloc = context.read<MessagingBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +28,8 @@ class _ConversationsListState extends State<ConversationsList> {
 
         return ListView(
           children: conversationsToShow.map((e) {
+            final userId = messagingBloc.state.userId;
+
             final (:chat, :message, contacts: _) = e;
             return FadeIn(
               child: ChatConversationsTile(conversation: chat, lastMessage: message, userId: userId, key: ValueKey(e)),
@@ -47,6 +48,8 @@ class _ConversationsListState extends State<ConversationsList> {
 
         return ListView(
           children: conversationsToShow.map((e) {
+            final userId = messagingBloc.state.userId;
+
             final conversation = e.$1;
             final lastMessage = e.$2;
             return FadeIn(

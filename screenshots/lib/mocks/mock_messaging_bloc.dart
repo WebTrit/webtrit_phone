@@ -20,6 +20,7 @@ class MockMessagingBloc extends MockBloc<MessagingEvent, MessagingState> impleme
       mock,
       const Stream<MessagingState>.empty(),
       initialState: MessagingState.initial(
+          'user-id',
           MockPhoenixSocket(),
           MessagingConfig(
             coreSmsSupport: true,

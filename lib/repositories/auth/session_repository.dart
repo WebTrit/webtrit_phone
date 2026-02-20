@@ -11,7 +11,7 @@ final _logger = Logger('SessionRepository');
 
 abstract class SessionRepository {
   /// Returns the current in-memory session snapshot.
-  Session? getCurrent();
+  Session getCurrent();
 
   /// Persists a session.
   ///
@@ -26,6 +26,10 @@ abstract class SessionRepository {
   /// Revokes the session on the server (API Call).
   /// This does NOT clear local data.
   Future<void> revokeSession(Session session);
+
+  /// Patches the current session with new values.
+  /// Only non-null parameters will be updated; null parameters will be ignored.
+  Future<void> patchSession({String? tenantId, String? token, String? coreUrl, String? userId});
 }
 
 class SessionRepositoryImpl implements SessionRepository {
@@ -63,7 +67,7 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   @override
-  Session? getCurrent() => _effectiveSession;
+  Session getCurrent() => _effectiveSession;
 
   @override
   Future<void> save(Session session) async {
@@ -130,6 +134,33 @@ class SessionRepositoryImpl implements SessionRepository {
       }
     } catch (e, st) {
       _logger.severe('Unexpected error during remote revoke', e, st);
+    }
+  }
+
+  @override
+  Future<void> patchSession({String? tenantId, String? token, String? coreUrl, String? userId}) async {
+    if (tenantId != null) {
+      await secureStorage.writeTenantId(tenantId);
+      _currentSession = _currentSession?.copyWith(tenantId: tenantId) ?? _currentSession;
+      _logger.warning('tenantId patched: $tenantId');
+    }
+
+    if (token != null) {
+      await secureStorage.writeToken(token);
+      _currentSession = _currentSession?.copyWith(token: token) ?? _currentSession;
+      _logger.warning('token patched: ${token.substring(0, 8)}...');
+    }
+
+    if (coreUrl != null) {
+      await secureStorage.writeCoreUrl(coreUrl);
+      _currentSession = _currentSession?.copyWith(coreUrl: coreUrl) ?? _currentSession;
+      _logger.warning('coreUrl patched: $coreUrl');
+    }
+
+    if (userId != null) {
+      await secureStorage.writeUserId(userId);
+      _currentSession = _currentSession?.copyWith(userId: userId) ?? _currentSession;
+      _logger.warning('userId patched: $userId');
     }
   }
 
