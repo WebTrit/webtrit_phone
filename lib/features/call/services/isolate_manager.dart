@@ -144,7 +144,11 @@ class PushNotificationIsolateManager extends IsolateManager {
     _pushService.setBackgroundServiceDelegate(this);
   }
 
+  /// The service for interacting with the isolate that was launched by an incoming push notification.
   final BackgroundPushNotificationService _pushService;
+
+  /// The metadata of the incoming call.
+  /// This is used to display the caller's name in the missed call notification.
   CallkeepIncomingCallMetadata? _metadata;
 
   Future<void> launchSignaling(CallkeepIncomingCallMetadata? metadata) async {
