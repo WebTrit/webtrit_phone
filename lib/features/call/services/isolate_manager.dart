@@ -84,13 +84,17 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
           event.callId.hashCode,
           // TODO: Add localization
           'Missed Call',
-          call.username ?? 'Unknown',
+          _getDisplayNameForMissedCall(event, call) ?? 'Unknown',
           payload: {'callId': event.callId, 'type': 'missed_call'},
         ),
       );
     } catch (e) {
       logger.severe('Failed to show missed call notification', e);
     }
+  }
+
+  String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
+    return call.username;
   }
 
   // Default behavior: End calls on signaling error.
@@ -138,10 +142,16 @@ class PushNotificationIsolateManager extends IsolateManager {
     _pushService.setBackgroundServiceDelegate(this);
   }
 
+  /// The service for interacting with the isolate that was launched by an incoming push notification.
   final BackgroundPushNotificationService _pushService;
 
-  Future<void> launchSignaling() async {
-    logger.info('Starting background call event service');
+  /// The metadata of the incoming call.
+  /// This is used to display the caller's name in the missed call notification.
+  CallkeepIncomingCallMetadata? _metadata;
+
+  Future<void> launchSignaling(CallkeepIncomingCallMetadata? metadata) async {
+    _metadata = metadata;
+    logger.info('Starting background call event service: $metadata');
     return signalingManager.launch();
   }
 
@@ -160,6 +170,20 @@ class PushNotificationIsolateManager extends IsolateManager {
     if (!(await signalingManager.hasNetworkConnection())) {
       throw Exception('Not connected');
     }
+  }
+
+  @override
+  String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
+    final signalingName = super._getDisplayNameForMissedCall(event, call);
+    if (signalingName?.isNotEmpty == true) {
+      return signalingName;
+    }
+
+    if (_metadata?.callId == event.callId && _metadata!.displayName?.isNotEmpty == true) {
+      return _metadata!.displayName;
+    }
+
+    return signalingName;
   }
 }
 

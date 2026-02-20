@@ -49,8 +49,8 @@ class LocalPushRepositoryFLNImpl implements LocalPushRepository {
   }
 
   @override
-  Future<void> displayPush(AppLocalPush notification) async {
-    FlutterLocalNotificationsPlugin().show(
+  Future<void> displayPush(AppLocalPush notification) {
+    return FlutterLocalNotificationsPlugin().show(
       notification.id,
       notification.title,
       notification.body,
