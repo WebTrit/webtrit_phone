@@ -115,7 +115,11 @@ Future<InstanceRegistry> bootstrap() async {
   );
 
   // Logger
-  final appLogger = await AppLogger.init(featureAccess.loggingConfig, appLabels);
+  final appLogger = await AppLogger.init(
+    featureAccess.loggingConfig.logLevel,
+    featureAccess.loggingConfig.remoteLoggingEnabled,
+    appLabels,
+  );
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
     ..attachToLogger(Logger.root);
 
@@ -279,7 +283,8 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
   final overrides = FeatureOverridesFactory.create(remoteCacheConfigService.snapshot);
-  await AppLogger.init(LoggingMapper.mapFromOverridesOnly(overrides), appLabelsProvider);
+  final loggingConfig = LoggingMapper.mapFromOverridesOnly(overrides);
+  await AppLogger.init(loggingConfig.logLevel, loggingConfig.remoteLoggingEnabled, appLabelsProvider);
 
   final appPush = AppRemotePush.fromFCM(message);
 

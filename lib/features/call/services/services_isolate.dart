@@ -38,7 +38,12 @@ Future<void> _initializeCommonDependencies() async {
   _secureStorage = await SecureStorageImpl.init();
   _appLabelsProvider ??= await DefaultAppMetadataProvider.init(_packageInfo!, _deviceInfo!, _appInfo!, _secureStorage!);
   final isolateOverrides = FeatureOverridesFactory.create(_remoteConfigService!.snapshot);
-  _appLogger ??= await AppLogger.init(LoggingMapper.mapFromOverridesOnly(isolateOverrides), _appLabelsProvider!);
+  final isolateLoggingConfig = LoggingMapper.mapFromOverridesOnly(isolateOverrides);
+  _appLogger ??= await AppLogger.init(
+    isolateLoggingConfig.logLevel,
+    isolateLoggingConfig.remoteLoggingEnabled,
+    _appLabelsProvider!,
+  );
   _appCertificates ??= await AppCertificates.init();
   _localPushRepository ??= LocalPushRepositoryFLNImpl();
 

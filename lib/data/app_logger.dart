@@ -6,14 +6,13 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/environment_config.dart';
-import 'package:webtrit_phone/models/models.dart';
 
 import 'app_metadata_provider.dart';
 
 final _logger = Logger('AppLogger');
 
 class AppLogger {
-  static Future<AppLogger> init(LoggingConfig loggingConfig, AppMetadataProvider labelsProvider) async {
+  static Future<AppLogger> init(Level logLevel, bool remoteLoggingEnabled, AppMetadataProvider labelsProvider) async {
     hierarchicalLoggingEnabled = true;
 
     final logzioLogLevel = Level.LEVELS.firstWhere((l) => l.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
@@ -24,13 +23,13 @@ class AppLogger {
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
-    final remoteLoggingServices = _buildRemoteLoggingServices(loggingConfig.remoteLoggingEnabled, logzioLogLevel);
+    final remoteLoggingServices = _buildRemoteLoggingServices(remoteLoggingEnabled, logzioLogLevel);
     for (var it in remoteLoggingServices) {
       it.initialize(labelsProvider.logLabels);
     }
 
     final instance = AppLogger._(remoteLoggingServices, labelsProvider);
-    instance.applyConfig(loggingConfig.logLevel);
+    instance.applyConfig(logLevel);
 
     return instance;
   }
