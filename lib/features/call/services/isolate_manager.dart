@@ -8,6 +8,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
@@ -170,6 +171,30 @@ class PushNotificationIsolateManager extends IsolateManager {
     if (!(await signalingManager.hasNetworkConnection())) {
       throw Exception('Not connected');
     }
+  }
+
+  @override
+  void _onNoActiveLines() async {
+    if (_metadata != null) {
+      final event = HangupEvent(
+        callId: _metadata!.callId,
+        line: -1,
+        reason: 'Missed',
+        code: -1,
+      );
+      final call = (
+        direction: CallDirection.incoming,
+        number: _metadata!.handle!.value,
+        video: _metadata!.hasVideo,
+        username: _metadata!.displayName,
+        createdTime: DateTime.now(),
+        acceptedTime: null,
+        hungUpTime: DateTime.now(),
+      );
+      await _showMissedCallNotification(event, call);
+      await _logCall(call);
+    }
+    await endCallsOnService();
   }
 
   @override
