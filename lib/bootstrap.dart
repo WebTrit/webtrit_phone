@@ -116,7 +116,6 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Logger
   final appLogger = await AppLogger.init(featureAccess.loggingConfig, appLabels);
-  appLogger.watchFeatureAccess(featureAccessStreamFactory.create());
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
     ..attachToLogger(Logger.root);
 
