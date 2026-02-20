@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:async/async.dart';
 
@@ -227,6 +228,108 @@ void main() {
 
     expect(secondEmission.overrides.monitorCheckInterval, isNull);
     expect(secondEmission.loggingConfig.monitorCheckInterval, const Duration(seconds: 15));
+
+    await queue.cancel();
+  });
+
+  test('create() propagates logLevel from RemoteConfig', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+
+    when(() => newRemoteSnapshot.getString('feature_log_level')).thenReturn('WARNING');
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final stream = factory.create();
+    final queue = StreamQueue(stream);
+
+    await queue.next;
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    final secondEmission = await queue.next;
+
+    expect(secondEmission.overrides.logLevel, Level.WARNING);
+    expect(secondEmission.loggingConfig.logLevel, Level.WARNING);
+
+    await queue.cancel();
+  });
+
+  test('create() defaults logLevel to Level.INFO when not set in RemoteConfig', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final stream = factory.create();
+    final queue = StreamQueue(stream);
+
+    await queue.next;
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    final secondEmission = await queue.next;
+
+    expect(secondEmission.overrides.logLevel, isNull);
+    expect(secondEmission.loggingConfig.logLevel, Level.INFO);
+
+    await queue.cancel();
+  });
+
+  test('create() propagates remoteLoggingEnabled from RemoteConfig', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+    when(() => newRemoteSnapshot.getBool('firebaseRemoteLogging')).thenReturn(true);
+
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final stream = factory.create();
+    final queue = StreamQueue(stream);
+
+    await queue.next;
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    final secondEmission = await queue.next;
+
+    expect(secondEmission.overrides.remoteLoggingEnabled, isTrue);
+    expect(secondEmission.loggingConfig.remoteLoggingEnabled, isTrue);
+
+    await queue.cancel();
+  });
+
+  test('create() defaults remoteLoggingEnabled to false when not set in RemoteConfig', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final stream = factory.create();
+    final queue = StreamQueue(stream);
+
+    await queue.next;
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    final secondEmission = await queue.next;
+
+    expect(secondEmission.overrides.remoteLoggingEnabled, isNull);
+    expect(secondEmission.loggingConfig.remoteLoggingEnabled, isFalse);
 
     await queue.cancel();
   });
