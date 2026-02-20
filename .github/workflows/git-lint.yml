@@ -16,43 +16,30 @@ jobs:
       - name: Validate Branch Name
         run: |
           BRANCH="${{ github.head_ref }}"
-          echo "🔍 Checking branch name: $BRANCH"
-          
           REGEX="^(feature|refactor|fix|chore|build|style|docs|release)/.+$"
           
           if [[ ! "$BRANCH" =~ $REGEX ]]; then
-            echo "❌ Invalid branch name: '$BRANCH'"
-            echo "💡 Use: feature/name, fix/bug-name, etc."
+            echo "Invalid branch name: '$BRANCH'"
             exit 1
           fi
-          echo "✅ Branch name is valid."
 
       - name: Validate Commit Messages
         run: |
-          echo "🔍 Checking commit messages in PR..."
+          COMMITS_FULL=$(git log --no-merges --format=%B origin/${{ github.base_ref }}..HEAD)
+          COMMITS_SUBJECTS=$(git log --no-merges --format=%s origin/${{ github.base_ref }}..HEAD)
           
-          COMMITS=$(git log --no-merges --pretty=%B origin/${{ github.base_ref }}..HEAD)
-          
-          REGEX="^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\(.+\))?:\ .+"
-          
-          CYRILLIC_REGEX='[а-яА-ЯёЁіІїЇєЄ]'
+          if echo "$COMMITS_FULL" | grep -qP '\p{Cyrillic}'; then
+            echo "Cyrillic characters detected in commits."
+            exit 1
+          fi
 
-          while IFS= read -r MSG; do
-            if [ -z "$MSG" ]; then continue; fi
+          REGEX="^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\([^)]+\))?: [^A-Z].+$"
+
+          while IFS= read -r SUBJECT; do
+            if [ -z "$SUBJECT" ]; then continue; fi
           
-            echo "💬 Testing: $MSG"
-          
-            if [[ ! "$MSG" =~ $REGEX ]]; then
-              echo "❌ Invalid format: '$MSG'"
-              echo "💡 Use: feat(scope): description"
+            if [[ ! "$SUBJECT" =~ $REGEX ]]; then
+              echo "Invalid format or capitalized description: '$SUBJECT'"
               exit 1
             fi
-          
-            if [[ "$MSG" =~ $CYRILLIC_REGEX ]]; then
-              echo "❌ Cyrillic detected in: '$MSG'"
-              echo "💡 Use English only for commit messages."
-              exit 1
-            fi
-          done <<< "$COMMITS"
-          
-          echo "✅ All commit messages are valid."
+          done <<< "$COMMITS_SUBJECTS"

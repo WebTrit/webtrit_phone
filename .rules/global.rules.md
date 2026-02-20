@@ -3,19 +3,15 @@
 **[CRITICAL]** These rules apply to ALL files and ALL requests. You must strictly follow them before
 writing any code.
 
-## 1. CRITICAL: CLEAN CODE & GIT FLOW
+## 1. CRITICAL: CLEAN CODE
 
 * **No Cyrillic:** Strictly prohibited anywhere in the codebase. This includes source files,
-  comments, strings, logs, identifiers, JSON/YAML keys, and commit messages.
+  comments, strings, logs, identifiers, and JSON/YAML keys.
 * **Self-Documenting Code:** Code must be clean and self-explanatory. Do not write comments to
   describe logic, UI structure, or use them as visual separators. Use DartDoc strictly for public
   APIs.
 * **No Conversational Filler:** AI tools or generators must output pure, commit-ready code without
   unnecessary explanations.
-* **Branch Naming:** Must follow the pattern: `feature/*`, `refactor/*`, `fix/*`, `chore/*`,
-  `build/*`, `style/*`, `docs/*`, or `release/*`.
-* **Commit Messages:** Must follow Conventional Commits format and start with a lowercase letter (
-  e.g., feat(auth): add login form, fix: resolve crash on logout).
 
 ## 2. FLUTTER ARCHITECTURE & LIFECYCLE
 
@@ -71,13 +67,3 @@ comments to describe the sections.
 * **Reusability:** To reduce duplication, sub-features can utilize l10n variables declared in their
   parent/main feature.
 * **Global Terms:** General terms (e.g., Yes, No, Ok, Cancel) can be placed in the global namespace.
-
-## 7. GIT FLOW & CONVENTIONAL COMMITS
-
-* **Branching:** Use specific prefixes: `feature/`, `refactor/`, `fix/`, `chore/`, `build/`,
-  `style/`, `docs/`, `release/`.
-* **Commits:** Strictly follow Conventional Commits.
-    * Allowed types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `style`, `ci`, `perf`,
-      `build`, `revert`.
-    * Example: `feat(ui): implement custom card widget`.
-* **No Cyrillic:** This applies to branch names and commit messages as well. English only.
