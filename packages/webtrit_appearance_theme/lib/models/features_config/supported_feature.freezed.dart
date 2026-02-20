@@ -166,7 +166,7 @@ return sipPresence(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel, int checkIntervalSec)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  sipPresence,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  sipPresence,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
@@ -191,7 +191,7 @@ return sipPresence(_that.enabled);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel, int checkIntervalSec)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  sipPresence,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  sipPresence,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that.mode);case SupportedVideoCall():
@@ -212,7 +212,7 @@ return sipPresence(_that.enabled);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel, int checkIntervalSec)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  sipPresence,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  sipPresence,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
@@ -381,7 +381,6 @@ class SupportedLoggingConfig implements SupportedFeature {
   factory SupportedLoggingConfig.fromJson(Map<String, dynamic> json) => _$SupportedLoggingConfigFromJson(json);
 
 @JsonKey() final  String logLevel;
-
 @JsonKey() final  int checkIntervalSec;
 
 @JsonKey(name: 'type')
@@ -441,8 +440,7 @@ class _$SupportedLoggingConfigCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? logLevel = null,Object? checkIntervalSec = null,}) {
   return _then(SupportedLoggingConfig(
 logLevel: null == logLevel ? _self.logLevel : logLevel // ignore: cast_nullable_to_non_nullable
-as String,
-checkIntervalSec: null == checkIntervalSec ? _self.checkIntervalSec : checkIntervalSec // ignore: cast_nullable_to_non_nullable
+as String,checkIntervalSec: null == checkIntervalSec ? _self.checkIntervalSec : checkIntervalSec // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
