@@ -11,6 +11,7 @@ class FeatureOverrides extends Equatable {
     this.isVoicemailEnabled,
     this.monitorCheckInterval,
     this.logLevel,
+    this.remoteLoggingEnabled,
   });
 
   final bool? isVideoCallEnabled;
@@ -19,6 +20,7 @@ class FeatureOverrides extends Equatable {
   final bool? isVoicemailEnabled;
   final Duration? monitorCheckInterval;
   final Level? logLevel;
+  final bool? remoteLoggingEnabled;
 
   @override
   List<Object?> get props => [
@@ -28,6 +30,7 @@ class FeatureOverrides extends Equatable {
     isVoicemailEnabled,
     monitorCheckInterval,
     logLevel,
+    remoteLoggingEnabled,
   ];
 }
 
@@ -37,7 +40,8 @@ abstract final class FeatureOverridesFactory {
   static const _kSipPresenceEnabledKey = 'feature_sip_presence_enabled';
   static const _kVoicemailEnabledKey = 'feature_voicemail_enabled';
   static const _kMonitorCheckIntervalKey = 'feature_monitor_check_interval_sec';
-  static const kLogLevelKey = 'feature_log_level';
+  static const _kLogLevelKey = 'feature_log_level';
+  static const _kRemoteLoggingEnabledKey = 'firebaseRemoteLogging';
 
   static FeatureOverrides create(RemoteConfigSnapshot snapshot) {
     final monitorIntervalSec = int.tryParse(snapshot.getString(_kMonitorCheckIntervalKey) ?? '');
@@ -46,10 +50,8 @@ abstract final class FeatureOverridesFactory {
       monitorCheckInterval = Duration(seconds: monitorIntervalSec);
     }
 
-    final logLevelName = snapshot.getString(kLogLevelKey);
-    final logLevel = logLevelName != null
-        ? Level.LEVELS.where((l) => l.name == logLevelName).firstOrNull
-        : null;
+    final logLevelName = snapshot.getString(_kLogLevelKey);
+    final logLevel = logLevelName != null ? Level.LEVELS.where((l) => l.name == logLevelName).firstOrNull : null;
 
     return FeatureOverrides(
       isVideoCallEnabled: snapshot.getBool(_kVideoCallEnabledKey),
@@ -58,7 +60,7 @@ abstract final class FeatureOverridesFactory {
       isVoicemailEnabled: snapshot.getBool(_kVoicemailEnabledKey),
       monitorCheckInterval: monitorCheckInterval,
       logLevel: logLevel,
+      remoteLoggingEnabled: snapshot.getBool(_kRemoteLoggingEnabledKey),
     );
   }
 }
-

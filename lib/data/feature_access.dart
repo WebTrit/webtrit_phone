@@ -593,20 +593,35 @@ abstract final class SupportedMapper {
 abstract final class LoggingMapper {
   static const _defaultInterval = Duration(seconds: 15);
   static const _defaultLogLevel = Level.INFO;
+  static const _defaultRemoteLoggingEnabled = false;
 
   static LoggingConfig map(AppConfig appConfig, FeatureOverrides overrides) {
     final loggingFeature =
         appConfig.supported.firstWhereOrNull((e) => e is SupportedLoggingConfig) as SupportedLoggingConfig?;
 
-    final logLevel = overrides.logLevel ??
+    final logLevel =
+        overrides.logLevel ??
         (loggingFeature != null
             ? Level.LEVELS.where((l) => l.name == loggingFeature.logLevel).firstOrNull ?? _defaultLogLevel
             : _defaultLogLevel);
 
-    final monitorCheckInterval = overrides.monitorCheckInterval ??
+    final monitorCheckInterval =
+        overrides.monitorCheckInterval ??
         (loggingFeature != null ? Duration(seconds: loggingFeature.checkIntervalSec) : _defaultInterval);
 
-    return LoggingConfig(logLevel: logLevel, monitorCheckInterval: monitorCheckInterval);
+    return LoggingConfig(
+      logLevel: logLevel,
+      monitorCheckInterval: monitorCheckInterval,
+      remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+    );
+  }
+
+  static LoggingConfig mapFromOverridesOnly(FeatureOverrides overrides) {
+    return LoggingConfig(
+      logLevel: overrides.logLevel ?? _defaultLogLevel,
+      monitorCheckInterval: overrides.monitorCheckInterval ?? _defaultInterval,
+      remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+    );
   }
 }
 
