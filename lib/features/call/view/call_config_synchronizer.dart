@@ -44,8 +44,10 @@ class _CallConfigSynchronizerState extends State<CallConfigSynchronizer> {
   }
 
   void _syncConfigs(FeatureAccess prev, FeatureAccess current) {
-    if (prev.loggingConfig != current.loggingConfig) {
-      _logger.info('LoggingConfig updated: ${prev.loggingConfig} -> ${current.loggingConfig}');
+    if (prev.loggingConfig.monitorCheckInterval != current.loggingConfig.monitorCheckInterval) {
+      _logger.info(
+        'monitorCheckInterval updated: ${prev.loggingConfig.monitorCheckInterval} -> ${current.loggingConfig.monitorCheckInterval}',
+      );
 
       context.read<CallBloc>().add(
         CallConfigEvent.updated(monitorCheckInterval: current.loggingConfig.monitorCheckInterval),
