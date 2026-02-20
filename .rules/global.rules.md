@@ -14,8 +14,8 @@ writing any code.
   unnecessary explanations.
 * **Branch Naming:** Must follow the pattern: `feature/*`, `refactor/*`, `fix/*`, `chore/*`,
   `build/*`, `style/*`, `docs/*`, or `release/*`.
-* **Commit Messages:** Must follow Conventional Commits format (e.g., `feat(auth): add login form`,
-  `fix: resolve crash on logout`).
+* **Commit Messages:** Must follow Conventional Commits format and start with a lowercase letter (
+  e.g., feat(auth): add login form, fix: resolve crash on logout).
 
 ## 2. FLUTTER ARCHITECTURE & LIFECYCLE
 
