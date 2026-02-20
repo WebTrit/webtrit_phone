@@ -44,7 +44,7 @@ Future<void> _initializeCommonDependencies() async {
   _appLogger ??= await AppLogger.init(
     isolateLoggingConfig.logLevel,
     logzioLogLevel,
-    _buildRemoteLoggingServices(isolateLoggingConfig.remoteLoggingEnabled, logzioLogLevel),
+    LogzioLoggingService.fromEnvironment(isolateLoggingConfig.remoteLoggingEnabled, logzioLogLevel),
     _appLabelsProvider!,
   );
   _appCertificates ??= await AppCertificates.init();
@@ -132,18 +132,4 @@ Future<void> onSignalingSyncCallback(CallkeepServiceStatus status, CallkeepIncom
   // no explicit "releaseResources" event, so we need a reliable trigger (or idle-timeout) to
   // call `_disposeCommonDependencies()` without breaking subsequent sync calls.
   return;
-}
-
-List<RemoteLoggingService> _buildRemoteLoggingServices(bool remoteLoggingEnabled, Level minLevel) {
-  if (!remoteLoggingEnabled) return [];
-
-  const logzioUrl = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
-  const logzioToken = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
-  final logzioBufferSize = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_BUFFER_SIZE;
-
-  if (logzioUrl != null && logzioToken != null) {
-    return [LogzioLoggingService(url: logzioUrl, token: logzioToken, bufferSize: logzioBufferSize, minLevel: minLevel)];
-  }
-
-  return [];
 }

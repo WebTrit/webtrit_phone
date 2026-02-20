@@ -119,7 +119,7 @@ Future<InstanceRegistry> bootstrap() async {
   final appLogger = await AppLogger.init(
     featureAccess.loggingConfig.logLevel,
     logzioLogLevel,
-    _buildRemoteLoggingServices(featureAccess.loggingConfig.remoteLoggingEnabled, logzioLogLevel),
+    LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled, logzioLogLevel),
     appLabels,
   );
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
@@ -290,7 +290,7 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   await AppLogger.init(
     loggingConfig.logLevel,
     logzioLogLevel,
-    _buildRemoteLoggingServices(loggingConfig.remoteLoggingEnabled, logzioLogLevel),
+    LogzioLoggingService.fromEnvironment(loggingConfig.remoteLoggingEnabled, logzioLogLevel),
     appLabelsProvider,
   );
 
@@ -414,20 +414,6 @@ Future<void> _dShowInspectLocalPush({required String title, required String body
       ),
     ),
   );
-}
-
-List<RemoteLoggingService> _buildRemoteLoggingServices(bool remoteLoggingEnabled, Level minLevel) {
-  if (!remoteLoggingEnabled) return [];
-
-  const logzioUrl = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
-  const logzioToken = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
-  final logzioBufferSize = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_BUFFER_SIZE;
-
-  if (logzioUrl != null && logzioToken != null) {
-    return [LogzioLoggingService(url: logzioUrl, token: logzioToken, bufferSize: logzioBufferSize, minLevel: minLevel)];
-  }
-
-  return [];
 }
 
 Future<void> _initWorkManager() async {

@@ -1,5 +1,7 @@
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/environment_config.dart';
+
 import 'anonymizing_formatter.dart';
 import 'filtered_logz_io_appender.dart';
 import 'remote_formatter.dart';
@@ -9,6 +11,21 @@ final _logger = Logger('LogzioLoggingService');
 
 class LogzioLoggingService implements RemoteLoggingService {
   LogzioLoggingService({required this.url, required this.token, required this.bufferSize, required this.minLevel});
+
+  static LogzioLoggingService? fromEnvironment(bool enabled, Level minLevel) {
+    if (!enabled) return null;
+
+    const url = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
+    const token = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
+    if (url == null || token == null) return null;
+
+    return LogzioLoggingService(
+      url: url,
+      token: token,
+      bufferSize: EnvironmentConfig.REMOTE_LOGZIO_LOGGING_BUFFER_SIZE,
+      minLevel: minLevel,
+    );
+  }
 
   final String url;
   final String token;

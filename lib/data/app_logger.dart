@@ -14,7 +14,7 @@ class AppLogger {
   static Future<AppLogger> init(
     Level logLevel,
     Level logzioLogLevel,
-    List<RemoteLoggingService> remoteLoggingServices,
+    LogzioLoggingService? logzioService,
     AppMetadataProvider labelsProvider,
   ) async {
     hierarchicalLoggingEnabled = true;
@@ -25,19 +25,17 @@ class AppLogger {
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
-    for (var it in remoteLoggingServices) {
-      it.initialize(labelsProvider.logLabels);
-    }
+    logzioService?.initialize(labelsProvider.logLabels);
 
-    final instance = AppLogger._(remoteLoggingServices, labelsProvider, logzioLogLevel);
+    final instance = AppLogger._(logzioService, labelsProvider, logzioLogLevel);
     instance.applyConfig(logLevel);
 
     return instance;
   }
 
-  AppLogger._(this._remoteLoggingServices, this._labelsProvider, this._logzioLogLevel);
+  AppLogger._(this._logzioService, this._labelsProvider, this._logzioLogLevel);
 
-  final List<RemoteLoggingService> _remoteLoggingServices;
+  final LogzioLoggingService? _logzioService;
   final AppMetadataProvider _labelsProvider;
   final Level _logzioLogLevel;
 
@@ -49,9 +47,6 @@ class AppLogger {
 
   /// Allows regenerating labels when coreUrl and tenantId are available.
   void regenerateRemoteLabels() {
-    final labels = _labelsProvider.logLabels;
-    for (var it in _remoteLoggingServices) {
-      it.initialize(labels);
-    }
+    _logzioService?.initialize(_labelsProvider.logLabels);
   }
 }
