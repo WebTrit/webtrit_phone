@@ -154,6 +154,9 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
       return AudioSource.uri(_uri);
     }
 
+    // No stable caching alternative exists in just_audio (0.10.5).
+    // LockCachingAudioSource is the only built-in caching API and has been actively maintained since 2020.
+    // ignore: experimental_member_use
     return LockCachingAudioSource(_uri, headers: _headers, cacheFile: _getCacheFile());
   }
 
