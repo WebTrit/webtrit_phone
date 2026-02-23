@@ -64,14 +64,16 @@ class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
     return DialogNotifyEvent(
       transaction: json['transaction'],
       line: json['line'],
-      callId: json['call_id'],
+      callId: json['call_id'] as String? ?? '',
       notify: json['notify'],
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
           : null,
-      userActiveCalls: (json['user_active_calls'] as List)
-          .map((e) => UserActiveCall.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      userActiveCalls:
+          (json['user_active_calls'] as List?)
+              ?.map((e) => UserActiveCall.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -112,18 +114,27 @@ class UserActiveCall extends Equatable {
 
   factory UserActiveCall.fromJson(Map<String, dynamic> json) {
     return UserActiveCall(
-      id: json['id'],
+      id: json['id'] as String? ?? '',
       state: UserActiveCallState.values.firstWhere(
         (e) => e.name == json['state'],
         orElse: () => UserActiveCallState.unknown,
       ),
-      callId: json['call_id'],
-      direction: UserActiveCallDirection.values.byName(json['direction']),
-      localTag: json['local_tag'],
+      callId: json['call_id'] as String? ?? '',
+      direction: _parseDirection(json['direction']),
+      localTag: json['local_tag'] as String? ?? '',
       remoteTag: json['remote_tag'],
-      remoteNumber: json['remote_number'],
+      remoteNumber: json['remote_number'] as String? ?? '',
       remoteDisplayName: json['remote_display_name'],
     );
+  }
+
+  static UserActiveCallDirection _parseDirection(dynamic value) {
+    if (value == null) return UserActiveCallDirection.initiator;
+    try {
+      return UserActiveCallDirection.values.byName(value);
+    } catch (_) {
+      return UserActiveCallDirection.initiator;
+    }
   }
 
   @override
@@ -155,15 +166,14 @@ class PresenceNotifyEvent extends NotifyEvent with EquatableMixin {
     return PresenceNotifyEvent(
       transaction: json['transaction'],
       line: json['line'],
-      callId: json['call_id'],
+      callId: json['call_id'] as String? ?? '',
       notify: json['notify'],
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
           : null,
-      number: json['number'],
-      presenceInfo: (json['presence_info'] as List<dynamic>)
-          .map((item) => SignalingPresenceInfo.fromJson(item))
-          .toList(),
+      number: json['number'] as String? ?? '',
+      presenceInfo:
+          (json['presence_info'] as List<dynamic>?)?.map((item) => SignalingPresenceInfo.fromJson(item)).toList() ?? [],
     );
   }
 
@@ -200,14 +210,14 @@ class SignalingPresenceInfo extends Equatable {
   @override
   factory SignalingPresenceInfo.fromJson(Map<String, dynamic> json) {
     return SignalingPresenceInfo(
-      id: json['id'],
-      available: json['available'],
-      note: json['note'],
+      id: json['id'] as String? ?? '',
+      available: json['available'] as bool? ?? false,
+      note: json['note'] as String? ?? '',
       statusIcon: json['status_icon'],
       device: json['device'],
       timeOffsetMin: json['time_offset_min'],
       timestamp: json['timestamp'],
-      activities: (json['activities'] as List<dynamic>).map((e) => e as String).toList(),
+      activities: (json['activities'] as List<dynamic>?)?.whereType<String>().toList() ?? [],
     );
   }
 
@@ -238,7 +248,7 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
 
   @override
   factory ReferNotifyEvent.fromJson(Map<String, dynamic> json) {
-    final contentStr = json['content'] as String;
+    final contentStr = json['content'] as String?;
     final state = switch (contentStr) {
       String s when s.startsWith('SIP/2.0 100') => ReferNotifyState.trying,
       String s when s.contains('200 OK') => ReferNotifyState.ok,
@@ -248,7 +258,7 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
     return ReferNotifyEvent(
       transaction: json['transaction'],
       line: json['line'],
-      callId: json['call_id'],
+      callId: json['call_id'] as String? ?? '',
       notify: json['notify'],
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
@@ -286,7 +296,7 @@ class UnknownNotifyEvent extends NotifyEvent with EquatableMixin {
     return UnknownNotifyEvent(
       transaction: json['transaction'],
       line: json['line'],
-      callId: json['call_id'],
+      callId: json['call_id'] as String? ?? '',
       notify: json['notify'],
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])

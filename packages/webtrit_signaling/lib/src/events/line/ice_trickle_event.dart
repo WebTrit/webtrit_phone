@@ -16,8 +16,8 @@ class IceTrickleEvent extends LineEvent {
       throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal $typeValue');
     }
 
-    final candidateJson = json['candidate'] as Map<String, dynamic>;
-    if (candidateJson['completed'] == true) {
+    final candidateJson = json['candidate'] as Map<String, dynamic>?;
+    if (candidateJson == null || candidateJson['completed'] == true) {
       return IceTrickleEvent(transaction: json['transaction'], line: json['line'], candidate: null);
     } else {
       return IceTrickleEvent(transaction: json['transaction'], line: json['line'], candidate: candidateJson);

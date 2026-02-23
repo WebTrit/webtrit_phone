@@ -109,17 +109,17 @@ class StateHandshake extends Handshake {
       throw ArgumentError.value(handshakeTypeValue, Handshake.typeKey, 'Not equal $typeValue');
     }
 
-    final keepaliveInterval = Duration(milliseconds: json['keepalive_interval'] as int);
+    final keepaliveInterval = Duration(milliseconds: json['keepalive_interval'] as int? ?? 30000);
 
-    final timestamp = json['timestamp'] as int;
+    final timestamp = json['timestamp'] as int? ?? 0;
 
     final registrationMessage = json['registration'];
     final registration = Registration(
-      status: RegistrationStatus.values.byName(registrationMessage['status']),
-      code: registrationMessage['code'],
-      reason: registrationMessage['reason'],
+      status: _parseRegistrationStatus(registrationMessage?['status']),
+      code: registrationMessage?['code'],
+      reason: registrationMessage?['reason'],
     );
-    final linesJson = json['lines'] as List<dynamic>;
+    final linesJson = json['lines'] as List<dynamic>? ?? <dynamic>[];
     final lines = linesJson
         .asMap()
         .entries
@@ -139,9 +139,9 @@ class StateHandshake extends Handshake {
             return null;
           }
 
-          final callLogs = (lineJson['call_logs'] as List<dynamic>)
+          final callLogs = (lineJson['call_logs'] as List<dynamic>? ?? <dynamic>[])
               .map<CallLog>((callLogJson) {
-                final timestamp = callLogJson[0] as int;
+                final timestamp = callLogJson[0] as int? ?? 0;
                 final requestOrResponseOrEventJson = callLogJson[1];
                 requestOrResponseOrEventJson['line'] = lineIndex; // inject line to apply universal fromJson methods
                 requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
@@ -177,7 +177,9 @@ class StateHandshake extends Handshake {
     final contactsPresenceInfoJson = json['presence_contacts_info'] as Map<String, dynamic>?;
     final contactsPresenceInfo =
         contactsPresenceInfoJson?.map((key, value) {
-          final presenceInfoList = (value as List<dynamic>).map((e) => SignalingPresenceInfo.fromJson(e)).toList();
+          final presenceInfoList =
+              (value as List<dynamic>?)?.map((e) => SignalingPresenceInfo.fromJson(e)).toList() ??
+              <SignalingPresenceInfo>[];
           return MapEntry(key, presenceInfoList);
         }) ??
         <String, List<SignalingPresenceInfo>>{};
@@ -187,9 +189,9 @@ class StateHandshake extends Handshake {
     if (guestLineJson != null) {
       final callId = guestLineJson['call_id'] as String?;
       if (callId != null) {
-        final callLogs = (guestLineJson['call_logs'] as List<dynamic>)
+        final callLogs = (guestLineJson['call_logs'] as List<dynamic>? ?? <dynamic>[])
             .map<CallLog>((callLogJson) {
-              final timestamp = callLogJson[0] as int;
+              final timestamp = callLogJson[0] as int? ?? 0;
               final requestOrResponseOrEventJson = callLogJson[1];
               requestOrResponseOrEventJson['line'] = null; // inject line to apply universal fromJson methods
               requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
@@ -225,5 +227,14 @@ class StateHandshake extends Handshake {
       contactsPresenceInfo: contactsPresenceInfo,
       guestLine: guestLine,
     );
+  }
+
+  static RegistrationStatus _parseRegistrationStatus(dynamic value) {
+    if (value == null) return RegistrationStatus.unregistered;
+    try {
+      return RegistrationStatus.values.byName(value);
+    } catch (_) {
+      return RegistrationStatus.unregistered;
+    }
   }
 }

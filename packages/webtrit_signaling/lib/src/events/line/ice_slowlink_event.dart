@@ -29,11 +29,20 @@ class IceSlowLinkEvent extends LineEvent {
 
     return IceSlowLinkEvent(
       transaction: json['transaction'],
-      mid: json['mid'],
+      mid: json['mid'] as String? ?? '',
       line: json['line'],
-      media: IceMediaType.values.byName(json['media']),
-      uplink: json['uplink'],
-      lost: json['lost'],
+      media: _parseMediaType(json['media']),
+      uplink: json['uplink'] as bool? ?? false,
+      lost: json['lost'] as int? ?? 0,
     );
+  }
+
+  static IceMediaType _parseMediaType(dynamic value) {
+    if (value == null) return IceMediaType.audio;
+    try {
+      return IceMediaType.values.byName(value);
+    } catch (_) {
+      return IceMediaType.audio;
+    }
   }
 }

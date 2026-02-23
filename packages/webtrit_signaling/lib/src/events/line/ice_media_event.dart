@@ -28,9 +28,18 @@ class IceMediaEvent extends LineEvent {
     return IceMediaEvent(
       transaction: json['transaction'],
       line: json['line'],
-      mid: json['mid'],
-      type: IceMediaType.values.byName(json['type']),
-      receiving: json['receiving'],
+      mid: json['mid'] as String? ?? '',
+      type: _parseMediaType(json['type']),
+      receiving: json['receiving'] as bool? ?? false,
     );
+  }
+
+  static IceMediaType _parseMediaType(dynamic value) {
+    if (value == null) return IceMediaType.audio;
+    try {
+      return IceMediaType.values.byName(value);
+    } catch (_) {
+      return IceMediaType.audio;
+    }
   }
 }
