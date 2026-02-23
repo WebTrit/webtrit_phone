@@ -1,5 +1,13 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(flutter test:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(dart format:*)",
+      "Bash(dart fix:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(flutter gen-l10n:*)"
+    ],
     "deny": [
       "Bash(**/webtrit_phone_keystores/**)",
       "Read(**/webtrit_phone_keystores/**)",
