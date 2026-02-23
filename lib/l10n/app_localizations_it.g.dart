@@ -1794,10 +1794,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Bilancia la qualità delle chiamate con l\'utilizzo dei dati.';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Banda larga ridotta';
+  String get settings_encoding_Section_preset_eco => 'Banda larga ridotta';
 
   @override
-  String get settings_encoding_Section_preset_bypass_tooltip =>
+  String get settings_encoding_Section_preset_eco_tooltip =>
       'Utilizza meno dati Internet e funziona meglio con connessioni lente o instabili.';
 
   @override
@@ -1815,10 +1815,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Impostazioni predefinite della qualità multimediale scelte per questa applicazione. Funziona bene per la maggior parte delle chiamate';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Modalità compatibilità';
+  String get settings_encoding_Section_preset_bypass => 'Modalità compatibilità';
 
   @override
-  String get settings_encoding_Section_preset_eco_tooltip =>
+  String get settings_encoding_Section_preset_bypass_tooltip =>
       'Ignora l\'applicazione delle impostazioni di qualità multimediale e utilizza una configurazione di chiamata non modificata. Aiuta a risolvere i problemi di compatibilità.';
 
   @override

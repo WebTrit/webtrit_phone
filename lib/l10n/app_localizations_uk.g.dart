@@ -1792,10 +1792,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_preset_balance_tooltip => 'Збалансовує якість дзвінків і використання даних.';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Низька пропускна здатність';
+  String get settings_encoding_Section_preset_eco => 'Низька пропускна здатність';
 
   @override
-  String get settings_encoding_Section_preset_bypass_tooltip =>
+  String get settings_encoding_Section_preset_eco_tooltip =>
       'Використовує менше інтернет-даних і краще працює при повільному або нестабільному з\'єднанні.';
 
   @override
@@ -1812,10 +1812,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Стандартні налаштування якості медіа, обрані для цієї програми. Підходить для більшості дзвінків.';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Режим сумісності';
+  String get settings_encoding_Section_preset_bypass => 'Режим сумісності';
 
   @override
-  String get settings_encoding_Section_preset_eco_tooltip =>
+  String get settings_encoding_Section_preset_bypass_tooltip =>
       'Пропускає застосування налаштувань якості медіа та використовує незмінену конфігурацію дзвінка. Допомагає вирішити проблеми сумісності.';
 
   @override
