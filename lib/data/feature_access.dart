@@ -62,7 +62,7 @@ class FeatureAccess extends Equatable {
     this.supportedConfig,
     this.coreSupport,
     this.overrides,
-    this.monitoringConfig,
+    this.loggingConfig,
   );
 
   final EmbeddedConfig embeddedConfig;
@@ -75,7 +75,7 @@ class FeatureAccess extends Equatable {
   final TermsConfig termsConfig;
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
-  final MonitoringConfig monitoringConfig;
+  final LoggingConfig loggingConfig;
 
   /// Represents the set of features explicitly supported and configured within the application's static [AppConfig].
   /// This includes features like theme mode and video call capabilities as defined in the application's build-time configuration.
@@ -114,7 +114,7 @@ class FeatureAccess extends Equatable {
       final contactsConfig = ContactsMapper.map(appConfig);
       final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
       final sipPresenceConfig = SipPresenceMapper.map(coreSupport, appConfig, featureOverrides);
-      final monitoringConfig = MonitoringMapper.map(appConfig, featureOverrides);
+      final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
 
@@ -132,7 +132,7 @@ class FeatureAccess extends Equatable {
         supportedConfig,
         coreSupport,
         featureOverrides,
-        monitoringConfig,
+        loggingConfig,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -152,7 +152,7 @@ class FeatureAccess extends Equatable {
     termsConfig,
     systemNotificationsConfig,
     sipPresenceConfig,
-    monitoringConfig,
+    loggingConfig,
     supportedConfig,
     coreSupport,
     overrides,
@@ -590,22 +590,38 @@ abstract final class SupportedMapper {
   }
 }
 
-abstract final class MonitoringMapper {
+abstract final class LoggingMapper {
   static const _defaultInterval = Duration(seconds: 15);
+  static const _defaultLogLevel = Level.INFO;
+  static const _defaultRemoteLoggingEnabled = false;
 
-  static MonitoringConfig map(AppConfig appConfig, FeatureOverrides overrides) {
-    if (overrides.monitorCheckInterval != null) {
-      return MonitoringConfig(monitorCheckInterval: overrides.monitorCheckInterval!);
-    }
+  static LoggingConfig map(AppConfig appConfig, FeatureOverrides overrides) {
+    final loggingFeature =
+        appConfig.supported.firstWhereOrNull((e) => e is SupportedLoggingConfig) as SupportedLoggingConfig?;
 
-    final monitorFeature =
-        appConfig.supported.firstWhereOrNull((e) => e is SupportedMonitorConfig) as SupportedMonitorConfig?;
+    final logLevel =
+        overrides.logLevel ??
+        (loggingFeature != null
+            ? Level.LEVELS.where((l) => l.name == loggingFeature.logLevel).firstOrNull ?? _defaultLogLevel
+            : _defaultLogLevel);
 
-    if (monitorFeature != null) {
-      return MonitoringConfig(monitorCheckInterval: Duration(seconds: monitorFeature.checkIntervalSec));
-    }
+    final monitorCheckInterval =
+        overrides.monitorCheckInterval ??
+        (loggingFeature != null ? Duration(seconds: loggingFeature.checkIntervalSec) : _defaultInterval);
 
-    return const MonitoringConfig(monitorCheckInterval: _defaultInterval);
+    return LoggingConfig(
+      logLevel: logLevel,
+      monitorCheckInterval: monitorCheckInterval,
+      remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+    );
+  }
+
+  static LoggingConfig mapFromOverridesOnly(FeatureOverrides overrides) {
+    return LoggingConfig(
+      logLevel: overrides.logLevel ?? _defaultLogLevel,
+      monitorCheckInterval: overrides.monitorCheckInterval ?? _defaultInterval,
+      remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+    );
   }
 }
 

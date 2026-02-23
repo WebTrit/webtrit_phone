@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/services/services.dart';
 
@@ -9,6 +10,8 @@ class FeatureOverrides extends Equatable {
     this.isSipPresenceEnabled,
     this.isVoicemailEnabled,
     this.monitorCheckInterval,
+    this.logLevel,
+    this.remoteLoggingEnabled,
   });
 
   final bool? isVideoCallEnabled;
@@ -16,6 +19,8 @@ class FeatureOverrides extends Equatable {
   final bool? isSipPresenceEnabled;
   final bool? isVoicemailEnabled;
   final Duration? monitorCheckInterval;
+  final Level? logLevel;
+  final bool? remoteLoggingEnabled;
 
   @override
   List<Object?> get props => [
@@ -24,6 +29,8 @@ class FeatureOverrides extends Equatable {
     isSipPresenceEnabled,
     isVoicemailEnabled,
     monitorCheckInterval,
+    logLevel,
+    remoteLoggingEnabled,
   ];
 }
 
@@ -33,6 +40,8 @@ abstract final class FeatureOverridesFactory {
   static const _kSipPresenceEnabledKey = 'feature_sip_presence_enabled';
   static const _kVoicemailEnabledKey = 'feature_voicemail_enabled';
   static const _kMonitorCheckIntervalKey = 'feature_monitor_check_interval_sec';
+  static const _kLogLevelKey = 'feature_log_level';
+  static const _kRemoteLoggingEnabledKey = 'firebaseRemoteLogging';
 
   static FeatureOverrides create(RemoteConfigSnapshot snapshot) {
     final monitorIntervalSec = int.tryParse(snapshot.getString(_kMonitorCheckIntervalKey) ?? '');
@@ -41,12 +50,17 @@ abstract final class FeatureOverridesFactory {
       monitorCheckInterval = Duration(seconds: monitorIntervalSec);
     }
 
+    final logLevelName = snapshot.getString(_kLogLevelKey);
+    final logLevel = logLevelName != null ? Level.LEVELS.where((l) => l.name == logLevelName).firstOrNull : null;
+
     return FeatureOverrides(
       isVideoCallEnabled: snapshot.getBool(_kVideoCallEnabledKey),
       isSystemNotificationsEnabled: snapshot.getBool(_kSystemNotificationsEnabledKey),
       isSipPresenceEnabled: snapshot.getBool(_kSipPresenceEnabledKey),
       isVoicemailEnabled: snapshot.getBool(_kVoicemailEnabledKey),
       monitorCheckInterval: monitorCheckInterval,
+      logLevel: logLevel,
+      remoteLoggingEnabled: snapshot.getBool(_kRemoteLoggingEnabledKey),
     );
   }
 }

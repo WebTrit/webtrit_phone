@@ -12,7 +12,7 @@ final _logger = Logger('CallConfigSynchronizer');
 /// Synchronizes external feature configurations with the [CallBloc].
 ///
 /// This widget acts as a logical listener layer. It monitors changes in
-/// [FeatureAccess] (e.g., [MonitoringConfig]) and dispatches the appropriate
+/// [FeatureAccess] (e.g., [LoggingConfig]) and dispatches the appropriate
 /// configuration events to the [CallBloc].
 ///
 /// By isolating this side-effect logic from visual routing components
@@ -44,11 +44,13 @@ class _CallConfigSynchronizerState extends State<CallConfigSynchronizer> {
   }
 
   void _syncConfigs(FeatureAccess prev, FeatureAccess current) {
-    if (prev.monitoringConfig != current.monitoringConfig) {
-      _logger.info('MonitoringConfig updated: ${prev.monitoringConfig} -> ${current.monitoringConfig}');
+    if (prev.loggingConfig.monitorCheckInterval != current.loggingConfig.monitorCheckInterval) {
+      _logger.info(
+        'monitorCheckInterval updated: ${prev.loggingConfig.monitorCheckInterval} -> ${current.loggingConfig.monitorCheckInterval}',
+      );
 
       context.read<CallBloc>().add(
-        CallConfigEvent.updated(monitorCheckInterval: current.monitoringConfig.monitorCheckInterval),
+        CallConfigEvent.updated(monitorCheckInterval: current.loggingConfig.monitorCheckInterval),
       );
     }
   }

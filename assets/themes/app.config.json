@@ -5,7 +5,7 @@
       "mode": "system"
     },
     {
-      "type": "monitorConfig",
+      "type": "loggingConfig",
       "checkIntervalSec": 15
     }
   ],

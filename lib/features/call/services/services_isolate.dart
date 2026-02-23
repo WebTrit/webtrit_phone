@@ -4,6 +4,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 
@@ -36,7 +37,13 @@ Future<void> _initializeCommonDependencies() async {
   _packageInfo ??= await PackageInfoFactory.init();
   _secureStorage = await SecureStorageImpl.init();
   _appLabelsProvider ??= await DefaultAppMetadataProvider.init(_packageInfo!, _deviceInfo!, _appInfo!, _secureStorage!);
-  _appLogger ??= await AppLogger.init(_remoteConfigService!.snapshot, _appLabelsProvider!);
+  final isolateOverrides = FeatureOverridesFactory.create(_remoteConfigService!.snapshot);
+  final isolateLoggingConfig = LoggingMapper.mapFromOverridesOnly(isolateOverrides);
+  _appLogger ??= await AppLogger.init(
+    isolateLoggingConfig.logLevel,
+    LogzioLoggingService.fromEnvironment(isolateLoggingConfig.remoteLoggingEnabled),
+    _appLabelsProvider!,
+  );
   _appCertificates ??= await AppCertificates.init();
   _localPushRepository ??= LocalPushRepositoryFLNImpl();
 
