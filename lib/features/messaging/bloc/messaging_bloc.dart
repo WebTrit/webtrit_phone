@@ -28,15 +28,15 @@ final _logger = Logger('MessagingBloc');
 
 class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   MessagingBloc(
-    this._userId,
     this._client,
     this._messagingConfig,
     this._chatsRepository,
     this._chatsOutboxRepository,
     this._smsRepository,
     this._smsOutboxRepository,
+    this._sessionRepository,
     this._submitNotification,
-  ) : super(MessagingState.initial(_client, _messagingConfig)) {
+  ) : super(MessagingState.initial(_sessionRepository.getCurrent().userId, _client, _messagingConfig)) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
     on<Disconnect>(_onDisconnect);
@@ -49,13 +49,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     _subs.add(_client.errorStream.listen((e) => add(_ClientError(e))));
   }
 
-  final String _userId;
   final PhoenixSocket _client;
   final MessagingConfig _messagingConfig;
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _chatsOutboxRepository;
   final SmsRepository _smsRepository;
   final SmsOutboxRepository _smsOutboxRepository;
+  final SessionRepository _sessionRepository;
   final Function(Notification) _submitNotification;
   final List<StreamSubscription> _subs = [];
 
@@ -70,10 +70,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     // -
     // Uncomment section below to wipe messaging related data
     // -
-    // _chatsRepository.wipeChatsData();
-    // _chatsOutboxRepository.wipeOutboxData();
-    // _smsRepository.wipeData();
-    // _smsOutboxRepository.wipeOutboxData();
+    // wipeData()
 
     emit(state.copyWith(status: ConnectionStatus.connecting));
     _client.connect();
@@ -89,8 +86,26 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     try {
       // Join channel for user specific events
       if (_client.userChannel == null) {
-        final userChannel = _client.createUserChannel(_userId);
-        await userChannel.join().future;
+        final userId = _sessionRepository.getCurrent().userId;
+        final userChannel = _client.createUserChannel(userId);
+        final joinReq = await userChannel.join().future;
+        final response = joinReq.response;
+
+        /// Handle the workaround for core userId upgrade
+        /// When the server detects that the client is using an old userId format, it responds with a "forbidden" message containing the new userId.
+        /// The client then updates its session with the new userId, wipes local messaging data to prevent inconsistencies
+        /// and rejoins the channel with the new userId.
+        if (response is List && response[0] == 'forbidden' && response[1] is String) {
+          final newUserId = response[1] as String;
+          _logger.warning('UserId upgrade required, new userId: $newUserId');
+
+          await _sessionRepository.patchSession(userId: newUserId);
+          await wipeData();
+
+          emit(state.copyWith(userId: newUserId));
+          final userChannel = _client.createUserChannel(newUserId);
+          await userChannel.join().future;
+        }
       }
 
       // Init workers
@@ -135,6 +150,13 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     } else {
       _logger.info('Event error notification filtered out');
     }
+  }
+
+  Future<void> wipeData() async {
+    await _chatsRepository.wipeChatsData();
+    await _chatsOutboxRepository.wipeOutboxData();
+    await _smsRepository.wipeData();
+    await _smsOutboxRepository.wipeOutboxData();
   }
 
   void _disposeWorkers() {

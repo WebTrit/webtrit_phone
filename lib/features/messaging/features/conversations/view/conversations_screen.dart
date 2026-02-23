@@ -264,7 +264,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
         body: MessagingStateWrapper(
           child: TabBarView(
             controller: _tabController,
-            children: [for (final tab in _tabs) ConversationsList(selectedTab: tab)],
+            children: [for (final tab in _tabs) ConversationsList(selectedTab: tab)], // TODO: wtf
           ),
         ),
         floatingActionButton: Builder(

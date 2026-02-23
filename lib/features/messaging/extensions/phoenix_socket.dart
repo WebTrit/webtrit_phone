@@ -26,8 +26,13 @@ PhoenixSocket createMessagingSocket(String coreUrl, String token, String tenantI
 }
 
 extension PhoenixSocketExt on PhoenixSocket {
-  /// Create user channel by [userId] and connect, if already exists returns it
-  PhoenixChannel createUserChannel(String userId) => addChannel(topic: 'chat:user:$userId');
+  /// Create user channel by [userId] and connect, if already exists replaces it
+  PhoenixChannel createUserChannel(String userId) {
+    final oldChannel = userChannel;
+    if (oldChannel != null) removeChannel(oldChannel);
+
+    return addChannel(topic: 'chat:user:$userId');
+  }
 
   /// Get user channel if exists
   PhoenixChannel? get userChannel => channels.values.firstWhereOrNull((c) => c.topic.startsWith('chat:user:'));
