@@ -51,3 +51,4 @@ makefile.shared
 
 # Agents
 .aider*
+.claude/settings.local.json

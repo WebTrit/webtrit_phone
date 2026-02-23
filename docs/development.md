@@ -71,3 +71,33 @@ bash tool/scripts/commit-msg-check.sh
 ╰───────────────────────────────────────╯
 ✅ Commit message OK.
 ```
+
+## Claude Code Settings
+
+We use [Claude Code](https://docs.anthropic.com/en/docs/claude-code) settings to enforce consistent AI-assisted development rules across the team.
+
+### Settings Levels
+
+Claude Code supports multiple settings levels with different scopes:
+
+| Level | File | Scope | Committed to repo |
+|-------|------|-------|--------------------|
+| **Team** | `.claude/settings.json` | Shared across all team members | Yes |
+| **Local** | `.claude/settings.local.json` | Personal per-developer overrides | No (gitignored) |
+| **User** | `~/.claude/settings.json` | Global per-machine settings | N/A |
+
+Settings are merged at runtime: **User < Team < Local** (local overrides team, team overrides user).
+
+### Team Settings (`.claude/settings.json`)
+
+The team settings file defines shared `deny` rules that prevent Claude Code from accessing sensitive files:
+
+- **Keystores** — `.jks`, `.keystore`, `.p12` files and `webtrit_phone_keystores/` directory
+- **Signing keys** — `.pem`, `.key`, `.p8` files
+- **Environment files** — `.env*` files
+
+These rules ensure that no team member accidentally exposes secrets or signing credentials through AI-assisted workflows.
+
+### Local Settings (`.claude/settings.local.json`)
+
+This file is gitignored and used for personal `allow` rules (e.g., auto-approving `flutter test`, `dart format`). Each developer can configure their own convenience permissions without affecting the team.
