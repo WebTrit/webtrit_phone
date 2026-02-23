@@ -2,16 +2,15 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class MockRegisterStatusCubit extends MockCubit<RegisterStatus>
-    implements RegisterStatusCubit {
+class MockRegisterStatusCubit extends MockCubit<RegisterStatus> implements RegisterStatusCubit {
   MockRegisterStatusCubit();
 
-  factory MockRegisterStatusCubit.initial(RegisterStatus initialStatus) {
+  factory MockRegisterStatusCubit.initial(bool initialValue) {
     final mock = MockRegisterStatusCubit();
     whenListen(
       mock,
       const Stream<RegisterStatus>.empty(),
-      initialState: initialStatus,
+      initialState: RegisterStatus(value: initialValue),
     );
     return mock;
   }
