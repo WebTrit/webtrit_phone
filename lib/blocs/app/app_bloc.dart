@@ -39,8 +39,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required AppThemes appThemes,
   }) : super(
          AppState(
-           session: sessionRepository.getCurrent() ?? const Session(),
-           status: (sessionRepository.getCurrent()?.isLoggedIn ?? false)
+           session: sessionRepository.getCurrent(),
+           status: (sessionRepository.getCurrent().isLoggedIn)
                ? AppLifecycleStatus.authenticated
                : AppLifecycleStatus.unauthenticated,
            themeSettings: appThemes.values.first.settings,
@@ -135,7 +135,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     // guarantees the session is already terminated.
     final shouldRevokeRemote = reason == AppLogoutReason.userRequest || reason == AppLogoutReason.serverRejection;
 
-    if (shouldRevokeRemote && currentSession != null && currentSession.isLoggedIn) {
+    if (shouldRevokeRemote && currentSession.isLoggedIn) {
       _logger.info('Revoking remote session. Reason: $reason');
       unawaited(sessionRepository.revokeSession(currentSession));
     } else {

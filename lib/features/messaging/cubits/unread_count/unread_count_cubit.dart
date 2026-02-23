@@ -11,15 +11,15 @@ final _logger = Logger('UnreadCountCubit');
 
 class UnreadCountCubit extends Cubit<UnreadCountState> {
   UnreadCountCubit({
-    required this.userId,
     required this.chatsRepository,
     required this.smsRepository,
+    required this.sessionRepository,
     this.updateDebounce = const Duration(seconds: 1),
   }) : super(UnreadCountState.initial());
 
-  final String userId;
   final ChatsRepository chatsRepository;
   final SmsRepository smsRepository;
+  final SessionRepository sessionRepository;
   final Duration updateDebounce;
   StreamSubscription? _chatsUpdatesSub;
   StreamSubscription? _smsUpdatesSub;
@@ -32,6 +32,7 @@ class UnreadCountCubit extends Cubit<UnreadCountState> {
   }
 
   void _updateUnreadCount() async {
+    final userId = sessionRepository.getCurrent().userId;
     final chatCounts = await chatsRepository.unreadedCountPerChat(userId);
     final smsCounts = await smsRepository.unreadedCountPerConversation(userId);
 

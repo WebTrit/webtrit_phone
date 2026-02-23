@@ -6,7 +6,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -22,9 +21,9 @@ class ChatConversationScreen extends StatefulWidget {
 }
 
 class _ChatConversationScreenState extends State<ChatConversationScreen> {
-  late final userId = context.read<AppBloc>().state.session.userId;
   late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<ConversationCubit>();
+  late final userId = messagingBloc.state.userId;
 
   void onMenuTap() {
     final state = conversationCubit.state;

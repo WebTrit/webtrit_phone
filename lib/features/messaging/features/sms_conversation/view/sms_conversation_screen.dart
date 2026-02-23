@@ -7,7 +7,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/fade_id.dart';
@@ -22,10 +21,10 @@ class SmsConversationScreen extends StatefulWidget {
 }
 
 class _SmsConversationScreenState extends State<SmsConversationScreen> {
-  late final userId = context.read<AppBloc>().state.session.userId;
   late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<SmsConversationCubit>();
   late final contactsRepo = context.read<ContactsRepository>();
+  late final userId = messagingBloc.state.userId;
 
   Future<void> onDeleteDialog() async {
     final askResult = await showDialog<bool>(
