@@ -10,7 +10,7 @@ import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 /// for now only opus level bitrate will be used, and ilbc as second priority for traffic reduction
 /// uncomment this when issue is fixed
 
-enum EncodingPreset { bypass, eco, balance, quality, custom }
+enum EncodingPreset { eco, balance, quality, bypass, custom }
 
 class EncodingSettings extends Equatable {
   EncodingSettings({

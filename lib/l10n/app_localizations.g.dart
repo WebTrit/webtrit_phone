@@ -3312,17 +3312,17 @@ abstract class AppLocalizations {
   /// **'Balances call quality with data usage.'**
   String get settings_encoding_Section_preset_balance_tooltip;
 
-  /// No description provided for @settings_encoding_Section_preset_bypass.
+  /// No description provided for @settings_encoding_Section_preset_eco.
   ///
   /// In en, this message translates to:
   /// **'Low bandwidth'**
-  String get settings_encoding_Section_preset_bypass;
+  String get settings_encoding_Section_preset_eco;
 
-  /// No description provided for @settings_encoding_Section_preset_bypass_tooltip.
+  /// No description provided for @settings_encoding_Section_preset_eco_tooltip.
   ///
   /// In en, this message translates to:
   /// **'Uses less internet data and works better on slow or unstable connections.'**
-  String get settings_encoding_Section_preset_bypass_tooltip;
+  String get settings_encoding_Section_preset_eco_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_custom.
   ///
@@ -3348,17 +3348,17 @@ abstract class AppLocalizations {
   /// **'The default media quality settings chosen for this application. Works well for most calls'**
   String get settings_encoding_Section_preset_default_tooltip;
 
-  /// No description provided for @settings_encoding_Section_preset_eco.
+  /// No description provided for @settings_encoding_Section_preset_bypass.
   ///
   /// In en, this message translates to:
   /// **'Compatibility mode'**
-  String get settings_encoding_Section_preset_eco;
+  String get settings_encoding_Section_preset_bypass;
 
-  /// No description provided for @settings_encoding_Section_preset_eco_tooltip.
+  /// No description provided for @settings_encoding_Section_preset_bypass_tooltip.
   ///
   /// In en, this message translates to:
   /// **'Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.'**
-  String get settings_encoding_Section_preset_eco_tooltip;
+  String get settings_encoding_Section_preset_bypass_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_full_flex.
   ///

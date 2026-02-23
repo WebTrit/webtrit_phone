@@ -988,10 +988,10 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_preset_balance,
       'settings_encoding_Section_preset_balance_tooltip':
           localizations.settings_encoding_Section_preset_balance_tooltip,
-      'settings_encoding_Section_preset_bypass':
-          localizations.settings_encoding_Section_preset_bypass,
-      'settings_encoding_Section_preset_bypass_tooltip':
-          localizations.settings_encoding_Section_preset_bypass_tooltip,
+      'settings_encoding_Section_preset_eco':
+          localizations.settings_encoding_Section_preset_eco,
+      'settings_encoding_Section_preset_eco_tooltip':
+          localizations.settings_encoding_Section_preset_eco_tooltip,
       'settings_encoding_Section_preset_custom':
           localizations.settings_encoding_Section_preset_custom,
       'settings_encoding_Section_preset_custom_tooltip':
@@ -1000,10 +1000,10 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_preset_default,
       'settings_encoding_Section_preset_default_tooltip':
           localizations.settings_encoding_Section_preset_default_tooltip,
-      'settings_encoding_Section_preset_eco':
-          localizations.settings_encoding_Section_preset_eco,
-      'settings_encoding_Section_preset_eco_tooltip':
-          localizations.settings_encoding_Section_preset_eco_tooltip,
+      'settings_encoding_Section_preset_bypass':
+          localizations.settings_encoding_Section_preset_bypass,
+      'settings_encoding_Section_preset_bypass_tooltip':
+          localizations.settings_encoding_Section_preset_bypass_tooltip,
       'settings_encoding_Section_preset_full_flex':
           localizations.settings_encoding_Section_preset_full_flex,
       'settings_encoding_Section_preset_quality':
