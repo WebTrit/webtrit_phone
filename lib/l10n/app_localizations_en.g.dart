@@ -1778,10 +1778,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_preset_balance_tooltip => 'Balances call quality with data usage.';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Low bandwidth';
+  String get settings_encoding_Section_preset_eco => 'Low bandwidth';
 
   @override
-  String get settings_encoding_Section_preset_bypass_tooltip =>
+  String get settings_encoding_Section_preset_eco_tooltip =>
       'Uses less internet data and works better on slow or unstable connections.';
 
   @override
@@ -1798,10 +1798,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The default media quality settings chosen for this application. Works well for most calls';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Compatibility mode';
+  String get settings_encoding_Section_preset_bypass => 'Compatibility mode';
 
   @override
-  String get settings_encoding_Section_preset_eco_tooltip =>
+  String get settings_encoding_Section_preset_bypass_tooltip =>
       'Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.';
 
   @override
