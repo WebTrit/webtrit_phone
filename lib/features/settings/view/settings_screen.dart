@@ -86,12 +86,16 @@ class SettingsScreen extends StatelessWidget {
                           context.l10n.settings_ListViewTileTitle_registered,
                           style: effectiveStyle?.itemTextStyle,
                         ),
-                        value: registerState,
-                        onChanged: (value) => _onRegisterStatusChanged(context, value),
-                        secondary: Icon(
-                          Icons.account_circle_outlined,
-                          color: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
-                        ),
+                        value: registerState.value,
+                        onChanged: registerState.isUpdating
+                            ? null
+                            : (value) => _onRegisterStatusChanged(context, value),
+                        secondary: registerState.isUpdating
+                            ? const SizedCircularProgressIndicator(size: 24, strokeWidth: 2)
+                            : Icon(
+                                Icons.account_circle_outlined,
+                                color: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
+                              ),
                       ),
                     ),
                     if (showSeparators) const ListTileSeparator(),

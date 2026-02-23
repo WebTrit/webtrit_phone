@@ -8,9 +8,19 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('RegisterStatusCubit');
 
+class RegisterStatus {
+  const RegisterStatus({required this.value, this.isUpdating = false});
+
+  final bool value;
+  final bool isUpdating;
+
+  RegisterStatus copyWith({bool? value, bool? isUpdating}) =>
+      RegisterStatus(value: value ?? this.value, isUpdating: isUpdating ?? this.isUpdating);
+}
+
 class RegisterStatusCubit extends Cubit<RegisterStatus> {
   RegisterStatusCubit(this.appRepository, this.registerStatusRepository, {this.handleError})
-    : super(registerStatusRepository.getRegisterStatus()) {
+    : super(RegisterStatus(value: registerStatusRepository.getRegisterStatus())) {
     fetchStatus();
     _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }
@@ -29,7 +39,7 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
     try {
       final status = await appRepository.getRegisterStatus();
       registerStatusRepository.setRegisterStatus(status);
-      emit(status);
+      emit(RegisterStatus(value: status));
     } catch (e, s) {
       _logger.warning('Failed to get register status', e, s);
       handleError?.call(e, s);
@@ -37,12 +47,14 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
   }
 
   Future<void> setStatus(bool value) async {
+    emit(RegisterStatus(value: value, isUpdating: true));
     try {
       await appRepository.setRegisterStatus(value);
       await registerStatusRepository.setRegisterStatus(value);
-      emit(value);
+      emit(RegisterStatus(value: value, isUpdating: false));
     } catch (e, stackTrace) {
       _logger.warning('_onRegisterStatusChanged', e, stackTrace);
+      emit(RegisterStatus(value: !value, isUpdating: false));
       handleError?.call(e, stackTrace);
     }
   }
@@ -53,5 +65,3 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
     return super.close();
   }
 }
-
-typedef RegisterStatus = bool;
