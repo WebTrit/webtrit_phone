@@ -73,16 +73,17 @@ FLUTTER_NATIVE_SPLASH_CONFIG = $(CONFIGS_PATH)/flutter_native_splash.yaml
 # - Use `SPLASH_COLOR` for a solid background color.
 # - Use `SPLASH_IMAGE` for a custom background image (useful for gradients).
 # - Only one of them should be set at a time.
-SPLASH_COLOR ?= "#123752"
+SPLASH_COLOR ?= \#123752
 
 # Android 12+ splash screen configuration
 #
 # - From Android 12 onwards, splash screens are handled differently.
 # - Visit: https://developer.android.com/guide/topics/ui/splash-screen
-ANDROID_12_SPLASH_COLOR ?= "#123752"
+ANDROID_12_SPLASH_COLOR ?= \#123752
+ANDROID_12_SPLASH_IMAGE ?= tool/assets/native_splash/image.png
 
 # Path to splash screen background image (if used)
-SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
+SPLASH_IMAGE ?= tool/assets/native_splash/image.png
 
 # ===========================
 #  Localizely Configuration
@@ -158,11 +159,12 @@ generate-launcher-icons:
 
 ## Generate flutter_native_splash.yaml with custom parameters
 generate-native-splash-config:
-	@echo "flutter_native_splash:" > $(FLUTTER_NATIVE_SPLASH_CONFIG)
-	@echo "  color: \"$${SPLASH_COLOR:-$(SPLASH_COLOR)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
-	@echo "  image: \"$${SPLASH_IMAGE:-$(SPLASH_IMAGE)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
-	@echo "  android_12:" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
-	@echo "    color: \"$${ANDROID_12_SPLASH_COLOR:-$(ANDROID_12_SPLASH_COLOR)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo 'flutter_native_splash:' > $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '  color: "$(SPLASH_COLOR)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '  image: "$(SPLASH_IMAGE)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '  android_12:' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '    color: "$(ANDROID_12_SPLASH_COLOR)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '    image: "$(ANDROID_12_SPLASH_IMAGE)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
 
 ## Generate native splash screen using external config
 generate-native-splash:
