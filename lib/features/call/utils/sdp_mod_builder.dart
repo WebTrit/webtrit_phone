@@ -235,8 +235,10 @@ class SDPModBuilder {
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
     if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
 
-    // PCMU(0), PCMA(8), G722(9), CN(13) are static payload types that supports by our WebRTC stack.
-    final staticPayloads = ['0', '8', '9', '13'];
+    final staticPayloads = RTPCodecProfile.values
+        .where((p) => p.staticPayload != null)
+        .map((p) => p.staticPayload.toString())
+        .toSet();
 
     final modedRtpMaps = originalRtpMaps.where((r) => !staticPayloads.contains(r['payload'].toString()));
     final modedFmtps = originalFmtps.where((f) => !staticPayloads.contains(f['payload'].toString()));
@@ -366,13 +368,18 @@ class SDPModBuilder {
   /// Get the codec profile payload id.
   /// Return codec by specific profile using fmtp records for multiprofile codecs
   /// e.g. H264 with profile 42e01f, 42e034, 640c34 etc.
-  /// Elsewhere return codec finded by rtp records.
+  /// Elsewhere return codec finded by rtp records or by static payloads if they are defined.
   dynamic _getProfileId(RTPCodecProfile profile) {
     final media = _getMedia(profile.kind);
     if (media == null) return null;
 
-    final rtps = media['rtp'] as List<dynamic>;
-    final fmtps = media['fmtp'] as List<dynamic>;
+    final payloads = media['payloads'] is String ? (media['payloads'] as String).split(' ') : [];
+    if (profile.staticPayload != null && payloads.contains(profile.staticPayload.toString())) {
+      return profile.staticPayload;
+    }
+
+    final rtps = media['rtp'] is List<dynamic> ? media['rtp'] as List<dynamic> : const [];
+    final fmtps = media['fmtp'] is List<dynamic> ? media['fmtp'] as List<dynamic> : const [];
 
     final rtp = rtps.firstWhereOrNull((r) {
       final sameCodec = r['codec'] == profile.codec.sdpKey;

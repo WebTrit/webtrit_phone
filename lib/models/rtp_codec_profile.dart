@@ -2,13 +2,13 @@
 
 enum RTPCodecProfile {
   opus(RTPCodecKind.audio, RTPCodec.opus, 48000, channels: 2),
-  g722(RTPCodecKind.audio, RTPCodec.g722, 8000),
+  g722(RTPCodecKind.audio, RTPCodec.g722, 8000, staticPayload: 9),
   ilbc(RTPCodecKind.audio, RTPCodec.ilbc, 8000),
-  pcmu(RTPCodecKind.audio, RTPCodec.pcmu, 8000),
-  pcma(RTPCodecKind.audio, RTPCodec.pcma, 8000),
+  pcmu(RTPCodecKind.audio, RTPCodec.pcmu, 8000, staticPayload: 0),
+  pcma(RTPCodecKind.audio, RTPCodec.pcma, 8000, staticPayload: 8),
   comfortNoise_32k(RTPCodecKind.audio, RTPCodec.cn, 32000),
   comfortNoise_16k(RTPCodecKind.audio, RTPCodec.cn, 16000),
-  comfortNoise_8k(RTPCodecKind.audio, RTPCodec.cn, 8000),
+  comfortNoise_8k(RTPCodecKind.audio, RTPCodec.cn, 8000, staticPayload: 13),
   telephoneEvent_48k(RTPCodecKind.audio, RTPCodec.telephoneEvent, 48000),
   telephoneEvent_16k(RTPCodecKind.audio, RTPCodec.telephoneEvent, 16000),
   telephoneEvent_8k(RTPCodecKind.audio, RTPCodec.telephoneEvent, 8000),
@@ -23,13 +23,14 @@ enum RTPCodecProfile {
   av1(RTPCodecKind.video, RTPCodec.av1, 90000),
   redundancy_video(RTPCodecKind.video, RTPCodec.red, 90000);
 
-  const RTPCodecProfile(this.kind, this.codec, this.rate, {this.channels, this.levelId});
+  const RTPCodecProfile(this.kind, this.codec, this.rate, {this.channels, this.levelId, this.staticPayload});
 
   final RTPCodecKind kind;
   final RTPCodec codec;
   final int rate;
   final int? channels;
   final String? levelId;
+  final int? staticPayload;
 }
 
 enum RTPCodec {
