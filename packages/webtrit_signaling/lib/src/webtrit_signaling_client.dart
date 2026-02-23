@@ -248,9 +248,9 @@ class WebtritSignalingClient {
       requestJson['transaction'] = transaction.id;
     }
 
-    _addMessage(requestJson);
-
     try {
+      _addMessage(requestJson);
+
       final responseJson = await transaction.future;
       if (transaction.isIdGenerate) {
         responseJson.remove('transaction');
