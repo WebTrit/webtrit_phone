@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/widgets/widgets.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 
 import './keypad_view.dart';
 import 'keypad_screen_style.dart';

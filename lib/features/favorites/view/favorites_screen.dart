@@ -13,7 +13,6 @@ import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/favorite.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../favorites.dart';
