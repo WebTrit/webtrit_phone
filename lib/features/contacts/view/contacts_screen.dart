@@ -73,9 +73,6 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final effectiveStyle = widget.style ?? themeData.extension<ContactsScreenStyles>()?.primary;
-    final background = effectiveStyle?.background;
-    final isComplexBackground = background?.isComplex ?? false;
-
     final mediaQueryData = MediaQuery.of(context);
 
     final tabBar = widget.sourceTypes.length <= 1
@@ -127,10 +124,11 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
         background: effectiveStyle?.background,
         contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
         applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+        extendBodyBehindAppBar: true,
         appBar: MainAppBar(
           title: widget.title,
-          backgroundColor: isComplexBackground ? Colors.transparent : null,
-          elevation: isComplexBackground ? 0 : null,
+          backgroundColor: themeData.canvasColor.withAlpha(150),
+          flexibleSpace: const BlurredSurface(),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,

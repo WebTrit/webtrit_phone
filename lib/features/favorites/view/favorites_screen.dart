@@ -96,18 +96,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final effectiveStyle = widget.style ?? themeData.extension<FavoritesScreenStyles>()?.primary;
-    final background = effectiveStyle?.background;
-    final isComplexBackground = background?.isComplex ?? false;
-
     return ThemedScaffold(
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
         context: context,
-        backgroundColor: isComplexBackground ? Colors.transparent : null,
-        elevation: isComplexBackground ? 0 : null,
+        backgroundColor: themeData.canvasColor.withAlpha(150),
+        flexibleSpace: const BlurredSurface(),
       ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {

@@ -42,15 +42,13 @@ class _AboutScreenState extends State<AboutScreen> {
     final themeData = Theme.of(context);
     final localStyle = widget.style ?? themeData.extension<AboutScreenStyles>()?.primary;
     final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
-    final background = localStyle?.background;
-    final isComplexBackground = background?.isComplex ?? false;
-
     return ThemedScaffold(
-      background: background,
+      background: localStyle?.background,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_about),
-        backgroundColor: isComplexBackground ? Colors.transparent : null,
-        elevation: isComplexBackground ? 0 : null,
+        backgroundColor: themeData.canvasColor.withAlpha(150),
+        flexibleSpace: const BlurredSurface(),
       ),
       body: BlocBuilder<AboutBloc, AboutState>(
         builder: (context, state) {

@@ -34,23 +34,20 @@ class SettingsScreen extends StatelessWidget {
     final effectiveStyle = style ?? themeData.extension<SettingsScreenStyles>()?.primary;
 
     final showSeparators = effectiveStyle?.showSeparators ?? true;
-    final background = effectiveStyle?.background;
-    final isComplexBackground = background?.isComplex == true;
 
-    // Calculate top padding to prevent content from going under the AppBar
-    // when using a complex background (which extends body behind app bar).
     final mediaQuery = MediaQuery.of(context);
-    final topPadding = isComplexBackground ? (kToolbarHeight + mediaQuery.padding.top) : 0.0;
+    final topPadding = kToolbarHeight + mediaQuery.padding.top;
 
     return ThemedScaffold(
-      background: background,
+      background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
-        backgroundColor: isComplexBackground ? Colors.transparent : null,
-        elevation: isComplexBackground ? 0 : null,
+        backgroundColor: themeData.canvasColor.withAlpha(150),
+        flexibleSpace: const BlurredSurface(),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -64,7 +61,7 @@ class SettingsScreen extends StatelessWidget {
           return Stack(
             children: [
               SafeArea(
-                top: !isComplexBackground,
+                top: false,
                 bottom: false,
                 child: ListView(
                   padding: (effectiveStyle?.listViewPadding ?? const EdgeInsets.only(top: 16)).add(

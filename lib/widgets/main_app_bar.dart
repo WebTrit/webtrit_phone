@@ -19,6 +19,7 @@ class MainAppBar extends AppBar {
     super.bottom,
     required BuildContext context,
     super.backgroundColor,
+    super.flexibleSpace,
     super.elevation,
   }) : super(
          centerTitle: false,

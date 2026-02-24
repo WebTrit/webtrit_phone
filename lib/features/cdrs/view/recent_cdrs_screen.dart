@@ -47,9 +47,14 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
     final mediaQueryData = MediaQuery.of(context);
     final l10n = context.l10n;
 
+    final themeData = Theme.of(context);
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
+        backgroundColor: themeData.canvasColor.withAlpha(150),
+        flexibleSpace: const BlurredSurface(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(
