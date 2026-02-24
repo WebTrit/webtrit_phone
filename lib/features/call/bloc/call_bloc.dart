@@ -2826,11 +2826,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void _addToRecents(ActiveCall activeCall) {
+    final number = activeCall.handle.value;
+    final username = activeCall.displayName;
+
+    _logger.info(
+      '[Recents:store] '
+      'direction=${activeCall.direction.name} '
+      'number=$number '
+      'number.hash=${number.hashCode} '
+      'username=$username '
+      'username.hash=${username?.hashCode} '
+      'numberEqualsUsername=${number == username} '
+      'usernameIsNull=${username == null}',
+    );
+
     NewCall call = (
       direction: activeCall.direction,
-      number: activeCall.handle.value,
+      number: number,
       video: activeCall.video,
-      username: activeCall.displayName,
+      username: username,
       createdTime: activeCall.createdTime,
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,
