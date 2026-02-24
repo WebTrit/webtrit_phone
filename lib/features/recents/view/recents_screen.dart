@@ -134,6 +134,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
       extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
+        context: context,
         backgroundColor: themeData.canvasColor.withAlpha(150),
         flexibleSpace: const BlurredSurface(),
         bottom: PreferredSize(
@@ -148,7 +149,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
             ),
           ),
         ),
-        context: context,
       ),
       body: BlocBuilder<RecentsBloc, RecentsState>(
         builder: (context, state) {

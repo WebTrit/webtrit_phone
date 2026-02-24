@@ -127,6 +127,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
         extendBodyBehindAppBar: true,
         appBar: MainAppBar(
           title: widget.title,
+          context: context,
           backgroundColor: themeData.canvasColor.withAlpha(150),
           flexibleSpace: const BlurredSurface(),
           bottom: PreferredSize(
@@ -135,7 +136,6 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
             ),
             child: Column(children: [if (tabBar != null) tabBar, search]),
           ),
-          context: context,
         ),
         body: TabBarView(
           controller: _tabController,

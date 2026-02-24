@@ -53,6 +53,7 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
       extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
+        context: context,
         backgroundColor: themeData.canvasColor.withAlpha(150),
         flexibleSpace: const BlurredSurface(),
         bottom: PreferredSize(
@@ -70,7 +71,6 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
             ),
           ),
         ),
-        context: context,
       ),
       body: TabBarView(
         controller: _tabController,
