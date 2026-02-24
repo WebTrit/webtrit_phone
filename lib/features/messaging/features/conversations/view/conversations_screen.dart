@@ -13,7 +13,6 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'conversations_screen_style.dart';
@@ -178,9 +177,6 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final effectiveStyle = widget.style ?? themeData.extension<ConversationsScreenStyles>()?.primary;
-    final background = effectiveStyle?.background;
-    final isComplexBackground = background?.isComplex ?? false;
-
     final colorScheme = themeData.colorScheme;
     final mediaQueryData = MediaQuery.of(context);
 
@@ -249,11 +245,12 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
         background: effectiveStyle?.background,
         contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
         applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+        extendBodyBehindAppBar: true,
         appBar: MainAppBar(
           title: widget.title,
           context: context,
-          backgroundColor: isComplexBackground ? Colors.transparent : null,
-          elevation: isComplexBackground ? 0 : null,
+          backgroundColor: themeData.canvasColor.withAlpha(150),
+          flexibleSpace: const BlurredSurface(),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
