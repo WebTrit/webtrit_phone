@@ -95,6 +95,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final effectiveStyle = widget.style ?? themeData.extension<FavoritesScreenStyles>()?.primary;
+    final mediaQueryData = MediaQuery.of(context);
+    final topPadding = kToolbarHeight + mediaQueryData.padding.top;
+
     return ThemedScaffold(
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
@@ -130,6 +133,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                         builder: (context, callRoutingState) {
                           return ListView.builder(
+                            padding: EdgeInsets.only(top: topPadding),
                             itemCount: favorites.length,
                             itemBuilder: (context, index) {
                               final favorite = favorites[index];

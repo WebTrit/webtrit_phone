@@ -126,6 +126,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
     final effectiveStyle = widget.style ?? themeData.extension<RecentsScreenStyles>()?.primary;
 
     final mediaQueryData = MediaQuery.of(context);
+    final topPadding = kToolbarHeight + mediaQueryData.padding.top + kMainAppBarBottomTabHeight;
 
     return ThemedScaffold(
       background: effectiveStyle?.background,
@@ -181,6 +182,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                         builder: (context, callRoutingState) {
                           return ListView.builder(
+                            padding: EdgeInsets.only(top: topPadding),
                             itemCount: recentsFiltered.length,
                             itemBuilder: (context, index) {
                               final recent = recentsFiltered[index];

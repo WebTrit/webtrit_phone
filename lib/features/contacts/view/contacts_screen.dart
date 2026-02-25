@@ -136,9 +136,22 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
             child: Column(children: [if (tabBar != null) tabBar, search]),
           ),
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: [for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType)],
+        body: MediaQuery(
+          data: mediaQueryData.copyWith(
+            padding: mediaQueryData.padding.copyWith(
+              top:
+                  mediaQueryData.padding.top +
+                  kToolbarHeight +
+                  (tabBar != null ? kMainAppBarBottomTabHeight : 0) +
+                  kMainAppBarBottomSearchHeight,
+            ),
+          ),
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType),
+            ],
+          ),
         ),
         bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
           buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,

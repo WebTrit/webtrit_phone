@@ -41,6 +41,9 @@ class _AboutScreenState extends State<AboutScreen> {
     final themeData = Theme.of(context);
     final localStyle = widget.style ?? themeData.extension<AboutScreenStyles>()?.primary;
     final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
+    final mediaQuery = MediaQuery.of(context);
+    final topPadding = kToolbarHeight + mediaQuery.padding.top;
+
     return ThemedScaffold(
       background: localStyle?.background,
       extendBodyBehindAppBar: true,
@@ -53,6 +56,7 @@ class _AboutScreenState extends State<AboutScreen> {
         builder: (context, state) {
           return Column(
             children: [
+              SizedBox(height: topPadding),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {

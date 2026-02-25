@@ -72,22 +72,29 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          FullRecentCdrsList(
-            transferEnabled: widget.transferEnabled,
-            videoEnabled: widget.videoEnabled,
-            chatsEnabled: widget.chatsEnabled,
-            smssEnabled: widget.smssEnabled,
+      body: MediaQuery(
+        data: mediaQueryData.copyWith(
+          padding: mediaQueryData.padding.copyWith(
+            top: mediaQueryData.padding.top + kToolbarHeight + kMainAppBarBottomTabHeight,
           ),
-          MissedRecentCdrsList(
-            transferEnabled: widget.transferEnabled,
-            videoEnabled: widget.videoEnabled,
-            chatsEnabled: widget.chatsEnabled,
-            smssEnabled: widget.smssEnabled,
-          ),
-        ],
+        ),
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            FullRecentCdrsList(
+              transferEnabled: widget.transferEnabled,
+              videoEnabled: widget.videoEnabled,
+              chatsEnabled: widget.chatsEnabled,
+              smssEnabled: widget.smssEnabled,
+            ),
+            MissedRecentCdrsList(
+              transferEnabled: widget.transferEnabled,
+              videoEnabled: widget.videoEnabled,
+              chatsEnabled: widget.chatsEnabled,
+              smssEnabled: widget.smssEnabled,
+            ),
+          ],
+        ),
       ),
     );
   }
