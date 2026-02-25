@@ -16,10 +16,12 @@ class ScreenshotApp extends StatelessWidget {
     super.key,
     required this.appBloc,
     required this.child,
+    this.ignorePointer = true,
   });
 
   final AppBloc appBloc;
   final Widget child;
+  final bool ignorePointer;
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +70,11 @@ class ScreenshotApp extends StatelessWidget {
       },
     );
 
-    widgetsApp = IgnorePointer(
-      child: widgetsApp,
-    );
+    if (ignorePointer) {
+      widgetsApp = IgnorePointer(
+        child: widgetsApp,
+      );
+    }
 
     final provider = MultiBlocProvider(
       providers: [
