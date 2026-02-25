@@ -123,6 +123,91 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
         appBloc: appBloc,
         child: const CallScreenScreenshot(true),
       ),
+      // Contact & messaging
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const ContactScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const ChatConversationScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const SmsConversationScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const SystemNotificationsScreenScreenshot(),
+      ),
+      // CDRs & call log
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const RecentCdrsScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const NumberCdrsScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const CallLogScreenScreenshot(),
+      ),
+      // Settings sub-screens
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const NetworkScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const LanguageScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const DiagnosticScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const CallerIdSettingsScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const PresenceSettingsScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const ThemeModeScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const VoicemailScreenScreenshot(),
+      ),
+      // Login variant
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const LoginSwitchScreenScreenshot(),
+      ),
+      // Utility screens
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const LogRecordsConsoleScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const ContactsAgreementScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const TeardownScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const PermissionsScreenScreenshot(),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: const UserAgreementScreenScreenshot(),
+      ),
     ];
 
     return DefaultTabController(

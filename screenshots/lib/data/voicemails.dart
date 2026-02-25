@@ -1,0 +1,40 @@
+import 'package:webtrit_phone/models/models.dart';
+
+final dMockVoicemails = [
+  Voicemail(
+    'vm-001',
+    '2022-07-20 09:30:00',
+    45.0,
+    '1234',
+    'Thomas Anderson',
+    '999',
+    ReadStatus.unread,
+    32000,
+    'audio/wav',
+    'https://example.com/voicemail/vm-001.wav',
+  ),
+  Voicemail(
+    'vm-002',
+    '2022-07-19 14:15:00',
+    120.0,
+    '3344',
+    'Dion Dames',
+    '999',
+    ReadStatus.read,
+    96000,
+    'audio/wav',
+    'https://example.com/voicemail/vm-002.wav',
+  ),
+  Voicemail(
+    'vm-003',
+    '2022-07-18 11:00:00',
+    30.0,
+    '5566',
+    'Stuart Peterson',
+    '999',
+    ReadStatus.unread,
+    24000,
+    'audio/wav',
+    'https://example.com/voicemail/vm-003.wav',
+  ),
+];
