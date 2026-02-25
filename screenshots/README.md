@@ -45,8 +45,7 @@ xcrun simctl openurl booted https://webtrit-phone-screenshots.firebaseapp.com/1
 ### Firebase Hosting
 
 [Firebase Hosting](https://firebase.google.com/docs/hosting) is used to host
-`apple-app-site-association` is used to host the apple-app-site-association file, which is necessary
-for iOS universal links to work.
+the `apple-app-site-association` file, which is necessary for iOS universal links to work.
 
 To update the `apple-app-site-association` file on hosting (in case of any changes) use following
 command:

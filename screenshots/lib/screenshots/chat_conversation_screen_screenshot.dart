@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-// ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/features/features.dart';
@@ -37,7 +36,6 @@ class _ChatConversationScreenScreenshotState extends State<ChatConversationScree
                 providers: [
                   BlocProvider<MessagingBloc>(create: (_) => MockMessagingBloc.initial()),
                   BlocProvider<ConversationCubit>(create: (_) => MockConversationCubit.withMessages()),
-                  BlocProvider<ChatTypingCubit>(create: (_) => MockChatTypingCubit.idle()),
                   BlocProvider<ChatsForwardingCubit>(create: (_) => MockChatsForwardingCubit.initial()),
                 ],
                 child: const ChatConversationScreen(),

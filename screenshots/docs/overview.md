@@ -102,12 +102,23 @@ Navigate to `/<index>` to view a specific screenshot (e.g., `/0` for first, `/14
 
 ### Capture on Device/Emulator
 
+Using `flutter test` (output to build directory):
+
 ```bash
 cd screenshots
 flutter test integration_test/take_screenshots_test.dart
 ```
 
 Output is saved to `build/integration_test_screenshots/<DeviceModel>/`.
+
+Using `flutter drive` (output to `output/` directory):
+
+```bash
+cd screenshots
+flutter drive --driver=test_driver/integration_test.dart --target=integration_test/take_screenshots_test.dart
+```
+
+Output is saved to `output/<name>.png`.
 
 ## Current Screenshot Coverage
 

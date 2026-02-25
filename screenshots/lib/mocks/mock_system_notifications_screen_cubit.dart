@@ -12,8 +12,13 @@ class MockSystemNotificationsScreenCubit extends MockCubit<SystemNotificationScr
     implements SystemNotificationsScreenCubit {
   MockSystemNotificationsScreenCubit();
 
+  static bool _fallbackRegistered = false;
+
   factory MockSystemNotificationsScreenCubit.withNotifications() {
-    registerFallbackValue(_FakeSystemNotification());
+    if (!_fallbackRegistered) {
+      registerFallbackValue(_FakeSystemNotification());
+      _fallbackRegistered = true;
+    }
     final mock = MockSystemNotificationsScreenCubit();
     whenListen(
       mock,

@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-// ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/features/settings/features/voicemail/bloc/voicemail_cubit.dart';

@@ -234,17 +234,14 @@ final screenshots = [
 Add to `integration_test/take_screenshots_test.dart` inside the appropriate `group`:
 
 ```dart
-group
-('take settings sub-screen screenshots
-'
-, () {
-// ... existing entries
-takeScreenshotTestWidgets('your_new_screen', () {
-return ScreenshotApp(
-appBloc: appContext.appBloc,
-child: const YourNewScreenScreenshot(),
-);
-});
+group('take settings sub-screen screenshots', () {
+  // ... existing entries
+  takeScreenshotTestWidgets('your_new_screen', () {
+    return ScreenshotApp(
+      appBloc: appContext.appBloc,
+      child: const YourNewScreenScreenshot(),
+    );
+  });
 });
 ```
 

@@ -14,7 +14,7 @@ This document lists all mocks in the `screenshots/` package, grouped by category
 | Mock                      | Type                             | Factories                                      | Used By                               |
 |---------------------------|----------------------------------|------------------------------------------------|---------------------------------------|
 | `MockAppBloc`             | `MockBloc<AppEvent, AppState>`   | `.allScreen(themeSettings, themeMode, locale)` | All screenshots (via `ScreenshotApp`) |
-| `MockSessionStatusCubit`  | `MockCubit<SessionState>`        | `.initial()`                                   | Settings screen                       |
+| `MockSessionStatusCubit`  | `MockCubit<SessionStatusState>`  | `.initial()`                                   | Settings screen                       |
 | `MockRegisterStatusCubit` | `MockCubit<RegisterStatusState>` | `.initial()`                                   | Settings screen                       |
 
 ### Login
@@ -50,11 +50,11 @@ This document lists all mocks in the `screenshots/` package, grouped by category
 | `MockMessagingBloc`          | `MockBloc<MessagingEvent, MessagingState>` | `.initial()`      |
 | `MockChatConversationsCubit` | `MockCubit<ChatConversationsState>`        | `.withMockData()` |
 | `MockConversationCubit`      | `MockCubit<ConversationState>`             | `.withMessages()` |
-| `MockChatTypingCubit`        | `MockCubit<ChatTypingState>`               | `.idle()`         |
+| `MockChatTypingCubit`        | `MockCubit<TypingUsers>`                   | `.idle()`         |
 | `MockChatsForwardingCubit`   | `MockCubit<ChatMessage?>`                  | `.initial()`      |
 | `MockSmsConversationsCubit`  | `MockCubit<SmsConversationsState>`         | `.withMockData()` |
 | `MockSmsConversationCubit`   | `MockCubit<SmsConversationState>`          | `.withMessages()` |
-| `MockSmsTypingCubit`         | `MockCubit<SmsTypingState>`                | `.idle()`         |
+| `MockSmsTypingCubit`         | `MockCubit<TypingNumbers>`                 | `.idle()`         |
 | `MockUnreadCountCubit`       | `MockCubit<UnreadCountState>`              | `.initial()`      |
 
 ### Calls & CDRs
@@ -64,7 +64,7 @@ This document lists all mocks in the `screenshots/` package, grouped by category
 | `MockCallBloc`              | `MockBloc<CallEvent, CallState>`       | `.mainScreen()`, `.callScreen(video)` |
 | `MockCallRoutingCubit`      | `MockCubit<CallRoutingState>`          | `.initial()`                          |
 | `MockFullRecentCdrsCubit`   | `MockCubit<FullRecentCdrsState>`       | `.withCdrs()`                         |
-| `MockMissedRecentCdrsCubit` | `MockCubit<MissedRecentCdrsState>`     | `.withCdrs()`                         |
+| `MockMissedRecentCdrsCubit` | `MockCubit<MissedRecentCdrsState>`     | `.withRecords()`                      |
 | `MockNumberCdrsLogCubit`    | `MockCubit<NumberCdrsLogState>`        | `.withRecords()`                      |
 | `MockCallLogBloc`           | `MockBloc<CallLogEvent, CallLogState>` | `.withHistory()`                      |
 
@@ -77,16 +77,16 @@ This document lists all mocks in the `screenshots/` package, grouped by category
 | `MockNetworkCubit`           | `MockCubit<NetworkState>`                | `.initial()`       |
 | `MockDiagnosticCubit`        | `MockCubit<DiagnosticState>`             | `.initial()`       |
 | `MockCallerIdSettingsCubit`  | `MockCubit<CallerIdSettingsState>`       | `.initial()`       |
-| `MockPresenceSettingsCubit`  | `MockCubit<PresenceSettingsState>`       | `.initial()`       |
+| `MockPresenceSettingsCubit`  | `MockCubit<PresenceSettings>`            | `.initial()`       |
 | `MockVoicemailCubit`         | `MockCubit<VoicemailState>`              | `.withItems()`     |
-| `MockLogRecordsConsoleCubit` | `MockCubit<LogRecordsConsoleState>`      | `.initial()`       |
+| `MockLogRecordsConsoleCubit` | `MockCubit<LogRecordsConsoleState>`      | `.withRecords()`   |
 
 ### Notifications
 
 | Mock                                  | Type                                       | Factories              |
 |---------------------------------------|--------------------------------------------|------------------------|
 | `MockNotificationsBloc`               | `MockBloc<..., NotificationsState>`        | `.initial()`           |
-| `MockSystemNotificationsCounterCubit` | `MockCubit<int>`                           | `.initial()`           |
+| `MockSystemNotificationCounterCubit`  | `MockCubit<int>`                           | `.withDefaults()`      |
 | `MockSystemNotificationsScreenCubit`  | `MockCubit<SystemNotificationScreenState>` | `.withNotifications()` |
 
 ### User Info
@@ -139,9 +139,7 @@ This document lists all mocks in the `screenshots/` package, grouped by category
 ### Getter
 
 ```dart
-when
-(
-() => mock.dateFormat).thenReturn(DateFormat.yMMMd().add_Hm());
+when(() => mock.dateFormat).thenReturn(DateFormat.yMMMd().add_Hm());
 when(() => mock.smsFallbackAvailable).thenReturn(false);
 when(() => mock.number).thenReturn('1234');
 ```
@@ -149,9 +147,7 @@ when(() => mock.number).thenReturn('1234');
 ### Async Method
 
 ```dart
-when
-(
-() => mock.userReadedUntilUpdate(any())).thenAnswer((_) async {});
+when(() => mock.userReadedUntilUpdate(any())).thenAnswer((_) async {});
 when(() => mock.markAsSeen(any())).thenAnswer((_) async {});
 ```
 
@@ -160,17 +156,11 @@ when(() => mock.markAsSeen(any())).thenAnswer((_) async {});
 ```dart
 class _FakeSystemNotification extends Fake implements SystemNotification {}
 
-factory
-MockSomeBloc.ready
-() {
+factory MockSomeBloc.ready() {
+  registerFallbackValue(_FakeSystemNotification());
 
-registerFallbackValue(_FakeSystemNotification());
-
-final mock = MockSomeBloc();
-when
-(
-() => mock.markAsSeen(any())).thenAnswer((_) async {});
-return
-mock;
+  final mock = MockSomeBloc();
+  when(() => mock.markAsSeen(any())).thenAnswer((_) async {});
+  return mock;
 }
 ```
