@@ -2,20 +2,33 @@
 
 WebTrit Phone screenshots application.
 
-This application intends to run integration tests over it to generate WebTrit Phone screenshots used with app marketplaces.
+This application intends to run integration tests over it to generate WebTrit Phone screenshots used
+with app marketplaces.
 
 Also, widgets, mocks and data from this application are going to be used by configuration tools.
 
+## Documentation
+
+- [Overview](docs/overview.md) — architecture, directory structure, how it all works
+- [Adding Screenshots](docs/adding_screenshots.md) — step-by-step guide to add a new screenshot
+- [Mock Reference](docs/mocks.md) — index of all mock BLoCs, Cubits, and Repositories
+- [Data Reference](docs/data.md) — index of all static mock data files
+
+## Usage
+
 To run take screenshots integration test next command needs to be executed:
+
 ```shell
 flutter drive --driver=test_driver/integration_test.dart --target=integration_test/take_screenshots_test.dart
 ```
 
 ## Deep linking
 
-[Deep linking](https://docs.flutter.dev/development/ui/navigation/deep-linking) is used to navigate to a specific screen in the app using a command line.
+[Deep linking](https://docs.flutter.dev/development/ui/navigation/deep-linking) is used to navigate
+to a specific screen in the app using a command line.
 
 Android command example:
+
 ```shell
 adb shell 'am start -a android.intent.action.VIEW \
     -c android.intent.category.BROWSABLE \
@@ -24,15 +37,19 @@ adb shell 'am start -a android.intent.action.VIEW \
 ```
 
 iOS command example:
+
 ```shell
 xcrun simctl openurl booted https://webtrit-phone-screenshots.firebaseapp.com/1
 ```
 
 ### Firebase Hosting
 
-[Firebase Hosting](https://firebase.google.com/docs/hosting) is used to host `apple-app-site-association` is used to host the apple-app-site-association file, which is necessary for iOS universal links to work.
+[Firebase Hosting](https://firebase.google.com/docs/hosting) is used to host
+the `apple-app-site-association` file, which is necessary for iOS universal links to work.
 
-To update the `apple-app-site-association` file on hosting (in case of any changes) use following command:
+To update the `apple-app-site-association` file on hosting (in case of any changes) use following
+command:
+
 ```shell
 firebase deploy --only hosting
 ```

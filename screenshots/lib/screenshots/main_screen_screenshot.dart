@@ -31,7 +31,8 @@ class MainScreenScreenshot extends StatelessWidget {
     // If FeatureAccess is not available, fallback to predefined default tabs.
     final featureAccess = context.read<FeatureAccess?>();
 
-    final tabs = featureAccess?.bottomMenuConfig.tabs ?? _defaultTabs(context);
+    final configTabs = featureAccess?.bottomMenuConfig.tabs;
+    final tabs = (configTabs != null && configTabs.length >= 2) ? configTabs : _defaultTabs(context);
 
     return MultiProvider(
       providers: [

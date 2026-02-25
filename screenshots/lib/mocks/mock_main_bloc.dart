@@ -2,8 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
-class MockMainBloc extends MockBloc<MainBlocEvent, MainBlocState>
-    implements MainBloc {
+class MockMainBloc extends MockBloc<MainBlocEvent, MainBlocState> implements MainBloc {
   MockMainBloc();
 
   factory MockMainBloc.mainScreen() {
