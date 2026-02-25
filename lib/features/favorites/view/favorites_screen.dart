@@ -13,7 +13,6 @@ import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/favorite.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../favorites.dart';
@@ -96,18 +95,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final effectiveStyle = widget.style ?? themeData.extension<FavoritesScreenStyles>()?.primary;
-    final background = effectiveStyle?.background;
-    final isComplexBackground = background?.isComplex ?? false;
+    final mediaQueryData = MediaQuery.of(context);
+    final topPadding = kToolbarHeight + mediaQueryData.padding.top;
 
     return ThemedScaffold(
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
         context: context,
-        backgroundColor: isComplexBackground ? Colors.transparent : null,
-        elevation: isComplexBackground ? 0 : null,
+        backgroundColor: themeData.canvasColor.withAlpha(150),
+        flexibleSpace: const BlurredSurface(),
       ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
@@ -133,6 +133,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                         builder: (context, callRoutingState) {
                           return ListView.builder(
+                            padding: EdgeInsets.only(top: topPadding),
                             itemCount: favorites.length,
                             itemBuilder: (context, index) {
                               final favorite = favorites[index];

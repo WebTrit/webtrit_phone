@@ -3,6 +3,7 @@ export 'ago_ticker.dart';
 export 'agreement_checkbox.dart';
 export 'app_icon.dart';
 export 'back_button.dart';
+export 'blurred_surface.dart';
 export 'circular_progress_template.dart';
 export 'configurable_theme_image.dart';
 export 'confirm_dialog.dart';

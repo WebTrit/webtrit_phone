@@ -47,9 +47,15 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
     final mediaQueryData = MediaQuery.of(context);
     final l10n = context.l10n;
 
+    final themeData = Theme.of(context);
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
+        context: context,
+        backgroundColor: themeData.canvasColor.withAlpha(150),
+        flexibleSpace: const BlurredSurface(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(
@@ -65,24 +71,30 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
             ),
           ),
         ),
-        context: context,
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          FullRecentCdrsList(
-            transferEnabled: widget.transferEnabled,
-            videoEnabled: widget.videoEnabled,
-            chatsEnabled: widget.chatsEnabled,
-            smssEnabled: widget.smssEnabled,
+      body: MediaQuery(
+        data: mediaQueryData.copyWith(
+          padding: mediaQueryData.padding.copyWith(
+            top: mediaQueryData.padding.top + kToolbarHeight + kMainAppBarBottomTabHeight,
           ),
-          MissedRecentCdrsList(
-            transferEnabled: widget.transferEnabled,
-            videoEnabled: widget.videoEnabled,
-            chatsEnabled: widget.chatsEnabled,
-            smssEnabled: widget.smssEnabled,
-          ),
-        ],
+        ),
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            FullRecentCdrsList(
+              transferEnabled: widget.transferEnabled,
+              videoEnabled: widget.videoEnabled,
+              chatsEnabled: widget.chatsEnabled,
+              smssEnabled: widget.smssEnabled,
+            ),
+            MissedRecentCdrsList(
+              transferEnabled: widget.transferEnabled,
+              videoEnabled: widget.videoEnabled,
+              chatsEnabled: widget.chatsEnabled,
+              smssEnabled: widget.smssEnabled,
+            ),
+          ],
+        ),
       ),
     );
   }

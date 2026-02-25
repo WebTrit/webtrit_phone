@@ -15,7 +15,6 @@ import 'package:webtrit_phone/features/recents/view/recents_screen_styles.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../call/call.dart';
@@ -125,19 +124,20 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final effectiveStyle = widget.style ?? themeData.extension<RecentsScreenStyles>()?.primary;
-    final background = effectiveStyle?.background;
-    final isComplexBackground = background?.isComplex ?? false;
 
     final mediaQueryData = MediaQuery.of(context);
+    final topPadding = kToolbarHeight + mediaQueryData.padding.top + kMainAppBarBottomTabHeight;
 
     return ThemedScaffold(
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
-        backgroundColor: isComplexBackground ? Colors.transparent : null,
-        elevation: isComplexBackground ? 0 : null,
+        context: context,
+        backgroundColor: themeData.canvasColor.withAlpha(150),
+        flexibleSpace: const BlurredSurface(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(
@@ -150,7 +150,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
             ),
           ),
         ),
-        context: context,
       ),
       body: BlocBuilder<RecentsBloc, RecentsState>(
         builder: (context, state) {
@@ -183,6 +182,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                         builder: (context, callRoutingState) {
                           return ListView.builder(
+                            padding: EdgeInsets.only(top: topPadding),
                             itemCount: recentsFiltered.length,
                             itemBuilder: (context, index) {
                               final recent = recentsFiltered[index];

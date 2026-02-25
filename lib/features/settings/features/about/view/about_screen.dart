@@ -7,7 +7,6 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 
 import '../bloc/about_bloc.dart';
 import '../widgets/widgets.dart';
@@ -42,20 +41,22 @@ class _AboutScreenState extends State<AboutScreen> {
     final themeData = Theme.of(context);
     final localStyle = widget.style ?? themeData.extension<AboutScreenStyles>()?.primary;
     final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
-    final background = localStyle?.background;
-    final isComplexBackground = background?.isComplex ?? false;
+    final mediaQuery = MediaQuery.of(context);
+    final topPadding = kToolbarHeight + mediaQuery.padding.top;
 
     return ThemedScaffold(
-      background: background,
+      background: localStyle?.background,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_about),
-        backgroundColor: isComplexBackground ? Colors.transparent : null,
-        elevation: isComplexBackground ? 0 : null,
+        backgroundColor: themeData.canvasColor.withAlpha(150),
+        flexibleSpace: const BlurredSurface(),
       ),
       body: BlocBuilder<AboutBloc, AboutState>(
         builder: (context, state) {
           return Column(
             children: [
+              SizedBox(height: topPadding),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
