@@ -7,11 +7,11 @@
         "applyToAppBar": false
       },
       "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
-      "_background": {
+      "background": {
         "type": "gradient",
         "colors": [
-          "#162533",
-          "#000000"
+          "#5CACE3",
+          "#123752"
         ],
         "stops": [
           0.0,
@@ -139,6 +139,21 @@
     }
   },
   "dialing": {
+    "background": {
+      "type": "gradient",
+      "colors": [
+        "#5CACE3",
+        "#123752"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    },
     "systemUiOverlayStyle": {
       "statusBarIconBrightness": "dark",
       "statusBarBrightness": "light",
