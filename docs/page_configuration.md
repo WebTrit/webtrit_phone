@@ -84,6 +84,14 @@ Top-level keys inside `login`:
       "mainLogo": {
         "asset": "assets/branding/logo.png"
       },
+      "greetingTextStyle": {
+        "color": "#FFFFFFFF",
+        "fontSize": 24,
+        "fontWeight": { "weight": 600 },
+        "backgroundColor": "#CC123752",
+        "backgroundBorderRadius": 8.0,
+        "backgroundPadding": { "left": 16, "top": 8, "right": 16, "bottom": 8 }
+      },
       "buttonLoginStyleType": "primary",
       "buttonSignupStyleType": "primary"
     }
@@ -95,6 +103,7 @@ Top-level keys inside `login`:
 
 - `systemUiOverlayStyle` — status/navigation bar colors & icon brightness
 - `mainLogo` — image descriptor for the primary logo
+- `greetingTextStyle` — text style for the greeting/onboarding text (see [TextStyleConfig](#text-style-textstyleconfig-shape)); when `backgroundColor` is combined with `backgroundBorderRadius` or `backgroundPadding`, a rounded decorated background is rendered behind the text
 - `buttonLoginStyleType`, `buttonSignupStyleType` — enum style presets
 
 ---
