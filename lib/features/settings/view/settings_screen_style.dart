@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/blurred_surface.dart';
 
 import '../widgets/group_title_list_style.dart';
 
@@ -13,6 +14,8 @@ import '../widgets/group_title_list_style.dart';
 class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   const SettingScreenStyle({
     super.background,
+    super.appBarBackgroundColor,
+    super.appBarBlurredSurface,
     this.contentThemeOverride,
     this.applyToAppBar,
     this.leadingIconsColor,
@@ -50,6 +53,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
 
   SettingScreenStyle copyWith({
     BackgroundStyle? background,
+    Color? appBarBackgroundColor,
+    BlurredSurfaceStyle? appBarBlurredSurface,
     ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
     Color? leadingIconsColor,
@@ -62,6 +67,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   }) {
     return SettingScreenStyle(
       background: background ?? this.background,
+      appBarBackgroundColor: appBarBackgroundColor ?? this.appBarBackgroundColor,
+      appBarBlurredSurface: appBarBlurredSurface ?? this.appBarBlurredSurface,
       contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
       applyToAppBar: applyToAppBar ?? this.applyToAppBar,
       leadingIconsColor: leadingIconsColor ?? this.leadingIconsColor,
@@ -80,6 +87,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
 
     return SettingScreenStyle(
       background: b.background ?? a.background,
+      appBarBackgroundColor: b.appBarBackgroundColor ?? a.appBarBackgroundColor,
+      appBarBlurredSurface: BlurredSurfaceStyle.merge(a.appBarBlurredSurface, b.appBarBlurredSurface),
       contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
       applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
       leadingIconsColor: b.leadingIconsColor ?? a.leadingIconsColor,
@@ -95,6 +104,8 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   static SettingScreenStyle lerp(SettingScreenStyle? a, SettingScreenStyle? b, double t) {
     return SettingScreenStyle(
       background: BaseScreenStyle.lerp(a?.background, b?.background, t),
+      appBarBackgroundColor: Color.lerp(a?.appBarBackgroundColor, b?.appBarBackgroundColor, t),
+      appBarBlurredSurface: BlurredSurfaceStyle.lerp(a?.appBarBlurredSurface, b?.appBarBlurredSurface, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
       leadingIconsColor: Color.lerp(a?.leadingIconsColor, b?.leadingIconsColor, t),

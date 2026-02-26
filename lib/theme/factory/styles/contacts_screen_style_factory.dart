@@ -20,6 +20,8 @@ class ContactsScreenStyleFactory implements ThemeStyleFactory<ContactsScreenStyl
     return ContactsScreenStyles(
       primary: ContactsScreenStyle(
         background: backgroundStyle,
+        appBarBackgroundColor: config.appBarBackgroundColor?.toColor(),
+        appBarBlurredSurface: config.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
       ),

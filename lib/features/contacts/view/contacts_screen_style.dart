@@ -2,16 +2,31 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/blurred_surface.dart';
 
 class ContactsScreenStyle extends BaseScreenStyle with Diagnosticable {
-  const ContactsScreenStyle({super.background, this.contentThemeOverride, this.applyToAppBar});
+  const ContactsScreenStyle({
+    super.background,
+    super.appBarBackgroundColor,
+    super.appBarBlurredSurface,
+    this.contentThemeOverride,
+    this.applyToAppBar,
+  });
 
   final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
 
-  ContactsScreenStyle copyWith({BackgroundStyle? background, ThemeMode? contentThemeOverride, bool? applyToAppBar}) {
+  ContactsScreenStyle copyWith({
+    BackgroundStyle? background,
+    Color? appBarBackgroundColor,
+    BlurredSurfaceStyle? appBarBlurredSurface,
+    ThemeMode? contentThemeOverride,
+    bool? applyToAppBar,
+  }) {
     return ContactsScreenStyle(
       background: background ?? this.background,
+      appBarBackgroundColor: appBarBackgroundColor ?? this.appBarBackgroundColor,
+      appBarBlurredSurface: appBarBlurredSurface ?? this.appBarBlurredSurface,
       contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
       applyToAppBar: applyToAppBar ?? this.applyToAppBar,
     );
@@ -23,6 +38,8 @@ class ContactsScreenStyle extends BaseScreenStyle with Diagnosticable {
 
     return ContactsScreenStyle(
       background: b.background ?? a.background,
+      appBarBackgroundColor: b.appBarBackgroundColor ?? a.appBarBackgroundColor,
+      appBarBlurredSurface: BlurredSurfaceStyle.merge(a.appBarBlurredSurface, b.appBarBlurredSurface),
       contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
       applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
     );
@@ -31,6 +48,8 @@ class ContactsScreenStyle extends BaseScreenStyle with Diagnosticable {
   static ContactsScreenStyle lerp(ContactsScreenStyle? a, ContactsScreenStyle? b, double t) {
     return ContactsScreenStyle(
       background: BaseScreenStyle.lerp(a?.background, b?.background, t),
+      appBarBackgroundColor: Color.lerp(a?.appBarBackgroundColor, b?.appBarBackgroundColor, t),
+      appBarBlurredSurface: BlurredSurfaceStyle.lerp(a?.appBarBlurredSurface, b?.appBarBlurredSurface, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
     );

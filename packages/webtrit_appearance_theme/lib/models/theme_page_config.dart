@@ -196,6 +196,8 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig implements Base
     this.buttonSignupStyleType = ElevatedButtonStyleType.primary,
     this.background,
     this.greetingTextStyle,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
   });
 
   @override
@@ -219,6 +221,12 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig implements Base
   @override
   final TextStyleConfig? greetingTextStyle;
 
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
+
   factory LoginModeSelectPageConfig.fromJson(Map<String, Object?> json) => _$LoginModeSelectPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LoginModeSelectPageConfigToJson(this);
@@ -232,6 +240,8 @@ class LoginSwitchPageConfig with _$LoginSwitchPageConfig implements BasePageConf
     this.background,
     this.themeOverride = const ThemeOverrideConfig(),
     this.segmentButtonStyle,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
   });
 
   @override
@@ -246,6 +256,12 @@ class LoginSwitchPageConfig with _$LoginSwitchPageConfig implements BasePageConf
   @override
   final ButtonStyleConfig? segmentButtonStyle;
 
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
+
   factory LoginSwitchPageConfig.fromJson(Map<String, Object?> json) => _$LoginSwitchPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LoginSwitchPageConfigToJson(this);
@@ -255,7 +271,13 @@ class LoginSwitchPageConfig with _$LoginSwitchPageConfig implements BasePageConf
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AboutPageConfig with _$AboutPageConfig implements BasePageConfig {
-  const AboutPageConfig({this.mainLogo, this.metadata = const Metadata(), this.background});
+  const AboutPageConfig({
+    this.mainLogo,
+    this.metadata = const Metadata(),
+    this.background,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
+  });
 
   @override
   final ImageSource? mainLogo;
@@ -265,6 +287,12 @@ class AboutPageConfig with _$AboutPageConfig implements BasePageConfig {
 
   @override
   final PageBackground? background;
+
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
 
   factory AboutPageConfig.fromJson(Map<String, Object?> json) => _$AboutPageConfigFromJson(json);
 
@@ -279,7 +307,15 @@ class AboutPageConfig with _$AboutPageConfig implements BasePageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class CallPageConfig with _$CallPageConfig implements BasePageConfig {
-  const CallPageConfig({this.systemUiOverlayStyle, this.callInfo, this.actions, this.background, this.appBarStyle});
+  const CallPageConfig({
+    this.systemUiOverlayStyle,
+    this.callInfo,
+    this.actions,
+    this.background,
+    this.appBarStyle,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
+  });
 
   @override
   final OverlayStyleModel? systemUiOverlayStyle;
@@ -295,6 +331,12 @@ class CallPageConfig with _$CallPageConfig implements BasePageConfig {
 
   @override
   final PageBackground? background;
+
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
 
   factory CallPageConfig.fromJson(Map<String, Object?> json) => _$CallPageConfigFromJson(json);
 
@@ -388,6 +430,8 @@ class KeypadPageConfig with _$KeypadPageConfig implements BasePageConfig {
     this.actionpad,
     this.background,
     this.themeOverride = const ThemeOverrideConfig(),
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
   });
 
   @override
@@ -411,6 +455,12 @@ class KeypadPageConfig with _$KeypadPageConfig implements BasePageConfig {
   /// Configuration to force override the theme mode (e.g., force Dark mode).
   @override
   final ThemeOverrideConfig themeOverride;
+
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
 
   factory KeypadPageConfig.fromJson(Map<String, Object?> json) => _$KeypadPageConfigFromJson(json);
 
@@ -452,6 +502,8 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
     this.showSeparators = true,
     this.background,
     this.itemTextStyle,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
   });
 
   /// Configuration to force override the theme mode.
@@ -479,6 +531,12 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   @override
   final TextStyleConfig? itemTextStyle;
 
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
+
   factory SettingsPageConfig.fromJson(Map<String, Object?> json) => _$SettingsPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$SettingsPageConfigToJson(this);
@@ -487,7 +545,12 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ContactsPageConfig with _$ContactsPageConfig implements BasePageConfig {
-  const ContactsPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+  const ContactsPageConfig({
+    this.themeOverride = const ThemeOverrideConfig(),
+    this.background,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
+  });
 
   /// Configuration to force override the theme mode.
   @override
@@ -495,6 +558,12 @@ class ContactsPageConfig with _$ContactsPageConfig implements BasePageConfig {
 
   @override
   final PageBackground? background;
+
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
 
   factory ContactsPageConfig.fromJson(Map<String, Object?> json) => _$ContactsPageConfigFromJson(json);
 
@@ -504,7 +573,12 @@ class ContactsPageConfig with _$ContactsPageConfig implements BasePageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class EmbeddedPageConfig with _$EmbeddedPageConfig implements BasePageConfig {
-  const EmbeddedPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+  const EmbeddedPageConfig({
+    this.themeOverride = const ThemeOverrideConfig(),
+    this.background,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
+  });
 
   /// Configuration to force override the theme mode.
   @override
@@ -512,6 +586,12 @@ class EmbeddedPageConfig with _$EmbeddedPageConfig implements BasePageConfig {
 
   @override
   final PageBackground? background;
+
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
 
   factory EmbeddedPageConfig.fromJson(Map<String, Object?> json) => _$EmbeddedPageConfigFromJson(json);
 
@@ -521,7 +601,12 @@ class EmbeddedPageConfig with _$EmbeddedPageConfig implements BasePageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class FavoritesPageConfig with _$FavoritesPageConfig implements BasePageConfig {
-  const FavoritesPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+  const FavoritesPageConfig({
+    this.themeOverride = const ThemeOverrideConfig(),
+    this.background,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
+  });
 
   /// Configuration to force override the theme mode.
   @override
@@ -529,6 +614,12 @@ class FavoritesPageConfig with _$FavoritesPageConfig implements BasePageConfig {
 
   @override
   final PageBackground? background;
+
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
 
   factory FavoritesPageConfig.fromJson(Map<String, Object?> json) => _$FavoritesPageConfigFromJson(json);
 
@@ -538,7 +629,12 @@ class FavoritesPageConfig with _$FavoritesPageConfig implements BasePageConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ConversationsPageConfig with _$ConversationsPageConfig implements BasePageConfig {
-  const ConversationsPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+  const ConversationsPageConfig({
+    this.themeOverride = const ThemeOverrideConfig(),
+    this.background,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
+  });
 
   /// Configuration to force override the theme mode.
   @override
@@ -546,6 +642,12 @@ class ConversationsPageConfig with _$ConversationsPageConfig implements BasePage
 
   @override
   final PageBackground? background;
+
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
 
   factory ConversationsPageConfig.fromJson(Map<String, Object?> json) => _$ConversationsPageConfigFromJson(json);
 
@@ -555,7 +657,12 @@ class ConversationsPageConfig with _$ConversationsPageConfig implements BasePage
 @freezed
 @JsonSerializable(explicitToJson: true)
 class RecentsPageConfig with _$RecentsPageConfig implements BasePageConfig {
-  const RecentsPageConfig({this.themeOverride = const ThemeOverrideConfig(), this.background});
+  const RecentsPageConfig({
+    this.themeOverride = const ThemeOverrideConfig(),
+    this.background,
+    this.appBarBackgroundColor,
+    this.appBarBlurredSurface,
+  });
 
   /// Configuration to force override the theme mode.
   @override
@@ -563,6 +670,12 @@ class RecentsPageConfig with _$RecentsPageConfig implements BasePageConfig {
 
   @override
   final PageBackground? background;
+
+  @override
+  final String? appBarBackgroundColor;
+
+  @override
+  final BlurredSurfaceConfig? appBarBlurredSurface;
 
   factory RecentsPageConfig.fromJson(Map<String, Object?> json) => _$RecentsPageConfigFromJson(json);
 
