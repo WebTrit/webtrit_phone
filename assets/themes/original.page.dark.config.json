@@ -25,11 +25,11 @@
       "systemUiOverlayStyle": {
         "statusBarIconBrightness": "light",
         "statusBarBrightness": "dark",
-        "systemNavigationBarColor": "#000000",
+        "systemNavigationBarColor": "#0A1219",
         "systemNavigationBarIconBrightness": "light"
       },
       "mainLogo": {
-        "uri": "asset://assets/images/primary_onboarding_logo_dark.svg",
+        "uri": "asset://assets/images/primary_onboarding_logo.svg",
         "render": {
           "scale": 0.42,
           "alignment": "center",
@@ -39,6 +39,12 @@
             "right": 0.0,
             "bottom": 0.0
           }
+        }
+      },
+      "greetingTextStyle": {
+        "color": "#E2E2E2",
+        "fontWeight": {
+          "weight": 600
         }
       },
       "buttonLoginStyleType": "neutralOnDark",
@@ -66,16 +72,8 @@
         "endX": 0.0,
         "endY": 1.0
       },
-      "background": {
-        "color": "#FFFFFF",
-        "type": "solid"
-      },
-      "themeOverride": {
-        "mode": "light",
-        "applyToAppBar": true
-      },
       "mainLogo": {
-        "uri": "asset://assets/images/secondary_onboarding_logo_dark.svg",
+        "uri": "asset://assets/images/secondary_onboarding_logo.svg",
         "render": {
           "scale": 0.25,
           "padding": {
@@ -178,10 +176,7 @@
         "fontWeight": {
           "weight": 400
         },
-        "color": "#C0C2BE",
-        "fontFeatures": [
-          "tabularFigures"
-        ]
+        "color": "#C0C2BE"
       },
       "processingStatusTextStyle": {
         "fontSize": 14,
@@ -277,7 +272,7 @@
   },
   "about": {
     "mainLogo": {
-      "uri": "asset://assets/images/secondary_onboarding_logo_dark.svg",
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg",
       "render": {
         "scale": 0.25,
         "padding": {

@@ -2,6 +2,72 @@
   "fonts": {
     "fontFamily": "Montserrat"
   },
+  "_button": {
+    "__primaryElevatedButton": "Styling for the primary elevated button used across the app. Supports textStyle, colors, shape, elevation, padding, and more.",
+    "primaryElevatedButton": {
+      "backgroundColor": "#5CACE3",
+      "foregroundColor": "#FFFFFF",
+      "disabledBackgroundColor": "#DDE0E3",
+      "disabledForegroundColor": "#848581",
+      "textStyle": {
+        "fontSize": 14,
+        "fontWeight": {
+          "weight": 500
+        }
+      },
+      "shape": {
+        "type": "rounded",
+        "borderRadius": 8.0
+      }
+    }
+  },
+  "_group": {
+    "__groupTitleListTile": "Styling for group title tiles in list views (e.g., section headers in contacts or settings).",
+    "groupTitleListTile": {
+      "backgroundColor": "#EEF3F6",
+      "textStyle": {
+        "fontSize": 12,
+        "fontWeight": {
+          "weight": 600
+        },
+        "color": "#1F618F"
+      }
+    }
+  },
+  "_bar": {
+    "__bottomNavigationBar": "Bottom navigation bar styling.",
+    "bottomNavigationBar": {
+      "backgroundColor": "#FFFFFF",
+      "selectedItemColor": "#5CACE3",
+      "unSelectedItemColor": "#848581"
+    },
+    "__appBarConfig": "Top app bar configuration. Supports colors, elevation, title styling, icon themes, and system overlay style.",
+    "appBarConfig": {
+      "primary": true,
+      "showBackButton": true,
+      "backgroundColor": "#FFFFFF",
+      "foregroundColor": "#30302F",
+      "centerTitle": true,
+      "elevation": 0,
+      "scrolledUnderElevation": 0,
+      "titleTextStyle": {
+        "fontSize": 18,
+        "fontWeight": {
+          "weight": 600
+        },
+        "color": "#30302F"
+      }
+    },
+    "__tabBarConfig": "Tab bar styling including indicator, labels, alignment, and animation.",
+    "tabBarConfig": {
+      "indicatorColor": "#5CACE3",
+      "labelColor": "#5CACE3",
+      "unselectedLabelColor": "#848581",
+      "dividerColor": "#CDCFC9",
+      "indicatorSize": "tab",
+      "tabAlignment": "fill"
+    }
+  },
   "imageAssets": {
     "defaultPlaceholderImage": {
       "uri": "asset://assets/images/secondary_onboarding_logo.svg"
@@ -53,7 +119,45 @@
       }
     }
   },
+  "_input": {
+    "__primary": "Primary text form field styling. Controls label color and border colors for different states (disabled, focused, default).",
+    "primary": {
+      "labelColor": "#1F618F",
+      "border": {
+        "disabled": {
+          "typicalColor": "#CDCFC9",
+          "errorColor": "#E74C3C"
+        },
+        "focused": {
+          "typicalColor": "#5CACE3",
+          "errorColor": "#E74C3C"
+        },
+        "any": {
+          "typicalColor": "#848581",
+          "errorColor": "#E74C3C"
+        }
+      }
+    }
+  },
+  "_text": {
+    "__selection": "Text selection styling: cursor, selection highlight, and drag handles.",
+    "selection": {
+      "cursorColor": "#5CACE3",
+      "selectionColor": "#B9E3F9",
+      "selectionHandleColor": "#5CACE3"
+    },
+    "__linkify": "Linkify text styling for detected links in messages.",
+    "linkify": {
+      "styleColor": "#30302F",
+      "linkifyStyleColor": "#5CACE3"
+    }
+  },
   "dialog": {
+    "_confirmDialog": {
+      "activeButtonColor1": "#5CACE3",
+      "activeButtonColor2": "#E74C3C",
+      "defaultButtonColor": "#848581"
+    },
     "snackBar": {
       "successBackgroundColor": "#75B943",
       "errorBackgroundColor": "#E74C3C",
@@ -66,7 +170,7 @@
       "online": "#75B943",
       "offline": "#EEF3F6"
     },
-    "calStatuses": {
+    "callStatuses": {
       "connectivityNone": "#E74C3C",
       "connectError": "#E74C3C",
       "appUnregistered": "#494949",
