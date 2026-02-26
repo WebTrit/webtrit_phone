@@ -86,7 +86,11 @@ class ThemeStyleFactoryProvider {
     final groupTitleListStyleFactory = GroupTitleListStyleFactory(colorScheme, groupTitleListTile, defaultFontFamily);
     final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
 
-    final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(loginPageScheme.modeSelect, colorScheme);
+    final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(
+      loginPageScheme.modeSelect,
+      colorScheme,
+      defaultFontFamily,
+    );
     final leadingAvatarStyleFactory = LeadingAvatarStyleFactory(
       colorScheme,
       widgetConfig.imageAssets.leadingAvatarStyle,

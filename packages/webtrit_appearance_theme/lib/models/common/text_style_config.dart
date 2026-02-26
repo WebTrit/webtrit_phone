@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'padding_config.dart';
+
 part 'text_style_config.freezed.dart';
 
 part 'text_style_config.g.dart';
@@ -39,6 +41,12 @@ class TextStyleConfig with _$TextStyleConfig {
 
     /// Background color for the text in hex format.
     this.backgroundColor,
+
+    /// Border radius for background decoration.
+    this.backgroundBorderRadius,
+
+    /// Padding around text when background is applied.
+    this.backgroundPadding,
   });
 
   /// The name of the font family to use (e.g., "Roboto").
@@ -80,6 +88,14 @@ class TextStyleConfig with _$TextStyleConfig {
   /// Background color for the text in hex format.
   @override
   final String? backgroundColor;
+
+  /// Border radius for background decoration.
+  @override
+  final double? backgroundBorderRadius;
+
+  /// Padding around text when background is applied.
+  @override
+  final PaddingConfig? backgroundPadding;
 
   factory TextStyleConfig.fromJson(Map<String, Object?> json) => _$TextStyleConfigFromJson(json);
 
