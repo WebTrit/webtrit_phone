@@ -13,7 +13,7 @@ class CallInitScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final style = themeData.extension<CallScreenStyles>()?.primary;
-    final onSurface = themeData.colorScheme.surface;
+    final surfaceColor = themeData.colorScheme.surface;
 
     return ThemedScaffold(
       background: style?.background,
@@ -24,14 +24,14 @@ class CallInitScaffold extends StatelessWidget {
             child: AppBar(
               leading: const ExtBackButton(),
               backgroundColor: Colors.transparent,
-              foregroundColor: onSurface,
+              foregroundColor: surfaceColor,
               primary: false,
             ),
           ),
           Center(
             child: Visibility(
               visible: showProgressIndicator,
-              child: CircularProgressIndicator(color: onSurface),
+              child: CircularProgressIndicator(color: surfaceColor),
             ),
           ),
         ],
