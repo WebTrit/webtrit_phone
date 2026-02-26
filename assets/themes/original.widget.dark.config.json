@@ -178,19 +178,5 @@
       "inProgress": "#A5C6E4",
       "ready": "#B8E078"
     }
-  },
-  "decorationConfig": {
-    "primaryGradientColorsConfig": {
-      "colors": [
-        {
-          "color": "#123752",
-          "blend": true
-        },
-        {
-          "color": "#123752",
-          "blend": true
-        }
-      ]
-    }
   }
 }

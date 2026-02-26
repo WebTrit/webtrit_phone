@@ -8,7 +8,6 @@ export 'confirm__dialog_style_factory.dart';
 export 'contacts_screen_style_factory.dart';
 export 'elevated_button_style_factory.dart';
 export 'embedded_request_error_dialog_factory.dart';
-export 'gradients_style_factory.dart';
 export 'group_title_list_styles.dart';
 export 'input_decoration_style_factory.dart';
 export 'keypad_screen_style_factory.dart';

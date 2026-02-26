@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+
+import 'call_screen_styles.dart';
 
 class CallInitScaffold extends StatelessWidget {
   const CallInitScaffold({super.key, this.showProgressIndicator = false});
@@ -11,30 +12,29 @@ class CallInitScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final Gradients? gradients = themeData.extension<Gradients>();
-    final onTabGradient = themeData.colorScheme.surface;
+    final style = themeData.extension<CallScreenStyles>()?.primary;
+    final onSurface = themeData.colorScheme.surface;
 
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(gradient: gradients?.tab),
-        child: Stack(
-          children: [
-            SafeArea(
-              child: AppBar(
-                leading: const ExtBackButton(),
-                backgroundColor: Colors.transparent,
-                foregroundColor: onTabGradient,
-                primary: false,
-              ),
+    return ThemedScaffold(
+      background: style?.background,
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: AppBar(
+              leading: const ExtBackButton(),
+              backgroundColor: Colors.transparent,
+              foregroundColor: onSurface,
+              primary: false,
             ),
-            Center(
-              child: Visibility(
-                visible: showProgressIndicator,
-                child: CircularProgressIndicator(color: onTabGradient),
-              ),
+          ),
+          Center(
+            child: Visibility(
+              visible: showProgressIndicator,
+              child: CircularProgressIndicator(color: onSurface),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

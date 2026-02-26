@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ThemeWidgetConfig {
 
- FontsConfig get fonts; ButtonWidgetConfig get button; GroupWidgetConfig? get group; BarWidgetConfig get bar; ImageAssetsConfig get imageAssets; InputWidgetConfig get input; TextWidgetConfig get text; DialogWidgetConfig get dialog; StatusesWidgetConfig get statuses; DecorationConfig get decorationConfig;
+ FontsConfig get fonts; ButtonWidgetConfig get button; GroupWidgetConfig? get group; BarWidgetConfig get bar; ImageAssetsConfig get imageAssets; InputWidgetConfig get input; TextWidgetConfig get text; DialogWidgetConfig get dialog; StatusesWidgetConfig get statuses;
 /// Create a copy of ThemeWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $ThemeWidgetConfigCopyWith<ThemeWidgetConfig> get copyWith => _$ThemeWidgetConfi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ThemeWidgetConfig&&(identical(other.fonts, fonts) || other.fonts == fonts)&&(identical(other.button, button) || other.button == button)&&(identical(other.group, group) || other.group == group)&&(identical(other.bar, bar) || other.bar == bar)&&(identical(other.imageAssets, imageAssets) || other.imageAssets == imageAssets)&&(identical(other.input, input) || other.input == input)&&(identical(other.text, text) || other.text == text)&&(identical(other.dialog, dialog) || other.dialog == dialog)&&(identical(other.statuses, statuses) || other.statuses == statuses)&&(identical(other.decorationConfig, decorationConfig) || other.decorationConfig == decorationConfig));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ThemeWidgetConfig&&(identical(other.fonts, fonts) || other.fonts == fonts)&&(identical(other.button, button) || other.button == button)&&(identical(other.group, group) || other.group == group)&&(identical(other.bar, bar) || other.bar == bar)&&(identical(other.imageAssets, imageAssets) || other.imageAssets == imageAssets)&&(identical(other.input, input) || other.input == input)&&(identical(other.text, text) || other.text == text)&&(identical(other.dialog, dialog) || other.dialog == dialog)&&(identical(other.statuses, statuses) || other.statuses == statuses));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,fonts,button,group,bar,imageAssets,input,text,dialog,statuses,decorationConfig);
+int get hashCode => Object.hash(runtimeType,fonts,button,group,bar,imageAssets,input,text,dialog,statuses);
 
 @override
 String toString() {
-  return 'ThemeWidgetConfig(fonts: $fonts, button: $button, group: $group, bar: $bar, imageAssets: $imageAssets, input: $input, text: $text, dialog: $dialog, statuses: $statuses, decorationConfig: $decorationConfig)';
+  return 'ThemeWidgetConfig(fonts: $fonts, button: $button, group: $group, bar: $bar, imageAssets: $imageAssets, input: $input, text: $text, dialog: $dialog, statuses: $statuses)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $ThemeWidgetConfigCopyWith<$Res>  {
   factory $ThemeWidgetConfigCopyWith(ThemeWidgetConfig value, $Res Function(ThemeWidgetConfig) _then) = _$ThemeWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- FontsConfig fonts, ButtonWidgetConfig button, GroupWidgetConfig? group, BarWidgetConfig bar, ImageAssetsConfig imageAssets, InputWidgetConfig input, TextWidgetConfig text, DialogWidgetConfig dialog, StatusesWidgetConfig statuses, DecorationConfig decorationConfig
+ FontsConfig fonts, ButtonWidgetConfig button, GroupWidgetConfig? group, BarWidgetConfig bar, ImageAssetsConfig imageAssets, InputWidgetConfig input, TextWidgetConfig text, DialogWidgetConfig dialog, StatusesWidgetConfig statuses
 });
 
 
@@ -63,7 +63,7 @@ class _$ThemeWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of ThemeWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? fonts = null,Object? button = null,Object? group = freezed,Object? bar = null,Object? imageAssets = null,Object? input = null,Object? text = null,Object? dialog = null,Object? statuses = null,Object? decorationConfig = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? fonts = null,Object? button = null,Object? group = freezed,Object? bar = null,Object? imageAssets = null,Object? input = null,Object? text = null,Object? dialog = null,Object? statuses = null,}) {
   return _then(ThemeWidgetConfig(
 fonts: null == fonts ? _self.fonts : fonts // ignore: cast_nullable_to_non_nullable
 as FontsConfig,button: null == button ? _self.button : button // ignore: cast_nullable_to_non_nullable
@@ -74,8 +74,7 @@ as ImageAssetsConfig,input: null == input ? _self.input : input // ignore: cast_
 as InputWidgetConfig,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as TextWidgetConfig,dialog: null == dialog ? _self.dialog : dialog // ignore: cast_nullable_to_non_nullable
 as DialogWidgetConfig,statuses: null == statuses ? _self.statuses : statuses // ignore: cast_nullable_to_non_nullable
-as StatusesWidgetConfig,decorationConfig: null == decorationConfig ? _self.decorationConfig : decorationConfig // ignore: cast_nullable_to_non_nullable
-as DecorationConfig,
+as StatusesWidgetConfig,
   ));
 }
 
@@ -4790,378 +4789,6 @@ as String,
 
 /// Adds pattern-matching-related methods to [CallStatusesWidgetConfig].
 extension CallStatusesWidgetConfigPatterns on CallStatusesWidgetConfig {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-
-/// @nodoc
-mixin _$DecorationConfig {
-
- GradientColorsConfig get primaryGradientColorsConfig;
-/// Create a copy of DecorationConfig
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$DecorationConfigCopyWith<DecorationConfig> get copyWith => _$DecorationConfigCopyWithImpl<DecorationConfig>(this as DecorationConfig, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DecorationConfig&&(identical(other.primaryGradientColorsConfig, primaryGradientColorsConfig) || other.primaryGradientColorsConfig == primaryGradientColorsConfig));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,primaryGradientColorsConfig);
-
-@override
-String toString() {
-  return 'DecorationConfig(primaryGradientColorsConfig: $primaryGradientColorsConfig)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $DecorationConfigCopyWith<$Res>  {
-  factory $DecorationConfigCopyWith(DecorationConfig value, $Res Function(DecorationConfig) _then) = _$DecorationConfigCopyWithImpl;
-@useResult
-$Res call({
- GradientColorsConfig primaryGradientColorsConfig
-});
-
-
-
-
-}
-/// @nodoc
-class _$DecorationConfigCopyWithImpl<$Res>
-    implements $DecorationConfigCopyWith<$Res> {
-  _$DecorationConfigCopyWithImpl(this._self, this._then);
-
-  final DecorationConfig _self;
-  final $Res Function(DecorationConfig) _then;
-
-/// Create a copy of DecorationConfig
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? primaryGradientColorsConfig = null,}) {
-  return _then(DecorationConfig(
-primaryGradientColorsConfig: null == primaryGradientColorsConfig ? _self.primaryGradientColorsConfig : primaryGradientColorsConfig // ignore: cast_nullable_to_non_nullable
-as GradientColorsConfig,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [DecorationConfig].
-extension DecorationConfigPatterns on DecorationConfig {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-
-/// @nodoc
-mixin _$GradientColorsConfig {
-
- List<CustomColor> get colors;
-/// Create a copy of GradientColorsConfig
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$GradientColorsConfigCopyWith<GradientColorsConfig> get copyWith => _$GradientColorsConfigCopyWithImpl<GradientColorsConfig>(this as GradientColorsConfig, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GradientColorsConfig&&const DeepCollectionEquality().equals(other.colors, colors));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(colors));
-
-@override
-String toString() {
-  return 'GradientColorsConfig(colors: $colors)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $GradientColorsConfigCopyWith<$Res>  {
-  factory $GradientColorsConfigCopyWith(GradientColorsConfig value, $Res Function(GradientColorsConfig) _then) = _$GradientColorsConfigCopyWithImpl;
-@useResult
-$Res call({
- List<CustomColor> colors
-});
-
-
-
-
-}
-/// @nodoc
-class _$GradientColorsConfigCopyWithImpl<$Res>
-    implements $GradientColorsConfigCopyWith<$Res> {
-  _$GradientColorsConfigCopyWithImpl(this._self, this._then);
-
-  final GradientColorsConfig _self;
-  final $Res Function(GradientColorsConfig) _then;
-
-/// Create a copy of GradientColorsConfig
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? colors = null,}) {
-  return _then(GradientColorsConfig(
-colors: null == colors ? _self.colors : colors // ignore: cast_nullable_to_non_nullable
-as List<CustomColor>,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [GradientColorsConfig].
-extension GradientColorsConfigPatterns on GradientColorsConfig {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

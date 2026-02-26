@@ -5,7 +5,6 @@ export 'button_style_config.dart';
 export 'color_scheme_config.dart';
 export 'custom_color.dart';
 export 'elevated_button_styles.dart';
-export 'gradients.dart';
 export 'icon_theme_config_extension.dart';
 export 'input_decoration.dart';
 export 'input_decorations.dart';
