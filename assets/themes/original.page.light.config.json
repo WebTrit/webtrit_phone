@@ -170,10 +170,7 @@
         "fontWeight": {
           "weight": 400
         },
-        "color": "#EEF3F6",
-        "fontFeatures": [
-          "tabularFigures"
-        ]
+        "color": "#EEF3F6"
       },
       "processingStatusTextStyle": {
         "fontSize": 14,

@@ -2,9 +2,75 @@
   "fonts": {
     "fontFamily": "Montserrat"
   },
+  "_button": {
+    "__primaryElevatedButton": "Styling for the primary elevated button used across the app. Supports textStyle, colors, shape, elevation, padding, and more.",
+    "primaryElevatedButton": {
+      "backgroundColor": "#A5C6E4",
+      "foregroundColor": "#092D4A",
+      "disabledBackgroundColor": "#333537",
+      "disabledForegroundColor": "#8E918F",
+      "textStyle": {
+        "fontSize": 14,
+        "fontWeight": {
+          "weight": 500
+        }
+      },
+      "shape": {
+        "type": "rounded",
+        "borderRadius": 8.0
+      }
+    }
+  },
+  "_group": {
+    "__groupTitleListTile": "Styling for group title tiles in list views (e.g., section headers in contacts or settings).",
+    "groupTitleListTile": {
+      "backgroundColor": "#1D2022",
+      "textStyle": {
+        "fontSize": 12,
+        "fontWeight": {
+          "weight": 600
+        },
+        "color": "#A5C6E4"
+      }
+    }
+  },
+  "_bar": {
+    "__bottomNavigationBar": "Bottom navigation bar styling.",
+    "bottomNavigationBar": {
+      "backgroundColor": "#111315",
+      "selectedItemColor": "#A5C6E4",
+      "unSelectedItemColor": "#8E918F"
+    },
+    "__appBarConfig": "Top app bar configuration. Supports colors, elevation, title styling, icon themes, and system overlay style.",
+    "appBarConfig": {
+      "primary": true,
+      "showBackButton": true,
+      "backgroundColor": "#111315",
+      "foregroundColor": "#E2E2E2",
+      "centerTitle": true,
+      "elevation": 0,
+      "scrolledUnderElevation": 0,
+      "titleTextStyle": {
+        "fontSize": 18,
+        "fontWeight": {
+          "weight": 600
+        },
+        "color": "#E2E2E2"
+      }
+    },
+    "__tabBarConfig": "Tab bar styling including indicator, labels, alignment, and animation.",
+    "tabBarConfig": {
+      "indicatorColor": "#A5C6E4",
+      "labelColor": "#A5C6E4",
+      "unselectedLabelColor": "#8E918F",
+      "dividerColor": "#444749",
+      "indicatorSize": "tab",
+      "tabAlignment": "fill"
+    }
+  },
   "imageAssets": {
     "defaultPlaceholderImage": {
-      "uri": "asset://assets/images/secondary_onboarding_logo_dark.svg"
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg"
     },
     "leadingAvatarStyle": {
       "backgroundColor": "#3C4750",
@@ -53,7 +119,45 @@
       }
     }
   },
+  "_input": {
+    "__primary": "Primary text form field styling. Controls label color and border colors for different states (disabled, focused, default).",
+    "primary": {
+      "labelColor": "#A5C6E4",
+      "border": {
+        "disabled": {
+          "typicalColor": "#444749",
+          "errorColor": "#FF897D"
+        },
+        "focused": {
+          "typicalColor": "#A5C6E4",
+          "errorColor": "#FF897D"
+        },
+        "any": {
+          "typicalColor": "#8E918F",
+          "errorColor": "#FF897D"
+        }
+      }
+    }
+  },
+  "_text": {
+    "__selection": "Text selection styling: cursor, selection highlight, and drag handles.",
+    "selection": {
+      "cursorColor": "#A5C6E4",
+      "selectionColor": "#1F618F",
+      "selectionHandleColor": "#A5C6E4"
+    },
+    "__linkify": "Linkify text styling for detected links in messages.",
+    "linkify": {
+      "styleColor": "#E2E2E2",
+      "linkifyStyleColor": "#A5C6E4"
+    }
+  },
   "dialog": {
+    "_confirmDialog": {
+      "activeButtonColor1": "#A5C6E4",
+      "activeButtonColor2": "#FF897D",
+      "defaultButtonColor": "#8E918F"
+    },
     "snackBar": {
       "successBackgroundColor": "#B8E078",
       "errorBackgroundColor": "#FF897D",
@@ -66,7 +170,7 @@
       "online": "#B8E078",
       "offline": "#37393B"
     },
-    "calStatuses": {
+    "callStatuses": {
       "connectivityNone": "#FF897D",
       "connectError": "#FF897D",
       "appUnregistered": "#8E918F",
@@ -79,11 +183,11 @@
     "primaryGradientColorsConfig": {
       "colors": [
         {
-          "color": "#1F618F",
+          "color": "#123752",
           "blend": true
         },
         {
-          "color": "#000000",
+          "color": "#123752",
           "blend": true
         }
       ]
