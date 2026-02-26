@@ -1333,7 +1333,7 @@ case _:
 /// @nodoc
 mixin _$LoginModeSelectPageConfig {
 
- ThemeOverrideConfig get themeOverride; OverlayStyleModel? get systemUiOverlayStyle; ImageSource? get mainLogo; ElevatedButtonStyleType get buttonLoginStyleType; ElevatedButtonStyleType get buttonSignupStyleType; PageBackground? get background;
+ ThemeOverrideConfig get themeOverride; OverlayStyleModel? get systemUiOverlayStyle; ImageSource? get mainLogo; ElevatedButtonStyleType get buttonLoginStyleType; ElevatedButtonStyleType get buttonSignupStyleType; PageBackground? get background; TextStyleConfig? get greetingTextStyle;
 /// Create a copy of LoginModeSelectPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1344,16 +1344,16 @@ $LoginModeSelectPageConfigCopyWith<LoginModeSelectPageConfig> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginModeSelectPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.buttonLoginStyleType, buttonLoginStyleType) || other.buttonLoginStyleType == buttonLoginStyleType)&&(identical(other.buttonSignupStyleType, buttonSignupStyleType) || other.buttonSignupStyleType == buttonSignupStyleType)&&(identical(other.background, background) || other.background == background));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginModeSelectPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.mainLogo, mainLogo) || other.mainLogo == mainLogo)&&(identical(other.buttonLoginStyleType, buttonLoginStyleType) || other.buttonLoginStyleType == buttonLoginStyleType)&&(identical(other.buttonSignupStyleType, buttonSignupStyleType) || other.buttonSignupStyleType == buttonSignupStyleType)&&(identical(other.background, background) || other.background == background)&&(identical(other.greetingTextStyle, greetingTextStyle) || other.greetingTextStyle == greetingTextStyle));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,themeOverride,systemUiOverlayStyle,mainLogo,buttonLoginStyleType,buttonSignupStyleType,background);
+int get hashCode => Object.hash(runtimeType,themeOverride,systemUiOverlayStyle,mainLogo,buttonLoginStyleType,buttonSignupStyleType,background,greetingTextStyle);
 
 @override
 String toString() {
-  return 'LoginModeSelectPageConfig(themeOverride: $themeOverride, systemUiOverlayStyle: $systemUiOverlayStyle, mainLogo: $mainLogo, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType, background: $background)';
+  return 'LoginModeSelectPageConfig(themeOverride: $themeOverride, systemUiOverlayStyle: $systemUiOverlayStyle, mainLogo: $mainLogo, buttonLoginStyleType: $buttonLoginStyleType, buttonSignupStyleType: $buttonSignupStyleType, background: $background, greetingTextStyle: $greetingTextStyle)';
 }
 
 
@@ -1364,7 +1364,7 @@ abstract mixin class $LoginModeSelectPageConfigCopyWith<$Res>  {
   factory $LoginModeSelectPageConfigCopyWith(LoginModeSelectPageConfig value, $Res Function(LoginModeSelectPageConfig) _then) = _$LoginModeSelectPageConfigCopyWithImpl;
 @useResult
 $Res call({
- ThemeOverrideConfig themeOverride, OverlayStyleModel? systemUiOverlayStyle, ImageSource? mainLogo, ElevatedButtonStyleType buttonLoginStyleType, ElevatedButtonStyleType buttonSignupStyleType, PageBackground? background
+ ThemeOverrideConfig themeOverride, OverlayStyleModel? systemUiOverlayStyle, ImageSource? mainLogo, ElevatedButtonStyleType buttonLoginStyleType, ElevatedButtonStyleType buttonSignupStyleType, PageBackground? background, TextStyleConfig? greetingTextStyle
 });
 
 
@@ -1381,7 +1381,7 @@ class _$LoginModeSelectPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of LoginModeSelectPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? themeOverride = null,Object? systemUiOverlayStyle = freezed,Object? mainLogo = freezed,Object? buttonLoginStyleType = null,Object? buttonSignupStyleType = null,Object? background = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? themeOverride = null,Object? systemUiOverlayStyle = freezed,Object? mainLogo = freezed,Object? buttonLoginStyleType = null,Object? buttonSignupStyleType = null,Object? background = freezed,Object? greetingTextStyle = freezed,}) {
   return _then(LoginModeSelectPageConfig(
 themeOverride: null == themeOverride ? _self.themeOverride : themeOverride // ignore: cast_nullable_to_non_nullable
 as ThemeOverrideConfig,systemUiOverlayStyle: freezed == systemUiOverlayStyle ? _self.systemUiOverlayStyle : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
@@ -1389,7 +1389,8 @@ as OverlayStyleModel?,mainLogo: freezed == mainLogo ? _self.mainLogo : mainLogo 
 as ImageSource?,buttonLoginStyleType: null == buttonLoginStyleType ? _self.buttonLoginStyleType : buttonLoginStyleType // ignore: cast_nullable_to_non_nullable
 as ElevatedButtonStyleType,buttonSignupStyleType: null == buttonSignupStyleType ? _self.buttonSignupStyleType : buttonSignupStyleType // ignore: cast_nullable_to_non_nullable
 as ElevatedButtonStyleType,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
-as PageBackground?,
+as PageBackground?,greetingTextStyle: freezed == greetingTextStyle ? _self.greetingTextStyle : greetingTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,
   ));
 }
 

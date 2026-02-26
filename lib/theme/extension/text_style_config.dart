@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_appearance_theme/models/common/common.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
+import 'package:webtrit_phone/widgets/extended_text_style.dart';
 
 extension TextStyleConfigExtension on TextStyleConfig {
   TextStyle toTextStyle({
@@ -26,6 +27,18 @@ extension TextStyleConfigExtension on TextStyleConfig {
       height: height ?? defaultHeight,
       decoration: _resolveTextDecoration(decoration) ?? defaultDecoration,
       backgroundColor: backgroundColor?.toColor() ?? defaultBackgroundColor,
+    );
+  }
+
+  ExtendedTextDecoration? toExtendedTextDecoration() {
+    final bgColor = backgroundColor?.toColor();
+    if (bgColor == null) return null;
+    if (backgroundBorderRadius == null && backgroundPadding == null) return null;
+
+    return ExtendedTextDecoration(
+      color: bgColor,
+      borderRadius: backgroundBorderRadius != null ? BorderRadius.circular(backgroundBorderRadius!) : null,
+      padding: backgroundPadding?.toEdgeInsets(),
     );
   }
 

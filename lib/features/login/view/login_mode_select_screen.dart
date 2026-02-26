@@ -31,7 +31,8 @@ class LoginModeSelectScreen extends StatelessWidget {
 
     final localStyle = style ?? loginPageStyles?.primary;
 
-    final titleStyle = themeData.textTheme.displayMedium?.merge(localStyle?.onboardingTextStyle);
+    final onboardingStyle = localStyle?.onboardingTextStyle;
+    final titleStyle = themeData.textTheme.displayMedium?.merge(onboardingStyle?.textStyle);
     final dividerHeight = (titleStyle?.fontSize ?? 0) / 3;
 
     return BlocBuilder<LoginCubit, LoginState>(
@@ -77,7 +78,11 @@ class LoginModeSelectScreen extends StatelessWidget {
                       ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
                       if (appGreetingL10n != null) ...[
                         SizedBox(height: dividerHeight),
-                        Text(context.parseL10n(appGreetingL10n!), style: titleStyle, textAlign: TextAlign.center),
+                        ExtendedText(
+                          context.parseL10n(appGreetingL10n!),
+                          extendedStyle: onboardingStyle?.copyWith(textStyle: titleStyle),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ],
                   ),

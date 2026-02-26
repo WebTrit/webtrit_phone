@@ -211,6 +211,11 @@ LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
   background: json['background'] == null
       ? null
       : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  greetingTextStyle: json['greetingTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['greetingTextStyle'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
@@ -224,6 +229,7 @@ Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
   'buttonSignupStyleType':
       _$ElevatedButtonStyleTypeEnumMap[instance.buttonSignupStyleType]!,
   'background': instance.background?.toJson(),
+  'greetingTextStyle': instance.greetingTextStyle?.toJson(),
 };
 
 const _$ElevatedButtonStyleTypeEnumMap = {
