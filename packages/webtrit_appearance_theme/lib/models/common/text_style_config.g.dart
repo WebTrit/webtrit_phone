@@ -6,29 +6,34 @@ part of 'text_style_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TextStyleConfig _$TextStyleConfigFromJson(Map<String, dynamic> json) =>
-    TextStyleConfig(
-      fontFamily: json['fontFamily'] as String?,
-      fontSize: (json['fontSize'] as num?)?.toDouble(),
-      fontWeight: json['fontWeight'] == null
-          ? null
-          : FontWeightConfig.fromJson(
-              json['fontWeight'] as Map<String, dynamic>,
-            ),
-      fontStyle: json['fontStyle'] == null
-          ? null
-          : FontStyleConfig.fromJson(json['fontStyle'] as Map<String, dynamic>),
-      color: json['color'] as String?,
-      letterSpacing: (json['letterSpacing'] as num?)?.toDouble(),
-      wordSpacing: (json['wordSpacing'] as num?)?.toDouble(),
-      height: (json['height'] as num?)?.toDouble(),
-      decoration: json['decoration'] == null
-          ? null
-          : TextDecorationConfig.fromJson(
-              json['decoration'] as Map<String, dynamic>,
-            ),
-      backgroundColor: json['backgroundColor'] as String?,
-    );
+TextStyleConfig _$TextStyleConfigFromJson(
+  Map<String, dynamic> json,
+) => TextStyleConfig(
+  fontFamily: json['fontFamily'] as String?,
+  fontSize: (json['fontSize'] as num?)?.toDouble(),
+  fontWeight: json['fontWeight'] == null
+      ? null
+      : FontWeightConfig.fromJson(json['fontWeight'] as Map<String, dynamic>),
+  fontStyle: json['fontStyle'] == null
+      ? null
+      : FontStyleConfig.fromJson(json['fontStyle'] as Map<String, dynamic>),
+  color: json['color'] as String?,
+  letterSpacing: (json['letterSpacing'] as num?)?.toDouble(),
+  wordSpacing: (json['wordSpacing'] as num?)?.toDouble(),
+  height: (json['height'] as num?)?.toDouble(),
+  decoration: json['decoration'] == null
+      ? null
+      : TextDecorationConfig.fromJson(
+          json['decoration'] as Map<String, dynamic>,
+        ),
+  backgroundColor: json['backgroundColor'] as String?,
+  backgroundBorderRadius: (json['backgroundBorderRadius'] as num?)?.toDouble(),
+  backgroundPadding: json['backgroundPadding'] == null
+      ? null
+      : PaddingConfig.fromJson(
+          json['backgroundPadding'] as Map<String, dynamic>,
+        ),
+);
 
 Map<String, dynamic> _$TextStyleConfigToJson(TextStyleConfig instance) =>
     <String, dynamic>{
@@ -42,6 +47,8 @@ Map<String, dynamic> _$TextStyleConfigToJson(TextStyleConfig instance) =>
       'height': instance.height,
       'decoration': instance.decoration?.toJson(),
       'backgroundColor': instance.backgroundColor,
+      'backgroundBorderRadius': instance.backgroundBorderRadius,
+      'backgroundPadding': instance.backgroundPadding?.toJson(),
     };
 
 FontWeightConfig _$FontWeightConfigFromJson(Map<String, dynamic> json) =>

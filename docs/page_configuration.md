@@ -422,9 +422,21 @@ or
   "letterSpacing": 0.0,
   "fontFeatures": [
     "tabularFigures"
-  ]
+  ],
+  "backgroundColor": "#33000000",
+  "backgroundBorderRadius": 4.0,
+  "backgroundPadding": {
+    "left": 4,
+    "top": 2,
+    "right": 4,
+    "bottom": 2
+  }
 }
 ```
+
+- `backgroundColor` — background fill behind the text (hex).
+- `backgroundBorderRadius` — corner radius for the background decoration.
+- `backgroundPadding` — padding around text when background is applied (`left`, `top`, `right`, `bottom`).
 
 ### Text field (`TextFieldConfig` shape)
 
