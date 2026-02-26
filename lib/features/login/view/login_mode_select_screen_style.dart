@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/extended_text_style.dart';
 
 class LoginModeSelectScreenStyle with Diagnosticable {
   const LoginModeSelectScreenStyle({
@@ -19,7 +20,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
   final ElevatedButtonStyleType? signUpTypeButton;
   final SystemUiOverlayStyle? systemUiOverlayStyle;
   final ThemeImageStyle? pictureLogoStyle;
-  final TextStyle? onboardingTextStyle;
+  final ExtendedTextStyle? onboardingTextStyle;
   final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
 
@@ -28,7 +29,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     ElevatedButtonStyleType? signUpTypeButton,
     SystemUiOverlayStyle? systemUiOverlayStyle,
     ThemeImageStyle? pictureLogoStyle,
-    TextStyle? onboardingTextStyle,
+    ExtendedTextStyle? onboardingTextStyle,
     ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
   }) {
@@ -52,7 +53,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
       signUpTypeButton: b.signUpTypeButton ?? a.signUpTypeButton,
       systemUiOverlayStyle: b.systemUiOverlayStyle ?? a.systemUiOverlayStyle,
       pictureLogoStyle: ThemeImageStyle.merge(a.pictureLogoStyle, b.pictureLogoStyle),
-      onboardingTextStyle: b.onboardingTextStyle ?? a.onboardingTextStyle,
+      onboardingTextStyle: ExtendedTextStyle.merge(a.onboardingTextStyle, b.onboardingTextStyle),
       contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
       applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
     );
@@ -64,7 +65,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
       signUpTypeButton: LerpTools.lerpButtonStyleType(a?.signUpTypeButton, b?.signUpTypeButton, t),
       systemUiOverlayStyle: b?.systemUiOverlayStyle ?? a?.systemUiOverlayStyle,
       pictureLogoStyle: ThemeImageStyle.lerp(a?.pictureLogoStyle, b?.pictureLogoStyle, t),
-      onboardingTextStyle: TextStyle.lerp(a?.onboardingTextStyle, b?.onboardingTextStyle, t),
+      onboardingTextStyle: ExtendedTextStyle.lerp(a?.onboardingTextStyle, b?.onboardingTextStyle, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
     );
@@ -77,7 +78,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     properties.add(DiagnosticsProperty<ElevatedButtonStyleType?>('signUpTypeButton', signUpTypeButton));
     properties.add(DiagnosticsProperty<SystemUiOverlayStyle?>('systemUiOverlayStyle', systemUiOverlayStyle));
     properties.add(DiagnosticsProperty<ThemeImageStyle?>('pictureLogoStyle', pictureLogoStyle));
-    properties.add(DiagnosticsProperty<TextStyle?>('onboardingTextStyle', onboardingTextStyle));
+    properties.add(DiagnosticsProperty<ExtendedTextStyle?>('onboardingTextStyle', onboardingTextStyle));
     properties.add(EnumProperty<ThemeMode?>('contentThemeOverride', contentThemeOverride));
     properties.add(DiagnosticsProperty<bool?>('applyToAppBar', applyToAppBar));
   }
