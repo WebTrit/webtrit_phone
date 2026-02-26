@@ -195,6 +195,7 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig implements Base
     this.buttonLoginStyleType = ElevatedButtonStyleType.primary,
     this.buttonSignupStyleType = ElevatedButtonStyleType.primary,
     this.background,
+    this.greetingTextStyle,
   });
 
   @override
@@ -214,6 +215,9 @@ class LoginModeSelectPageConfig with _$LoginModeSelectPageConfig implements Base
 
   @override
   final PageBackground? background;
+
+  @override
+  final TextStyleConfig? greetingTextStyle;
 
   factory LoginModeSelectPageConfig.fromJson(Map<String, Object?> json) => _$LoginModeSelectPageConfigFromJson(json);
 
