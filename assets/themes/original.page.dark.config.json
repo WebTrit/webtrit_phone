@@ -10,8 +10,8 @@
       "background": {
         "type": "gradient",
         "colors": [
-          "#1F618F",
-          "#0A1929"
+          "#0A1929",
+          "#1F618F"
         ],
         "stops": [
           0.0,
