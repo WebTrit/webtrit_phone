@@ -15,6 +15,10 @@ class FavoritesRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Fav
   }
 
   Future<void> remove(Favorite favorite) async {
-    _dao.remove((favorite.number, FavoriteSourceTypeData.values.byName(favorite.sourceType.name)));
+    _dao.remove(favoriteKeyFromFavorite(favorite));
+  }
+
+  Future<void> shift(Favorite favorite, int position) async {
+    _dao.shift(favoriteKeyFromFavorite(favorite), position);
   }
 }

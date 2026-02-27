@@ -19,3 +19,13 @@ class FavoritesRemoved extends FavoritesEvent {
   @override
   List<Object?> get props => [favorite];
 }
+
+class FavoritesShifted extends FavoritesEvent {
+  const FavoritesShifted({required this.favorite, required this.position});
+
+  final Favorite favorite;
+  final int position;
+
+  @override
+  List<Object?> get props => [favorite, position];
+}

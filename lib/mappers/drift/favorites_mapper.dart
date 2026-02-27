@@ -37,4 +37,16 @@ mixin FavoritesDriftMapper on ContactsDriftMapper {
           : null,
     );
   }
+
+  FavoriteSourceType favoriteSourceTypeFromDrift(FavoriteSourceTypeData data) {
+    return FavoriteSourceType.values.byName(data.name);
+  }
+
+  FavoriteSourceTypeData favoriteSourceTypeToDrift(FavoriteSourceType data) {
+    return FavoriteSourceTypeData.values.byName(data.name);
+  }
+
+  FavoriteKeyData favoriteKeyFromFavorite(Favorite favorite) {
+    return (favorite.number, favoriteSourceTypeToDrift(favorite.sourceType));
+  }
 }

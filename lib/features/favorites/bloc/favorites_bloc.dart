@@ -13,6 +13,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc({required this.favoritesRepository}) : super(const FavoritesState()) {
     on<FavoritesStarted>(_onStarted, transformer: restartable());
     on<FavoritesRemoved>(_onRemoved);
+    on<FavoritesShifted>(_onShifted);
   }
 
   final FavoritesRepository favoritesRepository;
@@ -26,5 +27,9 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
 
   Future<void> _onRemoved(FavoritesRemoved event, Emitter<FavoritesState> emit) async {
     await favoritesRepository.remove(event.favorite);
+  }
+
+  Future<void> _onShifted(FavoritesShifted event, Emitter<FavoritesState> emit) async {
+    await favoritesRepository.shift(event.favorite, event.position);
   }
 }
