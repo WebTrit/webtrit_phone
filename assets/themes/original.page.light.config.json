@@ -265,6 +265,11 @@
     }
   },
   "about": {
+    "appBarBlurredSurface": {
+      "color": "#CCD5E8F2",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "mainLogo": {
       "uri": "asset://assets/images/secondary_onboarding_logo.svg",
       "render": {
@@ -294,6 +299,11 @@
     }
   },
   "settings": {
+    "appBarBlurredSurface": {
+      "color": "#CCD5E8F2",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -317,6 +327,11 @@
     }
   },
   "keypad": {
+    "appBarBlurredSurface": {
+      "color": "#CCD5E8F2",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -340,6 +355,11 @@
     }
   },
   "contacts": {
+    "appBarBlurredSurface": {
+      "color": "#CCD5E8F2",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -363,6 +383,11 @@
     }
   },
   "favorites": {
+    "appBarBlurredSurface": {
+      "color": "#CCD5E8F2",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -386,6 +411,11 @@
     }
   },
   "conversations": {
+    "appBarBlurredSurface": {
+      "color": "#CCD5E8F2",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -409,6 +439,11 @@
     }
   },
   "recents": {
+    "appBarBlurredSurface": {
+      "color": "#CCD5E8F2",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
