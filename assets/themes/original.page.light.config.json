@@ -266,7 +266,7 @@
   },
   "about": {
     "appBarBlurredSurface": {
-      "color": "#CCD5E8F2",
+      "color": "#96EEF5FA",
       "sigmaX": 10,
       "sigmaY": 10
     },
@@ -300,7 +300,7 @@
   },
   "settings": {
     "appBarBlurredSurface": {
-      "color": "#CCD5E8F2",
+      "color": "#96EEF5FA",
       "sigmaX": 10,
       "sigmaY": 10
     },
@@ -328,7 +328,7 @@
   },
   "keypad": {
     "appBarBlurredSurface": {
-      "color": "#CCD5E8F2",
+      "color": "#96EEF5FA",
       "sigmaX": 10,
       "sigmaY": 10
     },
@@ -356,7 +356,7 @@
   },
   "contacts": {
     "appBarBlurredSurface": {
-      "color": "#CCD5E8F2",
+      "color": "#96EEF5FA",
       "sigmaX": 10,
       "sigmaY": 10
     },
@@ -384,7 +384,7 @@
   },
   "favorites": {
     "appBarBlurredSurface": {
-      "color": "#CCD5E8F2",
+      "color": "#96EEF5FA",
       "sigmaX": 10,
       "sigmaY": 10
     },
@@ -412,7 +412,7 @@
   },
   "conversations": {
     "appBarBlurredSurface": {
-      "color": "#CCD5E8F2",
+      "color": "#96EEF5FA",
       "sigmaX": 10,
       "sigmaY": 10
     },
@@ -440,7 +440,7 @@
   },
   "recents": {
     "appBarBlurredSurface": {
-      "color": "#CCD5E8F2",
+      "color": "#96EEF5FA",
       "sigmaX": 10,
       "sigmaY": 10
     },
