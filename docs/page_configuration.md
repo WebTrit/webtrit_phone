@@ -341,7 +341,6 @@ Top-level keys inside `"keypad"`:
 
 | Key                      | Type   | Description                                                                                                            |
 |--------------------------|--------|------------------------------------------------------------------------------------------------------------------------|
-| `appBarBackgroundColor`  | string | App bar background color (hex). See [Common page fields](#common-page-fields).                                         |
 | `appBarBlurredSurface`   | object | Blurred surface config. See [Common page fields](#common-page-fields).                                                 |
 | `systemUiOverlayStyle`   | object | Status/navigation bars styling.                                                                                        |
 | `textField`              | object | Number input field style (top of page).                                                                                |
@@ -354,7 +353,6 @@ Top-level keys inside `"keypad"`:
 ```json
 {
   "keypad": {
-    "appBarBackgroundColor": "#000000",
     "appBarBlurredSurface": {
       "color": "#66000000",
       "sigmaX": 10,
@@ -391,7 +389,6 @@ Every page config that has an app bar supports these optional fields:
 
 | Key                     | Type   | Description                                                        |
 |-------------------------|--------|--------------------------------------------------------------------|
-| `appBarBackgroundColor` | string | Background color for the app bar (hex). Overrides the default.     |
 | `appBarBlurredSurface`  | object | Blurred surface overlay config (frosted-glass effect in app bar).  |
 
 ### `appBarBlurredSurface`

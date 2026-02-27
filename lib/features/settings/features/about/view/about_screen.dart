@@ -49,7 +49,6 @@ class _AboutScreenState extends State<AboutScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_about),
-        backgroundColor: localStyle?.appBarBackgroundColor ?? themeData.canvasColor.withAlpha(150),
         flexibleSpace: BlurredSurface(
           color: localStyle?.appBarBlurredSurface?.color,
           sigmaX: localStyle?.appBarBlurredSurface?.sigmaX ?? 0,

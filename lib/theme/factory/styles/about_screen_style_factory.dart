@@ -20,7 +20,6 @@ class AboutScreenStyleFactory implements ThemeStyleFactory<AboutScreenStyles> {
       primary: AboutScreenStyle(
         pictureLogoStyle: pictureLogoStyle,
         background: backgroundStyle,
-        appBarBackgroundColor: config?.appBarBackgroundColor?.toColor(),
         appBarBlurredSurface: config?.appBarBlurredSurface?.toStyle(),
       ),
     );

@@ -29,7 +29,6 @@ class KeypadScreen extends StatelessWidget {
       appBar: MainAppBar(
         title: title,
         context: context,
-        backgroundColor: effectiveStyle?.appBarBackgroundColor ?? themeData.canvasColor.withAlpha(150),
         flexibleSpace: BlurredSurface(
           color: effectiveStyle?.appBarBlurredSurface?.color,
           sigmaX: effectiveStyle?.appBarBlurredSurface?.sigmaX ?? 0,

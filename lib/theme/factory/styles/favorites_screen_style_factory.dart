@@ -22,7 +22,6 @@ class FavoritesScreenStyleFactory implements ThemeStyleFactory<FavoritesScreenSt
     return FavoritesScreenStyles(
       primary: FavoritesScreenStyle(
         background: backgroundStyle,
-        appBarBackgroundColor: config.appBarBackgroundColor?.toColor(),
         appBarBlurredSurface: config.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
