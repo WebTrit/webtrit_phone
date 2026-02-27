@@ -197,7 +197,13 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
   Stream<Contact?> watchContactByPhoneNumber(String number) {
     return _appDatabase.contactsDao.watchContactByPhoneNumber(number).map((data) {
       if (data == null) return null;
-      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
+      return contactFromDrift(
+        data.contact,
+        phones: data.phones,
+        emails: data.emails,
+        favorites: data.favorites,
+        presenceInfo: data.presenceInfo,
+      );
     });
   }
 
@@ -216,16 +222,34 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
     final nationalNumber = number.nationalPhoneIfValid;
     return _appDatabase.contactsDao.watchContactByPhoneMatchedEnding(nationalNumber ?? number).map((data) {
       if (data == null) return null;
-      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
+      return contactFromDrift(
+        data.contact,
+        phones: data.phones,
+        emails: data.emails,
+        favorites: data.favorites,
+        presenceInfo: data.presenceInfo,
+      );
     });
   }
 
-  Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
-    return _appDatabase.favoritesDao.insertFavoriteByContactPhoneId(contactPhone.id);
+  Future<void> addContactPhoneToFavorites(ContactPhone contactPhone, Contact contact) async {
+    final number = contactPhone.number;
+    final sourceType = switch (contact.sourceType) {
+      ContactSourceType.local => FavoriteSourceTypeData.device,
+      ContactSourceType.external => FavoriteSourceTypeData.pbx,
+    };
+    final sourceId = contact.sourceId ?? contact.id.toString();
+    final label = contactPhone.label;
+    await _appDatabase.favoritesV2Dao.add(number, sourceType, sourceId, label);
   }
 
-  Future<int> removeContactPhoneFromFavorites(ContactPhone contactPhone) {
-    return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
+  Future<void> removeContactPhoneFromFavorites(ContactPhone contactPhone, Contact contact) {
+    final number = contactPhone.number;
+    final sourceType = switch (contact.sourceType) {
+      ContactSourceType.local => FavoriteSourceTypeData.device,
+      ContactSourceType.external => FavoriteSourceTypeData.pbx,
+    };
+    return _appDatabase.favoritesV2Dao.remove((number, sourceType));
   }
 
   /// Synchronizes a list of external contacts.

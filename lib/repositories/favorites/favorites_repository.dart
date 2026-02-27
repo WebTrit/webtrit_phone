@@ -8,12 +8,13 @@ class FavoritesRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Fav
   FavoritesRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;
+  late final _dao = _appDatabase.favoritesV2Dao;
 
-  Stream<List<Favorite>> favorites() {
-    return _appDatabase.favoritesDao.watchFavoritesExt().map((data) => data.map(favoriteFromDrift).toList());
+  Stream<List<FavoriteWithContact>> favorites() {
+    return _dao.watchWithContacts().map((data) => data.map((e) => favoriteWithContactFromDrift(e)).toList());
   }
 
   Future<void> remove(Favorite favorite) async {
-    _appDatabase.favoritesDao.deleteFavorite(FavoriteDataCompanion(id: Value(favorite.id)));
+    _dao.remove((favorite.number, FavoriteSourceTypeData.values.byName(favorite.sourceType.name)));
   }
 }

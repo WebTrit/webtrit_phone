@@ -17,11 +17,13 @@ class FullContactData {
   final ContactData contact;
   final List<ContactPhoneData> phones;
   final List<ContactEmailData> emails;
-  final List<FavoriteData> favorites;
+  final List<FavoriteV2Data> favorites;
   final List<PresenceInfoData> presenceInfo;
 }
 
-@DriftAccessor(tables: [ContactsTable, ContactPhonesTable, ContactEmailsTable, FavoritesTable, PresenceInfoTable])
+@DriftAccessor(
+  tables: [ContactsTable, ContactPhonesTable, ContactEmailsTable, FavoritesTable, FavoritesV2Table, PresenceInfoTable],
+)
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(super.db);
 
@@ -53,13 +55,13 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     ContactData contact = rows.first.readTable(contactsTable);
     List<ContactPhoneData> phones = [];
     List<ContactEmailData> emails = [];
-    List<FavoriteData> favorites = [];
+    List<FavoriteV2Data> favorites = [];
     List<PresenceInfoData> presenceInfo = [];
 
     for (final row in rows) {
       final phone = row.readTableOrNull(contactPhonesTable);
       final email = row.readTableOrNull(contactEmailsTable);
-      final favorite = row.readTableOrNull(favoritesTable);
+      final favorite = row.readTableOrNull(favoritesV2Table);
       final presence = row.readTableOrNull(presenceInfoTable);
 
       if (phone != null && !phones.contains(phone)) phones.add(phone);
@@ -84,7 +86,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       final contact = row.readTable(contactsTable);
       final phone = row.readTableOrNull(contactPhonesTable);
       final email = row.readTableOrNull(contactEmailsTable);
-      final favorite = row.readTableOrNull(favoritesTable);
+      final favorite = row.readTableOrNull(favoritesV2Table);
       final presenceInfo = row.readTableOrNull(presenceInfoTable);
 
       final contactWithPhonesAndEmails = contactMap.putIfAbsent(
@@ -118,7 +120,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return select.join([
       leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(favoritesTable, favoritesTable.contactPhoneId.equalsExp(contactPhonesTable.id)),
+      leftOuterJoin(favoritesV2Table, favoritesV2Table.number.equalsExp(contactPhonesTable.number)),
       leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
   }
@@ -202,7 +204,10 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
             CaseWhen(contactsTable.aliasName.isNotNull(), then: contactsTable.aliasName.trim().collate(Collate.noCase)),
             CaseWhen(
               contactsTable.firstName.isNotNull() & contactsTable.lastName.isNotNull(),
-              then: contactsTable.firstName.trim().collate(Collate.noCase) + const Constant(' ') + contactsTable.lastName.trim().collate(Collate.noCase),
+              then:
+                  contactsTable.firstName.trim().collate(Collate.noCase) +
+                  const Constant(' ') +
+                  contactsTable.lastName.trim().collate(Collate.noCase),
             ),
             CaseWhen(contactsTable.firstName.isNotNull(), then: contactsTable.firstName.trim().collate(Collate.noCase)),
             CaseWhen(contactsTable.lastName.isNotNull(), then: contactsTable.lastName.trim().collate(Collate.noCase)),

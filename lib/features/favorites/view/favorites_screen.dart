@@ -87,7 +87,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   void delete({required Favorite favorite}) {
-    context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
+    context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.number));
     context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
   }
 
@@ -136,15 +136,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             padding: EdgeInsets.only(top: topPadding),
                             itemCount: favorites.length,
                             itemBuilder: (context, index) {
-                              final favorite = favorites[index];
-                              final contact = favorite.contact;
-                              final contactSourceId = contact.sourceId;
-                              final contactSmsNumbers = contact.smsNumbers;
+                              final favorite = favorites[index].favorite;
+                              final contact = favorites[index].contact;
+
+                              final contactSourceId = contact?.sourceId;
+                              final contactSmsNumbers = contact?.smsNumbers ?? [];
                               final canSendSms = contactSmsNumbers.contains(favorite.number);
 
                               return FavoriteTile(
                                 key: favoriteTileKey,
                                 favorite: favorite,
+                                contact: contact,
                                 callNumbers: callRoutingState?.allNumbers ?? [],
                                 onTap: blingTransferInitiated
                                     ? () {
@@ -153,13 +155,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                     : () {
                                         _callController.createCall(
                                           destination: favorite.number,
-                                          displayName: favorite.name,
+                                          displayName: contact?.maybeName ?? favorite.number,
                                         );
                                       },
                                 onAudioCallPressed: () {
                                   _callController.createCall(
                                     destination: favorite.number,
-                                    displayName: favorite.name,
+                                    displayName: contact?.maybeName ?? favorite.number,
                                     video: false,
                                   );
                                 },
@@ -167,7 +169,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                     ? () {
                                         _callController.createCall(
                                           destination: favorite.number,
-                                          displayName: favorite.name,
+                                          displayName: contact?.maybeName ?? favorite.number,
                                           video: true,
                                         );
                                       }
@@ -177,7 +179,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                         submitTransfer(destination: favorite.number);
                                       }
                                     : null,
-                                onChatPressed: widget.chatsEnabled && contact.canMessage
+                                onChatPressed: widget.chatsEnabled && contact?.canMessage == true
                                     ? () {
                                         openChat(contactSourceId!);
                                       }
@@ -191,7 +193,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                         );
                                       }
                                     : null,
-                                onViewContactPressed: () => openContact(contactId: contact.id),
+                                onViewContactPressed: contact != null ? () => openContact(contactId: contact.id) : null,
                                 onCallLogPressed: () => openCallLog(number: favorite.number),
                                 onDelete: () => delete(favorite: favorite),
                               );

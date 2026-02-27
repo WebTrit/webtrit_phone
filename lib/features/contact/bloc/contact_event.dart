@@ -12,21 +12,23 @@ class ContactStarted extends ContactEvent {
 }
 
 class ContactAddedToFavorites extends ContactEvent {
-  const ContactAddedToFavorites(this.contactPhone);
+  const ContactAddedToFavorites(this.contactPhone, this.contact);
 
   final ContactPhone contactPhone;
+  final Contact contact;
 
   @override
-  List<Object?> get props => [contactPhone];
+  List<Object?> get props => [contactPhone, contact];
 }
 
 class ContactRemovedFromFavorites extends ContactEvent {
-  const ContactRemovedFromFavorites(this.contactPhone);
+  const ContactRemovedFromFavorites(this.contactPhone, this.contact);
 
   final ContactPhone contactPhone;
+  final Contact contact;
 
   @override
-  List<Object?> get props => [contactPhone];
+  List<Object?> get props => [contactPhone, contact];
 }
 
 class ContactEmailSend extends ContactEvent {

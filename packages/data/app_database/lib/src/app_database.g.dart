@@ -2380,6 +2380,382 @@ class FavoriteDataCompanion extends UpdateCompanion<FavoriteData> {
   }
 }
 
+class $FavoritesV2TableTable extends FavoritesV2Table
+    with TableInfo<$FavoritesV2TableTable, FavoriteV2Data> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FavoritesV2TableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+    'number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<FavoriteSourceTypeData, String>
+  sourceType =
+      GeneratedColumn<String>(
+        'source_type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<FavoriteSourceTypeData>(
+        $FavoritesV2TableTable.$convertersourceType,
+      );
+  static const VerificationMeta _sourceIdMeta = const VerificationMeta(
+    'sourceId',
+  );
+  @override
+  late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
+    'source_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _positionMeta = const VerificationMeta(
+    'position',
+  );
+  @override
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+    'position',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    number,
+    sourceType,
+    sourceId,
+    label,
+    position,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'favorites_v2';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FavoriteV2Data> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('number')) {
+      context.handle(
+        _numberMeta,
+        number.isAcceptableOrUnknown(data['number']!, _numberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_numberMeta);
+    }
+    if (data.containsKey('source_id')) {
+      context.handle(
+        _sourceIdMeta,
+        sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceIdMeta);
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_labelMeta);
+    }
+    if (data.containsKey('position')) {
+      context.handle(
+        _positionMeta,
+        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_positionMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {number, sourceType};
+  @override
+  FavoriteV2Data map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FavoriteV2Data(
+      number: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}number'],
+      )!,
+      sourceType: $FavoritesV2TableTable.$convertersourceType.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}source_type'],
+        )!,
+      ),
+      sourceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_id'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      )!,
+      position: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}position'],
+      )!,
+    );
+  }
+
+  @override
+  $FavoritesV2TableTable createAlias(String alias) {
+    return $FavoritesV2TableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<FavoriteSourceTypeData, String, String>
+  $convertersourceType = const EnumNameConverter<FavoriteSourceTypeData>(
+    FavoriteSourceTypeData.values,
+  );
+}
+
+class FavoriteV2Data extends DataClass implements Insertable<FavoriteV2Data> {
+  final String number;
+  final FavoriteSourceTypeData sourceType;
+  final String sourceId;
+  final String label;
+  final int position;
+  const FavoriteV2Data({
+    required this.number,
+    required this.sourceType,
+    required this.sourceId,
+    required this.label,
+    required this.position,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['number'] = Variable<String>(number);
+    {
+      map['source_type'] = Variable<String>(
+        $FavoritesV2TableTable.$convertersourceType.toSql(sourceType),
+      );
+    }
+    map['source_id'] = Variable<String>(sourceId);
+    map['label'] = Variable<String>(label);
+    map['position'] = Variable<int>(position);
+    return map;
+  }
+
+  FavoriteV2DataCompanion toCompanion(bool nullToAbsent) {
+    return FavoriteV2DataCompanion(
+      number: Value(number),
+      sourceType: Value(sourceType),
+      sourceId: Value(sourceId),
+      label: Value(label),
+      position: Value(position),
+    );
+  }
+
+  factory FavoriteV2Data.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FavoriteV2Data(
+      number: serializer.fromJson<String>(json['number']),
+      sourceType: $FavoritesV2TableTable.$convertersourceType.fromJson(
+        serializer.fromJson<String>(json['sourceType']),
+      ),
+      sourceId: serializer.fromJson<String>(json['sourceId']),
+      label: serializer.fromJson<String>(json['label']),
+      position: serializer.fromJson<int>(json['position']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'number': serializer.toJson<String>(number),
+      'sourceType': serializer.toJson<String>(
+        $FavoritesV2TableTable.$convertersourceType.toJson(sourceType),
+      ),
+      'sourceId': serializer.toJson<String>(sourceId),
+      'label': serializer.toJson<String>(label),
+      'position': serializer.toJson<int>(position),
+    };
+  }
+
+  FavoriteV2Data copyWith({
+    String? number,
+    FavoriteSourceTypeData? sourceType,
+    String? sourceId,
+    String? label,
+    int? position,
+  }) => FavoriteV2Data(
+    number: number ?? this.number,
+    sourceType: sourceType ?? this.sourceType,
+    sourceId: sourceId ?? this.sourceId,
+    label: label ?? this.label,
+    position: position ?? this.position,
+  );
+  FavoriteV2Data copyWithCompanion(FavoriteV2DataCompanion data) {
+    return FavoriteV2Data(
+      number: data.number.present ? data.number.value : this.number,
+      sourceType: data.sourceType.present
+          ? data.sourceType.value
+          : this.sourceType,
+      sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
+      label: data.label.present ? data.label.value : this.label,
+      position: data.position.present ? data.position.value : this.position,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FavoriteV2Data(')
+          ..write('number: $number, ')
+          ..write('sourceType: $sourceType, ')
+          ..write('sourceId: $sourceId, ')
+          ..write('label: $label, ')
+          ..write('position: $position')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(number, sourceType, sourceId, label, position);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FavoriteV2Data &&
+          other.number == this.number &&
+          other.sourceType == this.sourceType &&
+          other.sourceId == this.sourceId &&
+          other.label == this.label &&
+          other.position == this.position);
+}
+
+class FavoriteV2DataCompanion extends UpdateCompanion<FavoriteV2Data> {
+  final Value<String> number;
+  final Value<FavoriteSourceTypeData> sourceType;
+  final Value<String> sourceId;
+  final Value<String> label;
+  final Value<int> position;
+  final Value<int> rowid;
+  const FavoriteV2DataCompanion({
+    this.number = const Value.absent(),
+    this.sourceType = const Value.absent(),
+    this.sourceId = const Value.absent(),
+    this.label = const Value.absent(),
+    this.position = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FavoriteV2DataCompanion.insert({
+    required String number,
+    required FavoriteSourceTypeData sourceType,
+    required String sourceId,
+    required String label,
+    required int position,
+    this.rowid = const Value.absent(),
+  }) : number = Value(number),
+       sourceType = Value(sourceType),
+       sourceId = Value(sourceId),
+       label = Value(label),
+       position = Value(position);
+  static Insertable<FavoriteV2Data> custom({
+    Expression<String>? number,
+    Expression<String>? sourceType,
+    Expression<String>? sourceId,
+    Expression<String>? label,
+    Expression<int>? position,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (number != null) 'number': number,
+      if (sourceType != null) 'source_type': sourceType,
+      if (sourceId != null) 'source_id': sourceId,
+      if (label != null) 'label': label,
+      if (position != null) 'position': position,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FavoriteV2DataCompanion copyWith({
+    Value<String>? number,
+    Value<FavoriteSourceTypeData>? sourceType,
+    Value<String>? sourceId,
+    Value<String>? label,
+    Value<int>? position,
+    Value<int>? rowid,
+  }) {
+    return FavoriteV2DataCompanion(
+      number: number ?? this.number,
+      sourceType: sourceType ?? this.sourceType,
+      sourceId: sourceId ?? this.sourceId,
+      label: label ?? this.label,
+      position: position ?? this.position,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (number.present) {
+      map['number'] = Variable<String>(number.value);
+    }
+    if (sourceType.present) {
+      map['source_type'] = Variable<String>(
+        $FavoritesV2TableTable.$convertersourceType.toSql(sourceType.value),
+      );
+    }
+    if (sourceId.present) {
+      map['source_id'] = Variable<String>(sourceId.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FavoriteV2DataCompanion(')
+          ..write('number: $number, ')
+          ..write('sourceType: $sourceType, ')
+          ..write('sourceId: $sourceId, ')
+          ..write('label: $label, ')
+          ..write('position: $position, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $ChatsTableTable extends ChatsTable
     with TableInfo<$ChatsTableTable, ChatData> {
   @override
@@ -11986,6 +12362,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ContactEmailsTableTable(this);
   late final $CallLogsTableTable callLogsTable = $CallLogsTableTable(this);
   late final $FavoritesTableTable favoritesTable = $FavoritesTableTable(this);
+  late final $FavoritesV2TableTable favoritesV2Table = $FavoritesV2TableTable(
+    this,
+  );
   late final $ChatsTableTable chatsTable = $ChatsTableTable(this);
   late final $ChatMembersTableTable chatMembersTable = $ChatMembersTableTable(
     this,
@@ -12041,6 +12420,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
   late final RecentsDao recentsDao = RecentsDao(this as AppDatabase);
   late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
+  late final FavoritesV2Dao favoritesV2Dao = FavoritesV2Dao(
+    this as AppDatabase,
+  );
   late final ChatsDao chatsDao = ChatsDao(this as AppDatabase);
   late final SmsDao smsDao = SmsDao(this as AppDatabase);
   late final ActiveMessageNotificationsDao activeMessageNotificationsDao =
@@ -12062,6 +12444,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     contactEmailsTable,
     callLogsTable,
     favoritesTable,
+    favoritesV2Table,
     chatsTable,
     chatMembersTable,
     chatMessagesTable,
@@ -13695,6 +14078,220 @@ typedef $$FavoritesTableTableProcessedTableManager =
         BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData>,
       ),
       FavoriteData,
+      PrefetchHooks Function()
+    >;
+typedef $$FavoritesV2TableTableCreateCompanionBuilder =
+    FavoriteV2DataCompanion Function({
+      required String number,
+      required FavoriteSourceTypeData sourceType,
+      required String sourceId,
+      required String label,
+      required int position,
+      Value<int> rowid,
+    });
+typedef $$FavoritesV2TableTableUpdateCompanionBuilder =
+    FavoriteV2DataCompanion Function({
+      Value<String> number,
+      Value<FavoriteSourceTypeData> sourceType,
+      Value<String> sourceId,
+      Value<String> label,
+      Value<int> position,
+      Value<int> rowid,
+    });
+
+class $$FavoritesV2TableTableFilterComposer
+    extends Composer<_$AppDatabase, $FavoritesV2TableTable> {
+  $$FavoritesV2TableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    FavoriteSourceTypeData,
+    FavoriteSourceTypeData,
+    String
+  >
+  get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get sourceId => $composableBuilder(
+    column: $table.sourceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$FavoritesV2TableTableOrderingComposer
+    extends Composer<_$AppDatabase, $FavoritesV2TableTable> {
+  $$FavoritesV2TableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceId => $composableBuilder(
+    column: $table.sourceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$FavoritesV2TableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FavoritesV2TableTable> {
+  $$FavoritesV2TableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<FavoriteSourceTypeData, String>
+  get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get sourceId =>
+      $composableBuilder(column: $table.sourceId, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+}
+
+class $$FavoritesV2TableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FavoritesV2TableTable,
+          FavoriteV2Data,
+          $$FavoritesV2TableTableFilterComposer,
+          $$FavoritesV2TableTableOrderingComposer,
+          $$FavoritesV2TableTableAnnotationComposer,
+          $$FavoritesV2TableTableCreateCompanionBuilder,
+          $$FavoritesV2TableTableUpdateCompanionBuilder,
+          (
+            FavoriteV2Data,
+            BaseReferences<
+              _$AppDatabase,
+              $FavoritesV2TableTable,
+              FavoriteV2Data
+            >,
+          ),
+          FavoriteV2Data,
+          PrefetchHooks Function()
+        > {
+  $$FavoritesV2TableTableTableManager(
+    _$AppDatabase db,
+    $FavoritesV2TableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FavoritesV2TableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FavoritesV2TableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FavoritesV2TableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> number = const Value.absent(),
+                Value<FavoriteSourceTypeData> sourceType = const Value.absent(),
+                Value<String> sourceId = const Value.absent(),
+                Value<String> label = const Value.absent(),
+                Value<int> position = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FavoriteV2DataCompanion(
+                number: number,
+                sourceType: sourceType,
+                sourceId: sourceId,
+                label: label,
+                position: position,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String number,
+                required FavoriteSourceTypeData sourceType,
+                required String sourceId,
+                required String label,
+                required int position,
+                Value<int> rowid = const Value.absent(),
+              }) => FavoriteV2DataCompanion.insert(
+                number: number,
+                sourceType: sourceType,
+                sourceId: sourceId,
+                label: label,
+                position: position,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FavoritesV2TableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FavoritesV2TableTable,
+      FavoriteV2Data,
+      $$FavoritesV2TableTableFilterComposer,
+      $$FavoritesV2TableTableOrderingComposer,
+      $$FavoritesV2TableTableAnnotationComposer,
+      $$FavoritesV2TableTableCreateCompanionBuilder,
+      $$FavoritesV2TableTableUpdateCompanionBuilder,
+      (
+        FavoriteV2Data,
+        BaseReferences<_$AppDatabase, $FavoritesV2TableTable, FavoriteV2Data>,
+      ),
+      FavoriteV2Data,
       PrefetchHooks Function()
     >;
 typedef $$ChatsTableTableCreateCompanionBuilder =
@@ -22644,6 +23241,8 @@ class $AppDatabaseManager {
       $$CallLogsTableTableTableManager(_db, _db.callLogsTable);
   $$FavoritesTableTableTableManager get favoritesTable =>
       $$FavoritesTableTableTableManager(_db, _db.favoritesTable);
+  $$FavoritesV2TableTableTableManager get favoritesV2Table =>
+      $$FavoritesV2TableTableTableManager(_db, _db.favoritesV2Table);
   $$ChatsTableTableTableManager get chatsTable =>
       $$ChatsTableTableTableManager(_db, _db.chatsTable);
   $$ChatMembersTableTableTableManager get chatMembersTable =>

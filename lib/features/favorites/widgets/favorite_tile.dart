@@ -11,6 +11,7 @@ class FavoriteTile extends StatefulWidget {
   const FavoriteTile({
     super.key,
     required this.favorite,
+    this.contact,
     required this.callNumbers,
     this.onTap,
     this.onAudioCallPressed,
@@ -25,6 +26,7 @@ class FavoriteTile extends StatefulWidget {
   });
 
   final Favorite favorite;
+  final Contact? contact;
   final List<String> callNumbers;
   final Function()? onTap;
   final Function()? onAudioCallPressed;
@@ -99,8 +101,8 @@ class _FavoriteTileState extends State<FavoriteTile> {
     final themeData = Theme.of(context);
     final presenceSource = PresenceViewParams.of(context).viewSource;
 
-    final contact = widget.favorite.contact;
-    final name = widget.favorite.name;
+    final contact = widget.contact;
+    final name = widget.contact?.maybeName ?? widget.favorite.number;
 
     return Dismissible(
       key: ObjectKey(widget.favorite),
@@ -121,13 +123,13 @@ class _FavoriteTileState extends State<FavoriteTile> {
         contentPadding: const EdgeInsets.only(left: 16.0),
         leading: LeadingAvatar(
           username: name,
-          thumbnail: contact.thumbnail,
-          thumbnailUrl: contact.thumbnailUrl,
-          registered: contact.registered,
-          presenceInfo: contact.presenceInfo,
+          thumbnail: contact?.thumbnail,
+          thumbnailUrl: contact?.thumbnailUrl,
+          registered: contact?.registered,
+          presenceInfo: contact?.presenceInfo,
         ),
         title: switch (presenceSource) {
-          PresenceViewSource.sipPresence => Text('$name ${contact.presenceInfo.primaryStatusIcon ?? ''}'),
+          PresenceViewSource.sipPresence => Text('$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}'),
           PresenceViewSource.contactInfo => Text(name),
         },
         subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),

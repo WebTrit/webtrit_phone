@@ -44,11 +44,11 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   }
 
   FutureOr<void> _onAddedToFavorites(ContactAddedToFavorites event, Emitter<ContactState> emit) async {
-    await contactsRepository.addContactPhoneToFavorites(event.contactPhone);
+    await contactsRepository.addContactPhoneToFavorites(event.contactPhone, event.contact);
   }
 
   FutureOr<void> _onRemovedFromFavorites(ContactRemovedFromFavorites event, Emitter<ContactState> emit) async {
-    await contactsRepository.removeContactPhoneFromFavorites(event.contactPhone);
+    await contactsRepository.removeContactPhoneFromFavorites(event.contactPhone, event.contact);
   }
 
   FutureOr<void> _onEmailSend(ContactEmailSend event, Emitter<ContactState> emit) async {

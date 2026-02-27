@@ -27,6 +27,15 @@ class Contacts extends Table with TableInfo {
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL',
   );
+  late final GeneratedColumn<int> kind = GeneratedColumn<int>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
     'source_id',
     aliasedName,
@@ -112,6 +121,7 @@ class Contacts extends Table with TableInfo {
   List<GeneratedColumn> get $columns => [
     id,
     sourceType,
+    kind,
     sourceId,
     firstName,
     lastName,
@@ -485,6 +495,84 @@ class Favorites extends Table with TableInfo {
     return Favorites(attachedDatabase, alias);
   }
 
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class FavoritesV2 extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  FavoritesV2(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+    'number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> sourceType = GeneratedColumn<String>(
+    'source_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
+    'source_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+    'position',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    number,
+    sourceType,
+    sourceId,
+    label,
+    position,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'favorites_v2';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {number, sourceType};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  FavoritesV2 createAlias(String alias) {
+    return FavoritesV2(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'PRIMARY KEY(number, source_type)',
+  ];
   @override
   bool get dontWriteConstraints => true;
 }
@@ -2378,13 +2466,14 @@ class Cdrs extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
-class DatabaseAtV17 extends GeneratedDatabase {
-  DatabaseAtV17(QueryExecutor e) : super(e);
+class DatabaseAtV19 extends GeneratedDatabase {
+  DatabaseAtV19(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
   late final ContactPhones contactPhones = ContactPhones(this);
   late final ContactEmails contactEmails = ContactEmails(this);
   late final CallLogs callLogs = CallLogs(this);
   late final Favorites favorites = Favorites(this);
+  late final FavoritesV2 favoritesV2 = FavoritesV2(this);
   late final Chats chats = Chats(this);
   late final ChatMembers chatMembers = ChatMembers(this);
   late final ChatMessages chatMessages = ChatMessages(this);
@@ -2456,6 +2545,7 @@ class DatabaseAtV17 extends GeneratedDatabase {
     contactEmails,
     callLogs,
     favorites,
+    favoritesV2,
     chats,
     chatMembers,
     chatMessages,
@@ -2493,44 +2583,188 @@ class DatabaseAtV17 extends GeneratedDatabase {
         'contacts',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [],
+      result: [TableUpdate('contact_phones', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'contacts',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [],
+      result: [TableUpdate('contact_emails', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'contact_phones',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [],
+      result: [TableUpdate('favorites', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('chat_members', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('chat_messages', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_message_sync_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_message_read_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('chat_outbox_messages', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_outbox_message_edits', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_outbox_message_deletes', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_outbox_read_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('sms_messages', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('sms_message_sync_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('sms_message_read_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('sms_outbox_messages', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('sms_outbox_message_deletes', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('sms_outbox_read_cursors', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'system_notifications',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('system_notifications_outbox', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'contacts',
+        limitUpdateKind: UpdateKind.insert,
+      ),
+      result: [TableUpdate('contacts', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'contacts',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('contacts', kind: UpdateKind.update)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'contact_phones',
-        limitUpdateKind: UpdateKind.delete,
+        limitUpdateKind: UpdateKind.insert,
       ),
-      result: [],
+      result: [TableUpdate('contact_phones', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'contact_phones',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('contact_phones', kind: UpdateKind.update)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'contact_emails',
-        limitUpdateKind: UpdateKind.delete,
+        limitUpdateKind: UpdateKind.insert,
       ),
-      result: [],
+      result: [TableUpdate('contact_emails', kind: UpdateKind.update)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'contact_emails',
-        limitUpdateKind: UpdateKind.delete,
+        limitUpdateKind: UpdateKind.update,
       ),
-      result: [],
+      result: [TableUpdate('contact_emails', kind: UpdateKind.update)],
     ),
   ]);
   @override
-  int get schemaVersion => 17;
+  int get schemaVersion => 19;
 }
