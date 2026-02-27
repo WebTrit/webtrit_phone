@@ -120,7 +120,14 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return select.join([
       leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(favoritesV2Table, favoritesV2Table.number.equalsExp(contactPhonesTable.number)),
+      leftOuterJoin(
+        favoritesV2Table,
+        favoritesV2Table.number.equalsExp(contactPhonesTable.number) &
+            (favoritesV2Table.sourceType.equalsValue(FavoriteSourceTypeData.pbx) &
+                    contactsTable.sourceType.equalsValue(ContactSourceTypeEnum.external) |
+                favoritesV2Table.sourceType.equalsValue(FavoriteSourceTypeData.device) &
+                    contactsTable.sourceType.equalsValue(ContactSourceTypeEnum.local)),
+      ),
       leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
     ]);
   }

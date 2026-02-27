@@ -24,7 +24,14 @@ class FavoritesV2Dao extends DatabaseAccessor<AppDatabase> with _$FavoritesV2Dao
   Stream<List<FavoriteWithContactDataV2>> watchWithContacts() {
     final q = (select(favoritesV2Table)..orderBy([(t) => OrderingTerm.asc(t.position)])).join([
       leftOuterJoin(_sourcePhone, favoritesV2Table.number.equalsExp(_sourcePhone.number)),
-      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(_sourcePhone.contactId)),
+      leftOuterJoin(
+        contactsTable,
+        contactsTable.id.equalsExp(_sourcePhone.contactId) &
+            ((favoritesV2Table.sourceType.equalsValue(FavoriteSourceTypeData.pbx) &
+                    contactsTable.sourceType.equalsValue(ContactSourceTypeEnum.external)) |
+                (favoritesV2Table.sourceType.equalsValue(FavoriteSourceTypeData.device) &
+                    contactsTable.sourceType.equalsValue(ContactSourceTypeEnum.local))),
+      ),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(_contactPhones, _contactPhones.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(_contactPhones.number)),

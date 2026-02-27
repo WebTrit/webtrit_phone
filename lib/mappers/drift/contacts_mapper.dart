@@ -45,11 +45,7 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
     ContactSourceTypeEnum contactSourceType,
   ) {
     return phones.map((phone) {
-      final favoriteSourceType = switch (contactSourceType) {
-        ContactSourceTypeEnum.local => FavoriteSourceTypeData.device,
-        ContactSourceTypeEnum.external => FavoriteSourceTypeData.pbx,
-      };
-      final favorite = favorites.any((f) => f.sourceType == favoriteSourceType && f.number == phone.number);
+      final favorite = favorites.any((f) => f.number == phone.number);
       return contactPhoneFromDrift(phone, favorite: favorite);
     });
   }
