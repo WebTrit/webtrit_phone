@@ -19,6 +19,7 @@ back to sensible in-app defaults.
     - [App bar](#app-bar)
     - [Call info](#call-info)
 - [Keypad page](#keypad-page)
+- [Common page fields](#common-page-fields)
 - [Common object formats](#common-object-formats)
 
 ---
@@ -338,19 +339,27 @@ application, including the main call screen and the keypad.
 
 Top-level keys inside `"keypad"`:
 
-| Key                    | Type   | Description                                                                                                            |
-|------------------------|--------|------------------------------------------------------------------------------------------------------------------------|
-| `systemUiOverlayStyle` | object | Status/navigation bars styling.                                                                                        |
-| `textField`            | object | Number input field style (top of page).                                                                                |
-| `contactName`          | object | Resolved contact name style (under input).                                                                             |
-| `keypad`               | object | Numeric keypad layout (digits, spacing, padding).                                                                      |
-| `actionpad`            | object | Layout for action buttons (call, backspace, etc.). Button styles are taken from the global `Action Pad Configuration`. |
+| Key                      | Type   | Description                                                                                                            |
+|--------------------------|--------|------------------------------------------------------------------------------------------------------------------------|
+| `appBarBackgroundColor`  | string | App bar background color (hex). See [Common page fields](#common-page-fields).                                         |
+| `appBarBlurredSurface`   | object | Blurred surface config. See [Common page fields](#common-page-fields).                                                 |
+| `systemUiOverlayStyle`   | object | Status/navigation bars styling.                                                                                        |
+| `textField`              | object | Number input field style (top of page).                                                                                |
+| `contactName`            | object | Resolved contact name style (under input).                                                                             |
+| `keypad`                 | object | Numeric keypad layout (digits, spacing, padding).                                                                      |
+| `actionpad`              | object | Layout for action buttons (call, backspace, etc.). Button styles are taken from the global `Action Pad Configuration`. |
 
 **Minimal example:**
 
 ```json
 {
   "keypad": {
+    "appBarBackgroundColor": "#000000",
+    "appBarBlurredSurface": {
+      "color": "#66000000",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "systemUiOverlayStyle": {
       "statusBarIconBrightness": "dark"
     },
@@ -373,6 +382,37 @@ Top-level keys inside `"keypad"`:
   }
 }
 ```
+
+---
+
+## Common page fields
+
+Every page config that has an app bar supports these optional fields:
+
+| Key                     | Type   | Description                                                        |
+|-------------------------|--------|--------------------------------------------------------------------|
+| `appBarBackgroundColor` | string | Background color for the app bar (hex). Overrides the default.     |
+| `appBarBlurredSurface`  | object | Blurred surface overlay config (frosted-glass effect in app bar).  |
+
+### `appBarBlurredSurface`
+
+```json
+{
+  "appBarBlurredSurface": {
+    "color": "#66000000",
+    "sigmaX": 10,
+    "sigmaY": 10
+  }
+}
+```
+
+| Key      | Type   | Default | Description                          |
+|----------|--------|---------|--------------------------------------|
+| `color`  | string | `null`  | Overlay color (hex).                 |
+| `sigmaX` | double | `0`     | Horizontal gaussian blur sigma.      |
+| `sigmaY` | double | `0`     | Vertical gaussian blur sigma.        |
+
+Applies to: **Keypad**, **Contacts**, **Favorites**, **Recents**, **Conversations**, **Settings**, **About**.
 
 ---
 
