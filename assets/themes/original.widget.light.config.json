@@ -57,6 +57,10 @@
           "weight": 600
         },
         "color": "#30302F"
+      },
+      "systemOverlayStyle": {
+        "statusBarIconBrightness": "dark",
+        "statusBarBrightness": "light"
       }
     },
     "__tabBarConfig": "Tab bar styling including indicator, labels, alignment, and animation.",
