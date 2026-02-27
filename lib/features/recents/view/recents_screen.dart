@@ -136,11 +136,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
       appBar: MainAppBar(
         title: widget.title,
         context: context,
-        flexibleSpace: BlurredSurface(
-          color: effectiveStyle?.appBarBlurredSurface?.color,
-          sigmaX: effectiveStyle?.appBarBlurredSurface?.sigmaX ?? 0,
-          sigmaY: effectiveStyle?.appBarBlurredSurface?.sigmaY ?? 0,
-        ),
+        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(

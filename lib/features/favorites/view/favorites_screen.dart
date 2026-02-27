@@ -106,11 +106,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       appBar: MainAppBar(
         title: widget.title,
         context: context,
-        flexibleSpace: BlurredSurface(
-          color: effectiveStyle?.appBarBlurredSurface?.color,
-          sigmaX: effectiveStyle?.appBarBlurredSurface?.sigmaX ?? 0,
-          sigmaY: effectiveStyle?.appBarBlurredSurface?.sigmaY ?? 0,
-        ),
+        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
       ),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {

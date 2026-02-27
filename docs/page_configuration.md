@@ -403,11 +403,13 @@ Every page config that has an app bar supports these optional fields:
 }
 ```
 
-| Key      | Type   | Default | Description                          |
-|----------|--------|---------|--------------------------------------|
-| `color`  | string | `null`  | Overlay color (hex).                 |
-| `sigmaX` | double | `0`     | Horizontal gaussian blur sigma.      |
-| `sigmaY` | double | `0`     | Vertical gaussian blur sigma.        |
+| Key      | Type   | Default | Description                     |
+|----------|--------|---------|---------------------------------|
+| `color`  | string | `null`  | Overlay color (hex).            |
+| `sigmaX` | double | `0`     | Horizontal gaussian blur sigma. Resolved default: 10. |
+| `sigmaY` | double | `0`     | Vertical gaussian blur sigma. Resolved default: 10.   |
+
+When `appBarBlurredSurface` is present (even `{}`), the app bar applies a frosted-glass blur with resolved sigma defaults of 10. When absent (`null`), no blur is applied and the app bar uses the standard theme background.
 
 Applies to: **Keypad**, **Contacts**, **Favorites**, **Recents**, **Conversations**, **Settings**, **About**.
 
