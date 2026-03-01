@@ -2380,6 +2380,556 @@ class FavoriteDataCompanion extends UpdateCompanion<FavoriteData> {
   }
 }
 
+class $FavoritesOutboxTableTable extends FavoritesOutboxTable
+    with TableInfo<$FavoritesOutboxTableTable, FavoriteOutboxEntryData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FavoritesOutboxTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+    'number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<FavoriteSourceTypeData, String>
+  sourceType =
+      GeneratedColumn<String>(
+        'source_type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<FavoriteSourceTypeData>(
+        $FavoritesOutboxTableTable.$convertersourceType,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<FavoriteOutboxActionData, String>
+  action =
+      GeneratedColumn<String>(
+        'action',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<FavoriteOutboxActionData>(
+        $FavoritesOutboxTableTable.$converteraction,
+      );
+  static const VerificationMeta _sourceIdMeta = const VerificationMeta(
+    'sourceId',
+  );
+  @override
+  late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
+    'source_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _positionMeta = const VerificationMeta(
+    'position',
+  );
+  @override
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+    'position',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sendAttemptsMeta = const VerificationMeta(
+    'sendAttempts',
+  );
+  @override
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+    'send_attempts',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _timestampUsecMeta = const VerificationMeta(
+    'timestampUsec',
+  );
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+    'timestamp_usec',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    number,
+    sourceType,
+    action,
+    sourceId,
+    label,
+    position,
+    sendAttempts,
+    timestampUsec,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'favorites_outbox';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FavoriteOutboxEntryData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('number')) {
+      context.handle(
+        _numberMeta,
+        number.isAcceptableOrUnknown(data['number']!, _numberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_numberMeta);
+    }
+    if (data.containsKey('source_id')) {
+      context.handle(
+        _sourceIdMeta,
+        sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceIdMeta);
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_labelMeta);
+    }
+    if (data.containsKey('position')) {
+      context.handle(
+        _positionMeta,
+        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+      );
+    }
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+        _sendAttemptsMeta,
+        sendAttempts.isAcceptableOrUnknown(
+          data['send_attempts']!,
+          _sendAttemptsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+        _timestampUsecMeta,
+        timestampUsec.isAcceptableOrUnknown(
+          data['timestamp_usec']!,
+          _timestampUsecMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_timestampUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {number, sourceType, action};
+  @override
+  FavoriteOutboxEntryData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FavoriteOutboxEntryData(
+      number: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}number'],
+      )!,
+      sourceType: $FavoritesOutboxTableTable.$convertersourceType.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}source_type'],
+        )!,
+      ),
+      action: $FavoritesOutboxTableTable.$converteraction.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}action'],
+        )!,
+      ),
+      sourceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_id'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      )!,
+      position: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}position'],
+      ),
+      sendAttempts: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}send_attempts'],
+      )!,
+      timestampUsec: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}timestamp_usec'],
+      )!,
+    );
+  }
+
+  @override
+  $FavoritesOutboxTableTable createAlias(String alias) {
+    return $FavoritesOutboxTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<FavoriteSourceTypeData, String, String>
+  $convertersourceType = const EnumNameConverter<FavoriteSourceTypeData>(
+    FavoriteSourceTypeData.values,
+  );
+  static JsonTypeConverter2<FavoriteOutboxActionData, String, String>
+  $converteraction = const EnumNameConverter<FavoriteOutboxActionData>(
+    FavoriteOutboxActionData.values,
+  );
+}
+
+class FavoriteOutboxEntryData extends DataClass
+    implements Insertable<FavoriteOutboxEntryData> {
+  final String number;
+  final FavoriteSourceTypeData sourceType;
+  final FavoriteOutboxActionData action;
+  final String sourceId;
+  final String label;
+  final int? position;
+  final int sendAttempts;
+  final int timestampUsec;
+  const FavoriteOutboxEntryData({
+    required this.number,
+    required this.sourceType,
+    required this.action,
+    required this.sourceId,
+    required this.label,
+    this.position,
+    required this.sendAttempts,
+    required this.timestampUsec,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['number'] = Variable<String>(number);
+    {
+      map['source_type'] = Variable<String>(
+        $FavoritesOutboxTableTable.$convertersourceType.toSql(sourceType),
+      );
+    }
+    {
+      map['action'] = Variable<String>(
+        $FavoritesOutboxTableTable.$converteraction.toSql(action),
+      );
+    }
+    map['source_id'] = Variable<String>(sourceId);
+    map['label'] = Variable<String>(label);
+    if (!nullToAbsent || position != null) {
+      map['position'] = Variable<int>(position);
+    }
+    map['send_attempts'] = Variable<int>(sendAttempts);
+    map['timestamp_usec'] = Variable<int>(timestampUsec);
+    return map;
+  }
+
+  FavoriteOutboxEntryDataCompanion toCompanion(bool nullToAbsent) {
+    return FavoriteOutboxEntryDataCompanion(
+      number: Value(number),
+      sourceType: Value(sourceType),
+      action: Value(action),
+      sourceId: Value(sourceId),
+      label: Value(label),
+      position: position == null && nullToAbsent
+          ? const Value.absent()
+          : Value(position),
+      sendAttempts: Value(sendAttempts),
+      timestampUsec: Value(timestampUsec),
+    );
+  }
+
+  factory FavoriteOutboxEntryData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FavoriteOutboxEntryData(
+      number: serializer.fromJson<String>(json['number']),
+      sourceType: $FavoritesOutboxTableTable.$convertersourceType.fromJson(
+        serializer.fromJson<String>(json['sourceType']),
+      ),
+      action: $FavoritesOutboxTableTable.$converteraction.fromJson(
+        serializer.fromJson<String>(json['action']),
+      ),
+      sourceId: serializer.fromJson<String>(json['sourceId']),
+      label: serializer.fromJson<String>(json['label']),
+      position: serializer.fromJson<int?>(json['position']),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
+      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'number': serializer.toJson<String>(number),
+      'sourceType': serializer.toJson<String>(
+        $FavoritesOutboxTableTable.$convertersourceType.toJson(sourceType),
+      ),
+      'action': serializer.toJson<String>(
+        $FavoritesOutboxTableTable.$converteraction.toJson(action),
+      ),
+      'sourceId': serializer.toJson<String>(sourceId),
+      'label': serializer.toJson<String>(label),
+      'position': serializer.toJson<int?>(position),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
+      'timestampUsec': serializer.toJson<int>(timestampUsec),
+    };
+  }
+
+  FavoriteOutboxEntryData copyWith({
+    String? number,
+    FavoriteSourceTypeData? sourceType,
+    FavoriteOutboxActionData? action,
+    String? sourceId,
+    String? label,
+    Value<int?> position = const Value.absent(),
+    int? sendAttempts,
+    int? timestampUsec,
+  }) => FavoriteOutboxEntryData(
+    number: number ?? this.number,
+    sourceType: sourceType ?? this.sourceType,
+    action: action ?? this.action,
+    sourceId: sourceId ?? this.sourceId,
+    label: label ?? this.label,
+    position: position.present ? position.value : this.position,
+    sendAttempts: sendAttempts ?? this.sendAttempts,
+    timestampUsec: timestampUsec ?? this.timestampUsec,
+  );
+  FavoriteOutboxEntryData copyWithCompanion(
+    FavoriteOutboxEntryDataCompanion data,
+  ) {
+    return FavoriteOutboxEntryData(
+      number: data.number.present ? data.number.value : this.number,
+      sourceType: data.sourceType.present
+          ? data.sourceType.value
+          : this.sourceType,
+      action: data.action.present ? data.action.value : this.action,
+      sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
+      label: data.label.present ? data.label.value : this.label,
+      position: data.position.present ? data.position.value : this.position,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FavoriteOutboxEntryData(')
+          ..write('number: $number, ')
+          ..write('sourceType: $sourceType, ')
+          ..write('action: $action, ')
+          ..write('sourceId: $sourceId, ')
+          ..write('label: $label, ')
+          ..write('position: $position, ')
+          ..write('sendAttempts: $sendAttempts, ')
+          ..write('timestampUsec: $timestampUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    number,
+    sourceType,
+    action,
+    sourceId,
+    label,
+    position,
+    sendAttempts,
+    timestampUsec,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FavoriteOutboxEntryData &&
+          other.number == this.number &&
+          other.sourceType == this.sourceType &&
+          other.action == this.action &&
+          other.sourceId == this.sourceId &&
+          other.label == this.label &&
+          other.position == this.position &&
+          other.sendAttempts == this.sendAttempts &&
+          other.timestampUsec == this.timestampUsec);
+}
+
+class FavoriteOutboxEntryDataCompanion
+    extends UpdateCompanion<FavoriteOutboxEntryData> {
+  final Value<String> number;
+  final Value<FavoriteSourceTypeData> sourceType;
+  final Value<FavoriteOutboxActionData> action;
+  final Value<String> sourceId;
+  final Value<String> label;
+  final Value<int?> position;
+  final Value<int> sendAttempts;
+  final Value<int> timestampUsec;
+  final Value<int> rowid;
+  const FavoriteOutboxEntryDataCompanion({
+    this.number = const Value.absent(),
+    this.sourceType = const Value.absent(),
+    this.action = const Value.absent(),
+    this.sourceId = const Value.absent(),
+    this.label = const Value.absent(),
+    this.position = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FavoriteOutboxEntryDataCompanion.insert({
+    required String number,
+    required FavoriteSourceTypeData sourceType,
+    required FavoriteOutboxActionData action,
+    required String sourceId,
+    required String label,
+    this.position = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
+    required int timestampUsec,
+    this.rowid = const Value.absent(),
+  }) : number = Value(number),
+       sourceType = Value(sourceType),
+       action = Value(action),
+       sourceId = Value(sourceId),
+       label = Value(label),
+       timestampUsec = Value(timestampUsec);
+  static Insertable<FavoriteOutboxEntryData> custom({
+    Expression<String>? number,
+    Expression<String>? sourceType,
+    Expression<String>? action,
+    Expression<String>? sourceId,
+    Expression<String>? label,
+    Expression<int>? position,
+    Expression<int>? sendAttempts,
+    Expression<int>? timestampUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (number != null) 'number': number,
+      if (sourceType != null) 'source_type': sourceType,
+      if (action != null) 'action': action,
+      if (sourceId != null) 'source_id': sourceId,
+      if (label != null) 'label': label,
+      if (position != null) 'position': position,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FavoriteOutboxEntryDataCompanion copyWith({
+    Value<String>? number,
+    Value<FavoriteSourceTypeData>? sourceType,
+    Value<FavoriteOutboxActionData>? action,
+    Value<String>? sourceId,
+    Value<String>? label,
+    Value<int?>? position,
+    Value<int>? sendAttempts,
+    Value<int>? timestampUsec,
+    Value<int>? rowid,
+  }) {
+    return FavoriteOutboxEntryDataCompanion(
+      number: number ?? this.number,
+      sourceType: sourceType ?? this.sourceType,
+      action: action ?? this.action,
+      sourceId: sourceId ?? this.sourceId,
+      label: label ?? this.label,
+      position: position ?? this.position,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (number.present) {
+      map['number'] = Variable<String>(number.value);
+    }
+    if (sourceType.present) {
+      map['source_type'] = Variable<String>(
+        $FavoritesOutboxTableTable.$convertersourceType.toSql(sourceType.value),
+      );
+    }
+    if (action.present) {
+      map['action'] = Variable<String>(
+        $FavoritesOutboxTableTable.$converteraction.toSql(action.value),
+      );
+    }
+    if (sourceId.present) {
+      map['source_id'] = Variable<String>(sourceId.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FavoriteOutboxEntryDataCompanion(')
+          ..write('number: $number, ')
+          ..write('sourceType: $sourceType, ')
+          ..write('action: $action, ')
+          ..write('sourceId: $sourceId, ')
+          ..write('label: $label, ')
+          ..write('position: $position, ')
+          ..write('sendAttempts: $sendAttempts, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $FavoritesV2TableTable extends FavoritesV2Table
     with TableInfo<$FavoritesV2TableTable, FavoriteV2Data> {
   @override
@@ -12362,6 +12912,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ContactEmailsTableTable(this);
   late final $CallLogsTableTable callLogsTable = $CallLogsTableTable(this);
   late final $FavoritesTableTable favoritesTable = $FavoritesTableTable(this);
+  late final $FavoritesOutboxTableTable favoritesOutboxTable =
+      $FavoritesOutboxTableTable(this);
   late final $FavoritesV2TableTable favoritesV2Table = $FavoritesV2TableTable(
     this,
   );
@@ -12420,6 +12972,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
   late final RecentsDao recentsDao = RecentsDao(this as AppDatabase);
   late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
+  late final FavoritesOutboxDao favoritesOutboxDao = FavoritesOutboxDao(
+    this as AppDatabase,
+  );
   late final FavoritesV2Dao favoritesV2Dao = FavoritesV2Dao(
     this as AppDatabase,
   );
@@ -12444,6 +12999,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     contactEmailsTable,
     callLogsTable,
     favoritesTable,
+    favoritesOutboxTable,
     favoritesV2Table,
     chatsTable,
     chatMembersTable,
@@ -14078,6 +14634,297 @@ typedef $$FavoritesTableTableProcessedTableManager =
         BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData>,
       ),
       FavoriteData,
+      PrefetchHooks Function()
+    >;
+typedef $$FavoritesOutboxTableTableCreateCompanionBuilder =
+    FavoriteOutboxEntryDataCompanion Function({
+      required String number,
+      required FavoriteSourceTypeData sourceType,
+      required FavoriteOutboxActionData action,
+      required String sourceId,
+      required String label,
+      Value<int?> position,
+      Value<int> sendAttempts,
+      required int timestampUsec,
+      Value<int> rowid,
+    });
+typedef $$FavoritesOutboxTableTableUpdateCompanionBuilder =
+    FavoriteOutboxEntryDataCompanion Function({
+      Value<String> number,
+      Value<FavoriteSourceTypeData> sourceType,
+      Value<FavoriteOutboxActionData> action,
+      Value<String> sourceId,
+      Value<String> label,
+      Value<int?> position,
+      Value<int> sendAttempts,
+      Value<int> timestampUsec,
+      Value<int> rowid,
+    });
+
+class $$FavoritesOutboxTableTableFilterComposer
+    extends Composer<_$AppDatabase, $FavoritesOutboxTableTable> {
+  $$FavoritesOutboxTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    FavoriteSourceTypeData,
+    FavoriteSourceTypeData,
+    String
+  >
+  get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    FavoriteOutboxActionData,
+    FavoriteOutboxActionData,
+    String
+  >
+  get action => $composableBuilder(
+    column: $table.action,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get sourceId => $composableBuilder(
+    column: $table.sourceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+    column: $table.sendAttempts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$FavoritesOutboxTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $FavoritesOutboxTableTable> {
+  $$FavoritesOutboxTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get action => $composableBuilder(
+    column: $table.action,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceId => $composableBuilder(
+    column: $table.sourceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+    column: $table.sendAttempts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$FavoritesOutboxTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FavoritesOutboxTableTable> {
+  $$FavoritesOutboxTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<FavoriteSourceTypeData, String>
+  get sourceType => $composableBuilder(
+    column: $table.sourceType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<FavoriteOutboxActionData, String>
+  get action =>
+      $composableBuilder(column: $table.action, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceId =>
+      $composableBuilder(column: $table.sourceId, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+    column: $table.sendAttempts,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => column,
+  );
+}
+
+class $$FavoritesOutboxTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FavoritesOutboxTableTable,
+          FavoriteOutboxEntryData,
+          $$FavoritesOutboxTableTableFilterComposer,
+          $$FavoritesOutboxTableTableOrderingComposer,
+          $$FavoritesOutboxTableTableAnnotationComposer,
+          $$FavoritesOutboxTableTableCreateCompanionBuilder,
+          $$FavoritesOutboxTableTableUpdateCompanionBuilder,
+          (
+            FavoriteOutboxEntryData,
+            BaseReferences<
+              _$AppDatabase,
+              $FavoritesOutboxTableTable,
+              FavoriteOutboxEntryData
+            >,
+          ),
+          FavoriteOutboxEntryData,
+          PrefetchHooks Function()
+        > {
+  $$FavoritesOutboxTableTableTableManager(
+    _$AppDatabase db,
+    $FavoritesOutboxTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FavoritesOutboxTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FavoritesOutboxTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$FavoritesOutboxTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> number = const Value.absent(),
+                Value<FavoriteSourceTypeData> sourceType = const Value.absent(),
+                Value<FavoriteOutboxActionData> action = const Value.absent(),
+                Value<String> sourceId = const Value.absent(),
+                Value<String> label = const Value.absent(),
+                Value<int?> position = const Value.absent(),
+                Value<int> sendAttempts = const Value.absent(),
+                Value<int> timestampUsec = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FavoriteOutboxEntryDataCompanion(
+                number: number,
+                sourceType: sourceType,
+                action: action,
+                sourceId: sourceId,
+                label: label,
+                position: position,
+                sendAttempts: sendAttempts,
+                timestampUsec: timestampUsec,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String number,
+                required FavoriteSourceTypeData sourceType,
+                required FavoriteOutboxActionData action,
+                required String sourceId,
+                required String label,
+                Value<int?> position = const Value.absent(),
+                Value<int> sendAttempts = const Value.absent(),
+                required int timestampUsec,
+                Value<int> rowid = const Value.absent(),
+              }) => FavoriteOutboxEntryDataCompanion.insert(
+                number: number,
+                sourceType: sourceType,
+                action: action,
+                sourceId: sourceId,
+                label: label,
+                position: position,
+                sendAttempts: sendAttempts,
+                timestampUsec: timestampUsec,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FavoritesOutboxTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FavoritesOutboxTableTable,
+      FavoriteOutboxEntryData,
+      $$FavoritesOutboxTableTableFilterComposer,
+      $$FavoritesOutboxTableTableOrderingComposer,
+      $$FavoritesOutboxTableTableAnnotationComposer,
+      $$FavoritesOutboxTableTableCreateCompanionBuilder,
+      $$FavoritesOutboxTableTableUpdateCompanionBuilder,
+      (
+        FavoriteOutboxEntryData,
+        BaseReferences<
+          _$AppDatabase,
+          $FavoritesOutboxTableTable,
+          FavoriteOutboxEntryData
+        >,
+      ),
+      FavoriteOutboxEntryData,
       PrefetchHooks Function()
     >;
 typedef $$FavoritesV2TableTableCreateCompanionBuilder =
@@ -23241,6 +24088,8 @@ class $AppDatabaseManager {
       $$CallLogsTableTableTableManager(_db, _db.callLogsTable);
   $$FavoritesTableTableTableManager get favoritesTable =>
       $$FavoritesTableTableTableManager(_db, _db.favoritesTable);
+  $$FavoritesOutboxTableTableTableManager get favoritesOutboxTable =>
+      $$FavoritesOutboxTableTableTableManager(_db, _db.favoritesOutboxTable);
   $$FavoritesV2TableTableTableManager get favoritesV2Table =>
       $$FavoritesV2TableTableTableManager(_db, _db.favoritesV2Table);
   $$ChatsTableTableTableManager get chatsTable =>

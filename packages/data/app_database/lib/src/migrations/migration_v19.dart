@@ -12,7 +12,10 @@ class MigrationV19 extends Migration {
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
     final favoritesV2Table = v19.FavoritesV2(db);
+    final favoritesOutboxTable = v19.FavoritesOutbox(db);
+
     await m.createTable(favoritesV2Table);
+    await m.createTable(favoritesOutboxTable);
 
     final favoritesTable = v18.Favorites(db);
     final contactPhonesTable = v18.ContactPhones(db);

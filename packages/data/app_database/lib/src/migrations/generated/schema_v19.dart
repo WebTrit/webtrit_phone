@@ -499,6 +499,112 @@ class Favorites extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class FavoritesOutbox extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  FavoritesOutbox(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+    'number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> sourceType = GeneratedColumn<String>(
+    'source_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> action = GeneratedColumn<String>(
+    'action',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
+    'source_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+    'position',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+    'send_attempts',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+    'timestamp_usec',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    number,
+    sourceType,
+    action,
+    sourceId,
+    label,
+    position,
+    sendAttempts,
+    timestampUsec,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'favorites_outbox';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {number, sourceType, action};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  FavoritesOutbox createAlias(String alias) {
+    return FavoritesOutbox(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'PRIMARY KEY(number, source_type, "action")',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class FavoritesV2 extends Table with TableInfo {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -2473,6 +2579,7 @@ class DatabaseAtV19 extends GeneratedDatabase {
   late final ContactEmails contactEmails = ContactEmails(this);
   late final CallLogs callLogs = CallLogs(this);
   late final Favorites favorites = Favorites(this);
+  late final FavoritesOutbox favoritesOutbox = FavoritesOutbox(this);
   late final FavoritesV2 favoritesV2 = FavoritesV2(this);
   late final Chats chats = Chats(this);
   late final ChatMembers chatMembers = ChatMembers(this);
@@ -2545,6 +2652,7 @@ class DatabaseAtV19 extends GeneratedDatabase {
     contactEmails,
     callLogs,
     favorites,
+    favoritesOutbox,
     favoritesV2,
     chats,
     chatMembers,
