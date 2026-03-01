@@ -21,36 +21,69 @@ class MigrationV19 extends Migration {
     final contactPhonesTable = v18.ContactPhones(db);
     final contactsTable = v18.Contacts(db);
 
-    final oldFavorites = await favoritesTable.select().join([
-      leftOuterJoin(contactPhonesTable, contactPhonesTable.id.equalsExp(favoritesTable.contactPhoneId)),
-      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
-    ]).get();
+    await db.customStatement('''
+      INSERT INTO ${favoritesV2Table.actualTableName} (
+        number,
+        source_type,
+        source_id,
+        label,
+        position
+      )
+      SELECT
+        mapped.number,
+        mapped.source_type,
+        mapped.source_id,
+        mapped.label,
+        MIN(mapped.position) AS position
+      FROM (
+        SELECT
+          cp.number AS number,
+          CASE c.source_type
+            WHEN 0 THEN 'device'
+            WHEN 1 THEN 'pbx'
+            ELSE NULL
+          END AS source_type,
+          c.source_id AS source_id,
+          cp.label AS label,
+          f.position AS position
+        FROM ${favoritesTable.actualTableName} f
+        LEFT JOIN ${contactPhonesTable.actualTableName} cp ON cp.id = f.contact_phone_id
+        LEFT JOIN ${contactsTable.actualTableName} c ON c.id = cp.contact_id
+      ) AS mapped
+      WHERE mapped.number IS NOT NULL
+        AND mapped.source_type IS NOT NULL
+        AND mapped.source_id IS NOT NULL
+        AND mapped.label IS NOT NULL
+        AND mapped.position IS NOT NULL
+      GROUP BY mapped.number, mapped.source_type
+    ''');
 
-    print('Migrating ${oldFavorites.length} favorites to new favorites_v2 table');
+    final timestampUsec = DateTime.now().microsecondsSinceEpoch;
 
-    // TODO: finish correct migration
-
-    // final oldFavorites = await db.favoritesDao.getFavoritesWithContactData();
-    // final newFavorites = oldFavorites
-    //     .map((oldFavorite) {
-    //       final sourceId = oldFavorite.contactData.sourceId;
-    //       if (sourceId == null) return null;
-
-    //       final sourceType = switch (oldFavorite.contactData.sourceType) {
-    //         ContactSourceTypeEnum.external => 'pbx',
-    //         ContactSourceTypeEnum.local => 'device',
-    //       };
-
-    //       return FavoriteV2Data(
-    //         number: oldFavorite.contactPhoneData.number,
-    //         sourceType: sourceType,
-    //         sourceId: sourceId,
-    //         label: oldFavorite.contactPhoneData.label,
-    //         position: oldFavorite.favoriteData.position,
-    //       );
-    //     })
-    //     .nonNulls
-    //     .toList();
-    // await db.favoritesV2Dao.upsertFavorites(newFavorites);
+    await db.customStatement(
+      '''
+      INSERT INTO ${favoritesOutboxTable.actualTableName} (
+        number,
+        source_type,
+        action,
+        source_id,
+        label,
+        position,
+        send_attempts,
+        timestamp_usec
+      )
+      SELECT
+        number,
+        source_type,
+        'upsert',
+        source_id,
+        label,
+        position,
+        0,
+        ?
+      FROM ${favoritesV2Table.actualTableName}
+      ''',
+      [timestampUsec],
+    );
   }
 }
