@@ -55,7 +55,7 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
         title: widget.title,
         context: context,
         backgroundColor: themeData.canvasColor.withAlpha(150),
-        flexibleSpace: const BlurredSurface(),
+        flexibleSpace: const BlurredSurface(sigmaX: 10, sigmaY: 10),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(

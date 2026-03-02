@@ -14,10 +14,10 @@ abstract class BlurredSurfaceConfig with _$BlurredSurfaceConfig {
     String? color,
 
     /// Horizontal gaussian blur sigma.
-    @Default(0) double sigmaX,
+    double? sigmaX,
 
     /// Vertical gaussian blur sigma.
-    @Default(0) double sigmaY,
+    double? sigmaY,
   }) = _BlurredSurfaceConfig;
 
   factory BlurredSurfaceConfig.fromJson(Map<String, dynamic> json) => _$BlurredSurfaceConfigFromJson(json);

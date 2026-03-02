@@ -31,7 +31,7 @@ class BlurredSurface extends StatelessWidget {
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
-        child: child ?? Container(color: color),
+        child: child ?? Container(color: color ?? Colors.transparent),
       ),
     );
   }
