@@ -29,9 +29,11 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   CallScreenStyles create() {
     final appBarCfg = pageConfig?.appBarStyle;
     final infoCfg = pageConfig?.callInfo;
+    final backgroundStyle = pageConfig?.background?.toStyle();
 
     return CallScreenStyles(
       primary: CallScreenStyle(
+        background: backgroundStyle,
         systemUiOverlayStyle: pageConfig?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
         appBar: _mapAppBarStyle(appBarCfg),
         callInfo: _mapCallInfoStyle(infoCfg),

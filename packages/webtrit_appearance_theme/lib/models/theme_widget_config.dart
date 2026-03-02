@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'common/common.dart';
-import 'custom_color.dart';
 import 'features_config/metadata.dart';
 import 'resources/image_source.dart';
 
@@ -22,7 +21,6 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     this.text = const TextWidgetConfig(),
     this.dialog = const DialogWidgetConfig(),
     this.statuses = const StatusesWidgetConfig(),
-    this.decorationConfig = const DecorationConfig(),
   });
 
   @override
@@ -51,9 +49,6 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
 
   @override
   final StatusesWidgetConfig statuses;
-
-  @override
-  final DecorationConfig decorationConfig;
 
   factory ThemeWidgetConfig.fromJson(Map<String, Object?> json) => _$ThemeWidgetConfigFromJson(json);
 
@@ -640,32 +635,6 @@ class CallStatusesWidgetConfig with _$CallStatusesWidgetConfig {
   factory CallStatusesWidgetConfig.fromJson(Map<String, Object?> json) => _$CallStatusesWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$CallStatusesWidgetConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
-class DecorationConfig with _$DecorationConfig {
-  const DecorationConfig({this.primaryGradientColorsConfig = const GradientColorsConfig()});
-
-  @override
-  final GradientColorsConfig primaryGradientColorsConfig;
-
-  factory DecorationConfig.fromJson(Map<String, Object?> json) => _$DecorationConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$DecorationConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
-class GradientColorsConfig with _$GradientColorsConfig {
-  const GradientColorsConfig({this.colors = const []});
-
-  @override
-  final List<CustomColor> colors;
-
-  factory GradientColorsConfig.fromJson(Map<String, Object?> json) => _$GradientColorsConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$GradientColorsConfigToJson(this);
 }
 
 /// Defines default property values for descendant [TabBar] widgets.

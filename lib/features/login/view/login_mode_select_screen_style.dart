@@ -7,6 +7,7 @@ import 'package:webtrit_phone/widgets/extended_text_style.dart';
 
 class LoginModeSelectScreenStyle with Diagnosticable {
   const LoginModeSelectScreenStyle({
+    this.background,
     this.signInTypeButton,
     this.signUpTypeButton,
     this.systemUiOverlayStyle,
@@ -16,6 +17,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     this.applyToAppBar,
   });
 
+  final BackgroundStyle? background;
   final ElevatedButtonStyleType? signInTypeButton;
   final ElevatedButtonStyleType? signUpTypeButton;
   final SystemUiOverlayStyle? systemUiOverlayStyle;
@@ -25,6 +27,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
   final bool? applyToAppBar;
 
   LoginModeSelectScreenStyle copyWith({
+    BackgroundStyle? background,
     ElevatedButtonStyleType? signInTypeButton,
     ElevatedButtonStyleType? signUpTypeButton,
     SystemUiOverlayStyle? systemUiOverlayStyle,
@@ -34,6 +37,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     bool? applyToAppBar,
   }) {
     return LoginModeSelectScreenStyle(
+      background: background ?? this.background,
       signInTypeButton: signInTypeButton ?? this.signInTypeButton,
       signUpTypeButton: signUpTypeButton ?? this.signUpTypeButton,
       systemUiOverlayStyle: systemUiOverlayStyle ?? this.systemUiOverlayStyle,
@@ -49,6 +53,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     if (b == null) return a;
 
     return LoginModeSelectScreenStyle(
+      background: b.background ?? a.background,
       signInTypeButton: b.signInTypeButton ?? a.signInTypeButton,
       signUpTypeButton: b.signUpTypeButton ?? a.signUpTypeButton,
       systemUiOverlayStyle: b.systemUiOverlayStyle ?? a.systemUiOverlayStyle,
@@ -61,6 +66,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
 
   static LoginModeSelectScreenStyle lerp(LoginModeSelectScreenStyle? a, LoginModeSelectScreenStyle? b, double t) {
     return LoginModeSelectScreenStyle(
+      background: BackgroundStyle.lerp(a?.background, b?.background, t),
       signInTypeButton: LerpTools.lerpButtonStyleType(a?.signInTypeButton, b?.signInTypeButton, t),
       signUpTypeButton: LerpTools.lerpButtonStyleType(a?.signUpTypeButton, b?.signUpTypeButton, t),
       systemUiOverlayStyle: b?.systemUiOverlayStyle ?? a?.systemUiOverlayStyle,
@@ -74,6 +80,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<BackgroundStyle?>('background', background));
     properties.add(DiagnosticsProperty<ElevatedButtonStyleType?>('signInTypeButton', signInTypeButton));
     properties.add(DiagnosticsProperty<ElevatedButtonStyleType?>('signUpTypeButton', signUpTypeButton));
     properties.add(DiagnosticsProperty<SystemUiOverlayStyle?>('systemUiOverlayStyle', systemUiOverlayStyle));
