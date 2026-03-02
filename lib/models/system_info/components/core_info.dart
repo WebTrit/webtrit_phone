@@ -27,4 +27,9 @@ class CoreInfo with EquatableMixin {
     // Remote caller ID settings support was added in 0.23.0-alpha.2
     return verifyVersionStr('>=0.23.0-alpha.2 <2.0.0');
   }
+
+  bool get supportsRemoteFavorites {
+    // Remote favorites support was added in 0.24.0-alpha.2
+    return verifyVersionStr('>=0.24.0-alpha.2 <2.0.0');
+  }
 }

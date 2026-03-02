@@ -117,6 +117,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             final appDatabase = context.read<AppDatabase>();
             final apiClient = context.read<WebtritApiClient>();
             final apiToken = context.read<AppBloc>().state.session.token!;
+            final core = context.read<SystemInfoRepository>().getLocalSystemInfo().core;
 
             final localDataSource = FavoritesLocalDataSourceDriftImpl(appDatabase);
             final remoteDataSource = FavoritesRemoteDataSourceApiImpl(apiClient: apiClient, apiToken: apiToken);
@@ -125,6 +126,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               localDataSource: localDataSource,
               remoteDataSource: remoteDataSource,
               connectivityService: context.read<ConnectivityService>(),
+              remoteSyncEnabled: core.supportsRemoteFavorites,
             );
           },
         ),

@@ -34,6 +34,7 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
     required FavoritesLocalDataSource localDataSource,
     required FavoritesRemoteDataSource remoteDataSource,
     required ConnectivityService connectivityService,
+    this.remoteSyncEnabled = true,
   }) : _localRepository = localDataSource,
        _remoteRepository = remoteDataSource,
        _connectivityService = connectivityService;
@@ -41,6 +42,7 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
   final FavoritesLocalDataSource _localRepository;
   final FavoritesRemoteDataSource _remoteRepository;
   final ConnectivityService _connectivityService;
+  final bool remoteSyncEnabled;
 
   // Store the ETag of the last successfully pulled favorites
   // list to optimize network usage if nothing has changed on the server.
@@ -76,7 +78,7 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
       replacePrevAction: true,
     );
 
-    await _syncIfOnline();
+    await _maybeSync();
   }
 
   @override
@@ -102,7 +104,7 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
       replacePrevAction: true,
     );
 
-    await _syncIfOnline();
+    await _maybeSync();
   }
 
   @override
@@ -120,7 +122,7 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
       replacePrevAction: true,
     );
 
-    await _syncIfOnline();
+    await _maybeSync();
   }
 
   @override
@@ -141,13 +143,11 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
       replacePrevAction: true,
     );
 
-    await _syncIfOnline();
+    await _maybeSync();
   }
 
   @override
-  Future<void> refresh() {
-    return _sync();
-  }
+  Future<void> refresh() => _maybeSync();
 
   FavoriteSourceType _favoriteSourceTypeFromContact(ContactSourceType sourceType) {
     return switch (sourceType) {
@@ -156,17 +156,15 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
     };
   }
 
-  Future<void> _syncIfOnline() async {
-    final online = await _connectivityService.checkConnection();
-    if (online) await _sync();
-  }
+  Future<void> _maybeSync() async {
+    if (remoteSyncEnabled == false) return;
+    if ((await _connectivityService.checkConnection()) == false) return;
 
-  Future<void> _sync() async {
     final outbox = await _localRepository.getAllOutboxActions();
     if (outbox.isEmpty) {
       await _pullRemoteFavorites();
     } else {
-      await _syncOutboxActions(outbox);
+      await _pushPullChanges(outbox);
     }
   }
 
@@ -185,7 +183,7 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
     }
   }
 
-  Future<void> _syncOutboxActions(List<FavoriteOutboxAction> outbox) async {
+  Future<void> _pushPullChanges(List<FavoriteOutboxAction> outbox) async {
     _logger.info('Syncing ${outbox.length} favorite changes from outbox');
     try {
       final result = await _remoteRepository.batchSyncFavorites(outbox);
