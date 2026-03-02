@@ -1,4 +1,5 @@
 export 'alignment_config_extension.dart';
+export 'blurred_surface_config_extension.dart';
 export 'box_fit_config_extension.dart';
 export 'brightness.dart';
 export 'button_style_config.dart';

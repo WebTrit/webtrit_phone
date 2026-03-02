@@ -22,6 +22,7 @@ class ConversationsScreenStyleFactory implements ThemeStyleFactory<Conversations
     return ConversationsScreenStyles(
       primary: ConversationsScreenStyle(
         background: backgroundStyle,
+        appBarBlurredSurface: config.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
       ),

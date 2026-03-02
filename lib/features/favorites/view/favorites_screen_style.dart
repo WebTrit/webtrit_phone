@@ -2,16 +2,28 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/blurred_surface.dart';
 
 class FavoritesScreenStyle extends BaseScreenStyle with Diagnosticable {
-  const FavoritesScreenStyle({super.background, this.contentThemeOverride, this.applyToAppBar});
+  const FavoritesScreenStyle({
+    super.background,
+    super.appBarBlurredSurface,
+    this.contentThemeOverride,
+    this.applyToAppBar,
+  });
 
   final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
 
-  FavoritesScreenStyle copyWith({BackgroundStyle? background, ThemeMode? contentThemeOverride, bool? applyToAppBar}) {
+  FavoritesScreenStyle copyWith({
+    BackgroundStyle? background,
+    BlurredSurfaceStyle? appBarBlurredSurface,
+    ThemeMode? contentThemeOverride,
+    bool? applyToAppBar,
+  }) {
     return FavoritesScreenStyle(
       background: background ?? this.background,
+      appBarBlurredSurface: appBarBlurredSurface ?? this.appBarBlurredSurface,
       contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
       applyToAppBar: applyToAppBar ?? this.applyToAppBar,
     );
@@ -23,6 +35,7 @@ class FavoritesScreenStyle extends BaseScreenStyle with Diagnosticable {
 
     return FavoritesScreenStyle(
       background: b.background ?? a.background,
+      appBarBlurredSurface: BlurredSurfaceStyle.merge(a.appBarBlurredSurface, b.appBarBlurredSurface),
       contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
       applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
     );
@@ -31,6 +44,7 @@ class FavoritesScreenStyle extends BaseScreenStyle with Diagnosticable {
   static FavoritesScreenStyle lerp(FavoritesScreenStyle? a, FavoritesScreenStyle? b, double t) {
     return FavoritesScreenStyle(
       background: BaseScreenStyle.lerp(a?.background, b?.background, t),
+      appBarBlurredSurface: BlurredSurfaceStyle.lerp(a?.appBarBlurredSurface, b?.appBarBlurredSurface, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
     );

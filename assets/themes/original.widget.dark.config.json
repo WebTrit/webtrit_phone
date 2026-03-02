@@ -2,7 +2,7 @@
   "fonts": {
     "fontFamily": "Montserrat"
   },
-  "_button": {
+  "button": {
     "__primaryElevatedButton": "Styling for the primary elevated button used across the app. Supports textStyle, colors, shape, elevation, padding, and more.",
     "primaryElevatedButton": {
       "backgroundColor": "#A5C6E4",
@@ -21,7 +21,7 @@
       }
     }
   },
-  "_group": {
+  "group": {
     "__groupTitleListTile": "Styling for group title tiles in list views (e.g., section headers in contacts or settings).",
     "groupTitleListTile": {
       "backgroundColor": "#1D2022",
@@ -34,7 +34,7 @@
       }
     }
   },
-  "_bar": {
+  "bar": {
     "__bottomNavigationBar": "Bottom navigation bar styling.",
     "bottomNavigationBar": {
       "backgroundColor": "#111315",
@@ -45,8 +45,9 @@
     "appBarConfig": {
       "primary": true,
       "showBackButton": true,
-      "backgroundColor": "#111315",
+      "backgroundColor": "#00000000",
       "foregroundColor": "#E2E2E2",
+      "surfaceTintColor": "#00000000",
       "centerTitle": true,
       "elevation": 0,
       "scrolledUnderElevation": 0,
@@ -61,9 +62,9 @@
     "__tabBarConfig": "Tab bar styling including indicator, labels, alignment, and animation.",
     "tabBarConfig": {
       "indicatorColor": "#A5C6E4",
-      "labelColor": "#A5C6E4",
+      "labelColor": "#092D4A",
       "unselectedLabelColor": "#8E918F",
-      "dividerColor": "#444749",
+      "dividerColor": "#00000000",
       "indicatorSize": "tab",
       "tabAlignment": "fill"
     }
@@ -119,7 +120,7 @@
       }
     }
   },
-  "_input": {
+  "input": {
     "__primary": "Primary text form field styling. Controls label color and border colors for different states (disabled, focused, default).",
     "primary": {
       "labelColor": "#A5C6E4",
@@ -139,7 +140,7 @@
       }
     }
   },
-  "_text": {
+  "text": {
     "__selection": "Text selection styling: cursor, selection highlight, and drag handles.",
     "selection": {
       "cursorColor": "#A5C6E4",

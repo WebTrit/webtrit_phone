@@ -2,7 +2,7 @@
   "fonts": {
     "fontFamily": "Montserrat"
   },
-  "_button": {
+  "button": {
     "__primaryElevatedButton": "Styling for the primary elevated button used across the app. Supports textStyle, colors, shape, elevation, padding, and more.",
     "primaryElevatedButton": {
       "backgroundColor": "#5CACE3",
@@ -21,7 +21,7 @@
       }
     }
   },
-  "_group": {
+  "group": {
     "__groupTitleListTile": "Styling for group title tiles in list views (e.g., section headers in contacts or settings).",
     "groupTitleListTile": {
       "backgroundColor": "#EEF3F6",
@@ -34,7 +34,7 @@
       }
     }
   },
-  "_bar": {
+  "bar": {
     "__bottomNavigationBar": "Bottom navigation bar styling.",
     "bottomNavigationBar": {
       "backgroundColor": "#FFFFFF",
@@ -45,8 +45,9 @@
     "appBarConfig": {
       "primary": true,
       "showBackButton": true,
-      "backgroundColor": "#FFFFFF",
+      "backgroundColor": "#00000000",
       "foregroundColor": "#30302F",
+      "surfaceTintColor": "#00000000",
       "centerTitle": true,
       "elevation": 0,
       "scrolledUnderElevation": 0,
@@ -56,14 +57,18 @@
           "weight": 600
         },
         "color": "#30302F"
+      },
+      "systemOverlayStyle": {
+        "statusBarIconBrightness": "dark",
+        "statusBarBrightness": "light"
       }
     },
     "__tabBarConfig": "Tab bar styling including indicator, labels, alignment, and animation.",
     "tabBarConfig": {
       "indicatorColor": "#5CACE3",
-      "labelColor": "#5CACE3",
+      "labelColor": "#FFFFFF",
       "unselectedLabelColor": "#848581",
-      "dividerColor": "#CDCFC9",
+      "dividerColor": "#00000000",
       "indicatorSize": "tab",
       "tabAlignment": "fill"
     }
@@ -119,7 +124,7 @@
       }
     }
   },
-  "_input": {
+  "input": {
     "__primary": "Primary text form field styling. Controls label color and border colors for different states (disabled, focused, default).",
     "primary": {
       "labelColor": "#1F618F",
@@ -139,7 +144,7 @@
       }
     }
   },
-  "_text": {
+  "text": {
     "__selection": "Text selection styling: cursor, selection highlight, and drag handles.",
     "selection": {
       "cursorColor": "#5CACE3",
