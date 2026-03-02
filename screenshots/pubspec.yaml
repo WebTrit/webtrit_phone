@@ -1,11 +1,12 @@
 name: screenshots
+resolution: workspace
 description: WebTrit Phone screenshots application.
 publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: ^3.8.0
   flutter: ^3.16.0
 
 dependencies:

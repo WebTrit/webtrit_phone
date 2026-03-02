@@ -1,4 +1,5 @@
 name: device_auto_rotate
+resolution: workspace
 description: A minimal plugin to check system auto-rotate settings.
 version: 0.0.1
 publish_to: 'none'

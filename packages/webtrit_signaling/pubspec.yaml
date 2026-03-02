@@ -1,4 +1,5 @@
 name: webtrit_signaling
+resolution: workspace
 description: Dart library for WebTrit Core Signalling.
 publish_to: none
 version: 1.0.0

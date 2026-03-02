@@ -1,6 +1,20 @@
 name: webtrit_phone
 description: WebTrit Phone application.
 publish_to: 'none'
+
+# Dart pub workspace — used by Melos v7 for package discovery
+workspace:
+  - packages/webtrit_api
+  - packages/webtrit_phone_number
+  - packages/webtrit_signaling
+  - packages/ssl_certificates
+  - packages/store_info_extractor
+  - packages/webtrit_appearance_theme
+  - packages/device_auto_rotate
+  - packages/data/app_database
+  - packages/_http_client
+  - packages/_web_socket_channel
+  - screenshots
 # Version format: <Major>.<Minor>.<Patch>[-<Pre-release>]+<Build>
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
@@ -161,3 +175,121 @@ patrol:
     package_name: com.webtrit.app
   ios:
     bundle_id: com.webtrit.app
+
+melos:
+  command:
+    bootstrap:
+      usePubspecOverrides: true
+
+  scripts:
+    # ===========================
+    # Formatting — melos run fmt
+    # ===========================
+
+    fmt:
+      description: Format all Dart code across the workspace.
+      exec: dart format . --line-length 120
+      packageFilters:
+        dirExists: lib
+
+    fmt:check:
+      description: Check formatting without making changes (exit 1 if unformatted).
+      exec: dart format . --line-length 120 --set-exit-if-changed
+      packageFilters:
+        dirExists: lib
+
+    # ===========================
+    # Code Generation — melos run generate
+    # ===========================
+
+    generate:
+      description: Run build_runner for packages that use code generation.
+      exec: dart run build_runner build --delete-conflicting-outputs
+      packageFilters:
+        dependsOn:
+          - build_runner
+
+    generate:watch:
+      description: Watch and rebuild generated files on change.
+      exec: dart run build_runner watch --delete-conflicting-outputs
+      packageFilters:
+        dependsOn:
+          - build_runner
+
+    generate:clean:
+      description: Clean and rebuild generated files.
+      exec: dart run build_runner clean
+      packageFilters:
+        dependsOn:
+          - build_runner
+
+    # ===========================
+    # Testing — melos run test
+    # ===========================
+
+    test:
+      description: Run all tests across the workspace.
+      exec: flutter test
+      packageFilters:
+        dirExists: test
+
+    test:unit:
+      description: Run unit tests only.
+      exec: flutter test test/
+      packageFilters:
+        dirExists: test
+
+    test:coverage:
+      description: Run tests with coverage report.
+      exec: flutter test --coverage
+      packageFilters:
+        dirExists: test
+
+    # ===========================
+    # Dependencies — melos run get
+    # ===========================
+
+    get:
+      description: Run pub get in all packages.
+      exec: flutter pub get
+
+    upgrade:
+      description: Upgrade dependencies to latest compatible versions.
+      exec: flutter pub upgrade
+
+    upgrade:major:
+      description: Upgrade dependencies including major versions.
+      exec: flutter pub upgrade --major-versions
+
+    outdated:
+      description: Show outdated dependencies for all packages.
+      exec: flutter pub outdated
+
+    # ===========================
+    # Analysis — melos run analyze
+    # ===========================
+
+    analyze:
+      description: Run Dart analysis across the workspace.
+      exec: flutter analyze
+      packageFilters:
+        dirExists: lib
+
+    # ===========================
+    # Combined — melos run check | melos run ci
+    # ===========================
+
+    check:
+      description: Run formatting check and analysis.
+      steps:
+        - fmt:check
+        - analyze
+
+    ci:
+      description: Full CI pipeline — get, generate, check format, analyze, test.
+      steps:
+        - get
+        - generate
+        - fmt:check
+        - analyze
+        - test

@@ -1,4 +1,5 @@
 name: store_info_extractor
+resolution: workspace
 description: Library to extract/get the application info from Apple App Store and/or Google Play Store.
 version: 1.0.0
 
