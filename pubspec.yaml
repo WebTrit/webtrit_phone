@@ -295,3 +295,107 @@ melos:
         - fmt:check
         - analyze
         - test
+
+    # ===========================
+    # Run - melos run run
+    # ===========================
+
+    run:
+      description: Run the app with dart_define.json. Set FLUTTER_FLAGS for extra flags.
+      run: flutter run --dart-define-from-file=dart_define.json ${FLUTTER_FLAGS:-}
+
+    run:ios:
+      description: Run on iOS device/simulator. Set FLUTTER_FLAGS for extra flags.
+      run: flutter run -d iPhone --dart-define-from-file=dart_define.json ${FLUTTER_FLAGS:-}
+
+    # ===========================
+    # Build - melos run build:apk | build:appbundle | build:ios
+    # ===========================
+
+    build:apk:
+      description: Build Android APK. Set FLUTTER_FLAGS for extra flags (e.g. --release).
+      run: flutter build apk --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+
+    build:appbundle:
+      description: Build Android App Bundle. Set FLUTTER_FLAGS for extra flags.
+      run: flutter build appbundle --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+
+    build:ios:
+      description: Build iOS app. Set FLUTTER_FLAGS for extra flags (e.g. --release --no-codesign).
+      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+
+    build:ios:config:
+      description: Configure Xcode project without building.
+      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only
+
+    # ===========================
+    # Clean - melos run clean | clean:git
+    # ===========================
+
+    clean:
+      description: Run flutter clean in all packages.
+      exec: flutter clean
+
+    clean:git:
+      description: Hard-reset repo and remove untracked files (DESTRUCTIVE).
+      run: |
+        git reset --hard HEAD
+        git clean -df
+
+    # ===========================
+    # Assets - melos run icons:generate | splash:generate | assets:generate
+    # ===========================
+
+    icons:generate:
+      description: Generate launcher icons from tool/configs/flutter_launcher_icons.yaml.
+      run: dart run flutter_launcher_icons -f tool/configs/flutter_launcher_icons.yaml
+
+    splash:generate:
+      description: Generate native splash screen from tool/configs/flutter_native_splash.yaml.
+      run: dart run flutter_native_splash:create --path=tool/configs/flutter_native_splash.yaml
+
+    assets:generate:
+      description: Generate launcher icons and native splash screen.
+      steps:
+        - icons:generate
+        - splash:generate
+
+    # ===========================
+    # Localization - melos run l10n:push | l10n:pull | l10n:generate | l10n:fetch
+    # ===========================
+
+    l10n:push:
+      description: Push localization keys to Localizely (reads LOCALIZELY_TOKEN from .env).
+      run: |
+        token=$(grep '^LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
+        localizely-cli --api-token="$token" push
+
+    l10n:pull:
+      description: Pull localization keys from Localizely (reads LOCALIZELY_TOKEN from .env).
+      run: |
+        token=$(grep '^LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
+        localizely-cli --api-token="$token" pull
+
+    l10n:generate:
+      description: Generate Flutter localization files from ARB files.
+      run: flutter gen-l10n
+
+    l10n:fetch:
+      description: Pull l10n from Localizely and regenerate Flutter localization files.
+      steps:
+        - l10n:pull
+        - l10n:generate
+
+    # ===========================
+    # IDE - melos run ide:sync
+    # ===========================
+
+    ide:sync:
+      description: Sync IDE run configurations from tool/run/ to .idea/runConfigurations/.
+      run: |
+        mkdir -p .idea/runConfigurations
+        cp tool/run/*.xml .idea/runConfigurations/
+
+    # ===========================
+    # Help - melos run --list
+    # ===========================
