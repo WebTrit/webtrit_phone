@@ -1,0 +1,153 @@
+name: webtrit_phone
+
+packages:
+  - .
+  - packages/**
+  - screenshots
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  # ===========================
+  # Formatting
+  # ===========================
+
+  format:
+    description: Format all Dart code across the workspace.
+    run: dart format . --line-length 120
+    exec:
+      concurrency: 1
+    packageFilters:
+      fileExists: "lib"
+
+  format:check:
+    description: Check formatting without making changes.
+    run: dart format . --line-length 120 --set-exit-if-changed
+    exec:
+      concurrency: 1
+    packageFilters:
+      fileExists: "lib"
+
+  # ===========================
+  # Code Generation
+  # ===========================
+
+  generate:
+    description: Run build_runner for packages that use code generation.
+    run: dart run build_runner build --delete-conflicting-outputs
+    exec:
+      concurrency: 1
+      failFast: true
+    packageFilters:
+      dependsOn: build_runner
+
+  generate:watch:
+    description: Watch and rebuild generated files on change.
+    run: dart run build_runner watch --delete-conflicting-outputs
+    exec:
+      concurrency: 1
+    packageFilters:
+      dependsOn: build_runner
+
+  generate:clean:
+    description: Clean generated files and rebuild.
+    run: dart run build_runner clean
+    exec:
+      concurrency: 1
+    packageFilters:
+      dependsOn: build_runner
+
+  # ===========================
+  # Testing
+  # ===========================
+
+  test:
+    description: Run all tests across the workspace.
+    run: flutter test
+    exec:
+      concurrency: 1
+      failFast: false
+    packageFilters:
+      dirExists: test
+
+  test:unit:
+    description: Run unit tests only (excludes integration tests).
+    run: flutter test test/
+    exec:
+      concurrency: 1
+      failFast: false
+    packageFilters:
+      dirExists: test
+      ignore:
+        - integration_test
+
+  test:coverage:
+    description: Run tests with coverage report.
+    run: flutter test --coverage
+    exec:
+      concurrency: 1
+      failFast: false
+    packageFilters:
+      dirExists: test
+
+  # ===========================
+  # Dependencies
+  # ===========================
+
+  get:
+    description: Run pub get in all packages.
+    run: flutter pub get
+    exec:
+      concurrency: 5
+
+  upgrade:
+    description: Upgrade dependencies to latest compatible versions.
+    run: flutter pub upgrade
+    exec:
+      concurrency: 1
+
+  upgrade:major:
+    description: Upgrade dependencies to latest versions (including major).
+    run: flutter pub upgrade --major-versions
+    exec:
+      concurrency: 1
+
+  outdated:
+    description: Show outdated dependencies for all packages.
+    run: flutter pub outdated
+    exec:
+      concurrency: 1
+
+  # ===========================
+  # Analysis
+  # ===========================
+
+  analyze:
+    description: Run Dart analysis across the workspace.
+    run: flutter analyze
+    exec:
+      concurrency: 1
+      failFast: false
+    packageFilters:
+      fileExists: "lib"
+
+  # ===========================
+  # Combined
+  # ===========================
+
+  check:
+    description: Run formatting check and analysis.
+    steps:
+      - format:check
+      - analyze
+
+  ci:
+    description: Run all checks and tests (for CI pipelines).
+    steps:
+      - get
+      - generate
+      - format:check
+      - analyze
+      - test

@@ -49,6 +49,10 @@ app.*.map.json
 makefile.shared
 .env
 
+# Melos
+.melos_tool/
+**/pubspec_overrides.yaml
+
 # Agents
 .aider*
 .claude/settings.local.json
