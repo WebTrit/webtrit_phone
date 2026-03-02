@@ -13,9 +13,6 @@ class PrivacyScreenScreenshot extends StatelessWidget {
     final url = context.read<FeatureAccess>().termsConfig.configData.uri;
     final appMetadataProvider = context.read<AppMetadataProvider>();
 
-    return TermsConditionsScreen(
-      initialUri: url,
-      userAgent: appMetadataProvider.userAgent,
-    );
+    return TermsConditionsScreen(initialUri: url, userAgent: appMetadataProvider.userAgent);
   }
 }

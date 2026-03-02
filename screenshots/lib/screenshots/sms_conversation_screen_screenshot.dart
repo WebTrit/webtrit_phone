@@ -27,7 +27,7 @@ class _SmsConversationScreenScreenshotState extends State<SmsConversationScreenS
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return MultiProvider(
               providers: [
                 Provider<ContactsRepository>(create: (_) => MockContactsRepository()),

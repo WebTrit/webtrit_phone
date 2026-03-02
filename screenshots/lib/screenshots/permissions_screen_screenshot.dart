@@ -25,7 +25,7 @@ class _PermissionsScreenScreenshotState extends State<PermissionsScreenScreensho
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return BlocProvider<PermissionsCubit>(
               create: (_) => MockPermissionsCubit.initial(),
               child: const PermissionsScreen(),

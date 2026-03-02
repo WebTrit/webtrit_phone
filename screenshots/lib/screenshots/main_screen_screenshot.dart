@@ -16,11 +16,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class MainScreenScreenshot extends StatelessWidget {
-  const MainScreenScreenshot(
-    this.flavor,
-    this.title, {
-    super.key,
-  });
+  const MainScreenScreenshot(this.flavor, this.title, {super.key});
 
   final MainFlavor flavor;
   final Widget? title;
@@ -37,9 +33,7 @@ class MainScreenScreenshot extends StatelessWidget {
     return MultiProvider(
       providers: [
         // TODO(Vladislav): Replace workaround with ContactsRepository in _ContactInfoBuilderState.
-        Provider<ContactsRepository>(
-          create: (c) => MockContactsRepository(),
-        ),
+        Provider<ContactsRepository>(create: (c) => MockContactsRepository()),
       ],
       child: MultiBlocProvider(
         providers: _createMockBlocProviders(),
@@ -115,10 +109,7 @@ class MainScreenScreenshot extends StatelessWidget {
       selectedLabelStyle: textTheme.bodySmall,
       unselectedLabelStyle: textTheme.bodySmall,
       items: tabs
-          .map((tab) => BottomNavigationBarItem(
-                icon: Icon(tab.icon),
-                label: context.parseL10n(tab.titleL10n),
-              ))
+          .map((tab) => BottomNavigationBarItem(icon: Icon(tab.icon), label: context.parseL10n(tab.titleL10n)))
           .toList(),
     );
   }
@@ -154,10 +145,7 @@ class MainScreenScreenshot extends StatelessWidget {
         return BlocProvider<ContactsBloc>(
           create: (_) => MockContactsSearchBloc.mainScreen(),
           child: ContactsScreen(
-            sourceTypes: const [
-              ContactSourceType.local,
-              ContactSourceType.external,
-            ],
+            sourceTypes: const [ContactSourceType.local, ContactSourceType.external],
             sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
             title: title,
           ),
@@ -165,11 +153,7 @@ class MainScreenScreenshot extends StatelessWidget {
       case MainFlavor.keypad:
         return BlocProvider<KeypadCubit>(
           create: (_) => MockKeypadCubit.mainScreen(),
-          child: KeypadScreen(
-            title: title,
-            videoEnabled: true,
-            transferEnabled: false,
-          ),
+          child: KeypadScreen(title: title, videoEnabled: true, transferEnabled: false),
         );
       case MainFlavor.embedded:
         return BlocProvider<EmbeddedCubit>(
@@ -179,10 +163,7 @@ class MainScreenScreenshot extends StatelessWidget {
             userAgent: appMetadataProvider.userAgent,
             mediaQueryMetricsData: null,
             deviceInfoData: null,
-            appBar: MainAppBar(
-              title: const Text('Embedded'),
-              context: context,
-            ),
+            appBar: MainAppBar(title: const Text('Embedded'), context: context),
             connectivityRecoveryStrategyBuilder: () => NoneConnectivityRecoveryStrategy(),
             pageInjectionStrategyBuilder: () => DefaultPayloadInjectionStrategy(),
           ),

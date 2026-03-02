@@ -21,7 +21,7 @@ class _LanguageScreenScreenshotState extends State<LanguageScreenScreenshot> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return const LanguageScreen();
           },
           transitionDuration: Duration.zero,
