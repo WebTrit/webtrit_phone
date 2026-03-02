@@ -42,8 +42,8 @@ void main() {
     when(() => mockSink.close(any(), any())).thenAnswer((_) => Future.value());
   });
 
-  tearDown(() {
-    streamController.close();
+  tearDown(() async {
+    await streamController.close();
   });
 
   group('Keepalive race condition', () {
@@ -81,7 +81,7 @@ void main() {
         // Advance past the keepalive interval.
         async.elapse(const Duration(milliseconds: 200));
 
-        verify(() => mockSink.add(any())).called(greaterThan(0));
+        verify(() => mockSink.add(any())).called(1);
         expect(errorReported, isFalse, reason: 'Race condition leaked to onError: $reportedError');
       });
     });
@@ -116,10 +116,10 @@ void main() {
 
         // Respond to first keepalive with matching transaction ID.
         streamController.add(jsonEncode({'handshake': 'keepalive', 'transaction': capturedTransactionId}));
-        async.flushMicrotasks();
 
-        // Simulate socket closed before next keepalive.
+        // Set closeCode BEFORE flushing so _onKeepalive sees it when it resumes.
         when(() => mockChannel.closeCode).thenReturn(1000);
+        async.flushMicrotasks();
 
         // Wait well beyond second keepalive interval — timer should not restart.
         async.elapse(const Duration(milliseconds: 500));
@@ -127,6 +127,11 @@ void main() {
 
         // Only one keepalive request should have been sent.
         expect(keepaliveRequestCount, equals(1));
+
+        // Verify closeCode was checked exactly twice: once in _addData (before write),
+        // once in _onKeepalive (after response, as the 'no restart' guard).
+        // If the timer restarted, closeCode would be accessed a third time.
+        verify(() => mockChannel.closeCode).called(2);
       });
     });
   });
