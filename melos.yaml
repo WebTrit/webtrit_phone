@@ -12,32 +12,34 @@ command:
 scripts:
   # ===========================
   # Formatting
+  # Usage: melos run fmt
   # ===========================
 
-  format:
+  fmt:
     description: Format all Dart code across the workspace.
-    run: dart format . --line-length 120
     exec:
+      run: dart format . --line-length 120
       concurrency: 1
     packageFilters:
       fileExists: "lib"
 
-  format:check:
+  fmt:check:
     description: Check formatting without making changes.
-    run: dart format . --line-length 120 --set-exit-if-changed
     exec:
+      run: dart format . --line-length 120 --set-exit-if-changed
       concurrency: 1
     packageFilters:
       fileExists: "lib"
 
   # ===========================
   # Code Generation
+  # Usage: melos run generate
   # ===========================
 
   generate:
     description: Run build_runner for packages that use code generation.
-    run: dart run build_runner build --delete-conflicting-outputs
     exec:
+      run: dart run build_runner build --delete-conflicting-outputs
       concurrency: 1
       failFast: true
     packageFilters:
@@ -45,48 +47,47 @@ scripts:
 
   generate:watch:
     description: Watch and rebuild generated files on change.
-    run: dart run build_runner watch --delete-conflicting-outputs
     exec:
+      run: dart run build_runner watch --delete-conflicting-outputs
       concurrency: 1
     packageFilters:
       dependsOn: build_runner
 
   generate:clean:
-    description: Clean generated files and rebuild.
-    run: dart run build_runner clean
+    description: Clean and rebuild generated files.
     exec:
+      run: dart run build_runner clean
       concurrency: 1
     packageFilters:
       dependsOn: build_runner
 
   # ===========================
   # Testing
+  # Usage: melos run test
   # ===========================
 
   test:
     description: Run all tests across the workspace.
-    run: flutter test
     exec:
+      run: flutter test
       concurrency: 1
       failFast: false
     packageFilters:
       dirExists: test
 
   test:unit:
-    description: Run unit tests only (excludes integration tests).
-    run: flutter test test/
+    description: Run unit tests only (excludes integration_test dir).
     exec:
+      run: flutter test test/
       concurrency: 1
       failFast: false
     packageFilters:
       dirExists: test
-      ignore:
-        - integration_test
 
   test:coverage:
     description: Run tests with coverage report.
-    run: flutter test --coverage
     exec:
+      run: flutter test --coverage
       concurrency: 1
       failFast: false
     packageFilters:
@@ -94,40 +95,42 @@ scripts:
 
   # ===========================
   # Dependencies
+  # Usage: melos run get
   # ===========================
 
   get:
     description: Run pub get in all packages.
-    run: flutter pub get
     exec:
+      run: flutter pub get
       concurrency: 5
 
   upgrade:
     description: Upgrade dependencies to latest compatible versions.
-    run: flutter pub upgrade
     exec:
+      run: flutter pub upgrade
       concurrency: 1
 
   upgrade:major:
-    description: Upgrade dependencies to latest versions (including major).
-    run: flutter pub upgrade --major-versions
+    description: Upgrade dependencies including major versions.
     exec:
+      run: flutter pub upgrade --major-versions
       concurrency: 1
 
   outdated:
     description: Show outdated dependencies for all packages.
-    run: flutter pub outdated
     exec:
+      run: flutter pub outdated
       concurrency: 1
 
   # ===========================
   # Analysis
+  # Usage: melos run analyze
   # ===========================
 
   analyze:
     description: Run Dart analysis across the workspace.
-    run: flutter analyze
     exec:
+      run: flutter analyze
       concurrency: 1
       failFast: false
     packageFilters:
@@ -135,19 +138,20 @@ scripts:
 
   # ===========================
   # Combined
+  # Usage: melos run check | melos run ci
   # ===========================
 
   check:
     description: Run formatting check and analysis.
     steps:
-      - format:check
+      - fmt:check
       - analyze
 
   ci:
-    description: Run all checks and tests (for CI pipelines).
+    description: Full CI pipeline — get, generate, check format, analyze, test.
     steps:
       - get
       - generate
-      - format:check
+      - fmt:check
       - analyze
       - test
