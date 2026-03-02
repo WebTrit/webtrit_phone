@@ -2,7 +2,7 @@ name: webtrit_phone
 description: WebTrit Phone application.
 publish_to: 'none'
 
-# Dart pub workspace — used by Melos v7 for package discovery
+# Dart pub workspace - used by Melos v7 for package discovery
 workspace:
   - packages/webtrit_api
   - packages/webtrit_phone_number
@@ -185,7 +185,7 @@ melos:
 
   scripts:
     # ===========================
-    # Formatting — melos run fmt
+    # Formatting - melos run fmt
     # ===========================
 
     fmt:
@@ -201,7 +201,7 @@ melos:
         dirExists: lib
 
     # ===========================
-    # Code Generation — melos run generate
+    # Code Generation - melos run generate
     # ===========================
 
     generate:
@@ -226,7 +226,7 @@ melos:
           - build_runner
 
     # ===========================
-    # Testing — melos run test
+    # Testing - melos run test
     # ===========================
 
     test:
@@ -248,7 +248,7 @@ melos:
         dirExists: test
 
     # ===========================
-    # Dependencies — melos run get
+    # Dependencies - melos run get
     # ===========================
 
     get:
@@ -268,7 +268,7 @@ melos:
       exec: flutter pub outdated
 
     # ===========================
-    # Analysis — melos run analyze
+    # Analysis - melos run analyze
     # ===========================
 
     analyze:
@@ -278,7 +278,7 @@ melos:
         dirExists: lib
 
     # ===========================
-    # Combined — melos run check | melos run ci
+    # Combined - melos run check | melos run ci
     # ===========================
 
     check:
@@ -288,7 +288,7 @@ melos:
         - analyze
 
     ci:
-      description: Full CI pipeline — get, generate, check format, analyze, test.
+      description: Full CI pipeline - get, generate, check format, analyze, test.
       steps:
         - get
         - generate
