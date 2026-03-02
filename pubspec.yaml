@@ -177,6 +177,8 @@ patrol:
     bundle_id: com.webtrit.app
 
 melos:
+  useRootAsPackage: true
+
   command:
     bootstrap:
       usePubspecOverrides: true
