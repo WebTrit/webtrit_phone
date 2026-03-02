@@ -2,28 +2,47 @@
 
 ## Common Commands
 
-```bash
-# Run
-flutter run --dart-define-from-file=dart_define.json
-make run          # uses dart_define.json automatically
+**Prefer Melos over direct `flutter`/`dart` commands.** Melos runs across the entire workspace
+(root + all packages) and is the standard tool for this monorepo.
 
-# Build
-make build-apk
-make build-appbundle
-make build-ios
+```bash
+# Format
+melos run fmt           # dart format --line-length 120 across workspace
+melos run fmt:check     # check only (used in CI)
+
+# Analyze
+melos run analyze       # flutter analyze across workspace
+
+# Format + analyze together
+melos run check
 
 # Tests
-flutter test                                         # unit & widget
+melos run test          # unit & widget tests across workspace
 patrol develop --dart-define-from-file=../dart_define.json \
   --dart-define-from-file=dart_define.integration_test.json \
-  --flavor=deeplinkssmsReceiver                      # integration (Patrol)
+  --flavor=deeplinkssmsReceiver    # integration tests (Patrol)
 
-# Code generation (run after model/route changes)
-dart run build_runner build --delete-conflicting-outputs
+# Code generation (run after model/route/freezed changes)
+melos run generate                 # build_runner build in packages with codegen
+melos run generate:watch           # watch mode
 
 # Localization
-flutter gen-l10n    # generate from ARB
-make fetch-l10n     # pull from Localizely + generate
+melos run l10n:generate            # generate from ARB
+melos run l10n:fetch               # pull from Localizely + generate
+
+# Run & Build
+melos run run                      # run app (Android)
+melos run run:ios                  # run app (iOS)
+melos run build:apk
+melos run build:appbundle
+melos run build:ios
+
+# Dependencies
+melos run get
+melos run upgrade
+
+# Full CI pipeline
+melos run ci                       # fmt:check + analyze + test
 
 # DB schema (after adding/modifying a table)
 dart run bin/create_new_schema_dump_and_test_migration.dart
@@ -77,6 +96,23 @@ Combined example: `--flavor deeplinkssmsReceiver`
 ---
 
 # Project Rules
+
+## Melos
+
+Always prefer `melos run <script>` over direct `flutter`/`dart` commands. Melos operates across
+the entire workspace and ensures consistent behavior in all packages.
+
+| Task | Use |
+|---|---|
+| Format | `melos run fmt` |
+| Analyze | `melos run analyze` |
+| Format + analyze | `melos run check` |
+| Tests | `melos run test` |
+| Code generation | `melos run generate` |
+| Localization | `melos run l10n:fetch` |
+
+Do **not** run `dart format`, `flutter analyze`, `flutter test`, or `dart run build_runner`
+directly — use the Melos equivalents above.
 
 ## Critical Constraints
 
