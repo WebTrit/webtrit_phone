@@ -18,9 +18,9 @@ class FavoritesOutboxTable extends Table {
 
   TextColumn get action => textEnum<FavoriteOutboxActionData>()();
 
-  TextColumn get sourceId => text()();
+  TextColumn get sourceId => text().nullable()();
 
-  TextColumn get label => text()();
+  TextColumn get label => text().nullable()();
 
   IntColumn get position => integer().nullable()();
 

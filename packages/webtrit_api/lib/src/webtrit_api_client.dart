@@ -78,7 +78,7 @@ class WebtritApiClient {
     String? requestId,
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
-    RequestOptions options = const RequestOptions(),
+    RequestOptions requestOptions = const RequestOptions(),
     ResponseOptions responseOptions = const ResponseOptions(),
   }) async {
     final url = tenantUrl.replace(
@@ -131,7 +131,7 @@ class WebtritApiClient {
           '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}',
         );
 
-        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204) {
+        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204 || httpResponse.statusCode == 304) {
           // Return response in the requested format depending on the response type:
           // - JSON-decoded map for API data responses
           // - Raw bytes for binary downloads (e.g., files)
@@ -196,10 +196,10 @@ class WebtritApiClient {
         _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
 
         // Do not retry for valid server responses with a defined HTTP status code.
-        if (e is RequestFailure || requestAttempt >= options.retries) rethrow;
+        if (e is RequestFailure || requestAttempt >= requestOptions.retries) rethrow;
 
         requestAttempt++;
-        await Future.delayed(options.retryDelay);
+        await Future.delayed(requestOptions.retryDelay);
       }
     }
   }
@@ -217,8 +217,10 @@ class WebtritApiClient {
       pathSegments,
       token,
       null,
-      options: requestOptions,
+      headers: headers,
       queryParameters: queryParameters,
+      requestOptions: requestOptions,
+      responseOptions: responseOptions,
     );
   }
 
@@ -228,7 +230,8 @@ class WebtritApiClient {
     String? token,
     Object? requestDataJson, {
     Map<String, String>? queryParameters,
-    RequestOptions options = const RequestOptions(),
+    RequestOptions requestOptions = const RequestOptions(),
+    ResponseOptions responseOptions = const ResponseOptions(),
   }) {
     return _httpClientExecute(
       'post',
@@ -236,8 +239,9 @@ class WebtritApiClient {
       token,
       requestDataJson,
       headers: headers,
-      options: options,
       queryParameters: queryParameters,
+      requestOptions: requestOptions,
+      responseOptions: responseOptions,
     );
   }
 
@@ -246,18 +250,34 @@ class WebtritApiClient {
     Map<String, String>? headers,
     String? token,
     Object? requestDataJson, {
-    RequestOptions options = const RequestOptions(),
+    RequestOptions requestOptions = const RequestOptions(),
+    ResponseOptions responseOptions = const ResponseOptions(),
   }) {
-    return _httpClientExecute('patch', pathSegments, token, requestDataJson, options: options);
+    return _httpClientExecute(
+      'patch',
+      pathSegments,
+      token,
+      requestDataJson,
+      requestOptions: requestOptions,
+      responseOptions: responseOptions,
+    );
   }
 
   Future<dynamic> _httpClientExecuteDelete(
     List<String> pathSegments,
     Map<String, String>? headers,
     String? token, {
-    RequestOptions options = const RequestOptions(),
+    RequestOptions requestOptions = const RequestOptions(),
+    ResponseOptions responseOptions = const ResponseOptions(),
   }) {
-    return _httpClientExecute('delete', pathSegments, token, null, options: options);
+    return _httpClientExecute(
+      'delete',
+      pathSegments,
+      token,
+      null,
+      requestOptions: requestOptions,
+      responseOptions: responseOptions,
+    );
   }
 
   Future<bool> healthCheck({RequestOptions options = const RequestOptions()}) async {
@@ -282,7 +302,7 @@ class WebtritApiClient {
   }) async {
     final requestPayload = {...sessionUserCredential.toJson(), if (extraPayload?.isNotEmpty == true) ...extraPayload!};
 
-    final responseJson = await _httpClientExecutePost(['user'], null, null, requestPayload, options: options);
+    final responseJson = await _httpClientExecutePost(['user'], null, null, requestPayload, requestOptions: options);
 
     return SessionResult.fromJson(responseJson);
   }
@@ -298,7 +318,7 @@ class WebtritApiClient {
       null,
       null,
       requestJson,
-      options: options,
+      requestOptions: options,
     );
 
     return SessionOtpProvisional.fromJson(responseJson);
@@ -316,7 +336,7 @@ class WebtritApiClient {
       null,
       null,
       requestJson,
-      options: options,
+      requestOptions: options,
     );
     return SessionToken.fromJson(responseJson);
   }
@@ -327,7 +347,7 @@ class WebtritApiClient {
   }) async {
     final requestJson = sessionLoginCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session'], null, null, requestJson, options: options);
+    final responseJson = await _httpClientExecutePost(['session'], null, null, requestJson, requestOptions: options);
 
     return SessionToken.fromJson(responseJson);
   }
@@ -343,14 +363,14 @@ class WebtritApiClient {
       null,
       null,
       requestJson,
-      options: options,
+      requestOptions: options,
     );
 
     return SessionToken.fromJson(responseJson);
   }
 
   Future<void> deleteSession(String token, {RequestOptions options = const RequestOptions()}) async {
-    await _httpClientExecuteDelete(['session'], null, token, options: options);
+    await _httpClientExecuteDelete(['session'], null, token, requestOptions: options);
   }
 
   Future<UserInfo> getUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
@@ -388,7 +408,7 @@ class WebtritApiClient {
   }
 
   Future<void> deleteUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
-    await _httpClientExecuteDelete(['user'], null, token, options: options);
+    await _httpClientExecuteDelete(['user'], null, token, requestOptions: options);
   }
 
   Future<AppStatus> getAppStatus(String token, {RequestOptions options = const RequestOptions()}) async {
@@ -404,7 +424,7 @@ class WebtritApiClient {
   }) async {
     final requestJson = appStatus.toJson();
 
-    await _httpClientExecutePatch(['app', 'status'], null, token, requestJson, options: options);
+    await _httpClientExecutePatch(['app', 'status'], null, token, requestJson, requestOptions: options);
   }
 
   Future<void> createAppContact(
@@ -414,7 +434,7 @@ class WebtritApiClient {
   }) async {
     final requestJson = appContacts.map((e) => e.toJson()).toList();
 
-    await _httpClientExecutePost(['app', 'contacts'], null, token, requestJson, options: options);
+    await _httpClientExecutePost(['app', 'contacts'], null, token, requestJson, requestOptions: options);
   }
 
   Future<List<AppSmartContact>> getAppSmartContactList(
@@ -438,7 +458,7 @@ class WebtritApiClient {
   }) async {
     final requestJson = appPushToken.toJson();
 
-    await _httpClientExecutePost(['app', 'push-tokens'], null, token, requestJson, options: options);
+    await _httpClientExecutePost(['app', 'push-tokens'], null, token, requestJson, requestOptions: options);
   }
 
   Future<DemoCallToActionsResponse> getCallToActions(
@@ -454,7 +474,7 @@ class WebtritApiClient {
       {'Accept-Language': locale},
       token,
       requestJson,
-      options: options,
+      requestOptions: options,
     );
 
     return DemoCallToActionsResponse.fromJson(responseJson);
@@ -466,7 +486,7 @@ class WebtritApiClient {
       null,
       token,
       {},
-      options: options,
+      requestOptions: options,
     );
 
     return SelfConfigResponse.fromJson(responseJson);
@@ -481,7 +501,7 @@ class WebtritApiClient {
       null,
       token,
       {},
-      options: options,
+      requestOptions: options,
     );
 
     return ExternalPageAccessToken.fromJson(responseJson);
@@ -528,7 +548,7 @@ class WebtritApiClient {
       ['user', 'voicemails', messageId],
       locale != null ? {'Accept-Language': locale} : null,
       token,
-      options: options,
+      requestOptions: options,
     );
   }
 
@@ -546,7 +566,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestJson,
-      options: options,
+      requestOptions: options,
     );
   }
 
@@ -632,7 +652,7 @@ class WebtritApiClient {
       {},
       token,
       requestJson,
-      options: options,
+      requestOptions: options,
     );
   }
 
@@ -682,8 +702,59 @@ class WebtritApiClient {
       null,
       token,
       requestJson,
-      options: options,
+      requestOptions: options,
     );
     return CallerIdSettings.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<FavoritesGetResult> getFavorites(
+    String token, {
+    String? ifNoneMatch,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final response =
+        await _httpClientExecuteGet(
+              ['user', 'favorites'],
+              ifNoneMatch != null ? {'If-None-Match': ifNoneMatch} : null,
+              token,
+              requestOptions: options,
+              responseOptions: ResponseOptions(responseType: ResponseType.raw),
+            )
+            as http.Response;
+
+    if (response.statusCode == 304) {
+      return FavoritesGetResult(notModified: true, etag: response.headers['etag'] ?? '0');
+    }
+
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+    return FavoritesGetResult(
+      notModified: false,
+      etag: response.headers['etag'] ?? '0',
+      data: FavoritesListResponse.fromJson(responseJson),
+    );
+  }
+
+  Future<FavoriteBatchSyncResult> batchSyncFavorites(
+    String token,
+    List<FavoriteBatchAction> actions, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final response =
+        await _httpClientExecutePost(
+              ['user', 'favorites', 'batch_sync'],
+              null,
+              token,
+              {'actions': actions.map((a) => a.toJson()).toList()},
+              requestOptions: options,
+              responseOptions: ResponseOptions(responseType: ResponseType.raw),
+            )
+            as http.Response;
+
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+
+    return FavoriteBatchSyncResult(
+      data: FavoriteBatchSyncResponse.fromJson(responseJson),
+      etag: response.headers['etag'] ?? '0',
+    );
   }
 }

@@ -6,6 +6,8 @@ part of 'favorites_v2_dao.dart';
 mixin _$FavoritesV2DaoMixin on DatabaseAccessor<AppDatabase> {
   $FavoritesV2TableTable get favoritesV2Table =>
       attachedDatabase.favoritesV2Table;
+  $FavoritesOutboxTableTable get favoritesOutboxTable =>
+      attachedDatabase.favoritesOutboxTable;
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
@@ -23,6 +25,11 @@ class FavoritesV2DaoManager {
       $$FavoritesV2TableTableTableManager(
         _db.attachedDatabase,
         _db.favoritesV2Table,
+      );
+  $$FavoritesOutboxTableTableTableManager get favoritesOutboxTable =>
+      $$FavoritesOutboxTableTableTableManager(
+        _db.attachedDatabase,
+        _db.favoritesOutboxTable,
       );
   $$ContactsTableTableTableManager get contactsTable =>
       $$ContactsTableTableTableManager(_db.attachedDatabase, _db.contactsTable);

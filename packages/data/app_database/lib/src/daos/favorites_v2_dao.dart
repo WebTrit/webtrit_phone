@@ -14,7 +14,16 @@ typedef ContactDatas = ({
 
 typedef FavoriteWithContactDataV2 = ({FavoriteV2Data favoriteData, ContactDatas? contactDatas});
 
-@DriftAccessor(tables: [FavoritesV2Table, ContactsTable, ContactPhonesTable, ContactEmailsTable, PresenceInfoTable])
+@DriftAccessor(
+  tables: [
+    FavoritesV2Table,
+    FavoritesOutboxTable,
+    ContactsTable,
+    ContactPhonesTable,
+    ContactEmailsTable,
+    PresenceInfoTable,
+  ],
+)
 class FavoritesV2Dao extends DatabaseAccessor<AppDatabase> with _$FavoritesV2DaoMixin {
   FavoritesV2Dao(super.db);
 
@@ -130,7 +139,43 @@ class FavoritesV2Dao extends DatabaseAccessor<AppDatabase> with _$FavoritesV2Dao
     return query.go();
   }
 
-  Future<void> wipe() {
-    return delete(favoritesV2Table).go();
+  Future<void> batchReplace(List<FavoriteV2Data> favorites, {bool removePrevious = false}) {
+    return transaction(() async {
+      if (removePrevious) await delete(favoritesV2Table).go();
+      await batch((batch) => batch.insertAllOnConflictUpdate(favoritesV2Table, favorites));
+    });
+  }
+
+  // Outbox operations
+
+  Future<void> setOutboxEntry(FavoriteOutboxEntryData entry, {bool replacePrevAction = false}) {
+    if (!replacePrevAction) {
+      return into(favoritesOutboxTable).insertOnConflictUpdate(entry);
+    }
+    return transaction(() async {
+      await (delete(favoritesOutboxTable)
+            ..where((table) => table.number.equals(entry.number))
+            ..where((table) => table.sourceType.equals(entry.sourceType.name)))
+          .go();
+      await into(favoritesOutboxTable).insertOnConflictUpdate(entry);
+    });
+  }
+
+  Future<int> removeOutboxEntry(FavoriteOutboxActionData action, String number, FavoriteSourceTypeData sourceType) {
+    return (delete(favoritesOutboxTable)
+          ..where((table) => table.action.equals(action.name))
+          ..where((table) => table.number.equals(number))
+          ..where((table) => table.sourceType.equals(sourceType.name)))
+        .go();
+  }
+
+  Future<List<FavoriteOutboxEntryData>> getAllOutboxEntries() {
+    final query = select(favoritesOutboxTable)..orderBy([(table) => OrderingTerm.asc(table.timestampUsec)]);
+    return query.get();
+  }
+
+  Future<void> wipe() async {
+    await delete(favoritesV2Table).go();
+    await delete(favoritesOutboxTable).go();
   }
 }

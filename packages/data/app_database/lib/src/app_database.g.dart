@@ -2426,18 +2426,18 @@ class $FavoritesOutboxTableTable extends FavoritesOutboxTable
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
     'source_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _labelMeta = const VerificationMeta('label');
   @override
   late final GeneratedColumn<String> label = GeneratedColumn<String>(
     'label',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _positionMeta = const VerificationMeta(
     'position',
@@ -2509,16 +2509,12 @@ class $FavoritesOutboxTableTable extends FavoritesOutboxTable
         _sourceIdMeta,
         sourceId.isAcceptableOrUnknown(data['source_id']!, _sourceIdMeta),
       );
-    } else if (isInserting) {
-      context.missing(_sourceIdMeta);
     }
     if (data.containsKey('label')) {
       context.handle(
         _labelMeta,
         label.isAcceptableOrUnknown(data['label']!, _labelMeta),
       );
-    } else if (isInserting) {
-      context.missing(_labelMeta);
     }
     if (data.containsKey('position')) {
       context.handle(
@@ -2577,11 +2573,11 @@ class $FavoritesOutboxTableTable extends FavoritesOutboxTable
       sourceId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}source_id'],
-      )!,
+      ),
       label: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}label'],
-      )!,
+      ),
       position: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}position'],
@@ -2617,8 +2613,8 @@ class FavoriteOutboxEntryData extends DataClass
   final String number;
   final FavoriteSourceTypeData sourceType;
   final FavoriteOutboxActionData action;
-  final String sourceId;
-  final String label;
+  final String? sourceId;
+  final String? label;
   final int? position;
   final int sendAttempts;
   final int timestampUsec;
@@ -2626,8 +2622,8 @@ class FavoriteOutboxEntryData extends DataClass
     required this.number,
     required this.sourceType,
     required this.action,
-    required this.sourceId,
-    required this.label,
+    this.sourceId,
+    this.label,
     this.position,
     required this.sendAttempts,
     required this.timestampUsec,
@@ -2646,8 +2642,12 @@ class FavoriteOutboxEntryData extends DataClass
         $FavoritesOutboxTableTable.$converteraction.toSql(action),
       );
     }
-    map['source_id'] = Variable<String>(sourceId);
-    map['label'] = Variable<String>(label);
+    if (!nullToAbsent || sourceId != null) {
+      map['source_id'] = Variable<String>(sourceId);
+    }
+    if (!nullToAbsent || label != null) {
+      map['label'] = Variable<String>(label);
+    }
     if (!nullToAbsent || position != null) {
       map['position'] = Variable<int>(position);
     }
@@ -2661,8 +2661,12 @@ class FavoriteOutboxEntryData extends DataClass
       number: Value(number),
       sourceType: Value(sourceType),
       action: Value(action),
-      sourceId: Value(sourceId),
-      label: Value(label),
+      sourceId: sourceId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceId),
+      label: label == null && nullToAbsent
+          ? const Value.absent()
+          : Value(label),
       position: position == null && nullToAbsent
           ? const Value.absent()
           : Value(position),
@@ -2684,8 +2688,8 @@ class FavoriteOutboxEntryData extends DataClass
       action: $FavoritesOutboxTableTable.$converteraction.fromJson(
         serializer.fromJson<String>(json['action']),
       ),
-      sourceId: serializer.fromJson<String>(json['sourceId']),
-      label: serializer.fromJson<String>(json['label']),
+      sourceId: serializer.fromJson<String?>(json['sourceId']),
+      label: serializer.fromJson<String?>(json['label']),
       position: serializer.fromJson<int?>(json['position']),
       sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
       timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
@@ -2702,8 +2706,8 @@ class FavoriteOutboxEntryData extends DataClass
       'action': serializer.toJson<String>(
         $FavoritesOutboxTableTable.$converteraction.toJson(action),
       ),
-      'sourceId': serializer.toJson<String>(sourceId),
-      'label': serializer.toJson<String>(label),
+      'sourceId': serializer.toJson<String?>(sourceId),
+      'label': serializer.toJson<String?>(label),
       'position': serializer.toJson<int?>(position),
       'sendAttempts': serializer.toJson<int>(sendAttempts),
       'timestampUsec': serializer.toJson<int>(timestampUsec),
@@ -2714,8 +2718,8 @@ class FavoriteOutboxEntryData extends DataClass
     String? number,
     FavoriteSourceTypeData? sourceType,
     FavoriteOutboxActionData? action,
-    String? sourceId,
-    String? label,
+    Value<String?> sourceId = const Value.absent(),
+    Value<String?> label = const Value.absent(),
     Value<int?> position = const Value.absent(),
     int? sendAttempts,
     int? timestampUsec,
@@ -2723,8 +2727,8 @@ class FavoriteOutboxEntryData extends DataClass
     number: number ?? this.number,
     sourceType: sourceType ?? this.sourceType,
     action: action ?? this.action,
-    sourceId: sourceId ?? this.sourceId,
-    label: label ?? this.label,
+    sourceId: sourceId.present ? sourceId.value : this.sourceId,
+    label: label.present ? label.value : this.label,
     position: position.present ? position.value : this.position,
     sendAttempts: sendAttempts ?? this.sendAttempts,
     timestampUsec: timestampUsec ?? this.timestampUsec,
@@ -2795,8 +2799,8 @@ class FavoriteOutboxEntryDataCompanion
   final Value<String> number;
   final Value<FavoriteSourceTypeData> sourceType;
   final Value<FavoriteOutboxActionData> action;
-  final Value<String> sourceId;
-  final Value<String> label;
+  final Value<String?> sourceId;
+  final Value<String?> label;
   final Value<int?> position;
   final Value<int> sendAttempts;
   final Value<int> timestampUsec;
@@ -2816,8 +2820,8 @@ class FavoriteOutboxEntryDataCompanion
     required String number,
     required FavoriteSourceTypeData sourceType,
     required FavoriteOutboxActionData action,
-    required String sourceId,
-    required String label,
+    this.sourceId = const Value.absent(),
+    this.label = const Value.absent(),
     this.position = const Value.absent(),
     this.sendAttempts = const Value.absent(),
     required int timestampUsec,
@@ -2825,8 +2829,6 @@ class FavoriteOutboxEntryDataCompanion
   }) : number = Value(number),
        sourceType = Value(sourceType),
        action = Value(action),
-       sourceId = Value(sourceId),
-       label = Value(label),
        timestampUsec = Value(timestampUsec);
   static Insertable<FavoriteOutboxEntryData> custom({
     Expression<String>? number,
@@ -2856,8 +2858,8 @@ class FavoriteOutboxEntryDataCompanion
     Value<String>? number,
     Value<FavoriteSourceTypeData>? sourceType,
     Value<FavoriteOutboxActionData>? action,
-    Value<String>? sourceId,
-    Value<String>? label,
+    Value<String?>? sourceId,
+    Value<String?>? label,
     Value<int?>? position,
     Value<int>? sendAttempts,
     Value<int>? timestampUsec,
@@ -12972,9 +12974,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final CallLogsDao callLogsDao = CallLogsDao(this as AppDatabase);
   late final RecentsDao recentsDao = RecentsDao(this as AppDatabase);
   late final FavoritesDao favoritesDao = FavoritesDao(this as AppDatabase);
-  late final FavoritesOutboxDao favoritesOutboxDao = FavoritesOutboxDao(
-    this as AppDatabase,
-  );
   late final FavoritesV2Dao favoritesV2Dao = FavoritesV2Dao(
     this as AppDatabase,
   );
@@ -14641,8 +14640,8 @@ typedef $$FavoritesOutboxTableTableCreateCompanionBuilder =
       required String number,
       required FavoriteSourceTypeData sourceType,
       required FavoriteOutboxActionData action,
-      required String sourceId,
-      required String label,
+      Value<String?> sourceId,
+      Value<String?> label,
       Value<int?> position,
       Value<int> sendAttempts,
       required int timestampUsec,
@@ -14653,8 +14652,8 @@ typedef $$FavoritesOutboxTableTableUpdateCompanionBuilder =
       Value<String> number,
       Value<FavoriteSourceTypeData> sourceType,
       Value<FavoriteOutboxActionData> action,
-      Value<String> sourceId,
-      Value<String> label,
+      Value<String?> sourceId,
+      Value<String?> label,
       Value<int?> position,
       Value<int> sendAttempts,
       Value<int> timestampUsec,
@@ -14859,8 +14858,8 @@ class $$FavoritesOutboxTableTableTableManager
                 Value<String> number = const Value.absent(),
                 Value<FavoriteSourceTypeData> sourceType = const Value.absent(),
                 Value<FavoriteOutboxActionData> action = const Value.absent(),
-                Value<String> sourceId = const Value.absent(),
-                Value<String> label = const Value.absent(),
+                Value<String?> sourceId = const Value.absent(),
+                Value<String?> label = const Value.absent(),
                 Value<int?> position = const Value.absent(),
                 Value<int> sendAttempts = const Value.absent(),
                 Value<int> timestampUsec = const Value.absent(),
@@ -14881,8 +14880,8 @@ class $$FavoritesOutboxTableTableTableManager
                 required String number,
                 required FavoriteSourceTypeData sourceType,
                 required FavoriteOutboxActionData action,
-                required String sourceId,
-                required String label,
+                Value<String?> sourceId = const Value.absent(),
+                Value<String?> label = const Value.absent(),
                 Value<int?> position = const Value.absent(),
                 Value<int> sendAttempts = const Value.absent(),
                 required int timestampUsec,

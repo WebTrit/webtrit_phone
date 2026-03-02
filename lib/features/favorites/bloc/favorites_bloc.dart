@@ -20,7 +20,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
 
   Future<void> _onStarted(FavoritesStarted event, Emitter<FavoritesState> emit) async {
     await emit.forEach(
-      favoritesRepository.favorites(),
+      favoritesRepository.watchAllWithContacts(),
       onData: (List<FavoriteWithContact> favorites) => FavoritesState(favorites: favorites),
     );
   }

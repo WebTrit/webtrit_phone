@@ -531,18 +531,18 @@ class FavoritesOutbox extends Table with TableInfo {
   late final GeneratedColumn<String> sourceId = GeneratedColumn<String>(
     'source_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
-    $customConstraints: 'NOT NULL',
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
   );
   late final GeneratedColumn<String> label = GeneratedColumn<String>(
     'label',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
-    $customConstraints: 'NOT NULL',
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
   );
   late final GeneratedColumn<int> position = GeneratedColumn<int>(
     'position',

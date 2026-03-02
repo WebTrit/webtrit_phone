@@ -232,26 +232,6 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
     });
   }
 
-  Future<void> addContactPhoneToFavorites(ContactPhone contactPhone, Contact contact) async {
-    final number = contactPhone.number;
-    final sourceType = switch (contact.sourceType) {
-      ContactSourceType.local => FavoriteSourceTypeData.device,
-      ContactSourceType.external => FavoriteSourceTypeData.pbx,
-    };
-    final sourceId = contact.sourceId ?? contact.id.toString();
-    final label = contactPhone.label;
-    await _appDatabase.favoritesV2Dao.add(number, sourceType, sourceId, label);
-  }
-
-  Future<void> removeContactPhoneFromFavorites(ContactPhone contactPhone, Contact contact) {
-    final number = contactPhone.number;
-    final sourceType = switch (contact.sourceType) {
-      ContactSourceType.local => FavoriteSourceTypeData.device,
-      ContactSourceType.external => FavoriteSourceTypeData.pbx,
-    };
-    return _appDatabase.favoritesV2Dao.remove((number, sourceType));
-  }
-
   /// Synchronizes a list of external contacts.
   /// Handles deletion of missing contacts and batch upsert of new/updated ones.
   Future<void> syncExternalContacts(List<ExternalContact> contacts) async {

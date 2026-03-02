@@ -54,8 +54,11 @@ class ContactScreenPage extends StatelessWidget {
 
     return BlocProvider(
       create: (context) {
-        return ContactBloc(contactId, contactsRepository: context.read<ContactsRepository>())
-          ..add(const ContactStarted());
+        return ContactBloc(
+          contactId,
+          contactsRepository: context.read<ContactsRepository>(),
+          favoritesRepository: context.read<FavoritesRepository>(),
+        )..add(const ContactStarted());
       },
       child: widget,
     );

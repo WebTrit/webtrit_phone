@@ -555,8 +555,8 @@
             "name": "source_id",
             "getter_name": "sourceId",
             "moor_type": "string",
-            "nullable": false,
-            "customConstraints": "NOT NULL",
+            "nullable": true,
+            "customConstraints": "NULL",
             "default_dart": null,
             "default_client_dart": null,
             "dsl_features": []
@@ -565,8 +565,8 @@
             "name": "label",
             "getter_name": "label",
             "moor_type": "string",
-            "nullable": false,
-            "customConstraints": "NOT NULL",
+            "nullable": true,
+            "customConstraints": "NULL",
             "default_dart": null,
             "default_client_dart": null,
             "dsl_features": []
@@ -2790,7 +2790,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"favorites_outbox\" (\"number\" TEXT NOT NULL, \"source_type\" TEXT NOT NULL, \"action\" TEXT NOT NULL, \"source_id\" TEXT NOT NULL, \"label\" TEXT NOT NULL, \"position\" INTEGER NULL, \"send_attempts\" INTEGER NOT NULL DEFAULT 0, \"timestamp_usec\" INTEGER NOT NULL, PRIMARY KEY(number, source_type, \"action\"));"
+          "sql": "CREATE TABLE IF NOT EXISTS \"favorites_outbox\" (\"number\" TEXT NOT NULL, \"source_type\" TEXT NOT NULL, \"action\" TEXT NOT NULL, \"source_id\" TEXT NULL, \"label\" TEXT NULL, \"position\" INTEGER NULL, \"send_attempts\" INTEGER NOT NULL DEFAULT 0, \"timestamp_usec\" INTEGER NOT NULL, PRIMARY KEY(number, source_type, \"action\"));"
         }
       ]
     },

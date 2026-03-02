@@ -16,7 +16,8 @@ part 'contact_event.dart';
 part 'contact_state.dart';
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
-  ContactBloc(this.contactId, {required this.contactsRepository}) : super(const ContactState()) {
+  ContactBloc(this.contactId, {required this.contactsRepository, required this.favoritesRepository})
+    : super(const ContactState()) {
     on<ContactStarted>(_onStarted, transformer: restartable());
     on<ContactAddedToFavorites>(_onAddedToFavorites);
     on<ContactRemovedFromFavorites>(_onRemovedFromFavorites);
@@ -25,6 +26,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
   final ContactId contactId;
   final ContactsRepository contactsRepository;
+  final FavoritesRepository favoritesRepository;
 
   /// Handles the [ContactStarted] event by subscribing to the contact stream
   /// from the [ContactsRepository] for the given [contactId].
@@ -44,11 +46,11 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   }
 
   FutureOr<void> _onAddedToFavorites(ContactAddedToFavorites event, Emitter<ContactState> emit) async {
-    await contactsRepository.addContactPhoneToFavorites(event.contactPhone, event.contact);
+    await favoritesRepository.addByContact(event.contactPhone, event.contact);
   }
 
   FutureOr<void> _onRemovedFromFavorites(ContactRemovedFromFavorites event, Emitter<ContactState> emit) async {
-    await contactsRepository.removeContactPhoneFromFavorites(event.contactPhone, event.contact);
+    await favoritesRepository.removeByContact(event.contactPhone, event.contact);
   }
 
   FutureOr<void> _onEmailSend(ContactEmailSend event, Emitter<ContactState> emit) async {

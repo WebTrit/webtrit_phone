@@ -49,7 +49,6 @@ part 'app_database.g.dart';
     CallLogsDao,
     RecentsDao,
     FavoritesDao,
-    FavoritesOutboxDao,
     FavoritesV2Dao,
     ChatsDao,
     SmsDao,

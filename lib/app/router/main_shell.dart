@@ -113,7 +113,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           },
         ),
         RepositoryProvider<FavoritesRepository>(
-          create: (context) => FavoritesRepository(appDatabase: context.read<AppDatabase>()),
+          create: (context) => FavoritesRepository(
+            appDatabase: context.read<AppDatabase>(),
+            connectivityService: context.read<ConnectivityService>(),
+            apiClient: context.read<WebtritApiClient>(),
+            apiToken: context.read<AppBloc>().state.session.token!,
+          ),
         ),
         RepositoryProvider<RecentsRepository>(
           create: (context) => RecentsRepository(appDatabase: context.read<AppDatabase>()),
@@ -619,6 +624,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           listener: cliSettingsRepository,
           interval: const Duration(seconds: EnvironmentConfig.CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
+      PollingRegistration(
+        listener: context.read<FavoritesRepository>(),
+        interval: const Duration(seconds: EnvironmentConfig.FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS),
+      ),
     ];
   }
 
