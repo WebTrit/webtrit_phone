@@ -17,7 +17,7 @@ export 'contacts_agreement_status/contacts_agreement_status_repository.dart';
 export 'dialing/dialing.dart';
 export 'encoding_preset/encoding_preset_repository.dart';
 export 'encoding_settings/encoding_settings_repository.dart';
-export 'favorites/favorites_repository.dart';
+export 'favorites/favorites.dart';
 export 'ice_settings/ice_settings_repository.dart';
 export 'incoming_call_type/incoming_call_type_repository.dart';
 export 'lines_state/lines_state_repository.dart';

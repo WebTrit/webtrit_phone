@@ -2,184 +2,211 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_api/webtrit_api.dart' as api;
-
 import 'package:webtrit_phone/common/refreshable.dart';
-import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/services/services.dart';
 
+import 'favorites_local_data_source.dart';
+import 'favorites_remote_data_source.dart';
+
 final _logger = Logger('FavoritesRepository');
 
-class FavoritesRepository
-    with PresenceInfoDriftMapper, ContactsDriftMapper, FavoritesDriftMapper
-    implements Refreshable {
-  FavoritesRepository({
-    required AppDatabase appDatabase,
-    required api.WebtritApiClient apiClient,
+abstract class FavoritesRepository {
+  /// Watch the list of favorites with corresponding contact information.
+  /// The list is ordered by favorite position.
+  Stream<List<FavoriteWithContact>> watchAllWithContacts();
+
+  /// Add new favorite corresponding to the given contact information.
+  Future<void> addByContact(ContactPhone contactPhone, Contact contact);
+
+  /// Remove the favorite corresponding to the given contact phone, if exists
+  Future<void> removeByContact(ContactPhone contactPhone, Contact contact);
+
+  /// Remove the given favorite.
+  Future<void> remove(Favorite favorite);
+
+  /// Shift the given favorite to the new position, adjusting positions of other favorites as needed.
+  Future<void> shift(Favorite favorite, int position);
+}
+
+class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshable {
+  FavoritesRepositorySyncableImpl({
+    required FavoritesLocalDataSource localDataSource,
+    required FavoritesRemoteDataSource remoteDataSource,
     required ConnectivityService connectivityService,
-    required String apiToken,
-  }) : _appDatabase = appDatabase,
-       _connectivityService = connectivityService,
-       _apiClient = apiClient,
-       _apiToken = apiToken;
+  }) : _localRepository = localDataSource,
+       _remoteRepository = remoteDataSource,
+       _connectivityService = connectivityService;
 
-  final AppDatabase _appDatabase;
+  final FavoritesLocalDataSource _localRepository;
+  final FavoritesRemoteDataSource _remoteRepository;
   final ConnectivityService _connectivityService;
-  final api.WebtritApiClient _apiClient;
-  final String _apiToken;
 
-  late final _dao = _appDatabase.favoritesV2Dao;
+  // Store the ETag of the last successfully pulled favorites
+  // list to optimize network usage if nothing has changed on the server.
   String? _etag;
 
+  @override
   Stream<List<FavoriteWithContact>> watchAllWithContacts() {
-    return _dao.watchWithContacts().map((data) => data.map((e) => favoriteWithContactFromDrift(e)).toList());
+    return _localRepository.watchAllWithContacts();
   }
 
+  @override
   Future<void> addByContact(ContactPhone contactPhone, Contact contact) async {
-    final number = contactPhone.number;
-    final sourceType = switch (contact.sourceType) {
-      ContactSourceType.local => FavoriteSourceTypeData.device,
-      ContactSourceType.external => FavoriteSourceTypeData.pbx,
-    };
-    final sourceId = contact.sourceId ?? contact.id.toString();
-    final label = contactPhone.label;
-    await _dao.add(number, sourceType, sourceId, label);
-
-    final outboxEntry = FavoriteOutboxEntryData(
-      action: FavoriteOutboxActionData.upsert,
-      number: number,
-      sourceType: sourceType,
-      sourceId: sourceId,
-      label: label,
-      sendAttempts: 0,
-      timestampUsec: DateTime.now().microsecondsSinceEpoch,
+    final favorite = Favorite(
+      number: contactPhone.number,
+      sourceType: _favoriteSourceTypeFromContact(contact.sourceType),
+      sourceId: contact.sourceId ?? contact.id.toString(),
+      label: contactPhone.label,
+      position: 0,
     );
 
-    await _dao.setOutboxEntry(outboxEntry, replacePrevAction: true);
+    await _localRepository.add(favorite);
 
-    final online = await _connectivityService.checkConnection();
-    if (online) await _syncWithApi();
+    await _localRepository.setOutboxAction(
+      FavoriteOutboxAction(
+        action: FavoriteOutboxActionType.upsert,
+        number: favorite.number,
+        sourceType: favorite.sourceType,
+        sourceId: favorite.sourceId,
+        label: favorite.label,
+        sendAttempts: 0,
+        timestampUsec: DateTime.now().microsecondsSinceEpoch,
+      ),
+      replacePrevAction: true,
+    );
+
+    await _syncIfOnline();
   }
 
+  @override
   Future<void> removeByContact(ContactPhone contactPhone, Contact contact) async {
-    final number = contactPhone.number;
-    final sourceType = switch (contact.sourceType) {
-      ContactSourceType.local => FavoriteSourceTypeData.device,
-      ContactSourceType.external => FavoriteSourceTypeData.pbx,
-    };
-    await _dao.remove((number, sourceType));
-
-    final outboxEntry = FavoriteOutboxEntryData(
-      action: FavoriteOutboxActionData.delete,
-      number: number,
-      sourceType: sourceType,
-      sendAttempts: 0,
-      timestampUsec: DateTime.now().microsecondsSinceEpoch,
+    final favorite = Favorite(
+      number: contactPhone.number,
+      sourceType: _favoriteSourceTypeFromContact(contact.sourceType),
+      sourceId: contact.sourceId ?? contact.id.toString(),
+      label: contactPhone.label,
+      position: 0,
     );
-    await _dao.setOutboxEntry(outboxEntry, replacePrevAction: true);
 
-    final online = await _connectivityService.checkConnection();
-    if (online) await _syncWithApi();
+    await _localRepository.remove(favorite);
+
+    await _localRepository.setOutboxAction(
+      FavoriteOutboxAction(
+        action: FavoriteOutboxActionType.delete,
+        number: favorite.number,
+        sourceType: favorite.sourceType,
+        sendAttempts: 0,
+        timestampUsec: DateTime.now().microsecondsSinceEpoch,
+      ),
+      replacePrevAction: true,
+    );
+
+    await _syncIfOnline();
   }
 
+  @override
   Future<void> remove(Favorite favorite) async {
-    _dao.remove(favoriteKeyFromFavorite(favorite));
+    await _localRepository.remove(favorite);
 
-    final outboxEntry = FavoriteOutboxEntryData(
-      action: FavoriteOutboxActionData.delete,
-      number: favorite.number,
-      sourceType: favoriteSourceTypeToDrift(favorite.sourceType),
-      sendAttempts: 0,
-      timestampUsec: DateTime.now().microsecondsSinceEpoch,
+    await _localRepository.setOutboxAction(
+      FavoriteOutboxAction(
+        action: FavoriteOutboxActionType.delete,
+        number: favorite.number,
+        sourceType: favorite.sourceType,
+        sendAttempts: 0,
+        timestampUsec: DateTime.now().microsecondsSinceEpoch,
+      ),
+      replacePrevAction: true,
     );
-    await _dao.setOutboxEntry(outboxEntry, replacePrevAction: true);
 
-    final online = await _connectivityService.checkConnection();
-    if (online) await _syncWithApi();
+    await _syncIfOnline();
   }
 
+  @override
   Future<void> shift(Favorite favorite, int position) async {
-    _dao.shift(favoriteKeyFromFavorite(favorite), position);
+    await _localRepository.shift(favorite, position);
 
-    final outboxEntry = FavoriteOutboxEntryData(
-      action: FavoriteOutboxActionData.upsert,
-      number: favorite.number,
-      sourceType: favoriteSourceTypeToDrift(favorite.sourceType),
-      sourceId: favorite.sourceId,
-      label: favorite.label,
-      position: position,
-      sendAttempts: 0,
-      timestampUsec: DateTime.now().microsecondsSinceEpoch,
+    await _localRepository.setOutboxAction(
+      FavoriteOutboxAction(
+        action: FavoriteOutboxActionType.upsert,
+        number: favorite.number,
+        sourceType: favorite.sourceType,
+        sourceId: favorite.sourceId,
+        label: favorite.label,
+        position: position,
+        sendAttempts: 0,
+        timestampUsec: DateTime.now().microsecondsSinceEpoch,
+      ),
+      replacePrevAction: true,
     );
-    await _dao.setOutboxEntry(outboxEntry, replacePrevAction: true);
 
-    final online = await _connectivityService.checkConnection();
-    if (online) await _syncWithApi();
+    await _syncIfOnline();
   }
 
   @override
   Future<void> refresh() {
-    return _syncWithApi();
+    return _sync();
   }
 
-  Future<void> _syncWithApi() async {
-    final outbox = await _dao.getAllOutboxEntries();
+  FavoriteSourceType _favoriteSourceTypeFromContact(ContactSourceType sourceType) {
+    return switch (sourceType) {
+      ContactSourceType.local => FavoriteSourceType.device,
+      ContactSourceType.external => FavoriteSourceType.pbx,
+    };
+  }
 
+  Future<void> _syncIfOnline() async {
+    final online = await _connectivityService.checkConnection();
+    if (online) await _sync();
+  }
+
+  Future<void> _sync() async {
+    final outbox = await _localRepository.getAllOutboxActions();
     if (outbox.isEmpty) {
-      try {
-        final result = await _apiClient.getFavorites(_apiToken, ifNoneMatch: _etag);
-
-        if (result.notModified) {
-          _logger.fine('Favorites not modified since last sync');
-          return;
-        }
-
-        final items = result.data!.items;
-        await _dao.batchReplace(items.map(_mapApiToDrift).toList(), removePrevious: true);
-        _etag = result.etag;
-      } catch (e, s) {
-        _logger.warning('Failed to pull remote data', e, s);
-      }
+      await _pullRemoteFavorites();
     } else {
-      _logger.info('Syncing ${outbox.length} favorite changes from outbox');
-      try {
-        final actions = outbox.map(_mapOutboxToApiAction).toList();
-        final result = await _apiClient.batchSyncFavorites(_apiToken, actions);
-        await Future.forEach(outbox, (e) => _dao.removeOutboxEntry(e.action, e.number, e.sourceType));
-        await _dao.batchReplace(result.data.items.map(_mapApiToDrift).toList(), removePrevious: true);
-        _etag = result.etag;
-      } catch (e, s) {
-        final outboxAfterAttempt = outbox.map((e) => e.copyWith(sendAttempts: e.sendAttempts + 1));
-        for (var en in outboxAfterAttempt) {
-          if (en.sendAttempts > 5) {
-            _logger.warning('Dropping outbox entry after 5 attempts: ${en.number} (${en.sourceType})');
-            await _dao.removeOutboxEntry(en.action, en.number, en.sourceType);
-          } else {
-            await _dao.setOutboxEntry(en);
-          }
-        }
-
-        _logger.warning('Failed to sync favorites outbox', e, s);
-      }
+      await _syncOutboxActions(outbox);
     }
   }
 
-  FavoriteV2Data _mapApiToDrift(api.FavoriteItem f) => FavoriteV2Data(
-    number: f.number,
-    sourceType: FavoriteSourceTypeData.values.byName(f.sourceType.name),
-    sourceId: f.sourceId,
-    label: f.label,
-    position: f.position,
-  );
+  Future<void> _pullRemoteFavorites() async {
+    try {
+      final result = await _remoteRepository.getFavorites(ifNoneMatch: _etag);
+      if (result.notModified) {
+        _logger.fine('Favorites not modified since last sync');
+        return;
+      }
 
-  api.FavoriteBatchAction _mapOutboxToApiAction(FavoriteOutboxEntryData e) => api.FavoriteBatchAction(
-    action: api.FavoriteBatchActionType.values.byName(e.action.name),
-    number: e.number,
-    sourceType: api.FavoriteSourceType.values.byName(e.sourceType.name),
-    sourceId: e.sourceId,
-    label: e.label,
-    position: e.position,
-  );
+      await _localRepository.batchReplace(result.items, removePrevious: true);
+      _etag = result.etag;
+    } catch (e, s) {
+      _logger.warning('Failed to pull remote data', e, s);
+    }
+  }
+
+  Future<void> _syncOutboxActions(List<FavoriteOutboxAction> outbox) async {
+    _logger.info('Syncing ${outbox.length} favorite changes from outbox');
+    try {
+      final result = await _remoteRepository.batchSyncFavorites(outbox);
+      await Future.forEach(outbox, _localRepository.removeOutboxAction);
+      await _localRepository.batchReplace(result.items, removePrevious: true);
+      _etag = result.etag;
+    } catch (e, s) {
+      await _handleOutboxSyncFailure(outbox);
+      _logger.warning('Failed to sync favorites outbox', e, s);
+    }
+  }
+
+  Future<void> _handleOutboxSyncFailure(List<FavoriteOutboxAction> outbox) async {
+    final outboxAfterAttempt = outbox.map((e) => e.copyWith(sendAttempts: e.sendAttempts + 1));
+    for (final action in outboxAfterAttempt) {
+      if (action.sendAttempts > 5) {
+        _logger.warning('Dropping outbox entry after 5 attempts: ${action.number} (${action.sourceType})');
+        await _localRepository.removeOutboxAction(action);
+      } else {
+        await _localRepository.setOutboxAction(action);
+      }
+    }
+  }
 }
