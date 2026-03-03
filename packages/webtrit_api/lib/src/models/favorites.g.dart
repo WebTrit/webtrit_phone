@@ -66,32 +66,6 @@ const _$FavoriteBatchActionTypeEnumMap = {
   FavoriteBatchActionType.delete: 'delete',
 };
 
-FavoriteBatchConflict _$FavoriteBatchConflictFromJson(
-  Map<String, dynamic> json,
-) => FavoriteBatchConflict(
-  action: $enumDecode(_$FavoriteBatchActionTypeEnumMap, json['action']),
-  number: json['number'] as String,
-  sourceType: $enumDecode(_$FavoriteSourceTypeEnumMap, json['source_type']),
-  sourceId: json['source_id'] as String,
-  reason: $enumDecode(_$FavoriteBatchConflictReasonEnumMap, json['reason']),
-);
-
-Map<String, dynamic> _$FavoriteBatchConflictToJson(
-  FavoriteBatchConflict instance,
-) => <String, dynamic>{
-  'action': _$FavoriteBatchActionTypeEnumMap[instance.action]!,
-  'number': instance.number,
-  'source_type': _$FavoriteSourceTypeEnumMap[instance.sourceType]!,
-  'source_id': instance.sourceId,
-  'reason': _$FavoriteBatchConflictReasonEnumMap[instance.reason]!,
-};
-
-const _$FavoriteBatchConflictReasonEnumMap = {
-  FavoriteBatchConflictReason.limitReached: 'limit_reached',
-  FavoriteBatchConflictReason.notFound: 'not_found',
-  FavoriteBatchConflictReason.labelRequired: 'label_required',
-};
-
 FavoriteBatchSyncResponse _$FavoriteBatchSyncResponseFromJson(
   Map<String, dynamic> json,
 ) => FavoriteBatchSyncResponse(
@@ -108,4 +82,29 @@ Map<String, dynamic> _$FavoriteBatchSyncResponseToJson(
 ) => <String, dynamic>{
   'items': instance.items.map((e) => e.toJson()).toList(),
   'conflicts': instance.conflicts.map((e) => e.toJson()).toList(),
+};
+
+FavoriteBatchConflict _$FavoriteBatchConflictFromJson(
+  Map<String, dynamic> json,
+) => FavoriteBatchConflict(
+  action: $enumDecode(_$FavoriteBatchActionTypeEnumMap, json['action']),
+  number: json['number'] as String,
+  sourceType: $enumDecode(_$FavoriteSourceTypeEnumMap, json['source_type']),
+  reason: $enumDecode(_$FavoriteBatchConflictReasonEnumMap, json['reason']),
+);
+
+Map<String, dynamic> _$FavoriteBatchConflictToJson(
+  FavoriteBatchConflict instance,
+) => <String, dynamic>{
+  'action': _$FavoriteBatchActionTypeEnumMap[instance.action]!,
+  'number': instance.number,
+  'source_type': _$FavoriteSourceTypeEnumMap[instance.sourceType]!,
+  'reason': _$FavoriteBatchConflictReasonEnumMap[instance.reason]!,
+};
+
+const _$FavoriteBatchConflictReasonEnumMap = {
+  FavoriteBatchConflictReason.limitReached: 'limit_reached',
+  FavoriteBatchConflictReason.notFound: 'not_found',
+  FavoriteBatchConflictReason.labelRequired: 'label_required',
+  FavoriteBatchConflictReason.sourceIdRequired: 'source_id_required',
 };

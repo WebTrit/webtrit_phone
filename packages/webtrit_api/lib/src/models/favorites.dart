@@ -134,7 +134,6 @@ class FavoriteBatchConflict with _$FavoriteBatchConflict {
     required this.action,
     required this.number,
     required this.sourceType,
-    required this.sourceId,
     required this.reason,
   });
 
@@ -146,9 +145,6 @@ class FavoriteBatchConflict with _$FavoriteBatchConflict {
 
   @override
   final FavoriteSourceType sourceType;
-
-  @override
-  final String sourceId;
 
   @override
   final FavoriteBatchConflictReason reason;
@@ -165,4 +161,6 @@ enum FavoriteBatchConflictReason {
   notFound,
   @JsonValue('label_required')
   labelRequired,
+  @JsonValue('source_id_required')
+  sourceIdRequired,
 }

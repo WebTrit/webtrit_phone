@@ -765,42 +765,41 @@ case _:
 
 }
 
-
 /// @nodoc
-mixin _$FavoriteBatchConflict {
+mixin _$FavoriteBatchSyncResult {
 
- FavoriteBatchActionType get action; String get number; FavoriteSourceType get sourceType; String get sourceId; FavoriteBatchConflictReason get reason;
-/// Create a copy of FavoriteBatchConflict
+ FavoriteBatchSyncResponse get data; String get etag;
+/// Create a copy of FavoriteBatchSyncResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$FavoriteBatchConflictCopyWith<FavoriteBatchConflict> get copyWith => _$FavoriteBatchConflictCopyWithImpl<FavoriteBatchConflict>(this as FavoriteBatchConflict, _$identity);
+$FavoriteBatchSyncResultCopyWith<FavoriteBatchSyncResult> get copyWith => _$FavoriteBatchSyncResultCopyWithImpl<FavoriteBatchSyncResult>(this as FavoriteBatchSyncResult, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteBatchConflict&&(identical(other.action, action) || other.action == action)&&(identical(other.number, number) || other.number == number)&&(identical(other.sourceType, sourceType) || other.sourceType == sourceType)&&(identical(other.sourceId, sourceId) || other.sourceId == sourceId)&&(identical(other.reason, reason) || other.reason == reason));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteBatchSyncResult&&(identical(other.data, data) || other.data == data)&&(identical(other.etag, etag) || other.etag == etag));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
-int get hashCode => Object.hash(runtimeType,action,number,sourceType,sourceId,reason);
+int get hashCode => Object.hash(runtimeType,data,etag);
 
 @override
 String toString() {
-  return 'FavoriteBatchConflict(action: $action, number: $number, sourceType: $sourceType, sourceId: $sourceId, reason: $reason)';
+  return 'FavoriteBatchSyncResult(data: $data, etag: $etag)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $FavoriteBatchConflictCopyWith<$Res>  {
-  factory $FavoriteBatchConflictCopyWith(FavoriteBatchConflict value, $Res Function(FavoriteBatchConflict) _then) = _$FavoriteBatchConflictCopyWithImpl;
+abstract mixin class $FavoriteBatchSyncResultCopyWith<$Res>  {
+  factory $FavoriteBatchSyncResultCopyWith(FavoriteBatchSyncResult value, $Res Function(FavoriteBatchSyncResult) _then) = _$FavoriteBatchSyncResultCopyWithImpl;
 @useResult
 $Res call({
- FavoriteBatchActionType action, String number, FavoriteSourceType sourceType, String sourceId, FavoriteBatchConflictReason reason
+ FavoriteBatchSyncResponse data, String etag
 });
 
 
@@ -808,31 +807,28 @@ $Res call({
 
 }
 /// @nodoc
-class _$FavoriteBatchConflictCopyWithImpl<$Res>
-    implements $FavoriteBatchConflictCopyWith<$Res> {
-  _$FavoriteBatchConflictCopyWithImpl(this._self, this._then);
+class _$FavoriteBatchSyncResultCopyWithImpl<$Res>
+    implements $FavoriteBatchSyncResultCopyWith<$Res> {
+  _$FavoriteBatchSyncResultCopyWithImpl(this._self, this._then);
 
-  final FavoriteBatchConflict _self;
-  final $Res Function(FavoriteBatchConflict) _then;
+  final FavoriteBatchSyncResult _self;
+  final $Res Function(FavoriteBatchSyncResult) _then;
 
-/// Create a copy of FavoriteBatchConflict
+/// Create a copy of FavoriteBatchSyncResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? action = null,Object? number = null,Object? sourceType = null,Object? sourceId = null,Object? reason = null,}) {
-  return _then(FavoriteBatchConflict(
-action: null == action ? _self.action : action // ignore: cast_nullable_to_non_nullable
-as FavoriteBatchActionType,number: null == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
-as String,sourceType: null == sourceType ? _self.sourceType : sourceType // ignore: cast_nullable_to_non_nullable
-as FavoriteSourceType,sourceId: null == sourceId ? _self.sourceId : sourceId // ignore: cast_nullable_to_non_nullable
-as String,reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
-as FavoriteBatchConflictReason,
+@pragma('vm:prefer-inline') @override $Res call({Object? data = null,Object? etag = null,}) {
+  return _then(FavoriteBatchSyncResult(
+data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as FavoriteBatchSyncResponse,etag: null == etag ? _self.etag : etag // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [FavoriteBatchConflict].
-extension FavoriteBatchConflictPatterns on FavoriteBatchConflict {
+/// Adds pattern-matching-related methods to [FavoriteBatchSyncResult].
+extension FavoriteBatchSyncResultPatterns on FavoriteBatchSyncResult {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -1142,41 +1138,42 @@ case _:
 
 }
 
-/// @nodoc
-mixin _$FavoriteBatchSyncResult {
 
- FavoriteBatchSyncResponse get data; String get etag;
-/// Create a copy of FavoriteBatchSyncResult
+/// @nodoc
+mixin _$FavoriteBatchConflict {
+
+ FavoriteBatchActionType get action; String get number; FavoriteSourceType get sourceType; FavoriteBatchConflictReason get reason;
+/// Create a copy of FavoriteBatchConflict
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$FavoriteBatchSyncResultCopyWith<FavoriteBatchSyncResult> get copyWith => _$FavoriteBatchSyncResultCopyWithImpl<FavoriteBatchSyncResult>(this as FavoriteBatchSyncResult, _$identity);
+$FavoriteBatchConflictCopyWith<FavoriteBatchConflict> get copyWith => _$FavoriteBatchConflictCopyWithImpl<FavoriteBatchConflict>(this as FavoriteBatchConflict, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteBatchSyncResult&&(identical(other.data, data) || other.data == data)&&(identical(other.etag, etag) || other.etag == etag));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteBatchConflict&&(identical(other.action, action) || other.action == action)&&(identical(other.number, number) || other.number == number)&&(identical(other.sourceType, sourceType) || other.sourceType == sourceType)&&(identical(other.reason, reason) || other.reason == reason));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,data,etag);
+int get hashCode => Object.hash(runtimeType,action,number,sourceType,reason);
 
 @override
 String toString() {
-  return 'FavoriteBatchSyncResult(data: $data, etag: $etag)';
+  return 'FavoriteBatchConflict(action: $action, number: $number, sourceType: $sourceType, reason: $reason)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $FavoriteBatchSyncResultCopyWith<$Res>  {
-  factory $FavoriteBatchSyncResultCopyWith(FavoriteBatchSyncResult value, $Res Function(FavoriteBatchSyncResult) _then) = _$FavoriteBatchSyncResultCopyWithImpl;
+abstract mixin class $FavoriteBatchConflictCopyWith<$Res>  {
+  factory $FavoriteBatchConflictCopyWith(FavoriteBatchConflict value, $Res Function(FavoriteBatchConflict) _then) = _$FavoriteBatchConflictCopyWithImpl;
 @useResult
 $Res call({
- FavoriteBatchSyncResponse data, String etag
+ FavoriteBatchActionType action, String number, FavoriteSourceType sourceType, FavoriteBatchConflictReason reason
 });
 
 
@@ -1184,28 +1181,30 @@ $Res call({
 
 }
 /// @nodoc
-class _$FavoriteBatchSyncResultCopyWithImpl<$Res>
-    implements $FavoriteBatchSyncResultCopyWith<$Res> {
-  _$FavoriteBatchSyncResultCopyWithImpl(this._self, this._then);
+class _$FavoriteBatchConflictCopyWithImpl<$Res>
+    implements $FavoriteBatchConflictCopyWith<$Res> {
+  _$FavoriteBatchConflictCopyWithImpl(this._self, this._then);
 
-  final FavoriteBatchSyncResult _self;
-  final $Res Function(FavoriteBatchSyncResult) _then;
+  final FavoriteBatchConflict _self;
+  final $Res Function(FavoriteBatchConflict) _then;
 
-/// Create a copy of FavoriteBatchSyncResult
+/// Create a copy of FavoriteBatchConflict
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? data = null,Object? etag = null,}) {
-  return _then(FavoriteBatchSyncResult(
-data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
-as FavoriteBatchSyncResponse,etag: null == etag ? _self.etag : etag // ignore: cast_nullable_to_non_nullable
-as String,
+@pragma('vm:prefer-inline') @override $Res call({Object? action = null,Object? number = null,Object? sourceType = null,Object? reason = null,}) {
+  return _then(FavoriteBatchConflict(
+action: null == action ? _self.action : action // ignore: cast_nullable_to_non_nullable
+as FavoriteBatchActionType,number: null == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
+as String,sourceType: null == sourceType ? _self.sourceType : sourceType // ignore: cast_nullable_to_non_nullable
+as FavoriteSourceType,reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
+as FavoriteBatchConflictReason,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [FavoriteBatchSyncResult].
-extension FavoriteBatchSyncResultPatterns on FavoriteBatchSyncResult {
+/// Adds pattern-matching-related methods to [FavoriteBatchConflict].
+extension FavoriteBatchConflictPatterns on FavoriteBatchConflict {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
