@@ -358,6 +358,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void _onLastCallEnded() {
     _logger.info(() => 'Lifecycle: Last call ended');
     if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
+    if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
   }
 
   void _handleSignalingSessionError({required CallServiceState previous, required CallServiceState current}) {
