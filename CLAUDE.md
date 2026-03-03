@@ -104,6 +104,19 @@ Groups separated by exactly one blank line, each group sorted alphabetically. No
 
 - Local packages live in `packages/`. They must **not** import from `lib/`.
 - Features and BLoCs live in `lib/features/`.
+- `webtrit_callkeep` is an **external repository** (path configured in `pubspec.yaml`), not part
+  of this monorepo. See its `README.md` for full API docs.
+
+### webtrit_callkeep
+
+Provides native call UI integration. Source: <https://github.com/WebTrit/webtrit_callkeep>.
+Full docs in its `README.md` (path resolved from `pubspec.yaml`).
+
+- **Interface**: singleton `Callkeep()`, events via `CallkeepDelegate` (`setDelegate`)
+- **iOS**: CallKit UI when app is in background/terminated; Flutter UI when in foreground
+- **Android**: always Flutter UI + push notification interface (no native ConnectionService UI)
+- **Background calls**: iOS via PushKit (`setPushRegistryDelegate`); Android via FCM or persistent
+  signaling service (`BackgroundSignalingService`)
 
 ### State Management (BLoC/Cubit)
 
