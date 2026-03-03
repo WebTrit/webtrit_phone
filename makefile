@@ -153,6 +153,7 @@ generate-launcher-icons-config:
 	@echo "    theme_color: \"$${THEME_COLOR:-$(THEME_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 
 ## Generate launcher icons using external config
+# DEPRECATED: use `melos run icons:generate`
 generate-launcher-icons:
 	flutter pub add flutter_launcher_icons --dev
 	dart run flutter_launcher_icons  -f $(FLUTTER_LAUNCHER_ICONS_CONFIG)
@@ -167,39 +168,48 @@ generate-native-splash-config:
 	@echo '    image: "$(ANDROID_12_SPLASH_IMAGE)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
 
 ## Generate native splash screen using external config
+# DEPRECATED: use `melos run splash:generate`
 generate-native-splash:
 	flutter pub add flutter_native_splash --dev
 	dart run flutter_native_splash:create --path=$(FLUTTER_NATIVE_SPLASH_CONFIG)
 
 ## Generate both launcher icons and splash screen
+# DEPRECATED: use `melos run assets:generate`
 generate-assets: generate-launcher-icons generate-native-splash
 
 ## Push localization keys to Localizely
+# DEPRECATED: use `melos run l10n:push`
 push-l10n:
 	$(call ensure_localizely_token)
 	localizely-cli --api-token=$(localizely_token) push
 
 ## Pull localization keys from Localizely
+# DEPRECATED: use `melos run l10n:pull`
 pull-l10n:
 	$(call ensure_localizely_token)
 	localizely-cli --api-token=$(localizely_token) pull
 
 ## Generate Flutter localization files
+# DEPRECATED: use `melos run l10n:generate`
 gen-l10n:
 	flutter gen-l10n
 
 ## Fetch localization keys from Localizely, pull them and generate localization files
+# DEPRECATED: use `melos run l10n:fetch`
 fetch-l10n: pull-l10n gen-l10n
 
 ## Clean git files
+# DEPRECATED: use `melos run clean:git`
 clean-git:
 	git reset --hard HEAD
 	git clean -df
 
+# DEPRECATED: use `melos run ide:sync`
 sync-run-configs:
 	mkdir -p .idea/runConfigurations
 	cp tool/run/*.xml .idea/runConfigurations/
 
+# DEPRECATED: use `melos run start`
 run-core:
 	$(MAKE) -f makefile.shared run
 

@@ -1,8 +1,9 @@
 name: ssl_certificates
+resolution: workspace
 description: Package to help initialize security context
 version: 1.0.0
 
-publish_to: none;
+publish_to: 'none'
 
 environment:
   sdk: ^3.8.0

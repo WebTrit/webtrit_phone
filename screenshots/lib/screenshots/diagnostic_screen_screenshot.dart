@@ -28,7 +28,7 @@ class _DiagnosticScreenScreenshotState extends State<DiagnosticScreenScreenshot>
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return MultiProvider(
               providers: [
                 Provider<DiagnosticScreenContext>(

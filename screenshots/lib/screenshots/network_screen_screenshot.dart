@@ -26,11 +26,8 @@ class _NetworkScreenScreenshotState extends State<NetworkScreenScreenshot> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
-            return BlocProvider<NetworkCubit>(
-              create: (_) => MockNetworkCubit.initial(),
-              child: const NetworkScreen(),
-            );
+          pageBuilder: (context, _, _) {
+            return BlocProvider<NetworkCubit>(create: (_) => MockNetworkCubit.initial(), child: const NetworkScreen());
           },
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,

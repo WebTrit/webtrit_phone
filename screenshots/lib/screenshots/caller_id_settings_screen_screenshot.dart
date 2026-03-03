@@ -25,7 +25,7 @@ class _CallerIdSettingsScreenScreenshotState extends State<CallerIdSettingsScree
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return BlocProvider<CallerIdSettingsCubit>(
               create: (_) => MockCallerIdSettingsCubit.initial(),
               child: const CallerIdSettingsScreen(),

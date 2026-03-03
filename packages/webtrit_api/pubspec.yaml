@@ -1,4 +1,5 @@
 name: webtrit_api
+resolution: workspace
 description: Dart library for WebTrit Core API.
 publish_to: none
 version: 1.0.0

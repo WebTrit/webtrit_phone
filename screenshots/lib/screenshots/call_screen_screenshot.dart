@@ -36,22 +36,14 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return MultiBlocProvider(
-              providers: [
-                BlocProvider<CallBloc>(
-                  create: (context) => MockCallBloc.callScreen(widget.video),
-                ),
-              ],
+              providers: [BlocProvider<CallBloc>(create: (context) => MockCallBloc.callScreen(widget.video))],
               child: CallScreen(
-                localePlaceholderBuilder: (context) => Image.network(
-                  widget.localePlaceholderImageUrl,
-                  fit: BoxFit.fitHeight,
-                ),
-                remotePlaceholderBuilder: (context) => Image.network(
-                  widget.remotePlaceholderImageUrl,
-                  fit: BoxFit.cover,
-                ),
+                localePlaceholderBuilder: (context) =>
+                    Image.network(widget.localePlaceholderImageUrl, fit: BoxFit.fitHeight),
+                remotePlaceholderBuilder: (context) =>
+                    Image.network(widget.remotePlaceholderImageUrl, fit: BoxFit.cover),
               ),
             );
           },

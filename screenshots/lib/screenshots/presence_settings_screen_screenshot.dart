@@ -25,7 +25,7 @@ class _PresenceSettingsScreenScreenshotState extends State<PresenceSettingsScree
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return BlocProvider<PresenceSettingsCubit>(
               create: (_) => MockPresenceSettingsCubit.initial(),
               child: const PresenceSettingsScreen(),

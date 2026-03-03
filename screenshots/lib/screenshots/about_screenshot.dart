@@ -11,9 +11,6 @@ class AboutScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AboutBloc>(
-      create: (context) => MockAboutBloc.success(),
-      child: const AboutScreen(),
-    );
+    return BlocProvider<AboutBloc>(create: (context) => MockAboutBloc.success(), child: const AboutScreen());
   }
 }

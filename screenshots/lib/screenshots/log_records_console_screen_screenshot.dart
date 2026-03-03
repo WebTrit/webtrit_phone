@@ -25,7 +25,7 @@ class _LogRecordsConsoleScreenScreenshotState extends State<LogRecordsConsoleScr
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return BlocProvider<LogRecordsConsoleCubit>(
               create: (_) => MockLogRecordsConsoleCubit.withRecords(),
               child: const LogRecordsConsoleScreen(),

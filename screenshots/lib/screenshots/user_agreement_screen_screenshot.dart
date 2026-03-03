@@ -7,9 +7,6 @@ class UserAgreementScreenScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const UserAgreementScreen(
-      appTermsAndConditionsUrl: 'https://example.com/terms',
-      appName: 'WebTrit',
-    );
+    return const UserAgreementScreen(appTermsAndConditionsUrl: 'https://example.com/terms', appName: 'WebTrit');
   }
 }

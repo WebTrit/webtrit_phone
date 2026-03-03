@@ -29,7 +29,7 @@ class _VoicemailScreenScreenshotState extends State<VoicemailScreenScreenshot> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return Provider<VoicemailScreenContext>(
               create: (_) => VoicemailScreenContext(
                 mediaCacheBasePath: '/tmp/screenshots_cache',
