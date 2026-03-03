@@ -14,7 +14,7 @@ melos run --list          # list all available scripts
 
 | Command                   | Description                           |
 |---------------------------|---------------------------------------|
-| `melos run get`           | `flutter pub get` in all packages     |
+| `melos run get`           | `flutter pub get` at workspace root   |
 | `melos run upgrade`       | Upgrade to latest compatible versions |
 | `melos run upgrade:major` | Upgrade including major versions      |
 | `melos run outdated`      | Show outdated dependencies            |

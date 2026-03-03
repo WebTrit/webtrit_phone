@@ -252,20 +252,20 @@ melos:
     # ===========================
 
     get:
-      description: Run pub get in all packages.
-      exec: flutter pub get
+      description: Run pub get at workspace root.
+      run: flutter pub get
 
     upgrade:
       description: Upgrade dependencies to latest compatible versions.
-      exec: flutter pub upgrade
+      run: flutter pub upgrade
 
     upgrade:major:
       description: Upgrade dependencies including major versions.
-      exec: flutter pub upgrade --major-versions
+      run: flutter pub upgrade --major-versions
 
     outdated:
       description: Show outdated dependencies for all packages.
-      exec: flutter pub outdated
+      run: flutter pub outdated
 
     # ===========================
     # Analysis - melos run analyze
