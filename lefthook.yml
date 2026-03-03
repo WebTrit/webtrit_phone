@@ -3,8 +3,14 @@ pre-commit:
   commands:
     format:
       glob: "*.dart"
-      exclude: "(\\.g|\\.freezed)\\.dart$"
-      run: dart format --output=none --set-exit-if-changed {staged_files}
+      # NOTE: `formatter.exclude` in analysis_options.yaml is NOT supported by the current
+      # Dart version (unsupported_option warning). Shell-level filtering is used instead
+      # to exclude generated files (*.g.dart, *.freezed.dart, *.gr.dart) from format checks.
+      run: |
+        files=$(echo {staged_files} | tr ' ' '\n' | grep -vE '\.(g|freezed|gr)\.dart$')
+        if [ -n "$files" ]; then
+          dart format --output=none --set-exit-if-changed $files
+        fi
 
 commit-msg:
   commands:
