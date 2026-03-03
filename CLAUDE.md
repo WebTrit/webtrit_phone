@@ -2,47 +2,14 @@
 
 ## Common Commands
 
-**Prefer Melos over direct `flutter`/`dart` commands.** Melos runs across the entire workspace
-(root + all packages) and is the standard tool for this monorepo.
+Melos scripts are defined in `melos.yaml`. Run `melos run` to list all available scripts.
+Formatting and linting rules are in `analysis_options.yaml`.
 
 ```bash
-# Format
-melos run fmt           # dart format --line-length 120 across workspace
-melos run fmt:check     # check only (used in CI)
-
-# Analyze
-melos run analyze       # flutter analyze across workspace
-
-# Format + analyze together
-melos run check
-
-# Tests
-melos run test          # unit & widget tests across workspace
+# Integration tests (Patrol)
 patrol develop --dart-define-from-file=../dart_define.json \
   --dart-define-from-file=dart_define.integration_test.json \
-  --flavor=deeplinkssmsReceiver    # integration tests (Patrol)
-
-# Code generation (run after model/route/freezed changes)
-melos run generate                 # build_runner build in packages with codegen
-melos run generate:watch           # watch mode
-
-# Localization
-melos run l10n:generate            # generate from ARB
-melos run l10n:fetch               # pull from Localizely + generate
-
-# Run & Build
-melos run run                      # run app (Android)
-melos run run:ios                  # run app (iOS)
-melos run build:apk
-melos run build:appbundle
-melos run build:ios
-
-# Dependencies
-melos run get
-melos run upgrade
-
-# Full CI pipeline
-melos run ci                       # fmt:check + analyze + test
+  --flavor=deeplinkssmsReceiver
 
 # DB schema (after adding/modifying a table)
 dart run bin/create_new_schema_dump_and_test_migration.dart
@@ -89,30 +56,11 @@ Combined example: `--flavor deeplinkssmsReceiver`
 
 ## Git Hooks (Lefthook)
 
-- **pre-commit**: `flutter analyze`
-- **pre-push**: `flutter analyze` + `flutter test` + branch name check
-- **commit-msg**: Conventional Commits validation
+See `lefthook.yml` for hook definitions.
 
 ---
 
 # Project Rules
-
-## Melos
-
-Always prefer `melos run <script>` over direct `flutter`/`dart` commands. Melos operates across
-the entire workspace and ensures consistent behavior in all packages.
-
-| Task | Use |
-|---|---|
-| Format | `melos run fmt` |
-| Analyze | `melos run analyze` |
-| Format + analyze | `melos run check` |
-| Tests | `melos run test` |
-| Code generation | `melos run generate` |
-| Localization | `melos run l10n:fetch` |
-
-Do **not** run `dart format`, `flutter analyze`, `flutter test`, or `dart run build_runner`
-directly — use the Melos equivalents above.
 
 ## Critical Constraints
 
@@ -123,7 +71,6 @@ directly — use the Melos equivalents above.
 
 ## Code Style
 
-- Line width: **120 characters**. Single quotes preferred (`prefer_single_quotes: true`).
 - Required named parameters declared **before** optional named parameters.
 - Avoid unnecessary `.0` literals on doubles unless required by the type context.
 - Callbacks must be **single-expression only**. Extract multi-statement logic into a private method.
