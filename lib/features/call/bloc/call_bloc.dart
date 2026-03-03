@@ -353,11 +353,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   /// Triggered when the last remaining active call ends (N -> 0 active calls).
   ///
-  /// * **iOS:** Resets audio output to the default Receiver state to ensure clean state
-  ///   for future calls, preventing state bleeding between sessions.
+  /// Resets platform audio routing to media profile:
+  /// * **iOS:** Disables speakerphone to release AVAudioSession from voice chat mode,
+  ///   preventing state bleeding between sessions.
+  /// * **Android:** Clears communication device to switch from SCO (call profile)
+  ///   back to A2DP (media profile), fixing degraded audio in YouTube/music after calls.
   void _onLastCallEnded() {
     _logger.info(() => 'Lifecycle: Last call ended');
     if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
+    if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
   }
 
   void _handleSignalingSessionError({required CallServiceState previous, required CallServiceState current}) {
