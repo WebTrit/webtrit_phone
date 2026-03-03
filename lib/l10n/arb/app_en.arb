@@ -928,6 +928,10 @@
   "@messaging_MessageView_reply": {},
   "messaging_MessageView_textcopy": "Copy to clipboard",
   "@messaging_MessageView_textcopy": {},
+  "messaging_MessageView_today": "Today",
+  "@messaging_MessageView_today": {},
+  "messaging_MessageView_yesterday": "Yesterday",
+  "@messaging_MessageView_yesterday": {},
   "messaging_ParticipantName_unknown": "Unknown user",
   "@messaging_ParticipantName_unknown": {
     "description": "Shown when a participant in a conversation does not have a known or available name. Condition: the user's name is missing or cannot be retrieved."
