@@ -297,14 +297,14 @@ melos:
         - test
 
     # ===========================
-    # Run - melos run run
+    # Run - melos run start | start:ios
     # ===========================
 
-    run:
+    start:
       description: Run the app with dart_define.json. Set FLUTTER_FLAGS for extra flags.
       run: flutter run --dart-define-from-file=dart_define.json ${FLUTTER_FLAGS:-}
 
-    run:ios:
+    start:ios:
       description: Run on iOS device/simulator. Set FLUTTER_FLAGS for extra flags.
       run: flutter run -d iPhone --dart-define-from-file=dart_define.json ${FLUTTER_FLAGS:-}
 

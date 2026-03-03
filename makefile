@@ -209,7 +209,7 @@ sync-run-configs:
 	mkdir -p .idea/runConfigurations
 	cp tool/run/*.xml .idea/runConfigurations/
 
-# DEPRECATED: use `melos run run`
+# DEPRECATED: use `melos run start`
 run-core:
 	$(MAKE) -f makefile.shared run
 
