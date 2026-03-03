@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // L10nMapperGenerator
@@ -29,17 +29,41 @@ extension AppLocalizationsExtension on AppLocalizations {
 }
 
 class L10nHelper {
-  static String parseL10n(
+  // Cache to store localization maps per locale
+  static final Map<String, Map<String, dynamic>> _cache = {};
+
+  static String? parseL10n(
     AppLocalizations localizations,
     String translationKey, {
     List<Object>? arguments,
   }) {
-    const mapper = AppLocalizationsMapper();
-    final object = mapper.toLocalizationMap(localizations)[translationKey];
+    // Get or create cached map for this locale
+    final localeName = localizations.localeName;
+    final cachedMap = _cache[localeName];
+
+    final map =
+        cachedMap ??
+        () {
+          const mapper = AppLocalizationsMapper();
+          final newMap = mapper.toLocalizationMap(localizations);
+          _cache[localeName] = newMap;
+          return newMap;
+        }();
+
+    final object = map[translationKey];
     if (object is String || object == null) return object;
     assert(arguments != null, 'Arguments should not be null!');
     assert(arguments!.isNotEmpty, 'Arguments should not be empty!');
     return Function.apply(object, arguments);
+  }
+
+  /// Clear the cache for a specific locale or all locales
+  static void clearCache([String? localeName]) {
+    if (localeName != null) {
+      _cache.remove(localeName);
+    } else {
+      _cache.clear();
+    }
   }
 }
 
@@ -630,6 +654,9 @@ class AppLocalizationsMapper {
       'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
       'messaging_MessageView_textcopy':
           localizations.messaging_MessageView_textcopy,
+      'messaging_MessageView_today': localizations.messaging_MessageView_today,
+      'messaging_MessageView_yesterday':
+          localizations.messaging_MessageView_yesterday,
       'messaging_ParticipantName_unknown':
           localizations.messaging_ParticipantName_unknown,
       'messaging_ParticipantName_you':
