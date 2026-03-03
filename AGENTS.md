@@ -24,8 +24,12 @@ dart run bin/create_new_schema_dump_and_test_migration.dart   # after Drift tabl
 - Required named params before optional named params.
 - Callbacks: single-expression only; extract multi-statement logic to a private method.
 - Imports: 6 groups, one blank line between, alphabetical within:
-  1. Dart SDK · 2. Flutter SDK · 3. External · 4. Internal packages
-  2. `package:webtrit_phone/...` · 6. Relative
+  1. Dart SDK
+  2. Flutter SDK
+  3. External
+  4. Internal packages
+  5. `package:webtrit_phone/...`
+  6. Relative
 
 ## Architecture
 

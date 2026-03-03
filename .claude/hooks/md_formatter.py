@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude Code PostToolUse hook: runs prettier on .md files after Write or Edit.
+Claude Code PostToolUse hook: runs markdownlint-cli2 --fix on .md files after Write or Edit.
 
 Place in: .claude/hooks/md_formatter.py
 Make executable: chmod +x .claude/hooks/md_formatter.py

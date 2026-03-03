@@ -5,6 +5,8 @@ Fully encapsulated — features and BLoCs use only DAOs, never `AppDatabase` dir
 
 ## Commands
 
+Run all commands from `packages/data/app_database/`:
+
 ```bash
 dart run build_runner build          # generate Drift code after editing tables/DAOs
 dart run build_runner watch          # watch mode

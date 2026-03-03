@@ -21,7 +21,7 @@ Two functions form the entire public surface:
 | `_web_socket_channel_html.dart` | Web (dart.library.html)  | `html.WebSocket`, resolves `Completer` on open/error, optional `.timeout()`. SSL/ping browser-managed. |
 | `_web_socket_channel_stub.dart` | Fallback                 | Throws `UnsupportedError`                                                                        |
 
-`web_socket_channel` pinned to `^3.0.3` — v2.4.1+ introduced a breaking `pkg:web` migration
+`web_socket_channel` constrained to `^3.0.3` — v2.4.1+ introduced a breaking `pkg:web` migration
 incompatible with the current IO/HTML implementation.
 
 ## Commands
