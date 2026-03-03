@@ -1,31 +1,10 @@
 # Build & Development Process Overview
 
-This documentation describes how to build and run the WebTrit Phone project.  
-It includes shared Makefile logic, flavor configuration, Flutter SDK version management, and tips
+This documentation describes how to build and run the WebTrit Phone project.
+It includes melos script usage, flavor configuration, Flutter SDK version management, and tips
 for local development.
 
-For a detailed reference of the internal Makefile structure, see
-the [shared_makefile_reference.md](https://github.com/WebTrit/webtrit_phone_tools/blob/main/docs/shared_makefile_reference.md)
-
----
-
-## Inclusion of Shared Makefile
-
-The shared logic is included in the local project Makefile as follows:
-
-```makefile
-# ===========================
-# Include Shared Makefile Logic
-# ===========================
-
-TOOLS_MAKEFILE := makefile.shared
-
-ifeq (,$(wildcard $(TOOLS_MAKEFILE)))
-$(shell curl -sSL https://raw.githubusercontent.com/WebTrit/webtrit_phone_tools/refs/heads/main/Makefile.shared -o $(TOOLS_MAKEFILE))
-endif
-
-include $(TOOLS_MAKEFILE)
-```
+For all available melos scripts, see [Melos Commands](make_file.md).
 
 ---
 
@@ -45,7 +24,7 @@ Depending on the version:
 * `v0.0.1`: only deeplink flavor is applied
 * `v0.0.2+`: both deeplink and SMS flavors are combined
 
-Version logic is delegated to the shared `makefile.shared`.
+Version logic is used to determine the correct flavor flags for build and run commands.
 
 > In the future, iOS flavor support may be added similarly
 
@@ -70,67 +49,91 @@ This ensures only required Android permissions or receivers are included in the 
 
 ## Build Commands
 
-The following targets are available:
+Use melos scripts to build. Extra Flutter flags are passed via the `FLUTTER_FLAGS` environment
+variable.
 
-| Target                       | Description                                |
-|------------------------------|--------------------------------------------|
-| `make build`                 | Builds the app with default platform (APK) |
-| `make build-apk`             | Builds Android APK                         |
-| `make build-appbundle`       | Builds Android App Bundle                  |
-| `make build-ios`             | Builds iOS app                             |
-| `make build-ios-config-only` | iOS config-only build                      |
+| Command                      | Description                             |
+|------------------------------|-----------------------------------------|
+| `melos run build:apk`        | Build Android APK                       |
+| `melos run build:appbundle`  | Build Android App Bundle                |
+| `melos run build:ios`        | Build iOS app                           |
+| `melos run build:ios:config` | Configure Xcode project only (no build) |
 
-### Optional Parameters:
+### Examples
 
-* `build_name` — passed as `--build-name`
-* `build_number` — passed as `--build-number`
-* `release=true` — adds `--release`
-* `no_codesign=true` — disables iOS codesign
-* `config_only=true` — used for iOS config-only
+```bash
+# Debug build (default)
+melos run build:apk
+
+# Release build
+FLUTTER_FLAGS="--release" melos run build:apk
+FLUTTER_FLAGS="--release" melos run build:appbundle
+FLUTTER_FLAGS="--release --no-codesign" melos run build:ios
+
+# Custom version
+FLUTTER_FLAGS="--build-name=1.2.3 --build-number=42 --release" melos run build:apk
+```
+
+All build commands read configuration from `dart_define.json` automatically.
 
 ---
 
 ## Run Commands
 
-| Target         | Description                        |
-|----------------|------------------------------------|
-| `make run`     | Runs the app with default platform |
-| `make run-apk` | Runs on Android with APK build     |
-| `make run-ios` | Runs on iOS                        |
+| Command                   | Description                            |
+|---------------------------|----------------------------------------|
+| `melos run start:android` | Run on Android with `dart_define.json` |
+| `melos run start:ios`     | Run on iOS device/simulator            |
 
-Flavor selection is auto-applied unless legacy version.
+### Examples
+
+```bash
+# Run on Android
+melos run start:android
+
+# Run on specific Android device
+FLUTTER_FLAGS="-d emulator-5554" melos run start:android
+
+# Run on iOS
+melos run start:ios
+```
 
 ---
 
 ## Development Workflow Notes
 
-While the [
-`makefile.shared`](https://github.com/WebTrit/webtrit_phone_tools/blob/main/Makefile.shared) handles
-builds and flavor logic very well, **during development you may need to adjust your environment
-manually** to work efficiently with flavors.
+During development you may need to adjust your environment manually to work efficiently with
+flavors.
 
 ### Options:
 
+* **Terminal (recommended)**:
+
+  Use melos scripts from the project root:
+
+  ```bash
+  melos run start
+  melos run start:ios
+  ```
+
 * **IDE Configuration**:
 
-  In IntelliJ IDEA or Android Studio, configure a custom **Run/Debug Configuration** to use `make`
-  with your desired target (e.g., `run-apk`) and working directory set to the root project.
+  In IntelliJ IDEA or Android Studio, sync run configurations via `melos run ide:sync`,
+  then use the generated run configurations from `.idea/runConfigurations/`.
 
 * **Manual Flavor Selection**:
 
-  Alternatively, when running from the IDE without using `make`, you must manually pass the correct
-  `--flavor` (e.g., `--flavor deeplinkssmsReceiverDisabled`) in your launch configuration to match
-  the current `dart_define.json`.
+  When running directly from the IDE without melos, manually pass the correct
+  `--flavor` (e.g., `--flavor deeplinkssmsReceiverDisabled`) in your launch configuration
+  to match the current `dart_define.json`.
 
 ### Tip:
 
-For easier debugging and local development:
-
 * Stick to a single flavor during development (e.g., the one most commonly enabled)
-* Or create a helper shell script that wraps `flutter run` with computed flavors
+* Run `melos run ide:sync` after updating run configurations in `tool/run/`
 
-> The Makefile works best for **CI/CD and structured builds**, but for day-to-day development,
-> some manual steps are currently needed.
+> Melos scripts work best for **CI/CD and structured builds**. For day-to-day IDE development,
+> use the synced run configurations or pass flags manually.
 
 ---
 
