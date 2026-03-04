@@ -11,9 +11,7 @@ class MockContactsSearchBloc extends MockBloc<ContactsEvent, ContactsState> impl
     whenListen(
       mock,
       const Stream<ContactsState>.empty(),
-      initialState: const ContactsState(
-        sourceType: ContactSourceType.local,
-      ),
+      initialState: const ContactsState(sourceType: ContactSourceType.local),
     );
     return mock;
   }

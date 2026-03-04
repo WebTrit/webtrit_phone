@@ -9,26 +9,21 @@ class MockUnreadCountCubit extends MockCubit<UnreadCountState> implements Unread
 
   factory MockUnreadCountCubit.initial() {
     final mock = MockUnreadCountCubit();
-    whenListen(
-      mock,
-      const Stream<UnreadCountState>.empty(),
-      initialState: UnreadCountState.initial(),
-    );
+    whenListen(mock, const Stream<UnreadCountState>.empty(), initialState: UnreadCountState.initial());
     return mock;
   }
 
   factory MockUnreadCountCubit.withUnreadMessages() {
     final mock = MockUnreadCountCubit();
 
-    final unreadState =
-        UnreadCountState.fromCountPerChat(dChatUnreadCountsMockUnreadCountCubit, dSmsUnreadCountsMockUnreadCountCubit);
+    final unreadState = UnreadCountState.fromCountPerChat(
+      dChatUnreadCountsMockUnreadCountCubit,
+      dSmsUnreadCountsMockUnreadCountCubit,
+    );
 
     whenListen(
       mock,
-      Stream.fromIterable([
-        UnreadCountState.initial(),
-        unreadState,
-      ]),
+      Stream.fromIterable([UnreadCountState.initial(), unreadState]),
       initialState: UnreadCountState.initial(),
     );
     return mock;
@@ -38,10 +33,7 @@ class MockUnreadCountCubit extends MockCubit<UnreadCountState> implements Unread
     final mock = MockUnreadCountCubit();
     whenListen(
       mock,
-      Stream.fromIterable([
-        UnreadCountState.initial(),
-        UnreadCountState.fromCountPerChat({}, {}),
-      ]),
+      Stream.fromIterable([UnreadCountState.initial(), UnreadCountState.fromCountPerChat({}, {})]),
       initialState: UnreadCountState.initial(),
     );
     return mock;

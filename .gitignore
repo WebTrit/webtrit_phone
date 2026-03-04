@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+**/build/
 
 # Web related
 
@@ -57,3 +58,4 @@ makefile.shared
 .aider*
 .claude/settings.local.json
 CLAUDE.local.md
+**/.claude/

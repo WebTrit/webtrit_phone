@@ -7,11 +7,7 @@ class MockSettingsBloc extends MockBloc<SettingsEvent, SettingsState> implements
 
   factory MockSettingsBloc.settingsScreen() {
     final mock = MockSettingsBloc();
-    whenListen(
-      mock,
-      const Stream<SettingsState>.empty(),
-      initialState: const SettingsState(progress: false),
-    );
+    whenListen(mock, const Stream<SettingsState>.empty(), initialState: const SettingsState(progress: false));
     return mock;
   }
 }

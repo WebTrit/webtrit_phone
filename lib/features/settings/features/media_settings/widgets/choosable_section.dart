@@ -42,17 +42,16 @@ class ChoosableSection<T> extends StatelessWidget {
           // contentPadding: EdgeInsets.zero,
           visualDensity: VisualDensity.compact,
           minTileHeight: 0,
-          trailing: buildOptionTooltipMessage != null ? Tooltip(
-            message: buildOptionTooltipMessage!(null),
-            triggerMode: TooltipTriggerMode.tap,
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.all(16),
-            showDuration: const Duration(seconds: 10),
-            child: Icon(
-              Icons.info_outline,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-          ) : null,
+          trailing: buildOptionTooltipMessage != null
+              ? Tooltip(
+                  message: buildOptionTooltipMessage!(null),
+                  triggerMode: TooltipTriggerMode.tap,
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.all(16),
+                  showDuration: const Duration(seconds: 10),
+                  child: Icon(Icons.info_outline, color: Theme.of(context).colorScheme.secondary),
+                )
+              : null,
         ),
         for (final option in options)
           ListTile(
@@ -64,17 +63,16 @@ class ChoosableSection<T> extends StatelessWidget {
             // contentPadding: EdgeInsets.zero,
             visualDensity: VisualDensity.compact,
             minTileHeight: 0,
-            trailing: buildOptionTooltipMessage != null ? Tooltip(
-              message: buildOptionTooltipMessage!(option),
-              triggerMode: TooltipTriggerMode.tap,
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.all(16),
-              showDuration: const Duration(seconds: 10),
-              child: Icon(
-                Icons.info_outline,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ) : null,
+            trailing: buildOptionTooltipMessage != null
+                ? Tooltip(
+                    message: buildOptionTooltipMessage!(option),
+                    triggerMode: TooltipTriggerMode.tap,
+                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(16),
+                    showDuration: const Duration(seconds: 10),
+                    child: Icon(Icons.info_outline, color: Theme.of(context).colorScheme.secondary),
+                  )
+                : null,
           ),
       ],
     );

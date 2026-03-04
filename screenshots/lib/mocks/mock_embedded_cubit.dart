@@ -7,11 +7,7 @@ class MockEmbeddedCubit extends MockCubit<EmbeddedState> implements EmbeddedCubi
 
   factory MockEmbeddedCubit.mainScreen() {
     final mock = MockEmbeddedCubit();
-    whenListen(
-      mock,
-      const Stream<EmbeddedState>.empty(),
-      initialState: const EmbeddedState(),
-    );
+    whenListen(mock, const Stream<EmbeddedState>.empty(), initialState: const EmbeddedState());
     return mock;
   }
 }

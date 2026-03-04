@@ -189,14 +189,31 @@ melos:
     # ===========================
 
     fmt:
-      description: Format all Dart code across the workspace.
-      exec: dart format . --line-length 120
+      description: Format all Dart code across the workspace (excludes generated files).
+      # NOTE: `formatter.exclude` in analysis_options.yaml is NOT supported by the current
+      # Dart version. Shell-level filtering via find+grep is used instead to skip
+      # *.g.dart, *.freezed.dart, *.gr.dart files.
+      exec: >-
+        find . -name "*.dart"
+        -not -path "*/build/*"
+        -not -path "*/.dart_tool/*"
+        -not -name "*.g.dart"
+        -not -name "*.freezed.dart"
+        -not -name "*.gr.dart"
+        | xargs dart format --line-length 120
       packageFilters:
         dirExists: lib
 
     fmt:check:
       description: Check formatting without making changes (exit 1 if unformatted).
-      exec: dart format . --line-length 120 --set-exit-if-changed
+      exec: >-
+        find . -name "*.dart"
+        -not -path "*/build/*"
+        -not -path "*/.dart_tool/*"
+        -not -name "*.g.dart"
+        -not -name "*.freezed.dart"
+        -not -name "*.gr.dart"
+        | xargs dart format --line-length 120 --set-exit-if-changed
       packageFilters:
         dirExists: lib
 

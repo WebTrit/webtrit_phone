@@ -16,8 +16,11 @@ part 'recents_event.dart';
 part 'recents_state.dart';
 
 class RecentsBloc extends Bloc<RecentsEvent, RecentsState> {
-  RecentsBloc({required this.recentsRepository, required this.activeRecentsVisibilityFilterRepository, required this.dateFormat})
-    : super(RecentsState(filter: activeRecentsVisibilityFilterRepository.getActiveRecentsVisibilityFilter())) {
+  RecentsBloc({
+    required this.recentsRepository,
+    required this.activeRecentsVisibilityFilterRepository,
+    required this.dateFormat,
+  }) : super(RecentsState(filter: activeRecentsVisibilityFilterRepository.getActiveRecentsVisibilityFilter())) {
     on<RecentsStarted>(_onStarted, transformer: restartable());
     on<RecentsFiltered>(_onFiltered);
     on<RecentsDeleted>(_onDeleted);

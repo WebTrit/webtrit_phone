@@ -95,9 +95,7 @@ final dContactsRepository = [
     registered: false,
     userRegistered: false,
     isCurrentUser: false,
-    phones: const [
-      ContactPhone(id: 201, number: '+1987654321', label: 'mobile', favorite: true),
-    ],
+    phones: const [ContactPhone(id: 201, number: '+1987654321', label: 'mobile', favorite: true)],
     emails: const [],
     thumbnail: Uint8List.fromList([0, 1, 2, 3]),
     thumbnailUrl: Uri.parse('https://example.com/avatar.png'),

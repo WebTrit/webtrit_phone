@@ -7,11 +7,7 @@ class MockSessionStatusCubit extends MockCubit<SessionStatusState> implements Se
 
   factory MockSessionStatusCubit.initial() {
     final mock = MockSessionStatusCubit();
-    whenListen(
-      mock,
-      const Stream<SessionStatusState>.empty(),
-      initialState: const SessionStatusState(),
-    );
+    whenListen(mock, const Stream<SessionStatusState>.empty(), initialState: const SessionStatusState());
     return mock;
   }
 }

@@ -7,11 +7,7 @@ class MockChatTypingCubit extends MockCubit<TypingUsers> implements ChatTypingCu
 
   factory MockChatTypingCubit.idle() {
     final mock = MockChatTypingCubit();
-    whenListen(
-      mock,
-      const Stream<TypingUsers>.empty(),
-      initialState: <String>{},
-    );
+    whenListen(mock, const Stream<TypingUsers>.empty(), initialState: <String>{});
     return mock;
   }
 }

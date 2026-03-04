@@ -8,11 +8,7 @@ class MockChatsForwardingCubit extends MockCubit<ChatMessage?> implements ChatsF
 
   factory MockChatsForwardingCubit.initial() {
     final mock = MockChatsForwardingCubit();
-    whenListen(
-      mock,
-      const Stream<ChatMessage?>.empty(),
-      initialState: null,
-    );
+    whenListen(mock, const Stream<ChatMessage?>.empty(), initialState: null);
     return mock;
   }
 }
