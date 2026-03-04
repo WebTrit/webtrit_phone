@@ -1,4 +1,5 @@
 name: _http_client
+resolution: workspace
 description: Internal package to create platform-appropriate HTTP clients.
 version: 1.0.0
 publish_to: none

@@ -18,9 +18,7 @@ class RecentCdrsScreenScreenshot extends StatelessWidget {
       systemNotificationsEnabled: false,
       pullableCalls: const [],
       child: MultiProvider(
-        providers: [
-          Provider<ContactsRepository>(create: (_) => MockContactsRepository()),
-        ],
+        providers: [Provider<ContactsRepository>(create: (_) => MockContactsRepository())],
         child: MultiBlocProvider(
           providers: [
             BlocProvider<FullRecentCdrsCubit>(create: (_) => MockFullRecentCdrsCubit.withCdrs()),

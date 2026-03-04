@@ -51,10 +51,10 @@ class L10nHelper {
         }();
 
     final object = map[translationKey];
-    if (object is String || object == null) return object as String?;
+    if (object is String || object == null) return object;
     assert(arguments != null, 'Arguments should not be null!');
     assert(arguments!.isNotEmpty, 'Arguments should not be empty!');
-    return Function.apply(object as Function, arguments) as String;
+    return Function.apply(object, arguments);
   }
 
   /// Clear the cache for a specific locale or all locales
@@ -654,6 +654,9 @@ class AppLocalizationsMapper {
       'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
       'messaging_MessageView_textcopy':
           localizations.messaging_MessageView_textcopy,
+      'messaging_MessageView_today': localizations.messaging_MessageView_today,
+      'messaging_MessageView_yesterday':
+          localizations.messaging_MessageView_yesterday,
       'messaging_ParticipantName_unknown':
           localizations.messaging_ParticipantName_unknown,
       'messaging_ParticipantName_you':
@@ -1554,85 +1557,84 @@ class AppLocalizationsMapper {
               .cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService,
       'cdr_disconnectReason_dtlTransitIsNotMyNodeId':
           localizations.cdr_disconnectReason_dtlTransitIsNotMyNodeId,
-      'agoTicker_daysAgo': (int days) => localizations.agoTicker_daysAgo(days),
-      'agoTicker_hoursAgo': (int hours) =>
-          localizations.agoTicker_hoursAgo(hours),
-      'agoTicker_minutesAgo': (int minutes) =>
+      'agoTicker_daysAgo': (days) => localizations.agoTicker_daysAgo(days),
+      'agoTicker_hoursAgo': (hours) => localizations.agoTicker_hoursAgo(hours),
+      'agoTicker_minutesAgo': (minutes) =>
           localizations.agoTicker_minutesAgo(minutes),
-      'agoTicker_secondsAgo': (num seconds) =>
+      'agoTicker_secondsAgo': (seconds) =>
           localizations.agoTicker_secondsAgo(seconds),
-      'default_UnknownExceptionError': (String error) =>
+      'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
-      'favorites_SnackBar_deleted': (String name) =>
+      'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
-      'formatPhone': (String style, String main, String ext) =>
+      'formatPhone': (style, main, ext) =>
           localizations.formatPhone(style, main, ext),
-      'login_Button_otpSigninVerifyRepeatInterval': (int seconds) =>
+      'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>
           localizations.login_Button_otpSigninVerifyRepeatInterval(seconds),
-      'login_Button_signupVerifyRepeatInterval': (int seconds) =>
+      'login_Button_signupVerifyRepeatInterval': (seconds) =>
           localizations.login_Button_signupVerifyRepeatInterval(seconds),
       'login_CoreVersionUnsupportedExceptionError':
-          (String actual, String supportedConstraint) =>
+          (actual, supportedConstraint) =>
               localizations.login_CoreVersionUnsupportedExceptionError(
                 actual,
                 supportedConstraint,
               ),
-      'login_Text_coreUrlAssignPostDescription': (Object email) =>
+      'login_Text_coreUrlAssignPostDescription': (email) =>
           localizations.login_Text_coreUrlAssignPostDescription(email),
-      'login_Text_otpSigninVerifyPostDescriptionFromEmail': (String email) =>
+      'login_Text_otpSigninVerifyPostDescriptionFromEmail': (email) =>
           localizations.login_Text_otpSigninVerifyPostDescriptionFromEmail(
             email,
           ),
-      'login_Text_otpSigninVerifyPreDescriptionUserRef': (String userRef) =>
+      'login_Text_otpSigninVerifyPreDescriptionUserRef': (userRef) =>
           localizations.login_Text_otpSigninVerifyPreDescriptionUserRef(
             userRef,
           ),
-      'login_Text_signupVerifyPostDescriptionFromEmail': (String email) =>
+      'login_Text_signupVerifyPostDescriptionFromEmail': (email) =>
           localizations.login_Text_signupVerifyPostDescriptionFromEmail(email),
-      'login_Text_signupVerifyPreDescriptionEmail': (String email) =>
+      'login_Text_signupVerifyPreDescriptionEmail': (email) =>
           localizations.login_Text_signupVerifyPreDescriptionEmail(email),
       'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError':
-          (String actual, String supportedConstraint) => localizations
+          (actual, supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
                 actual,
                 supportedConstraint,
               ),
-      'messaging_ConversationBuilders_contactExtension': (String extension) =>
+      'messaging_ConversationBuilders_contactExtension': (extension) =>
           localizations.messaging_ConversationBuilders_contactExtension(
             extension,
           ),
       'notifications_errorSnackBar_signalingDisconnectWithCodeName':
-          (String codeName) => localizations
+          (codeName) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithCodeName(
                 codeName,
               ),
       'notifications_errorSnackBar_signalingDisconnectWithSystemReason':
-          (String reason) => localizations
+          (reason) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithSystemReason(
                 reason,
               ),
       'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason':
-          (String reason) => localizations
+          (reason) => localizations
               .notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
                 reason,
               ),
-      'numberActions_callFrom': (String number) =>
+      'numberActions_callFrom': (number) =>
           localizations.numberActions_callFrom(number),
-      'recents_BodyCenter_empty': (Object filter) =>
+      'recents_BodyCenter_empty': (filter) =>
           localizations.recents_BodyCenter_empty(filter),
-      'recents_snackBar_deleted': (String name) =>
+      'recents_snackBar_deleted': (name) =>
           localizations.recents_snackBar_deleted(name),
-      'recentTimeAfterMidnight': (DateTime time) =>
+      'recentTimeAfterMidnight': (time) =>
           localizations.recentTimeAfterMidnight(time),
-      'recentTimeBeforeMidnight': (DateTime time) =>
+      'recentTimeBeforeMidnight': (time) =>
           localizations.recentTimeBeforeMidnight(time),
-      'socketError_defaultDescription': (int? errorCode) =>
+      'socketError_defaultDescription': (errorCode) =>
           localizations.socketError_defaultDescription(errorCode),
-      'user_agreement_checkbox_text': (Object url) =>
+      'user_agreement_checkbox_text': (url) =>
           localizations.user_agreement_checkbox_text(url),
-      'user_agreement_description': (Object appName) =>
+      'user_agreement_description': (appName) =>
           localizations.user_agreement_description(appName),
-      'webview_defaultError_details': (String description, int code) =>
+      'webview_defaultError_details': (description, code) =>
           localizations.webview_defaultError_details(description, code),
     };
   }

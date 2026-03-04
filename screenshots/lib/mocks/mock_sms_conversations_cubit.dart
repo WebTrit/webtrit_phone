@@ -9,11 +9,7 @@ class MockSmsConversationsCubit extends MockCubit<SmsConversationsState> impleme
 
   factory MockSmsConversationsCubit.initial() {
     final mock = MockSmsConversationsCubit();
-    whenListen(
-      mock,
-      const Stream<SmsConversationsState>.empty(),
-      initialState: SmsConversationsState.initial(),
-    );
+    whenListen(mock, const Stream<SmsConversationsState>.empty(), initialState: SmsConversationsState.initial());
     return mock;
   }
 
@@ -40,10 +36,7 @@ class MockSmsConversationsCubit extends MockCubit<SmsConversationsState> impleme
     final mock = MockSmsConversationsCubit();
     whenListen(
       mock,
-      Stream.fromIterable([
-        SmsConversationsState.initial(),
-        SmsConversationsState([], [], false),
-      ]),
+      Stream.fromIterable([SmsConversationsState.initial(), SmsConversationsState([], [], false)]),
       initialState: SmsConversationsState.initial(),
     );
     return mock;

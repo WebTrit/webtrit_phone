@@ -202,7 +202,10 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
             CaseWhen(contactsTable.aliasName.isNotNull(), then: contactsTable.aliasName.trim().collate(Collate.noCase)),
             CaseWhen(
               contactsTable.firstName.isNotNull() & contactsTable.lastName.isNotNull(),
-              then: contactsTable.firstName.trim().collate(Collate.noCase) + const Constant(' ') + contactsTable.lastName.trim().collate(Collate.noCase),
+              then:
+                  contactsTable.firstName.trim().collate(Collate.noCase) +
+                  const Constant(' ') +
+                  contactsTable.lastName.trim().collate(Collate.noCase),
             ),
             CaseWhen(contactsTable.firstName.isNotNull(), then: contactsTable.firstName.trim().collate(Collate.noCase)),
             CaseWhen(contactsTable.lastName.isNotNull(), then: contactsTable.lastName.trim().collate(Collate.noCase)),

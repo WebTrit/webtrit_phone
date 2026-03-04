@@ -27,20 +27,15 @@ class _NumberCdrsScreenScreenshotState extends State<NumberCdrsScreenScreenshot>
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return MultiProvider(
-              providers: [
-                Provider<ContactsRepository>(create: (_) => MockContactsRepository()),
-              ],
+              providers: [Provider<ContactsRepository>(create: (_) => MockContactsRepository())],
               child: MultiBlocProvider(
                 providers: [
                   BlocProvider<NumberCdrsLogCubit>(create: (_) => MockNumberCdrsLogCubit.withRecords()),
                   BlocProvider<CallBloc>(create: (_) => MockCallBloc.mainScreen()),
                 ],
-                child: const NumberCdrsScreen(
-                  title: Text('Thomas Anderson'),
-                  videoVisible: true,
-                ),
+                child: const NumberCdrsScreen(title: Text('Thomas Anderson'), videoVisible: true),
               ),
             );
           },

@@ -37,8 +37,20 @@ class EmbeddedRequestErrorDialog extends StatelessWidget {
           )
         : null;
 
+    // canPop: true — allows the system back button to bubble up to the parent PopScope.
+    //
+    // This widget is used in two modes:
+    //   Mode A (inline errorBuilder): embedded inside EmbeddedScreen or LoginSignupEmbeddedRequestScreen
+    //     as a WebView replacement. The parent PopScope correctly handles back navigation
+    //     (e.g. goBack in WebView or exit the screen). canPop: false here would wrongly block it.
+    //   Mode B (pushed route via BlocListener): pushed on top of LoginSignupEmbeddedRequestScreen.
+    //     onBack is non-null when the error allows going back (RequestFailure). The
+    //     onPopInvokedWithResult callback ensures onBack() is called on system back, so that
+    //     _errorDialogShown is properly reset in the parent screen.
     return PopScope(
-      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) onBack?.call();
+      },
       child: Scaffold(
         appBar: appBar,
         body: Center(

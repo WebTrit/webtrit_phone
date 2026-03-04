@@ -249,8 +249,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
         appBar: MainAppBar(
           title: widget.title,
           context: context,
-          backgroundColor: themeData.canvasColor.withAlpha(150),
-          flexibleSpace: const BlurredSurface(),
+          flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,

@@ -18,6 +18,7 @@ class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSe
   LoginModeSelectScreenStyles create() {
     final pictureLogoStyle = ThemeImageStyleFactory(source: config?.mainLogo).create();
     final backgroundDecoration = config?.greetingTextStyle?.toExtendedTextDecoration();
+    final backgroundStyle = config?.background?.toStyle();
 
     var textStyle = TextStyle(
       color: colors.onPrimary,
@@ -30,6 +31,7 @@ class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSe
 
     return LoginModeSelectScreenStyles(
       primary: LoginModeSelectScreenStyle(
+        background: backgroundStyle,
         contentThemeOverride: config?.themeOverride.mode.toThemeMode(),
         applyToAppBar: config?.themeOverride.applyToAppBar,
         systemUiOverlayStyle: config?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),

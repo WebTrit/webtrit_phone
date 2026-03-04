@@ -1119,6 +1119,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_MessageView_textcopy => 'Copia negli appunti';
 
   @override
+  String get messaging_MessageView_today => 'Oggi';
+
+  @override
+  String get messaging_MessageView_yesterday => 'Ieri';
+
+  @override
   String get messaging_ParticipantName_unknown => 'Utente sconosciuto';
 
   @override

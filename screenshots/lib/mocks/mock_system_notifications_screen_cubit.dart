@@ -23,10 +23,7 @@ class MockSystemNotificationsScreenCubit extends MockCubit<SystemNotificationScr
     whenListen(
       mock,
       const Stream<SystemNotificationScreenState>.empty(),
-      initialState: SystemNotificationScreenState(
-        notifications: dMockSystemNotifications,
-        isLoading: false,
-      ),
+      initialState: SystemNotificationScreenState(notifications: dMockSystemNotifications, isLoading: false),
     );
     when(() => mock.markAsSeen(any())).thenAnswer((_) async {});
     return mock;

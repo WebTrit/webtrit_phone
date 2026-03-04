@@ -10,9 +10,7 @@ class MockPermissionsCubit extends MockCubit<PermissionsState> implements Permis
     whenListen(
       mock,
       const Stream<PermissionsState>.empty(),
-      initialState: const PermissionsState(
-        initialRequestCompleted: false,
-      ),
+      initialState: const PermissionsState(initialRequestCompleted: false),
     );
     return mock;
   }

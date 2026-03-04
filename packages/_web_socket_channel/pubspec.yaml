@@ -1,4 +1,5 @@
 name: _web_socket_channel
+resolution: workspace
 description: Internal package to create platform-appropriate WS clients..
 version: 1.0.0
 publish_to: none

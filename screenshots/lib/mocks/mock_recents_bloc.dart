@@ -15,10 +15,7 @@ class MockRecentsBloc extends MockBloc<RecentsEvent, RecentsState> implements Re
     whenListen(
       mock,
       const Stream<RecentsState>.empty(),
-      initialState: RecentsState(
-        recents: dMockRecentCallHistory,
-        filter: RecentsVisibilityFilter.all,
-      ),
+      initialState: RecentsState(recents: dMockRecentCallHistory, filter: RecentsVisibilityFilter.all),
     );
     when(() => mock.dateFormat).thenReturn(DateFormat.yMMMd().add_Hm());
     return mock;

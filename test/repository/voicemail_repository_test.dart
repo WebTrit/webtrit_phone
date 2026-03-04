@@ -18,7 +18,12 @@ void main() {
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     apiClient = MockWebtritApiClient();
-    dataSource = VoicemailRepositoryImpl(webtritApiClient: apiClient, token: 'user_token', appDatabase: appDatabase, sessionGuard: const EmptySessionGuard());
+    dataSource = VoicemailRepositoryImpl(
+      webtritApiClient: apiClient,
+      token: 'user_token',
+      appDatabase: appDatabase,
+      sessionGuard: const EmptySessionGuard(),
+    );
   });
 
   tearDown(() async {
@@ -50,7 +55,7 @@ void main() {
       expect(voicemails.where((voicemail) => voicemail.seen).length, 3);
       expect(voicemails.where((voicemail) => !voicemail.seen).length, 1);
     });
-  
+
     test('deleteMultipleVoicemails', () async {
       final firstVoicemail = VoicemailsFixtureFactory.createVoicemail(id: '1');
       final secondVoicemail = VoicemailsFixtureFactory.createVoicemail(id: '2');

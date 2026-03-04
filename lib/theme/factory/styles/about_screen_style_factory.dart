@@ -17,7 +17,11 @@ class AboutScreenStyleFactory implements ThemeStyleFactory<AboutScreenStyles> {
     final backgroundStyle = config?.background?.toStyle();
 
     return AboutScreenStyles(
-      primary: AboutScreenStyle(pictureLogoStyle: pictureLogoStyle, background: backgroundStyle),
+      primary: AboutScreenStyle(
+        pictureLogoStyle: pictureLogoStyle,
+        background: backgroundStyle,
+        appBarBlurredSurface: config?.appBarBlurredSurface?.toStyle(),
+      ),
     );
   }
 }

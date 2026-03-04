@@ -1,4 +1,5 @@
 name: webtrit_appearance_theme
+resolution: workspace
 description: "A Flutter package for managing appearance themes."
 version: 0.0.1
 

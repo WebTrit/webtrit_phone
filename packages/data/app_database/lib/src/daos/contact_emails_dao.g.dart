@@ -6,4 +6,15 @@ part of 'contact_emails_dao.dart';
 mixin _$ContactEmailsDaoMixin on DatabaseAccessor<AppDatabase> {
   $ContactEmailsTableTable get contactEmailsTable =>
       attachedDatabase.contactEmailsTable;
+  ContactEmailsDaoManager get managers => ContactEmailsDaoManager(this);
+}
+
+class ContactEmailsDaoManager {
+  final _$ContactEmailsDaoMixin _db;
+  ContactEmailsDaoManager(this._db);
+  $$ContactEmailsTableTableTableManager get contactEmailsTable =>
+      $$ContactEmailsTableTableTableManager(
+        _db.attachedDatabase,
+        _db.contactEmailsTable,
+      );
 }

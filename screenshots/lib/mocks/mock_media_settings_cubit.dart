@@ -17,8 +17,9 @@ class MockMediaSettingsCubit extends MockCubit<MediaSettingsState> implements Me
         audioProcessingSettings: AudioProcessingSettings.blank(),
         videoCapturingSettings: VideoCapturingSettings.blank(),
         iceSettings: IceSettings.blank(),
-        pearConnectionSettings:
-            PeerConnectionSettings(negotiationSettings: NegotiationSettings(includeInactiveVideoInOfferAnswer: false)),
+        pearConnectionSettings: PeerConnectionSettings(
+          negotiationSettings: NegotiationSettings(includeInactiveVideoInOfferAnswer: false),
+        ),
       ),
     );
     return mock;

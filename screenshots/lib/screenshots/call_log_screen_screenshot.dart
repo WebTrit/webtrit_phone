@@ -28,11 +28,9 @@ class _CallLogScreenScreenshotState extends State<CallLogScreenScreenshot> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return MultiProvider(
-              providers: [
-                Provider<ContactsRepository>(create: (_) => MockContactsRepository()),
-              ],
+              providers: [Provider<ContactsRepository>(create: (_) => MockContactsRepository())],
               child: MultiBlocProvider(
                 providers: [
                   BlocProvider<CallLogBloc>(create: (_) => MockCallLogBloc.withHistory()),

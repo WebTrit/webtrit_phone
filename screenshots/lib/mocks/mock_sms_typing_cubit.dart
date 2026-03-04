@@ -7,11 +7,7 @@ class MockSmsTypingCubit extends MockCubit<TypingNumbers> implements SmsTypingCu
 
   factory MockSmsTypingCubit.idle() {
     final mock = MockSmsTypingCubit();
-    whenListen(
-      mock,
-      const Stream<TypingNumbers>.empty(),
-      initialState: <String>{},
-    );
+    whenListen(mock, const Stream<TypingNumbers>.empty(), initialState: <String>{});
     return mock;
   }
 }

@@ -7,11 +7,7 @@ class MockRegisterStatusCubit extends MockCubit<RegisterStatus> implements Regis
 
   factory MockRegisterStatusCubit.initial(bool initialValue) {
     final mock = MockRegisterStatusCubit();
-    whenListen(
-      mock,
-      const Stream<RegisterStatus>.empty(),
-      initialState: RegisterStatus(value: initialValue),
-    );
+    whenListen(mock, const Stream<RegisterStatus>.empty(), initialState: RegisterStatus(value: initialValue));
     return mock;
   }
 }

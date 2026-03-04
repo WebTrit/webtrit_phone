@@ -1123,6 +1123,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
 
   @override
+  String get messaging_MessageView_today => 'Сьогодні';
+
+  @override
+  String get messaging_MessageView_yesterday => 'Вчора';
+
+  @override
   String get messaging_ParticipantName_unknown => 'Невідомий користувач';
 
   @override

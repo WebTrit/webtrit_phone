@@ -12,10 +12,7 @@ class MockDiagnosticCubit extends MockCubit<DiagnosticState> implements Diagnost
       mock,
       const Stream<DiagnosticState>.empty(),
       initialState: DiagnosticState(
-        pushTokenStatus: PushTokenStatus(
-          token: 'fcm-token-demo-1234567890',
-          type: PushTokenStatusType.success,
-        ),
+        pushTokenStatus: PushTokenStatus(token: 'fcm-token-demo-1234567890', type: PushTokenStatusType.success),
       ),
     );
     return mock;

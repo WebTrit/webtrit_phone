@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/extensions/iterable.dart';
-import 'package:webtrit_phone/models/cdr/disconnect_reason.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 enum CdrStatus { accepted, declined, missed, error }

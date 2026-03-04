@@ -21,10 +21,7 @@ class LoginSignUpVerifyScreenshot extends StatelessWidget {
     return BlocProvider<LoginCubit>(
       create: (context) => MockLoginCubit.loginSwitchScreen(),
       child: LoginSwitchScreen(
-        appBar: AppBar(
-          leading: const ExtBackButton(disabled: false),
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: AppBar(leading: const ExtBackButton(disabled: false), backgroundColor: Colors.transparent),
         header: Column(
           children: [
             ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
@@ -33,11 +30,7 @@ class LoginSignUpVerifyScreenshot extends StatelessWidget {
         ),
         body: LoginSignupVerifyScreen(bodySafeAreaSides: SafeAreaSide.values.toSet()),
         currentLoginType: LoginType.signup,
-        supportedLoginTypes: const [
-          LoginType.otpSignin,
-          LoginType.passwordSignin,
-          LoginType.signup,
-        ],
+        supportedLoginTypes: const [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup],
       ),
     );
   }

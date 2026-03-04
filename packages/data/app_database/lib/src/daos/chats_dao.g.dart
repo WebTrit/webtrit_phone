@@ -21,4 +21,57 @@ mixin _$ChatsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.chatOutboxMessageDeleteTable;
   $ChatOutboxReadCursorsTableTable get chatOutboxReadCursorsTable =>
       attachedDatabase.chatOutboxReadCursorsTable;
+  ChatsDaoManager get managers => ChatsDaoManager(this);
+}
+
+class ChatsDaoManager {
+  final _$ChatsDaoMixin _db;
+  ChatsDaoManager(this._db);
+  $$ChatsTableTableTableManager get chatsTable =>
+      $$ChatsTableTableTableManager(_db.attachedDatabase, _db.chatsTable);
+  $$ChatMembersTableTableTableManager get chatMembersTable =>
+      $$ChatMembersTableTableTableManager(
+        _db.attachedDatabase,
+        _db.chatMembersTable,
+      );
+  $$ChatMessagesTableTableTableManager get chatMessagesTable =>
+      $$ChatMessagesTableTableTableManager(
+        _db.attachedDatabase,
+        _db.chatMessagesTable,
+      );
+  $$ChatMessageSyncCursorTableTableTableManager
+  get chatMessageSyncCursorTable =>
+      $$ChatMessageSyncCursorTableTableTableManager(
+        _db.attachedDatabase,
+        _db.chatMessageSyncCursorTable,
+      );
+  $$ChatMessageReadCursorTableTableTableManager
+  get chatMessageReadCursorTable =>
+      $$ChatMessageReadCursorTableTableTableManager(
+        _db.attachedDatabase,
+        _db.chatMessageReadCursorTable,
+      );
+  $$ChatOutboxMessageTableTableTableManager get chatOutboxMessageTable =>
+      $$ChatOutboxMessageTableTableTableManager(
+        _db.attachedDatabase,
+        _db.chatOutboxMessageTable,
+      );
+  $$ChatOutboxMessageEditTableTableTableManager
+  get chatOutboxMessageEditTable =>
+      $$ChatOutboxMessageEditTableTableTableManager(
+        _db.attachedDatabase,
+        _db.chatOutboxMessageEditTable,
+      );
+  $$ChatOutboxMessageDeleteTableTableTableManager
+  get chatOutboxMessageDeleteTable =>
+      $$ChatOutboxMessageDeleteTableTableTableManager(
+        _db.attachedDatabase,
+        _db.chatOutboxMessageDeleteTable,
+      );
+  $$ChatOutboxReadCursorsTableTableTableManager
+  get chatOutboxReadCursorsTable =>
+      $$ChatOutboxReadCursorsTableTableTableManager(
+        _db.attachedDatabase,
+        _db.chatOutboxReadCursorsTable,
+      );
 }

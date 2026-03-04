@@ -21,7 +21,7 @@ class _ThemeModeScreenScreenshotState extends State<ThemeModeScreenScreenshot> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return const ThemeModeScreen();
           },
           transitionDuration: Duration.zero,
