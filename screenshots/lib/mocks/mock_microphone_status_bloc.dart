@@ -11,9 +11,7 @@ class MockMicrophoneStatusBloc extends MockBloc<MicrophoneStatusEvent, Microphon
     whenListen(
       mock,
       const Stream<MicrophoneStatusState>.empty(),
-      initialState: const MicrophoneStatusState(
-        microphonePermissionGranted: true,
-      ),
+      initialState: const MicrophoneStatusState(microphonePermissionGranted: true),
     );
     return mock;
   }
@@ -23,9 +21,7 @@ class MockMicrophoneStatusBloc extends MockBloc<MicrophoneStatusEvent, Microphon
     whenListen(
       mock,
       const Stream<MicrophoneStatusState>.empty(),
-      initialState: const MicrophoneStatusState(
-        microphonePermissionGranted: false,
-      ),
+      initialState: const MicrophoneStatusState(microphonePermissionGranted: false),
     );
     return mock;
   }
@@ -35,9 +31,7 @@ class MockMicrophoneStatusBloc extends MockBloc<MicrophoneStatusEvent, Microphon
     whenListen(
       mock,
       const Stream<MicrophoneStatusState>.empty(),
-      initialState: MicrophoneStatusState(
-        microphonePermissionGranted: isGranted,
-      ),
+      initialState: MicrophoneStatusState(microphonePermissionGranted: isGranted),
     );
     return mock;
   }

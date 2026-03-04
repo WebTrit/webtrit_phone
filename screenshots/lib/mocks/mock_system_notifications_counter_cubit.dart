@@ -10,11 +10,7 @@ class MockSystemNotificationCounterCubit extends MockCubit<int> implements Syste
     Stream<int> stream = const Stream<int>.empty(),
   }) {
     final mock = MockSystemNotificationCounterCubit();
-    whenListen(
-      mock,
-      stream,
-      initialState: initialState,
-    );
+    whenListen(mock, stream, initialState: initialState);
     return mock;
   }
 }

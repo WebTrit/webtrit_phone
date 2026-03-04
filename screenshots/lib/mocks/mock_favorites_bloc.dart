@@ -9,11 +9,7 @@ class MockFavoritesBloc extends MockBloc<FavoritesEvent, FavoritesState> impleme
 
   factory MockFavoritesBloc.mainScreen() {
     final mock = MockFavoritesBloc();
-    whenListen(
-      mock,
-      const Stream<FavoritesState>.empty(),
-      initialState: FavoritesState(favorites: dFavorites),
-    );
+    whenListen(mock, const Stream<FavoritesState>.empty(), initialState: FavoritesState(favorites: dFavorites));
     return mock;
   }
 }

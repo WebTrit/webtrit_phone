@@ -6,10 +6,7 @@ import 'package:webtrit_phone/models/call_direction.dart';
 final dAudioActiveCall = ActiveCall(
   line: 0,
   callId: '123',
-  handle: const CallkeepHandle(
-    type: CallkeepHandleType.number,
-    value: 'Thomas Anderson',
-  ),
+  handle: const CallkeepHandle(type: CallkeepHandleType.number, value: 'Thomas Anderson'),
   direction: CallDirection.incoming,
   video: false,
   createdTime: clock.ago(minutes: 10),
@@ -20,10 +17,7 @@ final dAudioActiveCall = ActiveCall(
 final dVideoActiveCall = ActiveCall(
   line: 0,
   callId: '123',
-  handle: const CallkeepHandle(
-    type: CallkeepHandleType.number,
-    value: 'Thomas Anderson',
-  ),
+  handle: const CallkeepHandle(type: CallkeepHandleType.number, value: 'Thomas Anderson'),
   direction: CallDirection.incoming,
   video: false,
   createdTime: clock.ago(minutes: 10),

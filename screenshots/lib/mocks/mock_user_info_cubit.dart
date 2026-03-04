@@ -7,11 +7,7 @@ class MockUserInfoCubit extends MockCubit<UserInfoState> implements UserInfoCubi
 
   factory MockUserInfoCubit.initial() {
     final mock = MockUserInfoCubit();
-    whenListen(
-      mock,
-      const Stream<UserInfoState>.empty(),
-      initialState: const UserInfoState(),
-    );
+    whenListen(mock, const Stream<UserInfoState>.empty(), initialState: const UserInfoState());
     return mock;
   }
 }

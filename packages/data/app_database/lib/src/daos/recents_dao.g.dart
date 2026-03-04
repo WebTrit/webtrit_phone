@@ -12,4 +12,29 @@ mixin _$RecentsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.contactEmailsTable;
   $PresenceInfoTableTable get presenceInfoTable =>
       attachedDatabase.presenceInfoTable;
+  RecentsDaoManager get managers => RecentsDaoManager(this);
+}
+
+class RecentsDaoManager {
+  final _$RecentsDaoMixin _db;
+  RecentsDaoManager(this._db);
+  $$CallLogsTableTableTableManager get callLogsTable =>
+      $$CallLogsTableTableTableManager(_db.attachedDatabase, _db.callLogsTable);
+  $$ContactsTableTableTableManager get contactsTable =>
+      $$ContactsTableTableTableManager(_db.attachedDatabase, _db.contactsTable);
+  $$ContactPhonesTableTableTableManager get contactPhonesTable =>
+      $$ContactPhonesTableTableTableManager(
+        _db.attachedDatabase,
+        _db.contactPhonesTable,
+      );
+  $$ContactEmailsTableTableTableManager get contactEmailsTable =>
+      $$ContactEmailsTableTableTableManager(
+        _db.attachedDatabase,
+        _db.contactEmailsTable,
+      );
+  $$PresenceInfoTableTableTableManager get presenceInfoTable =>
+      $$PresenceInfoTableTableTableManager(
+        _db.attachedDatabase,
+        _db.presenceInfoTable,
+      );
 }

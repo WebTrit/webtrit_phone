@@ -8,4 +8,22 @@ mixin _$SystemNotificationsDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.systemNotificationsTable;
   $SystemNotificationsOutboxTableTable get systemNotificationsOutboxTable =>
       attachedDatabase.systemNotificationsOutboxTable;
+  SystemNotificationsDaoManager get managers =>
+      SystemNotificationsDaoManager(this);
+}
+
+class SystemNotificationsDaoManager {
+  final _$SystemNotificationsDaoMixin _db;
+  SystemNotificationsDaoManager(this._db);
+  $$SystemNotificationsTableTableTableManager get systemNotificationsTable =>
+      $$SystemNotificationsTableTableTableManager(
+        _db.attachedDatabase,
+        _db.systemNotificationsTable,
+      );
+  $$SystemNotificationsOutboxTableTableTableManager
+  get systemNotificationsOutboxTable =>
+      $$SystemNotificationsOutboxTableTableTableManager(
+        _db.attachedDatabase,
+        _db.systemNotificationsOutboxTable,
+      );
 }

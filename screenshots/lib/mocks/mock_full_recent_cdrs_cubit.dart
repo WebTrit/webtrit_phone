@@ -9,11 +9,7 @@ class MockFullRecentCdrsCubit extends MockCubit<FullRecentCdrsState> implements 
 
   factory MockFullRecentCdrsCubit.mainScreen() {
     final mock = MockFullRecentCdrsCubit();
-    whenListen(
-      mock,
-      const Stream<FullRecentCdrsState>.empty(),
-      initialState: FullRecentCdrsState(),
-    );
+    whenListen(mock, const Stream<FullRecentCdrsState>.empty(), initialState: FullRecentCdrsState());
     return mock;
   }
 
@@ -22,10 +18,7 @@ class MockFullRecentCdrsCubit extends MockCubit<FullRecentCdrsState> implements 
     whenListen(
       mock,
       const Stream<FullRecentCdrsState>.empty(),
-      initialState: FullRecentCdrsState(
-        records: dMockCdrRecords,
-        isLoading: false,
-      ),
+      initialState: FullRecentCdrsState(records: dMockCdrRecords, isLoading: false),
     );
     return mock;
   }

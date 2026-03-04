@@ -20,16 +20,10 @@ class MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements CallR
   }
 
   /// Emit a sequence of states (useful for UI reacting to updates).
-  factory MockCallRoutingCubit.sequence({
-    required List<CallRoutingState?> states,
-  }) {
+  factory MockCallRoutingCubit.sequence({required List<CallRoutingState?> states}) {
     assert(states.isNotEmpty, 'states cannot be empty');
     final mock = MockCallRoutingCubit();
-    whenListen(
-      mock,
-      Stream<CallRoutingState?>.fromIterable(states.skip(1)),
-      initialState: states.first,
-    );
+    whenListen(mock, Stream<CallRoutingState?>.fromIterable(states.skip(1)), initialState: states.first);
     return mock;
   }
 }

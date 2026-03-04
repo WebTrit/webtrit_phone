@@ -264,7 +264,10 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Center(
-                  child: Text(formatChatMessageDate(entry.date), style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  child: Text(
+                    formatChatMessageDate(entry.date),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                 ),
               );
             }
