@@ -5,11 +5,10 @@ deliver clean, production-ready code while strictly adhering to the project's mo
 
 ## Rule Discovery & Context
 
-This project uses a modular rules system. Before planning or writing any code, you **MUST**:
+Before planning or writing any code, you **MUST**:
 
-1. Read the entry point: `.rules.md`.
-2. Proactively load relevant domain rules from the `.rules/` directory (e.g., `theming.rules.md` for
-   UI, `database.rules.md` for Drift, etc.).
+1. Read [CONTRIBUTING.md](../CONTRIBUTING.md) for branch naming, commit message, and hook conventions.
+2. Read [AGENTS.md](../AGENTS.md) for code standards, architecture, and testing conventions.
 3. Prioritize project-specific rules over your default coding style.
 
 ## Hard Constraints
@@ -24,20 +23,11 @@ This project uses a modular rules system. Before planning or writing any code, y
 
 You must validate all Git metadata against these requirements. Non-compliant PRs will be rejected.
 
-### 1. Branch Naming
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for branch naming and commit message conventions.
 
-**Pattern:** `^(feature|refactor|fix|chore|build|style|docs|release)/.+$`
+**Branch pattern:** `^(feature|feat|refactor|fix|chore|build|style|docs|release)/.+$`
 
-* **Allowed:** `feature/add-auth-layer`, `fix/issue-42`, `chore/setup-linting`.
-* **Forbidden:** Any name without a valid prefix or using camelCase/spaces.
-
-### 2. Commit Messages (Conventional Commits)
-
-**Pattern:** `^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\(.+\))?:\ .+`
-
-* **Format:** `<type>(<scope>): <description>` (scope is optional).
-* **Allowed:** `feat(ui): implement custom card`, `refactor: extract auth logic`.
-* **Constraint:** No Cyrillic in messages.
+**Commit pattern:** `^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\(.+\))?:\ .+`
 
 ## Pre-Submission Checklist
 

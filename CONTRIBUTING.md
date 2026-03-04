@@ -64,3 +64,5 @@ Hooks run automatically:
 - **pre-commit** — `dart format` on staged Dart files (generated files excluded)
 - **commit-msg** — validates commit message format
 - **pre-push** — validates branch name, runs `flutter analyze` and `flutter test`
+
+For installation details, manual execution, and troubleshooting see [docs/development.md](docs/development.md).
