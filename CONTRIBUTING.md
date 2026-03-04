@@ -6,16 +6,16 @@ Branches must follow the pattern `<type>/<description>`, where `<description>` u
 
 **Accepted prefixes:**
 
-| Prefix | When to use |
-|--------|-------------|
-| `feature/` or `feat/` | New feature or enhancement |
-| `fix/` | Bug fix |
-| `refactor/` | Code refactoring without behaviour change |
-| `chore/` | Maintenance, dependency updates, tooling |
-| `docs/` | Documentation only |
-| `style/` | Code style / formatting changes |
-| `build/` | Build system or CI changes |
-| `release/` | Release preparation |
+| Prefix                | When to use                               |
+|-----------------------|-------------------------------------------|
+| `feature/` or `feat/` | New feature or enhancement                |
+| `fix/`                | Bug fix                                   |
+| `refactor/`           | Code refactoring without behaviour change |
+| `chore/`              | Maintenance, dependency updates, tooling  |
+| `docs/`               | Documentation only                        |
+| `style/`              | Code style / formatting changes           |
+| `build/`              | Build system or CI changes                |
+| `release/`            | Release preparation                       |
 
 > Both `feature/` and `feat/` are accepted as equivalent aliases for feature branches.
 
@@ -36,7 +36,8 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 <type>[(scope)]: <lowercase description>
 ```
 
-Accepted types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `style`, `ci`, `perf`, `build`, `revert`.
+Accepted types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`, `style`, `ci`, `perf`, `build`,
+`revert`.
 
 - Description must start with a **lowercase** letter.
 - No Cyrillic characters anywhere in commit messages.
