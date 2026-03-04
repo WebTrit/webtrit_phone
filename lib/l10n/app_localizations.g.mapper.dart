@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // L10nMapperGenerator
@@ -29,17 +29,41 @@ extension AppLocalizationsExtension on AppLocalizations {
 }
 
 class L10nHelper {
-  static String parseL10n(
+  // Cache to store localization maps per locale
+  static final Map<String, Map<String, dynamic>> _cache = {};
+
+  static String? parseL10n(
     AppLocalizations localizations,
     String translationKey, {
     List<Object>? arguments,
   }) {
-    const mapper = AppLocalizationsMapper();
-    final object = mapper.toLocalizationMap(localizations)[translationKey];
-    if (object is String || object == null) return object;
+    // Get or create cached map for this locale
+    final localeName = localizations.localeName;
+    final cachedMap = _cache[localeName];
+
+    final map =
+        cachedMap ??
+        () {
+          const mapper = AppLocalizationsMapper();
+          final newMap = mapper.toLocalizationMap(localizations);
+          _cache[localeName] = newMap;
+          return newMap;
+        }();
+
+    final object = map[translationKey];
+    if (object is String || object == null) return object as String?;
     assert(arguments != null, 'Arguments should not be null!');
     assert(arguments!.isNotEmpty, 'Arguments should not be empty!');
-    return Function.apply(object, arguments);
+    return Function.apply(object as Function, arguments) as String;
+  }
+
+  /// Clear the cache for a specific locale or all locales
+  static void clearCache([String? localeName]) {
+    if (localeName != null) {
+      _cache.remove(localeName);
+    } else {
+      _cache.clear();
+    }
   }
 }
 
@@ -1324,84 +1348,291 @@ class AppLocalizationsMapper {
       'webview_sslError_message': localizations.webview_sslError_message,
       'webview_sslError_title': localizations.webview_sslError_title,
       'webview_sslError_tryAgain': localizations.webview_sslError_tryAgain,
-      'agoTicker_daysAgo': (days) => localizations.agoTicker_daysAgo(days),
-      'agoTicker_hoursAgo': (hours) => localizations.agoTicker_hoursAgo(hours),
-      'agoTicker_minutesAgo': (minutes) =>
+      'cdr_disconnectReason_unknown':
+          localizations.cdr_disconnectReason_unknown,
+      'cdr_disconnectReason_validCauseCodeNotYetReceived':
+          localizations.cdr_disconnectReason_validCauseCodeNotYetReceived,
+      'cdr_disconnectReason_unallocatedNumber':
+          localizations.cdr_disconnectReason_unallocatedNumber,
+      'cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan': localizations
+          .cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan,
+      'cdr_disconnectReason_noRouteToDestination':
+          localizations.cdr_disconnectReason_noRouteToDestination,
+      'cdr_disconnectReason_sendSpecialInformationTone':
+          localizations.cdr_disconnectReason_sendSpecialInformationTone,
+      'cdr_disconnectReason_misdialledTrunkPrefix':
+          localizations.cdr_disconnectReason_misdialledTrunkPrefix,
+      'cdr_disconnectReason_channelUnacceptable':
+          localizations.cdr_disconnectReason_channelUnacceptable,
+      'cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel':
+          localizations
+              .cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel,
+      'cdr_disconnectReason_prefix0DialedButNotAllowedPreemption': localizations
+          .cdr_disconnectReason_prefix0DialedButNotAllowedPreemption,
+      'cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved':
+          localizations
+              .cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved,
+      'cdr_disconnectReason_prefix1DialedButNotRequired':
+          localizations.cdr_disconnectReason_prefix1DialedButNotRequired,
+      'cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding':
+          localizations
+              .cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding,
+      'cdr_disconnectReason_normalCallClearing':
+          localizations.cdr_disconnectReason_normalCallClearing,
+      'cdr_disconnectReason_userBusy':
+          localizations.cdr_disconnectReason_userBusy,
+      'cdr_disconnectReason_noUserResponding':
+          localizations.cdr_disconnectReason_noUserResponding,
+      'cdr_disconnectReason_noAnswerFromUser':
+          localizations.cdr_disconnectReason_noAnswerFromUser,
+      'cdr_disconnectReason_subscriberIsAbsent':
+          localizations.cdr_disconnectReason_subscriberIsAbsent,
+      'cdr_disconnectReason_callRejected':
+          localizations.cdr_disconnectReason_callRejected,
+      'cdr_disconnectReason_numberChanged':
+          localizations.cdr_disconnectReason_numberChanged,
+      'cdr_disconnectReason_reverseChargingRejected':
+          localizations.cdr_disconnectReason_reverseChargingRejected,
+      'cdr_disconnectReason_callSuspended':
+          localizations.cdr_disconnectReason_callSuspended,
+      'cdr_disconnectReason_callResumed':
+          localizations.cdr_disconnectReason_callResumed,
+      'cdr_disconnectReason_nonSelectedUserClearing':
+          localizations.cdr_disconnectReason_nonSelectedUserClearing,
+      'cdr_disconnectReason_destinationOutOfOrder':
+          localizations.cdr_disconnectReason_destinationOutOfOrder,
+      'cdr_disconnectReason_invalidNumberFormatIncompleteNumber': localizations
+          .cdr_disconnectReason_invalidNumberFormatIncompleteNumber,
+      'cdr_disconnectReason_facilityRejected':
+          localizations.cdr_disconnectReason_facilityRejected,
+      'cdr_disconnectReason_responseToStatusEnquiry':
+          localizations.cdr_disconnectReason_responseToStatusEnquiry,
+      'cdr_disconnectReason_normalUnspecified':
+          localizations.cdr_disconnectReason_normalUnspecified,
+      'cdr_disconnectReason_circuitOutOfOrder':
+          localizations.cdr_disconnectReason_circuitOutOfOrder,
+      'cdr_disconnectReason_noCircuitChannelAvailable':
+          localizations.cdr_disconnectReason_noCircuitChannelAvailable,
+      'cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable':
+          localizations
+              .cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable,
+      'cdr_disconnectReason_vpciVciAssignmentFailure':
+          localizations.cdr_disconnectReason_vpciVciAssignmentFailure,
+      'cdr_disconnectReason_degradedServiceCallRateIsnNotValid':
+          localizations.cdr_disconnectReason_degradedServiceCallRateIsnNotValid,
+      'cdr_disconnectReason_networkWanOutOfOrder':
+          localizations.cdr_disconnectReason_networkWanOutOfOrder,
+      'cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService':
+          localizations
+              .cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService,
+      'cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational':
+          localizations
+              .cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational,
+      'cdr_disconnectReason_temporaryFailure':
+          localizations.cdr_disconnectReason_temporaryFailure,
+      'cdr_disconnectReason_switchingEquipmentCongestion':
+          localizations.cdr_disconnectReason_switchingEquipmentCongestion,
+      'cdr_disconnectReason_accessInformationDiscarded':
+          localizations.cdr_disconnectReason_accessInformationDiscarded,
+      'cdr_disconnectReason_requestedCircuitChannelNotAvailable': localizations
+          .cdr_disconnectReason_requestedCircuitChannelNotAvailable,
+      'cdr_disconnectReason_preEmptedNoVpciVciIsAvailable':
+          localizations.cdr_disconnectReason_preEmptedNoVpciVciIsAvailable,
+      'cdr_disconnectReason_precedenceCallBlocked':
+          localizations.cdr_disconnectReason_precedenceCallBlocked,
+      'cdr_disconnectReason_resourceUnavailableUnspecified':
+          localizations.cdr_disconnectReason_resourceUnavailableUnspecified,
+      'cdr_disconnectReason_dspError':
+          localizations.cdr_disconnectReason_dspError,
+      'cdr_disconnectReason_qualityOfServiceUnavailable':
+          localizations.cdr_disconnectReason_qualityOfServiceUnavailable,
+      'cdr_disconnectReason_requestedFacilityNotSubscribed':
+          localizations.cdr_disconnectReason_requestedFacilityNotSubscribed,
+      'cdr_disconnectReason_reverseChargingNotAllowed':
+          localizations.cdr_disconnectReason_reverseChargingNotAllowed,
+      'cdr_disconnectReason_outgoingCallsBarred':
+          localizations.cdr_disconnectReason_outgoingCallsBarred,
+      'cdr_disconnectReason_outgoingCallsBarredWithinCug':
+          localizations.cdr_disconnectReason_outgoingCallsBarredWithinCug,
+      'cdr_disconnectReason_incomingCallsBarred':
+          localizations.cdr_disconnectReason_incomingCallsBarred,
+      'cdr_disconnectReason_incomingCallsBarredWithinCug':
+          localizations.cdr_disconnectReason_incomingCallsBarredWithinCug,
+      'cdr_disconnectReason_callWaitingNotSubscribed':
+          localizations.cdr_disconnectReason_callWaitingNotSubscribed,
+      'cdr_disconnectReason_bearerCapabilityNotAuthorized':
+          localizations.cdr_disconnectReason_bearerCapabilityNotAuthorized,
+      'cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable':
+          localizations
+              .cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable,
+      'cdr_disconnectReason_inconsistancyInTheInformationAndClass':
+          localizations
+              .cdr_disconnectReason_inconsistancyInTheInformationAndClass,
+      'cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified':
+          localizations
+              .cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified,
+      'cdr_disconnectReason_bearerServiceNotImplemented':
+          localizations.cdr_disconnectReason_bearerServiceNotImplemented,
+      'cdr_disconnectReason_channelTypeNotImplemented':
+          localizations.cdr_disconnectReason_channelTypeNotImplemented,
+      'cdr_disconnectReason_transitNetworkSelectionNotImplemented':
+          localizations
+              .cdr_disconnectReason_transitNetworkSelectionNotImplemented,
+      'cdr_disconnectReason_messageNotImplemented':
+          localizations.cdr_disconnectReason_messageNotImplemented,
+      'cdr_disconnectReason_requestedFacilityNotImplemented':
+          localizations.cdr_disconnectReason_requestedFacilityNotImplemented,
+      'cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable':
+          localizations
+              .cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable,
+      'cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified':
+          localizations
+              .cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified,
+      'cdr_disconnectReason_invalidCallReferenceValue':
+          localizations.cdr_disconnectReason_invalidCallReferenceValue,
+      'cdr_disconnectReason_identifiedChannelDoesNotExist':
+          localizations.cdr_disconnectReason_identifiedChannelDoesNotExist,
+      'cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot':
+          localizations
+              .cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot,
+      'cdr_disconnectReason_callIdentityInUse':
+          localizations.cdr_disconnectReason_callIdentityInUse,
+      'cdr_disconnectReason_noCallSuspended':
+          localizations.cdr_disconnectReason_noCallSuspended,
+      'cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared':
+          localizations
+              .cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared,
+      'cdr_disconnectReason_calledUserNotMemberOfCug':
+          localizations.cdr_disconnectReason_calledUserNotMemberOfCug,
+      'cdr_disconnectReason_incompatibleDestination':
+          localizations.cdr_disconnectReason_incompatibleDestination,
+      'cdr_disconnectReason_nonExistentAbbreviatedAddressEntry':
+          localizations.cdr_disconnectReason_nonExistentAbbreviatedAddressEntry,
+      'cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed':
+          localizations
+              .cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed,
+      'cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse':
+          localizations
+              .cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse,
+      'cdr_disconnectReason_invalidFacilityParameter':
+          localizations.cdr_disconnectReason_invalidFacilityParameter,
+      'cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported':
+          localizations
+              .cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported,
+      'cdr_disconnectReason_invalidMessageUnspecified':
+          localizations.cdr_disconnectReason_invalidMessageUnspecified,
+      'cdr_disconnectReason_mandatoryInformationElementIsMissing': localizations
+          .cdr_disconnectReason_mandatoryInformationElementIsMissing,
+      'cdr_disconnectReason_messageTypeNonExistentOrNotImplemented':
+          localizations
+              .cdr_disconnectReason_messageTypeNonExistentOrNotImplemented,
+      'cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented':
+          localizations
+              .cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented,
+      'cdr_disconnectReason_informationElementNonexistantOrNotImplemented':
+          localizations
+              .cdr_disconnectReason_informationElementNonexistantOrNotImplemented,
+      'cdr_disconnectReason_invalidInformationElementContents':
+          localizations.cdr_disconnectReason_invalidInformationElementContents,
+      'cdr_disconnectReason_messageNotCompatibleWithCallState':
+          localizations.cdr_disconnectReason_messageNotCompatibleWithCallState,
+      'cdr_disconnectReason_recoveryOnTimerExpiry':
+          localizations.cdr_disconnectReason_recoveryOnTimerExpiry,
+      'cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn':
+          localizations
+              .cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn,
+      'cdr_disconnectReason_urecognizedParameterMessageDiscarded': localizations
+          .cdr_disconnectReason_urecognizedParameterMessageDiscarded,
+      'cdr_disconnectReason_protocolErrorUnspecified':
+          localizations.cdr_disconnectReason_protocolErrorUnspecified,
+      'cdr_disconnectReason_internetworkingUnspecified':
+          localizations.cdr_disconnectReason_internetworkingUnspecified,
+      'cdr_disconnectReason_nextNodeIsUnreachable':
+          localizations.cdr_disconnectReason_nextNodeIsUnreachable,
+      'cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService':
+          localizations
+              .cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService,
+      'cdr_disconnectReason_dtlTransitIsNotMyNodeId':
+          localizations.cdr_disconnectReason_dtlTransitIsNotMyNodeId,
+      'agoTicker_daysAgo': (int days) => localizations.agoTicker_daysAgo(days),
+      'agoTicker_hoursAgo': (int hours) =>
+          localizations.agoTicker_hoursAgo(hours),
+      'agoTicker_minutesAgo': (int minutes) =>
           localizations.agoTicker_minutesAgo(minutes),
-      'agoTicker_secondsAgo': (seconds) =>
+      'agoTicker_secondsAgo': (num seconds) =>
           localizations.agoTicker_secondsAgo(seconds),
-      'default_UnknownExceptionError': (error) =>
+      'default_UnknownExceptionError': (String error) =>
           localizations.default_UnknownExceptionError(error),
-      'favorites_SnackBar_deleted': (name) =>
+      'favorites_SnackBar_deleted': (String name) =>
           localizations.favorites_SnackBar_deleted(name),
-      'formatPhone': (style, main, ext) =>
+      'formatPhone': (String style, String main, String ext) =>
           localizations.formatPhone(style, main, ext),
-      'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>
+      'login_Button_otpSigninVerifyRepeatInterval': (int seconds) =>
           localizations.login_Button_otpSigninVerifyRepeatInterval(seconds),
-      'login_Button_signupVerifyRepeatInterval': (seconds) =>
+      'login_Button_signupVerifyRepeatInterval': (int seconds) =>
           localizations.login_Button_signupVerifyRepeatInterval(seconds),
       'login_CoreVersionUnsupportedExceptionError':
-          (actual, supportedConstraint) =>
+          (String actual, String supportedConstraint) =>
               localizations.login_CoreVersionUnsupportedExceptionError(
                 actual,
                 supportedConstraint,
               ),
-      'login_Text_coreUrlAssignPostDescription': (email) =>
+      'login_Text_coreUrlAssignPostDescription': (Object email) =>
           localizations.login_Text_coreUrlAssignPostDescription(email),
-      'login_Text_otpSigninVerifyPostDescriptionFromEmail': (email) =>
+      'login_Text_otpSigninVerifyPostDescriptionFromEmail': (String email) =>
           localizations.login_Text_otpSigninVerifyPostDescriptionFromEmail(
             email,
           ),
-      'login_Text_otpSigninVerifyPreDescriptionUserRef': (userRef) =>
+      'login_Text_otpSigninVerifyPreDescriptionUserRef': (String userRef) =>
           localizations.login_Text_otpSigninVerifyPreDescriptionUserRef(
             userRef,
           ),
-      'login_Text_signupVerifyPostDescriptionFromEmail': (email) =>
+      'login_Text_signupVerifyPostDescriptionFromEmail': (String email) =>
           localizations.login_Text_signupVerifyPostDescriptionFromEmail(email),
-      'login_Text_signupVerifyPreDescriptionEmail': (email) =>
+      'login_Text_signupVerifyPreDescriptionEmail': (String email) =>
           localizations.login_Text_signupVerifyPreDescriptionEmail(email),
       'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError':
-          (actual, supportedConstraint) => localizations
+          (String actual, String supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
                 actual,
                 supportedConstraint,
               ),
-      'messaging_ConversationBuilders_contactExtension': (extension) =>
+      'messaging_ConversationBuilders_contactExtension': (String extension) =>
           localizations.messaging_ConversationBuilders_contactExtension(
             extension,
           ),
       'notifications_errorSnackBar_signalingDisconnectWithCodeName':
-          (codeName) => localizations
+          (String codeName) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithCodeName(
                 codeName,
               ),
       'notifications_errorSnackBar_signalingDisconnectWithSystemReason':
-          (reason) => localizations
+          (String reason) => localizations
               .notifications_errorSnackBar_signalingDisconnectWithSystemReason(
                 reason,
               ),
       'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason':
-          (reason) => localizations
+          (String reason) => localizations
               .notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
                 reason,
               ),
-      'numberActions_callFrom': (number) =>
+      'numberActions_callFrom': (String number) =>
           localizations.numberActions_callFrom(number),
-      'recents_BodyCenter_empty': (filter) =>
+      'recents_BodyCenter_empty': (Object filter) =>
           localizations.recents_BodyCenter_empty(filter),
-      'recents_snackBar_deleted': (name) =>
+      'recents_snackBar_deleted': (String name) =>
           localizations.recents_snackBar_deleted(name),
-      'recentTimeAfterMidnight': (time) =>
+      'recentTimeAfterMidnight': (DateTime time) =>
           localizations.recentTimeAfterMidnight(time),
-      'recentTimeBeforeMidnight': (time) =>
+      'recentTimeBeforeMidnight': (DateTime time) =>
           localizations.recentTimeBeforeMidnight(time),
-      'socketError_defaultDescription': (errorCode) =>
+      'socketError_defaultDescription': (int? errorCode) =>
           localizations.socketError_defaultDescription(errorCode),
-      'user_agreement_checkbox_text': (url) =>
+      'user_agreement_checkbox_text': (Object url) =>
           localizations.user_agreement_checkbox_text(url),
-      'user_agreement_description': (appName) =>
+      'user_agreement_description': (Object appName) =>
           localizations.user_agreement_description(appName),
-      'webview_defaultError_details': (description, code) =>
+      'webview_defaultError_details': (String description, int code) =>
           localizations.webview_defaultError_details(description, code),
     };
   }

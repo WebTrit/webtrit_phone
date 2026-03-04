@@ -1,23 +1,12 @@
 import 'package:equatable/equatable.dart';
 
+import 'package:webtrit_phone/extensions/iterable.dart';
+import 'package:webtrit_phone/models/cdr/disconnect_reason.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 enum CdrStatus { accepted, declined, missed, error }
 
 class CdrRecord extends Equatable {
-  final String callId;
-  final CallDirection direction;
-  final CdrStatus status;
-  final String callee;
-  final String? calleeNumber;
-  final String caller;
-  final String? callerNumber;
-  final DateTime connectTime;
-  final DateTime disconnectTime;
-  final String disconnectReason;
-  final Duration duration;
-  final dynamic recordingId;
-
   CdrRecord({
     required this.callId,
     required this.direction,
@@ -33,11 +22,30 @@ class CdrRecord extends Equatable {
     this.recordingId,
   });
 
+  final String callId;
+  final CallDirection direction;
+  final CdrStatus status;
+  final String callee;
+  final String? calleeNumber;
+  final String caller;
+  final String? callerNumber;
+  final DateTime connectTime;
+  final DateTime disconnectTime;
+  final String disconnectReason;
+  final Duration duration;
+  final dynamic recordingId;
+
   /// The other party in the call, depending on the call direction
   late final String participant = direction == CallDirection.outgoing ? callee : caller;
 
   /// The other party's number in the call, depending on the call direction
   late final String? participantNumber = direction == CallDirection.outgoing ? calleeNumber : callerNumber;
+
+  /// Tries to parse the [disconnectReason] string into a known [CdrDisconnectReason] enum value.
+  /// Returns null if no match is found, so consumer can decide to use the raw string instead.
+  late final CdrDisconnectReason? disconnectReasonEnum = CdrDisconnectReason.values.firstWhereOrNull(
+    (r) => r.rawValue.toLowerCase().trim() == disconnectReason.toLowerCase().trim(),
+  );
 
   @override
   List<Object?> get props => [

@@ -2394,4 +2394,303 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Спробувати ще раз';
+
+  @override
+  String get cdr_disconnectReason_unknown => 'Невідомо';
+
+  @override
+  String get cdr_disconnectReason_validCauseCodeNotYetReceived => 'Коректний код причини ще не отримано';
+
+  @override
+  String get cdr_disconnectReason_unallocatedNumber => 'Непризначений номер';
+
+  @override
+  String get cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan =>
+      'Немає маршруту до вказаної транзитної мережі (WAN)';
+
+  @override
+  String get cdr_disconnectReason_noRouteToDestination => 'Немає маршруту до пункту призначення';
+
+  @override
+  String get cdr_disconnectReason_sendSpecialInformationTone => 'Надіслати спеціальний інформаційний тон';
+
+  @override
+  String get cdr_disconnectReason_misdialledTrunkPrefix => 'Неправильно набраний префікс транку';
+
+  @override
+  String get cdr_disconnectReason_channelUnacceptable => 'Неприйнятний канал';
+
+  @override
+  String get cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel =>
+      'Виклик призначено та доставляється встановленим каналом';
+
+  @override
+  String get cdr_disconnectReason_prefix0DialedButNotAllowedPreemption =>
+      'Набрано префікс 0, але це не дозволено (пріоритетне витіснення)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved =>
+      'Набрано префікс 1, але це не дозволено (резерв пріоритету)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotRequired => 'Набрано префікс 1, але він не потрібен';
+
+  @override
+  String get cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding =>
+      'Отримано більше цифр, ніж дозволено; виклик продовжується';
+
+  @override
+  String get cdr_disconnectReason_normalCallClearing => 'Нормальне завершення виклику';
+
+  @override
+  String get cdr_disconnectReason_userBusy => 'Абонент зайнятий';
+
+  @override
+  String get cdr_disconnectReason_noUserResponding => 'Абонент не відповідає';
+
+  @override
+  String get cdr_disconnectReason_noAnswerFromUser => 'Немає відповіді від абонента';
+
+  @override
+  String get cdr_disconnectReason_subscriberIsAbsent => 'Абонент відсутній';
+
+  @override
+  String get cdr_disconnectReason_callRejected => 'Виклик відхилено';
+
+  @override
+  String get cdr_disconnectReason_numberChanged => 'Номер змінено';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingRejected => 'Зворотна тарифікація відхилена';
+
+  @override
+  String get cdr_disconnectReason_callSuspended => 'Виклик призупинено';
+
+  @override
+  String get cdr_disconnectReason_callResumed => 'Виклик відновлено';
+
+  @override
+  String get cdr_disconnectReason_nonSelectedUserClearing => 'Завершення виклику не вибраним абонентом';
+
+  @override
+  String get cdr_disconnectReason_destinationOutOfOrder => 'Напрямок поза сервісом';
+
+  @override
+  String get cdr_disconnectReason_invalidNumberFormatIncompleteNumber => 'Неправильний формат номера (неповний номер)';
+
+  @override
+  String get cdr_disconnectReason_facilityRejected => 'Послугу/функцію відхилено';
+
+  @override
+  String get cdr_disconnectReason_responseToStatusEnquiry => 'Відповідь на STATUS ENQUIRY';
+
+  @override
+  String get cdr_disconnectReason_normalUnspecified => 'Нормально, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_circuitOutOfOrder => 'Канал (circuit) поза сервісом';
+
+  @override
+  String get cdr_disconnectReason_noCircuitChannelAvailable => 'Немає доступного каналу/лінії';
+
+  @override
+  String get cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable =>
+      'Напрямок недосяжний (потрібний VPCI/VCI недоступний)';
+
+  @override
+  String get cdr_disconnectReason_vpciVciAssignmentFailure => 'Помилка призначення VPCI/VCI';
+
+  @override
+  String get cdr_disconnectReason_degradedServiceCallRateIsnNotValid =>
+      'Погіршення сервісу (швидкість викликів недійсна)';
+
+  @override
+  String get cdr_disconnectReason_networkWanOutOfOrder => 'Мережа (WAN) поза сервісом';
+
+  @override
+  String get cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService =>
+      'Неможливо досягти діапазону транзитної затримки (режим постійного кадру поза сервісом)';
+
+  @override
+  String get cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational =>
+      'Неможливо досягти діапазону пропускної здатності (режим постійного кадру працює)';
+
+  @override
+  String get cdr_disconnectReason_temporaryFailure => 'Тимчасовий збій';
+
+  @override
+  String get cdr_disconnectReason_switchingEquipmentCongestion => 'Перевантаження комутаційного обладнання';
+
+  @override
+  String get cdr_disconnectReason_accessInformationDiscarded => 'Інформацію доступу відкинуто';
+
+  @override
+  String get cdr_disconnectReason_requestedCircuitChannelNotAvailable => 'Запитаний канал/лінія недоступний(а)';
+
+  @override
+  String get cdr_disconnectReason_preEmptedNoVpciVciIsAvailable => 'Витіснено за пріоритетом (VPCI/VCI недоступний)';
+
+  @override
+  String get cdr_disconnectReason_precedenceCallBlocked => 'Пріоритетний виклик заблоковано';
+
+  @override
+  String get cdr_disconnectReason_resourceUnavailableUnspecified => 'Ресурс недоступний - не уточнено';
+
+  @override
+  String get cdr_disconnectReason_dspError => 'Помилка DSP';
+
+  @override
+  String get cdr_disconnectReason_qualityOfServiceUnavailable => 'Якість обслуговування недоступна';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotSubscribed => 'Запитана послуга/функція не підключена';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingNotAllowed => 'Зворотна тарифікація не дозволена';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarred => 'Вихідні виклики заборонені';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarredWithinCug => 'Вихідні виклики заборонені в межах CUG';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarred => 'Вхідні виклики заборонені';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarredWithinCug => 'Вхідні виклики заборонені в межах CUG';
+
+  @override
+  String get cdr_disconnectReason_callWaitingNotSubscribed => 'Очікування виклику не підключено';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotAuthorized => 'Несуча здатність не авторизована';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable => 'Несуча здатність наразі недоступна';
+
+  @override
+  String get cdr_disconnectReason_inconsistancyInTheInformationAndClass => 'Невідповідність між інформацією та класом';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified => 'Послуга або опція недоступна, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_bearerServiceNotImplemented => 'Bearer-послуга не реалізована';
+
+  @override
+  String get cdr_disconnectReason_channelTypeNotImplemented => 'Тип каналу не реалізовано';
+
+  @override
+  String get cdr_disconnectReason_transitNetworkSelectionNotImplemented => 'Вибір транзитної мережі не реалізовано';
+
+  @override
+  String get cdr_disconnectReason_messageNotImplemented => 'Повідомлення не реалізовано';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotImplemented => 'Запитану послугу/функцію не реалізовано';
+
+  @override
+  String get cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable =>
+      'Доступна лише обмежена цифрова bearer-здатність';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified =>
+      'Послуга або опція не реалізована, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_invalidCallReferenceValue => 'Недійсне значення посилання виклику';
+
+  @override
+  String get cdr_disconnectReason_identifiedChannelDoesNotExist => 'Ідентифікований канал не існує';
+
+  @override
+  String get cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot =>
+      'Існує призупинений виклик, але такого ідентифікатора виклику немає';
+
+  @override
+  String get cdr_disconnectReason_callIdentityInUse => 'Ідентифікатор виклику вже використовується';
+
+  @override
+  String get cdr_disconnectReason_noCallSuspended => 'Немає призупиненого виклику';
+
+  @override
+  String get cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared =>
+      'Виклик із запитаним ідентифікатором уже завершено';
+
+  @override
+  String get cdr_disconnectReason_calledUserNotMemberOfCug => 'Викликаний абонент не є учасником CUG';
+
+  @override
+  String get cdr_disconnectReason_incompatibleDestination => 'Несумісний напрямок';
+
+  @override
+  String get cdr_disconnectReason_nonExistentAbbreviatedAddressEntry => 'Неіснуючий запис скороченої адреси';
+
+  @override
+  String get cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed =>
+      'Адреса призначення відсутня, і прямий виклик не підключено';
+
+  @override
+  String get cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse =>
+      'Недійсний вибір транзитної мережі (національне використання)';
+
+  @override
+  String get cdr_disconnectReason_invalidFacilityParameter => 'Недійсний параметр послуги/функції';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported =>
+      'Обов\'язковий інформаційний елемент відсутній (параметр AAL не підтримується)';
+
+  @override
+  String get cdr_disconnectReason_invalidMessageUnspecified => 'Недійсне повідомлення, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissing =>
+      'Обов\'язковий інформаційний елемент відсутній';
+
+  @override
+  String get cdr_disconnectReason_messageTypeNonExistentOrNotImplemented =>
+      'Тип повідомлення не існує або не реалізований';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented =>
+      'Повідомлення несумісне зі станом виклику або тип повідомлення не існує/не реалізований';
+
+  @override
+  String get cdr_disconnectReason_informationElementNonexistantOrNotImplemented =>
+      'Інформаційний елемент не існує або не реалізований';
+
+  @override
+  String get cdr_disconnectReason_invalidInformationElementContents => 'Недійсний вміст інформаційного елемента';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallState => 'Повідомлення несумісне зі станом виклику';
+
+  @override
+  String get cdr_disconnectReason_recoveryOnTimerExpiry => 'Відновлення після спливу таймера';
+
+  @override
+  String get cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn =>
+      'Параметр не існує або не реалізований - передано далі';
+
+  @override
+  String get cdr_disconnectReason_urecognizedParameterMessageDiscarded =>
+      'Нерозпізнаний параметр, повідомлення відкинуто';
+
+  @override
+  String get cdr_disconnectReason_protocolErrorUnspecified => 'Помилка протоколу, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_internetworkingUnspecified => 'Взаємодія мереж (internetworking), не уточнено';
+
+  @override
+  String get cdr_disconnectReason_nextNodeIsUnreachable => 'Наступний вузол недосяжний';
+
+  @override
+  String get cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService =>
+      'Модуль постачальника телефонних послуг Holst (HTSPM) поза сервісом';
+
+  @override
+  String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'DTL-транзит не відповідає моєму ID вузла';
 }

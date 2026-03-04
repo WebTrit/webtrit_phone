@@ -2398,4 +2398,308 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Riprova';
+
+  @override
+  String get cdr_disconnectReason_unknown => 'Sconosciuto';
+
+  @override
+  String get cdr_disconnectReason_validCauseCodeNotYetReceived => 'Codice causa valido non ancora ricevuto';
+
+  @override
+  String get cdr_disconnectReason_unallocatedNumber => 'Numero non assegnato (non attribuito)';
+
+  @override
+  String get cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan =>
+      'Nessuna rotta verso la rete di transito specificata (WAN)';
+
+  @override
+  String get cdr_disconnectReason_noRouteToDestination => 'Nessuna rotta verso la destinazione';
+
+  @override
+  String get cdr_disconnectReason_sendSpecialInformationTone => 'Invia tono informativo speciale';
+
+  @override
+  String get cdr_disconnectReason_misdialledTrunkPrefix => 'Prefisso di linea composto in modo errato';
+
+  @override
+  String get cdr_disconnectReason_channelUnacceptable => 'Canale non accettabile';
+
+  @override
+  String get cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel =>
+      'Chiamata assegnata e in consegna su un canale stabilito';
+
+  @override
+  String get cdr_disconnectReason_prefix0DialedButNotAllowedPreemption =>
+      'Prefisso 0 composto ma non consentito (prelazione)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved =>
+      'Prefisso 1 composto ma non consentito (prelazione riservata)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotRequired => 'Prefisso 1 composto ma non richiesto';
+
+  @override
+  String get cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding =>
+      'Ricevute più cifre del consentito, la chiamata prosegue';
+
+  @override
+  String get cdr_disconnectReason_normalCallClearing => 'Chiusura normale della chiamata';
+
+  @override
+  String get cdr_disconnectReason_userBusy => 'Utente occupato';
+
+  @override
+  String get cdr_disconnectReason_noUserResponding => 'Nessuna risposta dell\'utente';
+
+  @override
+  String get cdr_disconnectReason_noAnswerFromUser => 'Nessuna risposta dall\'utente';
+
+  @override
+  String get cdr_disconnectReason_subscriberIsAbsent => 'Abbonato assente';
+
+  @override
+  String get cdr_disconnectReason_callRejected => 'Chiamata rifiutata';
+
+  @override
+  String get cdr_disconnectReason_numberChanged => 'Numero cambiato';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingRejected => 'Addebito a carico del destinatario rifiutato';
+
+  @override
+  String get cdr_disconnectReason_callSuspended => 'Chiamata sospesa';
+
+  @override
+  String get cdr_disconnectReason_callResumed => 'Chiamata ripresa';
+
+  @override
+  String get cdr_disconnectReason_nonSelectedUserClearing => 'Chiusura da utente non selezionato';
+
+  @override
+  String get cdr_disconnectReason_destinationOutOfOrder => 'Destinazione fuori servizio';
+
+  @override
+  String get cdr_disconnectReason_invalidNumberFormatIncompleteNumber =>
+      'Formato numero non valido (numero incompleto)';
+
+  @override
+  String get cdr_disconnectReason_facilityRejected => 'Servizio/facilità rifiutato';
+
+  @override
+  String get cdr_disconnectReason_responseToStatusEnquiry => 'Risposta a STATUS ENQUIRY';
+
+  @override
+  String get cdr_disconnectReason_normalUnspecified => 'Normale, non specificato';
+
+  @override
+  String get cdr_disconnectReason_circuitOutOfOrder => 'Circuito fuori servizio';
+
+  @override
+  String get cdr_disconnectReason_noCircuitChannelAvailable => 'Nessun circuito/canale disponibile';
+
+  @override
+  String get cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable =>
+      'Destinazione irraggiungibile (VPCI/VCI richiesto non disponibile)';
+
+  @override
+  String get cdr_disconnectReason_vpciVciAssignmentFailure => 'Errore di assegnazione VPCI/VCI';
+
+  @override
+  String get cdr_disconnectReason_degradedServiceCallRateIsnNotValid =>
+      'Servizio degradato (tasso di chiamata non valido)';
+
+  @override
+  String get cdr_disconnectReason_networkWanOutOfOrder => 'Rete (WAN) fuori servizio';
+
+  @override
+  String get cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService =>
+      'Intervallo di ritardo di transito non raggiungibile (modalità frame permanente fuori servizio)';
+
+  @override
+  String get cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational =>
+      'Intervallo di throughput non raggiungibile (modalità frame permanente operativa)';
+
+  @override
+  String get cdr_disconnectReason_temporaryFailure => 'Guasto temporaneo';
+
+  @override
+  String get cdr_disconnectReason_switchingEquipmentCongestion => 'Congestione dell\'apparato di commutazione';
+
+  @override
+  String get cdr_disconnectReason_accessInformationDiscarded => 'Informazioni di accesso scartate';
+
+  @override
+  String get cdr_disconnectReason_requestedCircuitChannelNotAvailable => 'Circuito/canale richiesto non disponibile';
+
+  @override
+  String get cdr_disconnectReason_preEmptedNoVpciVciIsAvailable =>
+      'Prelazione effettuata (nessun VPCI/VCI disponibile)';
+
+  @override
+  String get cdr_disconnectReason_precedenceCallBlocked => 'Chiamata con precedenza bloccata';
+
+  @override
+  String get cdr_disconnectReason_resourceUnavailableUnspecified => 'Risorsa non disponibile - non specificato';
+
+  @override
+  String get cdr_disconnectReason_dspError => 'Errore DSP';
+
+  @override
+  String get cdr_disconnectReason_qualityOfServiceUnavailable => 'Qualità del servizio non disponibile';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotSubscribed => 'Servizio/facilità richiesto non sottoscritto';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingNotAllowed => 'Addebito a carico del destinatario non consentito';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarred => 'Chiamate uscenti bloccate';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarredWithinCug => 'Chiamate uscenti bloccate all\'interno del CUG';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarred => 'Chiamate entranti bloccate';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarredWithinCug => 'Chiamate entranti bloccate all\'interno del CUG';
+
+  @override
+  String get cdr_disconnectReason_callWaitingNotSubscribed => 'Avviso di chiamata non sottoscritto';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotAuthorized => 'Capacità portante non autorizzata';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable =>
+      'Capacità portante attualmente non disponibile';
+
+  @override
+  String get cdr_disconnectReason_inconsistancyInTheInformationAndClass => 'Incoerenza tra informazione e classe';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified =>
+      'Servizio o opzione non disponibile, non specificato';
+
+  @override
+  String get cdr_disconnectReason_bearerServiceNotImplemented => 'Servizio bearer non implementato';
+
+  @override
+  String get cdr_disconnectReason_channelTypeNotImplemented => 'Tipo di canale non implementato';
+
+  @override
+  String get cdr_disconnectReason_transitNetworkSelectionNotImplemented =>
+      'Selezione rete di transito non implementata';
+
+  @override
+  String get cdr_disconnectReason_messageNotImplemented => 'Messaggio non implementato';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotImplemented => 'Servizio/facilità richiesto non implementato';
+
+  @override
+  String get cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable =>
+      'Disponibile solo capacità bearer digitale limitata';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified =>
+      'Servizio o opzione non implementato, non specificato';
+
+  @override
+  String get cdr_disconnectReason_invalidCallReferenceValue => 'Valore di riferimento chiamata non valido';
+
+  @override
+  String get cdr_disconnectReason_identifiedChannelDoesNotExist => 'Il canale identificato non esiste';
+
+  @override
+  String get cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot =>
+      'Esiste una chiamata sospesa, ma questa identità chiamata non esiste';
+
+  @override
+  String get cdr_disconnectReason_callIdentityInUse => 'Identità chiamata già in uso';
+
+  @override
+  String get cdr_disconnectReason_noCallSuspended => 'Nessuna chiamata sospesa';
+
+  @override
+  String get cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared =>
+      'La chiamata con l\'identità richiesta è stata chiusa';
+
+  @override
+  String get cdr_disconnectReason_calledUserNotMemberOfCug => 'L\'utente chiamato non è membro del CUG';
+
+  @override
+  String get cdr_disconnectReason_incompatibleDestination => 'Destinazione incompatibile';
+
+  @override
+  String get cdr_disconnectReason_nonExistentAbbreviatedAddressEntry => 'Voce di indirizzo abbreviato inesistente';
+
+  @override
+  String get cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed =>
+      'Indirizzo di destinazione mancante e chiamata diretta non sottoscritta';
+
+  @override
+  String get cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse =>
+      'Selezione rete di transito non valida (uso nazionale)';
+
+  @override
+  String get cdr_disconnectReason_invalidFacilityParameter => 'Parametro servizio/facilità non valido';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported =>
+      'Elemento informativo obbligatorio mancante (parametro AAL non supportato)';
+
+  @override
+  String get cdr_disconnectReason_invalidMessageUnspecified => 'Messaggio non valido, non specificato';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissing => 'Elemento informativo obbligatorio mancante';
+
+  @override
+  String get cdr_disconnectReason_messageTypeNonExistentOrNotImplemented =>
+      'Tipo di messaggio inesistente o non implementato';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented =>
+      'Messaggio non compatibile con lo stato chiamata o tipo di messaggio inesistente/non implementato';
+
+  @override
+  String get cdr_disconnectReason_informationElementNonexistantOrNotImplemented =>
+      'Elemento informativo inesistente o non implementato';
+
+  @override
+  String get cdr_disconnectReason_invalidInformationElementContents => 'Contenuto elemento informativo non valido';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallState =>
+      'Messaggio non compatibile con lo stato della chiamata';
+
+  @override
+  String get cdr_disconnectReason_recoveryOnTimerExpiry => 'Ripristino alla scadenza del timer';
+
+  @override
+  String get cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn =>
+      'Parametro inesistente o non implementato - inoltrato';
+
+  @override
+  String get cdr_disconnectReason_urecognizedParameterMessageDiscarded =>
+      'Parametro non riconosciuto, messaggio scartato';
+
+  @override
+  String get cdr_disconnectReason_protocolErrorUnspecified => 'Errore di protocollo non specificato';
+
+  @override
+  String get cdr_disconnectReason_internetworkingUnspecified => 'Interworking, non specificato';
+
+  @override
+  String get cdr_disconnectReason_nextNodeIsUnreachable => 'Nodo successivo irraggiungibile';
+
+  @override
+  String get cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService =>
+      'Modulo fornitore servizio telefonico Holst (HTSPM) fuori servizio';
+
+  @override
+  String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'Il transito DTL non corrisponde al mio ID nodo';
 }
