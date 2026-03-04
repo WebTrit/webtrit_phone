@@ -29,7 +29,7 @@ class CoreInfo with EquatableMixin {
   }
 
   bool get supportsRemoteFavorites {
-    // Remote favorites support was added in 0.24.0-alpha.2
-    return verifyVersionStr('>=0.24.0-alpha.2 <2.0.0');
+    // Remote favorites support was added in 0.25.0-alpha.2
+    return verifyVersionStr('>=0.25.0-alpha.2 <2.0.0');
   }
 }
