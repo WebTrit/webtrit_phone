@@ -1773,10 +1773,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     late final MediaStream localStream;
     try {
-      localStream = await userMediaBuilder.build(
-        video: event.video,
-        frontCamera: state.retrieveActiveCall(event.callId)?.frontCamera,
-      );
+      if (state.activeCalls.length > 1) {
+        final previousActiveCall = state.activeCalls[state.activeCalls.length - 2];
+        if (previousActiveCall.localStream == null) {
+          localStream = await userMediaBuilder.build(
+            video: event.video,
+            frontCamera: state.retrieveActiveCall(event.callId)?.frontCamera,
+          );
+        }
+        else {
+          localStream = previousActiveCall.localStream!;
+          final videoTrack = localStream.getVideoTracks().firstOrNull;
+          if (videoTrack != null) {
+            videoTrack.enabled = event.video;
+            emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: event.video)));
+          }
+        }
+      }
+      else {
+        localStream = await userMediaBuilder.build(
+          video: event.video,
+          frontCamera: state.retrieveActiveCall(event.callId)?.frontCamera,
+        );
+      }
       event.fulfill();
 
       emit(
@@ -1922,7 +1941,45 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
-      final localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
+      late final MediaStream localStream;
+      try {
+        if (state.activeCalls.length > 1) {
+          final previousActiveCall = state.activeCalls[state.activeCalls.length - 2];
+          if (previousActiveCall.localStream == null) {
+            localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
+          }
+          else {
+            localStream = previousActiveCall.localStream!;
+            final videoTrack = localStream.getVideoTracks().firstOrNull;
+            if (videoTrack != null) {
+              videoTrack.enabled = offer.hasVideo;
+              emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: offer.hasVideo)));
+            }
+          }
+        }
+        else {
+          localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
+        }
+        event.fulfill();
+
+        emit(
+          state.copyWithMappedActiveCall(event.callId, (activeCall) {
+            return activeCall.copyWith(localStream: localStream);
+          }),
+        );
+      } catch (e, stackTrace) {
+        _logger.warning('__onCallPerformEventStarted _getUserMedia', e, stackTrace);
+
+        event.fail();
+
+        _peerConnectionManager.completeError(event.callId, e, stackTrace);
+
+        emit(state.copyWithPopActiveCall(event.callId));
+
+        submitNotification(const CallUserMediaErrorNotification());
+        return;
+      }
+
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
