@@ -31,6 +31,10 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
     );
   }
 
+  /// Deletes all phone rows for [contactId] that are NOT present in [pairs].
+  ///
+  /// Each pair is a `(number, label)` tuple that identifies a row to keep.
+  /// If [pairs] is empty, all phones for the contact are deleted.
   Future<void> deleteOtherContactPhonesOfContactId(int contactId, List<({String number, String label})> pairs) async {
     if (pairs.isEmpty) {
       await (delete(contactPhonesTable)..where((t) => t.contactId.equals(contactId))).go();
