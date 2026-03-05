@@ -166,6 +166,42 @@ void main() {
       }
     });
 
+    test('favorites FK to contact_phones remains valid after migration', () async {
+      final schema = await verifier.schemaAt(19);
+      try {
+        final oldDb = v19.DatabaseAtV19(schema.newConnection());
+
+        await oldDb.customStatement(
+          "INSERT INTO contacts (id, source_type, source_id, kind) VALUES (1, 1, 'ext_source_1', 0)",
+        );
+        await oldDb.customStatement(
+          "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (1, '16042000001', 'number', 1)",
+        );
+        await oldDb.customStatement('INSERT INTO favorites (id, contact_phone_id, position) VALUES (1, 1, 0)');
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 20);
+        await appDatabase.close();
+
+        final checkDb = v20.DatabaseAtV20(schema.newConnection());
+
+        await checkDb.customStatement('PRAGMA foreign_keys = ON');
+
+        // PRAGMA foreign_key_check returns rows only for violations; empty means all FKs are valid.
+        final violations = await checkDb.customSelect('PRAGMA foreign_key_check(favorites)').get();
+        expect(violations, isEmpty);
+
+        final favoriteRows = await checkDb.customSelect('SELECT id, contact_phone_id FROM favorites').get();
+        expect(favoriteRows.length, 1);
+        expect(favoriteRows[0].read<int>('contact_phone_id'), 1);
+
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+
     test('new schema allows same number with different labels for same contact', () async {
       final schema = await verifier.schemaAt(19);
       try {
