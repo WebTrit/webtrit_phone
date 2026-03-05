@@ -25,7 +25,6 @@ class LoginModeSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final Gradients? gradients = themeData.extension<Gradients>();
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     final LoginModeSelectScreenStyles? loginPageStyles = themeData.extension<LoginModeSelectScreenStyles>();
 
@@ -42,6 +41,7 @@ class LoginModeSelectScreen extends StatelessWidget {
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
 
         return ThemedScaffold(
+          background: localStyle?.background,
           contentThemeOverride: localStyle?.contentThemeOverride,
           applyToAppBar: localStyle?.applyToAppBar ?? true,
           extendBodyBehindAppBar: true,
@@ -65,7 +65,6 @@ class LoginModeSelectScreen extends StatelessWidget {
           ),
           body: Container(
             padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
-            decoration: BoxDecoration(gradient: gradients?.tab),
             child: SafeArea(
               top: false,
               child: Column(

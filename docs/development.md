@@ -10,9 +10,11 @@ Git hooks are scripts that run automatically at certain points in your Git workf
 this project to:
 
 - Enforce [Conventional Commits](https://www.conventionalcommits.org/)
-- Check branch naming conventions (e.g., `feature/`, `fix/`)
-- Run `flutter analyze` before committing or pushing
-- Run unit and widget tests before pushing
+- Check branch naming conventions (e.g., `feature/`, `feat/`, `fix/`)
+- Run `dart format` before committing
+- Run `flutter analyze` and unit/widget tests before pushing
+
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for branch naming and commit message rules.
 
 ### Installation
 
@@ -32,7 +34,7 @@ lefthook install
 
 | Hook         | Purpose                                                                                      |
 |--------------|----------------------------------------------------------------------------------------------|
-| `pre-commit` | Runs `flutter analyze` before committing                                                     |
+| `pre-commit` | Runs `dart format` on staged Dart files (generated files excluded)                           |
 | `pre-push`   | Runs `flutter analyze`, `flutter test`, and checks branch name                               |
 | `commit-msg` | Validates commit messages using [Conventional Commits](https://www.conventionalcommits.org/) |
 

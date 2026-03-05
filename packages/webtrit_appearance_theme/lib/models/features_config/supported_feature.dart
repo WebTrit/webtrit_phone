@@ -18,10 +18,8 @@ sealed class SupportedFeature with _$SupportedFeature {
   /// [logLevel] controls the application log level. Defaults to 'INFO'.
   /// [checkIntervalSec] defines how often the [RtpTrafficMonitor] checks for traffic.
   /// Defaults to 15 seconds.
-  const factory SupportedFeature.loggingConfig({
-    @Default('INFO') String logLevel,
-    @Default(15) int checkIntervalSec,
-  }) = SupportedLoggingConfig;
+  const factory SupportedFeature.loggingConfig({@Default('INFO') String logLevel, @Default(15) int checkIntervalSec}) =
+      SupportedLoggingConfig;
 
   const factory SupportedFeature.systemNotifications({@Default(true) bool enabled}) = SupportedSystemNotifications;
 

@@ -5,8 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
 class CallScreenStyle with Diagnosticable {
-  CallScreenStyle({this.systemUiOverlayStyle, this.appBar, this.callInfo, this.actions});
+  CallScreenStyle({this.background, this.systemUiOverlayStyle, this.appBar, this.callInfo, this.actions});
 
+  final BackgroundStyle? background;
   final SystemUiOverlayStyle? systemUiOverlayStyle;
   final AppBarStyle? appBar;
   final CallInfoStyle? callInfo;
@@ -16,6 +17,7 @@ class CallScreenStyle with Diagnosticable {
     if (identical(a, b)) return a;
 
     return CallScreenStyle(
+      background: BackgroundStyle.lerp(a?.background, b?.background, t),
       systemUiOverlayStyle: b?.systemUiOverlayStyle ?? a?.systemUiOverlayStyle,
       callInfo: CallInfoStyle.lerp(a?.callInfo, b?.callInfo, t),
       appBar: AppBarStyle.lerp(a?.appBar, b?.appBar, t),
@@ -27,6 +29,7 @@ class CallScreenStyle with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
+      ..add(DiagnosticsProperty<BackgroundStyle?>('background', background))
       ..add(DiagnosticsProperty<SystemUiOverlayStyle?>('systemUiOverlayStyle', systemUiOverlayStyle))
       ..add(DiagnosticsProperty<AppBarStyle?>('appBar', appBar))
       ..add(DiagnosticsProperty<CallInfoStyle?>('callInfo', callInfo))

@@ -11,9 +11,7 @@ class MockContactsLocalTabBloc extends MockBloc<ContactsLocalTabEvent, ContactsL
     whenListen(
       mock,
       const Stream<ContactsLocalTabState>.empty(),
-      initialState: const ContactsLocalTabState(
-        status: ContactsLocalTabStatus.success,
-      ),
+      initialState: const ContactsLocalTabState(status: ContactsLocalTabStatus.success),
     );
     return mock;
   }

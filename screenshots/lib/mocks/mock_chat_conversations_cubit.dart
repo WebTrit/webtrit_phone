@@ -10,11 +10,7 @@ class MockChatConversationsCubit extends MockCubit<ChatConversationsState> imple
   factory MockChatConversationsCubit.initial() {
     final mock = MockChatConversationsCubit();
 
-    whenListen(
-      mock,
-      const Stream<ChatConversationsState>.empty(),
-      initialState: ChatConversationsState.initial(),
-    );
+    whenListen(mock, const Stream<ChatConversationsState>.empty(), initialState: ChatConversationsState.initial());
 
     return mock;
   }
@@ -49,10 +45,7 @@ class MockChatConversationsCubit extends MockCubit<ChatConversationsState> imple
 
     whenListen(
       mock,
-      Stream.fromIterable([
-        ChatConversationsState.initial(),
-        ChatConversationsState([], [], false),
-      ]),
+      Stream.fromIterable([ChatConversationsState.initial(), ChatConversationsState([], [], false)]),
       initialState: ChatConversationsState.initial(),
     );
 

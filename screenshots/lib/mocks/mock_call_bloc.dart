@@ -14,9 +14,7 @@ class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {
       mock,
       const Stream<CallState>.empty(),
       initialState: const CallState(
-        callServiceState: CallServiceState(
-          signalingClientStatus: SignalingClientStatus.connect,
-        ),
+        callServiceState: CallServiceState(signalingClientStatus: SignalingClientStatus.connect),
       ),
     );
     return mock;
@@ -28,9 +26,7 @@ class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {
       mock,
       const Stream<CallState>.empty(),
       initialState: const CallState(
-        callServiceState: CallServiceState(
-          signalingClientStatus: SignalingClientStatus.connect,
-        ),
+        callServiceState: CallServiceState(signalingClientStatus: SignalingClientStatus.connect),
       ),
     );
     return mock;
@@ -42,12 +38,8 @@ class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {
       mock,
       const Stream<CallState>.empty(),
       initialState: CallState(
-        callServiceState: const CallServiceState(
-          signalingClientStatus: SignalingClientStatus.connect,
-        ),
-        activeCalls: [
-          if (video) dVideoActiveCall else dAudioActiveCall,
-        ],
+        callServiceState: const CallServiceState(signalingClientStatus: SignalingClientStatus.connect),
+        activeCalls: [if (video) dVideoActiveCall else dAudioActiveCall],
       ),
     );
     return mock;

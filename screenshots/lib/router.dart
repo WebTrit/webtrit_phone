@@ -43,180 +43,68 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
     final appBloc = context.read<AppBloc>();
 
     final screenshots = [
+      ScreenshotApp(appBloc: appBloc, child: const LoginModeSelectScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const LoginCoreUrlAssignScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const LoginOtpSignInScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const LoginOtpVerifyInScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const LoginPasswordSignInScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const LoginSignUpScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const PrivacyScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const LoginSignUpVerifyScreenshot()),
       ScreenshotApp(
         appBloc: appBloc,
-        child: const LoginModeSelectScreenScreenshot(),
+        child: const MainScreenScreenshot(MainFlavor.favorites, Text(EnvironmentConfig.APP_NAME)),
       ),
       ScreenshotApp(
         appBloc: appBloc,
-        child: const LoginCoreUrlAssignScreenScreenshot(),
+        child: const MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
       ),
       ScreenshotApp(
         appBloc: appBloc,
-        child: const LoginOtpSignInScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const LoginOtpVerifyInScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const LoginPasswordSignInScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const LoginSignUpScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const PrivacyScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const LoginSignUpVerifyScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.favorites,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.recents,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.keypad,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
+        child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME)),
       ),
       ScreenshotApp(
         appBloc: appBloc,
         child: Builder(
-          builder: (context) => const MainScreenScreenshot(
-            MainFlavor.messaging,
-            Text(EnvironmentConfig.APP_NAME),
-          ),
+          builder: (context) => const MainScreenScreenshot(MainFlavor.messaging, Text(EnvironmentConfig.APP_NAME)),
         ),
       ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const SettingScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: MediaSettingsScreenScreenshot(
-          initialOpenSection: 1,
-        ),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const CallScreenScreenshot(false),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const CallScreenScreenshot(true),
-      ),
+      ScreenshotApp(appBloc: appBloc, child: const SettingScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: MediaSettingsScreenScreenshot(initialOpenSection: 1)),
+      ScreenshotApp(appBloc: appBloc, child: const CallScreenScreenshot(false)),
+      ScreenshotApp(appBloc: appBloc, child: const CallScreenScreenshot(true)),
       // Contact & messaging
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const ContactScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const ChatConversationScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const SmsConversationScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const SystemNotificationsScreenScreenshot(),
-      ),
+      ScreenshotApp(appBloc: appBloc, child: const ContactScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const ChatConversationScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const SmsConversationScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const SystemNotificationsScreenScreenshot()),
       // CDRs & call log
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const RecentCdrsScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const NumberCdrsScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const CallLogScreenScreenshot(),
-      ),
+      ScreenshotApp(appBloc: appBloc, child: const RecentCdrsScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const NumberCdrsScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const CallLogScreenScreenshot()),
       // Settings sub-screens
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const NetworkScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const LanguageScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const DiagnosticScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const CallerIdSettingsScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const PresenceSettingsScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const ThemeModeScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const VoicemailScreenScreenshot(),
-      ),
+      ScreenshotApp(appBloc: appBloc, child: const NetworkScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const LanguageScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const DiagnosticScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const CallerIdSettingsScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const PresenceSettingsScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const ThemeModeScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const VoicemailScreenScreenshot()),
       // Login variant
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const LoginSwitchScreenScreenshot(),
-      ),
+      ScreenshotApp(appBloc: appBloc, child: const LoginSwitchScreenScreenshot()),
       // Utility screens
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const LogRecordsConsoleScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const ContactsAgreementScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const TeardownScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const PermissionsScreenScreenshot(),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const UserAgreementScreenScreenshot(),
-      ),
+      ScreenshotApp(appBloc: appBloc, child: const LogRecordsConsoleScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const ContactsAgreementScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const TeardownScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const PermissionsScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const UserAgreementScreenScreenshot()),
     ];
 
     return DefaultTabController(
       key: ValueKey(widget.index),
       length: screenshots.length,
       initialIndex: widget.index,
-      child: TabBarView(
-        children: screenshots,
-      ),
+      child: TabBarView(children: screenshots),
     );
   }
 }

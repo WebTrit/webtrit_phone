@@ -36,11 +36,6 @@ ThemeWidgetConfig _$ThemeWidgetConfigFromJson(
   statuses: json['statuses'] == null
       ? const StatusesWidgetConfig()
       : StatusesWidgetConfig.fromJson(json['statuses'] as Map<String, dynamic>),
-  decorationConfig: json['decorationConfig'] == null
-      ? const DecorationConfig()
-      : DecorationConfig.fromJson(
-          json['decorationConfig'] as Map<String, dynamic>,
-        ),
 );
 
 Map<String, dynamic> _$ThemeWidgetConfigToJson(ThemeWidgetConfig instance) =>
@@ -54,7 +49,6 @@ Map<String, dynamic> _$ThemeWidgetConfigToJson(ThemeWidgetConfig instance) =>
       'text': instance.text.toJson(),
       'dialog': instance.dialog.toJson(),
       'statuses': instance.statuses.toJson(),
-      'decorationConfig': instance.decorationConfig.toJson(),
     };
 
 FontsConfig _$FontsConfigFromJson(Map<String, dynamic> json) =>
@@ -510,37 +504,6 @@ Map<String, dynamic> _$CallStatusesWidgetConfigToJson(
   'connectIssue': instance.connectIssue,
   'inProgress': instance.inProgress,
   'ready': instance.ready,
-};
-
-DecorationConfig _$DecorationConfigFromJson(Map<String, dynamic> json) =>
-    DecorationConfig(
-      primaryGradientColorsConfig: json['primaryGradientColorsConfig'] == null
-          ? const GradientColorsConfig()
-          : GradientColorsConfig.fromJson(
-              json['primaryGradientColorsConfig'] as Map<String, dynamic>,
-            ),
-    );
-
-Map<String, dynamic> _$DecorationConfigToJson(
-  DecorationConfig instance,
-) => <String, dynamic>{
-  'primaryGradientColorsConfig': instance.primaryGradientColorsConfig.toJson(),
-};
-
-GradientColorsConfig _$GradientColorsConfigFromJson(
-  Map<String, dynamic> json,
-) => GradientColorsConfig(
-  colors:
-      (json['colors'] as List<dynamic>?)
-          ?.map((e) => CustomColor.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
-);
-
-Map<String, dynamic> _$GradientColorsConfigToJson(
-  GradientColorsConfig instance,
-) => <String, dynamic>{
-  'colors': instance.colors.map((e) => e.toJson()).toList(),
 };
 
 TabBarConfig _$TabBarConfigFromJson(Map<String, dynamic> json) => TabBarConfig(

@@ -7,11 +7,7 @@ class MockMainBloc extends MockBloc<MainBlocEvent, MainBlocState> implements Mai
 
   factory MockMainBloc.mainScreen() {
     final mock = MockMainBloc();
-    whenListen(
-      mock,
-      const Stream<MainBlocState>.empty(),
-      initialState: MainBlocState.initial(),
-    );
+    whenListen(mock, const Stream<MainBlocState>.empty(), initialState: MainBlocState.initial());
     return mock;
   }
 }

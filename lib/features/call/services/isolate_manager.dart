@@ -176,12 +176,7 @@ class PushNotificationIsolateManager extends IsolateManager {
   @override
   void _onNoActiveLines() async {
     if (_metadata != null) {
-      final event = HangupEvent(
-        callId: _metadata!.callId,
-        line: -1,
-        reason: 'Missed',
-        code: -1,
-      );
+      final event = HangupEvent(callId: _metadata!.callId, line: -1, reason: 'Missed', code: -1);
       final call = (
         direction: CallDirection.incoming,
         number: _metadata!.handle!.value,

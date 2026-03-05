@@ -14,30 +14,22 @@ import 'package:screenshots/router.dart';
 import 'package:screenshots/bootstrap.dart';
 
 void main() async {
-  await withClock(
-    Clock.fixed(dFixedTime),
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
+  await withClock(Clock.fixed(dFixedTime), () async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-      final context = await bootstrap();
+    final context = await bootstrap();
 
-      runApp(
-        MultiProvider(
-          providers: context.providers,
-          child: ScreenshotsApp(
-            appBloc: context.appBloc,
-          ),
-        ),
-      );
-    },
-  );
+    runApp(
+      MultiProvider(
+        providers: context.providers,
+        child: ScreenshotsApp(appBloc: context.appBloc),
+      ),
+    );
+  });
 }
 
 class ScreenshotsApp extends StatelessWidget {
-  const ScreenshotsApp({
-    super.key,
-    required this.appBloc,
-  });
+  const ScreenshotsApp({super.key, required this.appBloc});
 
   final AppBloc appBloc;
 
@@ -45,10 +37,7 @@ class ScreenshotsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return PresenceViewParams(
       viewSource: PresenceViewSource.contactInfo,
-      child: BlocProvider.value(
-        value: appBloc,
-        child: const AppPairingContent(),
-      ),
+      child: BlocProvider.value(value: appBloc, child: const AppPairingContent()),
     );
   }
 }

@@ -928,6 +928,10 @@
   "@messaging_MessageView_reply": {},
   "messaging_MessageView_textcopy": "Копіювати в буфер обміну",
   "@messaging_MessageView_textcopy": {},
+  "messaging_MessageView_today": "Сьогодні",
+  "@messaging_MessageView_today": {},
+  "messaging_MessageView_yesterday": "Вчора",
+  "@messaging_MessageView_yesterday": {},
   "messaging_ParticipantName_unknown": "Невідомий користувач",
   "@messaging_ParticipantName_unknown": {
     "description": "Shown when a participant in a conversation does not have a known or available name. Condition: the user's name is missing or cannot be retrieved."

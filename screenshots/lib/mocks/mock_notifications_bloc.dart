@@ -7,11 +7,7 @@ class MockNotificationsBloc extends MockBloc<NotificationsEvent, NotificationsSt
 
   factory MockNotificationsBloc.initial() {
     final mock = MockNotificationsBloc();
-    whenListen(
-      mock,
-      const Stream<NotificationsState>.empty(),
-      initialState: const NotificationsState(),
-    );
+    whenListen(mock, const Stream<NotificationsState>.empty(), initialState: const NotificationsState());
     return mock;
   }
 }

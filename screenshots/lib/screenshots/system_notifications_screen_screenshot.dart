@@ -25,7 +25,7 @@ class _SystemNotificationsScreenScreenshotState extends State<SystemNotification
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return BlocProvider<SystemNotificationsScreenCubit>(
               create: (_) => MockSystemNotificationsScreenCubit.withNotifications(),
               child: const SystemNotificationsScreen(),

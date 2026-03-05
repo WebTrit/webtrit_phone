@@ -36,6 +36,7 @@ class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyl
     return SettingsScreenStyles(
       primary: SettingScreenStyle(
         background: backgroundStyle,
+        appBarBlurredSurface: config?.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: contentThemeOverride,
         applyToAppBar: applyToAppBar,
         leadingIconsColor: leadingIconsColor,

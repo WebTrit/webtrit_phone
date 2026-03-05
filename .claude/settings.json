@@ -6,21 +6,71 @@
       "Bash(dart format:*)",
       "Bash(dart fix:*)",
       "Bash(flutter pub get:*)",
-      "Bash(flutter gen-l10n:*)"
+      "Bash(flutter gen-l10n:*)",
+      "Bash(melos *)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git branch:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(git push:*)",
+      "Bash(git stash:*)",
+      "Bash(git merge:*)",
+      "Bash(git rebase:*)"
     ],
     "deny": [
-      "Bash(**/webtrit_phone_keystores/**)",
-      "Read(**/webtrit_phone_keystores/**)",
-      "Write(**/webtrit_phone_keystores/**)",
+      "Bash(**/.env*)",
+      "Read(**/.env*)",
+      "Write(**/.env*)",
       "Read(**/*.jks)",
       "Read(**/*.keystore)",
       "Read(**/*.p12)",
       "Read(**/*.pem)",
       "Read(**/*.key)",
       "Read(**/*.p8)",
-      "Bash(**/.env*)",
-      "Read(**/.env*)",
-      "Write(**/.env*)"
+      "Write(**/*.jks)",
+      "Write(**/*.keystore)",
+      "Write(**/*.p12)",
+      "Write(**/*.pem)",
+      "Write(**/*.key)",
+      "Write(**/*.p8)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/md_formatter.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Run",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/env_file_guard.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|View|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/env_file_guard.py"
+          }
+        ]
+      }
     ]
   }
 }

@@ -1,3 +1,4 @@
+export 'blurred_surface_config.dart';
 export 'border_config.dart';
 export 'button_style_config.dart';
 export 'geometry_config.dart';

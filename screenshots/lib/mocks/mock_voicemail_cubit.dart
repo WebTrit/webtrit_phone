@@ -12,10 +12,7 @@ class MockVoicemailCubit extends MockCubit<VoicemailState> implements VoicemailC
     whenListen(
       mock,
       const Stream<VoicemailState>.empty(),
-      initialState: VoicemailState(
-        status: VoicemailStatus.loaded,
-        items: dMockVoicemails,
-      ),
+      initialState: VoicemailState(status: VoicemailStatus.loaded, items: dMockVoicemails),
     );
     return mock;
   }

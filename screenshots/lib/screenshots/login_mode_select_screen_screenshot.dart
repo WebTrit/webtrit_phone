@@ -9,9 +9,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class LoginModeSelectScreenScreenshot extends StatelessWidget {
-  const LoginModeSelectScreenScreenshot({
-    super.key,
-  });
+  const LoginModeSelectScreenScreenshot({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -19,6 +19,7 @@ back to sensible in-app defaults.
     - [App bar](#app-bar)
     - [Call info](#call-info)
 - [Keypad page](#keypad-page)
+- [Common page fields](#common-page-fields)
 - [Common object formats](#common-object-formats)
 
 ---
@@ -338,19 +339,25 @@ application, including the main call screen and the keypad.
 
 Top-level keys inside `"keypad"`:
 
-| Key                    | Type   | Description                                                                                                            |
-|------------------------|--------|------------------------------------------------------------------------------------------------------------------------|
-| `systemUiOverlayStyle` | object | Status/navigation bars styling.                                                                                        |
-| `textField`            | object | Number input field style (top of page).                                                                                |
-| `contactName`          | object | Resolved contact name style (under input).                                                                             |
-| `keypad`               | object | Numeric keypad layout (digits, spacing, padding).                                                                      |
-| `actionpad`            | object | Layout for action buttons (call, backspace, etc.). Button styles are taken from the global `Action Pad Configuration`. |
+| Key                      | Type   | Description                                                                                                            |
+|--------------------------|--------|------------------------------------------------------------------------------------------------------------------------|
+| `appBarBlurredSurface`   | object | Blurred surface config. See [Common page fields](#common-page-fields).                                                 |
+| `systemUiOverlayStyle`   | object | Status/navigation bars styling.                                                                                        |
+| `textField`              | object | Number input field style (top of page).                                                                                |
+| `contactName`            | object | Resolved contact name style (under input).                                                                             |
+| `keypad`                 | object | Numeric keypad layout (digits, spacing, padding).                                                                      |
+| `actionpad`              | object | Layout for action buttons (call, backspace, etc.). Button styles are taken from the global `Action Pad Configuration`. |
 
 **Minimal example:**
 
 ```json
 {
   "keypad": {
+    "appBarBlurredSurface": {
+      "color": "#66000000",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "systemUiOverlayStyle": {
       "statusBarIconBrightness": "dark"
     },
@@ -373,6 +380,38 @@ Top-level keys inside `"keypad"`:
   }
 }
 ```
+
+---
+
+## Common page fields
+
+Every page config that has an app bar supports these optional fields:
+
+| Key                     | Type   | Description                                                        |
+|-------------------------|--------|--------------------------------------------------------------------|
+| `appBarBlurredSurface`  | object | Blurred surface overlay config (frosted-glass effect in app bar).  |
+
+### `appBarBlurredSurface`
+
+```json
+{
+  "appBarBlurredSurface": {
+    "color": "#66000000",
+    "sigmaX": 10,
+    "sigmaY": 10
+  }
+}
+```
+
+| Key      | Type   | Default | Description                       |
+|----------|--------|---------|-----------------------------------|
+| `color`  | string | `null`  | Overlay color (hex).              |
+| `sigmaX` | double | `null`  | Horizontal gaussian blur sigma. Defaults to 10 when omitted. |
+| `sigmaY` | double | `null`  | Vertical gaussian blur sigma. Defaults to 10 when omitted.   |
+
+When `appBarBlurredSurface` is present (even `{}`), the app bar applies a frosted-glass blur. `sigmaX`/`sigmaY` default to 10 when omitted. When `appBarBlurredSurface` is absent (`null`), no blur is applied and the app bar uses the standard theme background.
+
+Applies to: **Keypad**, **Contacts**, **Favorites**, **Recents**, **Conversations**, **Settings**, **About**.
 
 ---
 

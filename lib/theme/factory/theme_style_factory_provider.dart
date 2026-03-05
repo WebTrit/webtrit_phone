@@ -54,7 +54,6 @@ class ThemeStyleFactoryProvider {
 
     // Other widgets config
     final appIconConfig = imageAssetsConfig.appIcon;
-    final primaryGradientColorsConfig = widgetConfig.decorationConfig.primaryGradientColorsConfig;
     final confirmDialog = widgetConfig.dialog.confirmDialog;
     final snackBar = widgetConfig.dialog.snackBar;
     final callStatuses = widgetConfig.statuses.callStatuses;
@@ -84,8 +83,6 @@ class ThemeStyleFactoryProvider {
     final registrationStatusStyleFactory = RegisteredStatusStyleFactory(colorScheme, registrationStatuses);
     final snackBarStyleFactory = SnackBarStyleFactory(colorScheme, snackBar);
     final groupTitleListStyleFactory = GroupTitleListStyleFactory(colorScheme, groupTitleListTile, defaultFontFamily);
-    final gradientsStyleFactory = GradientsStyleFactory(primaryGradientColorsConfig);
-
     final loginModeSelectStyleFactory = LoginModeSelectScreenStyleFactory(
       loginPageScheme.modeSelect,
       colorScheme,
@@ -159,8 +156,6 @@ class ThemeStyleFactoryProvider {
       registrationStatusStyleFactory.create(),
       snackBarStyleFactory.create(),
       groupTitleListStyleFactory.create(),
-      gradientsStyleFactory.create(),
-
       loginModeSelectStyleFactory.create(),
       leadingAvatarStyleFactory.create(),
       keypadStyleFactory.create(),

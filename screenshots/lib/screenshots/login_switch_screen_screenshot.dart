@@ -12,11 +12,7 @@ class LoginSwitchScreenScreenshot extends StatelessWidget {
       header: null,
       body: const Center(child: Text('Login form content')),
       currentLoginType: LoginType.otpSignin,
-      supportedLoginTypes: const [
-        LoginType.otpSignin,
-        LoginType.passwordSignin,
-        LoginType.signup,
-      ],
+      supportedLoginTypes: const [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup],
       onLoginTypeChanged: null,
     );
   }

@@ -7,6 +7,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -167,6 +168,20 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     widget.onDelete(message);
   }
 
+  String formatChatMessageDate(DateTime messageDate) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final date = DateTime(messageDate.year, messageDate.month, messageDate.day);
+
+    final difference = today.difference(date).inDays;
+
+    if (difference == 0) return context.l10n.messaging_MessageView_today;
+    if (difference == 1) return context.l10n.messaging_MessageView_yesterday;
+    if (difference < 7) return messageDate.toWeekday;
+
+    return messageDate.toWeekDayOfMonth;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -249,7 +264,10 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Center(
-                  child: Text(entry.date.toDayOfMonth, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  child: Text(
+                    formatChatMessageDate(entry.date),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                 ),
               );
             }
@@ -407,7 +425,7 @@ _ComputeResult _computeList(_ComputeParams params) {
     if (nextMessage != null) {
       final nextMsgDate = nextMessage.createdAt;
       final msgDate = message.createdAt;
-      lastMsgOfTheDay = nextMsgDate.day != msgDate.day;
+      lastMsgOfTheDay = !nextMsgDate.isSameDay(msgDate);
     }
 
     if (i == messages.length - 1) {
@@ -416,11 +434,7 @@ _ComputeResult _computeList(_ComputeParams params) {
       final prevMessage = messages[i + 1];
       final prevMsgDate = prevMessage.createdAt;
       final msgDate = message.createdAt;
-      firstMsgOfTheDay = prevMsgDate.day != msgDate.day;
-    }
-
-    if (lastMsgOfTheDay) {
-      entries.add(_DateViewEntry(message.createdAt));
+      firstMsgOfTheDay = !prevMsgDate.isSameDay(msgDate);
     }
 
     final lastInSequence = isLast || nextMessage!.senderId != message.senderId || lastMsgOfTheDay;
@@ -439,6 +453,10 @@ _ComputeResult _computeList(_ComputeParams params) {
         firstInSequence: firstInSequence,
       ),
     );
+
+    if (firstMsgOfTheDay) {
+      entries.add(_DateViewEntry(message.createdAt));
+    }
   }
 
   return (entries: entries, dueTime: dueTime);

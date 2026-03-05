@@ -7,11 +7,11 @@
         "applyToAppBar": false
       },
       "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
-      "_background": {
+      "background": {
         "type": "gradient",
         "colors": [
-          "#162533",
-          "#000000"
+          "#5CACE3",
+          "#123752"
         ],
         "stops": [
           0.0,
@@ -139,6 +139,21 @@
     }
   },
   "dialing": {
+    "background": {
+      "type": "gradient",
+      "colors": [
+        "#5CACE3",
+        "#123752"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    },
     "systemUiOverlayStyle": {
       "statusBarIconBrightness": "dark",
       "statusBarBrightness": "light",
@@ -170,10 +185,7 @@
         "fontWeight": {
           "weight": 400
         },
-        "color": "#EEF3F6",
-        "fontFeatures": [
-          "tabularFigures"
-        ]
+        "color": "#EEF3F6"
       },
       "processingStatusTextStyle": {
         "fontSize": 14,
@@ -268,6 +280,11 @@
     }
   },
   "about": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "mainLogo": {
       "uri": "asset://assets/images/secondary_onboarding_logo.svg",
       "render": {
@@ -297,6 +314,11 @@
     }
   },
   "settings": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -320,6 +342,11 @@
     }
   },
   "keypad": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -343,6 +370,11 @@
     }
   },
   "contacts": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -366,6 +398,11 @@
     }
   },
   "favorites": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -389,6 +426,11 @@
     }
   },
   "conversations": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",
@@ -412,6 +454,11 @@
     }
   },
   "recents": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
     "_themeOverride": {
       "mode": "light",

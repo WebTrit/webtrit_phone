@@ -7,11 +7,7 @@ class MockKeypadCubit extends MockCubit<KeypadState> implements KeypadCubit {
 
   factory MockKeypadCubit.mainScreen() {
     final mock = MockKeypadCubit();
-    whenListen(
-      mock,
-      const Stream<KeypadState>.empty(),
-      initialState: const KeypadState(),
-    );
+    whenListen(mock, const Stream<KeypadState>.empty(), initialState: const KeypadState());
     return mock;
   }
 }

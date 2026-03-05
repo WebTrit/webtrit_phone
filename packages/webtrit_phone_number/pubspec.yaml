@@ -1,4 +1,5 @@
 name: webtrit_phone_number
+resolution: workspace
 description: Flutter package for processing phone numbers.
 version: 0.0.1
 

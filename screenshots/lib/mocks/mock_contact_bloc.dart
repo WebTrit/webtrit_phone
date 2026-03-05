@@ -12,9 +12,7 @@ class MockContactBloc extends MockBloc<ContactEvent, ContactState> implements Co
     whenListen(
       mock,
       const Stream<ContactState>.empty(),
-      initialState: ContactState(
-        contact: dContactsRepository.first,
-      ),
+      initialState: ContactState(contact: dContactsRepository.first),
     );
     return mock;
   }

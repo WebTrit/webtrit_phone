@@ -2082,6 +2082,18 @@ abstract class AppLocalizations {
   /// **'Copy to clipboard'**
   String get messaging_MessageView_textcopy;
 
+  /// No description provided for @messaging_MessageView_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get messaging_MessageView_today;
+
+  /// No description provided for @messaging_MessageView_yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get messaging_MessageView_yesterday;
+
   /// Shown when a participant in a conversation does not have a known or available name. Condition: the user's name is missing or cannot be retrieved.
   ///
   /// In en, this message translates to:

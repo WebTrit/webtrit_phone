@@ -20,15 +20,16 @@ class MockMessagingBloc extends MockBloc<MessagingEvent, MessagingState> impleme
       mock,
       const Stream<MessagingState>.empty(),
       initialState: MessagingState.initial(
-          'user-id',
-          MockPhoenixSocket(),
-          MessagingConfig(
-            coreSmsSupport: true,
-            coreChatsSupport: true,
-            tabEnabled: true,
-            groupChatSupport: true,
-            contactInfoVideoCallSupport: true,
-          )).copyWith(status: ConnectionStatus.connected),
+        'user-id',
+        MockPhoenixSocket(),
+        MessagingConfig(
+          coreSmsSupport: true,
+          coreChatsSupport: true,
+          tabEnabled: true,
+          groupChatSupport: true,
+          contactInfoVideoCallSupport: true,
+        ),
+      ).copyWith(status: ConnectionStatus.connected),
     );
     return mock;
   }

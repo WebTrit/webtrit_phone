@@ -11,9 +11,7 @@ class MockContactsExternalTabBloc extends MockBloc<ContactsExternalTabEvent, Con
     whenListen(
       mock,
       const Stream<ContactsExternalTabState>.empty(),
-      initialState: const ContactsExternalTabState(
-        status: ContactsExternalTabStatus.success,
-      ),
+      initialState: const ContactsExternalTabState(status: ContactsExternalTabStatus.success),
     );
     return mock;
   }
