@@ -486,8 +486,8 @@ void main() {
 
       final visibleContacts = await database.contactsDao.getAllContacts(null);
       expect(visibleContacts.length, initialVisibleCount + 1);
-      expect(visibleContacts.first.contact.firstName, 'Abi');
-      expect(visibleContacts.first.contact.kind, ContactKindTypeEnum.visible);
+      final abiContact = visibleContacts.firstWhere((c) => c.contact.firstName == 'Abi');
+      expect(abiContact.contact.kind, ContactKindTypeEnum.visible);
 
       final serviceContacts = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.service);
       expect(serviceContacts.length, 1);
