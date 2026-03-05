@@ -36,11 +36,14 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
   /// Each pair is a `(number, label)` tuple that identifies a row to keep.
   /// If [pairs] is empty, all phones for the contact are deleted.
   Future<void> deleteOtherContactPhonesOfContactId(int contactId, List<({String number, String label})> pairs) async {
+    // No phones to keep → wipe all rows for this contact.
     if (pairs.isEmpty) {
       await (delete(contactPhonesTable)..where((t) => t.contactId.equals(contactId))).go();
       return;
     }
 
+    // Build a keep-expression: rows whose (number, label) is in [pairs] are retained;
+    // everything else for this contact is deleted.
     final keepExpr = pairs
         .map<Expression<bool>>(
           (p) => contactPhonesTable.number.equals(p.number) & contactPhonesTable.label.equals(p.label),
