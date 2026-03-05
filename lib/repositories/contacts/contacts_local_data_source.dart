@@ -97,7 +97,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
           // Cleanup old phones
           await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
             contactId,
-            localContact.phones.map((phone) => phone.number),
+            localContact.phones.map((p) => (number: _sanitizeNumber(p.number), label: p.label)).toList(),
           );
 
           for (final localContactPhone in localContact.phones) {
@@ -170,15 +170,17 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
     final externalContactAdditional = externalContact.additional;
     final externalSmsNumbers = externalContact.smsNumbers;
 
-    final externalContactNumbers = [
-      if (externalContactNumber != null) externalContactNumber,
-      if (externalContactExt != null) externalContactExt,
-      if (externalContactAdditional != null) ...externalContactAdditional,
-      if (externalSmsNumbers != null) ...externalSmsNumbers,
+    final externalContactPhonePairs = [
+      if (externalContactNumber != null) (number: externalContactNumber, label: kContactMainLabel),
+      if (externalContactExt != null) (number: externalContactExt, label: kContactExtLabel),
+      if (externalContactAdditional != null)
+        for (final n in externalContactAdditional) (number: n, label: kContactAdditionalLabel),
+      if (externalSmsNumbers != null)
+        for (final n in externalSmsNumbers) (number: n, label: kContactSmsLabel),
     ];
 
     // Cleanup old phones
-    await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(contactId, externalContactNumbers);
+    await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(contactId, externalContactPhonePairs);
 
     // Prepare Batch List
     final phoneCompanions = <ContactPhoneDataCompanion>[];
