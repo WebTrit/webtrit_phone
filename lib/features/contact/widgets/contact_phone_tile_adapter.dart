@@ -59,7 +59,7 @@ class ContactPhoneTileAdapter extends StatelessWidget {
   final CallRoutingState? callRoutingState;
 
   // Handler methods passed from the parent State
-  final void Function(bool, ContactPhone) onFavoriteChanged;
+  final void Function(bool, ContactPhone, Contact) onFavoriteChanged;
   final void Function(ContactPhone, Contact) onAudioPressed;
   final void Function(ContactPhone, Contact) onVideoPressed;
   final void Function(ContactPhone) onTransferPressed;
@@ -77,7 +77,7 @@ class ContactPhoneTileAdapter extends StatelessWidget {
     /// It is only enabled if [enableTileFavorite] is true.
     final OnFavoriteChangedCallback? favoriteCallback =
         enableTileFavorite //
-        ? (isFavorite) => onFavoriteChanged(isFavorite, contactPhone)
+        ? (isFavorite) => onFavoriteChanged(isFavorite, contactPhone, contact)
         : null;
 
     /// Callback executed to initiate a standard voice call.

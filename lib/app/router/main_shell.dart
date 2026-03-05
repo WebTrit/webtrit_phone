@@ -113,7 +113,22 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           },
         ),
         RepositoryProvider<FavoritesRepository>(
-          create: (context) => FavoritesRepository(appDatabase: context.read<AppDatabase>()),
+          create: (context) {
+            final appDatabase = context.read<AppDatabase>();
+            final apiClient = context.read<WebtritApiClient>();
+            final apiToken = context.read<AppBloc>().state.session.token!;
+            final core = context.read<SystemInfoRepository>().getLocalSystemInfo().core;
+
+            final localDataSource = FavoritesLocalDataSourceDriftImpl(appDatabase);
+            final remoteDataSource = FavoritesRemoteDataSourceApiImpl(apiClient: apiClient, apiToken: apiToken);
+
+            return FavoritesRepositorySyncableImpl(
+              localDataSource: localDataSource,
+              remoteDataSource: remoteDataSource,
+              connectivityService: context.read<ConnectivityService>(),
+              remoteSyncEnabled: core.supportsRemoteFavorites,
+            );
+          },
         ),
         RepositoryProvider<RecentsRepository>(
           create: (context) => RecentsRepository(appDatabase: context.read<AppDatabase>()),
@@ -595,6 +610,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
+    final favoritesRepository = context.read<FavoritesRepository>();
 
     return [
       PollingRegistration(
@@ -618,6 +634,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         PollingRegistration(
           listener: cliSettingsRepository,
           interval: const Duration(seconds: EnvironmentConfig.CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
+      if (favoritesRepository is FavoritesRepositorySyncableImpl)
+        PollingRegistration(
+          listener: favoritesRepository,
+          interval: const Duration(seconds: EnvironmentConfig.FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
     ];
   }

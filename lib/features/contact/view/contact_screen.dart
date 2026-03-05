@@ -169,11 +169,11 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 
-  void _onFavoriteChanged(bool isFavorite, ContactPhone contactPhone) {
+  void _onFavoriteChanged(bool isFavorite, ContactPhone contactPhone, Contact contact) {
     if (isFavorite) {
-      context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
+      context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone, contact));
     } else {
-      context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
+      context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone, contact));
     }
   }
 

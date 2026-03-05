@@ -14,7 +14,7 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
     ContactData contactData, {
     List<ContactPhoneData> phones = const [],
     List<ContactEmailData> emails = const [],
-    List<FavoriteData> favorites = const [],
+    List<FavoriteV2Data> favorites = const [],
     List<PresenceInfoData> presenceInfo = const [],
   }) {
     final email = emails.firstOrNull?.address;
@@ -33,17 +33,21 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
       aliasName: contactData.aliasName,
       thumbnail: contactData.thumbnail,
       thumbnailUrl: gravatarUrl,
-      phones: contactPhonesFromDrift(phones, favorites).toList(),
+      phones: contactPhonesFromDrift(phones, favorites, contactData.sourceType).toList(),
       emails: contactEmailsFromDrift(emails).toList(),
       presenceInfo: contactPresenceInfosFromDrift(presenceInfo).toList(),
     );
   }
 
-  Iterable<ContactPhone> contactPhonesFromDrift(List<ContactPhoneData> phones, List<FavoriteData> favorites) {
-    return phones.map(
-      (phone) =>
-          contactPhoneFromDrift(phone, favorite: favorites.any((favorite) => favorite.contactPhoneId == phone.id)),
-    );
+  Iterable<ContactPhone> contactPhonesFromDrift(
+    List<ContactPhoneData> phones,
+    List<FavoriteV2Data> favorites,
+    ContactSourceTypeEnum contactSourceType,
+  ) {
+    return phones.map((phone) {
+      final favorite = favorites.any((f) => f.number == phone.number);
+      return contactPhoneFromDrift(phone, favorite: favorite);
+    });
   }
 
   Iterable<ContactEmail> contactEmailsFromDrift(List<ContactEmailData> emails) {

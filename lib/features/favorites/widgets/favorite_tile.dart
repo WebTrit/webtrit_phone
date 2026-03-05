@@ -11,6 +11,7 @@ class FavoriteTile extends StatefulWidget {
   const FavoriteTile({
     super.key,
     required this.favorite,
+    this.contact,
     required this.callNumbers,
     this.onTap,
     this.onAudioCallPressed,
@@ -22,9 +23,11 @@ class FavoriteTile extends StatefulWidget {
     this.onCallLogPressed,
     this.onDelete,
     this.onCallFrom,
+    this.gesturesEnabled = true,
   });
 
   final Favorite favorite;
+  final Contact? contact;
   final List<String> callNumbers;
   final Function()? onTap;
   final Function()? onAudioCallPressed;
@@ -36,6 +39,7 @@ class FavoriteTile extends StatefulWidget {
   final Function()? onCallLogPressed;
   final Function()? onDelete;
   final Function(String)? onCallFrom;
+  final bool gesturesEnabled;
 
   @override
   State<FavoriteTile> createState() => _FavoriteTileState();
@@ -97,15 +101,16 @@ class _FavoriteTileState extends State<FavoriteTile> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final colorScheme = themeData.colorScheme;
     final presenceSource = PresenceViewParams.of(context).viewSource;
 
-    final contact = widget.favorite.contact;
-    final name = widget.favorite.name;
+    final contact = widget.contact;
+    final name = widget.contact?.maybeName ?? widget.favorite.number;
 
     return Dismissible(
       key: ObjectKey(widget.favorite),
       background: Container(
-        color: themeData.colorScheme.error,
+        color: colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
         child: const Align(alignment: Alignment.centerRight, child: Icon(Icons.delete_outline)),
       ),
@@ -116,23 +121,30 @@ class _FavoriteTileState extends State<FavoriteTile> {
       ),
       onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
       direction: DismissDirection.endToStart,
-      child: ListTile(
-        key: tileKey,
-        contentPadding: const EdgeInsets.only(left: 16.0),
-        leading: LeadingAvatar(
-          username: name,
-          thumbnail: contact.thumbnail,
-          thumbnailUrl: contact.thumbnailUrl,
-          registered: contact.registered,
-          presenceInfo: contact.presenceInfo,
-        ),
-        title: switch (presenceSource) {
-          PresenceViewSource.sipPresence => Text('$name ${contact.presenceInfo.primaryStatusIcon ?? ''}'),
-          PresenceViewSource.contactInfo => Text(name),
-        },
-        subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
-        onTap: widget.onTap,
-        onLongPress: onLongPress,
+      child: Row(
+        children: [
+          Expanded(
+            child: ListTile(
+              key: tileKey,
+              contentPadding: const EdgeInsets.only(left: 16.0),
+              leading: LeadingAvatar(
+                username: name,
+                thumbnail: contact?.thumbnail,
+                thumbnailUrl: contact?.thumbnailUrl,
+                registered: contact?.registered,
+                presenceInfo: contact?.presenceInfo,
+              ),
+              title: switch (presenceSource) {
+                PresenceViewSource.sipPresence => Text('$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}'),
+                PresenceViewSource.contactInfo => Text(name),
+              },
+              subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
+              onTap: widget.gesturesEnabled ? widget.onTap : null,
+              onLongPress: widget.gesturesEnabled ? onLongPress : null,
+            ),
+          ),
+          if (widget.gesturesEnabled) GestureDetector(onTap: onLongPress, child: const Icon(Icons.more_vert)),
+        ],
       ),
     );
   }

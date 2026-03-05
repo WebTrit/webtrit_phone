@@ -13,6 +13,7 @@ export 'demo/demo.dart';
 export 'error.dart';
 export 'error_code.dart';
 export 'external_page_access_token.dart';
+export 'favorites.dart';
 export 'otp_notification_type.dart';
 export 'self_config.dart';
 export 'session_autoprovision_credential.dart';

@@ -44,15 +44,17 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  // TODO(Serdun): Think about moving this to a controller or bloc.
-  late final CallController _callController = CallController(
+  late final CallController callController = CallController(
     callBloc: context.read<CallBloc>(),
     callRoutingCubit: context.read<CallRoutingCubit>(),
     notificationsBloc: context.read<NotificationsBloc>(),
   );
 
+  bool isReorderMode = false;
+  int? draggingIndex;
+
   void submitTransfer({required String destination}) {
-    _callController.submitTransfer(destination);
+    callController.submitTransfer(destination);
     context.router.maybePop();
   }
 
@@ -87,8 +89,35 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   void delete({required Favorite favorite}) {
-    context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.name));
+    context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.number));
     context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
+  }
+
+  void reorder({required List<FavoriteWithContact> favorites, required int oldIndex, required int newIndex}) {
+    var targetIndex = newIndex;
+    if (targetIndex > oldIndex) {
+      targetIndex -= 1;
+    }
+    if (targetIndex == oldIndex) {
+      return;
+    }
+    context.read<FavoritesBloc>().add(FavoritesShifted(favorite: favorites[oldIndex].favorite, position: targetIndex));
+  }
+
+  void toggleReorderMode() => setState(() => isReorderMode = !isReorderMode);
+
+  void onReorderStart(int index) {
+    draggingIndex = index;
+  }
+
+  void onReorderEnd(int index) {
+    if (draggingIndex == null) return;
+    if (index > draggingIndex!) index -= 1;
+    final favorites = context.read<FavoritesBloc>().state.favorites;
+    final favorite = favorites?[draggingIndex!].favorite;
+    if (favorite == null) return;
+    context.read<FavoritesBloc>().add(FavoritesShifted(favorite: favorite, position: index));
+    draggingIndex = null;
   }
 
   @override
@@ -108,7 +137,30 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         context: context,
         flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
       ),
-      body: BlocBuilder<FavoritesBloc, FavoritesState>(
+      floatingActionButton: BlocBuilder<FavoritesBloc, FavoritesState>(
+        builder: (context, state) {
+          final favorites = state.favorites;
+          if (favorites == null || favorites.length < 3) {
+            return const SizedBox.shrink();
+          }
+          return FloatingActionButton(
+            shape: const CircleBorder(),
+            onPressed: toggleReorderMode,
+            child: Icon(isReorderMode ? Icons.check : Icons.edit_note_outlined),
+          );
+        },
+      ),
+      body: BlocConsumer<FavoritesBloc, FavoritesState>(
+        listenWhen: (previous, current) => previous.favorites != current.favorites,
+        listener: (context, state) {
+          // Exit reorder mode if favorites were updated while reordering
+          if (draggingIndex != null) {
+            setState(() {
+              isReorderMode = false;
+              draggingIndex = null;
+            });
+          }
+        },
         builder: (context, state) {
           final favorites = state.favorites;
           if (favorites == null) {
@@ -131,70 +183,96 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
                       return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                         builder: (context, callRoutingState) {
-                          return ListView.builder(
-                            padding: EdgeInsets.only(top: topPadding),
-                            itemCount: favorites.length,
-                            itemBuilder: (context, index) {
-                              final favorite = favorites[index];
-                              final contact = favorite.contact;
-                              final contactSourceId = contact.sourceId;
-                              final contactSmsNumbers = contact.smsNumbers;
-                              final canSendSms = contactSmsNumbers.contains(favorite.number);
+                          return SizedBox.expand(
+                            child: ReorderableListView.builder(
+                              padding: EdgeInsets.only(top: topPadding),
+                              itemCount: favorites.length,
+                              onReorder: (oldIndex, newIndex) {},
+                              onReorderStart: onReorderStart,
+                              onReorderEnd: onReorderEnd,
+                              buildDefaultDragHandles: false,
+                              itemBuilder: (context, index) {
+                                final favorite = favorites[index].favorite;
+                                final contact = favorites[index].contact;
 
-                              return FavoriteTile(
-                                key: favoriteTileKey,
-                                favorite: favorite,
-                                callNumbers: callRoutingState?.allNumbers ?? [],
-                                onTap: blingTransferInitiated
-                                    ? () {
-                                        submitTransfer(destination: favorite.number);
-                                      }
-                                    : () {
-                                        _callController.createCall(
-                                          destination: favorite.number,
-                                          displayName: favorite.name,
-                                        );
-                                      },
-                                onAudioCallPressed: () {
-                                  _callController.createCall(
-                                    destination: favorite.number,
-                                    displayName: favorite.name,
-                                    video: false,
-                                  );
-                                },
-                                onVideoCallPressed: widget.videoEnabled
-                                    ? () {
-                                        _callController.createCall(
-                                          destination: favorite.number,
-                                          displayName: favorite.name,
-                                          video: true,
-                                        );
-                                      }
-                                    : null,
-                                onTransferPressed: widget.transferEnabled && hasActiveCall
-                                    ? () {
-                                        submitTransfer(destination: favorite.number);
-                                      }
-                                    : null,
-                                onChatPressed: widget.chatsEnabled && contact.canMessage
-                                    ? () {
-                                        openChat(contactSourceId!);
-                                      }
-                                    : null,
-                                onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
-                                    ? () {
-                                        sendSms(
-                                          userSmsNumbers: userSmsNumbers,
-                                          contactPhoneNumber: favorite.number,
-                                          contactSourceId: contactSourceId,
-                                        );
-                                      }
-                                    : null,
-                                onViewContactPressed: () => openContact(contactId: contact.id),
-                                onCallLogPressed: () => openCallLog(number: favorite.number),
-                                onDelete: () => delete(favorite: favorite),
-                              );
-                            },
+                                final contactSourceId = contact?.sourceId;
+                                final contactSmsNumbers = contact?.smsNumbers ?? [];
+                                final canSendSms = contactSmsNumbers.contains(favorite.number);
+
+                                return ReorderableDragStartListener(
+                                  key: ValueKey('${favorite.number}_${favorite.sourceType.name}_$index'),
+                                  index: index,
+                                  enabled: isReorderMode,
+                                  child: Row(
+                                    children: [
+                                      if (isReorderMode) ...[SizedBox(width: 4), const Icon(Icons.drag_handle)],
+                                      Expanded(
+                                        child: FavoriteTile(
+                                          key: favoriteTileKey,
+                                          gesturesEnabled: !isReorderMode,
+                                          favorite: favorite,
+                                          contact: contact,
+                                          callNumbers: callRoutingState?.allNumbers ?? [],
+                                          onTap: blingTransferInitiated
+                                              ? () {
+                                                  submitTransfer(destination: favorite.number);
+                                                }
+                                              : () {
+                                                  callController.createCall(
+                                                    destination: favorite.number,
+                                                    displayName: contact?.maybeName ?? favorite.number,
+                                                  );
+                                                },
+                                          onAudioCallPressed: () {
+                                            callController.createCall(
+                                              destination: favorite.number,
+                                              displayName: contact?.maybeName ?? favorite.number,
+                                              video: false,
+                                            );
+                                          },
+                                          onVideoCallPressed: widget.videoEnabled
+                                              ? () {
+                                                  callController.createCall(
+                                                    destination: favorite.number,
+                                                    displayName: contact?.maybeName ?? favorite.number,
+                                                    video: true,
+                                                  );
+                                                }
+                                              : null,
+                                          onTransferPressed: widget.transferEnabled && hasActiveCall
+                                              ? () {
+                                                  submitTransfer(destination: favorite.number);
+                                                }
+                                              : null,
+                                          onChatPressed: widget.chatsEnabled && contact?.canMessage == true
+                                              ? () {
+                                                  openChat(contactSourceId!);
+                                                }
+                                              : null,
+                                          onSendSmsPressed:
+                                              widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
+                                              ? () {
+                                                  sendSms(
+                                                    userSmsNumbers: userSmsNumbers,
+                                                    contactPhoneNumber: favorite.number,
+                                                    contactSourceId: contactSourceId,
+                                                  );
+                                                }
+                                              : null,
+                                          onViewContactPressed: contact != null
+                                              ? () => openContact(contactId: contact.id)
+                                              : null,
+                                          onCallLogPressed: () => openCallLog(number: favorite.number),
+                                          onDelete: () => delete(favorite: favorite),
+                                        ),
+                                      ),
+
+                                      const SizedBox(width: 8),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         },
                       );

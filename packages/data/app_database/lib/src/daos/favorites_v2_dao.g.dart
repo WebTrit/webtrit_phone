@@ -1,25 +1,36 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'contacts_dao.dart';
+part of 'favorites_v2_dao.dart';
 
 // ignore_for_file: type=lint
-mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
+mixin _$FavoritesV2DaoMixin on DatabaseAccessor<AppDatabase> {
+  $FavoritesV2TableTable get favoritesV2Table =>
+      attachedDatabase.favoritesV2Table;
+  $FavoritesOutboxTableTable get favoritesOutboxTable =>
+      attachedDatabase.favoritesOutboxTable;
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
   $ContactEmailsTableTable get contactEmailsTable =>
       attachedDatabase.contactEmailsTable;
-  $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
-  $FavoritesV2TableTable get favoritesV2Table =>
-      attachedDatabase.favoritesV2Table;
   $PresenceInfoTableTable get presenceInfoTable =>
       attachedDatabase.presenceInfoTable;
-  ContactsDaoManager get managers => ContactsDaoManager(this);
+  FavoritesV2DaoManager get managers => FavoritesV2DaoManager(this);
 }
 
-class ContactsDaoManager {
-  final _$ContactsDaoMixin _db;
-  ContactsDaoManager(this._db);
+class FavoritesV2DaoManager {
+  final _$FavoritesV2DaoMixin _db;
+  FavoritesV2DaoManager(this._db);
+  $$FavoritesV2TableTableTableManager get favoritesV2Table =>
+      $$FavoritesV2TableTableTableManager(
+        _db.attachedDatabase,
+        _db.favoritesV2Table,
+      );
+  $$FavoritesOutboxTableTableTableManager get favoritesOutboxTable =>
+      $$FavoritesOutboxTableTableTableManager(
+        _db.attachedDatabase,
+        _db.favoritesOutboxTable,
+      );
   $$ContactsTableTableTableManager get contactsTable =>
       $$ContactsTableTableTableManager(_db.attachedDatabase, _db.contactsTable);
   $$ContactPhonesTableTableTableManager get contactPhonesTable =>
@@ -31,16 +42,6 @@ class ContactsDaoManager {
       $$ContactEmailsTableTableTableManager(
         _db.attachedDatabase,
         _db.contactEmailsTable,
-      );
-  $$FavoritesTableTableTableManager get favoritesTable =>
-      $$FavoritesTableTableTableManager(
-        _db.attachedDatabase,
-        _db.favoritesTable,
-      );
-  $$FavoritesV2TableTableTableManager get favoritesV2Table =>
-      $$FavoritesV2TableTableTableManager(
-        _db.attachedDatabase,
-        _db.favoritesV2Table,
       );
   $$PresenceInfoTableTableTableManager get presenceInfoTable =>
       $$PresenceInfoTableTableTableManager(
