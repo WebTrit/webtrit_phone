@@ -69,7 +69,7 @@ void main() {
 
       final display = contact.displayPhones;
 
-      // ext stays separate; main+sms merge into one
+      // ext stays separate; main+sms merge into one display row
       expect(display.length, 2);
       final extRow = display.firstWhere((p) => p.number == '1602');
       expect(extRow.label, kContactExtLabel);

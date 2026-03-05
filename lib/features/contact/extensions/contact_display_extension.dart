@@ -34,9 +34,8 @@ extension ContactDisplayExtension on Contact {
     return grouped.values.map((group) {
       final first = group.first;
       final isFavorite = group.any((p) => p.favorite);
-      // Use the canonical label from the highest-priority phone in the group
-      // so that favorites and other action layers receive a real role label.
-      return ContactPhone(id: first.id, number: first.number, label: first.label, favorite: isFavorite);
+      final mergedLabel = group.map((p) => p.label).join(' / ');
+      return ContactPhone(id: first.id, number: first.number, label: mergedLabel, favorite: isFavorite);
     }).toList();
   }
 

@@ -170,10 +170,13 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   void _onFavoriteChanged(bool isFavorite, ContactPhone contactPhone, Contact contact) {
+    // displayPhones may carry a merged label (e.g. "number / sms") for display purposes.
+    // Resolve the canonical ContactPhone by id so favorites store the real role label.
+    final canonical = contact.phones.firstWhere((p) => p.id == contactPhone.id, orElse: () => contactPhone);
     if (isFavorite) {
-      context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone, contact));
+      context.read<ContactBloc>().add(ContactAddedToFavorites(canonical, contact));
     } else {
-      context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone, contact));
+      context.read<ContactBloc>().add(ContactRemovedFromFavorites(canonical, contact));
     }
   }
 
