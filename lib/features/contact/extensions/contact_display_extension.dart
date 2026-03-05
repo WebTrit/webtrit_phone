@@ -24,8 +24,11 @@ extension ContactDisplayExtension on Contact {
     // Group phones sharing the same number into a single display entry.
     // Insertion order is preserved because [sortedPhones] is already priority-sorted,
     // so the first phone in each group carries the highest-priority label.
-    // Labels from all duplicates are joined with ' / ' (e.g. "ext / main"),
-    // and the entry is marked as favorite if any duplicate is a favorite.
+    // Labels from all duplicates are joined with ' / ' for display (e.g. "number / sms").
+    // The entry id equals first.id (highest-priority phone), which is used by the UI
+    // to resolve the canonical ContactPhone when saving to favorites - meaning only
+    // the highest-priority label is stored (e.g. "additional" for "additional / sms").
+    // This behavior is intentional; per-label favorites can be refined later if needed.
     final grouped = <String, List<ContactPhone>>{};
     for (final phone in sortedPhones) {
       (grouped[phone.number] ??= []).add(phone);

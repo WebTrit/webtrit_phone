@@ -170,8 +170,11 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   void _onFavoriteChanged(bool isFavorite, ContactPhone contactPhone, Contact contact) {
-    // displayPhones may carry a merged label (e.g. "number / sms") for display purposes.
-    // Resolve the canonical ContactPhone by id so favorites store the real role label.
+    // displayPhones groups phones with the same number into one display entry and merges
+    // their labels (e.g. "number / sms"). When saving to favorites the highest-priority
+    // phone in the group is used (identified by id = first.id after priority sort).
+    // For example, tapping favorite on an "additional / sms" row stores label "additional".
+    // This is intentional and agreed upon; refine per-label favorites support later if needed.
     final canonical = contact.phones.firstWhere((p) => p.id == contactPhone.id, orElse: () => contactPhone);
     if (isFavorite) {
       context.read<ContactBloc>().add(ContactAddedToFavorites(canonical, contact));
