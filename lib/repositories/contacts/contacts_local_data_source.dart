@@ -97,7 +97,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
           // Cleanup old phones
           await _appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
             contactId,
-            localContact.phones.map((p) => (number: _sanitizeNumber(p.number), label: p.label)).toList(),
+            localContact.phones.map((phone) => (number: _sanitizeNumber(phone.number), label: phone.label)).toList(),
           );
 
           for (final localContactPhone in localContact.phones) {
