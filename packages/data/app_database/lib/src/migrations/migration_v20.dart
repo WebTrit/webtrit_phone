@@ -8,10 +8,16 @@ class MigrationV20 extends Migration {
 
   @override
   Future<void> execute(AppDatabase db, Migrator m) async {
-    await db.customStatement('ALTER TABLE contact_phones RENAME TO contact_phones_old');
+    // Disable FK checks during the table recreation so that dependent tables
+    // (e.g. favorites.contact_phone_id) are not invalidated mid-migration.
+    await db.customStatement('PRAGMA foreign_keys = OFF');
 
+    // Create the replacement table under a temporary name first.
+    // This avoids the RENAME-old approach, which would rewrite FK references
+    // in dependent tables to point to the temporary name and break them after
+    // the temporary table is dropped.
     await db.customStatement('''
-      CREATE TABLE contact_phones (
+      CREATE TABLE contact_phones_new (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         number TEXT NOT NULL,
         label TEXT NOT NULL,
@@ -23,12 +29,17 @@ class MigrationV20 extends Migration {
     ''');
 
     await db.customStatement('''
-      INSERT INTO contact_phones (id, number, label, contact_id, inserted_at, updated_at)
+      INSERT INTO contact_phones_new (id, number, label, contact_id, inserted_at, updated_at)
       SELECT id, number, label, contact_id, inserted_at, updated_at
-      FROM contact_phones_old
+      FROM contact_phones
     ''');
 
-    await db.customStatement('DROP TABLE contact_phones_old');
+    // Drop the old table first. FK references in other tables (e.g. favorites)
+    // are left unchanged in sqlite_master and resolve correctly once the table
+    // with the original name is restored in the next step.
+    await db.customStatement('DROP TABLE contact_phones');
+
+    await db.customStatement('ALTER TABLE contact_phones_new RENAME TO contact_phones');
 
     await db.customStatement('''
       CREATE TRIGGER contact_phones_after_insert_trigger
@@ -46,5 +57,7 @@ class MigrationV20 extends Migration {
         UPDATE contact_phones SET updated_at = STRFTIME('%s', 'NOW') WHERE id = NEW.id;
       END
     ''');
+
+    await db.customStatement('PRAGMA foreign_keys = ON');
   }
 }
