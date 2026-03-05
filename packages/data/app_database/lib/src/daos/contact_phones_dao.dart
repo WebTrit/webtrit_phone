@@ -24,14 +24,30 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
   Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) {
     return into(contactPhonesTable).insert(
       contactPhone,
-      onConflict: DoUpdate((_) => contactPhone, target: [contactPhonesTable.number, contactPhonesTable.contactId]),
+      onConflict: DoUpdate(
+        (_) => contactPhone,
+        target: [contactPhonesTable.number, contactPhonesTable.label, contactPhonesTable.contactId],
+      ),
     );
   }
 
-  Future<int> deleteOtherContactPhonesOfContactId(int id, Iterable<String> numbers) {
-    return (delete(contactPhonesTable)
-          ..where((t) => t.contactId.equals(id))
-          ..where((t) => t.number.isNotIn(numbers)))
+  Future<void> deleteOtherContactPhonesOfContactId(
+    int contactId,
+    List<({String number, String label})> pairs,
+  ) async {
+    if (pairs.isEmpty) {
+      await (delete(contactPhonesTable)..where((t) => t.contactId.equals(contactId))).go();
+      return;
+    }
+
+    final keepExpr = pairs
+        .map<Expression<bool>>(
+          (p) => contactPhonesTable.number.equals(p.number) & contactPhonesTable.label.equals(p.label),
+        )
+        .reduce((a, b) => a | b);
+
+    await (delete(contactPhonesTable)
+          ..where((t) => t.contactId.equals(contactId) & keepExpr.not()))
         .go();
   }
 
@@ -42,7 +58,10 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
         batch.insert(
           contactPhonesTable,
           phone,
-          onConflict: DoUpdate((old) => phone, target: [contactPhonesTable.number, contactPhonesTable.contactId]),
+          onConflict: DoUpdate(
+            (old) => phone,
+            target: [contactPhonesTable.number, contactPhonesTable.label, contactPhonesTable.contactId],
+          ),
         );
       }
     });
