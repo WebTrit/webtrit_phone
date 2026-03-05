@@ -21,7 +21,11 @@ extension ContactDisplayExtension on Contact {
       return a.label.compareTo(b.label);
     });
 
-    // Group by number, preserving sorted order
+    // Group phones sharing the same number into a single display entry.
+    // Insertion order is preserved because [sortedPhones] is already priority-sorted,
+    // so the first phone in each group carries the highest-priority label.
+    // Labels from all duplicates are joined with ' / ' (e.g. "ext / main"),
+    // and the entry is marked as favorite if any duplicate is a favorite.
     final grouped = <String, List<ContactPhone>>{};
     for (final phone in sortedPhones) {
       (grouped[phone.number] ??= []).add(phone);
