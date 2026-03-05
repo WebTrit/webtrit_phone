@@ -673,7 +673,11 @@ void main() {
         ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('1601'), label: Value('ext')),
         ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000001'), label: Value('number')),
         ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000001'), label: Value('sms')),
-        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('99900099907'), label: Value('additional')),
+        ContactPhoneDataCompanion(
+          contactId: Value(contactId),
+          number: Value('99900099907'),
+          label: Value('additional'),
+        ),
         ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('99900099907'), label: Value('sms')),
       ]);
 

@@ -150,9 +150,9 @@ void main() {
 
         final checkDb = v20.DatabaseAtV20(schema.newConnection());
 
-        final rows = await checkDb.customSelect(
-          'SELECT number, label FROM contact_phones WHERE contact_id = 1 ORDER BY id ASC',
-        ).get();
+        final rows = await checkDb
+            .customSelect('SELECT number, label FROM contact_phones WHERE contact_id = 1 ORDER BY id ASC')
+            .get();
 
         expect(rows.length, 2);
         expect(rows[0].read<String>('number'), '16042000001');
@@ -190,9 +190,9 @@ void main() {
           "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (2, '16042000002', 'sms', 1)",
         );
 
-        final rows = await checkDb.customSelect(
-          'SELECT number, label FROM contact_phones WHERE contact_id = 1 ORDER BY id ASC',
-        ).get();
+        final rows = await checkDb
+            .customSelect('SELECT number, label FROM contact_phones WHERE contact_id = 1 ORDER BY id ASC')
+            .get();
 
         expect(rows.length, 2);
         expect(rows.any((r) => r.read<String>('label') == 'number'), isTrue);

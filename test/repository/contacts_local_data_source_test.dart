@@ -177,10 +177,7 @@ void main() {
 
         await dataSource.upsertContact(contact, ContactKindTypeEnum.visible);
 
-        final dbContact = await appDatabase.contactsDao.getContactBySource(
-          ContactSourceTypeEnum.external,
-          '1602',
-        );
+        final dbContact = await appDatabase.contactsDao.getContactBySource(ContactSourceTypeEnum.external, '1602');
 
         expect(dbContact, isNotNull);
         final phones = dbContact!.phones;
@@ -204,10 +201,7 @@ void main() {
 
         await dataSource.upsertContact(contact, ContactKindTypeEnum.visible);
 
-        final dbContact = await appDatabase.contactsDao.getContactBySource(
-          ContactSourceTypeEnum.external,
-          '1601',
-        );
+        final dbContact = await appDatabase.contactsDao.getContactBySource(ContactSourceTypeEnum.external, '1601');
 
         expect(dbContact, isNotNull);
         final phones = dbContact!.phones;
@@ -234,10 +228,7 @@ void main() {
 
         await dataSource.upsertContact(contact, ContactKindTypeEnum.visible);
 
-        final dbContact = await appDatabase.contactsDao.getContactBySource(
-          ContactSourceTypeEnum.external,
-          '1604205',
-        );
+        final dbContact = await appDatabase.contactsDao.getContactBySource(ContactSourceTypeEnum.external, '1604205');
 
         expect(dbContact, isNotNull);
         final phones = dbContact!.phones;
@@ -259,24 +250,14 @@ void main() {
         );
         await dataSource.upsertContact(initial, ContactKindTypeEnum.visible);
 
-        var dbContact = await appDatabase.contactsDao.getContactBySource(
-          ContactSourceTypeEnum.external,
-          '1604',
-        );
+        var dbContact = await appDatabase.contactsDao.getContactBySource(ContactSourceTypeEnum.external, '1604');
         expect(dbContact!.phones.length, 3); // ext + number + sms
 
         // Second sync: sms removed
-        final updated = ContactsFixtureFactory.createExternalContact(
-          id: '1604',
-          ext: '1604',
-          number: '16042000004',
-        );
+        final updated = ContactsFixtureFactory.createExternalContact(id: '1604', ext: '1604', number: '16042000004');
         await dataSource.upsertContact(updated, ContactKindTypeEnum.visible);
 
-        dbContact = await appDatabase.contactsDao.getContactBySource(
-          ContactSourceTypeEnum.external,
-          '1604',
-        );
+        dbContact = await appDatabase.contactsDao.getContactBySource(ContactSourceTypeEnum.external, '1604');
         expect(dbContact!.phones.length, 2); // only ext + number
         expect(dbContact.phones.any((p) => p.label == kContactSmsLabel), isFalse);
       });

@@ -31,10 +31,7 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
     );
   }
 
-  Future<void> deleteOtherContactPhonesOfContactId(
-    int contactId,
-    List<({String number, String label})> pairs,
-  ) async {
+  Future<void> deleteOtherContactPhonesOfContactId(int contactId, List<({String number, String label})> pairs) async {
     if (pairs.isEmpty) {
       await (delete(contactPhonesTable)..where((t) => t.contactId.equals(contactId))).go();
       return;
@@ -46,9 +43,7 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
         )
         .reduce((a, b) => a | b);
 
-    await (delete(contactPhonesTable)
-          ..where((t) => t.contactId.equals(contactId) & keepExpr.not()))
-        .go();
+    await (delete(contactPhonesTable)..where((t) => t.contactId.equals(contactId) & keepExpr.not())).go();
   }
 
   Future<void> insertContactPhonesBatch(List<ContactPhoneDataCompanion> phones) {
