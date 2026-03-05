@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-
 import 'package:webtrit_phone/features/recents/extensions/extensions.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -53,6 +52,10 @@ class _CdrTileState extends State<CdrTile> {
   String get participant => widget.cdr.participant;
   String? get participantNumber => widget.cdr.participantNumber;
 
+  String get name => contact?.maybeName ?? participant;
+  String get number => participantNumber ?? participant;
+  bool get nameSameAsNumber => name == number;
+
   List<PopupMenuEntry> get actions => [
     if (widget.onAudioCallPressed != null)
       PopupMenuItem(onTap: widget.onAudioCallPressed, child: Text(context.l10n.numberActions_audioCall)),
@@ -89,7 +92,7 @@ class _CdrTileState extends State<CdrTile> {
     ),
   ];
 
-  void onLongPress() {
+  void showMenuPopup() {
     final position = getPosition();
     showMenu(context: context, position: position, items: actions);
   }
@@ -111,38 +114,113 @@ class _CdrTileState extends State<CdrTile> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final colorScheme = themeData.colorScheme;
+    final l10n = context.l10n;
 
-    return ListTile(
-      key: tileKey,
-      contentPadding: const EdgeInsets.only(left: 16, right: 16),
-      leading: LeadingAvatar(
-        username: contact?.maybeName ?? participant,
-        thumbnail: contact?.thumbnail,
-        thumbnailUrl: contact?.thumbnailUrl,
-        registered: contact?.registered,
-        presenceInfo: contact?.presenceInfo,
-      ),
-      trailing: Column(
-        children: [
-          Text(cdr.connectTime.toLocal().timeOrDate, style: themeData.textTheme.bodySmall),
-          const SizedBox(width: 4),
-          Text(cdr.duration.format()),
-        ],
-      ),
-      title: Text(contact?.maybeName ?? participant, maxLines: 1, overflow: TextOverflow.ellipsis),
-      subtitle: Row(
-        children: [
-          Icon(
-            cdr.direction.icon(cdr.status == CdrStatus.accepted),
-            size: 16,
-            color: cdr.direction == CallDirection.incoming ? Colors.blue : Colors.green,
+    String? disconnectText;
+    if (cdr.disconnectReasonEnum != null) {
+      if (cdr.disconnectReasonEnum != CdrDisconnectReason.unknown &&
+          cdr.disconnectReasonEnum != CdrDisconnectReason.normalCallClearing) {
+        disconnectText = l10n.parseL10n(cdr.disconnectReasonEnum!.l10nKey) ?? cdr.disconnectReasonEnum!.rawValue;
+      } else {
+        disconnectText = null;
+      }
+    } else if (cdr.disconnectReason.isNotEmpty) {
+      disconnectText = cdr.disconnectReason;
+    }
+
+    final directionIcon = Icon(
+      cdr.direction.icon(cdr.status == CdrStatus.accepted),
+      size: 14,
+      color: cdr.direction == CallDirection.incoming ? Colors.blue : Colors.green,
+    );
+
+    final nameTitle = Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.titleMedium);
+
+    final phoneLabel = Text(
+      number,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: themeData.textTheme.labelSmall,
+      textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
+    );
+
+    final disconnectReasonLabel = Text(
+      disconnectText ?? '',
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: themeData.textTheme.labelSmall,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Material(
+        color: colorScheme.surface.withAlpha(25),
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          focusColor: Colors.yellow,
+          hoverColor: Colors.yellow,
+          splashColor: colorScheme.secondary.withAlpha(50),
+          key: tileKey,
+          onTap: widget.onTap,
+          onLongPress: showMenuPopup,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8, right: 0, top: 8, bottom: 8),
+            child: Row(
+              children: [
+                LeadingAvatar(
+                  username: name,
+                  thumbnail: contact?.thumbnail,
+                  thumbnailUrl: contact?.thumbnailUrl,
+                  registered: contact?.registered,
+                  presenceInfo: contact?.presenceInfo,
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (!nameSameAsNumber) ...[
+                        nameTitle,
+                        Row(children: [directionIcon, const SizedBox(width: 4), phoneLabel]),
+                        if (disconnectText != null) ...[SizedBox(height: 2), disconnectReasonLabel],
+                      ],
+                      if (nameSameAsNumber && disconnectText == null) ...[
+                        Row(children: [directionIcon, const SizedBox(width: 4), nameTitle]),
+                      ],
+                      if (nameSameAsNumber && disconnectText != null) ...[
+                        nameTitle,
+                        Row(children: [directionIcon, const SizedBox(width: 4), disconnectReasonLabel]),
+                      ],
+                    ],
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(cdr.connectTime.toLocal().timeOrDate, style: themeData.textTheme.labelSmall),
+                    const SizedBox(width: 4),
+                    Text(cdr.duration.format(), style: themeData.textTheme.labelSmall),
+                  ],
+                ),
+                SizedBox(width: 4),
+                GestureDetector(
+                  onTap: showMenuPopup,
+                  child: Container(
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface.withAlpha(1), // just for better tap tracking
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Icon(Icons.more_vert, size: 20, color: themeData.textTheme.labelMedium?.color),
+                  ),
+                ),
+              ],
+            ),
           ),
-          SizedBox(width: 4),
-          Flexible(child: Text(participantNumber ?? participant, maxLines: 1, overflow: TextOverflow.ellipsis)),
-        ],
+        ),
       ),
-      onTap: widget.onTap,
-      onLongPress: onLongPress,
     );
   }
 }
