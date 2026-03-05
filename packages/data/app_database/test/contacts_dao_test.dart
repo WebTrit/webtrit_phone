@@ -605,4 +605,90 @@ void main() {
       expect(fetched.first.phones.first.number, '911');
     });
   });
+
+  group('ContactPhonesDao', () {
+    late int contactId;
+
+    setUp(() async {
+      final contact = await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('did_test'),
+          firstName: Value('Alice'),
+        ),
+      );
+      contactId = contact.id;
+    });
+
+    test('allows same number with different labels (DID-only scenario)', () async {
+      final dao = database.contactPhonesDao;
+
+      await dao.insertContactPhonesBatch([
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000002'), label: Value('number')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000002'), label: Value('sms')),
+      ]);
+
+      final phones = await dao.getContactPhonesByContactId(contactId);
+
+      expect(phones.length, 2);
+      expect(phones.any((p) => p.label == 'number'), isTrue);
+      expect(phones.any((p) => p.label == 'sms'), isTrue);
+    });
+
+    test('upsert same (number, label, contact_id) updates in place — no duplicate', () async {
+      final dao = database.contactPhonesDao;
+
+      await dao.insertOnUniqueConflictUpdateContactPhone(
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000002'), label: Value('number')),
+      );
+      await dao.insertOnUniqueConflictUpdateContactPhone(
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000002'), label: Value('number')),
+      );
+
+      final phones = await dao.getContactPhonesByContactId(contactId);
+
+      expect(phones.length, 1);
+      expect(phones.first.number, '16042000002');
+      expect(phones.first.label, 'number');
+    });
+
+    test('deleteOtherContactPhonesOfContactId with empty list removes all phones', () async {
+      final dao = database.contactPhonesDao;
+
+      await dao.insertContactPhonesBatch([
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('1601'), label: Value('ext')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000001'), label: Value('number')),
+      ]);
+
+      await dao.deleteOtherContactPhonesOfContactId(contactId, []);
+
+      final phones = await dao.getContactPhonesByContactId(contactId);
+      expect(phones, isEmpty);
+    });
+
+    test('deleteOtherContactPhonesOfContactId keeps only matching (number, label) pairs', () async {
+      final dao = database.contactPhonesDao;
+
+      await dao.insertContactPhonesBatch([
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('1601'), label: Value('ext')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000001'), label: Value('number')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000001'), label: Value('sms')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('99900099907'), label: Value('additional')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('99900099907'), label: Value('sms')),
+      ]);
+
+      // Simulate role change: additional is removed, sms for 99900099907 stays
+      await dao.deleteOtherContactPhonesOfContactId(contactId, [
+        (number: '1601', label: 'ext'),
+        (number: '16042000001', label: 'number'),
+        (number: '16042000001', label: 'sms'),
+        (number: '99900099907', label: 'sms'),
+      ]);
+
+      final phones = await dao.getContactPhonesByContactId(contactId);
+      expect(phones.length, 4);
+      expect(phones.any((p) => p.number == '99900099907' && p.label == 'additional'), isFalse);
+      expect(phones.any((p) => p.number == '99900099907' && p.label == 'sms'), isTrue);
+    });
+  });
 }

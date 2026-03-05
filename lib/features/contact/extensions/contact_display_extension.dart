@@ -21,7 +21,18 @@ extension ContactDisplayExtension on Contact {
       return a.label.compareTo(b.label);
     });
 
-    return sortedPhones;
+    // Group by number, preserving sorted order
+    final grouped = <String, List<ContactPhone>>{};
+    for (final phone in sortedPhones) {
+      (grouped[phone.number] ??= []).add(phone);
+    }
+
+    return grouped.values.map((group) {
+      final first = group.first;
+      final mergedLabel = group.map((p) => p.label).join(' / ');
+      final isFavorite = group.any((p) => p.favorite);
+      return ContactPhone(id: first.id, number: first.number, label: mergedLabel, favorite: isFavorite);
+    }).toList();
   }
 
   /// Helper function to assign "weight" to labels.

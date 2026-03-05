@@ -165,6 +165,123 @@ void main() {
       expect(allContacts.first.contact.sourceId, 'number_unique_number_1');
     });
 
+    group('DID-only contacts (same number in multiple roles)', () {
+      test('Alice W: main and sms share the same number — creates 3 distinct rows', () async {
+        // ext=1602, main=16042000002, sms=[16042000002]
+        final contact = ContactsFixtureFactory.createExternalContact(
+          id: '1602',
+          ext: '1602',
+          number: '16042000002',
+          smsNumbers: ['16042000002'],
+        );
+
+        await dataSource.upsertContact(contact, ContactKindTypeEnum.visible);
+
+        final dbContact = await appDatabase.contactsDao.getContactBySource(
+          ContactSourceTypeEnum.external,
+          '1602',
+        );
+
+        expect(dbContact, isNotNull);
+        final phones = dbContact!.phones;
+
+        // ext(1602/ext), main(16042000002/number), sms(16042000002/sms) — 3 rows
+        expect(phones.length, 3);
+        expect(phones.any((p) => p.number == '1602' && p.label == kContactExtLabel), isTrue);
+        expect(phones.any((p) => p.number == '16042000002' && p.label == kContactMainLabel), isTrue);
+        expect(phones.any((p) => p.number == '16042000002' && p.label == kContactSmsLabel), isTrue);
+      });
+
+      test('Annet: ext, main, additional and sms with overlapping numbers — creates 5 distinct rows', () async {
+        // ext=1601, main=16042000001, additional=[99900099907], sms=[99900099907, 16042000001]
+        final contact = ContactsFixtureFactory.createExternalContact(
+          id: '1601',
+          ext: '1601',
+          number: '16042000001',
+          additional: ['99900099907'],
+          smsNumbers: ['99900099907', '16042000001'],
+        );
+
+        await dataSource.upsertContact(contact, ContactKindTypeEnum.visible);
+
+        final dbContact = await appDatabase.contactsDao.getContactBySource(
+          ContactSourceTypeEnum.external,
+          '1601',
+        );
+
+        expect(dbContact, isNotNull);
+        final phones = dbContact!.phones;
+
+        // ext, number, additional, sms×2 = 5 rows
+        expect(phones.length, 5);
+        expect(phones.any((p) => p.number == '1601' && p.label == kContactExtLabel), isTrue);
+        expect(phones.any((p) => p.number == '16042000001' && p.label == kContactMainLabel), isTrue);
+        expect(phones.any((p) => p.number == '99900099907' && p.label == kContactAdditionalLabel), isTrue);
+        expect(phones.any((p) => p.number == '99900099907' && p.label == kContactSmsLabel), isTrue);
+        expect(phones.any((p) => p.number == '16042000001' && p.label == kContactSmsLabel), isTrue);
+      });
+
+      test('contact without name falls back to mobileNumber for displayTitle', () async {
+        // user_id=1604205, no name, main=1604205, additional=[16042000005], sms=[16042000005]
+        final contact = ContactsFixtureFactory.createExternalContact(
+          id: '1604205',
+          number: '1604205',
+          additional: ['16042000005'],
+          smsNumbers: ['16042000005'],
+          firstName: null,
+          lastName: null,
+        );
+
+        await dataSource.upsertContact(contact, ContactKindTypeEnum.visible);
+
+        final dbContact = await appDatabase.contactsDao.getContactBySource(
+          ContactSourceTypeEnum.external,
+          '1604205',
+        );
+
+        expect(dbContact, isNotNull);
+        final phones = dbContact!.phones;
+
+        // main, additional, sms — 3 rows (no ext)
+        expect(phones.length, 3);
+        expect(phones.any((p) => p.number == '1604205' && p.label == kContactMainLabel), isTrue);
+        expect(phones.any((p) => p.number == '16042000005' && p.label == kContactAdditionalLabel), isTrue);
+        expect(phones.any((p) => p.number == '16042000005' && p.label == kContactSmsLabel), isTrue);
+      });
+
+      test('phone role change removes stale label row on re-sync', () async {
+        // First sync: number has sms label
+        final initial = ContactsFixtureFactory.createExternalContact(
+          id: '1604',
+          ext: '1604',
+          number: '16042000004',
+          smsNumbers: ['16042000004'],
+        );
+        await dataSource.upsertContact(initial, ContactKindTypeEnum.visible);
+
+        var dbContact = await appDatabase.contactsDao.getContactBySource(
+          ContactSourceTypeEnum.external,
+          '1604',
+        );
+        expect(dbContact!.phones.length, 3); // ext + number + sms
+
+        // Second sync: sms removed
+        final updated = ContactsFixtureFactory.createExternalContact(
+          id: '1604',
+          ext: '1604',
+          number: '16042000004',
+        );
+        await dataSource.upsertContact(updated, ContactKindTypeEnum.visible);
+
+        dbContact = await appDatabase.contactsDao.getContactBySource(
+          ContactSourceTypeEnum.external,
+          '1604',
+        );
+        expect(dbContact!.phones.length, 2); // only ext + number
+        expect(dbContact.phones.any((p) => p.label == kContactSmsLabel), isFalse);
+      });
+    });
+
     test('sanitizes phone numbers by removing non-digit characters before insertion', () async {
       final localContact = ContactsFixtureFactory.createLocalContact(
         id: 'sanitize_test_id',
