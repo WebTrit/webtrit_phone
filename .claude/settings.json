@@ -50,6 +50,16 @@
             "command": "python3 .claude/hooks/md_formatter.py"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/dart_formatter.py",
+            "timeout": 30
+          }
+        ]
       }
     ],
     "PreToolUse": [
