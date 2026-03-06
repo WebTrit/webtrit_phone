@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""PostToolUse hook: ensure every text file written or edited ends with a newline.
+"""PostToolUse hook: ensure text files written or edited end with a newline.
 
 Prevents the "no newline at end of file" warning in Git diffs and code review tools.
-Applies to all text-based file types; silently skips binary files and generated Dart files.
-
-Generated Dart files (*.g.dart, *.freezed.dart, *.gr.dart) are skipped because
-they are managed exclusively by build_runner.
+Only applies to explicitly allowlisted extensions — all other files are ignored.
 """
 
 import json
@@ -13,16 +10,21 @@ import os
 import sys
 from typing import Optional
 
-# Extensions treated as binary or otherwise not touched.
-BINARY_EXTENSIONS = {
-    '.png', '.jpg', '.jpeg', '.gif', '.ico', '.webp',
-    '.ttf', '.otf', '.woff', '.woff2',
-    '.pdf', '.zip', '.tar', '.gz',
-    '.jks', '.keystore', '.p12', '.pem', '.key', '.p8',
+# Only these extensions will have a trailing newline enforced.
+ALLOWED_EXTENSIONS = {
+    '.dart',
+    '.yaml', '.yml',
+    '.json',
+    '.md',
+    '.py',
+    '.sh',
+    '.kt', '.kts',
+    '.swift',
+    '.gradle',
+    '.xml',
+    '.html',
+    '.txt',
 }
-
-# Generated Dart files must never be modified outside of build_runner.
-GENERATED_DART_SUFFIXES = ('.g.dart', '.freezed.dart', '.gr.dart')
 
 
 def get_file_path(hook_input: dict) -> Optional[str]:
@@ -34,13 +36,9 @@ def get_file_path(hook_input: dict) -> Optional[str]:
     return None
 
 
-def should_skip(file_path: str) -> bool:
+def should_apply(file_path: str) -> bool:
     _, ext = os.path.splitext(file_path)
-    if ext.lower() in BINARY_EXTENSIONS:
-        return True
-    if any(file_path.endswith(s) for s in GENERATED_DART_SUFFIXES):
-        return True
-    return False
+    return ext.lower() in ALLOWED_EXTENSIONS
 
 
 def main() -> None:
@@ -52,7 +50,7 @@ def main() -> None:
     file_path = get_file_path(hook_input)
     if not file_path or not os.path.isfile(file_path):
         sys.exit(0)
-    if should_skip(file_path):
+    if not should_apply(file_path):
         sys.exit(0)
 
     try:
