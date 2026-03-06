@@ -11,6 +11,7 @@ they are managed exclusively by build_runner.
 import json
 import os
 import sys
+from typing import Optional
 
 # Extensions treated as binary or otherwise not touched.
 BINARY_EXTENSIONS = {
@@ -24,12 +25,12 @@ BINARY_EXTENSIONS = {
 GENERATED_DART_SUFFIXES = ('.g.dart', '.freezed.dart', '.gr.dart')
 
 
-def get_file_path(hook_input: dict) -> str | None:
+def get_file_path(hook_input: dict) -> Optional[str]:
     """Return the file_path from a Write/Edit/MultiEdit tool call, or None."""
-    tool = hook_input.get('tool_name', '')
+    tool = hook_input.get('tool') or hook_input.get('tool_name', '')
     params = hook_input.get('tool_input', {})
     if tool in ('Write', 'Edit', 'MultiEdit'):
-        return params.get('file_path')
+        return params.get('file_path') or params.get('path')
     return None
 
 

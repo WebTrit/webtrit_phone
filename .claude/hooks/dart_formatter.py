@@ -13,17 +13,18 @@ they must never be hand-edited or reformatted outside of build_runner.
 import json
 import subprocess
 import sys
+from typing import Optional
 
 # Suffixes that identify auto-generated Dart files — never reformat these.
 GENERATED_SUFFIXES = ('.g.dart', '.freezed.dart', '.gr.dart')
 
 
-def get_file_path(hook_input: dict) -> str | None:
+def get_file_path(hook_input: dict) -> Optional[str]:
     """Return the file_path from a Write/Edit/MultiEdit tool call, or None."""
-    tool = hook_input.get('tool_name', '')
+    tool = hook_input.get('tool') or hook_input.get('tool_name', '')
     params = hook_input.get('tool_input', {})
     if tool in ('Write', 'Edit', 'MultiEdit'):
-        return params.get('file_path')
+        return params.get('file_path') or params.get('path')
     return None
 
 
@@ -48,8 +49,12 @@ def main() -> None:
         text=True,
     )
     if result.returncode != 0:
-        print(f'dart format failed: {result.stderr}', file=sys.stderr)
-        sys.exit(result.returncode)
+        print(
+            f'dart format failed for {file_path} with exit code {result.returncode}\n'
+            f'stdout:\n{result.stdout}\n'
+            f'stderr:\n{result.stderr}',
+            file=sys.stderr,
+        )
 
 
 if __name__ == '__main__':
