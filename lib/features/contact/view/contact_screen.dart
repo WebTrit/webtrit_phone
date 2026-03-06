@@ -75,8 +75,6 @@ class _ContactScreenState extends State<ContactScreen> {
             final contactSourceId = contact.sourceId;
             final contactSmsNumbers = contact.smsNumbers;
 
-            final displayPhones = contact.displayPhones;
-
             return BlocBuilder<CallBloc, CallState>(
               buildWhen: (previous, current) =>
                   previous.isBlingTransferInitiated != current.isBlingTransferInitiated ||
@@ -116,31 +114,29 @@ class _ContactScreenState extends State<ContactScreen> {
                             textAlign: TextAlign.center,
                           ),
                           const Divider(height: 16),
-                          for (final contactPhone in displayPhones)
+                          for (final entry in contact.displayPhoneEntries)
                             ContactPhoneTileAdapter(
-                              contactPhone: contactPhone,
-                              contact: contact,
+                              number: entry.phone.number,
+                              displayLabel: entry.displayLabel,
+                              favorite: entry.displayFavorite,
+                              callNumbers: callRoutingState?.allNumbers ?? [],
+                              isSmsEnabled: widget.enableTileSms && contactSmsNumbers.contains(entry.phone.number),
+                              isMessageEnabled: widget.enableTileChat && contact.canMessage,
                               enableTileFavorite: widget.enableTileFavorite,
                               enableTileVoiceCall: widget.enableTileVoiceCall,
                               enableTileVideoCall: widget.enableTileVideoCall,
-                              enableTileSms: widget.enableTileSms,
-                              enableTileChat: widget.enableTileChat,
                               enableTileTransfer: widget.enableTileTransfer,
                               enableTileCallLog: widget.enableTileCallLog,
-                              contactSmsNumbers: contactSmsNumbers,
-                              contactSourceId: contactSourceId,
-                              userSmsNumbers: userSmsNumbers,
                               hasActiveCall: hasActiveCall,
                               isBlingTransferInitiated: isBlingTransferInitiated,
-                              callRoutingState: callRoutingState,
-                              onFavoriteChanged: _onFavoriteChanged,
-                              onAudioPressed: _onAudioPressed,
-                              onVideoPressed: _onVideoPressed,
-                              onTransferPressed: _onTransferPressed,
-                              onSendSmsPressed: _onSendSmsPressed,
-                              onCallLogPressed: _onCallLogPressed,
-                              onNavigateToChatConversation: _navigateToChatConversation,
-                              onCallFromPressed: _onCallFromPressed,
+                              onFavoriteChanged: (isFavorite) => _onFavoriteChanged(isFavorite, entry.phone, contact),
+                              onAudioPressed: () => _onAudioPressed(entry.phone, contact),
+                              onVideoPressed: () => _onVideoPressed(entry.phone, contact),
+                              onTransferPressed: () => _onTransferPressed(entry.phone),
+                              onSmsPressed: () => _onSendSmsPressed(entry.phone, contactSourceId, userSmsNumbers),
+                              onCallLogPressed: () => _onCallLogPressed(entry.phone.number),
+                              onMessagePressed: () => _navigateToChatConversation(contact),
+                              onCallFromPressed: (fromNumber) => _onCallFromPressed(entry.phone, contact, fromNumber),
                             ),
                           for (final contactEmail in contact.emails)
                             ContactEmailTile(
