@@ -11,6 +11,7 @@ they must never be hand-edited or reformatted outside of build_runner.
 """
 
 import json
+import os
 import subprocess
 import sys
 from typing import Optional
@@ -36,7 +37,7 @@ def main() -> None:
 
     file_path = get_file_path(hook_input)
 
-    if not file_path:
+    if not file_path or not os.path.isfile(file_path):
         sys.exit(0)
     if not file_path.endswith('.dart'):
         sys.exit(0)
