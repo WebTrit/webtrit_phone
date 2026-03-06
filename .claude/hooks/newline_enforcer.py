@@ -26,6 +26,11 @@ ALLOWED_EXTENSIONS = {
     '.txt',
 }
 
+# Generated Dart files must never be modified outside of build_runner.
+# os.path.splitext('foo.g.dart') returns ('.g', '.dart'), so extension-based
+# allowlist alone is not enough — explicit suffix check is required.
+GENERATED_DART_SUFFIXES = ('.g.dart', '.freezed.dart', '.gr.dart')
+
 
 def get_file_path(hook_input: dict) -> Optional[str]:
     """Return the file_path from a Write/Edit/MultiEdit tool call, or None."""
@@ -37,6 +42,8 @@ def get_file_path(hook_input: dict) -> Optional[str]:
 
 
 def should_apply(file_path: str) -> bool:
+    if any(file_path.endswith(s) for s in GENERATED_DART_SUFFIXES):
+        return False
     _, ext = os.path.splitext(file_path)
     return ext.lower() in ALLOWED_EXTENSIONS
 
