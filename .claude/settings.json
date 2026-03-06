@@ -60,6 +60,15 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/newline_enforcer.py"
+          }
+        ]
       }
     ],
     "PreToolUse": [
