@@ -384,13 +384,13 @@ melos:
     l10n:push:
       description: Push localization keys to Localizely (reads LOCALIZELY_TOKEN from .env).
       run: |
-        token=$(grep '^LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
+        token=$(grep -E '^(export[[:space:]]+)?LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
         localizely-cli --api-token="$token" push
 
     l10n:pull:
       description: Pull localization keys from Localizely (reads LOCALIZELY_TOKEN from .env).
       run: |
-        token=$(grep '^LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
+        token=$(grep -E '^(export[[:space:]]+)?LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
         localizely-cli --api-token="$token" pull
 
     l10n:generate:
