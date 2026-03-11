@@ -102,9 +102,7 @@ class LogRecordsFileRepositoryImpl implements LogRecordsRepository, Disposable {
 
   @override
   @mustCallSuper
-  Future<void> dispose() async {
-    appender.dispose();
-  }
+  Future<void> dispose() => appender.dispose();
 
   @override
   Future<void> cancelSubscriptions() async {}
