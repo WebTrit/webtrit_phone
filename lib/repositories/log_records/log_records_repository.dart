@@ -196,8 +196,14 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
 
   /// Deletes all log files (base file and rotated files).
   Future<void> cleanLogs() async {
-    // ignore: invalid_use_of_visible_for_testing_member
-    await forceFlush();
+    try {
+      // ignore: invalid_use_of_visible_for_testing_member
+      await forceFlush();
+    } catch (e, st) {
+      if (kDebugMode) {
+        debugPrint('Error during forceFlush before cleaning logs: $e\n$st');
+      }
+    }
 
     // Get all rotated files (e.g. app.log, app.log.1, app.log.2)
     final files = getAllLogFiles();
