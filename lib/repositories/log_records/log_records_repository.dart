@@ -168,21 +168,24 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     return records;
   }
 
-  /// Tries to get the list of log files.
-  /// If the list is empty, it waits and retries a few times.
-  /// This fixes issues where existsSync() returns false immediately after a flush.
+  /// Waits until the base log file exists on disk, then returns all log files.
+  ///
+  /// [getAllLogFiles] uses [File.existsSync] which may return false immediately
+  /// after [forceFlush] because the OS filesystem cache has not yet been updated.
+  /// Using the async [File.exists] forces a fresh stat() call that bypasses the
+  /// cache. Retries up to [maxRetries] times with [retryDelay] between attempts.
   Future<List<File>> _getAllLogFilesWithRetry({
-    int maxRetries = 5,
-    Duration retryDelay = const Duration(seconds: 2),
+    int maxRetries = 10,
+    Duration retryDelay = const Duration(milliseconds: 100),
   }) async {
+    final baseFile = File(baseFilePath);
     for (int i = 0; i < maxRetries; i++) {
-      final files = getAllLogFiles();
-      if (files.isNotEmpty) {
-        return files;
+      if (await baseFile.exists()) {
+        return getAllLogFiles();
       }
       await Future.delayed(retryDelay);
     }
-    return getAllLogFiles();
+    return [];
   }
 
   /// Deletes all log files (base file and rotated files).
