@@ -15,24 +15,19 @@ class _MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements Call
 class _MockNotificationsBloc extends MockBloc<NotificationsEvent, NotificationsState> implements NotificationsBloc {}
 
 class _FakeCallRoutingState extends Fake implements CallRoutingState {
-  _FakeCallRoutingState({
-    this.mainNumber = '111',
-    this.additionalNumbers = const [],
-    required this.mainLinesState,
-    this.guestLineState,
-  });
+  _FakeCallRoutingState({required this.mainLinesState});
 
   @override
-  final String? mainNumber;
+  final String? mainNumber = '111';
 
   @override
-  final List<String> additionalNumbers;
+  final List<String> additionalNumbers = const [];
 
   @override
   final List<LineState> mainLinesState;
 
   @override
-  final LineState? guestLineState;
+  final LineState? guestLineState = null;
 
   @override
   bool get hasIdleMainLine => mainLinesState.any((l) => l == LineState.idle);
