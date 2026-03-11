@@ -1,7 +1,6 @@
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
-import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 
