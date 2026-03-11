@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/features/call/call.dart';
-import 'package:webtrit_phone/features/call/controllers/call_controller.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/models/lines_state.dart';
 
