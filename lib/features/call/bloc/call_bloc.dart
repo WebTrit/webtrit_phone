@@ -1700,14 +1700,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallPerformEventStarted(_CallPerformEventStarted event, Emitter<CallState> emit) async {
-    if (state.callServiceState.registration?.status.isRegistered != true) {
-      _logger.info('__onCallPerformEventStarted account is not registered');
-      submitNotification(CallWhileUnregisteredNotification());
-
-      event.fail();
-      return;
-    }
-
     if (await state.performOnActiveCall(event.callId, (activeCall) => activeCall.line != _kUndefinedLine) != true) {
       event.fail();
 
@@ -1722,9 +1714,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     ///
 
     bool signalingConnected = state.callServiceState.signalingClientStatus.isConnect;
+    bool registrationKnown = state.callServiceState.registration?.status != null;
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
-    if (signalingConnected == false) {
+    if (signalingConnected == false || registrationKnown == false) {
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingConnectingToSignaling);
@@ -1732,12 +1725,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       final nextStatus = await stream
-          .firstWhere(
-            (state) =>
-                state.callServiceState.signalingClientStatus.isConnect ||
-                state.callServiceState.signalingClientStatus.isFailure,
-            orElse: () => state,
-          )
+          .firstWhere((state) => state.isHandshakeEstablished && state.isSignalingEstablished, orElse: () => state)
           .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state);
       signalingConnected = nextStatus.callServiceState.signalingClientStatus.isConnect;
       if (isClosed) return;
@@ -1758,6 +1746,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       callkeep.endCall(event.callId);
 
       submitNotification(const CallWhileOfflineNotification());
+      return;
+    }
+
+    // If registration status is not registered after signaling is established, notify user
+    if (state.callServiceState.registration?.status.isRegistered != true) {
+      _logger.info('__onCallPerformEventStarted account is not registered');
+      submitNotification(CallWhileUnregisteredNotification());
+
+      event.fail();
       return;
     }
 
