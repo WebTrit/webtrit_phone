@@ -125,8 +125,14 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
   Future<List<String>> readAllLogs({int? limit}) async {
     final records = <String>[];
 
-    // ignore: invalid_use_of_visible_for_testing_member
-    await forceFlush();
+    try {
+      // ignore: invalid_use_of_visible_for_testing_member
+      await forceFlush();
+    } catch (e, st) {
+      if (kDebugMode) {
+        debugPrint('Error during forceFlush before reading logs: $e\n$st');
+      }
+    }
 
     // Get all log files and iterate in reverse to read newest logs first
     final files = await _getAllLogFilesWithRetry();
