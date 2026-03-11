@@ -20,14 +20,19 @@ class CallController {
 
   /// Creates a new call using the current call routing state.
   ///
-  /// Handles caller ID logic and available line validation.
-  void createCall({required String destination, String? displayName, bool video = false, String? fromNumber}) {
-    final callRoutingState = callRoutingCubit.state;
-    if (callRoutingState == null) {
-      _logger.warning('Call routing state is null, cannot create call.');
-      notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
-      return;
-    }
+  /// If the routing state is not yet available (app just launched, internet
+  /// not yet connected), the call is held as pending and automatically
+  /// proceeds once the routing state becomes available.
+  Future<void> createCall({
+    required String destination,
+    String? displayName,
+    bool video = false,
+    String? fromNumber,
+  }) async {
+    final callRoutingState =
+        callRoutingCubit.state ?? await callRoutingCubit.stream.firstWhere((s) => s != null, orElse: () => null);
+
+    if (callRoutingState == null) return;
 
     // Determine fromNumber based on routing settings
     final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
@@ -50,7 +55,6 @@ class CallController {
       return;
     }
 
-    // All checks passed, create call
     callBloc.add(
       CallControlEvent.started(number: destination, video: video, displayName: displayName, fromNumber: fromNumber),
     );
