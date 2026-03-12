@@ -95,6 +95,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Timer? _presenceInfoSyncTimer;
 
   late final PeerConnectionManager _peerConnectionManager;
+  late final RenegotiationHandler _renegotiationHandler;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -129,6 +130,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingClientFactory = signalingClientFactory;
     _peerConnectionManager = peerConnectionManager;
+    _renegotiationHandler = RenegotiationHandler(callErrorReporter: callErrorReporter, sdpMunger: sdpMunger);
 
     on<CallStarted>(_onCallStarted, transformer: sequential());
     on<_AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());
@@ -2782,43 +2784,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         onIceCandidate: (candidate) => add(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
         onAddStream: (stream) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
         onRemoveStream: (stream) => add(_PeerConnectionEvent.streamRemoved(callId, stream)),
-        onRenegotiationNeeded: (pc) => _handleRenegotiationNeeded(callId, lineId, pc),
+        onRenegotiationNeeded: (pc) => _renegotiationHandler.handle(callId, lineId, pc, (callId, lineId, jsep) async {
+          final updateRequest = UpdateRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: lineId,
+            callId: callId,
+            jsep: jsep.toMap(),
+          );
+          await _signalingClient?.execute(updateRequest);
+        }),
       ),
     );
-  }
-
-  Future<void> _handleRenegotiationNeeded(String callId, int? lineId, RTCPeerConnection peerConnection) async {
-    final stateBeforeOffer = peerConnection.signalingState;
-    _logger.fine(() => 'onRenegotiationNeeded signalingState: $stateBeforeOffer');
-    if (stateBeforeOffer == RTCSignalingState.RTCSignalingStateStable) {
-      final localDescription = await peerConnection.createOffer({});
-      sdpMunger?.apply(localDescription);
-
-      final stateAfterOffer = peerConnection.signalingState;
-      if (stateAfterOffer != RTCSignalingState.RTCSignalingStateStable) {
-        _logger.fine(
-          () =>
-              'onRenegotiationNeeded: state changed to $stateAfterOffer after createOffer, skipping setLocalDescription',
-        );
-        return;
-      }
-
-      // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
-      // localDescription should be set before sending the offer to transition into have-local-offer state.
-      await peerConnection.setLocalDescription(localDescription);
-
-      try {
-        final updateRequest = UpdateRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: lineId,
-          callId: callId,
-          jsep: localDescription.toMap(),
-        );
-        await _signalingClient?.execute(updateRequest);
-      } catch (e, s) {
-        callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
-      }
-    }
   }
 
   void _addToRecents(ActiveCall activeCall) {
