@@ -44,11 +44,7 @@ class CallController {
     // orElse returns null only if the cubit is closed while waiting (e.g. logout).
     final CallRoutingState? callRoutingState;
     try {
-      callRoutingState =
-          callRoutingCubit.state ??
-          await callRoutingCubit.stream
-              .firstWhere((s) => s != null, orElse: () => null)
-              .timeout(kCallRoutingStateTimeout);
+      callRoutingState = callRoutingCubit.state ?? await _waitForRoutingState();
     } on TimeoutException {
       _logger.warning(
         'createCall: routing state not available after ${kCallRoutingStateTimeout.inSeconds}s, no network',
@@ -89,6 +85,13 @@ class CallController {
       CallControlEvent.started(number: destination, video: video, displayName: displayName, fromNumber: fromNumber),
     );
   }
+
+  /// Waits for the first non-null [CallRoutingState] from the cubit stream.
+  ///
+  /// Returns null if the cubit is closed before any state arrives (e.g. logout).
+  /// Throws [TimeoutException] if no state arrives within [kCallRoutingStateTimeout].
+  Future<CallRoutingState?> _waitForRoutingState() =>
+      callRoutingCubit.stream.firstWhere((s) => s != null, orElse: () => null).timeout(kCallRoutingStateTimeout);
 
   /// Submits a blind transfer for the given destination.
   ///
