@@ -1714,11 +1714,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     ///
 
     var currentState = state;
-    bool signalingConnected = currentState.callServiceState.signalingClientStatus.isConnect;
-    bool registrationKnown = currentState.callServiceState.registration?.status != null;
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
-    if (signalingConnected == false || registrationKnown == false) {
+    if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingConnectingToSignaling);
@@ -1734,12 +1732,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             return signalingReady || signalingFailed;
           }, orElse: () => state)
           .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state);
-      signalingConnected = currentState.callServiceState.signalingClientStatus.isConnect;
       if (isClosed) return;
     }
 
     // If the signaling client is not connected, hung up the call and notify user
-    if (signalingConnected == false) {
+    if (!currentState.isSignalingEstablished) {
       event.fail();
 
       // Notice that the tube was already hung up to avoid sending an extra event to the server
