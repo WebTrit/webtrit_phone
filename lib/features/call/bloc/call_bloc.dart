@@ -1810,9 +1810,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       final activeCall = state.retrieveActiveCall(event.callId);
       final peerConnection = await _createPeerConnection(event.callId, activeCall!.line);
-      localStream.getTracks().forEach((track) async {
-        await peerConnection.addTrack(track, localStream);
-      });
+      await Future.wait(localStream.getTracks().map((track) => peerConnection.addTrack(track, localStream)));
 
       final localDescription = await peerConnection.createOffer({});
       sdpMunger?.apply(localDescription);
