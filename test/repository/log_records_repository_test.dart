@@ -141,7 +141,7 @@ void main() {
         File(basePath).writeAsStringSync('new-1\nnew-2\n');
         File('$basePath.1').writeAsStringSync('old-1\nold-2\n');
 
-        // files.reversed iterates base last → lines from base come first in result
+        // Base file contains newer logs, so its lines appear before rotated file lines (overall newest first).
         final records = await appender.readAllLogs();
         expect(records, ['new-2', 'new-1', 'old-2', 'old-1']);
       });
