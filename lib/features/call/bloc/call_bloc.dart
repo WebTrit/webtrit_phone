@@ -2784,7 +2784,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         onIceCandidate: (candidate) => add(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
         onAddStream: (stream) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
         onRemoveStream: (stream) => add(_PeerConnectionEvent.streamRemoved(callId, stream)),
-        onRenegotiationNeeded: (pc) => _renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate),
+        onRenegotiationNeeded: (pc) =>
+            unawaited(_renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate)),
       ),
     );
   }

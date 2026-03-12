@@ -151,12 +151,14 @@ void main() {
   });
 
   group('RenegotiationHandler — execute error handling', () {
+    setUp(() {
+      when(() => mockErrorReporter.handle(any(), any(), any())).thenReturn(null);
+    });
+
     test('reports error via callErrorReporter when execute throws', () async {
       when(() => mockPC.signalingState).thenReturn(RTCSignalingState.RTCSignalingStateStable);
       when(() => mockPC.createOffer(any())).thenAnswer((_) async => kOffer);
       when(() => mockPC.setLocalDescription(any())).thenAnswer((_) async {});
-      when(() => mockErrorReporter.handle(any(), any(), any())).thenReturn(null);
-
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
       final exception = Exception('signaling error');
 
@@ -165,12 +167,33 @@ void main() {
       verify(() => mockErrorReporter.handle(exception, any(), any())).called(1);
     });
 
+    test('reports error via callErrorReporter when createOffer throws', () async {
+      when(() => mockPC.signalingState).thenReturn(RTCSignalingState.RTCSignalingStateStable);
+      final exception = Exception('createOffer error');
+      when(() => mockPC.createOffer(any())).thenThrow(exception);
+      handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
+
+      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async {});
+
+      verify(() => mockErrorReporter.handle(exception, any(), any())).called(1);
+    });
+
+    test('reports error via callErrorReporter when setLocalDescription throws', () async {
+      when(() => mockPC.signalingState).thenReturn(RTCSignalingState.RTCSignalingStateStable);
+      when(() => mockPC.createOffer(any())).thenAnswer((_) async => kOffer);
+      final exception = Exception('setLocalDescription error');
+      when(() => mockPC.setLocalDescription(any())).thenThrow(exception);
+      handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
+
+      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async {});
+
+      verify(() => mockErrorReporter.handle(exception, any(), any())).called(1);
+    });
+
     test('does not rethrow when execute throws', () async {
       when(() => mockPC.signalingState).thenReturn(RTCSignalingState.RTCSignalingStateStable);
       when(() => mockPC.createOffer(any())).thenAnswer((_) async => kOffer);
       when(() => mockPC.setLocalDescription(any())).thenAnswer((_) async {});
-      when(() => mockErrorReporter.handle(any(), any(), any())).thenReturn(null);
-
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
 
       await expectLater(
