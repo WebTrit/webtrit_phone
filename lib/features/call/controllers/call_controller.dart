@@ -40,7 +40,12 @@ class CallController {
     final callRoutingState =
         callRoutingCubit.state ?? await callRoutingCubit.stream.firstWhere((s) => s != null, orElse: () => null);
 
-    if (callRoutingState == null) return;
+    if (callRoutingState == null) {
+      _logger.warning(
+        'createCall: callRoutingCubit closed before routing state became available, dropping call to $destination',
+      );
+      return;
+    }
 
     // Determine fromNumber based on routing settings
     final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
