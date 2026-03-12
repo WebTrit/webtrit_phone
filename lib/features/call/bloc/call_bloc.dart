@@ -1713,8 +1713,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     /// Ensuring that the signaling client is connected before attempting to make an outgoing call
     ///
 
-    bool signalingConnected = state.callServiceState.signalingClientStatus.isConnect;
-    bool registrationKnown = state.callServiceState.registration?.status != null;
+    var currentState = state;
+    bool signalingConnected = currentState.callServiceState.signalingClientStatus.isConnect;
+    bool registrationKnown = currentState.callServiceState.registration?.status != null;
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
     if (signalingConnected == false || registrationKnown == false) {
@@ -1724,7 +1725,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
-      final nextStatus = await stream
+      currentState = await stream
           .firstWhere((next) {
             // Stop waiting as soon as signaling is fully ready or has failed —
             // avoids blocking for the full timeout on a definitive failure.
@@ -1733,7 +1734,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             return signalingReady || signalingFailed;
           }, orElse: () => state)
           .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state);
-      signalingConnected = nextStatus.callServiceState.signalingClientStatus.isConnect;
+      signalingConnected = currentState.callServiceState.signalingClientStatus.isConnect;
       if (isClosed) return;
     }
 
@@ -1756,7 +1757,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     // If registration status is not registered after signaling is established, notify user
-    if (state.callServiceState.registration?.status.isRegistered != true) {
+    if (currentState.callServiceState.registration?.status.isRegistered != true) {
       _logger.info('__onCallPerformEventStarted account is not registered');
       submitNotification(CallWhileUnregisteredNotification());
 
