@@ -2784,17 +2784,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         onIceCandidate: (candidate) => add(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
         onAddStream: (stream) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
         onRemoveStream: (stream) => add(_PeerConnectionEvent.streamRemoved(callId, stream)),
-        onRenegotiationNeeded: (pc) => _renegotiationHandler.handle(callId, lineId, pc, (callId, lineId, jsep) async {
-          final updateRequest = UpdateRequest(
-            transaction: WebtritSignalingClient.generateTransactionId(),
-            line: lineId,
-            callId: callId,
-            jsep: jsep.toMap(),
-          );
-          await _signalingClient?.execute(updateRequest);
-        }),
+        onRenegotiationNeeded: (pc) => _renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate),
       ),
     );
+  }
+
+  /// Sends a renegotiation [UpdateRequest] to the signaling server with the given [jsep] offer.
+  ///
+  /// Used as a [RenegotiationExecutor] callback by [RenegotiationHandler].
+  Future<void> _sendRenegotiationUpdate(String callId, int? lineId, RTCSessionDescription jsep) async {
+    final updateRequest = UpdateRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: lineId,
+      callId: callId,
+      jsep: jsep.toMap(),
+    );
+    await _signalingClient?.execute(updateRequest);
   }
 
   void _addToRecents(ActiveCall activeCall) {
