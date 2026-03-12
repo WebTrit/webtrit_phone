@@ -134,14 +134,11 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
       }
     }
 
-    // Get all log files and iterate in reverse to read newest logs first
-    final files = await _getAllLogFilesWithRetry();
+    // _getAllLogFilesAsync returns files ordered rotation-0 first (newest write target),
+    // so iterating in order reads the newest file first.
+    final files = await _getAllLogFilesAsync();
 
-    for (final file in files.reversed) {
-      if (!await file.exists()) {
-        continue;
-      }
-
+    for (final file in files) {
       try {
         // Use readAsLines for simplicity, which is fine for moderately sized logs.
         // For extremely large logs, a streaming approach (using file.openRead)
@@ -174,24 +171,26 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     return records;
   }
 
-  /// Waits until the base log file exists on disk, then returns all log files.
+  /// Returns all existing log files using async [File.exists] checks.
   ///
-  /// [getAllLogFiles] uses [File.existsSync] which may return false immediately
-  /// after [forceFlush] because the OS filesystem cache has not yet been updated.
-  /// Using the async [File.exists] forces a fresh stat() call that bypasses the
-  /// cache. Retries up to [maxRetries] times with [retryDelay] between attempts.
-  Future<List<File>> _getAllLogFilesWithRetry({
-    int maxRetries = 10,
-    Duration retryDelay = const Duration(milliseconds: 100),
-  }) async {
-    final baseFile = File(baseFilePath);
-    for (int i = 0; i < maxRetries; i++) {
-      if (await baseFile.exists()) {
-        return getAllLogFiles();
+  /// [getAllLogFiles] from the parent class uses [File.existsSync] which may
+  /// return stale results immediately after [forceFlush] due to OS filesystem
+  /// cache. Using async [File.exists] forces a fresh stat() call per file.
+  ///
+  /// Covers the full rotation range (0..keepRotateCount inclusive) because
+  /// [RotatingFileAppender._maybeRotate] renames file[keepRotateCount-1] to
+  /// file[keepRotateCount], so the base file may be absent right after rotation
+  /// while file[keepRotateCount] still holds recent logs.
+  Future<List<File>> _getAllLogFilesAsync() async {
+    final result = <File>[];
+    for (int rotation = 0; rotation <= keepRotateCount; rotation++) {
+      final path = rotation == 0 ? baseFilePath : '$baseFilePath.$rotation';
+      final file = File(path);
+      if (await file.exists()) {
+        result.add(file);
       }
-      await Future.delayed(retryDelay);
     }
-    return [];
+    return result;
   }
 
   /// Deletes all log files (base file and rotated files).
@@ -206,7 +205,7 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     }
 
     // Get all rotated files (e.g. app.log, app.log.1, app.log.2)
-    final files = getAllLogFiles();
+    final files = await _getAllLogFilesAsync();
 
     for (final file in files) {
       try {
