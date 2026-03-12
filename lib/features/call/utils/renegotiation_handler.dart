@@ -22,28 +22,31 @@ class RenegotiationHandler {
   ) async {
     final stateBeforeOffer = peerConnection.signalingState;
     _logger.fine(() => 'onRenegotiationNeeded signalingState: $stateBeforeOffer');
-    if (stateBeforeOffer == RTCSignalingState.RTCSignalingStateStable) {
-      try {
-        final localDescription = await peerConnection.createOffer({});
-        sdpMunger?.apply(localDescription);
+    if (stateBeforeOffer != RTCSignalingState.RTCSignalingStateStable) {
+      _logger.fine(() => 'onRenegotiationNeeded skipped: not in stable state ($stateBeforeOffer)');
+      return;
+    }
 
-        final stateAfterOffer = peerConnection.signalingState;
-        if (stateAfterOffer != RTCSignalingState.RTCSignalingStateStable) {
-          _logger.fine(
-            () =>
-                'onRenegotiationNeeded: state changed to $stateAfterOffer after createOffer, skipping setLocalDescription',
-          );
-          return;
-        }
+    try {
+      final localDescription = await peerConnection.createOffer({});
+      sdpMunger?.apply(localDescription);
 
-        // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
-        // localDescription should be set before sending the offer to transition into have-local-offer state.
-        await peerConnection.setLocalDescription(localDescription);
-
-        await execute(callId, lineId, localDescription);
-      } catch (e, s) {
-        callErrorReporter.handle(e, s, 'RenegotiationHandler.handle error (callId=$callId, lineId=$lineId)');
+      final stateAfterOffer = peerConnection.signalingState;
+      if (stateAfterOffer != RTCSignalingState.RTCSignalingStateStable) {
+        _logger.fine(
+          () =>
+              'onRenegotiationNeeded: state changed to $stateAfterOffer after createOffer, skipping setLocalDescription',
+        );
+        return;
       }
+
+      // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+      // localDescription should be set before sending the offer to transition into have-local-offer state.
+      await peerConnection.setLocalDescription(localDescription);
+
+      await execute(callId, lineId, localDescription);
+    } catch (e, s) {
+      callErrorReporter.handle(e, s, 'RenegotiationHandler.handle error (callId=$callId, lineId=$lineId)');
     }
   }
 }
