@@ -2788,16 +2788,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> _handleRenegotiationNeeded(String callId, int? lineId, RTCPeerConnection peerConnection) async {
-    final pcState = peerConnection.signalingState;
-    _logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
-    if (pcState == RTCSignalingState.RTCSignalingStateStable) {
+    final stateBeforeOffer = peerConnection.signalingState;
+    _logger.fine(() => 'onRenegotiationNeeded signalingState: $stateBeforeOffer');
+    if (stateBeforeOffer == RTCSignalingState.RTCSignalingStateStable) {
       final localDescription = await peerConnection.createOffer({});
       sdpMunger?.apply(localDescription);
 
-      final currentState = peerConnection.signalingState;
-      if (currentState != RTCSignalingState.RTCSignalingStateStable) {
+      final stateAfterOffer = peerConnection.signalingState;
+      if (stateAfterOffer != RTCSignalingState.RTCSignalingStateStable) {
         _logger.fine(
-          () => 'onRenegotiationNeeded: state changed to $currentState after createOffer, skipping setLocalDescription',
+          () =>
+              'onRenegotiationNeeded: state changed to $stateAfterOffer after createOffer, skipping setLocalDescription',
         );
         return;
       }
