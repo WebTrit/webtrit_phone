@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
+import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/models/lines_state.dart';
@@ -143,6 +148,21 @@ void main() {
 
         verify(() => notificationsBloc.add(any(that: isA<NotificationsSubmitted>()))).called(1);
         verifyNever(() => callBloc.add(any()));
+      });
+
+      test('submits NoInternetConnectionNotification when routing state does not arrive before timeout', () {
+        when(() => callRoutingCubit.state).thenReturn(null);
+        whenListen(callRoutingCubit, StreamController<CallRoutingState?>().stream);
+
+        fakeAsync((async) {
+          controller.createCall(destination: '222');
+          async.elapse(kCallRoutingStateTimeout);
+
+          final captured = verify(() => notificationsBloc.add(captureAny())).captured.single;
+          expect(captured, isA<NotificationsSubmitted>());
+          expect((captured as NotificationsSubmitted).notification, isA<NoInternetConnectionNotification>());
+          verifyNever(() => callBloc.add(any()));
+        });
       });
     });
   });

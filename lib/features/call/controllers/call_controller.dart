@@ -30,7 +30,14 @@ class CallController {
   /// proceeds once the routing state becomes available.
   void createCall({required String destination, String? displayName, bool video = false, String? fromNumber}) =>
       unawaited(
-        _createCallAsync(destination: destination, displayName: displayName, video: video, fromNumber: fromNumber),
+        _createCallAsync(
+          destination: destination,
+          displayName: displayName,
+          video: video,
+          fromNumber: fromNumber,
+        ).catchError(
+          (Object e, StackTrace st) => _logger.severe('createCall: unexpected error for $destination', e, st),
+        ),
       );
 
   Future<void> _createCallAsync({
