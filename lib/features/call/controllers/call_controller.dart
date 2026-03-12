@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
+import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 
@@ -38,9 +40,22 @@ class CallController {
     String? fromNumber,
   }) async {
     // Use current state if available, otherwise wait for the first non-null emission.
-    // orElse returns null if the cubit is closed before state arrives (e.g. logout).
-    final callRoutingState =
-        callRoutingCubit.state ?? await callRoutingCubit.stream.firstWhere((s) => s != null, orElse: () => null);
+    // Timeout guards against indefinite wait when there is no network on startup.
+    // orElse returns null only if the cubit is closed while waiting (e.g. logout).
+    final CallRoutingState? callRoutingState;
+    try {
+      callRoutingState =
+          callRoutingCubit.state ??
+          await callRoutingCubit.stream
+              .firstWhere((s) => s != null, orElse: () => null)
+              .timeout(kCallRoutingStateTimeout);
+    } on TimeoutException {
+      _logger.warning(
+        'createCall: routing state not available after ${kCallRoutingStateTimeout.inSeconds}s, no network',
+      );
+      notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
+      return;
+    }
 
     if (callRoutingState == null) {
       _logger.warning(
