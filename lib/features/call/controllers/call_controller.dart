@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
@@ -22,7 +24,12 @@ class CallController {
   /// If the routing state is not yet available (app just launched, internet
   /// not yet connected), the call is held as pending and automatically
   /// proceeds once the routing state becomes available.
-  Future<void> createCall({
+  void createCall({required String destination, String? displayName, bool video = false, String? fromNumber}) =>
+      unawaited(
+        _createCallAsync(destination: destination, displayName: displayName, video: video, fromNumber: fromNumber),
+      );
+
+  Future<void> _createCallAsync({
     required String destination,
     String? displayName,
     bool video = false,

@@ -1725,7 +1725,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       final nextStatus = await stream
-          .firstWhere((state) => state.isHandshakeEstablished && state.isSignalingEstablished, orElse: () => state)
+          .firstWhere(
+            (next) =>
+                (next.isHandshakeEstablished && next.isSignalingEstablished) ||
+                next.callServiceState.signalingClientStatus.isFailure,
+            orElse: () => state,
+          )
           .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state);
       signalingConnected = nextStatus.callServiceState.signalingClientStatus.isConnect;
       if (isClosed) return;
