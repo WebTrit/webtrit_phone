@@ -70,7 +70,8 @@ void main() {
       test('dispatches CallControlEvent to callBloc when idle main line exists', () async {
         when(() => callRoutingCubit.state).thenReturn(_FakeCallRoutingState(mainLinesState: [LineState.idle]));
 
-        await controller.createCall(destination: '222');
+        controller.createCall(destination: '222');
+        await Future<void>.delayed(Duration.zero);
 
         verify(() => callBloc.add(any(that: isA<CallControlEvent>()))).called(1);
         verifyNever(() => notificationsBloc.add(any()));
@@ -79,7 +80,8 @@ void main() {
       test('submits CallUndefinedLineNotification when all main lines are in use', () async {
         when(() => callRoutingCubit.state).thenReturn(_FakeCallRoutingState(mainLinesState: [LineState.inUse]));
 
-        await controller.createCall(destination: '222');
+        controller.createCall(destination: '222');
+        await Future<void>.delayed(Duration.zero);
 
         final captured = verify(() => notificationsBloc.add(captureAny())).captured.single;
         expect(captured, isA<NotificationsSubmitted>());
@@ -90,7 +92,8 @@ void main() {
       test('does not dispatch call when no lines at all', () async {
         when(() => callRoutingCubit.state).thenReturn(_FakeCallRoutingState(mainLinesState: const []));
 
-        await controller.createCall(destination: '222');
+        controller.createCall(destination: '222');
+        await Future<void>.delayed(Duration.zero);
 
         verifyNever(() => callBloc.add(any()));
       });
@@ -102,7 +105,8 @@ void main() {
         when(() => callRoutingCubit.state).thenReturn(null);
         whenListen(callRoutingCubit, Stream.fromIterable([routingState]));
 
-        await controller.createCall(destination: '222');
+        controller.createCall(destination: '222');
+        await Future<void>.delayed(Duration.zero);
 
         verify(() => callBloc.add(any(that: isA<CallControlEvent>()))).called(1);
       });
@@ -112,7 +116,8 @@ void main() {
         when(() => callRoutingCubit.state).thenReturn(null);
         whenListen(callRoutingCubit, Stream.fromIterable([null, null, routingState]));
 
-        await controller.createCall(destination: '222');
+        controller.createCall(destination: '222');
+        await Future<void>.delayed(Duration.zero);
 
         verify(() => callBloc.add(any(that: isA<CallControlEvent>()))).called(1);
       });
@@ -121,7 +126,8 @@ void main() {
         when(() => callRoutingCubit.state).thenReturn(null);
         whenListen(callRoutingCubit, const Stream<CallRoutingState?>.empty());
 
-        await controller.createCall(destination: '222');
+        controller.createCall(destination: '222');
+        await Future<void>.delayed(Duration.zero);
 
         verifyNever(() => callBloc.add(any()));
         verifyNever(() => notificationsBloc.add(any()));
@@ -132,7 +138,8 @@ void main() {
         when(() => callRoutingCubit.state).thenReturn(null);
         whenListen(callRoutingCubit, Stream.fromIterable([routingState]));
 
-        await controller.createCall(destination: '222');
+        controller.createCall(destination: '222');
+        await Future<void>.delayed(Duration.zero);
 
         verify(() => notificationsBloc.add(any(that: isA<NotificationsSubmitted>()))).called(1);
         verifyNever(() => callBloc.add(any()));
