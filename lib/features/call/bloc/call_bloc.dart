@@ -1727,7 +1727,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       currentState = await stream
           .firstWhere((next) {
-            // Stop waiting as soon as signaling is fully ready or has failed —
+            // Stop waiting as soon as signaling is fully ready or has failed;
             // avoids blocking for the full timeout on a definitive failure.
             final signalingReady = next.isHandshakeEstablished && next.isSignalingEstablished;
             final signalingFailed = next.callServiceState.signalingClientStatus.isFailure;
