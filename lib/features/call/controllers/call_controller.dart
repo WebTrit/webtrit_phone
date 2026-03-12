@@ -37,6 +37,8 @@ class CallController {
     bool video = false,
     String? fromNumber,
   }) async {
+    // Use current state if available, otherwise wait for the first non-null emission.
+    // orElse returns null if the cubit is closed before state arrives (e.g. logout).
     final callRoutingState =
         callRoutingCubit.state ?? await callRoutingCubit.stream.firstWhere((s) => s != null, orElse: () => null);
 
