@@ -302,7 +302,7 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
     // due to concurrent database access from multiple isolates.
     final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
 
-    AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
+    await AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
       appPush.call.id,
       CallkeepHandle.number(appPush.call.handle),
       displayName: displayName,
