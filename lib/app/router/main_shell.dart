@@ -42,6 +42,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
 
+  /// Lazily initialised on first [build] once [CallBloc], [CallRoutingCubit],
+  /// and [NotificationsBloc] are available in the widget tree. The `??=`
+  /// assignment guarantees a single instance for the lifetime of this [State],
+  /// preventing consumers from holding stale references across rebuilds.
   CallController? _callController;
 
   @override
