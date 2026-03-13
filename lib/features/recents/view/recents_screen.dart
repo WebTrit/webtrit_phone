@@ -45,7 +45,7 @@ class RecentsScreen extends StatefulWidget {
 }
 
 class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProviderStateMixin {
-  late final _callController = context.read<CallController>();
+  late final _callController = CallControllerScope.of(context);
   late TabController _tabController;
 
   @override

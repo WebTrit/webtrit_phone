@@ -43,7 +43,7 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  late final _callController = context.read<CallController>();
+  late final _callController = CallControllerScope.of(context);
   bool isReorderMode = false;
   int? draggingIndex;
 

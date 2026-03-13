@@ -29,7 +29,7 @@ class DialogInfo extends StatefulWidget {
 
 class _DialogInfoState extends State<DialogInfo> {
   late final conversationCubit = context.read<ConversationCubit>();
-  late final _callController = context.read<CallController>();
+  late final _callController = CallControllerScope.of(context);
 
   Future<void> onDeleteDialog() async {
     final askResult = await showDialog<bool>(

@@ -33,7 +33,7 @@ class MissedRecentCdrsList extends StatefulWidget {
 
 class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
   late final cubit = context.read<MissedRecentCdrsCubit>();
-  late final _callController = context.read<CallController>();
+  late final _callController = CallControllerScope.of(context);
   late final scrollController = ScrollController();
 
   bool scrolledAway = false;

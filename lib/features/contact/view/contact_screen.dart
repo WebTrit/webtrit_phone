@@ -50,7 +50,7 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-  late final _callController = context.read<CallController>();
+  late final _callController = CallControllerScope.of(context);
 
   @override
   Widget build(BuildContext context) {

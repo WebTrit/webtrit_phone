@@ -25,7 +25,7 @@ class KeypadView extends StatefulWidget {
 class KeypadViewState extends State<KeypadView> {
   final _keypadTextFieldKey = GlobalKey();
 
-  late final _callController = context.read<CallController>();
+  late final _callController = CallControllerScope.of(context);
   late TextEditingController _controller;
   late FocusNode _focusNode;
 
