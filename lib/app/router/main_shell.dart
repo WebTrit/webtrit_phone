@@ -42,6 +42,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
 
+  CallController? _callController;
+
   @override
   void initState() {
     super.initState();
@@ -562,7 +564,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           final sipPresenceFeature = featureAccess.sipPresenceConfig;
 
                           return CallControllerScope(
-                            controller: CallController(
+                            controller: _callController ??= CallController(
                               callBloc: context.read<CallBloc>(),
                               callRoutingCubit: context.read<CallRoutingCubit>(),
                               notificationsBloc: context.read<NotificationsBloc>(),

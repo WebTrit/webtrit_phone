@@ -8,9 +8,9 @@ class CallControllerScope extends InheritedWidget {
   final CallController controller;
 
   static CallController of(BuildContext context) {
-    final result = context.dependOnInheritedWidgetOfExactType<CallControllerScope>();
-    if (result == null) throw Exception('CallControllerScope not found in context');
-    return result.controller;
+    final element = context.getElementForInheritedWidgetOfExactType<CallControllerScope>();
+    assert(element != null, 'CallControllerScope not found in context');
+    return (element!.widget as CallControllerScope).controller;
   }
 
   @override
