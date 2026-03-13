@@ -1700,14 +1700,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallPerformEventStarted(_CallPerformEventStarted event, Emitter<CallState> emit) async {
-    if (state.callServiceState.registration?.status.isRegistered != true) {
-      _logger.info('__onCallPerformEventStarted account is not registered');
-      submitNotification(CallWhileUnregisteredNotification());
-
-      event.fail();
-      return;
-    }
-
     if (await state.performOnActiveCall(event.callId, (activeCall) => activeCall.line != _kUndefinedLine) != true) {
       event.fail();
 
@@ -1721,30 +1713,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     /// Ensuring that the signaling client is connected before attempting to make an outgoing call
     ///
 
-    bool signalingConnected = state.callServiceState.signalingClientStatus.isConnect;
+    var currentState = state;
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
-    if (signalingConnected == false) {
+    if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingConnectingToSignaling);
         }),
       );
 
-      final nextStatus = await stream
-          .firstWhere(
-            (state) =>
-                state.callServiceState.signalingClientStatus.isConnect ||
-                state.callServiceState.signalingClientStatus.isFailure,
-            orElse: () => state,
-          )
+      currentState = await stream
+          .firstWhere((next) {
+            // Stop waiting as soon as signaling is fully ready or has failed;
+            // avoids blocking for the full timeout on a definitive failure.
+            final signalingReady = next.isHandshakeEstablished && next.isSignalingEstablished;
+            final signalingFailed = next.callServiceState.signalingClientStatus.isFailure;
+            return signalingReady || signalingFailed;
+          }, orElse: () => state)
           .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state);
-      signalingConnected = nextStatus.callServiceState.signalingClientStatus.isConnect;
       if (isClosed) return;
     }
 
     // If the signaling client is not connected, hung up the call and notify user
-    if (signalingConnected == false) {
+    if (!currentState.isSignalingEstablished) {
       event.fail();
 
       // Notice that the tube was already hung up to avoid sending an extra event to the server
@@ -1758,6 +1750,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       callkeep.endCall(event.callId);
 
       submitNotification(const CallWhileOfflineNotification());
+      return;
+    }
+
+    // If registration status is not registered after signaling is established, notify user
+    if (currentState.callServiceState.registration?.status.isRegistered != true) {
+      _logger.info('__onCallPerformEventStarted account is not registered');
+      submitNotification(CallWhileUnregisteredNotification());
+
+      event.fail();
       return;
     }
 
@@ -1809,9 +1810,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     try {
       final activeCall = state.retrieveActiveCall(event.callId);
       final peerConnection = await _createPeerConnection(event.callId, activeCall!.line);
-      localStream.getTracks().forEach((track) async {
-        await peerConnection.addTrack(track, localStream);
-      });
+      await Future.wait(localStream.getTracks().map((track) => peerConnection.addTrack(track, localStream)));
 
       final localDescription = await peerConnection.createOffer({});
       sdpMunger?.apply(localDescription);
