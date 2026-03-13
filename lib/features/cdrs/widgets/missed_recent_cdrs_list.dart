@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -34,11 +33,7 @@ class MissedRecentCdrsList extends StatefulWidget {
 
 class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
   late final cubit = context.read<MissedRecentCdrsCubit>();
-  late final CallController _callController = CallController(
-    callBloc: context.read<CallBloc>(),
-    callRoutingCubit: context.read<CallRoutingCubit>(),
-    notificationsBloc: context.read<NotificationsBloc>(),
-  );
+  late final _callController = context.read<CallController>();
   late final scrollController = ScrollController();
 
   bool scrolledAway = false;

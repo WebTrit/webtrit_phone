@@ -6,7 +6,6 @@ import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/call_routing.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 
 import '../cubit/keypad_cubit.dart';
 import '../widgets/widgets.dart';
@@ -26,12 +25,7 @@ class KeypadView extends StatefulWidget {
 class KeypadViewState extends State<KeypadView> {
   final _keypadTextFieldKey = GlobalKey();
 
-  // TODO(Serdun): Think about moving this to a controller or bloc.
-  late final CallController _callController = CallController(
-    callBloc: context.read<CallBloc>(),
-    callRoutingCubit: context.read<CallRoutingCubit>(),
-    notificationsBloc: context.read<NotificationsBloc>(),
-  );
+  late final _callController = context.read<CallController>();
   late TextEditingController _controller;
   late FocusNode _focusNode;
 

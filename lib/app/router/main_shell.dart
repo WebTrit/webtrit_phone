@@ -561,19 +561,26 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         builder: (context) {
                           final sipPresenceFeature = featureAccess.sipPresenceConfig;
 
-                          return PresenceViewParams(
-                            viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
-                              true => PresenceViewSource.sipPresence,
-                              false => PresenceViewSource.contactInfo,
-                            },
-                            child: CallConfigSynchronizer(
-                              child: CallShell(
-                                child: MessagingShell(
-                                  child: SystemNotificationsShell(
-                                    child: AutoRouter(
-                                      navigatorObservers: () => [
-                                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                                      ],
+                          return RepositoryProvider<CallController>(
+                            create: (context) => CallController(
+                              callBloc: context.read<CallBloc>(),
+                              callRoutingCubit: context.read<CallRoutingCubit>(),
+                              notificationsBloc: context.read<NotificationsBloc>(),
+                            ),
+                            child: PresenceViewParams(
+                              viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
+                                true => PresenceViewSource.sipPresence,
+                                false => PresenceViewSource.contactInfo,
+                              },
+                              child: CallConfigSynchronizer(
+                                child: CallShell(
+                                  child: MessagingShell(
+                                    child: SystemNotificationsShell(
+                                      child: AutoRouter(
+                                        navigatorObservers: () => [
+                                          MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

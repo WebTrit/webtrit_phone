@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/call.dart';
@@ -44,17 +43,12 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  late final CallController callController = CallController(
-    callBloc: context.read<CallBloc>(),
-    callRoutingCubit: context.read<CallRoutingCubit>(),
-    notificationsBloc: context.read<NotificationsBloc>(),
-  );
-
+  late final _callController = context.read<CallController>();
   bool isReorderMode = false;
   int? draggingIndex;
 
   void submitTransfer({required String destination}) {
-    callController.submitTransfer(destination);
+    _callController.submitTransfer(destination);
     context.router.maybePop();
   }
 
@@ -218,13 +212,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                                   submitTransfer(destination: favorite.number);
                                                 }
                                               : () {
-                                                  callController.createCall(
+                                                  _callController.createCall(
                                                     destination: favorite.number,
                                                     displayName: contact?.maybeName ?? favorite.number,
                                                   );
                                                 },
                                           onAudioCallPressed: () {
-                                            callController.createCall(
+                                            _callController.createCall(
                                               destination: favorite.number,
                                               displayName: contact?.maybeName ?? favorite.number,
                                               video: false,
@@ -232,7 +226,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                           },
                                           onVideoCallPressed: widget.videoEnabled
                                               ? () {
-                                                  callController.createCall(
+                                                  _callController.createCall(
                                                     destination: favorite.number,
                                                     displayName: contact?.maybeName ?? favorite.number,
                                                     video: true,

@@ -8,8 +8,6 @@ import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 
-// TODO(Serdun): Provide CallController as a singleton via RepositoryProvider in MainShell scope
-// instead of instantiating it in each StatefulWidget. All call sites should use context.read<CallController>().
 class CallController {
   CallController({
     required this.callBloc,
