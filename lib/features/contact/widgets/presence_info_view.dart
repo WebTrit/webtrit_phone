@@ -17,6 +17,7 @@ class PresenceInfoView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    // Original presences ids
     final ids = this.presenceInfo.map((e) => e.id);
 
     // If user receives both SIP and direct presence for the same number
@@ -57,6 +58,7 @@ class PresenceInfoView extends StatelessWidget {
                           height: 16,
                           child: SipPresenceIndicator(
                             presenceInfo: presenceInfo,
+                            dialogInfo: [],
                             presenceRect: Rect.fromLTWH(0, 0, 16, 16),
                           ),
                         ),

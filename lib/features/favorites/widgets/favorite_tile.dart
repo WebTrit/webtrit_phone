@@ -133,6 +133,7 @@ class _FavoriteTileState extends State<FavoriteTile> {
                 thumbnailUrl: contact?.thumbnailUrl,
                 registered: contact?.registered,
                 presenceInfo: contact?.presenceInfo,
+                dialogInfo: contact?.dialogInfo,
               ),
               title: switch (presenceSource) {
                 PresenceViewSource.sipPresence => Text('$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}'),

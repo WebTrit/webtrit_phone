@@ -83,6 +83,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                             ),
                                           ],
                                           presenceRect: Rect.fromLTWH(0, 0, 16, 16),
+                                          dialogInfo: [],
                                         ),
                                       ),
                                       SizedBox(width: 8),

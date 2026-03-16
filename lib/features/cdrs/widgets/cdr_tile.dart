@@ -175,6 +175,7 @@ class _CdrTileState extends State<CdrTile> {
                   thumbnailUrl: contact?.thumbnailUrl,
                   registered: contact?.registered,
                   presenceInfo: contact?.presenceInfo,
+                  dialogInfo: contact?.dialogInfo,
                 ),
                 SizedBox(width: 8),
                 Expanded(

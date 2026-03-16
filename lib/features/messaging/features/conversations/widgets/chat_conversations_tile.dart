@@ -103,6 +103,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             radius: 20,
             registered: contact?.registered,
             presenceInfo: contact?.presenceInfo,
+            dialogInfo: contact?.dialogInfo,
           ),
           title: Row(
             children: [

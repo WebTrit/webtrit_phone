@@ -357,6 +357,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
+  String get contacts_DialogsInfoView_title => 'Informazioni chiamate (BLF):';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Testo copiato';
 
   @override

@@ -25,7 +25,8 @@ final _logger = Logger('ContactsRepository');
 ///
 /// Once all logic is migrated, the [AppDatabase] dependency and related mappers
 /// should be removed from this class.
-class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, ExternalContactApiMapper {
+class ContactsRepository
+    with PresenceInfoDriftMapper, DialogInfoDriftMapper, ContactsDriftMapper, ExternalContactApiMapper {
   ContactsRepository({
     // TODO: Remove this dependency after migrating logic to ContactsLocalDataSource
     required AppDatabase appDatabase,
@@ -61,6 +62,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
                     emails: data.emails,
                     favorites: data.favorites,
                     presenceInfo: data.presenceInfo,
+                    dialogInfo: data.dialogInfo,
                   ),
                 )
                 .toList()),
@@ -77,6 +79,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
                     emails: data.emails,
                     favorites: data.favorites,
                     presenceInfo: data.presenceInfo,
+                    dialogInfo: data.dialogInfo,
                   ),
                 )
                 .toList()),
@@ -93,6 +96,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
         emails: data.emails,
         favorites: data.favorites,
         presenceInfo: data.presenceInfo,
+        dialogInfo: data.dialogInfo,
       );
     });
   }
@@ -120,6 +124,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
               emails: data.emails,
               favorites: data.favorites,
               presenceInfo: data.presenceInfo,
+              dialogInfo: data.dialogInfo,
             );
           }
 
@@ -179,6 +184,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
       emails: data.emails,
       favorites: data.favorites,
       presenceInfo: data.presenceInfo,
+      dialogInfo: data.dialogInfo,
     );
   }
 
@@ -191,6 +197,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
       emails: data.emails,
       favorites: data.favorites,
       presenceInfo: data.presenceInfo,
+      dialogInfo: data.dialogInfo,
     );
   }
 
@@ -203,6 +210,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
         emails: data.emails,
         favorites: data.favorites,
         presenceInfo: data.presenceInfo,
+        dialogInfo: data.dialogInfo,
       );
     });
   }
@@ -228,6 +236,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
         emails: data.emails,
         favorites: data.favorites,
         presenceInfo: data.presenceInfo,
+        dialogInfo: data.dialogInfo,
       );
     });
   }

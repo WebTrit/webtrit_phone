@@ -209,6 +209,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                 thumbnail: contact.thumbnail,
                 thumbnailUrl: contact.thumbnailUrl,
                 presenceInfo: contact.presenceInfo,
+                dialogInfo: contact.dialogInfo,
               ),
               const SizedBox(width: 8),
               Flexible(

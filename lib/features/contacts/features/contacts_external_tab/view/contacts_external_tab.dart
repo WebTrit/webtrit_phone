@@ -45,6 +45,7 @@ class ContactsExternalTab extends StatelessWidget {
                   registered: contact.registered,
                   onTap: () => routeToContactScreen(contact.id),
                   presenceInfo: contact.presenceInfo,
+                  dialogInfo: contact.dialogInfo,
                 );
               },
             ),

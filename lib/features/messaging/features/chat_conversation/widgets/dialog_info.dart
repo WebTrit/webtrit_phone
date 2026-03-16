@@ -97,6 +97,7 @@ class _DialogChatInfoState extends State<DialogChatInfo> {
                             thumbnailUrl: contact?.thumbnailUrl,
                             registered: contact?.registered,
                             presenceInfo: contact?.presenceInfo,
+                            dialogInfo: contact?.dialogInfo,
                             radius: 50,
                           ),
                           const SizedBox(height: 8),

@@ -255,6 +255,8 @@
   "@contactsSourceLocal": {},
   "contacts_Text_blingTransferInitiated": "Trasferimento senza vedere",
   "@contacts_Text_blingTransferInitiated": {},
+  "contacts_DialogsInfoView_title": "Informazioni chiamate (BLF):",
+  "@contacts_DialogsInfoView_title": {},
   "copyToClipboard_floatingSnackBar": "Testo copiato",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copia negli appunti",

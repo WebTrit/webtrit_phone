@@ -255,6 +255,8 @@
   "@contactsSourceLocal": {},
   "contacts_Text_blingTransferInitiated": "Безумовне переведення дзвінка",
   "@contacts_Text_blingTransferInitiated": {},
+  "contacts_DialogsInfoView_title": "Інформація про дзвінки (BLF):",
+  "@contacts_DialogsInfoView_title": {},
   "copyToClipboard_floatingSnackBar": "Текст скопійовано",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Скопіювати в буфер обміну",

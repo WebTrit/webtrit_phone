@@ -18,6 +18,7 @@ class ContactTile extends StatelessWidget {
     this.onLongPress,
     this.onMessagePressed,
     this.presenceInfo,
+    this.dialogInfo,
   });
 
   final String displayName;
@@ -29,6 +30,7 @@ class ContactTile extends StatelessWidget {
   final GestureLongPressCallback? onLongPress;
   final GestureTapCallback? onMessagePressed;
   final List<PresenceInfo>? presenceInfo;
+  final List<DialogInfo>? dialogInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +55,7 @@ class ContactTile extends StatelessWidget {
         registered: registered,
         smart: smart,
         presenceInfo: presenceInfo,
+        dialogInfo: dialogInfo,
       ),
       title: Text(title),
       subtitle: subtitle?.isNotEmpty == true

@@ -12,6 +12,7 @@ class FullContactData {
     required this.emails,
     required this.favorites,
     required this.presenceInfo,
+    required this.dialogInfo,
   });
 
   final ContactData contact;
@@ -19,10 +20,19 @@ class FullContactData {
   final List<ContactEmailData> emails;
   final List<FavoriteV2Data> favorites;
   final List<PresenceInfoData> presenceInfo;
+  final List<DialogInfoData> dialogInfo;
 }
 
 @DriftAccessor(
-  tables: [ContactsTable, ContactPhonesTable, ContactEmailsTable, FavoritesTable, FavoritesV2Table, PresenceInfoTable],
+  tables: [
+    ContactsTable,
+    ContactPhonesTable,
+    ContactEmailsTable,
+    FavoritesTable,
+    FavoritesV2Table,
+    PresenceInfoTable,
+    DialogInfoTable,
+  ],
 )
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
   ContactsDao(super.db);
@@ -57,17 +67,20 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     List<ContactEmailData> emails = [];
     List<FavoriteV2Data> favorites = [];
     List<PresenceInfoData> presenceInfo = [];
+    List<DialogInfoData> dialogInfo = [];
 
     for (final row in rows) {
       final phone = row.readTableOrNull(contactPhonesTable);
       final email = row.readTableOrNull(contactEmailsTable);
       final favorite = row.readTableOrNull(favoritesV2Table);
       final presence = row.readTableOrNull(presenceInfoTable);
+      final dialog = row.readTableOrNull(dialogInfoTable);
 
       if (phone != null && !phones.contains(phone)) phones.add(phone);
       if (email != null && !emails.contains(email)) emails.add(email);
       if (favorite != null && !favorites.contains(favorite)) favorites.add(favorite);
       if (presence != null && !presenceInfo.contains(presence)) presenceInfo.add(presence);
+      if (dialog != null && !dialogInfo.contains(dialog)) dialogInfo.add(dialog);
     }
 
     return FullContactData(
@@ -76,6 +89,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       emails: emails,
       favorites: favorites,
       presenceInfo: presenceInfo,
+      dialogInfo: dialogInfo,
     );
   }
 
@@ -88,10 +102,12 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       final email = row.readTableOrNull(contactEmailsTable);
       final favorite = row.readTableOrNull(favoritesV2Table);
       final presenceInfo = row.readTableOrNull(presenceInfoTable);
+      final dialogInfo = row.readTableOrNull(dialogInfoTable);
 
       final contactWithPhonesAndEmails = contactMap.putIfAbsent(
         contact.id,
-        () => FullContactData(contact: contact, phones: [], emails: [], favorites: [], presenceInfo: []),
+        () =>
+            FullContactData(contact: contact, phones: [], emails: [], favorites: [], presenceInfo: [], dialogInfo: []),
       );
 
       if (phone != null && !contactWithPhonesAndEmails.phones.contains(phone)) {
@@ -108,6 +124,10 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
       if (presenceInfo != null && !contactWithPhonesAndEmails.presenceInfo.contains(presenceInfo)) {
         contactWithPhonesAndEmails.presenceInfo.add(presenceInfo);
+      }
+
+      if (dialogInfo != null && !contactWithPhonesAndEmails.dialogInfo.contains(dialogInfo)) {
+        contactWithPhonesAndEmails.dialogInfo.add(dialogInfo);
       }
     }
 
@@ -127,6 +147,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
                     contactsTable.sourceType.equalsValue(ContactSourceTypeEnum.local)),
       ),
       leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
+      leftOuterJoin(dialogInfoTable, dialogInfoTable.entityNumber.equalsExp(contactPhonesTable.number)),
     ]);
   }
 

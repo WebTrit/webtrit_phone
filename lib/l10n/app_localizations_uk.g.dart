@@ -363,6 +363,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contacts_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
+  String get contacts_DialogsInfoView_title => 'Інформація про дзвінки (BLF):';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Текст скопійовано';
 
   @override

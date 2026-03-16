@@ -354,6 +354,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contacts_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
+  String get contacts_DialogsInfoView_title => 'Calls information (BLF):';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Text copied';
 
   @override

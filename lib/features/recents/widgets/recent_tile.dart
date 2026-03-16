@@ -132,6 +132,7 @@ class _RecentTileState extends State<RecentTile> {
           thumbnailUrl: contact?.thumbnailUrl,
           registered: contact?.registered,
           presenceInfo: contact?.presenceInfo,
+          dialogInfo: contact?.dialogInfo,
         ),
         trailing: Text(dateFormat.format(callLogEntry.createdTime), style: themeData.textTheme.bodySmall),
         title: Text(

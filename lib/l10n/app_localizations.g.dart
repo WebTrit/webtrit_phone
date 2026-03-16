@@ -687,6 +687,12 @@ abstract class AppLocalizations {
   /// **'Performing blind transfer'**
   String get contacts_Text_blingTransferInitiated;
 
+  /// No description provided for @contacts_DialogsInfoView_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls information (BLF):'**
+  String get contacts_DialogsInfoView_title;
+
   /// No description provided for @copyToClipboard_floatingSnackBar.
   ///
   /// In en, this message translates to:

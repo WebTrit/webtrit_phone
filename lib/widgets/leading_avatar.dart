@@ -24,6 +24,7 @@ class LeadingAvatar extends StatefulWidget {
     this.loadingPadding,
     this.style,
     this.presenceInfo,
+    this.dialogInfo,
   });
 
   final String? username;
@@ -37,6 +38,7 @@ class LeadingAvatar extends StatefulWidget {
   final EdgeInsets? loadingPadding;
   final LeadingAvatarStyle? style;
   final List<PresenceInfo>? presenceInfo;
+  final List<DialogInfo>? dialogInfo;
 
   @override
   State<LeadingAvatar> createState() => _LeadingAvatarState();
@@ -75,6 +77,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
         oldWidget.thumbnailUrl != widget.thumbnailUrl ||
         oldWidget.thumbnail != widget.thumbnail ||
         oldWidget.presenceInfo != widget.presenceInfo ||
+        oldWidget.dialogInfo != widget.dialogInfo ||
         oldWidget.username != widget.username) {
       _recompute();
     }
@@ -135,7 +138,10 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
           if (presenceSource == PresenceViewSource.contactInfo && widget.registered != null)
             Positioned.fromRect(rect: _registeredRect, child: _registeredIndicator(_style)),
           if (presenceSource == PresenceViewSource.sipPresence && widget.presenceInfo != null)
-            Positioned.fromRect(rect: _presenceRect, child: _buildPresenceIndicator(_style, widget.presenceInfo!)),
+            Positioned.fromRect(
+              rect: _presenceRect,
+              child: _buildPresenceIndicator(_style, widget.presenceInfo!, widget.dialogInfo!),
+            ),
           if (widget.smart) Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme)),
           if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
@@ -143,8 +149,12 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     );
   }
 
-  Widget _buildPresenceIndicator(LeadingAvatarStyle style, List<PresenceInfo> presenceInfo) {
-    return SipPresenceIndicator(presenceInfo: presenceInfo, presenceRect: _presenceRect);
+  Widget _buildPresenceIndicator(
+    LeadingAvatarStyle style,
+    List<PresenceInfo> presenceInfo,
+    List<DialogInfo> dialogInfo,
+  ) {
+    return SipPresenceIndicator(presenceInfo: presenceInfo, presenceRect: _presenceRect, dialogInfo: dialogInfo);
   }
 
   Widget _buildAvatarContent(double diameter, LeadingAvatarStyle style) {

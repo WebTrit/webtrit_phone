@@ -56,7 +56,7 @@ abstract class VoicemailRepository implements Refreshable {
 final _logger = Logger('VoicemailRepository');
 
 class VoicemailRepositoryImpl
-    with PresenceInfoDriftMapper, ContactsDriftMapper, VoicemailMapper
+    with DialogInfoDriftMapper, PresenceInfoDriftMapper, ContactsDriftMapper, VoicemailMapper
     implements VoicemailRepository {
   VoicemailRepositoryImpl({
     required WebtritApiClient webtritApiClient,

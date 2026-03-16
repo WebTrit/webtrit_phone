@@ -145,9 +145,14 @@ class _ContactScreenState extends State<ContactScreen> {
                               onEmailPressed: widget.enableTileEmail ? () => _onEmailPressed(contactEmail) : null,
                             ),
                           if (presenceSource == PresenceViewSource.sipPresence &&
-                              contact.sourceType == ContactSourceType.external) ...[
+                              contact.sourceType == ContactSourceType.external &&
+                              contact.presenceInfo.isNotEmpty) ...[
                             const Divider(),
                             PresenceInfoView(presenceInfo: contact.presenceInfo),
+                          ],
+                          if (contact.sourceType == ContactSourceType.external && contact.dialogInfo.isNotEmpty) ...[
+                            const Divider(),
+                            DialogsInfoView(dialogInfo: contact.dialogInfo),
                           ],
                         ],
                       ),

@@ -22,7 +22,12 @@ abstract class FavoritesLocalDataSource {
 }
 
 class FavoritesLocalDataSourceDriftImpl
-    with PresenceInfoDriftMapper, ContactsDriftMapper, FavoritesDriftMapper, FavoriteOutboxActionDriftMapper
+    with
+        DialogInfoDriftMapper,
+        PresenceInfoDriftMapper,
+        ContactsDriftMapper,
+        FavoritesDriftMapper,
+        FavoriteOutboxActionDriftMapper
     implements FavoritesLocalDataSource {
   FavoritesLocalDataSourceDriftImpl(this._appDatabase);
 
