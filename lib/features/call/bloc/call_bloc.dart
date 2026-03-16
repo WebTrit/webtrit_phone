@@ -60,10 +60,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final TrustedCertificates trustedCertificates;
 
   final CallLogsRepository callLogsRepository;
-  final CallPullRepository callPullRepository;
   final UserRepository userRepository;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
+  final DialogInfoRepository dialogInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
   final Function(Notification) submitNotification;
 
@@ -104,9 +104,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.token,
     required this.trustedCertificates,
     required this.callLogsRepository,
-    required this.callPullRepository,
     required this.linesStateRepository,
     required this.presenceInfoRepository,
+    required this.dialogInfoRepository,
     required this.presenceSettingsRepository,
     required this.onSessionInvalidated,
     required this.userRepository,
@@ -151,6 +151,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_PeerConnectionEvent>(_onPeerConnectionEvent, transformer: sequential());
     on<CallScreenEvent>(_onCallScreenEvent, transformer: sequential());
     on<CallConfigEvent>(_onConfigEvent, transformer: sequential());
+    on<_GlobalEvent>(_onGlobalEvent, transformer: sequential());
 
     navigator.mediaDevices.ondevicechange = (event) {
       add(const _NavigatorMediaDevicesChange());
@@ -291,11 +292,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final activeCalls = change.nextState.activeCalls;
     final List<LineState> mainLinesState = [];
     for (var i = 0; i < linesCount; i++) {
-      final inUse = activeCalls.any((e) => e.line == i);
-      mainLinesState.add(inUse ? LineState.inUse : LineState.idle);
+      final lineCall = activeCalls.firstWhereOrNull((e) => e.line == i);
+      if (lineCall != null) {
+        mainLinesState.add(LineState.inUse(callId: lineCall.callId));
+      } else {
+        mainLinesState.add(LineState.idle());
+      }
     }
-    final guestLineInUse = activeCalls.any((e) => e.line == null);
-    final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
+    final guestLineCall = activeCalls.firstWhereOrNull((e) => e.line == null);
+    final guestLineState = guestLineCall != null ? LineState.inUse(callId: guestLineCall.callId) : LineState.idle();
 
     linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
     _handleSignalingSessionError(
@@ -853,11 +858,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventUpdated() => __onCallSignalingEventUpdated(event, emit),
       _CallSignalingEventTransfer() => __onCallSignalingEventTransfer(event, emit),
       _CallSignalingEventTransferring() => __onCallSignalingEventTransfering(event, emit),
-      _CallSignalingEventNotifyDialog() => __onCallSignalingEventNotifyDialog(event, emit),
       _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
-      _CallSignalingEventNotifyPresence() => __onCallSignalingEventNotifyPresence(event, emit),
       _CallSignalingEventNotifyUnknown() => __onCallSignalingEventNotifyUnknown(event, emit),
       _CallSignalingEventRegistration() => __onCallSignalingEventRegistration(event, emit),
+    };
+  }
+
+  // processing global events
+
+  Future<void> _onGlobalEvent(_GlobalEvent event, Emitter<CallState> emit) {
+    return switch (event) {
+      _GlobalEventNumberPresenceUpdate() => __onGlobalEventNumberPresenceUpdate(event, emit),
+      _GlobalEventNumberDialogsUpdate() => __onGlobalEventNumberDialogsUpdate(event, emit),
     };
   }
 
@@ -1166,20 +1178,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWithMappedActiveCall(event.callId, (_) => callUpdate));
   }
 
-  Future<void> __onCallSignalingEventNotifyDialog(
-    _CallSignalingEventNotifyDialog event,
+  Future<void> __onGlobalEventNumberPresenceUpdate(
+    _GlobalEventNumberPresenceUpdate event,
     Emitter<CallState> emit,
   ) async {
-    _logger.fine('_CallSignalingEventNotifyDialogs: $event');
-    await _assingUserActiveCalls(event.userActiveCalls);
+    _logger.fine('_GlobalEventNumberPresenceUpdate: $event');
+    await _assignNumberPresence(event.number, event.presenceInfo);
   }
 
-  Future<void> __onCallSignalingEventNotifyPresence(
-    _CallSignalingEventNotifyPresence event,
+  Future<void> __onGlobalEventNumberDialogsUpdate(
+    _GlobalEventNumberDialogsUpdate event,
     Emitter<CallState> emit,
   ) async {
-    _logger.fine('_CallSignalingEventNotifyPresence: $event');
-    await _assingNumberPresence(event.number, event.presenceInfo);
+    _logger.fine('_GlobalEventNumberDialogsUpdate: $event');
+    await _assignNumberDialogs(event.number, event.dialogInfos);
   }
 
   Future<void> __onCallSignalingEventNotifyRefer(_CallSignalingEventNotifyRefer event, Emitter<CallState> emit) async {
@@ -2345,8 +2357,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _HandshakeSignalingEventState(registration: stateHandshake.registration, linesCount: stateHandshake.lines.length),
     );
 
-    _assingUserActiveCalls(stateHandshake.userActiveCalls);
-    stateHandshake.contactsPresenceInfo.forEach(_assingNumberPresence);
+    _assignInitialPresence(stateHandshake.presenceInfos);
+    _assignInitialDialogs(stateHandshake.dialogInfos);
 
     // Hang up all active calls that are not associated with any line
     // or guest line, indicating that they are no longer valid.
@@ -2515,27 +2527,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
     } else if (event is NotifyEvent) {
       add(switch (event) {
-        DialogNotifyEvent event => _CallSignalingEvent.notifyDialog(
-          line: event.line,
-          callId: event.callId,
-          notify: event.notify,
-          subscriptionState: event.subscriptionState,
-          userActiveCalls: event.userActiveCalls,
-        ),
         ReferNotifyEvent event => _CallSignalingEvent.notifyRefer(
           line: event.line,
           callId: event.callId,
           notify: event.notify,
           subscriptionState: event.subscriptionState,
           state: event.state,
-        ),
-        PresenceNotifyEvent event => _CallSignalingEvent.notifyPresence(
-          line: event.line,
-          callId: event.callId,
-          notify: event.notify,
-          subscriptionState: event.subscriptionState,
-          number: event.number,
-          presenceInfo: event.presenceInfo,
         ),
         UnknownNotifyEvent event => _CallSignalingEvent.notifyUnknown(
           line: event.line,
@@ -2563,6 +2560,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
     } else if (event is TransferringEvent) {
       add(_CallSignalingEvent.transferring(line: event.line, callId: event.callId));
+    } else if (event is GlobalEvent) {
+      add(switch (event) {
+        NumberPresenceUpdate event => _GlobalEvent.numberPresenceUpdate(
+          number: event.number,
+          presenceInfo: event.presenceInfo,
+        ),
+        NumberDialogsUpdate event => _GlobalEvent.numberDialogsUpdate(
+          number: event.number,
+          dialogInfos: event.dialogInfos,
+        ),
+      });
     } else {
       _logger.warning('unhandled signaling event $event');
     }
@@ -2860,40 +2868,32 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
 
-  // TODO(Vlad): extract mapper,find better naming
-  Future<void> _assingUserActiveCalls(List<UserActiveCall> userActiveCalls) async {
-    final pullableCalls = userActiveCalls
-        .map(
-          (call) => PullableCall(
-            id: call.id,
-            state: PullableCallState.values.byName(call.state.name),
-            callId: call.callId,
-            localTag: call.localTag,
-            remoteTag: call.remoteTag,
-            remoteNumber: call.remoteNumber,
-            remoteDisplayName: call.remoteDisplayName,
-            direction: PullableCallDirection.values.byName(call.direction.name),
-          ),
-        )
-        .toList();
+  Future<void> _assignInitialPresence(List<SignalingPresenceInfo> data) async {
+    _logger.info('Received initial presence info: ${data.length} entries');
 
-    List<PullableCall> pullableCallsToSet = [];
-
-    for (final pullableCall in pullableCalls) {
-      // Skip calls that are already active
-      if (state.activeCalls.any((call) => call.callId == pullableCall.callId)) continue;
-
-      // Resolve contact name for the call's remote number
-      final contactName = await contactNameResolver.resolveWithNumber(pullableCall.remoteNumber);
-      pullableCallsToSet.add(pullableCall.copyWith(remoteDisplayName: contactName));
-    }
-
-    callPullRepository.setPullableCalls(pullableCallsToSet);
+    final presenceInfo = data.map(SignalingPresenceInfoMapper.fromSignaling).toList();
+    presenceInfoRepository.setInitialPresenceInfo(presenceInfo);
   }
 
-  Future<void> _assingNumberPresence(String number, List<SignalingPresenceInfo> data) async {
+  Future<void> _assignNumberPresence(String number, List<SignalingPresenceInfo> data) async {
+    _logger.info('Received presence update for number $number: ${data.length} entries');
+
     final presenceInfo = data.map(SignalingPresenceInfoMapper.fromSignaling).toList();
     presenceInfoRepository.setNumberPresence(number, presenceInfo);
+  }
+
+  Future<void> _assignInitialDialogs(List<SignalingDialogInfo> data) async {
+    _logger.info('Received initial dialogs: ${data.length} dialogs');
+
+    final dialogInfos = data.map(SignalingDialogInfoMapper.fromSignaling).toList();
+    dialogInfoRepository.setInitialDialogInfo(dialogInfos);
+  }
+
+  Future<void> _assignNumberDialogs(String number, List<SignalingDialogInfo> data) async {
+    _logger.info('Received dialogs update for number $number: ${data.length} dialogs');
+
+    final dialogInfos = data.map(SignalingDialogInfoMapper.fromSignaling).toList();
+    dialogInfoRepository.setNumberDialogs(number, dialogInfos);
   }
 
   Future<void> syncPresenceSettings() async {

@@ -70,6 +70,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                           presenceInfo: [
                                             PresenceInfo(
                                               id: 'id',
+                                              number: 'number',
                                               available: e.available,
                                               note: e.note,
                                               activities: [if (e.activity != null) e.activity!],
@@ -77,6 +78,8 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                               device: 'device',
                                               timeOffsetMin: 0,
                                               timestamp: DateTime.now(),
+                                              source: PresenceInfoSource.direct,
+                                              arrivalTime: DateTime.now(),
                                             ),
                                           ],
                                           presenceRect: Rect.fromLTWH(0, 0, 16, 16),

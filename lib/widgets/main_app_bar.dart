@@ -24,8 +24,8 @@ class MainAppBar extends AppBar {
   }) : super(
          centerTitle: false,
          actions: [
-           if (AppBarParams.of(context).pullableCalls.isNotEmpty)
-             CallPullBadge(pullableCalls: AppBarParams.of(context).pullableCalls),
+           if (AppBarParams.of(context).pullableCallDialogs.isNotEmpty)
+             CallPullBadge(pullableCallDialogs: AppBarParams.of(context).pullableCallDialogs),
            if (AppBarParams.of(context).systemNotificationsEnabled) SystemNotificationsBadge(),
            BlocBuilder<SessionStatusCubit, SessionStatusState>(
              builder: (context, sessionState) {

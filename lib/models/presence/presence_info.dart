@@ -3,9 +3,12 @@ import 'package:equatable/equatable.dart';
 
 import 'presence_activity.dart';
 
+enum PresenceInfoSource { sip, direct }
+
 class PresenceInfo extends Equatable {
   const PresenceInfo({
     required this.id,
+    required this.number,
     required this.available,
     required this.note,
     required this.statusIcon,
@@ -13,9 +16,12 @@ class PresenceInfo extends Equatable {
     required this.timeOffsetMin,
     required this.timestamp,
     required this.activities,
+    required this.source,
+    required this.arrivalTime,
   });
 
   final String id;
+  final String number;
   final bool available;
   final String note;
   final String? statusIcon;
@@ -23,14 +29,28 @@ class PresenceInfo extends Equatable {
   final int? timeOffsetMin;
   final DateTime? timestamp;
   final List<PresenceActivity> activities;
+  final PresenceInfoSource source;
+  final DateTime arrivalTime;
 
   @override
-  List<Object?> get props => [id, available, note, statusIcon, device, timeOffsetMin, timestamp, activities];
+  List<Object?> get props => [
+    id,
+    number,
+    available,
+    note,
+    statusIcon,
+    device,
+    timeOffsetMin,
+    timestamp,
+    activities,
+    source,
+    arrivalTime,
+  ];
 
   @override
   String toString() {
-    return 'PresenceInfo{id: $id, available: $available, note: $note, statusIcon: $statusIcon, device: $device, '
-        'timeOffsetMin: $timeOffsetMin, timestamp: $timestamp, activities: $activities}';
+    return 'PresenceInfo{id: $id, number: $number, available: $available, note: $note, statusIcon: $statusIcon, device: $device, '
+        'timeOffsetMin: $timeOffsetMin, timestamp: $timestamp, activities: $activities, source: $source, arrivalTime: $arrivalTime}';
   }
 }
 

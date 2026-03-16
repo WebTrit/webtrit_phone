@@ -11665,6 +11665,26 @@ class $PresenceInfoTableTable extends PresenceInfoTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _arrivalTimeUsecMeta = const VerificationMeta(
+    'arrivalTimeUsec',
+  );
+  @override
+  late final GeneratedColumn<int> arrivalTimeUsec = GeneratedColumn<int>(
+    'arrival_time_usec',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     idKey,
@@ -11676,6 +11696,8 @@ class $PresenceInfoTableTable extends PresenceInfoTable
     timeOffsetMin,
     timestampUsec,
     activitiesJson,
+    source,
+    arrivalTimeUsec,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -11762,11 +11784,30 @@ class $PresenceInfoTableTable extends PresenceInfoTable
     } else if (isInserting) {
       context.missing(_activitiesJsonMeta);
     }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
+    if (data.containsKey('arrival_time_usec')) {
+      context.handle(
+        _arrivalTimeUsecMeta,
+        arrivalTimeUsec.isAcceptableOrUnknown(
+          data['arrival_time_usec']!,
+          _arrivalTimeUsecMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_arrivalTimeUsecMeta);
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {idKey};
+  Set<GeneratedColumn> get $primaryKey => {number, source, idKey};
   @override
   PresenceInfoData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -11807,6 +11848,14 @@ class $PresenceInfoTableTable extends PresenceInfoTable
         DriftSqlType.string,
         data['${effectivePrefix}activities_json'],
       )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      arrivalTimeUsec: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}arrival_time_usec'],
+      )!,
     );
   }
 
@@ -11827,6 +11876,8 @@ class PresenceInfoData extends DataClass
   final int? timeOffsetMin;
   final int? timestampUsec;
   final String activitiesJson;
+  final String source;
+  final int arrivalTimeUsec;
   const PresenceInfoData({
     required this.idKey,
     required this.number,
@@ -11837,6 +11888,8 @@ class PresenceInfoData extends DataClass
     this.timeOffsetMin,
     this.timestampUsec,
     required this.activitiesJson,
+    required this.source,
+    required this.arrivalTimeUsec,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -11858,6 +11911,8 @@ class PresenceInfoData extends DataClass
       map['timestamp_usec'] = Variable<int>(timestampUsec);
     }
     map['activities_json'] = Variable<String>(activitiesJson);
+    map['source'] = Variable<String>(source);
+    map['arrival_time_usec'] = Variable<int>(arrivalTimeUsec);
     return map;
   }
 
@@ -11880,6 +11935,8 @@ class PresenceInfoData extends DataClass
           ? const Value.absent()
           : Value(timestampUsec),
       activitiesJson: Value(activitiesJson),
+      source: Value(source),
+      arrivalTimeUsec: Value(arrivalTimeUsec),
     );
   }
 
@@ -11898,6 +11955,8 @@ class PresenceInfoData extends DataClass
       timeOffsetMin: serializer.fromJson<int?>(json['timeOffsetMin']),
       timestampUsec: serializer.fromJson<int?>(json['timestampUsec']),
       activitiesJson: serializer.fromJson<String>(json['activitiesJson']),
+      source: serializer.fromJson<String>(json['source']),
+      arrivalTimeUsec: serializer.fromJson<int>(json['arrivalTimeUsec']),
     );
   }
   @override
@@ -11913,6 +11972,8 @@ class PresenceInfoData extends DataClass
       'timeOffsetMin': serializer.toJson<int?>(timeOffsetMin),
       'timestampUsec': serializer.toJson<int?>(timestampUsec),
       'activitiesJson': serializer.toJson<String>(activitiesJson),
+      'source': serializer.toJson<String>(source),
+      'arrivalTimeUsec': serializer.toJson<int>(arrivalTimeUsec),
     };
   }
 
@@ -11926,6 +11987,8 @@ class PresenceInfoData extends DataClass
     Value<int?> timeOffsetMin = const Value.absent(),
     Value<int?> timestampUsec = const Value.absent(),
     String? activitiesJson,
+    String? source,
+    int? arrivalTimeUsec,
   }) => PresenceInfoData(
     idKey: idKey ?? this.idKey,
     number: number ?? this.number,
@@ -11940,6 +12003,8 @@ class PresenceInfoData extends DataClass
         ? timestampUsec.value
         : this.timestampUsec,
     activitiesJson: activitiesJson ?? this.activitiesJson,
+    source: source ?? this.source,
+    arrivalTimeUsec: arrivalTimeUsec ?? this.arrivalTimeUsec,
   );
   PresenceInfoData copyWithCompanion(PresenceInfoDataCompanion data) {
     return PresenceInfoData(
@@ -11960,6 +12025,10 @@ class PresenceInfoData extends DataClass
       activitiesJson: data.activitiesJson.present
           ? data.activitiesJson.value
           : this.activitiesJson,
+      source: data.source.present ? data.source.value : this.source,
+      arrivalTimeUsec: data.arrivalTimeUsec.present
+          ? data.arrivalTimeUsec.value
+          : this.arrivalTimeUsec,
     );
   }
 
@@ -11974,7 +12043,9 @@ class PresenceInfoData extends DataClass
           ..write('device: $device, ')
           ..write('timeOffsetMin: $timeOffsetMin, ')
           ..write('timestampUsec: $timestampUsec, ')
-          ..write('activitiesJson: $activitiesJson')
+          ..write('activitiesJson: $activitiesJson, ')
+          ..write('source: $source, ')
+          ..write('arrivalTimeUsec: $arrivalTimeUsec')
           ..write(')'))
         .toString();
   }
@@ -11990,6 +12061,8 @@ class PresenceInfoData extends DataClass
     timeOffsetMin,
     timestampUsec,
     activitiesJson,
+    source,
+    arrivalTimeUsec,
   );
   @override
   bool operator ==(Object other) =>
@@ -12003,7 +12076,9 @@ class PresenceInfoData extends DataClass
           other.device == this.device &&
           other.timeOffsetMin == this.timeOffsetMin &&
           other.timestampUsec == this.timestampUsec &&
-          other.activitiesJson == this.activitiesJson);
+          other.activitiesJson == this.activitiesJson &&
+          other.source == this.source &&
+          other.arrivalTimeUsec == this.arrivalTimeUsec);
 }
 
 class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
@@ -12016,6 +12091,8 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
   final Value<int?> timeOffsetMin;
   final Value<int?> timestampUsec;
   final Value<String> activitiesJson;
+  final Value<String> source;
+  final Value<int> arrivalTimeUsec;
   final Value<int> rowid;
   const PresenceInfoDataCompanion({
     this.idKey = const Value.absent(),
@@ -12027,6 +12104,8 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
     this.timeOffsetMin = const Value.absent(),
     this.timestampUsec = const Value.absent(),
     this.activitiesJson = const Value.absent(),
+    this.source = const Value.absent(),
+    this.arrivalTimeUsec = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PresenceInfoDataCompanion.insert({
@@ -12039,12 +12118,16 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
     this.timeOffsetMin = const Value.absent(),
     this.timestampUsec = const Value.absent(),
     required String activitiesJson,
+    required String source,
+    required int arrivalTimeUsec,
     this.rowid = const Value.absent(),
   }) : idKey = Value(idKey),
        number = Value(number),
        available = Value(available),
        note = Value(note),
-       activitiesJson = Value(activitiesJson);
+       activitiesJson = Value(activitiesJson),
+       source = Value(source),
+       arrivalTimeUsec = Value(arrivalTimeUsec);
   static Insertable<PresenceInfoData> custom({
     Expression<String>? idKey,
     Expression<String>? number,
@@ -12055,6 +12138,8 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
     Expression<int>? timeOffsetMin,
     Expression<int>? timestampUsec,
     Expression<String>? activitiesJson,
+    Expression<String>? source,
+    Expression<int>? arrivalTimeUsec,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -12067,6 +12152,8 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
       if (timeOffsetMin != null) 'time_offset_min': timeOffsetMin,
       if (timestampUsec != null) 'timestamp_usec': timestampUsec,
       if (activitiesJson != null) 'activities_json': activitiesJson,
+      if (source != null) 'source': source,
+      if (arrivalTimeUsec != null) 'arrival_time_usec': arrivalTimeUsec,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -12081,6 +12168,8 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
     Value<int?>? timeOffsetMin,
     Value<int?>? timestampUsec,
     Value<String>? activitiesJson,
+    Value<String>? source,
+    Value<int>? arrivalTimeUsec,
     Value<int>? rowid,
   }) {
     return PresenceInfoDataCompanion(
@@ -12093,6 +12182,8 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
       timeOffsetMin: timeOffsetMin ?? this.timeOffsetMin,
       timestampUsec: timestampUsec ?? this.timestampUsec,
       activitiesJson: activitiesJson ?? this.activitiesJson,
+      source: source ?? this.source,
+      arrivalTimeUsec: arrivalTimeUsec ?? this.arrivalTimeUsec,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -12127,6 +12218,12 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
     if (activitiesJson.present) {
       map['activities_json'] = Variable<String>(activitiesJson.value);
     }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (arrivalTimeUsec.present) {
+      map['arrival_time_usec'] = Variable<int>(arrivalTimeUsec.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -12145,6 +12242,809 @@ class PresenceInfoDataCompanion extends UpdateCompanion<PresenceInfoData> {
           ..write('timeOffsetMin: $timeOffsetMin, ')
           ..write('timestampUsec: $timestampUsec, ')
           ..write('activitiesJson: $activitiesJson, ')
+          ..write('source: $source, ')
+          ..write('arrivalTimeUsec: $arrivalTimeUsec, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DialogInfoTableTable extends DialogInfoTable
+    with TableInfo<$DialogInfoTableTable, DialogInfoData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DialogInfoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idKeyMeta = const VerificationMeta('idKey');
+  @override
+  late final GeneratedColumn<String> idKey = GeneratedColumn<String>(
+    'id_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _entityNumberMeta = const VerificationMeta(
+    'entityNumber',
+  );
+  @override
+  late final GeneratedColumn<String> entityNumber = GeneratedColumn<String>(
+    'entity_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _callIdMeta = const VerificationMeta('callId');
+  @override
+  late final GeneratedColumn<String> callId = GeneratedColumn<String>(
+    'call_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _directionMeta = const VerificationMeta(
+    'direction',
+  );
+  @override
+  late final GeneratedColumn<String> direction = GeneratedColumn<String>(
+    'direction',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _localTagMeta = const VerificationMeta(
+    'localTag',
+  );
+  @override
+  late final GeneratedColumn<String> localTag = GeneratedColumn<String>(
+    'local_tag',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _localNumberMeta = const VerificationMeta(
+    'localNumber',
+  );
+  @override
+  late final GeneratedColumn<String> localNumber = GeneratedColumn<String>(
+    'local_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _localDisplayNameMeta = const VerificationMeta(
+    'localDisplayName',
+  );
+  @override
+  late final GeneratedColumn<String> localDisplayName = GeneratedColumn<String>(
+    'local_display_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _remoteTagMeta = const VerificationMeta(
+    'remoteTag',
+  );
+  @override
+  late final GeneratedColumn<String> remoteTag = GeneratedColumn<String>(
+    'remote_tag',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _remoteNumberMeta = const VerificationMeta(
+    'remoteNumber',
+  );
+  @override
+  late final GeneratedColumn<String> remoteNumber = GeneratedColumn<String>(
+    'remote_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _remoteDisplayNameMeta = const VerificationMeta(
+    'remoteDisplayName',
+  );
+  @override
+  late final GeneratedColumn<String> remoteDisplayName =
+      GeneratedColumn<String>(
+        'remote_display_name',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _arrivalVersionMeta = const VerificationMeta(
+    'arrivalVersion',
+  );
+  @override
+  late final GeneratedColumn<String> arrivalVersion = GeneratedColumn<String>(
+    'arrival_version',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _arrivalTimeUsecMeta = const VerificationMeta(
+    'arrivalTimeUsec',
+  );
+  @override
+  late final GeneratedColumn<int> arrivalTimeUsec = GeneratedColumn<int>(
+    'arrival_time_usec',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    idKey,
+    entityNumber,
+    state,
+    callId,
+    direction,
+    localTag,
+    localNumber,
+    localDisplayName,
+    remoteTag,
+    remoteNumber,
+    remoteDisplayName,
+    arrivalVersion,
+    arrivalTimeUsec,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'dialog_info';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DialogInfoData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id_key')) {
+      context.handle(
+        _idKeyMeta,
+        idKey.isAcceptableOrUnknown(data['id_key']!, _idKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_idKeyMeta);
+    }
+    if (data.containsKey('entity_number')) {
+      context.handle(
+        _entityNumberMeta,
+        entityNumber.isAcceptableOrUnknown(
+          data['entity_number']!,
+          _entityNumberMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_entityNumberMeta);
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stateMeta);
+    }
+    if (data.containsKey('call_id')) {
+      context.handle(
+        _callIdMeta,
+        callId.isAcceptableOrUnknown(data['call_id']!, _callIdMeta),
+      );
+    }
+    if (data.containsKey('direction')) {
+      context.handle(
+        _directionMeta,
+        direction.isAcceptableOrUnknown(data['direction']!, _directionMeta),
+      );
+    }
+    if (data.containsKey('local_tag')) {
+      context.handle(
+        _localTagMeta,
+        localTag.isAcceptableOrUnknown(data['local_tag']!, _localTagMeta),
+      );
+    }
+    if (data.containsKey('local_number')) {
+      context.handle(
+        _localNumberMeta,
+        localNumber.isAcceptableOrUnknown(
+          data['local_number']!,
+          _localNumberMeta,
+        ),
+      );
+    }
+    if (data.containsKey('local_display_name')) {
+      context.handle(
+        _localDisplayNameMeta,
+        localDisplayName.isAcceptableOrUnknown(
+          data['local_display_name']!,
+          _localDisplayNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('remote_tag')) {
+      context.handle(
+        _remoteTagMeta,
+        remoteTag.isAcceptableOrUnknown(data['remote_tag']!, _remoteTagMeta),
+      );
+    }
+    if (data.containsKey('remote_number')) {
+      context.handle(
+        _remoteNumberMeta,
+        remoteNumber.isAcceptableOrUnknown(
+          data['remote_number']!,
+          _remoteNumberMeta,
+        ),
+      );
+    }
+    if (data.containsKey('remote_display_name')) {
+      context.handle(
+        _remoteDisplayNameMeta,
+        remoteDisplayName.isAcceptableOrUnknown(
+          data['remote_display_name']!,
+          _remoteDisplayNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('arrival_version')) {
+      context.handle(
+        _arrivalVersionMeta,
+        arrivalVersion.isAcceptableOrUnknown(
+          data['arrival_version']!,
+          _arrivalVersionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_arrivalVersionMeta);
+    }
+    if (data.containsKey('arrival_time_usec')) {
+      context.handle(
+        _arrivalTimeUsecMeta,
+        arrivalTimeUsec.isAcceptableOrUnknown(
+          data['arrival_time_usec']!,
+          _arrivalTimeUsecMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_arrivalTimeUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {entityNumber, idKey};
+  @override
+  DialogInfoData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DialogInfoData(
+      idKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id_key'],
+      )!,
+      entityNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entity_number'],
+      )!,
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+      callId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}call_id'],
+      ),
+      direction: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}direction'],
+      ),
+      localTag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_tag'],
+      ),
+      localNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_number'],
+      ),
+      localDisplayName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_display_name'],
+      ),
+      remoteTag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_tag'],
+      ),
+      remoteNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_number'],
+      ),
+      remoteDisplayName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_display_name'],
+      ),
+      arrivalVersion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}arrival_version'],
+      )!,
+      arrivalTimeUsec: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}arrival_time_usec'],
+      )!,
+    );
+  }
+
+  @override
+  $DialogInfoTableTable createAlias(String alias) {
+    return $DialogInfoTableTable(attachedDatabase, alias);
+  }
+}
+
+class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
+  final String idKey;
+  final String entityNumber;
+  final String state;
+  final String? callId;
+  final String? direction;
+  final String? localTag;
+  final String? localNumber;
+  final String? localDisplayName;
+  final String? remoteTag;
+  final String? remoteNumber;
+  final String? remoteDisplayName;
+  final String arrivalVersion;
+  final int arrivalTimeUsec;
+  const DialogInfoData({
+    required this.idKey,
+    required this.entityNumber,
+    required this.state,
+    this.callId,
+    this.direction,
+    this.localTag,
+    this.localNumber,
+    this.localDisplayName,
+    this.remoteTag,
+    this.remoteNumber,
+    this.remoteDisplayName,
+    required this.arrivalVersion,
+    required this.arrivalTimeUsec,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id_key'] = Variable<String>(idKey);
+    map['entity_number'] = Variable<String>(entityNumber);
+    map['state'] = Variable<String>(state);
+    if (!nullToAbsent || callId != null) {
+      map['call_id'] = Variable<String>(callId);
+    }
+    if (!nullToAbsent || direction != null) {
+      map['direction'] = Variable<String>(direction);
+    }
+    if (!nullToAbsent || localTag != null) {
+      map['local_tag'] = Variable<String>(localTag);
+    }
+    if (!nullToAbsent || localNumber != null) {
+      map['local_number'] = Variable<String>(localNumber);
+    }
+    if (!nullToAbsent || localDisplayName != null) {
+      map['local_display_name'] = Variable<String>(localDisplayName);
+    }
+    if (!nullToAbsent || remoteTag != null) {
+      map['remote_tag'] = Variable<String>(remoteTag);
+    }
+    if (!nullToAbsent || remoteNumber != null) {
+      map['remote_number'] = Variable<String>(remoteNumber);
+    }
+    if (!nullToAbsent || remoteDisplayName != null) {
+      map['remote_display_name'] = Variable<String>(remoteDisplayName);
+    }
+    map['arrival_version'] = Variable<String>(arrivalVersion);
+    map['arrival_time_usec'] = Variable<int>(arrivalTimeUsec);
+    return map;
+  }
+
+  DialogInfoDataCompanion toCompanion(bool nullToAbsent) {
+    return DialogInfoDataCompanion(
+      idKey: Value(idKey),
+      entityNumber: Value(entityNumber),
+      state: Value(state),
+      callId: callId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(callId),
+      direction: direction == null && nullToAbsent
+          ? const Value.absent()
+          : Value(direction),
+      localTag: localTag == null && nullToAbsent
+          ? const Value.absent()
+          : Value(localTag),
+      localNumber: localNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(localNumber),
+      localDisplayName: localDisplayName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(localDisplayName),
+      remoteTag: remoteTag == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteTag),
+      remoteNumber: remoteNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteNumber),
+      remoteDisplayName: remoteDisplayName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteDisplayName),
+      arrivalVersion: Value(arrivalVersion),
+      arrivalTimeUsec: Value(arrivalTimeUsec),
+    );
+  }
+
+  factory DialogInfoData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DialogInfoData(
+      idKey: serializer.fromJson<String>(json['idKey']),
+      entityNumber: serializer.fromJson<String>(json['entityNumber']),
+      state: serializer.fromJson<String>(json['state']),
+      callId: serializer.fromJson<String?>(json['callId']),
+      direction: serializer.fromJson<String?>(json['direction']),
+      localTag: serializer.fromJson<String?>(json['localTag']),
+      localNumber: serializer.fromJson<String?>(json['localNumber']),
+      localDisplayName: serializer.fromJson<String?>(json['localDisplayName']),
+      remoteTag: serializer.fromJson<String?>(json['remoteTag']),
+      remoteNumber: serializer.fromJson<String?>(json['remoteNumber']),
+      remoteDisplayName: serializer.fromJson<String?>(
+        json['remoteDisplayName'],
+      ),
+      arrivalVersion: serializer.fromJson<String>(json['arrivalVersion']),
+      arrivalTimeUsec: serializer.fromJson<int>(json['arrivalTimeUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'idKey': serializer.toJson<String>(idKey),
+      'entityNumber': serializer.toJson<String>(entityNumber),
+      'state': serializer.toJson<String>(state),
+      'callId': serializer.toJson<String?>(callId),
+      'direction': serializer.toJson<String?>(direction),
+      'localTag': serializer.toJson<String?>(localTag),
+      'localNumber': serializer.toJson<String?>(localNumber),
+      'localDisplayName': serializer.toJson<String?>(localDisplayName),
+      'remoteTag': serializer.toJson<String?>(remoteTag),
+      'remoteNumber': serializer.toJson<String?>(remoteNumber),
+      'remoteDisplayName': serializer.toJson<String?>(remoteDisplayName),
+      'arrivalVersion': serializer.toJson<String>(arrivalVersion),
+      'arrivalTimeUsec': serializer.toJson<int>(arrivalTimeUsec),
+    };
+  }
+
+  DialogInfoData copyWith({
+    String? idKey,
+    String? entityNumber,
+    String? state,
+    Value<String?> callId = const Value.absent(),
+    Value<String?> direction = const Value.absent(),
+    Value<String?> localTag = const Value.absent(),
+    Value<String?> localNumber = const Value.absent(),
+    Value<String?> localDisplayName = const Value.absent(),
+    Value<String?> remoteTag = const Value.absent(),
+    Value<String?> remoteNumber = const Value.absent(),
+    Value<String?> remoteDisplayName = const Value.absent(),
+    String? arrivalVersion,
+    int? arrivalTimeUsec,
+  }) => DialogInfoData(
+    idKey: idKey ?? this.idKey,
+    entityNumber: entityNumber ?? this.entityNumber,
+    state: state ?? this.state,
+    callId: callId.present ? callId.value : this.callId,
+    direction: direction.present ? direction.value : this.direction,
+    localTag: localTag.present ? localTag.value : this.localTag,
+    localNumber: localNumber.present ? localNumber.value : this.localNumber,
+    localDisplayName: localDisplayName.present
+        ? localDisplayName.value
+        : this.localDisplayName,
+    remoteTag: remoteTag.present ? remoteTag.value : this.remoteTag,
+    remoteNumber: remoteNumber.present ? remoteNumber.value : this.remoteNumber,
+    remoteDisplayName: remoteDisplayName.present
+        ? remoteDisplayName.value
+        : this.remoteDisplayName,
+    arrivalVersion: arrivalVersion ?? this.arrivalVersion,
+    arrivalTimeUsec: arrivalTimeUsec ?? this.arrivalTimeUsec,
+  );
+  DialogInfoData copyWithCompanion(DialogInfoDataCompanion data) {
+    return DialogInfoData(
+      idKey: data.idKey.present ? data.idKey.value : this.idKey,
+      entityNumber: data.entityNumber.present
+          ? data.entityNumber.value
+          : this.entityNumber,
+      state: data.state.present ? data.state.value : this.state,
+      callId: data.callId.present ? data.callId.value : this.callId,
+      direction: data.direction.present ? data.direction.value : this.direction,
+      localTag: data.localTag.present ? data.localTag.value : this.localTag,
+      localNumber: data.localNumber.present
+          ? data.localNumber.value
+          : this.localNumber,
+      localDisplayName: data.localDisplayName.present
+          ? data.localDisplayName.value
+          : this.localDisplayName,
+      remoteTag: data.remoteTag.present ? data.remoteTag.value : this.remoteTag,
+      remoteNumber: data.remoteNumber.present
+          ? data.remoteNumber.value
+          : this.remoteNumber,
+      remoteDisplayName: data.remoteDisplayName.present
+          ? data.remoteDisplayName.value
+          : this.remoteDisplayName,
+      arrivalVersion: data.arrivalVersion.present
+          ? data.arrivalVersion.value
+          : this.arrivalVersion,
+      arrivalTimeUsec: data.arrivalTimeUsec.present
+          ? data.arrivalTimeUsec.value
+          : this.arrivalTimeUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DialogInfoData(')
+          ..write('idKey: $idKey, ')
+          ..write('entityNumber: $entityNumber, ')
+          ..write('state: $state, ')
+          ..write('callId: $callId, ')
+          ..write('direction: $direction, ')
+          ..write('localTag: $localTag, ')
+          ..write('localNumber: $localNumber, ')
+          ..write('localDisplayName: $localDisplayName, ')
+          ..write('remoteTag: $remoteTag, ')
+          ..write('remoteNumber: $remoteNumber, ')
+          ..write('remoteDisplayName: $remoteDisplayName, ')
+          ..write('arrivalVersion: $arrivalVersion, ')
+          ..write('arrivalTimeUsec: $arrivalTimeUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    idKey,
+    entityNumber,
+    state,
+    callId,
+    direction,
+    localTag,
+    localNumber,
+    localDisplayName,
+    remoteTag,
+    remoteNumber,
+    remoteDisplayName,
+    arrivalVersion,
+    arrivalTimeUsec,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DialogInfoData &&
+          other.idKey == this.idKey &&
+          other.entityNumber == this.entityNumber &&
+          other.state == this.state &&
+          other.callId == this.callId &&
+          other.direction == this.direction &&
+          other.localTag == this.localTag &&
+          other.localNumber == this.localNumber &&
+          other.localDisplayName == this.localDisplayName &&
+          other.remoteTag == this.remoteTag &&
+          other.remoteNumber == this.remoteNumber &&
+          other.remoteDisplayName == this.remoteDisplayName &&
+          other.arrivalVersion == this.arrivalVersion &&
+          other.arrivalTimeUsec == this.arrivalTimeUsec);
+}
+
+class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
+  final Value<String> idKey;
+  final Value<String> entityNumber;
+  final Value<String> state;
+  final Value<String?> callId;
+  final Value<String?> direction;
+  final Value<String?> localTag;
+  final Value<String?> localNumber;
+  final Value<String?> localDisplayName;
+  final Value<String?> remoteTag;
+  final Value<String?> remoteNumber;
+  final Value<String?> remoteDisplayName;
+  final Value<String> arrivalVersion;
+  final Value<int> arrivalTimeUsec;
+  final Value<int> rowid;
+  const DialogInfoDataCompanion({
+    this.idKey = const Value.absent(),
+    this.entityNumber = const Value.absent(),
+    this.state = const Value.absent(),
+    this.callId = const Value.absent(),
+    this.direction = const Value.absent(),
+    this.localTag = const Value.absent(),
+    this.localNumber = const Value.absent(),
+    this.localDisplayName = const Value.absent(),
+    this.remoteTag = const Value.absent(),
+    this.remoteNumber = const Value.absent(),
+    this.remoteDisplayName = const Value.absent(),
+    this.arrivalVersion = const Value.absent(),
+    this.arrivalTimeUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DialogInfoDataCompanion.insert({
+    required String idKey,
+    required String entityNumber,
+    required String state,
+    this.callId = const Value.absent(),
+    this.direction = const Value.absent(),
+    this.localTag = const Value.absent(),
+    this.localNumber = const Value.absent(),
+    this.localDisplayName = const Value.absent(),
+    this.remoteTag = const Value.absent(),
+    this.remoteNumber = const Value.absent(),
+    this.remoteDisplayName = const Value.absent(),
+    required String arrivalVersion,
+    required int arrivalTimeUsec,
+    this.rowid = const Value.absent(),
+  }) : idKey = Value(idKey),
+       entityNumber = Value(entityNumber),
+       state = Value(state),
+       arrivalVersion = Value(arrivalVersion),
+       arrivalTimeUsec = Value(arrivalTimeUsec);
+  static Insertable<DialogInfoData> custom({
+    Expression<String>? idKey,
+    Expression<String>? entityNumber,
+    Expression<String>? state,
+    Expression<String>? callId,
+    Expression<String>? direction,
+    Expression<String>? localTag,
+    Expression<String>? localNumber,
+    Expression<String>? localDisplayName,
+    Expression<String>? remoteTag,
+    Expression<String>? remoteNumber,
+    Expression<String>? remoteDisplayName,
+    Expression<String>? arrivalVersion,
+    Expression<int>? arrivalTimeUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (idKey != null) 'id_key': idKey,
+      if (entityNumber != null) 'entity_number': entityNumber,
+      if (state != null) 'state': state,
+      if (callId != null) 'call_id': callId,
+      if (direction != null) 'direction': direction,
+      if (localTag != null) 'local_tag': localTag,
+      if (localNumber != null) 'local_number': localNumber,
+      if (localDisplayName != null) 'local_display_name': localDisplayName,
+      if (remoteTag != null) 'remote_tag': remoteTag,
+      if (remoteNumber != null) 'remote_number': remoteNumber,
+      if (remoteDisplayName != null) 'remote_display_name': remoteDisplayName,
+      if (arrivalVersion != null) 'arrival_version': arrivalVersion,
+      if (arrivalTimeUsec != null) 'arrival_time_usec': arrivalTimeUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DialogInfoDataCompanion copyWith({
+    Value<String>? idKey,
+    Value<String>? entityNumber,
+    Value<String>? state,
+    Value<String?>? callId,
+    Value<String?>? direction,
+    Value<String?>? localTag,
+    Value<String?>? localNumber,
+    Value<String?>? localDisplayName,
+    Value<String?>? remoteTag,
+    Value<String?>? remoteNumber,
+    Value<String?>? remoteDisplayName,
+    Value<String>? arrivalVersion,
+    Value<int>? arrivalTimeUsec,
+    Value<int>? rowid,
+  }) {
+    return DialogInfoDataCompanion(
+      idKey: idKey ?? this.idKey,
+      entityNumber: entityNumber ?? this.entityNumber,
+      state: state ?? this.state,
+      callId: callId ?? this.callId,
+      direction: direction ?? this.direction,
+      localTag: localTag ?? this.localTag,
+      localNumber: localNumber ?? this.localNumber,
+      localDisplayName: localDisplayName ?? this.localDisplayName,
+      remoteTag: remoteTag ?? this.remoteTag,
+      remoteNumber: remoteNumber ?? this.remoteNumber,
+      remoteDisplayName: remoteDisplayName ?? this.remoteDisplayName,
+      arrivalVersion: arrivalVersion ?? this.arrivalVersion,
+      arrivalTimeUsec: arrivalTimeUsec ?? this.arrivalTimeUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (idKey.present) {
+      map['id_key'] = Variable<String>(idKey.value);
+    }
+    if (entityNumber.present) {
+      map['entity_number'] = Variable<String>(entityNumber.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (callId.present) {
+      map['call_id'] = Variable<String>(callId.value);
+    }
+    if (direction.present) {
+      map['direction'] = Variable<String>(direction.value);
+    }
+    if (localTag.present) {
+      map['local_tag'] = Variable<String>(localTag.value);
+    }
+    if (localNumber.present) {
+      map['local_number'] = Variable<String>(localNumber.value);
+    }
+    if (localDisplayName.present) {
+      map['local_display_name'] = Variable<String>(localDisplayName.value);
+    }
+    if (remoteTag.present) {
+      map['remote_tag'] = Variable<String>(remoteTag.value);
+    }
+    if (remoteNumber.present) {
+      map['remote_number'] = Variable<String>(remoteNumber.value);
+    }
+    if (remoteDisplayName.present) {
+      map['remote_display_name'] = Variable<String>(remoteDisplayName.value);
+    }
+    if (arrivalVersion.present) {
+      map['arrival_version'] = Variable<String>(arrivalVersion.value);
+    }
+    if (arrivalTimeUsec.present) {
+      map['arrival_time_usec'] = Variable<int>(arrivalTimeUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DialogInfoDataCompanion(')
+          ..write('idKey: $idKey, ')
+          ..write('entityNumber: $entityNumber, ')
+          ..write('state: $state, ')
+          ..write('callId: $callId, ')
+          ..write('direction: $direction, ')
+          ..write('localTag: $localTag, ')
+          ..write('localNumber: $localNumber, ')
+          ..write('localDisplayName: $localDisplayName, ')
+          ..write('remoteTag: $remoteTag, ')
+          ..write('remoteNumber: $remoteNumber, ')
+          ..write('remoteDisplayName: $remoteDisplayName, ')
+          ..write('arrivalVersion: $arrivalVersion, ')
+          ..write('arrivalTimeUsec: $arrivalTimeUsec, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -12963,6 +13863,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   systemNotificationsOutboxTable = $SystemNotificationsOutboxTableTable(this);
   late final $PresenceInfoTableTable presenceInfoTable =
       $PresenceInfoTableTable(this);
+  late final $DialogInfoTableTable dialogInfoTable = $DialogInfoTableTable(
+    this,
+  );
   late final $CdrTableTable cdrTable = $CdrTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao = ContactPhonesDao(
@@ -12987,6 +13890,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final PresenceInfoDao presenceInfoDao = PresenceInfoDao(
     this as AppDatabase,
   );
+  late final DialogInfoDao dialogInfoDao = DialogInfoDao(this as AppDatabase);
   late final CdrsDao cdrsDao = CdrsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -13022,6 +13926,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     systemNotificationsTable,
     systemNotificationsOutboxTable,
     presenceInfoTable,
+    dialogInfoTable,
     cdrTable,
   ];
   @override
@@ -23438,6 +24343,8 @@ typedef $$PresenceInfoTableTableCreateCompanionBuilder =
       Value<int?> timeOffsetMin,
       Value<int?> timestampUsec,
       required String activitiesJson,
+      required String source,
+      required int arrivalTimeUsec,
       Value<int> rowid,
     });
 typedef $$PresenceInfoTableTableUpdateCompanionBuilder =
@@ -23451,6 +24358,8 @@ typedef $$PresenceInfoTableTableUpdateCompanionBuilder =
       Value<int?> timeOffsetMin,
       Value<int?> timestampUsec,
       Value<String> activitiesJson,
+      Value<String> source,
+      Value<int> arrivalTimeUsec,
       Value<int> rowid,
     });
 
@@ -23505,6 +24414,16 @@ class $$PresenceInfoTableTableFilterComposer
 
   ColumnFilters<String> get activitiesJson => $composableBuilder(
     column: $table.activitiesJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get arrivalTimeUsec => $composableBuilder(
+    column: $table.arrivalTimeUsec,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -23562,6 +24481,16 @@ class $$PresenceInfoTableTableOrderingComposer
     column: $table.activitiesJson,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get arrivalTimeUsec => $composableBuilder(
+    column: $table.arrivalTimeUsec,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PresenceInfoTableTableAnnotationComposer
@@ -23605,6 +24534,14 @@ class $$PresenceInfoTableTableAnnotationComposer
 
   GeneratedColumn<String> get activitiesJson => $composableBuilder(
     column: $table.activitiesJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<int> get arrivalTimeUsec => $composableBuilder(
+    column: $table.arrivalTimeUsec,
     builder: (column) => column,
   );
 }
@@ -23658,6 +24595,8 @@ class $$PresenceInfoTableTableTableManager
                 Value<int?> timeOffsetMin = const Value.absent(),
                 Value<int?> timestampUsec = const Value.absent(),
                 Value<String> activitiesJson = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<int> arrivalTimeUsec = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PresenceInfoDataCompanion(
                 idKey: idKey,
@@ -23669,6 +24608,8 @@ class $$PresenceInfoTableTableTableManager
                 timeOffsetMin: timeOffsetMin,
                 timestampUsec: timestampUsec,
                 activitiesJson: activitiesJson,
+                source: source,
+                arrivalTimeUsec: arrivalTimeUsec,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -23682,6 +24623,8 @@ class $$PresenceInfoTableTableTableManager
                 Value<int?> timeOffsetMin = const Value.absent(),
                 Value<int?> timestampUsec = const Value.absent(),
                 required String activitiesJson,
+                required String source,
+                required int arrivalTimeUsec,
                 Value<int> rowid = const Value.absent(),
               }) => PresenceInfoDataCompanion.insert(
                 idKey: idKey,
@@ -23693,6 +24636,8 @@ class $$PresenceInfoTableTableTableManager
                 timeOffsetMin: timeOffsetMin,
                 timestampUsec: timestampUsec,
                 activitiesJson: activitiesJson,
+                source: source,
+                arrivalTimeUsec: arrivalTimeUsec,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -23722,6 +24667,378 @@ typedef $$PresenceInfoTableTableProcessedTableManager =
         >,
       ),
       PresenceInfoData,
+      PrefetchHooks Function()
+    >;
+typedef $$DialogInfoTableTableCreateCompanionBuilder =
+    DialogInfoDataCompanion Function({
+      required String idKey,
+      required String entityNumber,
+      required String state,
+      Value<String?> callId,
+      Value<String?> direction,
+      Value<String?> localTag,
+      Value<String?> localNumber,
+      Value<String?> localDisplayName,
+      Value<String?> remoteTag,
+      Value<String?> remoteNumber,
+      Value<String?> remoteDisplayName,
+      required String arrivalVersion,
+      required int arrivalTimeUsec,
+      Value<int> rowid,
+    });
+typedef $$DialogInfoTableTableUpdateCompanionBuilder =
+    DialogInfoDataCompanion Function({
+      Value<String> idKey,
+      Value<String> entityNumber,
+      Value<String> state,
+      Value<String?> callId,
+      Value<String?> direction,
+      Value<String?> localTag,
+      Value<String?> localNumber,
+      Value<String?> localDisplayName,
+      Value<String?> remoteTag,
+      Value<String?> remoteNumber,
+      Value<String?> remoteDisplayName,
+      Value<String> arrivalVersion,
+      Value<int> arrivalTimeUsec,
+      Value<int> rowid,
+    });
+
+class $$DialogInfoTableTableFilterComposer
+    extends Composer<_$AppDatabase, $DialogInfoTableTable> {
+  $$DialogInfoTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get idKey => $composableBuilder(
+    column: $table.idKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get entityNumber => $composableBuilder(
+    column: $table.entityNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get callId => $composableBuilder(
+    column: $table.callId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get direction => $composableBuilder(
+    column: $table.direction,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get localTag => $composableBuilder(
+    column: $table.localTag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get localNumber => $composableBuilder(
+    column: $table.localNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get localDisplayName => $composableBuilder(
+    column: $table.localDisplayName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remoteTag => $composableBuilder(
+    column: $table.remoteTag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remoteNumber => $composableBuilder(
+    column: $table.remoteNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remoteDisplayName => $composableBuilder(
+    column: $table.remoteDisplayName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get arrivalVersion => $composableBuilder(
+    column: $table.arrivalVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get arrivalTimeUsec => $composableBuilder(
+    column: $table.arrivalTimeUsec,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DialogInfoTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $DialogInfoTableTable> {
+  $$DialogInfoTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get idKey => $composableBuilder(
+    column: $table.idKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get entityNumber => $composableBuilder(
+    column: $table.entityNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get callId => $composableBuilder(
+    column: $table.callId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get direction => $composableBuilder(
+    column: $table.direction,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get localTag => $composableBuilder(
+    column: $table.localTag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get localNumber => $composableBuilder(
+    column: $table.localNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get localDisplayName => $composableBuilder(
+    column: $table.localDisplayName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get remoteTag => $composableBuilder(
+    column: $table.remoteTag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get remoteNumber => $composableBuilder(
+    column: $table.remoteNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get remoteDisplayName => $composableBuilder(
+    column: $table.remoteDisplayName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get arrivalVersion => $composableBuilder(
+    column: $table.arrivalVersion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get arrivalTimeUsec => $composableBuilder(
+    column: $table.arrivalTimeUsec,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DialogInfoTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DialogInfoTableTable> {
+  $$DialogInfoTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get idKey =>
+      $composableBuilder(column: $table.idKey, builder: (column) => column);
+
+  GeneratedColumn<String> get entityNumber => $composableBuilder(
+    column: $table.entityNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<String> get callId =>
+      $composableBuilder(column: $table.callId, builder: (column) => column);
+
+  GeneratedColumn<String> get direction =>
+      $composableBuilder(column: $table.direction, builder: (column) => column);
+
+  GeneratedColumn<String> get localTag =>
+      $composableBuilder(column: $table.localTag, builder: (column) => column);
+
+  GeneratedColumn<String> get localNumber => $composableBuilder(
+    column: $table.localNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get localDisplayName => $composableBuilder(
+    column: $table.localDisplayName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get remoteTag =>
+      $composableBuilder(column: $table.remoteTag, builder: (column) => column);
+
+  GeneratedColumn<String> get remoteNumber => $composableBuilder(
+    column: $table.remoteNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get remoteDisplayName => $composableBuilder(
+    column: $table.remoteDisplayName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get arrivalVersion => $composableBuilder(
+    column: $table.arrivalVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get arrivalTimeUsec => $composableBuilder(
+    column: $table.arrivalTimeUsec,
+    builder: (column) => column,
+  );
+}
+
+class $$DialogInfoTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DialogInfoTableTable,
+          DialogInfoData,
+          $$DialogInfoTableTableFilterComposer,
+          $$DialogInfoTableTableOrderingComposer,
+          $$DialogInfoTableTableAnnotationComposer,
+          $$DialogInfoTableTableCreateCompanionBuilder,
+          $$DialogInfoTableTableUpdateCompanionBuilder,
+          (
+            DialogInfoData,
+            BaseReferences<
+              _$AppDatabase,
+              $DialogInfoTableTable,
+              DialogInfoData
+            >,
+          ),
+          DialogInfoData,
+          PrefetchHooks Function()
+        > {
+  $$DialogInfoTableTableTableManager(
+    _$AppDatabase db,
+    $DialogInfoTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DialogInfoTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DialogInfoTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DialogInfoTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> idKey = const Value.absent(),
+                Value<String> entityNumber = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<String?> callId = const Value.absent(),
+                Value<String?> direction = const Value.absent(),
+                Value<String?> localTag = const Value.absent(),
+                Value<String?> localNumber = const Value.absent(),
+                Value<String?> localDisplayName = const Value.absent(),
+                Value<String?> remoteTag = const Value.absent(),
+                Value<String?> remoteNumber = const Value.absent(),
+                Value<String?> remoteDisplayName = const Value.absent(),
+                Value<String> arrivalVersion = const Value.absent(),
+                Value<int> arrivalTimeUsec = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DialogInfoDataCompanion(
+                idKey: idKey,
+                entityNumber: entityNumber,
+                state: state,
+                callId: callId,
+                direction: direction,
+                localTag: localTag,
+                localNumber: localNumber,
+                localDisplayName: localDisplayName,
+                remoteTag: remoteTag,
+                remoteNumber: remoteNumber,
+                remoteDisplayName: remoteDisplayName,
+                arrivalVersion: arrivalVersion,
+                arrivalTimeUsec: arrivalTimeUsec,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String idKey,
+                required String entityNumber,
+                required String state,
+                Value<String?> callId = const Value.absent(),
+                Value<String?> direction = const Value.absent(),
+                Value<String?> localTag = const Value.absent(),
+                Value<String?> localNumber = const Value.absent(),
+                Value<String?> localDisplayName = const Value.absent(),
+                Value<String?> remoteTag = const Value.absent(),
+                Value<String?> remoteNumber = const Value.absent(),
+                Value<String?> remoteDisplayName = const Value.absent(),
+                required String arrivalVersion,
+                required int arrivalTimeUsec,
+                Value<int> rowid = const Value.absent(),
+              }) => DialogInfoDataCompanion.insert(
+                idKey: idKey,
+                entityNumber: entityNumber,
+                state: state,
+                callId: callId,
+                direction: direction,
+                localTag: localTag,
+                localNumber: localNumber,
+                localDisplayName: localDisplayName,
+                remoteTag: remoteTag,
+                remoteNumber: remoteNumber,
+                remoteDisplayName: remoteDisplayName,
+                arrivalVersion: arrivalVersion,
+                arrivalTimeUsec: arrivalTimeUsec,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DialogInfoTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DialogInfoTableTable,
+      DialogInfoData,
+      $$DialogInfoTableTableFilterComposer,
+      $$DialogInfoTableTableOrderingComposer,
+      $$DialogInfoTableTableAnnotationComposer,
+      $$DialogInfoTableTableCreateCompanionBuilder,
+      $$DialogInfoTableTableUpdateCompanionBuilder,
+      (
+        DialogInfoData,
+        BaseReferences<_$AppDatabase, $DialogInfoTableTable, DialogInfoData>,
+      ),
+      DialogInfoData,
       PrefetchHooks Function()
     >;
 typedef $$CdrTableTableCreateCompanionBuilder =
@@ -24185,6 +25502,8 @@ class $AppDatabaseManager {
       );
   $$PresenceInfoTableTableTableManager get presenceInfoTable =>
       $$PresenceInfoTableTableTableManager(_db, _db.presenceInfoTable);
+  $$DialogInfoTableTableTableManager get dialogInfoTable =>
+      $$DialogInfoTableTableTableManager(_db, _db.dialogInfoTable);
   $$CdrTableTableTableManager get cdrTable =>
       $$CdrTableTableTableManager(_db, _db.cdrTable);
 }

@@ -258,10 +258,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             _sessionGuard,
           ),
         ),
-        RepositoryProvider<CallPullRepository>(create: (context) => CallPullRepositoryMemoryImpl()),
         RepositoryProvider<LinesStateRepository>(create: (context) => LinesStateRepositoryInMemoryImpl()),
         RepositoryProvider<PresenceInfoRepository>(
           create: (context) => PresenceInfoRepositoryDriftImpl(context.read<AppDatabase>()),
+        ),
+        RepositoryProvider<DialogInfoRepository>(
+          create: (context) => DialogInfoRepositoryDriftImpl(context.read<AppDatabase>()),
         ),
         RepositoryProvider<CdrsLocalRepository>(
           create: (context) => CdrsLocalRepositoryDriftImpl(context.read<AppDatabase>()),
@@ -447,9 +449,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         token: appBloc.state.session.token!,
                         trustedCertificates: appCertificates.trustedCertificates,
                         callLogsRepository: context.read<CallLogsRepository>(),
-                        callPullRepository: context.read<CallPullRepository>(),
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
+                        dialogInfoRepository: context.read<DialogInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
@@ -546,7 +548,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           create: (_) =>
                               SystemNotificationsCounterCubit(context.read<SystemNotificationsLocalRepository>()),
                         ),
-                        BlocProvider(lazy: false, create: (_) => CallPullCubit(context.read<CallPullRepository>())),
+                        BlocProvider(
+                          lazy: false,
+                          create: (_) => CallPullCubit(
+                            userRepository: context.read<UserRepository>(),
+                            dialogInfoRepository: context.read<DialogInfoRepository>(),
+                            linesStateRepository: context.read<LinesStateRepository>(),
+                          )..init(),
+                        ),
                         BlocProvider<CallRoutingCubit>(
                           lazy: false,
                           create: (_) => CallRoutingCubit(

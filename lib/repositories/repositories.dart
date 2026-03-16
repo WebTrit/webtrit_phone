@@ -14,7 +14,7 @@ export 'cdrs/cdrs_local_repository.dart';
 export 'cdrs/cdrs_remote_repository.dart';
 export 'contacts/contacts.dart';
 export 'contacts_agreement_status/contacts_agreement_status_repository.dart';
-export 'dialing/dialing.dart';
+export 'dialog_info/dialog_info_repository.dart';
 export 'encoding_preset/encoding_preset_repository.dart';
 export 'encoding_settings/encoding_settings_repository.dart';
 export 'favorites/favorites.dart';

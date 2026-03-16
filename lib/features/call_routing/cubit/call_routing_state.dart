@@ -29,6 +29,6 @@ class CallRoutingState extends Equatable {
     return 'CallRoutingState{mainNumber: $mainNumber, additionalNumbers: $additionalNumbers, mainLinesState: $mainLinesState, guestLineState: $guestLineState}';
   }
 
-  bool get hasIdleMainLine => mainLinesState.any((line) => line == LineState.idle);
-  bool get hasIdleGuestLine => guestLineState == LineState.idle;
+  bool get hasIdleMainLine => mainLinesState.any((line) => line is IdleLineState);
+  bool get hasIdleGuestLine => guestLineState is IdleLineState;
 }

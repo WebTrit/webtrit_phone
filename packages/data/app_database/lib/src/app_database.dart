@@ -40,6 +40,7 @@ part 'app_database.g.dart';
     SystemNotificationsTable,
     SystemNotificationsOutboxTable,
     PresenceInfoTable,
+    DialogInfoTable,
     CdrTable,
   ],
   daos: [
@@ -56,6 +57,7 @@ part 'app_database.g.dart';
     VoicemailDao,
     SystemNotificationsDao,
     PresenceInfoDao,
+    DialogInfoDao,
     CdrsDao,
   ],
 )

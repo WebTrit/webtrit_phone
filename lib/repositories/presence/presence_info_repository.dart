@@ -5,8 +5,13 @@ import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 abstract class PresenceInfoRepository {
+  /// Sets the initial presence information for multiple numbers.
+  /// Note: it replaces all previous presence info for all numbers with the provided data
+  Future<void> setInitialPresenceInfo(List<PresenceInfo> presenceInfos);
+
   /// Sets the presence information for a specific number.
-  void setNumberPresence(String number, List<PresenceInfo> presenceInfo);
+  /// Note: it sets multiple presence info for the same number, replacing existing
+  Future<void> setNumberPresence(String number, List<PresenceInfo> presenceInfo);
 
   /// Gets the presence information for a specific number.
   Future<List<PresenceInfo>> getNumberPresence(String number);
@@ -21,12 +26,21 @@ class PresenceInfoRepositoryDriftImpl with PresenceInfoDriftMapper implements Pr
   late final _dao = _appDatabase.presenceInfoDao;
 
   @override
-  void setNumberPresence(String number, List<PresenceInfo> presence) async {
-    final existing = await _dao.getPresenceInfoByNumber(number);
-    final deleteIds = existing.map((e) => e.idKey).toSet().difference(presence.map((e) => e.id).toSet());
+  Future<void> setInitialPresenceInfo(List<PresenceInfo> presenceInfos) async {
+    await _dao.replaceData(presenceInfos.map((info) => presenceInfoToDrift(info)).toList());
+  }
 
-    final data = presence.map((e) => presenceInfoToDrift(number, e)).toList();
-    await _dao.deletePresenceInfoByIds(deleteIds.toList());
+  @override
+  Future<void> setNumberPresence(String number, List<PresenceInfo> presence) async {
+    final existing = await _dao.getPresenceInfoByNumber(number);
+    final toRemove = existing
+        .map((e) => (e.idKey, e.source))
+        .toSet()
+        .difference(presence.map((e) => (e.id, e.source)).toSet())
+        .map((e) => e.$1);
+
+    final data = presence.map((e) => presenceInfoToDrift(e)).toList();
+    await _dao.deletePresenceInfoByIds(toRemove.toList());
     await _dao.upsertPresenceInfo(data);
   }
 

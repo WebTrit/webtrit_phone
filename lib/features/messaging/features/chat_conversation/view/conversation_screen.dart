@@ -39,7 +39,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
           value: conversationCubit,
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: DialogInfo(
+            child: DialogChatInfo(
               userId,
               state.credentials.participantId!,
               isAudioCallEnabled: true,
@@ -59,7 +59,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
           value: conversationCubit,
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: GroupInfo(userId),
+            child: GroupChatInfo(userId),
           ),
         ),
       );

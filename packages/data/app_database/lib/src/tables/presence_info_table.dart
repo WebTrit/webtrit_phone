@@ -6,7 +6,7 @@ class PresenceInfoTable extends Table {
   String get tableName => 'presence_info';
 
   @override
-  Set<Column> get primaryKey => {idKey};
+  Set<Column> get primaryKey => {number, source, idKey};
 
   TextColumn get idKey => text()();
 
@@ -25,4 +25,8 @@ class PresenceInfoTable extends Table {
   IntColumn get timestampUsec => integer().nullable()();
 
   TextColumn get activitiesJson => text()();
+
+  TextColumn get source => text()();
+
+  IntColumn get arrivalTimeUsec => integer()();
 }

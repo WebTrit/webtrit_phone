@@ -58,8 +58,8 @@ void main() {
       null,
       null,
     ],
-    userActiveCalls: [],
-    contactsPresenceInfo: {},
+    presenceInfos: [],
+    dialogInfos: [],
     guestLine: null,
   );
 

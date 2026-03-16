@@ -17,6 +17,13 @@ class PresenceInfoView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    final ids = this.presenceInfo.map((e) => e.id);
+
+    // If user receives both SIP and direct presence for the same number
+    // show one entry from direct but with source text "sip and direct".
+    final presenceInfo = List<PresenceInfo>.from(this.presenceInfo)
+      ..removeWhere((info) => ids.where((id) => id == info.id).length > 1 && info.source == PresenceInfoSource.sip);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -100,11 +107,17 @@ class PresenceInfoView extends StatelessWidget {
                           ),
                         ],
                       ),
+                    // TODO: translate
+                    if (ids.where((id) => id == info.id).length == 1)
+                      Text('Source: ${info.source.name}', style: Theme.of(context).textTheme.bodySmall),
+                    if (ids.where((id) => id == info.id).length > 1)
+                      Text('Source: sip and direct', style: Theme.of(context).textTheme.bodySmall),
                     if (info.device != null && info.device!.isNotEmpty)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [Text(info.device!, style: Theme.of(context).textTheme.bodySmall)],
                       ),
+
                     // const Divider(),
                   ],
                 );

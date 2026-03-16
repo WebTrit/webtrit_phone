@@ -13,6 +13,7 @@ export 'chats_table.dart';
 export 'contact_emails_table.dart';
 export 'contact_phones_table.dart';
 export 'contacts_table.dart';
+export 'dialog_info_table.dart';
 export 'favorites_table.dart';
 export 'favorites_outbox_table.dart';
 export 'favorites_v2_table.dart';

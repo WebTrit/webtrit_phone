@@ -95,11 +95,11 @@ class MainScreenPage extends StatelessWidget {
           : autoTabsRouter,
     );
 
-    return BlocBuilder<CallPullCubit, List<PullableCall>>(
-      builder: (context, state) {
+    return BlocBuilder<CallPullCubit, List<DialogInfo>>(
+      builder: (context, dialogs) {
         return AppBarParams(
           systemNotificationsEnabled: systemNotificationsEnabled,
-          pullableCalls: state,
+          pullableCallDialogs: dialogs,
           child: provider,
         );
       },
