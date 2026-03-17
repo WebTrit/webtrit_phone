@@ -516,7 +516,7 @@ abstract final class SipPresenceMapper {
     final withpresenceViaSip = isSupported && (systemInfo?.adapter?.supportsSipPresence ?? false);
 
     return SipPresenceConfig(
-      hybridPresenceSupport: true,
+      hybridPresenceSupport: isSupported,
       dialogsViaSipBlfSupport: withBlfViaSip,
       presenceViaSipSupport: withpresenceViaSip,
     );
