@@ -2187,21 +2187,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
               '__onPeerConnectionEventIceConnectionStateChanged: peerConnection is null - most likely some state issue',
             );
           } else {
-            await peerConnection.restartIce();
-            final localDescription = await peerConnection.createOffer({});
-            sdpMunger?.apply(localDescription);
+            final pcState = peerConnection.signalingState;
+            if (pcState == RTCSignalingState.RTCSignalingStateStable) {
+              await peerConnection.restartIce();
+              final localDescription = await peerConnection.createOffer({});
+              sdpMunger?.apply(localDescription);
 
-            // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
-            // localDescription should be set before sending the answer to transition into stable state.
-            await peerConnection.setLocalDescription(localDescription);
+              final currentState = peerConnection.signalingState;
+              if (currentState == RTCSignalingState.RTCSignalingStateStable) {
+                // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+                // localDescription should be set before sending the answer to transition into stable state.
+                await peerConnection.setLocalDescription(localDescription);
 
-            final updateRequest = UpdateRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: activeCall.line,
-              callId: activeCall.callId,
-              jsep: localDescription.toMap(),
-            );
-            await _signalingClient?.execute(updateRequest);
+                final updateRequest = UpdateRequest(
+                  transaction: WebtritSignalingClient.generateTransactionId(),
+                  line: activeCall.line,
+                  callId: activeCall.callId,
+                  jsep: localDescription.toMap(),
+                );
+                await _signalingClient?.execute(updateRequest);
+              }
+            }
           }
         });
       } catch (e, stackTrace) {
