@@ -7,7 +7,7 @@ class FeatureOverrides extends Equatable {
   const FeatureOverrides({
     this.isVideoCallEnabled,
     this.isSystemNotificationsEnabled,
-    this.isSipPresenceEnabled,
+    this.hybridPresenceSupport,
     this.isVoicemailEnabled,
     this.monitorCheckInterval,
     this.logLevel,
@@ -16,7 +16,7 @@ class FeatureOverrides extends Equatable {
 
   final bool? isVideoCallEnabled;
   final bool? isSystemNotificationsEnabled;
-  final bool? isSipPresenceEnabled;
+  final bool? hybridPresenceSupport;
   final bool? isVoicemailEnabled;
   final Duration? monitorCheckInterval;
   final Level? logLevel;
@@ -26,7 +26,7 @@ class FeatureOverrides extends Equatable {
   List<Object?> get props => [
     isVideoCallEnabled,
     isSystemNotificationsEnabled,
-    isSipPresenceEnabled,
+    hybridPresenceSupport,
     isVoicemailEnabled,
     monitorCheckInterval,
     logLevel,
@@ -37,7 +37,7 @@ class FeatureOverrides extends Equatable {
 abstract final class FeatureOverridesFactory {
   static const _kVideoCallEnabledKey = 'feature_video_call_enabled';
   static const _kSystemNotificationsEnabledKey = 'feature_system_notifications_enabled';
-  static const _kSipPresenceEnabledKey = 'feature_sip_presence_enabled';
+  static const _kHybridPresenceEnabledKey = 'feature_hybrid_presence_enabled';
   static const _kVoicemailEnabledKey = 'feature_voicemail_enabled';
   static const _kMonitorCheckIntervalKey = 'feature_monitor_check_interval_sec';
   static const _kLogLevelKey = 'feature_log_level';
@@ -56,7 +56,7 @@ abstract final class FeatureOverridesFactory {
     return FeatureOverrides(
       isVideoCallEnabled: snapshot.getBool(_kVideoCallEnabledKey),
       isSystemNotificationsEnabled: snapshot.getBool(_kSystemNotificationsEnabledKey),
-      isSipPresenceEnabled: snapshot.getBool(_kSipPresenceEnabledKey),
+      hybridPresenceSupport: snapshot.getBool(_kHybridPresenceEnabledKey),
       isVoicemailEnabled: snapshot.getBool(_kVoicemailEnabledKey),
       monitorCheckInterval: monitorCheckInterval,
       logLevel: logLevel,

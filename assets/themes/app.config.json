@@ -98,8 +98,7 @@
         }
       ]
     },
-    "systemNotificationsEnabled": true,
-    "sipPresenceEnabled": true
+    "systemNotificationsEnabled": true
   },
   "settingsConfig": {
     "sections": [

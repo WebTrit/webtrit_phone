@@ -33,14 +33,18 @@ class PresenceInfoView extends StatelessWidget {
             l10n.presence_infoView_title,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 8),
           for (final info in presenceInfo)
             Builder(
               builder: (context) {
-                final maybeActivityText = info.activities.isNotEmpty
-                    ? info.activities.first.l10n(l10n)
+                final activitiesTexts = info.activities.map((activity) => activity.l10n(l10n)).toList();
+                final maybeActivityText = activitiesTexts.isNotEmpty
+                    ? activitiesTexts.join(', ')
                     : (info.available ? l10n.presence_infoView_available_true : l10n.presence_infoView_available_false);
 
-                final shouldDisplayNote = info.note.isNotEmpty && info.note.trim() != maybeActivityText;
+                // Not show note if it is the same as activity
+                // usually setted by preset for compatibility with more old clients that doesn't support activities
+                final shouldDisplayNote = info.note.isNotEmpty && activitiesTexts.contains(info.note.trim()) == false;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -109,11 +113,20 @@ class PresenceInfoView extends StatelessWidget {
                           ),
                         ],
                       ),
-                    // TODO: translate
                     if (ids.where((id) => id == info.id).length == 1)
-                      Text('Source: ${info.source.name}', style: Theme.of(context).textTheme.bodySmall),
+                      Text(
+                        l10n.presence_infoView_source(
+                          info.source == PresenceInfoSource.sip
+                              ? l10n.presence_infoView_source_sip
+                              : l10n.presence_infoView_source_direct,
+                        ),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     if (ids.where((id) => id == info.id).length > 1)
-                      Text('Source: sip and direct', style: Theme.of(context).textTheme.bodySmall),
+                      Text(
+                        l10n.presence_infoView_source(l10n.presence_infoView_source_sipAndDirect),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     if (info.device != null && info.device!.isNotEmpty)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,

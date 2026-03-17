@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -34,17 +35,51 @@ class ContactTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final presenceSource = PresenceViewParams.of(context).viewSource;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final contentColor = colorScheme.onSurface;
 
-    final title = switch (presenceSource) {
-      PresenceViewSource.sipPresence => '$displayName ${presenceInfo?.primaryStatusIcon ?? ''}',
-      PresenceViewSource.contactInfo => displayName,
+    final presenceParams = PresenceViewParams.of(context);
+
+    final title = switch (presenceParams.hybridPresenceSupport) {
+      true => '$displayName ${presenceInfo?.primaryStatusIcon ?? ''}',
+      false => displayName,
     };
 
-    final subtitle = switch (presenceSource) {
-      PresenceViewSource.sipPresence => presenceInfo?.primaryNote,
-      PresenceViewSource.contactInfo => null,
-    };
+    Widget? subtitle;
+
+    if (presenceParams.blfViaSipSupport && (dialogInfo ?? []).isNotEmpty) {
+      final dialog = dialogInfo!.first;
+
+      String? destination;
+      if (dialog.remoteDisplayName != null && dialog.remoteNumber != null) {
+        destination = '${dialog.remoteDisplayName} <${dialog.remoteNumber}>';
+      } else if (dialog.remoteDisplayName != null) {
+        destination = dialog.remoteDisplayName!;
+      } else if (dialog.remoteNumber != null) {
+        destination = dialog.remoteNumber!;
+      }
+
+      if (destination != null) {
+        subtitle = Text(
+          context.l10n.contacts_ContactTile_inCall(destination),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: contentColor.withOpacity(0.7)),
+        );
+      }
+    }
+
+    final presenceNote = (presenceInfo ?? []).primaryNote;
+
+    if (subtitle == null && presenceParams.hybridPresenceSupport && presenceNote != null && presenceNote.isNotEmpty) {
+      subtitle = Text(
+        presenceNote,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.bodySmall,
+      );
+    }
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
@@ -58,9 +93,7 @@ class ContactTile extends StatelessWidget {
         dialogInfo: dialogInfo,
       ),
       title: Text(title),
-      subtitle: subtitle?.isNotEmpty == true
-          ? Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12))
-          : null,
+      subtitle: subtitle,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

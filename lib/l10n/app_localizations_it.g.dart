@@ -360,6 +360,28 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_DialogsInfoView_title => 'Informazioni chiamate (BLF):';
 
   @override
+  String contacts_ContactTile_inCall(Object destination) {
+    return 'In chiamata: $destination';
+  }
+
+  @override
+  String get contacts_ContactScreen_options => 'Opzioni:';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip => 'Iscriviti allo stato utente tramite SIP (Presence)';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip_tooltip =>
+      'Oltre allo scambio diretto di dati (app-to-app), l\'iscrizione tramite la funzione SIP-Presence consente di raccogliere informazioni di presenza da altri user agent (telefoni desktop, softphone standalone, ecc.). Si consiglia di abilitarla solo se il contatto utilizza agent legacy e si desidera vedere lo stato di presenza su tutti i dispositivi.';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf => 'Iscriviti allo stato delle chiamate tramite SIP (BLF/Dialogs)';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf_tooltip =>
+      'Oltre allo scambio diretto di dati (app-to-app), l\'iscrizione tramite la funzione SIP-Dialogs consente di raccogliere informazioni sullo stato delle chiamate da altri user agent (telefoni desktop, softphone standalone, ecc.). Si consiglia di abilitarla solo se il contatto utilizza agent legacy e si desidera vedere lo stato delle chiamate su tutti i dispositivi.';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Testo copiato';
 
   @override
@@ -1415,6 +1437,20 @@ class AppLocalizationsIt extends AppLocalizations {
   String get presence_infoView_updated => 'Aggiornato:';
 
   @override
+  String presence_infoView_source(Object source) {
+    return 'Fonte: $source';
+  }
+
+  @override
+  String get presence_infoView_source_direct => 'diretto';
+
+  @override
+  String get presence_infoView_source_sip => 'sip';
+
+  @override
+  String get presence_infoView_source_sipAndDirect => 'sip e diretto';
+
+  @override
   String get presence_preset_absent_name => 'Assente';
 
   @override
@@ -1513,6 +1549,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get presence_settings_presets_label => 'Scegli preset';
+
+  @override
+  String get presence_settings_presets_label_custom => 'Costume';
 
   @override
   String get presence_settings_presets_title => 'Preset:';

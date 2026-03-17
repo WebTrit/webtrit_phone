@@ -83,7 +83,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
   final ContactNameResolver contactNameResolver;
   final CallErrorReporter callErrorReporter;
-  final bool sipPresenceEnabled;
+  final bool sendPresenceSettings;
   final VoidCallback? onCallEnded;
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
@@ -116,7 +116,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.userMediaBuilder,
     required this.contactNameResolver,
     required this.callErrorReporter,
-    required this.sipPresenceEnabled,
+    required this.sendPresenceSettings,
     required this.onDiagnosticReportRequested,
     this.sdpMunger,
     this.sdpSanitizer,
@@ -161,7 +161,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     callkeep.setDelegate(this);
 
-    if (sipPresenceEnabled) {
+    if (sendPresenceSettings) {
       _presenceInfoSyncTimer = Timer.periodic(const Duration(seconds: 5), (_) => syncPresenceSettings());
     }
   }

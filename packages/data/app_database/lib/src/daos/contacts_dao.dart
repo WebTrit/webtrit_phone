@@ -13,6 +13,7 @@ class FullContactData {
     required this.favorites,
     required this.presenceInfo,
     required this.dialogInfo,
+    required this.sipSubscriptions,
   });
 
   final ContactData contact;
@@ -21,6 +22,7 @@ class FullContactData {
   final List<FavoriteV2Data> favorites;
   final List<PresenceInfoData> presenceInfo;
   final List<DialogInfoData> dialogInfo;
+  final List<SipSubscriptionData> sipSubscriptions;
 }
 
 @DriftAccessor(
@@ -32,6 +34,7 @@ class FullContactData {
     FavoritesV2Table,
     PresenceInfoTable,
     DialogInfoTable,
+    SipSubscriptionsTable,
   ],
 )
 class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin {
@@ -68,6 +71,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     List<FavoriteV2Data> favorites = [];
     List<PresenceInfoData> presenceInfo = [];
     List<DialogInfoData> dialogInfo = [];
+    List<SipSubscriptionData> sipSubscriptions = [];
 
     for (final row in rows) {
       final phone = row.readTableOrNull(contactPhonesTable);
@@ -75,12 +79,14 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       final favorite = row.readTableOrNull(favoritesV2Table);
       final presence = row.readTableOrNull(presenceInfoTable);
       final dialog = row.readTableOrNull(dialogInfoTable);
+      final sipSubscription = row.readTableOrNull(sipSubscriptionsTable);
 
       if (phone != null && !phones.contains(phone)) phones.add(phone);
       if (email != null && !emails.contains(email)) emails.add(email);
       if (favorite != null && !favorites.contains(favorite)) favorites.add(favorite);
       if (presence != null && !presenceInfo.contains(presence)) presenceInfo.add(presence);
       if (dialog != null && !dialogInfo.contains(dialog)) dialogInfo.add(dialog);
+      if (sipSubscription != null && !sipSubscriptions.contains(sipSubscription)) sipSubscriptions.add(sipSubscription);
     }
 
     return FullContactData(
@@ -90,6 +96,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       favorites: favorites,
       presenceInfo: presenceInfo,
       dialogInfo: dialogInfo,
+      sipSubscriptions: sipSubscriptions,
     );
   }
 
@@ -103,11 +110,18 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       final favorite = row.readTableOrNull(favoritesV2Table);
       final presenceInfo = row.readTableOrNull(presenceInfoTable);
       final dialogInfo = row.readTableOrNull(dialogInfoTable);
-
+      final sipSubscription = row.readTableOrNull(sipSubscriptionsTable);
       final contactWithPhonesAndEmails = contactMap.putIfAbsent(
         contact.id,
-        () =>
-            FullContactData(contact: contact, phones: [], emails: [], favorites: [], presenceInfo: [], dialogInfo: []),
+        () => FullContactData(
+          contact: contact,
+          phones: [],
+          emails: [],
+          favorites: [],
+          presenceInfo: [],
+          dialogInfo: [],
+          sipSubscriptions: [],
+        ),
       );
 
       if (phone != null && !contactWithPhonesAndEmails.phones.contains(phone)) {
@@ -129,12 +143,16 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       if (dialogInfo != null && !contactWithPhonesAndEmails.dialogInfo.contains(dialogInfo)) {
         contactWithPhonesAndEmails.dialogInfo.add(dialogInfo);
       }
+
+      if (sipSubscription != null && !contactWithPhonesAndEmails.sipSubscriptions.contains(sipSubscription)) {
+        contactWithPhonesAndEmails.sipSubscriptions.add(sipSubscription);
+      }
     }
 
     return contactMap.values.toList();
   }
 
-  JoinedSelectStatement _joinFullData(SimpleSelectStatement select) {
+  JoinedSelectStatement _joinFullData(SimpleSelectStatement select, {bool includeSipSubscriptions = false}) {
     return select.join([
       leftOuterJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
@@ -148,6 +166,8 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
       ),
       leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
       leftOuterJoin(dialogInfoTable, dialogInfoTable.entityNumber.equalsExp(contactPhonesTable.number)),
+      if (includeSipSubscriptions)
+        leftOuterJoin(sipSubscriptionsTable, sipSubscriptionsTable.number.equalsExp(contactPhonesTable.number)),
     ]);
   }
 
@@ -159,9 +179,9 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return query.get().then(_gatherSingleContact);
   }
 
-  Stream<FullContactData?> watchContact(int id) {
+  Stream<FullContactData?> watchContact(int id, {bool includeSipSubscriptions = false}) {
     final s = (select(contactsTable)..where((t) => t.id.equals(id)));
-    final query = _joinFullData(s);
+    final query = _joinFullData(s, includeSipSubscriptions: includeSipSubscriptions);
     return query.watch().map(_gatherSingleContact);
   }
 

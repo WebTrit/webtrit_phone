@@ -32,4 +32,9 @@ class CoreInfo with EquatableMixin {
     // Remote favorites support was added in 0.25.0-alpha.2
     return verifyVersionStr('>=0.25.0-alpha.2 <2.0.0');
   }
+
+  bool get hybridPresenceAware {
+    // Hybrid presence was was added in 0.26.0-alpha.2
+    return verifyVersionStr('>=0.26.0-alpha.2 <2.0.0');
+  }
 }

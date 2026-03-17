@@ -37,6 +37,7 @@ Future<AppContext> bootstrap() async {
     appThemes.appConfig,
     appThemes.embeddedResources,
     coreSupport,
+    systemInfo,
     featureOverrides,
   );
 

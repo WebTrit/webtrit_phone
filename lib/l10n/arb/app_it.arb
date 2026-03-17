@@ -257,6 +257,22 @@
   "@contacts_Text_blingTransferInitiated": {},
   "contacts_DialogsInfoView_title": "Informazioni chiamate (BLF):",
   "@contacts_DialogsInfoView_title": {},
+  "contacts_ContactTile_inCall": "In chiamata: {destination}",
+  "@contacts_ContactTile_inCall": {
+    "placeholders": {
+      "destination": {}
+    }
+  },
+  "contacts_ContactScreen_options": "Opzioni:",
+  "@contacts_ContactScreen_options": {},
+  "contacts_ContactScreen_presenceViaSip": "Iscriviti allo stato utente tramite SIP (Presence)",
+  "@contacts_ContactScreen_presenceViaSip": {},
+  "contacts_ContactScreen_presenceViaSip_tooltip": "Oltre allo scambio diretto di dati (app-to-app), l'iscrizione tramite la funzione SIP-Presence consente di raccogliere informazioni di presenza da altri user agent (telefoni desktop, softphone standalone, ecc.). Si consiglia di abilitarla solo se il contatto utilizza agent legacy e si desidera vedere lo stato di presenza su tutti i dispositivi.",
+  "@contacts_ContactScreen_presenceViaSip_tooltip": {},
+  "contacts_ContactScreen_dialogsViaSipBlf": "Iscriviti allo stato delle chiamate tramite SIP (BLF/Dialogs)",
+  "@contacts_ContactScreen_dialogsViaSipBlf": {},
+  "contacts_ContactScreen_dialogsViaSipBlf_tooltip": "Oltre allo scambio diretto di dati (app-to-app), l'iscrizione tramite la funzione SIP-Dialogs consente di raccogliere informazioni sullo stato delle chiamate da altri user agent (telefoni desktop, softphone standalone, ecc.). Si consiglia di abilitarla solo se il contatto utilizza agent legacy e si desidera vedere lo stato delle chiamate su tutti i dispositivi.",
+  "@contacts_ContactScreen_dialogsViaSipBlf_tooltip": {},
   "copyToClipboard_floatingSnackBar": "Testo copiato",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copia negli appunti",
@@ -1184,6 +1200,18 @@
   "@presence_infoView_title": {},
   "presence_infoView_updated": "Aggiornato:",
   "@presence_infoView_updated": {},
+  "presence_infoView_source": "Fonte: {source}",
+  "@presence_infoView_source": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "presence_infoView_source_direct": "diretto",
+  "@presence_infoView_source_direct": {},
+  "presence_infoView_source_sip": "sip",
+  "@presence_infoView_source_sip": {},
+  "presence_infoView_source_sipAndDirect": "sip e diretto",
+  "@presence_infoView_source_sipAndDirect": {},
   "presence_preset_absent_name": "Assente",
   "@presence_preset_absent_name": {},
   "presence_preset_absent_note": "Assente",
@@ -1248,6 +1276,8 @@
   "@presence_settings_note_tooltip": {},
   "presence_settings_presets_label": "Scegli preset",
   "@presence_settings_presets_label": {},
+  "presence_settings_presets_label_custom": "Costume",
+  "@presence_settings_presets_label_custom": {},
   "presence_settings_presets_title": "Preset:",
   "@presence_settings_presets_title": {},
   "presence_settings_statusIcon_none": "Nessuna",

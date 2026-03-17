@@ -45,6 +45,6 @@ class FeatureAccessStreamFactory {
     final coreSupport = CoreSupportFactory.create(systemInfo);
     final overrides = FeatureOverridesFactory.create(remoteConfig);
 
-    return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, coreSupport, overrides);
+    return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, coreSupport, systemInfo, overrides);
   }
 }

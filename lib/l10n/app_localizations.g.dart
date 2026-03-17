@@ -693,6 +693,42 @@ abstract class AppLocalizations {
   /// **'Calls information (BLF):'**
   String get contacts_DialogsInfoView_title;
 
+  /// No description provided for @contacts_ContactTile_inCall.
+  ///
+  /// In en, this message translates to:
+  /// **'In call: {destination}'**
+  String contacts_ContactTile_inCall(Object destination);
+
+  /// No description provided for @contacts_ContactScreen_options.
+  ///
+  /// In en, this message translates to:
+  /// **'Options:'**
+  String get contacts_ContactScreen_options;
+
+  /// No description provided for @contacts_ContactScreen_presenceViaSip.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to user status via SIP (Presence)'**
+  String get contacts_ContactScreen_presenceViaSip;
+
+  /// No description provided for @contacts_ContactScreen_presenceViaSip_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'In addition to direct(app to app) data exchange, subscribe via SIP-Presence feature allows gathering presence information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their presence status across all devices.'**
+  String get contacts_ContactScreen_presenceViaSip_tooltip;
+
+  /// No description provided for @contacts_ContactScreen_dialogsViaSipBlf.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to active calls via SIP (BLF/Dialogs)'**
+  String get contacts_ContactScreen_dialogsViaSipBlf;
+
+  /// No description provided for @contacts_ContactScreen_dialogsViaSipBlf_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'In addition to direct(app to app) data exchange, subscribe via SIP-Dialogs feature allows gathering call state information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their call status across all devices.'**
+  String get contacts_ContactScreen_dialogsViaSipBlf_tooltip;
+
   /// No description provided for @copyToClipboard_floatingSnackBar.
   ///
   /// In en, this message translates to:
@@ -2616,6 +2652,30 @@ abstract class AppLocalizations {
   /// **'Updated:'**
   String get presence_infoView_updated;
 
+  /// No description provided for @presence_infoView_source.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {source}'**
+  String presence_infoView_source(Object source);
+
+  /// No description provided for @presence_infoView_source_direct.
+  ///
+  /// In en, this message translates to:
+  /// **'direct'**
+  String get presence_infoView_source_direct;
+
+  /// No description provided for @presence_infoView_source_sip.
+  ///
+  /// In en, this message translates to:
+  /// **'sip'**
+  String get presence_infoView_source_sip;
+
+  /// No description provided for @presence_infoView_source_sipAndDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'sip and direct'**
+  String get presence_infoView_source_sipAndDirect;
+
   /// No description provided for @presence_preset_absent_name.
   ///
   /// In en, this message translates to:
@@ -2807,6 +2867,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose preset'**
   String get presence_settings_presets_label;
+
+  /// No description provided for @presence_settings_presets_label_custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get presence_settings_presets_label_custom;
 
   /// No description provided for @presence_settings_presets_title.
   ///

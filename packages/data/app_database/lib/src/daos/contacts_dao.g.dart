@@ -15,6 +15,8 @@ mixin _$ContactsDaoMixin on DatabaseAccessor<AppDatabase> {
   $PresenceInfoTableTable get presenceInfoTable =>
       attachedDatabase.presenceInfoTable;
   $DialogInfoTableTable get dialogInfoTable => attachedDatabase.dialogInfoTable;
+  $SipSubscriptionsTableTable get sipSubscriptionsTable =>
+      attachedDatabase.sipSubscriptionsTable;
   ContactsDaoManager get managers => ContactsDaoManager(this);
 }
 
@@ -52,5 +54,10 @@ class ContactsDaoManager {
       $$DialogInfoTableTableTableManager(
         _db.attachedDatabase,
         _db.dialogInfoTable,
+      );
+  $$SipSubscriptionsTableTableTableManager get sipSubscriptionsTable =>
+      $$SipSubscriptionsTableTableTableManager(
+        _db.attachedDatabase,
+        _db.sipSubscriptionsTable,
       );
 }

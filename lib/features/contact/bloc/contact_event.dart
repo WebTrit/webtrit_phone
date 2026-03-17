@@ -39,3 +39,13 @@ class ContactEmailSend extends ContactEvent {
   @override
   List<Object?> get props => [contactEmail];
 }
+
+class ContactSipSubscriptionToggled extends ContactEvent {
+  const ContactSipSubscriptionToggled(this.enabled, this.type);
+
+  final bool enabled;
+  final SipSubscriptionType type;
+
+  @override
+  List<Object?> get props => [enabled, type];
+}

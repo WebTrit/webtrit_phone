@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
-enum PresenceViewSource { contactInfo, sipPresence }
-
 class PresenceViewParams extends InheritedWidget {
-  const PresenceViewParams({required this.viewSource, required super.child, super.key});
+  const PresenceViewParams({
+    required this.hybridPresenceSupport,
+    required this.blfViaSipSupport,
+    required this.presenceViaSipSupport,
+    required super.child,
+    super.key,
+  });
 
-  final PresenceViewSource viewSource;
+  final bool hybridPresenceSupport;
+  final bool blfViaSipSupport;
+  final bool presenceViaSipSupport;
+
   static PresenceViewParams of(BuildContext context) {
     final result = context.dependOnInheritedWidgetOfExactType<PresenceViewParams>();
     if (result == null) {
@@ -16,6 +23,8 @@ class PresenceViewParams extends InheritedWidget {
 
   @override
   bool updateShouldNotify(PresenceViewParams oldWidget) {
-    return viewSource != oldWidget.viewSource;
+    return hybridPresenceSupport != oldWidget.hybridPresenceSupport ||
+        blfViaSipSupport != oldWidget.blfViaSipSupport ||
+        presenceViaSipSupport != oldWidget.presenceViaSipSupport;
   }
 }

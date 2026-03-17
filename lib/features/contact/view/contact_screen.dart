@@ -10,6 +10,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
@@ -61,7 +62,8 @@ class _ContactScreenState extends State<ContactScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
-    final presenceSource = PresenceViewParams.of(context).viewSource;
+    final l10n = context.l10n;
+    final presenceParams = PresenceViewParams.of(context);
 
     return BlocBuilder<UserInfoCubit, UserInfoState>(
       builder: (context, userInfoState) {
@@ -74,6 +76,8 @@ class _ContactScreenState extends State<ContactScreen> {
 
             final contactSourceId = contact.sourceId;
             final contactSmsNumbers = contact.smsNumbers;
+            final presenseInfo = contact.presenceInfo;
+            final dialogInfo = contact.dialogInfo;
 
             return BlocBuilder<CallBloc, CallState>(
               buildWhen: (previous, current) =>
@@ -86,6 +90,31 @@ class _ContactScreenState extends State<ContactScreen> {
 
                 return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                   builder: (context, callRoutingState) {
+                    final showPresenceInfo =
+                        presenceParams.hybridPresenceSupport &&
+                        contact.sourceType == ContactSourceType.external &&
+                        presenseInfo.isNotEmpty;
+
+                    final showDialogsInfo =
+                        presenceParams.hybridPresenceSupport &&
+                        presenceParams.blfViaSipSupport &&
+                        contact.sourceType == ContactSourceType.external &&
+                        dialogInfo.isNotEmpty;
+
+                    final bool dialogSipSubAvaliable =
+                        contact.sourceType == ContactSourceType.external &&
+                        presenceParams.hybridPresenceSupport &&
+                        presenceParams.blfViaSipSupport;
+
+                    final bool presenceSipSubAvaliable =
+                        contact.sourceType == ContactSourceType.external &&
+                        presenceParams.hybridPresenceSupport &&
+                        presenceParams.presenceViaSipSupport;
+
+                    final bool sipSubsAvailable = dialogSipSubAvaliable || presenceSipSubAvaliable;
+
+                    final bool showOptionsSection = sipSubsAvailable; // && yourNextOptionFeature
+
                     return Scaffold(
                       appBar: AppBar(
                         actions: [
@@ -144,15 +173,108 @@ class _ContactScreenState extends State<ContactScreen> {
                               label: contactEmail.label,
                               onEmailPressed: widget.enableTileEmail ? () => _onEmailPressed(contactEmail) : null,
                             ),
-                          if (presenceSource == PresenceViewSource.sipPresence &&
-                              contact.sourceType == ContactSourceType.external &&
-                              contact.presenceInfo.isNotEmpty) ...[
+                          if (showPresenceInfo) ...[const Divider(), PresenceInfoView(presenceInfo: presenseInfo)],
+                          if (showDialogsInfo) ...[const Divider(), DialogsInfoView(dialogInfo: dialogInfo)],
+                          if (showOptionsSection) ...[
                             const Divider(),
-                            PresenceInfoView(presenceInfo: contact.presenceInfo),
-                          ],
-                          if (contact.sourceType == ContactSourceType.external && contact.dialogInfo.isNotEmpty) ...[
-                            const Divider(),
-                            DialogsInfoView(dialogInfo: contact.dialogInfo),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                              child: Column(
+                                spacing: 12,
+                                children: [
+                                  Text(
+                                    l10n.contacts_ContactScreen_options,
+                                    style: themeData.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  if (presenceSipSubAvaliable)
+                                    Builder(
+                                      builder: (context) {
+                                        final hasPresenceSubscription = contact.sipSubscriptions.any(
+                                          (sub) => sub.type == SipSubscriptionType.presence,
+                                        );
+                                        return Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                context.read<ContactBloc>().add(
+                                                  ContactSipSubscriptionToggled(
+                                                    !hasPresenceSubscription,
+                                                    SipSubscriptionType.presence,
+                                                  ),
+                                                );
+                                              },
+                                              child: Icon(
+                                                hasPresenceSubscription
+                                                    ? Icons.check_box
+                                                    : Icons.check_box_outline_blank,
+                                                color: hasPresenceSubscription
+                                                    ? colorScheme.primary
+                                                    : colorScheme.onSurface,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                                child: Text(
+                                                  l10n.contacts_ContactScreen_presenceViaSip,
+                                                  style: themeData.textTheme.labelMedium,
+                                                  softWrap: true,
+                                                ),
+                                              ),
+                                            ),
+                                            Tooltip(
+                                              message: l10n.contacts_ContactScreen_presenceViaSip_tooltip,
+                                              child: const Icon(Icons.info_outline),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  if (dialogSipSubAvaliable)
+                                    Builder(
+                                      builder: (context) {
+                                        final hasDialogSubscription = contact.sipSubscriptions.any(
+                                          (sub) => sub.type == SipSubscriptionType.blf,
+                                        );
+                                        return Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                context.read<ContactBloc>().add(
+                                                  ContactSipSubscriptionToggled(
+                                                    !hasDialogSubscription,
+                                                    SipSubscriptionType.blf,
+                                                  ),
+                                                );
+                                              },
+                                              child: Icon(
+                                                hasDialogSubscription ? Icons.check_box : Icons.check_box_outline_blank,
+                                                color: hasDialogSubscription
+                                                    ? colorScheme.primary
+                                                    : colorScheme.onSurface,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                                child: Text(
+                                                  l10n.contacts_ContactScreen_dialogsViaSipBlf,
+                                                  style: themeData.textTheme.labelMedium,
+                                                  softWrap: true,
+                                                ),
+                                              ),
+                                            ),
+                                            Tooltip(
+                                              message: l10n.contacts_ContactScreen_dialogsViaSipBlf_tooltip,
+                                              child: const Icon(Icons.info_outline),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                ],
+                              ),
+                            ),
                           ],
                         ],
                       ),

@@ -130,6 +130,23 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             );
           },
         ),
+        RepositoryProvider<SipSubscriptionsRepository>(
+          create: (context) {
+            final appDatabase = context.read<AppDatabase>();
+            final apiClient = context.read<WebtritApiClient>();
+            final apiToken = context.read<AppBloc>().state.session.token!;
+
+            final localDataSource = SipSubscriptionsLocalDataSourceDriftImpl(appDatabase);
+            final remoteDataSource = SipSubscriptionsRemoteDataSourceApiImpl(apiClient: apiClient, apiToken: apiToken);
+
+            return SipSubscriptionsRepositorySyncableImpl(
+              localDataSource: localDataSource,
+              remoteDataSource: remoteDataSource,
+              connectivityService: context.read<ConnectivityService>(),
+              remoteSyncEnabled: featureAccess.sipPresenceConfig.subsSyncEnabled,
+            );
+          },
+        ),
         RepositoryProvider<RecentsRepository>(
           create: (context) => RecentsRepository(appDatabase: context.read<AppDatabase>()),
         ),
@@ -471,7 +488,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         ),
                         iceFilter: FilterWithAppSettings(iceSettingsRepository),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
-                        sipPresenceEnabled: featureAccess.sipPresenceConfig.sipPresenceSupport,
+                        sendPresenceSettings: featureAccess.sipPresenceConfig.hybridPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
                         onDiagnosticReportRequested: (id, error) => diagnosticService.request(
                           DiagnosticType.androidCallkeepOnly,
@@ -571,10 +588,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           final sipPresenceFeature = featureAccess.sipPresenceConfig;
 
                           return PresenceViewParams(
-                            viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
-                              true => PresenceViewSource.sipPresence,
-                              false => PresenceViewSource.contactInfo,
-                            },
+                            hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
+                            blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
+                            presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
                             child: CallConfigSynchronizer(
                               child: CallShell(
                                 child: MessagingShell(
@@ -620,6 +636,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
+    final sipSubscriptionsRepository = context.read<SipSubscriptionsRepository>();
 
     return [
       PollingRegistration(
@@ -648,6 +665,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         PollingRegistration(
           listener: favoritesRepository,
           interval: const Duration(seconds: EnvironmentConfig.FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
+      if (sipSubscriptionsRepository is SipSubscriptionsRepositorySyncableImpl)
+        PollingRegistration(
+          listener: sipSubscriptionsRepository,
+          interval: const Duration(seconds: EnvironmentConfig.SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
     ];
   }

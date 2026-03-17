@@ -956,7 +956,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigMain {
 
- AppConfigBottomMenu get bottomMenu; bool get systemNotificationsEnabled; bool get sipPresenceEnabled;
+ AppConfigBottomMenu get bottomMenu; bool get systemNotificationsEnabled;
 /// Create a copy of AppConfigMain
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -967,16 +967,16 @@ $AppConfigMainCopyWith<AppConfigMain> get copyWith => _$AppConfigMainCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigMain&&(identical(other.bottomMenu, bottomMenu) || other.bottomMenu == bottomMenu)&&(identical(other.systemNotificationsEnabled, systemNotificationsEnabled) || other.systemNotificationsEnabled == systemNotificationsEnabled)&&(identical(other.sipPresenceEnabled, sipPresenceEnabled) || other.sipPresenceEnabled == sipPresenceEnabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigMain&&(identical(other.bottomMenu, bottomMenu) || other.bottomMenu == bottomMenu)&&(identical(other.systemNotificationsEnabled, systemNotificationsEnabled) || other.systemNotificationsEnabled == systemNotificationsEnabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,bottomMenu,systemNotificationsEnabled,sipPresenceEnabled);
+int get hashCode => Object.hash(runtimeType,bottomMenu,systemNotificationsEnabled);
 
 @override
 String toString() {
-  return 'AppConfigMain(bottomMenu: $bottomMenu, systemNotificationsEnabled: $systemNotificationsEnabled, sipPresenceEnabled: $sipPresenceEnabled)';
+  return 'AppConfigMain(bottomMenu: $bottomMenu, systemNotificationsEnabled: $systemNotificationsEnabled)';
 }
 
 
@@ -987,7 +987,7 @@ abstract mixin class $AppConfigMainCopyWith<$Res>  {
   factory $AppConfigMainCopyWith(AppConfigMain value, $Res Function(AppConfigMain) _then) = _$AppConfigMainCopyWithImpl;
 @useResult
 $Res call({
- AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled, bool sipPresenceEnabled
+ AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled
 });
 
 
@@ -1004,11 +1004,10 @@ class _$AppConfigMainCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigMain
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? bottomMenu = null,Object? systemNotificationsEnabled = null,Object? sipPresenceEnabled = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bottomMenu = null,Object? systemNotificationsEnabled = null,}) {
   return _then(AppConfigMain(
 bottomMenu: null == bottomMenu ? _self.bottomMenu : bottomMenu // ignore: cast_nullable_to_non_nullable
 as AppConfigBottomMenu,systemNotificationsEnabled: null == systemNotificationsEnabled ? _self.systemNotificationsEnabled : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
-as bool,sipPresenceEnabled: null == sipPresenceEnabled ? _self.sipPresenceEnabled : sipPresenceEnabled // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

@@ -9555,6 +9555,815 @@ class SmsOutboxReadCursorDataCompanion
   }
 }
 
+class $SipSubscriptionsTableTable extends SipSubscriptionsTable
+    with TableInfo<$SipSubscriptionsTableTable, SipSubscriptionData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SipSubscriptionsTableTable(this.attachedDatabase, [this._alias]);
+  @override
+  late final GeneratedColumnWithTypeConverter<SipSubscriptionTypeData, String>
+  type =
+      GeneratedColumn<String>(
+        'type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<SipSubscriptionTypeData>(
+        $SipSubscriptionsTableTable.$convertertype,
+      );
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+    'number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contactUserIdMeta = const VerificationMeta(
+    'contactUserId',
+  );
+  @override
+  late final GeneratedColumn<String> contactUserId = GeneratedColumn<String>(
+    'contact_user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _subscribedAtUsecMeta = const VerificationMeta(
+    'subscribedAtUsec',
+  );
+  @override
+  late final GeneratedColumn<int> subscribedAtUsec = GeneratedColumn<int>(
+    'subscribed_at_usec',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    type,
+    number,
+    contactUserId,
+    subscribedAtUsec,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sip_subscriptions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SipSubscriptionData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('number')) {
+      context.handle(
+        _numberMeta,
+        number.isAcceptableOrUnknown(data['number']!, _numberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_numberMeta);
+    }
+    if (data.containsKey('contact_user_id')) {
+      context.handle(
+        _contactUserIdMeta,
+        contactUserId.isAcceptableOrUnknown(
+          data['contact_user_id']!,
+          _contactUserIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_contactUserIdMeta);
+    }
+    if (data.containsKey('subscribed_at_usec')) {
+      context.handle(
+        _subscribedAtUsecMeta,
+        subscribedAtUsec.isAcceptableOrUnknown(
+          data['subscribed_at_usec']!,
+          _subscribedAtUsecMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_subscribedAtUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {type, number};
+  @override
+  SipSubscriptionData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SipSubscriptionData(
+      type: $SipSubscriptionsTableTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}type'],
+        )!,
+      ),
+      number: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}number'],
+      )!,
+      contactUserId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}contact_user_id'],
+      )!,
+      subscribedAtUsec: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}subscribed_at_usec'],
+      )!,
+    );
+  }
+
+  @override
+  $SipSubscriptionsTableTable createAlias(String alias) {
+    return $SipSubscriptionsTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SipSubscriptionTypeData, String, String>
+  $convertertype = const EnumNameConverter<SipSubscriptionTypeData>(
+    SipSubscriptionTypeData.values,
+  );
+}
+
+class SipSubscriptionData extends DataClass
+    implements Insertable<SipSubscriptionData> {
+  final SipSubscriptionTypeData type;
+  final String number;
+  final String contactUserId;
+  final int subscribedAtUsec;
+  const SipSubscriptionData({
+    required this.type,
+    required this.number,
+    required this.contactUserId,
+    required this.subscribedAtUsec,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    {
+      map['type'] = Variable<String>(
+        $SipSubscriptionsTableTable.$convertertype.toSql(type),
+      );
+    }
+    map['number'] = Variable<String>(number);
+    map['contact_user_id'] = Variable<String>(contactUserId);
+    map['subscribed_at_usec'] = Variable<int>(subscribedAtUsec);
+    return map;
+  }
+
+  SipSubscriptionDataCompanion toCompanion(bool nullToAbsent) {
+    return SipSubscriptionDataCompanion(
+      type: Value(type),
+      number: Value(number),
+      contactUserId: Value(contactUserId),
+      subscribedAtUsec: Value(subscribedAtUsec),
+    );
+  }
+
+  factory SipSubscriptionData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SipSubscriptionData(
+      type: $SipSubscriptionsTableTable.$convertertype.fromJson(
+        serializer.fromJson<String>(json['type']),
+      ),
+      number: serializer.fromJson<String>(json['number']),
+      contactUserId: serializer.fromJson<String>(json['contactUserId']),
+      subscribedAtUsec: serializer.fromJson<int>(json['subscribedAtUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'type': serializer.toJson<String>(
+        $SipSubscriptionsTableTable.$convertertype.toJson(type),
+      ),
+      'number': serializer.toJson<String>(number),
+      'contactUserId': serializer.toJson<String>(contactUserId),
+      'subscribedAtUsec': serializer.toJson<int>(subscribedAtUsec),
+    };
+  }
+
+  SipSubscriptionData copyWith({
+    SipSubscriptionTypeData? type,
+    String? number,
+    String? contactUserId,
+    int? subscribedAtUsec,
+  }) => SipSubscriptionData(
+    type: type ?? this.type,
+    number: number ?? this.number,
+    contactUserId: contactUserId ?? this.contactUserId,
+    subscribedAtUsec: subscribedAtUsec ?? this.subscribedAtUsec,
+  );
+  SipSubscriptionData copyWithCompanion(SipSubscriptionDataCompanion data) {
+    return SipSubscriptionData(
+      type: data.type.present ? data.type.value : this.type,
+      number: data.number.present ? data.number.value : this.number,
+      contactUserId: data.contactUserId.present
+          ? data.contactUserId.value
+          : this.contactUserId,
+      subscribedAtUsec: data.subscribedAtUsec.present
+          ? data.subscribedAtUsec.value
+          : this.subscribedAtUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SipSubscriptionData(')
+          ..write('type: $type, ')
+          ..write('number: $number, ')
+          ..write('contactUserId: $contactUserId, ')
+          ..write('subscribedAtUsec: $subscribedAtUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(type, number, contactUserId, subscribedAtUsec);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SipSubscriptionData &&
+          other.type == this.type &&
+          other.number == this.number &&
+          other.contactUserId == this.contactUserId &&
+          other.subscribedAtUsec == this.subscribedAtUsec);
+}
+
+class SipSubscriptionDataCompanion
+    extends UpdateCompanion<SipSubscriptionData> {
+  final Value<SipSubscriptionTypeData> type;
+  final Value<String> number;
+  final Value<String> contactUserId;
+  final Value<int> subscribedAtUsec;
+  final Value<int> rowid;
+  const SipSubscriptionDataCompanion({
+    this.type = const Value.absent(),
+    this.number = const Value.absent(),
+    this.contactUserId = const Value.absent(),
+    this.subscribedAtUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SipSubscriptionDataCompanion.insert({
+    required SipSubscriptionTypeData type,
+    required String number,
+    required String contactUserId,
+    required int subscribedAtUsec,
+    this.rowid = const Value.absent(),
+  }) : type = Value(type),
+       number = Value(number),
+       contactUserId = Value(contactUserId),
+       subscribedAtUsec = Value(subscribedAtUsec);
+  static Insertable<SipSubscriptionData> custom({
+    Expression<String>? type,
+    Expression<String>? number,
+    Expression<String>? contactUserId,
+    Expression<int>? subscribedAtUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (type != null) 'type': type,
+      if (number != null) 'number': number,
+      if (contactUserId != null) 'contact_user_id': contactUserId,
+      if (subscribedAtUsec != null) 'subscribed_at_usec': subscribedAtUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SipSubscriptionDataCompanion copyWith({
+    Value<SipSubscriptionTypeData>? type,
+    Value<String>? number,
+    Value<String>? contactUserId,
+    Value<int>? subscribedAtUsec,
+    Value<int>? rowid,
+  }) {
+    return SipSubscriptionDataCompanion(
+      type: type ?? this.type,
+      number: number ?? this.number,
+      contactUserId: contactUserId ?? this.contactUserId,
+      subscribedAtUsec: subscribedAtUsec ?? this.subscribedAtUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (type.present) {
+      map['type'] = Variable<String>(
+        $SipSubscriptionsTableTable.$convertertype.toSql(type.value),
+      );
+    }
+    if (number.present) {
+      map['number'] = Variable<String>(number.value);
+    }
+    if (contactUserId.present) {
+      map['contact_user_id'] = Variable<String>(contactUserId.value);
+    }
+    if (subscribedAtUsec.present) {
+      map['subscribed_at_usec'] = Variable<int>(subscribedAtUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SipSubscriptionDataCompanion(')
+          ..write('type: $type, ')
+          ..write('number: $number, ')
+          ..write('contactUserId: $contactUserId, ')
+          ..write('subscribedAtUsec: $subscribedAtUsec, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SipSubscriptionsOutboxTableTable extends SipSubscriptionsOutboxTable
+    with
+        TableInfo<
+          $SipSubscriptionsOutboxTableTable,
+          SipSubscriptionOutboxEntryData
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SipSubscriptionsOutboxTableTable(this.attachedDatabase, [this._alias]);
+  @override
+  late final GeneratedColumnWithTypeConverter<
+    SipSubscriptionOutboxActionData,
+    String
+  >
+  action =
+      GeneratedColumn<String>(
+        'action',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<SipSubscriptionOutboxActionData>(
+        $SipSubscriptionsOutboxTableTable.$converteraction,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<SipSubscriptionTypeData, String>
+  type =
+      GeneratedColumn<String>(
+        'type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<SipSubscriptionTypeData>(
+        $SipSubscriptionsOutboxTableTable.$convertertype,
+      );
+  static const VerificationMeta _numberMeta = const VerificationMeta('number');
+  @override
+  late final GeneratedColumn<String> number = GeneratedColumn<String>(
+    'number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contactUserIdMeta = const VerificationMeta(
+    'contactUserId',
+  );
+  @override
+  late final GeneratedColumn<String> contactUserId = GeneratedColumn<String>(
+    'contact_user_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sendAttemptsMeta = const VerificationMeta(
+    'sendAttempts',
+  );
+  @override
+  late final GeneratedColumn<int> sendAttempts = GeneratedColumn<int>(
+    'send_attempts',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _timestampUsecMeta = const VerificationMeta(
+    'timestampUsec',
+  );
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+    'timestamp_usec',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    action,
+    type,
+    number,
+    contactUserId,
+    sendAttempts,
+    timestampUsec,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sip_subscriptions_outbox';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SipSubscriptionOutboxEntryData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('number')) {
+      context.handle(
+        _numberMeta,
+        number.isAcceptableOrUnknown(data['number']!, _numberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_numberMeta);
+    }
+    if (data.containsKey('contact_user_id')) {
+      context.handle(
+        _contactUserIdMeta,
+        contactUserId.isAcceptableOrUnknown(
+          data['contact_user_id']!,
+          _contactUserIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('send_attempts')) {
+      context.handle(
+        _sendAttemptsMeta,
+        sendAttempts.isAcceptableOrUnknown(
+          data['send_attempts']!,
+          _sendAttemptsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+        _timestampUsecMeta,
+        timestampUsec.isAcceptableOrUnknown(
+          data['timestamp_usec']!,
+          _timestampUsecMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_timestampUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {action, type, number};
+  @override
+  SipSubscriptionOutboxEntryData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SipSubscriptionOutboxEntryData(
+      action: $SipSubscriptionsOutboxTableTable.$converteraction.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}action'],
+        )!,
+      ),
+      type: $SipSubscriptionsOutboxTableTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}type'],
+        )!,
+      ),
+      number: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}number'],
+      )!,
+      contactUserId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}contact_user_id'],
+      ),
+      sendAttempts: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}send_attempts'],
+      )!,
+      timestampUsec: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}timestamp_usec'],
+      )!,
+    );
+  }
+
+  @override
+  $SipSubscriptionsOutboxTableTable createAlias(String alias) {
+    return $SipSubscriptionsOutboxTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SipSubscriptionOutboxActionData, String, String>
+  $converteraction = const EnumNameConverter<SipSubscriptionOutboxActionData>(
+    SipSubscriptionOutboxActionData.values,
+  );
+  static JsonTypeConverter2<SipSubscriptionTypeData, String, String>
+  $convertertype = const EnumNameConverter<SipSubscriptionTypeData>(
+    SipSubscriptionTypeData.values,
+  );
+}
+
+class SipSubscriptionOutboxEntryData extends DataClass
+    implements Insertable<SipSubscriptionOutboxEntryData> {
+  final SipSubscriptionOutboxActionData action;
+  final SipSubscriptionTypeData type;
+  final String number;
+  final String? contactUserId;
+  final int sendAttempts;
+  final int timestampUsec;
+  const SipSubscriptionOutboxEntryData({
+    required this.action,
+    required this.type,
+    required this.number,
+    this.contactUserId,
+    required this.sendAttempts,
+    required this.timestampUsec,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    {
+      map['action'] = Variable<String>(
+        $SipSubscriptionsOutboxTableTable.$converteraction.toSql(action),
+      );
+    }
+    {
+      map['type'] = Variable<String>(
+        $SipSubscriptionsOutboxTableTable.$convertertype.toSql(type),
+      );
+    }
+    map['number'] = Variable<String>(number);
+    if (!nullToAbsent || contactUserId != null) {
+      map['contact_user_id'] = Variable<String>(contactUserId);
+    }
+    map['send_attempts'] = Variable<int>(sendAttempts);
+    map['timestamp_usec'] = Variable<int>(timestampUsec);
+    return map;
+  }
+
+  SipSubscriptionOutboxEntryDataCompanion toCompanion(bool nullToAbsent) {
+    return SipSubscriptionOutboxEntryDataCompanion(
+      action: Value(action),
+      type: Value(type),
+      number: Value(number),
+      contactUserId: contactUserId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contactUserId),
+      sendAttempts: Value(sendAttempts),
+      timestampUsec: Value(timestampUsec),
+    );
+  }
+
+  factory SipSubscriptionOutboxEntryData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SipSubscriptionOutboxEntryData(
+      action: $SipSubscriptionsOutboxTableTable.$converteraction.fromJson(
+        serializer.fromJson<String>(json['action']),
+      ),
+      type: $SipSubscriptionsOutboxTableTable.$convertertype.fromJson(
+        serializer.fromJson<String>(json['type']),
+      ),
+      number: serializer.fromJson<String>(json['number']),
+      contactUserId: serializer.fromJson<String?>(json['contactUserId']),
+      sendAttempts: serializer.fromJson<int>(json['sendAttempts']),
+      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'action': serializer.toJson<String>(
+        $SipSubscriptionsOutboxTableTable.$converteraction.toJson(action),
+      ),
+      'type': serializer.toJson<String>(
+        $SipSubscriptionsOutboxTableTable.$convertertype.toJson(type),
+      ),
+      'number': serializer.toJson<String>(number),
+      'contactUserId': serializer.toJson<String?>(contactUserId),
+      'sendAttempts': serializer.toJson<int>(sendAttempts),
+      'timestampUsec': serializer.toJson<int>(timestampUsec),
+    };
+  }
+
+  SipSubscriptionOutboxEntryData copyWith({
+    SipSubscriptionOutboxActionData? action,
+    SipSubscriptionTypeData? type,
+    String? number,
+    Value<String?> contactUserId = const Value.absent(),
+    int? sendAttempts,
+    int? timestampUsec,
+  }) => SipSubscriptionOutboxEntryData(
+    action: action ?? this.action,
+    type: type ?? this.type,
+    number: number ?? this.number,
+    contactUserId: contactUserId.present
+        ? contactUserId.value
+        : this.contactUserId,
+    sendAttempts: sendAttempts ?? this.sendAttempts,
+    timestampUsec: timestampUsec ?? this.timestampUsec,
+  );
+  SipSubscriptionOutboxEntryData copyWithCompanion(
+    SipSubscriptionOutboxEntryDataCompanion data,
+  ) {
+    return SipSubscriptionOutboxEntryData(
+      action: data.action.present ? data.action.value : this.action,
+      type: data.type.present ? data.type.value : this.type,
+      number: data.number.present ? data.number.value : this.number,
+      contactUserId: data.contactUserId.present
+          ? data.contactUserId.value
+          : this.contactUserId,
+      sendAttempts: data.sendAttempts.present
+          ? data.sendAttempts.value
+          : this.sendAttempts,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SipSubscriptionOutboxEntryData(')
+          ..write('action: $action, ')
+          ..write('type: $type, ')
+          ..write('number: $number, ')
+          ..write('contactUserId: $contactUserId, ')
+          ..write('sendAttempts: $sendAttempts, ')
+          ..write('timestampUsec: $timestampUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    action,
+    type,
+    number,
+    contactUserId,
+    sendAttempts,
+    timestampUsec,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SipSubscriptionOutboxEntryData &&
+          other.action == this.action &&
+          other.type == this.type &&
+          other.number == this.number &&
+          other.contactUserId == this.contactUserId &&
+          other.sendAttempts == this.sendAttempts &&
+          other.timestampUsec == this.timestampUsec);
+}
+
+class SipSubscriptionOutboxEntryDataCompanion
+    extends UpdateCompanion<SipSubscriptionOutboxEntryData> {
+  final Value<SipSubscriptionOutboxActionData> action;
+  final Value<SipSubscriptionTypeData> type;
+  final Value<String> number;
+  final Value<String?> contactUserId;
+  final Value<int> sendAttempts;
+  final Value<int> timestampUsec;
+  final Value<int> rowid;
+  const SipSubscriptionOutboxEntryDataCompanion({
+    this.action = const Value.absent(),
+    this.type = const Value.absent(),
+    this.number = const Value.absent(),
+    this.contactUserId = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SipSubscriptionOutboxEntryDataCompanion.insert({
+    required SipSubscriptionOutboxActionData action,
+    required SipSubscriptionTypeData type,
+    required String number,
+    this.contactUserId = const Value.absent(),
+    this.sendAttempts = const Value.absent(),
+    required int timestampUsec,
+    this.rowid = const Value.absent(),
+  }) : action = Value(action),
+       type = Value(type),
+       number = Value(number),
+       timestampUsec = Value(timestampUsec);
+  static Insertable<SipSubscriptionOutboxEntryData> custom({
+    Expression<String>? action,
+    Expression<String>? type,
+    Expression<String>? number,
+    Expression<String>? contactUserId,
+    Expression<int>? sendAttempts,
+    Expression<int>? timestampUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (action != null) 'action': action,
+      if (type != null) 'type': type,
+      if (number != null) 'number': number,
+      if (contactUserId != null) 'contact_user_id': contactUserId,
+      if (sendAttempts != null) 'send_attempts': sendAttempts,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SipSubscriptionOutboxEntryDataCompanion copyWith({
+    Value<SipSubscriptionOutboxActionData>? action,
+    Value<SipSubscriptionTypeData>? type,
+    Value<String>? number,
+    Value<String?>? contactUserId,
+    Value<int>? sendAttempts,
+    Value<int>? timestampUsec,
+    Value<int>? rowid,
+  }) {
+    return SipSubscriptionOutboxEntryDataCompanion(
+      action: action ?? this.action,
+      type: type ?? this.type,
+      number: number ?? this.number,
+      contactUserId: contactUserId ?? this.contactUserId,
+      sendAttempts: sendAttempts ?? this.sendAttempts,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (action.present) {
+      map['action'] = Variable<String>(
+        $SipSubscriptionsOutboxTableTable.$converteraction.toSql(action.value),
+      );
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(
+        $SipSubscriptionsOutboxTableTable.$convertertype.toSql(type.value),
+      );
+    }
+    if (number.present) {
+      map['number'] = Variable<String>(number.value);
+    }
+    if (contactUserId.present) {
+      map['contact_user_id'] = Variable<String>(contactUserId.value);
+    }
+    if (sendAttempts.present) {
+      map['send_attempts'] = Variable<int>(sendAttempts.value);
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SipSubscriptionOutboxEntryDataCompanion(')
+          ..write('action: $action, ')
+          ..write('type: $type, ')
+          ..write('number: $number, ')
+          ..write('contactUserId: $contactUserId, ')
+          ..write('sendAttempts: $sendAttempts, ')
+          ..write('timestampUsec: $timestampUsec, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $UserSmsNumbersTableTable extends UserSmsNumbersTable
     with TableInfo<$UserSmsNumbersTableTable, UserSmsNumberData> {
   @override
@@ -13852,6 +14661,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $SmsOutboxMessageDeleteTableTable(this);
   late final $SmsOutboxReadCursorsTableTable smsOutboxReadCursorsTable =
       $SmsOutboxReadCursorsTableTable(this);
+  late final $SipSubscriptionsTableTable sipSubscriptionsTable =
+      $SipSubscriptionsTableTable(this);
+  late final $SipSubscriptionsOutboxTableTable sipSubscriptionsOutboxTable =
+      $SipSubscriptionsOutboxTableTable(this);
   late final $UserSmsNumbersTableTable userSmsNumbersTable =
       $UserSmsNumbersTableTable(this);
   late final $ActiveMessageNotificationsTableTable
@@ -13882,6 +14695,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final ChatsDao chatsDao = ChatsDao(this as AppDatabase);
   late final SmsDao smsDao = SmsDao(this as AppDatabase);
+  late final SipSubscriptionsDao sipSubscriptionsDao = SipSubscriptionsDao(
+    this as AppDatabase,
+  );
   late final ActiveMessageNotificationsDao activeMessageNotificationsDao =
       ActiveMessageNotificationsDao(this as AppDatabase);
   late final VoicemailDao voicemailDao = VoicemailDao(this as AppDatabase);
@@ -13920,6 +14736,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     smsOutboxMessagesTable,
     smsOutboxMessageDeleteTable,
     smsOutboxReadCursorsTable,
+    sipSubscriptionsTable,
+    sipSubscriptionsOutboxTable,
     userSmsNumbersTable,
     activeMessageNotificationsTable,
     voicemailTable,
@@ -22935,6 +23753,471 @@ typedef $$SmsOutboxReadCursorsTableTableProcessedTableManager =
       SmsOutboxReadCursorData,
       PrefetchHooks Function({bool conversationId})
     >;
+typedef $$SipSubscriptionsTableTableCreateCompanionBuilder =
+    SipSubscriptionDataCompanion Function({
+      required SipSubscriptionTypeData type,
+      required String number,
+      required String contactUserId,
+      required int subscribedAtUsec,
+      Value<int> rowid,
+    });
+typedef $$SipSubscriptionsTableTableUpdateCompanionBuilder =
+    SipSubscriptionDataCompanion Function({
+      Value<SipSubscriptionTypeData> type,
+      Value<String> number,
+      Value<String> contactUserId,
+      Value<int> subscribedAtUsec,
+      Value<int> rowid,
+    });
+
+class $$SipSubscriptionsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SipSubscriptionsTableTable> {
+  $$SipSubscriptionsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnWithTypeConverterFilters<
+    SipSubscriptionTypeData,
+    SipSubscriptionTypeData,
+    String
+  >
+  get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contactUserId => $composableBuilder(
+    column: $table.contactUserId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get subscribedAtUsec => $composableBuilder(
+    column: $table.subscribedAtUsec,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SipSubscriptionsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SipSubscriptionsTableTable> {
+  $$SipSubscriptionsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contactUserId => $composableBuilder(
+    column: $table.contactUserId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get subscribedAtUsec => $composableBuilder(
+    column: $table.subscribedAtUsec,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SipSubscriptionsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SipSubscriptionsTableTable> {
+  $$SipSubscriptionsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumnWithTypeConverter<SipSubscriptionTypeData, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<String> get contactUserId => $composableBuilder(
+    column: $table.contactUserId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get subscribedAtUsec => $composableBuilder(
+    column: $table.subscribedAtUsec,
+    builder: (column) => column,
+  );
+}
+
+class $$SipSubscriptionsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SipSubscriptionsTableTable,
+          SipSubscriptionData,
+          $$SipSubscriptionsTableTableFilterComposer,
+          $$SipSubscriptionsTableTableOrderingComposer,
+          $$SipSubscriptionsTableTableAnnotationComposer,
+          $$SipSubscriptionsTableTableCreateCompanionBuilder,
+          $$SipSubscriptionsTableTableUpdateCompanionBuilder,
+          (
+            SipSubscriptionData,
+            BaseReferences<
+              _$AppDatabase,
+              $SipSubscriptionsTableTable,
+              SipSubscriptionData
+            >,
+          ),
+          SipSubscriptionData,
+          PrefetchHooks Function()
+        > {
+  $$SipSubscriptionsTableTableTableManager(
+    _$AppDatabase db,
+    $SipSubscriptionsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SipSubscriptionsTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$SipSubscriptionsTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$SipSubscriptionsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<SipSubscriptionTypeData> type = const Value.absent(),
+                Value<String> number = const Value.absent(),
+                Value<String> contactUserId = const Value.absent(),
+                Value<int> subscribedAtUsec = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SipSubscriptionDataCompanion(
+                type: type,
+                number: number,
+                contactUserId: contactUserId,
+                subscribedAtUsec: subscribedAtUsec,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required SipSubscriptionTypeData type,
+                required String number,
+                required String contactUserId,
+                required int subscribedAtUsec,
+                Value<int> rowid = const Value.absent(),
+              }) => SipSubscriptionDataCompanion.insert(
+                type: type,
+                number: number,
+                contactUserId: contactUserId,
+                subscribedAtUsec: subscribedAtUsec,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SipSubscriptionsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SipSubscriptionsTableTable,
+      SipSubscriptionData,
+      $$SipSubscriptionsTableTableFilterComposer,
+      $$SipSubscriptionsTableTableOrderingComposer,
+      $$SipSubscriptionsTableTableAnnotationComposer,
+      $$SipSubscriptionsTableTableCreateCompanionBuilder,
+      $$SipSubscriptionsTableTableUpdateCompanionBuilder,
+      (
+        SipSubscriptionData,
+        BaseReferences<
+          _$AppDatabase,
+          $SipSubscriptionsTableTable,
+          SipSubscriptionData
+        >,
+      ),
+      SipSubscriptionData,
+      PrefetchHooks Function()
+    >;
+typedef $$SipSubscriptionsOutboxTableTableCreateCompanionBuilder =
+    SipSubscriptionOutboxEntryDataCompanion Function({
+      required SipSubscriptionOutboxActionData action,
+      required SipSubscriptionTypeData type,
+      required String number,
+      Value<String?> contactUserId,
+      Value<int> sendAttempts,
+      required int timestampUsec,
+      Value<int> rowid,
+    });
+typedef $$SipSubscriptionsOutboxTableTableUpdateCompanionBuilder =
+    SipSubscriptionOutboxEntryDataCompanion Function({
+      Value<SipSubscriptionOutboxActionData> action,
+      Value<SipSubscriptionTypeData> type,
+      Value<String> number,
+      Value<String?> contactUserId,
+      Value<int> sendAttempts,
+      Value<int> timestampUsec,
+      Value<int> rowid,
+    });
+
+class $$SipSubscriptionsOutboxTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SipSubscriptionsOutboxTableTable> {
+  $$SipSubscriptionsOutboxTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnWithTypeConverterFilters<
+    SipSubscriptionOutboxActionData,
+    SipSubscriptionOutboxActionData,
+    String
+  >
+  get action => $composableBuilder(
+    column: $table.action,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    SipSubscriptionTypeData,
+    SipSubscriptionTypeData,
+    String
+  >
+  get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contactUserId => $composableBuilder(
+    column: $table.contactUserId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sendAttempts => $composableBuilder(
+    column: $table.sendAttempts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SipSubscriptionsOutboxTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SipSubscriptionsOutboxTableTable> {
+  $$SipSubscriptionsOutboxTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get action => $composableBuilder(
+    column: $table.action,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get number => $composableBuilder(
+    column: $table.number,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contactUserId => $composableBuilder(
+    column: $table.contactUserId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sendAttempts => $composableBuilder(
+    column: $table.sendAttempts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SipSubscriptionsOutboxTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SipSubscriptionsOutboxTableTable> {
+  $$SipSubscriptionsOutboxTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumnWithTypeConverter<SipSubscriptionOutboxActionData, String>
+  get action =>
+      $composableBuilder(column: $table.action, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SipSubscriptionTypeData, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get number =>
+      $composableBuilder(column: $table.number, builder: (column) => column);
+
+  GeneratedColumn<String> get contactUserId => $composableBuilder(
+    column: $table.contactUserId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get sendAttempts => $composableBuilder(
+    column: $table.sendAttempts,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => column,
+  );
+}
+
+class $$SipSubscriptionsOutboxTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SipSubscriptionsOutboxTableTable,
+          SipSubscriptionOutboxEntryData,
+          $$SipSubscriptionsOutboxTableTableFilterComposer,
+          $$SipSubscriptionsOutboxTableTableOrderingComposer,
+          $$SipSubscriptionsOutboxTableTableAnnotationComposer,
+          $$SipSubscriptionsOutboxTableTableCreateCompanionBuilder,
+          $$SipSubscriptionsOutboxTableTableUpdateCompanionBuilder,
+          (
+            SipSubscriptionOutboxEntryData,
+            BaseReferences<
+              _$AppDatabase,
+              $SipSubscriptionsOutboxTableTable,
+              SipSubscriptionOutboxEntryData
+            >,
+          ),
+          SipSubscriptionOutboxEntryData,
+          PrefetchHooks Function()
+        > {
+  $$SipSubscriptionsOutboxTableTableTableManager(
+    _$AppDatabase db,
+    $SipSubscriptionsOutboxTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SipSubscriptionsOutboxTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$SipSubscriptionsOutboxTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$SipSubscriptionsOutboxTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<SipSubscriptionOutboxActionData> action =
+                    const Value.absent(),
+                Value<SipSubscriptionTypeData> type = const Value.absent(),
+                Value<String> number = const Value.absent(),
+                Value<String?> contactUserId = const Value.absent(),
+                Value<int> sendAttempts = const Value.absent(),
+                Value<int> timestampUsec = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SipSubscriptionOutboxEntryDataCompanion(
+                action: action,
+                type: type,
+                number: number,
+                contactUserId: contactUserId,
+                sendAttempts: sendAttempts,
+                timestampUsec: timestampUsec,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required SipSubscriptionOutboxActionData action,
+                required SipSubscriptionTypeData type,
+                required String number,
+                Value<String?> contactUserId = const Value.absent(),
+                Value<int> sendAttempts = const Value.absent(),
+                required int timestampUsec,
+                Value<int> rowid = const Value.absent(),
+              }) => SipSubscriptionOutboxEntryDataCompanion.insert(
+                action: action,
+                type: type,
+                number: number,
+                contactUserId: contactUserId,
+                sendAttempts: sendAttempts,
+                timestampUsec: timestampUsec,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SipSubscriptionsOutboxTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SipSubscriptionsOutboxTableTable,
+      SipSubscriptionOutboxEntryData,
+      $$SipSubscriptionsOutboxTableTableFilterComposer,
+      $$SipSubscriptionsOutboxTableTableOrderingComposer,
+      $$SipSubscriptionsOutboxTableTableAnnotationComposer,
+      $$SipSubscriptionsOutboxTableTableCreateCompanionBuilder,
+      $$SipSubscriptionsOutboxTableTableUpdateCompanionBuilder,
+      (
+        SipSubscriptionOutboxEntryData,
+        BaseReferences<
+          _$AppDatabase,
+          $SipSubscriptionsOutboxTableTable,
+          SipSubscriptionOutboxEntryData
+        >,
+      ),
+      SipSubscriptionOutboxEntryData,
+      PrefetchHooks Function()
+    >;
 typedef $$UserSmsNumbersTableTableCreateCompanionBuilder =
     UserSmsNumberDataCompanion Function({
       required String phoneNumber,
@@ -25478,6 +26761,14 @@ class $AppDatabaseManager {
       $$SmsOutboxReadCursorsTableTableTableManager(
         _db,
         _db.smsOutboxReadCursorsTable,
+      );
+  $$SipSubscriptionsTableTableTableManager get sipSubscriptionsTable =>
+      $$SipSubscriptionsTableTableTableManager(_db, _db.sipSubscriptionsTable);
+  $$SipSubscriptionsOutboxTableTableTableManager
+  get sipSubscriptionsOutboxTable =>
+      $$SipSubscriptionsOutboxTableTableTableManager(
+        _db,
+        _db.sipSubscriptionsOutboxTable,
       );
   $$UserSmsNumbersTableTableTableManager get userSmsNumbersTable =>
       $$UserSmsNumbersTableTableTableManager(_db, _db.userSmsNumbersTable);

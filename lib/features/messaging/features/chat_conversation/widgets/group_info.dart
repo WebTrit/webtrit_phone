@@ -51,7 +51,9 @@ class _GroupChatInfoState extends State<GroupChatInfo> {
     final result = await showDialog<Contact>(
       context: context,
       builder: (_) => PresenceViewParams(
-        viewSource: PresenceViewParams.of(context).viewSource,
+        hybridPresenceSupport: PresenceViewParams.of(context).hybridPresenceSupport,
+        blfViaSipSupport: PresenceViewParams.of(context).blfViaSipSupport,
+        presenceViaSipSupport: PresenceViewParams.of(context).presenceViaSipSupport,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
           child: Dialog(

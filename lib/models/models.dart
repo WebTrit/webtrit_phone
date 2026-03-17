@@ -42,6 +42,7 @@ export 'rtp_codec_profile.dart';
 export 'session_status.dart';
 export 'settings_flavor.dart';
 export 'settings_sync_metadata.dart';
+export 'sip_subscriptions/sip_subscriptions.dart';
 export 'system_info/system_info.dart';
 export 'system_notification.dart';
 export 'system_notification_event.dart';

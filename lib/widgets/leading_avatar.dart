@@ -115,7 +115,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final presenceSource = PresenceViewParams.of(context).viewSource;
+    final presenceParams = PresenceViewParams.of(context);
 
     return Container(
       width: _diameter,
@@ -135,9 +135,9 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               child: _buildAvatarContent(_diameter, _style),
             ),
           ),
-          if (presenceSource == PresenceViewSource.contactInfo && widget.registered != null)
+          if (!presenceParams.hybridPresenceSupport && widget.registered != null)
             Positioned.fromRect(rect: _registeredRect, child: _registeredIndicator(_style)),
-          if (presenceSource == PresenceViewSource.sipPresence && widget.presenceInfo != null)
+          if (presenceParams.hybridPresenceSupport && widget.presenceInfo != null)
             Positioned.fromRect(
               rect: _presenceRect,
               child: _buildPresenceIndicator(_style, widget.presenceInfo!, widget.dialogInfo!),

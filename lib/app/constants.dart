@@ -51,6 +51,7 @@ const kVoicemailFeatureFlag = 'voicemail';
 const kSystemNotificationsFeatureFlag = 'notifications';
 const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
 const kSipPresenceFeatureFlag = 'sipPresence';
+const kSipDialogsFeatureFlag = 'sipDialogs';
 
 const kSystemNotificationsTask = 'systemNotificationsTask';
 const kSystemNotificationsTaskId = 'systemNotificationsTask-id';

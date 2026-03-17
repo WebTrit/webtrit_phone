@@ -10,5 +10,7 @@ export 'favorites_mapper.dart';
 export 'recents_mapper.dart';
 export 'sms_drift_mapper.dart';
 export 'sms_outbox_drift_mapper.dart';
+export 'sip_subscription_outbox_action_drift_mapper.dart';
+export 'sip_subscriptions_drift_mapper.dart';
 export 'voicemail_mapper.dart';
 export 'presence_info_drift_mapper.dart';

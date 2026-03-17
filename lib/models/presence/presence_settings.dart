@@ -23,6 +23,10 @@ class PresenceSettings extends Equatable {
   final PresenceActivity? activity;
   final bool dndMode;
 
+  bool isBlank() {
+    return this == PresenceSettings.blank(device: device);
+  }
+
   factory PresenceSettings.blank({required String device}) {
     return PresenceSettings(
       available: true,

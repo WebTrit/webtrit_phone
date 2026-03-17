@@ -87,8 +87,10 @@ class ContactsRepository
     }
   }
 
-  Stream<Contact?> watchContact(ContactId contactId) {
-    return _appDatabase.contactsDao.watchContact(contactId).map((data) {
+  Stream<Contact?> watchContact(ContactId contactId, {bool includeSipSubscriptions = false}) {
+    return _appDatabase.contactsDao.watchContact(contactId, includeSipSubscriptions: includeSipSubscriptions).map((
+      data,
+    ) {
       if (data == null) return null;
       return contactFromDrift(
         data.contact,
@@ -97,6 +99,7 @@ class ContactsRepository
         favorites: data.favorites,
         presenceInfo: data.presenceInfo,
         dialogInfo: data.dialogInfo,
+        sipSubscriptions: data.sipSubscriptions,
       );
     });
   }

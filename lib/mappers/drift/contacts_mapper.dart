@@ -6,6 +6,7 @@ import 'package:webtrit_phone/models/contact_phone.dart';
 import 'package:webtrit_phone/models/dialog_info.dart';
 import 'package:webtrit_phone/models/presence/presence_info.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/models/sip_subscriptions/sip_subscription.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'dialog_info_drift_mapper.dart';
@@ -19,6 +20,7 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper, DialogInfoDriftMapper {
     List<FavoriteV2Data> favorites = const [],
     List<PresenceInfoData> presenceInfo = const [],
     List<DialogInfoData> dialogInfo = const [],
+    List<SipSubscriptionData> sipSubscriptions = const [],
   }) {
     final email = emails.firstOrNull?.address;
     final gravatarUrl = gravatarThumbnailUrl(email);
@@ -40,6 +42,7 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper, DialogInfoDriftMapper {
       emails: contactEmailsFromDrift(emails).toList(),
       presenceInfo: contactPresenceInfosFromDrift(presenceInfo).toList(),
       dialogInfo: contactDialogInfosFromDrift(dialogInfo).toList(),
+      sipSubscriptions: contactSipSubscriptionsFromDrift(sipSubscriptions).toList(),
     );
   }
 
@@ -72,5 +75,18 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper, DialogInfoDriftMapper {
 
   ContactEmail contactEmailFromDrift(ContactEmailData data) {
     return ContactEmail(id: data.id, address: data.address, label: data.label);
+  }
+
+  Iterable<SipSubscription> contactSipSubscriptionsFromDrift(List<SipSubscriptionData> sipSubscriptions) {
+    return sipSubscriptions.map(sipSubscriptionFromDrift);
+  }
+
+  SipSubscription sipSubscriptionFromDrift(SipSubscriptionData data) {
+    return SipSubscription(
+      type: SipSubscriptionType.values.byName(data.type.name),
+      number: data.number,
+      contactUserId: data.contactUserId,
+      subscribedAt: DateTime.fromMicrosecondsSinceEpoch(data.subscribedAtUsec),
+    );
   }
 }

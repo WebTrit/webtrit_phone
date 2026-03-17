@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:webtrit_phone/app/constants.dart';
 
 class AdapterInfo with EquatableMixin {
   AdapterInfo({this.name, this.version, this.supported, this.custom});
@@ -13,4 +14,8 @@ class AdapterInfo with EquatableMixin {
 
   @override
   bool get stringify => true;
+
+  bool get supportsSipPresence => supported?.contains(kSipPresenceFeatureFlag) ?? false;
+
+  bool get supportsSipDialogs => supported?.contains(kSipDialogsFeatureFlag) ?? false;
 }

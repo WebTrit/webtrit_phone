@@ -257,6 +257,22 @@
   "@contacts_Text_blingTransferInitiated": {},
   "contacts_DialogsInfoView_title": "Інформація про дзвінки (BLF):",
   "@contacts_DialogsInfoView_title": {},
+  "contacts_ContactTile_inCall": "На дроті з: {destination}",
+  "@contacts_ContactTile_inCall": {
+    "placeholders": {
+      "destination": {}
+    }
+  },
+  "contacts_ContactScreen_options": "Параметри:",
+  "@contacts_ContactScreen_options": {},
+  "contacts_ContactScreen_presenceViaSip": "Підписатись на статус юзера через SIP (Presence)",
+  "@contacts_ContactScreen_presenceViaSip": {},
+  "contacts_ContactScreen_presenceViaSip_tooltip": "Окрім прямого обміну даними (додаток-до-додатку), підписка через функцію SIP-Presence дозволяє отримувати інформацію про статус від інших користувацьких агентів (настільні телефони, окремі софтфони тощо). Рекомендується вмикати лише якщо контакт використовує застарілі клієнти і ви хочете бачити його статус на всіх пристроях.",
+  "@contacts_ContactScreen_presenceViaSip_tooltip": {},
+  "contacts_ContactScreen_dialogsViaSipBlf": "Підписатись на статус викликів через SIP (BLF/Dialogs)",
+  "@contacts_ContactScreen_dialogsViaSipBlf": {},
+  "contacts_ContactScreen_dialogsViaSipBlf_tooltip": "Окрім прямого обміну даними (додаток-до-додатку), підписка через функцію SIP-Dialogs дозволяє отримувати інформацію про стан викликів від інших користувацьких агентів (настільні телефони, окремі софтфони тощо). Рекомендується вмикати лише якщо контакт використовує застарілі клієнти і ви хочете бачити стан його викликів на всіх пристроях.",
+  "@contacts_ContactScreen_dialogsViaSipBlf_tooltip": {},
   "copyToClipboard_floatingSnackBar": "Текст скопійовано",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Скопіювати в буфер обміну",
@@ -1184,6 +1200,18 @@
   "@presence_infoView_title": {},
   "presence_infoView_updated": "Оновлено:",
   "@presence_infoView_updated": {},
+  "presence_infoView_source": "Джерело: {source}",
+  "@presence_infoView_source": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "presence_infoView_source_direct": "напряму",
+  "@presence_infoView_source_direct": {},
+  "presence_infoView_source_sip": "sip",
+  "@presence_infoView_source_sip": {},
+  "presence_infoView_source_sipAndDirect": "sip і напряму",
+  "@presence_infoView_source_sipAndDirect": {},
   "presence_preset_absent_name": "Відсутній",
   "@presence_preset_absent_name": {},
   "presence_preset_absent_note": "Відсутній",
@@ -1248,6 +1276,8 @@
   "@presence_settings_note_tooltip": {},
   "presence_settings_presets_label": "Виберіть пресет",
   "@presence_settings_presets_label": {},
+  "presence_settings_presets_label_custom": "Ручна конфігурація",
+  "@presence_settings_presets_label_custom": {},
   "presence_settings_presets_title": "Пресети:",
   "@presence_settings_presets_title": {},
   "presence_settings_statusIcon_none": "Немає",

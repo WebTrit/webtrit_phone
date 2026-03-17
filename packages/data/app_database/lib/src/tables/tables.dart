@@ -25,6 +25,8 @@ export 'sms_messages_table.dart';
 export 'sms_outbox_message_delete_table.dart';
 export 'sms_outbox_messages_table.dart';
 export 'sms_outbox_read_cursors_table.dart';
+export 'sip_subscriptions_outbox_table.dart';
+export 'sip_subscriptions_table.dart';
 export 'system_notifications_outbox_table.dart';
 export 'system_notifications_table.dart';
 export 'user_sms_numbers_table.dart';
