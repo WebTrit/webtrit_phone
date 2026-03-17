@@ -224,6 +224,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                             ),
                                             Tooltip(
                                               message: l10n.contacts_ContactScreen_presenceViaSip_tooltip,
+                                              triggerMode: TooltipTriggerMode.tap,
+                                              showDuration: const Duration(seconds: 10),
+                                              textStyle: themeData.textTheme.labelSmall?.copyWith(
+                                                color: colorScheme.onSecondary,
+                                              ),
                                               child: const Icon(Icons.info_outline),
                                             ),
                                           ],
@@ -266,6 +271,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                             ),
                                             Tooltip(
                                               message: l10n.contacts_ContactScreen_dialogsViaSipBlf_tooltip,
+                                              triggerMode: TooltipTriggerMode.tap,
+                                              showDuration: const Duration(seconds: 10),
+                                              textStyle: themeData.textTheme.labelSmall?.copyWith(
+                                                color: colorScheme.onSecondary,
+                                              ),
                                               child: const Icon(Icons.info_outline),
                                             ),
                                           ],
