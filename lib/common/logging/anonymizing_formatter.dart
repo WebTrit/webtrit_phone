@@ -26,7 +26,7 @@ enum AnonymizationType {
 }
 
 class AnonymizingFormatter extends ColorFormatter {
-  final List<AnonymizationType> anonymizationTypes;
+  List<AnonymizationType> anonymizationTypes;
 
   AnonymizingFormatter({
     LogRecordFormatter wrappedFormatter = const DefaultLogRecordFormatter(),

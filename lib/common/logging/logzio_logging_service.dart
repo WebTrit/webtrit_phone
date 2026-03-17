@@ -37,22 +37,28 @@ class LogzioLoggingService implements RemoteLoggingService {
 
   FilteredLogzIoAppender? _filteredLogzIoAppender;
 
+  AnonymizingFormatter? _remoteFormatter;
+
   @override
   void initialize(Map<String, String> labels) {
     _logger.finest('Initializing with url: $url, token: $token, bufferSize: $bufferSize labels: $labels');
-    final remoteFormatter = AnonymizingFormatter(
+    _remoteFormatter = AnonymizingFormatter(
       anonymizationTypes: AnonymizationType.full,
       wrappedFormatter: const RemoteFormatter(),
     );
 
     _filteredLogzIoAppender = FilteredLogzIoAppender(
-      formatter: remoteFormatter,
+      formatter: _remoteFormatter!,
       url: url,
       apiToken: token,
       bufferSize: bufferSize,
       labels: labels,
       minLevel: minLevel,
     )..attachToLogger(Logger.root);
+  }
+
+  void setAnonymizationEnabled(bool enabled) {
+    _remoteFormatter?.anonymizationTypes = enabled ? AnonymizationType.full : [];
   }
 
   @override

@@ -40,6 +40,7 @@ SupportedLoggingConfig _$SupportedLoggingConfigFromJson(
 ) => SupportedLoggingConfig(
   logLevel: json['logLevel'] as String? ?? 'INFO',
   checkIntervalSec: (json['checkIntervalSec'] as num?)?.toInt() ?? 15,
+  anonymizationEnabled: json['anonymizationEnabled'] as bool? ?? true,
   $type: json['type'] as String?,
 );
 
@@ -48,6 +49,7 @@ Map<String, dynamic> _$SupportedLoggingConfigToJson(
 ) => <String, dynamic>{
   'logLevel': instance.logLevel,
   'checkIntervalSec': instance.checkIntervalSec,
+  'anonymizationEnabled': instance.anonymizationEnabled,
   'type': instance.$type,
 };
 

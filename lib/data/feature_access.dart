@@ -616,6 +616,7 @@ abstract final class LoggingMapper {
       logLevel: logLevel,
       monitorCheckInterval: monitorCheckInterval,
       remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+      anonymizationEnabled: overrides.isLogAnonymizationEnabled ?? loggingFeature?.anonymizationEnabled ?? true,
     );
   }
 
@@ -624,6 +625,7 @@ abstract final class LoggingMapper {
       logLevel: overrides.logLevel ?? _defaultLogLevel,
       monitorCheckInterval: overrides.monitorCheckInterval ?? _defaultInterval,
       remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+      anonymizationEnabled: overrides.isLogAnonymizationEnabled ?? true,
     );
   }
 }

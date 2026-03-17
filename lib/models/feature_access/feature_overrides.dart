@@ -12,6 +12,7 @@ class FeatureOverrides extends Equatable {
     this.monitorCheckInterval,
     this.logLevel,
     this.remoteLoggingEnabled,
+    this.isLogAnonymizationEnabled,
   });
 
   final bool? isVideoCallEnabled;
@@ -21,6 +22,7 @@ class FeatureOverrides extends Equatable {
   final Duration? monitorCheckInterval;
   final Level? logLevel;
   final bool? remoteLoggingEnabled;
+  final bool? isLogAnonymizationEnabled;
 
   @override
   List<Object?> get props => [
@@ -42,6 +44,7 @@ abstract final class FeatureOverridesFactory {
   static const _kMonitorCheckIntervalKey = 'feature_monitor_check_interval_sec';
   static const _kLogLevelKey = 'feature_log_level';
   static const _kRemoteLoggingEnabledKey = 'firebaseRemoteLogging';
+  static const _kLogAnonymizationEnabledKey = 'feature_log_anonymization_enabled';
 
   static FeatureOverrides create(RemoteConfigSnapshot snapshot) {
     final monitorIntervalSec = int.tryParse(snapshot.getString(_kMonitorCheckIntervalKey) ?? '');
@@ -61,6 +64,7 @@ abstract final class FeatureOverridesFactory {
       monitorCheckInterval: monitorCheckInterval,
       logLevel: logLevel,
       remoteLoggingEnabled: snapshot.getBool(_kRemoteLoggingEnabledKey),
+      isLogAnonymizationEnabled: snapshot.getBool(_kLogAnonymizationEnabledKey),
     );
   }
 }

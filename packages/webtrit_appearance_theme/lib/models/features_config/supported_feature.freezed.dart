@@ -166,12 +166,12 @@ return sipPresence(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  sipPresence,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  sipPresence,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
-return loggingConfig(_that.logLevel,_that.checkIntervalSec);case SupportedSystemNotifications() when systemNotifications != null:
+return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that.enabled);case SupportedSipPresence() when sipPresence != null:
 return sipPresence(_that.enabled);case _:
   return orElse();
@@ -191,12 +191,12 @@ return sipPresence(_that.enabled);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  sipPresence,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  sipPresence,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that.mode);case SupportedVideoCall():
 return videoCall(_that.enabled);case SupportedLoggingConfig():
-return loggingConfig(_that.logLevel,_that.checkIntervalSec);case SupportedSystemNotifications():
+return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications():
 return systemNotifications(_that.enabled);case SupportedSipPresence():
 return sipPresence(_that.enabled);}
 }
@@ -212,12 +212,12 @@ return sipPresence(_that.enabled);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  sipPresence,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  sipPresence,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
-return loggingConfig(_that.logLevel,_that.checkIntervalSec);case SupportedSystemNotifications() when systemNotifications != null:
+return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that.enabled);case SupportedSipPresence() when sipPresence != null:
 return sipPresence(_that.enabled);case _:
   return null;
@@ -377,11 +377,12 @@ as bool,
 @JsonSerializable()
 
 class SupportedLoggingConfig implements SupportedFeature {
-  const SupportedLoggingConfig({this.logLevel = 'INFO', this.checkIntervalSec = 15, final  String? $type}): $type = $type ?? 'loggingConfig';
+  const SupportedLoggingConfig({this.logLevel = 'INFO', this.checkIntervalSec = 15, this.anonymizationEnabled = true, final  String? $type}): $type = $type ?? 'loggingConfig';
   factory SupportedLoggingConfig.fromJson(Map<String, dynamic> json) => _$SupportedLoggingConfigFromJson(json);
 
 @JsonKey() final  String logLevel;
 @JsonKey() final  int checkIntervalSec;
+@JsonKey() final  bool anonymizationEnabled;
 
 @JsonKey(name: 'type')
 final String $type;
@@ -400,16 +401,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedLoggingConfig&&(identical(other.logLevel, logLevel) || other.logLevel == logLevel)&&(identical(other.checkIntervalSec, checkIntervalSec) || other.checkIntervalSec == checkIntervalSec));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedLoggingConfig&&(identical(other.logLevel, logLevel) || other.logLevel == logLevel)&&(identical(other.checkIntervalSec, checkIntervalSec) || other.checkIntervalSec == checkIntervalSec)&&(identical(other.anonymizationEnabled, anonymizationEnabled) || other.anonymizationEnabled == anonymizationEnabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,logLevel,checkIntervalSec);
+int get hashCode => Object.hash(runtimeType,logLevel,checkIntervalSec,anonymizationEnabled);
 
 @override
 String toString() {
-  return 'SupportedFeature.loggingConfig(logLevel: $logLevel, checkIntervalSec: $checkIntervalSec)';
+  return 'SupportedFeature.loggingConfig(logLevel: $logLevel, checkIntervalSec: $checkIntervalSec, anonymizationEnabled: $anonymizationEnabled)';
 }
 
 
@@ -420,7 +421,7 @@ abstract mixin class $SupportedLoggingConfigCopyWith<$Res> implements $Supported
   factory $SupportedLoggingConfigCopyWith(SupportedLoggingConfig value, $Res Function(SupportedLoggingConfig) _then) = _$SupportedLoggingConfigCopyWithImpl;
 @useResult
 $Res call({
- String logLevel, int checkIntervalSec
+ String logLevel, int checkIntervalSec, bool anonymizationEnabled
 });
 
 
@@ -437,11 +438,12 @@ class _$SupportedLoggingConfigCopyWithImpl<$Res>
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? logLevel = null,Object? checkIntervalSec = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? logLevel = null,Object? checkIntervalSec = null,Object? anonymizationEnabled = null,}) {
   return _then(SupportedLoggingConfig(
 logLevel: null == logLevel ? _self.logLevel : logLevel // ignore: cast_nullable_to_non_nullable
 as String,checkIntervalSec: null == checkIntervalSec ? _self.checkIntervalSec : checkIntervalSec // ignore: cast_nullable_to_non_nullable
-as int,
+as int,anonymizationEnabled: null == anonymizationEnabled ? _self.anonymizationEnabled : anonymizationEnabled // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
