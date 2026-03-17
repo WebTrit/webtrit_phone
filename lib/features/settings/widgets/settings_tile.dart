@@ -16,6 +16,8 @@ class SettingsTile extends StatelessWidget {
     this.trailing,
     this.textStyle,
     this.showSeparator = true,
+    this.enabled = true,
+    this.opacity = 1.0,
     super.key,
   });
 
@@ -26,14 +28,20 @@ class SettingsTile extends StatelessWidget {
   final TextStyle? textStyle;
   final bool showSeparator;
   final VoidCallback onTap;
+  final bool enabled;
+  final double opacity;
 
   @override
   Widget build(BuildContext context) {
-    final tile = ListTile(
-      leading: Icon(icon, color: iconColor),
-      title: Text(title, style: textStyle),
-      trailing: trailing,
-      onTap: onTap,
+    final tile = Opacity(
+      opacity: opacity,
+      child: ListTile(
+        leading: Icon(icon, color: iconColor),
+        title: Text(title, style: textStyle),
+        trailing: trailing,
+        onTap: onTap,
+        enabled: enabled,
+      ),
     );
 
     if (!showSeparator) return tile;

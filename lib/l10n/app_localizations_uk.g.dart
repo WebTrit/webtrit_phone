@@ -2358,6 +2358,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Label_retry => 'Спробувати ще раз';
 
   @override
+  String get voicemail_Snackbar_notConfigured => 'Зверніться до адміністратора, щоб активувати голосову пошту.';
+
+  @override
   String get voicemail_Title_notSupported => 'Функція не підтримується';
 
   @override

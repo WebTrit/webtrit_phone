@@ -47,6 +47,9 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     } on EndpointNotSupportedException catch (e) {
       final error = DefaultErrorNotification(e);
       _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
+    } on VoicemailNotConfiguredException catch (e) {
+      final error = DefaultErrorNotification(e);
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
     } catch (e) {
       final error = DefaultErrorNotification(e);
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded, error: error));

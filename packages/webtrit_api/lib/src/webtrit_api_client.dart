@@ -181,6 +181,15 @@ class WebtritApiClient {
             );
           }
 
+          if (error?.code == 'voicemail_not_configured') {
+            throw VoicemailNotConfiguredException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              // recognizedNotConfiguredCodes: ,
+            );
+          }
+
           throw RequestFailure(
             url: tenantUrl,
             statusCode: httpResponse.statusCode,

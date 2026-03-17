@@ -35,6 +35,15 @@ class EndpointNotSupportedException extends RequestFailure {
   }) : super();
 }
 
+class VoicemailNotConfiguredException extends RequestFailure {
+  VoicemailNotConfiguredException({
+    required super.url,
+    required super.requestId,
+    required super.statusCode,
+    // required List<String> recognizedNotConfiguredCodes,
+  }) : super();
+}
+
 class UserNotFoundException extends RequestFailure {
   UserNotFoundException({required super.url, required super.requestId, required super.statusCode});
 

@@ -4332,6 +4332,12 @@ abstract class AppLocalizations {
   /// **'Try again'**
   String get voicemail_Label_retry;
 
+  /// No description provided for @voicemail_Snackbar_notConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact your administrator to activate voicemail'**
+  String get voicemail_Snackbar_notConfigured;
+
   /// No description provided for @voicemail_Title_notSupported.
   ///
   /// In en, this message translates to:

@@ -16,21 +16,36 @@ class SettingsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final voicemailRepository = context.read<VoicemailRepository>();
+    final notificationsBloc = context.read<NotificationsBloc>();
+    final callBloc = context.read<CallBloc>();
+
     final settingsFeature = context.read<FeatureAccess>().settingsConfig;
 
     final widget = SettingsScreen(sections: settingsFeature.sections);
 
-    final provider = BlocProvider(
-      create: (context) {
-        return SettingsBloc(
-          notificationsBloc: context.read<NotificationsBloc>(),
-          appBloc: context.read<AppBloc>(),
-          userRepository: context.read<UserRepository>(),
-          voicemailRepository: context.read<VoicemailRepository>(),
-          sessionRepository: context.read(),
-          appPermissions: context.read<AppPermissions>(),
-        );
-      },
+    final provider = MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            return SettingsBloc(
+              notificationsBloc: context.read<NotificationsBloc>(),
+              appBloc: context.read<AppBloc>(),
+              userRepository: context.read<UserRepository>(),
+              voicemailRepository: context.read<VoicemailRepository>(),
+              sessionRepository: context.read(),
+              appPermissions: context.read<AppPermissions>(),
+            );
+          },
+        ),
+        BlocProvider(
+          create: (context) => VoicemailCubit(
+            repository: voicemailRepository,
+            onCallStarted: (number) => callBloc.add(CallControlEvent.started(number: number, video: false)),
+            onSubmitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+          ),
+        )
+      ],
       child: widget,
     );
     return provider;

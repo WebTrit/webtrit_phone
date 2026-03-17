@@ -1924,6 +1924,8 @@
   "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "Try again",
   "@voicemail_Label_retry": {},
+  "voicemail_Snackbar_notConfigured": "Contact your administrator to activate voicemail",
+  "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Feature not supported",
   "@voicemail_Title_notSupported": {},
   "voicemail_Widget_screenTitle": "Voicemail",
