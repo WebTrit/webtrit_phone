@@ -2195,8 +2195,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
               final currentState = peerConnection.signalingState;
               if (currentState == RTCSignalingState.RTCSignalingStateStable) {
-                // According to RFC 8829 1.1 (https://datatracker.ietf.org/doc/html/rfc8829#section-1.1),
-                // localDescription should be set before sending the offer to the remote side.
+                // According to the WebRTC spec (https://www.w3.org/TR/webrtc/#dom-rtcpeerconnection-setlocaldescription),
+                // setLocalDescription must be called before sending the offer to the remote side.
                 await peerConnection.setLocalDescription(localDescription);
 
                 final updateRequest = UpdateRequest(
