@@ -489,15 +489,16 @@ abstract final class SystemNotificationsMapper {
 
     // TODO: Migrate client configurations first before fully removing this property.
     // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-    final baseEnabled = supportedFeature?.enabled ?? appConfig.mainConfig.systemNotificationsEnabled;
+    final baseAppSupport = supportedFeature?.enabled ?? appConfig.mainConfig.systemNotificationsEnabled;
+    // Apply remote config overrides
+    final appSupport = featureOverrides.isSystemNotificationsEnabled ?? baseAppSupport;
+    // Check if the backend supports system notifications
+    final backendSupport = coreSupport.supportsSystemNotifications;
 
-    // Apply remote overrides
-    final isEnabled = featureOverrides.isSystemNotificationsEnabled ?? baseEnabled;
+    final isEnabled = appSupport && backendSupport;
+    final withPush = isEnabled && coreSupport.supportsSystemPushNotifications;
 
-    return SystemNotificationsConfig(
-      systemNotificationsSupport: isEnabled && coreSupport.supportsSystemNotifications,
-      systemNotificationsPushSupport: isEnabled && coreSupport.supportsSystemPushNotifications,
-    );
+    return SystemNotificationsConfig(systemNotificationsSupport: isEnabled, systemNotificationsPushSupport: withPush);
   }
 }
 
@@ -509,13 +510,15 @@ abstract final class SipPresenceMapper {
 
     // TODO: Migrate client configurations first before fully removing this property.
     // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-    final baseEnabled = supportedFeature?.enabled ?? appConfig.mainConfig.sipPresenceEnabled;
-
+    final baseAppSupport = supportedFeature?.enabled ?? appConfig.mainConfig.sipPresenceEnabled;
     // Apply remote overrides
-    final isEnabled = featureOverrides.isSipPresenceEnabled ?? baseEnabled;
-    final coreSupportEnabled = coreSupport.supportsSipPresence;
+    final appSupport = featureOverrides.isSipPresenceEnabled ?? baseAppSupport;
+    // Check if the backend supports SIP presence
+    final backendSupport = coreSupport.supportsSipPresence;
 
-    return SipPresenceConfig(sipPresenceSupport: isEnabled && coreSupportEnabled);
+    final isEnabled = appSupport && backendSupport;
+
+    return SipPresenceConfig(sipPresenceSupport: isEnabled);
   }
 }
 
