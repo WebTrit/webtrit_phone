@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webtrit_appearance_theme/models/models.dart';
 import 'package:webtrit_phone/theme/extension/extension.dart';
@@ -9,6 +10,7 @@ extension OverlayStyleModelMapper on OverlayStyleModel {
       systemNavigationBarIconBrightness: systemNavigationBarIconBrightness != null
           ? _mapBrightness(systemNavigationBarIconBrightness!)
           : null,
+      statusBarColor: Colors.transparent,
       statusBarIconBrightness: _mapBrightness(statusBarIconBrightness),
       statusBarBrightness: statusBarBrightness != null ? _mapBrightness(statusBarBrightness!) : null,
     );
