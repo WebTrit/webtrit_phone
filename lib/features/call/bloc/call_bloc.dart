@@ -2206,7 +2206,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                   jsep: localDescription.toMap(),
                 );
                 await _signalingClient?.execute(updateRequest);
+              } else {
+                _logger.warning(
+                  '__onPeerConnectionEventIceConnectionStateChanged: signalingState changed mid-flight ($currentState), skipping setLocalDescription',
+                );
               }
+            } else {
+              _logger.warning(
+                '__onPeerConnectionEventIceConnectionStateChanged: signalingState is $pcState, skipping ICE restart',
+              );
             }
           }
         });
