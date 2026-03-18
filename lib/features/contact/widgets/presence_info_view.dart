@@ -61,7 +61,7 @@ class PresenceInfoView extends StatelessWidget {
                           width: 16,
                           height: 16,
                           child: SipPresenceIndicator(
-                            presenceInfo: presenceInfo,
+                            presenceInfo: [info],
                             dialogInfo: [],
                             presenceRect: Rect.fromLTWH(0, 0, 16, 16),
                           ),
