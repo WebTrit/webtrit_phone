@@ -174,6 +174,12 @@ class TcpProxy {
     );
   }
 
+  /// Returns the index of the first `\r\n\r\n` (CR LF CR LF, bytes 13 10 13 10)
+  /// sequence in [bytes], or -1 if not found.
+  ///
+  /// HTTP headers end with a blank line, encoded as `\r\n\r\n`. Finding this
+  /// sequence marks the boundary between the HTTP request headers and the body
+  /// (or, for a WebSocket upgrade, the start of the WebSocket framing).
   static int _findCrlfCrlf(List<int> bytes) {
     for (var i = 0; i < bytes.length - 3; i++) {
       if (bytes[i] == 13 && bytes[i + 1] == 10 && bytes[i + 2] == 13 && bytes[i + 3] == 10) return i;
