@@ -39,6 +39,7 @@ void main() {
     when(() => mockChannel.sink).thenReturn(mockSink);
     when(() => mockChannel.stream).thenAnswer((_) => streamController.stream);
     when(() => mockChannel.closeCode).thenReturn(null);
+    when(() => mockChannel.closeReason).thenReturn(null);
     when(() => mockSink.close(any(), any())).thenAnswer((_) => Future.value());
   });
 
@@ -134,6 +135,208 @@ void main() {
         verify(() => mockChannel.closeCode).called(2);
       });
     });
+  });
+
+  group('Keepalive timeout', () {
+    test('should report WebtritSignalingKeepaliveTransactionTimeoutException when server does not respond', () {
+      fakeAsync((async) {
+        final client = WebtritSignalingClient.inner(mockChannel);
+
+        Object? capturedError;
+        when(() => mockSink.add(any())).thenAnswer((_) {});
+
+        client.listen(
+          onStateHandshake: (_) {},
+          onEvent: (_) {},
+          onError: (e, _) => capturedError = e,
+          onDisconnect: (_, _) {},
+        );
+
+        streamController.add(_handshakeJson());
+        async.flushMicrotasks();
+
+        // Keepalive fires at 100 ms, transaction timeout at 100 ms + 10 000 ms.
+        async.elapse(const Duration(milliseconds: 10200));
+        async.flushMicrotasks();
+
+        expect(capturedError, isA<WebtritSignalingKeepaliveTransactionTimeoutException>());
+      });
+    });
+  });
+
+  group('Keepalive normal flow', () {
+    test('should restart keepalive timer after successful echo and send second keepalive', () {
+      fakeAsync((async) {
+        final client = WebtritSignalingClient.inner(mockChannel);
+
+        var keepaliveCount = 0;
+        String? lastTransactionId;
+
+        when(() => mockSink.add(any())).thenAnswer((invocation) {
+          final data = invocation.positionalArguments[0] as String;
+          final decoded = jsonDecode(data) as Map<String, dynamic>;
+          if (decoded['handshake'] == 'keepalive') {
+            keepaliveCount++;
+            lastTransactionId = decoded['transaction'] as String?;
+          }
+        });
+
+        client.listen(onStateHandshake: (_) {}, onEvent: (_) {}, onError: (_, _) {}, onDisconnect: (_, _) {});
+
+        streamController.add(_handshakeJson());
+        async.flushMicrotasks();
+
+        // First keepalive fires.
+        async.elapse(const Duration(milliseconds: 110));
+        async.flushMicrotasks();
+        expect(keepaliveCount, equals(1));
+
+        // Echo the first keepalive.
+        streamController.add(jsonEncode({'handshake': 'keepalive', 'transaction': lastTransactionId}));
+        async.flushMicrotasks();
+
+        // Second keepalive fires.
+        async.elapse(const Duration(milliseconds: 110));
+        async.flushMicrotasks();
+        expect(keepaliveCount, equals(2));
+      });
+    });
+
+    test('should complete three keepalive cycles without error', () {
+      fakeAsync((async) {
+        final client = WebtritSignalingClient.inner(mockChannel);
+
+        var keepaliveCount = 0;
+        var errorCount = 0;
+        final transactionIds = <String?>[];
+
+        when(() => mockSink.add(any())).thenAnswer((invocation) {
+          final data = invocation.positionalArguments[0] as String;
+          final decoded = jsonDecode(data) as Map<String, dynamic>;
+          if (decoded['handshake'] == 'keepalive') {
+            keepaliveCount++;
+            transactionIds.add(decoded['transaction'] as String?);
+          }
+        });
+
+        client.listen(
+          onStateHandshake: (_) {},
+          onEvent: (_) {},
+          onError: (_, _) => errorCount++,
+          onDisconnect: (_, _) {},
+        );
+
+        streamController.add(_handshakeJson());
+        async.flushMicrotasks();
+
+        for (var i = 0; i < 3; i++) {
+          async.elapse(const Duration(milliseconds: 110));
+          async.flushMicrotasks();
+          expect(keepaliveCount, equals(i + 1));
+          streamController.add(jsonEncode({'handshake': 'keepalive', 'transaction': transactionIds.last}));
+          async.flushMicrotasks();
+        }
+
+        expect(errorCount, equals(0));
+      });
+    });
+  });
+
+  group('Disconnect handling', () {
+    test('should call onDisconnect with code and reason when stream closes gracefully', () async {
+      final client = WebtritSignalingClient.inner(mockChannel);
+
+      int? disconnectCode;
+      String? disconnectReason;
+
+      client.listen(
+        onStateHandshake: (_) {},
+        onEvent: (_) {},
+        onError: (_, _) {},
+        onDisconnect: (code, reason) {
+          disconnectCode = code;
+          disconnectReason = reason;
+        },
+      );
+
+      when(() => mockChannel.closeCode).thenReturn(1000);
+      when(() => mockChannel.closeReason).thenReturn('normal closure');
+
+      await streamController.close();
+      await Future.delayed(Duration.zero);
+
+      expect(disconnectCode, equals(1000));
+      expect(disconnectReason, equals('normal closure'));
+    });
+
+    test('should call onError when stream emits an error', () async {
+      final client = WebtritSignalingClient.inner(mockChannel);
+
+      Object? capturedError;
+
+      client.listen(
+        onStateHandshake: (_) {},
+        onEvent: (_) {},
+        onError: (e, _) => capturedError = e,
+        onDisconnect: (_, _) {},
+      );
+
+      final networkError = Exception('network dropped');
+      streamController.addError(networkError);
+      await Future.delayed(Duration.zero);
+
+      expect(capturedError, equals(networkError));
+    });
+
+    test('should throw WebtritSignalingDisconnectedException when execute called after stream closes', () async {
+      final client = WebtritSignalingClient.inner(mockChannel);
+
+      client.listen(onStateHandshake: (_) {}, onEvent: (_) {}, onError: (_, _) {}, onDisconnect: (_, _) {});
+
+      await streamController.close();
+      await Future.delayed(Duration.zero);
+
+      final request = HangupRequest(transaction: 'test-tx', line: 0, callId: 'test-call-id');
+      await expectLater(() => client.execute(request), throwsA(isA<WebtritSignalingDisconnectedException>()));
+    });
+  });
+
+  group('Request transaction timeout', () {
+    test(
+      'should throw WebtritSignalingTransactionTimeoutException (not keepalive variant) when server ignores request',
+      () {
+        fakeAsync((async) {
+          final client = WebtritSignalingClient.inner(mockChannel);
+
+          Object? executeError;
+          when(() => mockSink.add(any())).thenAnswer((_) {});
+
+          client.listen(onStateHandshake: (_) {}, onEvent: (_) {}, onError: (_, _) {}, onDisconnect: (_, _) {});
+
+          // Long keepalive interval to prevent interference with the request timeout.
+          streamController.add(_handshakeJson(keepaliveInterval: 100000));
+          async.flushMicrotasks();
+
+          client
+              .execute(HangupRequest(transaction: 'test-tx', line: 0, callId: 'test-call-id'))
+              .then<void>(
+                (_) {},
+                onError: (Object e, _) {
+                  executeError = e;
+                },
+              );
+
+          async.flushMicrotasks();
+
+          // Advance past transaction timeout (10 000 ms).
+          async.elapse(const Duration(milliseconds: 10100));
+          async.flushMicrotasks();
+
+          expect(executeError, isA<WebtritSignalingTransactionTimeoutException>());
+          expect(executeError, isNot(isA<WebtritSignalingKeepaliveTransactionTimeoutException>()));
+        });
+      },
+    );
   });
 
   group('Transaction cleanup on send failure', () {
