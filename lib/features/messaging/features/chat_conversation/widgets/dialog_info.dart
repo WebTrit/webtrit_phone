@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -30,11 +29,7 @@ class DialogInfo extends StatefulWidget {
 
 class _DialogInfoState extends State<DialogInfo> {
   late final conversationCubit = context.read<ConversationCubit>();
-  late final CallController _callController = CallController(
-    callBloc: context.read<CallBloc>(),
-    callRoutingCubit: context.read<CallRoutingCubit>(),
-    notificationsBloc: context.read<NotificationsBloc>(),
-  );
+  late final _callController = CallControllerScope.of(context);
 
   Future<void> onDeleteDialog() async {
     final askResult = await showDialog<bool>(
