@@ -65,7 +65,7 @@ void main() {
     await $(actionPadStartKey).tap();
     await $(CallActiveScaffold).waitUntilVisible();
     await pumpFor(const Duration(seconds: 5), $);
-    expect(find.textContaining('On Hold'), findsOneWidget, reason: 'One call should be on hold');
+    expect(find.textContaining('On hold'), findsOneWidget, reason: 'One call should be on hold');
     expect(find.textContaining('00:0'), findsOneWidget, reason: 'Another call should be active');
 
     // Make attended transfer and verify that the call is transferred.
