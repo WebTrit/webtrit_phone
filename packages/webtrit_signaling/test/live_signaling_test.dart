@@ -44,9 +44,7 @@ Future<({String token, String tenantId})> _fetchSessionToken() async {
 
   final uri = Uri.parse('https://$coreUrl/api/v1/session');
   // ignore: avoid_types_on_closure_parameters
-  final client = HttpClient()
-    ..connectionTimeout = const Duration(seconds: 15)
-    ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  final client = HttpClient()..connectionTimeout = const Duration(seconds: 15);
 
   try {
     final request = await client.postUrl(uri);
@@ -75,7 +73,7 @@ Future<({String token, String tenantId})> _fetchSessionToken() async {
 // ---------------------------------------------------------------------------
 
 void main() {
-  late WebtritSignalingClient client;
+  WebtritSignalingClient? client;
   late String sessionToken;
   late String tenantId;
 
@@ -88,23 +86,24 @@ void main() {
   });
 
   tearDown(() async {
-    if (!_credentialsProvided) return;
-    await client.disconnect();
+    await client?.disconnect();
+    client = null;
   });
 
   group('Live signaling — real server', skip: _credentialsProvided ? false : 'credentials not set', () {
     test('should receive StateHandshake after connecting', () async {
-      client = await WebtritSignalingClient.connect(
+      final signalingClient = await WebtritSignalingClient.connect(
         Uri.parse('wss://${_env(_coreUrlKey)}'),
         tenantId,
         sessionToken,
         false,
         connectionTimeout: const Duration(seconds: 15),
       );
+      client = signalingClient;
 
       final handshakeCompleter = Completer<StateHandshake>();
 
-      client.listen(
+      signalingClient.listen(
         onStateHandshake: (sh) {
           if (!handshakeCompleter.isCompleted) handshakeCompleter.complete(sh);
         },
@@ -125,18 +124,19 @@ void main() {
       'should complete at least one keepalive cycle without error',
       timeout: const Timeout(Duration(minutes: 2)),
       () async {
-        client = await WebtritSignalingClient.connect(
+        final signalingClient = await WebtritSignalingClient.connect(
           Uri.parse('wss://${_env(_coreUrlKey)}'),
           tenantId,
           sessionToken,
           false,
           connectionTimeout: const Duration(seconds: 15),
         );
+        client = signalingClient;
 
         final handshakeCompleter = Completer<StateHandshake>();
         Object? capturedError;
 
-        client.listen(
+        signalingClient.listen(
           onStateHandshake: (sh) {
             if (!handshakeCompleter.isCompleted) handshakeCompleter.complete(sh);
           },
@@ -155,18 +155,19 @@ void main() {
     );
 
     test('should NOT call onDisconnect when disconnect is called manually', () async {
-      client = await WebtritSignalingClient.connect(
+      final signalingClient = await WebtritSignalingClient.connect(
         Uri.parse('wss://${_env(_coreUrlKey)}'),
         tenantId,
         sessionToken,
         false,
         connectionTimeout: const Duration(seconds: 15),
       );
+      client = signalingClient;
 
       var disconnectFired = false;
       final handshakeCompleter = Completer<void>();
 
-      client.listen(
+      signalingClient.listen(
         onStateHandshake: (_) {
           if (!handshakeCompleter.isCompleted) handshakeCompleter.complete();
         },
@@ -178,7 +179,7 @@ void main() {
       await handshakeCompleter.future.timeout(const Duration(seconds: 10));
 
       // disconnect() cancels the stream subscription before closing — onDisconnect must NOT fire.
-      await client.disconnect(1000, 'normal closure');
+      await signalingClient.disconnect(1000, 'normal closure');
       await Future.delayed(const Duration(milliseconds: 200));
 
       expect(disconnectFired, isFalse);
@@ -200,18 +201,19 @@ void main() {
       'should fire WebtritSignalingKeepaliveTransactionTimeoutException when packets are dropped mid-connection',
       timeout: const Timeout(Duration(minutes: 2)),
       () async {
-        client = await WebtritSignalingClient.connect(
-          Uri.parse('ws://localhost:$proxyPort'),
+        final signalingClient = await WebtritSignalingClient.connect(
+          Uri.parse('ws://127.0.0.1:$proxyPort'),
           tenantId,
           sessionToken,
           false,
           connectionTimeout: const Duration(seconds: 15),
         );
+        client = signalingClient;
 
         final handshakeCompleter = Completer<StateHandshake>();
         final errorCompleter = Completer<Object>();
 
-        client.listen(
+        signalingClient.listen(
           onStateHandshake: (sh) {
             if (!handshakeCompleter.isCompleted) handshakeCompleter.complete(sh);
           },

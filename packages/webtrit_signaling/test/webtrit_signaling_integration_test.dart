@@ -297,7 +297,7 @@ void main() {
       await Future.delayed(Duration.zero);
 
       final request = HangupRequest(transaction: 'test-tx', line: 0, callId: 'test-call-id');
-      await expectLater(() => client.execute(request), throwsA(isA<WebtritSignalingDisconnectedException>()));
+      await expectLater(client.execute(request), throwsA(isA<WebtritSignalingDisconnectedException>()));
     });
   });
 
@@ -354,7 +354,7 @@ void main() {
 
       final request = HangupRequest(transaction: 'test-tx', line: 0, callId: 'test-call-id');
 
-      await expectLater(() => client.execute(request), throwsA(isA<WebtritSignalingBadStateException>()));
+      await expectLater(client.execute(request), throwsA(isA<WebtritSignalingBadStateException>()));
     });
 
     test('should throw WebtritSignalingBadStateException when closeCode is already set', () async {
@@ -371,7 +371,7 @@ void main() {
 
       final request = HangupRequest(transaction: 'test-tx', line: 0, callId: 'test-call-id');
 
-      await expectLater(() => client.execute(request), throwsA(isA<WebtritSignalingBadStateException>()));
+      await expectLater(client.execute(request), throwsA(isA<WebtritSignalingBadStateException>()));
     });
 
     test('should not call sink.add when closeCode is detected before write', () async {

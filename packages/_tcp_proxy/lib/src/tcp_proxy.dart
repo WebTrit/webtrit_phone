@@ -10,7 +10,7 @@ import 'dart:io';
 /// final proxy = TcpProxy(host: 'example.com');
 /// final port = await proxy.start();
 ///
-/// // Connect your client to ws://localhost:$port/...
+/// // Connect your client to ws://127.0.0.1:$port/...
 ///
 /// proxy.pause();   // simulate network blackhole
 /// proxy.resume();  // restore connectivity
@@ -97,6 +97,8 @@ class TcpProxy {
     }
   }
 
+  static const _maxHeaderBytes = 64 * 1024; // 64 KB guard against unbounded buffering
+
   /// Buffers the first HTTP request, rewrites the Host header, then switches
   /// to a transparent raw-byte relay for the rest of the connection.
   void _relayWithHostRewrite(Socket clientSocket, Socket serverSocket, String targetHost) {
@@ -110,7 +112,16 @@ class TcpProxy {
           return;
         }
 
+        if (_paused) return;
+
         headerBuf.addAll(bytes);
+
+        if (headerBuf.length > _maxHeaderBytes) {
+          clientSocket.destroy();
+          serverSocket.destroy();
+          return;
+        }
+
         final end = _findCrlfCrlf(headerBuf);
         if (end == -1) return;
 
