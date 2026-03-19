@@ -7,6 +7,7 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
+import 'package:_tcp_proxy/_tcp_proxy.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 // ---------------------------------------------------------------------------
@@ -15,9 +16,9 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 // works for both app-level and signaling live tests.
 //
 // Run example:
-//   WEBTRIT_APP_TEST_CUSTOM_CORE_URL=core.demo.turbocompany.com \
-//   WEBTRIT_APP_TEST_EMAIL_CREDENTIAL=test@turbomail.com \
-//   WEBTRIT_APP_TEST_EMAIL_VERIFY_CREDENTIAL=turbopassword \
+//   WEBTRIT_APP_TEST_CUSTOM_CORE_URL=core.support.portaone.com \
+//   WEBTRIT_APP_TEST_EMAIL_CREDENTIAL=111000333 \
+//   WEBTRIT_APP_TEST_EMAIL_VERIFY_CREDENTIAL=zzzxxx123 \
 //   dart test test/live_signaling_test.dart --tags live
 // ---------------------------------------------------------------------------
 
@@ -69,105 +70,6 @@ Future<({String token, String tenantId})> _fetchSessionToken() async {
   } finally {
     client.close();
   }
-}
-
-// ---------------------------------------------------------------------------
-// Proxy — raw TCP relay that can pause byte forwarding.
-//
-// Client connects to localhost:PORT over plain TCP.
-// Proxy opens a TLS (SecureSocket) connection to the real server and relays
-// raw bytes in both directions — below the WebSocket framing layer.
-// Calling pause() silently drops all bytes, simulating a network blackhole
-// (NAT timeout / Wi-Fi drop) in the middle of an active connection.
-// ---------------------------------------------------------------------------
-
-class _SignalingProxy {
-  final String _realHost;
-  final int _realPort;
-
-  ServerSocket? _server;
-  bool _paused = false;
-
-  _SignalingProxy({required String host, int port = 443}) : _realHost = host, _realPort = port;
-
-  Future<int> start() async {
-    _server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
-    _acceptLoop();
-    return _server!.port;
-  }
-
-  void _acceptLoop() async {
-    await for (final clientSocket in _server!) {
-      _relay(clientSocket);
-    }
-  }
-
-  void _relay(Socket clientSocket) async {
-    try {
-      // SecureSocket uses _realHost as SNI — cert validation works correctly.
-      final serverSocket = await SecureSocket.connect(_realHost, _realPort, timeout: const Duration(seconds: 15));
-
-      // Phase 1: buffer bytes until HTTP headers are complete, then rewrite the
-      // Host header (dart:io sets it to localhost:PORT) so the server accepts
-      // the WebSocket upgrade request.
-      // Phase 2: relay raw bytes transparently — below WebSocket framing.
-      final headerBuf = <int>[];
-      var headersDone = false;
-
-      clientSocket.listen(
-        (bytes) {
-          if (headersDone) {
-            if (!_paused) serverSocket.add(bytes);
-            return;
-          }
-
-          headerBuf.addAll(bytes);
-          final end = _crlfCrlfIndex(headerBuf);
-          if (end == -1) return;
-
-          headersDone = true;
-          final headerStr = String.fromCharCodes(headerBuf.sublist(0, end + 4));
-          final tail = headerBuf.sublist(end + 4);
-          final rewritten = headerStr.replaceFirstMapped(
-            RegExp(r'^Host: .+$', multiLine: true, caseSensitive: false),
-            (_) => 'Host: $_realHost',
-          );
-
-          if (!_paused) {
-            serverSocket.add(rewritten.codeUnits);
-            if (tail.isNotEmpty) serverSocket.add(tail);
-          }
-        },
-        onDone: () => serverSocket.destroy(),
-        onError: (_) => serverSocket.destroy(),
-        cancelOnError: true,
-      );
-
-      // Server → Client: raw bytes.
-      serverSocket.listen(
-        (bytes) {
-          if (!_paused) clientSocket.add(bytes);
-        },
-        onDone: () => clientSocket.destroy(),
-        onError: (_) => clientSocket.destroy(),
-        cancelOnError: true,
-      );
-    } catch (_) {
-      clientSocket.destroy();
-    }
-  }
-
-  static int _crlfCrlfIndex(List<int> bytes) {
-    for (var i = 0; i < bytes.length - 3; i++) {
-      if (bytes[i] == 13 && bytes[i + 1] == 10 && bytes[i + 2] == 13 && bytes[i + 3] == 10) return i;
-    }
-    return -1;
-  }
-
-  void pause() => _paused = true;
-  void resume() => _paused = false;
-
-  Future<void> stop() async => _server?.close();
 }
 
 // ---------------------------------------------------------------------------
@@ -284,11 +186,11 @@ void main() {
   });
 
   group('Network simulation via proxy', skip: _credentialsProvided ? false : 'credentials not set', () {
-    late _SignalingProxy proxy;
+    late TcpProxy proxy;
     late int proxyPort;
 
     setUp(() async {
-      proxy = _SignalingProxy(host: _env(_coreUrlKey));
+      proxy = TcpProxy(host: _env(_coreUrlKey), rewriteHostHeader: _env(_coreUrlKey));
       proxyPort = await proxy.start();
     });
 
@@ -322,7 +224,7 @@ void main() {
 
         final handshake = await handshakeCompleter.future.timeout(const Duration(seconds: 10));
 
-        // Simulate network blackhole — drop all packets in both directions.
+        // Simulate network blackhole — drop all bytes in both directions.
         proxy.pause();
 
         // The next keepalive will be sent after keepaliveInterval.

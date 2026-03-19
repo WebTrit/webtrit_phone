@@ -1,0 +1,11 @@
+name: _tcp_proxy
+resolution: workspace
+description: Internal test utility — raw TCP proxy with pause/resume for network simulation.
+publish_to: none
+version: 1.0.0
+
+environment:
+  sdk: ^3.8.0
+
+dependencies:
+  meta: any
