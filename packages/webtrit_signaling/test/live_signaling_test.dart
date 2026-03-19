@@ -72,72 +72,102 @@ Future<({String token, String tenantId})> _fetchSessionToken() async {
 }
 
 // ---------------------------------------------------------------------------
-// Proxy — pure Dart WebSocket relay that can pause packet forwarding.
+// Proxy — raw TCP relay that can pause byte forwarding.
 //
-// Client connects to ws://localhost:PORT (plain TCP).
-// Proxy connects to wss://<realHost> (TLS) and relays frames in both
-// directions. Calling pause() drops all frames, simulating a network
-// blackhole in the middle of the connection.
+// Client connects to localhost:PORT over plain TCP.
+// Proxy opens a TLS (SecureSocket) connection to the real server and relays
+// raw bytes in both directions — below the WebSocket framing layer.
+// Calling pause() silently drops all bytes, simulating a network blackhole
+// (NAT timeout / Wi-Fi drop) in the middle of an active connection.
 // ---------------------------------------------------------------------------
 
 class _SignalingProxy {
-  final String _realBaseUrl;
+  final String _realHost;
+  final int _realPort;
 
-  HttpServer? _server;
+  ServerSocket? _server;
   bool _paused = false;
 
-  _SignalingProxy(this._realBaseUrl);
+  _SignalingProxy({required String host, int port = 443}) : _realHost = host, _realPort = port;
 
   Future<int> start() async {
-    _server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    _server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
     _acceptLoop();
     return _server!.port;
   }
 
   void _acceptLoop() async {
-    await for (final request in _server!) {
-      if (WebSocketTransformer.isUpgradeRequest(request)) {
-        _relay(request);
-      } else {
-        request.response
-          ..statusCode = HttpStatus.badRequest
-          ..close();
-      }
+    await for (final clientSocket in _server!) {
+      _relay(clientSocket);
     }
   }
 
-  void _relay(HttpRequest request) async {
+  void _relay(Socket clientSocket) async {
     try {
-      final realUrl = '$_realBaseUrl${request.uri.path}?${request.uri.query}';
-      final clientWs = await WebSocketTransformer.upgrade(request);
-      final serverWs = await WebSocket.connect(realUrl);
+      // SecureSocket uses _realHost as SNI — cert validation works correctly.
+      final serverSocket = await SecureSocket.connect(_realHost, _realPort, timeout: const Duration(seconds: 15));
 
-      clientWs.listen(
-        (data) {
-          if (!_paused) serverWs.add(data);
+      // Phase 1: buffer bytes until HTTP headers are complete, then rewrite the
+      // Host header (dart:io sets it to localhost:PORT) so the server accepts
+      // the WebSocket upgrade request.
+      // Phase 2: relay raw bytes transparently — below WebSocket framing.
+      final headerBuf = <int>[];
+      var headersDone = false;
+
+      clientSocket.listen(
+        (bytes) {
+          if (headersDone) {
+            if (!_paused) serverSocket.add(bytes);
+            return;
+          }
+
+          headerBuf.addAll(bytes);
+          final end = _crlfCrlfIndex(headerBuf);
+          if (end == -1) return;
+
+          headersDone = true;
+          final headerStr = String.fromCharCodes(headerBuf.sublist(0, end + 4));
+          final tail = headerBuf.sublist(end + 4);
+          final rewritten = headerStr.replaceFirstMapped(
+            RegExp(r'^Host: .+$', multiLine: true, caseSensitive: false),
+            (_) => 'Host: $_realHost',
+          );
+
+          if (!_paused) {
+            serverSocket.add(rewritten.codeUnits);
+            if (tail.isNotEmpty) serverSocket.add(tail);
+          }
         },
-        onDone: () => serverWs.close(),
-        onError: (_) => serverWs.close(),
+        onDone: () => serverSocket.destroy(),
+        onError: (_) => serverSocket.destroy(),
         cancelOnError: true,
       );
 
-      serverWs.listen(
-        (data) {
-          if (!_paused) clientWs.add(data);
+      // Server → Client: raw bytes.
+      serverSocket.listen(
+        (bytes) {
+          if (!_paused) clientSocket.add(bytes);
         },
-        onDone: () => clientWs.close(),
-        onError: (_) => clientWs.close(),
+        onDone: () => clientSocket.destroy(),
+        onError: (_) => clientSocket.destroy(),
         cancelOnError: true,
       );
     } catch (_) {
-      // Connection to real server failed — nothing to relay.
+      clientSocket.destroy();
     }
+  }
+
+  static int _crlfCrlfIndex(List<int> bytes) {
+    for (var i = 0; i < bytes.length - 3; i++) {
+      if (bytes[i] == 13 && bytes[i + 1] == 10 && bytes[i + 2] == 13 && bytes[i + 3] == 10) return i;
+    }
+    return -1;
   }
 
   void pause() => _paused = true;
   void resume() => _paused = false;
 
-  Future<void> stop() async => _server?.close(force: true);
+  Future<void> stop() async => _server?.close();
 }
 
 // ---------------------------------------------------------------------------
@@ -258,7 +288,7 @@ void main() {
     late int proxyPort;
 
     setUp(() async {
-      proxy = _SignalingProxy('wss://${_env(_coreUrlKey)}');
+      proxy = _SignalingProxy(host: _env(_coreUrlKey));
       proxyPort = await proxy.start();
     });
 
