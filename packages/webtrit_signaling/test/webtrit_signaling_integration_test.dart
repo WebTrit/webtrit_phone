@@ -12,8 +12,12 @@ class MockWebSocketChannel extends Mock implements WebSocketChannel {}
 
 class MockWebSocketSink extends Mock implements WebSocketSink {}
 
+// Keepalive interval used by _handshakeJson() - drives all timing calculations below.
+const _kKeepaliveIntervalMs = 100;
+const _kKeepaliveInterval = Duration(milliseconds: _kKeepaliveIntervalMs);
+
 /// Helper to create a valid handshake state JSON string.
-String _handshakeJson({int keepaliveInterval = 100}) {
+String _handshakeJson({int keepaliveInterval = _kKeepaliveIntervalMs}) {
   return jsonEncode({
     'handshake': 'state',
     'timestamp': 1705322000000,
@@ -80,7 +84,7 @@ void main() {
         isPhysicalSocketClosed = true;
 
         // Advance past the keepalive interval.
-        async.elapse(const Duration(milliseconds: 200));
+        async.elapse(_kKeepaliveInterval * 2);
 
         verify(() => mockSink.add(any())).called(1);
         expect(errorReported, isFalse, reason: 'Race condition leaked to onError: $reportedError');
@@ -155,8 +159,12 @@ void main() {
         streamController.add(_handshakeJson());
         async.flushMicrotasks();
 
-        // Keepalive fires at 100 ms, transaction timeout at 100 ms + 10 000 ms.
-        async.elapse(const Duration(milliseconds: 10200));
+        // Keepalive fires after _kKeepaliveInterval, then waits defaultExecuteTransactionTimeoutDuration for a response.
+        async.elapse(
+          _kKeepaliveInterval +
+              WebtritSignalingClient.defaultExecuteTransactionTimeoutDuration +
+              const Duration(milliseconds: 100),
+        );
         async.flushMicrotasks();
 
         expect(capturedError, isA<WebtritSignalingKeepaliveTransactionTimeoutException>());
@@ -328,8 +336,10 @@ void main() {
 
           async.flushMicrotasks();
 
-          // Advance past transaction timeout (10 000 ms).
-          async.elapse(const Duration(milliseconds: 10100));
+          // Advance past transaction timeout.
+          async.elapse(
+            WebtritSignalingClient.defaultExecuteTransactionTimeoutDuration + const Duration(milliseconds: 100),
+          );
           async.flushMicrotasks();
 
           expect(executeError, isA<WebtritSignalingTransactionTimeoutException>());
