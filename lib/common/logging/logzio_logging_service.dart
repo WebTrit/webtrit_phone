@@ -10,7 +10,7 @@ import 'remote_logging_service.dart';
 final _logger = Logger('LogzioLoggingService');
 
 class LogzioLoggingService implements RemoteLoggingService {
-  LogzioLoggingService({required this.url, required this.token, required this.bufferSize, required this.minLevel});
+  LogzioLoggingService({required this.minLevel, required this.url, required this.token, required this.bufferSize});
 
   static LogzioLoggingService? fromEnvironment(bool enabled) {
     if (!enabled) return null;
@@ -29,11 +29,11 @@ class LogzioLoggingService implements RemoteLoggingService {
     );
   }
 
+  @override
+  final Level minLevel;
   final String url;
   final String token;
   final int bufferSize;
-  @override
-  final Level minLevel;
 
   FilteredLogzIoAppender? _filteredLogzIoAppender;
 
