@@ -29,7 +29,6 @@ class SignalingPresenceInfo extends Equatable {
   final SignalingPresenceInfoSource source;
 
   factory SignalingPresenceInfo.fromJson(Map<String, dynamic> json) {
-    print('Parsing SignalingPresenceInfo from JSON: $json');
     final activities = (json['activities'] as List<dynamic>).map((e) => e as String).toList();
 
     return SignalingPresenceInfo(
