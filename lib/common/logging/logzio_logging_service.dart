@@ -43,7 +43,7 @@ class LogzioLoggingService implements RemoteLoggingService {
   void initialize(Map<String, String> labels) {
     _logger.finest('Initializing with url: $url, token: $token, bufferSize: $bufferSize labels: $labels');
     _remoteFormatter = AnonymizingFormatter(
-      anonymizationTypes: AnonymizationType.full,
+      anonymizationType: AnonymizationType.full,
       wrappedFormatter: const RemoteFormatter(),
     );
 
@@ -58,7 +58,7 @@ class LogzioLoggingService implements RemoteLoggingService {
   }
 
   void setAnonymizationEnabled(bool enabled) {
-    _remoteFormatter?.anonymizationTypes = enabled ? AnonymizationType.full : [];
+    _remoteFormatter?.anonymizationType = enabled ? AnonymizationType.full : AnonymizationType.none;
   }
 
   @override
