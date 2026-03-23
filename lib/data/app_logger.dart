@@ -23,8 +23,8 @@ class AppLogger {
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
     final instance = AppLogger._(remoteLoggingService, getLabels);
-    instance.applyConfig(logLevel);
     instance.updateRemoteLabels();
+    instance.applyConfig(logLevel);
 
     return instance;
   }
