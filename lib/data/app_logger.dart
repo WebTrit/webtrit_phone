@@ -19,6 +19,8 @@ class AppLogger {
 
     Logger.root.clearListeners();
 
+    // Anonymization is intentionally applied only to remote logs (Logzio).
+    // Console output is not anonymized to preserve full detail for local debugging.
     PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
