@@ -13,7 +13,7 @@ final _logger = Logger('AppLogger');
 class AppLogger {
   static Future<AppLogger> init(
     Level logLevel,
-    LogzioLoggingService? logzioService,
+    RemoteLoggingService? remoteLoggingService,
     AppMetadataProvider labelsProvider,
   ) async {
     hierarchicalLoggingEnabled = true;
@@ -24,27 +24,28 @@ class AppLogger {
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
-    logzioService?.initialize(labelsProvider.logLabels);
+    remoteLoggingService?.initialize(labelsProvider.logLabels);
 
-    final instance = AppLogger._(logzioService, labelsProvider);
+    final instance = AppLogger._(remoteLoggingService, labelsProvider);
     instance.applyConfig(logLevel);
 
     return instance;
   }
 
-  AppLogger._(this._logzioService, this._labelsProvider);
+  AppLogger._(this._remoteLoggingService, this._labelsProvider);
 
-  final LogzioLoggingService? _logzioService;
+  final RemoteLoggingService? _remoteLoggingService;
   final AppMetadataProvider _labelsProvider;
 
   void applyConfig(Level logLevel) {
     Logger.root.level = logLevel;
-    EquatableConfig.stringify = logLevel <= Level.FINE || (_logzioService?.minLevel ?? Level.OFF) <= Level.FINE;
+    final remoteMinLevel = _remoteLoggingService is LogzioLoggingService ? _remoteLoggingService.minLevel : Level.OFF;
+    EquatableConfig.stringify = logLevel <= Level.FINE || remoteMinLevel <= Level.FINE;
     _logger.info('AppLogger log level applied: $logLevel');
   }
 
   /// Allows regenerating labels when coreUrl and tenantId are available.
   void regenerateRemoteLabels() {
-    _logzioService?.initialize(_labelsProvider.logLabels);
+    _remoteLoggingService?.initialize(_labelsProvider.logLabels);
   }
 }
