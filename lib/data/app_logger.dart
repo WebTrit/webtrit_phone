@@ -24,7 +24,7 @@ class AppLogger {
 
     final instance = AppLogger._(remoteLoggingService);
     instance.applyConfig(logLevel);
-    instance.regenerateRemoteLabels(labels);
+    instance.updateRemoteLabels(labels);
 
     return instance;
   }
@@ -39,8 +39,11 @@ class AppLogger {
     _logger.info('AppLogger log level applied: $logLevel');
   }
 
-  /// Allows regenerating labels when coreUrl and tenantId are available.
-  void regenerateRemoteLabels(Map<String, String> labels) {
+  /// Updates remote logging labels and re-attaches the remote appender.
+  ///
+  /// Call this after authentication when coreUrl and tenantId become available.
+  void updateRemoteLabels(Map<String, String> labels) {
+    _remoteLoggingService?.dispose();
     _remoteLoggingService?.initialize(labels);
   }
 }
