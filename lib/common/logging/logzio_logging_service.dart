@@ -32,6 +32,7 @@ class LogzioLoggingService implements RemoteLoggingService {
   final String url;
   final String token;
   final int bufferSize;
+  @override
   final Level minLevel;
 
   FilteredLogzIoAppender? _filteredLogzIoAppender;
