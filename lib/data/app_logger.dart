@@ -26,21 +26,22 @@ class AppLogger {
 
     remoteLoggingService?.initialize(labelsProvider.logLabels);
 
-    final instance = AppLogger._(remoteLoggingService, labelsProvider);
+    final remoteMinLevel = remoteLoggingService is LogzioLoggingService ? remoteLoggingService.minLevel : Level.OFF;
+    final instance = AppLogger._(remoteLoggingService, labelsProvider, remoteMinLevel);
     instance.applyConfig(logLevel);
 
     return instance;
   }
 
-  AppLogger._(this._remoteLoggingService, this._labelsProvider);
+  AppLogger._(this._remoteLoggingService, this._labelsProvider, this._remoteMinLevel);
 
   final RemoteLoggingService? _remoteLoggingService;
   final AppMetadataProvider _labelsProvider;
+  final Level _remoteMinLevel;
 
   void applyConfig(Level logLevel) {
     Logger.root.level = logLevel;
-    final remoteMinLevel = _remoteLoggingService is LogzioLoggingService ? _remoteLoggingService.minLevel : Level.OFF;
-    EquatableConfig.stringify = logLevel <= Level.FINE || remoteMinLevel <= Level.FINE;
+    EquatableConfig.stringify = logLevel <= Level.FINE || _remoteMinLevel <= Level.FINE;
     _logger.info('AppLogger log level applied: $logLevel');
   }
 
