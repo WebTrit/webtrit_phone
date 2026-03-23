@@ -12,7 +12,7 @@ class AppLogger {
   static Future<AppLogger> init(
     Level logLevel,
     RemoteLoggingService? remoteLoggingService,
-    Map<String, String> labels,
+    Map<String, String> Function() getLabels,
   ) async {
     hierarchicalLoggingEnabled = true;
 
@@ -22,16 +22,17 @@ class AppLogger {
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
-    final instance = AppLogger._(remoteLoggingService);
+    final instance = AppLogger._(remoteLoggingService, getLabels);
     instance.applyConfig(logLevel);
-    instance.updateRemoteLabels(labels);
+    instance.updateRemoteLabels();
 
     return instance;
   }
 
-  AppLogger._(this._remoteLoggingService);
+  AppLogger._(this._remoteLoggingService, this._getLabels);
 
   final RemoteLoggingService? _remoteLoggingService;
+  final Map<String, String> Function() _getLabels;
 
   void applyConfig(Level logLevel) {
     Logger.root.level = logLevel;
@@ -42,8 +43,8 @@ class AppLogger {
   /// Updates remote logging labels and re-attaches the remote appender.
   ///
   /// Call this after authentication when coreUrl and tenantId become available.
-  void updateRemoteLabels(Map<String, String> labels) {
+  void updateRemoteLabels() {
     _remoteLoggingService?.dispose();
-    _remoteLoggingService?.initialize(labels);
+    _remoteLoggingService?.initialize(_getLabels());
   }
 }

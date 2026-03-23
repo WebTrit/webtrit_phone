@@ -71,7 +71,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     );
 
     // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
-    context.read<AppLogger>().updateRemoteLabels(context.read<AppMetadataProvider>().logLabels);
+    context.read<AppLogger>().updateRemoteLabels();
 
     _sessionGuard = RouterLogoutSessionGuard(
       performLogout: () {
