@@ -6,15 +6,13 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 
-import 'app_metadata_provider.dart';
-
 final _logger = Logger('AppLogger');
 
 class AppLogger {
   static Future<AppLogger> init(
     Level logLevel,
     RemoteLoggingService? remoteLoggingService,
-    AppMetadataProvider labelsProvider,
+    Map<String, String> labels,
   ) async {
     hierarchicalLoggingEnabled = true;
 
@@ -24,18 +22,16 @@ class AppLogger {
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
-    remoteLoggingService?.initialize(labelsProvider.logLabels);
-
-    final instance = AppLogger._(remoteLoggingService, labelsProvider);
+    final instance = AppLogger._(remoteLoggingService);
     instance.applyConfig(logLevel);
+    instance.regenerateRemoteLabels(labels);
 
     return instance;
   }
 
-  AppLogger._(this._remoteLoggingService, this._labelsProvider);
+  AppLogger._(this._remoteLoggingService);
 
   final RemoteLoggingService? _remoteLoggingService;
-  final AppMetadataProvider _labelsProvider;
 
   void applyConfig(Level logLevel) {
     Logger.root.level = logLevel;
@@ -44,7 +40,7 @@ class AppLogger {
   }
 
   /// Allows regenerating labels when coreUrl and tenantId are available.
-  void regenerateRemoteLabels() {
-    _remoteLoggingService?.initialize(_labelsProvider.logLabels);
+  void regenerateRemoteLabels(Map<String, String> labels) {
+    _remoteLoggingService?.initialize(labels);
   }
 }
