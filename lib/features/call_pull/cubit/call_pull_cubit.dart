@@ -24,12 +24,18 @@ class CallPullCubit extends Cubit<List<DialogInfo>> {
   List<DialogInfo> _dialogInfos = [];
 
   void init() {
-    _userSub = userRepository.getInfoAndListen().listen((userInfo) {
-      if (isClosed) return;
-      _mainNumber = userInfo.numbers.main;
-      _logger.info('Main number updated: $_mainNumber');
-      _subscribeToDialogs();
-    });
+    _userSub = userRepository.getInfoAndListen().listen(
+      (userInfo) {
+        if (isClosed) return;
+        _mainNumber = userInfo.numbers.main;
+        _logger.info('Main number updated: $_mainNumber');
+        _subscribeToDialogs();
+      },
+      onError: (e, st) {
+        _logger.warning('Failed to get user info', e, st);
+      },
+      cancelOnError: false,
+    );
 
     _linesStateSub = linesStateRepository.getStateAndListen().listen((linesState) {
       if (isClosed) return;

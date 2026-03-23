@@ -12,6 +12,10 @@ export 'package:webtrit_api/webtrit_api.dart'
 
 final _logger = Logger('UserRepository');
 
+// TODO:
+// - cache user info to prefs, to ensure last known state is available during all user session
+//   so getInfoAndListen should never thow error to its consumers
+
 class UserRepository implements Refreshable {
   UserRepository(this.webtritApiClient, this.token, {SessionGuard? sessionGuard})
     : _sessionGuard = sessionGuard ?? const EmptySessionGuard() {
@@ -25,7 +29,7 @@ class UserRepository implements Refreshable {
 
   UserInfo? _lastInfo;
 
-  Future<UserInfo?> _gatherUserInfo() async {
+  Future<UserInfo> _gatherUserInfo() async {
     try {
       final newInfo = await webtritApiClient.getUserInfo(token);
 
@@ -62,8 +66,7 @@ class UserRepository implements Refreshable {
   Stream<UserInfo> infoUpdates() => _updatesController.stream;
 
   Stream<UserInfo> getInfoAndListen() async* {
-    final info = _lastInfo ?? await _gatherUserInfo();
-    if (info != null) yield info;
+    yield _lastInfo ?? await _gatherUserInfo();
     yield* _updatesController.stream;
   }
 
