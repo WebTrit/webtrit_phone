@@ -67,7 +67,7 @@ void main() {
     expect(find.widgetWithIcon(TextButton, Icons.volume_up), findsOneWidget, reason: 'Speaker should be on');
     await $(callActionsSpeakerKey).tap();
     await pumpFor(const Duration(seconds: 1), $);
-    expect(find.widgetWithIcon(TextButton, Icons.volume_off), findsOneWidget, reason: 'Speaker should be off');
+    expect(find.widgetWithIcon(TextButton, Icons.phone_in_talk), findsOneWidget, reason: 'Speaker should be off');
 
     // Check hold function
     await $(callActionsHoldKey).tap();
