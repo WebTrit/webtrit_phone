@@ -42,6 +42,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
 
+  /// Lazily initialised on first [build] once [CallBloc], [CallRoutingCubit],
+  /// and [NotificationsBloc] are available in the widget tree. The `??=`
+  /// assignment guarantees a single instance for the lifetime of this [State],
+  /// preventing consumers from holding stale references across rebuilds.
+  CallController? _callController;
+
   @override
   void initState() {
     super.initState();
@@ -586,19 +592,25 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       child: Builder(
                         builder: (context) {
                           final sipPresenceFeature = featureAccess.sipPresenceConfig;
-
-                          return PresenceViewParams(
-                            hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
-                            blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
-                            presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
-                            child: CallConfigSynchronizer(
-                              child: CallShell(
-                                child: MessagingShell(
-                                  child: SystemNotificationsShell(
-                                    child: AutoRouter(
-                                      navigatorObservers: () => [
-                                        MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                                      ],
+                          return CallControllerScope(
+                            controller: _callController ??= CallController(
+                              callBloc: context.read<CallBloc>(),
+                              callRoutingCubit: context.read<CallRoutingCubit>(),
+                              notificationsBloc: context.read<NotificationsBloc>(),
+                            ),
+                            child: PresenceViewParams(
+                              hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
+                              blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
+                              presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
+                              child: CallConfigSynchronizer(
+                                child: CallShell(
+                                  child: MessagingShell(
+                                    child: SystemNotificationsShell(
+                                      child: AutoRouter(
+                                        navigatorObservers: () => [
+                                          MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

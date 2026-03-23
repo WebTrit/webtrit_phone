@@ -47,7 +47,26 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/md_formatter.py"
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0; bash \"$ROOT/.claude/hooks/md_formatter.sh\""
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0; bash \"$ROOT/.claude/hooks/dart_formatter.sh\"",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0; bash \"$ROOT/.claude/hooks/newline_enforcer.sh\""
           }
         ]
       }
@@ -58,7 +77,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/env_file_guard.py"
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0; bash \"$ROOT/.claude/hooks/env_file_guard.sh\""
           }
         ]
       },
@@ -67,7 +86,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/env_file_guard.py"
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0; bash \"$ROOT/.claude/hooks/env_file_guard.sh\""
           }
         ]
       }
