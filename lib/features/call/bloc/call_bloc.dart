@@ -758,6 +758,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
     } else if (code == SignalingDisconnectCode.controllerExitError) {
       _logger.info('__onSignalingClientEventDisconnected: skipping expected system unregistration notification');
+    } else if (code == SignalingDisconnectCode.controllerForceAttachClose) {
+      // Server closed the connection because a duplicate signaling session was detected
+      // (e.g. background push isolate still connected when main engine reconnects).
+      // Reconnect silently: don't set lastSignalingDisconnectCode so connectIssue is never shown.
+      _logger.warning(
+        '__onSignalingClientEventDisconnected: signaling race detected — '
+        'server force-closed duplicate session (code=${event.code}, reason="${event.reason}"). '
+        'Reconnecting silently without showing connectIssue.',
+      );
+      newState = state.copyWith(
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.disconnect,
+          lastSignalingDisconnectCode: null,
+        ),
+      );
     } else if (code == SignalingDisconnectCode.sessionMissedError) {
       notificationToShow = const SignalingSessionMissedNotification();
     } else if (code.type == SignalingDisconnectCodeType.auxiliary) {
@@ -786,7 +801,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(newState);
     _signalingClient = null;
     if (notificationToShow != null && !repeated) submitNotification(notificationToShow);
-    if (shouldReconnect) _reconnectInitiated(kSignalingClientReconnectDelay);
+    if (shouldReconnect) {
+      final reconnectDelay = code == SignalingDisconnectCode.controllerForceAttachClose
+          ? kSignalingClientFastReconnectDelay
+          : kSignalingClientReconnectDelay;
+      _reconnectInitiated(reconnectDelay);
+    }
   }
 
   // processing call push events
