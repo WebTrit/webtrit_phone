@@ -6,15 +6,13 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 
-import 'app_metadata_provider.dart';
-
 final _logger = Logger('AppLogger');
 
 class AppLogger {
   static Future<AppLogger> init(
     Level logLevel,
-    LogzioLoggingService? logzioService,
-    AppMetadataProvider labelsProvider,
+    RemoteLoggingService? remoteLoggingService,
+    Map<String, String> Function() getLabels,
   ) async {
     hierarchicalLoggingEnabled = true;
 
@@ -24,27 +22,29 @@ class AppLogger {
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
-    logzioService?.initialize(labelsProvider.logLabels);
-
-    final instance = AppLogger._(logzioService, labelsProvider);
+    final instance = AppLogger._(remoteLoggingService, getLabels);
+    instance.updateRemoteLabels();
     instance.applyConfig(logLevel);
 
     return instance;
   }
 
-  AppLogger._(this._logzioService, this._labelsProvider);
+  AppLogger._(this._remoteLoggingService, this._getLabels);
 
-  final LogzioLoggingService? _logzioService;
-  final AppMetadataProvider _labelsProvider;
+  final RemoteLoggingService? _remoteLoggingService;
+  final Map<String, String> Function() _getLabels;
 
   void applyConfig(Level logLevel) {
     Logger.root.level = logLevel;
-    EquatableConfig.stringify = logLevel <= Level.FINE || (_logzioService?.minLevel ?? Level.OFF) <= Level.FINE;
+    EquatableConfig.stringify = logLevel <= Level.FINE || (_remoteLoggingService?.minLevel ?? Level.OFF) <= Level.FINE;
     _logger.info('AppLogger log level applied: $logLevel');
   }
 
-  /// Allows regenerating labels when coreUrl and tenantId are available.
-  void regenerateRemoteLabels() {
-    _logzioService?.initialize(_labelsProvider.logLabels);
+  /// Updates remote logging labels and re-attaches the remote appender.
+  ///
+  /// Call this after authentication when coreUrl and tenantId become available.
+  void updateRemoteLabels() {
+    _remoteLoggingService?.dispose();
+    _remoteLoggingService?.initialize(_getLabels());
   }
 }

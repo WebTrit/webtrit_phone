@@ -42,7 +42,7 @@ Future<void> _initializeCommonDependencies() async {
   _appLogger ??= await AppLogger.init(
     isolateLoggingConfig.logLevel,
     LogzioLoggingService.fromEnvironment(isolateLoggingConfig.remoteLoggingEnabled),
-    _appLabelsProvider!,
+    () => _appLabelsProvider!.logLabels,
   );
   _appCertificates ??= await AppCertificates.init();
   _localPushRepository ??= LocalPushRepositoryFLNImpl();
