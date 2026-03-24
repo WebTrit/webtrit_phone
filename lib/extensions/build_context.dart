@@ -36,6 +36,7 @@ extension BuildContextSnackBar on BuildContext {
         content: Text(data),
         action: action,
         backgroundColor: callStatusStyles?.errorBackgroundColor ?? themeData.colorScheme.error,
+        duration: duration,
       ),
     );
   }
@@ -63,6 +64,7 @@ extension BuildContextSnackBar on BuildContext {
         content: Text(data),
         action: action,
         backgroundColor: callStatusStyles?.successBackgroundColor ?? themeData.colorScheme.tertiary,
+        duration: duration,
       ),
     );
   }
