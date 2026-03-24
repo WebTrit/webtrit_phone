@@ -5,5 +5,7 @@ abstract class RemoteLoggingService {
 
   void initialize(Map<String, String> labels);
 
+  void setAnonymizationEnabled(bool enabled);
+
   void dispose();
 }

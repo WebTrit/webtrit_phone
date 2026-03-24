@@ -5,12 +5,13 @@ import 'package:logging_appenders/logging_appenders.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('AppLogger');
 
 class AppLogger {
   static Future<AppLogger> init(
-    Level logLevel,
+    LoggingConfig config,
     RemoteLoggingService? remoteLoggingService,
     Map<String, String> Function() getLabels,
   ) async {
@@ -18,13 +19,15 @@ class AppLogger {
 
     Logger.root.clearListeners();
 
+    // Anonymization is intentionally applied only to remote logs (Logzio).
+    // Console output is not anonymized to preserve full detail for local debugging.
     PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
     final instance = AppLogger._(remoteLoggingService, getLabels);
     instance.updateRemoteLabels();
-    instance.applyConfig(logLevel);
+    instance.applyConfig(config);
 
     return instance;
   }
@@ -34,10 +37,12 @@ class AppLogger {
   final RemoteLoggingService? _remoteLoggingService;
   final Map<String, String> Function() _getLabels;
 
-  void applyConfig(Level logLevel) {
-    Logger.root.level = logLevel;
-    EquatableConfig.stringify = logLevel <= Level.FINE || (_remoteLoggingService?.minLevel ?? Level.OFF) <= Level.FINE;
-    _logger.info('AppLogger log level applied: $logLevel');
+  void applyConfig(LoggingConfig config) {
+    Logger.root.level = config.logLevel;
+    _remoteLoggingService?.setAnonymizationEnabled(config.anonymizationEnabled);
+    EquatableConfig.stringify =
+        config.logLevel <= Level.FINE || (_remoteLoggingService?.minLevel ?? Level.OFF) <= Level.FINE;
+    _logger.info('AppLogger log level applied: ${config.logLevel}');
   }
 
   /// Updates remote logging labels and re-attaches the remote appender.
