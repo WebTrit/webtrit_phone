@@ -24,6 +24,10 @@ class UserRepository implements Refreshable {
 
   /// Gets last known user information and listens for updates.
   /// Its safe to use without catching exceptions, as they are handled internally and never emitted through this stream.
+  ///
+  /// Its recommended to use this method for most use cases:
+  /// fo example [getAndListen.first] will give your dependant components (like [user_info_cubit] or [contacts_sync_bloc])
+  /// valid user info only when it will be available, because they dont give a heck if it wasn't in cache or app were offline or error happend.
   Stream<UserInfo> getAndListen() async* {
     final info = getLocalInfo();
     if (info != null) yield info;
