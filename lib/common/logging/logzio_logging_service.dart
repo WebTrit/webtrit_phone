@@ -57,6 +57,7 @@ class LogzioLoggingService implements RemoteLoggingService {
     )..attachToLogger(Logger.root);
   }
 
+  @override
   void setAnonymizationEnabled(bool enabled) {
     _remoteFormatter?.anonymizationType = enabled ? AnonymizationType.full : AnonymizationType.none;
   }
