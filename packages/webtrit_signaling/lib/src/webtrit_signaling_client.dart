@@ -54,19 +54,17 @@ class WebtritSignalingClient {
 
   static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 10000);
 
+  static final _logger = Logger('WebtritSignalingClient');
   static int _createCounter = 0;
 
   @visibleForTesting
-  WebtritSignalingClient.inner(this._wsc)
-    : _id = _createCounter,
-      _logger = Logger('WebtritSignalingClient-$_createCounter') {
+  WebtritSignalingClient.inner(this._wsc) : _id = _createCounter {
     _createCounter++;
 
-    _logger.fine('connected');
+    _logger.fine('$_id connected');
   }
 
   final int _id;
-  final Logger _logger;
 
   final WebSocketChannel _wsc;
   StreamSubscription? _wscStreamSubscription;
@@ -116,7 +114,7 @@ class WebtritSignalingClient {
     if (_wscStreamSubscription != null) {
       throw StateError('$WebtritSignalingClient with id: $_id has already been listened to');
     }
-    _logger.fine('listen');
+    _logger.fine('$_id listen');
 
     _onStateHandshake = onStateHandshake;
     _onEvent = onEvent;
@@ -129,9 +127,9 @@ class WebtritSignalingClient {
   Future<void> disconnect([int? code, String? reason]) async {
     final wscStreamSubscription = _wscStreamSubscription;
     if (wscStreamSubscription == null) {
-      _logger.fine('already disconnected with code: ${_wsc.closeCode} reason: ${_wsc.closeReason}');
+      _logger.fine('$_id already disconnected with code: ${_wsc.closeCode} reason: ${_wsc.closeReason}');
     } else {
-      _logger.fine('disconnect code: $code reason: $reason');
+      _logger.fine('$_id disconnect code: $code reason: $reason');
 
       _stopKeepaliveTimer();
 
@@ -148,14 +146,14 @@ class WebtritSignalingClient {
   //
 
   void _wscStreamOnData(dynamic data) {
-    _logger.fine('_wsOnData: $data');
+    _logger.fine('$_id _wsOnData: $data');
 
     final Map<String, dynamic> messageJson = jsonDecode(data);
     _onMessage(messageJson);
   }
 
   void _wscStreamOnError(dynamic error, StackTrace stackTrace) {
-    _logger.warning('_wsOnError', error, stackTrace);
+    _logger.warning('$_id _wsOnError', error, stackTrace);
 
     _onError(error, stackTrace);
   }
@@ -164,7 +162,7 @@ class WebtritSignalingClient {
     final closeCode = _wsc.closeCode;
     final closeReason = _wsc.closeReason;
 
-    _logger.fine('_wsOnDone code: $closeCode reason: $closeReason');
+    _logger.fine('$_id _wsOnDone code: $closeCode reason: $closeReason');
 
     _stopKeepaliveTimer();
 
@@ -269,7 +267,7 @@ class WebtritSignalingClient {
   }
 
   void _addData(dynamic data) {
-    _logger.fine(() => '_addData add: $data');
+    _logger.fine(() => '$_id _addData add: $data');
 
     try {
       if (_wsc.closeCode != null) {
@@ -307,7 +305,7 @@ class WebtritSignalingClient {
   void _onKeepalive() async {
     try {
       final elapsed = await _executeKeepaliveTransaction(defaultExecuteTransactionTimeoutDuration);
-      _logger.finest('handshake keepalive latency: $elapsed');
+      _logger.finest('$_id handshake keepalive latency: $elapsed');
 
       // Stop the keepalive loop if the socket was closed between send and response.
       if (_wsc.closeCode == null) {
@@ -316,7 +314,7 @@ class WebtritSignalingClient {
     } on WebtritSignalingTransactionTimeoutException catch (e, stackTrace) {
       _onError(WebtritSignalingKeepaliveTransactionTimeoutException(e.id, e.transactionId), stackTrace);
     } on WebtritSignalingBadStateException {
-      _logger.fine('Keepalive stopped gracefully due to closed socket.');
+      _logger.fine('$_id keepalive stopped gracefully due to closed socket.');
       // Catches the specific exception thrown when attempting to write to a closed socket.
       // This indicates a race condition where the Keepalive timer triggered shortly after
       // the socket was closed but before the timer could be cancelled.
