@@ -54,11 +54,12 @@ class WebtritSignalingClient {
 
   static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 10000);
 
-  static final _sharedLogger = Logger('WebtritSignalingClient');
   static int _createCounter = 0;
 
   @visibleForTesting
-  WebtritSignalingClient.inner(this._wsc, {Logger? logger}) : _id = _createCounter, _logger = logger ?? _sharedLogger {
+  WebtritSignalingClient.inner(this._wsc, {Logger? logger})
+    : _id = _createCounter,
+      _logger = logger ?? Logger('WebtritSignalingClient') {
     _createCounter++;
 
     _logger.fine('$_id connected');
