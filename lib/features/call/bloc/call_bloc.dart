@@ -668,8 +668,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (emit.isDone) return;
       _logger.warning('__onSignalingClientEventConnectInitiated: $e', s);
 
-      final repeated = state.callServiceState.lastSignalingClientConnectError == e;
-      if (repeated == false) submitNotification(const SignalingConnectFailedNotification());
+      // toString is important to compare low level exceptions like SocketException, HttpException, TlsException etc.
+      final repeated = state.callServiceState.lastSignalingClientConnectError.toString() == e.toString();
+      if (repeated == false) {
+        submitNotification(const SignalingConnectFailedNotification());
+      }
 
       emit(
         state.copyWith(
