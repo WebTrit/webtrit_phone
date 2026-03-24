@@ -18,9 +18,9 @@ extension BuildContextSnackBar on BuildContext {
     SnackBarAction? action,
     Duration duration = const Duration(seconds: 3),
   }) {
-    return (ScaffoldMessenger.of(
-      this,
-    )..removeCurrentSnackBar()).showSnackBar(SnackBar(content: Text(data), action: action, duration: duration));
+    return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(
+      SnackBar(content: Text(data), action: action, duration: duration, persist: false),
+    );
   }
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
@@ -37,6 +37,7 @@ extension BuildContextSnackBar on BuildContext {
         action: action,
         backgroundColor: callStatusStyles?.errorBackgroundColor ?? themeData.colorScheme.error,
         duration: duration,
+        persist: false,
       ),
     );
   }
@@ -47,7 +48,13 @@ extension BuildContextSnackBar on BuildContext {
     Duration duration = const Duration(seconds: 1),
   }) {
     return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(
-      SnackBar(content: Text(data), behavior: SnackBarBehavior.floating, action: action, duration: duration),
+      SnackBar(
+        content: Text(data),
+        behavior: SnackBarBehavior.floating,
+        action: action,
+        duration: duration,
+        persist: false,
+      ),
     );
   }
 
@@ -65,6 +72,7 @@ extension BuildContextSnackBar on BuildContext {
         action: action,
         backgroundColor: callStatusStyles?.successBackgroundColor ?? themeData.colorScheme.tertiary,
         duration: duration,
+        persist: false,
       ),
     );
   }
