@@ -31,6 +31,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
     required this.encodingSettingsRepository,
     required this.localeRepository,
     required this.themeModeRepository,
+    required this.userLocalDatasource,
     required this.appDatabase,
   });
 
@@ -49,6 +50,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
   final EncodingSettingsRepository encodingSettingsRepository;
   final LocaleRepository localeRepository;
   final ThemeModeRepository themeModeRepository;
+  final UserLocalDatasource userLocalDatasource;
   final AppDatabase appDatabase;
 
   @override
@@ -71,6 +73,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
       peerConnectionSettingsRepository.clear().suppressError('peerConnectionSettingsRepository'),
       videoCapturingSettingsRepository.clear().suppressError('videoCapturingSettingsRepository'),
       encodingSettingsRepository.clear().suppressError('encodingSettingsRepository'),
+      userLocalDatasource.clear().suppressError('userRepository'),
       localeRepository.clear().suppressError('localeRepository'),
       themeModeRepository.clear().suppressError('themeModeRepository'),
     ]);

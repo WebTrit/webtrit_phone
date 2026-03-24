@@ -42,7 +42,7 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
 
   void _startInfoSubscription() {
     _infoSub = _userRepository
-        .getInfoAndListen()
+        .getAndListen()
         .combineLatest(_linesStateRepository.getStateAndListen(), _combineInfo)
         .listen(emit);
   }

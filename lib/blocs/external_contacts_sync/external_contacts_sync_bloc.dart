@@ -59,28 +59,18 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
     _ExternalContactsSyncUpdated event,
     Emitter<ExternalContactsSyncState> emit, {
     int retryCount = 0,
-    UserInfo? userInfo,
   }) async {
     _logger.finer('_onUpdated contacts count:${event.contacts.length}');
-
-    // Retrieve `UserInfo` separately because filtering requires the user's primary number.
-    // If obtaining `UserInfo` fails, treat it as a refresh failure and abort processing.
-    // Do not perform automatic retries for failures at this stage.
-    try {
-      userInfo ??= await userRepository.getInfo();
-    } catch (error) {
-      _logger.warning('_onUpdated userInfo error: ', error);
-      emit(const ExternalContactsSyncRefreshFailure());
-      return;
-    }
 
     // Synchronize external contacts into the local contacts store.
     // On transient database errors, retry the transaction up to 3 attempts with a short backoff.
     try {
+      final userInfo = await userRepository.getAndListen().first;
+
       // TODO: Clarify this filtering logic. Comparing `externalContact.id` with `userInfo.numbers.main` implies a type mismatch (ID vs Number).
       // This might be related to the legacy change: "fix(api): remove overabundant SIP information from user information response" (2023-08-08).
       final filteredContacts = event.contacts
-          .where((externalContact) => externalContact.id != userInfo!.numbers.main)
+          .where((externalContact) => externalContact.id != userInfo.numbers.main)
           .toList();
 
       await contactsRepository.syncExternalContacts(filteredContacts);
@@ -94,7 +84,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
         if (isClosed) return;
         // Provide the retrieved `userInfo` to the recursive retry
         // to avoid redundant fetches and preserve the valid user context.
-        await _onUpdated(event, emit, retryCount: retryCount + 1, userInfo: userInfo);
+        await _onUpdated(event, emit, retryCount: retryCount + 1);
       } else {
         emit(const ExternalContactsSyncUpdateFailure());
       }

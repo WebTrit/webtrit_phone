@@ -65,7 +65,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     emit(state.copyWith(progress: true));
     try {
-      await userRepository.delete();
+      await userRepository.deleteRemote();
 
       appBloc.add(const AppLogoutRequested());
       if (emit.isDone) return;

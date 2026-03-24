@@ -387,7 +387,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // TODO: Consider moving this method to a separate repository
   Future<void> _notifyAccountErrorSafely() async {
     try {
-      await userRepository.getInfo(true);
+      await userRepository.getRemoteInfo();
     } on RequestFailure catch (e) {
       final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
       _logger.warning('Account error code: $errorCode');
