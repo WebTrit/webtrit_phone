@@ -39,6 +39,8 @@ part 'call_event.dart';
 
 part 'call_state.dart';
 
+part 'platform_bridge.dart';
+
 const int _kUndefinedLine = -1;
 
 final _logger = Logger('CallBloc');
@@ -53,7 +55,7 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 /// application-level logout to resolve the state.
 typedef SignalingSessionInvalidatedCallback = void Function();
 
-class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
+class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _PlatformBridgeMixin {
   final String coreUrl;
   final String tenantId;
   final String token;
@@ -65,6 +67,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
+  @override
   final Function(Notification) submitNotification;
 
   /// Callback invoked when the signaling client reports a critical session error
@@ -2584,190 +2587,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     add(_AppLifecycleStateChanged(state));
   }
 
-  // CallkeepDelegate
-
-  @override
-  void continueStartCallIntent(CallkeepHandle handle, String? displayName, bool video) {
-    _logger.fine(() => 'continueStartCallIntent handle: $handle displayName: $displayName video: $video');
-
-    _continueStartCallIntent(handle, displayName, video);
-  }
-
-  Future<void> _continueStartCallIntent(CallkeepHandle handle, String? displayName, bool video) async {
-    _logger.fine(
-      () => StringBuffer()
-        ..write('_continueStartCallIntent - Attempting to start call')
-        ..write(' handle: $handle')
-        ..write(' displayName: $displayName')
-        ..write(' video: $video')
-        ..write(' isHandshakeActive: ${state.isHandshakeEstablished}')
-        ..write(' isSignalingActive: ${state.isSignalingEstablished}'),
-    );
-
-    try {
-      // Wait until both signaling and handshake are active.
-      // If the desired state is not reached within kSignalingClientConnectionTimeout, a TimeoutException will be thrown.
-      final resolvedState = await stream
-          .firstWhere((state) => state.isHandshakeEstablished && state.isSignalingEstablished)
-          .timeout(kSignalingClientConnectionTimeout);
-
-      if (isClosed) return;
-
-      _logger.fine(
-        () => StringBuffer()
-          ..write('_continueStartCallIntent - Signaling and handshake are now active for')
-          ..write(' handle: $handle')
-          ..write(' displayName: $displayName')
-          ..write(' video: $video')
-          ..write(' isHandshakeActive: ${resolvedState.isHandshakeEstablished}')
-          ..write(' isSignalingActive: ${resolvedState.isSignalingEstablished}'),
-      );
-
-      final event = CallControlEvent.started(
-        generic: handle.isGeneric ? handle.value : null,
-        number: handle.isNumber ? handle.value : null,
-        email: handle.isEmail ? handle.value : null,
-        displayName: displayName,
-        video: video,
-      );
-
-      add(event);
-    } on TimeoutException {
-      if (isClosed) return;
-
-      _logger.warning(
-        () => StringBuffer()
-          ..write('_continueStartCallIntent - Failed to start call')
-          ..write(' handle: $handle')
-          ..write(' (Signaling/handshake connection timed out after ${kSignalingClientConnectionTimeout.inSeconds}s)')
-          ..write(' isHandshakeActive: ${state.isHandshakeEstablished}')
-          ..write(' isSignalingActive: ${state.isSignalingEstablished}'),
-      );
-
-      submitNotification(const SignalingConnectFailedNotification());
-    } catch (e, s) {
-      if (isClosed) return;
-
-      final severeMessage = StringBuffer()
-        ..write('_continueStartCallIntent - An unexpected error occurred while waiting for signaling')
-        ..write(' handle: $handle');
-      _logger.severe(() => severeMessage, e, s);
-
-      submitNotification(ErrorMessageNotification(e.toString()));
-    }
-  }
-
-  @override
-  // Handles incoming call notifications from the native side.
-  // On iOS, this is triggered via PushKit when a push is received.
-  //
-  // On Android, this method is currently not used. Call state synchronization
-  // from the background is handled by `CallkeepConnections`. A future refactoring
-  // could unify this logic so that both platforms use this delegate method.
-  //
-  // On Android, this is now fully feasible because after the recent callback
-  // improvement we can reliably detect when the bloc is ready.
-  //
-  // PDelegateFlutterApi.setUp(null);
-  // _api.onDelegateSet();
-  //
-  // TODO: Unify incoming-call handling for both iOS and Android so that
-  // this method becomes the shared entry point. This may require removing
-  // `CallkeepConnections` and adjusting the method signature.
-  void didPushIncomingCall(
-    CallkeepHandle handle,
-    String? displayName,
-    bool video,
-    String callId,
-    CallkeepIncomingCallError? error,
-  ) {
-    _logger.fine(
-      () =>
-          'didPushIncomingCall handle: $handle displayName: $displayName video: $video'
-          ' callId: $callId error: $error',
-    );
-
-    add(_CallPushEventIncoming(callId: callId, handle: handle, displayName: displayName, video: video, error: error));
-  }
-
-  @override
-  Future<bool> performStartCall(
-    String callId,
-    CallkeepHandle handle,
-    String? displayNameOrContactIdentifier,
-    bool video,
-  ) {
-    return _perform(
-      _CallPerformEvent.started(callId, handle: handle, displayName: displayNameOrContactIdentifier, video: video),
-    );
-  }
-
-  @override
-  Future<bool> performAnswerCall(String callId) {
-    return _perform(_CallPerformEvent.answered(callId));
-  }
-
-  @override
-  Future<bool> performEndCall(String callId) {
-    return _perform(_CallPerformEvent.ended(callId));
-  }
-
-  @override
-  Future<bool> performSetHeld(String callId, bool onHold) {
-    return _perform(_CallPerformEvent.setHeld(callId, onHold));
-  }
-
-  @override
-  Future<bool> performSetMuted(String callId, bool muted) {
-    return _perform(_CallPerformEvent.setMuted(callId, muted));
-  }
-
-  @override
-  Future<bool> performSendDTMF(String callId, String key) {
-    return _perform(_CallPerformEvent.sentDTMF(callId, key));
-  }
-
-  @override
-  Future<bool> performAudioDeviceSet(String callId, CallkeepAudioDevice device) {
-    final callDevice = CallAudioDevice.fromCallkeep(device);
-    return _perform(_CallPerformEvent.audioDeviceSet(callId, callDevice));
-  }
-
-  @override
-  Future<bool> performAudioDevicesUpdate(String callId, List<CallkeepAudioDevice> devices) {
-    final callDevices = devices.map(CallAudioDevice.fromCallkeep).toList();
-    return _perform(_CallPerformEvent.audioDevicesUpdate(callId, callDevices));
-  }
-
-  @override
-  void didActivateAudioSession() {
-    _logger.fine('didActivateAudioSession');
-    () async {
-      await AppleNativeAudioManagement.audioSessionDidActivate();
-      await AppleNativeAudioManagement.setIsAudioEnabled(true);
-    }();
-  }
-
-  @override
-  void didDeactivateAudioSession() {
-    _logger.fine('didDeactivateAudioSession');
-    () async {
-      await AppleNativeAudioManagement.setIsAudioEnabled(false);
-      await AppleNativeAudioManagement.audioSessionDidDeactivate();
-    }();
-  }
-
-  @override
-  void didReset() {
-    _logger.warning('didReset');
-  }
-
   // helpers
-
-  Future<bool> _perform(_CallPerformEvent callPerformEvent) {
-    add(callPerformEvent);
-    return callPerformEvent.future;
-  }
 
   Future<RTCPeerConnection> _createPeerConnection(String callId, int? lineId) {
     return _peerConnectionManager.createPeerConnection(
