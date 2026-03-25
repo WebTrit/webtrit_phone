@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart' hide Notification;
 import 'package:mocktail/mocktail.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -11,8 +10,6 @@ import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
 import 'package:webtrit_phone/features/call/utils/utils.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-
-import 'fake_signaling_client.dart';
 
 // ---------------------------------------------------------------------------
 // Mock declarations
@@ -135,7 +132,7 @@ TestCallBloc buildTestBloc({
   when(() => mockPcm.disposePeerConnection(any())).thenAnswer((_) async {});
   when(() => mockPcm.add(any())).thenReturn(null);
 
-  final notifications_ = <Notification>[];
+  final capturedNotifications = <Notification>[];
 
   return TestCallBloc(
     coreUrl: 'https://example.com',
@@ -149,14 +146,14 @@ TestCallBloc buildTestBloc({
     presenceSettingsRepository: mockPresenceSettings,
     onSessionInvalidated: () {},
     userRepository: MockUserRepository(),
-    submitNotification: notifications_.add,
+    submitNotification: capturedNotifications.add,
     callkeep: mockCallkeep,
     callkeepConnections: mockConnections,
     userMediaBuilder: MockUserMediaBuilder(),
     contactNameResolver: MockContactNameResolver(),
     callErrorReporter: MockCallErrorReporter(),
     sipPresenceEnabled: sipPresenceEnabled,
-    onDiagnosticReportRequested: (_, __) {},
+    onDiagnosticReportRequested: (_, _2) {},
     peerConnectionManager: mockPcm,
     signalingClientFactory: signalingClientFactory,
     callkeepSound: mockSound,

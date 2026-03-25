@@ -7,10 +7,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import 'helpers/call_bloc_test_helpers.dart';
 import 'helpers/fake_signaling_client.dart';
@@ -265,7 +262,6 @@ void main() {
         expect(bloc.state.callServiceState.status, isNot(CallStatus.connectIssue));
 
         // Verify fast reconnect fires (not slow).
-        final factoryCallsBefore = 1; // already connected once
         async.elapse(kSignalingClientFastReconnectDelay + const Duration(milliseconds: 1));
         async.flushMicrotasks();
 
@@ -314,7 +310,7 @@ void main() {
           contactNameResolver: MockContactNameResolver(),
           callErrorReporter: MockCallErrorReporter(),
           sipPresenceEnabled: false,
-          onDiagnosticReportRequested: (_, __) {},
+          onDiagnosticReportRequested: (_, _2) {},
           peerConnectionManager: () {
             final m = MockPeerConnectionManager();
             when(() => m.dispose()).thenAnswer((_) async {});

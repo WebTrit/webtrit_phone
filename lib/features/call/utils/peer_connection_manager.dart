@@ -103,6 +103,7 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   final _pendingDisposals = <CallId, Future<void>>{};
 
   /// Updates configuration parameters for future connections.
+  @override
   void updateConfig({Duration? retrieveTimeout, Duration? monitorCheckInterval, Duration? disposalTimeout}) {
     if (retrieveTimeout != null) {
       _retrieveTimeout = retrieveTimeout;
@@ -119,6 +120,7 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   }
 
   /// Reserves a slot for a call. Must be called before [retrieve].
+  @override
   void add(CallId callId) {
     if (_states.containsKey(callId)) {
       _logger.finer(() => 'add($callId): state already exists');
@@ -138,6 +140,7 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   /// this method waits for the disposal to complete before creating the new connection.
   ///
   /// Does NOT automatically complete the barrier; [complete] must be called separately.
+  @override
   Future<RTCPeerConnection> createPeerConnection(CallId callId, {required PeerConnectionObserver observer}) async {
     // BARRIER: Check if this callId is currently cleaning up
     if (_pendingDisposals.containsKey(callId)) {
@@ -176,6 +179,7 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   }
 
   /// Completes the barrier for [callId] with the created [pc].
+  @override
   void complete(CallId callId, RTCPeerConnection pc) {
     final state = _states[callId];
 
@@ -200,6 +204,7 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   }
 
   /// Completes the barrier with an error if it hasn't completed yet.
+  @override
   void completeError(CallId callId, Object error, [StackTrace? st]) {
     final state = _states[callId];
     if (state == null || state.completer.isCompleted) {
@@ -215,11 +220,13 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   }
 
   /// Alias for [completeError].
+  @override
   void conditionalCompleteError(CallId callId, Object error, [StackTrace? st]) {
     completeError(callId, error, st);
   }
 
   /// Retrieves the PeerConnection. Waits if it is being created.
+  @override
   Future<RTCPeerConnection?> retrieve(CallId callId, {bool allowWaiting = true}) async {
     final state = _states[callId];
     if (state == null) {
@@ -247,6 +254,7 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   ///
   /// This method is async, but it removes the state synchronously to prevent usage.
   /// It returns a Future that completes when the underlying PeerConnection is actually closed.
+  @override
   Future<void> disposePeerConnection(CallId callId) async {
     final state = _states.remove(callId);
     if (state == null) return;
@@ -270,6 +278,7 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   ///
   /// Waits for all connections to close, but guarantees return after [timeout]
   /// to prevent blocking the application (e.g., if the native WebRTC layer hangs).
+  @override
   Future<void> dispose() async {
     final ids = _states.keys.toList();
 
