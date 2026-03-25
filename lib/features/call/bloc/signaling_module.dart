@@ -118,7 +118,7 @@ extension _SignalingModule on CallBloc {
       );
     } catch (e, s) {
       if (emit.isDone) return;
-      _logger.warning('__onSignalingClientEventConnectInitiated: $e', s);
+      _logger.warning('__onSignalingClientEventConnectInitiated', e, s);
 
       // toString is important to compare low level exceptions like SocketException, HttpException, TlsException etc.
       final repeated = state.callServiceState.lastSignalingClientConnectError.toString() == e.toString();
@@ -603,7 +603,7 @@ extension _SignalingModule on CallBloc {
     Emitter<CallState> emit,
   ) async {
     _logger.fine('_CallSignalingEventNotifyDialogs: $event');
-    await _assingUserActiveCalls(event.userActiveCalls);
+    await _assignUserActiveCalls(event.userActiveCalls);
   }
 
   Future<void> __onCallSignalingEventNotifyPresence(
@@ -611,7 +611,7 @@ extension _SignalingModule on CallBloc {
     Emitter<CallState> emit,
   ) async {
     _logger.fine('_CallSignalingEventNotifyPresence: $event');
-    await _assingNumberPresence(event.number, event.presenceInfo);
+    await _assignNumberPresence(event.number, event.presenceInfo);
   }
 
   Future<void> __onCallSignalingEventNotifyRefer(_CallSignalingEventNotifyRefer event, Emitter<CallState> emit) async {
@@ -640,113 +640,121 @@ extension _SignalingModule on CallBloc {
 
   // WebtritSignalingClient listen handlers
 
-  void _onSignalingStateHandshake(StateHandshake stateHandshake) async {
+  void _onSignalingStateHandshake(StateHandshake stateHandshake) {
     add(
       _HandshakeSignalingEventState(registration: stateHandshake.registration, linesCount: stateHandshake.lines.length),
     );
 
-    _assingUserActiveCalls(stateHandshake.userActiveCalls);
-    stateHandshake.contactsPresenceInfo.forEach(_assingNumberPresence);
+    _assignUserActiveCalls(stateHandshake.userActiveCalls);
+    stateHandshake.contactsPresenceInfo.forEach(_assignNumberPresence);
 
-    // Hang up all active calls that are not associated with any line
-    // or guest line, indicating that they are no longer valid.
-    //
-    // This is needed to drop or retain calls after reconnecting to the signaling server
-    activeCallsLoop:
-    for (final activeCall in state.activeCalls) {
-      // Ignore active calls that are already associated with a line or guest line
+    _processHandshakeAsync(stateHandshake);
+  }
+
+  Future<void> _processHandshakeAsync(StateHandshake stateHandshake) async {
+    try {
+      // Hang up all active calls that are not associated with any line
+      // or guest line, indicating that they are no longer valid.
       //
-      // If you have troubles with line position mismatch replace this with
-      // following code that deal with it: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
-      for (final line in [...stateHandshake.lines, stateHandshake.guestLine]) {
-        if (line != null && line.callId == activeCall.callId) {
+      // This is needed to drop or retain calls after reconnecting to the signaling server
+      activeCallsLoop:
+      for (final activeCall in state.activeCalls) {
+        // Ignore active calls that are already associated with a line or guest line
+        //
+        // If you have troubles with line position mismatch replace this with
+        // following code that deal with it: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
+        for (final line in [...stateHandshake.lines, stateHandshake.guestLine]) {
+          if (line != null && line.callId == activeCall.callId) {
+            continue activeCallsLoop;
+          }
+        }
+
+        // Handles an outgoing active call that has not yet started, typically initiated
+        // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
+        //
+        // TODO: Implement a dedicated flag to confirm successful execution of
+        // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
+        if (activeCall.direction == CallDirection.outgoing &&
+            activeCall.acceptedTime == null &&
+            activeCall.hungUpTime == null) {
           continue activeCallsLoop;
         }
+
+        _peerConnectionManager.conditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
+
+        add(
+          _CallSignalingEvent.hangup(
+            line: activeCall.line,
+            callId: activeCall.callId,
+            code: 487,
+            reason: 'Request Terminated',
+          ),
+        );
       }
 
-      // Handles an outgoing active call that has not yet started, typically initiated
-      // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
-      //
-      // TODO: Implement a dedicated flag to confirm successful execution of
-      // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
-      if (activeCall.direction == CallDirection.outgoing &&
-          activeCall.acceptedTime == null &&
-          activeCall.hungUpTime == null) {
-        continue activeCallsLoop;
-      }
+      final lines = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
+      final localConnections = await callkeepConnections.getConnections();
 
-      _peerConnectionManager.conditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
+      for (final activeLine in lines) {
+        // Get the first call event from the call logs, if any
+        final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
-      add(
-        _CallSignalingEvent.hangup(
-          line: activeCall.line,
-          callId: activeCall.callId,
-          code: 487,
-          reason: 'Request Terminated',
-        ),
-      );
-    }
+        if (callEvent != null) {
+          // Obtain the corresponding Callkeep connection for the line.
+          // Callkeep maintains connection states even if the app's lifecycle has ended.
+          final connection = await callkeepConnections.getConnection(callEvent.callId);
 
-    final lines = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
-    final localConnections = await callkeepConnections.getConnections();
-
-    for (final activeLine in lines) {
-      // Get the first call event from the call logs, if any
-      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
-
-      if (callEvent != null) {
-        // Obtain the corresponding Callkeep connection for the line.
-        // Callkeep maintains connection states even if the app's lifecycle has ended.
-        final connection = await callkeepConnections.getConnection(callEvent.callId);
-
-        // Check if the Callkeep connection exists and its state is `stateDisconnected`.
-        // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
-        // Synchronize the signaling state with the local state for such scenarios.
-        if (connection?.state == CallkeepConnectionState.stateDisconnected) {
-          // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
-          // initiate a hang-up request to align the signaling state.
-          if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
+          // Check if the Callkeep connection exists and its state is `stateDisconnected`.
+          // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
+          // Synchronize the signaling state with the local state for such scenarios.
+          if (connection?.state == CallkeepConnectionState.stateDisconnected) {
             // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
             // initiate a hang-up request to align the signaling state.
-            final hangupRequest = HangupRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: callEvent.line,
-              callId: callEvent.callId,
-            );
-            await _signalingClient?.execute(hangupRequest).catchError((e, s) {
-              callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
-            });
+            if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
+              // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
+              // initiate a hang-up request to align the signaling state.
+              final hangupRequest = HangupRequest(
+                transaction: WebtritSignalingClient.generateTransactionId(),
+                line: callEvent.line,
+                callId: callEvent.callId,
+              );
+              await _signalingClient?.execute(hangupRequest).catchError((e, s) {
+                callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
+              });
 
-            return;
-          } else if (callEvent is IncomingCallEvent) {
-            // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
-            final declineRequest = DeclineRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: callEvent.line,
-              callId: callEvent.callId,
-            );
-            await _signalingClient?.execute(declineRequest).catchError((e, s) {
-              callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
-            });
-            return;
+              return;
+            } else if (callEvent is IncomingCallEvent) {
+              // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
+              final declineRequest = DeclineRequest(
+                transaction: WebtritSignalingClient.generateTransactionId(),
+                line: callEvent.line,
+                callId: callEvent.callId,
+              );
+              await _signalingClient?.execute(declineRequest).catchError((e, s) {
+                callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
+              });
+              return;
+            }
+          }
+        }
+
+        if (activeLine.callLogs.length == 1) {
+          final singleCallLog = activeLine.callLogs.first;
+          if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
+            _onSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
           }
         }
       }
 
-      if (activeLine.callLogs.length == 1) {
-        final singleCallLog = activeLine.callLogs.first;
-        if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
-          _onSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
+      // Synchronize the signaling state with the local state for calls.
+      // If a local connection exists that is not present in the signaling state, end the call to ensure consistency between the local and signaling states.
+      for (var connection in localConnections) {
+        if (!lines.map((e) => e.callId).contains(connection.callId)) {
+          await callkeep.endCall(connection.callId);
         }
       }
-    }
-
-    // Synchronize the signaling state with the local state for calls.
-    // If a local connection exists that is not present in the signaling state, end the call to ensure consistency between the local and signaling states.
-    for (var connection in localConnections) {
-      if (!lines.map((e) => e.callId).contains(connection.callId)) {
-        await callkeep.endCall(connection.callId);
-      }
+    } catch (e, s) {
+      _logger.severe('_processHandshakeAsync error', e, s);
     }
   }
 

@@ -145,19 +145,31 @@ mixin _PlatformBridgeMixin on Bloc<CallEvent, CallState> implements CallkeepDele
   @override
   void didActivateAudioSession() {
     _logger.fine('didActivateAudioSession');
-    () async {
-      await AppleNativeAudioManagement.audioSessionDidActivate();
-      await AppleNativeAudioManagement.setIsAudioEnabled(true);
-    }();
+    unawaited(
+      Future(() async {
+        try {
+          await AppleNativeAudioManagement.audioSessionDidActivate();
+          await AppleNativeAudioManagement.setIsAudioEnabled(true);
+        } catch (e, s) {
+          _logger.warning('didActivateAudioSession error', e, s);
+        }
+      }),
+    );
   }
 
   @override
   void didDeactivateAudioSession() {
     _logger.fine('didDeactivateAudioSession');
-    () async {
-      await AppleNativeAudioManagement.setIsAudioEnabled(false);
-      await AppleNativeAudioManagement.audioSessionDidDeactivate();
-    }();
+    unawaited(
+      Future(() async {
+        try {
+          await AppleNativeAudioManagement.setIsAudioEnabled(false);
+          await AppleNativeAudioManagement.audioSessionDidDeactivate();
+        } catch (e, s) {
+          _logger.warning('didDeactivateAudioSession error', e, s);
+        }
+      }),
+    );
   }
 
   @override

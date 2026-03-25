@@ -47,7 +47,10 @@ final class LivePresenceSyncService implements PresenceSyncService {
 
   @override
   void start() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (_) => sync());
+    if (_timer != null) return;
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
+      sync().catchError((e, s) => _logger.warning('PresenceSyncService.sync error', e, s));
+    });
   }
 
   @override

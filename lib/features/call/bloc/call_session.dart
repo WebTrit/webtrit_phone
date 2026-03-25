@@ -601,7 +601,13 @@ extension _CallSession on CallBloc {
         onIceCandidate: (candidate) => add(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
         onAddStream: (stream) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
         onRemoveStream: (stream) => add(_PeerConnectionEvent.streamRemoved(callId, stream)),
-        onRenegotiationNeeded: (pc) => _handleRenegotiationNeeded(callId, lineId, pc),
+        onRenegotiationNeeded: (pc) {
+          _handleRenegotiationNeeded(
+            callId,
+            lineId,
+            pc,
+          ).catchError((e, s) => callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error'));
+        },
       ),
     );
   }
@@ -665,7 +671,7 @@ extension _CallSession on CallBloc {
   Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
 
   // TODO(Vlad): extract mapper,find better naming
-  Future<void> _assingUserActiveCalls(List<UserActiveCall> userActiveCalls) async {
+  Future<void> _assignUserActiveCalls(List<UserActiveCall> userActiveCalls) async {
     final pullableCalls = userActiveCalls
         .map(
           (call) => PullableCall(
@@ -695,7 +701,7 @@ extension _CallSession on CallBloc {
     callPullRepository.setPullableCalls(pullableCallsToSet);
   }
 
-  Future<void> _assingNumberPresence(String number, List<SignalingPresenceInfo> data) async {
+  Future<void> _assignNumberPresence(String number, List<SignalingPresenceInfo> data) async {
     final presenceInfo = data.map(SignalingPresenceInfoMapper.fromSignaling).toList();
     presenceInfoRepository.setNumberPresence(number, presenceInfo);
   }

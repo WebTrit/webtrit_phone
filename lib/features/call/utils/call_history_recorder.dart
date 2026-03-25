@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -13,13 +15,11 @@ class CallHistoryRecorder {
     _logger.info(
       '[Recents:store] '
       'direction=${call.direction.name} '
-      'number=${call.number} '
       'number.hash=${call.number.hashCode} '
-      'username=${call.username} '
       'username.hash=${call.username?.hashCode} '
       'numberEqualsUsername=${call.number == call.username} '
       'usernameIsNull=${call.username == null}',
     );
-    _repository.add(call);
+    unawaited(_repository.add(call).catchError((e, s) => _logger.severe('Failed to record call history', e, s)));
   }
 }

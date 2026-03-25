@@ -20,12 +20,12 @@ class AudioDeviceManager {
   }
 
   void _onFirstCallStarted() {
-    _logger.info(() => 'Lifecycle: First call started');
+    _logger.info('Lifecycle: First call started');
     if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
   }
 
   void _onLastCallEnded() {
-    _logger.info(() => 'Lifecycle: Last call ended');
+    _logger.info('Lifecycle: Last call ended');
     if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
     if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
   }
