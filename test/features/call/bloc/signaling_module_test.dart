@@ -310,7 +310,7 @@ void main() {
           contactNameResolver: MockContactNameResolver(),
           callErrorReporter: MockCallErrorReporter(),
           sipPresenceEnabled: false,
-          onDiagnosticReportRequested: (_, _2) {},
+          onDiagnosticReportRequested: (_, _) {},
           peerConnectionManager: () {
             final m = MockPeerConnectionManager();
             when(() => m.dispose()).thenAnswer((_) async {});
