@@ -75,12 +75,14 @@ Future<InstanceRegistry> bootstrap() async {
     localDatasource: systemInfoLocalDatasource,
     remoteDatasource: systemInfoRemoteDatasource,
   );
+
   final authRepository = AuthRepositoryImpl(
     apiClientFactory: apiClientFactory,
     systemInfoRemoteDatasource: systemInfoRemoteDatasource,
     appIdentifier: appInfo.identifier,
     appBundleId: packageInfo.packageName,
   );
+
   final sessionRepository = SessionRepositoryImpl(
     secureStorage: secureStorage,
     sessionCleanupWorker: sessionCleanupWorker,
@@ -145,6 +147,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<AuthRepository>(authRepository);
   registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
   registry.register<SessionRepository>(sessionRepository);
+  registry.register<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
   // Logic & Features
   registry.register<FeatureAccess>(featureAccess);

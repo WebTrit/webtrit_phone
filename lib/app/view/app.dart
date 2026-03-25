@@ -56,6 +56,7 @@ class _AppState extends State<App> {
         encodingSettingsRepository: context.read<EncodingSettingsRepository>(),
         localeRepository: context.read<LocaleRepository>(),
         themeModeRepository: context.read<ThemeModeRepository>(),
+        userLocalDatasource: context.read<UserLocalDatasource>(),
         appDatabase: context.read<AppDatabase>(),
       ),
     );

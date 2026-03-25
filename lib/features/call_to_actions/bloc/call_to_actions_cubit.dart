@@ -15,11 +15,16 @@ part 'call_to_actions_cubit.freezed.dart';
 final _logger = Logger('DemoCubit');
 
 class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
-  CallToActionsCubit({required CallToActionsRepository callToActionsRepository, required Locale locale})
-    : _callToActionsRepository = callToActionsRepository,
-      super(CallToActionsCubitState(locale: locale));
+  CallToActionsCubit({
+    required CallToActionsRepository callToActionsRepository,
+    required UserRepository userRepository,
+    required Locale locale,
+  }) : _callToActionsRepository = callToActionsRepository,
+       _userRepository = userRepository,
+       super(CallToActionsCubitState(locale: locale));
 
   final CallToActionsRepository _callToActionsRepository;
+  final UserRepository _userRepository;
 
   void changeVisibility(bool visible) {
     emit(state.copyWith(visible: visible));
@@ -54,7 +59,8 @@ class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
   // Loads and updates state with actions for the specified flavor and locale
   Future<void> _loadFlavorActions(MainFlavor flavor, Locale locale) async {
     try {
-      final flavorCallToActions = await _callToActionsRepository.getActions(flavor, locale);
+      final userInfo = await _userRepository.getAndListen().first;
+      final flavorCallToActions = await _callToActionsRepository.getActions(flavor, locale, userInfo.email!);
       final updatedFlavorCallToActions = {...state.actions, flavor: flavorCallToActions};
 
       emit(state.copyWith(actions: updatedFlavorCallToActions));

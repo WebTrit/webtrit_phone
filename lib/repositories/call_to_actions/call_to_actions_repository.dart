@@ -6,7 +6,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 
 abstract class CallToActionsRepository {
-  Future<List<CallToAction>> getActions(MainFlavor flavor, Locale locale);
+  Future<List<CallToAction>> getActions(MainFlavor flavor, Locale locale, String email);
 }
 
 class CallToActionsRepositoryImpl implements CallToActionsRepository {
@@ -22,15 +22,10 @@ class CallToActionsRepositoryImpl implements CallToActionsRepository {
   final String _token;
   final SessionGuard _sessionGuard;
 
-  // Cache the user information to avoid redundant API calls when data sources are unavailable
-  UserInfo? _cachedUserInfo;
-
   @override
-  Future<List<CallToAction>> getActions(MainFlavor flavor, Locale locale) async {
+  Future<List<CallToAction>> getActions(MainFlavor flavor, Locale locale, String email) async {
     try {
-      final userInfo = await _getUserInfo();
-
-      final param = DemoCallToActionsParam(email: userInfo.email!, tab: flavor.name);
+      final param = DemoCallToActionsParam(email: email, tab: flavor.name);
 
       final callToActions = await _webtritApiClient.getCallToActions(
         _token,
@@ -50,11 +45,5 @@ class CallToActionsRepositoryImpl implements CallToActionsRepository {
       // should result in returning an empty list without interrupting the flow.
       return [];
     }
-  }
-
-  Future<UserInfo> _getUserInfo() async {
-    final requestOption = RequestOptions.withNoRetries();
-    final account = _cachedUserInfo ?? await _webtritApiClient.getUserInfo(_token, options: requestOption);
-    return account;
   }
 }

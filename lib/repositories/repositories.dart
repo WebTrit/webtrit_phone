@@ -1,4 +1,3 @@
-export 'account/user_repository.dart';
 export 'active_contact_source_type/active_contact_source_type_repository.dart';
 export 'active_main_flavor/active_main_flavor_repository.dart';
 export 'active_recents_visibility_filter/active_recents_visibility_filter_repository.dart';
@@ -39,5 +38,6 @@ export 'system_notifications/system_notifications_local_repository.dart';
 export 'system_notifications/system_notifications_remote_repository.dart';
 export 'theme_mode/theme_mode_repository.dart';
 export 'user_agreement_status/user_agreement_status_repository.dart';
+export 'user_info/user_info.dart';
 export 'video_capturing_settings/video_capturing_settings_repository.dart';
 export 'voicemail/voicemail.dart';

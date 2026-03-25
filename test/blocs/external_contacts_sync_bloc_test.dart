@@ -49,7 +49,7 @@ void main() {
     externalContactsRepository = MockExternalContactsRepository();
     contactsRepository = MockContactsRepository();
 
-    when(() => userRepository.getInfo()).thenAnswer((_) async => _testUser);
+    when(() => userRepository.getLocalInfo()).thenAnswer((_) => _testUser);
     when(() => externalContactsRepository.load()).thenAnswer((_) async {});
     when(() => contactsRepository.syncExternalContacts(any())).thenAnswer((_) async {});
   });
@@ -116,7 +116,7 @@ void main() {
       'emits RefreshFailure if UserRepository fails during update',
       build: () {
         when(() => externalContactsRepository.contacts()).thenAnswer((_) => Stream.value([_contactOther]));
-        when(() => userRepository.getInfo()).thenThrow(Exception('User info error'));
+        when(() => userRepository.getLocalInfo()).thenThrow(Exception('User info error'));
 
         return ExternalContactsSyncBloc(
           userRepository: userRepository,

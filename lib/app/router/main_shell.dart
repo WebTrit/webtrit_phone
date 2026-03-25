@@ -177,9 +177,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         ),
         RepositoryProvider<UserRepository>(
           create: (context) => UserRepository(
-            context.read<WebtritApiClient>(),
-            context.read<AppBloc>().state.session.token!,
-            sessionGuard: _sessionGuard,
+            remoteDatasource: UserRemoteDatasourceApiImpl(
+              context.read<WebtritApiClient>(),
+              context.read<AppBloc>().state.session.token!,
+              sessionGuard: _sessionGuard,
+            ),
+            localDatasource: context.read<UserLocalDatasource>(),
           ),
         ),
         RepositoryProvider<CallerIdSettingsRepository>(
