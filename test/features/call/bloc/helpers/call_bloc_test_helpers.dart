@@ -41,6 +41,14 @@ class MockPeerConnectionManager extends Mock implements PeerConnectionManagerPro
 
 class MockWebtritCallkeepSound extends Mock implements WebtritCallkeepSound {}
 
+/// A no-op [CallLogsRepository] that silently drops all `add` calls.
+///
+/// Avoids mocktail `any()` matcher issues with Dart record types.
+class _NoOpCallLogsRepository extends Fake implements CallLogsRepository {
+  @override
+  Future<void> add(NewCall call) async {}
+}
+
 // ---------------------------------------------------------------------------
 // Test subclass that disables platform-specific side effects
 // ---------------------------------------------------------------------------
@@ -104,18 +112,28 @@ Future<WebtritSignalingClient> _pendingSignalingFactory({
 ///
 /// Callers can override individual fields as needed for specific test scenarios.
 /// Required stubs for construction side effects are automatically configured.
+///
+/// Pass [capturedNotifications] to collect submitted [Notification]s for assertions.
+/// Pass [contactNameResolver] or [callLogsRepository] to supply pre-configured mocks.
 TestCallBloc buildTestBloc({
   MockCallkeep? callkeep,
   MockCallkeepConnections? callkeepConnections,
   MockPeerConnectionManager? peerConnectionManager,
   MockPresenceSettingsRepository? presenceSettingsRepository,
+  MockContactNameResolver? contactNameResolver,
+  MockCallLogsRepository? callLogsRepository,
   SignalingClientFactory signalingClientFactory = _pendingSignalingFactory,
   bool sipPresenceEnabled = false,
+  List<Notification>? capturedNotifications,
 }) {
   final mockCallkeep = callkeep ?? MockCallkeep();
   final mockConnections = callkeepConnections ?? MockCallkeepConnections();
   final mockPcm = peerConnectionManager ?? MockPeerConnectionManager();
   final mockPresenceSettings = presenceSettingsRepository ?? MockPresenceSettingsRepository();
+  final mockContactNameResolver = contactNameResolver ?? MockContactNameResolver();
+  // Use a no-op fake by default to avoid mocktail `any()` issues with the
+  // `NewCall` Dart record typedef.
+  final CallLogsRepository mockCallLogs = callLogsRepository ?? _NoOpCallLogsRepository();
 
   final mockLinesState = MockLinesStateRepository();
   final mockSound = MockWebtritCallkeepSound();
@@ -131,26 +149,28 @@ TestCallBloc buildTestBloc({
   when(() => mockPcm.dispose()).thenAnswer((_) async {});
   when(() => mockPcm.disposePeerConnection(any())).thenAnswer((_) async {});
   when(() => mockPcm.add(any())).thenReturn(null);
+  when(() => mockPcm.retrieve(any())).thenAnswer((_) async => null);
+  when(() => mockContactNameResolver.resolveWithNumber(any())).thenAnswer((_) async => null);
 
-  final capturedNotifications = <Notification>[];
+  final notifications = capturedNotifications ?? <Notification>[];
 
   return TestCallBloc(
     coreUrl: 'https://example.com',
     tenantId: 'test-tenant',
     token: 'test-token',
     trustedCertificates: TrustedCertificates.empty,
-    callLogsRepository: MockCallLogsRepository(),
+    callLogsRepository: mockCallLogs,
     callPullRepository: MockCallPullRepository(),
     linesStateRepository: mockLinesState,
     presenceInfoRepository: MockPresenceInfoRepository(),
     presenceSettingsRepository: mockPresenceSettings,
     onSessionInvalidated: () {},
     userRepository: MockUserRepository(),
-    submitNotification: capturedNotifications.add,
+    submitNotification: notifications.add,
     callkeep: mockCallkeep,
     callkeepConnections: mockConnections,
     userMediaBuilder: MockUserMediaBuilder(),
-    contactNameResolver: MockContactNameResolver(),
+    contactNameResolver: mockContactNameResolver,
     callErrorReporter: MockCallErrorReporter(),
     sipPresenceEnabled: sipPresenceEnabled,
     onDiagnosticReportRequested: (_, _) {},
