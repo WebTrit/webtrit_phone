@@ -92,9 +92,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   late final SignalingClientFactory _signalingClientFactory;
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
-  Timer? _presenceInfoSyncTimer;
 
   late final PeerConnectionManager _peerConnectionManager;
+  late final CallHistoryRecorder _callHistoryRecorder;
+  late final PresenceSyncService _presenceSyncService;
+  final AudioDeviceManager _audioDeviceManager = AudioDeviceManager();
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -129,6 +131,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingClientFactory = signalingClientFactory;
     _peerConnectionManager = peerConnectionManager;
+    _callHistoryRecorder = CallHistoryRecorder(repository: callLogsRepository);
+    _presenceSyncService = sipPresenceEnabled
+        ? LivePresenceSyncService(
+            settingsRepository: presenceSettingsRepository,
+            signalingClientProvider: () => _signalingClient,
+            isReady: () => state.callServiceState.status == CallStatus.ready,
+          )
+        : const PresenceSyncService.disabled();
 
     on<CallStarted>(_onCallStarted, transformer: sequential());
     on<_AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());
@@ -160,9 +170,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     callkeep.setDelegate(this);
 
-    if (sipPresenceEnabled) {
-      _presenceInfoSyncTimer = Timer.periodic(const Duration(seconds: 5), (_) => syncPresenceSettings());
-    }
+    _presenceSyncService.start();
   }
 
   @override
@@ -177,7 +185,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _signalingClientReconnectTimer?.cancel();
 
-    _presenceInfoSyncTimer?.cancel();
+    _presenceSyncService.stop();
 
     await _signalingClient?.disconnect();
 
@@ -322,50 +330,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
   }
 
-  /// Analyzes changes in the active call list to trigger specific lifecycle hooks.
-  ///
-  /// This method identifies keys transitions:
-  /// * **First Call Started (`0 -> 1`):** A cold start of the calling session.
-  ///     Crucial for initializing hardware resources (e.g., resetting speaker output on iOS).
-  /// * **Last Call Ended (`N -> 0`):** The termination of the calling session.
-  ///     Used for global cleanup and resource release.
   void _handleCallLifecycleTransitions({
     required List<ActiveCall> previousCalls,
     required List<ActiveCall> currentCalls,
   }) {
-    final wasEmpty = previousCalls.isEmpty;
-    final isEmpty = currentCalls.isEmpty;
-
-    if (wasEmpty && !isEmpty) {
-      _onFirstCallStarted();
-    }
-
-    if (!wasEmpty && isEmpty) {
-      _onLastCallEnded();
-    }
-  }
-
-  /// Triggered when the first active call is established (0 -> 1 active calls).
-  ///
-  /// * **iOS:** Forces the audio output to the Receiver (Earpiece) via `Helper.setSpeakerphoneOn(false)`.
-  ///   This is a critical hard-reset to fix the "sticky speaker" issue where iOS
-  ///   retains the speaker route from a previous, unrelated session.
-  void _onFirstCallStarted() {
-    _logger.info(() => 'Lifecycle: First call started');
-    if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
-  }
-
-  /// Triggered when the last remaining active call ends (N -> 0 active calls).
-  ///
-  /// Resets platform audio routing to media profile:
-  /// * **iOS:** Disables speakerphone to release AVAudioSession from voice chat mode,
-  ///   preventing state bleeding between sessions.
-  /// * **Android:** Clears communication device to switch from SCO (call profile)
-  ///   back to A2DP (media profile), fixing degraded audio in YouTube/music after calls.
-  void _onLastCallEnded() {
-    _logger.info(() => 'Lifecycle: Last call ended');
-    if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
-    if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
+    _audioDeviceManager.handleCallListChange(wasEmpty: previousCalls.isEmpty, isEmpty: currentCalls.isEmpty);
   }
 
   void _handleSignalingSessionError({required CallServiceState previous, required CallServiceState current}) {
@@ -2859,30 +2828,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void _addToRecents(ActiveCall activeCall) {
-    final number = activeCall.handle.value;
-    final username = activeCall.displayName;
-
-    _logger.info(
-      '[Recents:store] '
-      'direction=${activeCall.direction.name} '
-      'number=$number '
-      'number.hash=${number.hashCode} '
-      'username=$username '
-      'username.hash=${username?.hashCode} '
-      'numberEqualsUsername=${number == username} '
-      'usernameIsNull=${username == null}',
-    );
-
-    NewCall call = (
+    _callHistoryRecorder.record((
       direction: activeCall.direction,
-      number: number,
+      number: activeCall.handle.value,
       video: activeCall.video,
-      username: username,
+      username: activeCall.displayName,
       createdTime: activeCall.createdTime,
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,
-    );
-    callLogsRepository.add(call);
+    ));
   }
 
   Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
@@ -2925,37 +2879,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     presenceInfoRepository.setNumberPresence(number, presenceInfo);
   }
 
-  Future<void> syncPresenceSettings() async {
-    final now = DateTime.now();
-    final lastSync = presenceSettingsRepository.lastSettingsSync;
-    final presenceSettings = presenceSettingsRepository.presenceSettings;
-
-    final canUpdate = state.callServiceState.status == CallStatus.ready;
-    bool shouldUpdate = false;
-    if (lastSync == null) {
-      shouldUpdate = true;
-    } else if (presenceSettings.timestamp.difference(lastSync).inSeconds > 0) {
-      shouldUpdate = true;
-    } else if (now.difference(lastSync).inMinutes >= 30) {
-      shouldUpdate = true;
-    }
-
-    if (shouldUpdate && canUpdate) {
-      _logger.fine('_presenceInfoSyncTimer: updating presence settings');
-      try {
-        await _signalingClient?.execute(
-          PresenceSettingsUpdateRequest(
-            transaction: clock.now().millisecondsSinceEpoch.toString(),
-            settings: SignalingPresenceSettingsMapper.toSignaling(presenceSettings),
-          ),
-        );
-        presenceSettingsRepository.updateLastSettingsSync(now);
-        _logger.fine('Presence settings updated at $now');
-      } on Exception catch (e, s) {
-        _logger.warning('Failed to update presence settings', e, s);
-      }
-    }
-  }
+  Future<void> syncPresenceSettings() => _presenceSyncService.sync();
 
   void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
     if (senderResult == null) {

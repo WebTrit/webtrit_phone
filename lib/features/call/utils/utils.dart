@@ -1,4 +1,6 @@
 export 'audio_constraints_builder.dart';
+export 'audio_device_manager.dart';
+export 'call_history_recorder.dart';
 export 'call_error_reporter.dart';
 export 'compact_auto_reset_controller.dart';
 export 'contact_name_resolver.dart';
@@ -6,6 +8,7 @@ export 'contact_resolver.dart';
 export 'ice_filter.dart';
 export 'logging_rtp_traffic_monitor_delegate.dart';
 export 'peer_connection_factory.dart';
+export 'presence_sync_service.dart';
 export 'peer_connection_manager.dart';
 export 'peer_connection_policy_applier.dart';
 export 'rtp_traffic_monitor.dart';
