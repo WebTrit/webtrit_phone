@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -40,6 +41,12 @@ class MockCallErrorReporter extends Mock implements CallErrorReporter {}
 class MockPeerConnectionManager extends Mock implements PeerConnectionManagerProtocol {}
 
 class MockWebtritCallkeepSound extends Mock implements WebtritCallkeepSound {}
+
+class MockRTCPeerConnection extends Mock implements RTCPeerConnection {}
+
+class MockMediaStream extends Mock implements MediaStream {}
+
+class MockRTCRtpSender extends Mock implements RTCRtpSender {}
 
 /// A no-op [CallLogsRepository] that silently drops all `add` calls.
 ///
@@ -115,6 +122,7 @@ Future<WebtritSignalingClient> _pendingSignalingFactory({
 ///
 /// Pass [capturedNotifications] to collect submitted [Notification]s for assertions.
 /// Pass [contactNameResolver] or [callLogsRepository] to supply pre-configured mocks.
+/// Pass [userMediaBuilder] to inject a pre-configured WebRTC media mock.
 TestCallBloc buildTestBloc({
   MockCallkeep? callkeep,
   MockCallkeepConnections? callkeepConnections,
@@ -122,6 +130,7 @@ TestCallBloc buildTestBloc({
   MockPresenceSettingsRepository? presenceSettingsRepository,
   MockContactNameResolver? contactNameResolver,
   MockCallLogsRepository? callLogsRepository,
+  MockUserMediaBuilder? userMediaBuilder,
   SignalingClientFactory signalingClientFactory = _pendingSignalingFactory,
   bool sipPresenceEnabled = false,
   List<Notification>? capturedNotifications,
@@ -131,6 +140,7 @@ TestCallBloc buildTestBloc({
   final mockPcm = peerConnectionManager ?? MockPeerConnectionManager();
   final mockPresenceSettings = presenceSettingsRepository ?? MockPresenceSettingsRepository();
   final mockContactNameResolver = contactNameResolver ?? MockContactNameResolver();
+  final mockUserMedia = userMediaBuilder ?? MockUserMediaBuilder();
   // Use a no-op fake by default to avoid mocktail `any()` issues with the
   // `NewCall` Dart record typedef.
   final CallLogsRepository mockCallLogs = callLogsRepository ?? _NoOpCallLogsRepository();
@@ -169,7 +179,7 @@ TestCallBloc buildTestBloc({
     submitNotification: notifications.add,
     callkeep: mockCallkeep,
     callkeepConnections: mockConnections,
-    userMediaBuilder: MockUserMediaBuilder(),
+    userMediaBuilder: mockUserMedia,
     contactNameResolver: mockContactNameResolver,
     callErrorReporter: MockCallErrorReporter(),
     sipPresenceEnabled: sipPresenceEnabled,
