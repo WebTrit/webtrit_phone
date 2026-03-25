@@ -215,8 +215,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final connected = _signalingClient != null;
 
       if (appInactive) {
-        if (hasActiveCalls && !connected) _reconnectInitiated(kSignalingClientFastReconnectDelay, true);
-        if (!hasActiveCalls && connected) _disconnectInitiated();
+        if (hasActiveCalls && !connected) {
+          _reconnectInitiated(delay: kSignalingClientFastReconnectDelay, force: true);
+        }
+        if (!hasActiveCalls && connected) {
+          _disconnectInitiated();
+        }
       }
     }
 
@@ -402,7 +406,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  void _reconnectInitiated([Duration delay = kSignalingClientFastReconnectDelay, bool force = false]) {
+  void _reconnectInitiated({Duration delay = kSignalingClientFastReconnectDelay, bool force = false}) {
     _signalingClientReconnectTimer?.cancel();
     _signalingClientReconnectTimer = Timer(delay, () {
       final appActive = state.currentAppLifecycleState == AppLifecycleState.resumed;
@@ -414,7 +418,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       // Guard clause to prevent reconnection when the bloc was closed after delay.
-      if (isClosed) return;
+      if (isClosed) {
+        return;
+      }
 
       // Guard clause to prevent reconnection when the app is in the background.
       // Coz reconnect can be triggered by another action e.g conectivity change.
@@ -477,7 +483,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_ConnectivityResultChanged(currentConnectivityResult));
     });
 
-    _reconnectInitiated(Duration.zero);
+    _reconnectInitiated(delay: Duration.zero);
 
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
@@ -668,8 +674,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (emit.isDone) return;
       _logger.warning('__onSignalingClientEventConnectInitiated: $e', s);
 
-      final repeated = state.callServiceState.lastSignalingClientConnectError == e;
-      if (repeated == false) submitNotification(const SignalingConnectFailedNotification());
+      // toString is important to compare low level exceptions like SocketException, HttpException, TlsException etc.
+      final repeated = state.callServiceState.lastSignalingClientConnectError.toString() == e.toString();
+      if (repeated == false) {
+        submitNotification(const SignalingConnectFailedNotification());
+      }
 
       emit(
         state.copyWith(
@@ -680,7 +689,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ),
       );
 
-      _reconnectInitiated(kSignalingClientReconnectDelay);
+      _reconnectInitiated(delay: kSignalingClientReconnectDelay);
     }
   }
 
@@ -805,7 +814,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final reconnectDelay = code == SignalingDisconnectCode.controllerForceAttachClose
           ? kSignalingClientFastReconnectDelay
           : kSignalingClientReconnectDelay;
-      _reconnectInitiated(reconnectDelay);
+      _reconnectInitiated(delay: reconnectDelay);
     }
   }
 
@@ -2590,7 +2599,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void _onSignalingError(Object error, [StackTrace? stackTrace]) {
     _logger.severe('_onErrorCallback', error, stackTrace);
 
-    _reconnectInitiated();
+    /// Important to reconnect signaling client on errors especially on keepalive timeout and pure network issues
+    _reconnectInitiated(force: true);
   }
 
   void _onSignalingDisconnect(int? code, String? reason) {
