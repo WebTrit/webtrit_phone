@@ -153,7 +153,7 @@ TestCallBloc buildTestBloc({
     contactNameResolver: MockContactNameResolver(),
     callErrorReporter: MockCallErrorReporter(),
     sipPresenceEnabled: sipPresenceEnabled,
-    onDiagnosticReportRequested: (_, _2) {},
+    onDiagnosticReportRequested: (_, _) {},
     peerConnectionManager: mockPcm,
     signalingClientFactory: signalingClientFactory,
     callkeepSound: mockSound,
