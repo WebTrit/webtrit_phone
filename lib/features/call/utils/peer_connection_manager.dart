@@ -41,10 +41,25 @@ class _ConnectionState {
   }
 }
 
+/// Protocol for managing the lifecycle of [RTCPeerConnection] instances.
+///
+/// Abstracts the concrete implementation to allow test doubles.
+abstract interface class PeerConnectionManagerProtocol {
+  void add(CallId callId);
+  Future<RTCPeerConnection> createPeerConnection(CallId callId, {required PeerConnectionObserver observer});
+  void complete(CallId callId, RTCPeerConnection pc);
+  void completeError(CallId callId, Object error, [StackTrace? st]);
+  void conditionalCompleteError(CallId callId, Object error, [StackTrace? st]);
+  Future<RTCPeerConnection?> retrieve(CallId callId, {bool allowWaiting = true});
+  Future<void> disposePeerConnection(CallId callId);
+  Future<void> dispose();
+  void updateConfig({Duration? retrieveTimeout, Duration? monitorCheckInterval, Duration? disposalTimeout});
+}
+
 /// Manages the lifecycle of [RTCPeerConnection] instances.
 ///
 /// Handles async creation barriers and safe disposal to prevent race conditions.
-final class PeerConnectionManager {
+final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   PeerConnectionManager({
     this.factory = const DefaultPeerConnectionFactory(),
     this.monitorDelegatesFactory,

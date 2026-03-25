@@ -102,12 +102,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
   WebtritSignalingClient? _signalingClient;
   Timer? _signalingClientReconnectTimer;
 
-  late final PeerConnectionManager _peerConnectionManager;
+  late final PeerConnectionManagerProtocol _peerConnectionManager;
   late final CallHistoryRecorder _callHistoryRecorder;
   late final PresenceSyncService _presenceSyncService;
   final AudioDeviceManager _audioDeviceManager = AudioDeviceManager();
 
-  final _callkeepSound = WebtritCallkeepSound();
+  late final WebtritCallkeepSound _callkeepSound;
 
   CallBloc({
     required this.coreUrl,
@@ -135,9 +135,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
     this.iceFilter,
     this.peerConnectionPolicyApplier,
     SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
-    required PeerConnectionManager peerConnectionManager,
+    required PeerConnectionManagerProtocol peerConnectionManager,
     this.onCallEnded,
+    WebtritCallkeepSound? callkeepSound,
   }) : super(const CallState()) {
+    _callkeepSound = callkeepSound ?? WebtritCallkeepSound();
     _signalingClientFactory = signalingClientFactory;
     _peerConnectionManager = peerConnectionManager;
     _callHistoryRecorder = CallHistoryRecorder(repository: callLogsRepository);
@@ -171,9 +173,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
     on<CallScreenEvent>(_onCallScreenEvent, transformer: sequential());
     on<CallConfigEvent>(_onConfigEvent, transformer: sequential());
 
-    navigator.mediaDevices.ondevicechange = (event) {
-      add(const _NavigatorMediaDevicesChange());
-    };
+    attachMediaDeviceObserver();
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -188,7 +188,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
 
     WidgetsBinding.instance.removeObserver(this);
 
-    navigator.mediaDevices.ondevicechange = null;
+    detachMediaDeviceObserver();
 
     await _connectivityChangedSubscription?.cancel();
 
@@ -210,6 +210,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
     super.onError(error, stackTrace);
     _logger.warning('onError', error, stackTrace);
     // TODO: analise error and finalize necessary active call
+  }
+
+  @visibleForTesting
+  void attachMediaDeviceObserver() {
+    navigator.mediaDevices.ondevicechange = (event) {
+      add(const _NavigatorMediaDevicesChange());
+    };
+  }
+
+  @visibleForTesting
+  void detachMediaDeviceObserver() {
+    navigator.mediaDevices.ondevicechange = null;
   }
 
   @override
