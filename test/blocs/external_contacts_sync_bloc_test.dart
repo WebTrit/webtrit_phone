@@ -50,6 +50,7 @@ void main() {
     contactsRepository = MockContactsRepository();
 
     when(() => userRepository.getLocalInfo()).thenAnswer((_) => _testUser);
+    when(() => userRepository.getAndListen()).thenAnswer((_) => Stream.value(_testUser));
     when(() => externalContactsRepository.load()).thenAnswer((_) async {});
     when(() => contactsRepository.syncExternalContacts(any())).thenAnswer((_) async {});
   });
@@ -113,10 +114,10 @@ void main() {
     );
 
     blocTest<ExternalContactsSyncBloc, ExternalContactsSyncState>(
-      'emits RefreshFailure if UserRepository fails during update',
+      'emits UpdateFailure after max retries when UserRepository fails during update',
       build: () {
         when(() => externalContactsRepository.contacts()).thenAnswer((_) => Stream.value([_contactOther]));
-        when(() => userRepository.getLocalInfo()).thenThrow(Exception('User info error'));
+        when(() => userRepository.getAndListen()).thenThrow(Exception('User info error'));
 
         return ExternalContactsSyncBloc(
           userRepository: userRepository,
@@ -125,8 +126,9 @@ void main() {
         );
       },
       act: (bloc) => bloc.add(const ExternalContactsSyncStarted()),
+      wait: const Duration(seconds: 4),
       skip: 1,
-      expect: () => [const ExternalContactsSyncRefreshFailure()],
+      expect: () => [const ExternalContactsSyncUpdateFailure()],
     );
   });
 }
