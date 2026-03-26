@@ -66,6 +66,108 @@ class _CallSessionManager {
     };
   }
 
+  Future<void> onCameraSwitched(_CallControlEventCameraSwitched event, Emitter<CallState> emit) async {
+    emit(
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(frontCamera: null);
+      }),
+    );
+    final frontCamera = await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) {
+      final videoTrack = activeCall.localStream?.getVideoTracks()[0];
+      if (videoTrack != null) return Helper.switchCamera(videoTrack);
+    });
+    emit(
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(frontCamera: frontCamera);
+      }),
+    );
+  }
+
+  /// Enables or disables the camera for the active call, using local track enable state.
+  ///
+  /// If its audiocall, try to upgrade to videocal using renegotiation
+  /// by adding the tracks to the peer connection.
+  /// after success [_createPeerConnection].onRenegotiationNeeded will fired accordingly to webrtc state
+  /// then [__onCallSignalingEventAccepted] will be called as acknowledge of [UpdateRequest] with new remote jsep.
+  ///
+  /// **Mute Implementation Note:**
+  /// Currently, this method implements a **"Soft Mute"** strategy by toggling
+  /// [MediaStreamTrack.enabled] instead of a **"Hard Mute"** (changing
+  /// [RTCRtpTransceiver] direction to [TransceiverDirection.RecvOnly]).
+  ///
+  /// **Reason:** It was observed that switching to `RecvOnly` causes the server
+  /// to stop sending the *incoming* video stream to the client.
+  /// This behavior suggests that the server infrastructure might interpret the cessation
+  /// of outgoing RTP packets as a connection timeout or does not correctly handle
+  /// the session modification in the current configuration. "Soft Mute" avoids this
+  /// by keeping the channel active (sending black/empty frames).
+  Future<void> onCameraEnabled(_CallControlEventCameraEnabled event, Emitter<CallState> emit) async {
+    final activeCall = _delegate.currentState.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
+
+    final localStream = activeCall.localStream;
+    if (localStream == null) return;
+
+    final currentVideoTrack = localStream.getVideoTracks().firstOrNull;
+    if (currentVideoTrack != null) {
+      currentVideoTrack.enabled = event.enabled;
+      emit(
+        _delegate.currentState.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: event.enabled)),
+      );
+      return;
+    }
+
+    final peerConnection = await _delegate.peerConnectionManager.retrieve(event.callId);
+    if (peerConnection == null) return;
+
+    try {
+      // Capture new audio and video pair together to avoid time sync issues
+      // and avoid storing separate audio and video tracks to control them on mute, camera switch etc
+      final newLocalStream = await _delegate.userMediaBuilder.build(video: true, frontCamera: activeCall.frontCamera);
+
+      final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
+      final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
+
+      final senders = await peerConnection.getSenders();
+      final audioSender = senders.firstWhereOrNull((s) => s.track?.kind == 'audio');
+      final videoSender = senders.firstWhereOrNull((s) => s.track?.kind == 'video');
+
+      /// Replace audio/video tracks using existing senders to avoid adding new m= lines
+      ///
+      /// Alternatively, you can use (remove || stop) + add tracks flow
+      /// but it has weak support on infrastructure level:
+      /// - second audio m= line causes problems with call recordings and music on hold
+      /// - second video m= line causes empty video stream
+      ///
+      /// So for best compatibility, use existing senders and control them via .enabled or .replaceTrack
+      if (audioSender != null && newAudioTrack != null) {
+        await audioSender.replaceTrack(newAudioTrack);
+      } else if (newAudioTrack != null) {
+        final audioSenderResult = await peerConnection.safeAddTrack(newAudioTrack, newLocalStream);
+        _checkSenderResult(audioSenderResult, 'audio');
+      }
+
+      if (videoSender != null && newVideoTrack != null) {
+        await videoSender.replaceTrack(newVideoTrack);
+      } else if (newVideoTrack != null) {
+        final videoSenderResult = await peerConnection.safeAddTrack(newVideoTrack, newLocalStream);
+        _checkSenderResult(videoSenderResult, 'video');
+      }
+
+      emit(
+        _delegate.currentState.copyWithMappedActiveCall(
+          event.callId,
+          (call) => call.copyWith(localStream: newLocalStream, video: true),
+        ),
+      );
+
+      await _delegate.callkeep.reportUpdateCall(event.callId, hasVideo: true);
+    } on UserMediaError catch (e) {
+      _logger.warning('onCameraEnabled cant enable: $e');
+      _delegate.showNotification(const CallUserMediaErrorNotification());
+    }
+  }
+
   Future<void> onPeerConnectionEvent(_PeerConnectionEvent event, Emitter<CallState> emit) {
     return switch (event) {
       _PeerConnectionEventSignalingStateChanged() => _onPeerConnectionEventSignalingStateChanged(event, emit),
@@ -741,6 +843,12 @@ class _CallSessionManager {
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,
     ));
+  }
+
+  void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
+    if (senderResult == null) {
+      _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');
+    }
   }
 
   Future<void> _stopRingbackSound() => _delegate.callkeepSound.stopRingbackSound();
