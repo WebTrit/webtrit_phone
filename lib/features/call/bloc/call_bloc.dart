@@ -186,6 +186,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
   Future<void> close() async {
     callkeep.setDelegate(null);
 
+    // Fail any perform-event futures that the native side is still awaiting.
+    // Without this, CallKit/ConnectionService can hang indefinitely if close()
+    // is called while a performStartCall/performAnswerCall/performEndCall is
+    // in-flight but not yet processed by the BLoC event loop.
+    _drainPendingPerformEvents();
+
     WidgetsBinding.instance.removeObserver(this);
 
     detachMediaDeviceObserver();

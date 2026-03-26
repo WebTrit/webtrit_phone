@@ -708,9 +708,6 @@ extension _CallSession on CallBloc {
     presenceInfoRepository.setNumberPresence(number, presenceInfo);
   }
 
-  // ignore: unused_element
-  Future<void> syncPresenceSettings() => _presenceSyncService.sync();
-
   void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
     if (senderResult == null) {
       _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');

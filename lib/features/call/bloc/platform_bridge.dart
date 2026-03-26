@@ -7,6 +7,19 @@ mixin _PlatformBridgeMixin on Bloc<CallEvent, CallState> implements CallkeepDele
   // Abstract fields satisfied by CallBloc.
   Function(Notification) get submitNotification;
 
+  /// Tracks in-flight [_CallPerformEvent]s whose [_CallPerformEvent.future] has
+  /// been handed to the native CallKit/ConnectionService layer.  Call
+  /// [_drainPendingPerformEvents] from [CallBloc.close] to fail them all,
+  /// preventing the native side from hanging when the BLoC tears down.
+  final _pendingPerformEvents = <_CallPerformEvent>{};
+
+  void _drainPendingPerformEvents() {
+    for (final event in _pendingPerformEvents) {
+      event.fail();
+    }
+    _pendingPerformEvents.clear();
+  }
+
   @override
   void continueStartCallIntent(CallkeepHandle handle, String? displayName, bool video) {
     _logger.fine(() => 'continueStartCallIntent handle: $handle displayName: $displayName video: $video');
@@ -178,7 +191,10 @@ mixin _PlatformBridgeMixin on Bloc<CallEvent, CallState> implements CallkeepDele
   }
 
   Future<bool> _perform(_CallPerformEvent callPerformEvent) {
+    _pendingPerformEvents.add(callPerformEvent);
     add(callPerformEvent);
-    return callPerformEvent.future;
+    return callPerformEvent.future.whenComplete(() {
+      _pendingPerformEvents.remove(callPerformEvent);
+    });
   }
 }

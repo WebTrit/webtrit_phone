@@ -103,7 +103,7 @@ extension _SignalingModule on CallBloc {
         onStateHandshake: _onSignalingStateHandshake,
         onEvent: _onSignalingEvent,
         onError: _onSignalingError,
-        onDisconnect: (c, r) => _onSignalingDisconnect(c, r),
+        onDisconnect: _onSignalingDisconnect,
       );
       _signalingClient = signalingClient;
 
@@ -768,6 +768,8 @@ extension _SignalingModule on CallBloc {
           await callkeep.endCall(connection.callId);
         }
       }
+    } on Error {
+      rethrow;
     } catch (e, s) {
       _logger.severe('_processHandshakeAsync error', e, s);
     }
