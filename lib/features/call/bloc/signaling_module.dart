@@ -717,6 +717,42 @@ extension _SignalingHandlers on CallBloc {
     add(_RegistrationChange(registration: registration));
   }
 
+  // TODO(Vlad): extract mapper, find better naming
+  Future<void> _assignUserActiveCalls(List<UserActiveCall> userActiveCalls) async {
+    final pullableCalls = userActiveCalls
+        .map(
+          (call) => PullableCall(
+            id: call.id,
+            state: PullableCallState.values.byName(call.state.name),
+            callId: call.callId,
+            localTag: call.localTag,
+            remoteTag: call.remoteTag,
+            remoteNumber: call.remoteNumber,
+            remoteDisplayName: call.remoteDisplayName,
+            direction: PullableCallDirection.values.byName(call.direction.name),
+          ),
+        )
+        .toList();
+
+    List<PullableCall> pullableCallsToSet = [];
+
+    for (final pullableCall in pullableCalls) {
+      // Skip calls that are already active
+      if (state.activeCalls.any((call) => call.callId == pullableCall.callId)) continue;
+
+      // Resolve contact name for the call's remote number
+      final contactName = await contactNameResolver.resolveWithNumber(pullableCall.remoteNumber);
+      pullableCallsToSet.add(pullableCall.copyWith(remoteDisplayName: contactName));
+    }
+
+    callPullRepository.setPullableCalls(pullableCallsToSet);
+  }
+
+  Future<void> _assignNumberPresence(String number, List<SignalingPresenceInfo> data) async {
+    final presenceInfo = data.map(SignalingPresenceInfoMapper.fromSignaling).toList();
+    presenceInfoRepository.setNumberPresence(number, presenceInfo);
+  }
+
   Future<void> _processHandshakeAsync(StateHandshake stateHandshake) async {
     try {
       // Hang up all active calls that are not associated with any line

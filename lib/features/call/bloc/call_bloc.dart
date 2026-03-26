@@ -255,32 +255,52 @@ class CallBloc extends Bloc<CallEvent, CallState>
   @override
   void onChange(Change<CallState> change) {
     super.onChange(change);
+    _syncCallkeepSignalingStatus(change);
+    _handleBackgroundConnectivity(change);
+    _syncPeerConnections(change);
+    _logProcessingStatusTransitions(change);
+    _handleRegistrationChange(change);
+    _syncLinesState(change);
+    _handleSignalingSessionError(
+      previous: change.currentState.callServiceState,
+      current: change.nextState.callServiceState,
+    );
+    _handleCallEndedCallback(change);
+    _handleCallLifecycleTransitions(
+      previousCalls: change.currentState.activeCalls,
+      currentCalls: change.nextState.activeCalls,
+    );
+  }
 
-    // Update the signaling status in Callkeep to ensure proper call handling when the app is minimized or in the background
+  void _syncCallkeepSignalingStatus(Change<CallState> change) {
     callkeepConnections.updateActivitySignalingStatus(
       change.nextState.callServiceState.signalingClientStatus.toCallkeepSignalingStatus(),
     );
+  }
 
-    // TODO: add detailed explanation of the following code and why it is necessary to initialize signaling client in background
-    if (change.currentState.isActive != change.nextState.isActive) {
-      final appLifecycleState = change.nextState.currentAppLifecycleState;
-      final appInactive =
-          appLifecycleState == AppLifecycleState.paused ||
-          appLifecycleState == AppLifecycleState.detached ||
-          appLifecycleState == AppLifecycleState.inactive;
-      final hasActiveCalls = change.nextState.isActive;
-      final connected = _signalingModule.signalingClient != null;
+  // TODO: add detailed explanation of the following code and why it is necessary to initialize signaling client in background
+  void _handleBackgroundConnectivity(Change<CallState> change) {
+    if (change.currentState.isActive == change.nextState.isActive) return;
 
-      if (appInactive) {
-        if (hasActiveCalls && !connected) {
-          _signalingModule.reconnect(delay: kSignalingClientFastReconnectDelay, force: true);
-        }
-        if (!hasActiveCalls && connected) {
-          _signalingModule.disconnect();
-        }
+    final appLifecycleState = change.nextState.currentAppLifecycleState;
+    final appInactive =
+        appLifecycleState == AppLifecycleState.paused ||
+        appLifecycleState == AppLifecycleState.detached ||
+        appLifecycleState == AppLifecycleState.inactive;
+    final hasActiveCalls = change.nextState.isActive;
+    final connected = _signalingModule.signalingClient != null;
+
+    if (appInactive) {
+      if (hasActiveCalls && !connected) {
+        _signalingModule.reconnect(delay: kSignalingClientFastReconnectDelay, force: true);
+      }
+      if (!hasActiveCalls && connected) {
+        _signalingModule.disconnect();
       }
     }
+  }
 
+  void _syncPeerConnections(Change<CallState> change) {
     final currentActiveCallUuids = Set.from(change.currentState.activeCalls.map((e) => e.callId));
     final nextActiveCallUuids = Set.from(change.nextState.activeCalls.map((e) => e.callId));
 
@@ -297,7 +317,9 @@ class CallBloc extends Bloc<CallEvent, CallState>
     for (final addUuid in nextActiveCallUuids.difference(currentActiveCallUuids)) {
       _peerConnectionManager.add(addUuid);
     }
+  }
 
+  void _logProcessingStatusTransitions(Change<CallState> change) {
     final currentProcessingStatuses = Set.from(
       change.currentState.activeCalls.map((e) => '${e.line}:${e.processingStatus.name}'),
     ).join(', ');
@@ -307,47 +329,48 @@ class CallBloc extends Bloc<CallEvent, CallState>
     if (currentProcessingStatuses != nextProcessingStatuses) {
       _logger.info(() => 'status transitions: $currentProcessingStatuses -> $nextProcessingStatuses');
     }
+  }
 
-    /// RegistrationStatus can be null if the signaling state
-    /// was not yet fully initialized. In this case, RegistrationStatus was made nullable to indicate that signaling has not been initialized yet.
-    ///
-    /// This scenario is particularly relevant when a call is triggered before the app
-    /// is fully active, such as via [CallkeepDelegate.continueStartCallIntent]
-    /// (e.g., from phone recents).
-
+  /// RegistrationStatus can be null if the signaling state was not yet fully
+  /// initialized. This scenario is particularly relevant when a call is
+  /// triggered before the app is fully active, such as via
+  /// [CallkeepDelegate.continueStartCallIntent] (e.g. from phone recents).
+  void _handleRegistrationChange(Change<CallState> change) {
     final newRegistration = change.nextState.callServiceState.registration;
     final previousRegistration = change.currentState.callServiceState.registration;
 
-    if (newRegistration != previousRegistration && newRegistration != null) {
-      _logger.fine('_onRegistrationChange: $newRegistration to $previousRegistration');
+    if (newRegistration == previousRegistration || newRegistration == null) return;
 
-      final newRegistrationStatus = newRegistration.status;
-      final previousRegistrationStatus = previousRegistration?.status;
+    _logger.fine('_onRegistrationChange: $newRegistration to $previousRegistration');
 
-      if (previousRegistrationStatus?.isRegistered == false && newRegistrationStatus.isRegistered == true) {
-        presenceSettingsRepository.resetLastSettingsSync();
-        submitNotification(AppOnlineNotification());
-      }
+    final newRegistrationStatus = newRegistration.status;
+    final previousRegistrationStatus = previousRegistration?.status;
 
-      if (previousRegistrationStatus?.isRegistered == true && newRegistrationStatus.isRegistered == false) {
-        submitNotification(AppOfflineNotification());
-      }
-
-      if (newRegistrationStatus.isFailed == true || newRegistrationStatus.isUnregistered == true) {
-        add(const _ResetStateEvent.completeCalls());
-      }
-
-      if (newRegistrationStatus.isFailed == true) {
-        submitNotification(
-          SipRegistrationFailedNotification(
-            knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration.code),
-            systemCode: newRegistration.code,
-            systemReason: newRegistration.reason,
-          ),
-        );
-      }
+    if (previousRegistrationStatus?.isRegistered == false && newRegistrationStatus.isRegistered == true) {
+      presenceSettingsRepository.resetLastSettingsSync();
+      submitNotification(AppOnlineNotification());
     }
 
+    if (previousRegistrationStatus?.isRegistered == true && newRegistrationStatus.isRegistered == false) {
+      submitNotification(AppOfflineNotification());
+    }
+
+    if (newRegistrationStatus.isFailed == true || newRegistrationStatus.isUnregistered == true) {
+      add(const _ResetStateEvent.completeCalls());
+    }
+
+    if (newRegistrationStatus.isFailed == true) {
+      submitNotification(
+        SipRegistrationFailedNotification(
+          knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration.code),
+          systemCode: newRegistration.code,
+          systemReason: newRegistration.reason,
+        ),
+      );
+    }
+  }
+
+  void _syncLinesState(Change<CallState> change) {
     final linesCount = change.nextState.linesCount;
     final activeCalls = change.nextState.activeCalls;
     final List<LineState> mainLinesState = [];
@@ -359,24 +382,12 @@ class CallBloc extends Bloc<CallEvent, CallState>
     final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
 
     linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
-    _handleSignalingSessionError(
-      previous: change.currentState.callServiceState,
-      current: change.nextState.callServiceState,
-    );
+  }
 
+  void _handleCallEndedCallback(Change<CallState> change) {
     if (change.nextState.activeCalls.length < change.currentState.activeCalls.length) {
       onCallEnded?.call();
     }
-
-    /// Manages global side effects triggered by call lifecycle transitions.
-    /// Key responsibility:
-    /// - **iOS Audio Reset:** On the start of the *first* call, it forces the
-    ///   audio route back to the Receiver (Earpiece). This prevents the "sticky speaker"
-    ///   issue where iOS remembers the Speaker output from a previous session.
-    _handleCallLifecycleTransitions(
-      previousCalls: change.currentState.activeCalls,
-      currentCalls: change.nextState.activeCalls,
-    );
   }
 
   void _handleCallLifecycleTransitions({

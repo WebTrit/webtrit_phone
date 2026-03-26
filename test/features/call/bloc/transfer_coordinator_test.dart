@@ -410,5 +410,151 @@ void main() {
         async.flushMicrotasks();
       });
     });
+
+    test('new outgoing ActiveCall has processingStatus outgoingCreatedFromRefer', () {
+      fakeAsync((async) {
+        final factory = FakeSignalingClientFactory();
+        final mockCallkeep = _transferCallkeepMock();
+        final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
+
+        _bringOnlineWithHandshake(async, bloc, factory);
+        _simulateIncoming(async, factory, callId: 'call-1');
+        factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
+        async.flushMicrotasks();
+
+        bloc.add(const CallControlEvent.attendedRequestApproved(referId: 'refer-xyz', referTo: '777'));
+        async.flushMicrotasks();
+
+        final newCall = bloc.state.activeCalls.firstWhere((c) => c.direction == CallDirection.outgoing);
+        expect(newCall.processingStatus, CallProcessingStatus.outgoingCreatedFromRefer);
+
+        bloc.close();
+        async.flushMicrotasks();
+      });
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Signaling request verification
+  // -------------------------------------------------------------------------
+
+  group('signaling requests', () {
+    test('blindTransferSubmitted sends TransferRequest with correct number', () {
+      fakeAsync((async) {
+        final factory = FakeSignalingClientFactory();
+        final mockCallkeep = _transferCallkeepMock();
+        final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
+
+        _bringOnlineWithHandshake(async, bloc, factory);
+        _simulateIncoming(async, factory, callId: 'call-1', caller: '100');
+        factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
+        async.flushMicrotasks();
+
+        bloc.add(CallControlEvent.blindTransferInitiated('call-1'));
+        async.flushMicrotasks();
+
+        factory.client!.executedRequests.clear();
+
+        bloc.add(const CallControlEvent.blindTransferSubmitted(number: '999'));
+        async.flushMicrotasks();
+
+        final transferRequests = factory.client!.executedRequests.whereType<TransferRequest>().toList();
+        expect(transferRequests, hasLength(1));
+        expect(transferRequests.first.number, '999');
+
+        bloc.close();
+        async.flushMicrotasks();
+      });
+    });
+
+    test('blindTransferSubmitted does not send TransferRequest when number is in activeCalls', () {
+      fakeAsync((async) {
+        final factory = FakeSignalingClientFactory();
+        final mockCallkeep = _transferCallkeepMock();
+        final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
+
+        _bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
+        _simulateIncoming(async, factory, callId: 'call-1', caller: '123');
+        factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
+        async.flushMicrotasks();
+
+        _simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '456');
+        factory.client!.simulateEvent(const AcceptedEvent(line: 1, callId: 'call-2'));
+        async.flushMicrotasks();
+
+        bloc.add(CallControlEvent.blindTransferInitiated('call-1'));
+        async.flushMicrotasks();
+
+        factory.client!.executedRequests.clear();
+
+        bloc.add(const CallControlEvent.blindTransferSubmitted(number: '456'));
+        async.flushMicrotasks();
+
+        expect(factory.client!.executedRequests.whereType<TransferRequest>(), isEmpty);
+
+        bloc.close();
+        async.flushMicrotasks();
+      });
+    });
+
+    test('attendedTransferSubmitted sends TransferRequest with replaceCallId', () {
+      fakeAsync((async) {
+        final factory = FakeSignalingClientFactory();
+        final mockCallkeep = _transferCallkeepMock();
+        final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
+
+        _bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
+        _simulateIncoming(async, factory, callId: 'call-1', caller: '100');
+        factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
+        async.flushMicrotasks();
+
+        _simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '200');
+        factory.client!.simulateEvent(const AcceptedEvent(line: 1, callId: 'call-2'));
+        async.flushMicrotasks();
+
+        final referorCall = bloc.state.retrieveActiveCall('call-1')!;
+        final replaceCall = bloc.state.retrieveActiveCall('call-2')!;
+
+        factory.client!.executedRequests.clear();
+
+        bloc.add(CallControlEvent.attendedTransferSubmitted(referorCall: referorCall, replaceCall: replaceCall));
+        async.flushMicrotasks();
+
+        final transferRequests = factory.client!.executedRequests.whereType<TransferRequest>().toList();
+        expect(transferRequests, hasLength(1));
+        expect(transferRequests.first.replaceCallId, 'call-2');
+
+        bloc.close();
+        async.flushMicrotasks();
+      });
+    });
+
+    test('attendedRequestDeclined sends DeclineRequest with correct referId', () {
+      fakeAsync((async) {
+        final factory = FakeSignalingClientFactory();
+        final mockCallkeep = _transferCallkeepMock();
+        final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
+
+        _bringOnlineWithHandshake(async, bloc, factory);
+        _simulateIncoming(async, factory, callId: 'call-1');
+        factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
+        async.flushMicrotasks();
+
+        bloc.add(CallControlEvent.attendedTransferInitiated('call-1'));
+        async.flushMicrotasks();
+
+        factory.client!.executedRequests.clear();
+
+        bloc.add(const CallControlEvent.attendedRequestDeclined(callId: 'call-1', referId: 'refer-abc'));
+        async.flushMicrotasks();
+
+        final declineRequests = factory.client!.executedRequests.whereType<DeclineRequest>().toList();
+        expect(declineRequests, hasLength(1));
+        expect(declineRequests.first.referId, 'refer-abc');
+
+        bloc.close();
+        async.flushMicrotasks();
+      });
+    });
   });
 }

@@ -16,6 +16,10 @@ class FakeSignalingClient implements WebtritSignalingClient {
 
   bool _disconnected = false;
 
+  /// All requests passed to [execute], in order. Tests can inspect this list
+  /// to verify that specific signaling requests were (or were not) sent.
+  final List<Request> executedRequests = [];
+
   @override
   void listen({
     required StateHandshakeHandler onStateHandshake,
@@ -30,7 +34,9 @@ class FakeSignalingClient implements WebtritSignalingClient {
   }
 
   @override
-  Future<void> execute(Request request, [Duration? timeout]) async {}
+  Future<void> execute(Request request, [Duration? timeout]) async {
+    executedRequests.add(request);
+  }
 
   @override
   Future<void> disconnect([int? code, String? reason]) async {
