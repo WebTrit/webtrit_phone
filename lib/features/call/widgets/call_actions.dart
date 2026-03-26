@@ -353,11 +353,11 @@ class _CallActionsState extends State<CallActions> {
             ),
           ),
           Tooltip(
-            key: callActionsVideoCallKey,
             message: widget.cameraValue
                 ? context.l10n.call_CallActionsTooltip_disableCamera
                 : context.l10n.call_CallActionsTooltip_enableCamera,
             child: TextButton(
+              key: callActionsVideoCallKey,
               onPressed: () => onCameraChanged?.call(!widget.cameraValue),
               statesController: _cameraStatesController..update(WidgetState.selected, widget.cameraValue),
               style: widget.style?.camera,

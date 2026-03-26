@@ -49,7 +49,7 @@ final class LivePresenceSyncService implements PresenceSyncService {
   void start() {
     if (_timer != null) return;
     _timer = Timer.periodic(const Duration(seconds: 5), (_) {
-      sync().catchError((e, s) => _logger.warning('PresenceSyncService.sync error', e, s));
+      unawaited(sync().catchError((e, s) => _logger.warning('PresenceSyncService.sync error', e, s)));
     });
   }
 
@@ -61,7 +61,7 @@ final class LivePresenceSyncService implements PresenceSyncService {
 
   @override
   Future<void> sync() async {
-    final now = DateTime.now();
+    final now = clock.now();
     final lastSync = _settingsRepository.lastSettingsSync;
     final presenceSettings = _settingsRepository.presenceSettings;
 

@@ -16,7 +16,7 @@ extension _SignalingModule on CallBloc {
       if (isClosed) return;
 
       // Guard clause to prevent reconnection when the app is in the background.
-      // Coz reconnect can be triggered by another action e.g conectivity change.
+      // Coz reconnect can be triggered by another action e.g connectivity change.
       if (appActive == false && force == false) {
         _logger.info('__onSignalingClientEventConnectInitiated: skipped due to appActive: $appActive');
         return;
@@ -34,7 +34,7 @@ extension _SignalingModule on CallBloc {
       // Can be triggered by switching from wifi to mobile data.
       // In this case, the connection is recovers automatically, and signaling wasnt disposed.
       //
-      // Or if app resumes from background or native call screen durning active call,
+      // Or if app resumes from background or native call screen during active call,
       // in this case signaling wasnt disposed
       if (signalingRemains == true && force == false) {
         _logger.info('__onSignalingClientEventConnectInitiated: skipped due signalingRemains: $signalingRemains');
@@ -451,6 +451,7 @@ extension _SignalingModule on CallBloc {
         break;
       case SignalingResponseCode.unauthorizedRequest:
         submitNotification(CallWhileUnregisteredNotification());
+        break;
       default:
         final signalingHangupException = SignalingHangupFailure(code);
         final defaultErrorNotification = DefaultErrorNotification(signalingHangupException);
@@ -458,7 +459,7 @@ extension _SignalingModule on CallBloc {
     }
 
     try {
-      _stopRingbackSound();
+      await _stopRingbackSound();
 
       ActiveCall? call = state.retrieveActiveCall(event.callId);
 
@@ -645,10 +646,24 @@ extension _SignalingModule on CallBloc {
       _HandshakeSignalingEventState(registration: stateHandshake.registration, linesCount: stateHandshake.lines.length),
     );
 
-    _assignUserActiveCalls(stateHandshake.userActiveCalls);
-    stateHandshake.contactsPresenceInfo.forEach(_assignNumberPresence);
+    unawaited(
+      _assignUserActiveCalls(stateHandshake.userActiveCalls).catchError((e, s) {
+        _logger.severe('_onSignalingStateHandshake _assignUserActiveCalls error', e, s);
+      }),
+    );
+    stateHandshake.contactsPresenceInfo.forEach((number, data) {
+      unawaited(
+        _assignNumberPresence(number, data).catchError((e, s) {
+          _logger.severe('_onSignalingStateHandshake _assignNumberPresence error', e, s);
+        }),
+      );
+    });
 
-    _processHandshakeAsync(stateHandshake);
+    unawaited(
+      _processHandshakeAsync(stateHandshake).catchError((e, s) {
+        _logger.severe('_onSignalingStateHandshake _processHandshakeAsync error', e, s);
+      }),
+    );
   }
 
   Future<void> _processHandshakeAsync(StateHandshake stateHandshake) async {

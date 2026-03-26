@@ -64,7 +64,7 @@ extension _CallSession on CallBloc {
       );
 
       // Remove local connection
-      callkeep.endCall(event.callId);
+      await callkeep.endCall(event.callId);
 
       submitNotification(const CallWhileOfflineNotification());
       return;
@@ -602,11 +602,13 @@ extension _CallSession on CallBloc {
         onAddStream: (stream) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
         onRemoveStream: (stream) => add(_PeerConnectionEvent.streamRemoved(callId, stream)),
         onRenegotiationNeeded: (pc) {
-          _handleRenegotiationNeeded(
-            callId,
-            lineId,
-            pc,
-          ).catchError((e, s) => callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error'));
+          unawaited(
+            _handleRenegotiationNeeded(
+              callId,
+              lineId,
+              pc,
+            ).catchError((e, s) => callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error')),
+          );
         },
       ),
     );

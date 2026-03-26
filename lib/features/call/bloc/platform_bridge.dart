@@ -10,7 +10,7 @@ mixin _PlatformBridgeMixin on Bloc<CallEvent, CallState> implements CallkeepDele
   @override
   void continueStartCallIntent(CallkeepHandle handle, String? displayName, bool video) {
     _logger.fine(() => 'continueStartCallIntent handle: $handle displayName: $displayName video: $video');
-    _continueStartCallIntent(handle, displayName, video);
+    unawaited(_continueStartCallIntent(handle, displayName, video));
   }
 
   Future<void> _continueStartCallIntent(CallkeepHandle handle, String? displayName, bool video) async {
