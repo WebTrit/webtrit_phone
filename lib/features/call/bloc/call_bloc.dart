@@ -27,6 +27,8 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
+import '../bridge/platform_bridge.dart';
+import '../bridge/platform_event.dart';
 import '../extensions/extensions.dart';
 import '../models/models.dart';
 import '../utils/utils.dart';
@@ -38,8 +40,6 @@ part 'call_bloc.freezed.dart';
 part 'call_event.dart';
 
 part 'call_state.dart';
-
-part 'platform_bridge.dart';
 
 part '../utils/signaling_module.dart';
 
@@ -62,7 +62,7 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 typedef SignalingSessionInvalidatedCallback = void Function();
 
 class CallBloc extends Bloc<CallEvent, CallState>
-    with WidgetsBindingObserver, _PlatformBridgeMixin
+    with WidgetsBindingObserver
     implements SignalingModuleDelegate, _CallSessionDelegate {
   final CallLogsRepository callLogsRepository;
   final CallPullRepository callPullRepository;
@@ -70,7 +70,6 @@ class CallBloc extends Bloc<CallEvent, CallState>
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
-  @override
   final Function(Notification) submitNotification;
 
   /// Callback invoked when the signaling client reports a critical session error
@@ -99,6 +98,9 @@ class CallBloc extends Bloc<CallEvent, CallState>
   final VoidCallback? onCallEnded;
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
+  final PlatformBridge platform;
+
+  StreamSubscription<PlatformEvent>? _platformSub;
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
 
   late final SignalingModule _signalingModule;
@@ -112,6 +114,7 @@ class CallBloc extends Bloc<CallEvent, CallState>
   late final WebtritCallkeepSound _callkeepSound;
 
   CallBloc({
+    required this.platform,
     required SignalingModule signalingModule,
     required this.callLogsRepository,
     required this.callPullRepository,
@@ -184,11 +187,11 @@ class CallBloc extends Bloc<CallEvent, CallState>
     on<CallScreenEvent>(_onCallScreenEvent, transformer: sequential());
     on<CallConfigEvent>(_onConfigEvent, transformer: sequential());
 
+    _platformSub = platform.events.listen(_onPlatformEvent);
+
     attachMediaDeviceObserver();
 
     WidgetsBinding.instance.addObserver(this);
-
-    callkeep.setDelegate(this);
 
     // Start presence sync at construction time so subscription negotiation
     // begins as early as possible. The underlying signalingClientProvider
@@ -200,18 +203,15 @@ class CallBloc extends Bloc<CallEvent, CallState>
 
   @override
   Future<void> close() async {
-    callkeep.setDelegate(null);
-
     // Cancel connectivity subscription first to prevent _ConnectivityResultChanged
     // events from reaching the event loop (and triggering reconnect/disconnect)
-    // between draining perform events and super.close().
+    // between platform disposal and super.close().
     await _connectivityChangedSubscription?.cancel();
 
-    // Fail any perform-event futures that the native side is still awaiting.
-    // Without this, CallKit/ConnectionService can hang indefinitely if close()
-    // is called while a performStartCall/performAnswerCall/performEndCall is
-    // in-flight but not yet processed by the BLoC event loop.
-    _drainPendingPerformEvents();
+    // Stop receiving native platform callbacks and fail any pending perform-event
+    // futures so that CallKit/ConnectionService does not hang on teardown.
+    await _platformSub?.cancel();
+    platform.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
 
@@ -525,6 +525,131 @@ class CallBloc extends Bloc<CallEvent, CallState>
       acceptedTime: activeCall.acceptedTime,
       hungUpTime: activeCall.hungUpTime,
     ));
+  }
+
+  // PlatformBridge stream subscription handler — translates public PlatformEvent
+  // types into private library-internal BLoC events.
+
+  void _onPlatformEvent(PlatformEvent event) {
+    switch (event) {
+      case StartCallIntentPlatformEvent():
+        unawaited(_processContinueStartCallIntent(event));
+      case PushIncomingCallPlatformEvent():
+        add(
+          _CallPushEventIncoming(
+            callId: event.callId,
+            handle: event.handle,
+            displayName: event.displayName,
+            video: event.video,
+            error: event.error,
+          ),
+        );
+      case StartCallPerformEvent():
+        final perform = _CallPerformEvent.started(
+          event.callId,
+          handle: event.handle,
+          displayName: event.displayName,
+          video: event.video,
+        );
+        unawaited(perform.future.then(event.complete));
+        add(perform);
+      case AnswerCallPerformEvent():
+        final perform = _CallPerformEvent.answered(event.callId);
+        unawaited(perform.future.then(event.complete));
+        add(perform);
+      case EndCallPerformEvent():
+        final perform = _CallPerformEvent.ended(event.callId);
+        unawaited(perform.future.then(event.complete));
+        add(perform);
+      case SetHeldPerformEvent():
+        final perform = _CallPerformEvent.setHeld(event.callId, event.onHold);
+        unawaited(perform.future.then(event.complete));
+        add(perform);
+      case SetMutedPerformEvent():
+        final perform = _CallPerformEvent.setMuted(event.callId, event.muted);
+        unawaited(perform.future.then(event.complete));
+        add(perform);
+      case SendDtmfPerformEvent():
+        final perform = _CallPerformEvent.sentDTMF(event.callId, event.key);
+        unawaited(perform.future.then(event.complete));
+        add(perform);
+      case AudioDeviceSetPerformEvent():
+        final perform = _CallPerformEvent.audioDeviceSet(event.callId, CallAudioDevice.fromCallkeep(event.device));
+        unawaited(perform.future.then(event.complete));
+        add(perform);
+      case AudioDevicesUpdatePerformEvent():
+        final perform = _CallPerformEvent.audioDevicesUpdate(
+          event.callId,
+          event.devices.map(CallAudioDevice.fromCallkeep).toList(),
+        );
+        unawaited(perform.future.then(event.complete));
+        add(perform);
+    }
+  }
+
+  Future<void> _processContinueStartCallIntent(StartCallIntentPlatformEvent event) async {
+    _logger.fine(
+      () => StringBuffer()
+        ..write('_processContinueStartCallIntent - Attempting to start call')
+        ..write(' handle: ${event.handle}')
+        ..write(' displayName: ${event.displayName}')
+        ..write(' video: ${event.video}')
+        ..write(' isHandshakeActive: ${state.isHandshakeEstablished}')
+        ..write(' isSignalingActive: ${state.isSignalingEstablished}'),
+    );
+
+    try {
+      final resolvedState = await stream
+          .firstWhere((s) => s.isHandshakeEstablished && s.isSignalingEstablished)
+          .timeout(kSignalingClientConnectionTimeout);
+
+      if (isClosed) return;
+
+      _logger.fine(
+        () => StringBuffer()
+          ..write('_processContinueStartCallIntent - Signaling and handshake are now active for')
+          ..write(' handle: ${event.handle}')
+          ..write(' displayName: ${event.displayName}')
+          ..write(' video: ${event.video}')
+          ..write(' isHandshakeActive: ${resolvedState.isHandshakeEstablished}')
+          ..write(' isSignalingActive: ${resolvedState.isSignalingEstablished}'),
+      );
+
+      add(
+        CallControlEvent.started(
+          generic: event.handle.isGeneric ? event.handle.value : null,
+          number: event.handle.isNumber ? event.handle.value : null,
+          email: event.handle.isEmail ? event.handle.value : null,
+          displayName: event.displayName,
+          video: event.video,
+        ),
+      );
+    } on TimeoutException {
+      if (isClosed) return;
+
+      _logger.warning(
+        () => StringBuffer()
+          ..write('_processContinueStartCallIntent - Failed to start call')
+          ..write(' handle: ${event.handle}')
+          ..write(' (Signaling/handshake connection timed out after ${kSignalingClientConnectionTimeout.inSeconds}s)')
+          ..write(' isHandshakeActive: ${state.isHandshakeEstablished}')
+          ..write(' isSignalingActive: ${state.isSignalingEstablished}'),
+      );
+
+      submitNotification(const SignalingConnectFailedNotification());
+    } catch (e, s) {
+      if (isClosed) return;
+
+      _logger.severe(
+        () => StringBuffer()
+          ..write('_processContinueStartCallIntent - An unexpected error occurred')
+          ..write(' handle: ${event.handle}'),
+        e,
+        s,
+      );
+
+      submitNotification(ErrorMessageNotification(e.toString()));
+    }
   }
 
   Future<void> _onCallStarted(CallStarted event, Emitter<CallState> emit) async {

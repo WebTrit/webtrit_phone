@@ -12,6 +12,8 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
+import 'package:webtrit_phone/features/call/bridge/platform_bridge.dart';
+import 'package:webtrit_phone/features/call/bridge/platform_event.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/features/call/utils/utils.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -108,6 +110,117 @@ class MockMediaStream extends Mock implements MediaStream {}
 
 class MockRTCRtpSender extends Mock implements RTCRtpSender {}
 
+/// A [PlatformBridge] backed by a synchronous broadcast stream.
+///
+/// Uses `sync: true` so events are delivered in the same microtask as the
+/// [CallkeepDelegate] callback — matching the behaviour of [PlatformBridgeImpl]
+/// and keeping fakeAsync tests compatible with one [flushMicrotasks()] call.
+class FakePlatformBridge implements PlatformBridge {
+  final _controller = StreamController<PlatformEvent>.broadcast(sync: true);
+  final _pendingPerforms = <PerformCallEvent>{};
+
+  @override
+  Stream<PlatformEvent> get events => _controller.stream;
+
+  @override
+  void dispose() {
+    final copy = _pendingPerforms.toList();
+    _pendingPerforms.clear();
+    for (final event in copy) {
+      event.complete(false);
+    }
+    _controller.close();
+  }
+
+  // ---------------------------------------------------------------------------
+  // CallkeepDelegate — intent callbacks
+  // ---------------------------------------------------------------------------
+
+  @override
+  void continueStartCallIntent(CallkeepHandle handle, String? displayName, bool video) {
+    if (_controller.isClosed) return;
+    _controller.add(StartCallIntentPlatformEvent(handle: handle, displayName: displayName, video: video));
+  }
+
+  @override
+  void didPushIncomingCall(
+    CallkeepHandle handle,
+    String? displayName,
+    bool video,
+    String callId,
+    CallkeepIncomingCallError? error,
+  ) {
+    if (_controller.isClosed) return;
+    _controller.add(
+      PushIncomingCallPlatformEvent(
+        callId: callId,
+        handle: handle,
+        displayName: displayName,
+        video: video,
+        error: error,
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // CallkeepDelegate — perform callbacks
+  // ---------------------------------------------------------------------------
+
+  @override
+  Future<bool> performStartCall(
+    String callId,
+    CallkeepHandle handle,
+    String? displayNameOrContactIdentifier,
+    bool video,
+  ) => _perform(
+    StartCallPerformEvent(callId: callId, handle: handle, displayName: displayNameOrContactIdentifier, video: video),
+  );
+
+  @override
+  Future<bool> performAnswerCall(String callId) => _perform(AnswerCallPerformEvent(callId));
+
+  @override
+  Future<bool> performEndCall(String callId) => _perform(EndCallPerformEvent(callId));
+
+  @override
+  Future<bool> performSetHeld(String callId, bool onHold) => _perform(SetHeldPerformEvent(callId, onHold));
+
+  @override
+  Future<bool> performSetMuted(String callId, bool muted) => _perform(SetMutedPerformEvent(callId, muted));
+
+  @override
+  Future<bool> performSendDTMF(String callId, String key) => _perform(SendDtmfPerformEvent(callId, key));
+
+  @override
+  Future<bool> performAudioDeviceSet(String callId, CallkeepAudioDevice device) =>
+      _perform(AudioDeviceSetPerformEvent(callId, device));
+
+  @override
+  Future<bool> performAudioDevicesUpdate(String callId, List<CallkeepAudioDevice> devices) =>
+      _perform(AudioDevicesUpdatePerformEvent(callId, devices));
+
+  // ---------------------------------------------------------------------------
+  // CallkeepDelegate — audio session (no-op in tests)
+  // ---------------------------------------------------------------------------
+
+  @override
+  void didActivateAudioSession() {}
+
+  @override
+  void didDeactivateAudioSession() {}
+
+  @override
+  void didReset() {}
+
+  // ---------------------------------------------------------------------------
+
+  Future<bool> _perform(PerformCallEvent event) {
+    _pendingPerforms.add(event);
+    if (!_controller.isClosed) _controller.add(event);
+    return event.result.whenComplete(() => _pendingPerforms.remove(event));
+  }
+}
+
 /// A no-op [CallLogsRepository] that silently drops all `add` calls.
 ///
 /// Avoids mocktail `any()` matcher issues with Dart record types.
@@ -141,6 +254,7 @@ class TestCallBloc extends CallBloc {
     required super.sipPresenceEnabled,
     required super.onDiagnosticReportRequested,
     required super.peerConnectionManager,
+    required super.platform,
     super.onCallEnded,
     super.callkeepSound,
   });
@@ -205,6 +319,8 @@ TestCallBloc buildTestBloc({
   final mockSound = MockWebtritCallkeepSound();
   final mockUserRepository = MockUserRepository();
 
+  final fakePlatform = FakePlatformBridge();
+
   // Stub the construction-time and change-time side effects.
   when(() => mockCallkeep.setDelegate(any())).thenReturn(null);
   when(() => mockConnections.updateActivitySignalingStatus(any())).thenAnswer((_) async {});
@@ -246,6 +362,7 @@ TestCallBloc buildTestBloc({
     sipPresenceEnabled: sipPresenceEnabled,
     onDiagnosticReportRequested: (_, _) {},
     peerConnectionManager: mockPcm,
+    platform: fakePlatform,
     callkeepSound: mockSound,
   );
 }

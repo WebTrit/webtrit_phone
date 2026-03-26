@@ -16,6 +16,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/call/bridge/platform_bridge.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -458,7 +459,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         signalingClientFactory: defaultSignalingClientFactory,
                       );
 
+                      final platformBridge = PlatformBridgeImpl(callkeep: _callkeep);
+
                       return CallBloc(
+                        platform: platformBridge,
                         signalingModule: signalingModule,
                         callLogsRepository: context.read<CallLogsRepository>(),
                         callPullRepository: context.read<CallPullRepository>(),

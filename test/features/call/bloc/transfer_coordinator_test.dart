@@ -177,8 +177,8 @@ void main() {
         async.flushMicrotasks();
 
         // Inject a speaker as the current audio device so speakerOnBeforeMinimize is captured.
-        bloc.performAudioDevicesUpdate('call-1', [CallkeepAudioDevice(type: CallkeepAudioDeviceType.speaker)]);
-        bloc.performAudioDeviceSet('call-1', CallkeepAudioDevice(type: CallkeepAudioDeviceType.speaker));
+        bloc.platform.performAudioDevicesUpdate('call-1', [CallkeepAudioDevice(type: CallkeepAudioDeviceType.speaker)]);
+        bloc.platform.performAudioDeviceSet('call-1', CallkeepAudioDevice(type: CallkeepAudioDeviceType.speaker));
         async.flushMicrotasks();
 
         expect(bloc.state.audioDevice?.type, CallAudioDeviceType.speaker);

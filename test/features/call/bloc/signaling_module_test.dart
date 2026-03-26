@@ -387,6 +387,7 @@ void main() {
             when(() => m.add(any())).thenReturn(null);
             return m;
           }(),
+          platform: FakePlatformBridge(),
           callkeepSound: mockSound,
         );
 

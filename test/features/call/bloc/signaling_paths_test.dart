@@ -91,7 +91,7 @@ void main() {
         );
 
         // Trigger the intent — the bloc is not yet online, so it waits for the stream.
-        bloc.continueStartCallIntent(const CallkeepHandle.number('555'), null, false);
+        bloc.platform.continueStartCallIntent(const CallkeepHandle.number('555'), null, false);
         async.flushMicrotasks();
 
         // No notification yet — the timeout has not elapsed.
@@ -120,7 +120,7 @@ void main() {
         final bloc = buildTestBloc(callkeep: _incomingCallkeepMock(), signalingClientFactory: factory.call);
 
         // Fire push before signaling is online.
-        bloc.didPushIncomingCall(const CallkeepHandle.number('123'), null, false, 'call-push', null);
+        bloc.platform.didPushIncomingCall(const CallkeepHandle.number('123'), null, false, 'call-push', null);
         async.flushMicrotasks();
 
         expect(bloc.state.activeCalls, hasLength(1));
@@ -139,7 +139,7 @@ void main() {
         final bloc = buildTestBloc(callkeep: _incomingCallkeepMock(), signalingClientFactory: factory.call);
 
         // Push arrives first (before signaling is online).
-        bloc.didPushIncomingCall(const CallkeepHandle.number('123'), null, false, 'call-push', null);
+        bloc.platform.didPushIncomingCall(const CallkeepHandle.number('123'), null, false, 'call-push', null);
         async.flushMicrotasks();
 
         expect(bloc.state.activeCalls, hasLength(1));

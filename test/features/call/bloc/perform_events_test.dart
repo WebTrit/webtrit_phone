@@ -157,7 +157,7 @@ void main() {
         final callId = bloc.state.activeCalls.first.callId;
 
         // Trigger the perform-start chain: Callkeep → performStartCall → _CallPerformEvent.started
-        bloc.performStartCall(callId, const CallkeepHandle.number('456'), null, false);
+        bloc.platform.performStartCall(callId, const CallkeepHandle.number('456'), null, false);
         async.flushMicrotasks();
 
         expect(bloc.state.activeCalls.first.processingStatus, CallProcessingStatus.outgoingOfferSent);
@@ -193,7 +193,7 @@ void main() {
 
         final callId = bloc.state.activeCalls.first.callId;
 
-        bloc.performStartCall(callId, const CallkeepHandle.number('789'), null, false);
+        bloc.platform.performStartCall(callId, const CallkeepHandle.number('789'), null, false);
         async.flushMicrotasks();
 
         // After full flush, the call completed the WebRTC offer path
@@ -247,7 +247,7 @@ void main() {
         );
         async.flushMicrotasks();
 
-        bloc.performStartCall(callId, const CallkeepHandle.number('456'), null, false);
+        bloc.platform.performStartCall(callId, const CallkeepHandle.number('456'), null, false);
         async.flushMicrotasks();
 
         expect(notifications, contains(isA<CallWhileUnregisteredNotification>()));
@@ -290,7 +290,7 @@ void main() {
         expect(bloc.state.activeCalls, hasLength(1));
         expect(bloc.state.activeCalls.first.processingStatus, CallProcessingStatus.incomingFromOffer);
 
-        bloc.performAnswerCall('call-1');
+        bloc.platform.performAnswerCall('call-1');
         async.flushMicrotasks();
 
         final call = bloc.state.retrieveActiveCall('call-1');
@@ -330,12 +330,12 @@ void main() {
         simulateIncoming(async, factory, jsep: {'type': 'offer', 'sdp': 'v=0\r\n'});
 
         // First answer: advances to incomingAnswering
-        bloc.performAnswerCall('call-1');
+        bloc.platform.performAnswerCall('call-1');
         async.flushMicrotasks();
         expect(bloc.state.retrieveActiveCall('call-1')?.processingStatus, CallProcessingStatus.incomingAnswering);
 
         // Second answer on the same call: status is no longer incomingFromOffer, should be skipped
-        bloc.performAnswerCall('call-1');
+        bloc.platform.performAnswerCall('call-1');
         async.flushMicrotasks();
 
         // createPeerConnection called only once
@@ -363,7 +363,7 @@ void main() {
         simulateIncoming(async, factory);
         expect(bloc.state.activeCalls, hasLength(1));
 
-        bloc.performEndCall('call-1');
+        bloc.platform.performEndCall('call-1');
         async.flushMicrotasks();
 
         expect(bloc.state.activeCalls, isEmpty);
@@ -400,7 +400,7 @@ void main() {
         final callId = bloc.state.activeCalls.first.callId;
 
         // Bring call to outgoingOfferSent via performStartCall
-        bloc.performStartCall(callId, const CallkeepHandle.number('456'), null, false);
+        bloc.platform.performStartCall(callId, const CallkeepHandle.number('456'), null, false);
         async.flushMicrotasks();
         expect(bloc.state.activeCalls.first.processingStatus, CallProcessingStatus.outgoingOfferSent);
 
@@ -410,7 +410,7 @@ void main() {
         expect(bloc.state.activeCalls.first.processingStatus, CallProcessingStatus.connected);
 
         // Now end the connected call
-        bloc.performEndCall(callId);
+        bloc.platform.performEndCall(callId);
         async.flushMicrotasks();
 
         expect(bloc.state.activeCalls, isEmpty);
@@ -440,7 +440,7 @@ void main() {
         expect(bloc.state.activeCalls, isEmpty);
 
         // performEndCall for a call that no longer exists — should be a no-op
-        bloc.performEndCall('call-1');
+        bloc.platform.performEndCall('call-1');
         async.flushMicrotasks();
 
         expect(bloc.state.activeCalls, isEmpty);
