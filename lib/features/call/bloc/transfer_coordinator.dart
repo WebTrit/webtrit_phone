@@ -135,7 +135,7 @@ extension _TransferCoordinator on CallBloc {
     final error = await callkeep.startCall(callId, newHandle, hasVideo: false, proximityEnabled: true);
 
     if (error != null) {
-      _logger.warning('__onCallControlEventStarted error: $error');
+      _logger.warning('_onCallControlEventAttendedRequestApproved startCall error: $error');
       submitNotification(ErrorMessageNotification(error.toString()));
       return;
     }

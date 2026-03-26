@@ -14,7 +14,7 @@ The class is split across six `part` files that share one library boundary (`cal
 | `call_event.dart` | All event classes (sealed hierarchies) |
 | `call_state.dart` | `CallState`, `ActiveCall`, audio device models |
 | `platform_bridge.dart` | `_PlatformBridgeMixin` — `CallkeepDelegate` implementation |
-| `signaling_module.dart` | `_SignalingModule` extension — signaling lifecycle |
+| `signaling_module.dart` | `SignalingModule` class + `_SignalingHandlers` extension — signaling lifecycle |
 | `call_session.dart` | `_CallSession` extension — per-call WebRTC state machine |
 | `transfer_coordinator.dart` | `_TransferCoordinator` extension — blind and attended transfer |
 
@@ -269,7 +269,7 @@ Disconnect:
 | `CallStarted` / network restored / app resumed | 0 s |
 | Code 4441 (server force-close) | 0 s |
 | Unexpected disconnect | 6 s |
-| Code `sessionMissedError` | — (calls `onSessionInvalidated`, no reconnect) |
+| Code `sessionMissedError` | 6 s; also triggers `onSessionInvalidated` via `_handleSignalingSessionError` in `CallBloc.onChange` |
 
 Reconnect is suppressed when the app is backgrounded with no active calls.
 
@@ -280,7 +280,7 @@ On each `StateHandshake` the BLoC:
 1. Enriches existing `ActiveCall` entries with server-reported line/callId matches.
 2. Cleans up any server-reported calls with no local match (sends `HangupRequest`).
 3. Drops local calls absent from the server list (sends `HangupRequest`, pops from state).
-4. Starts/restarts `PresenceSyncService`.
+4. Updates `PresenceSyncService` with the latest user-active-calls and contact presence data.
 
 ## Isolates
 

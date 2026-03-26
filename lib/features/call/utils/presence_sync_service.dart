@@ -78,14 +78,17 @@ final class LivePresenceSyncService implements PresenceSyncService {
     if (shouldUpdate && canUpdate) {
       _logger.fine('sync: updating presence settings');
       try {
-        await _signalingClientProvider()?.execute(
-          PresenceSettingsUpdateRequest(
-            transaction: clock.now().millisecondsSinceEpoch.toString(),
-            settings: SignalingPresenceSettingsMapper.toSignaling(presenceSettings),
-          ),
-        );
-        _settingsRepository.updateLastSettingsSync(now);
-        _logger.fine('Presence settings updated at $now');
+        final client = _signalingClientProvider();
+        if (client != null) {
+          await client.execute(
+            PresenceSettingsUpdateRequest(
+              transaction: clock.now().millisecondsSinceEpoch.toString(),
+              settings: SignalingPresenceSettingsMapper.toSignaling(presenceSettings),
+            ),
+          );
+          _settingsRepository.updateLastSettingsSync(now);
+          _logger.fine('Presence settings updated at $now');
+        }
       } on Exception catch (e, s) {
         _logger.warning('Failed to update presence settings', e, s);
       }

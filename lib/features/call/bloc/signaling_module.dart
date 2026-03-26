@@ -784,11 +784,12 @@ extension _SignalingHandlers on CallBloc {
                 line: callEvent.line,
                 callId: callEvent.callId,
               );
-              await _signalingModule.signalingClient?.execute(hangupRequest).catchError((e, s) {
+              final hangupFuture = _signalingModule.signalingClient?.execute(hangupRequest);
+              await hangupFuture?.catchError((e, s) {
                 callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
               });
 
-              return;
+              continue;
             } else if (callEvent is IncomingCallEvent) {
               // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
               final declineRequest = DeclineRequest(
@@ -796,10 +797,11 @@ extension _SignalingHandlers on CallBloc {
                 line: callEvent.line,
                 callId: callEvent.callId,
               );
-              await _signalingModule.signalingClient?.execute(declineRequest).catchError((e, s) {
+              final declineFuture = _signalingModule.signalingClient?.execute(declineRequest);
+              await declineFuture?.catchError((e, s) {
                 callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
               });
-              return;
+              continue;
             }
           }
         }
@@ -819,6 +821,8 @@ extension _SignalingHandlers on CallBloc {
           await callkeep.endCall(connection.callId);
         }
       }
+    } on Error {
+      rethrow;
     } catch (e, s) {
       _logger.severe('_processHandshakeAsync error', e, s);
     }

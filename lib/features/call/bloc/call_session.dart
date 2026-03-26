@@ -318,7 +318,8 @@ extension _CallSession on CallBloc {
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        await _signalingModule.signalingClient?.execute(declineRequest).catchError((e, s) {
+        final declineFuture = _signalingModule.signalingClient?.execute(declineRequest);
+        await declineFuture?.catchError((e, s) {
           callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
         });
       } else {
@@ -327,7 +328,8 @@ extension _CallSession on CallBloc {
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        await _signalingModule.signalingClient?.execute(hangupRequest).catchError((e, s) {
+        final hangupFuture = _signalingModule.signalingClient?.execute(hangupRequest);
+        await hangupFuture?.catchError((e, s) {
           callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
         });
       }
