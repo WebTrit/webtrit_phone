@@ -49,7 +49,7 @@ extension _TransferCoordinator on CallBloc {
     final callId = activeCallBlindTransferInitiated?.callId ?? currentCall.callId;
 
     // Check if the number is already in active calls
-    final isNumberAlreadyConnected = state.activeCalls.any((call) => call.handle.value == event.number);
+    final isNumberAlreadyConnected = state.activeCalls.any((call) => call.handle.normalizedValue() == event.number);
     if (isNumberAlreadyConnected) {
       submitNotification(ActiveLineBlindTransferWarningNotification());
       return;

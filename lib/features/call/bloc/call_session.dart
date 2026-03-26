@@ -283,7 +283,7 @@ extension _CallSession on CallBloc {
 
       final declineId = WebtritSignalingClient.generateTransactionId();
       final declineRequest = DeclineRequest(transaction: declineId, line: call.line, callId: call.callId);
-      _signalingModule.signalingClient?.execute(declineRequest).ignore();
+      _signalingModule.signalingClient?.execute(declineRequest)?.ignore();
 
       callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
     }
@@ -293,6 +293,7 @@ extension _CallSession on CallBloc {
     // Condition occur when the user interacts with a push notification before signaling is properly initialized.
     // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
     if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
+      event.fail();
       add(_ResetStateEvent.completeCall(event.callId));
       return;
     }
