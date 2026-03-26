@@ -104,6 +104,7 @@ class CallBloc extends Bloc<CallEvent, CallState>
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
 
   late final SignalingModule _signalingModule;
+  late final TransferCoordinatorImpl _transfer;
   late final _CallSessionManager _callSession;
 
   late final PeerConnectionManagerProtocol _peerConnectionManager;
@@ -142,6 +143,14 @@ class CallBloc extends Bloc<CallEvent, CallState>
   }) : super(const CallState()) {
     _callkeepSound = callkeepSound ?? WebtritCallkeepSound();
     _signalingModule = signalingModule.._delegate = this;
+    _transfer = TransferCoordinatorImpl(
+      signalingModule: signalingModule,
+      callkeep: callkeep,
+      callErrorReporter: callErrorReporter,
+      submitNotification: submitNotification,
+      getCurrentState: () => state,
+      addEvent: add,
+    );
     _callSession = _CallSessionManager(delegate: this);
     _peerConnectionManager = peerConnectionManager;
     _callHistoryRecorder = CallHistoryRecorder(repository: callLogsRepository);
@@ -860,12 +869,12 @@ class CallBloc extends Bloc<CallEvent, CallState>
       _CallControlEventCameraEnabled() => _callSession.onCameraEnabled(event, emit),
       _CallControlEventAudioDeviceSet() => _onCallControlEventAudioDeviceSet(event, emit),
       _CallControlEventFailureApproved() => _onCallControlEventFailureApproved(event, emit),
-      _CallControlEventBlindTransferInitiated() => _onCallControlEventBlindTransferInitiated(event, emit),
-      _CallControlEventAttendedTransferInitiated() => _onCallControlEventAttendedTransferInitiated(event, emit),
-      _CallControlEventBlindTransferSubmitted() => _onCallControlEventBlindTransferSubmitted(event, emit),
-      _CallControlEventAttendedTransferSubmitted() => _onCallControlEventAttendedTransferSubmitted(event, emit),
-      _CallControlEventAttendedRequestApproved() => _onCallControlEventAttendedRequestApproved(event, emit),
-      _CallControlEventAttendedRequestDeclined() => _onCallControlEventAttendedRequestDeclined(event, emit),
+      _CallControlEventBlindTransferInitiated() => _transfer._onBlindTransferInitiated(event, emit.call),
+      _CallControlEventAttendedTransferInitiated() => _transfer._onAttendedTransferInitiated(event, emit.call),
+      _CallControlEventBlindTransferSubmitted() => _transfer._onBlindTransferSubmitted(event, emit.call),
+      _CallControlEventAttendedTransferSubmitted() => _transfer._onAttendedTransferSubmitted(event, emit.call),
+      _CallControlEventAttendedRequestApproved() => _transfer._onAttendedRequestApproved(event, emit.call),
+      _CallControlEventAttendedRequestDeclined() => _transfer._onAttendedRequestDeclined(event, emit.call),
     };
   }
 
