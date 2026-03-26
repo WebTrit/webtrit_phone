@@ -537,7 +537,7 @@ extension _CallSession on CallBloc {
     Emitter<CallState> emit,
   ) async {
     if (iceFilter?.filter(event.candidate) == true) {
-      _logger.fine('__onPeerConnectionEventIceCandidateIdentified: skip by iceFiler');
+      _logger.fine('__onPeerConnectionEventIceCandidateIdentified: skip by iceFilter');
       return;
     }
 

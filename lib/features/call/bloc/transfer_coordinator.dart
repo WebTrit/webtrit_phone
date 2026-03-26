@@ -7,18 +7,16 @@ extension _TransferCoordinator on CallBloc {
   ) async {
     final isSpeakerOn = state.audioDevice?.type == CallAudioDeviceType.speaker;
 
-    var newState = state.copyWith(minimized: true);
-
     await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
 
-    newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
-      return activeCall.copyWith(
-        transfer: const Transfer.blindTransferInitiated(),
-        speakerOnBeforeMinimize: isSpeakerOn,
-      );
-    });
-
-    emit(newState);
+    emit(
+      state.copyWith(minimized: true).copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(
+          transfer: const Transfer.blindTransferInitiated(),
+          speakerOnBeforeMinimize: isSpeakerOn,
+        );
+      }),
+    );
 
     await callkeep.reportUpdateCall(state.activeCalls.current.callId, proximityEnabled: state.shouldListenToProximity);
   }

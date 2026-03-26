@@ -11,7 +11,7 @@ mixin _PlatformBridgeMixin on Bloc<CallEvent, CallState> implements CallkeepDele
   /// been handed to the native CallKit/ConnectionService layer.  Call
   /// [_drainPendingPerformEvents] from [CallBloc.close] to fail them all,
   /// preventing the native side from hanging when the BLoC tears down.
-  final _pendingPerformEvents = <_CallPerformEvent>{};
+  final _pendingPerformEvents = Set<_CallPerformEvent>.identity();
 
   void _drainPendingPerformEvents() {
     for (final event in _pendingPerformEvents) {
