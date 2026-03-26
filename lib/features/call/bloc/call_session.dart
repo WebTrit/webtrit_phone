@@ -283,7 +283,7 @@ extension _CallSession on CallBloc {
 
       final declineId = WebtritSignalingClient.generateTransactionId();
       final declineRequest = DeclineRequest(transaction: declineId, line: call.line, callId: call.callId);
-      _signalingModule.signalingClient?.execute(declineRequest)?.ignore();
+      _signalingModule.signalingClient?.execute(declineRequest).ignore();
 
       callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
     }
