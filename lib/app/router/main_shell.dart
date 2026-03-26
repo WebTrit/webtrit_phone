@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -461,16 +461,29 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       final platformBridge = PlatformBridgeImpl(callkeep: _callkeep);
 
+                      void submitNotification(Notification n) => notificationsBloc.add(NotificationsSubmitted(n));
+                      final callErrorReporter = DefaultCallErrorReporter(submitNotification);
+
+                      final transfer = TransferCoordinatorImpl(
+                        signalingModule: signalingModule,
+                        callkeep: _callkeep,
+                        callErrorReporter: callErrorReporter,
+                        submitNotification: submitNotification,
+                      );
+
+                      final callSession = CallSessionManager(peerConnectionManager: peerConnectionManager);
+
                       return CallBloc(
                         platform: platformBridge,
                         signalingModule: signalingModule,
+                        transfer: transfer,
                         callLogsRepository: context.read<CallLogsRepository>(),
                         callPullRepository: context.read<CallPullRepository>(),
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
                         userRepository: context.read<UserRepository>(),
-                        submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+                        submitNotification: submitNotification,
                         callkeep: _callkeep,
                         callkeepConnections: _callkeepConnections,
                         sdpMunger: ModifyWithEncodingSettings(
@@ -482,9 +495,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(audioProcessingSettingsRepository),
                         userMediaBuilder: userMediaBuilder,
                         contactNameResolver: contactNameResolver,
-                        callErrorReporter: DefaultCallErrorReporter(
-                          (n) => notificationsBloc.add(NotificationsSubmitted(n)),
-                        ),
+                        callErrorReporter: callErrorReporter,
                         iceFilter: FilterWithAppSettings(iceSettingsRepository),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                         sipPresenceEnabled: featureAccess.sipPresenceConfig.sipPresenceSupport,
@@ -493,7 +504,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           DiagnosticType.androidCallkeepOnly,
                           extras: {'callId': id, 'error': error.name},
                         ),
-                        peerConnectionManager: peerConnectionManager,
+                        callSession: callSession,
                         onSessionInvalidated: () =>
                             appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
                       )..add(const CallStarted());

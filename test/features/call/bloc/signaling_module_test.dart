@@ -353,14 +353,24 @@ void main() {
         when(() => mockSound.stopRingbackSound()).thenAnswer((_) async {});
         when(() => mockSound.playRingbackSound()).thenAnswer((_) async {});
 
+        final sigModule = SignalingModule(
+          coreUrl: 'https://example.com',
+          tenantId: 'test-tenant',
+          token: 'test-token',
+          trustedCertificates: TrustedCertificates.empty,
+          signalingClientFactory: sessionFactory.call,
+        );
+        final mockCallErrorReporter = MockCallErrorReporter();
+        when(() => mockCallErrorReporter.handle(any(), any(), any())).thenReturn(null);
+        final transfer = TransferCoordinatorImpl(
+          signalingModule: sigModule,
+          callkeep: mockCallkeep,
+          callErrorReporter: mockCallErrorReporter,
+          submitNotification: (_) {},
+        );
+
         bloc = TestCallBloc(
-          signalingModule: SignalingModule(
-            coreUrl: 'https://example.com',
-            tenantId: 'test-tenant',
-            token: 'test-token',
-            trustedCertificates: TrustedCertificates.empty,
-            signalingClientFactory: sessionFactory.call,
-          ),
+          signalingModule: sigModule,
           callLogsRepository: MockCallLogsRepository(),
           callPullRepository: MockCallPullRepository(),
           linesStateRepository: mockLinesState,
@@ -377,17 +387,20 @@ void main() {
           callkeepConnections: mockConnections,
           userMediaBuilder: MockUserMediaBuilder(),
           contactNameResolver: MockContactNameResolver(),
-          callErrorReporter: MockCallErrorReporter(),
+          callErrorReporter: mockCallErrorReporter,
           sipPresenceEnabled: false,
           onDiagnosticReportRequested: (_, _) {},
-          peerConnectionManager: () {
-            final m = MockPeerConnectionManager();
-            when(() => m.dispose()).thenAnswer((_) async {});
-            when(() => m.disposePeerConnection(any())).thenAnswer((_) async {});
-            when(() => m.add(any())).thenReturn(null);
-            return m;
-          }(),
+          callSession: CallSessionManager(
+            peerConnectionManager: () {
+              final m = MockPeerConnectionManager();
+              when(() => m.dispose()).thenAnswer((_) async {});
+              when(() => m.disposePeerConnection(any())).thenAnswer((_) async {});
+              when(() => m.add(any())).thenReturn(null);
+              return m;
+            }(),
+          ),
           platform: FakePlatformBridge(),
+          transfer: transfer,
           callkeepSound: mockSound,
         );
 

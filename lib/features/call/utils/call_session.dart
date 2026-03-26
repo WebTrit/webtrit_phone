@@ -1,29 +1,25 @@
+// ignore_for_file: library_private_types_in_public_api
 part of '../bloc/call_bloc.dart';
 
 /// Interface that [CallSessionManager] uses to interact with the outside world.
 ///
-/// Typed callbacks keep the manager decoupled from private BLoC event classes,
-/// making it possible to instantiate and test [CallSessionManager] independently
-/// via a fake delegate without constructing a [CallBloc].
+/// Provides runtime-dynamic state and event-dispatch capability. Static
+/// dependencies (peer connection manager, signaling, callkeep, etc.) are
+/// injected at construction time instead, keeping this interface minimal.
 abstract interface class _CallSessionDelegate {
   CallState get currentState;
   Stream<CallState> get stateStream;
   bool get isSessionClosed;
 
-  /// Dispatches a [_PeerConnectionEvent] onto the BLoC event loop.
-  void _dispatchPeerConnectionEvent(_PeerConnectionEvent event);
-
-  /// Dispatches a complete-call reset for [callId] onto the BLoC event loop.
-  void dispatchCompleteCall(String callId);
-
   /// Submits a UI notification.
   void showNotification(Notification notification);
 
+  /// Dispatches any [CallEvent] (peer-connection or complete-call reset)
+  /// onto the BLoC event loop.
+  void addCallSessionEvent(CallEvent event);
+
   /// Provides access to the signaling module.
   SignalingModule get signalingModule;
-
-  /// Provides access to the peer connection manager.
-  PeerConnectionManagerProtocol get peerConnectionManager;
 
   /// Provides access to the call history recorder.
   CallHistoryRecorder get callHistoryRecorder;
@@ -46,10 +42,18 @@ abstract interface class _CallSessionDelegate {
 /// boundary (and thus access to private types such as [_CallPerformEvent] and
 /// [_PeerConnectionEvent]), but it is a concrete, independently-instantiable
 /// class rather than an extension on [CallBloc].
-class _CallSessionManager {
-  _CallSessionManager({required _CallSessionDelegate delegate}) : _delegate = delegate;
+class CallSessionManager {
+  CallSessionManager({required PeerConnectionManagerProtocol peerConnectionManager})
+    : _peerConnectionManager = peerConnectionManager;
 
-  final _CallSessionDelegate _delegate;
+  final PeerConnectionManagerProtocol _peerConnectionManager;
+
+  /// Exposes the peer connection manager so [CallBloc] can reach it for
+  /// lifecycle operations (dispose, sync, config updates) without holding a
+  /// separate reference.
+  PeerConnectionManagerProtocol get peerConnectionManager => _peerConnectionManager;
+
+  late _CallSessionDelegate _delegate;
 
   // Public entry-point dispatchers called from BLoC on<> handlers.
 
@@ -117,7 +121,7 @@ class _CallSessionManager {
       return;
     }
 
-    final peerConnection = await _delegate.peerConnectionManager.retrieve(event.callId);
+    final peerConnection = await _peerConnectionManager.retrieve(event.callId);
     if (peerConnection == null) return;
 
     try {
@@ -279,7 +283,7 @@ class _CallSessionManager {
 
       event.fail();
 
-      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
 
       emit(_delegate.currentState.copyWithPopActiveCall(event.callId));
 
@@ -323,7 +327,7 @@ class _CallSessionManager {
       // In other cases setLocalDescription is called first; here it's delayed to avoid ICE race
       await peerConnection.setLocalDescription(localDescription);
 
-      _delegate.peerConnectionManager.complete(event.callId, peerConnection);
+      _peerConnectionManager.complete(event.callId, peerConnection);
 
       await _delegate.callkeep.reportConnectingOutgoingCall(event.callId);
 
@@ -340,9 +344,9 @@ class _CallSessionManager {
       _delegate.callErrorReporter.handle(e, stackTrace, '_onCallPerformEventStarted error:');
 
       await _stopRingbackSound();
-      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-      _delegate.dispatchCompleteCall(event.callId);
+      _delegate.addCallSessionEvent(_ResetStateEvent.completeCall(event.callId));
     }
   }
 
@@ -442,12 +446,12 @@ class _CallSessionManager {
         ),
       );
 
-      _delegate.peerConnectionManager.complete(event.callId, peerConnection);
+      _peerConnectionManager.complete(event.callId, peerConnection);
     } on Error {
       rethrow;
     } catch (e, stackTrace) {
-      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
-      _delegate.dispatchCompleteCall(event.callId);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _delegate.addCallSessionEvent(_ResetStateEvent.completeCall(event.callId));
 
       _addToRecents(call!);
 
@@ -464,7 +468,7 @@ class _CallSessionManager {
     // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
     if (_delegate.currentState.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
       event.fail();
-      _delegate.dispatchCompleteCall(event.callId);
+      _delegate.addCallSessionEvent(_ResetStateEvent.completeCall(event.callId));
       return;
     }
 
@@ -515,7 +519,7 @@ class _CallSessionManager {
       // Need to close peer connection after executing [HangupRequest]
       // to prevent "Simulate a "hangup" coming from the application"
       // because of "No WebRTC media anymore".
-      await _delegate.peerConnectionManager.disposePeerConnection(activeCall.callId);
+      await _peerConnectionManager.disposePeerConnection(activeCall.callId);
       await activeCall.localStream?.dispose();
     });
 
@@ -557,9 +561,9 @@ class _CallSessionManager {
     } catch (e, stackTrace) {
       _delegate.callErrorReporter.handle(e, stackTrace, '_onCallPerformEventSetHeld error');
 
-      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-      _delegate.dispatchCompleteCall(event.callId);
+      _delegate.addCallSessionEvent(_ResetStateEvent.completeCall(event.callId));
     }
   }
 
@@ -584,7 +588,7 @@ class _CallSessionManager {
     event.fulfill();
 
     await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) async {
-      final peerConnection = await _delegate.peerConnectionManager.retrieve(event.callId);
+      final peerConnection = await _peerConnectionManager.retrieve(event.callId);
       if (peerConnection == null) {
         _logger.warning('_onCallPerformEventSentDTMF: peerConnection is null - most likely some permissions issue');
       } else {
@@ -654,9 +658,9 @@ class _CallSessionManager {
       } catch (e, stackTrace) {
         _delegate.callErrorReporter.handle(e, stackTrace, '_onPeerConnectionEventIceGatheringStateChanged error');
 
-        _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
+        _peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-        _delegate.dispatchCompleteCall(event.callId);
+        _delegate.addCallSessionEvent(_ResetStateEvent.completeCall(event.callId));
       }
     }
   }
@@ -668,7 +672,7 @@ class _CallSessionManager {
     if (event.state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
       try {
         await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) async {
-          final peerConnection = await _delegate.peerConnectionManager.retrieve(event.callId);
+          final peerConnection = await _peerConnectionManager.retrieve(event.callId);
           if (peerConnection == null) {
             _logger.warning(
               '_onPeerConnectionEventIceConnectionStateChanged: peerConnection is null - most likely some state issue',
@@ -696,9 +700,9 @@ class _CallSessionManager {
       } catch (e, stackTrace) {
         _delegate.callErrorReporter.handle(e, stackTrace, '_onPeerConnectionEventIceConnectionStateChanged error');
 
-        _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
+        _peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-        _delegate.dispatchCompleteCall(event.callId);
+        _delegate.addCallSessionEvent(_ResetStateEvent.completeCall(event.callId));
       }
     }
   }
@@ -728,9 +732,9 @@ class _CallSessionManager {
     } catch (e, stackTrace) {
       _delegate.callErrorReporter.handle(e, stackTrace, '_onPeerConnectionEventIceCandidateIdentified error');
 
-      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-      _delegate.dispatchCompleteCall(event.callId);
+      _delegate.addCallSessionEvent(_ResetStateEvent.completeCall(event.callId));
     }
   }
 
@@ -761,23 +765,21 @@ class _CallSessionManager {
   }
 
   Future<RTCPeerConnection> _createPeerConnection(String callId, int? lineId) {
-    return _delegate.peerConnectionManager.createPeerConnection(
+    return _peerConnectionManager.createPeerConnection(
       callId,
       observer: PeerConnectionObserver(
         onSignalingState: (state) =>
-            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.signalingStateChanged(callId, state)),
+            _delegate.addCallSessionEvent(_PeerConnectionEvent.signalingStateChanged(callId, state)),
         onConnectionState: (state) =>
-            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.connectionStateChanged(callId, state)),
+            _delegate.addCallSessionEvent(_PeerConnectionEvent.connectionStateChanged(callId, state)),
         onIceGatheringState: (state) =>
-            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.iceGatheringStateChanged(callId, state)),
+            _delegate.addCallSessionEvent(_PeerConnectionEvent.iceGatheringStateChanged(callId, state)),
         onIceConnectionState: (state) =>
-            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.iceConnectionStateChanged(callId, state)),
+            _delegate.addCallSessionEvent(_PeerConnectionEvent.iceConnectionStateChanged(callId, state)),
         onIceCandidate: (candidate) =>
-            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
-        onAddStream: (stream) =>
-            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.streamAdded(callId, stream)),
-        onRemoveStream: (stream) =>
-            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.streamRemoved(callId, stream)),
+            _delegate.addCallSessionEvent(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
+        onAddStream: (stream) => _delegate.addCallSessionEvent(_PeerConnectionEvent.streamAdded(callId, stream)),
+        onRemoveStream: (stream) => _delegate.addCallSessionEvent(_PeerConnectionEvent.streamRemoved(callId, stream)),
         onRenegotiationNeeded: (pc) {
           unawaited(
             _handleRenegotiationNeeded(callId, lineId, pc).catchError(

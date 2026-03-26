@@ -253,8 +253,9 @@ class TestCallBloc extends CallBloc {
     required super.callErrorReporter,
     required super.sipPresenceEnabled,
     required super.onDiagnosticReportRequested,
-    required super.peerConnectionManager,
+    required super.callSession,
     required super.platform,
+    required super.transfer,
     super.onCallEnded,
     super.callkeepSound,
   });
@@ -338,14 +339,29 @@ TestCallBloc buildTestBloc({
 
   final notifications = capturedNotifications ?? <Notification>[];
 
+  final mockCallErrorReporter = MockCallErrorReporter();
+  when(() => mockCallErrorReporter.handle(any(), any(), any())).thenReturn(null);
+
+  // Extract signalingModule so it can be shared with TransferCoordinatorImpl.
+  final sigModule = SignalingModule(
+    coreUrl: 'https://example.com',
+    tenantId: 'test-tenant',
+    token: 'test-token',
+    trustedCertificates: TrustedCertificates.empty,
+    signalingClientFactory: signalingClientFactory,
+  );
+
+  final transfer = TransferCoordinatorImpl(
+    signalingModule: sigModule,
+    callkeep: mockCallkeep,
+    callErrorReporter: mockCallErrorReporter,
+    submitNotification: notifications.add,
+  );
+
+  final callSession = CallSessionManager(peerConnectionManager: mockPcm);
+
   return TestCallBloc(
-    signalingModule: SignalingModule(
-      coreUrl: 'https://example.com',
-      tenantId: 'test-tenant',
-      token: 'test-token',
-      trustedCertificates: TrustedCertificates.empty,
-      signalingClientFactory: signalingClientFactory,
-    ),
+    signalingModule: sigModule,
     callLogsRepository: mockCallLogs,
     callPullRepository: MockCallPullRepository(),
     linesStateRepository: mockLinesState,
@@ -358,11 +374,12 @@ TestCallBloc buildTestBloc({
     callkeepConnections: mockConnections,
     userMediaBuilder: mockUserMedia,
     contactNameResolver: mockContactNameResolver,
-    callErrorReporter: MockCallErrorReporter(),
+    callErrorReporter: mockCallErrorReporter,
     sipPresenceEnabled: sipPresenceEnabled,
     onDiagnosticReportRequested: (_, _) {},
-    peerConnectionManager: mockPcm,
+    callSession: callSession,
     platform: fakePlatform,
+    transfer: transfer,
     callkeepSound: mockSound,
   );
 }

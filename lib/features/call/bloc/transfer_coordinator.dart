@@ -1,16 +1,51 @@
 part of 'call_bloc.dart';
 
-extension _TransferCoordinator on CallBloc {
-  Future<void> _onCallControlEventBlindTransferInitiated(
-    _CallControlEventBlindTransferInitiated event,
-    Emitter<CallState> emit,
-  ) async {
-    final isSpeakerOn = state.audioDevice?.type == CallAudioDeviceType.speaker;
+final _transferLogger = Logger('TransferCoordinatorImpl');
 
-    await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
+/// Minimal interface that [TransferCoordinatorImpl] needs from [CallBloc] at
+/// runtime. The static dependencies (callkeep, signalingModule, etc.) are
+/// provided at construction time and do not change.
+abstract interface class _TransferCoordinatorDelegate {
+  CallState get currentState;
+
+  void addTransferCallEvent(CallEvent event);
+}
+
+/// Handles all transfer-related [CallControlEvent] sub-types.
+///
+/// Receives static dependencies at construction and is wired to [CallBloc] via
+/// [_delegate], set in [CallBloc]'s constructor body with the cascade pattern
+/// (`transfer.._delegate = this`).
+class TransferCoordinatorImpl {
+  TransferCoordinatorImpl({
+    required SignalingModule signalingModule,
+    required Callkeep callkeep,
+    required CallErrorReporter callErrorReporter,
+    required void Function(Notification) submitNotification,
+  }) : _signalingModule = signalingModule,
+       _callkeep = callkeep,
+       _callErrorReporter = callErrorReporter,
+       _submitNotification = submitNotification;
+
+  final SignalingModule _signalingModule;
+  final Callkeep _callkeep;
+  final CallErrorReporter _callErrorReporter;
+  final void Function(Notification) _submitNotification;
+
+  late _TransferCoordinatorDelegate _delegate;
+
+  // ---------------------------------------------------------------------------
+  // Handlers — called from CallBloc._onCallControlEvent
+  // ---------------------------------------------------------------------------
+
+  Future<void> onBlindTransferInitiated(String callId, Emitter<CallState> emit) async {
+    final isSpeakerOn = _delegate.currentState.audioDevice?.type == CallAudioDeviceType.speaker;
+
+    final holdError = await _callkeep.setHeld(callId, onHold: true);
+    if (holdError != null) _transferLogger.warning('onBlindTransferInitiated setHeld error: $holdError');
 
     emit(
-      state.copyWith(minimized: true).copyWithMappedActiveCall(event.callId, (activeCall) {
+      _delegate.currentState.copyWith(minimized: true).copyWithMappedActiveCall(callId, (activeCall) {
         return activeCall.copyWith(
           transfer: const Transfer.blindTransferInitiated(),
           speakerOnBeforeMinimize: isSpeakerOn,
@@ -18,40 +53,33 @@ extension _TransferCoordinator on CallBloc {
       }),
     );
 
-    await callkeep.reportUpdateCall(event.callId, proximityEnabled: state.shouldListenToProximity);
+    await _callkeep.reportUpdateCall(callId, proximityEnabled: _delegate.currentState.shouldListenToProximity);
   }
 
-  Future<void> _onCallControlEventAttendedTransferInitiated(
-    _CallControlEventAttendedTransferInitiated event,
-    Emitter<CallState> emit,
-  ) async {
-    final isSpeakerOn = state.audioDevice?.type == CallAudioDeviceType.speaker;
+  Future<void> onAttendedTransferInitiated(String callId, Emitter<CallState> emit) async {
+    final isSpeakerOn = _delegate.currentState.audioDevice?.type == CallAudioDeviceType.speaker;
 
-    var newState = state.copyWith(minimized: true);
-
-    newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
+    var newState = _delegate.currentState.copyWith(minimized: true);
+    newState = newState.copyWithMappedActiveCall(callId, (activeCall) {
       return activeCall.copyWith(speakerOnBeforeMinimize: isSpeakerOn);
     });
-
     emit(newState);
 
-    await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
+    final holdError = await _callkeep.setHeld(callId, onHold: true);
+    if (holdError != null) _transferLogger.warning('onAttendedTransferInitiated setHeld error: $holdError');
   }
 
-  Future<void> _onCallControlEventBlindTransferSubmitted(
-    _CallControlEventBlindTransferSubmitted event,
-    Emitter<CallState> emit,
-  ) async {
-    final activeCallBlindTransferInitiated = state.activeCalls.blindTransferInitiated;
-    final currentCall = state.activeCalls.current;
+  Future<void> onBlindTransferSubmitted(String number, Emitter<CallState> emit) async {
+    final currentState = _delegate.currentState;
+    final activeCallBlindTransferInitiated = currentState.activeCalls.blindTransferInitiated;
+    final currentCall = currentState.activeCalls.current;
 
     final line = activeCallBlindTransferInitiated?.line ?? currentCall.line;
     final callId = activeCallBlindTransferInitiated?.callId ?? currentCall.callId;
 
-    // Check if the number is already in active calls
-    final isNumberAlreadyConnected = state.activeCalls.any((call) => call.handle.normalizedValue() == event.number);
+    final isNumberAlreadyConnected = currentState.activeCalls.any((call) => call.handle.normalizedValue() == number);
     if (isNumberAlreadyConnected) {
-      submitNotification(ActiveLineBlindTransferWarningNotification());
+      _submitNotification(ActiveLineBlindTransferWarningNotification());
       return;
     }
 
@@ -60,41 +88,36 @@ extension _TransferCoordinator on CallBloc {
         transaction: WebtritSignalingClient.generateTransactionId(),
         line: line,
         callId: callId,
-        number: event.number,
+        number: number,
       );
 
       await _signalingModule.signalingClient?.execute(transferRequest);
 
-      var newState = state.copyWith(minimized: false);
+      var newState = _delegate.currentState.copyWith(minimized: false);
       newState = newState.copyWithMappedActiveCall(callId, (activeCall) {
-        final transfer = Transfer.blindTransferTransferSubmitted(toNumber: event.number);
+        final transfer = Transfer.blindTransferTransferSubmitted(toNumber: number);
         return activeCall.copyWith(transfer: transfer);
       });
       emit(newState);
 
-      await callkeep.reportUpdateCall(callId, proximityEnabled: state.shouldListenToProximity);
+      await _callkeep.reportUpdateCall(callId, proximityEnabled: _delegate.currentState.shouldListenToProximity);
 
-      final callBeingTransferred = state.retrieveActiveCall(callId);
-
+      final callBeingTransferred = _delegate.currentState.retrieveActiveCall(callId);
       if (callBeingTransferred?.speakerOnBeforeMinimize == true) {
-        add(CallControlEvent.audioDeviceSet(callId, state.availableAudioDevices.getSpeaker));
+        _delegate.addTransferCallEvent(
+          CallControlEvent.audioDeviceSet(callId, _delegate.currentState.availableAudioDevices.getSpeaker),
+        );
       }
-
-      // After request successfully submitted, the transfer flow continues via
-      // TransferringEvent from Janus, handled in [__onCallSignalingEventTransferring],
-      // which marks the call as transfer-in-progress.
     } catch (e, s) {
-      callErrorReporter.handle(e, s, '_onCallControlEventBlindTransferSubmitted request error:');
+      _callErrorReporter.handle(e, s, 'onBlindTransferSubmitted request error:');
     }
   }
 
-  Future<void> _onCallControlEventAttendedTransferSubmitted(
-    _CallControlEventAttendedTransferSubmitted event,
+  Future<void> onAttendedTransferSubmitted(
+    ActiveCall referorCall,
+    ActiveCall replaceCall,
     Emitter<CallState> emit,
   ) async {
-    final referorCall = event.referorCall;
-    final replaceCall = event.replaceCall;
-
     try {
       final transferRequest = TransferRequest(
         transaction: WebtritSignalingClient.generateTransactionId(),
@@ -107,42 +130,32 @@ extension _TransferCoordinator on CallBloc {
       await _signalingModule.signalingClient?.execute(transferRequest);
 
       emit(
-        state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
+        _delegate.currentState.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
           final transfer = Transfer.attendedTransferTransferSubmitted(replaceCallId: replaceCall.callId);
           return activeCall.copyWith(transfer: transfer);
         }),
       );
-
-      // After request successfully submitted, the transfer flow continues via
-      // TransferringEvent from Janus, handled in [__onCallSignalingEventTransferring],
-      // which marks the referor call as transfer-in-progress.
     } catch (e, s) {
-      callErrorReporter.handle(e, s, '_onCallControlEventAttendedTransferSubmitted request error:');
+      _callErrorReporter.handle(e, s, 'onAttendedTransferSubmitted request error:');
     }
   }
 
-  Future<void> _onCallControlEventAttendedRequestApproved(
-    _CallControlEventAttendedRequestApproved event,
-    Emitter<CallState> emit,
-  ) async {
-    final referId = event.referId;
-    final referTo = event.referTo;
-
+  Future<void> onAttendedRequestApproved(String referId, String referTo, Emitter<CallState> emit) async {
     final newHandle = CallkeepHandle.number(referTo);
-
     final callId = WebtritSignalingClient.generateCallId();
 
-    final error = await callkeep.startCall(callId, newHandle, hasVideo: false, proximityEnabled: true);
+    final error = await _callkeep.startCall(callId, newHandle, hasVideo: false, proximityEnabled: true);
 
     if (error != null) {
-      _logger.warning('_onCallControlEventAttendedRequestApproved startCall error: $error');
-      submitNotification(ErrorMessageNotification(error.toString()));
+      _transferLogger.warning('onAttendedRequestApproved startCall error: $error');
+      _submitNotification(ErrorMessageNotification(error.toString()));
       return;
     }
 
+    final currentState = _delegate.currentState;
     final newCall = ActiveCall(
       direction: CallDirection.outgoing,
-      line: state.retrieveIdleLine() ?? _kUndefinedLine,
+      line: currentState.retrieveIdleLine() ?? _kUndefinedLine,
       callId: callId,
       handle: newHandle,
       fromReferId: referId,
@@ -151,17 +164,11 @@ extension _TransferCoordinator on CallBloc {
       processingStatus: CallProcessingStatus.outgoingCreatedFromRefer,
     );
 
-    emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
+    emit(currentState.copyWithPushActiveCall(newCall).copyWith(minimized: false));
   }
 
-  Future<void> _onCallControlEventAttendedRequestDeclined(
-    _CallControlEventAttendedRequestDeclined event,
-    Emitter<CallState> emit,
-  ) async {
-    final referId = event.referId;
-    final callId = event.callId;
-
-    final call = state.retrieveActiveCall(callId);
+  Future<void> onAttendedRequestDeclined(String callId, String referId, Emitter<CallState> emit) async {
+    final call = _delegate.currentState.retrieveActiveCall(callId);
     if (call == null) return;
 
     try {
@@ -175,12 +182,12 @@ extension _TransferCoordinator on CallBloc {
       await _signalingModule.signalingClient?.execute(declineRequest);
 
       emit(
-        state.copyWithMappedActiveCall(callId, (activeCall) {
+        _delegate.currentState.copyWithMappedActiveCall(callId, (activeCall) {
           return activeCall.copyWith(transfer: null);
         }),
       );
     } catch (e, s) {
-      callErrorReporter.handle(e, s, '_onCallControlEventAttendedRequestDeclined request error:');
+      _callErrorReporter.handle(e, s, 'onAttendedRequestDeclined request error:');
     }
   }
 }

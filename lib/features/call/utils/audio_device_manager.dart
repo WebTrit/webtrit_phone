@@ -11,12 +11,20 @@ final _logger = Logger('AudioDeviceManager');
 /// issue where the previous session's speaker state bleeds into the new call.
 /// On the last call end, resets the audio route to media profile on both platforms.
 class AudioDeviceManager {
-  /// Called whenever the active call list changes.
+  /// Called when a new call is added to the active list.
   ///
-  /// Pass the previous and current counts to detect first-call and last-call transitions.
-  void handleCallListChange({required bool wasEmpty, required bool isEmpty}) {
-    if (wasEmpty && !isEmpty) _onFirstCallStarted();
-    if (!wasEmpty && isEmpty) _onLastCallEnded();
+  /// [activeCallCount] is the total count after the addition.
+  /// Handles the first-call transition when [activeCallCount] is 1.
+  void onCallStarted(int activeCallCount) {
+    if (activeCallCount == 1) _onFirstCallStarted();
+  }
+
+  /// Called when a call is removed from the active list.
+  ///
+  /// [activeCallCount] is the total count after the removal.
+  /// Handles the last-call transition when [activeCallCount] is 0.
+  void onCallEnded(int activeCallCount) {
+    if (activeCallCount == 0) _onLastCallEnded();
   }
 
   void _onFirstCallStarted() {
