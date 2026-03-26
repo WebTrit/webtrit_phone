@@ -1,71 +1,119 @@
 part of 'call_bloc.dart';
 
-extension _SignalingModule on CallBloc {
-  void _reconnectInitiated({Duration delay = kSignalingClientFastReconnectDelay, bool force = false}) {
-    _signalingClientReconnectTimer?.cancel();
-    _signalingClientReconnectTimer = Timer(delay, () {
-      final appActive = state.currentAppLifecycleState == AppLifecycleState.resumed;
-      final connectionActive = state.callServiceState.networkStatus != NetworkStatus.none;
-      final signalingRemains = _signalingClient != null;
+/// Interface that [SignalingModule] uses to interact with the outside world.
+///
+/// Typed callbacks keep the module decoupled from private BLoC event classes,
+/// making it possible to instantiate and test [SignalingModule] independently
+/// via a [FakeSignalingModuleDelegate] without constructing a [CallBloc].
+abstract interface class SignalingModuleDelegate {
+  String get coreUrl;
+  String get tenantId;
+  String get token;
+  TrustedCertificates get trustedCertificates;
+
+  CallState get currentState;
+  bool get isModuleClosed;
+
+  /// Schedules a [_SignalingClientEvent.connectInitiated] on the BLoC event loop.
+  void requestConnect();
+
+  /// Schedules a [_SignalingClientEvent.disconnectInitiated] on the BLoC event loop.
+  void requestDisconnect();
+
+  /// Schedules a [_SignalingClientEvent.disconnected] on the BLoC event loop.
+  void notifyDisconnected(int? code, String? reason);
+
+  /// Called when the signaling client receives a [StateHandshake].
+  void onStateHandshake(StateHandshake stateHandshake);
+
+  /// Called when the signaling client receives any [Event].
+  void onSignalingEvent(Event event);
+
+  /// Dispatches a registration-change signaling event.
+  void dispatchRegistrationChange(RegistrationStatus status, {int? code, String? reason});
+
+  /// Dispatches a complete-call reset for [callId].
+  void dispatchCompleteCall(String callId);
+
+  /// Submits a UI notification.
+  void showNotification(Notification notification);
+}
+
+/// Owns the [WebtritSignalingClient] lifecycle and reconnect timer.
+///
+/// Lives inside `part of 'call_bloc.dart'` so it shares the library boundary
+/// (and thus access to private types such as [_SignalingClientEvent]), but it
+/// is a concrete, independently-instantiable class rather than an extension on
+/// [CallBloc]. Tests can therefore exercise the connection lifecycle by
+/// supplying a [FakeSignalingModuleDelegate] without constructing a full BLoC.
+class SignalingModule {
+  SignalingModule({required SignalingModuleDelegate delegate, required SignalingClientFactory signalingClientFactory})
+    : _delegate = delegate,
+      _signalingClientFactory = signalingClientFactory;
+
+  final SignalingModuleDelegate _delegate;
+  final SignalingClientFactory _signalingClientFactory;
+
+  WebtritSignalingClient? _client;
+  Timer? _reconnectTimer;
+
+  WebtritSignalingClient? get signalingClient => _client;
+
+  /// Cancels any pending reconnect timer and schedules a new connect attempt
+  /// after [delay].  The attempt is skipped when the app is backgrounded,
+  /// connectivity is absent, or the signaling client is already connected —
+  /// unless [force] is set.
+  void reconnect({Duration delay = kSignalingClientFastReconnectDelay, bool force = false}) {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(delay, () {
+      final appActive = _delegate.currentState.currentAppLifecycleState == AppLifecycleState.resumed;
+      final connectionActive = _delegate.currentState.callServiceState.networkStatus != NetworkStatus.none;
+      final signalingRemains = _client != null;
 
       _logger.info(
-        '_reconnectInitiated Timer callback after $delay, isClosed: $isClosed, appActive: $appActive, connectionActive: $connectionActive',
+        'SignalingModule.reconnect timer callback after $delay, '
+        'isClosed: ${_delegate.isModuleClosed}, appActive: $appActive, '
+        'connectionActive: $connectionActive',
       );
 
-      // Guard clause to prevent reconnection when the bloc was closed after delay.
-      if (isClosed) return;
+      if (_delegate.isModuleClosed) return;
 
-      // Guard clause to prevent reconnection when the app is in the background.
-      // Coz reconnect can be triggered by another action e.g connectivity change.
-      if (appActive == false && force == false) {
-        _logger.info('__onSignalingClientEventConnectInitiated: skipped due to appActive: $appActive');
+      if (!appActive && !force) {
+        _logger.info('SignalingModule.reconnect: skipped — app not active');
         return;
       }
 
-      // Guard clause to prevent reconnection when there is no connectivity.
-      // Coz reconnect can be triggered by another action e.g app lifecycle change.
-      if (connectionActive == false && force == false) {
-        _logger.info('__onSignalingClientEventConnectInitiated: skipped due to connectionActive: $connectionActive');
+      if (!connectionActive && !force) {
+        _logger.info('SignalingModule.reconnect: skipped — no connectivity');
         return;
       }
 
-      // Guard clause to prevent reconnection when the signaling client is already connected.
-      //
-      // Can be triggered by switching from wifi to mobile data.
-      // In this case, the connection is recovers automatically, and signaling wasnt disposed.
-      //
-      // Or if app resumes from background or native call screen during active call,
-      // in this case signaling wasnt disposed
-      if (signalingRemains == true && force == false) {
-        _logger.info('__onSignalingClientEventConnectInitiated: skipped due signalingRemains: $signalingRemains');
+      if (signalingRemains && !force) {
+        _logger.info('SignalingModule.reconnect: skipped — client already connected');
         return;
       }
 
-      add(const _SignalingClientEvent.connectInitiated());
+      _delegate.requestConnect();
     });
   }
 
-  void _disconnectInitiated() {
-    _signalingClientReconnectTimer?.cancel();
-    _signalingClientReconnectTimer = null;
-    add(const _SignalingClientEvent.disconnectInitiated());
+  /// Cancels the reconnect timer and schedules a disconnect.
+  void disconnect() {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
+    _delegate.requestDisconnect();
   }
 
-  Future<void> _onSignalingClientEvent(_SignalingClientEvent event, Emitter<CallState> emit) {
-    return switch (event) {
-      _SignalingClientEventConnectInitiated() => __onSignalingClientEventConnectInitiated(event, emit),
-      _SignalingClientEventDisconnectInitiated() => __onSignalingClientEventDisconnectInitiated(event, emit),
-      _SignalingClientEventDisconnected() => __onSignalingClientEventDisconnected(event, emit),
-    };
-  }
-
-  Future<void> __onSignalingClientEventConnectInitiated(
-    _SignalingClientEventConnectInitiated event,
-    Emitter<CallState> emit,
-  ) async {
+  /// Establishes a new [WebtritSignalingClient] connection.
+  ///
+  /// Called from the BLoC's [_SignalingClientEvent.connectInitiated] handler.
+  /// [emit] and [isEmitDone] are forwarded from the BLoC's [Emitter] so that
+  /// state updates reach the BLoC stream while keeping this class free of
+  /// direct Bloc/Emitter dependencies (which simplifies testing).
+  Future<void> performConnect(void Function(CallState) emit, bool Function() isEmitDone) async {
     emit(
-      state.copyWith(
-        callServiceState: state.callServiceState.copyWith(
+      _delegate.currentState.copyWith(
+        callServiceState: _delegate.currentState.callServiceState.copyWith(
           signalingClientStatus: SignalingClientStatus.connecting,
           lastSignalingClientDisconnectError: null,
         ),
@@ -74,42 +122,42 @@ extension _SignalingModule on CallBloc {
 
     try {
       {
-        final signalingClient = _signalingClient;
+        final signalingClient = _client;
         if (signalingClient != null) {
-          _signalingClient = null;
+          _client = null;
           await signalingClient.disconnect();
         }
       }
 
-      if (emit.isDone) return;
+      if (isEmitDone()) return;
 
-      final signalingUrl = WebtritSignalingUtils.parseCoreUrlToSignalingUrl(coreUrl);
+      final signalingUrl = WebtritSignalingUtils.parseCoreUrlToSignalingUrl(_delegate.coreUrl);
 
       final signalingClient = await _signalingClientFactory(
         url: signalingUrl,
-        tenantId: tenantId,
-        token: token,
+        tenantId: _delegate.tenantId,
+        token: _delegate.token,
         connectionTimeout: kSignalingClientConnectionTimeout,
-        certs: trustedCertificates,
+        certs: _delegate.trustedCertificates,
         force: true,
       );
 
-      if (emit.isDone) {
+      if (isEmitDone()) {
         await signalingClient.disconnect(SignalingDisconnectCode.goingAway.code);
         return;
       }
 
       signalingClient.listen(
-        onStateHandshake: _onSignalingStateHandshake,
-        onEvent: _onSignalingEvent,
-        onError: _onSignalingError,
-        onDisconnect: _onSignalingDisconnect,
+        onStateHandshake: _onStateHandshake,
+        onEvent: _onEvent,
+        onError: _onError,
+        onDisconnect: _onDisconnect,
       );
-      _signalingClient = signalingClient;
+      _client = signalingClient;
 
       emit(
-        state.copyWith(
-          callServiceState: state.callServiceState.copyWith(
+        _delegate.currentState.copyWith(
+          callServiceState: _delegate.currentState.callServiceState.copyWith(
             signalingClientStatus: SignalingClientStatus.connect,
             lastSignalingClientConnectError: null,
             lastSignalingDisconnectCode: null,
@@ -117,35 +165,36 @@ extension _SignalingModule on CallBloc {
         ),
       );
     } catch (e, s) {
-      if (emit.isDone) return;
-      _logger.warning('__onSignalingClientEventConnectInitiated', e, s);
+      if (isEmitDone()) return;
+      _logger.warning('SignalingModule.performConnect', e, s);
 
       // toString is important to compare low level exceptions like SocketException, HttpException, TlsException etc.
-      final repeated = state.callServiceState.lastSignalingClientConnectError.toString() == e.toString();
-      if (repeated == false) {
-        submitNotification(const SignalingConnectFailedNotification());
+      final repeated =
+          _delegate.currentState.callServiceState.lastSignalingClientConnectError.toString() == e.toString();
+      if (!repeated) {
+        _delegate.showNotification(const SignalingConnectFailedNotification());
       }
 
       emit(
-        state.copyWith(
-          callServiceState: state.callServiceState.copyWith(
+        _delegate.currentState.copyWith(
+          callServiceState: _delegate.currentState.callServiceState.copyWith(
             signalingClientStatus: SignalingClientStatus.failure,
             lastSignalingClientConnectError: e,
           ),
         ),
       );
 
-      _reconnectInitiated(delay: kSignalingClientReconnectDelay);
+      reconnect(delay: kSignalingClientReconnectDelay);
     }
   }
 
-  Future<void> __onSignalingClientEventDisconnectInitiated(
-    _SignalingClientEventDisconnectInitiated event,
-    Emitter<CallState> emit,
-  ) async {
+  /// Tears down the current [WebtritSignalingClient] connection.
+  ///
+  /// Called from the BLoC's [_SignalingClientEvent.disconnectInitiated] handler.
+  Future<void> performDisconnect(void Function(CallState) emit, bool Function() isEmitDone) async {
     emit(
-      state.copyWith(
-        callServiceState: state.callServiceState.copyWith(
+      _delegate.currentState.copyWith(
+        callServiceState: _delegate.currentState.callServiceState.copyWith(
           signalingClientStatus: SignalingClientStatus.disconnecting,
           lastSignalingClientConnectError: null,
         ),
@@ -153,17 +202,17 @@ extension _SignalingModule on CallBloc {
     );
 
     try {
-      final signalingClient = _signalingClient;
+      final signalingClient = _client;
       if (signalingClient != null) {
-        _signalingClient = null;
+        _client = null;
         await signalingClient.disconnect();
       }
 
-      if (emit.isDone) return;
+      if (isEmitDone()) return;
 
       emit(
-        state.copyWith(
-          callServiceState: state.callServiceState.copyWith(
+        _delegate.currentState.copyWith(
+          callServiceState: _delegate.currentState.callServiceState.copyWith(
             signalingClientStatus: SignalingClientStatus.disconnect,
             lastSignalingClientDisconnectError: null,
             lastSignalingDisconnectCode: null,
@@ -171,11 +220,11 @@ extension _SignalingModule on CallBloc {
         ),
       );
     } catch (e) {
-      if (emit.isDone) return;
+      if (isEmitDone()) return;
 
       emit(
-        state.copyWith(
-          callServiceState: state.callServiceState.copyWith(
+        _delegate.currentState.copyWith(
+          callServiceState: _delegate.currentState.callServiceState.copyWith(
             signalingClientStatus: SignalingClientStatus.failure,
             lastSignalingClientDisconnectError: e,
           ),
@@ -184,87 +233,116 @@ extension _SignalingModule on CallBloc {
     }
   }
 
-  Future<void> __onSignalingClientEventDisconnected(
-    _SignalingClientEventDisconnected event,
-    Emitter<CallState> emit,
+  /// Processes a server-initiated disconnect (WebSocket close frame).
+  ///
+  /// Called from the BLoC's [_SignalingClientEvent.disconnected] handler.
+  Future<void> handleDisconnected(
+    int? code,
+    String? reason,
+    void Function(CallState) emit,
+    bool Function() isEmitDone,
   ) async {
-    final code = SignalingDisconnectCode.values.byCode(event.code ?? -1);
-    final repeated = event.code == state.callServiceState.lastSignalingDisconnectCode;
+    final disconnectCode = SignalingDisconnectCode.values.byCode(code ?? -1);
+    final repeated = code == _delegate.currentState.callServiceState.lastSignalingDisconnectCode;
 
-    CallState newState = state.copyWith(
-      callServiceState: state.callServiceState.copyWith(
+    CallState newState = _delegate.currentState.copyWith(
+      callServiceState: _delegate.currentState.callServiceState.copyWith(
         signalingClientStatus: SignalingClientStatus.disconnect,
-        lastSignalingDisconnectCode: event.code,
+        lastSignalingDisconnectCode: code,
       ),
     );
     Notification? notificationToShow;
     bool shouldReconnect = true;
 
-    if (code == SignalingDisconnectCode.appUnregisteredError) {
-      add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
+    if (disconnectCode == SignalingDisconnectCode.appUnregisteredError) {
+      _delegate.dispatchRegistrationChange(RegistrationStatus.unregistered);
 
-      newState = state.copyWith(
-        callServiceState: state.callServiceState.copyWith(
+      newState = _delegate.currentState.copyWith(
+        callServiceState: _delegate.currentState.callServiceState.copyWith(
           signalingClientStatus: SignalingClientStatus.disconnect,
-          lastSignalingDisconnectCode: event.code,
+          lastSignalingDisconnectCode: code,
         ),
       );
-    } else if (code == SignalingDisconnectCode.requestCallIdError) {
-      state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
-    } else if (code == SignalingDisconnectCode.controllerExitError) {
-      _logger.info('__onSignalingClientEventDisconnected: skipping expected system unregistration notification');
-    } else if (code == SignalingDisconnectCode.controllerForceAttachClose) {
+    } else if (disconnectCode == SignalingDisconnectCode.requestCallIdError) {
+      _delegate.currentState.activeCalls
+          .where((e) => e.wasHungUp)
+          .forEach((e) => _delegate.dispatchCompleteCall(e.callId));
+    } else if (disconnectCode == SignalingDisconnectCode.controllerExitError) {
+      _logger.info('handleDisconnected: skipping expected system unregistration notification');
+    } else if (disconnectCode == SignalingDisconnectCode.controllerForceAttachClose) {
       // Server closed the connection because a duplicate signaling session was detected
       // (e.g. background push isolate still connected when main engine reconnects).
       // Reconnect silently: don't set lastSignalingDisconnectCode so connectIssue is never shown.
       _logger.warning(
-        '__onSignalingClientEventDisconnected: signaling race detected — '
-        'server force-closed duplicate session (code=${event.code}, reason="${event.reason}"). '
+        'handleDisconnected: signaling race detected — '
+        'server force-closed duplicate session (code=$code, reason="$reason"). '
         'Reconnecting silently without showing connectIssue.',
       );
-      newState = state.copyWith(
-        callServiceState: state.callServiceState.copyWith(
+      newState = _delegate.currentState.copyWith(
+        callServiceState: _delegate.currentState.callServiceState.copyWith(
           signalingClientStatus: SignalingClientStatus.disconnect,
           lastSignalingDisconnectCode: null,
         ),
       );
-    } else if (code == SignalingDisconnectCode.sessionMissedError) {
+    } else if (disconnectCode == SignalingDisconnectCode.sessionMissedError) {
       notificationToShow = const SignalingSessionMissedNotification();
-    } else if (code.type == SignalingDisconnectCodeType.auxiliary) {
-      _logger.info('__onSignalingClientEventDisconnected: socket goes down');
+    } else if (disconnectCode.type == SignalingDisconnectCodeType.auxiliary) {
+      _logger.info('handleDisconnected: socket goes down');
 
       /// Fun facts
       /// - in case of network disconnection on android this section is evaluating faster than [_onConnectivityResultChanged].
       /// - also in case of network disconnection error code is protocolError instead of normalClosure by unknown reason
       /// so we need to handle it here as regular disconnection
-      if (code == SignalingDisconnectCode.protocolError) {
+      if (disconnectCode == SignalingDisconnectCode.protocolError) {
         shouldReconnect = false;
       } else {
         notificationToShow = SignalingDisconnectNotification(
-          knownCode: code,
-          systemCode: event.code,
-          systemReason: event.reason,
+          knownCode: disconnectCode,
+          systemCode: code,
+          systemReason: reason,
         );
       }
     } else {
       notificationToShow = SignalingDisconnectNotification(
-        knownCode: code,
-        systemCode: event.code,
-        systemReason: event.reason,
+        knownCode: disconnectCode,
+        systemCode: code,
+        systemReason: reason,
       );
     }
+
     emit(newState);
-    _signalingClient = null;
-    if (notificationToShow != null && !repeated) submitNotification(notificationToShow);
+    _client = null;
+    if (notificationToShow != null && !repeated) _delegate.showNotification(notificationToShow);
     if (shouldReconnect) {
-      final reconnectDelay = code == SignalingDisconnectCode.controllerForceAttachClose
+      final reconnectDelay = disconnectCode == SignalingDisconnectCode.controllerForceAttachClose
           ? kSignalingClientFastReconnectDelay
           : kSignalingClientReconnectDelay;
-      _reconnectInitiated(delay: reconnectDelay);
+      reconnect(delay: reconnectDelay);
     }
   }
 
-  // processing handshake signaling events
+  /// Cancels the reconnect timer and disconnects the signaling client.
+  Future<void> dispose() async {
+    _reconnectTimer?.cancel();
+    await _client?.disconnect();
+  }
+
+  void _onStateHandshake(StateHandshake stateHandshake) => _delegate.onStateHandshake(stateHandshake);
+
+  void _onEvent(Event event) => _delegate.onSignalingEvent(event);
+
+  void _onError(Object error, [StackTrace? stackTrace]) {
+    _logger.severe('SignalingModule._onError', error, stackTrace);
+
+    /// Important to reconnect on errors, especially on keepalive timeout and network issues.
+    reconnect(force: true);
+  }
+
+  void _onDisconnect(int? code, String? reason) => _delegate.notifyDisconnected(code, reason);
+}
+
+extension _SignalingHandlers on CallBloc {
+  // Processing handshake signaling events
 
   Future<void> _onHandshakeSignalingEventState(_HandshakeSignalingEventState event, Emitter<CallState> emit) async {
     emit(state.copyWith(linesCount: event.linesCount));
@@ -272,7 +350,7 @@ extension _SignalingModule on CallBloc {
     add(_RegistrationChange(registration: event.registration));
   }
 
-  // processing call signaling events
+  // Processing call signaling events
 
   Future<void> _onCallSignalingEvent(_CallSignalingEvent event, Emitter<CallState> emit) {
     return switch (event) {
@@ -330,7 +408,7 @@ extension _SignalingModule on CallBloc {
 
     if (error != null && !callAlreadyExists && !callAlreadyAnswered && !callAlreadyTerminated) {
       _logger.warning('__onCallSignalingEventIncoming reportNewIncomingCall error: $error');
-      // TODO: implement correct incoming call hangup (take into account that _signalingClient could be disconnected)
+      // TODO: implement correct incoming call hangup (take into account that _signalingModule.signalingClient could be disconnected)
       return;
     }
 
@@ -535,7 +613,7 @@ extension _SignalingModule on CallBloc {
             // localDescription should be set before sending the answer to transition into stable state.
             await peerConnection.setLocalDescription(localDescription);
 
-            await _signalingClient?.execute(
+            await _signalingModule.signalingClient?.execute(
               UpdateRequest(
                 transaction: WebtritSignalingClient.generateTransactionId(),
                 line: activeCall.line,
@@ -639,33 +717,6 @@ extension _SignalingModule on CallBloc {
     add(_RegistrationChange(registration: registration));
   }
 
-  // WebtritSignalingClient listen handlers
-
-  void _onSignalingStateHandshake(StateHandshake stateHandshake) {
-    add(
-      _HandshakeSignalingEventState(registration: stateHandshake.registration, linesCount: stateHandshake.lines.length),
-    );
-
-    unawaited(
-      _assignUserActiveCalls(stateHandshake.userActiveCalls).catchError((e, s) {
-        _logger.severe('_onSignalingStateHandshake _assignUserActiveCalls error', e, s);
-      }),
-    );
-    stateHandshake.contactsPresenceInfo.forEach((number, data) {
-      unawaited(
-        _assignNumberPresence(number, data).catchError((e, s) {
-          _logger.severe('_onSignalingStateHandshake _assignNumberPresence error', e, s);
-        }),
-      );
-    });
-
-    unawaited(
-      _processHandshakeAsync(stateHandshake).catchError((e, s) {
-        _logger.severe('_onSignalingStateHandshake _processHandshakeAsync error', e, s);
-      }),
-    );
-  }
-
   Future<void> _processHandshakeAsync(StateHandshake stateHandshake) async {
     try {
       // Hang up all active calls that are not associated with any line
@@ -733,7 +784,7 @@ extension _SignalingModule on CallBloc {
                 line: callEvent.line,
                 callId: callEvent.callId,
               );
-              await _signalingClient?.execute(hangupRequest).catchError((e, s) {
+              await _signalingModule.signalingClient?.execute(hangupRequest).catchError((e, s) {
                 callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
               });
 
@@ -745,7 +796,7 @@ extension _SignalingModule on CallBloc {
                 line: callEvent.line,
                 callId: callEvent.callId,
               );
-              await _signalingClient?.execute(declineRequest).catchError((e, s) {
+              await _signalingModule.signalingClient?.execute(declineRequest).catchError((e, s) {
                 callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
               });
               return;
@@ -756,7 +807,7 @@ extension _SignalingModule on CallBloc {
         if (activeLine.callLogs.length == 1) {
           final singleCallLog = activeLine.callLogs.first;
           if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
-            _onSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
+            _onSignalingEventMapper(singleCallLog.callEvent as IncomingCallEvent);
           }
         }
       }
@@ -773,7 +824,7 @@ extension _SignalingModule on CallBloc {
     }
   }
 
-  void _onSignalingEvent(Event event) {
+  void _onSignalingEventMapper(Event event) {
     if (event is IncomingCallEvent) {
       add(
         _CallSignalingEvent.incoming(
@@ -874,12 +925,13 @@ extension _SignalingModule on CallBloc {
     } else if (event is RegisteredEvent) {
       add(const _CallSignalingEvent.registration(RegistrationStatus.registered));
     } else if (event is RegistrationFailedEvent) {
-      final registrationFailedEvent = _CallSignalingEvent.registration(
-        RegistrationStatus.registration_failed,
-        code: event.code,
-        reason: event.reason,
+      add(
+        _CallSignalingEvent.registration(
+          RegistrationStatus.registration_failed,
+          code: event.code,
+          reason: event.reason,
+        ),
       );
-      add(registrationFailedEvent);
     } else if (event is UnregisteringEvent) {
       add(const _CallSignalingEvent.registration(RegistrationStatus.unregistering));
     } else if (event is UnregisteredEvent) {
@@ -889,16 +941,5 @@ extension _SignalingModule on CallBloc {
     } else {
       _logger.warning('unhandled signaling event $event');
     }
-  }
-
-  void _onSignalingError(Object error, [StackTrace? stackTrace]) {
-    _logger.severe('_onErrorCallback', error, stackTrace);
-
-    /// Important to reconnect signaling client on errors especially on keepalive timeout and pure network issues
-    _reconnectInitiated(force: true);
-  }
-
-  void _onSignalingDisconnect(int? code, String? reason) {
-    add(_SignalingClientEvent.disconnected(code, reason));
   }
 }

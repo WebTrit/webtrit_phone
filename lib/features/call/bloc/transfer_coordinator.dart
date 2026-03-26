@@ -63,7 +63,7 @@ extension _TransferCoordinator on CallBloc {
         number: event.number,
       );
 
-      await _signalingClient?.execute(transferRequest);
+      await _signalingModule.signalingClient?.execute(transferRequest);
 
       var newState = state.copyWith(minimized: false);
       newState = newState.copyWithMappedActiveCall(callId, (activeCall) {
@@ -104,7 +104,7 @@ extension _TransferCoordinator on CallBloc {
         replaceCallId: replaceCall.callId,
       );
 
-      await _signalingClient?.execute(transferRequest);
+      await _signalingModule.signalingClient?.execute(transferRequest);
 
       emit(
         state.copyWithMappedActiveCall(referorCall.callId, (activeCall) {
@@ -172,7 +172,7 @@ extension _TransferCoordinator on CallBloc {
         referId: referId,
       );
 
-      await _signalingClient?.execute(declineRequest);
+      await _signalingModule.signalingClient?.execute(declineRequest);
 
       emit(
         state.copyWithMappedActiveCall(callId, (activeCall) {

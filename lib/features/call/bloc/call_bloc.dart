@@ -61,10 +61,16 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 /// application-level logout to resolve the state.
 typedef SignalingSessionInvalidatedCallback = void Function();
 
-class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _PlatformBridgeMixin {
+class CallBloc extends Bloc<CallEvent, CallState>
+    with WidgetsBindingObserver, _PlatformBridgeMixin
+    implements SignalingModuleDelegate {
+  @override
   final String coreUrl;
+  @override
   final String tenantId;
+  @override
   final String token;
+  @override
   final TrustedCertificates trustedCertificates;
 
   final CallLogsRepository callLogsRepository;
@@ -98,9 +104,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
 
-  late final SignalingClientFactory _signalingClientFactory;
-  WebtritSignalingClient? _signalingClient;
-  Timer? _signalingClientReconnectTimer;
+  late final SignalingModule _signalingModule;
 
   late final PeerConnectionManagerProtocol _peerConnectionManager;
   late final CallHistoryRecorder _callHistoryRecorder;
@@ -140,13 +144,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
     WebtritCallkeepSound? callkeepSound,
   }) : super(const CallState()) {
     _callkeepSound = callkeepSound ?? WebtritCallkeepSound();
-    _signalingClientFactory = signalingClientFactory;
+    _signalingModule = SignalingModule(delegate: this, signalingClientFactory: signalingClientFactory);
     _peerConnectionManager = peerConnectionManager;
     _callHistoryRecorder = CallHistoryRecorder(repository: callLogsRepository);
     _presenceSyncService = sipPresenceEnabled
         ? LivePresenceSyncService(
             settingsRepository: presenceSettingsRepository,
-            signalingClientProvider: () => _signalingClient,
+            signalingClientProvider: () => _signalingModule.signalingClient,
             isReady: () => state.callServiceState.status == CallStatus.ready,
           )
         : const PresenceSyncService.disabled();
@@ -157,7 +161,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
     on<_NavigatorMediaDevicesChange>(_onNavigatorMediaDevicesChange, transformer: debounce());
     on<_RegistrationChange>(_onRegistrationChange, transformer: droppable());
     on<_ResetStateEvent>(_onResetStateEvent, transformer: droppable());
-    on<_SignalingClientEvent>((e, emit) => _onSignalingClientEvent(e, emit), transformer: restartable());
+    on<_SignalingClientEvent>(
+      (e, emit) => switch (e) {
+        _SignalingClientEventConnectInitiated() => _signalingModule.performConnect(emit.call, () => emit.isDone),
+        _SignalingClientEventDisconnectInitiated() => _signalingModule.performDisconnect(emit.call, () => emit.isDone),
+        _SignalingClientEventDisconnected() => _signalingModule.handleDisconnected(
+          e.code,
+          e.reason,
+          emit.call,
+          () => emit.isDone,
+        ),
+      },
+      transformer: restartable(),
+    );
     on<_HandshakeSignalingEventState>((e, emit) => _onHandshakeSignalingEventState(e, emit), transformer: sequential());
     on<_CallSignalingEvent>((e, emit) => _onCallSignalingEvent(e, emit), transformer: sequential());
     on<_CallPushEventIncoming>(_onCallPushEventIncoming, transformer: sequential());
@@ -198,11 +214,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
 
     await _connectivityChangedSubscription?.cancel();
 
-    _signalingClientReconnectTimer?.cancel();
-
     _presenceSyncService.stop();
 
-    await _signalingClient?.disconnect();
+    await _signalingModule.dispose();
 
     await _stopRingbackSound();
 
@@ -247,14 +261,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
           appLifecycleState == AppLifecycleState.detached ||
           appLifecycleState == AppLifecycleState.inactive;
       final hasActiveCalls = change.nextState.isActive;
-      final connected = _signalingClient != null;
+      final connected = _signalingModule.signalingClient != null;
 
       if (appInactive) {
         if (hasActiveCalls && !connected) {
-          _reconnectInitiated(delay: kSignalingClientFastReconnectDelay, force: true);
+          _signalingModule.reconnect(delay: kSignalingClientFastReconnectDelay, force: true);
         }
         if (!hasActiveCalls && connected) {
-          _disconnectInitiated();
+          _signalingModule.disconnect();
         }
       }
     }
@@ -402,6 +416,60 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
     }
   }
 
+  // SignalingModuleDelegate implementation
+
+  @override
+  CallState get currentState => state;
+
+  @override
+  bool get isModuleClosed => isClosed;
+
+  @override
+  void requestConnect() => add(const _SignalingClientEvent.connectInitiated());
+
+  @override
+  void requestDisconnect() => add(const _SignalingClientEvent.disconnectInitiated());
+
+  @override
+  void notifyDisconnected(int? code, String? reason) => add(_SignalingClientEvent.disconnected(code, reason));
+
+  @override
+  void onStateHandshake(StateHandshake stateHandshake) {
+    add(
+      _HandshakeSignalingEventState(registration: stateHandshake.registration, linesCount: stateHandshake.lines.length),
+    );
+    unawaited(
+      _assignUserActiveCalls(stateHandshake.userActiveCalls).catchError((e, s) {
+        _logger.severe('onStateHandshake _assignUserActiveCalls error', e, s);
+      }),
+    );
+    stateHandshake.contactsPresenceInfo.forEach((number, data) {
+      unawaited(
+        _assignNumberPresence(number, data).catchError((e, s) {
+          _logger.severe('onStateHandshake _assignNumberPresence error', e, s);
+        }),
+      );
+    });
+    unawaited(
+      _processHandshakeAsync(stateHandshake).catchError((e, s) {
+        _logger.severe('onStateHandshake _processHandshakeAsync error', e, s);
+      }),
+    );
+  }
+
+  @override
+  void onSignalingEvent(Event event) => _onSignalingEventMapper(event);
+
+  @override
+  void dispatchRegistrationChange(RegistrationStatus status, {int? code, String? reason}) =>
+      add(_CallSignalingEvent.registration(status, code: code, reason: reason));
+
+  @override
+  void dispatchCompleteCall(String callId) => add(_ResetStateEvent.completeCall(callId));
+
+  @override
+  void showNotification(Notification notification) => submitNotification(notification);
+
   Future<void> _onCallStarted(CallStarted event, Emitter<CallState> emit) async {
     AppleNativeAudioManagement.setUseManualAudio(true);
 
@@ -425,7 +493,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
       add(_ConnectivityResultChanged(currentConnectivityResult));
     });
 
-    _reconnectInitiated(delay: Duration.zero);
+    _signalingModule.reconnect(delay: Duration.zero);
 
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
@@ -437,9 +505,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
     emit(state.copyWith(currentAppLifecycleState: appLifecycleState));
 
     if (appLifecycleState == AppLifecycleState.paused || appLifecycleState == AppLifecycleState.detached) {
-      if (state.isActive == false) _disconnectInitiated();
+      if (state.isActive == false) _signalingModule.disconnect();
     } else if (appLifecycleState == AppLifecycleState.resumed) {
-      _reconnectInitiated();
+      _signalingModule.reconnect();
     }
   }
 
@@ -447,9 +515,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver, _
     final connectivityResult = event.result;
     _logger.fine('_onConnectivityResultChanged: $connectivityResult');
     if (connectivityResult == ConnectivityResult.none) {
-      _disconnectInitiated();
+      _signalingModule.disconnect();
     } else {
-      _reconnectInitiated();
+      _signalingModule.reconnect();
     }
     emit(
       state.copyWith(

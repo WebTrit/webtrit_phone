@@ -135,7 +135,7 @@ extension _CallSession on CallBloc {
 
       // Need to initiate outgoing call before set localDescription to avoid races
       // between [OutgoingCallRequest] and [IceTrickleRequest]s.
-      await _signalingClient?.execute(
+      await _signalingModule.signalingClient?.execute(
         OutgoingCallRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
@@ -258,7 +258,7 @@ extension _CallSession on CallBloc {
       // localDescription should be set before sending the answer to transition into stable state.
       await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
 
-      await _signalingClient?.execute(
+      await _signalingModule.signalingClient?.execute(
         AcceptRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
           line: call.line,
@@ -276,7 +276,7 @@ extension _CallSession on CallBloc {
 
       final declineId = WebtritSignalingClient.generateTransactionId();
       final declineRequest = DeclineRequest(transaction: declineId, line: call.line, callId: call.callId);
-      _signalingClient?.execute(declineRequest).ignore();
+      _signalingModule.signalingClient?.execute(declineRequest).ignore();
 
       callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
     }
@@ -318,7 +318,7 @@ extension _CallSession on CallBloc {
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        await _signalingClient?.execute(declineRequest).catchError((e, s) {
+        await _signalingModule.signalingClient?.execute(declineRequest).catchError((e, s) {
           callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
         });
       } else {
@@ -327,7 +327,7 @@ extension _CallSession on CallBloc {
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        await _signalingClient?.execute(hangupRequest).catchError((e, s) {
+        await _signalingModule.signalingClient?.execute(hangupRequest).catchError((e, s) {
           callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
         });
       }
@@ -348,7 +348,7 @@ extension _CallSession on CallBloc {
     try {
       await state.performOnActiveCall(event.callId, (activeCall) {
         if (event.onHold) {
-          return _signalingClient?.execute(
+          return _signalingModule.signalingClient?.execute(
             HoldRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
@@ -357,7 +357,7 @@ extension _CallSession on CallBloc {
             ),
           );
         } else {
-          return _signalingClient?.execute(
+          return _signalingModule.signalingClient?.execute(
             UnholdRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
@@ -479,7 +479,7 @@ extension _CallSession on CallBloc {
               line: activeCall.line,
               candidate: null,
             );
-            return _signalingClient?.execute(iceTrickleRequest);
+            return _signalingModule.signalingClient?.execute(iceTrickleRequest);
           }
         });
       } catch (e, stackTrace) {
@@ -519,7 +519,7 @@ extension _CallSession on CallBloc {
               callId: activeCall.callId,
               jsep: localDescription.toMap(),
             );
-            await _signalingClient?.execute(updateRequest);
+            await _signalingModule.signalingClient?.execute(updateRequest);
           }
         });
       } catch (e, stackTrace) {
@@ -549,7 +549,7 @@ extension _CallSession on CallBloc {
             line: activeCall.line,
             candidate: event.candidate.toMap(),
           );
-          return _signalingClient?.execute(iceTrickleRequest);
+          return _signalingModule.signalingClient?.execute(iceTrickleRequest);
         }
       });
     } catch (e, stackTrace) {
@@ -649,7 +649,7 @@ extension _CallSession on CallBloc {
           callId: callId,
           jsep: localDescription.toMap(),
         );
-        await _signalingClient?.execute(updateRequest);
+        await _signalingModule.signalingClient?.execute(updateRequest);
       } catch (e, s) {
         callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
       }

@@ -1,5 +1,5 @@
 import 'package:fake_async/fake_async.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Notification;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
@@ -7,10 +7,81 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
+import 'package:webtrit_phone/features/call/models/notification.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'helpers/call_bloc_test_helpers.dart';
 import 'helpers/fake_signaling_client.dart';
+
+// ---------------------------------------------------------------------------
+// FakeSignalingModuleDelegate — drives SignalingModule in isolation
+// ---------------------------------------------------------------------------
+
+/// A minimal [SignalingModuleDelegate] implementation for unit tests.
+///
+/// Captures every delegate call so tests can assert on what the module did
+/// without constructing a [CallBloc].
+class FakeSignalingModuleDelegate implements SignalingModuleDelegate {
+  FakeSignalingModuleDelegate({CallState? initialState}) : _state = initialState ?? const CallState();
+
+  CallState _state;
+  bool _closed = false;
+
+  // Captured calls
+  int connectRequests = 0;
+  int disconnectRequests = 0;
+  final List<(int?, String?)> disconnectedNotifications = [];
+  final List<StateHandshake> handshakes = [];
+  final List<Event> signalingEvents = [];
+  final List<({RegistrationStatus status, int? code, String? reason})> registrationChanges = [];
+  final List<String> completedCalls = [];
+  final List<Notification> notifications = [];
+
+  @override
+  String get coreUrl => 'https://example.com';
+  @override
+  String get tenantId => 'test-tenant';
+  @override
+  String get token => 'test-token';
+  @override
+  TrustedCertificates get trustedCertificates => TrustedCertificates.empty;
+
+  @override
+  CallState get currentState => _state;
+
+  @override
+  bool get isModuleClosed => _closed;
+
+  void close() => _closed = true;
+  void updateState(CallState s) => _state = s;
+
+  @override
+  void requestConnect() => connectRequests++;
+
+  @override
+  void requestDisconnect() => disconnectRequests++;
+
+  @override
+  void notifyDisconnected(int? code, String? reason) => disconnectedNotifications.add((code, reason));
+
+  @override
+  void onStateHandshake(StateHandshake stateHandshake) => handshakes.add(stateHandshake);
+
+  @override
+  void onSignalingEvent(Event event) => signalingEvents.add(event);
+
+  @override
+  void dispatchRegistrationChange(RegistrationStatus status, {int? code, String? reason}) =>
+      registrationChanges.add((status: status, code: code, reason: reason));
+
+  @override
+  void dispatchCompleteCall(String callId) => completedCalls.add(callId);
+
+  @override
+  void showNotification(Notification notification) => notifications.add(notification);
+}
 
 // ---------------------------------------------------------------------------
 // Fallback values required by mocktail
@@ -410,6 +481,337 @@ void main() {
 
         bloc.close();
         async.flushMicrotasks();
+      });
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // SignalingModule isolated tests (no CallBloc)
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule isolated', () {
+    late FakeSignalingModuleDelegate delegate;
+    late FakeSignalingClientFactory factory;
+    late SignalingModule module;
+
+    setUp(() {
+      delegate = FakeSignalingModuleDelegate();
+      factory = FakeSignalingClientFactory();
+      module = SignalingModule(delegate: delegate, signalingClientFactory: factory.call);
+    });
+
+    tearDown(() => module.dispose());
+
+    // reconnect() guard clauses
+
+    test('reconnect() skips when app is backgrounded and force=false', () {
+      fakeAsync((async) {
+        // Default state: currentAppLifecycleState=null → appActive=false.
+        module.reconnect(delay: Duration.zero);
+        async.flushMicrotasks();
+
+        expect(delegate.connectRequests, 0);
+      });
+    });
+
+    test('reconnect() skips when no connectivity and force=false', () {
+      fakeAsync((async) {
+        delegate.updateState(
+          const CallState().copyWith(
+            currentAppLifecycleState: AppLifecycleState.resumed,
+            callServiceState: const CallServiceState().copyWith(networkStatus: NetworkStatus.none),
+          ),
+        );
+
+        module.reconnect(delay: Duration.zero);
+        async.flushMicrotasks();
+
+        expect(delegate.connectRequests, 0);
+      });
+    });
+
+    test('reconnect() skips when client already connected and force=false', () {
+      fakeAsync((async) {
+        delegate.updateState(const CallState().copyWith(currentAppLifecycleState: AppLifecycleState.resumed));
+
+        // First connect to populate _client.
+        module.reconnect(delay: Duration.zero);
+        async.elapse(Duration.zero);
+        async.flushMicrotasks();
+        expect(delegate.connectRequests, 1);
+
+        // Simulate module receiving the connect by calling performConnect.
+        final emitted = <CallState>[];
+        module.performConnect((s) {
+          emitted.add(s);
+          delegate.updateState(s);
+        }, () => false);
+        async.flushMicrotasks();
+
+        // Now _client is set — second reconnect without force should be skipped.
+        module.reconnect(delay: Duration.zero);
+        async.elapse(Duration.zero);
+        async.flushMicrotasks();
+
+        expect(delegate.connectRequests, 1);
+      });
+    });
+
+    test('reconnect(force: true) bypasses guards', () {
+      fakeAsync((async) {
+        // App backgrounded and no connectivity — normally both guards would block.
+        delegate.updateState(
+          const CallState().copyWith(
+            callServiceState: const CallServiceState().copyWith(networkStatus: NetworkStatus.none),
+          ),
+        );
+
+        module.reconnect(delay: Duration.zero, force: true);
+        async.elapse(Duration.zero);
+        async.flushMicrotasks();
+
+        expect(delegate.connectRequests, 1);
+      });
+    });
+
+    test('reconnect() skips when module is closed', () {
+      fakeAsync((async) {
+        delegate.updateState(const CallState().copyWith(currentAppLifecycleState: AppLifecycleState.resumed));
+        delegate.close();
+
+        module.reconnect(delay: Duration.zero);
+        async.flushMicrotasks();
+
+        expect(delegate.connectRequests, 0);
+      });
+    });
+
+    test('disconnect() cancels pending timer and requests disconnect', () {
+      fakeAsync((async) {
+        delegate.updateState(const CallState().copyWith(currentAppLifecycleState: AppLifecycleState.resumed));
+
+        // Schedule a delayed reconnect.
+        module.reconnect(delay: const Duration(seconds: 5));
+
+        // Disconnect should cancel it and emit a disconnectRequest.
+        module.disconnect();
+        async.flushMicrotasks();
+
+        // Advance past the original timer — no connect request should fire.
+        async.elapse(const Duration(seconds: 6));
+        async.flushMicrotasks();
+
+        expect(delegate.connectRequests, 0);
+        expect(delegate.disconnectRequests, 1);
+      });
+    });
+
+    // performConnect
+
+    test('performConnect emits connecting → connect and stores client', () async {
+      final emitted = <CallState>[];
+      await module.performConnect((s) {
+        emitted.add(s);
+        delegate.updateState(s);
+      }, () => false);
+
+      expect(
+        emitted.map((s) => s.callServiceState.signalingClientStatus),
+        containsAllInOrder([SignalingClientStatus.connecting, SignalingClientStatus.connect]),
+      );
+      expect(module.signalingClient, isNotNull);
+    });
+
+    test('performConnect emits failure and schedules slow reconnect when factory throws', () {
+      fakeAsync((async) {
+        final failingModule = SignalingModule(
+          delegate: delegate,
+          signalingClientFactory:
+              ({
+                required url,
+                required tenantId,
+                required token,
+                required connectionTimeout,
+                required certs,
+                required force,
+              }) async {
+                throw Exception('refused');
+              },
+        );
+
+        delegate.updateState(const CallState().copyWith(currentAppLifecycleState: AppLifecycleState.resumed));
+
+        final emitted = <SignalingClientStatus>[];
+        failingModule.performConnect((s) {
+          emitted.add(s.callServiceState.signalingClientStatus);
+          delegate.updateState(s);
+        }, () => false);
+        async.flushMicrotasks();
+
+        expect(emitted, containsAllInOrder([SignalingClientStatus.connecting, SignalingClientStatus.failure]));
+
+        // Slow reconnect should fire after kSignalingClientReconnectDelay.
+        async.elapse(kSignalingClientReconnectDelay + const Duration(milliseconds: 1));
+        async.flushMicrotasks();
+        expect(delegate.connectRequests, 1);
+
+        failingModule.dispose();
+      });
+    });
+
+    test('performConnect does not emit a duplicate failure notification on repeated error', () async {
+      final failingModule = SignalingModule(
+        delegate: delegate,
+        signalingClientFactory:
+            ({
+              required url,
+              required tenantId,
+              required token,
+              required connectionTimeout,
+              required certs,
+              required force,
+            }) async {
+              throw Exception('same error');
+            },
+      );
+
+      // First attempt — notification should be emitted.
+      await failingModule.performConnect((s) => delegate.updateState(s), () => false);
+      expect(delegate.notifications.whereType<SignalingConnectFailedNotification>().length, 1);
+
+      // Second attempt with the same error — no duplicate notification.
+      await failingModule.performConnect((s) => delegate.updateState(s), () => false);
+      expect(delegate.notifications.whereType<SignalingConnectFailedNotification>().length, 1);
+
+      await failingModule.dispose();
+    });
+
+    // performDisconnect
+
+    test('performDisconnect emits disconnecting → disconnect and clears client', () async {
+      // First connect.
+      await module.performConnect((s) => delegate.updateState(s), () => false);
+      expect(module.signalingClient, isNotNull);
+
+      final emitted = <SignalingClientStatus>[];
+      await module.performDisconnect((s) {
+        emitted.add(s.callServiceState.signalingClientStatus);
+        delegate.updateState(s);
+      }, () => false);
+
+      expect(emitted, containsAllInOrder([SignalingClientStatus.disconnecting, SignalingClientStatus.disconnect]));
+      expect(module.signalingClient, isNull);
+    });
+
+    // handleDisconnected — delegate callbacks
+
+    test('handleDisconnected for appUnregisteredError dispatches registration change', () async {
+      await module.handleDisconnected(
+        SignalingDisconnectCode.appUnregisteredError.code,
+        'unregistered',
+        (s) => delegate.updateState(s),
+        () => false,
+      );
+
+      expect(delegate.registrationChanges, hasLength(1));
+      expect(delegate.registrationChanges.first.status, RegistrationStatus.unregistered);
+    });
+
+    test('handleDisconnected for controllerForceAttachClose keeps lastSignalingDisconnectCode null', () async {
+      final emitted = <CallState>[];
+      await module.handleDisconnected(SignalingDisconnectCode.controllerForceAttachClose.code, 'force close', (s) {
+        emitted.add(s);
+        delegate.updateState(s);
+      }, () => false);
+
+      expect(emitted.last.callServiceState.lastSignalingDisconnectCode, isNull);
+    });
+
+    test('handleDisconnected for sessionMissedError shows notification', () async {
+      await module.handleDisconnected(
+        SignalingDisconnectCode.sessionMissedError.code,
+        'session missing',
+        (s) => delegate.updateState(s),
+        () => false,
+      );
+
+      expect(delegate.notifications, contains(isA<SignalingSessionMissedNotification>()));
+    });
+
+    test('handleDisconnected repeated code suppresses duplicate notification', () async {
+      delegate.updateState(
+        const CallState().copyWith(
+          callServiceState: const CallServiceState().copyWith(
+            lastSignalingDisconnectCode: SignalingDisconnectCode.goingAway.code,
+          ),
+        ),
+      );
+
+      await module.handleDisconnected(
+        SignalingDisconnectCode.goingAway.code,
+        'going away',
+        (s) => delegate.updateState(s),
+        () => false,
+      );
+
+      expect(delegate.notifications, isEmpty);
+    });
+
+    test('handleDisconnected forwards disconnect to delegate.notifyDisconnected', () {
+      fakeAsync((async) {
+        module.performConnect((s) => delegate.updateState(s), () => false);
+        async.flushMicrotasks();
+
+        factory.client!.simulateDisconnect(SignalingDisconnectCode.goingAway.code, 'bye');
+        async.flushMicrotasks();
+
+        expect(delegate.disconnectedNotifications, contains((SignalingDisconnectCode.goingAway.code, 'bye')));
+      });
+    });
+
+    // Signaling callbacks forwarded to delegate
+
+    test('client handshake is forwarded to delegate.onStateHandshake', () {
+      fakeAsync((async) {
+        module.performConnect((s) => delegate.updateState(s), () => false);
+        async.flushMicrotasks();
+
+        final handshake = minimalStateHandshake(linesCount: 3);
+        factory.client!.simulateHandshake(handshake);
+        async.flushMicrotasks();
+
+        expect(delegate.handshakes, contains(handshake));
+      });
+    });
+
+    test('client event is forwarded to delegate.onSignalingEvent', () {
+      fakeAsync((async) {
+        module.performConnect((s) => delegate.updateState(s), () => false);
+        async.flushMicrotasks();
+
+        final event = RegisteredEvent();
+        factory.client!.simulateEvent(event);
+        async.flushMicrotasks();
+
+        expect(delegate.signalingEvents, contains(event));
+      });
+    });
+
+    test('client error triggers reconnect(force: true)', () {
+      fakeAsync((async) {
+        delegate.updateState(const CallState().copyWith(currentAppLifecycleState: AppLifecycleState.resumed));
+
+        module.performConnect((s) => delegate.updateState(s), () => false);
+        async.flushMicrotasks();
+
+        factory.client!.simulateError(Exception('keepalive timeout'));
+        async.flushMicrotasks();
+
+        // reconnect(force: true) uses kSignalingClientFastReconnectDelay — advance past it.
+        async.elapse(kSignalingClientFastReconnectDelay + const Duration(milliseconds: 1));
+        async.flushMicrotasks();
+
+        expect(delegate.connectRequests, 1);
       });
     });
   });
