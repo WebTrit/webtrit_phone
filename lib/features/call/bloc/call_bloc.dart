@@ -430,6 +430,8 @@ class CallBloc extends Bloc<CallEvent, CallState>
       } else {
         _logger.fine('Account error code not mapped: ${e.error?.code}', e);
       }
+    } on Error {
+      rethrow;
     } catch (e, st) {
       _logger.warning('Unexpected error during account info refresh', e, st);
     }
@@ -601,6 +603,12 @@ class CallBloc extends Bloc<CallEvent, CallState>
     _logger.warning('__onResetStateEventCompleteCalls: ${state.activeCalls}');
 
     for (var element in state.activeCalls) {
+      // Skip outgoing calls not yet accepted — they are waiting for performStartCall
+      // to run, which will check registration and emit the appropriate notification.
+      // This mirrors the guard in _processHandshakeAsync that preserves the same calls.
+      if (element.direction == CallDirection.outgoing && element.acceptedTime == null && element.hungUpTime == null) {
+        continue;
+      }
       add(_ResetStateEvent.completeCall(element.callId));
     }
   }
@@ -627,8 +635,10 @@ class CallBloc extends Bloc<CallEvent, CallState>
         await activeCall.localStream?.dispose();
       });
       emit(state.copyWithPopActiveCall(event.callId));
-    } catch (e) {
-      _logger.warning('__onResetStateEventCompleteCall: $e');
+    } on Error {
+      rethrow;
+    } catch (e, s) {
+      _logger.warning('__onResetStateEventCompleteCall', e, s);
     }
   }
 

@@ -164,6 +164,8 @@ class SignalingModule {
           ),
         ),
       );
+    } on Error {
+      rethrow;
     } catch (e, s) {
       if (isEmitDone()) return;
       _logger.warning('SignalingModule.performConnect', e, s);
@@ -219,8 +221,11 @@ class SignalingModule {
           ),
         ),
       );
-    } catch (e) {
+    } on Error {
+      rethrow;
+    } catch (e, s) {
       if (isEmitDone()) return;
+      _logger.warning('SignalingModule.performDisconnect', e, s);
 
       emit(
         _delegate.currentState.copyWith(
@@ -563,8 +568,10 @@ extension _SignalingHandlers on CallBloc {
 
         await callkeep.reportEndCall(event.callId, call.displayName ?? call.handle.value, endReason);
       }
-    } catch (e) {
-      _logger.warning('__onCallSignalingEventHangup: $e');
+    } on Error {
+      rethrow;
+    } catch (e, s) {
+      _logger.warning('__onCallSignalingEventHangup', e, s);
     }
   }
 
@@ -624,6 +631,8 @@ extension _SignalingHandlers on CallBloc {
           }
         });
       }
+    } on Error {
+      rethrow;
     } catch (e, s) {
       callErrorReporter.handle(e, s, '__onCallSignalingEventUpdating && jsep error:');
 

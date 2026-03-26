@@ -1,12 +1,10 @@
 import 'package:fake_async/fake_async.dart';
-import 'package:flutter/widgets.dart' hide Notification;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
 import 'package:webtrit_phone/features/call/models/models.dart';
@@ -92,6 +90,7 @@ MockCallkeep _outgoingCallkeepMock() {
   ).thenAnswer((_) async => null);
   when(() => mock.reportConnectedOutgoingCall(any())).thenAnswer((_) async {});
   when(() => mock.reportConnectingOutgoingCall(any())).thenAnswer((_) async {});
+  when(() => mock.reportEndCall(any(), any(), any())).thenAnswer((_) async {});
   return mock;
 }
 
@@ -108,37 +107,6 @@ MockCallkeep _incomingCallkeepMock() {
   ).thenAnswer((_) async => null);
   when(() => mock.reportEndCall(any(), any(), any())).thenAnswer((_) async {});
   return mock;
-}
-
-// ---------------------------------------------------------------------------
-// Shared test helpers
-// ---------------------------------------------------------------------------
-
-void _bringOnlineWithHandshake(FakeAsync async, TestCallBloc bloc, FakeSignalingClientFactory factory) {
-  bloc.didChangeAppLifecycleState(AppLifecycleState.resumed);
-  async.flushMicrotasks();
-  async.elapse(kSignalingClientFastReconnectDelay + const Duration(milliseconds: 1));
-  async.flushMicrotasks();
-  factory.client!.simulateHandshake(minimalStateHandshake());
-  async.flushMicrotasks();
-  expect(bloc.state.callServiceState.registration?.status, RegistrationStatus.registered);
-}
-
-void _simulateIncoming(
-  FakeAsync async,
-  FakeSignalingClientFactory factory, {
-  int line = 0,
-  String callId = 'call-1',
-  String callee = 'bob',
-  String caller = '123',
-  Map<String, dynamic>? jsep,
-}) {
-  factory.client!.simulateEvent(
-    IncomingCallEvent(line: line, callId: callId, callee: callee, caller: caller, jsep: jsep),
-  );
-  async.flushMicrotasks();
-  async.elapse(Duration.zero);
-  async.flushMicrotasks();
 }
 
 // ---------------------------------------------------------------------------
@@ -180,7 +148,7 @@ void main() {
           signalingClientFactory: factory.call,
         );
 
-        _bringOnlineWithHandshake(async, bloc, factory);
+        bringOnlineWithHandshake(async, bloc, factory);
 
         bloc.add(const CallControlEvent.started(number: '456', video: false));
         async.flushMicrotasks();
@@ -218,7 +186,7 @@ void main() {
           signalingClientFactory: factory.call,
         );
 
-        _bringOnlineWithHandshake(async, bloc, factory);
+        bringOnlineWithHandshake(async, bloc, factory);
 
         bloc.add(const CallControlEvent.started(number: '789', video: false));
         async.flushMicrotasks();
@@ -265,7 +233,7 @@ void main() {
         );
 
         // Bring online as registered so the outgoing call can be created.
-        _bringOnlineWithHandshake(async, bloc, factory);
+        bringOnlineWithHandshake(async, bloc, factory);
 
         bloc.add(const CallControlEvent.started(number: '456', video: false));
         async.flushMicrotasks();
@@ -314,10 +282,10 @@ void main() {
           signalingClientFactory: factory.call,
         );
 
-        _bringOnlineWithHandshake(async, bloc, factory);
+        bringOnlineWithHandshake(async, bloc, factory);
 
         // Simulate incoming with a JSEP offer so incomingOffer is non-null.
-        _simulateIncoming(async, factory, jsep: {'type': 'offer', 'sdp': 'v=0\r\nm=audio 9 UDP/TLS/RTP/SAVPF\r\n'});
+        simulateIncoming(async, factory, jsep: {'type': 'offer', 'sdp': 'v=0\r\nm=audio 9 UDP/TLS/RTP/SAVPF\r\n'});
 
         expect(bloc.state.activeCalls, hasLength(1));
         expect(bloc.state.activeCalls.first.processingStatus, CallProcessingStatus.incomingFromOffer);
@@ -357,9 +325,9 @@ void main() {
           signalingClientFactory: factory.call,
         );
 
-        _bringOnlineWithHandshake(async, bloc, factory);
+        bringOnlineWithHandshake(async, bloc, factory);
 
-        _simulateIncoming(async, factory, jsep: {'type': 'offer', 'sdp': 'v=0\r\n'});
+        simulateIncoming(async, factory, jsep: {'type': 'offer', 'sdp': 'v=0\r\n'});
 
         // First answer: advances to incomingAnswering
         bloc.performAnswerCall('call-1');
@@ -391,8 +359,8 @@ void main() {
 
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory);
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory);
         expect(bloc.state.activeCalls, hasLength(1));
 
         bloc.performEndCall('call-1');
@@ -424,7 +392,7 @@ void main() {
           signalingClientFactory: factory.call,
         );
 
-        _bringOnlineWithHandshake(async, bloc, factory);
+        bringOnlineWithHandshake(async, bloc, factory);
 
         bloc.add(const CallControlEvent.started(number: '456', video: false));
         async.flushMicrotasks();
@@ -462,8 +430,8 @@ void main() {
 
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory);
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory);
         expect(bloc.state.activeCalls, hasLength(1));
 
         // Remote side hangs up first

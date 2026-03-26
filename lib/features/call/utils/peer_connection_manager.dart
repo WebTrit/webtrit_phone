@@ -412,7 +412,7 @@ final class PeerConnectionManager implements PeerConnectionManagerProtocol {
   }
 
   void _onDataChannel(RTCDataChannel dataChannel, PeerConnectionObserver observer, Logger logger) {
-    logger.fine(() => 'onDataChannel channel: $observer');
+    logger.fine(() => 'onDataChannel channel: $dataChannel');
     observer.onDataChannel?.call(dataChannel);
   }
 

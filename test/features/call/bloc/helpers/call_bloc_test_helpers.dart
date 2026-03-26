@@ -1,16 +1,76 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart' hide Notification;
+import 'package:fake_async/fake_async.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/features/call/utils/utils.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+
+import 'fake_signaling_client.dart';
+
+// ---------------------------------------------------------------------------
+// Shared test scenario helpers
+// ---------------------------------------------------------------------------
+
+/// Brings the bloc online by simulating an app resume and waiting for the
+/// signaling client to connect.
+void bringOnline(FakeAsync async, TestCallBloc bloc, FakeSignalingClientFactory factory) {
+  bloc.didChangeAppLifecycleState(AppLifecycleState.resumed);
+  async.flushMicrotasks();
+  async.elapse(kSignalingClientFastReconnectDelay + const Duration(milliseconds: 1));
+  async.flushMicrotasks();
+  expect(bloc.state.callServiceState.signalingClientStatus, SignalingClientStatus.connect);
+}
+
+/// Brings the bloc online and delivers a minimal [StateHandshake].
+void bringOnlineWithHandshake(
+  FakeAsync async,
+  TestCallBloc bloc,
+  FakeSignalingClientFactory factory, {
+  RegistrationStatus registrationStatus = RegistrationStatus.registered,
+  int linesCount = 1,
+}) {
+  bringOnline(async, bloc, factory);
+  factory.client!.simulateHandshake(
+    minimalStateHandshake(registrationStatus: registrationStatus, linesCount: linesCount),
+  );
+  async.flushMicrotasks();
+  expect(bloc.state.callServiceState.registration?.status, registrationStatus);
+}
+
+/// Simulates an [IncomingCallEvent] and drains the pending 0-duration timer
+/// that [__onCallSignalingEventIncoming] defers at its end.
+///
+/// Without this drain, the BLoC's sequential event queue stays blocked while
+/// the incoming-call handler awaits [Future.delayed(Duration.zero)], causing
+/// any subsequent events to pile up unprocessed.
+void simulateIncoming(
+  FakeAsync async,
+  FakeSignalingClientFactory factory, {
+  int line = 0,
+  String callId = 'call-1',
+  String callee = 'bob',
+  String caller = '123',
+  Map<String, dynamic>? jsep,
+}) {
+  factory.client!.simulateEvent(
+    IncomingCallEvent(line: line, callId: callId, callee: callee, caller: caller, jsep: jsep),
+  );
+  async.flushMicrotasks();
+  async.elapse(Duration.zero);
+  async.flushMicrotasks();
+}
 
 // ---------------------------------------------------------------------------
 // Mock declarations
@@ -147,6 +207,7 @@ TestCallBloc buildTestBloc({
 
   final mockLinesState = MockLinesStateRepository();
   final mockSound = MockWebtritCallkeepSound();
+  final mockUserRepository = MockUserRepository();
 
   // Stub the construction-time and change-time side effects.
   when(() => mockCallkeep.setDelegate(any())).thenReturn(null);
@@ -161,6 +222,7 @@ TestCallBloc buildTestBloc({
   when(() => mockPcm.add(any())).thenReturn(null);
   when(() => mockPcm.retrieve(any())).thenAnswer((_) async => null);
   when(() => mockContactNameResolver.resolveWithNumber(any())).thenAnswer((_) async => null);
+  when(() => mockUserRepository.getRemoteInfo()).thenAnswer((_) async => null);
 
   final notifications = capturedNotifications ?? <Notification>[];
 
@@ -175,7 +237,7 @@ TestCallBloc buildTestBloc({
     presenceInfoRepository: MockPresenceInfoRepository(),
     presenceSettingsRepository: mockPresenceSettings,
     onSessionInvalidated: () {},
-    userRepository: MockUserRepository(),
+    userRepository: mockUserRepository,
     submitNotification: notifications.add,
     callkeep: mockCallkeep,
     callkeepConnections: mockConnections,

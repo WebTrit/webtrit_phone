@@ -1,11 +1,9 @@
 import 'package:fake_async/fake_async.dart';
-import 'package:flutter/widgets.dart' hide Notification;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/call/bloc/call_bloc.dart';
 import 'package:webtrit_phone/features/call/models/models.dart';
@@ -31,47 +29,6 @@ final _fakeNewCall = (
   acceptedTime: null,
   hungUpTime: null,
 );
-
-// ---------------------------------------------------------------------------
-// Shared helpers (copied from call_flow_test.dart — private to that file)
-// ---------------------------------------------------------------------------
-
-void _bringOnline(FakeAsync async, TestCallBloc bloc, FakeSignalingClientFactory factory) {
-  bloc.didChangeAppLifecycleState(AppLifecycleState.resumed);
-  async.flushMicrotasks();
-  async.elapse(kSignalingClientFastReconnectDelay + const Duration(milliseconds: 1));
-  async.flushMicrotasks();
-  expect(bloc.state.callServiceState.signalingClientStatus, SignalingClientStatus.connect);
-}
-
-void _bringOnlineWithHandshake(
-  FakeAsync async,
-  TestCallBloc bloc,
-  FakeSignalingClientFactory factory, {
-  RegistrationStatus registrationStatus = RegistrationStatus.registered,
-  int linesCount = 1,
-}) {
-  _bringOnline(async, bloc, factory);
-  factory.client!.simulateHandshake(
-    minimalStateHandshake(registrationStatus: registrationStatus, linesCount: linesCount),
-  );
-  async.flushMicrotasks();
-  expect(bloc.state.callServiceState.registration?.status, registrationStatus);
-}
-
-void _simulateIncoming(
-  FakeAsync async,
-  FakeSignalingClientFactory factory, {
-  int line = 0,
-  String callId = 'call-1',
-  String callee = 'bob',
-  String caller = '123',
-}) {
-  factory.client!.simulateEvent(IncomingCallEvent(line: line, callId: callId, callee: callee, caller: caller));
-  async.flushMicrotasks();
-  async.elapse(Duration.zero);
-  async.flushMicrotasks();
-}
 
 // ---------------------------------------------------------------------------
 // Transfer-specific callkeep mock
@@ -126,8 +83,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
 
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
@@ -154,8 +111,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
 
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
@@ -181,8 +138,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
 
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
@@ -213,8 +170,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
 
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
@@ -254,15 +211,15 @@ void main() {
           capturedNotifications: notifications,
         );
 
-        _bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
+        bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
 
         // First call (caller number: '123')
-        _simulateIncoming(async, factory, callId: 'call-1', caller: '123');
+        simulateIncoming(async, factory, callId: 'call-1', caller: '123');
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
 
         // Second call (caller number: '456')
-        _simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '456');
+        simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '456');
         factory.client!.simulateEvent(const AcceptedEvent(line: 1, callId: 'call-2'));
         async.flushMicrotasks();
 
@@ -298,8 +255,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
 
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
@@ -323,15 +280,15 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
+        bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
 
         // First call — the referor
-        _simulateIncoming(async, factory, callId: 'call-1', caller: '100');
+        simulateIncoming(async, factory, callId: 'call-1', caller: '100');
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
 
         // Second call — the replace target
-        _simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '200');
+        simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '200');
         factory.client!.simulateEvent(const AcceptedEvent(line: 1, callId: 'call-2'));
         async.flushMicrotasks();
 
@@ -357,8 +314,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
 
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
@@ -389,8 +346,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
 
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
@@ -417,8 +374,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
 
@@ -445,8 +402,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1', caller: '100');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1', caller: '100');
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
 
@@ -473,12 +430,12 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
-        _simulateIncoming(async, factory, callId: 'call-1', caller: '123');
+        bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
+        simulateIncoming(async, factory, callId: 'call-1', caller: '123');
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
 
-        _simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '456');
+        simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '456');
         factory.client!.simulateEvent(const AcceptedEvent(line: 1, callId: 'call-2'));
         async.flushMicrotasks();
 
@@ -503,12 +460,12 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
-        _simulateIncoming(async, factory, callId: 'call-1', caller: '100');
+        bringOnlineWithHandshake(async, bloc, factory, linesCount: 2);
+        simulateIncoming(async, factory, callId: 'call-1', caller: '100');
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
 
-        _simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '200');
+        simulateIncoming(async, factory, callId: 'call-2', line: 1, caller: '200');
         factory.client!.simulateEvent(const AcceptedEvent(line: 1, callId: 'call-2'));
         async.flushMicrotasks();
 
@@ -535,8 +492,8 @@ void main() {
         final mockCallkeep = _transferCallkeepMock();
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-1');
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
 

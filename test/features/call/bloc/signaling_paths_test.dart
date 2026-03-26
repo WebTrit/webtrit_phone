@@ -35,47 +35,6 @@ final _fakeNewCall = (
 );
 
 // ---------------------------------------------------------------------------
-// Shared helpers (copied from call_flow_test.dart — private to that file)
-// ---------------------------------------------------------------------------
-
-void _bringOnline(FakeAsync async, TestCallBloc bloc, FakeSignalingClientFactory factory) {
-  bloc.didChangeAppLifecycleState(AppLifecycleState.resumed);
-  async.flushMicrotasks();
-  async.elapse(kSignalingClientFastReconnectDelay + const Duration(milliseconds: 1));
-  async.flushMicrotasks();
-  expect(bloc.state.callServiceState.signalingClientStatus, SignalingClientStatus.connect);
-}
-
-void _bringOnlineWithHandshake(
-  FakeAsync async,
-  TestCallBloc bloc,
-  FakeSignalingClientFactory factory, {
-  RegistrationStatus registrationStatus = RegistrationStatus.registered,
-  int linesCount = 1,
-}) {
-  _bringOnline(async, bloc, factory);
-  factory.client!.simulateHandshake(
-    minimalStateHandshake(registrationStatus: registrationStatus, linesCount: linesCount),
-  );
-  async.flushMicrotasks();
-  expect(bloc.state.callServiceState.registration?.status, registrationStatus);
-}
-
-void _simulateIncoming(
-  FakeAsync async,
-  FakeSignalingClientFactory factory, {
-  int line = 0,
-  String callId = 'call-1',
-  String callee = 'bob',
-  String caller = '123',
-}) {
-  factory.client!.simulateEvent(IncomingCallEvent(line: line, callId: callId, callee: callee, caller: caller));
-  async.flushMicrotasks();
-  async.elapse(Duration.zero);
-  async.flushMicrotasks();
-}
-
-// ---------------------------------------------------------------------------
 // Incoming callkeep mock
 // ---------------------------------------------------------------------------
 
@@ -188,8 +147,8 @@ void main() {
         expect(bloc.state.activeCalls.first.processingStatus, CallProcessingStatus.incomingFromPush);
 
         // Now bring signaling online and simulate the matching IncomingCallEvent.
-        _bringOnlineWithHandshake(async, bloc, factory);
-        _simulateIncoming(async, factory, callId: 'call-push', caller: '123');
+        bringOnlineWithHandshake(async, bloc, factory);
+        simulateIncoming(async, factory, callId: 'call-push', caller: '123');
 
         // The placeholder must be enriched — no duplicate call created.
         expect(bloc.state.activeCalls, hasLength(1));
@@ -219,8 +178,8 @@ void main() {
         final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
 
         // Bring online and get a connected call.
-        _bringOnlineWithHandshake(async, bloc, factory, linesCount: 1);
-        _simulateIncoming(async, factory, callId: 'call-1');
+        bringOnlineWithHandshake(async, bloc, factory, linesCount: 1);
+        simulateIncoming(async, factory, callId: 'call-1');
         factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
         async.flushMicrotasks();
 

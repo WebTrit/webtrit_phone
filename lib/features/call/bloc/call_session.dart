@@ -102,6 +102,8 @@ extension _CallSession on CallBloc {
           return activeCall.copyWith(localStream: localStream);
         }),
       );
+    } on Error {
+      rethrow;
     } catch (e, stackTrace) {
       _logger.warning('__onCallPerformEventStarted _getUserMedia', e, stackTrace);
 
@@ -160,6 +162,8 @@ extension _CallSession on CallBloc {
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingOfferSent);
         }),
       );
+    } on Error {
+      rethrow;
     } catch (e, stackTrace) {
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
@@ -228,7 +232,8 @@ extension _CallSession on CallBloc {
               },
             );
 
-        call = state.retrieveActiveCall(event.callId)!;
+        call = state.retrieveActiveCall(event.callId);
+        if (call == null) return;
       }
       final offer = call.incomingOffer!;
 
@@ -268,6 +273,8 @@ extension _CallSession on CallBloc {
       );
 
       _peerConnectionManager.complete(event.callId, peerConnection);
+    } on Error {
+      rethrow;
     } catch (e, stackTrace) {
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
@@ -374,6 +381,8 @@ extension _CallSession on CallBloc {
           return activeCall.copyWith(held: event.onHold);
         }),
       );
+    } on Error {
+      rethrow;
     } catch (e, stackTrace) {
       callErrorReporter.handle(e, stackTrace, '__onCallPerformEventSetHeld error');
 
@@ -484,6 +493,8 @@ extension _CallSession on CallBloc {
             return _signalingModule.signalingClient?.execute(iceTrickleRequest);
           }
         });
+      } on Error {
+        rethrow;
       } catch (e, stackTrace) {
         callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceGatheringStateChanged error');
 
@@ -524,6 +535,8 @@ extension _CallSession on CallBloc {
             await _signalingModule.signalingClient?.execute(updateRequest);
           }
         });
+      } on Error {
+        rethrow;
       } catch (e, stackTrace) {
         callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceConnectionStateChanged error');
 
@@ -554,6 +567,8 @@ extension _CallSession on CallBloc {
           return _signalingModule.signalingClient?.execute(iceTrickleRequest);
         }
       });
+    } on Error {
+      rethrow;
     } catch (e, stackTrace) {
       callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceCandidateIdentified error');
 
@@ -652,6 +667,8 @@ extension _CallSession on CallBloc {
           jsep: localDescription.toMap(),
         );
         await _signalingModule.signalingClient?.execute(updateRequest);
+      } on Error {
+        rethrow;
       } catch (e, s) {
         callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
       }

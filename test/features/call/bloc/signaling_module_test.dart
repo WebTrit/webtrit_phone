@@ -373,7 +373,11 @@ void main() {
           presenceInfoRepository: MockPresenceInfoRepository(),
           presenceSettingsRepository: mockPresenceSettings,
           onSessionInvalidated: () => sessionInvalidated = true,
-          userRepository: MockUserRepository(),
+          userRepository: () {
+            final m = MockUserRepository();
+            when(() => m.getRemoteInfo()).thenAnswer((_) async => null);
+            return m;
+          }(),
           submitNotification: (_) {},
           callkeep: mockCallkeep,
           callkeepConnections: mockConnections,
