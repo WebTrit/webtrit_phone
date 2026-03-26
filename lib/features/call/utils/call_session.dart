@@ -1,28 +1,96 @@
-part of 'call_bloc.dart';
+part of '../bloc/call_bloc.dart';
 
-extension _CallSession on CallBloc {
-  // processing call perform events
+/// Interface that [CallSessionManager] uses to interact with the outside world.
+///
+/// Typed callbacks keep the manager decoupled from private BLoC event classes,
+/// making it possible to instantiate and test [CallSessionManager] independently
+/// via a fake delegate without constructing a [CallBloc].
+abstract interface class _CallSessionDelegate {
+  CallState get currentState;
+  Stream<CallState> get stateStream;
+  bool get isSessionClosed;
 
-  Future<void> _onCallPerformEvent(_CallPerformEvent event, Emitter<CallState> emit) {
+  /// Dispatches a [_PeerConnectionEvent] onto the BLoC event loop.
+  void _dispatchPeerConnectionEvent(_PeerConnectionEvent event);
+
+  /// Dispatches a complete-call reset for [callId] onto the BLoC event loop.
+  void dispatchCompleteCall(String callId);
+
+  /// Submits a UI notification.
+  void showNotification(Notification notification);
+
+  /// Provides access to the signaling module.
+  SignalingModule get signalingModule;
+
+  /// Provides access to the peer connection manager.
+  PeerConnectionManagerProtocol get peerConnectionManager;
+
+  /// Provides access to the call history recorder.
+  CallHistoryRecorder get callHistoryRecorder;
+
+  /// Provides access to the callkeep sound service.
+  WebtritCallkeepSound get callkeepSound;
+
+  /// Call capabilities and services.
+  UserMediaBuilder get userMediaBuilder;
+  SDPMunger? get sdpMunger;
+  SdpSanitizer? get sdpSanitizer;
+  IceFilter? get iceFilter;
+  Callkeep get callkeep;
+  CallErrorReporter get callErrorReporter;
+}
+
+/// Owns per-call WebRTC state machine logic and peer connection event handling.
+///
+/// Lives inside `part of '../bloc/call_bloc.dart'` so it shares the library
+/// boundary (and thus access to private types such as [_CallPerformEvent] and
+/// [_PeerConnectionEvent]), but it is a concrete, independently-instantiable
+/// class rather than an extension on [CallBloc].
+class _CallSessionManager {
+  _CallSessionManager({required _CallSessionDelegate delegate}) : _delegate = delegate;
+
+  final _CallSessionDelegate _delegate;
+
+  // Public entry-point dispatchers called from BLoC on<> handlers.
+
+  Future<void> onCallPerformEvent(_CallPerformEvent event, Emitter<CallState> emit) {
     return switch (event) {
-      _CallPerformEventStarted() => __onCallPerformEventStarted(event, emit),
-      _CallPerformEventAnswered() => __onCallPerformEventAnswered(event, emit),
-      _CallPerformEventEnded() => __onCallPerformEventEnded(event, emit),
-      _CallPerformEventSetHeld() => __onCallPerformEventSetHeld(event, emit),
-      _CallPerformEventSetMuted() => __onCallPerformEventSetMuted(event, emit),
-      _CallPerformEventSentDTMF() => __onCallPerformEventSentDTMF(event, emit),
-      _CallPerformEventAudioDeviceSet() => __onCallPerformEventAudioDeviceSet(event, emit),
-      _CallPerformEventAudioDevicesUpdate() => __onCallPerformEventAudioDevicesUpdate(event, emit),
+      _CallPerformEventStarted() => _onCallPerformEventStarted(event, emit),
+      _CallPerformEventAnswered() => _onCallPerformEventAnswered(event, emit),
+      _CallPerformEventEnded() => _onCallPerformEventEnded(event, emit),
+      _CallPerformEventSetHeld() => _onCallPerformEventSetHeld(event, emit),
+      _CallPerformEventSetMuted() => _onCallPerformEventSetMuted(event, emit),
+      _CallPerformEventSentDTMF() => _onCallPerformEventSentDTMF(event, emit),
+      _CallPerformEventAudioDeviceSet() => _onCallPerformEventAudioDeviceSet(event, emit),
+      _CallPerformEventAudioDevicesUpdate() => _onCallPerformEventAudioDevicesUpdate(event, emit),
     };
   }
 
-  Future<void> __onCallPerformEventStarted(_CallPerformEventStarted event, Emitter<CallState> emit) async {
-    if (await state.performOnActiveCall(event.callId, (activeCall) => activeCall.line != _kUndefinedLine) != true) {
+  Future<void> onPeerConnectionEvent(_PeerConnectionEvent event, Emitter<CallState> emit) {
+    return switch (event) {
+      _PeerConnectionEventSignalingStateChanged() => _onPeerConnectionEventSignalingStateChanged(event, emit),
+      _PeerConnectionEventConnectionStateChanged() => _onPeerConnectionEventConnectionStateChanged(event, emit),
+      _PeerConnectionEventIceGatheringStateChanged() => _onPeerConnectionEventIceGatheringStateChanged(event, emit),
+      _PeerConnectionEventIceConnectionStateChanged() => _onPeerConnectionEventIceConnectionStateChanged(event, emit),
+      _PeerConnectionEventIceCandidateIdentified() => _onPeerConnectionEventIceCandidateIdentified(event, emit),
+      _PeerConnectionEventStreamAdded() => _onPeerConnectionEventStreamAdded(event, emit),
+      _PeerConnectionEventStreamRemoved() => _onPeerConnectionEventStreamRemoved(event, emit),
+    };
+  }
+
+  // Private call perform event handlers
+
+  Future<void> _onCallPerformEventStarted(_CallPerformEventStarted event, Emitter<CallState> emit) async {
+    if (await _delegate.currentState.performOnActiveCall(
+          event.callId,
+          (activeCall) => activeCall.line != _kUndefinedLine,
+        ) !=
+        true) {
       event.fail();
 
-      emit(state.copyWithPopActiveCall(event.callId));
+      emit(_delegate.currentState.copyWithPopActiveCall(event.callId));
 
-      submitNotification(const CallUndefinedLineNotification());
+      _delegate.showNotification(const CallUndefinedLineNotification());
       return;
     }
 
@@ -30,26 +98,26 @@ extension _CallSession on CallBloc {
     /// Ensuring that the signaling client is connected before attempting to make an outgoing call
     ///
 
-    var currentState = state;
+    var currentState = _delegate.currentState;
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
     if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
       emit(
-        state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingConnectingToSignaling);
         }),
       );
 
-      currentState = await stream
+      currentState = await _delegate.stateStream
           .firstWhere((next) {
             // Stop waiting as soon as signaling is fully ready or has failed;
             // avoids blocking for the full timeout on a definitive failure.
             final signalingReady = next.isHandshakeEstablished && next.isSignalingEstablished;
             final signalingFailed = next.callServiceState.signalingClientStatus.isFailure;
             return signalingReady || signalingFailed;
-          }, orElse: () => state)
-          .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state);
-      if (isClosed) return;
+          }, orElse: () => _delegate.currentState)
+          .timeout(kSignalingClientConnectionTimeout, onTimeout: () => _delegate.currentState);
+      if (_delegate.isSessionClosed) return;
     }
 
     // If the signaling client is not connected, hung up the call and notify user
@@ -58,22 +126,22 @@ extension _CallSession on CallBloc {
 
       // Notice that the tube was already hung up to avoid sending an extra event to the server
       emit(
-        state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(hungUpTime: clock.now());
         }),
       );
 
       // Remove local connection
-      await callkeep.endCall(event.callId);
+      await _delegate.callkeep.endCall(event.callId);
 
-      submitNotification(const CallWhileOfflineNotification());
+      _delegate.showNotification(const CallWhileOfflineNotification());
       return;
     }
 
     // If registration status is not registered after signaling is established, notify user
     if (currentState.callServiceState.registration?.status.isRegistered != true) {
-      _logger.info('__onCallPerformEventStarted account is not registered');
-      submitNotification(CallWhileUnregisteredNotification());
+      _logger.info('_onCallPerformEventStarted account is not registered');
+      _delegate.showNotification(CallWhileUnregisteredNotification());
 
       event.fail();
       return;
@@ -84,36 +152,36 @@ extension _CallSession on CallBloc {
     ///
     ///
     emit(
-      state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingInitializingMedia);
       }),
     );
 
     late final MediaStream localStream;
     try {
-      localStream = await userMediaBuilder.build(
+      localStream = await _delegate.userMediaBuilder.build(
         video: event.video,
-        frontCamera: state.retrieveActiveCall(event.callId)?.frontCamera,
+        frontCamera: _delegate.currentState.retrieveActiveCall(event.callId)?.frontCamera,
       );
       event.fulfill();
 
       emit(
-        state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(localStream: localStream);
         }),
       );
     } on Error {
       rethrow;
     } catch (e, stackTrace) {
-      _logger.warning('__onCallPerformEventStarted _getUserMedia', e, stackTrace);
+      _logger.warning('_onCallPerformEventStarted _getUserMedia', e, stackTrace);
 
       event.fail();
 
-      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-      emit(state.copyWithPopActiveCall(event.callId));
+      emit(_delegate.currentState.copyWithPopActiveCall(event.callId));
 
-      submitNotification(const CallUserMediaErrorNotification());
+      _delegate.showNotification(const CallUserMediaErrorNotification());
       return;
     }
 
@@ -121,23 +189,23 @@ extension _CallSession on CallBloc {
     /// Initializing peer connection and sending outgoing offer
     ///
     emit(
-      state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingOfferPreparing);
       }),
     );
 
     try {
-      final activeCall = state.retrieveActiveCall(event.callId);
+      final activeCall = _delegate.currentState.retrieveActiveCall(event.callId);
       final peerConnection = await _createPeerConnection(event.callId, activeCall!.line);
       await Future.wait(localStream.getTracks().map((track) => peerConnection.addTrack(track, localStream)));
 
       final localDescription = await peerConnection.createOffer({});
-      sdpMunger?.apply(localDescription);
-      _logger.infoPretty(localDescription.sdp, tag: '__onCallPerformEventStarted');
+      _delegate.sdpMunger?.apply(localDescription);
+      _logger.infoPretty(localDescription.sdp, tag: '_onCallPerformEventStarted');
 
       // Need to initiate outgoing call before set localDescription to avoid races
       // between [OutgoingCallRequest] and [IceTrickleRequest]s.
-      await _signalingModule.signalingClient?.execute(
+      await _delegate.signalingModule.signalingClient?.execute(
         OutgoingCallRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
@@ -153,12 +221,12 @@ extension _CallSession on CallBloc {
       // In other cases setLocalDescription is called first; here it's delayed to avoid ICE race
       await peerConnection.setLocalDescription(localDescription);
 
-      _peerConnectionManager.complete(event.callId, peerConnection);
+      _delegate.peerConnectionManager.complete(event.callId, peerConnection);
 
-      await callkeep.reportConnectingOutgoingCall(event.callId);
+      await _delegate.callkeep.reportConnectingOutgoingCall(event.callId);
 
       emit(
-        state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingOfferSent);
         }),
       );
@@ -167,30 +235,30 @@ extension _CallSession on CallBloc {
     } catch (e, stackTrace) {
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
-      callErrorReporter.handle(e, stackTrace, '__onCallPerformEventStarted error:');
+      _delegate.callErrorReporter.handle(e, stackTrace, '_onCallPerformEventStarted error:');
 
       await _stopRingbackSound();
-      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-      add(_ResetStateEvent.completeCall(event.callId));
+      _delegate.dispatchCompleteCall(event.callId);
     }
   }
 
-  /// Performs answer after incoming call accepted by ui call controlls or native controls
+  /// Performs answer after incoming call accepted by ui call controls or native controls.
   /// quick shortcuts:
-  /// ui control event - [__onCallControlEventAnswered]
-  /// after success - [__onCallSignalingEventAccepted]
-  /// jsep processing in - [__onCallSignalingEventIncoming]
-  Future<void> __onCallPerformEventAnswered(_CallPerformEventAnswered event, Emitter<CallState> emit) async {
+  /// ui control event - [_onCallControlEventAnswered]
+  /// after success - [_onCallSignalingEventAccepted]
+  /// jsep processing in - [_onCallSignalingEventIncoming]
+  Future<void> _onCallPerformEventAnswered(_CallPerformEventAnswered event, Emitter<CallState> emit) async {
     event.fulfill();
 
-    ActiveCall? call = state.retrieveActiveCall(event.callId);
+    ActiveCall? call = _delegate.currentState.retrieveActiveCall(event.callId);
     if (call == null) return;
 
     // Prevent performing double answer and race conditions
     //
-    // Main case happens when the call is answered from background(ios) or from the lock screen using navite controls
-    // In such case performAnswered called emidiately and after signaling initialized via
+    // Main case happens when the call is answered from background(ios) or from the lock screen using native controls
+    // In such case performAnswered called immediately and after signaling initialized via
     // [IncomingEvent] + (callAlreadyAnswered == true) > [callControlAnswered] > [performAnswered] called again
     //
     final canPerformAnswer = switch (call.processingStatus) {
@@ -201,12 +269,12 @@ extension _CallSession on CallBloc {
     };
 
     if (canPerformAnswer == false) {
-      _logger.info('__onCallPerformEventAnswered: skipping due stale status: ${call.processingStatus}');
+      _logger.info('_onCallPerformEventAnswered: skipping due stale status: ${call.processingStatus}');
       return;
     }
 
     emit(
-      state.copyWithMappedActiveCall(event.callId, (call) {
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (call) {
         return call.copyWith(processingStatus: CallProcessingStatus.incomingPerformingStarted);
       }),
     );
@@ -215,12 +283,12 @@ extension _CallSession on CallBloc {
       /// Prevent performing answer without offer
       ///
       /// Main case happens when the call is answered from push event while signaling is disconnected
-      /// and main [IncomingEvent] with offer wasnt received yet
+      /// and main [IncomingEvent] with offer wasn't received yet
       ///
       if (call.incomingOffer == null) {
-        _logger.info('__onCallPerformEventAnswered: wait for offer');
+        _logger.info('_onCallPerformEventAnswered: wait for offer');
 
-        await stream
+        await _delegate.stateStream
             .firstWhere((s) {
               final activeCall = s.retrieveActiveCall(event.callId);
               return activeCall?.incomingOffer != null;
@@ -232,38 +300,38 @@ extension _CallSession on CallBloc {
               },
             );
 
-        call = state.retrieveActiveCall(event.callId);
+        call = _delegate.currentState.retrieveActiveCall(event.callId);
         if (call == null) return;
       }
       final offer = call.incomingOffer!;
 
       emit(
-        state.copyWithMappedActiveCall(event.callId, (call) {
+        _delegate.currentState.copyWithMappedActiveCall(event.callId, (call) {
           return call.copyWith(processingStatus: CallProcessingStatus.incomingInitializingMedia);
         }),
       );
 
-      final localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
+      final localStream = await _delegate.userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
       emit(
-        state.copyWithMappedActiveCall(event.callId, (call) {
+        _delegate.currentState.copyWithMappedActiveCall(event.callId, (call) {
           return call.copyWith(localStream: localStream, processingStatus: CallProcessingStatus.incomingAnswering);
         }),
       );
 
       final remoteDescription = offer.toDescription();
-      sdpSanitizer?.apply(remoteDescription);
+      _delegate.sdpSanitizer?.apply(remoteDescription);
       await peerConnection.setRemoteDescription(remoteDescription);
       final localDescription = await peerConnection.createAnswer({});
-      sdpMunger?.apply(localDescription);
+      _delegate.sdpMunger?.apply(localDescription);
 
       // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
       await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
 
-      await _signalingModule.signalingClient?.execute(
+      await _delegate.signalingModule.signalingClient?.execute(
         AcceptRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
           line: call.line,
@@ -272,36 +340,36 @@ extension _CallSession on CallBloc {
         ),
       );
 
-      _peerConnectionManager.complete(event.callId, peerConnection);
+      _delegate.peerConnectionManager.complete(event.callId, peerConnection);
     } on Error {
       rethrow;
     } catch (e, stackTrace) {
-      _peerConnectionManager.completeError(event.callId, e, stackTrace);
-      add(_ResetStateEvent.completeCall(event.callId));
+      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _delegate.dispatchCompleteCall(event.callId);
 
       _addToRecents(call!);
 
       final declineId = WebtritSignalingClient.generateTransactionId();
       final declineRequest = DeclineRequest(transaction: declineId, line: call.line, callId: call.callId);
-      _signalingModule.signalingClient?.execute(declineRequest).ignore();
+      _delegate.signalingModule.signalingClient?.execute(declineRequest).ignore();
 
-      callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
+      _delegate.callErrorReporter.handle(e, stackTrace, '_onCallPerformEventAnswered error:');
     }
   }
 
-  Future<void> __onCallPerformEventEnded(_CallPerformEventEnded event, Emitter<CallState> emit) async {
+  Future<void> _onCallPerformEventEnded(_CallPerformEventEnded event, Emitter<CallState> emit) async {
     // Condition occur when the user interacts with a push notification before signaling is properly initialized.
     // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
-    if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
+    if (_delegate.currentState.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
       event.fail();
-      add(_ResetStateEvent.completeCall(event.callId));
+      _delegate.dispatchCompleteCall(event.callId);
       return;
     }
 
-    if (state.retrieveActiveCall(event.callId)?.wasHungUp == true) {
+    if (_delegate.currentState.retrieveActiveCall(event.callId)?.wasHungUp == true) {
       // TODO: There's an issue where the user might have already ended the call, but the active call screen remains visible.
-      if (state.isActive) {
-        emit(state.copyWithPopActiveCall(event.callId));
+      if (_delegate.currentState.isActive) {
+        emit(_delegate.currentState.copyWithPopActiveCall(event.callId));
       }
       event.fail();
       return;
@@ -312,23 +380,23 @@ extension _CallSession on CallBloc {
     await _stopRingbackSound();
 
     emit(
-      state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
         final activeCallUpdated = activeCall.copyWith(hungUpTime: clock.now());
         _addToRecents(activeCallUpdated);
         return activeCallUpdated;
       }),
     );
 
-    await state.performOnActiveCall(event.callId, (activeCall) async {
+    await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) async {
       if (activeCall.isIncoming && !activeCall.wasAccepted) {
         final declineRequest = DeclineRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        final declineFuture = _signalingModule.signalingClient?.execute(declineRequest);
+        final declineFuture = _delegate.signalingModule.signalingClient?.execute(declineRequest);
         await declineFuture?.catchError((e, s) {
-          callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
+          _delegate.callErrorReporter.handle(e, s, '_onCallPerformEventEnded declineRequest error');
         });
       } else {
         final hangupRequest = HangupRequest(
@@ -336,29 +404,29 @@ extension _CallSession on CallBloc {
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        final hangupFuture = _signalingModule.signalingClient?.execute(hangupRequest);
+        final hangupFuture = _delegate.signalingModule.signalingClient?.execute(hangupRequest);
         await hangupFuture?.catchError((e, s) {
-          callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
+          _delegate.callErrorReporter.handle(e, s, '_onCallPerformEventEnded hangupRequest error');
         });
       }
 
       // Need to close peer connection after executing [HangupRequest]
       // to prevent "Simulate a "hangup" coming from the application"
       // because of "No WebRTC media anymore".
-      await _peerConnectionManager.disposePeerConnection(activeCall.callId);
+      await _delegate.peerConnectionManager.disposePeerConnection(activeCall.callId);
       await activeCall.localStream?.dispose();
     });
 
-    emit(state.copyWithPopActiveCall(event.callId));
+    emit(_delegate.currentState.copyWithPopActiveCall(event.callId));
   }
 
-  Future<void> __onCallPerformEventSetHeld(_CallPerformEventSetHeld event, Emitter<CallState> emit) async {
+  Future<void> _onCallPerformEventSetHeld(_CallPerformEventSetHeld event, Emitter<CallState> emit) async {
     event.fulfill();
 
     try {
-      await state.performOnActiveCall(event.callId, (activeCall) {
+      await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) {
         if (event.onHold) {
-          return _signalingModule.signalingClient?.execute(
+          return _delegate.signalingModule.signalingClient?.execute(
             HoldRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
@@ -367,7 +435,7 @@ extension _CallSession on CallBloc {
             ),
           );
         } else {
-          return _signalingModule.signalingClient?.execute(
+          return _delegate.signalingModule.signalingClient?.execute(
             UnholdRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
@@ -378,25 +446,25 @@ extension _CallSession on CallBloc {
       });
 
       emit(
-        state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(held: event.onHold);
         }),
       );
     } on Error {
       rethrow;
     } catch (e, stackTrace) {
-      callErrorReporter.handle(e, stackTrace, '__onCallPerformEventSetHeld error');
+      _delegate.callErrorReporter.handle(e, stackTrace, '_onCallPerformEventSetHeld error');
 
-      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-      add(_ResetStateEvent.completeCall(event.callId));
+      _delegate.dispatchCompleteCall(event.callId);
     }
   }
 
-  Future<void> __onCallPerformEventSetMuted(_CallPerformEventSetMuted event, Emitter<CallState> emit) async {
+  Future<void> _onCallPerformEventSetMuted(_CallPerformEventSetMuted event, Emitter<CallState> emit) async {
     event.fulfill();
 
-    await state.performOnActiveCall(event.callId, (activeCall) {
+    await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) {
       final audioTrack = activeCall.localStream?.getAudioTracks()[0];
       if (audioTrack != null) {
         Helper.setMicrophoneMute(event.muted, audioTrack);
@@ -404,19 +472,19 @@ extension _CallSession on CallBloc {
     });
 
     emit(
-      state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(muted: event.muted);
       }),
     );
   }
 
-  Future<void> __onCallPerformEventSentDTMF(_CallPerformEventSentDTMF event, Emitter<CallState> emit) async {
+  Future<void> _onCallPerformEventSentDTMF(_CallPerformEventSentDTMF event, Emitter<CallState> emit) async {
     event.fulfill();
 
-    await state.performOnActiveCall(event.callId, (activeCall) async {
-      final peerConnection = await _peerConnectionManager.retrieve(event.callId);
+    await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) async {
+      final peerConnection = await _delegate.peerConnectionManager.retrieve(event.callId);
       if (peerConnection == null) {
-        _logger.warning('__onCallPerformEventSentDTMF: peerConnection is null - most likely some permissions issue');
+        _logger.warning('_onCallPerformEventSentDTMF: peerConnection is null - most likely some permissions issue');
       } else {
         final senders = await peerConnection.senders;
         try {
@@ -430,98 +498,83 @@ extension _CallSession on CallBloc {
           });
           await audioSender.dtmfSender.insertDTMF(event.key);
         } on StateError catch (_) {
-          _logger.warning('__onCallPerformEventSentDTMF can\'t send DTMF');
+          _logger.warning('_onCallPerformEventSentDTMF can\'t send DTMF');
         }
       }
     });
   }
 
-  Future<void> __onCallPerformEventAudioDeviceSet(
-    _CallPerformEventAudioDeviceSet event,
-    Emitter<CallState> emit,
-  ) async {
+  Future<void> _onCallPerformEventAudioDeviceSet(_CallPerformEventAudioDeviceSet event, Emitter<CallState> emit) async {
     _logger.info('CallPerformEventAudioDeviceSet: ${event.device}');
     event.fulfill();
-    emit(state.copyWith(audioDevice: event.device));
+    emit(_delegate.currentState.copyWith(audioDevice: event.device));
   }
 
-  Future<void> __onCallPerformEventAudioDevicesUpdate(
+  Future<void> _onCallPerformEventAudioDevicesUpdate(
     _CallPerformEventAudioDevicesUpdate event,
     Emitter<CallState> emit,
   ) async {
     _logger.info('CallPerformEventAudioDevicesUpdate: ${event.devices}');
     event.fulfill();
-    emit(state.copyWith(availableAudioDevices: event.devices));
+    emit(_delegate.currentState.copyWith(availableAudioDevices: event.devices));
   }
 
-  // processing peer connection events
+  // Private peer connection event handlers
 
-  Future<void> _onPeerConnectionEvent(_PeerConnectionEvent event, Emitter<CallState> emit) {
-    return switch (event) {
-      _PeerConnectionEventSignalingStateChanged() => __onPeerConnectionEventSignalingStateChanged(event, emit),
-      _PeerConnectionEventConnectionStateChanged() => __onPeerConnectionEventConnectionStateChanged(event, emit),
-      _PeerConnectionEventIceGatheringStateChanged() => __onPeerConnectionEventIceGatheringStateChanged(event, emit),
-      _PeerConnectionEventIceConnectionStateChanged() => __onPeerConnectionEventIceConnectionStateChanged(event, emit),
-      _PeerConnectionEventIceCandidateIdentified() => __onPeerConnectionEventIceCandidateIdentified(event, emit),
-      _PeerConnectionEventStreamAdded() => __onPeerConnectionEventStreamAdded(event, emit),
-      _PeerConnectionEventStreamRemoved() => __onPeerConnectionEventStreamRemoved(event, emit),
-    };
-  }
-
-  Future<void> __onPeerConnectionEventSignalingStateChanged(
+  Future<void> _onPeerConnectionEventSignalingStateChanged(
     _PeerConnectionEventSignalingStateChanged event,
     Emitter<CallState> emit,
   ) async {}
 
-  Future<void> __onPeerConnectionEventConnectionStateChanged(
+  Future<void> _onPeerConnectionEventConnectionStateChanged(
     _PeerConnectionEventConnectionStateChanged event,
     Emitter<CallState> emit,
   ) async {}
 
-  Future<void> __onPeerConnectionEventIceGatheringStateChanged(
+  Future<void> _onPeerConnectionEventIceGatheringStateChanged(
     _PeerConnectionEventIceGatheringStateChanged event,
     Emitter<CallState> emit,
   ) async {
     if (event.state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
       try {
-        await state.performOnActiveCall(event.callId, (activeCall) {
+        await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) {
           if (!activeCall.wasHungUp) {
             final iceTrickleRequest = IceTrickleRequest(
               transaction: WebtritSignalingClient.generateTransactionId(),
               line: activeCall.line,
               candidate: null,
             );
-            return _signalingModule.signalingClient?.execute(iceTrickleRequest);
+            return _delegate.signalingModule.signalingClient?.execute(iceTrickleRequest);
           }
         });
       } on Error {
         rethrow;
       } catch (e, stackTrace) {
-        callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceGatheringStateChanged error');
+        _delegate.callErrorReporter.handle(e, stackTrace, '_onPeerConnectionEventIceGatheringStateChanged error');
 
-        _peerConnectionManager.completeError(event.callId, e, stackTrace);
+        _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-        add(_ResetStateEvent.completeCall(event.callId));
+        _delegate.dispatchCompleteCall(event.callId);
       }
     }
   }
 
-  Future<void> __onPeerConnectionEventIceConnectionStateChanged(
+  Future<void> _onPeerConnectionEventIceConnectionStateChanged(
     _PeerConnectionEventIceConnectionStateChanged event,
     Emitter<CallState> emit,
   ) async {
     if (event.state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
       try {
-        await state.performOnActiveCall(event.callId, (activeCall) async {
-          final peerConnection = await _peerConnectionManager.retrieve(event.callId);
+        await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) async {
+          final peerConnection = await _delegate.peerConnectionManager.retrieve(event.callId);
           if (peerConnection == null) {
             _logger.warning(
-              '__onPeerConnectionEventIceConnectionStateChanged: peerConnection is null - most likely some state issue',
+              '_onPeerConnectionEventIceConnectionStateChanged: peerConnection is null - most likely some state issue',
             );
           } else {
             await peerConnection.restartIce();
             final localDescription = await peerConnection.createOffer({});
-            sdpMunger?.apply(localDescription);
+            _delegate.sdpMunger?.apply(localDescription);
 
             // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
             // localDescription should be set before sending the answer to transition into stable state.
@@ -533,72 +586,69 @@ extension _CallSession on CallBloc {
               callId: activeCall.callId,
               jsep: localDescription.toMap(),
             );
-            await _signalingModule.signalingClient?.execute(updateRequest);
+            await _delegate.signalingModule.signalingClient?.execute(updateRequest);
           }
         });
       } on Error {
         rethrow;
       } catch (e, stackTrace) {
-        callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceConnectionStateChanged error');
+        _delegate.callErrorReporter.handle(e, stackTrace, '_onPeerConnectionEventIceConnectionStateChanged error');
 
-        _peerConnectionManager.completeError(event.callId, e, stackTrace);
+        _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-        add(_ResetStateEvent.completeCall(event.callId));
+        _delegate.dispatchCompleteCall(event.callId);
       }
     }
   }
 
-  Future<void> __onPeerConnectionEventIceCandidateIdentified(
+  Future<void> _onPeerConnectionEventIceCandidateIdentified(
     _PeerConnectionEventIceCandidateIdentified event,
     Emitter<CallState> emit,
   ) async {
-    if (iceFilter?.filter(event.candidate) == true) {
-      _logger.fine('__onPeerConnectionEventIceCandidateIdentified: skip by iceFilter');
+    if (_delegate.iceFilter?.filter(event.candidate) == true) {
+      _logger.fine('_onPeerConnectionEventIceCandidateIdentified: skip by iceFilter');
       return;
     }
 
     try {
-      await state.performOnActiveCall(event.callId, (activeCall) {
+      await _delegate.currentState.performOnActiveCall(event.callId, (activeCall) {
         if (!activeCall.wasHungUp) {
           final iceTrickleRequest = IceTrickleRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
             line: activeCall.line,
             candidate: event.candidate.toMap(),
           );
-          return _signalingModule.signalingClient?.execute(iceTrickleRequest);
+          return _delegate.signalingModule.signalingClient?.execute(iceTrickleRequest);
         }
       });
     } on Error {
       rethrow;
     } catch (e, stackTrace) {
-      callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceCandidateIdentified error');
+      _delegate.callErrorReporter.handle(e, stackTrace, '_onPeerConnectionEventIceCandidateIdentified error');
 
-      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+      _delegate.peerConnectionManager.completeError(event.callId, e, stackTrace);
 
-      add(_ResetStateEvent.completeCall(event.callId));
+      _delegate.dispatchCompleteCall(event.callId);
     }
   }
 
-  Future<void> __onPeerConnectionEventStreamAdded(
-    _PeerConnectionEventStreamAdded event,
-    Emitter<CallState> emit,
-  ) async {
+  Future<void> _onPeerConnectionEventStreamAdded(_PeerConnectionEventStreamAdded event, Emitter<CallState> emit) async {
     // Skip stub stream created by Janus on unidirectional video
     if (event.stream.id == 'janus') return;
 
     emit(
-      state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(remoteStream: event.stream);
       }),
     );
   }
 
-  Future<void> __onPeerConnectionEventStreamRemoved(
+  Future<void> _onPeerConnectionEventStreamRemoved(
     _PeerConnectionEventStreamRemoved event,
     Emitter<CallState> emit,
   ) async {
     emit(
-      state.copyWithMappedActiveCall(event.callId, (activeCall) {
+      _delegate.currentState.copyWithMappedActiveCall(event.callId, (activeCall) {
         final prevStream = activeCall.remoteStream;
         if (prevStream != null && prevStream.id == event.stream.id) {
           return activeCall.copyWith(remoteStream: null);
@@ -609,23 +659,28 @@ extension _CallSession on CallBloc {
   }
 
   Future<RTCPeerConnection> _createPeerConnection(String callId, int? lineId) {
-    return _peerConnectionManager.createPeerConnection(
+    return _delegate.peerConnectionManager.createPeerConnection(
       callId,
       observer: PeerConnectionObserver(
-        onSignalingState: (state) => add(_PeerConnectionEvent.signalingStateChanged(callId, state)),
-        onConnectionState: (state) => add(_PeerConnectionEvent.connectionStateChanged(callId, state)),
-        onIceGatheringState: (state) => add(_PeerConnectionEvent.iceGatheringStateChanged(callId, state)),
-        onIceConnectionState: (state) => add(_PeerConnectionEvent.iceConnectionStateChanged(callId, state)),
-        onIceCandidate: (candidate) => add(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
-        onAddStream: (stream) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
-        onRemoveStream: (stream) => add(_PeerConnectionEvent.streamRemoved(callId, stream)),
+        onSignalingState: (state) =>
+            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.signalingStateChanged(callId, state)),
+        onConnectionState: (state) =>
+            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.connectionStateChanged(callId, state)),
+        onIceGatheringState: (state) =>
+            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.iceGatheringStateChanged(callId, state)),
+        onIceConnectionState: (state) =>
+            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.iceConnectionStateChanged(callId, state)),
+        onIceCandidate: (candidate) =>
+            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.iceCandidateIdentified(callId, candidate)),
+        onAddStream: (stream) =>
+            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.streamAdded(callId, stream)),
+        onRemoveStream: (stream) =>
+            _delegate._dispatchPeerConnectionEvent(_PeerConnectionEvent.streamRemoved(callId, stream)),
         onRenegotiationNeeded: (pc) {
           unawaited(
-            _handleRenegotiationNeeded(
-              callId,
-              lineId,
-              pc,
-            ).catchError((e, s) => callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error')),
+            _handleRenegotiationNeeded(callId, lineId, pc).catchError(
+              (e, s) => _delegate.callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error'),
+            ),
           );
         },
       ),
@@ -654,7 +709,7 @@ extension _CallSession on CallBloc {
     _logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
     if (pcState != null) {
       final localDescription = await peerConnection.createOffer({});
-      sdpMunger?.apply(localDescription);
+      _delegate.sdpMunger?.apply(localDescription);
 
       // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the offer to transition into have-local-offer state.
@@ -667,17 +722,17 @@ extension _CallSession on CallBloc {
           callId: callId,
           jsep: localDescription.toMap(),
         );
-        await _signalingModule.signalingClient?.execute(updateRequest);
+        await _delegate.signalingModule.signalingClient?.execute(updateRequest);
       } on Error {
         rethrow;
       } catch (e, s) {
-        callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
+        _delegate.callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
       }
     }
   }
 
   void _addToRecents(ActiveCall activeCall) {
-    _callHistoryRecorder.record((
+    _delegate.callHistoryRecorder.record((
       direction: activeCall.direction,
       number: activeCall.handle.value,
       video: activeCall.video,
@@ -688,13 +743,5 @@ extension _CallSession on CallBloc {
     ));
   }
 
-  Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
-
-  Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
-
-  void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
-    if (senderResult == null) {
-      _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');
-    }
-  }
+  Future<void> _stopRingbackSound() => _delegate.callkeepSound.stopRingbackSound();
 }

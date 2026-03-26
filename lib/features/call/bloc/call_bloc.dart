@@ -43,7 +43,7 @@ part 'platform_bridge.dart';
 
 part '../utils/signaling_module.dart';
 
-part 'call_session.dart';
+part '../utils/call_session.dart';
 
 part 'transfer_coordinator.dart';
 
@@ -63,7 +63,7 @@ typedef SignalingSessionInvalidatedCallback = void Function();
 
 class CallBloc extends Bloc<CallEvent, CallState>
     with WidgetsBindingObserver, _PlatformBridgeMixin
-    implements SignalingModuleDelegate {
+    implements SignalingModuleDelegate, _CallSessionDelegate {
   @override
   final String coreUrl;
   @override
@@ -87,16 +87,22 @@ class CallBloc extends Bloc<CallEvent, CallState>
   /// current session is no longer valid on the server.
   final SignalingSessionInvalidatedCallback onSessionInvalidated;
 
+  @override
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
 
+  @override
   final SDPMunger? sdpMunger;
+  @override
   final SdpSanitizer? sdpSanitizer;
   final WebrtcOptionsBuilder? webRtcOptionsBuilder;
+  @override
   final IceFilter? iceFilter;
+  @override
   final UserMediaBuilder userMediaBuilder;
   final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
   final ContactNameResolver contactNameResolver;
+  @override
   final CallErrorReporter callErrorReporter;
   final bool sipPresenceEnabled;
   final VoidCallback? onCallEnded;
@@ -105,6 +111,7 @@ class CallBloc extends Bloc<CallEvent, CallState>
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
 
   late final SignalingModule _signalingModule;
+  late final _CallSessionManager _callSession;
 
   late final PeerConnectionManagerProtocol _peerConnectionManager;
   late final CallHistoryRecorder _callHistoryRecorder;
@@ -145,6 +152,7 @@ class CallBloc extends Bloc<CallEvent, CallState>
   }) : super(const CallState()) {
     _callkeepSound = callkeepSound ?? WebtritCallkeepSound();
     _signalingModule = SignalingModule(delegate: this, signalingClientFactory: signalingClientFactory);
+    _callSession = _CallSessionManager(delegate: this);
     _peerConnectionManager = peerConnectionManager;
     _callHistoryRecorder = CallHistoryRecorder(repository: callLogsRepository);
     _presenceSyncService = sipPresenceEnabled
@@ -184,8 +192,8 @@ class CallBloc extends Bloc<CallEvent, CallState>
         sequential<CallControlEvent>().call(events.where((e) => e is! _CallControlEventStarted), mapper),
       ]),
     );
-    on<_CallPerformEvent>((e, emit) => _onCallPerformEvent(e, emit), transformer: sequential());
-    on<_PeerConnectionEvent>((e, emit) => _onPeerConnectionEvent(e, emit), transformer: sequential());
+    on<_CallPerformEvent>((e, emit) => _callSession.onCallPerformEvent(e, emit), transformer: sequential());
+    on<_PeerConnectionEvent>((e, emit) => _callSession.onPeerConnectionEvent(e, emit), transformer: sequential());
     on<CallScreenEvent>(_onCallScreenEvent, transformer: sequential());
     on<CallConfigEvent>(_onConfigEvent, transformer: sequential());
 
@@ -226,7 +234,7 @@ class CallBloc extends Bloc<CallEvent, CallState>
 
     await _signalingModule.dispose();
 
-    await _stopRingbackSound();
+    await _callkeepSound.stopRingbackSound();
 
     await _peerConnectionManager.dispose();
 
@@ -490,6 +498,53 @@ class CallBloc extends Bloc<CallEvent, CallState>
 
   @override
   void showNotification(Notification notification) => submitNotification(notification);
+
+  // _CallSessionDelegate implementation
+
+  @override
+  Stream<CallState> get stateStream => stream;
+
+  @override
+  bool get isSessionClosed => isClosed;
+
+  @override
+  void _dispatchPeerConnectionEvent(_PeerConnectionEvent event) => add(event);
+
+  @override
+  SignalingModule get signalingModule => _signalingModule;
+
+  @override
+  PeerConnectionManagerProtocol get peerConnectionManager => _peerConnectionManager;
+
+  @override
+  CallHistoryRecorder get callHistoryRecorder => _callHistoryRecorder;
+
+  @override
+  WebtritCallkeepSound get callkeepSound => _callkeepSound;
+
+  // Helpers used by signaling_module.dart (part of the same library).
+
+  Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
+
+  Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
+
+  void _addToRecents(ActiveCall activeCall) {
+    _callHistoryRecorder.record((
+      direction: activeCall.direction,
+      number: activeCall.handle.value,
+      video: activeCall.video,
+      username: activeCall.displayName,
+      createdTime: activeCall.createdTime,
+      acceptedTime: activeCall.acceptedTime,
+      hungUpTime: activeCall.hungUpTime,
+    ));
+  }
+
+  void _checkSenderResult(RTCRtpSender? senderResult, String kind) {
+    if (senderResult == null) {
+      _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');
+    }
+  }
 
   Future<void> _onCallStarted(CallStarted event, Emitter<CallState> emit) async {
     AppleNativeAudioManagement.setUseManualAudio(true);
