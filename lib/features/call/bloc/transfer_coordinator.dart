@@ -18,7 +18,7 @@ extension _TransferCoordinator on CallBloc {
       }),
     );
 
-    await callkeep.reportUpdateCall(state.activeCalls.current.callId, proximityEnabled: state.shouldListenToProximity);
+    await callkeep.reportUpdateCall(event.callId, proximityEnabled: state.shouldListenToProximity);
   }
 
   Future<void> _onCallControlEventAttendedTransferInitiated(
@@ -72,10 +72,7 @@ extension _TransferCoordinator on CallBloc {
       });
       emit(newState);
 
-      await callkeep.reportUpdateCall(
-        state.activeCalls.current.callId,
-        proximityEnabled: state.shouldListenToProximity,
-      );
+      await callkeep.reportUpdateCall(callId, proximityEnabled: state.shouldListenToProximity);
 
       final callBeingTransferred = state.retrieveActiveCall(callId);
 
@@ -83,9 +80,9 @@ extension _TransferCoordinator on CallBloc {
         add(CallControlEvent.audioDeviceSet(callId, state.availableAudioDevices.getSpeaker));
       }
 
-      // After request succesfully submitted, transfer flow will continue
-      // by TransferringEvent event from anus and handled in [_CallSignalingEventTransferring]
-      // that means that call transfering is now in progress
+      // After request successfully submitted, the transfer flow continues via
+      // TransferringEvent from Janus, handled in [__onCallSignalingEventTransferring],
+      // which marks the call as transfer-in-progress.
     } catch (e, s) {
       callErrorReporter.handle(e, s, '_onCallControlEventBlindTransferSubmitted request error:');
     }
@@ -116,9 +113,9 @@ extension _TransferCoordinator on CallBloc {
         }),
       );
 
-      // After request succesfully submitted, transfer flow will continue
-      // by TransferringEvent event from anus and handled in [_CallSignalingEventTransferring]
-      // that means that call transfering is now in progress
+      // After request successfully submitted, the transfer flow continues via
+      // TransferringEvent from Janus, handled in [__onCallSignalingEventTransferring],
+      // which marks the referor call as transfer-in-progress.
     } catch (e, s) {
       callErrorReporter.handle(e, s, '_onCallControlEventAttendedTransferSubmitted request error:');
     }

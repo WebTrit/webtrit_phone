@@ -768,8 +768,6 @@ extension _SignalingModule on CallBloc {
           await callkeep.endCall(connection.callId);
         }
       }
-    } on Error {
-      rethrow;
     } catch (e, s) {
       _logger.severe('_processHandshakeAsync error', e, s);
     }
