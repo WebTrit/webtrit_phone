@@ -5,8 +5,8 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
+import 'package:webtrit_phone/features/call/models/models.dart';
 
-import '../models/notification.dart';
 import 'user_media_builder.dart';
 
 final _logger = Logger('CallBloc:SignalingErrorReporter');

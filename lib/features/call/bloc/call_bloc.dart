@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/widgets.dart' hide Notification;
 
@@ -151,6 +152,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_PeerConnectionEvent>(_onPeerConnectionEvent, transformer: sequential());
     on<CallScreenEvent>(_onCallScreenEvent, transformer: sequential());
     on<CallConfigEvent>(_onConfigEvent, transformer: sequential());
+    on<_CallActionRenegotiate>(_onCallActionRenegotiate, transformer: droppable());
 
     navigator.mediaDevices.ondevicechange = (event) {
       add(const _NavigatorMediaDevicesChange());
@@ -1103,6 +1105,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       proximityEnabled: state.shouldListenToProximity,
     );
 
+    final realeaseLock = await _peerConnectionManager.acquireModificationLock(activeCall.callId);
+
     try {
       final jsep = event.jsep;
       if (jsep != null) {
@@ -1114,13 +1118,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
           } else {
             await peerConnectionPolicyApplier?.apply(peerConnection, hasRemoteVideo: jsep.hasVideo);
-            await peerConnection.setRemoteDescription(remoteDescription);
+
+            final pcSignalingState = await peerConnection.getSignalingState();
+            _logger.warning(() => '__onCallSignalingEventUpdating signalingState: $pcSignalingState');
+
+            if (pcSignalingState == RTCSignalingState.RTCSignalingStateHaveLocalOffer) {
+              _logger.warning('__onCallSignalingEventUpdating - rollback local offer to apply new remote offer');
+              await peerConnection.setLocalDescription(RTCSessionDescription('', 'rollback'));
+              _dispatchRenegotiation(event.callId);
+            }
+
+            await peerConnection
+                .setRemoteDescription(remoteDescription)
+                .catchError((error) => throw RtcJsepErrorParser.parse(error));
             final localDescription = await peerConnection.createAnswer({});
+
             sdpMunger?.apply(localDescription);
 
             // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
             // localDescription should be set before sending the answer to transition into stable state.
-            await peerConnection.setLocalDescription(localDescription);
+            await peerConnection
+                .setLocalDescription(localDescription)
+                .catchError((error) => throw RtcJsepErrorParser.parse(error));
 
             await _signalingClient?.execute(
               UpdateRequest(
@@ -1134,10 +1153,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         });
       }
     } catch (e, s) {
-      callErrorReporter.handle(e, s, '__onCallSignalingEventUpdating && jsep error:');
-
+      _logger.warning('__onCallSignalingEventUpdating - error:', e, s);
+      callErrorReporter.handle(e, s, '__onCallSignalingEventUpdating - error:');
       _peerConnectionManager.completeError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
+    } finally {
+      realeaseLock();
     }
   }
 
@@ -1438,6 +1459,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (currentVideoTrack != null) {
       currentVideoTrack.enabled = event.enabled;
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: event.enabled)));
+      // Can help if user ejoys video stuck and taps to "change something"
+      _dispatchRenegotiation(event.callId);
       return;
     }
 
@@ -1959,7 +1982,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
-      await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
+      await peerConnection
+          .setLocalDescription(localDescription)
+          .catchError((error) => throw RtcJsepErrorParser.parse(error));
 
       await _signalingClient?.execute(
         AcceptRequest(
@@ -2807,44 +2832,65 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> _handleRenegotiationNeeded(String callId, int? lineId, RTCPeerConnection peerConnection) async {
-    // TODO(Serdun): Handle renegotiation needed
-    // This implementation does not handle all possible signaling states.
-    // Specifically, if the current state is `have-remote-offer`, calling
-    // setLocalDescription with an offer will throw:
-    //   WEBRTC_SET_LOCAL_DESCRIPTION_ERROR: Failed to set local offer sdp: Called in wrong state: have-remote-offer
-    //
-    // Known case: when CalleeVideoOfferPolicy.includeInactiveTrack is used,
-    // the callee may trigger onRenegotiationNeeded before the current remote offer is processed.
-    // This causes a race where the local peer is still in 'have-remote-offer' state,
-    // leading to the above error. Currently this does not severely affect behavior,
-    // since the offer includes only an inactive track, but it should still be handled correctly.
-    //
-    // Proper handling should include:
-    // - Waiting until the signaling state becomes 'stable' before creating and setting a new offer
-    // - Avoiding renegotiation if a remote offer is currently being processed
-    // - Ensuring renegotiation is coordinated and state-aware
+    if (peerConnection.signalingState == null) return;
+    _dispatchRenegotiation(callId);
+  }
 
-    final pcState = peerConnection.signalingState;
-    _logger.fine(() => 'onRenegotiationNeeded signalingState: $pcState');
-    if (pcState != null) {
+  /// Use if you wana renegotiate the call by yourself
+  /// e.g after errors, race conditions or speed-up network switching
+  Future<void> _onCallActionRenegotiate(_CallActionRenegotiate event, Emitter<CallState> emit) async {
+    final callId = event.callId;
+    final activeCall = state.activeCalls.firstWhereOrNull((call) => call.callId == callId);
+    if (activeCall == null) return;
+    // if (activeCall.updating) {
+    //   _dispatchRenegotiation(callId);
+    //   return;
+    // }
+    final lineId = activeCall.line;
+
+    final peerConnection = await _peerConnectionManager.retrieve(callId);
+    if (peerConnection == null) return;
+
+    final realeaseLock = await _peerConnectionManager.acquireModificationLock(callId);
+
+    final pcSignalingState = await peerConnection.getSignalingState();
+    _logger.warning(() => '_onCallActionRenegotiate signalingState: $pcSignalingState');
+    final connectionState = await peerConnection.getConnectionState();
+    _logger.warning(() => '_onCallActionRenegotiate connectionState: $connectionState');
+
+    if (connectionState == RTCPeerConnectionState.RTCPeerConnectionStateNew) {
+      _logger.warning('_onCallActionRenegotiate skipped due to new connection state');
+      realeaseLock();
+      return;
+    }
+
+    if (pcSignalingState != RTCSignalingState.RTCSignalingStateStable) {
+      _logger.warning('_onCallActionRenegotiate skipped due to non-stable signaling state');
+      realeaseLock();
+      return;
+    }
+
+    try {
       final localDescription = await peerConnection.createOffer({});
       sdpMunger?.apply(localDescription);
-
       // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the offer to transition into have-local-offer state.
-      await peerConnection.setLocalDescription(localDescription);
+      await peerConnection
+          .setLocalDescription(localDescription)
+          .catchError((error) => throw RtcJsepErrorParser.parse(error));
 
-      try {
-        final updateRequest = UpdateRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: lineId,
-          callId: callId,
-          jsep: localDescription.toMap(),
-        );
-        await _signalingClient?.execute(updateRequest);
-      } catch (e, s) {
-        callErrorReporter.handle(e, s, '_createPeerConnection:onRenegotiationNeeded error');
-      }
+      final updateRequest = UpdateRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: lineId,
+        callId: callId,
+        jsep: localDescription.toMap(),
+      );
+      await _signalingClient?.execute(updateRequest);
+    } catch (e, s) {
+      _logger.warning('_onCallActionRenegotiate error', e, s);
+      callErrorReporter.handle(e, s, '_onCallActionRenegotiate error:');
+    } finally {
+      realeaseLock();
     }
   }
 
@@ -2951,5 +2997,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (senderResult == null) {
       _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');
     }
+  }
+
+  /// Dispatches a renegotiation action after a random delay
+  ///
+  /// Main purpose is to mitigate potential glare conditions
+  /// inspired by logic described in rfc5407 about 491 pending event
+  void _dispatchRenegotiation(String callId, {Duration? delayOverride}) async {
+    final randomDelay = delayOverride ?? Duration(milliseconds: Random().nextInt(6000).clamp(1000, 5000));
+    _logger.warning(() => '_dispatchRenegotiation for callId: $callId with random delay: $randomDelay');
+    Future.delayed(randomDelay).then((_) {
+      if (isClosed) return;
+      final activeCall = state.activeCalls.firstWhereOrNull((call) => call.callId == callId);
+      if (activeCall == null) return;
+
+      add(_CallActionRenegotiate(callId));
+    });
   }
 }

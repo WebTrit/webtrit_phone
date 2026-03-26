@@ -1056,3 +1056,14 @@ class _CallConfigEventUpdated extends CallConfigEvent {
   @override
   List<Object?> get props => [monitorCheckInterval];
 }
+
+// call actions events
+
+class _CallActionRenegotiate extends CallEvent {
+  const _CallActionRenegotiate(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}

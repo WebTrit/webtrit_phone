@@ -87,6 +87,11 @@ final class PeerConnectionManager {
   /// to ensure hardware resources are released before creating a new connection.
   final _pendingDisposals = <CallId, Future<void>>{};
 
+  /// Locks for synchronizing pc modifications
+  ///
+  /// Needed to prevent race conditions with get signaling state and set sdp, that under the hood absolutely unsynced
+  final _modificationLocks = <CallId, Completer<void>>{};
+
   /// Updates configuration parameters for future connections.
   void updateConfig({Duration? retrieveTimeout, Duration? monitorCheckInterval, Duration? disposalTimeout}) {
     if (retrieveTimeout != null) {
@@ -202,6 +207,37 @@ final class PeerConnectionManager {
   /// Alias for [completeError].
   void conditionalCompleteError(CallId callId, Object error, [StackTrace? st]) {
     completeError(callId, error, st);
+  }
+
+  /// Acquires a modification lock for the given [callId].
+  ///
+  /// If a lock already exists, waits for it to be released before acquiring a new one.
+  ///
+  /// Returns a function that releases the lock when called.
+  Future<Function()> acquireModificationLock(CallId callId) async {
+    // If a lock already exists for this callId, wait for it to complete
+    while (_modificationLocks.containsKey(callId)) {
+      _logger.warning(() => 'acquireModificationLock($callId): waiting for existing lock...');
+      try {
+        await _modificationLocks[callId]!.future;
+      } catch (e, st) {
+        _logger.warning('acquireModificationLock($callId): existing lock completed with error (ignored)', e, st);
+      }
+    }
+
+    // Create a new lock for this callId
+    final lock = Completer<void>();
+    _modificationLocks[callId] = lock;
+    _logger.warning(() => 'acquireModificationLock($callId): lock acquired');
+
+    // Return a function to release the lock
+    return () {
+      if (!lock.isCompleted) {
+        lock.complete();
+        _logger.warning(() => 'acquireModificationLock($callId): lock released');
+      }
+      _modificationLocks.remove(callId);
+    };
   }
 
   /// Retrieves the PeerConnection. Waits if it is being created.
