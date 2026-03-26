@@ -195,12 +195,22 @@ class CallBloc extends Bloc<CallEvent, CallState>
 
     callkeep.setDelegate(this);
 
+    // Start presence sync at construction time so subscription negotiation
+    // begins as early as possible. The underlying signalingClientProvider
+    // returns null until the first successful connect, which the service
+    // handles gracefully. The connectivity subscription is established
+    // later in _onCallStarted, so presence sync may no-op until then.
     _presenceSyncService.start();
   }
 
   @override
   Future<void> close() async {
     callkeep.setDelegate(null);
+
+    // Cancel connectivity subscription first to prevent _ConnectivityResultChanged
+    // events from reaching the event loop (and triggering reconnect/disconnect)
+    // between draining perform events and super.close().
+    await _connectivityChangedSubscription?.cancel();
 
     // Fail any perform-event futures that the native side is still awaiting.
     // Without this, CallKit/ConnectionService can hang indefinitely if close()
@@ -211,8 +221,6 @@ class CallBloc extends Bloc<CallEvent, CallState>
     WidgetsBinding.instance.removeObserver(this);
 
     detachMediaDeviceObserver();
-
-    await _connectivityChangedSubscription?.cancel();
 
     _presenceSyncService.stop();
 

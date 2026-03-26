@@ -102,13 +102,13 @@ the BLoC calls `event.fulfill()` or `event.fail()`.
 
 | Event type | Transformer | Rationale |
 |-----------|-------------|-----------|
-| `CallStarted` | `droppable()` | Ignore duplicate starts |
+| `CallStarted` | `sequential()` | Lifecycle events must not overlap |
 | `_CallPerformEvent` | `sequential()` | Native callbacks must complete in order |
 | `CallControlEvent` | `sequential()` | User actions must not interleave |
 | `_CallSignalingEvent` | `sequential()` | SIP events are protocol-ordered |
 | `_PeerConnectionEvent` | `sequential()` | WebRTC state machine is sequential |
-| `_CallPushEventIncoming` | concurrent (default) | Push can arrive at any time |
-| `_HandshakeSignalingEventState` | `droppable()` | Only the latest handshake matters |
+| `_CallPushEventIncoming` | `sequential()` | Push events must not interleave with each other |
+| `_HandshakeSignalingEventState` | `sequential()` | Handshake must complete before next one starts |
 | `_SignalingClientEvent` | `restartable()` | New connection supersedes pending |
 
 ## State Structure

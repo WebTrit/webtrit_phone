@@ -175,6 +175,74 @@ void main() {
       });
     });
 
+    test('blindTransferSubmitted transitions state even when signaling client is null', () {
+      fakeAsync((async) {
+        final factory = FakeSignalingClientFactory();
+        final mockCallkeep = _transferCallkeepMock();
+        final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
+
+        _bringOnlineWithHandshake(async, bloc, factory);
+        _simulateIncoming(async, factory, callId: 'call-1');
+
+        factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
+        async.flushMicrotasks();
+
+        bloc.add(CallControlEvent.blindTransferInitiated('call-1'));
+        async.flushMicrotasks();
+
+        // Drop the signaling connection before submitting.
+        factory.client!.simulateDisconnect();
+        async.flushMicrotasks();
+
+        // Submit blind transfer — signalingModule.signalingClient is null,
+        // the execute() call is skipped but state should still transition.
+        bloc.add(const CallControlEvent.blindTransferSubmitted(number: '999'));
+        async.flushMicrotasks();
+
+        final call = bloc.state.retrieveActiveCall('call-1');
+        expect(call?.transfer, isA<BlindTransferTransferSubmitted>());
+
+        bloc.close();
+        async.flushMicrotasks();
+      });
+    });
+
+    test('blindTransferSubmitted restores speaker when speakerOnBeforeMinimize is true', () {
+      fakeAsync((async) {
+        final factory = FakeSignalingClientFactory();
+        final mockCallkeep = _transferCallkeepMock();
+        final bloc = buildTestBloc(callkeep: mockCallkeep, signalingClientFactory: factory.call);
+
+        _bringOnlineWithHandshake(async, bloc, factory);
+        _simulateIncoming(async, factory, callId: 'call-1');
+
+        factory.client!.simulateEvent(const AcceptedEvent(line: 0, callId: 'call-1'));
+        async.flushMicrotasks();
+
+        // Inject a speaker as the current audio device so speakerOnBeforeMinimize is captured.
+        bloc.performAudioDevicesUpdate('call-1', [CallkeepAudioDevice(type: CallkeepAudioDeviceType.speaker)]);
+        bloc.performAudioDeviceSet('call-1', CallkeepAudioDevice(type: CallkeepAudioDeviceType.speaker));
+        async.flushMicrotasks();
+
+        expect(bloc.state.audioDevice?.type, CallAudioDeviceType.speaker);
+
+        bloc.add(CallControlEvent.blindTransferInitiated('call-1'));
+        async.flushMicrotasks();
+
+        final callAfterInitiate = bloc.state.retrieveActiveCall('call-1');
+        expect(callAfterInitiate?.speakerOnBeforeMinimize, isTrue);
+
+        // After submit the speaker should be restored.
+        bloc.add(const CallControlEvent.blindTransferSubmitted(number: '999'));
+        async.flushMicrotasks();
+
+        expect(bloc.state.audioDevice?.type, CallAudioDeviceType.speaker);
+
+        bloc.close();
+        async.flushMicrotasks();
+      });
+    });
+
     test('blindTransferSubmitted when target is already in active calls submits warning notification', () {
       fakeAsync((async) {
         final factory = FakeSignalingClientFactory();
