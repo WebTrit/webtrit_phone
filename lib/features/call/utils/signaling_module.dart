@@ -6,11 +6,6 @@ part of '../bloc/call_bloc.dart';
 /// making it possible to instantiate and test [SignalingModule] independently
 /// via a [FakeSignalingModuleDelegate] without constructing a [CallBloc].
 abstract interface class SignalingModuleDelegate {
-  String get coreUrl;
-  String get tenantId;
-  String get token;
-  TrustedCertificates get trustedCertificates;
-
   CallState get currentState;
   bool get isModuleClosed;
 
@@ -47,11 +42,26 @@ abstract interface class SignalingModuleDelegate {
 /// [CallBloc]. Tests can therefore exercise the connection lifecycle by
 /// supplying a [FakeSignalingModuleDelegate] without constructing a full BLoC.
 class SignalingModule {
-  SignalingModule({required SignalingModuleDelegate delegate, required SignalingClientFactory signalingClientFactory})
-    : _delegate = delegate,
-      _signalingClientFactory = signalingClientFactory;
+  SignalingModule({
+    required String coreUrl,
+    required String tenantId,
+    required String token,
+    required TrustedCertificates trustedCertificates,
+    required SignalingClientFactory signalingClientFactory,
+    SignalingModuleDelegate? delegate,
+  }) : _coreUrl = coreUrl,
+       _tenantId = tenantId,
+       _token = token,
+       _trustedCertificates = trustedCertificates,
+       _signalingClientFactory = signalingClientFactory {
+    if (delegate != null) _delegate = delegate;
+  }
 
-  final SignalingModuleDelegate _delegate;
+  late SignalingModuleDelegate _delegate;
+  final String _coreUrl;
+  final String _tenantId;
+  final String _token;
+  final TrustedCertificates _trustedCertificates;
   final SignalingClientFactory _signalingClientFactory;
 
   WebtritSignalingClient? _client;
@@ -131,14 +141,14 @@ class SignalingModule {
 
       if (isEmitDone()) return;
 
-      final signalingUrl = WebtritSignalingUtils.parseCoreUrlToSignalingUrl(_delegate.coreUrl);
+      final signalingUrl = WebtritSignalingUtils.parseCoreUrlToSignalingUrl(_coreUrl);
 
       final signalingClient = await _signalingClientFactory(
         url: signalingUrl,
-        tenantId: _delegate.tenantId,
-        token: _delegate.token,
+        tenantId: _tenantId,
+        token: _token,
         connectionTimeout: kSignalingClientConnectionTimeout,
-        certs: _delegate.trustedCertificates,
+        certs: _trustedCertificates,
         force: true,
       );
 

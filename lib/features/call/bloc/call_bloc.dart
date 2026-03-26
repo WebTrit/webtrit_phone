@@ -64,15 +64,6 @@ typedef SignalingSessionInvalidatedCallback = void Function();
 class CallBloc extends Bloc<CallEvent, CallState>
     with WidgetsBindingObserver, _PlatformBridgeMixin
     implements SignalingModuleDelegate, _CallSessionDelegate {
-  @override
-  final String coreUrl;
-  @override
-  final String tenantId;
-  @override
-  final String token;
-  @override
-  final TrustedCertificates trustedCertificates;
-
   final CallLogsRepository callLogsRepository;
   final CallPullRepository callPullRepository;
   final UserRepository userRepository;
@@ -121,10 +112,7 @@ class CallBloc extends Bloc<CallEvent, CallState>
   late final WebtritCallkeepSound _callkeepSound;
 
   CallBloc({
-    required this.coreUrl,
-    required this.tenantId,
-    required this.token,
-    required this.trustedCertificates,
+    required SignalingModule signalingModule,
     required this.callLogsRepository,
     required this.callPullRepository,
     required this.linesStateRepository,
@@ -145,13 +133,12 @@ class CallBloc extends Bloc<CallEvent, CallState>
     this.webRtcOptionsBuilder,
     this.iceFilter,
     this.peerConnectionPolicyApplier,
-    SignalingClientFactory signalingClientFactory = defaultSignalingClientFactory,
     required PeerConnectionManagerProtocol peerConnectionManager,
     this.onCallEnded,
     WebtritCallkeepSound? callkeepSound,
   }) : super(const CallState()) {
     _callkeepSound = callkeepSound ?? WebtritCallkeepSound();
-    _signalingModule = SignalingModule(delegate: this, signalingClientFactory: signalingClientFactory);
+    _signalingModule = signalingModule.._delegate = this;
     _callSession = _CallSessionManager(delegate: this);
     _peerConnectionManager = peerConnectionManager;
     _callHistoryRecorder = CallHistoryRecorder(repository: callLogsRepository);

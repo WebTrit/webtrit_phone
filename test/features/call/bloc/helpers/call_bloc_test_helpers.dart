@@ -124,10 +124,7 @@ class _NoOpCallLogsRepository extends Fake implements CallLogsRepository {
 /// so tests do not depend on native platform code.
 class TestCallBloc extends CallBloc {
   TestCallBloc({
-    required super.coreUrl,
-    required super.tenantId,
-    required super.token,
-    required super.trustedCertificates,
+    required super.signalingModule,
     required super.callLogsRepository,
     required super.callPullRepository,
     required super.linesStateRepository,
@@ -144,7 +141,6 @@ class TestCallBloc extends CallBloc {
     required super.sipPresenceEnabled,
     required super.onDiagnosticReportRequested,
     required super.peerConnectionManager,
-    super.signalingClientFactory,
     super.onCallEnded,
     super.callkeepSound,
   });
@@ -227,10 +223,13 @@ TestCallBloc buildTestBloc({
   final notifications = capturedNotifications ?? <Notification>[];
 
   return TestCallBloc(
-    coreUrl: 'https://example.com',
-    tenantId: 'test-tenant',
-    token: 'test-token',
-    trustedCertificates: TrustedCertificates.empty,
+    signalingModule: SignalingModule(
+      coreUrl: 'https://example.com',
+      tenantId: 'test-tenant',
+      token: 'test-token',
+      trustedCertificates: TrustedCertificates.empty,
+      signalingClientFactory: signalingClientFactory,
+    ),
     callLogsRepository: mockCallLogs,
     callPullRepository: MockCallPullRepository(),
     linesStateRepository: mockLinesState,
@@ -247,7 +246,6 @@ TestCallBloc buildTestBloc({
     sipPresenceEnabled: sipPresenceEnabled,
     onDiagnosticReportRequested: (_, _) {},
     peerConnectionManager: mockPcm,
-    signalingClientFactory: signalingClientFactory,
     callkeepSound: mockSound,
   );
 }

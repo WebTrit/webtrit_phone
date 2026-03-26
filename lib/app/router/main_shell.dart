@@ -450,11 +450,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
                       );
 
-                      return CallBloc(
+                      final signalingModule = SignalingModule(
                         coreUrl: appBloc.state.session.coreUrl!,
                         tenantId: appBloc.state.session.tenantId,
                         token: appBloc.state.session.token!,
                         trustedCertificates: appCertificates.trustedCertificates,
+                        signalingClientFactory: defaultSignalingClientFactory,
+                      );
+
+                      return CallBloc(
+                        signalingModule: signalingModule,
                         callLogsRepository: context.read<CallLogsRepository>(),
                         callPullRepository: context.read<CallPullRepository>(),
                         linesStateRepository: context.read<LinesStateRepository>(),

@@ -40,15 +40,6 @@ class FakeSignalingModuleDelegate implements SignalingModuleDelegate {
   final List<Notification> notifications = [];
 
   @override
-  String get coreUrl => 'https://example.com';
-  @override
-  String get tenantId => 'test-tenant';
-  @override
-  String get token => 'test-token';
-  @override
-  TrustedCertificates get trustedCertificates => TrustedCertificates.empty;
-
-  @override
   CallState get currentState => _state;
 
   @override
@@ -363,10 +354,13 @@ void main() {
         when(() => mockSound.playRingbackSound()).thenAnswer((_) async {});
 
         bloc = TestCallBloc(
-          coreUrl: 'https://example.com',
-          tenantId: 'test-tenant',
-          token: 'test-token',
-          trustedCertificates: TrustedCertificates.empty,
+          signalingModule: SignalingModule(
+            coreUrl: 'https://example.com',
+            tenantId: 'test-tenant',
+            token: 'test-token',
+            trustedCertificates: TrustedCertificates.empty,
+            signalingClientFactory: sessionFactory.call,
+          ),
           callLogsRepository: MockCallLogsRepository(),
           callPullRepository: MockCallPullRepository(),
           linesStateRepository: mockLinesState,
@@ -393,7 +387,6 @@ void main() {
             when(() => m.add(any())).thenReturn(null);
             return m;
           }(),
-          signalingClientFactory: sessionFactory.call,
           callkeepSound: mockSound,
         );
 
@@ -501,7 +494,14 @@ void main() {
     setUp(() {
       delegate = FakeSignalingModuleDelegate();
       factory = FakeSignalingClientFactory();
-      module = SignalingModule(delegate: delegate, signalingClientFactory: factory.call);
+      module = SignalingModule(
+        coreUrl: 'https://example.com',
+        tenantId: 'test-tenant',
+        token: 'test-token',
+        trustedCertificates: TrustedCertificates.empty,
+        signalingClientFactory: factory.call,
+        delegate: delegate,
+      );
     });
 
     tearDown(() => module.dispose());
@@ -629,7 +629,10 @@ void main() {
     test('performConnect emits failure and schedules slow reconnect when factory throws', () {
       fakeAsync((async) {
         final failingModule = SignalingModule(
-          delegate: delegate,
+          coreUrl: 'https://example.com',
+          tenantId: 'test-tenant',
+          token: 'test-token',
+          trustedCertificates: TrustedCertificates.empty,
           signalingClientFactory:
               ({
                 required url,
@@ -641,6 +644,7 @@ void main() {
               }) async {
                 throw Exception('refused');
               },
+          delegate: delegate,
         );
 
         delegate.updateState(const CallState().copyWith(currentAppLifecycleState: AppLifecycleState.resumed));
@@ -665,7 +669,10 @@ void main() {
 
     test('performConnect does not emit a duplicate failure notification on repeated error', () async {
       final failingModule = SignalingModule(
-        delegate: delegate,
+        coreUrl: 'https://example.com',
+        tenantId: 'test-tenant',
+        token: 'test-token',
+        trustedCertificates: TrustedCertificates.empty,
         signalingClientFactory:
             ({
               required url,
@@ -677,6 +684,7 @@ void main() {
             }) async {
               throw Exception('same error');
             },
+        delegate: delegate,
       );
 
       // First attempt — notification should be emitted.
