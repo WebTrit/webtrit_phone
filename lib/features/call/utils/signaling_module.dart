@@ -1,4 +1,4 @@
-part of 'call_bloc.dart';
+part of '../bloc/call_bloc.dart';
 
 /// Interface that [SignalingModule] uses to interact with the outside world.
 ///

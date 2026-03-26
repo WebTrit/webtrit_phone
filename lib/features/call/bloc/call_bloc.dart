@@ -41,7 +41,7 @@ part 'call_state.dart';
 
 part 'platform_bridge.dart';
 
-part 'signaling_module.dart';
+part '../utils/signaling_module.dart';
 
 part 'call_session.dart';
 

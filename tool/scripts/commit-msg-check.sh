@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MSG=$(git log -1 --pretty=%B | head -n1)
+MSG=$(head -n1 "$1")
 
 if ! [[ "$MSG" =~ ^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\(.+\))?:\ .+ ]]; then
   echo "❌ Invalid commit message: '$MSG'"
