@@ -339,7 +339,9 @@ class SignalingModule {
   /// Cancels the reconnect timer and disconnects the signaling client.
   Future<void> dispose() async {
     _reconnectTimer?.cancel();
-    await _client?.disconnect();
+    final client = _client;
+    _client = null;
+    await client?.disconnect();
   }
 
   void _onStateHandshake(StateHandshake stateHandshake) => _delegate.onStateHandshake(stateHandshake);

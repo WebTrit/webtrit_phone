@@ -40,7 +40,9 @@ bool get _credentialsProvided =>
 
 Future<({String token, String tenantId})> _fetchSessionToken() async {
   final uri = Uri.parse('https://${_env(_coreUrlKey)}/api/v1/session');
-  final client = HttpClient()..connectionTimeout = const Duration(seconds: 15);
+  final client = HttpClient()
+    ..connectionTimeout = const Duration(seconds: 15)
+    ..badCertificateCallback = (_, __, ___) => true;
 
   try {
     final request = await client.postUrl(uri);
@@ -137,8 +139,6 @@ class _LiveDelegate implements SignalingModuleDelegate {
 // ---------------------------------------------------------------------------
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   late String coreUrl;
   late String sessionToken;
   late String tenantId;
