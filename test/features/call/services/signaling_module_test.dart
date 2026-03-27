@@ -509,7 +509,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SignalingModule — _reconnectDelay', () {
-    Future<SignalingDisconnected> _disconnectWith(int code) async {
+    Future<SignalingDisconnected> disconnectWith(int code) async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
       addTearDown(module.dispose);
@@ -529,21 +529,21 @@ void main() {
     }
 
     test('controllerForceAttachClose (4441) → recommendedReconnectDelay is Duration.zero', () async {
-      final disc = await _disconnectWith(SignalingDisconnectCode.controllerForceAttachClose.code);
+      final disc = await disconnectWith(SignalingDisconnectCode.controllerForceAttachClose.code);
 
       expect(disc.knownCode, SignalingDisconnectCode.controllerForceAttachClose);
       expect(disc.recommendedReconnectDelay, Duration.zero);
     });
 
     test('protocolError (1002) → recommendedReconnectDelay is null', () async {
-      final disc = await _disconnectWith(SignalingDisconnectCode.protocolError.code);
+      final disc = await disconnectWith(SignalingDisconnectCode.protocolError.code);
 
       expect(disc.knownCode, SignalingDisconnectCode.protocolError);
       expect(disc.recommendedReconnectDelay, isNull);
     });
 
     test('normalClosure (1000) → recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
-      final disc = await _disconnectWith(SignalingDisconnectCode.normalClosure.code);
+      final disc = await disconnectWith(SignalingDisconnectCode.normalClosure.code);
 
       expect(disc.knownCode, SignalingDisconnectCode.normalClosure);
       expect(disc.recommendedReconnectDelay, kSignalingClientReconnectDelay);
@@ -551,7 +551,7 @@ void main() {
 
     test('unknown code → unmappedCode, recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
       const unknownCode = 9999;
-      final disc = await _disconnectWith(unknownCode);
+      final disc = await disconnectWith(unknownCode);
 
       expect(disc.knownCode, SignalingDisconnectCode.unmappedCode);
       expect(disc.recommendedReconnectDelay, kSignalingClientReconnectDelay);
