@@ -450,6 +450,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
                       );
 
+                      final signalingModule = SignalingModule(
+                        coreUrl: appBloc.state.session.coreUrl!,
+                        tenantId: appBloc.state.session.tenantId,
+                        token: appBloc.state.session.token!,
+                        trustedCertificates: appCertificates.trustedCertificates,
+                        signalingClientFactory: defaultSignalingClientFactory,
+                      );
+
                       return CallBloc(
                         coreUrl: appBloc.state.session.coreUrl!,
                         tenantId: appBloc.state.session.tenantId,
@@ -484,6 +492,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           DiagnosticType.androidCallkeepOnly,
                           extras: {'callId': id, 'error': error.name},
                         ),
+                        signalingModule: signalingModule,
                         peerConnectionManager: peerConnectionManager,
                         onSessionInvalidated: () =>
                             appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
