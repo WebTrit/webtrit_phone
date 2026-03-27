@@ -35,10 +35,14 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
+  Timer? _connectivityTimeout;
   bool _networkNone = false;
 
   /// callId → line index (populated from StateHandshake)
   final Map<String, int> _lines = {};
+
+  /// callId → IncomingCallEvent (populated from StateHandshake and protocol events)
+  final Map<String, IncomingCallEvent> _incomingCallEvents = {};
 
   /// Requests queued while module is not yet connected.
   final List<_PendingRequest> _pendingRequests = [];
@@ -71,11 +75,15 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
         case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
           _onSignalingError(error);
           if (enableReconnect && !_networkNone) {
-            Future.delayed(recommendedReconnectDelay, _signalingModule.connect);
+            Future.delayed(recommendedReconnectDelay, () {
+              if (_signalingModule.signalingClient == null) _signalingModule.connect();
+            });
           }
         case SignalingDisconnected(:final recommendedReconnectDelay):
           if (enableReconnect && recommendedReconnectDelay != null && !_networkNone) {
-            Future.delayed(recommendedReconnectDelay, _signalingModule.connect);
+            Future.delayed(recommendedReconnectDelay, () {
+              if (_signalingModule.signalingClient == null) _signalingModule.connect();
+            });
           }
         default:
           break;
@@ -86,23 +94,29 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   }
 
   Future<void> close() async {
+    _connectivityTimeout?.cancel();
+    for (final pending in _pendingRequests) {
+      pending.timeoutTimer.cancel();
+      if (!pending.completer.isCompleted) {
+        pending.completer.completeError(StateError('IsolateManager closed'));
+      }
+    }
+    _pendingRequests.clear();
     await _signalingSubscription.cancel();
     await _connectivitySubscription?.cancel();
     await _signalingModule.dispose();
-    _pendingRequests.clear();
   }
 
   void _monitorConnectivity({required bool enableReconnect}) {
     logger.info('Monitoring connectivity...');
 
-    Timer? connectivityTimeout;
     int connectivityNoneCounter = 0;
     const int maxConnectivityNoneRepeats = 3;
 
     _connectivitySubscription = Connectivity().onConnectivityChanged.listen((results) async {
       logger.info('Connectivity changed: $results');
 
-      connectivityTimeout?.cancel();
+      _connectivityTimeout?.cancel();
 
       if (results.any((r) => r == ConnectivityResult.none)) {
         _networkNone = true;
@@ -116,7 +130,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
           return;
         }
 
-        connectivityTimeout = Timer(const Duration(seconds: 5), () {
+        _connectivityTimeout = Timer(const Duration(seconds: 5), () {
           if (results.any((r) => r == ConnectivityResult.none)) {
             logger.severe('Internet connection not restored within timeout');
             _onSignalingError('No internet connection');
@@ -137,6 +151,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     final lines = handshake.lines.whereType<Line>().toList();
 
     _lines.clear();
+    _incomingCallEvents.clear();
     for (var i = 0; i < lines.length; i++) {
       _lines[lines[i].callId] = i;
     }
@@ -150,6 +165,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
       final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
       if (callEvent is IncomingCallEvent) {
+        _incomingCallEvents[callEvent.callId] = callEvent;
         _onIncomingCall(callEvent);
         _executePendingRequests();
         return;
@@ -164,6 +180,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     logger.info('Received event: $event');
     switch (event) {
       case IncomingCallEvent():
+        _incomingCallEvents[event.callId] = event;
         _onIncomingCall(event);
       case HangupEvent():
         final incomingEventLog = _findIncomingEventLog(event.callId);
@@ -183,13 +200,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  IncomingCallEvent? _findIncomingEventLog(String callId) {
-    // Lines map only has line index — we need to find the full Line object.
-    // Re-derive from the module's last handshake is not available here, so
-    // callers provide context via the event itself when possible.
-    // This is a best-effort lookup; callers handle null gracefully.
-    return null;
-  }
+  IncomingCallEvent? _findIncomingEventLog(String callId) => _incomingCallEvents[callId];
 
   void _executePendingRequests() {
     logger.info('Executing ${_pendingRequests.length} pending requests...');
@@ -425,7 +436,7 @@ class SignalingForegroundIsolateManager extends IsolateManager {
     if (isAppInBackground && !mainSignalingStatus) {
       _signalingModule.connect();
     } else {
-      await _signalingModule.dispose();
+      await _signalingModule.disconnect();
     }
   }
 

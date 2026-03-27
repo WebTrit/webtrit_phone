@@ -195,17 +195,21 @@ void main() {
     test('does nothing when called after dispose()', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
+
+      // Subscribe before dispose so stream is drained after close.
+      final events = <SignalingModuleEvent>[];
+      final sub = module.events.listen(events.add);
+
       await module.dispose();
 
-      final events = <SignalingModuleEvent>[];
-      // Stream is closed; listen just to verify no events arrive.
-      // ignore: unawaited_futures
-      module.events.toList().then((_) {});
-
-      module.connect(); // must not throw or emit
+      module.connect(); // must not throw or emit after dispose
       await Future<void>.delayed(Duration.zero);
 
-      expect(events, isEmpty);
+      await sub.cancel();
+      // Only Disconnecting + Disconnected from dispose() may appear; no
+      // Connecting or Connected from the post-dispose connect() call.
+      expect(events.whereType<SignalingConnecting>(), isEmpty);
+      expect(events.whereType<SignalingConnected>(), isEmpty);
     });
 
     test('reconnects (disconnects existing client) when already connected', () async {

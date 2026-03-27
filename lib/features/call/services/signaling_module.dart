@@ -116,11 +116,12 @@ class SignalingModule {
   /// [SignalingConnectionFailed].
   void connect() {
     if (_disposed) return;
-    _connectAsync();
+    unawaited(_connectAsync());
   }
 
   /// Disconnects the current client gracefully. Emits [SignalingDisconnecting]
-  /// followed by [SignalingDisconnected] via [events].
+  /// immediately. [SignalingDisconnected] follows asynchronously once the
+  /// underlying WebSocket confirms closure via the [_onDisconnect] callback.
   Future<void> disconnect() async {
     final client = _client;
     if (client == null) return;
@@ -174,7 +175,11 @@ class SignalingModule {
       );
 
       if (_disposed) {
-        await client.disconnect(SignalingDisconnectCode.goingAway.code);
+        try {
+          await client.disconnect(SignalingDisconnectCode.goingAway.code);
+        } catch (e, s) {
+          _logger.warning('_connectAsync dispose-disconnect error', e, s);
+        }
         return;
       }
 
