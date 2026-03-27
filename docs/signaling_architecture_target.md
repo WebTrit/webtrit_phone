@@ -1,47 +1,47 @@
 # Target Signaling Architecture
 
-## Контекст і мотивація
+## Context and Motivation
 
-Поточна кодова база має два паралельні класи, що виконують одну роль — управління
-`WebtritSignalingClient`:
+The codebase had two parallel classes performing the same role — managing `WebtritSignalingClient`:
 
-| Клас | Де використовується | Проблема |
-|------|---------------------|---------|
-| `SignalingModule` | `CallBloc` (головний ізолят) | Жорстко зав'язаний на `CallState` і `emit` |
-| `SignalingManager` | `IsolateManager` (фонові ізоляти) | Дублює логіку reconnect, disconnect, event routing |
+| Class | Where used | Problem |
+|---|---|---|
+| `SignalingModule` | `CallBloc` (main isolate) | Tightly coupled to `CallState` and `emit` |
+| `SignalingManager` | `IsolateManager` (background isolates) | Duplicated reconnect, disconnect, and event-routing logic |
 
-**Кінцева мета:** один `SignalingModule` — **незалежний event source**, без будь-яких
-знань про `CallState`, BLoC, `Notification`, `RegistrationStatus` чи інші
-концепти застосунку. Може жити в головному ізоляті, фоновому ізоляті, або в
-інтеграційному тесті без жодного зв'язку з UI чи WebRTC.
+**End goal:** a single `SignalingModule` — an **independent event source** with no knowledge
+of `CallState`, BLoC, `Notification`, `RegistrationStatus`, or any other app-level concept.
+Can live in the main isolate, a background isolate, or an integration test with no UI or
+WebRTC dependency.
 
 ---
 
-## Принципи нового дизайну
+## Design Principles
 
 ### SignalingModule — pure event source
 
-Модуль знає лише про одне: **WebSocket-з'єднання з сигналінг-сервером**.
+The module knows only one thing: the **WebSocket connection to the signaling server**.
 
-**Відповідає за:**
+**Responsible for:**
 
-- Lifecycle `WebtritSignalingClient` (connect / disconnect)
-- Інтерпретацію disconnect-кодів — це **протокольне знання** (код 4441 → fast
-  reconnect, `protocolError` → не reconnect)
-- Публікацію typed-подій у stream
+- `WebtritSignalingClient` lifecycle (connect / disconnect)
+- Interpreting disconnect codes — this is **protocol knowledge** (code 4441 → fast reconnect,
+  `protocolError` → no reconnect)
+- Publishing typed events to a stream
 
-**Не знає нічого про:**
+**Does not know anything about:**
 
 - `CallState`, `ActiveCall`, BLoC, `emit`
 - `Notification` (app-specific)
 - `RegistrationStatus`, `dispatchCompleteCall` (BLoC concerns)
-- Чи додаток активний, чи є мережа — це **environmental знання**, не протокольне
+- Whether the app is active or a network connection is available — this is **environmental
+  knowledge**, not protocol knowledge
 
 ---
 
-## API модуля
+## Module API
 
-### Stream подій
+### Event stream
 
 ```dart
 sealed class SignalingModuleEvent {}
@@ -50,18 +50,20 @@ class SignalingConnecting       extends SignalingModuleEvent {}
 class SignalingConnected        extends SignalingModuleEvent {}
 class SignalingConnectionFailed extends SignalingModuleEvent {
   final Object error;
+  final bool isRepeated;
+  final Duration recommendedReconnectDelay;
 }
 class SignalingDisconnecting    extends SignalingModuleEvent {}
 
-/// Сервер або клієнт закрив з'єднання.
+/// Connection closed by server or client.
 ///
-/// [recommendedReconnectDelay] — протокольна рекомендація модуля:
-///   - Duration(0)         → reconnect негайно (напр. код 4441)
-///   - Duration(seconds:6) → slow reconnect
-///   - null               → не reconnect (напр. protocolError)
+/// [recommendedReconnectDelay] — protocol recommendation from the module:
+///   - Duration.zero        → reconnect immediately (e.g. code 4441)
+///   - Duration(seconds: 3) → slow reconnect
+///   - null                 → do not reconnect (e.g. protocolError)
 ///
-/// Consumer сам вирішує чи виконувати рекомендацію (враховуючи
-/// стан мережі, app lifecycle тощо).
+/// The consumer decides whether to act on the recommendation based on
+/// network state, app lifecycle, etc.
 class SignalingDisconnected extends SignalingModuleEvent {
   final int? code;
   final String? reason;
@@ -78,7 +80,7 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 }
 ```
 
-### Публічний інтерфейс
+### Public interface
 
 ```dart
 class SignalingModule {
@@ -90,34 +92,37 @@ class SignalingModule {
     required SignalingClientFactory signalingClientFactory,
   });
 
-  /// Stream усіх подій модуля. Broadcast stream — підписуватись можуть кілька listeners.
+  /// Broadcast stream of all module events. Multiple listeners are supported.
   Stream<SignalingModuleEvent> get events;
 
-  /// Прямий доступ до клієнта для надсилання requests (HangupRequest, AcceptRequest тощо).
+  /// Direct access to the client for sending requests
+  /// (HangupRequest, AcceptRequest, etc.).
   WebtritSignalingClient? get signalingClient;
 
-  Future<void> connect();
+  /// Fire-and-forget. Result arrives via [events].
+  void connect();
+
   Future<void> disconnect();
   Future<void> dispose();
 }
 ```
 
-**Немає делегата. Немає callbacks. Немає залежностей від застосунку.**
+**No delegate. No callbacks. No app dependencies.**
 
 ---
 
-## Reconnect: розподіл відповідальності
+## Reconnect: responsibility split
 
 ```
-Модуль знає:             Consumer знає:
-─────────────            ──────────────
-Який код прийшов    →    Чи app активний
-Що він означає      →    Чи є мережа
-Скільки чекати      →    Чи взагалі треба reconnect зараз
+Module knows:               Consumer knows:
+─────────────               ──────────────
+Which code arrived    →     Whether the app is active
+What it means         →     Whether a network is available
+How long to wait      →     Whether to reconnect at all right now
 (recommendedDelay)
 ```
 
-Consumer-логіка reconnect (приклад для CallBloc):
+Consumer reconnect logic (example for CallBloc):
 
 ```dart
 _signalingModule.events.listen((event) {
@@ -130,7 +135,7 @@ _signalingModule.events.listen((event) {
 });
 ```
 
-Consumer-логіка reconnect (приклад для IsolateManager):
+Consumer reconnect logic (example for IsolateManager):
 
 ```dart
 _signalingModule.events.listen((event) {
@@ -145,28 +150,30 @@ _signalingModule.events.listen((event) {
 
 ---
 
-## CallBloc — споживач stream
+## CallBloc — stream consumer
 
-`CallBloc` **не реалізує жодного делегата**. Він підписується на `events` і
-маппить їх у свій стейт та внутрішні події:
+`CallBloc` **does not implement any delegate**. It subscribes to `events` and maps them to
+its internal events and state:
 
 ```dart
 late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
 
-// У конструкторі:
+// In the constructor:
 _signalingSubscription = _signalingModule.events.listen((event) {
   switch (event) {
     case SignalingConnecting():
       add(const _SignalingStatusEvent.connecting());
     case SignalingConnected():
       add(const _SignalingStatusEvent.connected());
-    case SignalingConnectionFailed(:final error):
+    case SignalingConnectionFailed(:final error, :final isRepeated, :final recommendedReconnectDelay):
+      if (!isRepeated) submitNotification(const SignalingConnectFailedNotification());
       add(_SignalingStatusEvent.failed(error));
+      _scheduleReconnect(recommendedReconnectDelay);
     case SignalingDisconnected(:final code, :final recommendedReconnectDelay):
       add(_SignalingStatusEvent.disconnected(code));
       _scheduleReconnectIfNeeded(recommendedReconnectDelay);
     case SignalingHandshakeReceived(:final handshake):
-      add(_HandshakeSignalingEventState(...));
+      add(_HandshakeSignalingEventState(handshake));
     case SignalingProtocolEvent(:final event):
       _onSignalingEventMapper(event);
     default:
@@ -177,9 +184,9 @@ _signalingSubscription = _signalingModule.events.listen((event) {
 
 ---
 
-## IsolateManager — споживач stream
+## IsolateManager — stream consumer
 
-`IsolateManager` підписується тільки на те, що йому потрібно:
+`IsolateManager` subscribes only to what it needs:
 
 ```dart
 _signalingModule.events.listen((event) {
@@ -198,17 +205,17 @@ _signalingModule.events.listen((event) {
 });
 ```
 
-`IsolateManager` сам управляє:
+`IsolateManager` manages internally:
 
-- `_lines` — з `SignalingHandshakeReceived` (для `declineCall` / `hangupCall`)
-- `_pendingRequests` — черга запитів до встановлення з'єднання
-- Connectivity monitoring — через `connectivity_plus`
+- `_lines` — populated from `SignalingHandshakeReceived` (for `declineCall` / `hangupCall`)
+- `_pendingRequests` — request queue until the connection is established
+- Connectivity monitoring — via `connectivity_plus`
 
 ---
 
-## Інтеграційні тести
+## Integration tests
 
-`SignalingModule` тестується повністю ізольовано від BLoC і WebRTC:
+`SignalingModule` is tested in full isolation from BLoC and WebRTC:
 
 ```dart
 test('connect → handshake → disconnect lifecycle', () async {
@@ -223,9 +230,9 @@ test('connect → handshake → disconnect lifecycle', () async {
   final events = <SignalingModuleEvent>[];
   final sub = module.events.listen(events.add);
 
-  await module.connect();
+  module.connect();
 
-  // Дочекатись handshake
+  // Wait for handshake.
   await module.events
       .whereType<SignalingHandshakeReceived>()
       .first
@@ -245,30 +252,30 @@ test('connect → handshake → disconnect lifecycle', () async {
 });
 ```
 
-**Немає `CallState`. Немає `CallBloc`. Немає mock-ів BLoC-рівня.**
+**No `CallState`. No `CallBloc`. No BLoC-level mocks.**
 
 ---
 
-## Діаграма залежностей
+## Dependency diagram
 
 ```
-До:
-  CallBloc ──uses──► SignalingModule  (знає про CallState, emit)
-  IsolateManager ──► SignalingManager (окремий клас, дублює логіку)
+Before:
+  CallBloc ──uses──► SignalingModule  (knew about CallState, emit)
+  IsolateManager ──► SignalingManager (separate class, duplicated logic)
 
-Після:
+After:
   CallBloc ──subscribes──► SignalingModule.events  (pure stream)
-  IsolateManager ──────────► SignalingModule.events  (той самий клас)
-  SignalingManager ──► [видалений]
-  SignalingModuleDelegate ──► [видалений]
+  IsolateManager ──────────► SignalingModule.events  (same class)
+  SignalingManager ──► [deleted]
+  SignalingModuleDelegate ──► [deleted]
 ```
 
 ---
 
-## Що видалити
+## What was deleted
 
-| Що | Де |
-|----|-----|
+| What | Where |
+|---|---|
 | `SignalingModuleDelegate` | `signaling_module.dart` |
 | `performConnect(emit, isCancelled)` | `signaling_module.dart` |
 | `performDisconnect(emit, isCancelled)` | `signaling_module.dart` |
@@ -278,97 +285,10 @@ test('connect → handshake → disconnect lifecycle', () async {
 
 ---
 
-## Кроки реалізації
+## Decisions
 
-1. **`signaling_module.dart`** — sealed `SignalingModuleEvent`, `StreamController.broadcast()`,
-   публічний API `connect()` / `disconnect()` / `dispose()` / `events` / `signalingClient`
-2. **`call_bloc.dart`** — підписка на `_signalingModule.events`, видалити `SignalingModuleDelegate`,
-   `_scheduleReconnectIfNeeded` з перевіркою `state.isAppActive && state.hasConnectivity`
-3. **`isolate_manager.dart`** — підписка на `_signalingModule.events`,
-   port `_lines`, `_pendingRequests`, connectivity monitoring
-4. Видалити `lib/common/signaling_manager.dart`
-5. Оновити `lib/common/common.dart`
-6. **Інтеграційні тести** — чисті тести без BLoC, перевірка послідовності подій у stream
-
----
-
-## Прийняті рішення
-
-| Питання | Рішення |
-|---------|---------|
-| `connect()` — Future чи fire-and-forget? | **Fire-and-forget.** Одразу повертається, `SignalingConnected` приходить через stream. Два канали для одного факту — зайве. |
-| Дедуплікація помилок connect | **`_lastConnectError` залишається в модулі.** Це протокольна деталь — не спамити однаковою помилкою. Модуль додає `isRepeated: bool` до `SignalingConnectionFailed`, consumer вирішує що з цим робити. |
-| `recommendedReconnectDelay` у `SignalingConnectionFailed` | **Так, додати** — консистентно з `SignalingDisconnected`. Consumer не hardcode-ить затримку, отримує її від модуля. При connect failure значення завжди `kSignalingClientReconnectDelay`. |
-
----
-
-## Фінальний вигляд sealed подій
-
-```dart
-sealed class SignalingModuleEvent {}
-
-class SignalingConnecting extends SignalingModuleEvent {}
-
-class SignalingConnected extends SignalingModuleEvent {}
-
-/// Connect не вдався (SocketException, TlsException тощо).
-///
-/// [isRepeated] — true якщо це та сама помилка що і попередній раз
-/// (модуль відстежує через internal [_lastConnectError]).
-/// Consumer може не показувати нотифікацію якщо [isRepeated] == true.
-///
-/// [recommendedReconnectDelay] — завжди [kSignalingClientReconnectDelay].
-class SignalingConnectionFailed extends SignalingModuleEvent {
-  final Object error;
-  final bool isRepeated;
-  final Duration recommendedReconnectDelay;
-}
-
-class SignalingDisconnecting extends SignalingModuleEvent {}
-
-/// З'єднання закрито (сервером або клієнтом).
-///
-/// [recommendedReconnectDelay]:
-///   - Duration(0)          → reconnect негайно (напр. код 4441)
-///   - Duration(seconds: 6) → slow reconnect
-///   - null                 → не reconnect (напр. protocolError)
-class SignalingDisconnected extends SignalingModuleEvent {
-  final int? code;
-  final String? reason;
-  final SignalingDisconnectCode knownCode;
-  final Duration? recommendedReconnectDelay;
-}
-
-class SignalingHandshakeReceived extends SignalingModuleEvent {
-  final StateHandshake handshake;
-}
-
-class SignalingProtocolEvent extends SignalingModuleEvent {
-  final Event event;
-}
-```
-
-### Публічний інтерфейс (фінальний)
-
-```dart
-class SignalingModule {
-  SignalingModule({
-    required String coreUrl,
-    required String tenantId,
-    required String token,
-    required TrustedCertificates trustedCertificates,
-    required SignalingClientFactory signalingClientFactory,
-  });
-
-  /// Broadcast stream усіх подій модуля.
-  Stream<SignalingModuleEvent> get events;
-
-  /// Прямий доступ до клієнта для надсилання requests.
-  WebtritSignalingClient? get signalingClient;
-
-  /// Fire-and-forget. Результат приходить через [events].
-  void connect();
-
-  Future<void> disconnect();
-  Future<void> dispose();
-}
+| Question | Decision |
+|---|---|
+| `connect()` — Future or fire-and-forget? | **Fire-and-forget.** Returns immediately; `SignalingConnected` arrives via stream. Two channels for the same fact would be redundant. |
+| Error deduplication | **`_lastConnectError` stays in the module.** This is protocol detail — avoid spamming the same error. The module adds `isRepeated: bool` to `SignalingConnectionFailed`; consumer decides what to do with it. |
+| `recommendedReconnectDelay` in `SignalingConnectionFailed` | **Yes, added** — consistent with `SignalingDisconnected`. Consumer does not hardcode the delay; it receives it from the module. On connect failure the value is always `kSignalingClientReconnectDelay`. |
