@@ -42,9 +42,11 @@ class _RTCStreamViewState extends State<RTCStreamView> {
   @override
   didUpdateWidget(RTCStreamView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.stream != widget.stream) {
-      renderer.srcObject = widget.stream;
-    }
+    // Always refresh srcObject to handle the case where the stream reference
+    // is the same object but its video tracks were replaced by renegotiation.
+    // The native videoRendererSetSrcObject re-scans the stream's current tracks
+    // and re-subscribes the renderer, ensuring the new track receives frames.
+    renderer.srcObject = widget.stream;
   }
 
   @override
