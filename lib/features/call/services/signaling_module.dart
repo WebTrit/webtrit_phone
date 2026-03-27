@@ -97,14 +97,42 @@ class SignalingModule {
 
   final _controller = StreamController<SignalingModuleEvent>.broadcast();
 
+  /// Events buffered since the last [connect] call. Cleared on every [connect]
+  /// so that late subscribers receive only the current session's events.
+  final List<SignalingModuleEvent> _sessionBuffer = [];
+
   WebtritSignalingClient? _client;
   bool _disposed = false;
 
   /// Last connect error as string for deduplication.
   String? _lastConnectErrorString;
 
-  /// Broadcast stream of all module events. Supports multiple listeners.
-  Stream<SignalingModuleEvent> get events => _controller.stream;
+  /// Broadcast stream of all module events.
+  ///
+  /// Each new subscriber immediately receives all events buffered since the
+  /// last [connect] call, followed by live events. This allows [SignalingModule]
+  /// to be connected before [CallBloc] (or any other consumer) is created —
+  /// the consumer will not miss [SignalingConnected], [SignalingHandshakeReceived],
+  /// or any protocol events that arrived in the interim.
+  Stream<SignalingModuleEvent> get events {
+    // sync: true so that events emitted via _controller.add() are forwarded
+    // to the subscriber in the same stack frame, preserving ordering and
+    // removing the extra async hop that would otherwise cause events to
+    // arrive after an await returns.
+    final liveController = StreamController<SignalingModuleEvent>(sync: true);
+    // Subscribe to the live broadcast stream first so no future events are missed.
+    final liveSub = _controller.stream.listen(
+      liveController.add,
+      onError: liveController.addError,
+      onDone: liveController.close,
+    );
+    liveController.onCancel = liveSub.cancel;
+    // Replay the current session's past events synchronously.
+    for (final event in List<SignalingModuleEvent>.of(_sessionBuffer)) {
+      liveController.add(event);
+    }
+    return liveController.stream;
+  }
 
   /// Direct access to the connected client for sending requests
   /// (e.g. [HangupRequest], [AcceptRequest], [OutgoingCallRequest]).
@@ -114,8 +142,12 @@ class SignalingModule {
   /// Initiates a connection. Fire-and-forget — returns immediately.
   /// The result arrives via [events] as [SignalingConnected] or
   /// [SignalingConnectionFailed].
+  ///
+  /// Clears the session buffer so that late subscribers receive only events
+  /// from the current session, not stale events from a previous one.
   void connect() {
     if (_disposed) return;
+    _sessionBuffer.clear();
     unawaited(_connectAsync());
   }
 
@@ -139,6 +171,7 @@ class SignalingModule {
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;
+    _sessionBuffer.clear();
     await disconnect();
     await _controller.close();
   }
@@ -272,6 +305,7 @@ class SignalingModule {
 
   void _emit(SignalingModuleEvent event) {
     if (_controller.isClosed) return;
+    _sessionBuffer.add(event);
     _controller.add(event);
   }
 }

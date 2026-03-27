@@ -359,12 +359,13 @@ void main() {
       final module = _buildModule(_successFactory(client));
       addTearDown(module.dispose);
 
-      module.connect();
-      await Future<void>.delayed(Duration.zero);
-
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
+      module.connect();
+      await Future<void>.delayed(Duration.zero);
+
+      events.clear(); // discard Connecting + Connected; focus on disconnect
       await module.disconnect();
 
       expect(events, hasLength(1));
@@ -774,6 +775,75 @@ void main() {
       expect(listenerA.whereType<SignalingHandshakeReceived>(), hasLength(1));
       expect(listenerB.whereType<SignalingConnected>(), hasLength(1));
       expect(listenerB.whereType<SignalingHandshakeReceived>(), hasLength(1));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — integration: late subscriber replay', () {
+    test('late subscriber receives all buffered events from the current session', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      // Connect and receive handshake BEFORE any subscriber exists.
+      module.connect();
+      await Future<void>.delayed(Duration.zero);
+      client.injectHandshake(_kHandshake);
+      await Future<void>.delayed(Duration.zero);
+
+      // Late subscriber — attaches after connect + handshake have already happened.
+      final late = <SignalingModuleEvent>[];
+      module.events.listen(late.add);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(late.whereType<SignalingConnecting>(), hasLength(1));
+      expect(late.whereType<SignalingConnected>(), hasLength(1));
+      expect(late.whereType<SignalingHandshakeReceived>(), hasLength(1));
+    });
+
+    test('connect() clears the buffer so late subscribers see only the new session', () async {
+      final client1 = _FakeSignalingClient();
+      var callCount = 0;
+      final client2 = _FakeSignalingClient();
+
+      final module = _buildModule(({
+        required Uri url,
+        required String tenantId,
+        required String token,
+        required Duration connectionTimeout,
+        required TrustedCertificates certs,
+        required bool force,
+      }) async {
+        callCount++;
+        return callCount == 1 ? client1 : client2;
+      });
+      addTearDown(module.dispose);
+
+      // First session — connect, handshake, then disconnect.
+      module.connect();
+      await Future<void>.delayed(Duration.zero);
+      client1.injectHandshake(_kHandshake);
+      await Future<void>.delayed(Duration.zero);
+      client1.injectDisconnect(1000, 'done');
+      await Future<void>.delayed(Duration.zero);
+
+      // Second session — reconnect clears the buffer.
+      module.connect();
+      await Future<void>.delayed(Duration.zero);
+
+      // Late subscriber joins after the second connect() but before handshake.
+      final late = <SignalingModuleEvent>[];
+      module.events.listen(late.add);
+      await Future<void>.delayed(Duration.zero);
+
+      // Should see only the second session's SignalingConnecting, not the first session's events.
+      expect(
+        late.whereType<SignalingHandshakeReceived>(),
+        isEmpty,
+        reason: 'Handshake from the first session must not be replayed',
+      );
+      expect(late.whereType<SignalingConnecting>(), hasLength(1));
     });
   });
 }
