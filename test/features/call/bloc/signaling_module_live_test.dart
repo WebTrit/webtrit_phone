@@ -42,7 +42,7 @@ Future<({String token, String tenantId})> _fetchSessionToken() async {
   final uri = Uri.parse('https://${_env(_coreUrlKey)}/api/v1/session');
   final client = HttpClient()
     ..connectionTimeout = const Duration(seconds: 15)
-    ..badCertificateCallback = (_, __, ___) => true;
+    ..badCertificateCallback = (_, _, _) => true;
 
   try {
     final request = await client.postUrl(uri);
