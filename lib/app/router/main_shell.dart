@@ -459,10 +459,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       );
 
                       return CallBloc(
-                        coreUrl: appBloc.state.session.coreUrl!,
-                        tenantId: appBloc.state.session.tenantId,
-                        token: appBloc.state.session.token!,
-                        trustedCertificates: appCertificates.trustedCertificates,
                         callLogsRepository: context.read<CallLogsRepository>(),
                         callPullRepository: context.read<CallPullRepository>(),
                         linesStateRepository: context.read<LinesStateRepository>(),

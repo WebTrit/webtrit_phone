@@ -11,7 +11,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:async/async.dart';
 
@@ -55,11 +54,6 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 typedef SignalingSessionInvalidatedCallback = void Function();
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
-  final String coreUrl;
-  final String tenantId;
-  final String token;
-  final TrustedCertificates trustedCertificates;
-
   final CallLogsRepository callLogsRepository;
   final CallPullRepository callPullRepository;
   final UserRepository userRepository;
@@ -101,10 +95,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final _callkeepSound = WebtritCallkeepSound();
 
   CallBloc({
-    required this.coreUrl,
-    required this.tenantId,
-    required this.token,
-    required this.trustedCertificates,
     required this.callLogsRepository,
     required this.callPullRepository,
     required this.linesStateRepository,
