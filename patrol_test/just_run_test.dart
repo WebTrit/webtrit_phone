@@ -1,10 +1,11 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
+import 'package:webtrit_phone/bootstrap.dart';
+
+import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 void main() {
   patrolTest('Should compile and run successfully', ($) async {
-    await $.pumpWidgetAndSettle(const SizedBox.shrink());
-    expect($(SizedBox), findsOneWidget);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
   });
 }

@@ -41,11 +41,7 @@ void main() {
 
       Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
 
-      final appDocDir = await getApplicationDocumentsPath();
-      final String baseLogDirectoryPath = '$appDocDir/logs';
-      final String baseLogFilePath = '$baseLogDirectoryPath/app_logs.log';
-
-      runApp(RootApp(instanceRegistry: instanceRegistry, baseLogFilePath: baseLogFilePath));
+      runApp(RootApp(instanceRegistry: instanceRegistry));
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
@@ -57,10 +53,9 @@ void main() {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry, required this.baseLogFilePath});
+  const RootApp({super.key, required this.instanceRegistry});
 
   final InstanceRegistry instanceRegistry;
-  final String baseLogFilePath;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +149,7 @@ class RootApp extends StatelessWidget {
                 dispose: disposeIfDisposable,
               ),
               RepositoryProvider<UserLocalDatasource>(create: (_) => instanceRegistry.get()),
-              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get(), dispose: disposeIfDisposable),
+              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get()),
             ],
             child: const App(),
           );

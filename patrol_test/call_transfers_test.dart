@@ -59,7 +59,7 @@ void main() {
     expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call2 should be active');
 
     // Make second call and wait for it to be active.
-    await $.native.pressBack();
+    await $.platformAutomator.mobile.swipeBack();
     await $(MainFlavor.keypad.toNavBarKey()).tap();
     await enterKeypadNumber($, callNumberB);
     await $(actionPadStartKey).tap();
