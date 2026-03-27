@@ -9,9 +9,7 @@ import 'package:clock/clock.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:async/async.dart';
 
@@ -35,17 +33,19 @@ import '../utils/utils.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
 
-part 'call_bloc.freezed.dart';
+import 'call_state.dart';
+import '../utils/signaling_module.dart';
+
+export 'call_state.dart';
+export '../utils/signaling_module.dart' show SignalingModule, SignalingModuleDelegate;
 
 part 'call_event.dart';
-
-part 'call_state.dart';
-
-part '../utils/signaling_module.dart';
 
 part '../utils/call_session.dart';
 
 part 'transfer_coordinator.dart';
+
+part 'signaling_handlers.dart';
 
 const int _kUndefinedLine = -1;
 
@@ -142,7 +142,7 @@ class CallBloc extends Bloc<CallEvent, CallState>
     WebtritCallkeepSound? callkeepSound,
   }) : super(const CallState()) {
     _callkeepSound = callkeepSound ?? WebtritCallkeepSound();
-    _signalingModule = signalingModule.._delegate = this;
+    _signalingModule = signalingModule..attachDelegate(this);
     _transfer = TransferCoordinatorImpl(
       signalingModule: signalingModule,
       callkeep: callkeep,

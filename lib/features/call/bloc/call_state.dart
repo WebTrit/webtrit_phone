@@ -1,4 +1,17 @@
-part of 'call_bloc.dart';
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+
+import 'package:collection/collection.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
+import 'package:webtrit_phone/models/models.dart';
+
+import '../models/models.dart';
+
+part 'call_state.freezed.dart';
 
 @freezed
 class CallState with _$CallState {
