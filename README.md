@@ -55,7 +55,7 @@ The application offers extensive customization options:
   ```
 * To specify a test file, use the `-t` option:
   ```bash
-  patrol build -t integration_test/call_and_recent_test.dart ...
+  patrol build -t patrol_test/call_and_recent_test.dart ...
   ```
 * For build and deploy to Firebase Test Lab, use the following command from the `tool/scripts` directory:
   ```bash
