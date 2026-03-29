@@ -10,6 +10,9 @@ class ProceedingEvent extends CallEvent {
 
   static const typeValue = 'proceeding';
 
+  @override
+  Map<String, dynamic> toJson() => {...callBaseJson(typeValue), 'code': code};
+
   factory ProceedingEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

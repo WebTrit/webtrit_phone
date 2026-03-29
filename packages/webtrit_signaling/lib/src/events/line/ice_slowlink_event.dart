@@ -21,6 +21,15 @@ class IceSlowLinkEvent extends LineEvent {
 
   static const typeValue = 'ice_slowlink';
 
+  @override
+  Map<String, dynamic> toJson() => {
+    ...lineBaseJson(typeValue),
+    'mid': mid,
+    'media': media.name,
+    'uplink': uplink,
+    'lost': lost,
+  };
+
   factory IceSlowLinkEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

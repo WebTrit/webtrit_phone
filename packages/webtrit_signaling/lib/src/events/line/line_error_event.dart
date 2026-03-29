@@ -11,6 +11,9 @@ class LineErrorEvent extends LineEvent implements ErrorEvent {
   @override
   List<Object?> get props => [...super.props, code, reason];
 
+  @override
+  Map<String, dynamic> toJson() => {...lineBaseJson(ErrorEvent.typeValue), 'code': code, 'reason': reason};
+
   static LineErrorEvent? tryFromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != ErrorEvent.typeValue) {

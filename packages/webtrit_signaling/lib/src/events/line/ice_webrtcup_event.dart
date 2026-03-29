@@ -5,6 +5,9 @@ class IceWebrtcUpEvent extends LineEvent {
 
   static const typeValue = 'ice_webrtcup';
 
+  @override
+  Map<String, dynamic> toJson() => lineBaseJson(typeValue);
+
   factory IceWebrtcUpEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
