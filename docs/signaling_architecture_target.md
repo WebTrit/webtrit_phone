@@ -1,328 +1,148 @@
 # Signaling Architecture
 
-## Layer Overview
+WebTrit Phone uses a standalone `webtrit_signaling_service` plugin to maintain a WebSocket
+connection to WebTrit Core. The plugin abstracts all platform differences (iOS vs Android
+background constraints) behind a single Dart API that `CallBloc` consumes identically on
+both platforms.
 
-The signaling stack has three layers. Each layer knows only the one below it — never above.
+**Plugin internals (layers, hub, modes, event model):**
+→ [`packages/webtrit_signaling_service/ARCHITECTURE.md`](../packages/webtrit_signaling_service/ARCHITECTURE.md)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Consumers  CallBloc · PushNotificationIsolateManager       │
-│             SignalingForegroundIsolateManager                │
-│  What they know: app lifecycle, network, active calls        │
-│  What they do:   decide WHEN to reconnect, handle state      │
-├─────────────────────────────────────────────────────────────┤
-│  SignalingModule                                             │
-│  What it knows: WebSocket protocol, disconnect codes        │
-│  What it does:  owns client lifecycle, emits typed events,  │
-│                 recommends reconnect delay                   │
-├─────────────────────────────────────────────────────────────┤
-│  WebtritSignalingClient                                      │
-│  What it knows: raw WebSocket frames, JSON protocol         │
-│  What it does:  connects, sends requests, fires callbacks   │
-└─────────────────────────────────────────────────────────────┘
+---
+
+## Big picture
+
+```mermaid
+graph TD
+    subgraph "WebTrit Phone app"
+        BS["bootstrap.dart\n(registers background handler,\nstarts plugin before CallBloc)"]
+
+        subgraph "Main isolate"
+            CB["CallBloc\n(central coordinator)"]
+            CK["webtrit_callkeep\n(native call UI)"]
+        end
+
+        subgraph "Background isolates (Android)"
+            PUSH["PushNotificationIsolateManager\n(FCM push)"]
+            SIG["SignalingForegroundIsolateManager\n(foreground service)"]
+        end
+    end
+
+    subgraph "webtrit_signaling_service plugin"
+        SVC["WebtritSignalingService\n(platform facade)"]
+        EVENTS["Stream&lt;SignalingModuleEvent&gt;"]
+    end
+
+    WS["WebTrit Core\n(WebSocket)"]
+
+    BS -->|"setIncomingCallHandler\nstart(config)"| SVC
+    CB -->|"attach() / execute()"| SVC
+    SVC --> EVENTS --> CB
+    PUSH & SIG -->|"start(pushBound) / attach()"| SVC
+
+    SVC <-->|WebSocket| WS
+    SIG -->|"reportNewIncomingCall"| CK
 ```
 
 ---
 
-## WebtritSignalingClient — raw WebSocket adapter
+## Integration points
 
-Single-use object. Created via `connect()`, unusable after disconnect.
-
-**Public API:**
+### 1. bootstrap.dart — startup sequence
 
 ```dart
-// Create
-static Future<WebtritSignalingClient> connect(baseUrl, tenantId, token, force)
-
-// Register callbacks (single-use — throws if called twice)
-void listen({
-  required onStateHandshake,   // server sent line state snapshot
-  required onEvent,            // IncomingCallEvent, HangupEvent, etc.
-  required onError,            // socket / protocol error
-  required onDisconnect,       // socket closed
-})
-
-// Send a request and await server acknowledgement
-Future<void> execute(Request request)
-
-// Graceful close
-Future<void> disconnect([int? code, String? reason])
-```
-
-**Internals:**
-
-- Subscribes to `WebSocketChannel.stream` internally — not exposed outside
-- Routes inbound JSON to the appropriate callback
-- Keepalive timer starts after `StateHandshake`; sends `KeepaliveHandshake` on each tick
-- Transaction map: each `execute()` registers a `Completer` keyed by transaction ID; resolved when matching response arrives
-
-```
-WebSocket frame → _wscStreamOnData(rawJson)
-                    ├── "handshake":"state"      → onStateHandshake()
-                    ├── "handshake":"keepalive"  → resolves keepalive transaction
-                    ├── "event":...              → onEvent()
-                    ├── "response":...           → resolves request transaction
-                    └── unknown                 → onError()
-```
-
----
-
-## SignalingModule — protocol event source
-
-Wraps `WebtritSignalingClient` lifecycle and converts the callback API into a
-broadcast stream. Knows the WebSocket protocol — nothing about the app.
-
-**What it owns:**
-
-- `WebtritSignalingClient` lifecycle (`connect` / `disconnect` / `dispose`)
-- Disconnect code interpretation — protocol knowledge:
-  - code 4441 → `Duration.zero` (fast reconnect, server evicted a duplicate session)
-  - `protocolError` → `null` (do not reconnect)
-  - everything else → `kSignalingClientReconnectDelay`
-- Session replay buffer — late subscribers receive all events from the current session
-
-**What it does NOT know:**
-
-- App lifecycle (`AppLifecycleState`)
-- Network availability
-- Active calls or call state
-- Whether reconnect should happen at all — it only provides `recommendedReconnectDelay`
-
-**Public API:**
-
-```dart
-SignalingModule({
-  required String coreUrl,
-  required String tenantId,
-  required String token,
-  required TrustedCertificates trustedCertificates,
-  required SignalingClientFactory signalingClientFactory,
-})
-
-// Per-subscriber stream. Replays all buffered events from the current
-// session, then continues with live events.
-Stream<SignalingModuleEvent> get events;
-
-// null when not connected. Used by consumers to send requests
-// (HangupRequest, AcceptRequest, OutgoingCallRequest, etc.)
-WebtritSignalingClient? get signalingClient;
-
-// Fire-and-forget. Clears the session buffer. Result arrives via events.
-void connect();
-
-Future<void> disconnect();
-Future<void> dispose();
-```
-
-**Event stream:**
-
-```dart
-sealed class SignalingModuleEvent {}
-
-class SignalingConnecting       extends SignalingModuleEvent {}
-class SignalingConnected        extends SignalingModuleEvent {}
-
-class SignalingConnectionFailed extends SignalingModuleEvent {
-  final Object error;
-  final bool isRepeated;            // true if same error as previous attempt
-  final Duration recommendedReconnectDelay;
+// 1. Register background incoming-call handler (Android only, before start)
+if (Platform.isAndroid) {
+  await WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall);
 }
 
-class SignalingDisconnecting    extends SignalingModuleEvent {}
-
-class SignalingDisconnected extends SignalingModuleEvent {
-  final int? code;
-  final String? reason;
-  final SignalingDisconnectCode knownCode;
-  final Duration? recommendedReconnectDelay;
-  // null  → do not reconnect (protocolError)
-  // zero  → reconnect immediately (code 4441)
-  // 3s    → standard slow reconnect
-}
-
-class SignalingHandshakeReceived extends SignalingModuleEvent {
-  final StateHandshake handshake;   // full line state snapshot from server
-}
-
-class SignalingProtocolEvent extends SignalingModuleEvent {
-  final Event event;                // IncomingCallEvent, HangupEvent, etc.
-}
+// 2. Connect early — before CallBloc is built
+//    Session replay buffer delivers events to late subscribers (CallBloc)
+SignalingModule.connect();
 ```
 
-**Session replay buffer:**
+### 2. CallBloc — the only consumer in the main isolate
 
-`connect()` clears the buffer. Each `_emit()` adds to the buffer AND the broadcast
-controller. The `events` getter subscribes to the live stream first (so no future
-events are missed), then synchronously replays buffered events:
-
-```
-connect() called
-  → buffer.clear()
-  → _connectAsync() fires
-
-events fired: Connecting, Connected, HandshakeReceived
-  → stored in _sessionBuffer
-  → forwarded to _controller (live broadcast)
-
-Late subscriber calls module.events
-  → subscribes to live stream (no gap)
-  → receives replay: Connecting, Connected, HandshakeReceived
-  → then receives future live events normally
-```
-
-This allows `SignalingModule` to be created and connected in `initState()`,
-before `CallBloc` is built. `CallBloc` receives the full session history when
-it eventually subscribes.
-
----
-
-## Reconnect — responsibility split
-
-The module emits `recommendedReconnectDelay` as a protocol hint.
-The consumer owns the reconnect decision because only it knows the full context.
-
-```
-Module knows:                     Consumer knows:
-─────────────                     ──────────────
-Which disconnect code arrived  →  Whether the app is in the foreground
-What it means for the protocol →  Whether a network connection is available
-How long to wait (delay hint)  →  Whether there are active calls
-                                  Whether the BLoC is still alive
-```
-
-**CallBloc** — full guard chain:
+`CallBloc` subscribes to `service.events` in its constructor and uses `execute()` to send
+requests. It has no knowledge of isolates, hubs, foreground services, or platform channels.
 
 ```dart
-void _scheduleReconnect(Duration delay, {bool force = false}) {
-  _signalingClientReconnectTimer?.cancel();
-  _signalingClientReconnectTimer = Timer(delay, () {
-    if (isClosed)                     return; // BLoC was closed during delay
-    if (!appActive && !force)         return; // app is backgrounded
-    if (!connectionActive && !force)  return; // no network
-    if (signalingRemains && !force)   return; // already connected (wifi→mobile)
-    _signalingModule.connect();
-  });
-}
-```
-
-**IsolateManager** — simpler:
-
-```dart
-case SignalingDisconnected(:final recommendedReconnectDelay):
-  if (enableReconnect && recommendedReconnectDelay != null && !_networkNone) {
-    _signalingReconnectTimer?.cancel();
-    _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
-      if (_signalingModule.signalingClient == null) _signalingModule.connect();
-    });
-  }
-```
-
-`PushNotificationIsolateManager` uses `enableReconnect: false` — never reconnects.
-`SignalingForegroundIsolateManager` uses `enableReconnect: true`.
-
----
-
-## Consumers
-
-### CallBloc (main isolate)
-
-Subscribes in constructor. Maps `SignalingModuleEvent` to internal BLoC events:
-
-```dart
-_signalingSubscription = _signalingModule.events.listen((event) {
+_signalingSubscription = _signalingService.events.listen((event) {
   switch (event) {
-    case SignalingConnecting():
-      add(const _SignalingClientEvent.connecting());
     case SignalingConnected():
       add(const _SignalingClientEvent.connected());
-    case SignalingConnectionFailed(:final error, :final isRepeated, :final recommendedReconnectDelay):
-      if (!isRepeated) submitNotification(const SignalingConnectFailedNotification());
-      add(_SignalingClientEvent.failed(error));
-      _scheduleReconnect(recommendedReconnectDelay);
-    case SignalingDisconnecting():
-      add(const _SignalingClientEvent.disconnecting());
-    case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
-      add(_SignalingClientEvent.disconnected(code, reason));
-      if (recommendedReconnectDelay != null) _scheduleReconnect(recommendedReconnectDelay);
     case SignalingHandshakeReceived(:final handshake):
       _handleHandshakeReceived(handshake);
     case SignalingProtocolEvent(:final event):
       _handleSignalingEvent(event);
+    case SignalingConnectionFailed(:final isRepeated, :final recommendedReconnectDelay):
+      if (!isRepeated) submitNotification(const SignalingConnectFailedNotification());
+      _scheduleReconnect(recommendedReconnectDelay);
+    case SignalingDisconnected(:final recommendedReconnectDelay):
+      _scheduleReconnectIfNeeded(recommendedReconnectDelay);
+    // ...
   }
 });
 ```
 
-### IsolateManager (background isolates)
+Reconnect decision belongs to `CallBloc` — it checks app lifecycle, network state, and
+active calls before calling `service.connect()`. The plugin only provides
+`recommendedReconnectDelay` as a protocol hint (see
+[ARCHITECTURE.md — Reconnect](../packages/webtrit_signaling_service/ARCHITECTURE.md#reconnect--who-decides-what)).
 
-Subscribes in `initSignaling()`. Handles only what background isolates need:
+### 3. Push isolate (Android) — push-bound mode
 
 ```dart
-_signalingSubscription = _signalingModule.events.listen((event) {
-  switch (event) {
-    case SignalingHandshakeReceived(:final handshake):
-      _onHandshake(handshake);       // populates _lines, _incomingCallEvents
-    case SignalingProtocolEvent(:final event):
-      _onProtocolEvent(event);       // IncomingCallEvent, HangupEvent, UnregisteredEvent
-    case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
-      _onSignalingError(error);
-      // reconnect if enabled and network is available
-    case SignalingDisconnected(:final recommendedReconnectDelay):
-      // reconnect if enabled, delay != null, and network is available
-  }
-});
+// onPushNotificationSyncCallback — push isolate entry point
+await WebtritSignalingService().start(config, mode: SignalingServiceMode.pushBound);
+// service starts, WebSocket connects, IncomingCallEvent dispatched to callkeep
+```
+
+### 4. Activity opens after a push — attach
+
+```dart
+// main isolate, when Activity creates after a push-initiated call
+await WebtritSignalingService().attach();
+// connects to the already-running hub — no new WebSocket, no lost events
+// CallBloc receives session buffer replay immediately
+```
+
+### 5. Background incoming call handler
+
+When the service runs in `persistent` mode and the app is closed, incoming calls are
+dispatched from the background isolate directly to Callkeep via a registered callback:
+
+```dart
+@pragma('vm:entry-point')
+Future<void> onSignalingBackgroundIncomingCall(IncomingCallEvent event) async {
+  await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
+      .reportNewIncomingCall(
+        event.callId,
+        CallkeepHandle.number(event.caller),
+        displayName: event.callerDisplayName,
+        hasVideo: JsepValue.fromOptional(event.jsep)?.hasVideo ?? false,
+      );
+}
 ```
 
 ---
 
-## Dependency diagram
+## Platform difference (summary)
 
-```
-MainShellState.initState()
-  └── SignalingModule.connect()        ← WebSocket starts here, in parallel
-                                          with widget tree construction
-         │
-         │  Stream<SignalingModuleEvent>  (replay buffer → live events)
-         │
-         ├──► CallBloc                  (main isolate)
-         │      subscribes in constructor
-         │      commands: connect() / disconnect() / signalingClient.execute()
-         │
-         ├──► PushNotificationIsolateManager   (background, no reconnect)
-         │      subscribes in initSignaling()
-         │      commands: connect() via launchSignaling()
-         │
-         └──► SignalingForegroundIsolateManager (background, reconnect enabled)
-                subscribes in initSignaling()
-                commands: connect() via handleLifecycleStatus()
-
-
-WebtritSignalingClient  ←  owned by SignalingModule  (1 instance at a time)
-  callbacks: onStateHandshake · onEvent · onError · onDisconnect
-  commands:  execute(Request) · disconnect()
-```
+| | iOS | Android |
+|-|-----|---------|
+| Where socket runs | Main isolate | Background isolate (foreground service) |
+| Survives app close | No | Yes (`persistent` mode) |
+| Incoming call (app closed) | PushKit → CallBloc | Service dispatches to callback → Callkeep |
+| `attach()` | No-op | Connects to running hub |
+| `setIncomingCallHandler` | No-op | Resolves handle via `PluginUtilities` internally, persists to `SharedPreferences` |
 
 ---
 
-## What was deleted
+## Related docs
 
-| What | Where |
-|---|---|
-| `SignalingModuleDelegate` | `signaling_module.dart` |
-| `performConnect(emit, isCancelled)` | `signaling_module.dart` |
-| `performDisconnect(emit, isCancelled)` | `signaling_module.dart` |
-| `handleDisconnected(code, reason, emit, isCancelled)` | `signaling_module.dart` |
-| `SignalingManager` | `lib/common/signaling_manager.dart` |
-| `export 'signaling_manager.dart'` | `lib/common/common.dart` |
-| `coreUrl`, `tenantId`, `token`, `trustedCertificates` fields | `CallBloc` |
-
----
-
-## Decisions
-
-| Question | Decision |
-|---|---|
-| `connect()` — Future or fire-and-forget? | **Fire-and-forget.** Returns immediately; result arrives via stream. Two channels for the same fact would be redundant. |
-| Error deduplication | **`_lastConnectErrorString` in the module.** Protocol detail — avoids spamming the same error. `isRepeated: bool` added to `SignalingConnectionFailed`; consumer decides what to show. |
-| `recommendedReconnectDelay` in `SignalingConnectionFailed` | **Yes.** Consistent with `SignalingDisconnected`. Consumer never hardcodes delays. |
-| Replay buffer | **Manual `List` + `connect()` clear.** `rxdart` is in the project but `ReplaySubject` has no `clear()` in v0.28. A manual buffer gives full control with no external dependency. |
-| Early connect (before CallBloc) | **`initState()` in `MainShellState`.** Module connects while the widget tree is built. Late subscribers get the full session history via the replay buffer. |
+| Document | What it covers |
+|----------|---------------|
+| [`packages/webtrit_signaling_service/ARCHITECTURE.md`](../packages/webtrit_signaling_service/ARCHITECTURE.md) | Plugin internals: three-layer model, hub, service modes, event model, session buffer |
+| [`packages/webtrit_signaling_service/README.md`](../packages/webtrit_signaling_service/README.md) | Quick start, full API reference, mode lifecycle diagrams, Callkeep integration |
+| [`docs/call_architecture.md`](call_architecture.md) | `CallBloc` responsibilities, event categories, state machine, isolate managers |

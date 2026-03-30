@@ -4,7 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart' show WebtritSignalingService;
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
@@ -29,7 +29,7 @@ class NetworkScreenPage extends StatelessWidget {
             featureAccess.callConfig.triggerConfig,
             context.read<DeviceInfo>(),
             context.read<IncomingCallTypeRepository>(),
-            BackgroundSignalingBootstrapService(),
+            WebtritSignalingService(),
           ),
         ),
       ],

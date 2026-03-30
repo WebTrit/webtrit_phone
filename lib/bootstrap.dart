@@ -13,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart' show WebtritSignalingService;
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -25,7 +26,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
 
-import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
+import 'package:webtrit_phone/features/call/call.dart'
+    show onPushNotificationSyncCallback, onSignalingBackgroundIncomingCall;
 
 import 'package:drift/isolate.dart';
 
@@ -200,8 +202,8 @@ Future<AppPermissions> _createAppPermissions(
 Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   if (!Platform.isAndroid) return;
 
-  AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
+  unawaited(WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall));
 
   // If the fallback incoming call trigger via SMS is enabled in the feature access config
   if (featureAccess.callConfig.triggerConfig.smsFallback.enabled) {

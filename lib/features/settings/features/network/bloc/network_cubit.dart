@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart' show WebtritSignalingService;
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/incoming_call_type/incoming_call_type_repository.dart';
@@ -14,19 +14,15 @@ part 'network_state.dart';
 part 'network_cubit.freezed.dart';
 
 class NetworkCubit extends Cubit<NetworkState> {
-  NetworkCubit(
-    this._callTriggerConfig,
-    this._deviceInfo,
-    this._incomingCallTypeRepository,
-    this._callkeepBackgroundService,
-  ) : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
+  NetworkCubit(this._callTriggerConfig, this._deviceInfo, this._incomingCallTypeRepository, this._signalingService)
+    : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
     _initializeActiveIncomingType();
   }
 
   final CallTriggerConfig _callTriggerConfig;
   final DeviceInfo _deviceInfo;
   final IncomingCallTypeRepository _incomingCallTypeRepository;
-  final BackgroundSignalingBootstrapService _callkeepBackgroundService;
+  final WebtritSignalingService _signalingService;
 
   bool get smsFallbackAvailable => _callTriggerConfig.smsFallback.available;
 
@@ -54,16 +50,7 @@ class NetworkCubit extends Cubit<NetworkState> {
 
   Future<void> selectIncomingCallType(IncomingCallTypeModel selectedTypeModel) async {
     await _incomingCallTypeRepository.setIncomingCallType(selectedTypeModel.incomingCallType);
-
-    switch (selectedTypeModel.incomingCallType) {
-      case IncomingCallType.pushNotification:
-        await _callkeepBackgroundService.stopService();
-        break;
-      case IncomingCallType.socket:
-        await _callkeepBackgroundService.startService();
-        break;
-    }
-
+    await _signalingService.updateMode(selectedTypeModel.incomingCallType.toSignalingServiceMode());
     _initializeActiveIncomingType();
   }
 }

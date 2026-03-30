@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -8,10 +11,10 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 
+import '../models/jsep_value.dart';
 import 'isolate_manager.dart';
 
 PushNotificationIsolateManager? _pushNotificationIsolateManager;
-SignalingForegroundIsolateManager? _signalingForegroundIsolateManager;
 
 RemoteConfigService? _remoteConfigService;
 
@@ -53,12 +56,10 @@ Future<void> _initializeCommonDependencies() async {
 
 Future<void> _disposeCommonDependencies() async {
   await _pushNotificationIsolateManager?.close();
-  await _signalingForegroundIsolateManager?.close();
   await _appDatabase?.close();
 
   _appDatabase = null;
   _pushNotificationIsolateManager = null;
-  _signalingForegroundIsolateManager = null;
   _callLogsRepository = null;
   _localPushRepository = null;
   _remoteConfigService = null;
@@ -70,17 +71,6 @@ Future<void> _disposeCommonDependencies() async {
   _appCertificates = null;
   _appInfo = null;
   _appLabelsProvider = null;
-}
-
-Future<void> _initializeSignalingDependencies() async {
-  _signalingForegroundIsolateManager ??= SignalingForegroundIsolateManager(
-    callLogsRepository: _callLogsRepository!,
-    localPushRepository: _localPushRepository!,
-    callkeep: BackgroundSignalingService(),
-    storage: _secureStorage!,
-    certificates: _appCertificates!.trustedCertificates,
-    logger: Logger('SignalingForegroundIsolateManager'),
-  );
 }
 
 Future<void> _initializePushNotificationDependencies() async {
@@ -96,7 +86,33 @@ Future<void> _initializePushNotificationDependencies() async {
 
 final _logger = Logger('BackgroundCallIsolate');
 
-// Called by the Flutter engine when the signaling service is started.
+/// Called by [SignalingForegroundIsolateManager] when an [IncomingCallEvent] arrives
+/// in the foreground-service background isolate and the app is not running.
+///
+/// Registered via [WebtritSignalingService.setIncomingCallHandler] so the plugin can
+/// invoke it from the background isolate. Uses the push-notification bootstrap path
+/// to report the incoming call to callkeep, which in turn shows the system call UI.
+///
+/// Must be a top-level function annotated with [@pragma('vm:entry-point')] to survive
+/// tree-shaking in release builds.
+@pragma('vm:entry-point')
+Future<void> onSignalingBackgroundIncomingCall(IncomingCallEvent event) async {
+  if (!Platform.isAndroid) return;
+
+  final caller = event.caller;
+  final hasVideo = JsepValue.fromOptional(event.jsep)?.hasVideo ?? false;
+
+  _logger.info('onSignalingBackgroundIncomingCall: callId=${event.callId} caller=$caller hasVideo=$hasVideo');
+
+  await AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
+    event.callId,
+    CallkeepHandle.number(caller),
+    displayName: event.callerDisplayName,
+    hasVideo: hasVideo,
+  );
+}
+
+// Called by the Flutter engine when an incoming push notification triggers a background call event.
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(
   CallkeepPushNotificationSyncStatus status,
@@ -113,20 +129,4 @@ Future<void> onPushNotificationSyncCallback(
     case CallkeepPushNotificationSyncStatus.releaseResources:
       await _disposeCommonDependencies();
   }
-}
-
-// Called by the Flutter engine when the signaling service is triggered.
-@pragma('vm:entry-point')
-Future<void> onSignalingSyncCallback(CallkeepServiceStatus status, CallkeepIncomingCallMetadata? metadata) async {
-  await _initializeCommonDependencies();
-  await _initializeSignalingDependencies();
-
-  _logger.info('onSignalingSyncCallback: $status');
-
-  await _signalingForegroundIsolateManager?.handleLifecycleStatus(status);
-  // TODO: Implement a deterministic cleanup path for common dependencies (DB, storages, logger)
-  // for the signaling isolate. Unlike the push-notification flow, this callback currently has
-  // no explicit "releaseResources" event, so we need a reliable trigger (or idle-timeout) to
-  // call `_disposeCommonDependencies()` without breaking subsequent sync calls.
-  return;
 }
