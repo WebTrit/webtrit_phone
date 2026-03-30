@@ -95,7 +95,10 @@ class SignalingModule {
   final TrustedCertificates trustedCertificates;
   final SignalingClientFactory signalingClientFactory;
 
-  final _controller = StreamController<SignalingModuleEvent>.broadcast();
+  // sync: true ensures events are delivered to existing listeners in the same
+  // call stack as _emit(), preserving ordering and eliminating async-dispatch
+  // races where a late-arriving broadcast event could duplicate a replayed one.
+  final _controller = StreamController<SignalingModuleEvent>.broadcast(sync: true);
 
   /// Events buffered since the last [connect] call. Cleared on every [connect]
   /// so that late subscribers receive only the current session's events.
