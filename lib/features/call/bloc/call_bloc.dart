@@ -719,7 +719,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // (e.g. background push isolate still connected when main engine reconnects).
       // Reconnect silently: don't set lastSignalingDisconnectCode so connectIssue is never shown.
       _logger.warning(
-        '__onSignalingClientEventDisconnected: signaling race detected — '
+        '__onSignalingClientEventDisconnected: signaling race detected - '
         'server force-closed duplicate session (code=${event.code}, reason="${event.reason}"). '
         'Reconnecting silently without showing connectIssue.',
       );
@@ -1098,7 +1098,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
             // Optimistic pre-check for glare condition. May be stale because
             // flutter_webrtc caches signalingState and updates it only when the
-            // onSignalingState callback fires — not when setLocalDescription completes.
+            // onSignalingState callback fires - not when setLocalDescription completes.
             // The try-catch below is the authoritative fallback.
             final signalingState = peerConnection.signalingState;
             if (signalingState == RTCSignalingState.RTCSignalingStateHaveLocalOffer) {

@@ -39,10 +39,10 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   Timer? _signalingReconnectTimer;
   bool _networkNone = false;
 
-  /// callId → line index (populated from StateHandshake)
+  /// callId -> line index (populated from StateHandshake)
   final Map<String, int> _lines = {};
 
-  /// callId → IncomingCallEvent (populated from StateHandshake and protocol events)
+  /// callId -> IncomingCallEvent (populated from StateHandshake and protocol events)
   final Map<String, IncomingCallEvent> _incomingCallEvents = {};
 
   /// Requests queued while module is not yet connected.
@@ -262,7 +262,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     await client.execute(requestBuilder(lineIndex, callId, WebtritSignalingClient.generateTransactionId()));
   }
 
-  // Callbacks — may be overridden by subclasses.
+  // Callbacks - may be overridden by subclasses.
 
   void _onIncomingCall(IncomingCallEvent event) {}
 
@@ -324,7 +324,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   @override
   void performEndCall(String callId) async {
     try {
-      // Do not early-return when _lines is empty — _sendRequest queues the
+      // Do not early-return when _lines is empty - _sendRequest queues the
       // request so it is executed once the handshake arrives (e.g. user declines
       // from the lock screen before the signaling handshake completes).
       await _sendRequest(callId, (line, id, tx) => DeclineRequest(transaction: tx, line: line, callId: id));

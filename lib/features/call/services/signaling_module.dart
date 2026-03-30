@@ -39,9 +39,9 @@ class SignalingDisconnecting extends SignalingModuleEvent {}
 /// Connection closed by the server or client.
 ///
 /// [recommendedReconnectDelay]:
-///   - [Duration.zero]          — reconnect immediately (e.g. code 4441)
-///   - [Duration(seconds: 3)]   — slow reconnect (default)
-///   - null                     — do not reconnect (e.g. protocolError)
+///   - [Duration.zero]          - reconnect immediately (e.g. code 4441)
+///   - [Duration(seconds: 3)]   - slow reconnect (default)
+///   - null                     - do not reconnect (e.g. protocolError)
 ///
 /// Consumers decide whether to act based on app state and network availability.
 class SignalingDisconnected extends SignalingModuleEvent {
@@ -77,7 +77,7 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 /// Manages a single [WebtritSignalingClient] lifecycle and publishes typed
 /// events via a broadcast stream.
 ///
-/// Knows only the WebSocket protocol — nothing about [CallState], BLoC, emit,
+/// Knows only the WebSocket protocol - nothing about [CallState], BLoC, emit,
 /// notifications, or app lifecycle. Can be used in the main isolate, a
 /// background isolate, or an integration test without any UI dependency.
 class SignalingModule {
@@ -102,7 +102,7 @@ class SignalingModule {
   // Reentrancy assumption: consumers must not call connect() or disconnect()
   // synchronously inside an event listener. Doing so would re-enter _emit()
   // in the same stack frame and produce unexpected ordering. All current
-  // consumers (CallBloc.add(), IsolateManager timer callbacks) satisfy this —
+  // consumers (CallBloc.add(), IsolateManager timer callbacks) satisfy this -
   // they either queue events or schedule via Timer, never calling back directly.
   final _controller = StreamController<SignalingModuleEvent>.broadcast(sync: true);
 
@@ -127,7 +127,7 @@ class SignalingModule {
 
   /// Set to true by [_onError] so that the subsequent [_onDisconnect] callback
   /// (which fires when the underlying socket closes after an error) is
-  /// suppressed — [_onError] already emits [SignalingConnectionFailed] and
+  /// suppressed - [_onError] already emits [SignalingConnectionFailed] and
   /// consumers would otherwise receive two separate reconnect triggers.
   ///
   /// Ordering invariant: [_onDisconnect] for the failed socket always arrives
@@ -149,7 +149,7 @@ class SignalingModule {
   /// This allows [SignalingModule] to be connected before [CallBloc] (or any
   /// other consumer) is created without missing session state.
   ///
-  /// Note: [SignalingProtocolEvent] (call events) are NOT replayed — they are
+  /// Note: [SignalingProtocolEvent] (call events) are NOT replayed - they are
   /// only delivered to subscribers already listening when they occur.
   ///
   /// Each call to [events] creates a new independent stream backed by a
@@ -161,7 +161,7 @@ class SignalingModule {
   Stream<SignalingModuleEvent> get events {
     // Take a snapshot of the buffer BEFORE subscribing to the live stream so
     // that any event arriving between snapshot and subscribe is delivered only
-    // via the live subscription and never replayed — preventing duplicates.
+    // via the live subscription and never replayed - preventing duplicates.
     final snapshot = List<SignalingModuleEvent>.of(_sessionBuffer);
 
     // sync: true so that events emitted via _controller.add() are forwarded
@@ -180,7 +180,7 @@ class SignalingModule {
       await liveSub.cancel();
       if (!liveController.isClosed) await liveController.close();
     };
-    // Replay only the snapshot — events that arrived after the snapshot are
+    // Replay only the snapshot - events that arrived after the snapshot are
     // already in the live subscription queue and must not be replayed.
     for (final event in snapshot) {
       liveController.add(event);
@@ -193,7 +193,7 @@ class SignalingModule {
   /// Null when not connected.
   WebtritSignalingClient? get signalingClient => _client;
 
-  /// Initiates a connection. Fire-and-forget — returns immediately.
+  /// Initiates a connection. Fire-and-forget - returns immediately.
   /// The result arrives via [events] as [SignalingConnected] or
   /// [SignalingConnectionFailed].
   ///
@@ -208,7 +208,7 @@ class SignalingModule {
   /// Disconnects the current client gracefully. Emits [SignalingDisconnecting]
   /// immediately and returns. [SignalingDisconnected] is emitted later,
   /// asynchronously, only when the underlying WebSocket close-ack arrives via
-  /// the [_onDisconnect] callback — it is NOT guaranteed to arrive before this
+  /// the [_onDisconnect] callback - it is NOT guaranteed to arrive before this
   /// Future completes.
   Future<void> disconnect() async {
     final client = _client;
@@ -328,7 +328,7 @@ class SignalingModule {
   void _onError(Object error, [StackTrace? stackTrace]) {
     if (_disposed) return;
     _logger.severe('_onError', error, stackTrace);
-    // Drop the client reference — the connection is broken.
+    // Drop the client reference - the connection is broken.
     // The consumer is responsible for scheduling a reconnect.
     _client = null;
     // Mark that we are handling this failure so that the subsequent
@@ -388,9 +388,9 @@ class SignalingModule {
 
   /// Maps a disconnect code to the recommended reconnect delay.
   ///
-  /// - [Duration.zero] — reconnect immediately (server evicted a duplicate session)
-  /// - [kSignalingClientReconnectDelay] — standard slow reconnect
-  /// - null — do not reconnect (protocol-level error or intentional close)
+  /// - [Duration.zero] - reconnect immediately (server evicted a duplicate session)
+  /// - [kSignalingClientReconnectDelay] - standard slow reconnect
+  /// - null - do not reconnect (protocol-level error or intentional close)
   Duration? _reconnectDelay(SignalingDisconnectCode code) {
     if (code == SignalingDisconnectCode.controllerForceAttachClose) {
       return Duration.zero;

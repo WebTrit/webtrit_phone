@@ -99,7 +99,7 @@ SignalingClientFactory _failingFactory(Object error) {
   }) async => throw error;
 }
 
-/// A factory backed by a completer — the test controls when the connection resolves.
+/// A factory backed by a completer - the test controls when the connection resolves.
 class _ControlledFactory {
   Completer<WebtritSignalingClient>? _completer;
 
@@ -152,10 +152,10 @@ SignalingModule _buildModule(SignalingClientFactory factory) => SignalingModule(
 
 void main() {
   // -------------------------------------------------------------------------
-  // Unit tests — pure SignalingModule behaviour, no real WebSocket.
+  // Unit tests - pure SignalingModule behaviour, no real WebSocket.
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — connect()', () {
+  group('SignalingModule - connect()', () {
     test('emits SignalingConnecting then SignalingConnected on success', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -269,7 +269,7 @@ void main() {
 
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — isRepeated deduplication', () {
+  group('SignalingModule - isRepeated deduplication', () {
     test('first failure has isRepeated: false', () async {
       final error = Exception('socket error');
       final module = _buildModule(_failingFactory(error));
@@ -336,7 +336,7 @@ void main() {
       expect(failures[1].isRepeated, isFalse);
     });
 
-    test('successful connect clears error history — next failure is isRepeated: false', () async {
+    test('successful connect clears error history - next failure is isRepeated: false', () async {
       final error = Exception('socket error');
       var failNext = false;
 
@@ -359,7 +359,7 @@ void main() {
 
       failNext = true;
 
-      // Second: fail — should NOT be repeated even if same error object.
+      // Second: fail - should NOT be repeated even if same error object.
       SignalingConnectionFailed? failed;
       module.events.listen((e) {
         if (e is SignalingConnectionFailed) failed = e;
@@ -374,7 +374,7 @@ void main() {
 
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — disconnect()', () {
+  group('SignalingModule - disconnect()', () {
     test('emits SignalingDisconnecting and calls client.disconnect', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -410,7 +410,7 @@ void main() {
 
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — dispose()', () {
+  group('SignalingModule - dispose()', () {
     test('closes the event stream', () async {
       final module = _buildModule(_failingFactory(Exception('x')));
 
@@ -447,7 +447,7 @@ void main() {
 
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — server-pushed events', () {
+  group('SignalingModule - server-pushed events', () {
     test('_onHandshake emits SignalingHandshakeReceived', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -534,7 +534,7 @@ void main() {
 
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — _reconnectDelay', () {
+  group('SignalingModule - _reconnectDelay', () {
     Future<SignalingDisconnected> disconnectWith(int code) async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -554,28 +554,28 @@ void main() {
       return disc!;
     }
 
-    test('controllerForceAttachClose (4441) → recommendedReconnectDelay is Duration.zero', () async {
+    test('controllerForceAttachClose (4441) -> recommendedReconnectDelay is Duration.zero', () async {
       final disc = await disconnectWith(SignalingDisconnectCode.controllerForceAttachClose.code);
 
       expect(disc.knownCode, SignalingDisconnectCode.controllerForceAttachClose);
       expect(disc.recommendedReconnectDelay, Duration.zero);
     });
 
-    test('protocolError (1002) → recommendedReconnectDelay is null', () async {
+    test('protocolError (1002) -> recommendedReconnectDelay is null', () async {
       final disc = await disconnectWith(SignalingDisconnectCode.protocolError.code);
 
       expect(disc.knownCode, SignalingDisconnectCode.protocolError);
       expect(disc.recommendedReconnectDelay, isNull);
     });
 
-    test('normalClosure (1000) → recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
+    test('normalClosure (1000) -> recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
       final disc = await disconnectWith(SignalingDisconnectCode.normalClosure.code);
 
       expect(disc.knownCode, SignalingDisconnectCode.normalClosure);
       expect(disc.recommendedReconnectDelay, kSignalingClientReconnectDelay);
     });
 
-    test('unknown code → unmappedCode, recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
+    test('unknown code -> unmappedCode, recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
       const unknownCode = 9999;
       final disc = await disconnectWith(unknownCode);
 
@@ -583,7 +583,7 @@ void main() {
       expect(disc.recommendedReconnectDelay, kSignalingClientReconnectDelay);
     });
 
-    test('null code → unmappedCode, recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
+    test('null code -> unmappedCode, recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
       addTearDown(module.dispose);
@@ -619,10 +619,10 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // Integration tests — full lifecycle sequences.
+  // Integration tests - full lifecycle sequences.
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — integration: connect → handshake → event → disconnect', () {
+  group('SignalingModule - integration: connect -> handshake -> event -> disconnect', () {
     test('full happy-path lifecycle emits events in correct order', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -658,7 +658,7 @@ void main() {
     });
   });
 
-  group('SignalingModule — integration: failure → reconnect → success', () {
+  group('SignalingModule - integration: failure -> reconnect -> success', () {
     test('failed connect followed by successful reconnect emits correct sequence', () async {
       final goodClient = _FakeSignalingClient();
       final error = Exception('TLS handshake failed');
@@ -681,11 +681,11 @@ void main() {
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
-      // First attempt — fails.
+      // First attempt - fails.
       module.connect();
       await pumpEventQueue();
 
-      // Second attempt — succeeds.
+      // Second attempt - succeeds.
       module.connect();
       await pumpEventQueue();
 
@@ -698,7 +698,7 @@ void main() {
     });
   });
 
-  group('SignalingModule — integration: server-forced reconnect (code 4441)', () {
+  group('SignalingModule - integration: server-forced reconnect (code 4441)', () {
     test('server close with 4441 emits SignalingDisconnected with Duration.zero delay', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -719,7 +719,7 @@ void main() {
       expect(discEvents, hasLength(1));
       expect(discEvents[0].recommendedReconnectDelay, Duration.zero);
 
-      // Consumer would immediately reconnect here — simulate it.
+      // Consumer would immediately reconnect here - simulate it.
       final nextClient = _FakeSignalingClient();
       final module2 = _buildModule(_successFactory(nextClient));
       addTearDown(module2.dispose);
@@ -736,7 +736,7 @@ void main() {
     });
   });
 
-  group('SignalingModule — integration: dispose during pending connect', () {
+  group('SignalingModule - integration: dispose during pending connect', () {
     test('dispose while factory is in flight does not emit events after dispose', () async {
       final controlled = _ControlledFactory();
       final module = _buildModule(controlled.factory);
@@ -776,7 +776,7 @@ void main() {
     });
   });
 
-  group('SignalingModule — integration: multiple listeners', () {
+  group('SignalingModule - integration: multiple listeners', () {
     test('broadcast stream delivers events to all active listeners', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -801,7 +801,7 @@ void main() {
 
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — integration: late subscriber replay', () {
+  group('SignalingModule - integration: late subscriber replay', () {
     test('late subscriber receives all buffered events from the current session', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -813,7 +813,7 @@ void main() {
       client.injectHandshake(_kHandshake);
       await pumpEventQueue();
 
-      // Late subscriber — attaches after connect + handshake have already happened.
+      // Late subscriber - attaches after connect + handshake have already happened.
       final late = <SignalingModuleEvent>[];
       module.events.listen(late.add);
       await pumpEventQueue();
@@ -841,7 +841,7 @@ void main() {
       });
       addTearDown(module.dispose);
 
-      // First session — connect, handshake, then disconnect.
+      // First session - connect, handshake, then disconnect.
       module.connect();
       await pumpEventQueue();
       client1.injectHandshake(_kHandshake);
@@ -849,7 +849,7 @@ void main() {
       client1.injectDisconnect(1000, 'done');
       await pumpEventQueue();
 
-      // Second session — reconnect clears the buffer.
+      // Second session - reconnect clears the buffer.
       module.connect();
       await pumpEventQueue();
 
@@ -869,10 +869,10 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // Concurrency — _connecting guard
+  // Concurrency - _connecting guard
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — concurrent connect()', () {
+  group('SignalingModule - concurrent connect()', () {
     test('second connect() while factory in-flight is dropped, not queued', () async {
       final controlled = _ControlledFactory();
       final module = _buildModule(controlled.factory);
@@ -881,7 +881,7 @@ void main() {
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
-      // First connect — factory is pending.
+      // First connect - factory is pending.
       module.connect();
       // Second connect() fires while first is still in-flight.
       module.connect();
@@ -891,17 +891,17 @@ void main() {
       controlled.complete(client);
       await pumpEventQueue();
 
-      // Only one SignalingConnecting and one SignalingConnected — not doubled.
+      // Only one SignalingConnecting and one SignalingConnected - not doubled.
       expect(events.whereType<SignalingConnecting>(), hasLength(1));
       expect(events.whereType<SignalingConnected>(), hasLength(1));
     });
   });
 
   // -------------------------------------------------------------------------
-  // Intentional disconnect — recommendedReconnectDelay == null
+  // Intentional disconnect - recommendedReconnectDelay == null
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — intentional disconnect()', () {
+  group('SignalingModule - intentional disconnect()', () {
     test('SignalingDisconnected has null recommendedReconnectDelay after disconnect()', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -941,10 +941,10 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // _errorHandled — _onDisconnect suppressed after _onError
+  // _errorHandled - _onDisconnect suppressed after _onError
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — error suppresses disconnect event', () {
+  group('SignalingModule - error suppresses disconnect event', () {
     test('_onDisconnect after _onError does NOT emit SignalingDisconnected', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -962,7 +962,7 @@ void main() {
       client.injectDisconnect(null, null);
       await pumpEventQueue();
 
-      // Only SignalingConnectionFailed — no SignalingDisconnected.
+      // Only SignalingConnectionFailed - no SignalingDisconnected.
       expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
       expect(events.whereType<SignalingDisconnected>(), isEmpty);
     });
@@ -972,7 +972,7 @@ void main() {
   // Protocol events excluded from replay buffer
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — replay buffer excludes protocol events', () {
+  group('SignalingModule - replay buffer excludes protocol events', () {
     test('SignalingProtocolEvent is not replayed to late subscribers', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -982,7 +982,7 @@ void main() {
       await pumpEventQueue();
       client.injectHandshake(_kHandshake);
       await pumpEventQueue();
-      // Emit a protocol event — must NOT be buffered.
+      // Emit a protocol event - must NOT be buffered.
       client.injectEvent(HangupEvent(callId: 'call-1', line: 0, reason: 'bye', code: 0));
       await pumpEventQueue();
 
@@ -1007,7 +1007,7 @@ void main() {
   // liveController closed on subscription cancel
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — subscription cancel', () {
+  group('SignalingModule - subscription cancel', () {
     test('cancelled subscription receives no further events', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -1024,7 +1024,7 @@ void main() {
       await sub.cancel();
       await pumpEventQueue();
 
-      // Inject a server event after cancel — must not reach the cancelled subscriber.
+      // Inject a server event after cancel - must not reach the cancelled subscriber.
       client.injectHandshake(_kHandshake);
       await pumpEventQueue();
 
@@ -1036,7 +1036,7 @@ void main() {
   // dispose() awaits disconnect ack before closing the stream
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — dispose() waits for disconnect ack', () {
+  group('SignalingModule - dispose() waits for disconnect ack', () {
     test('stream close arrives after SignalingDisconnected (dispose waits for ack)', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -1048,14 +1048,14 @@ void main() {
       module.connect();
       await pumpEventQueue();
 
-      // Start dispose — it calls disconnect() internally.
+      // Start dispose - it calls disconnect() internally.
       final disposeFuture = module.dispose();
 
-      // Flush — SignalingDisconnecting is emitted, but stream not yet closed.
+      // Flush - SignalingDisconnecting is emitted, but stream not yet closed.
       await pumpEventQueue();
       expect(streamDone, isFalse);
 
-      // WS close-ack arrives — unblocks dispose().
+      // WS close-ack arrives - unblocks dispose().
       client.injectDisconnect(1000, 'going away');
       await pumpEventQueue();
       await disposeFuture;
@@ -1074,7 +1074,7 @@ void main() {
   // _onHandshake / _onEvent are no-ops after dispose()
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — callbacks no-op after dispose()', () {
+  group('SignalingModule - callbacks no-op after dispose()', () {
     test('_onHandshake and _onEvent emit nothing after dispose()', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -1106,7 +1106,7 @@ void main() {
   // Mirrors what CallBloc sees: connection was healthy, then socket dies.
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — internet dropped mid-session', () {
+  group('SignalingModule - internet dropped mid-session', () {
     test('_onError after handshake emits ConnectionFailed, not Disconnected, and clears signalingClient', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -1120,10 +1120,10 @@ void main() {
       client.injectHandshake(_kHandshake);
       await pumpEventQueue();
 
-      // Simulate internet drop — socket emits an IOException-style error.
+      // Simulate internet drop - socket emits an IOException-style error.
       client.injectError(Exception('Connection reset by peer'));
       await pumpEventQueue();
-      // Automatic socket close follows the error — must be suppressed.
+      // Automatic socket close follows the error - must be suppressed.
       client.injectDisconnect(null, null);
       await pumpEventQueue();
 
@@ -1149,7 +1149,7 @@ void main() {
       client.injectHandshake(_kHandshake);
       await pumpEventQueue();
 
-      // Network disappeared — socket closes without a clean WebSocket close code.
+      // Network disappeared - socket closes without a clean WebSocket close code.
       client.injectDisconnect(null, null);
       await pumpEventQueue();
 
@@ -1176,7 +1176,7 @@ void main() {
       client.injectError(Exception('network gone'));
       await pumpEventQueue();
 
-      // Late subscriber — joins after the error.
+      // Late subscriber - joins after the error.
       final late = <SignalingModuleEvent>[];
       module.events.listen(late.add);
       await pumpEventQueue();
@@ -1196,7 +1196,7 @@ void main() {
   // CallBloc keeps linesCount == 0 and registration == null in this case.
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — handshake not completed', () {
+  group('SignalingModule - handshake not completed', () {
     test('disconnect before handshake emits Disconnected with reconnect delay but no HandshakeReceived', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
@@ -1285,13 +1285,13 @@ void main() {
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
-      // First session — no handshake, drops immediately.
+      // First session - no handshake, drops immediately.
       module.connect();
       await pumpEventQueue();
       client1.injectDisconnect(1001, 'going away');
       await pumpEventQueue();
 
-      // Reconnect — this time handshake arrives.
+      // Reconnect - this time handshake arrives.
       module.connect();
       await pumpEventQueue();
       client2.injectHandshake(_kHandshake);
@@ -1308,13 +1308,13 @@ void main() {
   // state by then (connecting, connected, or handshaken).
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — late subscriber mid-session', () {
+  group('SignalingModule - late subscriber mid-session', () {
     test('subscriber joining while factory still pending gets Connecting from buffer then Connected live', () async {
       final controlled = _ControlledFactory();
       final module = _buildModule(controlled.factory);
       addTearDown(module.dispose);
 
-      // Start connecting — Connecting buffered, factory not yet resolved.
+      // Start connecting - Connecting buffered, factory not yet resolved.
       module.connect();
       await pumpEventQueue();
 
@@ -1329,7 +1329,7 @@ void main() {
       );
       expect(late.whereType<SignalingConnected>(), isEmpty);
 
-      // Factory resolves — Connected arrives live.
+      // Factory resolves - Connected arrives live.
       controlled.complete(_FakeSignalingClient());
       await pumpEventQueue();
 
@@ -1364,7 +1364,7 @@ void main() {
   // not break if the underlying WebSocket close throws.
   // -------------------------------------------------------------------------
 
-  group('SignalingModule — disconnect() robustness', () {
+  group('SignalingModule - disconnect() robustness', () {
     test('dispose() completes even when client.disconnect() throws', () async {
       final client = _ThrowingDisconnectClient();
       // Use a factory that wraps the throwing client.
@@ -1400,7 +1400,7 @@ void main() {
       client.injectDisconnect(1000, 'ok');
       await pumpEventQueue();
 
-      // Second disconnect — no client, must be a silent no-op.
+      // Second disconnect - no client, must be a silent no-op.
       await module.disconnect();
 
       expect(client.disconnected, isTrue); // only one real disconnect happened
