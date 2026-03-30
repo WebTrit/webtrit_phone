@@ -127,20 +127,27 @@ class SignalingModule {
   /// the consumer will not miss [SignalingConnected], [SignalingHandshakeReceived],
   /// or any protocol events that arrived in the interim.
   Stream<SignalingModuleEvent> get events {
+    // Take a snapshot of the buffer BEFORE subscribing to the live stream so
+    // that any event arriving between snapshot and subscribe is delivered only
+    // via the live subscription and never replayed — preventing duplicates.
+    final snapshot = List<SignalingModuleEvent>.of(_sessionBuffer);
+
     // sync: true so that events emitted via _controller.add() are forwarded
     // to the subscriber in the same stack frame, preserving ordering and
     // removing the extra async hop that would otherwise cause events to
     // arrive after an await returns.
     final liveController = StreamController<SignalingModuleEvent>(sync: true);
-    // Subscribe to the live broadcast stream first so no future events are missed.
+    // Subscribe to the live broadcast stream after the snapshot so no future
+    // events are missed.
     final liveSub = _controller.stream.listen(
       liveController.add,
       onError: liveController.addError,
       onDone: liveController.close,
     );
     liveController.onCancel = liveSub.cancel;
-    // Replay the current session's past events synchronously.
-    for (final event in List<SignalingModuleEvent>.of(_sessionBuffer)) {
+    // Replay only the snapshot — events that arrived after the snapshot are
+    // already in the live subscription queue and must not be replayed.
+    for (final event in snapshot) {
       liveController.add(event);
     }
     return liveController.stream;
