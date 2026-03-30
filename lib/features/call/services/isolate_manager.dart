@@ -137,8 +137,17 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
         continue;
       }
 
-      _moduleExecute(pending.requestBuilder(lineIndex, pending.callId, WebtritSignalingClient.generateTransactionId()))
-          ?.then((_) => pending.completer.complete())
+      final future = _moduleExecute(
+        pending.requestBuilder(lineIndex, pending.callId, WebtritSignalingClient.generateTransactionId()),
+      );
+      if (future == null) {
+        pending.completer.completeError(StateError('Module not connected for callId: ${pending.callId}'));
+        pending.timeoutTimer.cancel();
+        _pendingRequests.remove(pending);
+        continue;
+      }
+      future
+          .then((_) => pending.completer.complete())
           .catchError((e, s) => pending.completer.completeError(e, s))
           .whenComplete(() {
             pending.timeoutTimer.cancel();
@@ -274,6 +283,10 @@ class PushNotificationIsolateManager extends IsolateManager {
   StreamSubscription<SignalingModuleEvent>? _signalingSubscription;
   bool _signalingConnected = false;
 
+  /// Set while [launchSignaling] is awaiting the initial handshake.
+  /// [close] completes it with false to unblock the launch immediately.
+  Completer<bool>? _handshakeCompleter;
+
   @override
   bool get _isModuleConnected => _signalingConnected;
 
@@ -303,22 +316,25 @@ class PushNotificationIsolateManager extends IsolateManager {
     // Wait for SignalingHandshakeReceived so that _lines is populated before
     // launchSignaling returns. ConnectionFailed/Disconnected resolve with false
     // so we do not hang forever on an unreachable server.
-    final handshakeCompleter = Completer<bool>();
+    // _handshakeCompleter is stored on the instance so close() can cancel the
+    // wait immediately instead of waiting for the 10-second timeout.
+    _handshakeCompleter = Completer<bool>();
     StreamSubscription<SignalingModuleEvent>? probeSub;
     probeSub = service.events.listen((event) {
-      if (handshakeCompleter.isCompleted) return;
+      if (_handshakeCompleter!.isCompleted) return;
       if (event is SignalingHandshakeReceived) {
-        handshakeCompleter.complete(true);
+        _handshakeCompleter!.complete(true);
       } else if (event is SignalingConnectionFailed || event is SignalingDisconnected) {
-        handshakeCompleter.complete(false);
+        _handshakeCompleter!.complete(false);
       }
     });
 
     await service.start(config, mode: SignalingServiceMode.pushBound);
 
-    final connected = await handshakeCompleter.future.timeout(const Duration(seconds: 10), onTimeout: () => false);
+    final connected = await _handshakeCompleter!.future.timeout(const Duration(seconds: 10), onTimeout: () => false);
 
     await probeSub.cancel();
+    _handshakeCompleter = null;
 
     if (!connected) {
       logger.severe('launchSignaling: failed to connect within timeout');
@@ -354,6 +370,12 @@ class PushNotificationIsolateManager extends IsolateManager {
 
   @override
   Future<void> close() async {
+    // Unblock launchSignaling() if it is still awaiting the handshake, so the
+    // probe subscription is cancelled promptly instead of waiting for the timeout.
+    if (_handshakeCompleter != null && !_handshakeCompleter!.isCompleted) {
+      _handshakeCompleter!.complete(false);
+    }
+    _handshakeCompleter = null;
     await _signalingSubscription?.cancel();
     _signalingSubscription = null;
     await _signalingService?.dispose();
