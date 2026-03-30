@@ -769,6 +769,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final contactName = await contactNameResolver.resolveWithNumber(event.handle.value);
     final displayName = contactName ?? event.displayName;
 
+    // Re-check after the async gap: the signaling path may have created an entry
+    // for this callId while contact resolution was in progress.
+    if (state.activeCalls.any((c) => c.callId == event.callId)) {
+      _logger.fine(
+        '_onCallPushEventIncoming: callId ${event.callId} handled during contact resolution — skipping push duplicate',
+      );
+      return;
+    }
+
     emit(
       state.copyWithPushActiveCall(
         ActiveCall(
