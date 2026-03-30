@@ -194,7 +194,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _presenceInfoSyncTimer?.cancel();
 
     await _signalingSubscription.cancel();
-    await _signalingModule.dispose();
 
     await _stopRingbackSound();
 
