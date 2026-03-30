@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -21,7 +22,7 @@ class RegisterStatus {
 class RegisterStatusCubit extends Cubit<RegisterStatus> {
   RegisterStatusCubit(this.appRepository, this.registerStatusRepository, {this.handleError})
     : super(RegisterStatus(value: registerStatusRepository.getRegisterStatus())) {
-    fetchStatus();
+    _fetchStatusSilently();
     _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }
 
@@ -32,7 +33,18 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
   late final StreamSubscription _connectivitySub;
 
   void _handleConnectivity(List<ConnectivityResult> results) {
-    if (results.any((result) => result != ConnectivityResult.none)) fetchStatus();
+    if (results.any((result) => result != ConnectivityResult.none)) _fetchStatusSilently();
+  }
+
+  Future<void> _fetchStatusSilently() async {
+    try {
+      final status = await appRepository.getRegisterStatus();
+      registerStatusRepository.setRegisterStatus(status);
+      emit(RegisterStatus(value: status));
+    } catch (e, s) {
+      _logger.warning('Failed to get register status', e, s);
+      if (!_isTransientNetworkError(e)) handleError?.call(e, s);
+    }
   }
 
   Future<void> fetchStatus() async {
@@ -45,6 +57,9 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
       handleError?.call(e, s);
     }
   }
+
+  bool _isTransientNetworkError(Object error) =>
+      error is SocketException || error is TimeoutException || error is TlsException;
 
   Future<void> setStatus(bool value) async {
     emit(RegisterStatus(value: value, isUpdating: true));
