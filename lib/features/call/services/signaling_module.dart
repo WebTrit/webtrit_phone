@@ -150,7 +150,10 @@ class SignalingModule {
       onError: liveController.addError,
       onDone: liveController.close,
     );
-    liveController.onCancel = liveSub.cancel;
+    liveController.onCancel = () async {
+      await liveSub.cancel();
+      if (!liveController.isClosed) await liveController.close();
+    };
     // Replay only the snapshot — events that arrived after the snapshot are
     // already in the live subscription queue and must not be replayed.
     for (final event in snapshot) {
