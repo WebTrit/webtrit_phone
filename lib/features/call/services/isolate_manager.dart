@@ -128,9 +128,10 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
         logger.warning('No internet connection detected ($connectivityNoneCounter/$maxConnectivityNoneRepeats)');
 
         if (connectivityNoneCounter >= maxConnectivityNoneRepeats) {
-          logger.severe('Max connectivity loss reached');
-          _onSignalingError('Max connectivity loss reached');
-          connectivityNoneCounter = 0;
+          if (connectivityNoneCounter == maxConnectivityNoneRepeats) {
+            logger.severe('Max connectivity loss reached');
+            _onSignalingError('Max connectivity loss reached');
+          }
           return;
         }
 

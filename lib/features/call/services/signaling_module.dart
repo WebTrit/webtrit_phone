@@ -98,6 +98,12 @@ class SignalingModule {
   // sync: true ensures events are delivered to existing listeners in the same
   // call stack as _emit(), preserving ordering and eliminating async-dispatch
   // races where a late-arriving broadcast event could duplicate a replayed one.
+  //
+  // Reentrancy assumption: consumers must not call connect() or disconnect()
+  // synchronously inside an event listener. Doing so would re-enter _emit()
+  // in the same stack frame and produce unexpected ordering. All current
+  // consumers (CallBloc.add(), IsolateManager timer callbacks) satisfy this —
+  // they either queue events or schedule via Timer, never calling back directly.
   final _controller = StreamController<SignalingModuleEvent>.broadcast(sync: true);
 
   /// Events buffered since the last [connect] call. Cleared on every [connect]
@@ -123,6 +129,13 @@ class SignalingModule {
   /// (which fires when the underlying socket closes after an error) is
   /// suppressed — [_onError] already emits [SignalingConnectionFailed] and
   /// consumers would otherwise receive two separate reconnect triggers.
+  ///
+  /// Ordering invariant: [_onDisconnect] for the failed socket always arrives
+  /// before any reconnect-triggered [_connectAsync] completes, because reconnect
+  /// is scheduled via [kSignalingClientReconnectDelay] (several seconds) while
+  /// the socket close-ack is delivered in the current event loop iteration.
+  /// [_onDisconnect] resets this flag to false, so a newly connected client
+  /// starts with a clean state.
   bool _errorHandled = false;
 
   /// Last connect error as string for deduplication.
@@ -138,6 +151,13 @@ class SignalingModule {
   ///
   /// Note: [SignalingProtocolEvent] (call events) are NOT replayed — they are
   /// only delivered to subscribers already listening when they occur.
+  ///
+  /// Each call to [events] creates a new independent stream backed by a
+  /// dedicated [StreamController] and a live subscription to the internal
+  /// broadcast controller. Call [events] exactly once per consumer and hold
+  /// the returned [StreamSubscription] for the consumer's lifetime; calling
+  /// it multiple times without cancelling previous subscriptions leaks
+  /// controllers.
   Stream<SignalingModuleEvent> get events {
     // Take a snapshot of the buffer BEFORE subscribing to the live stream so
     // that any event arriving between snapshot and subscribe is delivered only
