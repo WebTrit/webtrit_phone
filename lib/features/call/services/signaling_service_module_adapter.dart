@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
@@ -17,6 +18,8 @@ import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 ///   - [execute] -- delegates directly to [WebtritSignalingService.execute].
 ///     Throws [StateError] when the underlying module is not connected.
 ///   - [dispose] -- stops the service and releases all resources.
+final _logger = Logger('SignalingServiceModuleAdapter');
+
 class SignalingServiceModuleAdapter implements SignalingModuleInterface {
   SignalingServiceModuleAdapter({
     required WebtritSignalingService service,
@@ -53,7 +56,9 @@ class SignalingServiceModuleAdapter implements SignalingModuleInterface {
           break;
       }
     });
-    _service.start(_config, mode: _mode).ignore();
+    _service.start(_config, mode: _mode).catchError((Object e, StackTrace s) {
+      _logger.severe('start() failed', e, s);
+    });
   }
 
   /// No-op -- intentional. In persistent mode the service runs inside an Android
@@ -66,8 +71,13 @@ class SignalingServiceModuleAdapter implements SignalingModuleInterface {
   @override
   Future<void> disconnect() async {}
 
+  /// Returns [null] when not connected, matching the [SignalingModuleInterface]
+  /// contract that callers check (via [isConnected] or [?.ignore()]).
   @override
-  Future<void>? execute(Request request) => _service.execute(request);
+  Future<void>? execute(Request request) {
+    if (!_isConnected) return null;
+    return _service.execute(request);
+  }
 
   @override
   Future<void> dispose() async {

@@ -90,6 +90,8 @@ class _SignalingFlutterApiHandler extends PSignalingServiceFlutterApi {
     _logger.fine('onSynchronize received from Kotlin, queuing sync');
     // Chain each call so rapid stop+start sequences are serialised and never
     // interleave _stop() with _start().
-    _pendingSync = _pendingSync.then((_) => onSignalingServiceSync(status));
+    _pendingSync = _pendingSync.then((_) => onSignalingServiceSync(status)).catchError((Object e, StackTrace s) {
+      _logger.severe('onSignalingServiceSync failed — sync chain kept alive', e, s);
+    });
   }
 }
