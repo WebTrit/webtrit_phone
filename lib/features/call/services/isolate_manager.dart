@@ -314,7 +314,7 @@ class PushNotificationIsolateManager extends IsolateManager {
       }
     });
 
-    await service.start(config, mode: SignalingServiceMode.persistent);
+    await service.start(config, mode: SignalingServiceMode.pushBound);
 
     final connected = await handshakeCompleter.future.timeout(const Duration(seconds: 10), onTimeout: () => false);
 

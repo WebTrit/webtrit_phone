@@ -41,20 +41,19 @@ class SignalingServiceModuleAdapter implements SignalingModuleInterface {
 
   @override
   void connect() {
-    _service.start(_config, mode: _mode).then((_) {
-      _statusSub?.cancel();
-      _statusSub = _service.events.listen((event) {
-        switch (event) {
-          case SignalingConnected():
-            _isConnected = true;
-          case SignalingDisconnected():
-          case SignalingConnectionFailed():
-            _isConnected = false;
-          default:
-            break;
-        }
-      });
-    }).ignore();
+    _statusSub?.cancel();
+    _statusSub = _service.events.listen((event) {
+      switch (event) {
+        case SignalingConnected():
+          _isConnected = true;
+        case SignalingDisconnected():
+        case SignalingConnectionFailed():
+          _isConnected = false;
+        default:
+          break;
+      }
+    });
+    _service.start(_config, mode: _mode).ignore();
   }
 
   /// No-op -- the service manages its own connection lifecycle.
