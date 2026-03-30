@@ -117,6 +117,7 @@ class SDPModBuilder {
     final originalFmtps = [];
     final originalRtcpFbs = [];
 
+    if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
     if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
     if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
@@ -148,6 +149,7 @@ class SDPModBuilder {
       final originalFmtps = [];
       final originalRtcpFbs = [];
 
+      if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
       if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
       if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
       if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
@@ -230,6 +232,7 @@ class SDPModBuilder {
     final originalFmtps = [];
     final originalRtcpFbs = [];
 
+    if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
     if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
     if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
@@ -259,6 +262,7 @@ class SDPModBuilder {
     final originalFmtps = [];
     final originalRtcpFbs = [];
 
+    if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
     if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
     if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
@@ -342,6 +346,7 @@ class SDPModBuilder {
     final originalFmtps = [];
     final originalRtcpFbs = [];
 
+    if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
     if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
     if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
@@ -373,7 +378,11 @@ class SDPModBuilder {
     final media = _getMedia(profile.kind);
     if (media == null) return null;
 
-    final payloads = media['payloads'] is String ? (media['payloads'] as String).split(' ') : [];
+    final payloads = switch (media['payloads']) {
+      String p => p.split(' '),
+      int p => [p.toString()],
+      _ => const [],
+    };
     if (profile.staticPayload != null && payloads.contains(profile.staticPayload.toString())) {
       return profile.staticPayload;
     }
