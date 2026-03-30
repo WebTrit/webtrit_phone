@@ -49,6 +49,7 @@ dependencies:
   connectivity_plus: ^7.0.0
   cross_file: ^0.3.5
   device_info_plus: ^12.2.0
+  drift: ^2.29.0
   equatable: ^2.0.7
   firebase_analytics: ^12.0.4
   firebase_app_installations: ^0.4.0+4

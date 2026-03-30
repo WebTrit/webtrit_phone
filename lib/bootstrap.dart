@@ -27,6 +27,8 @@ import 'package:webtrit_phone/features/system_notifications/services/services.da
 
 import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
 
+import 'package:drift/isolate.dart';
+
 import 'app/session/session.dart';
 import 'firebase_options.dart';
 import 'services/services.dart';
@@ -106,6 +108,13 @@ Future<InstanceRegistry> bootstrap() async {
   // Utilities - Capturing instances that were previously just `await Class.init()`
   final pushEnvironment = await PushEnvironment.init();
   final appPath = await AppPath.init();
+
+  // Spawn the shared DriftIsolate database server. All isolates (FCM background,
+  // WorkManager) connect to this single server via IsolateNameServer, eliminating
+  // write-write SQLite contention.
+  final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
+  registry.register<DriftIsolate>(driftIsolate);
+
   final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
   final appTime = await AppTime.init();
   final appLabels = await DefaultAppMetadataProvider.init(

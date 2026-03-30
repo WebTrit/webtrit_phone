@@ -1,6 +1,17 @@
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
 
+/// Not supported on Web — [DriftIsolate] server spawning is a native-only feature.
+QueryExecutor createAppDatabaseNative(
+  String directoryPath,
+  String name, {
+  bool logStatements = false,
+  bool? isWalEnabled = true,
+  int? busyTimeoutMs = 5000,
+}) {
+  throw UnsupportedError('createAppDatabaseNative is not supported on Web.');
+}
+
 DatabaseConnection createAppDatabaseConnection(
   String? path,
   String name, {

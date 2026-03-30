@@ -18,7 +18,7 @@ abstract final class AppDatabaseScope {
     required Future<T> Function(AppDatabase db) action,
     String dbName = 'db.sqlite',
   }) async {
-    final db = IsolateDatabase.create(directoryPath: directoryPath, dbName: dbName);
+    final db = await IsolateDatabase.connectOrCreate(directoryPath: directoryPath, dbName: dbName);
     try {
       return await action(db);
     } finally {
