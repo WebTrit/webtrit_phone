@@ -846,4 +846,237 @@ void main() {
       expect(late.whereType<SignalingConnecting>(), hasLength(1));
     });
   });
+
+  // -------------------------------------------------------------------------
+  // Concurrency — _connecting guard
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — concurrent connect()', () {
+    test('second connect() while factory in-flight is dropped, not queued', () async {
+      final controlled = _ControlledFactory();
+      final module = _buildModule(controlled.factory);
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      // First connect — factory is pending.
+      module.connect();
+      // Second connect() fires while first is still in-flight.
+      module.connect();
+
+      // Let the first factory call complete.
+      final client = _FakeSignalingClient();
+      controlled.complete(client);
+      await pumpEventQueue();
+
+      // Only one SignalingConnecting and one SignalingConnected — not doubled.
+      expect(events.whereType<SignalingConnecting>(), hasLength(1));
+      expect(events.whereType<SignalingConnected>(), hasLength(1));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Intentional disconnect — recommendedReconnectDelay == null
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — intentional disconnect()', () {
+    test('SignalingDisconnected has null recommendedReconnectDelay after disconnect()', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await pumpEventQueue();
+
+      // Intentional disconnect.
+      unawaited(module.disconnect());
+      await pumpEventQueue();
+      // Simulate WS close-ack arriving.
+      client.injectDisconnect(1000, 'going away');
+      await pumpEventQueue();
+
+      final disconnected = events.whereType<SignalingDisconnected>().single;
+      expect(disconnected.recommendedReconnectDelay, isNull);
+    });
+
+    test('disconnect() passes goingAway code to the underlying client', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      unawaited(module.disconnect());
+      await pumpEventQueue();
+
+      expect(client.disconnected, isTrue);
+      expect(client.lastDisconnectCode, equals(SignalingDisconnectCode.goingAway.code));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // _errorHandled — _onDisconnect suppressed after _onError
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — error suppresses disconnect event', () {
+    test('_onDisconnect after _onError does NOT emit SignalingDisconnected', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await pumpEventQueue();
+
+      // Simulate socket error followed by the automatic close.
+      client.injectError(Exception('socket error'));
+      await pumpEventQueue();
+      client.injectDisconnect(null, null);
+      await pumpEventQueue();
+
+      // Only SignalingConnectionFailed — no SignalingDisconnected.
+      expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
+      expect(events.whereType<SignalingDisconnected>(), isEmpty);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Protocol events excluded from replay buffer
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — replay buffer excludes protocol events', () {
+    test('SignalingProtocolEvent is not replayed to late subscribers', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+      client.injectHandshake(_kHandshake);
+      await pumpEventQueue();
+      // Emit a protocol event — must NOT be buffered.
+      client.injectEvent(HangupEvent(callId: 'call-1', line: 0, reason: 'bye', code: 0));
+      await pumpEventQueue();
+
+      // Late subscriber.
+      final late = <SignalingModuleEvent>[];
+      module.events.listen(late.add);
+      await pumpEventQueue();
+
+      expect(
+        late.whereType<SignalingProtocolEvent>(),
+        isEmpty,
+        reason: 'Protocol events must not be replayed to late subscribers',
+      );
+      // But lifecycle events are still there.
+      expect(late.whereType<SignalingConnecting>(), hasLength(1));
+      expect(late.whereType<SignalingConnected>(), hasLength(1));
+      expect(late.whereType<SignalingHandshakeReceived>(), hasLength(1));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // liveController closed on subscription cancel
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — subscription cancel', () {
+    test('cancelled subscription receives no further events', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      final events = <SignalingModuleEvent>[];
+      final sub = module.events.listen(events.add);
+      await pumpEventQueue();
+      final countBeforeCancel = events.length;
+
+      await sub.cancel();
+      await pumpEventQueue();
+
+      // Inject a server event after cancel — must not reach the cancelled subscriber.
+      client.injectHandshake(_kHandshake);
+      await pumpEventQueue();
+
+      expect(events.length, equals(countBeforeCancel));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // dispose() awaits disconnect ack before closing the stream
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — dispose() waits for disconnect ack', () {
+    test('stream close arrives after SignalingDisconnected (dispose waits for ack)', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+
+      final events = <SignalingModuleEvent>[];
+      bool streamDone = false;
+      module.events.listen(events.add, onDone: () => streamDone = true);
+
+      module.connect();
+      await pumpEventQueue();
+
+      // Start dispose — it calls disconnect() internally.
+      final disposeFuture = module.dispose();
+
+      // Flush — SignalingDisconnecting is emitted, but stream not yet closed.
+      await pumpEventQueue();
+      expect(streamDone, isFalse);
+
+      // WS close-ack arrives — unblocks dispose().
+      client.injectDisconnect(1000, 'going away');
+      await pumpEventQueue();
+      await disposeFuture;
+
+      // SignalingDisconnected was emitted before stream closed.
+      expect(
+        events.whereType<SignalingDisconnected>(),
+        isEmpty,
+        reason: 'intentional disconnect from dispose suppresses reconnect hint',
+      );
+      expect(streamDone, isTrue);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // _onHandshake / _onEvent are no-ops after dispose()
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — callbacks no-op after dispose()', () {
+    test('_onHandshake and _onEvent emit nothing after dispose()', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await pumpEventQueue();
+
+      // dispose closes the module.
+      unawaited(module.dispose());
+      client.injectDisconnect(null, null);
+      await pumpEventQueue();
+
+      final countAfterDispose = events.length;
+
+      // These should be silently dropped.
+      client.injectHandshake(_kHandshake);
+      client.injectEvent(HangupEvent(callId: 'call-1', line: 0, reason: 'bye', code: 0));
+      await pumpEventQueue();
+
+      expect(events.length, equals(countAfterDispose), reason: 'No events must be emitted after dispose()');
+    });
+  });
 }
