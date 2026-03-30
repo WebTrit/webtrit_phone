@@ -700,7 +700,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ),
     );
     Notification? notificationToShow;
-    bool shouldReconnect = true;
 
     if (code == SignalingDisconnectCode.appUnregisteredError) {
       add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
@@ -739,9 +738,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       /// - in case of network disconnection on android this section is evaluating faster than [_onConnectivityResultChanged].
       /// - also in case of network disconnection error code is protocolError instead of normalClosure by unknown reason
       /// so we need to handle it here as regular disconnection
-      if (code == SignalingDisconnectCode.protocolError) {
-        shouldReconnect = false;
-      } else {
+      if (code != SignalingDisconnectCode.protocolError) {
         notificationToShow = SignalingDisconnectNotification(
           knownCode: code,
           systemCode: event.code,
