@@ -122,7 +122,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
       _connectivityTimeout?.cancel();
 
-      if (results.any((r) => r == ConnectivityResult.none)) {
+      if (results.isEmpty || results.any((r) => r == ConnectivityResult.none)) {
         _networkNone = true;
         connectivityNoneCounter++;
         logger.warning('No internet connection detected ($connectivityNoneCounter/$maxConnectivityNoneRepeats)');
@@ -371,7 +371,9 @@ class PushNotificationIsolateManager extends IsolateManager {
 
   @override
   void performAnswerCall(String callId) async {
-    final hasNetwork = await Connectivity().checkConnectivity().then((r) => !r.contains(ConnectivityResult.none));
+    final hasNetwork = await Connectivity().checkConnectivity().then(
+      (r) => r.isNotEmpty && !r.contains(ConnectivityResult.none),
+    );
     if (!hasNetwork) {
       throw Exception('Not connected');
     }

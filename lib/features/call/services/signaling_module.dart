@@ -130,11 +130,14 @@ class SignalingModule {
 
   /// Broadcast stream of all module events.
   ///
-  /// Each new subscriber immediately receives all events buffered since the
-  /// last [connect] call, followed by live events. This allows [SignalingModule]
-  /// to be connected before [CallBloc] (or any other consumer) is created —
-  /// the consumer will not miss [SignalingConnected], [SignalingHandshakeReceived],
-  /// or any protocol events that arrived in the interim.
+  /// Each new subscriber immediately receives all lifecycle and handshake events
+  /// buffered since the last [connect] call (e.g. [SignalingConnecting],
+  /// [SignalingConnected], [SignalingHandshakeReceived]), followed by live events.
+  /// This allows [SignalingModule] to be connected before [CallBloc] (or any
+  /// other consumer) is created without missing session state.
+  ///
+  /// Note: [SignalingProtocolEvent] (call events) are NOT replayed — they are
+  /// only delivered to subscribers already listening when they occur.
   Stream<SignalingModuleEvent> get events {
     // Take a snapshot of the buffer BEFORE subscribing to the live stream so
     // that any event arriving between snapshot and subscribe is delivered only
@@ -177,7 +180,7 @@ class SignalingModule {
   /// Clears the session buffer so that late subscribers receive only events
   /// from the current session, not stale events from a previous one.
   void connect() {
-    if (_disposed) return;
+    if (_disposed || _connecting) return;
     _sessionBuffer.clear();
     unawaited(_connectAsync());
   }
@@ -340,9 +343,6 @@ class SignalingModule {
       return;
     }
 
-    // Emit even when _disposed is true so long as the controller is still open
-    // — dispose() awaits _disconnectAck before closing, so this window exists.
-    // _emit already guards against a closed controller.
     if (!_disposed) {
       final knownCode = SignalingDisconnectCode.values.byCode(code ?? -1);
       // Suppress reconnect hint for intentional disconnects so consumers do not
