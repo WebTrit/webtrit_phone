@@ -51,6 +51,11 @@ abstract class VoicemailRepository implements Refreshable {
   Stream<List<Voicemail>> watchVoicemails();
 
   Future<void> removeMultipleVoicemails(List<String> messagesIds);
+
+  /// Returns `false` once the server has responded with [VoicemailNotConfiguredException]
+  /// or [EndpointNotSupportedException], indicating that voicemail is permanently
+  /// unavailable for this session.
+  bool get isFeatureSupported;
 }
 
 final _logger = Logger('VoicemailRepository');
@@ -91,11 +96,20 @@ class VoicemailRepositoryImpl
   ///
   /// This mechanism helps to enforce sequential consistency across local/remote voicemail state updates.
   Completer<void>? _fetchingCompleter;
+  bool _featureSupported = true;
+
+  @override
+  bool get isFeatureSupported => _featureSupported;
 
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
-    unawaited(fetchVoicemails());
+    unawaited(
+      fetchVoicemails().catchError(
+        (Object e) {},
+        test: (e) => e is VoicemailNotConfiguredException || e is EndpointNotSupportedException,
+      ),
+    );
   }
 
   void _onListen() {
@@ -129,11 +143,14 @@ class VoicemailRepositoryImpl
   /// Throws an exception if the remote request fails.
   @override
   Future<void> fetchVoicemails({String? localeCode}) async {
+    if (!_featureSupported) return;
+
     if (_fetchingCompleter?.isCompleted == false) {
       return _fetchingCompleter!.future;
     }
 
     _fetchingCompleter = Completer<void>();
+    _fetchingCompleter!.future.ignore();
 
     try {
       /// Emit unknown status to indicate sync in progress
@@ -154,7 +171,9 @@ class VoicemailRepositoryImpl
       _sessionGuard.onUnauthorized(e);
       rethrow;
     } catch (e, st) {
-      _logger.warning('Failed to fetch voicemails', e, st);
+      final isExpected = e is VoicemailNotConfiguredException || e is EndpointNotSupportedException;
+      _logger.warning('Failed to fetch voicemails', e, isExpected ? null : st);
+      if (isExpected) _featureSupported = false;
 
       /// Revert to the actual cached status from database on failure
       await _emitCachedVoicemails();
@@ -375,4 +394,7 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   Future<void> removeMultipleVoicemails(List<String> messagesIds) => Future.value();
+
+  @override
+  bool get isFeatureSupported => false;
 }

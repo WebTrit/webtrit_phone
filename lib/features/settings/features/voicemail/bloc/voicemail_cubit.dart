@@ -36,6 +36,11 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       _safeEmit(state.copyWith(items: items, error: null, status: VoicemailStatus.loaded));
     });
 
+    if (!_repository.isFeatureSupported) {
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported));
+      return;
+    }
+
     fetchVoicemails();
   }
 

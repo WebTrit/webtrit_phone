@@ -199,7 +199,9 @@ class WebtritApiClient {
           );
         }
       } catch (e) {
-        _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
+        if (e is! VoicemailNotConfiguredException && e is! EndpointNotSupportedException) {
+          _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
+        }
 
         // Do not retry for valid server responses with a defined HTTP status code.
         if (e is RequestFailure || requestAttempt >= requestOptions.retries) rethrow;

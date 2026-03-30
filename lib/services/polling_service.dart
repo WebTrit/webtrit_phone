@@ -250,7 +250,7 @@ class PollingService implements Disposable {
           config.consecutiveErrors++;
           config.lastError = e;
           config.lastErrorAt = clock.now();
-          _logger.warning('PollingService: refresh() failed for $listener', e, st);
+          _logger.warning('PollingService: refresh() failed for $listener', e);
         } finally {
           config.isRefreshing = false;
         }
@@ -285,7 +285,7 @@ class PollingService implements Disposable {
         config.consecutiveErrors++;
         config.lastError = e;
         config.lastErrorAt = clock.now();
-        _logger.warning('PollingService: leading refresh failed for $listener', e, st);
+        _logger.warning('PollingService: leading refresh failed for $listener', e);
       } finally {
         config.isRefreshing = false;
 
