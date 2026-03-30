@@ -375,7 +375,13 @@ class SignalingModule {
 
   void _emit(SignalingModuleEvent event) {
     if (_controller.isClosed) return;
-    _sessionBuffer.add(event);
+    // Protocol events are transient (IncomingCallEvent, HangupEvent, etc.) and
+    // carry no persistent state that a late subscriber needs to reconstruct the
+    // current session. Buffering them causes the replay list to grow without
+    // bound in long sessions. Only lifecycle and handshake events are buffered.
+    if (event is! SignalingProtocolEvent) {
+      _sessionBuffer.add(event);
+    }
     _controller.add(event);
   }
 }
