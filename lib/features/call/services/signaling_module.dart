@@ -103,6 +103,7 @@ class SignalingModule {
 
   WebtritSignalingClient? _client;
   bool _disposed = false;
+  bool _connecting = false;
 
   /// Last connect error as string for deduplication.
   String? _lastConnectErrorString;
@@ -181,61 +182,72 @@ class SignalingModule {
   // ---------------------------------------------------------------------------
 
   Future<void> _connectAsync() async {
-    // If already connected, disconnect first.
-    final existing = _client;
-    if (existing != null) {
-      _client = null;
-      try {
-        await existing.disconnect();
-      } catch (e, s) {
-        _logger.warning('_connectAsync pre-disconnect error', e, s);
-      }
-    }
-
-    if (_disposed) return;
-
-    _emit(SignalingConnecting());
-
+    if (_connecting) return;
+    _connecting = true;
     try {
-      final url = WebtritSignalingUtils.parseCoreUrlToSignalingUrl(coreUrl);
-      final client = await signalingClientFactory(
-        url: url,
-        tenantId: tenantId,
-        token: token,
-        connectionTimeout: kSignalingClientConnectionTimeout,
-        certs: trustedCertificates,
-        force: true,
-      );
-
-      if (_disposed) {
+      // If already connected, disconnect first.
+      final existing = _client;
+      if (existing != null) {
+        _client = null;
         try {
-          await client.disconnect(SignalingDisconnectCode.goingAway.code);
+          await existing.disconnect();
         } catch (e, s) {
-          _logger.warning('_connectAsync dispose-disconnect error', e, s);
+          _logger.warning('_connectAsync pre-disconnect error', e, s);
         }
-        return;
       }
 
-      client.listen(onStateHandshake: _onHandshake, onEvent: _onEvent, onError: _onError, onDisconnect: _onDisconnect);
-
-      _client = client;
-      _lastConnectErrorString = null;
-      _emit(SignalingConnected());
-    } catch (e, s) {
       if (_disposed) return;
-      _logger.warning('_connectAsync failed', e, s);
 
-      final errorString = e.toString();
-      final isRepeated = _lastConnectErrorString == errorString;
-      _lastConnectErrorString = errorString;
+      _emit(SignalingConnecting());
 
-      _emit(
-        SignalingConnectionFailed(
-          error: e,
-          isRepeated: isRepeated,
-          recommendedReconnectDelay: kSignalingClientReconnectDelay,
-        ),
-      );
+      try {
+        final url = WebtritSignalingUtils.parseCoreUrlToSignalingUrl(coreUrl);
+        final client = await signalingClientFactory(
+          url: url,
+          tenantId: tenantId,
+          token: token,
+          connectionTimeout: kSignalingClientConnectionTimeout,
+          certs: trustedCertificates,
+          force: true,
+        );
+
+        if (_disposed) {
+          try {
+            await client.disconnect(SignalingDisconnectCode.goingAway.code);
+          } catch (e, s) {
+            _logger.warning('_connectAsync dispose-disconnect error', e, s);
+          }
+          return;
+        }
+
+        client.listen(
+          onStateHandshake: _onHandshake,
+          onEvent: _onEvent,
+          onError: _onError,
+          onDisconnect: _onDisconnect,
+        );
+
+        _client = client;
+        _lastConnectErrorString = null;
+        _emit(SignalingConnected());
+      } catch (e, s) {
+        if (_disposed) return;
+        _logger.warning('_connectAsync failed', e, s);
+
+        final errorString = e.toString();
+        final isRepeated = _lastConnectErrorString == errorString;
+        _lastConnectErrorString = errorString;
+
+        _emit(
+          SignalingConnectionFailed(
+            error: e,
+            isRepeated: isRepeated,
+            recommendedReconnectDelay: kSignalingClientReconnectDelay,
+          ),
+        );
+      }
+    } finally {
+      _connecting = false;
     }
   }
 
