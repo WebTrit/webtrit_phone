@@ -183,8 +183,10 @@ class SignalingModule {
   }
 
   /// Disconnects the current client gracefully. Emits [SignalingDisconnecting]
-  /// immediately. [SignalingDisconnected] follows asynchronously once the
-  /// underlying WebSocket confirms closure via the [_onDisconnect] callback.
+  /// immediately and returns. [SignalingDisconnected] is emitted later,
+  /// asynchronously, only when the underlying WebSocket close-ack arrives via
+  /// the [_onDisconnect] callback — it is NOT guaranteed to arrive before this
+  /// Future completes.
   Future<void> disconnect() async {
     final client = _client;
     if (client == null) return;
