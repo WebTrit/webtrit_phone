@@ -330,12 +330,13 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
       time: DateTime.now(),
     );
 
-    await AppDatabaseScope.use(
+    await AppDatabaseScope.useOrNull(
       directoryPath: appPath.applicationDocumentsPath,
       action: (db) async {
         final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
         await repo.set(activeMessagePush);
       },
+      onError: (e, st) => logger.warning('MessagePush DB write failed: $e'),
     );
   }
 }
@@ -348,28 +349,28 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
   final appPath = await AppPath.init();
 
-  return AppDatabaseScope.tryUse(
-    directoryPath: appPath.applicationDocumentsPath,
-    fallback: appPush.call.displayName,
-    onError: (e, st) {
-      logger.severe(
-        'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
-        'Fallback to push display name will be used.',
-        e,
-        st,
-      );
-    },
-    action: (db) async {
-      final contactsRepository = ContactsRepository(
-        appDatabase: db,
-        contactsRemoteDataSource: null,
-        contactsLocalDataSource: null,
-      );
+  return await AppDatabaseScope.useOrNull(
+        directoryPath: appPath.applicationDocumentsPath,
+        onError: (e, st) {
+          logger.severe(
+            'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
+            'Fallback to push display name will be used.',
+            e,
+            st,
+          );
+        },
+        action: (db) async {
+          final contactsRepository = ContactsRepository(
+            appDatabase: db,
+            contactsRemoteDataSource: null,
+            contactsLocalDataSource: null,
+          );
 
-      final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
-      return contact?.maybeName ?? appPush.call.displayName;
-    },
-  );
+          final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
+          return contact?.maybeName ?? appPush.call.displayName;
+        },
+      ) ??
+      appPush.call.displayName;
 }
 
 CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
@@ -458,16 +459,17 @@ void workManagerDispatcher() {
       final appPath = await AppPath.init();
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      final result = await AppDatabaseScope.tryUse<bool>(
-        directoryPath: appPath.applicationDocumentsPath,
-        fallback: false, // return false so WorkManager can retry on DB/worker failure
-        onError: (e, st) => logger.severe('System notifications task failed', e, st),
-        action: (db) async {
-          final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
-          final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
-          return worker.execute();
-        },
-      );
+      final result =
+          await AppDatabaseScope.useOrNull<bool>(
+            directoryPath: appPath.applicationDocumentsPath,
+            onError: (e, st) => logger.severe('System notifications task failed', e, st),
+            action: (db) async {
+              final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
+              final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
+              return worker.execute();
+            },
+          ) ??
+          false; // return false so WorkManager can retry on DB/worker failure
 
       logger.info('Task result: $result');
       return result;

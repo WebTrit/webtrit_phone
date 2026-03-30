@@ -28,25 +28,6 @@ abstract final class AppDatabaseScope {
 
   /// Runs [action] within a database scope.
   ///
-  /// On error, notifies [onError] (if provided) and returns [fallback],
-  /// preventing the exception from bubbling up the call stack.
-  static Future<T> tryUse<T>({
-    required String directoryPath,
-    required Future<T> Function(AppDatabase db) action,
-    required T fallback,
-    String dbName = 'db.sqlite',
-    void Function(Object error, StackTrace stackTrace)? onError,
-  }) async {
-    try {
-      return await use(directoryPath: directoryPath, dbName: dbName, action: action);
-    } catch (error, stackTrace) {
-      onError?.call(error, stackTrace);
-      return fallback;
-    }
-  }
-
-  /// Runs [action] within a database scope.
-  ///
   /// On error, notifies [onError] (if provided) and returns `null`.
   /// Useful when failures should yield an absent value instead of an exception.
   static Future<T?> useOrNull<T>({
