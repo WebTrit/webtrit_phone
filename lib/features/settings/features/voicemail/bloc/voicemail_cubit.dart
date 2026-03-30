@@ -33,6 +33,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void _initialize() async {
     _subscription = _repository.watchVoicemails().listen((items) {
+      if (state.isFeatureNotSupported) return;
       _safeEmit(state.copyWith(items: items, error: null, status: VoicemailStatus.loaded));
     });
 

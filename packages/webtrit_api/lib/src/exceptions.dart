@@ -40,7 +40,8 @@ class VoicemailNotConfiguredException extends RequestFailure {
     required super.url,
     required super.requestId,
     required super.statusCode,
-    // required List<String> recognizedNotConfiguredCodes,
+    super.token,
+    super.error,
   }) : super();
 }
 

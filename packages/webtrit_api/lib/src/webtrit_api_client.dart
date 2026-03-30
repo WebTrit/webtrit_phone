@@ -186,7 +186,8 @@ class WebtritApiClient {
               url: tenantUrl,
               requestId: xRequestId,
               statusCode: httpResponse.statusCode,
-              // recognizedNotConfiguredCodes: ,
+              token: token,
+              error: error,
             );
           }
 
@@ -200,7 +201,7 @@ class WebtritApiClient {
         }
       } catch (e) {
         if (e is! VoicemailNotConfiguredException && e is! EndpointNotSupportedException) {
-          _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
+          _logger.severe('${method.toUpperCase()} failed for requestId: $xRequestId with error: $e');
         }
 
         // Do not retry for valid server responses with a defined HTTP status code.
