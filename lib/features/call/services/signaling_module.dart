@@ -110,6 +110,12 @@ class SignalingModule {
   /// [SignalingDisconnected] is emitted before the stream closes.
   Completer<void>? _disconnectAck;
 
+  /// Set to true by [disconnect] so that [_onDisconnect] emits
+  /// [SignalingDisconnected] with [recommendedReconnectDelay] = null,
+  /// preventing consumers from scheduling a spurious reconnect after an
+  /// intentional close (e.g. when the foreground isolate takes over).
+  bool _intentionalDisconnect = false;
+
   /// Last connect error as string for deduplication.
   String? _lastConnectErrorString;
 
@@ -164,6 +170,7 @@ class SignalingModule {
     final client = _client;
     if (client == null) return;
     _client = null;
+    _intentionalDisconnect = true;
     _disconnectAck = Completer<void>();
     _emit(SignalingDisconnecting());
     try {
@@ -298,15 +305,21 @@ class SignalingModule {
     _client = null;
     final ack = _disconnectAck;
     _disconnectAck = null;
+    final wasIntentional = _intentionalDisconnect;
+    _intentionalDisconnect = false;
 
     // Emit even when _disposed is true so long as the controller is still open
     // — dispose() awaits _disconnectAck before closing, so this window exists.
     // _emit already guards against a closed controller.
     if (!_disposed) {
       final knownCode = SignalingDisconnectCode.values.byCode(code ?? -1);
-      final recommendedDelay = _reconnectDelay(knownCode);
+      // Suppress reconnect hint for intentional disconnects so consumers do not
+      // schedule a spurious reconnect (e.g. foreground isolate taking over).
+      final recommendedDelay = wasIntentional ? null : _reconnectDelay(knownCode);
 
-      _logger.fine('_onDisconnect code=$code reason=$reason knownCode=$knownCode delay=$recommendedDelay');
+      _logger.fine(
+        '_onDisconnect code=$code reason=$reason knownCode=$knownCode delay=$recommendedDelay intentional=$wasIntentional',
+      );
 
       _emit(
         SignalingDisconnected(
