@@ -203,7 +203,16 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   if (!Platform.isAndroid) return;
 
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
-  unawaited(WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall));
+  unawaited(
+    WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall).catchError((
+      Object e,
+      StackTrace s,
+    ) {
+      Logger(
+        'bootstrap',
+      ).severe('setIncomingCallHandler failed -- incoming calls in persistent mode may not work', e, s);
+    }),
+  );
 
   // If the fallback incoming call trigger via SMS is enabled in the feature access config
   if (featureAccess.callConfig.triggerConfig.smsFallback.enabled) {

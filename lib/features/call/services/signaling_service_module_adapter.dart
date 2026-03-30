@@ -56,7 +56,13 @@ class SignalingServiceModuleAdapter implements SignalingModuleInterface {
     _service.start(_config, mode: _mode).ignore();
   }
 
-  /// No-op -- the service manages its own connection lifecycle.
+  /// No-op -- intentional. In persistent mode the service runs inside an Android
+  /// foreground service and is designed to stay connected while the app is
+  /// backgrounded. [CallBloc] calls [disconnect] when it goes to the background
+  /// with no active calls; honouring that would defeat the purpose of the
+  /// persistent service (the server would lose the connection and fall back to
+  /// FCM push for the next call). If push-bound mode is used instead, the
+  /// service stops on its own via [onTaskRemoved] -- no explicit disconnect needed.
   @override
   Future<void> disconnect() async {}
 
