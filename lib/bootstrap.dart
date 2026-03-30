@@ -305,12 +305,14 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
     // due to concurrent database access from multiple isolates.
     final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
 
-    await AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
-      appPush.call.id,
-      CallkeepHandle.number(appPush.call.handle),
-      displayName: displayName,
-      hasVideo: appPush.call.hasVideo,
-    );
+    await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
+        .reportNewIncomingCall(
+          appPush.call.id,
+          CallkeepHandle.number(appPush.call.handle),
+          displayName: displayName,
+          hasVideo: appPush.call.hasVideo,
+        )
+        .timeout(const Duration(seconds: 10), onTimeout: () => _onReportIncomingCallTimeout(logger));
   }
 
   if (appPush is MessagePush) {
@@ -365,6 +367,11 @@ Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, L
       return contact?.maybeName ?? appPush.call.displayName;
     },
   );
+}
+
+CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
+  logger.warning('reportNewIncomingCall timed out — Telecom may be overloaded');
+  return null;
 }
 
 Future _initLocalPushs() async {
