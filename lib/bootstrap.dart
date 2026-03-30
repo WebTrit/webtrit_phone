@@ -237,7 +237,10 @@ Future<void> _initFirebaseMessaging() async {
     final appPush = AppRemotePush.fromFCM(message);
     RemotePushBroker.handleOpenedPush(appPush);
   });
-  final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  final initialMessage = await FirebaseMessaging.instance.getInitialMessage().timeout(
+    const Duration(seconds: 5),
+    onTimeout: () => null,
+  );
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
     final appPush = AppRemotePush.fromFCM(initialMessage);
