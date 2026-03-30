@@ -4,6 +4,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'call_error_reporter.dart';
+import 'pc_exceptions.dart';
 import 'sdp_munger.dart';
 
 final _logger = Logger('RenegotiationHandler');
@@ -44,7 +45,7 @@ typedef RenegotiationExecutor = Future<void> Function(String callId, int? lineId
 ///    calling `setLocalDescription`. The `await createOffer()` yields control
 ///    to the event loop; a concurrent native callback may update the Dart-side
 ///    cached [RTCPeerConnection.signalingState] in that gap. If the check misses
-///    a concurrent state change (stale cache), the [on String catch] below is the
+///    a concurrent state change (stale cache), the [RtcJsepErrorParser] below is the
 ///    authoritative fallback.
 ///
 /// ## Concurrency guard
@@ -90,52 +91,52 @@ class RenegotiationHandler {
     _isHandling = true;
     _pendingRetry = false;
     try {
-      final stateBeforeOffer = peerConnection.signalingState;
-      _logger.fine(() => 'onRenegotiationNeeded signalingState: $stateBeforeOffer');
-      if (stateBeforeOffer != RTCSignalingState.RTCSignalingStateStable) {
-        _logger.fine(() => 'onRenegotiationNeeded skipped: not in stable state ($stateBeforeOffer)');
-        return;
+      try {
+        final stateBeforeOffer = peerConnection.signalingState;
+        _logger.fine(() => 'onRenegotiationNeeded signalingState: $stateBeforeOffer');
+        if (stateBeforeOffer != RTCSignalingState.RTCSignalingStateStable) {
+          _logger.fine(() => 'onRenegotiationNeeded skipped: not in stable state ($stateBeforeOffer)');
+          return;
+        }
+
+        final localDescription = await peerConnection.createOffer({});
+        sdpMunger?.apply(localDescription);
+        _logger.info(() => 'onRenegotiationNeeded offer SDP (callId=$callId):\n${localDescription.sdp}');
+
+        final stateAfterOffer = peerConnection.signalingState;
+        if (stateAfterOffer != RTCSignalingState.RTCSignalingStateStable) {
+          _logger.fine(
+            () =>
+                'onRenegotiationNeeded: state changed to $stateAfterOffer after createOffer, skipping setLocalDescription',
+          );
+          return;
+        }
+
+        // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
+        // localDescription should be set before sending the offer to transition into have-local-offer state.
+        await peerConnection.setLocalDescription(localDescription);
+
+        await execute(callId, lineId, localDescription);
+      } on String catch (e) {
+        throw RtcJsepErrorParser.parse(e);
       }
-
-      final localDescription = await peerConnection.createOffer({});
-      sdpMunger?.apply(localDescription);
-      _logger.info(() => 'onRenegotiationNeeded offer SDP (callId=$callId):\n${localDescription.sdp}');
-
-      final stateAfterOffer = peerConnection.signalingState;
-      if (stateAfterOffer != RTCSignalingState.RTCSignalingStateStable) {
-        _logger.fine(
-          () =>
-              'onRenegotiationNeeded: state changed to $stateAfterOffer after createOffer, skipping setLocalDescription',
-        );
-        return;
-      }
-
-      // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
-      // localDescription should be set before sending the offer to transition into have-local-offer state.
-      await peerConnection.setLocalDescription(localDescription);
-
-      await execute(callId, lineId, localDescription);
     } on WebtritSignalingErrorException catch (e) {
       _logger.warning(
         () => 'onRenegotiationNeeded: UpdateRequest rejected by server (callId=$callId, lineId=$lineId): $e',
       );
       callErrorReporter.handle(e, null, 'RenegotiationHandler.handle error (callId=$callId, lineId=$lineId)');
-    } on String catch (e) {
+    } on PCWrongSignalingState catch (e) {
       // flutter_webrtc surfaces native errors as plain strings. A "wrong state" failure
       // on setLocalDescription means a concurrent setRemoteDescription (e.g. from an
       // incoming updating_call) moved the PC out of stable between the TOCTOU guard and
       // the setLocalDescription call. This is a transient race — libwebrtc keeps the
       // [[NegotiationNeeded]] flag set and will re-fire onRenegotiationNeeded once the
       // PC returns to stable. No user notification is needed.
-      if (e.contains('wrong state') || e.contains('have-remote-offer') || e.contains('have-local-offer')) {
-        _logger.warning(
-          () =>
-              'onRenegotiationNeeded: setLocalDescription failed in wrong state ($e) '
-              '— libwebrtc will re-fire onRenegotiationNeeded when stable',
-        );
-      } else {
-        callErrorReporter.handle(e, null, 'RenegotiationHandler.handle error (callId=$callId, lineId=$lineId)');
-      }
+      _logger.warning(
+        () =>
+            'onRenegotiationNeeded: setLocalDescription failed in wrong state (${e.message}) '
+            '— libwebrtc will re-fire onRenegotiationNeeded when stable',
+      );
     } catch (e, s) {
       callErrorReporter.handle(e, s, 'RenegotiationHandler.handle error (callId=$callId, lineId=$lineId)');
     } finally {
