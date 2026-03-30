@@ -54,23 +54,13 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
 /// Used to test that [SignalingModule.dispose] completes even when the
 /// underlying WebSocket close fails.
 class _ThrowingDisconnectClient extends Fake implements WebtritSignalingClient {
-  StateHandshakeHandler? _onStateHandshake;
-  EventHandler? _onEvent;
-  ErrorHandler? _onError;
-  DisconnectHandler? _onDisconnect;
-
   @override
   void listen({
     required StateHandshakeHandler onStateHandshake,
     required EventHandler onEvent,
     required ErrorHandler onError,
     required DisconnectHandler onDisconnect,
-  }) {
-    _onStateHandshake = onStateHandshake;
-    _onEvent = onEvent;
-    _onError = onError;
-    _onDisconnect = onDisconnect;
-  }
+  }) {}
 
   @override
   Future<void> disconnect([int? code, String? reason]) async {
