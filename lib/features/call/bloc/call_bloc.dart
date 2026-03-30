@@ -474,7 +474,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void _disconnectInitiated() {
     _signalingClientReconnectTimer?.cancel();
     _signalingClientReconnectTimer = null;
-    _signalingModule.disconnect();
+    unawaited(_signalingModule.disconnect());
   }
 
   //
