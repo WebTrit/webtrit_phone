@@ -36,6 +36,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   Timer? _connectivityTimeout;
+  Timer? _signalingReconnectTimer;
   bool _networkNone = false;
 
   /// callId → line index (populated from StateHandshake)
@@ -75,13 +76,15 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
         case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
           _onSignalingError(error);
           if (enableReconnect && !_networkNone) {
-            Future.delayed(recommendedReconnectDelay, () {
+            _signalingReconnectTimer?.cancel();
+            _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
               if (_signalingModule.signalingClient == null) _signalingModule.connect();
             });
           }
         case SignalingDisconnected(:final recommendedReconnectDelay):
           if (enableReconnect && recommendedReconnectDelay != null && !_networkNone) {
-            Future.delayed(recommendedReconnectDelay, () {
+            _signalingReconnectTimer?.cancel();
+            _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
               if (_signalingModule.signalingClient == null) _signalingModule.connect();
             });
           }
@@ -95,6 +98,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   Future<void> close() async {
     _connectivityTimeout?.cancel();
+    _signalingReconnectTimer?.cancel();
     for (final pending in _pendingRequests) {
       pending.timeoutTimer.cancel();
       if (!pending.completer.isCompleted) {
