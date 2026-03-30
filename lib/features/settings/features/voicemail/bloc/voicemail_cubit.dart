@@ -33,8 +33,14 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void _initialize() async {
     _subscription = _repository.watchVoicemails().listen((items) {
+      if (state.isFeatureNotSupported) return;
       _safeEmit(state.copyWith(items: items, error: null, status: VoicemailStatus.loaded));
     });
+
+    if (!_repository.isFeatureSupported) {
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported));
+      return;
+    }
 
     fetchVoicemails();
   }
@@ -45,6 +51,9 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       await _repository.fetchVoicemails();
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } on EndpointNotSupportedException catch (e) {
+      final error = DefaultErrorNotification(e);
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
+    } on VoicemailNotConfiguredException catch (e) {
       final error = DefaultErrorNotification(e);
       _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
     } catch (e) {

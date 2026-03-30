@@ -135,14 +135,21 @@ class SettingsScreen extends StatelessWidget {
                               showSeparator: showSeparators,
                               onTap: () => _onItemTap(context, item),
                             ),
+                        ] else if (item.flavor == SettingsFlavor.voicemail) ...[
+                          SettingsTile(
+                            title: context.parseL10n(item.titleL10n),
+                            icon: item.icon,
+                            iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                            trailing: UnreadBadge(count: state.unreadVoicemailCount),
+                            textStyle: effectiveStyle?.itemTextStyle,
+                            showSeparator: showSeparators,
+                            onTap: () => _onItemTap(context, item),
+                          ),
                         ] else
                           SettingsTile(
                             title: context.parseL10n(item.titleL10n),
                             icon: item.icon,
                             iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
-                            trailing: item.flavor == SettingsFlavor.voicemail
-                                ? UnreadBadge(count: state.unreadVoicemailCount)
-                                : null,
                             textStyle: effectiveStyle?.itemTextStyle,
                             showSeparator: showSeparators,
                             onTap: () => _onItemTap(context, item),

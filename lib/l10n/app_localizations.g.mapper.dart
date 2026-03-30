@@ -1331,6 +1331,8 @@ class AppLocalizationsMapper {
       'voicemail_Label_playbackError':
           localizations.voicemail_Label_playbackError,
       'voicemail_Label_retry': localizations.voicemail_Label_retry,
+      'voicemail_Snackbar_notConfigured':
+          localizations.voicemail_Snackbar_notConfigured,
       'voicemail_Title_notSupported':
           localizations.voicemail_Title_notSupported,
       'voicemail_Widget_screenTitle':

@@ -212,8 +212,8 @@ class ConnectivityLifecycleService implements Disposable {
         } else {
           await run(item);
         }
-      } catch (e, st) {
-        _logger.warning('ConnectivityLifecycleService: listener task failed', e, st);
+      } catch (e) {
+        _logger.warning('ConnectivityLifecycleService: listener task failed', e);
       }
     }
   }
@@ -236,8 +236,8 @@ class ConnectivityLifecycleService implements Disposable {
           } else {
             await run(item);
           }
-        } catch (e, st) {
-          _logger.warning('ConnectivityLifecycleService: listener task failed', e, st);
+        } catch (e) {
+          _logger.warning('ConnectivityLifecycleService: listener task failed', e);
         }
       }());
     }

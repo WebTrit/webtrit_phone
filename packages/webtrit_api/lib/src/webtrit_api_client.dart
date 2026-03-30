@@ -181,6 +181,16 @@ class WebtritApiClient {
             );
           }
 
+          if (error?.code == 'voicemail_not_configured') {
+            throw VoicemailNotConfiguredException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              token: token,
+              error: error,
+            );
+          }
+
           throw RequestFailure(
             url: tenantUrl,
             statusCode: httpResponse.statusCode,
@@ -190,7 +200,9 @@ class WebtritApiClient {
           );
         }
       } catch (e) {
-        _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
+        if (e is! VoicemailNotConfiguredException && e is! EndpointNotSupportedException) {
+          _logger.severe('${method.toUpperCase()} failed for requestId: $xRequestId with error: $e');
+        }
 
         // Do not retry for valid server responses with a defined HTTP status code.
         if (e is RequestFailure || requestAttempt >= requestOptions.retries) rethrow;

@@ -2361,6 +2361,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Label_retry => 'Riprova';
 
   @override
+  String get voicemail_Snackbar_notConfigured =>
+      'Contatta il tuo amministratore per attivare la segreteria telefonica.';
+
+  @override
   String get voicemail_Title_notSupported => 'Funzionalità non supportata';
 
   @override

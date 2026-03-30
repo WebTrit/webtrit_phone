@@ -2338,6 +2338,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voicemail_Label_retry => 'Try again';
 
   @override
+  String get voicemail_Snackbar_notConfigured => 'Contact your administrator to activate voicemail';
+
+  @override
   String get voicemail_Title_notSupported => 'Feature not supported';
 
   @override
