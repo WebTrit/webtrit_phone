@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:webtrit_signaling_service/webtrit_signaling_service.dart' show WebtritSignalingService;
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart' show SignalingServiceMode;
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/incoming_call_type/incoming_call_type_repository.dart';
@@ -14,7 +14,7 @@ part 'network_state.dart';
 part 'network_cubit.freezed.dart';
 
 class NetworkCubit extends Cubit<NetworkState> {
-  NetworkCubit(this._callTriggerConfig, this._deviceInfo, this._incomingCallTypeRepository, this._signalingService)
+  NetworkCubit(this._callTriggerConfig, this._deviceInfo, this._incomingCallTypeRepository, this._updateSignalingMode)
     : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
     _initializeActiveIncomingType();
   }
@@ -22,7 +22,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   final CallTriggerConfig _callTriggerConfig;
   final DeviceInfo _deviceInfo;
   final IncomingCallTypeRepository _incomingCallTypeRepository;
-  final WebtritSignalingService _signalingService;
+  final Future<void> Function(SignalingServiceMode) _updateSignalingMode;
 
   bool get smsFallbackAvailable => _callTriggerConfig.smsFallback.available;
 
@@ -50,7 +50,7 @@ class NetworkCubit extends Cubit<NetworkState> {
 
   Future<void> selectIncomingCallType(IncomingCallTypeModel selectedTypeModel) async {
     await _incomingCallTypeRepository.setIncomingCallType(selectedTypeModel.incomingCallType);
-    await _signalingService.updateMode(selectedTypeModel.incomingCallType.toSignalingServiceMode());
+    await _updateSignalingMode(selectedTypeModel.incomingCallType.toSignalingServiceMode());
     _initializeActiveIncomingType();
   }
 }

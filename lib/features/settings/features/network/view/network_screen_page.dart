@@ -29,7 +29,7 @@ class NetworkScreenPage extends StatelessWidget {
             featureAccess.callConfig.triggerConfig,
             context.read<DeviceInfo>(),
             context.read<IncomingCallTypeRepository>(),
-            WebtritSignalingService(),
+            WebtritSignalingService().updateMode,
           ),
         ),
       ],
