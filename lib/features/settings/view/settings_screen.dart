@@ -136,27 +136,16 @@ class SettingsScreen extends StatelessWidget {
                               onTap: () => _onItemTap(context, item),
                             ),
                         ] else if (item.flavor == SettingsFlavor.voicemail) ...[
-                          BlocBuilder<VoicemailCubit, VoicemailState>(
-                            builder: (context, voicemailState) {
-                              return SettingsTile(
-                                title: context.parseL10n(item.titleL10n),
-                                icon: item.icon,
-                                iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
-                                trailing: !voicemailState.isFeatureNotSupported ? UnreadBadge(count: state.unreadVoicemailCount) : null,
-                                textStyle: effectiveStyle?.itemTextStyle,
-                                showSeparator: showSeparators,
-                                onTap: () => !voicemailState.isFeatureNotSupported ? _onItemTap(context, item) : {
-                                  ScaffoldMessenger.of(
-                                    context,
-                                  ).showSnackBar(SnackBar(content: Text(context.l10n.voicemail_Snackbar_notConfigured)))
-                                },
-                                enabled: !voicemailState.isFeatureNotSupported,
-                                opacity: voicemailState.isFeatureNotSupported ? 0.4 : 1.0,
-                              );
-                            },
+                          SettingsTile(
+                            title: context.parseL10n(item.titleL10n),
+                            icon: item.icon,
+                            iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                            trailing: UnreadBadge(count: state.unreadVoicemailCount),
+                            textStyle: effectiveStyle?.itemTextStyle,
+                            showSeparator: showSeparators,
+                            onTap: () => _onItemTap(context, item),
                           ),
-                        ]
-                        else
+                        ] else
                           SettingsTile(
                             title: context.parseL10n(item.titleL10n),
                             icon: item.icon,
