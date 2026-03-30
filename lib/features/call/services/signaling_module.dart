@@ -195,7 +195,7 @@ class SignalingModule {
     _disconnectAck = Completer<void>();
     _emit(SignalingDisconnecting());
     try {
-      await client.disconnect(SignalingDisconnectCode.goingAway.code);
+      await client.disconnect(SignalingDisconnectCode.normalClosure.code);
     } catch (e, s) {
       _logger.warning('disconnect error', e, s);
       _disconnectAck?.complete();
@@ -254,7 +254,7 @@ class SignalingModule {
 
         if (_disposed) {
           try {
-            await client.disconnect(SignalingDisconnectCode.goingAway.code);
+            await client.disconnect(SignalingDisconnectCode.normalClosure.code);
           } catch (e, s) {
             _logger.warning('_connectAsync dispose-disconnect error', e, s);
           }
