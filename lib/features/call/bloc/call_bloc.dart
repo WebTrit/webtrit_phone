@@ -135,8 +135,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           _scheduleReconnect(recommendedReconnectDelay);
         case SignalingDisconnecting():
           add(const _SignalingClientEvent.disconnecting());
-        case SignalingDisconnected(:final code, :final reason):
+        case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
           add(_SignalingClientEvent.disconnected(code, reason));
+          if (recommendedReconnectDelay != null) _scheduleReconnect(recommendedReconnectDelay);
         case SignalingHandshakeReceived(:final handshake):
           _handleHandshakeReceived(handshake);
         case SignalingProtocolEvent(:final event):
@@ -756,12 +757,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
     emit(newState);
     if (notificationToShow != null && !repeated) submitNotification(notificationToShow);
-    if (shouldReconnect) {
-      final reconnectDelay = code == SignalingDisconnectCode.controllerForceAttachClose
-          ? kSignalingClientFastReconnectDelay
-          : kSignalingClientReconnectDelay;
-      _reconnectInitiated(delay: reconnectDelay);
-    }
   }
 
   // processing call push events
