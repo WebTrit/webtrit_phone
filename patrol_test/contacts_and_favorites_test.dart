@@ -59,13 +59,13 @@ void main() {
     await $(contactsExtContactTileKey).containing(contactA).tap();
     await $(contactPhoneTileKey).containing(contactANumber).waitUntilVisible();
     await $(contactPhoneTileKey).containing(contactANumber).$(contactPhoneTileFavIconKey).tap();
-    await $.native.pressBack().then((e) => $.pumpAndTrySettle());
+    await $.platformAutomator.mobile.swipeBack().then((e) => $.pumpAndTrySettle());
 
     // Open contactB and add number to favorites.
     await $(contactsExtContactTileKey).containing(contactB).tap();
     await $(contactPhoneTileKey).containing(contactBNumber).waitUntilVisible();
     await $(contactPhoneTileKey).containing(contactBNumber).$(contactPhoneTileFavIconKey).tap();
-    await $.native.pressBack().then((e) => $.pumpAndTrySettle());
+    await $.platformAutomator.mobile.swipeBack().then((e) => $.pumpAndTrySettle());
 
     await $(MainFlavor.favorites.toNavBarKey()).tap();
     expect($(favoriteTileKey).containing(contactA), findsOneWidget, reason: '$contactB should favorited');
