@@ -135,7 +135,9 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
         }
 
         _connectivityTimeout = Timer(const Duration(seconds: 5), () {
-          if (results.any((r) => r == ConnectivityResult.none)) {
+          // Use the current _networkNone state rather than the stale `results`
+          // snapshot captured at the time the timer was created.
+          if (_networkNone) {
             logger.severe('Internet connection not restored within timeout');
             _onSignalingError('No internet connection');
           }
