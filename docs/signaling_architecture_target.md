@@ -193,8 +193,9 @@ How long to wait (delay hint)  →  Whether there are active calls
 **CallBloc** — full guard chain:
 
 ```dart
-void _scheduleReconnect(Duration delay) {
-  Timer(delay, () {
+void _scheduleReconnect(Duration delay, {bool force = false}) {
+  _signalingClientReconnectTimer?.cancel();
+  _signalingClientReconnectTimer = Timer(delay, () {
     if (isClosed)                     return; // BLoC was closed during delay
     if (!appActive && !force)         return; // app is backgrounded
     if (!connectionActive && !force)  return; // no network
@@ -209,7 +210,8 @@ void _scheduleReconnect(Duration delay) {
 ```dart
 case SignalingDisconnected(:final recommendedReconnectDelay):
   if (enableReconnect && recommendedReconnectDelay != null && !_networkNone) {
-    Future.delayed(recommendedReconnectDelay, () {
+    _signalingReconnectTimer?.cancel();
+    _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
       if (_signalingModule.signalingClient == null) _signalingModule.connect();
     });
   }
@@ -237,6 +239,8 @@ _signalingSubscription = _signalingModule.events.listen((event) {
       if (!isRepeated) submitNotification(const SignalingConnectFailedNotification());
       add(_SignalingClientEvent.failed(error));
       _scheduleReconnect(recommendedReconnectDelay);
+    case SignalingDisconnecting():
+      add(const _SignalingClientEvent.disconnecting());
     case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
       add(_SignalingClientEvent.disconnected(code, reason));
       if (recommendedReconnectDelay != null) _scheduleReconnect(recommendedReconnectDelay);
