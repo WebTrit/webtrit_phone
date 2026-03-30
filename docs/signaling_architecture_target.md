@@ -237,9 +237,9 @@ _signalingSubscription = _signalingModule.events.listen((event) {
       if (!isRepeated) submitNotification(const SignalingConnectFailedNotification());
       add(_SignalingClientEvent.failed(error));
       _scheduleReconnect(recommendedReconnectDelay);
-    case SignalingDisconnected(:final code, :final recommendedReconnectDelay):
+    case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
       add(_SignalingClientEvent.disconnected(code, reason));
-      _scheduleReconnectIfNeeded(recommendedReconnectDelay);
+      if (recommendedReconnectDelay != null) _scheduleReconnect(recommendedReconnectDelay);
     case SignalingHandshakeReceived(:final handshake):
       _handleHandshakeReceived(handshake);
     case SignalingProtocolEvent(:final event):
