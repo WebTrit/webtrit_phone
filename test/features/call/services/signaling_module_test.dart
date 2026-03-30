@@ -50,6 +50,37 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
   void injectDisconnect(int? code, String? reason) => _onDisconnect?.call(code, reason);
 }
 
+/// Variant of [_FakeSignalingClient] whose [disconnect] always throws.
+/// Used to test that [SignalingModule.dispose] completes even when the
+/// underlying WebSocket close fails.
+class _ThrowingDisconnectClient extends Fake implements WebtritSignalingClient {
+  StateHandshakeHandler? _onStateHandshake;
+  EventHandler? _onEvent;
+  ErrorHandler? _onError;
+  DisconnectHandler? _onDisconnect;
+
+  @override
+  void listen({
+    required StateHandshakeHandler onStateHandshake,
+    required EventHandler onEvent,
+    required ErrorHandler onError,
+    required DisconnectHandler onDisconnect,
+  }) {
+    _onStateHandshake = onStateHandshake;
+    _onEvent = onEvent;
+    _onError = onError;
+    _onDisconnect = onDisconnect;
+  }
+
+  @override
+  Future<void> disconnect([int? code, String? reason]) async {
+    throw StateError('simulated disconnect failure');
+  }
+
+  @override
+  Future<void> execute(Request request, [Duration? timeout]) async {}
+}
+
 // ---------------------------------------------------------------------------
 // Factory helpers
 // ---------------------------------------------------------------------------
@@ -1077,6 +1108,312 @@ void main() {
       await pumpEventQueue();
 
       expect(events.length, equals(countAfterDispose), reason: 'No events must be emitted after dispose()');
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Internet dropped mid-session
+  // Mirrors what CallBloc sees: connection was healthy, then socket dies.
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — internet dropped mid-session', () {
+    test('_onError after handshake emits ConnectionFailed, not Disconnected, and clears signalingClient', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await pumpEventQueue();
+      client.injectHandshake(_kHandshake);
+      await pumpEventQueue();
+
+      // Simulate internet drop — socket emits an IOException-style error.
+      client.injectError(Exception('Connection reset by peer'));
+      await pumpEventQueue();
+      // Automatic socket close follows the error — must be suppressed.
+      client.injectDisconnect(null, null);
+      await pumpEventQueue();
+
+      expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
+      expect(
+        events.whereType<SignalingDisconnected>(),
+        isEmpty,
+        reason: 'Disconnect after _onError must be suppressed to avoid double reconnect trigger',
+      );
+      expect(module.signalingClient, isNull);
+    });
+
+    test('unexpected socket close (null code) after handshake emits Disconnected with reconnect delay', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await pumpEventQueue();
+      client.injectHandshake(_kHandshake);
+      await pumpEventQueue();
+
+      // Network disappeared — socket closes without a clean WebSocket close code.
+      client.injectDisconnect(null, null);
+      await pumpEventQueue();
+
+      final disconnected = events.whereType<SignalingDisconnected>().single;
+      expect(disconnected.code, isNull);
+      expect(
+        disconnected.recommendedReconnectDelay,
+        equals(kSignalingClientReconnectDelay),
+        reason: 'Unknown/null code should result in a slow reconnect, not a nil delay',
+      );
+      expect(module.signalingClient, isNull);
+    });
+
+    test('ConnectionFailed is buffered so late subscribers reconstruct last-known failure', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+      client.injectHandshake(_kHandshake);
+      await pumpEventQueue();
+      // Internet drops.
+      client.injectError(Exception('network gone'));
+      await pumpEventQueue();
+
+      // Late subscriber — joins after the error.
+      final late = <SignalingModuleEvent>[];
+      module.events.listen(late.add);
+      await pumpEventQueue();
+
+      expect(late.whereType<SignalingConnecting>(), hasLength(1));
+      expect(late.whereType<SignalingConnected>(), hasLength(1));
+      expect(late.whereType<SignalingHandshakeReceived>(), hasLength(1));
+      expect(late.whereType<SignalingConnectionFailed>(), hasLength(1));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Handshake not completed
+  // Mirrors the scenario where a connection is established but the server
+  // closes the socket before the StateHandshake arrives (e.g. TLS handshake
+  // succeeds but server rejects the upgrade, or network drops immediately).
+  // CallBloc keeps linesCount == 0 and registration == null in this case.
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — handshake not completed', () {
+    test('disconnect before handshake emits Disconnected with reconnect delay but no HandshakeReceived', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await pumpEventQueue();
+      // Server closes before sending StateHandshake (e.g. reboot, load-balancer eviction).
+      client.injectDisconnect(1001, 'Server going away');
+      await pumpEventQueue();
+
+      expect(events.whereType<SignalingConnecting>(), hasLength(1));
+      expect(events.whereType<SignalingConnected>(), hasLength(1));
+      expect(events.whereType<SignalingHandshakeReceived>(), isEmpty);
+      final disconnected = events.whereType<SignalingDisconnected>().single;
+      expect(
+        disconnected.recommendedReconnectDelay,
+        isNotNull,
+        reason: 'Code 1001 (goingAway) should trigger a slow reconnect',
+      );
+    });
+
+    test('late subscriber after handshake-less disconnect sees Connecting+Connected+Disconnected only', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+      client.injectDisconnect(1001, 'Server going away');
+      await pumpEventQueue();
+
+      final late = <SignalingModuleEvent>[];
+      module.events.listen(late.add);
+      await pumpEventQueue();
+
+      expect(
+        late.whereType<SignalingHandshakeReceived>(),
+        isEmpty,
+        reason: 'Handshake never arrived so must not be replayed',
+      );
+      expect(late.whereType<SignalingConnecting>(), hasLength(1));
+      expect(late.whereType<SignalingConnected>(), hasLength(1));
+      expect(late.whereType<SignalingDisconnected>(), hasLength(1));
+    });
+
+    test('error before handshake: ConnectionFailed buffered, no HandshakeReceived', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+      // Socket error arrives before any handshake.
+      client.injectError(Exception('auth rejected'));
+      await pumpEventQueue();
+
+      final late = <SignalingModuleEvent>[];
+      module.events.listen(late.add);
+      await pumpEventQueue();
+
+      expect(late.whereType<SignalingHandshakeReceived>(), isEmpty);
+      expect(late.whereType<SignalingConnectionFailed>(), hasLength(1));
+    });
+
+    test('reconnect after no-handshake failure delivers fresh Connecting+Connected+Handshake', () async {
+      int call = 0;
+      final client1 = _FakeSignalingClient();
+      final client2 = _FakeSignalingClient();
+      final module = _buildModule(({
+        required Uri url,
+        required String tenantId,
+        required String token,
+        required Duration connectionTimeout,
+        required TrustedCertificates certs,
+        required bool force,
+      }) async {
+        call++;
+        return call == 1 ? client1 : client2;
+      });
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      // First session — no handshake, drops immediately.
+      module.connect();
+      await pumpEventQueue();
+      client1.injectDisconnect(1001, 'going away');
+      await pumpEventQueue();
+
+      // Reconnect — this time handshake arrives.
+      module.connect();
+      await pumpEventQueue();
+      client2.injectHandshake(_kHandshake);
+      await pumpEventQueue();
+
+      // The second session must have a HandshakeReceived.
+      expect(events.whereType<SignalingHandshakeReceived>(), hasLength(1));
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Late subscriber mid-session
+  // CallBloc subscribes in its constructor; the module may already be in any
+  // state by then (connecting, connected, or handshaken).
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — late subscriber mid-session', () {
+    test('subscriber joining while factory still pending gets Connecting from buffer then Connected live', () async {
+      final controlled = _ControlledFactory();
+      final module = _buildModule(controlled.factory);
+      addTearDown(module.dispose);
+
+      // Start connecting — Connecting buffered, factory not yet resolved.
+      module.connect();
+      await pumpEventQueue();
+
+      final late = <SignalingModuleEvent>[];
+      module.events.listen(late.add);
+      await pumpEventQueue(); // flush buffer replay
+
+      expect(
+        late.whereType<SignalingConnecting>(),
+        hasLength(1),
+        reason: 'Connecting must be replayed from buffer before factory resolves',
+      );
+      expect(late.whereType<SignalingConnected>(), isEmpty);
+
+      // Factory resolves — Connected arrives live.
+      controlled.complete(_FakeSignalingClient());
+      await pumpEventQueue();
+
+      expect(late.whereType<SignalingConnected>(), hasLength(1));
+    });
+
+    test('subscriber joining after full connect+handshake gets all three lifecycle events', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+      client.injectHandshake(_kHandshake);
+      await pumpEventQueue();
+
+      final late = <SignalingModuleEvent>[];
+      module.events.listen(late.add);
+      await pumpEventQueue();
+
+      expect(late.whereType<SignalingConnecting>(), hasLength(1));
+      expect(late.whereType<SignalingConnected>(), hasLength(1));
+      expect(late.whereType<SignalingHandshakeReceived>(), hasLength(1));
+      // Protocol events are NOT replayed.
+      expect(late.whereType<SignalingProtocolEvent>(), isEmpty);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // disconnect() robustness
+  // CallBloc calls disconnect() on lifecycle / connectivity changes; it must
+  // not break if the underlying WebSocket close throws.
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule — disconnect() robustness', () {
+    test('dispose() completes even when client.disconnect() throws', () async {
+      final client = _ThrowingDisconnectClient();
+      // Use a factory that wraps the throwing client.
+      final module = _buildModule(
+        ({
+          required Uri url,
+          required String tenantId,
+          required String token,
+          required Duration connectionTimeout,
+          required TrustedCertificates certs,
+          required bool force,
+        }) async => client,
+      );
+
+      module.connect();
+      await pumpEventQueue();
+
+      // dispose() must not hang waiting for a disconnect ack that will never arrive.
+      await expectLater(module.dispose().timeout(const Duration(seconds: 2)), completes);
+    });
+
+    test('disconnect() is a no-op when called while already disconnected', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      // First disconnect.
+      unawaited(module.disconnect());
+      await pumpEventQueue();
+      client.injectDisconnect(1000, 'ok');
+      await pumpEventQueue();
+
+      // Second disconnect — no client, must be a silent no-op.
+      await module.disconnect();
+
+      expect(client.disconnected, isTrue); // only one real disconnect happened
     });
   });
 }
