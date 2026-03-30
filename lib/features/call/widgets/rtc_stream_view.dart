@@ -22,26 +22,31 @@ class RTCStreamView extends StatefulWidget {
 
 class _RTCStreamViewState extends State<RTCStreamView> {
   late final RTCVideoRenderer renderer = RTCVideoRenderer();
+  bool _initialized = false;
 
   @override
   initState() {
     super.initState();
-    renderer.initialize().then((value) {
+    renderer.initialize().then((_) {
       if (!mounted) return;
+      _initialized = true;
       renderer.srcObject = widget.stream;
     });
   }
 
   @override
   dispose() {
-    super.dispose();
-    renderer.srcObject = null;
+    if (_initialized) {
+      renderer.srcObject = null;
+    }
     renderer.dispose();
+    super.dispose();
   }
 
   @override
   didUpdateWidget(RTCStreamView oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (!_initialized) return;
     // Always refresh srcObject to handle the case where the stream reference
     // is the same object but its video tracks were replaced by renegotiation.
     // The native videoRendererSetSrcObject re-scans the stream's current tracks
