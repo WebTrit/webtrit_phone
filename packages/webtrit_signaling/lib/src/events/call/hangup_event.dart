@@ -17,6 +17,9 @@ class HangupEvent extends CallEvent {
 
   static const typeValue = 'hangup';
 
+  @override
+  Map<String, dynamic> toJson() => {...callBaseJson(typeValue), 'code': code, 'reason': reason};
+
   factory HangupEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

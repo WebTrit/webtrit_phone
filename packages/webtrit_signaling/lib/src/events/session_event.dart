@@ -30,6 +30,11 @@ abstract class SessionEvent extends Event {
         SessionErrorEvent.tryFromJson(json);
   }
 
+  Map<String, dynamic> sessionBaseJson(String typeValue) => {
+    Event.typeKey: typeValue,
+    if (transaction != null) 'transaction': transaction,
+  };
+
   static final Map<String, SessionEvent Function(Map<String, dynamic>)> _sessionEventFromJsonDecoders = {
     RegisteredEvent.typeValue: RegisteredEvent.fromJson,
     RegisteringEvent.typeValue: RegisteringEvent.fromJson,

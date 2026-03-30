@@ -34,7 +34,6 @@ void main() {
       transaction: 'transaction 1',
       line: 0,
       callId: 'qwerty',
-      notify: 'refer',
       subscriptionState: SubscriptionState.active,
       state: ReferNotifyState.trying,
     ),
@@ -57,7 +56,6 @@ void main() {
     ReferNotifyEvent(
       line: 0,
       callId: 'qwerty',
-      notify: 'refer',
       subscriptionState: SubscriptionState.active,
       state: ReferNotifyState.trying,
     ),

@@ -17,6 +17,9 @@ class DecliningEvent extends CallEvent {
 
   static const typeValue = 'declining';
 
+  @override
+  Map<String, dynamic> toJson() => {...callBaseJson(typeValue), 'code': code, if (referId != null) 'refer_id': referId};
+
   factory DecliningEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

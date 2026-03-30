@@ -19,6 +19,14 @@ class AcceptedEvent extends CallEvent {
 
   static const typeValue = 'accepted';
 
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(typeValue),
+    if (callee != null) 'callee': callee,
+    if (isFocus != null) 'is_focus': isFocus,
+    if (jsep != null) 'jsep': jsep,
+  };
+
   factory AcceptedEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

@@ -19,6 +19,14 @@ class MissedCallEvent extends CallEvent {
 
   static const typeValue = 'missed_call';
 
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(typeValue),
+    'callee': callee,
+    'caller': caller,
+    if (callerDisplayName != null) 'caller_display_name': callerDisplayName,
+  };
+
   factory MissedCallEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

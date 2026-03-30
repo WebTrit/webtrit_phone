@@ -16,6 +16,9 @@ sealed class NotifyEvent extends CallEvent {
   final String? notify;
   final SubscriptionState? subscriptionState;
 
+  @override
+  Map<String, dynamic> toJson();
+
   factory NotifyEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
@@ -41,13 +44,33 @@ class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
     super.transaction,
     required super.line,
     required super.callId,
-    super.notify,
     super.subscriptionState,
     required this.userActiveCalls,
   });
 
   static const notifyValue = 'dialog';
   final List<UserActiveCall> userActiveCalls;
+
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(NotifyEvent.typeValue),
+    'notify': notifyValue,
+    if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
+    'user_active_calls': userActiveCalls
+        .map(
+          (c) => {
+            'id': c.id,
+            'state': c.state.name,
+            'call_id': c.callId,
+            'direction': c.direction.name,
+            'local_tag': c.localTag,
+            if (c.remoteTag != null) 'remote_tag': c.remoteTag,
+            'remote_number': c.remoteNumber,
+            if (c.remoteDisplayName != null) 'remote_display_name': c.remoteDisplayName,
+          },
+        )
+        .toList(),
+  };
 
   @override
   factory DialogNotifyEvent.fromJson(Map<String, dynamic> json) {
@@ -65,7 +88,6 @@ class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
       transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
-      notify: json['notify'],
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
           : null,
@@ -140,7 +162,6 @@ class PresenceNotifyEvent extends NotifyEvent with EquatableMixin {
     super.transaction,
     required super.line,
     required super.callId,
-    super.notify,
     super.subscriptionState,
     required this.number,
     required this.presenceInfo,
@@ -151,12 +172,33 @@ class PresenceNotifyEvent extends NotifyEvent with EquatableMixin {
   final List<SignalingPresenceInfo> presenceInfo;
 
   @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(NotifyEvent.typeValue),
+    'notify': notifyValue,
+    if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
+    'number': number,
+    'presence_info': presenceInfo
+        .map(
+          (p) => {
+            'id': p.id,
+            'available': p.available,
+            'note': p.note,
+            if (p.statusIcon != null) 'status_icon': p.statusIcon,
+            if (p.device != null) 'device': p.device,
+            if (p.timeOffsetMin != null) 'time_offset_min': p.timeOffsetMin,
+            if (p.timestamp != null) 'timestamp': p.timestamp,
+            'activities': p.activities,
+          },
+        )
+        .toList(),
+  };
+
+  @override
   factory PresenceNotifyEvent.fromJson(Map<String, dynamic> json) {
     return PresenceNotifyEvent(
       transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
-      notify: json['notify'],
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
           : null,
@@ -228,13 +270,24 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
     super.transaction,
     required super.line,
     required super.callId,
-    super.notify,
     super.subscriptionState,
     required this.state,
   });
 
   static const notifyValue = 'refer';
   final ReferNotifyState state;
+
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(NotifyEvent.typeValue),
+    'notify': notifyValue,
+    if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
+    'content': switch (state) {
+      ReferNotifyState.trying => 'SIP/2.0 100 Trying',
+      ReferNotifyState.ok => 'SIP/2.0 200 OK',
+      ReferNotifyState.unknown => '',
+    },
+  };
 
   @override
   factory ReferNotifyEvent.fromJson(Map<String, dynamic> json) {
@@ -249,7 +302,6 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
       transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
-      notify: json['notify'],
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
           : null,
@@ -280,6 +332,15 @@ class UnknownNotifyEvent extends NotifyEvent with EquatableMixin {
 
   final String? content;
   final String? contentType;
+
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(NotifyEvent.typeValue),
+    if (notify != null) 'notify': notify,
+    if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
+    if (content != null) 'content': content,
+    if (contentType != null) 'content_type': contentType,
+  };
 
   @override
   factory UnknownNotifyEvent.fromJson(Map<String, dynamic> json) {
