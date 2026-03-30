@@ -105,6 +105,11 @@ class SignalingModule {
   bool _disposed = false;
   bool _connecting = false;
 
+  /// Completer resolved by [_onDisconnect] after a graceful [disconnect] call.
+  /// [dispose] awaits it (with timeout) before closing the controller so that
+  /// [SignalingDisconnected] is emitted before the stream closes.
+  Completer<void>? _disconnectAck;
+
   /// Last connect error as string for deduplication.
   String? _lastConnectErrorString;
 
@@ -159,11 +164,14 @@ class SignalingModule {
     final client = _client;
     if (client == null) return;
     _client = null;
+    _disconnectAck = Completer<void>();
     _emit(SignalingDisconnecting());
     try {
       await client.disconnect(SignalingDisconnectCode.goingAway.code);
     } catch (e, s) {
       _logger.warning('disconnect error', e, s);
+      _disconnectAck?.complete();
+      _disconnectAck = null;
     }
   }
 
@@ -174,6 +182,11 @@ class SignalingModule {
     _disposed = true;
     _sessionBuffer.clear();
     await disconnect();
+    // Wait for _onDisconnect to fire so SignalingDisconnected is emitted before
+    // the stream closes. Without this await, dispose() may close the controller
+    // before the WS close-ack callback arrives, leaving consumers stuck in the
+    // disconnecting state.
+    await _disconnectAck?.future.timeout(const Duration(seconds: 3), onTimeout: () {});
     await _controller.close();
   }
 
@@ -282,22 +295,30 @@ class SignalingModule {
   }
 
   void _onDisconnect(int? code, String? reason) {
-    if (_disposed) return;
     _client = null;
+    final ack = _disconnectAck;
+    _disconnectAck = null;
 
-    final knownCode = SignalingDisconnectCode.values.byCode(code ?? -1);
-    final recommendedDelay = _reconnectDelay(knownCode);
+    // Emit even when _disposed is true so long as the controller is still open
+    // — dispose() awaits _disconnectAck before closing, so this window exists.
+    // _emit already guards against a closed controller.
+    if (!_disposed) {
+      final knownCode = SignalingDisconnectCode.values.byCode(code ?? -1);
+      final recommendedDelay = _reconnectDelay(knownCode);
 
-    _logger.fine('_onDisconnect code=$code reason=$reason knownCode=$knownCode delay=$recommendedDelay');
+      _logger.fine('_onDisconnect code=$code reason=$reason knownCode=$knownCode delay=$recommendedDelay');
 
-    _emit(
-      SignalingDisconnected(
-        code: code,
-        reason: reason,
-        knownCode: knownCode,
-        recommendedReconnectDelay: recommendedDelay,
-      ),
-    );
+      _emit(
+        SignalingDisconnected(
+          code: code,
+          reason: reason,
+          knownCode: knownCode,
+          recommendedReconnectDelay: recommendedDelay,
+        ),
+      );
+    }
+
+    ack?.complete();
   }
 
   /// Maps a disconnect code to the recommended reconnect delay.
