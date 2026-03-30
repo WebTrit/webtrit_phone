@@ -246,7 +246,7 @@ class PollingService implements Disposable {
           _logger.finest('PollingService: refresh() succeeded for $listener');
           config.consecutiveErrors = 0;
           config.lastSuccessAt = clock.now();
-        } catch (e, st) {
+        } catch (e) {
           config.consecutiveErrors++;
           config.lastError = e;
           config.lastErrorAt = clock.now();
@@ -281,7 +281,7 @@ class PollingService implements Disposable {
           config.consecutiveErrors = 0;
           config.lastSuccessAt = clock.now();
         }
-      } catch (e, st) {
+      } catch (e) {
         config.consecutiveErrors++;
         config.lastError = e;
         config.lastErrorAt = clock.now();
