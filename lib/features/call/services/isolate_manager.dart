@@ -320,12 +320,10 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   @override
   void performEndCall(String callId) async {
-    final lineIndex = _lines[callId];
-    if (lineIndex == null) {
-      logger.warning('performEndCall: line not found for callId: $callId');
-      return;
-    }
     try {
+      // Do not early-return when _lines is empty — _sendRequest queues the
+      // request so it is executed once the handshake arrives (e.g. user declines
+      // from the lock screen before the signaling handshake completes).
       await _sendRequest(callId, (line, id, tx) => DeclineRequest(transaction: tx, line: line, callId: id));
     } catch (e) {
       logger.severe(e);
