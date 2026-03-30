@@ -924,7 +924,7 @@ void main() {
       expect(disconnected.recommendedReconnectDelay, isNull);
     });
 
-    test('disconnect() passes goingAway code to the underlying client', () async {
+    test('disconnect() passes normalClosure code to the underlying client', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
       addTearDown(module.dispose);
@@ -936,7 +936,7 @@ void main() {
       await pumpEventQueue();
 
       expect(client.disconnected, isTrue);
-      expect(client.lastDisconnectCode, equals(SignalingDisconnectCode.goingAway.code));
+      expect(client.lastDisconnectCode, equals(SignalingDisconnectCode.normalClosure.code));
     });
   });
 
