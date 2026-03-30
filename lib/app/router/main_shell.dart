@@ -82,22 +82,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     context.read<AppLogger>().updateRemoteLabels();
 
     final session = context.read<AppBloc>().state.session;
-    final coreUrl = session.coreUrl;
-    final token = session.token;
     _signalingModule = SignalingModule(
-      coreUrl: coreUrl ?? '',
+      coreUrl: session.coreUrl!,
       tenantId: session.tenantId,
-      token: token ?? '',
+      token: session.token!,
       trustedCertificates: context.read<AppCertificates>().trustedCertificates,
       signalingClientFactory: defaultSignalingClientFactory,
     );
-    if (coreUrl == null || token == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed));
-      });
-    } else {
-      _signalingModule.connect();
-    }
+    _signalingModule.connect();
 
     _sessionGuard = RouterLogoutSessionGuard(
       performLogout: () {
