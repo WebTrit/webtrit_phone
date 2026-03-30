@@ -29,8 +29,10 @@ class _RTCStreamViewState extends State<RTCStreamView> {
     super.initState();
     renderer.initialize().then((_) {
       if (!mounted) return;
-      _initialized = true;
-      renderer.srcObject = widget.stream;
+      setState(() {
+        _initialized = true;
+        renderer.srcObject = widget.stream;
+      });
     });
   }
 
@@ -56,6 +58,9 @@ class _RTCStreamViewState extends State<RTCStreamView> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_initialized) {
+      return widget.placeholderBuilder?.call(context) ?? const SizedBox.shrink();
+    }
     return RTCVideoView(
       renderer,
       mirror: widget.mirror,
