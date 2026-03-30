@@ -116,6 +116,12 @@ class SignalingModule {
   /// intentional close (e.g. when the foreground isolate takes over).
   bool _intentionalDisconnect = false;
 
+  /// Set to true by [_onError] so that the subsequent [_onDisconnect] callback
+  /// (which fires when the underlying socket closes after an error) is
+  /// suppressed — [_onError] already emits [SignalingConnectionFailed] and
+  /// consumers would otherwise receive two separate reconnect triggers.
+  bool _errorHandled = false;
+
   /// Last connect error as string for deduplication.
   String? _lastConnectErrorString;
 
@@ -294,6 +300,9 @@ class SignalingModule {
     // Drop the client reference — the connection is broken.
     // The consumer is responsible for scheduling a reconnect.
     _client = null;
+    // Mark that we are handling this failure so that the subsequent
+    // _onDisconnect callback (socket close after error) is suppressed.
+    _errorHandled = true;
 
     final errorString = error.toString();
     final isRepeated = _lastConnectErrorString == errorString;
@@ -314,6 +323,14 @@ class SignalingModule {
     _disconnectAck = null;
     final wasIntentional = _intentionalDisconnect;
     _intentionalDisconnect = false;
+
+    // _onError already emitted SignalingConnectionFailed for this connection
+    // failure. Skip SignalingDisconnected to avoid a double reconnect trigger.
+    if (_errorHandled) {
+      _errorHandled = false;
+      ack?.complete();
+      return;
+    }
 
     // Emit even when _disposed is true so long as the controller is still open
     // — dispose() awaits _disconnectAck before closing, so this window exists.
