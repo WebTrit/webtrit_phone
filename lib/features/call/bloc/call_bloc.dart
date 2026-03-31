@@ -2037,14 +2037,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
         });
       } else {
-        final hangupRequest = HangupRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: activeCall.line,
-          callId: activeCall.callId,
-        );
-        await _signalingModule.signalingClient?.execute(hangupRequest).catchError((e, s) {
-          callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
-        });
+        // Skip hangup when a blind transfer has been accepted by the server (Transfering state).
+        // The SIP dialog is already closed server-side via REFER; sending hangup results in a
+        // 4610 "call request on wrong line" rejection and an unexpected WebSocket disconnect.
+        final isBlindTransferCompleted = switch (activeCall.transfer) {
+          Transfering(:final fromBlindTransfer) => fromBlindTransfer,
+          _ => false,
+        };
+
+        if (!isBlindTransferCompleted) {
+          final hangupRequest = HangupRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
+            callId: activeCall.callId,
+          );
+          await _signalingModule.signalingClient?.execute(hangupRequest).catchError((e, s) {
+            callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
+          });
+        }
       }
 
       // Need to close peer connection after executing [HangupRequest]
