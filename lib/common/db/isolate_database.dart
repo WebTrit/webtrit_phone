@@ -45,15 +45,65 @@ abstract final class IsolateDatabase {
   /// All other isolates should use [connectOrCreate] to obtain a client connection.
   static Future<DriftIsolate> spawnServer({required String directoryPath, String dbName = 'db.sqlite'}) async {
     final receivePort = ReceivePort();
-    await Isolate.spawn(_driftServerEntryPoint, [
-      receivePort.sendPort,
-      directoryPath,
-      dbName,
-      EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-    ]);
-    final connectPort = await receivePort.first as SendPort;
-    receivePort.close();
-    IsolateNameServer.registerPortWithName(connectPort, kDbPortName);
+    final errorPort = ReceivePort();
+    final exitPort = ReceivePort();
+
+    final completer = Completer<SendPort>();
+
+    final receiveSub = receivePort.listen((message) {
+      if (!completer.isCompleted) completer.complete(message as SendPort);
+    });
+
+    final errorSub = errorPort.listen((message) {
+      if (completer.isCompleted) return;
+      final error = message is List ? message[0] : message;
+      final rawStack = message is List && message.length > 1 ? message[1] : null;
+      final stackTrace = rawStack is String ? StackTrace.fromString(rawStack) : StackTrace.current;
+      completer.completeError(DatabaseInitializationException('Database isolate error: $error', stackTrace));
+    });
+
+    final exitSub = exitPort.listen((_) {
+      if (!completer.isCompleted) {
+        completer.completeError(
+          DatabaseInitializationException('Database isolate exited before sending connect port', StackTrace.current),
+        );
+      }
+    });
+
+    final isolate = await Isolate.spawn(
+      _driftServerEntryPoint,
+      [receivePort.sendPort, directoryPath, dbName, EnvironmentConfig.DATABASE_LOG_STATEMENTS],
+      onError: errorPort.sendPort,
+      onExit: exitPort.sendPort,
+    );
+
+    SendPort connectPort;
+    try {
+      connectPort = await completer.future.timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          isolate.kill(priority: Isolate.immediate);
+          throw DatabaseInitializationException('Timed out waiting for database isolate to start', StackTrace.current);
+        },
+      );
+    } finally {
+      await receiveSub.cancel();
+      await errorSub.cancel();
+      await exitSub.cancel();
+      receivePort.close();
+      errorPort.close();
+      exitPort.close();
+    }
+
+    // Remove any stale mapping (e.g. from hot restart) before registering.
+    IsolateNameServer.removePortNameMapping(kDbPortName);
+    final registered = IsolateNameServer.registerPortWithName(connectPort, kDbPortName);
+    if (!registered) {
+      throw DatabaseInitializationException(
+        'Failed to register DriftIsolate SendPort under "$kDbPortName"',
+        StackTrace.current,
+      );
+    }
     return DriftIsolate.fromConnectPort(connectPort);
   }
 
@@ -69,7 +119,8 @@ abstract final class IsolateDatabase {
         final driftIsolate = DriftIsolate.fromConnectPort(sendPort);
         return AppDatabase(await driftIsolate.connect());
       } catch (_) {
-        // Stale port (e.g. after hot reload or app restart) — fall through to direct connection.
+        // Stale port (e.g. after hot reload or app restart) — remove mapping and fall through to direct connection.
+        IsolateNameServer.removePortNameMapping(kDbPortName);
       }
     }
     return create(directoryPath: directoryPath, dbName: dbName);

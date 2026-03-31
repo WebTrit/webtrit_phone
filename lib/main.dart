@@ -163,7 +163,7 @@ class RootApp extends StatelessWidget {
 
   AppDatabaseLifecycleHolder _createAppDatabaseLifecycleHolder(BuildContext context) {
     final driftIsolate = instanceRegistry.get<DriftIsolate>();
-    // Connect lazily: the actual IPC handshake to the server isolate happens on first query.
+    // Establish the connection; the IPC handshake to the server isolate starts when this Future is created.
     final db = AppDatabase(DatabaseConnection.delayed(driftIsolate.connect()));
     return AppDatabaseLifecycleHolder(db, driftIsolate)..attach();
   }
