@@ -19,12 +19,17 @@ final class LogRecordsConsoleStateLoading extends LogRecordsConsoleState {
 }
 
 final class LogRecordsConsoleStateSuccess extends LogRecordsConsoleState {
-  const LogRecordsConsoleStateSuccess(this.logRecords);
+  const LogRecordsConsoleStateSuccess(this.logRecords, {this.isSharing = false});
 
   final List<String> logRecords;
+  final bool isSharing;
+
+  LogRecordsConsoleStateSuccess copyWith({bool? isSharing}) {
+    return LogRecordsConsoleStateSuccess(logRecords, isSharing: isSharing ?? this.isSharing);
+  }
 
   @override
-  List<Object?> get props => [EquatablePropToString.list(logRecords)];
+  List<Object?> get props => [EquatablePropToString.list(logRecords), isSharing];
 }
 
 final class LogRecordsConsoleStateFailure extends LogRecordsConsoleState {

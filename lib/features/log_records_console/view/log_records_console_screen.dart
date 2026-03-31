@@ -21,7 +21,7 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                 icon: const Icon(Icons.delete_outline),
                 style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
                 onPressed: switch (state) {
-                  LogRecordsConsoleStateSuccess() => () {
+                  LogRecordsConsoleStateSuccess(isSharing: false) => () {
                     context.read<LogRecordsConsoleCubit>().clear();
                   },
                   _ => null,
@@ -31,11 +31,18 @@ class LogRecordsConsoleScreen extends StatelessWidget {
           ),
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
             builder: (context, state) {
+              final isSharing = state is LogRecordsConsoleStateSuccess && state.isSharing;
               return IconButton(
-                icon: const Icon(Icons.share),
+                icon: isSharing
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: colorScheme.onSurface),
+                      )
+                    : const Icon(Icons.share),
                 style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
                 onPressed: switch (state) {
-                  LogRecordsConsoleStateSuccess(:final logRecords) when logRecords.isNotEmpty => () {
+                  LogRecordsConsoleStateSuccess(:final logRecords, isSharing: false) when logRecords.isNotEmpty => () {
                     context.read<LogRecordsConsoleCubit>().share();
                   },
                   _ => null,
