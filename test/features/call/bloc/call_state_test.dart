@@ -1006,6 +1006,48 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // Transfer — blind transfer Transfering state detection
+  //
+  // Mirrors the pattern-match logic in CallBloc.__onCallPerformEventEnded that
+  // decides whether to skip the hangup request when a blind transfer is in the
+  // Transfering state (server started to process it).
+  // ---------------------------------------------------------------------------
+
+  group('Transfer — isBlindTransferInTransferingState detection', () {
+    // Replicates the exact switch used in __onCallPerformEventEnded.
+    bool isBlindTransferInTransferingState(Transfer? transfer) {
+      return switch (transfer) {
+        Transfering(:final fromBlindTransfer) => fromBlindTransfer,
+        _ => false,
+      };
+    }
+
+    test('Transfering(fromBlindTransfer: true) is detected as blind transfer in Transfering state', () {
+      const transfer = Transfer.transfering(fromBlindTransfer: true, fromAttendedTransfer: false);
+      expect(isBlindTransferInTransferingState(transfer), isTrue);
+    });
+
+    test('Transfering(fromBlindTransfer: false) is not detected as blind transfer in Transfering state', () {
+      const transfer = Transfer.transfering(fromBlindTransfer: false, fromAttendedTransfer: true);
+      expect(isBlindTransferInTransferingState(transfer), isFalse);
+    });
+
+    test('BlindTransferTransferSubmitted is not yet in Transfering state', () {
+      const transfer = Transfer.blindTransferTransferSubmitted(toNumber: '+1234567890');
+      expect(isBlindTransferInTransferingState(transfer), isFalse);
+    });
+
+    test('BlindTransferInitiated is not in Transfering state', () {
+      const transfer = Transfer.blindTransferInitiated();
+      expect(isBlindTransferInTransferingState(transfer), isFalse);
+    });
+
+    test('null (no transfer in progress) is not in Transfering state', () {
+      expect(isBlindTransferInTransferingState(null), isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // JsepValue — SDP media detection
   // ---------------------------------------------------------------------------
 

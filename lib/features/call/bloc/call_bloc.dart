@@ -1748,6 +1748,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
     if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
+      // Trigger reconnect so that an outgoing call recovers signaling even when the previous
+      // disconnect was intentional (e.g. post-transfer cleanup) and no reconnect was scheduled.
+      _scheduleReconnect(Duration.zero);
+
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingConnectingToSignaling);
@@ -2035,19 +2039,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
         });
       } else {
-        final hangupRequest = HangupRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: activeCall.line,
-          callId: activeCall.callId,
-        );
-        await _signalingModule.signalingClient?.execute(hangupRequest).catchError((e, s) {
-          callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
-        });
+        // Skip hangup when a blind transfer is in Transfering state (server started to process it).
+        // In this state the SIP dialog may already be closed server-side via REFER; sending hangup
+        // results in a 4610 "call request on wrong line" rejection and an unexpected WebSocket disconnect.
+        final isBlindTransferInTransferingState = switch (activeCall.transfer) {
+          Transfering(:final fromBlindTransfer) => fromBlindTransfer,
+          _ => false,
+        };
+
+        if (!isBlindTransferInTransferingState) {
+          final hangupRequest = HangupRequest(
+            transaction: WebtritSignalingClient.generateTransactionId(),
+            line: activeCall.line,
+            callId: activeCall.callId,
+          );
+          await _signalingModule.signalingClient?.execute(hangupRequest).catchError((e, s) {
+            callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
+          });
+        }
       }
 
-      // Need to close peer connection after executing [HangupRequest]
-      // to prevent "Simulate a "hangup" coming from the application"
-      // because of "No WebRTC media anymore".
+      // Need to close peer connection after the signaling request (decline/hangup) has been sent,
+      // or after skipping it for blind transfer, to prevent "Simulate a 'hangup' coming from the
+      // application" triggered by "No WebRTC media anymore".
       await _peerConnectionManager.disposePeerConnection(activeCall.callId);
       await activeCall.localStream?.dispose();
     });
