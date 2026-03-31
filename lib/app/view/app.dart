@@ -141,7 +141,9 @@ class _AppState extends State<App> {
                     context.read<AppAnalyticsRepository>().createObserver(),
                     AutoRouteObserver(),
                   ],
-                  reevaluateListenable: ReevaluateListenable.stream(appBloc.stream),
+                  reevaluateListenable: ReevaluateListenable.stream(
+                    appBloc.stream.distinct((p, n) => p.compareToReevaluate(n)),
+                  ),
                 ),
               );
             },
