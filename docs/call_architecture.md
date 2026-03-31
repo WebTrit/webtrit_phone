@@ -7,7 +7,7 @@ that bridges signaling, native call UI, WebRTC media, and the Flutter UI layer.
 ## Responsibilities
 
 - Manages all active calls (`List<ActiveCall>` in state)
-- Owns the `WebtritSignalingClient` lifecycle (connect → handshake → events → disconnect)
+- Owns the `SignalingModule` lifecycle (connect → handshake → events → disconnect → dispose)
 - Implements `CallkeepDelegate` — native platform calls directly into the BLoC
 - Creates and disposes `RTCPeerConnection` per call via `PeerConnectionManager`
 - Persists finished calls to `CallLogsRepository`

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -39,6 +41,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// The [SessionGuard] instance that handles session expiration and logout.
   late final SessionGuard _sessionGuard;
 
+  /// Created and connected in [initState] so that the WebSocket handshake
+  /// runs in parallel while the widget tree and [CallBloc] are being built.
+  /// Late subscribers (including [CallBloc]) receive all buffered session
+  /// events via the replay stream.
+  late final SignalingModule _signalingModule;
+
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
 
@@ -73,6 +81,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
     context.read<AppLogger>().updateRemoteLabels();
 
+    final session = context.read<AppBloc>().state.session;
+    _signalingModule = SignalingModule(
+      coreUrl: session.coreUrl!,
+      tenantId: session.tenantId,
+      token: session.token!,
+      trustedCertificates: context.read<AppCertificates>().trustedCertificates,
+      signalingClientFactory: defaultSignalingClientFactory,
+    );
+    _signalingModule.connect();
+
     _sessionGuard = RouterLogoutSessionGuard(
       performLogout: () {
         context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
@@ -89,6 +107,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   void dispose() {
     _disposeSessionGuard();
     _callkeep.tearDown();
+    unawaited(_signalingModule.dispose());
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -451,10 +470,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       );
 
                       return CallBloc(
-                        coreUrl: appBloc.state.session.coreUrl!,
-                        tenantId: appBloc.state.session.tenantId,
-                        token: appBloc.state.session.token!,
-                        trustedCertificates: appCertificates.trustedCertificates,
                         callLogsRepository: context.read<CallLogsRepository>(),
                         callPullRepository: context.read<CallPullRepository>(),
                         linesStateRepository: context.read<LinesStateRepository>(),
@@ -484,6 +499,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                           DiagnosticType.androidCallkeepOnly,
                           extras: {'callId': id, 'error': error.name},
                         ),
+                        signalingModule: _signalingModule,
                         peerConnectionManager: peerConnectionManager,
                         onSessionInvalidated: () =>
                             appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),

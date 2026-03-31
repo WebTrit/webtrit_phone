@@ -113,7 +113,7 @@ void main() {
     );
 
     blocTest<ExternalContactsSyncBloc, ExternalContactsSyncState>(
-      'emits RefreshFailure if UserRepository fails during update',
+      'emits RefreshFailure if load() fails',
       build: () {
         when(() => externalContactsRepository.contacts()).thenAnswer((_) => Stream.value([_contactOther]));
         when(() => userRepository.getAndListen()).thenAnswer((_) => Stream.error(Exception('User info error')));
