@@ -1006,6 +1006,47 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // Transfer — blind transfer completion detection
+  //
+  // Mirrors the pattern-match logic in CallBloc.__onCallPerformEventEnded that
+  // decides whether to skip the hangup request after a blind transfer.
+  // ---------------------------------------------------------------------------
+
+  group('Transfer — isBlindTransferCompleted detection', () {
+    // Replicates the exact switch used in __onCallPerformEventEnded.
+    bool isBlindTransferCompleted(Transfer? transfer) {
+      return switch (transfer) {
+        Transfering(:final fromBlindTransfer) => fromBlindTransfer,
+        _ => false,
+      };
+    }
+
+    test('Transfering(fromBlindTransfer: true) is detected as completed blind transfer', () {
+      const transfer = Transfer.transfering(fromBlindTransfer: true, fromAttendedTransfer: false);
+      expect(isBlindTransferCompleted(transfer), isTrue);
+    });
+
+    test('Transfering(fromBlindTransfer: false) is not detected as completed blind transfer', () {
+      const transfer = Transfer.transfering(fromBlindTransfer: false, fromAttendedTransfer: true);
+      expect(isBlindTransferCompleted(transfer), isFalse);
+    });
+
+    test('BlindTransferTransferSubmitted is not yet a completed transfer', () {
+      const transfer = Transfer.blindTransferTransferSubmitted(toNumber: '+1234567890');
+      expect(isBlindTransferCompleted(transfer), isFalse);
+    });
+
+    test('BlindTransferInitiated is not a completed transfer', () {
+      const transfer = Transfer.blindTransferInitiated();
+      expect(isBlindTransferCompleted(transfer), isFalse);
+    });
+
+    test('null (no transfer in progress) is not a completed transfer', () {
+      expect(isBlindTransferCompleted(null), isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // JsepValue — SDP media detection
   // ---------------------------------------------------------------------------
 

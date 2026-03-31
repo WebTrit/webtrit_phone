@@ -1359,6 +1359,78 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
+  // requestCallIdError (4610) — reconnect hint
+  //
+  // Code 4610 is sent by the server when a client submits a request (e.g.
+  // hangup) on a SIP dialog that is already closed server-side.  This happens
+  // after a blind transfer because the server closes the dialog via REFER while
+  // the client concurrently tries to send a hangup request.
+  //
+  // The key asymmetry:
+  //   - Non-intentional 4610 → recommendedReconnectDelay != null → CallBloc schedules reconnect.
+  //   - Intentional disconnect() followed by server 4610 → recommendedReconnectDelay == null
+  //     → CallBloc does NOT schedule a reconnect automatically.
+  //
+  // The second case was the root cause of WT-1214 (cannot make calls after
+  // blind transfer): post-transfer cleanup called disconnect() (intentional),
+  // then the server echoed back with 4610, suppressing the reconnect hint and
+  // leaving signaling permanently disconnected until the next outgoing call
+  // triggered the safety-net _scheduleReconnect(Duration.zero) added in the fix.
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule - requestCallIdError (4610) reconnect hint', () {
+    test('non-intentional 4610 emits SignalingDisconnected with non-null recommendedReconnectDelay', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await pumpEventQueue();
+
+      // Server closes the WebSocket with 4610 without the client calling disconnect() first.
+      client.injectDisconnect(SignalingDisconnectCode.requestCallIdError.code, 'call request on wrong line');
+      await pumpEventQueue();
+
+      final disconnected = events.whereType<SignalingDisconnected>().single;
+      expect(disconnected.knownCode, SignalingDisconnectCode.requestCallIdError);
+      expect(
+        disconnected.recommendedReconnectDelay,
+        isNotNull,
+        reason: 'Non-intentional 4610 should carry a reconnect hint so CallBloc schedules a reconnect',
+      );
+    });
+
+    test('intentional disconnect() followed by server 4610 emits null recommendedReconnectDelay', () async {
+      final client = _FakeSignalingClient();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await pumpEventQueue();
+
+      // Client calls disconnect() explicitly (e.g. post-transfer cleanup in onChange),
+      // then the server echoes back with 4610 instead of the expected 1000.
+      unawaited(module.disconnect());
+      await pumpEventQueue();
+      client.injectDisconnect(SignalingDisconnectCode.requestCallIdError.code, 'call request on wrong line');
+      await pumpEventQueue();
+
+      final disconnected = events.whereType<SignalingDisconnected>().single;
+      expect(
+        disconnected.recommendedReconnectDelay,
+        isNull,
+        reason: 'Intentional disconnect suppresses the reconnect hint even when the server closes with 4610',
+      );
+    });
+  });
+
+  // -------------------------------------------------------------------------
   // disconnect() robustness
   // CallBloc calls disconnect() on lifecycle / connectivity changes; it must
   // not break if the underlying WebSocket close throws.
