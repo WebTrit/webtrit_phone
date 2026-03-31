@@ -1746,6 +1746,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
     if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
+      // Trigger reconnect so that an outgoing call recovers signaling even when the previous
+      // disconnect was intentional (e.g. post-transfer cleanup) and no reconnect was scheduled.
+      _scheduleReconnect(Duration.zero);
+
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
           return activeCall.copyWith(processingStatus: CallProcessingStatus.outgoingConnectingToSignaling);
