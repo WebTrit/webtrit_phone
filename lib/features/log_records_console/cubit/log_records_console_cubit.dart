@@ -44,11 +44,13 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   Future<void> share() async {
     final state = this.state as LogRecordsConsoleStateSuccess;
 
-    final logRecords = state.logRecords;
-
-    final time = DateTime.now();
-    final name = '$exportFilenamePrefix(${dateFormat.format(time)}).log';
-
-    await shareLogRecords(logRecords, name: name);
+    emit(state.copyWith(isSharing: true));
+    try {
+      final time = DateTime.now();
+      final name = '$exportFilenamePrefix(${dateFormat.format(time)}).log';
+      await shareLogRecords(state.logRecords, name: name);
+    } finally {
+      emit(state.copyWith(isSharing: false));
+    }
   }
 }
