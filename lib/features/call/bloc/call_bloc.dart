@@ -1450,6 +1450,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    if (activeCall.held == true) return;
+
     final peerConnection = await _peerConnectionManager.retrieve(event.callId);
     if (peerConnection == null) return;
 
