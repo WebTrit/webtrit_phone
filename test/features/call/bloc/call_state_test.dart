@@ -1006,43 +1006,44 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Transfer — blind transfer completion detection
+  // Transfer — blind transfer Transfering state detection
   //
   // Mirrors the pattern-match logic in CallBloc.__onCallPerformEventEnded that
-  // decides whether to skip the hangup request after a blind transfer.
+  // decides whether to skip the hangup request when a blind transfer is in the
+  // Transfering state (server started to process it).
   // ---------------------------------------------------------------------------
 
-  group('Transfer — isBlindTransferCompleted detection', () {
+  group('Transfer — isBlindTransferInTransferingState detection', () {
     // Replicates the exact switch used in __onCallPerformEventEnded.
-    bool isBlindTransferCompleted(Transfer? transfer) {
+    bool isBlindTransferInTransferingState(Transfer? transfer) {
       return switch (transfer) {
         Transfering(:final fromBlindTransfer) => fromBlindTransfer,
         _ => false,
       };
     }
 
-    test('Transfering(fromBlindTransfer: true) is detected as completed blind transfer', () {
+    test('Transfering(fromBlindTransfer: true) is detected as blind transfer in Transfering state', () {
       const transfer = Transfer.transfering(fromBlindTransfer: true, fromAttendedTransfer: false);
-      expect(isBlindTransferCompleted(transfer), isTrue);
+      expect(isBlindTransferInTransferingState(transfer), isTrue);
     });
 
-    test('Transfering(fromBlindTransfer: false) is not detected as completed blind transfer', () {
+    test('Transfering(fromBlindTransfer: false) is not detected as blind transfer in Transfering state', () {
       const transfer = Transfer.transfering(fromBlindTransfer: false, fromAttendedTransfer: true);
-      expect(isBlindTransferCompleted(transfer), isFalse);
+      expect(isBlindTransferInTransferingState(transfer), isFalse);
     });
 
-    test('BlindTransferTransferSubmitted is not yet a completed transfer', () {
+    test('BlindTransferTransferSubmitted is not yet in Transfering state', () {
       const transfer = Transfer.blindTransferTransferSubmitted(toNumber: '+1234567890');
-      expect(isBlindTransferCompleted(transfer), isFalse);
+      expect(isBlindTransferInTransferingState(transfer), isFalse);
     });
 
-    test('BlindTransferInitiated is not a completed transfer', () {
+    test('BlindTransferInitiated is not in Transfering state', () {
       const transfer = Transfer.blindTransferInitiated();
-      expect(isBlindTransferCompleted(transfer), isFalse);
+      expect(isBlindTransferInTransferingState(transfer), isFalse);
     });
 
-    test('null (no transfer in progress) is not a completed transfer', () {
-      expect(isBlindTransferCompleted(null), isFalse);
+    test('null (no transfer in progress) is not in Transfering state', () {
+      expect(isBlindTransferInTransferingState(null), isFalse);
     });
   });
 

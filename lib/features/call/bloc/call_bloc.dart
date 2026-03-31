@@ -2037,15 +2037,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
         });
       } else {
-        // Skip hangup when a blind transfer has been accepted by the server (Transfering state).
-        // The SIP dialog is already closed server-side via REFER; sending hangup results in a
-        // 4610 "call request on wrong line" rejection and an unexpected WebSocket disconnect.
-        final isBlindTransferCompleted = switch (activeCall.transfer) {
+        // Skip hangup when a blind transfer is in Transfering state (server started to process it).
+        // In this state the SIP dialog may already be closed server-side via REFER; sending hangup
+        // results in a 4610 "call request on wrong line" rejection and an unexpected WebSocket disconnect.
+        final isBlindTransferInTransferingState = switch (activeCall.transfer) {
           Transfering(:final fromBlindTransfer) => fromBlindTransfer,
           _ => false,
         };
 
-        if (!isBlindTransferCompleted) {
+        if (!isBlindTransferInTransferingState) {
           final hangupRequest = HangupRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
             line: activeCall.line,
@@ -2057,9 +2057,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }
       }
 
-      // Need to close peer connection after executing [HangupRequest]
-      // to prevent "Simulate a "hangup" coming from the application"
-      // because of "No WebRTC media anymore".
+      // Need to close peer connection after the signaling request (decline/hangup) has been sent,
+      // or after skipping it for blind transfer, to prevent "Simulate a 'hangup' coming from the
+      // application" triggered by "No WebRTC media anymore".
       await _peerConnectionManager.disposePeerConnection(activeCall.callId);
       await activeCall.localStream?.dispose();
     });
