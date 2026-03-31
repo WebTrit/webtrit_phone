@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class LogRecordsConsoleScreen extends StatelessWidget {
   const LogRecordsConsoleScreen({super.key});
@@ -34,10 +35,11 @@ class LogRecordsConsoleScreen extends StatelessWidget {
               final isSharing = state is LogRecordsConsoleStateSuccess && state.isSharing;
               return IconButton(
                 icon: isSharing
-                    ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: colorScheme.onSurface),
+                    ? SizedCircularProgressIndicator(
+                        size: 20,
+                        outerSize: 24,
+                        color: colorScheme.onSurface,
+                        strokeWidth: 2,
                       )
                     : const Icon(Icons.share),
                 style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
