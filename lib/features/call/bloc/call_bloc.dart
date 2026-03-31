@@ -100,7 +100,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Timer? _presenceInfoSyncTimer;
 
   late final PeerConnectionManager _peerConnectionManager;
-  late final RenegotiationHandler _renegotiationHandler;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -131,7 +130,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
-    _renegotiationHandler = RenegotiationHandler(callErrorReporter: callErrorReporter, sdpMunger: sdpMunger);
 
     _signalingSubscription = _signalingModule.events.listen((event) {
       switch (event) {

@@ -8,6 +8,7 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "build/**"
+    - "packages/webtrit_signaling_service/webtrit_signaling_service_android/pigeons/**"
     
 formatter:
   page_width: 120
