@@ -138,7 +138,7 @@ final _kHandshake = StateHandshake(
 // Module builder
 // ---------------------------------------------------------------------------
 
-SignalingModule _buildModule(SignalingClientFactory factory) => SignalingModule(
+SignalingModuleIsolateImpl _buildModule(SignalingClientFactory factory) => SignalingModuleIsolateImpl(
   coreUrl: 'https://example.com',
   tenantId: 'test-tenant',
   token: 'test-token',
