@@ -1191,4 +1191,75 @@ void main() {
       expect(state.toLinesState().guestLine, LineState.idle);
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // Scenario: push → signaling line handoff (WT-1091)
+  //
+  // When an incoming call arrives via FCM push, CallBloc registers it with
+  // line -1 (kUndefinedLine) as a placeholder. When the signaling WebSocket
+  // later delivers the same call ID with a real line, the "call to myself"
+  // guard must NOT fire — it should only fire when an already-lined call gets
+  // a different real line (genuine call-to-myself or transfer-to-myself case).
+  // ---------------------------------------------------------------------------
+
+  group('Scenario: push → signaling line handoff (WT-1091)', () {
+    const kUndefinedLine = -1;
+
+    test('push-registered call has undefined line (-1)', () {
+      final call = _makeCall(
+        callId: 'push-call',
+        line: kUndefinedLine,
+        processingStatus: CallProcessingStatus.incomingFromPush,
+      );
+      expect(call.line, kUndefinedLine);
+    });
+
+    test('line-mismatch guard does NOT fire for push placeholder vs real line', () {
+      // Simulates the condition in __onCallSignalingEventIncoming after the fix.
+      // Push-registered call has line -1; signaling delivers line 0.
+      final pushCall = _makeCall(callId: 'c1', line: kUndefinedLine);
+      const signalingLine = 0;
+
+      // Fixed condition: exclude kUndefinedLine from the mismatch check.
+      final shouldDecline = pushCall.line != kUndefinedLine && pushCall.line != signalingLine;
+      expect(shouldDecline, isFalse);
+    });
+
+    test('line-mismatch guard DOES fire when both lines are real and different', () {
+      // Call already has a real line (0); signaling brings a new real line (1)
+      // → this is the genuine "call to myself" scenario.
+      final existingCall = _makeCall(callId: 'c1', line: 0);
+      const signalingLine = 1;
+
+      final shouldDecline = existingCall.line != kUndefinedLine && existingCall.line != signalingLine;
+      expect(shouldDecline, isTrue);
+    });
+
+    test('line-mismatch guard does not fire when lines match', () {
+      final existingCall = _makeCall(callId: 'c1', line: 0);
+      const signalingLine = 0;
+
+      final shouldDecline = existingCall.line != kUndefinedLine && existingCall.line != signalingLine;
+      expect(shouldDecline, isFalse);
+    });
+
+    test('copyWith updates push-placeholder line to real line from signaling', () {
+      final pushCall = _makeCall(
+        callId: 'c1',
+        line: kUndefinedLine,
+        processingStatus: CallProcessingStatus.incomingFromPush,
+      );
+      final state = CallState(activeCalls: [pushCall]);
+
+      // Signaling arrives with real line 0 — CallBloc calls copyWith.
+      final updated = state.copyWithMappedActiveCall(
+        'c1',
+        (c) => c.copyWith(line: 0, processingStatus: CallProcessingStatus.incomingFromOffer),
+      );
+
+      final call = updated.activeCalls.first;
+      expect(call.line, 0);
+      expect(call.processingStatus, CallProcessingStatus.incomingFromOffer);
+    });
+  });
 }

@@ -847,7 +847,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final displayName = contactName ?? event.callerDisplayName;
 
     final activeCallWithSameId = state.retrieveActiveCall(event.callId);
-    if (activeCallWithSameId != null && activeCallWithSameId.line != event.line) {
+    // Skip the "call to myself" check when the existing call was registered via push
+    // with an undefined line (_kUndefinedLine). In that case the signaling event carries
+    // the real line and should update the call rather than decline it.
+    if (activeCallWithSameId != null &&
+        activeCallWithSameId.line != _kUndefinedLine &&
+        activeCallWithSameId.line != event.line) {
       _logger.info(
         '__onCallSignalingEventIncoming: received incoming call with existing callId but different line - callId: ${event.callId}, probably call to myself or transfer to myself',
       );
