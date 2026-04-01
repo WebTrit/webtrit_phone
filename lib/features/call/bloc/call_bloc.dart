@@ -847,6 +847,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? event.callerDisplayName;
 
+    final activeCallWithSameId = state.retrieveActiveCall(event.callId);
+    if (activeCallWithSameId != null && activeCallWithSameId.line != event.line) {
+      _logger.info(
+        '__onCallSignalingEventIncoming: received incoming call with existing callId but different line - callId: ${event.callId}, probably call to myself or transfer to myself',
+      );
+      final declineRequest = DeclineRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: event.line,
+        callId: event.callId,
+      );
+      await _signalingModule.signalingClient?.execute(declineRequest);
+      return;
+    }
+
     final error = await callkeep.reportNewIncomingCall(event.callId, handle, displayName: displayName, hasVideo: video);
 
     // Check if a call instance already exists in the callkeep, which might have been added via push notifications
