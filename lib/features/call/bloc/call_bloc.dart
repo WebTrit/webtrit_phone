@@ -856,7 +856,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         callId: event.callId,
       );
-      await _signalingModule.signalingClient?.execute(declineRequest);
+      await _signalingModule.execute(declineRequest);
       return;
     }
 
