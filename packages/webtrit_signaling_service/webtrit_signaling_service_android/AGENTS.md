@@ -5,6 +5,10 @@ Runs the WebSocket connection inside an Android foreground service so it survive
 when the app is backgrounded or killed, and bridges it back to the main isolate
 via `IsolateNameServer` (pure Dart ports — no extra WebSocket).
 
+The package does **not** depend on `webtrit_signaling` directly. The app provides a
+`SignalingModuleFactory` via `setModuleFactory()` — the background isolate calls it
+to create a `SignalingModuleInterface`.
+
 ## Architecture
 
 ```
@@ -14,10 +18,11 @@ WebtritSignalingServiceAndroid        signalingServiceCallbackDispatcher()
   │                                     └─ PSignalingServiceFlutterApi.setUp
   │  Pigeon (MethodChannel)          onSignalingServiceSync(status)
   ├──► PSignalingServiceHostApi ──►    └─ SignalingForegroundIsolateManager
-  │    startService / stopService          ├─ SignalingModule  (WebSocket)
+  │    startService / stopService          ├─ SignalingModuleInterface (via factory)
   │    saveIncomingCallHandler             ├─ SignalingHub     (IsolateNameServer)
-  │                                        └─ _dispatchIncomingCall()
-  │  IsolateNameServer (SendPort)               └─ app callback (IncomingCallEvent)
+  │    saveModuleFactory                   └─ _dispatchIncomingCall()
+  │                                               └─ app callback (IncomingCallEvent)
+  │  IsolateNameServer (SendPort)
   └──► SignalingHubClient
          └─ SignalingHubModule
               └─ events (Stream<SignalingModuleEvent>)
@@ -31,6 +36,7 @@ Registered via `registerWith()` as `SignalingServicePlatform.instance`.
 
 | Method | Behaviour |
 |--------|-----------|
+| `setModuleFactory(factory)` | Resolves the raw handle via `PluginUtilities.getCallbackHandle(factory)`, persists it via `PSignalingServiceHostApi.saveModuleFactory` → `StorageDelegate` → `SharedPreferences`. The background isolate reads `PSignalingServiceStatus.moduleFactoryHandle` at each sync and resolves the factory via `PluginUtilities.getCallbackFromHandle`. |
 | `start(config, {mode})` | Obtains Dart callback handles, calls `initializeServiceCallback` + `startService(mode)` via Pigeon, removes any stale `kSignalingHubPortName` entry from `IsolateNameServer`, then polls until the hub port appears. The effective mode is taken from `_currentMode` (last explicit mode), not the parameter, so reconnect calls never revert a user-selected `updateMode` change. |
 | `attach()` | Connects to an already-running hub without starting a new service; polls `IsolateNameServer` the same way as `start()`. |
 | `execute(request)` | Delegates to the hub module. Throws `StateError` when not connected. |
@@ -40,23 +46,10 @@ Registered via `registerWith()` as `SignalingServicePlatform.instance`.
 
 Hub init (`_hubInitLoop`) polls indefinitely with a 100 ms retry delay until the hub port appears in `IsolateNameServer` or `dispose()` cancels the loop.
 
-### `SignalingModule`
-
-Manages a single `WebtritSignalingClient` WebSocket lifecycle.
-Converts raw callbacks (`onStateHandshake`, `onEvent`, `onError`, `onDisconnect`) into typed `SignalingModuleEvent`s on a broadcast stream.
-
-Key behaviours:
-
-- `connect()` fires `unawaited(_connectAsync())` — does not block the caller.
-- `events` getter replays the current session buffer to every new subscriber (late-subscriber safe).
-- Session buffer is cleared on each `connect()` call so reconnects start fresh.
-- Repeated identical error strings set `isRepeated = true` on `SignalingConnectionFailed`.
-- `coreUrl` scheme (`https`/`http`) is transparently converted to `wss`/`ws`.
-
 ### `SignalingHub`
 
-Runs in the background isolate. Wraps `SignalingModule` and forwards events to all
-subscriber `SendPort`s via `IsolateNameServer`.
+Runs in the background isolate. Wraps `SignalingModuleInterface` (created by the app factory)
+and forwards events to all subscriber `SendPort`s via `IsolateNameServer`.
 
 Hub wire protocol (Map messages, subscriber → hub):
 
@@ -66,7 +59,7 @@ Hub wire protocol (Map messages, subscriber → hub):
 | `unsub` | `id` | Unsubscribe |
 | `exec`  | `id`, `corr`, `req` | Execute request; hub replies with `[_kExecuteResult, corr, error?]` |
 
-Session buffer on the hub side mirrors the one in `SignalingModule` — cleared on `SignalingConnecting`.
+Session buffer on the hub side mirrors the one in the module — cleared on `SignalingConnecting`.
 
 ### `SignalingHubClient`
 
@@ -114,9 +107,18 @@ Both functions **must** be annotated `@pragma('vm:entry-point')` to survive tree
 
 ### `SignalingForegroundIsolateManager`
 
-Owns `SignalingModule` + `SignalingHub` inside the background isolate.
+Owns `SignalingModuleInterface` (created via `moduleFactory`) + `SignalingHub` inside the background isolate.
 `handleStatus(enabled: true)` → `_start()` (idempotent).
 `handleStatus(enabled: false)` → `_stop()` (disposes hub then module).
+
+**Module creation in `_start()`:**
+
+```dart
+final factory = PluginUtilities.getCallbackFromHandle(
+  CallbackHandle.fromRawHandle(moduleFactoryHandle),
+) as SignalingModuleFactory;
+_module = factory(config);
+```
 
 **Incoming call dispatch** (`_dispatchIncomingCall`):
 
@@ -138,7 +140,8 @@ Events never cross via Pigeon — only lifecycle control does.
 PSignalingServiceHostApi (Dart → Kotlin)
   initializeServiceCallback(callbackDispatcher, onSync)
   saveConnectionConfig(coreUrl, tenantId, token)
-  saveIncomingCallHandler(callbackHandle)   ← persists raw Dart callback handle
+  saveModuleFactory(callbackHandle)         ← persists raw SignalingModuleFactory handle
+  saveIncomingCallHandler(callbackHandle)   ← persists raw incoming call handler handle
   configureService(notificationTitle, notificationDescription)
   startService(mode: PSignalingServiceMode)
   stopService()
@@ -152,7 +155,8 @@ PSignalingServiceStatus
   coreUrl: String
   tenantId: String
   token: String
-  incomingCallHandlerHandle: int            ← 0 = no handler registered
+  moduleFactoryHandle: int              ← 0 = factory not registered
+  incomingCallHandlerHandle: int        ← 0 = no handler registered
 
 PSignalingServiceMode (enum)
   persistent  — index 0; service survives app close and device reboot
@@ -171,10 +175,10 @@ dart run pigeon --input pigeons/signaling.messages.dart
 | File | Responsibility |
 |------|---------------|
 | `WebtritSignalingServicePlugin.kt` | `FlutterPlugin` entry point; hosts `PSignalingServiceHostApi`; creates/destroys `SignalingForegroundService`; saves callback handles and mode via `StorageDelegate` |
-| `SignalingForegroundService.kt` | Android `Service`; starts/stops foreground notification (`remoteMessaging` type); creates `FlutterEngineHelper`; delivers `PSignalingServiceStatus` (including `incomingCallHandlerHandle`) to the background isolate via `synchronizeIsolate()` which retries with linear backoff on failure; stops on `onTaskRemoved` when mode is `pushBound` |
+| `SignalingForegroundService.kt` | Android `Service`; starts/stops foreground notification (`remoteMessaging` type); creates `FlutterEngineHelper`; delivers `PSignalingServiceStatus` (including `moduleFactoryHandle` and `incomingCallHandlerHandle`) to the background isolate via `synchronizeIsolate()` which retries with linear backoff on failure; stops on `onTaskRemoved` when mode is `pushBound` |
 | `FlutterEngineHelper.kt` | Spawns a background `FlutterEngine` (auto-registers all plugins), runs `signalingServiceCallbackDispatcher`, fires `onSynchronize` to the background isolate |
 | `SignalingBootReceiver.kt` | `BroadcastReceiver` for `BOOT_COMPLETED` / `LOCKED_BOOT_COMPLETED` / `MY_PACKAGE_REPLACED` — restarts service after reboot |
-| `StorageDelegate.kt` | Persists `callbackDispatcherHandle`, `onSyncHandler`, connection params, service mode, and incoming call handler handle to `SharedPreferences` |
+| `StorageDelegate.kt` | Persists `callbackDispatcherHandle`, `onSyncHandler`, connection params, service mode, `moduleFactoryHandle`, and incoming call handler handle to `SharedPreferences` |
 
 ## AndroidManifest permissions
 
@@ -194,9 +198,8 @@ POST_NOTIFICATIONS
 ## Session buffer timing (important for tests)
 
 Events emitted to a broadcast stream before a listener attaches are **lost**.
-`SignalingHubModule.events` and `SignalingModule.events` both replay their session
-buffer synchronously when a new subscriber calls `.listen()`, making them safe for
-late subscribers.
+`SignalingHubModule.events` replays its session buffer synchronously when a new subscriber
+calls `.listen()`, making it safe for late subscribers.
 
 Raw `SignalingHubClient.events` does **not** replay — always wrap it in
 `SignalingHubModule` or attach a listener before calling `start()`.

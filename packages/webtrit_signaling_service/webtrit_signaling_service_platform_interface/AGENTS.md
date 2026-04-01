@@ -14,6 +14,7 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   static set instance(SignalingServicePlatform instance) { ... }
 
   Stream<SignalingModuleEvent> get events;
+  Future<void> setModuleFactory(SignalingModuleFactory factory);
   Future<void> start(SignalingServiceConfig config, {SignalingServiceMode mode = SignalingServiceMode.persistent});
   Future<void> attach();
   Future<void> execute(Request request);
@@ -60,9 +61,22 @@ All events are typed and exhaustively matchable:
 | `SignalingHandshakeReceived` | Server sent `StateHandshake`; carries `handshake` |
 | `SignalingProtocolEvent` | Any other protocol `Event` (register, call, ICE, …) |
 
+### `SignalingModuleFactory` (typedef)
+
+```dart
+typedef SignalingModuleFactory = SignalingModuleInterface Function(SignalingServiceConfig config);
+```
+
+A factory function the app provides via `setModuleFactory()`. The plugin calls it to create a
+`SignalingModuleInterface` instance when needed — on iOS directly in `start()`, on Android in
+the background isolate via a serialized callback handle.
+
+The function must be **top-level** and annotated `@pragma('vm:entry-point')` (Android requirement
+so that `PluginUtilities.getCallbackHandle` can serialize it across isolate boundaries).
+
 ### `SignalingModuleInterface` (abstract)
 
-Internal contract shared by `SignalingModule` and `SignalingHubModule`:
+Internal contract shared by the app's `SignalingModule` and the plugin's `SignalingHubModule`:
 
 ```dart
 abstract class SignalingModuleInterface {
@@ -76,6 +90,16 @@ abstract class SignalingModuleInterface {
 ```
 
 ## Method Notes
+
+### `setModuleFactory(SignalingModuleFactory factory)`
+
+Registers the app-provided factory used to create a `SignalingModuleInterface` instance.
+Must be called once before `start()`.
+
+- On Android: resolves the raw handle via `PluginUtilities.getCallbackHandle(factory)` and
+  persists it via Pigeon → Kotlin → `SharedPreferences`. The background isolate resolves it
+  back via `PluginUtilities.getCallbackFromHandle` on each sync.
+- On iOS: stores the factory in memory; called directly in `start()`.
 
 ### `updateMode(SignalingServiceMode mode)`
 
@@ -98,7 +122,7 @@ On iOS this is a no-op.
 
 ## Barrel Export
 
-`lib/webtrit_signaling_service_platform_interface.dart` — re-exports the 5 local source files listed above. Does **not** re-export `webtrit_signaling` directly; consumers that need `Request`, `Event`, or `StateHandshake` must add `webtrit_signaling` as a direct dependency.
+`lib/webtrit_signaling_service_platform_interface.dart` — re-exports the 6 local source files (including `signaling_module_factory.dart`). Does **not** re-export `webtrit_signaling` directly; consumers that need `Request`, `Event`, or `StateHandshake` must add `webtrit_signaling` as a direct dependency.
 
 ## Dependencies
 

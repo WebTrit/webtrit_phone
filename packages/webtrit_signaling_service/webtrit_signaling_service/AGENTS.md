@@ -11,8 +11,11 @@ import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 final service = WebtritSignalingService();
 
-// 0. (Android only) Register the background incoming-call handler BEFORE start().
-//    The plugin resolves the callback handle internally via PluginUtilities.
+// 0. Register the module factory — REQUIRED on all platforms, before start().
+//    The function must be top-level and annotated @pragma('vm:entry-point').
+await service.setModuleFactory(createSignalingModule);
+
+// 0b. (Android only) Register the background incoming-call handler BEFORE start().
 if (Platform.isAndroid) {
   await service.setIncomingCallHandler(onSignalingBackgroundIncomingCall);
 }
@@ -57,6 +60,7 @@ await service.dispose();
 | Member | Description |
 |--------|-------------|
 | `events` | Broadcast `Stream<SignalingModuleEvent>` — safe to subscribe before `start()` |
+| `setModuleFactory(factory)` | Registers the app-provided `SignalingModuleFactory`; must be called before `start()` on all platforms |
 | `start(config, {mode})` | Starts the platform service; `mode` defaults to `SignalingServiceMode.persistent` |
 | `attach()` | Connects to an already-running hub without starting a new service |
 | `execute(request)` | Sends a `Request` via the active connection; throws when not connected |
@@ -79,7 +83,7 @@ The only difference is the **service lifecycle**:
 ```
 Push/callkeep isolate   ──attach──►  SignalingHub (background isolate, foreground service)
 Main isolate            ──attach──►       │
-                                          └─ SignalingModule (single WebSocket)
+                                          └─ SignalingModuleInterface (created by app factory)
 ```
 
 The WebSocket always lives in the foreground-service background isolate.
@@ -105,6 +109,32 @@ SignalingDisconnected      — code?, reason?, knownCode, recommendedReconnectDe
 SignalingHandshakeReceived — handshake (StateHandshake)
 SignalingProtocolEvent     — event (Event)
 ```
+
+## Module Factory
+
+The plugin does **not** own or depend on `webtrit_signaling` in the platform packages.
+The app owns `SignalingModule` and registers it via a factory:
+
+```dart
+// lib/features/call/services/services_isolate.dart
+@pragma('vm:entry-point')
+SignalingModuleInterface createSignalingModule(SignalingServiceConfig config) {
+  return SignalingModule(
+    coreUrl: config.coreUrl,
+    tenantId: config.tenantId,
+    token: config.token,
+    trustedCertificates: config.trustedCertificates,
+    signalingClientFactory: defaultSignalingClientFactory,
+  );
+}
+```
+
+Key constraints:
+- The function must be **top-level** and annotated `@pragma('vm:entry-point')`.
+- On Android: handle is serialized via `PluginUtilities.getCallbackHandle` and persisted to
+  `SharedPreferences`; the background isolate resolves it at each sync via
+  `PluginUtilities.getCallbackFromHandle`.
+- On iOS: stored in memory, called directly in `start()`.
 
 ## Background Incoming Call Handler (Android)
 
@@ -132,23 +162,22 @@ Future<void> onSignalingBackgroundIncomingCall(IncomingCallEvent event) async {
 ### Registration (once per session, before `start()`)
 
 ```dart
+await WebtritSignalingService().setModuleFactory(createSignalingModule);
 if (Platform.isAndroid) {
   unawaited(WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall));
 }
 ```
 
 Key constraints:
-
-- The function must be a **top-level** function annotated `@pragma('vm:entry-point')` to survive tree-shaking.
-- The plugin resolves the raw handle internally via `PluginUtilities.getCallbackHandle` and persists it to `SharedPreferences`; the background isolate reads it at each sync.
+- Both functions must be **top-level** and annotated `@pragma('vm:entry-point')`.
 - On iOS `setIncomingCallHandler` is a no-op.
 
 ## Platform Packages
 
 | Platform | Package | Notes |
 |----------|---------|-------|
-| Android | `webtrit_signaling_service_android` | Foreground service + IsolateNameServer hub |
-| iOS | `webtrit_signaling_service_ios` | Direct main-isolate `SignalingModule`; fully implemented |
+| Android | `webtrit_signaling_service_android` | Foreground service + IsolateNameServer hub; factory resolved in background isolate |
+| iOS | `webtrit_signaling_service_ios` | Main-isolate; factory called directly in `start()` |
 
 ## Example App
 
@@ -163,7 +192,7 @@ flutter run -d <device-id>
 ## Dependencies
 
 - `webtrit_signaling` — `Request` hierarchy, `Event`, `StateHandshake`
-- `webtrit_signaling_service_platform_interface` — `SignalingServicePlatform`, `SignalingModuleEvent`, `SignalingServiceConfig`
+- `webtrit_signaling_service_platform_interface` — `SignalingServicePlatform`, `SignalingModuleEvent`, `SignalingServiceConfig`, `SignalingModuleFactory`
 - `webtrit_signaling_service_android` / `webtrit_signaling_service_ios` — platform implementations (resolved at build time)
 
 ## Commands

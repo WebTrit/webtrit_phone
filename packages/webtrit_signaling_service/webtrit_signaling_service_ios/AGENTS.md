@@ -8,9 +8,11 @@ main isolate (same as the original `WebtritSignalingClient` usage in `CallBloc`)
 
 ## Current State
 
-Fully implemented. `start()` creates `SignalingModule` in the main isolate and
-calls `connect()`. `attach()`, `updateMode()`, and `setIncomingCallHandler()` are
-no-ops — no background process exists on iOS.
+Fully implemented. The plugin does **not** depend on `webtrit_signaling` directly.
+`setModuleFactory()` stores the app-provided factory; `start()` calls it to create a
+`SignalingModuleInterface` in the main isolate and calls `connect()`.
+`attach()`, `updateMode()`, and `setIncomingCallHandler()` are no-ops — no background
+process exists on iOS.
 
 ## Public API
 
@@ -20,6 +22,7 @@ Inherits the same interface as the Android package:
 
 ```dart
 Stream<SignalingModuleEvent> get events;
+Future<void> setModuleFactory(SignalingModuleFactory factory);
 Future<void> start(SignalingServiceConfig config, {SignalingServiceMode mode = SignalingServiceMode.persistent});
 Future<void> attach();
 Future<void> execute(Request request);
@@ -34,18 +37,13 @@ Future<void> dispose();
 
 | Method | Behaviour |
 |--------|-----------|
-| `start(config, {mode})` | Disposes any existing module; creates `SignalingModule`; pipes its events to `_eventsController`; calls `connect()`. `mode` is accepted for API compatibility — no behavioural difference on iOS. |
+| `setModuleFactory(factory)` | Stores `factory` in `_factory`. Must be called before `start()`. |
+| `start(config, {mode})` | Disposes any existing module; calls `_factory!(config)` to create a `SignalingModuleInterface`; pipes its events to `_eventsController`; calls `connect()`. `mode` is accepted for API compatibility — no behavioural difference on iOS. |
 | `attach()` | No-op. Logs a message. No background process exists to attach to. |
-| `execute(request)` | Delegates to `SignalingModule.execute`; throws `StateError` when not connected. |
+| `execute(request)` | Delegates to the module's `execute`; throws `StateError` when not connected. |
 | `updateMode(mode)` | No-op. Logs a message. Mode switching has no meaning on iOS. |
 | `setIncomingCallHandler(callback)` | No-op. Logs a message. Background isolate callbacks are not used on iOS. |
 | `dispose()` | Cancels subscription, disposes module, closes `_eventsController`. |
-
-### `SignalingModule`
-
-Manages a single `WebtritSignalingClient` lifecycle and replays the session buffer
-to every new subscriber via `events`. Similar to the Android version but without
-the `signalingClient` getter (not needed — no hub on iOS).
 
 ## Commands
 

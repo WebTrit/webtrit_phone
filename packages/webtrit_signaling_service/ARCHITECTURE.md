@@ -14,8 +14,13 @@ graph LR
     Umbrella -->|delegates to| PI["webtrit_signaling_service\n_platform_interface\n(SignalingServicePlatform)"]
     PI -->|implemented by| Android["webtrit_signaling_service_android"]
     PI -->|implemented by| IOS["webtrit_signaling_service_ios"]
-    Android & IOS -->|uses| Signaling["webtrit_signaling\n(WebtritSignalingClient)"]
+    App -->|provides SignalingModuleFactory| Android & IOS
+    App -->|owns| SM["SignalingModule\n(WebtritSignalingClient)"]
 ```
+
+The platform packages (`android`, `ios`) do **not** depend on `webtrit_signaling` directly.
+The app provides a `SignalingModuleFactory` callback via `setModuleFactory()` — the plugin
+calls it to create a `SignalingModuleInterface` instance and manages its lifecycle.
 
 ---
 
@@ -31,8 +36,8 @@ graph TD
         SFIM["SignalingForegroundIsolateManager\n(background isolate, Android)"]
     end
 
-    subgraph "Layer 2 — SignalingModule"
-        SM["SignalingModule\n· owns client lifecycle\n· session replay buffer\n· emits typed events\n· recommends reconnect delay"]
+    subgraph "Layer 2 — SignalingModuleInterface"
+        SM["SignalingModuleInterface\n(app-provided via SignalingModuleFactory)\n· owns client lifecycle\n· session replay buffer\n· emits typed events\n· recommends reconnect delay"]
     end
 
     subgraph "Layer 1 — Protocol"
@@ -44,11 +49,11 @@ graph TD
     WSC -->|WebSocket| Server["WebTrit Core"]
 ```
 
-| Layer                                | Knows                                                      | Does NOT know                                     |
-|--------------------------------------|------------------------------------------------------------|---------------------------------------------------|
-| `WebtritSignalingClient`             | Raw WebSocket, JSON protocol, transactions                 | App lifecycle, reconnect logic                    |
-| `SignalingModule`                    | Disconnect codes, reconnect delay hints, session buffering | Network state, active calls, whether to reconnect |
-| Consumer (CallBloc / IsolateManager) | App lifecycle, network, active calls                       | WebSocket internals                               |
+| Layer                                  | Knows                                                      | Does NOT know                                     |
+|----------------------------------------|------------------------------------------------------------|---------------------------------------------------|
+| `WebtritSignalingClient`               | Raw WebSocket, JSON protocol, transactions                 | App lifecycle, reconnect logic                    |
+| `SignalingModuleInterface` (app-owned) | Disconnect codes, reconnect delay hints, session buffering | Network state, active calls, whether to reconnect |
+| Consumer (CallBloc / IsolateManager)   | App lifecycle, network, active calls                       | WebSocket internals                               |
 
 ---
 
@@ -58,7 +63,7 @@ graph TD
 graph TD
     subgraph iOS["iOS — main isolate only"]
         direction TB
-        ios_cb["CallBloc"] -->|events| ios_sm["SignalingModule"]
+        ios_cb["CallBloc"] -->|events| ios_sm["SignalingModuleInterface\n(created by app factory)"]
         ios_sm -->|WebSocket| ios_srv["WebTrit Core"]
     end
 
@@ -67,7 +72,7 @@ graph TD
         and_cb["CallBloc\n(main isolate)"] -->|events via hub| and_hm["SignalingHubModule"]
         and_push["Push isolate"] -->|events via hub| and_hm2["SignalingHubModule"]
         and_hm & and_hm2 -->|" IsolateNameServer\nSendPort "| and_hub["SignalingHub\n(background isolate)"]
-        and_hub -->|owns| and_sm["SignalingModule"]
+        and_hub -->|owns| and_sm["SignalingModuleInterface\n(created by app factory)"]
         and_sm -->|WebSocket| and_srv["WebTrit Core"]
         and_hub -->|foreground| and_svc["SignalingForegroundService"]
     end
@@ -93,7 +98,7 @@ graph TD
         EP["onSignalingServiceSync()\n@pragma vm:entry-point"]
         SFIM2["SignalingForegroundIsolateManager"]
         HUB["SignalingHub\n(IsolateNameServer port)"]
-        SM2["SignalingModule"]
+        SM2["SignalingModuleInterface\n(via moduleFactory)"]
     end
 
     subgraph "Main isolate"
@@ -249,13 +254,62 @@ the main isolate does not need to be alive.
 
 ---
 
+## Module factory pattern
+
+The platform packages do not depend on `webtrit_signaling` directly.
+Instead, the app provides a `SignalingModuleFactory` callback at startup:
+
+```dart
+typedef SignalingModuleFactory = SignalingModuleInterface Function(SignalingServiceConfig config);
+```
+
+### App-side setup (bootstrap.dart)
+
+```dart
+// Top-level factory — @pragma required so PluginUtilities can serialize it across isolates
+@pragma('vm:entry-point')
+SignalingModuleInterface createSignalingModule(SignalingServiceConfig config) {
+  return SignalingModule(
+    coreUrl: config.coreUrl,
+    tenantId: config.tenantId,
+    token: config.token,
+    trustedCertificates: config.trustedCertificates,
+    signalingClientFactory: defaultSignalingClientFactory,
+  );
+}
+
+// Called once at bootstrap, before start()
+await WebtritSignalingService().setModuleFactory(createSignalingModule);
+await WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall);
+```
+
+### How the factory reaches the background isolate (Android)
+
+```
+setModuleFactory(factory)
+  └─ PluginUtilities.getCallbackHandle(factory) → raw int handle
+       └─ PSignalingServiceHostApi.saveModuleFactory(handle)
+            └─ Kotlin: StorageDelegate.setModuleFactoryHandle(handle)
+                 └─ SharedPreferences
+
+onSignalingServiceSync(status)   ← background isolate
+  └─ status.moduleFactoryHandle  ← read from SharedPreferences via synchronizeIsolate()
+       └─ PluginUtilities.getCallbackFromHandle(handle) as SignalingModuleFactory
+            └─ factory(config)   ← creates SignalingModuleInterface
+```
+
+On iOS the factory is stored in memory and called directly in `start()` — no isolate boundary to cross.
+
+---
+
 ## Key design decisions
 
-| Question                                 | Decision               | Why                                                                                                                      |
-|------------------------------------------|------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| `connect()` — Future or fire-and-forget? | Fire-and-forget        | Result arrives via stream; two channels for the same fact are redundant                                                  |
-| Where does protocol knowledge live?      | `SignalingModule`      | Disconnect codes and delays are protocol detail, not app logic                                                           |
-| Where does reconnect decision live?      | Consumer               | Only the consumer knows app state, network, and active calls                                                             |
-| Session buffer — `rxdart` or manual?     | Manual `List`          | `ReplaySubject` has no `clear()` in v0.28; manual list gives full control                                                |
-| `dispose()` closes the events stream?    | No                     | Closing would silently terminate active BLoC subscribers via `onDone`; stream stays open across `dispose`/`start` cycles |
-| iOS background service?                  | No — main isolate only | iOS suspends background processes; no equivalent of Android foreground service                                           |
+| Question                                         | Decision                    | Why                                                                                                                      |
+|--------------------------------------------------|-----------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `connect()` — Future or fire-and-forget?         | Fire-and-forget             | Result arrives via stream; two channels for the same fact are redundant                                                  |
+| Where does protocol knowledge live?              | App's `SignalingModule`     | Disconnect codes and delays are protocol detail, not app logic                                                           |
+| Where does reconnect decision live?              | Consumer                    | Only the consumer knows app state, network, and active calls                                                             |
+| Session buffer — `rxdart` or manual?             | Manual `List`               | `ReplaySubject` has no `clear()` in v0.28; manual list gives full control                                                |
+| `dispose()` closes the events stream?            | No                          | Closing would silently terminate active BLoC subscribers via `onDone`; stream stays open across `dispose`/`start` cycles |
+| iOS background service?                          | No — main isolate only      | iOS suspends background processes; no equivalent of Android foreground service                                           |
+| Plugin depends on `webtrit_signaling` directly?  | No — factory callback       | Keeps plugin packages dependency-free from signaling impl; app owns `SignalingModule`                                    |
