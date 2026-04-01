@@ -10,6 +10,13 @@ class LinesState extends Equatable {
 
   factory LinesState.blank() => const LinesState(mainLines: [], guestLine: null);
 
+  /// True when this state was produced by [LinesState.blank] — i.e. the
+  /// signaling handshake has not been received yet and line counts are unknown.
+  ///
+  /// After the first handshake, [CallBloc] always sets a non-null [guestLine],
+  /// so [guestLine] == null is an unambiguous marker for the pre-handshake state.
+  bool get isBlank => mainLines.isEmpty && guestLine == null;
+
   @override
   List<Object?> get props => [mainLines, guestLine];
 
