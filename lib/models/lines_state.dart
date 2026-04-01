@@ -13,8 +13,10 @@ class LinesState extends Equatable {
   /// True when this state was produced by [LinesState.blank] — i.e. the
   /// signaling handshake has not been received yet and line counts are unknown.
   ///
-  /// After the first handshake, [CallBloc] always sets a non-null [guestLine],
-  /// so [guestLine] == null is an unambiguous marker for the pre-handshake state.
+  /// [CallBloc.onChange] sets [LinesState.blank] whenever [CallState.linesCount]
+  /// is 0 (pre-handshake). Once the handshake arrives and [linesCount] > 0,
+  /// [guestLine] is always non-null, so [guestLine] == null is an unambiguous
+  /// marker for the pre-handshake state.
   bool get isBlank => mainLines.isEmpty && guestLine == null;
 
   @override
