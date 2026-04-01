@@ -40,6 +40,7 @@ class RemoteVideoViewOverlay extends StatelessWidget {
     super.key,
     this.remotePlaceholderBuilder,
     this.backgroundMode = VideoBackgroundMode.blur,
+    this.hideVideo = false,
   });
 
   /// Whether the call has been accepted and is currently active.
@@ -58,6 +59,9 @@ class RemoteVideoViewOverlay extends StatelessWidget {
 
   /// Optional builder for a placeholder widget while the stream is initializing.
   final WidgetBuilder? remotePlaceholderBuilder;
+
+  /// Whether to hide the video stream entirely.
+  final bool hideVideo;
 
   /// Determines how the empty space behind the video is rendered.
   ///
@@ -78,7 +82,8 @@ class RemoteVideoViewOverlay extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             if (_shouldRenderBackground) _BackgroundLayer(stream: remoteStream, mode: backgroundMode),
-            RTCStreamView(stream: remoteStream, placeholderBuilder: remotePlaceholderBuilder, fit: videoFit),
+            if (!hideVideo)
+              RTCStreamView(stream: remoteStream, placeholderBuilder: remotePlaceholderBuilder, fit: videoFit),
           ],
         ),
       ),
