@@ -1590,12 +1590,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final line = activeCallBlindTransferInitiated?.line ?? currentCall.line;
     final callId = activeCallBlindTransferInitiated?.callId ?? currentCall.callId;
 
-    // Check if the number is already in active calls
-    final isNumberAlreadyConnected = state.activeCalls.any((call) => call.handle.value == event.number);
-    if (isNumberAlreadyConnected) {
-      submitNotification(ActiveLineBlindTransferWarningNotification());
-      return;
-    }
+    // Commented out to emphasize that the check is disabled by intention
+    // to not add it again in future, to see why open ticket [WT-1160]
+    // final isNumberAlreadyConnected = state.activeCalls.any((call) => call.handle.value == event.number);
+    // if (isNumberAlreadyConnected) {
+    //   submitNotification(ActiveLineBlindTransferWarningNotification());
+    //   return;
+    // }
 
     try {
       final transferRequest = TransferRequest(
