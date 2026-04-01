@@ -84,7 +84,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
 
-  late final SignalingModuleInterface _signalingModule;
+  late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
   Timer? _signalingClientReconnectTimer;
   Timer? _presenceInfoSyncTimer;
@@ -115,7 +115,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.webRtcOptionsBuilder,
     this.iceFilter,
     this.peerConnectionPolicyApplier,
-    required SignalingModuleInterface signalingModule,
+    required SignalingModule signalingModule,
     required PeerConnectionManager peerConnectionManager,
     this.onCallEnded,
   }) : super(const CallState()) {

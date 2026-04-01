@@ -31,7 +31,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   final SecureStorage storage;
   final TrustedCertificates certificates;
 
-  late final SignalingModuleInterface _signalingModule;
+  late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
@@ -56,10 +56,10 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   Future<void> endCallsOnService();
 
-  /// Initialises the [SignalingModule] and starts connectivity monitoring.
+  /// Initialises the [SignalingModuleIsolateImpl] and starts connectivity monitoring.
   /// Must be called in the constructor body of the child class.
   void initSignaling({required bool enableReconnect}) {
-    _signalingModule = SignalingModule(
+    _signalingModule = SignalingModuleIsolateImpl(
       coreUrl: storage.readCoreUrl() ?? '',
       tenantId: storage.readTenantId() ?? '',
       token: storage.readToken() ?? '',
