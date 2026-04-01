@@ -306,26 +306,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
-    final linesCount = change.nextState.linesCount;
-    final activeCalls = change.nextState.activeCalls;
-
-    // linesCount == 0 before the first handshake means line counts are unknown.
-    // Keep blank so CallRoutingCubit stays unready until the handshake arrives.
-    // After handshake (isHandshakeEstablished), linesCount == 0 is a valid state
-    // (no main lines configured), so compute real LinesState to allow guest-line calls.
-    if (linesCount == 0 && !change.nextState.isHandshakeEstablished) {
-      linesStateRepository.setState(LinesState.blank());
-    } else {
-      final List<LineState> mainLinesState = [];
-      for (var i = 0; i < linesCount; i++) {
-        final inUse = activeCalls.any((e) => e.line == i);
-        mainLinesState.add(inUse ? LineState.inUse : LineState.idle);
-      }
-      final guestLineInUse = activeCalls.any((e) => e.line == null);
-      final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
-
-      linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
-    }
+    linesStateRepository.setState(change.nextState.toLinesState());
     _handleSignalingSessionError(
       previous: change.currentState.callServiceState,
       current: change.nextState.callServiceState,
