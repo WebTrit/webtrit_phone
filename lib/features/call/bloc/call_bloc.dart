@@ -308,15 +308,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final linesCount = change.nextState.linesCount;
     final activeCalls = change.nextState.activeCalls;
-    final List<LineState> mainLinesState = [];
-    for (var i = 0; i < linesCount; i++) {
-      final inUse = activeCalls.any((e) => e.line == i);
-      mainLinesState.add(inUse ? LineState.inUse : LineState.idle);
-    }
-    final guestLineInUse = activeCalls.any((e) => e.line == null);
-    final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
 
-    linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
+    // linesCount == 0 means the signaling handshake has not arrived yet.
+    // Keep the repository in blank state so CallRoutingCubit stays unready
+    // and CallController waits instead of blocking calls with "no idle lines".
+    if (linesCount == 0) {
+      linesStateRepository.setState(LinesState.blank());
+    } else {
+      final List<LineState> mainLinesState = [];
+      for (var i = 0; i < linesCount; i++) {
+        final inUse = activeCalls.any((e) => e.line == i);
+        mainLinesState.add(inUse ? LineState.inUse : LineState.idle);
+      }
+      final guestLineInUse = activeCalls.any((e) => e.line == null);
+      final guestLineState = guestLineInUse ? LineState.inUse : LineState.idle;
+
+      linesStateRepository.setState(LinesState(mainLines: mainLinesState, guestLine: guestLineState));
+    }
     _handleSignalingSessionError(
       previous: change.currentState.callServiceState,
       current: change.nextState.callServiceState,
