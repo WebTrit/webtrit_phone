@@ -7,6 +7,7 @@ linter:
 analyzer:
   exclude:
     - "**/*.g.dart"
+    - "pigeons/**"
 
 formatter:
   page_width: 120
