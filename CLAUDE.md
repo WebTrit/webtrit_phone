@@ -15,10 +15,7 @@
 @packages/store_info_extractor/AGENTS.md
 @packages/device_auto_rotate/AGENTS.md
 @packages/webtrit_phone_number/AGENTS.md
-@packages/webtrit_signaling_service/webtrit_signaling_service/AGENTS.md
-@packages/webtrit_signaling_service/webtrit_signaling_service_platform_interface/AGENTS.md
-@packages/webtrit_signaling_service/webtrit_signaling_service_android/AGENTS.md
-@packages/webtrit_signaling_service/webtrit_signaling_service_ios/AGENTS.md
+@packages/webtrit_signaling_service/AGENTS.md
 
 ## Gotchas
 
