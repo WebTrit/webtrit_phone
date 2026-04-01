@@ -1091,7 +1091,7 @@ void main() {
   // CallState.toLinesState
   // ---------------------------------------------------------------------------
 
-  const _kRegistered = CallServiceState(registration: Registration(status: RegistrationStatus.registered));
+  const kRegistered = CallServiceState(registration: Registration(status: RegistrationStatus.registered));
 
   group('CallState.toLinesState — pre-handshake', () {
     test('returns blank when linesCount is 0 and handshake not established', () {
@@ -1109,7 +1109,7 @@ void main() {
 
   group('CallState.toLinesState — post-handshake with 0 main lines', () {
     test('returns non-blank with idle guest line when no calls', () {
-      final state = CallState(linesCount: 0, callServiceState: _kRegistered);
+      final state = CallState(linesCount: 0, callServiceState: kRegistered);
       final result = state.toLinesState();
       expect(result.isBlank, isFalse);
       expect(result.mainLines, isEmpty);
@@ -1117,7 +1117,7 @@ void main() {
     });
 
     test('returns guest line inUse when guest call is active (line == null)', () {
-      final state = CallState(linesCount: 0, callServiceState: _kRegistered, activeCalls: [_makeCall(line: null)]);
+      final state = CallState(linesCount: 0, callServiceState: kRegistered, activeCalls: [_makeCall(line: null)]);
       final result = state.toLinesState();
       expect(result.mainLines, isEmpty);
       expect(result.guestLine, LineState.inUse);
@@ -1126,7 +1126,7 @@ void main() {
 
   group('CallState.toLinesState — post-handshake with main lines', () {
     test('all lines idle when no active calls', () {
-      final state = CallState(linesCount: 2, callServiceState: _kRegistered);
+      final state = CallState(linesCount: 2, callServiceState: kRegistered);
       final result = state.toLinesState();
       expect(result.mainLines, [LineState.idle, LineState.idle]);
       expect(result.guestLine, LineState.idle);
@@ -1135,7 +1135,7 @@ void main() {
     test('line 0 inUse when call on line 0', () {
       final state = CallState(
         linesCount: 2,
-        callServiceState: _kRegistered,
+        callServiceState: kRegistered,
         activeCalls: [_makeCall(callId: 'c1', line: 0)],
       );
       final result = state.toLinesState();
@@ -1146,7 +1146,7 @@ void main() {
     test('line 1 inUse when call on line 1', () {
       final state = CallState(
         linesCount: 2,
-        callServiceState: _kRegistered,
+        callServiceState: kRegistered,
         activeCalls: [_makeCall(callId: 'c1', line: 1)],
       );
       final result = state.toLinesState();
@@ -1157,7 +1157,7 @@ void main() {
     test('all lines inUse when calls on every line', () {
       final state = CallState(
         linesCount: 2,
-        callServiceState: _kRegistered,
+        callServiceState: kRegistered,
         activeCalls: [
           _makeCall(callId: 'c1', line: 0),
           _makeCall(callId: 'c2', line: 1),
@@ -1170,7 +1170,7 @@ void main() {
     test('guest line inUse when guest call present alongside main calls', () {
       final state = CallState(
         linesCount: 2,
-        callServiceState: _kRegistered,
+        callServiceState: kRegistered,
         activeCalls: [
           _makeCall(callId: 'c1', line: 0),
           _makeCall(callId: 'c2', line: null),
@@ -1185,7 +1185,7 @@ void main() {
     test('guest line idle when no guest call', () {
       final state = CallState(
         linesCount: 1,
-        callServiceState: _kRegistered,
+        callServiceState: kRegistered,
         activeCalls: [_makeCall(callId: 'c1', line: 0)],
       );
       expect(state.toLinesState().guestLine, LineState.idle);
