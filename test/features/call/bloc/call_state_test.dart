@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -1083,6 +1084,111 @@ void main() {
     test('hasAudio and hasVideo false when SDP is null', () {
       expect(makeJsep(null).hasAudio, isFalse);
       expect(makeJsep(null).hasVideo, isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState.toLinesState
+  // ---------------------------------------------------------------------------
+
+  const kRegistered = CallServiceState(registration: Registration(status: RegistrationStatus.registered));
+
+  group('CallState.toLinesState — pre-handshake', () {
+    test('returns blank when linesCount is 0 and handshake not established', () {
+      final state = CallState(linesCount: 0);
+      expect(state.isHandshakeEstablished, isFalse);
+      expect(state.toLinesState(), LinesState.blank());
+      expect(state.toLinesState().isBlank, isTrue);
+    });
+
+    test('returns blank regardless of activeCalls before handshake', () {
+      final state = CallState(linesCount: 0, activeCalls: [_makeCall(line: null)]);
+      expect(state.toLinesState(), LinesState.blank());
+    });
+  });
+
+  group('CallState.toLinesState — post-handshake with 0 main lines', () {
+    test('returns non-blank with idle guest line when no calls', () {
+      final state = CallState(linesCount: 0, callServiceState: kRegistered);
+      final result = state.toLinesState();
+      expect(result.isBlank, isFalse);
+      expect(result.mainLines, isEmpty);
+      expect(result.guestLine, LineState.idle);
+    });
+
+    test('returns guest line inUse when guest call is active (line == null)', () {
+      final state = CallState(linesCount: 0, callServiceState: kRegistered, activeCalls: [_makeCall(line: null)]);
+      final result = state.toLinesState();
+      expect(result.mainLines, isEmpty);
+      expect(result.guestLine, LineState.inUse);
+    });
+  });
+
+  group('CallState.toLinesState — post-handshake with main lines', () {
+    test('all lines idle when no active calls', () {
+      final state = CallState(linesCount: 2, callServiceState: kRegistered);
+      final result = state.toLinesState();
+      expect(result.mainLines, [LineState.idle, LineState.idle]);
+      expect(result.guestLine, LineState.idle);
+    });
+
+    test('line 0 inUse when call on line 0', () {
+      final state = CallState(
+        linesCount: 2,
+        callServiceState: kRegistered,
+        activeCalls: [_makeCall(callId: 'c1', line: 0)],
+      );
+      final result = state.toLinesState();
+      expect(result.mainLines[0], LineState.inUse);
+      expect(result.mainLines[1], LineState.idle);
+    });
+
+    test('line 1 inUse when call on line 1', () {
+      final state = CallState(
+        linesCount: 2,
+        callServiceState: kRegistered,
+        activeCalls: [_makeCall(callId: 'c1', line: 1)],
+      );
+      final result = state.toLinesState();
+      expect(result.mainLines[0], LineState.idle);
+      expect(result.mainLines[1], LineState.inUse);
+    });
+
+    test('all lines inUse when calls on every line', () {
+      final state = CallState(
+        linesCount: 2,
+        callServiceState: kRegistered,
+        activeCalls: [
+          _makeCall(callId: 'c1', line: 0),
+          _makeCall(callId: 'c2', line: 1),
+        ],
+      );
+      final result = state.toLinesState();
+      expect(result.mainLines, [LineState.inUse, LineState.inUse]);
+    });
+
+    test('guest line inUse when guest call present alongside main calls', () {
+      final state = CallState(
+        linesCount: 2,
+        callServiceState: kRegistered,
+        activeCalls: [
+          _makeCall(callId: 'c1', line: 0),
+          _makeCall(callId: 'c2', line: null),
+        ],
+      );
+      final result = state.toLinesState();
+      expect(result.mainLines[0], LineState.inUse);
+      expect(result.mainLines[1], LineState.idle);
+      expect(result.guestLine, LineState.inUse);
+    });
+
+    test('guest line idle when no guest call', () {
+      final state = CallState(
+        linesCount: 1,
+        callServiceState: kRegistered,
+        activeCalls: [_makeCall(callId: 'c1', line: 0)],
+      );
+      expect(state.toLinesState().guestLine, LineState.idle);
     });
   });
 }

@@ -45,7 +45,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// runs in parallel while the widget tree and [CallBloc] are being built.
   /// Late subscribers (including [CallBloc]) receive all buffered session
   /// events via the replay stream.
-  late final SignalingModule _signalingModule;
+  late final SignalingModuleIsolateImpl _signalingModule;
 
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
@@ -82,7 +82,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     context.read<AppLogger>().updateRemoteLabels();
 
     final session = context.read<AppBloc>().state.session;
-    _signalingModule = SignalingModule(
+    _signalingModule = SignalingModuleIsolateImpl(
       coreUrl: session.coreUrl!,
       tenantId: session.tenantId,
       token: session.token!,

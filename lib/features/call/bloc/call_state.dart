@@ -41,6 +41,24 @@ class CallState with _$CallState {
   /// Indicates that the signaling connection to the server is successfully established.
   bool get isSignalingEstablished => callServiceState.signalingClientStatus.isConnect;
 
+  /// Computes the [LinesState] that reflects the current lines and active calls.
+  ///
+  /// Returns [LinesState.blank] when [linesCount] is 0 and the signaling
+  /// handshake has not yet been received ([isHandshakeEstablished] is false),
+  /// keeping [CallRoutingCubit] in the unready state until server config arrives.
+  ///
+  /// After the handshake, [linesCount] == 0 is a valid server configuration
+  /// (no main lines), so a real [LinesState] is computed to allow guest-line calls.
+  LinesState toLinesState() {
+    if (linesCount == 0 && !isHandshakeEstablished) return LinesState.blank();
+    final mainLines = List.generate(linesCount, (i) {
+      final inUse = activeCalls.any((e) => e.line == i);
+      return inUse ? LineState.inUse : LineState.idle;
+    });
+    final guestLineInUse = activeCalls.any((e) => e.line == null);
+    return LinesState(mainLines: mainLines, guestLine: guestLineInUse ? LineState.inUse : LineState.idle);
+  }
+
   int? retrieveIdleLine() {
     for (var line = 0; line < linesCount; line++) {
       if (!activeCalls.any((activeCall) => activeCall.line == line)) {

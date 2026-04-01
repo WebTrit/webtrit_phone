@@ -56,10 +56,10 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   Future<void> endCallsOnService();
 
-  /// Initialises the [SignalingModule] and starts connectivity monitoring.
+  /// Initialises the [SignalingModuleIsolateImpl] and starts connectivity monitoring.
   /// Must be called in the constructor body of the child class.
   void initSignaling({required bool enableReconnect}) {
-    _signalingModule = SignalingModule(
+    _signalingModule = SignalingModuleIsolateImpl(
       coreUrl: storage.readCoreUrl() ?? '',
       tenantId: storage.readTenantId() ?? '',
       token: storage.readToken() ?? '',
@@ -78,14 +78,14 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
           if (enableReconnect && !_networkNone) {
             _signalingReconnectTimer?.cancel();
             _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
-              if (_signalingModule.signalingClient == null) _signalingModule.connect();
+              if (!_signalingModule.isConnected) _signalingModule.connect();
             });
           }
         case SignalingDisconnected(:final recommendedReconnectDelay):
           if (enableReconnect && recommendedReconnectDelay != null && !_networkNone) {
             _signalingReconnectTimer?.cancel();
             _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
-              if (_signalingModule.signalingClient == null) _signalingModule.connect();
+              if (!_signalingModule.isConnected) _signalingModule.connect();
             });
           }
         default:
@@ -147,7 +147,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
         _networkNone = false;
         connectivityNoneCounter = 0;
 
-        if (enableReconnect && _signalingModule.signalingClient == null) {
+        if (enableReconnect && !_signalingModule.isConnected) {
           _signalingModule.connect();
         }
       }
@@ -220,8 +220,16 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
         continue;
       }
 
-      _signalingModule.signalingClient
-          ?.execute(pending.requestBuilder(lineIndex, pending.callId, WebtritSignalingClient.generateTransactionId()))
+      final future = _signalingModule.execute(
+        pending.requestBuilder(lineIndex, pending.callId, WebtritSignalingClient.generateTransactionId()),
+      );
+      if (future == null) {
+        pending.completer.completeError(StateError('Signaling disconnected while flushing callId: ${pending.callId}'));
+        pending.timeoutTimer.cancel();
+        _pendingRequests.remove(pending);
+        continue;
+      }
+      future
           .then((_) => pending.completer.complete())
           .catchError((e, s) => pending.completer.completeError(e, s))
           .whenComplete(() {
@@ -232,8 +240,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   }
 
   Future<void> _sendRequest(String callId, Request Function(int line, String callId, String tx) requestBuilder) async {
-    final client = _signalingModule.signalingClient;
-    if (client == null) {
+    if (!_signalingModule.isConnected) {
       logger.warning('Not connected. Queueing request for $callId');
 
       final completer = Completer<void>();
@@ -259,7 +266,14 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     final lineIndex = _lines[callId];
     if (lineIndex == null) return;
 
-    await client.execute(requestBuilder(lineIndex, callId, WebtritSignalingClient.generateTransactionId()));
+    final future = _signalingModule.execute(
+      requestBuilder(lineIndex, callId, WebtritSignalingClient.generateTransactionId()),
+    );
+    if (future == null) {
+      logger.warning('execute returned null for callId $callId (disconnected after isConnected check)');
+      return;
+    }
+    await future;
   }
 
   // Callbacks - may be overridden by subclasses.

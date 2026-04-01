@@ -71,6 +71,61 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 }
 
 // ---------------------------------------------------------------------------
+// Interface
+// ---------------------------------------------------------------------------
+
+/// Contract for a signaling module used by [IsolateManager] and other consumers.
+///
+/// Abstracts the concrete [SignalingModuleIsolateImpl] so that the integration
+/// layer can be swapped to a plugin-backed implementation without changing
+/// consumers. When the webtrit_signaling_service plugin is integrated, this
+/// interface will be replaced by the one from the plugin's platform-interface
+/// package and this local definition removed.
+abstract class SignalingModule {
+  /// Broadcast stream of all module lifecycle and protocol events.
+  ///
+  /// Each new subscriber immediately receives all lifecycle and handshake events
+  /// buffered since the last [connect] call, followed by live events.
+  /// [SignalingProtocolEvent] items are NOT replayed — they are delivered only
+  /// to subscribers already listening when they occur.
+  Stream<SignalingModuleEvent> get events;
+
+  /// Whether the signaling client is currently connected.
+  ///
+  /// Returns `true` between a successful [connect] and the next [disconnect]
+  /// or connection failure. Use this to guard [execute] calls.
+  bool get isConnected;
+
+  /// Initiates a connection. Fire-and-forget — returns immediately.
+  ///
+  /// The result arrives asynchronously via [events] as [SignalingConnected]
+  /// or [SignalingConnectionFailed]. Calling [connect] when already connected
+  /// or while a connection attempt is in progress is a no-op.
+  void connect();
+
+  /// Disconnects the current client gracefully.
+  ///
+  /// Emits [SignalingDisconnecting] immediately. [SignalingDisconnected] is
+  /// emitted later once the underlying WebSocket close-ack arrives. Returns
+  /// immediately — callers must not assume the connection is closed when the
+  /// returned [Future] completes.
+  Future<void> disconnect();
+
+  /// Sends [request] via the active connection.
+  ///
+  /// Returns `null` when not connected; callers must handle this case.
+  /// Returns a [Future] that completes when the request has been written to
+  /// the transport.
+  Future<void>? execute(Request request);
+
+  /// Disconnects and closes the event stream.
+  ///
+  /// After [dispose] the module must not be used. Awaiting [dispose] gives
+  /// [SignalingDisconnected] time to be emitted before the stream closes.
+  Future<void> dispose();
+}
+
+// ---------------------------------------------------------------------------
 // Module
 // ---------------------------------------------------------------------------
 
@@ -80,8 +135,8 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 /// Knows only the WebSocket protocol - nothing about [CallState], BLoC, emit,
 /// notifications, or app lifecycle. Can be used in the main isolate, a
 /// background isolate, or an integration test without any UI dependency.
-class SignalingModule {
-  SignalingModule({
+class SignalingModuleIsolateImpl implements SignalingModule {
+  SignalingModuleIsolateImpl({
     required this.coreUrl,
     required this.tenantId,
     required this.token,
@@ -146,7 +201,7 @@ class SignalingModule {
   /// Each new subscriber immediately receives all lifecycle and handshake events
   /// buffered since the last [connect] call (e.g. [SignalingConnecting],
   /// [SignalingConnected], [SignalingHandshakeReceived]), followed by live events.
-  /// This allows [SignalingModule] to be connected before [CallBloc] (or any
+  /// This allows [SignalingModuleIsolateImpl] to be connected before [CallBloc] (or any
   /// other consumer) is created without missing session state.
   ///
   /// Note: [SignalingProtocolEvent] (call events) are NOT replayed - they are
@@ -158,6 +213,7 @@ class SignalingModule {
   /// the returned [StreamSubscription] for the consumer's lifetime; calling
   /// it multiple times without cancelling previous subscriptions leaks
   /// controllers.
+  @override
   Stream<SignalingModuleEvent> get events {
     // Take a snapshot of the buffer BEFORE subscribing to the live stream so
     // that any event arriving between snapshot and subscribe is delivered only
@@ -193,12 +249,19 @@ class SignalingModule {
   /// Null when not connected.
   WebtritSignalingClient? get signalingClient => _client;
 
+  @override
+  bool get isConnected => _client != null;
+
+  @override
+  Future<void>? execute(Request request) => _client?.execute(request);
+
   /// Initiates a connection. Fire-and-forget - returns immediately.
   /// The result arrives via [events] as [SignalingConnected] or
   /// [SignalingConnectionFailed].
   ///
   /// Clears the session buffer so that late subscribers receive only events
   /// from the current session, not stale events from a previous one.
+  @override
   void connect() {
     if (_disposed || _connecting) return;
     _sessionBuffer.clear();
@@ -210,6 +273,7 @@ class SignalingModule {
   /// asynchronously, only when the underlying WebSocket close-ack arrives via
   /// the [_onDisconnect] callback - it is NOT guaranteed to arrive before this
   /// Future completes.
+  @override
   Future<void> disconnect() async {
     final client = _client;
     if (client == null) return;
@@ -228,6 +292,7 @@ class SignalingModule {
 
   /// Disconnects and closes the event stream. After [dispose], the module
   /// must not be used.
+  @override
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;
