@@ -10,13 +10,13 @@ class LinesState extends Equatable {
 
   factory LinesState.blank() => const LinesState(mainLines: [], guestLine: null);
 
-  /// True when this state was produced by [LinesState.blank] — i.e. the
-  /// signaling handshake has not been received yet and line counts are unknown.
+  /// True when this state has no main lines and no guest line.
   ///
-  /// [CallBloc.onChange] sets [LinesState.blank] whenever [CallState.linesCount]
-  /// is 0 (pre-handshake). Once the handshake arrives and [linesCount] > 0,
-  /// [guestLine] is always non-null, so [guestLine] == null is an unambiguous
-  /// marker for the pre-handshake state.
+  /// This occurs in two situations:
+  /// - Pre-handshake: [CallBloc.onChange] sets [LinesState.blank] while
+  ///   [CallState.linesCount] is 0 and [CallState.isHandshakeEstablished] is false.
+  /// - Post-handshake with no lines: a valid server state where both main lines
+  ///   and guest line are absent (treated the same as blank by [CallRoutingCubit]).
   bool get isBlank => mainLines.isEmpty && guestLine == null;
 
   @override

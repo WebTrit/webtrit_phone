@@ -220,9 +220,17 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
         continue;
       }
 
-      _signalingModule
-          .execute(pending.requestBuilder(lineIndex, pending.callId, WebtritSignalingClient.generateTransactionId()))
-          ?.then((_) => pending.completer.complete())
+      final future = _signalingModule.execute(
+        pending.requestBuilder(lineIndex, pending.callId, WebtritSignalingClient.generateTransactionId()),
+      );
+      if (future == null) {
+        pending.completer.completeError(StateError('Signaling disconnected while flushing callId: ${pending.callId}'));
+        pending.timeoutTimer.cancel();
+        _pendingRequests.remove(pending);
+        continue;
+      }
+      future
+          .then((_) => pending.completer.complete())
           .catchError((e, s) => pending.completer.completeError(e, s))
           .whenComplete(() {
             pending.timeoutTimer.cancel();
@@ -258,7 +266,14 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     final lineIndex = _lines[callId];
     if (lineIndex == null) return;
 
-    await _signalingModule.execute(requestBuilder(lineIndex, callId, WebtritSignalingClient.generateTransactionId()));
+    final future = _signalingModule.execute(
+      requestBuilder(lineIndex, callId, WebtritSignalingClient.generateTransactionId()),
+    );
+    if (future == null) {
+      logger.warning('execute returned null for callId $callId (disconnected after isConnected check)');
+      return;
+    }
+    await future;
   }
 
   // Callbacks - may be overridden by subclasses.

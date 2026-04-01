@@ -309,10 +309,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final linesCount = change.nextState.linesCount;
     final activeCalls = change.nextState.activeCalls;
 
-    // linesCount == 0 means the signaling handshake has not arrived yet.
-    // Keep the repository in blank state so CallRoutingCubit stays unready
-    // and CallController waits instead of blocking calls with "no idle lines".
-    if (linesCount == 0) {
+    // linesCount == 0 before the first handshake means line counts are unknown.
+    // Keep blank so CallRoutingCubit stays unready until the handshake arrives.
+    // After handshake (isHandshakeEstablished), linesCount == 0 is a valid state
+    // (no main lines configured), so compute real LinesState to allow guest-line calls.
+    if (linesCount == 0 && !change.nextState.isHandshakeEstablished) {
       linesStateRepository.setState(LinesState.blank());
     } else {
       final List<LineState> mainLinesState = [];
