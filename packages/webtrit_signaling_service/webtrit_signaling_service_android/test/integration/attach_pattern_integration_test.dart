@@ -19,12 +19,239 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'package:webtrit_signaling_service_android/src/signaling_client_factory.dart';
 import 'package:webtrit_signaling_service_android/src/hub/signaling_hub.dart';
 import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_client.dart';
 import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_module.dart';
-import 'package:webtrit_signaling_service_android/src/isolate/signaling_foreground_isolate_manager.dart';
-import 'package:webtrit_signaling_service_android/src/signaling_module.dart';
+
+// ---------------------------------------------------------------------------
+// Local SignalingClientFactory typedef (mirrors the deleted per-platform type)
+// ---------------------------------------------------------------------------
+
+typedef _SignalingClientFactory =
+    Future<WebtritSignalingClient> Function({
+      required Uri url,
+      required String tenantId,
+      required String token,
+      required Duration connectionTimeout,
+      required TrustedCertificates certs,
+      required bool force,
+    });
+
+// ---------------------------------------------------------------------------
+// Local SignalingModule (mirrors the deleted per-platform implementation)
+// ---------------------------------------------------------------------------
+
+class _SignalingModule implements SignalingModuleInterface {
+  _SignalingModule({
+    required this.coreUrl,
+    required this.tenantId,
+    required this.token,
+    required this.trustedCertificates,
+    required this.signalingClientFactory,
+  });
+
+  final String coreUrl;
+  final String tenantId;
+  final String token;
+  final TrustedCertificates trustedCertificates;
+  final _SignalingClientFactory signalingClientFactory;
+
+  final _controller = StreamController<SignalingModuleEvent>.broadcast();
+  final List<SignalingModuleEvent> _sessionBuffer = [];
+
+  WebtritSignalingClient? _client;
+  bool _disposed = false;
+  String? _lastConnectErrorString;
+
+  WebtritSignalingClient? get signalingClient => _client;
+
+  @override
+  Stream<SignalingModuleEvent> get events {
+    final sink = StreamController<SignalingModuleEvent>(sync: true);
+    final sub = _controller.stream.listen(sink.add, onError: sink.addError, onDone: sink.close);
+    sink.onCancel = sub.cancel;
+    for (final e in List<SignalingModuleEvent>.of(_sessionBuffer)) {
+      sink.add(e);
+    }
+    return sink.stream;
+  }
+
+  @override
+  bool get isConnected => _client != null;
+
+  @override
+  void connect() {
+    if (_disposed) return;
+    unawaited(_connectAsync());
+  }
+
+  @override
+  Future<void> disconnect() async {
+    final client = _client;
+    if (client == null) return;
+    _client = null;
+    _emit(SignalingDisconnecting());
+    try {
+      await client.disconnect(SignalingDisconnectCode.goingAway.code);
+    } catch (_) {}
+  }
+
+  @override
+  Future<void>? execute(Request request) => _client?.execute(request);
+
+  @override
+  Future<void> dispose() async {
+    if (_disposed) return;
+    _disposed = true;
+    _sessionBuffer.clear();
+    await disconnect();
+    await _controller.close();
+  }
+
+  Future<void> _connectAsync() async {
+    final existing = _client;
+    if (existing != null) {
+      _client = null;
+      try {
+        await existing.disconnect();
+      } catch (_) {}
+    }
+    if (_disposed) return;
+    _sessionBuffer.clear();
+    _emit(SignalingConnecting());
+    try {
+      final url = Uri.parse(coreUrl).replace(scheme: coreUrl.startsWith('https') ? 'wss' : 'ws');
+      final client = await signalingClientFactory(
+        url: url,
+        tenantId: tenantId,
+        token: token,
+        connectionTimeout: const Duration(seconds: 10),
+        certs: trustedCertificates,
+        force: true,
+      );
+      if (_disposed) {
+        try {
+          await client.disconnect();
+        } catch (_) {}
+        return;
+      }
+      client.listen(
+        onStateHandshake: (h) {
+          if (!_disposed) _emit(SignalingHandshakeReceived(handshake: h));
+        },
+        onEvent: (e) {
+          if (!_disposed) _emit(SignalingProtocolEvent(event: e));
+        },
+        onError: (e, [st]) {
+          if (!_disposed) {
+            _client = null;
+            final es = e.toString();
+            final rep = _lastConnectErrorString == es;
+            _lastConnectErrorString = es;
+            _emit(
+              SignalingConnectionFailed(
+                error: e,
+                isRepeated: rep,
+                recommendedReconnectDelay: const Duration(seconds: 3),
+              ),
+            );
+          }
+        },
+        onDisconnect: (code, reason) {
+          if (!_disposed) {
+            _client = null;
+            final known = SignalingDisconnectCode.values.byCode(code ?? -1);
+            Duration? delay;
+            if (known == SignalingDisconnectCode.controllerForceAttachClose) {
+              delay = Duration.zero;
+            } else if (known == SignalingDisconnectCode.protocolError) {
+              delay = null;
+            } else {
+              delay = const Duration(seconds: 3);
+            }
+            _emit(
+              SignalingDisconnected(code: code, reason: reason, knownCode: known, recommendedReconnectDelay: delay),
+            );
+          }
+        },
+      );
+      _client = client;
+      _lastConnectErrorString = null;
+      _emit(SignalingConnected());
+    } catch (e) {
+      if (_disposed) return;
+      final es = e.toString();
+      final rep = _lastConnectErrorString == es;
+      _lastConnectErrorString = es;
+      _emit(
+        SignalingConnectionFailed(error: e, isRepeated: rep, recommendedReconnectDelay: const Duration(seconds: 3)),
+      );
+    }
+  }
+
+  void _emit(SignalingModuleEvent event) {
+    if (_controller.isClosed) return;
+    _sessionBuffer.add(event);
+    _controller.add(event);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Local test manager (replaces SignalingForegroundIsolateManager for tests)
+//
+// Owns a _SignalingModule + SignalingHub and starts/stops them on demand,
+// without the PluginUtilities callback-handle indirection used in production.
+// ---------------------------------------------------------------------------
+
+class _TestIsolateManager {
+  _TestIsolateManager({
+    required this.coreUrl,
+    required this.tenantId,
+    required this.token,
+    required this.signalingClientFactory,
+  });
+
+  final String coreUrl;
+  final String tenantId;
+  final String token;
+  final _SignalingClientFactory signalingClientFactory;
+
+  _SignalingModule? _module;
+  SignalingHub? _hub;
+  bool _started = false;
+
+  Future<void> handleStatus({required bool enabled}) async {
+    if (enabled) {
+      await _start();
+    } else {
+      await _stop();
+    }
+  }
+
+  Future<void> _start() async {
+    if (_started) return;
+    _started = true;
+    _module = _SignalingModule(
+      coreUrl: coreUrl,
+      tenantId: tenantId,
+      token: token,
+      trustedCertificates: TrustedCertificates.empty,
+      signalingClientFactory: signalingClientFactory,
+    );
+    _hub = SignalingHub(_module!);
+    _hub!.start();
+    _module!.connect();
+  }
+
+  Future<void> _stop() async {
+    if (!_started) return;
+    _started = false;
+    await _hub?.dispose();
+    await _module?.dispose();
+    _hub = null;
+    _module = null;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Stream whereType extension
@@ -90,7 +317,7 @@ final _kHandshake = StateHandshake(
 // Helpers
 // ---------------------------------------------------------------------------
 
-SignalingClientFactory _fakeFactory(_FakeSignalingClient client) =>
+_SignalingClientFactory _fakeFactory(_FakeSignalingClient client) =>
     ({
       required Uri url,
       required String tenantId,
@@ -101,11 +328,11 @@ SignalingClientFactory _fakeFactory(_FakeSignalingClient client) =>
     }) async => client;
 
 /// Builds and starts the "background service side":
-/// [SignalingForegroundIsolateManager] with a fake signaling client, connects,
+/// [_TestIsolateManager] with a fake signaling client, connects,
 /// and waits for the factory to resolve.
-Future<({SignalingForegroundIsolateManager manager, _FakeSignalingClient fakeClient})> _startServiceSide() async {
+Future<({_TestIsolateManager manager, _FakeSignalingClient fakeClient})> _startServiceSide() async {
   final fakeClient = _FakeSignalingClient();
-  final manager = SignalingForegroundIsolateManager(
+  final manager = _TestIsolateManager(
     coreUrl: 'https://example.com',
     tenantId: 'tenant',
     token: 'token',
@@ -176,7 +403,7 @@ void main() {
 
     test('main side receives only current session in buffer after hub reconnect', () async {
       final fakeClient = _FakeSignalingClient();
-      final manager = SignalingForegroundIsolateManager(
+      final manager = _TestIsolateManager(
         coreUrl: 'https://example.com',
         tenantId: 'tenant',
         token: 'token',
@@ -306,7 +533,7 @@ void main() {
     test('execute returns null when main side attach sees not-yet-connected module', () async {
       final fakeClient = _FakeSignalingClient();
       // Build module/hub manually without connecting.
-      final module = SignalingModule(
+      final module = _SignalingModule(
         coreUrl: 'https://example.com',
         tenantId: 'tenant',
         token: 'token',
@@ -461,7 +688,7 @@ void main() {
       final fakeClient2 = _FakeSignalingClient();
       var cycle = 0;
 
-      final manager = SignalingForegroundIsolateManager(
+      final manager = _TestIsolateManager(
         coreUrl: 'https://example.com',
         tenantId: 'tenant',
         token: 'token',
@@ -503,7 +730,7 @@ void main() {
     test('multiple start/stop cycles leave no stale hub port', () async {
       for (var i = 0; i < 3; i++) {
         final fakeClient = _FakeSignalingClient();
-        final manager = SignalingForegroundIsolateManager(
+        final manager = _TestIsolateManager(
           coreUrl: 'https://example.com',
           tenantId: 'tenant',
           token: 'token',
