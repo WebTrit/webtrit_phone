@@ -28,6 +28,7 @@ class PSignalingServiceStatus {
     required this.tenantId,
     required this.token,
     required this.incomingCallHandlerHandle,
+    required this.moduleFactoryHandle,
   });
 
   final bool enabled;
@@ -41,6 +42,12 @@ class PSignalingServiceStatus {
   /// persisted via [PSignalingServiceHostApi.saveIncomingCallHandler].
   /// 0 means no handler is registered.
   final int incomingCallHandlerHandle;
+
+  /// Raw handle for the app-side [SignalingModuleFactory] callback.
+  ///
+  /// Obtained via [PluginUtilities.getCallbackHandle] and persisted via
+  /// [PSignalingServiceHostApi.saveModuleFactory]. 0 means no factory registered.
+  final int moduleFactoryHandle;
 }
 
 // ---------------------------------------------------------------------------
@@ -64,6 +71,12 @@ abstract class PSignalingServiceHostApi {
   /// top-level function annotated with [@pragma('vm:entry-point')].
   /// Pass 0 to unregister.
   void saveIncomingCallHandler(int callbackHandle);
+
+  /// Persist the raw callback handle for the app-side [SignalingModuleFactory].
+  ///
+  /// The handle is obtained via [PluginUtilities.getCallbackHandle] on a
+  /// top-level function annotated with [@pragma('vm:entry-point')].
+  void saveModuleFactory(int callbackHandle);
 
   /// Set the foreground service notification text.
   void configureService(String notificationTitle, String notificationDescription);

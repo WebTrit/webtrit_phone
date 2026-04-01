@@ -15,6 +15,7 @@ object StorageDelegate {
     private const val KEY_TOKEN = "token"
     private const val KEY_MODE = "mode"
     private const val KEY_INCOMING_CALL_HANDLER = "incoming_call_handler"
+    private const val KEY_MODULE_FACTORY = "module_factory"
     private val MODE_PUSH_BOUND = PSignalingServiceMode.PUSH_BOUND.name
 
     private fun prefs(context: Context): SharedPreferences =
@@ -55,6 +56,12 @@ object StorageDelegate {
 
     fun getIncomingCallHandler(context: Context): Long =
         prefs(context).getLong(KEY_INCOMING_CALL_HANDLER, 0L)
+
+    fun saveModuleFactoryHandle(context: Context, handle: Long) =
+        prefs(context).edit().putLong(KEY_MODULE_FACTORY, handle).apply()
+
+    fun getModuleFactoryHandle(context: Context): Long =
+        prefs(context).getLong(KEY_MODULE_FACTORY, 0L)
 
     /// Removes stored credentials so that a reboot after logout does not
     /// restart the service with stale tokens.

@@ -2,25 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:logging/logging.dart';
-import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
-
-import 'signaling_client_factory.dart';
-import 'signaling_module.dart';
 
 final _logger = Logger('WebtritSignalingServiceIos');
 
 /// iOS implementation of [SignalingServicePlatform].
 ///
-/// On iOS there is no foreground service -- [SignalingModule] runs directly in
-/// the main isolate. [start] creates the module and opens the connection.
+/// On iOS there is no foreground service -- [SignalingModuleInterface] runs directly in
+/// the main isolate. [start] creates the module via the registered factory and opens the connection.
 /// [attach] is a no-op because there is no separate background process.
 class WebtritSignalingServiceIos extends SignalingServicePlatform {
-  WebtritSignalingServiceIos._({SignalingClientFactory? clientFactory})
-    : _clientFactory = clientFactory ?? defaultSignalingClientFactory;
+  WebtritSignalingServiceIos._();
 
   @visibleForTesting
-  WebtritSignalingServiceIos.forTesting(SignalingClientFactory clientFactory) : this._(clientFactory: clientFactory);
+  WebtritSignalingServiceIos.forTesting() : this._();
 
   static WebtritSignalingServiceIos? _instance;
 
@@ -29,8 +24,8 @@ class WebtritSignalingServiceIos extends SignalingServicePlatform {
     SignalingServicePlatform.instance = _instance!;
   }
 
-  final SignalingClientFactory _clientFactory;
-  SignalingModule? _module;
+  SignalingModuleFactory? _factory;
+  SignalingModuleInterface? _module;
   StreamSubscription<SignalingModuleEvent>? _moduleSub;
   StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
@@ -48,11 +43,22 @@ class WebtritSignalingServiceIos extends SignalingServicePlatform {
   }
 
   @override
+  Future<void> setModuleFactory(SignalingModuleFactory factory) async {
+    _logger.info('WebtritSignalingServiceIos.setModuleFactory');
+    _factory = factory;
+  }
+
+  @override
   Future<void> start(
     SignalingServiceConfig config, {
     SignalingServiceMode mode = SignalingServiceMode.persistent,
   }) async {
     _logger.info('WebtritSignalingServiceIos.start mode=$mode');
+
+    final factory = _factory;
+    if (factory == null) {
+      throw StateError('No SignalingModuleFactory registered -- call setModuleFactory() before start()');
+    }
 
     if (_eventsController.isClosed) {
       _eventsController = StreamController<SignalingModuleEvent>.broadcast();
@@ -60,13 +66,7 @@ class WebtritSignalingServiceIos extends SignalingServicePlatform {
 
     await _tearDownModule();
 
-    final module = SignalingModule(
-      coreUrl: config.coreUrl,
-      tenantId: config.tenantId,
-      token: config.token,
-      trustedCertificates: config.trustedCertificates,
-      signalingClientFactory: _clientFactory,
-    );
+    final module = factory(config);
 
     _moduleSub = module.events.listen(
       (event) {
@@ -87,7 +87,7 @@ class WebtritSignalingServiceIos extends SignalingServicePlatform {
 
   /// No-op on iOS -- there is no background service process to attach to.
   ///
-  /// On iOS the [SignalingModule] always runs in the main isolate, so no
+  /// On iOS the [SignalingModuleInterface] always runs in the main isolate, so no
   /// cross-isolate hub handshake is required.
   @override
   Future<void> attach() async {
@@ -95,7 +95,7 @@ class WebtritSignalingServiceIos extends SignalingServicePlatform {
   }
 
   @override
-  Future<void> execute(Request request) async {
+  Future<void> execute(request) async {
     final module = _module;
     if (module == null || !module.isConnected) {
       throw StateError('SignalingModule not ready -- call start() first');

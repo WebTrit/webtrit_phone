@@ -188,6 +188,7 @@ class SignalingForegroundService : Service() {
                 tenantId = tenantId,
                 token = token,
                 incomingCallHandlerHandle = StorageDelegate.getIncomingCallHandler(applicationContext),
+                moduleFactoryHandle = StorageDelegate.getModuleFactoryHandle(applicationContext),
             ),
         ) { result ->
             result.onSuccess {

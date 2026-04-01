@@ -2,22 +2,24 @@ import 'dart:async';
 
 import 'dart:ui' show CallbackHandle, PluginUtilities;
 import 'package:logging/logging.dart';
-import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import '../signaling_client_factory.dart';
-import '../signaling_module.dart';
 import '../hub/signaling_hub.dart';
 
 final _logger = Logger('SignalingForegroundIsolateManager');
 
-/// Manages the [SignalingModule] + [SignalingHub] lifecycle inside the
+/// Manages the [SignalingModuleInterface] + [SignalingHub] lifecycle inside the
 /// foreground-service background isolate.
 ///
 /// Created once per background isolate run. [handleStatus] is called by the
 /// background isolate entry point ([onSignalingServiceSync]) whenever the
 /// service status changes (service enabled/disabled).
+///
+/// The [SignalingModuleInterface] is created via the factory callback registered
+/// by the app through [WebtritSignalingService.setModuleFactory]. The raw handle
+/// is resolved from [PluginUtilities] so the factory can be called in the
+/// background isolate without the main isolate being alive.
 ///
 /// When an [IncomingCallEvent] arrives and [incomingCallHandlerHandle] is
 /// non-zero, the manager resolves the registered Dart callback via
@@ -28,15 +30,13 @@ class SignalingForegroundIsolateManager {
     required this.coreUrl,
     required this.tenantId,
     required this.token,
-    this.trustedCertificates = TrustedCertificates.empty,
     this.incomingCallHandlerHandle = 0,
-    SignalingClientFactory? signalingClientFactory,
-  }) : _signalingClientFactory = signalingClientFactory ?? defaultSignalingClientFactory;
+    this.moduleFactoryHandle = 0,
+  });
 
   final String coreUrl;
   final String tenantId;
   final String token;
-  final TrustedCertificates trustedCertificates;
 
   /// Raw handle for the app-side incoming call callback.
   ///
@@ -45,9 +45,13 @@ class SignalingForegroundIsolateManager {
   /// the hub (main isolate) and silently ignored in the background.
   final int incomingCallHandlerHandle;
 
-  final SignalingClientFactory _signalingClientFactory;
+  /// Raw handle for the app-side [SignalingModuleFactory] callback.
+  ///
+  /// Registered by the app via [WebtritSignalingService.setModuleFactory].
+  /// 0 means no factory is registered -- the isolate will log an error and skip start.
+  final int moduleFactoryHandle;
 
-  SignalingModule? _signalingModule;
+  SignalingModuleInterface? _signalingModule;
   SignalingHub? _hub;
 
   StreamSubscription<SignalingModuleEvent>? _eventsSubscription;
@@ -70,13 +74,22 @@ class SignalingForegroundIsolateManager {
 
     _logger.info('SignalingForegroundIsolateManager starting (incomingCallHandler=${incomingCallHandlerHandle != 0})');
 
-    _signalingModule = SignalingModule(
-      coreUrl: coreUrl,
-      tenantId: tenantId,
-      token: token,
-      trustedCertificates: trustedCertificates,
-      signalingClientFactory: _signalingClientFactory,
-    );
+    final rawHandle = moduleFactoryHandle;
+    if (rawHandle == 0) {
+      _logger.severe('No module factory registered -- call setModuleFactory() before start()');
+      return;
+    }
+
+    final factoryCallback = PluginUtilities.getCallbackFromHandle(CallbackHandle.fromRawHandle(rawHandle));
+    if (factoryCallback == null) {
+      _logger.severe('Could not resolve module factory from handle $rawHandle');
+      return;
+    }
+
+    final factory = factoryCallback as SignalingModuleFactory;
+    final config = SignalingServiceConfig(coreUrl: coreUrl, tenantId: tenantId, token: token);
+
+    _signalingModule = factory(config);
 
     _hub = SignalingHub(_signalingModule!);
     _hub!.start();
@@ -168,7 +181,8 @@ class SignalingForegroundIsolateManager {
     }
   }
 
-  void _scheduleReconnect(Duration delay) {
+  void _scheduleReconnect(Duration? delay) {
+    if (delay == null) return;
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
       if (_started) {

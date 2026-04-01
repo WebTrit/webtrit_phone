@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
+import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -13,6 +14,24 @@ import 'package:webtrit_phone/services/services.dart';
 
 import '../models/jsep_value.dart';
 import 'isolate_manager.dart';
+import 'signaling_client_factory.dart';
+import 'signaling_module.dart';
+
+/// Top-level factory that creates a [SignalingModule] from a [SignalingServiceConfig].
+///
+/// Must be a top-level function annotated with [@pragma('vm:entry-point')] so that
+/// [PluginUtilities] can serialize its handle for the Android background isolate.
+/// Registered via [WebtritSignalingService.setModuleFactory] in [_initCallkeep].
+@pragma('vm:entry-point')
+SignalingModuleInterface createSignalingModule(SignalingServiceConfig config) {
+  return SignalingModule(
+    coreUrl: config.coreUrl,
+    tenantId: config.tenantId,
+    token: config.token,
+    trustedCertificates: config.trustedCertificates,
+    signalingClientFactory: defaultSignalingClientFactory,
+  );
+}
 
 PushNotificationIsolateManager? _pushNotificationIsolateManager;
 

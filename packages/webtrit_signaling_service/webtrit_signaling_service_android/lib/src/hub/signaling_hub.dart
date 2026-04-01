@@ -7,12 +7,11 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
 import '../constants.dart';
-import '../signaling_module.dart';
 import 'signaling_hub_codec.dart';
 
 final _logger = Logger('SignalingHub');
 
-/// Wraps a [SignalingModule] and exposes its event stream to other isolates
+/// Wraps a [SignalingModuleInterface] and exposes its event stream to other isolates
 /// via [IsolateNameServer].
 ///
 /// [SignalingForegroundIsolateManager] creates and owns one hub instance.
@@ -30,7 +29,7 @@ final _logger = Logger('SignalingHub');
 class SignalingHub {
   SignalingHub(this._signalingModule);
 
-  final SignalingModule _signalingModule;
+  final SignalingModuleInterface _signalingModule;
   final ReceivePort _receivePort = ReceivePort();
 
   /// consumerId -> subscriber SendPort
@@ -44,7 +43,7 @@ class SignalingHub {
   bool _started = false;
 
   /// Registers the hub port in [IsolateNameServer] and begins forwarding
-  /// [SignalingModule] events to subscribers.
+  /// [SignalingModuleInterface] events to subscribers.
   ///
   /// Calling [start] more than once is a no-op.
   void start() {
@@ -142,9 +141,8 @@ class SignalingHub {
   Future<void> _executeAndReply(SendPort replyPort, String correlationId, Map<dynamic, dynamic> reqMap) async {
     try {
       final request = Request.fromJson(Map<String, dynamic>.from(reqMap));
-      final client = _signalingModule.signalingClient;
-      if (client == null) throw StateError('Signaling not connected');
-      await client.execute(request);
+      if (!_signalingModule.isConnected) throw StateError('Signaling not connected');
+      await _signalingModule.execute(request);
       replyPort.send(encodeExecuteResult(correlationId, null));
     } catch (e) {
       _logger.warning('Hub execute error: $e, corr=$correlationId');

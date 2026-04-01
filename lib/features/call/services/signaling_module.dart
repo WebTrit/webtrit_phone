@@ -5,17 +5,22 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'constants.dart';
 import 'signaling_client_factory.dart';
 
 final _logger = Logger('SignalingModule');
 
+/// Timeout for establishing a WebSocket connection.
+const _kSignalingClientConnectionTimeout = Duration(seconds: 10);
+
+/// Delay between reconnect attempts after an unexpected disconnect.
+const _kSignalingClientReconnectDelay = Duration(seconds: 3);
+
 /// Manages a single [WebtritSignalingClient] lifecycle and publishes typed
 /// events via a broadcast stream.
 ///
-/// Knows only the WebSocket protocol -- nothing about [CallBloc], isolates,
-/// notifications, or app lifecycle. Can be used in the main isolate, a
-/// background isolate, or an integration test without any UI dependency.
+/// Knows only the WebSocket protocol -- nothing about isolates, notifications,
+/// or app lifecycle. Used by the app-provided [SignalingModuleFactory] to
+/// create a module instance that is passed to the signaling service plugin.
 class SignalingModule implements SignalingModuleInterface {
   SignalingModule({
     required this.coreUrl,
@@ -122,7 +127,7 @@ class SignalingModule implements SignalingModuleInterface {
         url: url,
         tenantId: tenantId,
         token: token,
-        connectionTimeout: kSignalingClientConnectionTimeout,
+        connectionTimeout: _kSignalingClientConnectionTimeout,
         certs: trustedCertificates,
         force: true,
       );
@@ -153,7 +158,7 @@ class SignalingModule implements SignalingModuleInterface {
         SignalingConnectionFailed(
           error: e,
           isRepeated: isRepeated,
-          recommendedReconnectDelay: kSignalingClientReconnectDelay,
+          recommendedReconnectDelay: _kSignalingClientReconnectDelay,
         ),
       );
     }
@@ -182,7 +187,7 @@ class SignalingModule implements SignalingModuleInterface {
       SignalingConnectionFailed(
         error: error,
         isRepeated: isRepeated,
-        recommendedReconnectDelay: kSignalingClientReconnectDelay,
+        recommendedReconnectDelay: _kSignalingClientReconnectDelay,
       ),
     );
   }
@@ -214,7 +219,7 @@ class SignalingModule implements SignalingModuleInterface {
   Duration? _reconnectDelay(SignalingDisconnectCode code) {
     if (code == SignalingDisconnectCode.controllerForceAttachClose) return Duration.zero;
     if (code == SignalingDisconnectCode.protocolError) return null;
-    return kSignalingClientReconnectDelay;
+    return _kSignalingClientReconnectDelay;
   }
 
   void _emit(SignalingModuleEvent event) {

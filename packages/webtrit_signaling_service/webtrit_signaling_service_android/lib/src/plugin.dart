@@ -207,6 +207,19 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     await _hostApi.saveIncomingCallHandler(handle.toRawHandle());
   }
 
+  @override
+  Future<void> setModuleFactory(SignalingModuleFactory factory) async {
+    final handle = PluginUtilities.getCallbackHandle(factory);
+    if (handle == null) {
+      _logger.warning(
+        'setModuleFactory: could not obtain callback handle -- '
+        'ensure the function is top-level and annotated with @pragma(\'vm:entry-point\')',
+      );
+      return;
+    }
+    await _hostApi.saveModuleFactory(handle.toRawHandle());
+  }
+
   /// Stops the foreground service and clears stored credentials.
   ///
   /// Call this on explicit user logout so the service does not keep

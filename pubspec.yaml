@@ -120,6 +120,8 @@ dependencies:
     path: ./packages/webtrit_signaling
   webtrit_signaling_service:
     path: ./packages/webtrit_signaling_service/webtrit_signaling_service
+  webtrit_signaling_service_platform_interface:
+    path: ./packages/webtrit_signaling_service/webtrit_signaling_service_platform_interface
   webtrit_callkeep:
     path: ../webtrit_callkeep/webtrit_callkeep
   store_info_extractor:

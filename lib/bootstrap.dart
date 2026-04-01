@@ -27,7 +27,7 @@ import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
 
 import 'package:webtrit_phone/features/call/call.dart'
-    show onPushNotificationSyncCallback, onSignalingBackgroundIncomingCall;
+    show createSignalingModule, onPushNotificationSyncCallback, onSignalingBackgroundIncomingCall;
 
 import 'package:drift/isolate.dart';
 
@@ -203,11 +203,15 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   if (!Platform.isAndroid) return;
 
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
+
+  final signalingService = WebtritSignalingService();
   unawaited(
-    WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall).catchError((
-      Object e,
-      StackTrace s,
-    ) {
+    signalingService.setModuleFactory(createSignalingModule).catchError((Object e, StackTrace s) {
+      Logger('bootstrap').severe('setModuleFactory failed -- signaling may not work in background isolate', e, s);
+    }),
+  );
+  unawaited(
+    signalingService.setIncomingCallHandler(onSignalingBackgroundIncomingCall).catchError((Object e, StackTrace s) {
       Logger(
         'bootstrap',
       ).severe('setIncomingCallHandler failed -- incoming calls in persistent mode may not work', e, s);

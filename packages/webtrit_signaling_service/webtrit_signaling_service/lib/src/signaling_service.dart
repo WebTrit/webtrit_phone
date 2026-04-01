@@ -4,6 +4,7 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 export 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart'
     show
         SignalingModuleEvent,
+        SignalingModuleFactory,
         SignalingModuleInterface,
         SignalingConnecting,
         SignalingConnected,
@@ -62,6 +63,15 @@ class WebtritSignalingService {
   /// On iOS this is a no-op.
   Future<void> setIncomingCallHandler(Function callback) =>
       SignalingServicePlatform.instance.setIncomingCallHandler(callback);
+
+  /// Registers the factory used to create [SignalingModuleInterface] instances.
+  ///
+  /// On Android [factory] must be a top-level function annotated with
+  /// [@pragma('vm:entry-point')] so [PluginUtilities] can serialize its handle
+  /// for the foreground-service background isolate.
+  /// Must be called before [start].
+  Future<void> setModuleFactory(SignalingModuleFactory factory) =>
+      SignalingServicePlatform.instance.setModuleFactory(factory);
 
   /// Stops the service and releases all resources.
   Future<void> dispose() => SignalingServicePlatform.instance.dispose();

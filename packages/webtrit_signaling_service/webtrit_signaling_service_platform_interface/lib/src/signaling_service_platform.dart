@@ -2,6 +2,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'models/signaling_module_event.dart';
+import 'models/signaling_module_factory.dart';
 import 'models/signaling_service_config.dart';
 import 'models/signaling_service_mode.dart';
 
@@ -66,6 +67,14 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// the foreground-service isolate can invoke it without the main isolate being
   /// alive. On iOS this is a no-op.
   Future<void> setIncomingCallHandler(Function callback);
+
+  /// Registers the factory used to create [SignalingModuleInterface] instances.
+  ///
+  /// On Android [factory] must be a top-level function annotated with
+  /// [@pragma('vm:entry-point')] so [PluginUtilities] can serialize its handle
+  /// for the foreground-service background isolate.
+  /// Must be called before [start].
+  Future<void> setModuleFactory(SignalingModuleFactory factory);
 
   /// Stops the service and releases all resources.
   Future<void> dispose();
