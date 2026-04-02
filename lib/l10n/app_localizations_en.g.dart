@@ -1775,6 +1775,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues';
 
   @override
+  String get settings_encoding_Section_packetization_warning_title => 'Warning:';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_message =>
+      'Some codecs may struggle with non-default ptime values, causing audible glitches or silence. Use only if you know what you are doing.';
+
+  @override
   String get settings_encoding_Section_preset => 'Preset';
 
   @override

@@ -1009,6 +1009,10 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_packetization_title,
       'settings_encoding_Section_packetization_tooltip':
           localizations.settings_encoding_Section_packetization_tooltip,
+      'settings_encoding_Section_packetization_warning_title':
+          localizations.settings_encoding_Section_packetization_warning_title,
+      'settings_encoding_Section_packetization_warning_message':
+          localizations.settings_encoding_Section_packetization_warning_message,
       'settings_encoding_Section_preset':
           localizations.settings_encoding_Section_preset,
       'settings_encoding_Section_preset_balance':

@@ -1790,6 +1790,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete';
 
   @override
+  String get settings_encoding_Section_packetization_warning_title => 'Attenzione:';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_message =>
+      'Alcuni codec potrebbero avere difficoltà con valori ptime non predefiniti, causando glitch audio udibili o silenzio. Usare solo se si sa cosa si sta facendo.';
+
+  @override
   String get settings_encoding_Section_preset => 'Preimpostato';
 
   @override
