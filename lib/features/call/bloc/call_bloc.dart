@@ -818,6 +818,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventAccepted() => __onCallSignalingEventAccepted(event, emit),
       _CallSignalingEventHangup() => __onCallSignalingEventHangup(event, emit),
       _CallSignalingEventUpdating() => __onCallSignalingEventUpdating(event, emit),
+      _CallSignalingEventCallUpdating() => __onCallSignalingEventCallUpdating(event, emit),
       _CallSignalingEventUpdated() => __onCallSignalingEventUpdated(event, emit),
       _CallSignalingEventTransfer() => __onCallSignalingEventTransfer(event, emit),
       _CallSignalingEventTransferring() => __onCallSignalingEventTransfering(event, emit),
@@ -1012,6 +1013,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         await _stopRingbackSound();
         await callkeep.reportConnectedOutgoingCall(event.callId);
       }
+    } else {
+      call = call.copyWith(updating: false);
     }
 
     emit(state.copyWithMappedActiveCall(event.callId, (_) => call!));
@@ -1023,7 +1026,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       // An accepted event with an answer jsep is only valid when the PC is in
       // have-local-offer state. During a glare race the local offer may have
-      // been rolled back in __onCallSignalingEventUpdating, leaving the PC in
+      // been rolled back in __onCallSignalingEventCallUpdating, leaving the PC in
       // stable. Applying a stale answer in stable throws a wrong-state error,
       // so skip it and rely on libwebrtc re-firing onRenegotiationNeeded once
       // the PC returns to stable.
@@ -1111,7 +1114,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  Future<void> __onCallSignalingEventUpdating(_CallSignalingEventUpdating event, Emitter<CallState> emit) async {
+  Future<void> __onCallSignalingEventCallUpdating(
+    _CallSignalingEventCallUpdating event,
+    Emitter<CallState> emit,
+  ) async {
     final handle = CallkeepHandle.number(event.caller);
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? event.callerDisplayName;
@@ -1145,7 +1151,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         await state.performOnActiveCall(event.callId, (activeCall) async {
           final peerConnection = await _peerConnectionManager.retrieve(event.callId);
           if (peerConnection == null) {
-            _logger.warning('__onCallSignalingEventUpdating: peerConnection is null - most likely some state issue');
+            _logger.warning(
+              '__onCallSignalingEventCallUpdating: peerConnection is null - most likely some state issue',
+            );
           } else {
             await peerConnectionPolicyApplier?.apply(peerConnection, hasRemoteVideo: jsep.hasVideo);
 
@@ -1156,7 +1164,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             final signalingState = peerConnection.signalingState;
             if (signalingState == RTCSignalingState.RTCSignalingStateHaveLocalOffer) {
               _logger.warning(
-                '__onCallSignalingEventUpdating: glare detected via pre-check (signalingState=$signalingState), rolling back local offer',
+                '__onCallSignalingEventCallUpdating: glare detected via pre-check (signalingState=$signalingState), rolling back local offer',
               );
               await peerConnection.setLocalDescription(RTCSessionDescription('', 'rollback'));
             }
@@ -1169,7 +1177,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                 // caching), setLocalDescription completed on the native side but the
                 // Dart-side callback had not yet fired. Roll back and retry.
                 _logger.warning(
-                  '__onCallSignalingEventUpdating: glare detected via catch ($e), rolling back local offer and retrying',
+                  '__onCallSignalingEventCallUpdating: glare detected via catch ($e), rolling back local offer and retrying',
                 );
                 await peerConnection.setLocalDescription(RTCSessionDescription('', 'rollback'));
                 await peerConnection.setRemoteDescription(remoteDescription);
@@ -1196,11 +1204,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         });
       }
     } catch (e, s) {
-      callErrorReporter.handle(e, s, '__onCallSignalingEventUpdating && jsep error:');
+      callErrorReporter.handle(e, s, '__onCallSignalingEventCallUpdating && jsep error:');
 
       _peerConnectionManager.completeError(event.callId, e);
       add(_ResetStateEvent.completeCall(event.callId));
     }
+  }
+
+  Future<void> __onCallSignalingEventUpdating(_CallSignalingEventUpdating event, Emitter<CallState> emit) async {
+    emit(
+      state.copyWithMappedActiveCall(event.callId, (activeCall) {
+        return activeCall.copyWith(updating: true);
+      }),
+    );
   }
 
   Future<void> __onCallSignalingEventUpdated(_CallSignalingEventUpdated event, Emitter<CallState> emit) async {
@@ -2623,7 +2639,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_CallSignalingEvent.hangup(line: event.line, callId: event.callId, code: event.code, reason: event.reason));
     } else if (event is UpdatingCallEvent) {
       add(
-        _CallSignalingEvent.updating(
+        _CallSignalingEvent.callUpdating(
           line: event.line,
           callId: event.callId,
           callee: event.callee,
@@ -2635,6 +2651,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           jsep: JsepValue.fromOptional(event.jsep),
         ),
       );
+    } else if (event is UpdatingEvent) {
+      add(_CallSignalingEvent.updating(line: event.line, callId: event.callId));
     } else if (event is UpdatedEvent) {
       add(_CallSignalingEvent.updated(line: event.line, callId: event.callId));
     } else if (event is TransferEvent) {
