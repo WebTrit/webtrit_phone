@@ -3306,6 +3306,18 @@ abstract class AppLocalizations {
   /// **'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues'**
   String get settings_encoding_Section_packetization_tooltip;
 
+  /// No description provided for @settings_encoding_Section_packetization_warning_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning:'**
+  String get settings_encoding_Section_packetization_warning_title;
+
+  /// No description provided for @settings_encoding_Section_packetization_warning_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Some codecs may struggle with non-default ptime values, causing audible glitches or silence. Use only if you know what you are doing.'**
+  String get settings_encoding_Section_packetization_warning_message;
+
   /// No description provided for @settings_encoding_Section_preset.
   ///
   /// In en, this message translates to:

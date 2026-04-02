@@ -1789,6 +1789,13 @@ class AppLocalizationsUk extends AppLocalizations {
       'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або вирішення проблем із розміром MTU мережі';
 
   @override
+  String get settings_encoding_Section_packetization_warning_title => 'Увага:';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_message =>
+      'Деякі кодеки можуть погано працювати з нестандартними значеннями ptime, що спричиняє чутні збої або тишу. Використовуйте лише якщо розумієте, що робите.';
+
+  @override
   String get settings_encoding_Section_preset => 'Налаштування';
 
   @override
