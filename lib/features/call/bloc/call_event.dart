@@ -168,7 +168,7 @@ sealed class _CallSignalingEvent extends CallEvent {
     required String reason,
   }) = _CallSignalingEventHangup;
 
-  const factory _CallSignalingEvent.updating({
+  const factory _CallSignalingEvent.callUpdating({
     required int? line,
     required String callId,
     required String callee,
@@ -178,7 +178,10 @@ sealed class _CallSignalingEvent extends CallEvent {
     String? replaceCallId,
     bool? isFocus,
     JsepValue? jsep,
-  }) = _CallSignalingEventUpdating;
+  }) = _CallSignalingEventCallUpdating;
+
+  const factory _CallSignalingEvent.updating({required int? line, required String callId}) =
+      _CallSignalingEventUpdating;
 
   const factory _CallSignalingEvent.updated({required int? line, required String callId}) = _CallSignalingEventUpdated;
 
@@ -329,8 +332,8 @@ class _CallSignalingEventHangup extends _CallSignalingEvent {
   List<Object?> get props => [line, callId, code, reason];
 }
 
-class _CallSignalingEventUpdating extends _CallSignalingEvent {
-  const _CallSignalingEventUpdating({
+class _CallSignalingEventCallUpdating extends _CallSignalingEvent {
+  const _CallSignalingEventCallUpdating({
     required this.line,
     required this.callId,
     required this.callee,
@@ -372,6 +375,17 @@ class _CallSignalingEventUpdating extends _CallSignalingEvent {
     isFocus,
     jsep,
   ];
+}
+
+class _CallSignalingEventUpdating extends _CallSignalingEvent {
+  const _CallSignalingEventUpdating({required this.line, required this.callId});
+
+  final int? line;
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [line, callId];
 }
 
 class _CallSignalingEventUpdated extends _CallSignalingEvent {
