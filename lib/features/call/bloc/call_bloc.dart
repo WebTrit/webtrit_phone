@@ -2549,38 +2549,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // Hang up all active calls that are not associated with any line
     // or guest line, indicating that they are no longer valid.
     //
-    // This is needed to drop or retain calls after reconnecting to the signaling server
-    activeCallsLoop:
-    for (final activeCall in state.activeCalls) {
-      // Ignore active calls that are already associated with a line or guest line
-      //
-      // If you have troubles with line position mismatch replace this with
-      // following code that deal with it: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
-      for (final line in [...stateHandshake.lines, stateHandshake.guestLine]) {
-        if (line != null && line.callId == activeCall.callId) {
-          continue activeCallsLoop;
-        }
-      }
+    // This is needed to drop or retain calls after reconnecting to the signaling server.
+    // If you have troubles with line position mismatch replace the activeLineCallIds
+    // computation with: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
+    final activeLineCallIds = [
+      ...stateHandshake.lines,
+      stateHandshake.guestLine,
+    ].whereType<Line>().map((line) => line.callId).toList();
 
-      // Skips outgoing calls that are still in-flight (OutgoingCallRequest not yet sent).
-      // If the request was already sent but the server has no record of the call, treat it as dead.
-      if (activeCall.direction == CallDirection.outgoing &&
-          activeCall.acceptedTime == null &&
-          activeCall.hungUpTime == null &&
-          activeCall.processingStatus.isPreOfferSent) {
-        continue activeCallsLoop;
-      }
-
-      _peerConnectionManager.conditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
-
-      add(
-        _CallSignalingEvent.hangup(
-          line: activeCall.line,
-          callId: activeCall.callId,
-          code: 487,
-          reason: 'Request Terminated',
-        ),
-      );
+    for (final callId in state.callsToTerminate(activeLineCallIds)) {
+      final activeCall = state.retrieveActiveCall(callId);
+      if (activeCall == null) continue;
+      _peerConnectionManager.conditionalCompleteError(callId, 'Active call Request Terminated');
+      add(_CallSignalingEvent.hangup(line: activeCall.line, callId: callId, code: 487, reason: 'Request Terminated'));
     }
 
     final actions = await _handshakeProcessor.process(

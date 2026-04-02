@@ -1262,4 +1262,72 @@ void main() {
       expect(call.processingStatus, CallProcessingStatus.incomingFromOffer);
     });
   });
+  // ---------------------------------------------------------------------------
+  // CallState.callsToTerminate — handshake reconciliation (WT-1083)
+  // ---------------------------------------------------------------------------
+
+  group('CallState.callsToTerminate', () {
+    test('terminates call absent from handshake lines', () {
+      final call = _makeCall(callId: 'c1', processingStatus: CallProcessingStatus.connected);
+      final state = CallState(activeCalls: [call]);
+      expect(state.callsToTerminate([]), ['c1']);
+    });
+
+    test('keeps call that is present in handshake lines', () {
+      final call = _makeCall(callId: 'c1', processingStatus: CallProcessingStatus.connected);
+      final state = CallState(activeCalls: [call]);
+      expect(state.callsToTerminate(['c1']), isEmpty);
+    });
+
+    test('keeps outgoing call with isPreOfferSent status absent from handshake', () {
+      for (final status in [
+        CallProcessingStatus.outgoingCreated,
+        CallProcessingStatus.outgoingCreatedFromRefer,
+        CallProcessingStatus.outgoingConnectingToSignaling,
+        CallProcessingStatus.outgoingInitializingMedia,
+        CallProcessingStatus.outgoingOfferPreparing,
+      ]) {
+        final call = _makeCall(callId: 'c1', direction: CallDirection.outgoing, processingStatus: status);
+        final state = CallState(activeCalls: [call]);
+        expect(state.callsToTerminate([]), isEmpty, reason: 'should skip $status');
+      }
+    });
+
+    test('terminates outgoing call at outgoingOfferSent absent from handshake', () {
+      final call = _makeCall(
+        callId: 'c1',
+        direction: CallDirection.outgoing,
+        processingStatus: CallProcessingStatus.outgoingOfferSent,
+      );
+      final state = CallState(activeCalls: [call]);
+      expect(state.callsToTerminate([]), ['c1']);
+    });
+
+    test('terminates outgoing call at outgoingRinging absent from handshake', () {
+      final call = _makeCall(
+        callId: 'c1',
+        direction: CallDirection.outgoing,
+        processingStatus: CallProcessingStatus.outgoingRinging,
+      );
+      final state = CallState(activeCalls: [call]);
+      expect(state.callsToTerminate([]), ['c1']);
+    });
+
+    test('keeps outgoing isPreOfferSent call even if other calls are terminated', () {
+      final inFlight = _makeCall(
+        callId: 'in-flight',
+        direction: CallDirection.outgoing,
+        processingStatus: CallProcessingStatus.outgoingOfferPreparing,
+      );
+      final dead = _makeCall(callId: 'dead', processingStatus: CallProcessingStatus.connected);
+      final state = CallState(activeCalls: [inFlight, dead]);
+      expect(state.callsToTerminate([]), ['dead']);
+    });
+
+    test('returns empty when all calls are in handshake lines', () {
+      final calls = [_makeCall(callId: 'c1'), _makeCall(callId: 'c2')];
+      final state = CallState(activeCalls: calls);
+      expect(state.callsToTerminate(['c1', 'c2']), isEmpty);
+    });
+  });
 }
