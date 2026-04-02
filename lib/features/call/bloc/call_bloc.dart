@@ -240,7 +240,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     final currentActiveCallUuids = Set.from(change.currentState.activeCalls.map((e) => e.callId));
+    _logger.fine('onChange currentActiveCallUuids: $currentActiveCallUuids');
     final nextActiveCallUuids = Set.from(change.nextState.activeCalls.map((e) => e.callId));
+    _logger.fine('onChange nextActiveCallUuids: $nextActiveCallUuids');
 
     for (final removeUuid in currentActiveCallUuids.difference(nextActiveCallUuids)) {
       // Disposal is intentionally not awaited to avoid blocking the Bloc processing loop.
@@ -863,6 +865,40 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
       await _signalingModule.execute(declineRequest);
       return;
+    }
+
+    // Glare detection: check if there is an active outgoing call with the same caller which is not yet connected or disconnecting.
+    // Typical useccase is when two devices with the same account are calling each other at the same time, e.g. by pressing "call" button in recents or notifications.
+    final nonConnectedCallWithSameCaller = state.activeCalls
+        .where(
+          (call) =>
+              call.handle.value == event.caller &&
+              call.callId != event.callId &&
+              call.direction == CallDirection.outgoing &&
+              call.processingStatus != CallProcessingStatus.connected &&
+              call.processingStatus != CallProcessingStatus.disconnecting,
+        )
+        .firstOrNull;
+
+    if (nonConnectedCallWithSameCaller != null) {
+      // Polite glare resolution: compare call IDs lexicographically so both sides independently
+      // reach the same deterministic decision — exactly one device yields.
+      // The side whose outgoing callId is lexicographically greater yields: it ends its outgoing
+      // call and lets the incoming proceed. The other side declines the incoming and keeps its outgoing.
+      // final shouldYield = nonConnectedCallWithSameCaller.callId.compareTo(event.callId) > 0;
+      final q = [nonConnectedCallWithSameCaller.callId, event.callId]..sort();
+      final shouldYield = q.first == event.callId;
+      _logger.info(
+        '__onCallSignalingEventIncoming: glare detected - nonConnectedCallWithSameCaller.callId: ${nonConnectedCallWithSameCaller.callId}, event.callId: ${event.callId}, shouldYield: $shouldYield',
+      );
+
+      if (shouldYield) {
+        _logger.info(
+          '__onCallSignalingEventIncoming: glare detected - yielding, ending outgoing call '
+          '(callId: ${nonConnectedCallWithSameCaller.callId}), letting incoming (${event.callId}) proceed',
+        );
+        add(CallControlEvent.ended(nonConnectedCallWithSameCaller.callId));
+      }
     }
 
     final error = await callkeep.reportNewIncomingCall(event.callId, handle, displayName: displayName, hasVideo: video);
