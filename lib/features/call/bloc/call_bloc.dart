@@ -2563,13 +2563,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
 
       // Skips outgoing calls that are still in-flight (OutgoingCallRequest not yet sent).
-      // Once processingStatus reaches outgoingOfferSent or later, the request has reached
-      // the server — if the server has no record of the call in the handshake, treat it as dead.
+      // If the request was already sent but the server has no record of the call, treat it as dead.
       if (activeCall.direction == CallDirection.outgoing &&
           activeCall.acceptedTime == null &&
           activeCall.hungUpTime == null &&
-          activeCall.processingStatus != CallProcessingStatus.outgoingOfferSent &&
-          activeCall.processingStatus != CallProcessingStatus.outgoingRinging) {
+          activeCall.processingStatus.isPreOfferSent) {
         continue activeCallsLoop;
       }
 

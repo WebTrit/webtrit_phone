@@ -17,5 +17,13 @@ enum CallProcessingStatus {
   outgoingRinging,
 
   connected,
-  disconnecting,
+  disconnecting;
+
+  bool get isPreOfferSent => const {
+    CallProcessingStatus.outgoingCreated,
+    CallProcessingStatus.outgoingCreatedFromRefer,
+    CallProcessingStatus.outgoingConnectingToSignaling,
+    CallProcessingStatus.outgoingInitializingMedia,
+    CallProcessingStatus.outgoingOfferPreparing,
+  }.contains(this);
 }
