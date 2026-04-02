@@ -92,7 +92,7 @@ class CallState with _$CallState {
 
   bool get shouldListenToProximity => isActive && isVoiceChat && minimized != true;
 
-  List<String> callsToTerminate(List<String> activeLineCallIds) {
+  List<String> callsToTerminate(Set<String> activeLineCallIds) {
     final result = <String>[];
     activeCallsLoop:
     for (final activeCall in activeCalls) {

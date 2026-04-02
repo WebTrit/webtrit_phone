@@ -2555,7 +2555,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final activeLineCallIds = [
       ...stateHandshake.lines,
       stateHandshake.guestLine,
-    ].whereType<Line>().map((line) => line.callId).toList();
+    ].whereType<Line>().map((line) => line.callId).toSet();
 
     for (final callId in state.callsToTerminate(activeLineCallIds)) {
       final activeCall = state.retrieveActiveCall(callId);
