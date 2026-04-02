@@ -885,7 +885,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // reach the same deterministic decision — exactly one device yields.
       // The side whose outgoing callId is lexicographically greater yields: it ends its outgoing
       // call and lets the incoming proceed. The other side declines the incoming and keeps its outgoing.
-      // final shouldYield = nonConnectedCallWithSameCaller.callId.compareTo(event.callId) > 0;
       final q = [nonConnectedCallWithSameCaller.callId, event.callId]..sort();
       final shouldYield = q.first == event.callId;
       _logger.info(
