@@ -15,6 +15,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 import '../models/jsep_value.dart';
 import 'signaling_module.dart';
+import 'signaling_reconnect_controller.dart';
 
 abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   IsolateManager({
@@ -33,10 +34,10 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
+  late final SignalingReconnectController _reconnectController;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   Timer? _connectivityTimeout;
-  Timer? _signalingReconnectTimer;
   bool _networkNone = false;
 
   /// callId -> line index (populated from StateHandshake)
@@ -67,27 +68,24 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
       signalingClientFactory: defaultSignalingClientFactory,
     );
 
+    _reconnectController = SignalingReconnectController(
+      signalingModule: _signalingModule,
+      onConnectionFailed: null,
+      reconnectEnabled: enableReconnect,
+    );
+
+    // Translates SignalingModule events into IsolateManager callbacks.
+    // Reconnect scheduling is fully handled by [_reconnectController].
     _signalingSubscription = _signalingModule.events.listen((event) {
       switch (event) {
         case SignalingHandshakeReceived(:final handshake):
           _onHandshake(handshake);
         case SignalingProtocolEvent(:final event):
           _onProtocolEvent(event);
-        case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
+        case SignalingConnectionFailed(:final error):
           _onSignalingError(error);
-          if (enableReconnect && !_networkNone) {
-            _signalingReconnectTimer?.cancel();
-            _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
-              if (!_signalingModule.isConnected) _signalingModule.connect();
-            });
-          }
-        case SignalingDisconnected(:final recommendedReconnectDelay):
-          if (enableReconnect && recommendedReconnectDelay != null && !_networkNone) {
-            _signalingReconnectTimer?.cancel();
-            _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
-              if (!_signalingModule.isConnected) _signalingModule.connect();
-            });
-          }
+        case SignalingConnectionLost(:final error):
+          _onSignalingError(error);
         default:
           break;
       }
@@ -98,7 +96,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
   Future<void> close() async {
     _connectivityTimeout?.cancel();
-    _signalingReconnectTimer?.cancel();
+    _reconnectController.dispose();
     for (final pending in _pendingRequests) {
       pending.timeoutTimer.cancel();
       if (!pending.completer.isCompleted) {
@@ -124,6 +122,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
       if (results.isEmpty || results.any((r) => r == ConnectivityResult.none)) {
         _networkNone = true;
+        _reconnectController.notifyNetworkUnavailable();
         connectivityNoneCounter++;
         logger.warning('No internet connection detected ($connectivityNoneCounter/$maxConnectivityNoneRepeats)');
 
@@ -146,10 +145,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
       } else {
         _networkNone = false;
         connectivityNoneCounter = 0;
-
-        if (enableReconnect && !_signalingModule.isConnected) {
-          _signalingModule.connect();
-        }
+        _reconnectController.notifyNetworkAvailable();
       }
     });
   }

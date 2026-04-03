@@ -19,18 +19,29 @@ class SignalingConnecting extends SignalingModuleEvent {}
 
 class SignalingConnected extends SignalingModuleEvent {}
 
-/// Connect attempt failed (SocketException, TlsException, etc.).
+/// Initial connect attempt failed before a session was established
+/// (SocketException, TlsException, DNS failure, timeout, etc.).
 ///
-/// [isRepeated] is true when the error matches the previous connect attempt.
-/// Consumers may suppress duplicate notifications when [isRepeated] is true.
-///
-/// [recommendedReconnectDelay] is always [kSignalingClientReconnectDelay].
-/// Consumers decide whether to act on it based on app state and network.
+/// May be transient — consumers should apply a failure threshold before
+/// surfacing a user-visible error. Reconnect delay is always
+/// [kSignalingClientReconnectDelay].
 class SignalingConnectionFailed extends SignalingModuleEvent {
-  SignalingConnectionFailed({required this.error, required this.isRepeated, required this.recommendedReconnectDelay});
+  SignalingConnectionFailed({required this.error, required this.recommendedReconnectDelay});
 
   final Object error;
-  final bool isRepeated;
+  final Duration recommendedReconnectDelay;
+}
+
+/// An already-established session was lost due to a runtime error.
+///
+/// Distinct from [SignalingConnectionFailed]: the connection reached
+/// [SignalingConnected] before this error occurred. Consumers should treat
+/// this as an immediate failure (no threshold needed).
+/// Reconnect delay is always [kSignalingClientReconnectDelay].
+class SignalingConnectionLost extends SignalingModuleEvent {
+  SignalingConnectionLost({required this.error, required this.recommendedReconnectDelay});
+
+  final Object error;
   final Duration recommendedReconnectDelay;
 }
 
@@ -182,7 +193,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
 
   /// Set to true by [_onError] so that the subsequent [_onDisconnect] callback
   /// (which fires when the underlying socket closes after an error) is
-  /// suppressed - [_onError] already emits [SignalingConnectionFailed] and
+  /// suppressed - [_onError] already emits [SignalingConnectionLost] and
   /// consumers would otherwise receive two separate reconnect triggers.
   ///
   /// Ordering invariant: [_onDisconnect] for the failed socket always arrives
@@ -192,9 +203,6 @@ class SignalingModuleIsolateImpl implements SignalingModule {
   /// [_onDisconnect] resets this flag to false, so a newly connected client
   /// starts with a clean state.
   bool _errorHandled = false;
-
-  /// Last connect error as string for deduplication.
-  String? _lastConnectErrorString;
 
   /// Broadcast stream of all module events.
   ///
@@ -357,23 +365,12 @@ class SignalingModuleIsolateImpl implements SignalingModule {
         );
 
         _client = client;
-        _lastConnectErrorString = null;
         _emit(SignalingConnected());
       } catch (e, s) {
         if (_disposed) return;
         _logger.warning('_connectAsync failed', e, s);
 
-        final errorString = e.toString();
-        final isRepeated = _lastConnectErrorString == errorString;
-        _lastConnectErrorString = errorString;
-
-        _emit(
-          SignalingConnectionFailed(
-            error: e,
-            isRepeated: isRepeated,
-            recommendedReconnectDelay: kSignalingClientReconnectDelay,
-          ),
-        );
+        _emit(SignalingConnectionFailed(error: e, recommendedReconnectDelay: kSignalingClientReconnectDelay));
       }
     } finally {
       _connecting = false;
@@ -400,17 +397,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
     // _onDisconnect callback (socket close after error) is suppressed.
     _errorHandled = true;
 
-    final errorString = error.toString();
-    final isRepeated = _lastConnectErrorString == errorString;
-    _lastConnectErrorString = errorString;
-
-    _emit(
-      SignalingConnectionFailed(
-        error: error,
-        isRepeated: isRepeated,
-        recommendedReconnectDelay: kSignalingClientReconnectDelay,
-      ),
-    );
+    _emit(SignalingConnectionLost(error: error, recommendedReconnectDelay: kSignalingClientReconnectDelay));
   }
 
   void _onDisconnect(int? code, String? reason) {
@@ -420,7 +407,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
     final wasIntentional = _intentionalDisconnect;
     _intentionalDisconnect = false;
 
-    // _onError already emitted SignalingConnectionFailed for this connection
+    // _onError already emitted SignalingConnectionLost for this connection
     // failure. Skip SignalingDisconnected to avoid a double reconnect trigger.
     if (_errorHandled) {
       _errorHandled = false;
