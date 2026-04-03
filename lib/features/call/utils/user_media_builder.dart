@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'audio_constraints_builder.dart';
 import 'video_constraints_builder.dart';
@@ -13,19 +12,29 @@ abstract class UserMediaBuilder {
 }
 
 class DefaultUserMediaBuilder implements UserMediaBuilder {
-  const DefaultUserMediaBuilder({this.audioConstraintsBuilder, this.videoConstraintsBuilder});
+  const DefaultUserMediaBuilder({
+    this.audioConstraintsBuilder,
+    this.videoConstraintsBuilder,
+    this.isCameraPermissionGranted,
+  });
 
   final AudioConstraintsBuilder? audioConstraintsBuilder;
   final VideoConstraintsBuilder? videoConstraintsBuilder;
 
-  /// Returns [true] when the camera permission is granted on the current platform.
+  /// Optional callback to check whether camera permission is granted.
   ///
-  /// On web, where permission_handler is not applicable, always returns [true]
-  /// and lets the browser prompt handle access.
+  /// When [null], video availability is assumed to be [true] — the platform
+  /// itself (OS / browser) will handle the permission prompt.
+  final Future<bool> Function()? isCameraPermissionGranted;
+
+  /// Returns [true] when camera permission is granted.
+  ///
+  /// Delegates to [isCameraPermissionGranted] when provided; otherwise
+  /// returns [true] and lets the platform handle access.
   @override
   Future<bool> isVideoAvailable() async {
     if (kIsWeb) return true;
-    return (await Permission.camera.status).isGranted;
+    return isCameraPermissionGranted == null || await isCameraPermissionGranted!();
   }
 
   /// Requests access to the user's media input devices (camera and/or microphone).
