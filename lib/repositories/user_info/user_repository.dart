@@ -50,7 +50,6 @@ class UserRepository implements Refreshable {
   }
 
   @override
-  @override
   bool get isActive => true;
 
   @override

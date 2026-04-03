@@ -22,8 +22,10 @@ class MockRefreshableRepository implements Refreshable {
 
   Completer<void>? _neverCompleter;
 
+  bool active = true;
+
   @override
-  bool get isActive => true;
+  bool get isActive => active;
 
   @override
   Future<void> refresh() async {

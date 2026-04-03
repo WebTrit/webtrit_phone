@@ -86,7 +86,6 @@ class CallerIdSettingsRepositoryRemoteImpl
   }
 
   @override
-  @override
   bool get isActive => true;
 
   @override

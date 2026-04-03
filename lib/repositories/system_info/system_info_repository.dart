@@ -182,7 +182,6 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   }
 
   @override
-  @override
   bool get isActive => true;
 
   @override

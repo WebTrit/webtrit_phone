@@ -147,7 +147,6 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
   }
 
   @override
-  @override
   bool get isActive => true;
 
   @override
