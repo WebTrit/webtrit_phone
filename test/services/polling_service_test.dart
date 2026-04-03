@@ -184,6 +184,61 @@ void main() {
       });
     });
 
+    // Verifies that when a listener becomes inactive (isActive = false) it is
+    // automatically unregistered on the next polling tick and never called again.
+    test('listener becoming inactive is unregistered on next tick', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 5))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'Leading refresh on boot');
+
+        // Listener becomes inactive after the leading call.
+        task.active = false;
+
+        // Next tick — isActive check unregisters the listener, no refresh call.
+        async.elapse(const Duration(seconds: 5, milliseconds: 600));
+        expect(task.callCount, 1, reason: 'No more calls after listener became inactive');
+
+        // Further ticks — still no calls and no crash.
+        async.elapse(const Duration(seconds: 10));
+        expect(task.callCount, 1);
+      });
+    });
+
+    // Verifies that an inactive listener is also skipped during the leading
+    // refresh triggered on reconnect or app resume.
+    test('inactive listener is skipped on leading refresh (resume/reconnect)', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 60))],
+          options: const PollingOptions(pauseInBackground: true, jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        task.active = false;
+
+        // Resume triggers a leading refresh — inactive listener must be skipped.
+        service.didChangeAppLifecycleState(AppLifecycleState.paused);
+        service.didChangeAppLifecycleState(AppLifecycleState.resumed);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'Inactive listener not refreshed on resume');
+      });
+    });
+
     // Confirms that after service.dispose() is called, all timers are canceled
     // and no further refresh calls are executed.
     test('dispose cancels timers — no further refresh calls', () async {
