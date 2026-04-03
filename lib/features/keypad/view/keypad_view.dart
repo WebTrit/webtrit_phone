@@ -8,6 +8,7 @@ import 'package:webtrit_phone/features/call_routing/call_routing.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 import '../cubit/keypad_cubit.dart';
+import '../utils/utils.dart';
 import '../widgets/widgets.dart';
 import 'keypad_screen_style.dart';
 
@@ -79,6 +80,7 @@ class KeypadViewState extends State<KeypadView> {
                     showCursor: inputField?.showCursor ?? true,
                     keyboardType: inputField?.keyboardType ?? TextInputType.none,
                     cursorColor: inputField?.cursorColor,
+                    inputFormatters: [PhoneNormalizingFormatter()],
                   ),
                   BlocBuilder<KeypadCubit, KeypadState>(
                     builder: (context, state) => Text(
@@ -135,7 +137,7 @@ class KeypadViewState extends State<KeypadView> {
   }
 
   String _popNumber() {
-    final number = _controller.text;
+    final number = PhoneNormalizingFormatter.sanitize(_controller.text);
     _controller.clear();
     return number;
   }
