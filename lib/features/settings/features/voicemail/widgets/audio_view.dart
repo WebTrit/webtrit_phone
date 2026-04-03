@@ -166,7 +166,9 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     if (widget.path.isLocalPath || Platform.isIOS) return null;
 
     final key = widget.cacheKey ?? _uri.pathSegments.where((s) => s.isNotEmpty).join('_');
-    return File(path.join(_cachePath, key));
+    final file = File(path.join(_cachePath, key));
+    file.parent.createSync(recursive: true);
+    return file;
   }
 
   Future<void> _handleTogglePlayback() async {
