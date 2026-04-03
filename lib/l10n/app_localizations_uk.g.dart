@@ -861,10 +861,10 @@ class AppLocalizationsUk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '# записи',
-      many: '# записів',
-      few: '# записи',
-      one: '# запис',
+      other: '$count записи',
+      many: '$count записів',
+      few: '$count записи',
+      one: '$count запис',
     );
     return 'Відображено останні $_temp0. Використайте Поділитись для експорту повного журналу.';
   }

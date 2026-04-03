@@ -857,8 +857,8 @@ class AppLocalizationsIt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Visualizzazione degli ultimi # record. Usa Condividi per esportare il log completo.',
-      one: 'Visualizzazione dell\'ultimo # record. Usa Condividi per esportare il log completo.',
+      other: 'Visualizzazione degli ultimi $count record. Usa Condividi per esportare il log completo.',
+      one: 'Visualizzazione dell\'ultimo $count record. Usa Condividi per esportare il log completo.',
     );
     return '$_temp0';
   }
