@@ -2613,11 +2613,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Detect: callLogs has both IncomingCallEvent (earliest) and AcceptedEvent (latest),
       // no Callkeep connection exists (Activity recreation killed it), and the call is not
       // already in state (fresh BLoC after recreate). Trigger the restoration flow.
+      // callLogs is newest-first: firstOrNull = AcceptedEvent (latest), lastOrNull = IncomingCallEvent (earliest).
       final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
-      final earliestCallLog = callEventLogEntries.firstOrNull;
-      final latestCallLog = callEventLogEntries.lastOrNull;
-      final earliestCallEvent = earliestCallLog?.callEvent;
+      final latestCallLog = callEventLogEntries.firstOrNull;
+      final earliestCallLog = callEventLogEntries.lastOrNull;
       final latestCallEvent = latestCallLog?.callEvent;
+      final earliestCallEvent = earliestCallLog?.callEvent;
 
       // Guard: line must be non-null (guest-line calls have line == null and are not restorable).
       final isRestorationCandidate =
