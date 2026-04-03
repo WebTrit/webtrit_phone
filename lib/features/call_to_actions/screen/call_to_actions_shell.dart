@@ -25,11 +25,13 @@ class _CallToActionsShellState extends State<CallToActionsShell> with RouteAware
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _actionOverlay ??= DemoActionOverlay(
-      screenSize: MediaQuery.sizeOf(context),
-      safePadding: MediaQuery.paddingOf(context),
-      stickyPadding: const EdgeInsets.all(8),
-    );
+    if (_actionOverlay == null || !_actionOverlay!.inserted) {
+      _actionOverlay = DemoActionOverlay(
+        screenSize: MediaQuery.sizeOf(context),
+        safePadding: MediaQuery.paddingOf(context),
+        stickyPadding: const EdgeInsets.all(8),
+      );
+    }
   }
 
   @override
