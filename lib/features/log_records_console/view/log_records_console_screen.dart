@@ -9,6 +9,21 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 class LogRecordsConsoleScreen extends StatelessWidget {
   const LogRecordsConsoleScreen({super.key});
 
+  void _showInfoDialog(BuildContext context, int count) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(context.l10n.logRecordsConsole_Text_recordsCountHint(count)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.logRecordsConsole_Button_infoClose),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -52,30 +67,30 @@ class LogRecordsConsoleScreen extends StatelessWidget {
               );
             },
           ),
+          BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
+            builder: (context, state) {
+              return IconButton(
+                icon: const Icon(Icons.info_outline),
+                style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
+                onPressed: switch (state) {
+                  LogRecordsConsoleStateSuccess(:final logRecords) when logRecords.isNotEmpty => () {
+                    _showInfoDialog(context, logRecords.length);
+                  },
+                  _ => null,
+                },
+              );
+            },
+          ),
         ],
       ),
       body: BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
         builder: (context, state) {
           switch (state) {
             case LogRecordsConsoleStateSuccess(:final logRecords):
-              if (logRecords.isEmpty) return const SizedBox.shrink();
               return ListView.separated(
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text(
-                        context.l10n.logRecordsConsole_Text_recordsCountHint(logRecords.length),
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
-                      ),
-                    );
-                  }
-                  return Text(logRecords[index - 1], maxLines: 100);
-                },
-                separatorBuilder: (context, index) => index == 0 ? const SizedBox.shrink() : const Divider(),
-                itemCount: logRecords.length + 1,
+                itemBuilder: (context, index) => Text(logRecords[index], maxLines: 100),
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: logRecords.length,
               );
             case LogRecordsConsoleStateFailure():
               return Center(

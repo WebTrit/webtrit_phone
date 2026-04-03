@@ -864,6 +864,9 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get logRecordsConsole_Button_infoClose => 'Capito';
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
 
   @override

@@ -870,6 +870,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get logRecordsConsole_Button_infoClose => 'Зрозуміло';
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Чати';
 
   @override

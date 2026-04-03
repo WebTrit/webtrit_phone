@@ -1575,11 +1575,17 @@ abstract class AppLocalizations {
   /// **'An unexpected error occurred'**
   String get logRecordsConsole_Text_failure;
 
-  /// Shown at the top of the log list to inform the user that only the most recent records are displayed and the share button exports the complete log.
+  /// Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.
   ///
   /// In en, this message translates to:
   /// **'Showing last {count, plural, one{# record} other{# records}}. Use Share to export the full log.'**
   String logRecordsConsole_Text_recordsCountHint(int count);
+
+  /// No description provided for @logRecordsConsole_Button_infoClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get logRecordsConsole_Button_infoClose;
 
   /// No description provided for @main_BottomNavigationBarItemLabel_chats.
   ///

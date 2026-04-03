@@ -730,13 +730,15 @@
   },
   "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell'ultimo # record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi # record. Usa Condividi per esportare il log completo.}}",
   "@logRecordsConsole_Text_recordsCountHint": {
-    "description": "Shown at the top of the log list to inform the user that only the most recent records are displayed and the share button exports the complete log.",
+    "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
+  "logRecordsConsole_Button_infoClose": "Capito",
+  "@logRecordsConsole_Button_infoClose": {},
   "main_BottomNavigationBarItemLabel_chats": "Le chat",
   "@main_BottomNavigationBarItemLabel_chats": {},
   "main_BottomNavigationBarItemLabel_contacts": "Contatti",
