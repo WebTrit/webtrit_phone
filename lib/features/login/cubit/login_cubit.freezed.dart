@@ -45,7 +45,7 @@ abstract mixin class $LoginStateCopyWith<$Res>  {
   factory $LoginStateCopyWith(LoginState value, $Res Function(LoginState) _then) = _$LoginStateCopyWithImpl;
 @useResult
 $Res call({
- bool processing, LoginMode? mode, String? coreUrl, String? tenantId, WebtritSystemInfo? systemInfo, List<LoginType>? supportedLoginTypes, (InvalidType, DateTime)? otpSigninSessionOtpProvisionalWithDateTime, bool passwordSigninPasswordInputObscureText, (InvalidType, DateTime)? signupSessionOtpProvisionalWithDateTime, String? token, String? userId, EmbeddedData? embedded, Map<String, dynamic>? embeddedExtras, Map<String, dynamic>? embeddedCallbackData, Object? embeddedRequestError, UrlInput coreUrlInput, UserRefInput otpSigninUserRefInput, CodeInput otpSigninCodeInput, UserRefInput passwordSigninUserRefInput, PasswordInput passwordSigninPasswordInput, EmailInput signupEmailInput, CodeInput signupCodeInput
+ bool processing, LoginMode? mode, String? coreUrl, String? tenantId, WebtritSystemInfo? systemInfo, List<LoginType>? supportedLoginTypes, (SessionOtpProvisional, DateTime)? otpSigninSessionOtpProvisionalWithDateTime, bool passwordSigninPasswordInputObscureText, (SessionOtpProvisional, DateTime)? signupSessionOtpProvisionalWithDateTime, String? token, String? userId, EmbeddedData? embedded, Map<String, dynamic>? embeddedExtras, Map<String, dynamic>? embeddedCallbackData, Object? embeddedRequestError, UrlInput coreUrlInput, UserRefInput otpSigninUserRefInput, CodeInput otpSigninCodeInput, UserRefInput passwordSigninUserRefInput, PasswordInput passwordSigninPasswordInput, EmailInput signupEmailInput, CodeInput signupCodeInput
 });
 
 
@@ -71,9 +71,9 @@ as String?,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: 
 as String?,systemInfo: freezed == systemInfo ? _self.systemInfo : systemInfo // ignore: cast_nullable_to_non_nullable
 as WebtritSystemInfo?,supportedLoginTypes: freezed == supportedLoginTypes ? _self.supportedLoginTypes : supportedLoginTypes // ignore: cast_nullable_to_non_nullable
 as List<LoginType>?,otpSigninSessionOtpProvisionalWithDateTime: freezed == otpSigninSessionOtpProvisionalWithDateTime ? _self.otpSigninSessionOtpProvisionalWithDateTime : otpSigninSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
-as (InvalidType, DateTime)?,passwordSigninPasswordInputObscureText: null == passwordSigninPasswordInputObscureText ? _self.passwordSigninPasswordInputObscureText : passwordSigninPasswordInputObscureText // ignore: cast_nullable_to_non_nullable
+as (SessionOtpProvisional, DateTime)?,passwordSigninPasswordInputObscureText: null == passwordSigninPasswordInputObscureText ? _self.passwordSigninPasswordInputObscureText : passwordSigninPasswordInputObscureText // ignore: cast_nullable_to_non_nullable
 as bool,signupSessionOtpProvisionalWithDateTime: freezed == signupSessionOtpProvisionalWithDateTime ? _self.signupSessionOtpProvisionalWithDateTime : signupSessionOtpProvisionalWithDateTime // ignore: cast_nullable_to_non_nullable
-as (InvalidType, DateTime)?,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as (SessionOtpProvisional, DateTime)?,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
 as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,embedded: freezed == embedded ? _self.embedded : embedded // ignore: cast_nullable_to_non_nullable
 as EmbeddedData?,embeddedExtras: freezed == embeddedExtras ? _self.embeddedExtras : embeddedExtras // ignore: cast_nullable_to_non_nullable
