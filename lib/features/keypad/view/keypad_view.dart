@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone_number/webtrit_phone_number.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/call_routing.dart';
@@ -135,7 +136,7 @@ class KeypadViewState extends State<KeypadView> {
   }
 
   String _popNumber() {
-    final number = _controller.text;
+    final number = PhoneParser.normalize(_controller.text);
     _controller.clear();
     return number;
   }
