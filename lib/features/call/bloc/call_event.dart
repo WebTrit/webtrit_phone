@@ -974,6 +974,9 @@ sealed class _PeerConnectionEvent extends CallEvent {
 
   const factory _PeerConnectionEvent.streamRemoved(String callId, MediaStream stream) =
       _PeerConnectionEventStreamRemoved;
+
+  const factory _PeerConnectionEvent.renegotiationNeeded(String callId, int? lineId) =
+      _PeerConnectionEventRenegotiationNeeded;
 }
 
 class _PeerConnectionEventSignalingStateChanged extends _PeerConnectionEvent {
@@ -1051,6 +1054,17 @@ class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
 
   @override
   List<Object?> get props => [callId, stream];
+}
+
+class _PeerConnectionEventRenegotiationNeeded extends _PeerConnectionEvent {
+  const _PeerConnectionEventRenegotiationNeeded(this.callId, this.lineId);
+
+  final String callId;
+
+  final int? lineId;
+
+  @override
+  List<Object?> get props => [callId, lineId];
 }
 
 // call screen events
