@@ -853,6 +853,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'Si è verificato un errore imprevisto';
 
   @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    return 'Visualizzazione degli ultimi $count record. Usa Condividi per esportare il log completo.';
+  }
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
 
   @override

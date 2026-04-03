@@ -857,6 +857,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'Виникла неочікувана помилка';
 
   @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    return 'Відображено останні $count записів. Використайте Поділитись для експорту повного журналу.';
+  }
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Чати';
 
   @override
