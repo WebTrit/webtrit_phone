@@ -14,6 +14,7 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     this.audioConstraintsBuilder,
     this.videoConstraintsBuilder,
     this.isCameraPermissionGranted,
+    this.getUserMedia,
   });
 
   final AudioConstraintsBuilder? audioConstraintsBuilder;
@@ -24,6 +25,13 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
   /// When [null], video availability is assumed to be [true] — the platform
   /// itself (OS / browser) will handle the permission prompt.
   final Future<bool> Function()? isCameraPermissionGranted;
+
+  /// Injectable override for [navigator.mediaDevices.getUserMedia].
+  ///
+  /// Defaults to the real platform API when [null].
+  /// Intended for use in tests only.
+  @visibleForTesting
+  final Future<MediaStream> Function(Map<String, dynamic>)? getUserMedia;
 
   /// Requests access to the user's media input devices (camera and/or microphone).
   ///
@@ -47,7 +55,7 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     };
 
     try {
-      final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+      final localStream = await (getUserMedia ?? navigator.mediaDevices.getUserMedia)(mediaConstraints);
 
       if (!kIsWeb) {
         await Helper.setAppleAudioConfiguration(
