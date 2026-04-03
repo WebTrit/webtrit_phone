@@ -3049,7 +3049,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  /// Performs a safe renegotiation by first checking if the active call and peer connection still exist before proceeding.
+  /// Performs a safe renegotiation by first checking if the active call and peer connection still exist before proceeding and no "updating" state is detected on the call.
   ///
   /// Designed to be triggered in response to the `onRenegotiationNeeded` or manually for scenarios like:
   /// - boost call recovery after network switch
