@@ -2028,13 +2028,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
-      final localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
+      late final MediaStream localStream;
+      var resolvedVideo = offer.hasVideo;
+      try {
+        localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
+      } on UserMediaError {
+        if (!offer.hasVideo) rethrow;
+        _logger.warning('__onCallPerformEventAnswered: camera unavailable, falling back to audio-only');
+        localStream = await userMediaBuilder.build(video: false);
+        resolvedVideo = false;
+      }
+
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
-          return call.copyWith(localStream: localStream, processingStatus: CallProcessingStatus.incomingAnswering);
+          return call.copyWith(
+            video: resolvedVideo,
+            localStream: localStream,
+            processingStatus: CallProcessingStatus.incomingAnswering,
+          );
         }),
       );
 
