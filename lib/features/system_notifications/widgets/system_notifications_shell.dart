@@ -77,6 +77,7 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
   }
 
   void openNotificationsScreen() {
+    FocusScope.of(context).unfocus();
     context.router.navigate(const SystemNotificationsPageRoute());
   }
 
