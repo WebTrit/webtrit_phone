@@ -90,7 +90,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Timer? _presenceInfoSyncTimer;
 
   late final PeerConnectionManager _peerConnectionManager;
-  late final RenegotiationHandler _renegotiationHandler;
+  final Map<String, RenegotiationHandler> _renegotiationHandlers = {};
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -121,7 +121,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
-    _renegotiationHandler = RenegotiationHandler(callErrorReporter: callErrorReporter, sdpMunger: sdpMunger);
 
     _signalingSubscription = _signalingModule.events.listen((event) {
       switch (event) {
@@ -200,6 +199,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await _peerConnectionManager.dispose();
 
+    _clearRenegotiationHandlers();
+
     await super.close();
   }
 
@@ -245,6 +246,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine('onChange nextActiveCallUuids: $nextActiveCallUuids');
 
     for (final removeUuid in currentActiveCallUuids.difference(nextActiveCallUuids)) {
+      _clearRenegotiationHandler(removeUuid);
       // Disposal is intentionally not awaited to avoid blocking the Bloc processing loop.
       // The PeerConnectionManager implements an internal "disposal barrier" (via _pendingDisposals)
       // which guarantees that any subsequent createPeerConnection() for this CallId will
@@ -3054,6 +3056,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
+  void _clearRenegotiationHandler(String callId) {
+    _renegotiationHandlers.remove(callId);
+  }
+
+  void _clearRenegotiationHandlers() {
+    _renegotiationHandlers.clear();
+  }
+
+  RenegotiationHandler _getOrCreateRenegotiationHandler(String callId) {
+    return _renegotiationHandlers.putIfAbsent(
+      callId,
+      () => RenegotiationHandler(callErrorReporter: callErrorReporter, sdpMunger: sdpMunger),
+    );
+  }
+
   /// Performs a safe renegotiation by first checking if the active call and peer connection still exist before proceeding and no "updating" state is detected on the call.
   ///
   /// Designed to be triggered in response to the `onRenegotiationNeeded` or manually for scenarios like:
@@ -3088,7 +3105,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return _safeRenegotiate(callId, lineId, retryCount: newCount);
     }
 
-    await _renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate);
+    final renegotiationHandler = _getOrCreateRenegotiationHandler(callId);
+    await renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate);
   }
 
   /// Sends a renegotiation [UpdateRequest] to the signaling server with the given [jsep] offer.
