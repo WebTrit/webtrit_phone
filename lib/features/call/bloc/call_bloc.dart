@@ -2252,6 +2252,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _PeerConnectionEventIceCandidateIdentified() => __onPeerConnectionEventIceCandidateIdentified(event, emit),
       _PeerConnectionEventStreamAdded() => __onPeerConnectionEventStreamAdded(event, emit),
       _PeerConnectionEventStreamRemoved() => __onPeerConnectionEventStreamRemoved(event, emit),
+      _PeerConnectionEventRenegotiationNeeded() => __onPeerConnectionEventRenegotiationNeeded(event, emit),
     };
   }
 
@@ -2264,6 +2265,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventConnectionStateChanged event,
     Emitter<CallState> emit,
   ) async {}
+
+  Future<void> __onPeerConnectionEventRenegotiationNeeded(
+    _PeerConnectionEventRenegotiationNeeded event,
+    Emitter<CallState> emit,
+  ) async {
+    final _PeerConnectionEventRenegotiationNeeded(callId: callId, lineId: lineId) = event;
+    await _safeRenegotiate(callId, lineId);
+  }
 
   Future<void> __onPeerConnectionEventIceGatheringStateChanged(
     _PeerConnectionEventIceGatheringStateChanged event,
@@ -2932,23 +2941,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // state is updated with the latest stream reference when video is added
         // mid-call (e.g. after a glare-resolution rollback).
         onAddTrack: (stream, track) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
-        onRenegotiationNeeded: (pc) =>
-            unawaited(_renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate)),
+        onRenegotiationNeeded: (pc) {
+          // Skips initial triggering that happens during peer connection setup
+          if (pc.signalingState != null) add(_PeerConnectionEvent.renegotiationNeeded(callId, lineId));
+        },
       ),
     );
-  }
-
-  /// Sends a renegotiation [UpdateRequest] to the signaling server with the given [jsep] offer.
-  ///
-  /// Used as a [RenegotiationExecutor] callback by [RenegotiationHandler].
-  Future<void> _sendRenegotiationUpdate(String callId, int? lineId, RTCSessionDescription jsep) async {
-    final updateRequest = UpdateRequest(
-      transaction: WebtritSignalingClient.generateTransactionId(),
-      line: lineId,
-      callId: callId,
-      jsep: jsep.toMap(),
-    );
-    await _signalingModule.execute(updateRequest);
   }
 
   void _addToRecents(ActiveCall activeCall) {
@@ -3054,5 +3052,55 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (senderResult == null) {
       _logger.warning('safeAddTrack for $kind returned null: track not added, possibly due to closed connection');
     }
+  }
+
+  /// Performs a safe renegotiation by first checking if the active call and peer connection still exist before proceeding and no "updating" state is detected on the call.
+  ///
+  /// Designed to be triggered in response to the `onRenegotiationNeeded` or manually for scenarios like:
+  /// - boost call recovery after network switch
+  ///   (currently WebRTC built-in detector triggers after 10-15s, better to synchronize it with our signaling reconnection)
+  /// - force renegotiation after double network
+  ///   (when device had poor GSM, and then WIFI connected as second interface
+  ///   but WebRTC prefer stay on GSM network interface instead of switching to WIFI, so we can trigger renegotiation to make WebRTC switch to WIFI)
+  /// - if "STALLED" rtp traffic is detected
+  ///   (of something unexpected happens with RTP stream, will be good to try to recorer it with renegotiation)
+  /// - you name it..
+  Future<void> _safeRenegotiate(String callId, int? lineId, {int retryCount = 0}) async {
+    final activeCall = state.retrieveActiveCall(callId);
+    if (activeCall == null) {
+      _logger.info('_safeRenegotiate: activeCall disposed, skipping renegotiation');
+      return;
+    }
+
+    final pc = await _peerConnectionManager.retrieve(callId);
+    if (pc == null) {
+      _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
+      return;
+    }
+
+    // If call already in updating state, mostly by remote renegetiation, hold, transfer etc..
+    // we trying to wait and retry renegotiation after 1s,
+    // but after 3 times do it forcefully to avoid stuck in renegotiation loop if something goes wrong with call state
+    if (activeCall.updating && retryCount != 3) {
+      final newCount = retryCount + 1;
+      await Future.delayed(Duration(seconds: newCount));
+      _logger.info('_safeRenegotiate: activeCall is updating, retrying renegotiation (retryCount: $retryCount)');
+      return _safeRenegotiate(callId, lineId, retryCount: newCount);
+    }
+
+    await _renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate);
+  }
+
+  /// Sends a renegotiation [UpdateRequest] to the signaling server with the given [jsep] offer.
+  ///
+  /// Used as a [RenegotiationExecutor] callback by [RenegotiationHandler].
+  Future<void> _sendRenegotiationUpdate(String callId, int? lineId, RTCSessionDescription jsep) async {
+    final updateRequest = UpdateRequest(
+      transaction: WebtritSignalingClient.generateTransactionId(),
+      line: lineId,
+      callId: callId,
+      jsep: jsep.toMap(),
+    );
+    await _signalingModule.execute(updateRequest);
   }
 }
