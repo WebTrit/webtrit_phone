@@ -7,8 +7,6 @@ import 'video_constraints_builder.dart';
 
 abstract class UserMediaBuilder {
   Future<MediaStream> build({required bool video, bool? frontCamera});
-
-  Future<bool> isVideoAvailable();
 }
 
 class DefaultUserMediaBuilder implements UserMediaBuilder {
@@ -27,25 +25,21 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
   /// itself (OS / browser) will handle the permission prompt.
   final Future<bool> Function()? isCameraPermissionGranted;
 
-  /// Returns [true] when camera permission is granted.
-  ///
-  /// Delegates to [isCameraPermissionGranted] when provided; otherwise
-  /// returns [true] and lets the platform handle access.
-  @override
-  Future<bool> isVideoAvailable() async {
-    if (kIsWeb) return true;
-    return isCameraPermissionGranted == null || await isCameraPermissionGranted!();
-  }
-
   /// Requests access to the user's media input devices (camera and/or microphone).
+  ///
+  /// When [video] is [true] and [isCameraPermissionGranted] is provided, the
+  /// camera permission is checked first. If denied, the stream is acquired
+  /// without video to allow audio-only fallback.
   ///
   /// For more information on constraints structure, see:
   /// https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   @override
   Future<MediaStream> build({required bool video, bool? frontCamera}) async {
+    final resolvedVideo = video && await _isCameraAvailable();
+
     final Map<String, dynamic> mediaConstraints = {
       'audio': _buildAudioConstraints(),
-      'video': video ? _buildVideoConstraintsMap(frontCamera: frontCamera) : false,
+      'video': resolvedVideo ? _buildVideoConstraintsMap(frontCamera: frontCamera) : false,
     };
 
     try {
@@ -53,7 +47,7 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
 
       if (!kIsWeb) {
         await Helper.setAppleAudioConfiguration(
-          AppleAudioConfiguration(appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
+          AppleAudioConfiguration(appleAudioMode: resolvedVideo ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
         );
       }
 
@@ -61,6 +55,11 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     } catch (e) {
       throw UserMediaError(e.toString());
     }
+  }
+
+  Future<bool> _isCameraAvailable() async {
+    if (kIsWeb || isCameraPermissionGranted == null) return true;
+    return isCameraPermissionGranted!();
   }
 
   /// Constructs the map structure for audio constraints.

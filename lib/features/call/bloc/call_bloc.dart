@@ -2028,19 +2028,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
-      final videoEnabled = offer.hasVideo && await userMediaBuilder.isVideoAvailable();
-      if (offer.hasVideo && !videoEnabled) {
-        _logger.info('__onCallPerformEventAnswered: camera permission not granted, answering audio-only');
-      }
-
-      final localStream = await userMediaBuilder.build(video: videoEnabled, frontCamera: call.frontCamera);
+      final localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
           return call.copyWith(
-            video: videoEnabled,
+            video: localStream.getVideoTracks().isNotEmpty,
             localStream: localStream,
             processingStatus: CallProcessingStatus.incomingAnswering,
           );
