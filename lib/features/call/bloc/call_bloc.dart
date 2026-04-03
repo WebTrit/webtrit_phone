@@ -590,6 +590,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onResetStateEventCompleteCall(_ResetStateEventCompleteCall event, Emitter<CallState> emit) async {
     _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
 
+    await _stopRingbackSound();
+
     try {
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
