@@ -98,6 +98,61 @@ void main() {
     });
   });
 
+  group('DefaultUserMediaBuilder — allowAudioFallback: true, getUserMedia retry', () {
+    test('retries with video: false when getUserMedia fails on first video attempt', () async {
+      final capturedAttempts = <bool>[];
+      final subject = DefaultUserMediaBuilder(
+        isCameraPermissionGranted: () async => true,
+        getUserMedia: (constraints) async {
+          final hasVideo = constraints['video'] != false;
+          capturedAttempts.add(hasVideo);
+          if (hasVideo) throw Exception('NotAllowedError');
+          return mockStream;
+        },
+      );
+
+      final result = await subject.build(video: true, allowAudioFallback: true);
+
+      expect(capturedAttempts, [true, false]);
+      expect(result, mockStream);
+    });
+
+    test('does not retry when allowAudioFallback is false', () async {
+      var callCount = 0;
+      final subject = DefaultUserMediaBuilder(
+        getUserMedia: (_) async {
+          callCount++;
+          throw Exception('NotAllowedError');
+        },
+      );
+
+      await expectLater(subject.build(video: true), throwsA(isA<UserMediaError>()));
+      expect(callCount, 1);
+    });
+
+    test('does not retry when video was already false', () async {
+      var callCount = 0;
+      final subject = DefaultUserMediaBuilder(
+        getUserMedia: (_) async {
+          callCount++;
+          throw Exception('device error');
+        },
+      );
+
+      await expectLater(subject.build(video: false, allowAudioFallback: true), throwsA(isA<UserMediaError>()));
+      expect(callCount, 1);
+    });
+
+    test('throws UserMediaError when retry also fails', () async {
+      final subject = DefaultUserMediaBuilder(
+        isCameraPermissionGranted: () async => true,
+        getUserMedia: (_) async => throw Exception('no mic'),
+      );
+
+      await expectLater(subject.build(video: true, allowAudioFallback: true), throwsA(isA<UserMediaError>()));
+    });
+  });
+
   group('DefaultUserMediaBuilder — error handling', () {
     test('wraps getUserMedia exception in UserMediaError', () async {
       final subject = DefaultUserMediaBuilder(getUserMedia: (_) async => throw Exception('device not found'));

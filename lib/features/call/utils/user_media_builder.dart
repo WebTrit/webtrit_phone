@@ -39,6 +39,10 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
   /// permission is checked first via [isCameraPermissionGranted]. If denied,
   /// the stream is acquired without video rather than throwing.
   ///
+  /// If the pre-check passes but [getUserMedia] still fails (e.g. permission
+  /// revoked between check and call), the method retries with [video: false]
+  /// so the incoming call is answered audio-only rather than dropped.
+  ///
   /// When [allowAudioFallback] is [false] (default), any failure to acquire
   /// media throws [UserMediaError], preserving the original behaviour for
   /// callers that handle the error explicitly (e.g. camera-enable action).
@@ -49,6 +53,15 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
   Future<MediaStream> build({required bool video, bool? frontCamera, bool allowAudioFallback = false}) async {
     final resolvedVideo = video && (!allowAudioFallback || await _isCameraAvailable());
 
+    try {
+      return await _acquireStream(resolvedVideo: resolvedVideo, frontCamera: frontCamera);
+    } catch (_) {
+      if (!allowAudioFallback || !resolvedVideo) rethrow;
+      return _acquireStream(resolvedVideo: false, frontCamera: frontCamera);
+    }
+  }
+
+  Future<MediaStream> _acquireStream({required bool resolvedVideo, bool? frontCamera}) async {
     final Map<String, dynamic> mediaConstraints = {
       'audio': _buildAudioConstraints(),
       'video': resolvedVideo ? _buildVideoConstraintsMap(frontCamera: frontCamera) : false,
