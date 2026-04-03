@@ -6,7 +6,7 @@ import 'audio_constraints_builder.dart';
 import 'video_constraints_builder.dart';
 
 abstract class UserMediaBuilder {
-  Future<MediaStream> build({required bool video, bool? frontCamera});
+  Future<MediaStream> build({required bool video, bool? frontCamera, bool allowAudioFallback = false});
 }
 
 class DefaultUserMediaBuilder implements UserMediaBuilder {
@@ -27,15 +27,19 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
 
   /// Requests access to the user's media input devices (camera and/or microphone).
   ///
-  /// When [video] is [true] and [isCameraPermissionGranted] is provided, the
-  /// camera permission is checked first. If denied, the stream is acquired
-  /// without video to allow audio-only fallback.
+  /// When [allowAudioFallback] is [true] and [video] is [true], the camera
+  /// permission is checked first via [isCameraPermissionGranted]. If denied,
+  /// the stream is acquired without video rather than throwing.
+  ///
+  /// When [allowAudioFallback] is [false] (default), any failure to acquire
+  /// media throws [UserMediaError], preserving the original behaviour for
+  /// callers that handle the error explicitly (e.g. camera-enable action).
   ///
   /// For more information on constraints structure, see:
   /// https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   @override
-  Future<MediaStream> build({required bool video, bool? frontCamera}) async {
-    final resolvedVideo = video && await _isCameraAvailable();
+  Future<MediaStream> build({required bool video, bool? frontCamera, bool allowAudioFallback = false}) async {
+    final resolvedVideo = video && (!allowAudioFallback || await _isCameraAvailable());
 
     final Map<String, dynamic> mediaConstraints = {
       'audio': _buildAudioConstraints(),

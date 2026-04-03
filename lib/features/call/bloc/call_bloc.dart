@@ -2028,7 +2028,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
-      final localStream = await userMediaBuilder.build(video: offer.hasVideo, frontCamera: call.frontCamera);
+      final localStream = await userMediaBuilder.build(
+        video: offer.hasVideo,
+        frontCamera: call.frontCamera,
+        allowAudioFallback: true,
+      );
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
