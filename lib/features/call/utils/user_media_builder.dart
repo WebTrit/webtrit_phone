@@ -6,32 +6,73 @@ import 'audio_constraints_builder.dart';
 import 'video_constraints_builder.dart';
 
 abstract class UserMediaBuilder {
-  Future<MediaStream> build({required bool video, bool? frontCamera});
+  Future<MediaStream> build({required bool video, bool? frontCamera, bool allowAudioFallback = false});
 }
 
 class DefaultUserMediaBuilder implements UserMediaBuilder {
-  const DefaultUserMediaBuilder({this.audioConstraintsBuilder, this.videoConstraintsBuilder});
+  const DefaultUserMediaBuilder({
+    this.audioConstraintsBuilder,
+    this.videoConstraintsBuilder,
+    this.isCameraPermissionGranted,
+    this.getUserMedia,
+  });
 
   final AudioConstraintsBuilder? audioConstraintsBuilder;
   final VideoConstraintsBuilder? videoConstraintsBuilder;
 
+  /// Optional callback to check whether camera permission is granted.
+  ///
+  /// When [null], video availability is assumed to be [true] — the platform
+  /// itself (OS / browser) will handle the permission prompt.
+  final Future<bool> Function()? isCameraPermissionGranted;
+
+  /// Injectable override for [navigator.mediaDevices.getUserMedia].
+  ///
+  /// Defaults to the real platform API when [null].
+  /// Intended for use in tests only.
+  @visibleForTesting
+  final Future<MediaStream> Function(Map<String, dynamic>)? getUserMedia;
+
   /// Requests access to the user's media input devices (camera and/or microphone).
+  ///
+  /// When [allowAudioFallback] is [true] and [video] is [true], the camera
+  /// permission is checked first via [isCameraPermissionGranted]. If denied,
+  /// the stream is acquired without video rather than throwing.
+  ///
+  /// If the pre-check passes but [getUserMedia] still fails (e.g. permission
+  /// revoked between check and call), the method retries with [video: false]
+  /// so the incoming call is answered audio-only rather than dropped.
+  ///
+  /// When [allowAudioFallback] is [false] (default), any failure to acquire
+  /// media throws [UserMediaError], preserving the original behaviour for
+  /// callers that handle the error explicitly (e.g. camera-enable action).
   ///
   /// For more information on constraints structure, see:
   /// https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   @override
-  Future<MediaStream> build({required bool video, bool? frontCamera}) async {
+  Future<MediaStream> build({required bool video, bool? frontCamera, bool allowAudioFallback = false}) async {
+    final resolvedVideo = video && (!allowAudioFallback || await _isCameraAvailable());
+
+    try {
+      return await _acquireStream(resolvedVideo: resolvedVideo, frontCamera: frontCamera);
+    } catch (_) {
+      if (!allowAudioFallback || !resolvedVideo) rethrow;
+      return _acquireStream(resolvedVideo: false, frontCamera: frontCamera);
+    }
+  }
+
+  Future<MediaStream> _acquireStream({required bool resolvedVideo, bool? frontCamera}) async {
     final Map<String, dynamic> mediaConstraints = {
       'audio': _buildAudioConstraints(),
-      'video': video ? _buildVideoConstraintsMap(frontCamera: frontCamera) : false,
+      'video': resolvedVideo ? _buildVideoConstraintsMap(frontCamera: frontCamera) : false,
     };
 
     try {
-      final localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+      final localStream = await (getUserMedia ?? navigator.mediaDevices.getUserMedia)(mediaConstraints);
 
       if (!kIsWeb) {
         await Helper.setAppleAudioConfiguration(
-          AppleAudioConfiguration(appleAudioMode: video ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
+          AppleAudioConfiguration(appleAudioMode: resolvedVideo ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
         );
       }
 
@@ -39,6 +80,11 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     } catch (e) {
       throw UserMediaError(e.toString());
     }
+  }
+
+  Future<bool> _isCameraAvailable() async {
+    if (kIsWeb || isCameraPermissionGranted == null) return true;
+    return isCameraPermissionGranted!();
   }
 
   /// Constructs the map structure for audio constraints.

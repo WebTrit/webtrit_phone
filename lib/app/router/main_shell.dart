@@ -439,6 +439,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       // Initialize media builder with app-configured audio/video constraints
                       // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
+                      final appPermissions = context.read<AppPermissions>();
                       final userMediaBuilder = DefaultUserMediaBuilder(
                         audioConstraintsBuilder: AudioConstraintsWithAppSettingsBuilder(
                           audioProcessingSettingsRepository,
@@ -446,6 +447,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         videoConstraintsBuilder: VideoConstraintsWithAppSettingsBuilder(
                           videoCapturingSettingsRepository,
                         ),
+                        isCameraPermissionGranted: () => appPermissions.isPermissionGranted(Permission.camera),
                       );
                       // Initialize peer connection policy applier with app-specific negotiation rules
                       final pearConnectionPolicyApplier = ModifyWithSettingsPeerConnectionPolicyApplier(
