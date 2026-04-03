@@ -728,7 +728,7 @@
   "@logRecordsConsole_Text_failure": {
     "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
   },
-  "logRecordsConsole_Text_recordsCountHint": "Відображено останні {count} записів. Використайте Поділитись для експорту повного журналу.",
+  "logRecordsConsole_Text_recordsCountHint": "Відображено останні {count, plural, one{# запис} few{# записи} many{# записів} other{# записи}}. Використайте Поділитись для експорту повного журналу.",
   "@logRecordsConsole_Text_recordsCountHint": {
     "description": "Shown at the top of the log list to inform the user that only the most recent records are displayed and the share button exports the complete log.",
     "placeholders": {

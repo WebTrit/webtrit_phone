@@ -849,7 +849,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String logRecordsConsole_Text_recordsCountHint(int count) {
-    return 'Showing last $count records. Use Share to export the full log.';
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '# records', one: '# record');
+    return 'Showing last $_temp0. Use Share to export the full log.';
   }
 
   @override

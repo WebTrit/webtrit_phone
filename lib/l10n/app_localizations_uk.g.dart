@@ -858,7 +858,15 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String logRecordsConsole_Text_recordsCountHint(int count) {
-    return 'Відображено останні $count записів. Використайте Поділитись для експорту повного журналу.';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# записи',
+      many: '# записів',
+      few: '# записи',
+      one: '# запис',
+    );
+    return 'Відображено останні $_temp0. Використайте Поділитись для експорту повного журналу.';
   }
 
   @override
