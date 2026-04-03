@@ -239,6 +239,11 @@ class PollingService implements Disposable {
       final reachable = await _isReachable();
       if (_disposed) return _nextDelay(config);
 
+      if (!listener.isActive) {
+        unregister(listener);
+        return _nextDelay(config);
+      }
+
       if (reachable && !config.isRefreshing) {
         config.isRefreshing = true;
         try {

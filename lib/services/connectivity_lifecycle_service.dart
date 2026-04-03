@@ -172,7 +172,7 @@ class ConnectivityLifecycleService implements Disposable {
   Future<void> refreshAll() async {
     if (_isDisposed || _refreshables.isEmpty) return;
 
-    final snapshot = List<Refreshable>.unmodifiable(_refreshables);
+    final snapshot = List<Refreshable>.unmodifiable(_refreshables.where((r) => r.isActive));
 
     if (options.parallelism == Parallelism.concurrent) {
       await _runConcurrent<Refreshable>(snapshot, (r) => r.refresh());

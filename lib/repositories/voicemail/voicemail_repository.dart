@@ -101,6 +101,9 @@ class VoicemailRepositoryImpl
   @override
   bool get isFeatureSupported => _featureSupported;
 
+  @override
+  bool get isActive => _featureSupported;
+
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
@@ -370,6 +373,9 @@ class VoicemailRepositoryImpl
 
 class EmptyVoicemailRepository implements VoicemailRepository {
   const EmptyVoicemailRepository();
+
+  @override
+  bool get isActive => false;
 
   @override
   Future<void> fetchVoicemails({String? localeCode}) => Future.value();
