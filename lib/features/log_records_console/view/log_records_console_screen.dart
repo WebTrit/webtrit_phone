@@ -9,6 +9,15 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 class LogRecordsConsoleScreen extends StatelessWidget {
   const LogRecordsConsoleScreen({super.key});
 
+  void _onMenuSelected(BuildContext context, _LogConsoleMenuAction action, LogRecordsConsoleStateSuccess state) {
+    switch (action) {
+      case _LogConsoleMenuAction.info:
+        _showInfoDialog(context, state.logRecords.length);
+      case _LogConsoleMenuAction.clear:
+        context.read<LogRecordsConsoleCubit>().clear();
+    }
+  }
+
   void _showInfoDialog(BuildContext context, int count) {
     showDialog<void>(
       context: context,
@@ -33,20 +42,6 @@ class LogRecordsConsoleScreen extends StatelessWidget {
         actions: [
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
             builder: (context, state) {
-              return IconButton(
-                icon: const Icon(Icons.delete_outline),
-                style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
-                onPressed: switch (state) {
-                  LogRecordsConsoleStateSuccess(isSharing: false) => () {
-                    context.read<LogRecordsConsoleCubit>().clear();
-                  },
-                  _ => null,
-                },
-              );
-            },
-          ),
-          BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
-            builder: (context, state) {
               final isSharing = state is LogRecordsConsoleStateSuccess && state.isSharing;
               return IconButton(
                 icon: isSharing
@@ -69,15 +64,25 @@ class LogRecordsConsoleScreen extends StatelessWidget {
           ),
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
             builder: (context, state) {
-              return IconButton(
-                icon: const Icon(Icons.info_outline),
-                style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
-                onPressed: switch (state) {
-                  LogRecordsConsoleStateSuccess(:final logRecords) when logRecords.isNotEmpty => () {
-                    _showInfoDialog(context, logRecords.length);
-                  },
-                  _ => null,
-                },
+              final canInteract = state is LogRecordsConsoleStateSuccess && !state.isSharing;
+              final hasRecords = state is LogRecordsConsoleStateSuccess && state.logRecords.isNotEmpty;
+              return PopupMenuButton<_LogConsoleMenuAction>(
+                icon: const Icon(Icons.more_vert),
+                iconColor: colorScheme.onSurface,
+                position: PopupMenuPosition.under,
+                enabled: canInteract,
+                onSelected: (action) => _onMenuSelected(context, action, state as LogRecordsConsoleStateSuccess),
+                itemBuilder: (context) => [
+                  if (hasRecords)
+                    PopupMenuItem(
+                      value: _LogConsoleMenuAction.info,
+                      child: Text(context.l10n.logRecordsConsole_PopupMenuItem_info),
+                    ),
+                  PopupMenuItem(
+                    value: _LogConsoleMenuAction.clear,
+                    child: Text(context.l10n.logRecordsConsole_PopupMenuItem_clear),
+                  ),
+                ],
               );
             },
           ),
@@ -115,3 +120,5 @@ class LogRecordsConsoleScreen extends StatelessWidget {
     );
   }
 }
+
+enum _LogConsoleMenuAction { info, clear }

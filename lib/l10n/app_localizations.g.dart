@@ -1587,6 +1587,18 @@ abstract class AppLocalizations {
   /// **'Got it'**
   String get logRecordsConsole_Button_infoClose;
 
+  /// No description provided for @logRecordsConsole_PopupMenuItem_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Info'**
+  String get logRecordsConsole_PopupMenuItem_info;
+
+  /// No description provided for @logRecordsConsole_PopupMenuItem_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get logRecordsConsole_PopupMenuItem_clear;
+
   /// No description provided for @main_BottomNavigationBarItemLabel_chats.
   ///
   /// In en, this message translates to:

@@ -857,6 +857,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logRecordsConsole_Button_infoClose => 'Got it';
 
   @override
+  String get logRecordsConsole_PopupMenuItem_info => 'Info';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_clear => 'Clear';
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Chats';
 
   @override
