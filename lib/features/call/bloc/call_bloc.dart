@@ -2630,10 +2630,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///    appears immediately.
   /// 2. Re-register the call with Callkeep via [reportNewIncomingCall] + [answerCall] to
   ///    restore the native connection in the answered state.
-  /// 3. Re-negotiate WebRTC using the original offer SDP from [IncomingCallEvent].
-  /// 4. Send an [AcceptRequest] to signaling with the new local answer — the server
-  ///    re-establishes the media session.
-  /// 5. Transition to [CallProcessingStatus.connected].
+  /// 3. Acquire user media, create a new [RTCPeerConnection], and add local tracks.
+  /// 4. Transition immediately to [CallProcessingStatus.connected] with the original
+  ///    [acceptedTime] — the server already has this call in [status=incall], so
+  ///    [AcceptRequest] would be rejected (ERROR 447 "Wrong state").
+  /// 5. Complete the PC into [_peerConnectionManager], which triggers [onRenegotiationNeeded]
+  ///    → [_safeRenegotiate] → [UpdateRequest] (re-INVITE) to re-establish the media path.
+  /// 6. The server responds with [AcceptedEvent] carrying an answer SDP;
+  ///    [__onCallSignalingEventAccepted] applies [setRemoteDescription] and ICE negotiation
+  ///    resumes, restoring audio/video.
   Future<void> _onRestoreAcceptedIncomingCall(_RestoreAcceptedIncomingCall event, Emitter<CallState> emit) async {
     _logger.info('_onRestoreAcceptedIncomingCall: restoring callId=${event.callId}');
 
@@ -2693,56 +2698,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     RTCPeerConnection? peerConnection;
 
     try {
-      if (jsep == null) {
-        throw StateError('_onRestoreAcceptedIncomingCall: no jsep in IncomingCallEvent — cannot restore media');
-      }
-
-      emit(
-        state.copyWithMappedActiveCall(
-          event.callId,
-          (c) => c.copyWith(processingStatus: CallProcessingStatus.incomingInitializingMedia),
-        ),
-      );
-
-      localStream = await userMediaBuilder.build(video: jsep.hasVideo, frontCamera: activeCall.frontCamera);
+      localStream = await userMediaBuilder.build(video: video, frontCamera: activeCall.frontCamera);
       peerConnection = await _createPeerConnection(event.callId, event.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection!.addTrack(t, localStream!));
 
+      // The server already has this call in status=incall, so AcceptRequest would be rejected
+      // (ERROR 447 "Wrong state"). Mark the call as connected with the original acceptedTime so
+      // that when the server responds to the UpdateRequest below, __onCallSignalingEventAccepted
+      // treats it as an update (acceptedTime != null) and applies setRemoteDescription correctly.
       emit(
         state.copyWithMappedActiveCall(
           event.callId,
-          (c) => c.copyWith(localStream: localStream, processingStatus: CallProcessingStatus.incomingAnswering),
+          (c) => c.copyWith(
+            localStream: localStream,
+            processingStatus: CallProcessingStatus.connected,
+            acceptedTime: event.acceptedTime,
+          ),
         ),
       );
       localStream = null; // ownership transferred to state
 
-      final remoteDescription = jsep.toDescription();
-      sdpSanitizer?.apply(remoteDescription);
-      await peerConnection.setRemoteDescription(remoteDescription);
-
-      final localDescription = await peerConnection.createAnswer({});
-      sdpMunger?.apply(localDescription);
-
-      await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
-
-      await _signalingModule.execute(
-        AcceptRequest(
-          transaction: WebtritSignalingClient.generateTransactionId(),
-          line: event.line,
-          callId: event.callId,
-          jsep: localDescription.toMap(),
-        ),
-      );
-
+      // Completing the PC triggers onRenegotiationNeeded → _safeRenegotiate → UpdateRequest
+      // (re-INVITE), which re-establishes media after Activity recreation.
       _peerConnectionManager.complete(event.callId, peerConnection);
       peerConnection = null; // ownership transferred to manager
-
-      emit(
-        state.copyWithMappedActiveCall(
-          event.callId,
-          (c) => c.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: event.acceptedTime),
-        ),
-      );
 
       _logger.info('_onRestoreAcceptedIncomingCall: restoration complete for callId=${event.callId}');
     } catch (e, stackTrace) {
