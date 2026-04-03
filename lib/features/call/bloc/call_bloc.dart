@@ -3060,7 +3060,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// - if "STALLED" rtp traffic is detected
   ///   (of something unexpected happens with RTP stream, will be good to try to recorer it with renegotiation)
   /// - you name it..
-  Future<void> _safeRenegotiate(String callId, int? lineId) async {
+  Future<void> _safeRenegotiate(String callId, int? lineId, {int retryCount = 0}) async {
     final activeCall = state.retrieveActiveCall(callId);
     if (activeCall == null) {
       _logger.info('_safeRenegotiate: activeCall disposed, skipping renegotiation');
@@ -3071,6 +3071,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (pc == null) {
       _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
       return;
+    }
+
+    // If call already in updating state, mostly by remote renegetiation, hold, transfer etc..
+    // we trying to wait and retry renegotiation after 1s,
+    // but after 3 times do it forcefully to avoid stuck in renegotiation loop if something goes wrong with call state
+    if (activeCall.updating && retryCount != 3) {
+      final newCount = retryCount + 1;
+      await Future.delayed(Duration(seconds: newCount));
+      _logger.info('_safeRenegotiate: activeCall is updating, retrying renegotiation (retryCount: $retryCount)');
+      return _safeRenegotiate(callId, lineId, retryCount: newCount);
     }
 
     await _renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate);
