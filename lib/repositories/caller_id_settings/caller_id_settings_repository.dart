@@ -86,6 +86,10 @@ class CallerIdSettingsRepositoryRemoteImpl
   }
 
   @override
+  @override
+  bool get isActive => true;
+
+  @override
   Future<void> refresh() => sync();
 
   @override

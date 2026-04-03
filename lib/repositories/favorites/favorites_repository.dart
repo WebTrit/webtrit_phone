@@ -147,6 +147,10 @@ class FavoritesRepositorySyncableImpl implements FavoritesRepository, Refreshabl
   }
 
   @override
+  @override
+  bool get isActive => true;
+
+  @override
   Future<void> refresh() => _maybeSync();
 
   FavoriteSourceType _favoriteSourceTypeFromContact(ContactSourceType sourceType) {

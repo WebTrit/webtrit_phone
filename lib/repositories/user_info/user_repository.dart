@@ -50,6 +50,10 @@ class UserRepository implements Refreshable {
   }
 
   @override
+  @override
+  bool get isActive => true;
+
+  @override
   Future<void> refresh() async {
     try {
       final oldInfo = localDatasource.getInfo();

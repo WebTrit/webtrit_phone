@@ -64,6 +64,10 @@ class ExternalContactsRepository with ExternalContactApiMapper implements Refres
   }
 
   @override
+  @override
+  bool get isActive => true;
+
+  @override
   Future<void> refresh() async {
     return _gatherListContacts();
   }
