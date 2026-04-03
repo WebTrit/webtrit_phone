@@ -154,6 +154,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_HandshakeSignalingEventState>(_onHandshakeSignalingEventState, transformer: sequential());
     on<_CallSignalingEvent>(_onCallSignalingEvent, transformer: sequential());
     on<_CallPushEventIncoming>(_onCallPushEventIncoming, transformer: sequential());
+    on<_RestoreAcceptedIncomingCall>(_onRestoreAcceptedIncomingCall, transformer: sequential());
     on<CallControlEvent>(
       _onCallControlEvent,
       transformer: (events, mapper) => StreamGroup.merge([
@@ -2565,10 +2566,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Get the first call event from the call logs, if any
       final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
+      // Hoisted outside the callEvent block so the restoration detection below can read it.
+      CallkeepConnection? connection;
+
       if (callEvent != null) {
         // Obtain the corresponding Callkeep connection for the line.
         // Callkeep maintains connection states even if the app's lifecycle has ended.
-        final connection = await callkeepConnections.getConnection(callEvent.callId);
+        connection = await callkeepConnections.getConnection(callEvent.callId);
 
         // Check if the Callkeep connection exists and its state is `stateDisconnected`.
         // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
@@ -2604,6 +2608,36 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }
       }
 
+      // WT-1167 Subtask 2: Restore an already-accepted incoming call after Activity recreation.
+      //
+      // Detect: callLogs has both IncomingCallEvent (earliest) and AcceptedEvent (latest),
+      // no Callkeep connection exists (Activity recreation killed it), and the call is not
+      // already in state (fresh BLoC after recreate). Trigger the restoration flow.
+      final callEventLogs = activeLine.callLogs.whereType<CallEventLog>().map((l) => l.callEvent).toList();
+      final earliestCallEvent = callEventLogs.firstOrNull;
+      final latestCallEvent = callEventLogs.lastOrNull;
+
+      final isRestorationCandidate =
+          earliestCallEvent is IncomingCallEvent &&
+          latestCallEvent is AcceptedEvent &&
+          connection == null &&
+          !state.activeCalls.any((c) => c.callId == activeLine.callId);
+
+      if (isRestorationCandidate) {
+        _logger.info(
+          '_handleHandshakeReceived: accepted incoming call without Callkeep connection — '
+          'triggering restoration for callId=${activeLine.callId}',
+        );
+        add(
+          _RestoreAcceptedIncomingCall(
+            line: earliestCallEvent.line,
+            callId: activeLine.callId,
+            incomingCallEvent: earliestCallEvent,
+          ),
+        );
+        continue;
+      }
+
       if (activeLine.callLogs.length == 1) {
         final singleCallLog = activeLine.callLogs.first;
         if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
@@ -2618,6 +2652,135 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (!lines.map((e) => e.callId).contains(connection.callId)) {
         await callkeep.endCall(connection.callId);
       }
+    }
+  }
+
+  /// Restores an already-accepted incoming call after Android Activity recreation.
+  ///
+  /// Triggered by [_handleHandshakeReceived] when the signaling handshake shows a line
+  /// with both [IncomingCallEvent] and [AcceptedEvent] in its callLogs, no existing
+  /// Callkeep connection, and no entry in [state.activeCalls]. This happens when Android
+  /// destroys and recreates the Activity (e.g. a permission change) while a call is active.
+  ///
+  /// Steps:
+  /// 1. Emit an [ActiveCall] in [CallProcessingStatus.incomingRestoringMedia] so the UI
+  ///    appears immediately.
+  /// 2. Re-register the call with Callkeep via [reportNewIncomingCall] + [answerCall] to
+  ///    restore the native connection in the answered state.
+  /// 3. Re-negotiate WebRTC using the original offer SDP from [IncomingCallEvent].
+  /// 4. Send an [AcceptRequest] to signaling with the new local answer — the server
+  ///    re-establishes the media session.
+  /// 5. Transition to [CallProcessingStatus.connected].
+  Future<void> _onRestoreAcceptedIncomingCall(_RestoreAcceptedIncomingCall event, Emitter<CallState> emit) async {
+    _logger.info('_onRestoreAcceptedIncomingCall: restoring callId=${event.callId}');
+
+    final incoming = event.incomingCallEvent;
+    final jsep = JsepValue.fromOptional(incoming.jsep);
+    final video = jsep?.hasVideo ?? false;
+    final handle = CallkeepHandle.number(incoming.caller);
+    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final displayName = contactName ?? incoming.callerDisplayName;
+
+    // Guard: another event may have already created this call while the contact name resolved.
+    if (state.activeCalls.any((c) => c.callId == event.callId)) {
+      _logger.info('_onRestoreAcceptedIncomingCall: callId=${event.callId} already in state, skipping');
+      return;
+    }
+
+    final activeCall = ActiveCall(
+      direction: CallDirection.incoming,
+      line: event.line,
+      callId: event.callId,
+      handle: handle,
+      displayName: displayName,
+      video: video,
+      createdTime: clock.now(),
+      incomingOffer: jsep,
+      processingStatus: CallProcessingStatus.incomingRestoringMedia,
+    );
+    emit(state.copyWithPushActiveCall(activeCall));
+
+    // Re-register with Callkeep so the native connection is in the answered state.
+    final reportError = await callkeep.reportNewIncomingCall(
+      event.callId,
+      handle,
+      displayName: displayName,
+      hasVideo: video,
+    );
+
+    final acceptableReportErrors = {
+      null,
+      CallkeepIncomingCallError.callIdAlreadyExists,
+      CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
+    };
+    if (!acceptableReportErrors.contains(reportError)) {
+      _logger.warning('_onRestoreAcceptedIncomingCall: reportNewIncomingCall returned $reportError — aborting');
+      add(_ResetStateEvent.completeCall(event.callId));
+      return;
+    }
+
+    if (reportError == null || reportError == CallkeepIncomingCallError.callIdAlreadyExists) {
+      final answerError = await callkeep.answerCall(event.callId);
+      if (answerError != null) {
+        _logger.warning('_onRestoreAcceptedIncomingCall: answerCall error: $answerError');
+      }
+    }
+
+    try {
+      if (jsep == null) {
+        throw StateError('_onRestoreAcceptedIncomingCall: no jsep in IncomingCallEvent — cannot restore media');
+      }
+
+      emit(
+        state.copyWithMappedActiveCall(
+          event.callId,
+          (c) => c.copyWith(processingStatus: CallProcessingStatus.incomingInitializingMedia),
+        ),
+      );
+
+      final localStream = await userMediaBuilder.build(video: jsep.hasVideo, frontCamera: activeCall.frontCamera);
+      final peerConnection = await _createPeerConnection(event.callId, event.line);
+      await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
+
+      emit(
+        state.copyWithMappedActiveCall(
+          event.callId,
+          (c) => c.copyWith(localStream: localStream, processingStatus: CallProcessingStatus.incomingAnswering),
+        ),
+      );
+
+      final remoteDescription = jsep.toDescription();
+      sdpSanitizer?.apply(remoteDescription);
+      await peerConnection.setRemoteDescription(remoteDescription);
+
+      final localDescription = await peerConnection.createAnswer({});
+      sdpMunger?.apply(localDescription);
+
+      await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
+
+      await _signalingModule.execute(
+        AcceptRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: event.line,
+          callId: event.callId,
+          jsep: localDescription.toMap(),
+        ),
+      );
+
+      _peerConnectionManager.complete(event.callId, peerConnection);
+
+      emit(
+        state.copyWithMappedActiveCall(
+          event.callId,
+          (c) => c.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: clock.now()),
+        ),
+      );
+
+      _logger.info('_onRestoreAcceptedIncomingCall: restoration complete for callId=${event.callId}');
+    } catch (e, stackTrace) {
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+      add(_ResetStateEvent.completeCall(event.callId));
+      callErrorReporter.handle(e, stackTrace, '_onRestoreAcceptedIncomingCall error:');
     }
   }
 

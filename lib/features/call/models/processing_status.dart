@@ -5,6 +5,7 @@ enum CallProcessingStatus {
   incomingPerformingStarted,
   incomingInitializingMedia,
   incomingAnswering,
+  incomingRestoringMedia,
 
   outgoingCreated,
   outgoingCreatedFromRefer,
