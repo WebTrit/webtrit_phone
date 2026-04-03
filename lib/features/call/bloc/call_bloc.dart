@@ -30,6 +30,8 @@ import '../extensions/extensions.dart';
 import '../models/models.dart';
 import '../services/signaling_module.dart';
 import '../utils/utils.dart';
+import 'handshake_action.dart';
+import 'handshake_processor.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
 
@@ -91,6 +93,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   late final PeerConnectionManager _peerConnectionManager;
   final Map<String, RenegotiationHandler> _renegotiationHandlers = {};
+  late final HandshakeProcessor _handshakeProcessor;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -121,6 +124,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
+    _handshakeProcessor = HandshakeProcessor(callkeepConnections: callkeepConnections);
 
     _signalingSubscription = _signalingModule.events.listen((event) {
       switch (event) {
@@ -2559,104 +2563,57 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
     }
 
-    final lines = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
-    final localConnections = await callkeepConnections.getConnections();
+    final actions = await _handshakeProcessor.process(
+      lines: stateHandshake.lines,
+      guestLine: stateHandshake.guestLine,
+      activeCallIds: state.activeCalls.map((c) => c.callId).toSet(),
+    );
 
-    for (final activeLine in lines) {
-      // Get the first call event from the call logs, if any
-      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+    for (final action in actions) {
+      switch (action) {
+        case HangupSignalingAction():
+          await _signalingModule
+              .execute(
+                HangupRequest(
+                  transaction: WebtritSignalingClient.generateTransactionId(),
+                  line: action.line,
+                  callId: action.callId,
+                ),
+              )
+              ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived hangupRequest error'));
+          return;
 
-      // Hoisted outside the callEvent block so the restoration detection below can read it.
-      CallkeepConnection? connection;
+        case DeclineSignalingAction():
+          await _signalingModule
+              .execute(
+                DeclineRequest(
+                  transaction: WebtritSignalingClient.generateTransactionId(),
+                  line: action.line,
+                  callId: action.callId,
+                ),
+              )
+              ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived declineRequest error'));
+          return;
 
-      if (callEvent != null) {
-        // Obtain the corresponding Callkeep connection for the line.
-        // Callkeep maintains connection states even if the app's lifecycle has ended.
-        connection = await callkeepConnections.getConnection(callEvent.callId);
+        case RestoreCallAction():
+          _logger.info(
+            '_handleHandshakeReceived: accepted incoming call without Callkeep connection — '
+            'triggering restoration for callId=${action.callId}',
+          );
+          add(
+            _RestoreAcceptedIncomingCall(
+              line: action.line,
+              callId: action.callId,
+              incomingCallEvent: action.incomingCallEvent,
+              acceptedTime: action.acceptedTime,
+            ),
+          );
 
-        // Check if the Callkeep connection exists and its state is `stateDisconnected`.
-        // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
-        // Synchronize the signaling state with the local state for such scenarios.
-        if (connection?.state == CallkeepConnectionState.stateDisconnected) {
-          // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
-          // initiate a hang-up request to align the signaling state.
-          if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
-            // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
-            // initiate a hang-up request to align the signaling state.
-            final hangupRequest = HangupRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: callEvent.line,
-              callId: callEvent.callId,
-            );
-            await _signalingModule.execute(hangupRequest)?.catchError((e, s) {
-              callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
-            });
+        case HandleIncomingCallAction():
+          _handleSignalingEvent(action.event);
 
-            return;
-          } else if (callEvent is IncomingCallEvent) {
-            // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
-            final declineRequest = DeclineRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: callEvent.line,
-              callId: callEvent.callId,
-            );
-            await _signalingModule.execute(declineRequest)?.catchError((e, s) {
-              callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
-            });
-            return;
-          }
-        }
-      }
-
-      // WT-1167 Subtask 2: Restore an already-accepted incoming call after Activity recreation.
-      //
-      // Detect: callLogs has both IncomingCallEvent (earliest) and AcceptedEvent (latest),
-      // no Callkeep connection exists (Activity recreation killed it), and the call is not
-      // already in state (fresh BLoC after recreate). Trigger the restoration flow.
-      // callLogs is newest-first: firstOrNull = AcceptedEvent (latest), lastOrNull = IncomingCallEvent (earliest).
-      final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
-      final latestCallLog = callEventLogEntries.firstOrNull;
-      final earliestCallLog = callEventLogEntries.lastOrNull;
-      final latestCallEvent = latestCallLog?.callEvent;
-      final earliestCallEvent = earliestCallLog?.callEvent;
-
-      // Guard: line must be non-null (guest-line calls have line == null and are not restorable).
-      final isRestorationCandidate =
-          earliestCallEvent is IncomingCallEvent &&
-          earliestCallEvent.line != null &&
-          latestCallEvent is AcceptedEvent &&
-          connection == null &&
-          !state.activeCalls.any((c) => c.callId == activeLine.callId);
-
-      if (isRestorationCandidate) {
-        _logger.info(
-          '_handleHandshakeReceived: accepted incoming call without Callkeep connection — '
-          'triggering restoration for callId=${activeLine.callId}',
-        );
-        add(
-          _RestoreAcceptedIncomingCall(
-            line: earliestCallEvent.line!,
-            callId: activeLine.callId,
-            incomingCallEvent: earliestCallEvent,
-            acceptedTime: DateTime.fromMillisecondsSinceEpoch(latestCallLog!.timestamp),
-          ),
-        );
-        continue;
-      }
-
-      if (activeLine.callLogs.length == 1) {
-        final singleCallLog = activeLine.callLogs.first;
-        if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
-          _handleSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
-        }
-      }
-    }
-
-    // Synchronize the signaling state with the local state for calls.
-    // If a local connection exists that is not present in the signaling state, end the call to ensure consistency between the local and signaling states.
-    for (var connection in localConnections) {
-      if (!lines.map((e) => e.callId).contains(connection.callId)) {
-        await callkeep.endCall(connection.callId);
+        case EndLocalCallAction():
+          await callkeep.endCall(action.callId);
       }
     }
   }
