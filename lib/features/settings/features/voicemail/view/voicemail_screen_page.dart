@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -29,6 +31,8 @@ class VoicemailScreenPage extends StatelessWidget {
     final notificationsBloc = context.read<NotificationsBloc>();
 
     final mediaHeaders = MediaHeadersBuilder(secureStorage: secureStorage).build();
+
+    Directory(appPath.mediaCacheBasePath).createSync(recursive: true);
 
     final screenContext = VoicemailScreenContext(
       mediaCacheBasePath: appPath.mediaCacheBasePath,

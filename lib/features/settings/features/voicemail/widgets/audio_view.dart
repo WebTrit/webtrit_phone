@@ -18,11 +18,10 @@ import 'audio_player_interface.dart';
 final _logger = Logger('AudioView');
 
 class AudioView extends StatefulWidget {
-  const AudioView({required this.path, super.key, this.onPlaybackStarted});
+  const AudioView({required this.path, super.key, this.cacheKey, this.onPlaybackStarted});
 
   final String path;
-
-  // Callback triggered when playback starts, useful for marking the audio as seen
+  final String? cacheKey;
   final VoidCallback? onPlaybackStarted;
 
   @override
@@ -164,14 +163,10 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     // Do not provide a custom cacheFile on iOS:
     // just_audio internally handles caching on iOS, and supplying a custom file
     // may lead to PlayerException (-11828) if the file is not yet created or invalid.
-
     if (widget.path.isLocalPath || Platform.isIOS) return null;
 
-    // Safer path construction: use the filename from the URI,
-    // ensuring we don't accidentally create invalid directory structures.
-    final fileName = _uri.pathSegments.lastWhere((element) => element.isNotEmpty, orElse: () => 'audio_temp');
-
-    return File(path.join(_cachePath, fileName));
+    final key = widget.cacheKey ?? _uri.pathSegments.where((s) => s.isNotEmpty).join('_');
+    return File(path.join(_cachePath, key));
   }
 
   Future<void> _handleTogglePlayback() async {
