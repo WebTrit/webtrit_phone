@@ -2634,8 +2634,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// 4. Transition immediately to [CallProcessingStatus.connected] with the original
   ///    [acceptedTime] — the server already has this call in [status=incall], so
   ///    [AcceptRequest] would be rejected (ERROR 447 "Wrong state").
-  /// 5. Complete the PC into [_peerConnectionManager], which triggers [onRenegotiationNeeded]
-  ///    → [_safeRenegotiate] → [UpdateRequest] (re-INVITE) to re-establish the media path.
+  /// 5. Complete the PC into [_peerConnectionManager] and dispatch
+  ///    [_PeerConnectionEventRenegotiationNeeded] explicitly — [onRenegotiationNeeded]
+  ///    fires during initial setup when [RTCPeerConnection.signalingState] is still null
+  ///    and is suppressed by the guard in [_createPeerConnection]; dispatching the event
+  ///    directly ensures [_safeRenegotiate] → [UpdateRequest] (re-INVITE) always runs.
   /// 6. The server responds with [AcceptedEvent] carrying an answer SDP;
   ///    [__onCallSignalingEventAccepted] applies [setRemoteDescription] and ICE negotiation
   ///    resumes, restoring audio/video.
@@ -2718,10 +2721,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
       localStream = null; // ownership transferred to state
 
-      // Completing the PC triggers onRenegotiationNeeded → _safeRenegotiate → UpdateRequest
-      // (re-INVITE), which re-establishes media after Activity recreation.
       _peerConnectionManager.complete(event.callId, peerConnection);
       peerConnection = null; // ownership transferred to manager
+
+      // onRenegotiationNeeded fires during initial PC setup (addTrack) when
+      // signalingState is still null, so its guard skips the event. Dispatch
+      // it explicitly here so _safeRenegotiate sends UpdateRequest (re-INVITE)
+      // to re-establish media with the server that is already in status=incall.
+      add(_PeerConnectionEvent.renegotiationNeeded(event.callId, event.line));
 
       _logger.info('_onRestoreAcceptedIncomingCall: restoration complete for callId=${event.callId}');
     } catch (e, stackTrace) {
