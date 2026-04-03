@@ -2613,12 +2613,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Detect: callLogs has both IncomingCallEvent (earliest) and AcceptedEvent (latest),
       // no Callkeep connection exists (Activity recreation killed it), and the call is not
       // already in state (fresh BLoC after recreate). Trigger the restoration flow.
-      final callEventLogs = activeLine.callLogs.whereType<CallEventLog>().map((l) => l.callEvent).toList();
-      final earliestCallEvent = callEventLogs.firstOrNull;
-      final latestCallEvent = callEventLogs.lastOrNull;
+      final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
+      final earliestCallLog = callEventLogEntries.firstOrNull;
+      final latestCallLog = callEventLogEntries.lastOrNull;
+      final earliestCallEvent = earliestCallLog?.callEvent;
+      final latestCallEvent = latestCallLog?.callEvent;
 
+      // Guard: line must be non-null (guest-line calls have line == null and are not restorable).
       final isRestorationCandidate =
           earliestCallEvent is IncomingCallEvent &&
+          earliestCallEvent.line != null &&
           latestCallEvent is AcceptedEvent &&
           connection == null &&
           !state.activeCalls.any((c) => c.callId == activeLine.callId);
@@ -2630,9 +2634,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         );
         add(
           _RestoreAcceptedIncomingCall(
-            line: earliestCallEvent.line,
+            line: earliestCallEvent.line!,
             callId: activeLine.callId,
             incomingCallEvent: earliestCallEvent,
+            acceptedTime: DateTime.fromMillisecondsSinceEpoch(latestCallLog!.timestamp),
           ),
         );
         continue;
@@ -2726,6 +2731,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
+    MediaStream? localStream;
+    RTCPeerConnection? peerConnection;
+
     try {
       if (jsep == null) {
         throw StateError('_onRestoreAcceptedIncomingCall: no jsep in IncomingCallEvent — cannot restore media');
@@ -2738,9 +2746,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ),
       );
 
-      final localStream = await userMediaBuilder.build(video: jsep.hasVideo, frontCamera: activeCall.frontCamera);
-      final peerConnection = await _createPeerConnection(event.callId, event.line);
-      await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
+      localStream = await userMediaBuilder.build(video: jsep.hasVideo, frontCamera: activeCall.frontCamera);
+      peerConnection = await _createPeerConnection(event.callId, event.line);
+      await Future.forEach(localStream.getTracks(), (t) => peerConnection!.addTrack(t, localStream!));
 
       emit(
         state.copyWithMappedActiveCall(
@@ -2748,6 +2756,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           (c) => c.copyWith(localStream: localStream, processingStatus: CallProcessingStatus.incomingAnswering),
         ),
       );
+      localStream = null; // ownership transferred to state
 
       final remoteDescription = jsep.toDescription();
       sdpSanitizer?.apply(remoteDescription);
@@ -2768,16 +2777,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       _peerConnectionManager.complete(event.callId, peerConnection);
+      peerConnection = null; // ownership transferred to manager
 
       emit(
         state.copyWithMappedActiveCall(
           event.callId,
-          (c) => c.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: clock.now()),
+          (c) => c.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: event.acceptedTime),
         ),
       );
 
       _logger.info('_onRestoreAcceptedIncomingCall: restoration complete for callId=${event.callId}');
     } catch (e, stackTrace) {
+      localStream?.getTracks().forEach((t) => t.stop());
+      await localStream?.dispose();
+      await peerConnection?.dispose();
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
       callErrorReporter.handle(e, stackTrace, '_onRestoreAcceptedIncomingCall error:');
