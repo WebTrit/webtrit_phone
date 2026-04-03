@@ -2939,7 +2939,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // state is updated with the latest stream reference when video is added
         // mid-call (e.g. after a glare-resolution rollback).
         onAddTrack: (stream, track) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
-        onRenegotiationNeeded: (_) => add(_PeerConnectionEvent.renegotiationNeeded(callId, lineId)),
+        onRenegotiationNeeded: (pc) {
+          // Skips initial triggering that happens during peer connection setup
+          if (pc.signalingState != null) add(_PeerConnectionEvent.renegotiationNeeded(callId, lineId));
+        },
       ),
     );
   }
