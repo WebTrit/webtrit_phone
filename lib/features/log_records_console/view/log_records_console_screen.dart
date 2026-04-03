@@ -58,13 +58,24 @@ class LogRecordsConsoleScreen extends StatelessWidget {
         builder: (context, state) {
           switch (state) {
             case LogRecordsConsoleStateSuccess(:final logRecords):
+              if (logRecords.isEmpty) return const SizedBox.shrink();
               return ListView.separated(
                 itemBuilder: (context, index) {
-                  final logRecord = logRecords[index];
-                  return Text(logRecord, maxLines: 100);
+                  if (index == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Text(
+                        context.l10n.logRecordsConsole_Text_recordsCountHint(logRecords.length),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      ),
+                    );
+                  }
+                  return Text(logRecords[index - 1], maxLines: 100);
                 },
-                separatorBuilder: (context, index) => const Divider(),
-                itemCount: state.logRecords.length,
+                separatorBuilder: (context, index) => index == 0 ? const SizedBox.shrink() : const Divider(),
+                itemCount: logRecords.length + 1,
               );
             case LogRecordsConsoleStateFailure():
               return Center(
