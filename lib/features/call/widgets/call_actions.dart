@@ -89,6 +89,9 @@ class _CallActionsState extends State<CallActions> {
 
   late TextEditingController _keypadTextEditingController;
 
+  late MediaQueryData _mediaQueryData;
+  late ThemeData _themeData;
+
   late InputDecorations? _inputDecorations;
   late TextStyle? _textStyle;
 
@@ -126,20 +129,19 @@ class _CallActionsState extends State<CallActions> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _mediaQueryData = MediaQuery.of(context);
+    _themeData = Theme.of(context);
     computeDimensions();
   }
 
   void computeDimensions() {
-    final themeData = Theme.of(context);
+    _inputDecorations = _themeData.extension<InputDecorations>();
+    _textStyle = _themeData.textTheme.displaySmall?.copyWith(color: _themeData.colorScheme.surface);
 
-    _inputDecorations = themeData.extension<InputDecorations>();
-    _textStyle = themeData.textTheme.displaySmall?.copyWith(color: themeData.colorScheme.surface);
+    _iconSize = _themeData.textTheme.headlineLarge?.fontSize;
 
-    _iconSize = themeData.textTheme.headlineLarge?.fontSize;
-
-    final mediaQueryData = MediaQuery.of(context);
-    _isOrientationPortrait = mediaQueryData.orientation == Orientation.portrait;
-    _dimension = min(mediaQueryData.size.width, mediaQueryData.size.height) / 5;
+    _isOrientationPortrait = _mediaQueryData.orientation == Orientation.portrait;
+    _dimension = min(_mediaQueryData.size.width, _mediaQueryData.size.height) / 5;
     if (_isOrientationPortrait) {
       _actionsDelimiterDimension = _dimension / 5;
       if (widget.remoteVideo) {

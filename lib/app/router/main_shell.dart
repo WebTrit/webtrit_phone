@@ -91,13 +91,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     );
     _signalingModule.connect();
 
+    final appBloc = context.read<AppBloc>();
+    final notificationsBloc = context.read<NotificationsBloc>();
+    final sessionExpiredMessage = context.l10n.notifications_errorSnackBar_sessionExpired;
+
     _sessionGuard = RouterLogoutSessionGuard(
       performLogout: () {
-        context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
+        appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
       },
       onPreLogout: () {
-        final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
-        final notificationsBloc = context.read<NotificationsBloc>();
+        final notification = ErrorMessageNotification(sessionExpiredMessage);
         notificationsBloc.add(NotificationsSubmitted(notification));
       },
     );
