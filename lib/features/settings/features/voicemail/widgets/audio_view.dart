@@ -79,6 +79,10 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
       await _setupAudioSession();
       if (!mounted) return;
 
+      if (!widget.path.isLocalPath && !Platform.isIOS) {
+        await Directory(_cachePath).create(recursive: true);
+      }
+
       await _player.setAudioSource(_createAudioSource());
       if (!mounted) return;
 
@@ -165,10 +169,12 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
     // may lead to PlayerException (-11828) if the file is not yet created or invalid.
     if (widget.path.isLocalPath || Platform.isIOS) return null;
 
-    final key = widget.cacheKey ?? _uri.pathSegments.where((s) => s.isNotEmpty).join('_');
-    final file = File(path.join(_cachePath, key));
-    file.parent.createSync(recursive: true);
-    return file;
+    final rawKey = widget.cacheKey ?? _uri.pathSegments.where((s) => s.isNotEmpty).join('_');
+    if (rawKey.isEmpty) return null;
+
+    // Prevent path traversal from server-provided cacheKey values.
+    final key = rawKey.replaceAll(RegExp(r'[/\\]'), '_');
+    return File(path.join(_cachePath, key));
   }
 
   Future<void> _handleTogglePlayback() async {
