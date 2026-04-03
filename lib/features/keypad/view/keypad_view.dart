@@ -137,7 +137,7 @@ class KeypadViewState extends State<KeypadView> {
   }
 
   String _popNumber() {
-    final number = _controller.text;
+    final number = PhoneNormalizingFormatter.sanitize(_controller.text);
     _controller.clear();
     return number;
   }
