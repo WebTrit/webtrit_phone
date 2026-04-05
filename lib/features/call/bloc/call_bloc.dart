@@ -29,7 +29,6 @@ import 'package:webtrit_phone/utils/utils.dart';
 import '../extensions/extensions.dart';
 import '../models/models.dart';
 import '../services/signaling_module.dart';
-import '../utils/handshake_processor.dart';
 import '../utils/utils.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;

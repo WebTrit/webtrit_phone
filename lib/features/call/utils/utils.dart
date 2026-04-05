@@ -1,4 +1,5 @@
 export 'audio_constraints_builder.dart';
+export 'handshake_processor.dart';
 export 'pc_exceptions.dart';
 export 'call_error_reporter.dart';
 export 'compact_auto_reset_controller.dart';
