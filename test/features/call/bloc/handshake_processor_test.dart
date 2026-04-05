@@ -3,8 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'package:webtrit_phone/features/call/bloc/handshake_action.dart';
-import 'package:webtrit_phone/features/call/bloc/handshake_processor.dart';
+import 'package:webtrit_phone/features/call/utils/handshake_processor.dart';
 
 // ---------------------------------------------------------------------------
 // Mocks
