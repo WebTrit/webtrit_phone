@@ -1101,3 +1101,22 @@ class _CallConfigEventUpdated extends CallConfigEvent {
   @override
   List<Object?> get props => [monitorCheckInterval];
 }
+
+// call restoration events
+
+class _RestoreAcceptedIncomingCall extends CallEvent {
+  const _RestoreAcceptedIncomingCall({
+    required this.line,
+    required this.callId,
+    required this.incomingCallEvent,
+    required this.acceptedTime,
+  });
+
+  final int line;
+  final String callId;
+  final IncomingCallEvent incomingCallEvent;
+  final DateTime acceptedTime;
+
+  @override
+  List<Object?> get props => [line, callId, incomingCallEvent, acceptedTime];
+}

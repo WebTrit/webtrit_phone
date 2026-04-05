@@ -4,6 +4,7 @@ enum CallProcessingStatus {
   incomingSubmittedAnswer,
   incomingPerformingStarted,
   incomingInitializingMedia,
+  incomingRestoringMedia,
   incomingAnswering,
 
   outgoingCreated,

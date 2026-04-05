@@ -30,6 +30,8 @@ import '../extensions/extensions.dart';
 import '../models/models.dart';
 import '../services/signaling_module.dart';
 import '../utils/utils.dart';
+import 'handshake_action.dart';
+import 'handshake_processor.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
 
@@ -91,6 +93,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   late final PeerConnectionManager _peerConnectionManager;
   final Map<String, RenegotiationHandler> _renegotiationHandlers = {};
+  late final HandshakeProcessor _handshakeProcessor;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -121,6 +124,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
+    _handshakeProcessor = HandshakeProcessor(callkeepConnections: callkeepConnections);
 
     _signalingSubscription = _signalingModule.events.listen((event) {
       switch (event) {
@@ -154,6 +158,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_HandshakeSignalingEventState>(_onHandshakeSignalingEventState, transformer: sequential());
     on<_CallSignalingEvent>(_onCallSignalingEvent, transformer: sequential());
     on<_CallPushEventIncoming>(_onCallPushEventIncoming, transformer: sequential());
+    on<_RestoreAcceptedIncomingCall>(_onRestoreAcceptedIncomingCall, transformer: sequential());
     on<CallControlEvent>(
       _onCallControlEvent,
       transformer: (events, mapper) => StreamGroup.merge([
@@ -2558,66 +2563,168 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
     }
 
-    final lines = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
-    final localConnections = await callkeepConnections.getConnections();
+    final actions = await _handshakeProcessor.process(
+      lines: stateHandshake.lines,
+      guestLine: stateHandshake.guestLine,
+      activeCallIds: state.activeCalls.map((c) => c.callId).toSet(),
+    );
 
-    for (final activeLine in lines) {
-      // Get the first call event from the call logs, if any
-      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+    for (final action in actions) {
+      switch (action) {
+        case HangupSignalingAction():
+          await _signalingModule
+              .execute(
+                HangupRequest(
+                  transaction: WebtritSignalingClient.generateTransactionId(),
+                  line: action.line,
+                  callId: action.callId,
+                ),
+              )
+              ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived hangupRequest error'));
+          return;
 
-      if (callEvent != null) {
-        // Obtain the corresponding Callkeep connection for the line.
-        // Callkeep maintains connection states even if the app's lifecycle has ended.
-        final connection = await callkeepConnections.getConnection(callEvent.callId);
+        case DeclineSignalingAction():
+          await _signalingModule
+              .execute(
+                DeclineRequest(
+                  transaction: WebtritSignalingClient.generateTransactionId(),
+                  line: action.line,
+                  callId: action.callId,
+                ),
+              )
+              ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived declineRequest error'));
+          return;
 
-        // Check if the Callkeep connection exists and its state is `stateDisconnected`.
-        // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
-        // Synchronize the signaling state with the local state for such scenarios.
-        if (connection?.state == CallkeepConnectionState.stateDisconnected) {
-          // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
-          // initiate a hang-up request to align the signaling state.
-          if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
-            // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
-            // initiate a hang-up request to align the signaling state.
-            final hangupRequest = HangupRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: callEvent.line,
-              callId: callEvent.callId,
-            );
-            await _signalingModule.execute(hangupRequest)?.catchError((e, s) {
-              callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
-            });
+        case RestoreCallAction():
+          add(
+            _RestoreAcceptedIncomingCall(
+              line: action.line,
+              callId: action.callId,
+              incomingCallEvent: action.incomingCallEvent,
+              acceptedTime: action.acceptedTime,
+            ),
+          );
 
-            return;
-          } else if (callEvent is IncomingCallEvent) {
-            // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
-            final declineRequest = DeclineRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: callEvent.line,
-              callId: callEvent.callId,
-            );
-            await _signalingModule.execute(declineRequest)?.catchError((e, s) {
-              callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
-            });
-            return;
-          }
-        }
-      }
+        case HandleIncomingCallAction():
+          _handleSignalingEvent(action.event);
 
-      if (activeLine.callLogs.length == 1) {
-        final singleCallLog = activeLine.callLogs.first;
-        if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
-          _handleSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
-        }
+        case EndLocalCallAction():
+          await callkeep.endCall(action.callId);
       }
     }
+  }
 
-    // Synchronize the signaling state with the local state for calls.
-    // If a local connection exists that is not present in the signaling state, end the call to ensure consistency between the local and signaling states.
-    for (var connection in localConnections) {
-      if (!lines.map((e) => e.callId).contains(connection.callId)) {
-        await callkeep.endCall(connection.callId);
-      }
+  /// Restores an already-accepted incoming call after Android Activity recreation.
+  ///
+  /// Triggered by [_handleHandshakeReceived] when the signaling handshake shows a line
+  /// with both [IncomingCallEvent] and [AcceptedEvent] in its callLogs, no existing
+  /// Callkeep connection, and no entry in [state.activeCalls]. This happens when Android
+  /// destroys and recreates the Activity (e.g. a permission change) while a call is active.
+  ///
+  /// Steps:
+  /// 1. Emit an [ActiveCall] in [CallProcessingStatus.incomingRestoringMedia] so the UI
+  ///    appears immediately.
+  /// 2. Re-register the call with Callkeep via [reportNewIncomingCall] + [answerCall] to
+  ///    restore the native connection in the answered state.
+  /// 3. Acquire user media, create a new [RTCPeerConnection], and add local tracks.
+  /// 4. Transition immediately to [CallProcessingStatus.connected] with the original
+  ///    [acceptedTime] — the server already has this call in [status=incall], so
+  ///    [AcceptRequest] would be rejected (ERROR 447 "Wrong state").
+  /// 5. Complete the PC into [_peerConnectionManager] and dispatch
+  ///    [_PeerConnectionEventRenegotiationNeeded] explicitly — [onRenegotiationNeeded]
+  ///    fires during initial setup when [RTCPeerConnection.signalingState] is still null
+  ///    and is suppressed by the guard in [_createPeerConnection]; dispatching the event
+  ///    directly handles the case where [_safeRenegotiate] → [UpdateRequest] (re-INVITE) needs to run.
+  /// 6. The server responds with [AcceptedEvent] carrying an answer SDP;
+  ///    [__onCallSignalingEventAccepted] applies [setRemoteDescription] and ICE negotiation
+  ///    resumes, restoring audio/video.
+  Future<void> _onRestoreAcceptedIncomingCall(_RestoreAcceptedIncomingCall event, Emitter<CallState> emit) async {
+    final incoming = event.incomingCallEvent;
+    final jsep = JsepValue.fromOptional(incoming.jsep);
+    final video = jsep?.hasVideo ?? false;
+    final handle = CallkeepHandle.number(incoming.caller);
+    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final displayName = contactName ?? incoming.callerDisplayName;
+
+    // Guard: another event may have already created this call while the contact name resolved.
+    if (state.activeCalls.any((c) => c.callId == event.callId)) {
+      return;
+    }
+
+    final activeCall = ActiveCall(
+      direction: CallDirection.incoming,
+      line: event.line,
+      callId: event.callId,
+      handle: handle,
+      displayName: displayName,
+      video: video,
+      createdTime: clock.now(),
+      incomingOffer: jsep,
+      processingStatus: CallProcessingStatus.incomingRestoringMedia,
+    );
+    emit(state.copyWithPushActiveCall(activeCall));
+
+    // Re-register with Callkeep so the native connection is in the answered state.
+    final reportError = await callkeep.reportNewIncomingCall(
+      event.callId,
+      handle,
+      displayName: displayName,
+      hasVideo: video,
+    );
+
+    final acceptableReportErrors = {
+      null,
+      CallkeepIncomingCallError.callIdAlreadyExists,
+      CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
+    };
+    if (!acceptableReportErrors.contains(reportError)) {
+      add(_ResetStateEvent.completeCall(event.callId));
+      return;
+    }
+
+    if (reportError == null || reportError == CallkeepIncomingCallError.callIdAlreadyExists) {
+      await callkeep.answerCall(event.callId);
+    }
+
+    MediaStream? localStream;
+    RTCPeerConnection? peerConnection;
+
+    try {
+      localStream = await userMediaBuilder.build(video: video, frontCamera: activeCall.frontCamera);
+      peerConnection = await _createPeerConnection(event.callId, event.line);
+      await Future.forEach(localStream.getTracks(), (t) => peerConnection!.addTrack(t, localStream!));
+
+      // The server already has this call in status=incall, so AcceptRequest would be rejected
+      // (ERROR 447 "Wrong state"). Mark the call as connected with the original acceptedTime so
+      // that when the server responds to the UpdateRequest below, __onCallSignalingEventAccepted
+      // treats it as an update (acceptedTime != null) and applies setRemoteDescription correctly.
+      emit(
+        state.copyWithMappedActiveCall(
+          event.callId,
+          (c) => c.copyWith(
+            localStream: localStream,
+            processingStatus: CallProcessingStatus.connected,
+            acceptedTime: event.acceptedTime,
+          ),
+        ),
+      );
+      localStream = null; // ownership transferred to state
+
+      _peerConnectionManager.complete(event.callId, peerConnection);
+      peerConnection = null; // ownership transferred to manager
+
+      // onRenegotiationNeeded fires during initial PC setup (addTrack) when
+      // signalingState is still null, so its guard skips the event. Dispatch
+      // it explicitly here so _safeRenegotiate sends UpdateRequest (re-INVITE)
+      // to re-establish media with the server that is already in status=incall.
+      add(_PeerConnectionEvent.renegotiationNeeded(event.callId, event.line));
+    } catch (e, stackTrace) {
+      localStream?.getTracks().forEach((t) => t.stop());
+      await localStream?.dispose();
+      await peerConnection?.dispose();
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+      add(_ResetStateEvent.completeCall(event.callId));
+      callErrorReporter.handle(e, stackTrace, '_onRestoreAcceptedIncomingCall error:');
     }
   }
 
