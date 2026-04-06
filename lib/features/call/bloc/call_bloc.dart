@@ -1822,6 +1822,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    // Guard: skip standard outgoing flow for calls restored via _onRestoreAcceptedCall.
+    // Telecom fires performStartCall after startCall() regardless, but the call is already
+    // set up — only reportConnectedOutgoingCall is needed to advance Telecom to ACTIVE state.
+    final restoredCall = state.retrieveActiveCall(event.callId);
+    final canPerformStart = switch (restoredCall?.processingStatus) {
+      CallProcessingStatus.outgoingCreated => true,
+      CallProcessingStatus.outgoingCreatedFromRefer => true,
+      CallProcessingStatus.outgoingConnectingToSignaling => true,
+      _ => false,
+    };
+    if (!canPerformStart) {
+      _logger.info('__onCallPerformEventStarted: skipping due stale status: ${restoredCall?.processingStatus}');
+      await callkeep.reportConnectedOutgoingCall(event.callId);
+      event.fulfill();
+      return;
+    }
+
     ///
     /// Ensuring that the signaling client is connected before attempting to make an outgoing call
     ///
@@ -2689,6 +2706,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (answerError != null) {
           _logger.warning('_onRestoreAcceptedCall: answerCall error: $answerError');
         }
+      }
+    } else {
+      final startCallError = await callkeep.startCall(
+        event.callId,
+        handle,
+        displayNameOrContactIdentifier: displayName,
+        hasVideo: video,
+        proximityEnabled: !video,
+      );
+      if (startCallError != null) {
+        _logger.warning('_onRestoreAcceptedCall: startCall error: $startCallError');
       }
     }
 
