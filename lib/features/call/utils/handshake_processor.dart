@@ -29,23 +29,26 @@ final class DeclineSignalingAction extends HandshakeAction {
   final String callId;
 }
 
-/// Re-negotiate WebRTC media for an already-accepted incoming call.
+/// Re-negotiate WebRTC media for an already-accepted call after app restart.
 ///
-/// Emitted when the handshake contains both [IncomingCallEvent] (oldest) and [AcceptedEvent]
-/// (newest) for a line, the Callkeep connection is absent, and the call is not already in
-/// the BLoC state. This covers the case of Android Activity recreation during an active call.
+/// Emitted when the latest call log entry is [AcceptedEvent], the Callkeep connection
+/// is absent, and the call is not already in the BLoC state.
+/// - [incomingCallEvent] is non-null for incoming calls (provides offer SDP and caller).
+/// - [incomingCallEvent] is null for outgoing calls (callee is taken from [acceptedEvent]).
 final class RestoreCallAction extends HandshakeAction {
   const RestoreCallAction({
     required this.line,
     required this.callId,
-    required this.incomingCallEvent,
+    required this.acceptedEvent,
     required this.acceptedTime,
+    this.incomingCallEvent,
   });
 
   final int line;
   final String callId;
-  final IncomingCallEvent incomingCallEvent;
+  final AcceptedEvent acceptedEvent;
   final DateTime acceptedTime;
+  final IncomingCallEvent? incomingCallEvent;
 }
 
 /// Deliver an unanswered [IncomingCallEvent] to the BLoC signaling handler.
@@ -80,8 +83,8 @@ final class EndLocalCallAction extends HandshakeAction {
 ///   the latest event is [AcceptedEvent]/[ProceedingEvent] -> [HangupSignalingAction].
 /// - If the Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
 ///   the latest event is [IncomingCallEvent] -> [DeclineSignalingAction].
-/// - If the call was accepted ([AcceptedEvent] newest, [IncomingCallEvent] oldest)
-///   with no local connection -> [RestoreCallAction].
+/// - If the latest event is [AcceptedEvent] with no local connection -> [RestoreCallAction]
+///   (covers both incoming and outgoing calls).
 /// - If only a single unanswered [IncomingCallEvent] is present -> [HandleIncomingCallAction].
 ///
 /// **Loop C -orphaned local connections:**
@@ -127,17 +130,17 @@ class HandshakeProcessor {
       final latestCallEvent = latestCallLog?.callEvent;
       final earliestCallEvent = earliestCallLog?.callEvent;
 
-      if (earliestCallEvent is IncomingCallEvent &&
-          earliestCallEvent.line != null &&
-          latestCallEvent is AcceptedEvent &&
+      if (latestCallEvent is AcceptedEvent &&
+          latestCallEvent.line != null &&
           connection == null &&
           !activeCallIds.contains(activeLine.callId)) {
         actions.add(
           RestoreCallAction(
-            line: earliestCallEvent.line!,
+            line: latestCallEvent.line!,
             callId: activeLine.callId,
-            incomingCallEvent: earliestCallEvent,
+            acceptedEvent: latestCallEvent,
             acceptedTime: DateTime.fromMillisecondsSinceEpoch(latestCallLog!.timestamp),
+            incomingCallEvent: earliestCallEvent is IncomingCallEvent ? earliestCallEvent : null,
           ),
         );
         continue;

@@ -3,8 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'package:webtrit_phone/features/call/bloc/handshake_action.dart';
-import 'package:webtrit_phone/features/call/bloc/handshake_processor.dart';
+import 'package:webtrit_phone/features/call/utils/handshake_processor.dart';
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -54,7 +53,6 @@ void main() {
     mockConnections = MockCallkeepConnections();
     processor = HandshakeProcessor(callkeepConnections: mockConnections);
 
-    // Default: no local connections, no connection for any callId.
     when(() => mockConnections.getConnections()).thenAnswer((_) async => []);
     when(() => mockConnections.getConnection(any())).thenAnswer((_) async => null);
   });
@@ -93,19 +91,19 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // Restoration: AcceptedEvent (newest) + IncomingCallEvent (oldest)
+  // Restoration: incoming call (AcceptedEvent newest + IncomingCallEvent oldest)
   // -------------------------------------------------------------------------
 
-  group('restoration candidate', () {
-    Line _makeRestorationLine() => _makeLine(
+  group('incoming call restoration', () {
+    Line _makeIncomingRestorationLine() => _makeLine(
       callLogs: [
         CallEventLog(timestamp: 2000, callEvent: _makeAcceptedEvent()),
         CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
       ],
     );
 
-    test('returns RestoreCallAction when connection is null and call not in state', () async {
-      final line = _makeRestorationLine();
+    test('returns RestoreCallAction with incomingCallEvent set', () async {
+      final line = _makeIncomingRestorationLine();
       final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
       expect(actions, hasLength(1));
@@ -114,6 +112,8 @@ void main() {
       expect(a.callId, _kCallId);
       expect(a.line, _kLine);
       expect(a.acceptedTime, DateTime.fromMillisecondsSinceEpoch(2000));
+      expect(a.incomingCallEvent, isNotNull);
+      expect(a.incomingCallEvent!.callId, _kCallId);
     });
 
     test('uses AcceptedEvent timestamp (newest) as acceptedTime', () async {
@@ -131,76 +131,99 @@ void main() {
     });
 
     test('skips restoration when callId already in activeCallIds', () async {
-      final line = _makeRestorationLine();
+      final line = _makeIncomingRestorationLine();
       final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {_kCallId});
 
       expect(actions, isEmpty);
     });
 
-    test(
-      'returns RestoreCallAction when Callkeep connection survived (stateActive) but call not in BLoC state',
-      () async {
-        when(
-          () => mockConnections.getConnection(_kCallId),
-        ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateActive));
+    test('does NOT restore when Callkeep connection is stateActive', () async {
+      when(
+        () => mockConnections.getConnection(_kCallId),
+      ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateActive));
 
-        final line = _makeRestorationLine();
-        final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+      final line = _makeIncomingRestorationLine();
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
-        expect(actions, hasLength(1));
-        expect(actions.first, isA<RestoreCallAction>());
-      },
-    );
+      expect(actions.whereType<RestoreCallAction>(), isEmpty);
+    });
 
-    test(
-      'skips restoration when Callkeep connection is stateDisconnected (handled by HangupSignalingAction above)',
-      () async {
-        when(
-          () => mockConnections.getConnection(_kCallId),
-        ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
+    test('skips restoration when Callkeep connection is stateDisconnected', () async {
+      when(
+        () => mockConnections.getConnection(_kCallId),
+      ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
 
-        // stateDisconnected with AcceptedEvent → early exit with HangupSignalingAction, not RestoreCallAction
-        final line = _makeRestorationLine();
-        final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+      final line = _makeIncomingRestorationLine();
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
-        expect(actions.whereType<RestoreCallAction>(), isEmpty);
-      },
-    );
+      expect(actions.whereType<RestoreCallAction>(), isEmpty);
+    });
 
-    test('skips restoration when IncomingCallEvent.line is null (guest-line call)', () async {
-      // IncomingCallEvent with line == null — not restorable.
-      final incomingWithNullLine = IncomingCallEvent(line: null, callId: _kCallId, callee: 'callee', caller: '1234');
-      final lineWithNullLine = _makeLine(
+    test('skips restoration when AcceptedEvent.line is null', () async {
+      final line = _makeLine(
         callLogs: [
-          CallEventLog(timestamp: 2000, callEvent: _makeAcceptedEvent()),
-          CallEventLog(timestamp: 1000, callEvent: incomingWithNullLine),
+          CallEventLog(timestamp: 2000, callEvent: _makeAcceptedEvent(line: null)),
+          CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
         ],
       );
 
-      final actions = await processor.process(lines: [lineWithNullLine], guestLine: null, activeCallIds: {});
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
-      expect(actions, isEmpty);
+      expect(actions.whereType<RestoreCallAction>(), isEmpty);
     });
 
-    test('this specific order (newest=AcceptedEvent, oldest=IncomingCallEvent) is required', () async {
-      // Swapped order: oldest=AcceptedEvent, newest=IncomingCallEvent — must NOT trigger restore.
+    test('swapped order (newest=IncomingCallEvent) does not trigger restore', () async {
       final lineSwapped = _makeLine(
         callLogs: [
-          CallEventLog(timestamp: 2000, callEvent: _makeIncomingEvent()), // newest = IncomingCallEvent
-          CallEventLog(timestamp: 1000, callEvent: _makeAcceptedEvent()), // oldest = AcceptedEvent
+          CallEventLog(timestamp: 2000, callEvent: _makeIncomingEvent()),
+          CallEventLog(timestamp: 1000, callEvent: _makeAcceptedEvent()),
         ],
       );
 
       final actions = await processor.process(lines: [lineSwapped], guestLine: null, activeCallIds: {});
 
-      // Should produce HandleIncomingCallAction only if single log, otherwise nothing.
-      // With 2 logs none of the conditions match.
       expect(actions.whereType<RestoreCallAction>(), isEmpty);
     });
   });
 
   // -------------------------------------------------------------------------
-  // stateDisconnected connection — HangupSignalingAction
+  // Restoration: outgoing call (single AcceptedEvent)
+  // -------------------------------------------------------------------------
+
+  group('outgoing call restoration', () {
+    test('returns RestoreCallAction with incomingCallEvent null', () async {
+      final line = _makeLine(callLogs: [CallEventLog(timestamp: 5000, callEvent: _makeAcceptedEvent())]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions, hasLength(1));
+      expect(actions.first, isA<RestoreCallAction>());
+      final a = actions.first as RestoreCallAction;
+      expect(a.callId, _kCallId);
+      expect(a.line, _kLine);
+      expect(a.acceptedTime, DateTime.fromMillisecondsSinceEpoch(5000));
+      expect(a.incomingCallEvent, isNull);
+    });
+
+    test('skips restoration when callId already in activeCallIds', () async {
+      final line = _makeLine(callLogs: [CallEventLog(timestamp: 5000, callEvent: _makeAcceptedEvent())]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {_kCallId});
+
+      expect(actions, isEmpty);
+    });
+
+    test('skips restoration when AcceptedEvent.line is null', () async {
+      final line = _makeLine(callLogs: [CallEventLog(timestamp: 5000, callEvent: _makeAcceptedEvent(line: null))]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions.whereType<RestoreCallAction>(), isEmpty);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // stateDisconnected connection - HangupSignalingAction
   // -------------------------------------------------------------------------
 
   group('stateDisconnected with AcceptedEvent', () {
@@ -249,7 +272,7 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // stateDisconnected connection — DeclineSignalingAction
+  // stateDisconnected connection - DeclineSignalingAction
   // -------------------------------------------------------------------------
 
   group('stateDisconnected with IncomingCallEvent', () {
@@ -270,7 +293,7 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // Orphaned local connections — EndLocalCallAction
+  // Orphaned local connections - EndLocalCallAction
   // -------------------------------------------------------------------------
 
   group('local connection not in handshake', () {

@@ -156,7 +156,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_HandshakeSignalingEventState>(_onHandshakeSignalingEventState, transformer: sequential());
     on<_CallSignalingEvent>(_onCallSignalingEvent, transformer: sequential());
     on<_CallPushEventIncoming>(_onCallPushEventIncoming, transformer: sequential());
-    on<_RestoreAcceptedIncomingCall>(_onRestoreAcceptedIncomingCall, transformer: sequential());
+    on<_RestoreAcceptedCall>(_onRestoreAcceptedCall, transformer: sequential());
     on<CallControlEvent>(
       _onCallControlEvent,
       transformer: (events, mapper) => StreamGroup.merge([
@@ -2599,16 +2599,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return;
 
         case RestoreCallAction():
-          _logger.info(
-            '_handleHandshakeReceived: accepted incoming call without Callkeep connection — '
-            'triggering restoration for callId=${action.callId}',
-          );
           add(
-            _RestoreAcceptedIncomingCall(
+            _RestoreAcceptedCall(
               line: action.line,
               callId: action.callId,
-              incomingCallEvent: action.incomingCallEvent,
+              acceptedEvent: action.acceptedEvent,
               acceptedTime: action.acceptedTime,
+              incomingCallEvent: action.incomingCallEvent,
             ),
           );
 
@@ -2621,28 +2618,49 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  Future<void> _onRestoreAcceptedIncomingCall(_RestoreAcceptedIncomingCall event, Emitter<CallState> emit) async {
-    final incoming = event.incomingCallEvent;
-    final jsep = JsepValue.fromOptional(incoming.jsep);
-    final video = jsep?.hasVideo ?? false;
-    final handle = CallkeepHandle.number(incoming.caller);
+  Future<void> _onRestoreAcceptedCall(_RestoreAcceptedCall event, Emitter<CallState> emit) async {
+    final CallkeepHandle handle;
+    final String? callerDisplayName;
+    final bool video;
+    final JsepValue? incomingOffer;
+    final CallDirection direction;
+
+    if (event.incomingCallEvent != null) {
+      final incoming = event.incomingCallEvent!;
+      final jsep = JsepValue.fromOptional(incoming.jsep);
+      handle = CallkeepHandle.number(incoming.caller);
+      callerDisplayName = incoming.callerDisplayName;
+      video = jsep?.hasVideo ?? false;
+      incomingOffer = jsep;
+      direction = CallDirection.incoming;
+    } else {
+      final callee = event.acceptedEvent.callee ?? '';
+      final number = callee.replaceFirst(RegExp(r'^sips?:'), '').split('@').first;
+      final jsep = JsepValue.fromOptional(event.acceptedEvent.jsep);
+      handle = CallkeepHandle.number(number);
+      callerDisplayName = null;
+      video = jsep?.hasVideo ?? false;
+      incomingOffer = null;
+      direction = CallDirection.outgoing;
+    }
+
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
-    final displayName = contactName ?? incoming.callerDisplayName;
+    final displayName = contactName ?? callerDisplayName;
 
     if (state.activeCalls.any((c) => c.callId == event.callId)) {
-      _logger.warning('_onRestoreAcceptedIncomingCall: callId=${event.callId} already active, skipping');
+      _logger.warning('_onRestoreAcceptedCall: callId=${event.callId} already active, skipping');
       return;
     }
 
     final activeCall = ActiveCall(
-      direction: CallDirection.incoming,
+      direction: direction,
       line: event.line,
       callId: event.callId,
       handle: handle,
       displayName: displayName,
       video: video,
       createdTime: clock.now(),
-      incomingOffer: jsep,
+      incomingOffer: incomingOffer,
       processingStatus: CallProcessingStatus.incomingRestoringMedia,
     );
     emit(state.copyWithPushActiveCall(activeCall));
@@ -2660,7 +2678,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
     };
     if (!acceptableReportErrors.contains(reportError)) {
-      _logger.warning('_onRestoreAcceptedIncomingCall: reportNewIncomingCall returned $reportError — aborting');
+      _logger.warning('_onRestoreAcceptedCall: reportNewIncomingCall returned $reportError, aborting');
       add(_ResetStateEvent.completeCall(event.callId));
       return;
     }
@@ -2668,7 +2686,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (reportError == null || reportError == CallkeepIncomingCallError.callIdAlreadyExists) {
       final answerError = await callkeep.answerCall(event.callId);
       if (answerError != null) {
-        _logger.warning('_onRestoreAcceptedIncomingCall: answerCall error: $answerError');
+        _logger.warning('_onRestoreAcceptedCall: answerCall error: $answerError');
       }
     }
 
@@ -2702,7 +2720,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await peerConnection?.dispose();
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
-      callErrorReporter.handle(e, stackTrace, '_onRestoreAcceptedIncomingCall error:');
+      callErrorReporter.handle(e, stackTrace, '_onRestoreAcceptedCall error:');
     }
   }
 
