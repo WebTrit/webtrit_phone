@@ -51,7 +51,7 @@ final class RestoreCallAction extends HandshakeAction {
 /// Deliver an unanswered [IncomingCallEvent] to the BLoC signaling handler.
 ///
 /// Emitted when the line's [callLogs] contains a single [CallEventLog] carrying
-/// an [IncomingCallEvent] — the call has not been answered yet.
+/// an [IncomingCallEvent] -the call has not been answered yet.
 final class HandleIncomingCallAction extends HandshakeAction {
   const HandleIncomingCallAction({required this.event});
 
@@ -75,21 +75,21 @@ final class EndLocalCallAction extends HandshakeAction {
 ///
 /// The processor handles two loops from the original [CallBloc._handleHandshakeReceived]:
 ///
-/// **Loop B — per-line decisions:**
+/// **Loop B -per-line decisions:**
 /// - If the Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
-///   the latest event is [AcceptedEvent]/[ProceedingEvent] → [HangupSignalingAction].
+///   the latest event is [AcceptedEvent]/[ProceedingEvent] -> [HangupSignalingAction].
 /// - If the Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
-///   the latest event is [IncomingCallEvent] → [DeclineSignalingAction].
+///   the latest event is [IncomingCallEvent] -> [DeclineSignalingAction].
 /// - If the call was accepted ([AcceptedEvent] newest, [IncomingCallEvent] oldest)
-///   with no local connection → [RestoreCallAction].
-/// - If only a single unanswered [IncomingCallEvent] is present → [HandleIncomingCallAction].
+///   with no local connection -> [RestoreCallAction].
+/// - If only a single unanswered [IncomingCallEvent] is present -> [HandleIncomingCallAction].
 ///
-/// **Loop C — orphaned local connections:**
+/// **Loop C -orphaned local connections:**
 /// - For each local Callkeep connection whose call ID is absent from the handshake
-///   lines → [EndLocalCallAction].
+///   lines -> [EndLocalCallAction].
 ///
 /// [HangupSignalingAction] and [DeclineSignalingAction] are always returned as the
-/// sole action — the processor exits early to match the original `return` semantics.
+/// sole action -the processor exits early to match the original `return` semantics.
 class HandshakeProcessor {
   HandshakeProcessor({required this.callkeepConnections});
 
@@ -126,8 +126,8 @@ class HandshakeProcessor {
       // Restore an accepted incoming call after Activity recreation.
       //
       // callLogs is newest-first:
-      //   firstOrNull → AcceptedEvent  (latest)
-      //   lastOrNull  → IncomingCallEvent (earliest / original offer)
+      //   firstOrNull -> AcceptedEvent  (latest)
+      //   lastOrNull  -> IncomingCallEvent (earliest / original offer)
       final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
       final latestCallLog = callEventLogEntries.firstOrNull;
       final earliestCallLog = callEventLogEntries.lastOrNull;
