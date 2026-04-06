@@ -12,7 +12,7 @@ import 'package:webtrit_phone/features/call/services/signaling_reconnect_control
 // Fake SignalingModule
 // ---------------------------------------------------------------------------
 
-class _FakeSignalingModule implements SignalingModule {
+class _FakeSignalingModule implements SignalingReconnectable {
   final _controller = StreamController<SignalingModuleEvent>.broadcast(sync: true);
 
   int connectCalls = 0;
@@ -32,10 +32,6 @@ class _FakeSignalingModule implements SignalingModule {
   @override
   Future<void> disconnect() async => disconnectCalls++;
 
-  @override
-  Future<void>? execute(request) => null;
-
-  @override
   Future<void> dispose() async => _controller.close();
 }
 

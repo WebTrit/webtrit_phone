@@ -46,7 +46,7 @@ final _logger = Logger('SignalingReconnectController');
 /// ```
 class SignalingReconnectController {
   SignalingReconnectController({
-    required SignalingModule signalingModule,
+    required SignalingReconnectable signalingModule,
     void Function()? onConnectionFailed,
     int notifyAfterConsecutiveFailures = 2,
     bool reconnectEnabled = true,
@@ -58,7 +58,7 @@ class SignalingReconnectController {
     _subscription = _module.events.listen(_onEvent);
   }
 
-  final SignalingModule _module;
+  final SignalingReconnectable _module;
   final void Function()? _onConnectionFailed;
   final int _notifyThreshold;
   final bool _reconnectEnabled;

@@ -95,6 +95,28 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 // Interface
 // ---------------------------------------------------------------------------
 
+/// Minimal interface required by [SignalingReconnectController].
+///
+/// Exposes only the subset of [SignalingModule] that the reconnect controller
+/// needs: the event stream, connection state, and connect/disconnect commands.
+/// Keeping this narrow lets the controller be tested and reused without
+/// pulling in the full module contract.
+abstract class SignalingReconnectable {
+  /// Broadcast stream of lifecycle events ([SignalingConnected],
+  /// [SignalingConnectionFailed], [SignalingConnectionLost],
+  /// [SignalingDisconnected], etc.).
+  Stream<SignalingModuleEvent> get events;
+
+  /// Whether the signaling client is currently connected.
+  bool get isConnected;
+
+  /// Initiates a connection. Fire-and-forget — result arrives via [events].
+  void connect();
+
+  /// Disconnects the current client gracefully.
+  Future<void> disconnect();
+}
+
 /// Contract for a signaling module used by [IsolateManager] and other consumers.
 ///
 /// Abstracts the concrete [SignalingModuleIsolateImpl] so that the integration
@@ -102,19 +124,21 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 /// consumers. When the webtrit_signaling_service plugin is integrated, this
 /// interface will be replaced by the one from the plugin's platform-interface
 /// package and this local definition removed.
-abstract class SignalingModule {
+abstract class SignalingModule implements SignalingReconnectable {
   /// Broadcast stream of all module lifecycle and protocol events.
   ///
   /// Each new subscriber immediately receives all lifecycle and handshake events
   /// buffered since the last [connect] call, followed by live events.
   /// [SignalingProtocolEvent] items are NOT replayed — they are delivered only
   /// to subscribers already listening when they occur.
+  @override
   Stream<SignalingModuleEvent> get events;
 
   /// Whether the signaling client is currently connected.
   ///
   /// Returns `true` between a successful [connect] and the next [disconnect]
   /// or connection failure. Use this to guard [execute] calls.
+  @override
   bool get isConnected;
 
   /// Initiates a connection. Fire-and-forget — returns immediately.
@@ -122,6 +146,7 @@ abstract class SignalingModule {
   /// The result arrives asynchronously via [events] as [SignalingConnected]
   /// or [SignalingConnectionFailed]. Calling [connect] when already connected
   /// or while a connection attempt is in progress is a no-op.
+  @override
   void connect();
 
   /// Disconnects the current client gracefully.
@@ -130,6 +155,7 @@ abstract class SignalingModule {
   /// emitted later once the underlying WebSocket close-ack arrives. Returns
   /// immediately — callers must not assume the connection is closed when the
   /// returned [Future] completes.
+  @override
   Future<void> disconnect();
 
   /// Sends [request] via the active connection.
