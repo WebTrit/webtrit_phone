@@ -129,6 +129,15 @@ class RtpTrafficMonitor {
         final direction = RtpDirection.tryParse(report.type);
         if (direction != null) {
           _processRtpReport(report, direction);
+        } else if (report.type == 'transport') {
+          final dtlsState = report.values['dtlsState'];
+          final bytesSent = report.values['bytesSent'];
+          final bytesReceived = report.values['bytesReceived'];
+          final selectedPair = report.values['selectedCandidatePairId'];
+          _logger.info(
+            '[DIAG] transport id=${report.id} dtlsState=$dtlsState '
+            'bytesSent=$bytesSent bytesReceived=$bytesReceived selectedCandidatePairId=$selectedPair',
+          );
         }
       }
     } catch (e, stack) {

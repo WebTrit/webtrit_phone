@@ -105,7 +105,6 @@ class HandshakeProcessor {
     final localConnections = await callkeepConnections.getConnections();
 
     for (final activeLine in allLines) {
-      // Get the newest call event from the call logs, if any.
       final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
       CallkeepConnection? connection;
@@ -114,20 +113,14 @@ class HandshakeProcessor {
 
         if (connection?.state == CallkeepConnectionState.stateDisconnected) {
           if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
-            // Early exit: only this action, consistent with the original `return` in the BLoC.
             return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
           } else if (callEvent is IncomingCallEvent) {
-            // Early exit: only this action.
             return [DeclineSignalingAction(line: callEvent.line, callId: callEvent.callId)];
           }
         }
       }
 
-      // Restore an accepted incoming call after Activity recreation.
-      //
-      // callLogs is newest-first:
-      //   firstOrNull -> AcceptedEvent  (latest)
-      //   lastOrNull  -> IncomingCallEvent (earliest / original offer)
+      // callLogs is newest-first: firstOrNull = latest, lastOrNull = earliest.
       final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
       final latestCallLog = callEventLogEntries.firstOrNull;
       final earliestCallLog = callEventLogEntries.lastOrNull;
@@ -158,7 +151,6 @@ class HandshakeProcessor {
       }
     }
 
-    // Synchronize local connections: end any that are absent from the signaling state.
     final lineCallIds = allLines.map((l) => l.callId).toSet();
     for (final connection in localConnections) {
       if (!lineCallIds.contains(connection.callId)) {

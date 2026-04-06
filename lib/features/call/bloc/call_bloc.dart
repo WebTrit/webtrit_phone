@@ -1070,7 +1070,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> __onCallSignalingEventHangup(_CallSignalingEventHangup event, Emitter<CallState> emit) async {
     final code = SignalingResponseCode.values.byCode(event.code);
-    _logger.fine('__onCallSignalingEventHangup code: ${code?.name} ${code?.code} ${code?.type.name}');
+    final call = state.retrieveActiveCall(event.callId);
+    _logger.warning(
+      '__onCallSignalingEventHangup callId=${event.callId} '
+      'code=${event.code}(${code?.name}) reason="${event.reason}" '
+      'direction=${call?.direction.name} status=${call?.processingStatus.name}',
+    );
 
     switch (code) {
       case null:
@@ -2594,6 +2599,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return;
 
         case RestoreCallAction():
+          _logger.info(
+            '_handleHandshakeReceived: accepted incoming call without Callkeep connection — '
+            'triggering restoration for callId=${action.callId}',
+          );
           add(
             _RestoreAcceptedIncomingCall(
               line: action.line,
@@ -2612,30 +2621,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  /// Restores an already-accepted incoming call after Android Activity recreation.
-  ///
-  /// Triggered by [_handleHandshakeReceived] when the signaling handshake shows a line
-  /// with both [IncomingCallEvent] and [AcceptedEvent] in its callLogs, no existing
-  /// Callkeep connection, and no entry in [state.activeCalls]. This happens when Android
-  /// destroys and recreates the Activity (e.g. a permission change) while a call is active.
-  ///
-  /// Steps:
-  /// 1. Emit an [ActiveCall] in [CallProcessingStatus.incomingRestoringMedia] so the UI
-  ///    appears immediately.
-  /// 2. Re-register the call with Callkeep via [reportNewIncomingCall] + [answerCall] to
-  ///    restore the native connection in the answered state.
-  /// 3. Acquire user media, create a new [RTCPeerConnection], and add local tracks.
-  /// 4. Transition immediately to [CallProcessingStatus.connected] with the original
-  ///    [acceptedTime] — the server already has this call in [status=incall], so
-  ///    [AcceptRequest] would be rejected (ERROR 447 "Wrong state").
-  /// 5. Complete the PC into [_peerConnectionManager] and dispatch
-  ///    [_PeerConnectionEventRenegotiationNeeded] explicitly — [onRenegotiationNeeded]
-  ///    fires during initial setup when [RTCPeerConnection.signalingState] is still null
-  ///    and is suppressed by the guard in [_createPeerConnection]; dispatching the event
-  ///    directly handles the case where [_safeRenegotiate] → [UpdateRequest] (re-INVITE) needs to run.
-  /// 6. The server responds with [AcceptedEvent] carrying an answer SDP;
-  ///    [__onCallSignalingEventAccepted] applies [setRemoteDescription] and ICE negotiation
-  ///    resumes, restoring audio/video.
   Future<void> _onRestoreAcceptedIncomingCall(_RestoreAcceptedIncomingCall event, Emitter<CallState> emit) async {
     final incoming = event.incomingCallEvent;
     final jsep = JsepValue.fromOptional(incoming.jsep);
@@ -2644,10 +2629,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? incoming.callerDisplayName;
 
-    // Guard: another event may have already created this call while the contact name resolved.
-    if (state.activeCalls.any((c) => c.callId == event.callId)) {
-      return;
-    }
+    if (state.activeCalls.any((c) => c.callId == event.callId)) return;
 
     final activeCall = ActiveCall(
       direction: CallDirection.incoming,
@@ -2662,7 +2644,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     emit(state.copyWithPushActiveCall(activeCall));
 
-    // Re-register with Callkeep so the native connection is in the answered state.
     final reportError = await callkeep.reportNewIncomingCall(
       event.callId,
       handle,
@@ -2676,12 +2657,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
     };
     if (!acceptableReportErrors.contains(reportError)) {
+      _logger.warning('_onRestoreAcceptedIncomingCall: reportNewIncomingCall returned $reportError — aborting');
       add(_ResetStateEvent.completeCall(event.callId));
       return;
     }
 
     if (reportError == null || reportError == CallkeepIncomingCallError.callIdAlreadyExists) {
-      await callkeep.answerCall(event.callId);
+      final answerError = await callkeep.answerCall(event.callId);
+      if (answerError != null) {
+        _logger.warning('_onRestoreAcceptedIncomingCall: answerCall error: $answerError');
+      }
     }
 
     MediaStream? localStream;
@@ -2692,10 +2677,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       peerConnection = await _createPeerConnection(event.callId, event.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection!.addTrack(t, localStream!));
 
-      // The server already has this call in status=incall, so AcceptRequest would be rejected
-      // (ERROR 447 "Wrong state"). Mark the call as connected with the original acceptedTime so
-      // that when the server responds to the UpdateRequest below, __onCallSignalingEventAccepted
-      // treats it as an update (acceptedTime != null) and applies setRemoteDescription correctly.
       emit(
         state.copyWithMappedActiveCall(
           event.callId,
@@ -2706,15 +2687,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           ),
         ),
       );
-      localStream = null; // ownership transferred to state
+      localStream = null;
 
       _peerConnectionManager.complete(event.callId, peerConnection);
-      peerConnection = null; // ownership transferred to manager
+      peerConnection = null;
 
-      // onRenegotiationNeeded fires during initial PC setup (addTrack) when
-      // signalingState is still null, so its guard skips the event. Dispatch
-      // it explicitly here so _safeRenegotiate sends UpdateRequest (re-INVITE)
-      // to re-establish media with the server that is already in status=incall.
       add(_PeerConnectionEvent.renegotiationNeeded(event.callId, event.line));
     } catch (e, stackTrace) {
       localStream?.getTracks().forEach((t) => t.stop());
@@ -2727,7 +2704,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void _handleSignalingEvent(Event event) {
+    _logger.info('[SIG] ${event.runtimeType}');
     if (event is IncomingCallEvent) {
+      _logger.warning('[SIG] IncomingCallEvent: callId=${event.callId} caller=${event.caller} callee=${event.callee}');
       add(
         _CallSignalingEvent.incoming(
           line: event.line,
@@ -2762,6 +2741,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ),
       );
     } else if (event is HangupEvent) {
+      _logger.warning('[SIG] HangupEvent: callId=${event.callId} code=${event.code} reason="${event.reason}"');
       add(_CallSignalingEvent.hangup(line: event.line, callId: event.callId, code: event.code, reason: event.reason));
     } else if (event is UpdatingCallEvent) {
       add(
@@ -2841,6 +2821,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
     } else if (event is TransferringEvent) {
       add(_CallSignalingEvent.transferring(line: event.line, callId: event.callId));
+    } else if (event is CallingEvent) {
+      _logger.info('[SIG] CallingEvent: callId=${event.callId} line=${event.line} — remote is ringing');
+    } else if (event is HangingupEvent) {
+      _logger.info('[SIG] HangingupEvent: callId=${event.callId} line=${event.line} — hangup in progress');
+    } else if (event is IceHangupEvent) {
+      _logger.info('[SIG] IceHangupEvent: line=${event.line} reason="${event.reason}"');
     } else {
       _logger.warning('unhandled signaling event $event');
     }

@@ -3,7 +3,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'package:webtrit_phone/features/call/utils/handshake_processor.dart';
+import 'package:webtrit_phone/features/call/bloc/handshake_action.dart';
+import 'package:webtrit_phone/features/call/bloc/handshake_processor.dart';
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -136,14 +137,35 @@ void main() {
       expect(actions, isEmpty);
     });
 
-    test('skips restoration when connection is not null', () async {
-      when(() => mockConnections.getConnection(_kCallId)).thenAnswer((_) async => _makeConnection());
+    test(
+      'returns RestoreCallAction when Callkeep connection survived (stateActive) but call not in BLoC state',
+      () async {
+        when(
+          () => mockConnections.getConnection(_kCallId),
+        ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateActive));
 
-      final line = _makeRestorationLine();
-      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+        final line = _makeRestorationLine();
+        final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
-      expect(actions, isEmpty);
-    });
+        expect(actions, hasLength(1));
+        expect(actions.first, isA<RestoreCallAction>());
+      },
+    );
+
+    test(
+      'skips restoration when Callkeep connection is stateDisconnected (handled by HangupSignalingAction above)',
+      () async {
+        when(
+          () => mockConnections.getConnection(_kCallId),
+        ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
+
+        // stateDisconnected with AcceptedEvent → early exit with HangupSignalingAction, not RestoreCallAction
+        final line = _makeRestorationLine();
+        final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+        expect(actions.whereType<RestoreCallAction>(), isEmpty);
+      },
+    );
 
     test('skips restoration when IncomingCallEvent.line is null (guest-line call)', () async {
       // IncomingCallEvent with line == null — not restorable.
