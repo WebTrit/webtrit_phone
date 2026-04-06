@@ -50,7 +50,8 @@ class SignalingReconnectController {
     void Function()? onConnectionFailed,
     int notifyAfterConsecutiveFailures = 2,
     bool reconnectEnabled = true,
-  }) : _module = signalingModule,
+  }) : assert(notifyAfterConsecutiveFailures >= 1, 'notifyAfterConsecutiveFailures must be >= 1'),
+       _module = signalingModule,
        _onConnectionFailed = onConnectionFailed,
        _notifyThreshold = notifyAfterConsecutiveFailures,
        _reconnectEnabled = reconnectEnabled {
@@ -68,6 +69,7 @@ class SignalingReconnectController {
   int _consecutiveFailures = 0;
   bool _appActive = true;
   bool _networkActive = true;
+  bool _disposed = false;
 
   // ---------------------------------------------------------------------------
   // External lifecycle / connectivity notifications
@@ -84,11 +86,14 @@ class SignalingReconnectController {
   ///
   /// Disconnects immediately when there are no active calls.
   /// When [hasActiveCalls] is true the signaling connection is kept alive so
-  /// the ongoing call is not interrupted.
+  /// the ongoing call is not interrupted, and reconnects remain enabled so
+  /// a dropped connection during a call can recover.
   void notifyAppPaused({required bool hasActiveCalls}) {
     _logger.fine('notifyAppPaused hasActiveCalls=$hasActiveCalls');
-    _appActive = false;
-    if (!hasActiveCalls) _disconnect();
+    if (!hasActiveCalls) {
+      _appActive = false;
+      _disconnect();
+    }
   }
 
   /// Call when the app needs an immediate reconnect regardless of lifecycle
@@ -130,7 +135,7 @@ class SignalingReconnectController {
       case SignalingConnectionFailed(:final recommendedReconnectDelay):
         _consecutiveFailures++;
         _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
-        if (_consecutiveFailures >= _notifyThreshold) {
+        if (_consecutiveFailures == _notifyThreshold) {
           _logger.info('_onEvent: notifying — consecutive failures reached threshold ($_notifyThreshold)');
           _onConnectionFailed?.call();
         }
@@ -162,6 +167,7 @@ class SignalingReconnectController {
     if (!_reconnectEnabled) return;
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
+      if (_disposed) return;
       _logger.info(
         '_scheduleReconnect timer fired after $delay — '
         'appActive=$_appActive networkActive=$_networkActive '
@@ -196,6 +202,7 @@ class SignalingReconnectController {
   // ---------------------------------------------------------------------------
 
   void dispose() {
+    _disposed = true;
     _reconnectTimer?.cancel();
     _subscription.cancel();
   }
