@@ -71,6 +71,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     _reconnectController = SignalingReconnectController(
       signalingModule: _signalingModule,
       onConnectionFailed: () => logger.warning('signaling connection failed'),
+      onConnectionPresenceChanged: (isAvailable) => logger.info('signaling presence changed: isAvailable=$isAvailable'),
       reconnectEnabled: enableReconnect,
     );
 

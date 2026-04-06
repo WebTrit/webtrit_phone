@@ -127,6 +127,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _reconnectController = SignalingReconnectController(
       signalingModule: signalingModule,
       onConnectionFailed: () => submitNotification(const SignalingConnectFailedNotification()),
+      onConnectionPresenceChanged: (isAvailable) =>
+          _logger.info('signaling presence changed: isAvailable=$isAvailable'),
     );
 
     // Translates SignalingModule events into BLoC state-transition events.
