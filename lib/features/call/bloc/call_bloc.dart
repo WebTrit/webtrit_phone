@@ -2653,6 +2653,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // is bypassed because the status starts at incomingRestoringMedia (excluded from
       // canPerformAnswer). Media is re-established via renegotiationNeeded → UpdateRequest
       // (ICE restart), which creates a fresh offer with new ICE credentials.
+      // Outgoing restored calls use outgoingRestoringMedia for the same reason
+      // (excluded from canPerformStart normal flow).
       incomingOffer = jsep;
       direction = CallDirection.incoming;
     } else {
@@ -2683,7 +2685,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       video: video,
       createdTime: clock.now(),
       incomingOffer: incomingOffer,
-      processingStatus: CallProcessingStatus.incomingRestoringMedia,
+      processingStatus: direction == CallDirection.incoming
+          ? CallProcessingStatus.incomingRestoringMedia
+          : CallProcessingStatus.outgoingRestoringMedia,
     );
     emit(state.copyWithPushActiveCall(activeCall));
 

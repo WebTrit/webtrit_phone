@@ -11,6 +11,7 @@ enum CallProcessingStatus {
   outgoingCreatedFromRefer,
   outgoingConnectingToSignaling,
   outgoingInitializingMedia,
+  outgoingRestoringMedia,
   outgoingOfferPreparing,
   outgoingOfferSent,
   outgoingRinging,
