@@ -70,7 +70,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
 
     _reconnectController = SignalingReconnectController(
       signalingModule: _signalingModule,
-      onConnectionFailed: null,
+      onConnectionFailed: () => logger.warning('signaling connection failed'),
       reconnectEnabled: enableReconnect,
     );
 
