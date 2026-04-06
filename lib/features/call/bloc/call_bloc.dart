@@ -28,8 +28,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
-import '../services/signaling_module.dart';
-import '../services/signaling_reconnect_controller.dart';
+import '../services/services.dart';
 import '../utils/utils.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;

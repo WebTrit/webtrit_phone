@@ -96,7 +96,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('restoration candidate', () {
-    Line _makeRestorationLine() => _makeLine(
+    Line makeRestorationLine() => _makeLine(
       callLogs: [
         CallEventLog(timestamp: 2000, callEvent: _makeAcceptedEvent()),
         CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
@@ -104,7 +104,7 @@ void main() {
     );
 
     test('returns RestoreCallAction when connection is null and call not in state', () async {
-      final line = _makeRestorationLine();
+      final line = makeRestorationLine();
       final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
       expect(actions, hasLength(1));
@@ -130,7 +130,7 @@ void main() {
     });
 
     test('skips restoration when callId already in activeCallIds', () async {
-      final line = _makeRestorationLine();
+      final line = makeRestorationLine();
       final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {_kCallId});
 
       expect(actions, isEmpty);
@@ -143,7 +143,7 @@ void main() {
           () => mockConnections.getConnection(_kCallId),
         ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateActive));
 
-        final line = _makeRestorationLine();
+        final line = makeRestorationLine();
         final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
         expect(actions, hasLength(1));
@@ -159,7 +159,7 @@ void main() {
         ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
 
         // stateDisconnected with AcceptedEvent -> early exit with HangupSignalingAction, not RestoreCallAction
-        final line = _makeRestorationLine();
+        final line = makeRestorationLine();
         final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
         expect(actions.whereType<RestoreCallAction>(), isEmpty);
