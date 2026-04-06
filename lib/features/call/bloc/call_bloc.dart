@@ -2713,7 +2713,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (reportError == null || reportError == CallkeepIncomingCallError.callIdAlreadyExists) {
         final answerError = await callkeep.answerCall(event.callId);
         if (answerError != null) {
-          _logger.warning('_onRestoreAcceptedCall: answerCall error: $answerError');
+          _logger.warning('_onRestoreAcceptedCall: answerCall error: $answerError, aborting');
+          add(_ResetStateEvent.completeCall(event.callId));
+          return;
         }
       }
     } else {
