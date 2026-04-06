@@ -94,7 +94,12 @@ class RenegotiationHandler {
       try {
         final stateBeforeOffer = peerConnection.signalingState;
         _logger.fine(() => 'onRenegotiationNeeded signalingState: $stateBeforeOffer');
-        if (stateBeforeOffer != RTCSignalingState.RTCSignalingStateStable) {
+        // null means the Dart-side cache has not yet been populated by a native
+        // onSignalingStateChange callback (flutter_webrtc lazily updates the
+        // field). A brand-new RTCPeerConnection always starts in the native
+        // "stable" state, so null is treated as stable here. Every other
+        // non-stable state will be a concrete enum value, not null.
+        if (stateBeforeOffer != null && stateBeforeOffer != RTCSignalingState.RTCSignalingStateStable) {
           _logger.fine(() => 'onRenegotiationNeeded skipped: not in stable state ($stateBeforeOffer)');
           return;
         }
@@ -104,7 +109,10 @@ class RenegotiationHandler {
         _logger.info(() => 'onRenegotiationNeeded offer SDP (callId=$callId):\n${localDescription.sdp}');
 
         final stateAfterOffer = peerConnection.signalingState;
-        if (stateAfterOffer != RTCSignalingState.RTCSignalingStateStable) {
+        // Same null-as-stable reasoning as the pre-offer guard: if the Dart
+        // cache has not been updated by a native callback yet, the PC is still
+        // in its initial stable state and it is safe to proceed.
+        if (stateAfterOffer != null && stateAfterOffer != RTCSignalingState.RTCSignalingStateStable) {
           _logger.fine(
             () =>
                 'onRenegotiationNeeded: state changed to $stateAfterOffer after createOffer, skipping setLocalDescription',

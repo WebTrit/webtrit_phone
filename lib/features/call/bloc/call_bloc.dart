@@ -91,6 +91,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   late final PeerConnectionManager _peerConnectionManager;
   final Map<String, RenegotiationHandler> _renegotiationHandlers = {};
+  late final HandshakeProcessor _handshakeProcessor;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -121,6 +122,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
+    _handshakeProcessor = HandshakeProcessor(callkeepConnections: callkeepConnections);
 
     _signalingSubscription = _signalingModule.events.listen((event) {
       switch (event) {
@@ -154,6 +156,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_HandshakeSignalingEventState>(_onHandshakeSignalingEventState, transformer: sequential());
     on<_CallSignalingEvent>(_onCallSignalingEvent, transformer: sequential());
     on<_CallPushEventIncoming>(_onCallPushEventIncoming, transformer: sequential());
+    on<_RestoreAcceptedCall>(_onRestoreAcceptedCall, transformer: sequential());
     on<CallControlEvent>(
       _onCallControlEvent,
       transformer: (events, mapper) => StreamGroup.merge([
@@ -769,7 +772,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // for this callId while contact resolution was in progress.
     if (state.activeCalls.any((c) => c.callId == event.callId)) {
       _logger.fine(
-        '_onCallPushEventIncoming: callId ${event.callId} handled during contact resolution — skipping push duplicate',
+        '_onCallPushEventIncoming: callId ${event.callId} handled during contact resolution - skipping push duplicate',
       );
       return;
     }
@@ -887,7 +890,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     if (nonConnectedCallWithSameCaller != null) {
       // Polite glare resolution: compare call IDs lexicographically so both sides independently
-      // reach the same deterministic decision — exactly one device yields.
+      // reach the same deterministic decision - exactly one device yields.
       // The side whose outgoing callId is lexicographically greater yields: it ends its outgoing
       // call and lets the incoming proceed. The other side declines the incoming and keeps its outgoing.
       final q = [nonConnectedCallWithSameCaller.callId, event.callId]..sort();
@@ -1067,7 +1070,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> __onCallSignalingEventHangup(_CallSignalingEventHangup event, Emitter<CallState> emit) async {
     final code = SignalingResponseCode.values.byCode(event.code);
-    _logger.fine('__onCallSignalingEventHangup code: ${code?.name} ${code?.code} ${code?.type.name}');
+    final call = state.retrieveActiveCall(event.callId);
+    _logger.warning(
+      '__onCallSignalingEventHangup callId=${event.callId} '
+      'code=${event.code}(${code?.name}) reason="${event.reason}" '
+      'direction=${call?.direction.name} status=${call?.processingStatus.name}',
+    );
 
     switch (code) {
       case null:
@@ -1418,7 +1426,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
 
     if (canSubmitAnswer == false) {
-      _logger.info('__onCallControlEventAnswered: skipping due stale status: ${call.processingStatus}');
+      _logger.info('__onCallControlEventAnswered: skipping due to stale status: ${call.processingStatus}');
       return;
     }
 
@@ -1814,6 +1822,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    // Guard: skip standard outgoing flow for calls restored via _onRestoreAcceptedCall.
+    // Telecom fires performStartCall after startCall() regardless, but the call is already
+    // set up - only reportConnectedOutgoingCall is needed to advance Telecom to ACTIVE state.
+    final restoredCall = state.retrieveActiveCall(event.callId);
+    final canPerformStart = switch (restoredCall?.processingStatus) {
+      CallProcessingStatus.outgoingCreated => true,
+      CallProcessingStatus.outgoingCreatedFromRefer => true,
+      CallProcessingStatus.outgoingConnectingToSignaling => true,
+      _ => false,
+    };
+    if (!canPerformStart) {
+      _logger.info('__onCallPerformEventStarted: skipping due to stale status: ${restoredCall?.processingStatus}');
+      await callkeep.reportConnectedOutgoingCall(event.callId);
+      event.fulfill();
+      return;
+    } else {
+      _logger.info('__onCallPerformEventStarted: proceeding with status: ${restoredCall?.processingStatus}');
+    }
+
     ///
     /// Ensuring that the signaling client is connected before attempting to make an outgoing call
     ///
@@ -1989,7 +2016,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
 
     if (canPerformAnswer == false) {
-      _logger.info('__onCallPerformEventAnswered: skipping due stale status: ${call.processingStatus}');
+      _logger.info('__onCallPerformEventAnswered: skipping due to stale status: ${call.processingStatus}');
       return;
     }
 
@@ -2558,71 +2585,193 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
     }
 
-    final lines = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
-    final localConnections = await callkeepConnections.getConnections();
+    final actions = await _handshakeProcessor.process(
+      lines: stateHandshake.lines,
+      guestLine: stateHandshake.guestLine,
+      activeCallIds: state.activeCalls.map((c) => c.callId).toSet(),
+    );
 
-    for (final activeLine in lines) {
-      // Get the first call event from the call logs, if any
-      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+    for (final action in actions) {
+      switch (action) {
+        case HangupSignalingAction():
+          await _signalingModule
+              .execute(
+                HangupRequest(
+                  transaction: WebtritSignalingClient.generateTransactionId(),
+                  line: action.line,
+                  callId: action.callId,
+                ),
+              )
+              ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived hangupRequest error'));
+          return;
 
-      if (callEvent != null) {
-        // Obtain the corresponding Callkeep connection for the line.
-        // Callkeep maintains connection states even if the app's lifecycle has ended.
-        final connection = await callkeepConnections.getConnection(callEvent.callId);
+        case DeclineSignalingAction():
+          await _signalingModule
+              .execute(
+                DeclineRequest(
+                  transaction: WebtritSignalingClient.generateTransactionId(),
+                  line: action.line,
+                  callId: action.callId,
+                ),
+              )
+              ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived declineRequest error'));
+          return;
 
-        // Check if the Callkeep connection exists and its state is `stateDisconnected`.
-        // Indicates that the call has been terminated by the user or system (e.g., due to connectivity issues).
-        // Synchronize the signaling state with the local state for such scenarios.
-        if (connection?.state == CallkeepConnectionState.stateDisconnected) {
-          // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
-          // initiate a hang-up request to align the signaling state.
-          if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
-            // Handle outgoing or accepted calls. If the event is `AcceptedEvent` or `ProceedingEvent`,
-            // initiate a hang-up request to align the signaling state.
-            final hangupRequest = HangupRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: callEvent.line,
-              callId: callEvent.callId,
-            );
-            await _signalingModule.execute(hangupRequest)?.catchError((e, s) {
-              callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
-            });
+        case RestoreCallAction():
+          add(
+            _RestoreAcceptedCall(
+              line: action.line,
+              callId: action.callId,
+              acceptedEvent: action.acceptedEvent,
+              acceptedTime: action.acceptedTime,
+              incomingCallEvent: action.incomingCallEvent,
+            ),
+          );
 
-            return;
-          } else if (callEvent is IncomingCallEvent) {
-            // Handle incoming calls. If the event is `IncomingCallEvent`, send a decline request to update the signaling state accordingly.
-            final declineRequest = DeclineRequest(
-              transaction: WebtritSignalingClient.generateTransactionId(),
-              line: callEvent.line,
-              callId: callEvent.callId,
-            );
-            await _signalingModule.execute(declineRequest)?.catchError((e, s) {
-              callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
-            });
-            return;
-          }
-        }
-      }
+        case HandleIncomingCallAction():
+          _handleSignalingEvent(action.event);
 
-      if (activeLine.callLogs.length == 1) {
-        final singleCallLog = activeLine.callLogs.first;
-        if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
-          _handleSignalingEvent(singleCallLog.callEvent as IncomingCallEvent);
-        }
-      }
-    }
-
-    // Synchronize the signaling state with the local state for calls.
-    // If a local connection exists that is not present in the signaling state, end the call to ensure consistency between the local and signaling states.
-    for (var connection in localConnections) {
-      if (!lines.map((e) => e.callId).contains(connection.callId)) {
-        await callkeep.endCall(connection.callId);
+        case EndLocalCallAction():
+          await callkeep.endCall(action.callId);
       }
     }
   }
 
+  Future<void> _onRestoreAcceptedCall(_RestoreAcceptedCall event, Emitter<CallState> emit) async {
+    final CallkeepHandle handle;
+    final String? callerDisplayName;
+    final bool video;
+    final JsepValue? incomingOffer;
+    final CallDirection direction;
+
+    if (event.incomingCallEvent != null) {
+      final incoming = event.incomingCallEvent!;
+      final jsep = JsepValue.fromOptional(incoming.jsep);
+      handle = CallkeepHandle.number(incoming.caller);
+      callerDisplayName = incoming.callerDisplayName;
+      video = jsep?.hasVideo ?? false;
+      // The original offer SDP is stored for UI/video detection purposes only.
+      // It is NOT used for media setup during restoration — __onCallPerformEventAnswered
+      // is bypassed because the status starts at incomingRestoringMedia (excluded from
+      // canPerformAnswer). Media is re-established via renegotiationNeeded → UpdateRequest
+      // (ICE restart), which creates a fresh offer with new ICE credentials.
+      // Outgoing restored calls use outgoingRestoringMedia for the same reason
+      // (excluded from canPerformStart normal flow).
+      incomingOffer = jsep;
+      direction = CallDirection.incoming;
+    } else {
+      final callee = event.acceptedEvent.callee ?? '';
+      final number = callee.replaceFirst(RegExp(r'^sips?:'), '').split('@').first;
+      final jsep = JsepValue.fromOptional(event.acceptedEvent.jsep);
+      handle = CallkeepHandle.number(number);
+      callerDisplayName = null;
+      video = jsep?.hasVideo ?? false;
+      incomingOffer = null;
+      direction = CallDirection.outgoing;
+    }
+
+    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final displayName = contactName ?? callerDisplayName;
+
+    if (state.activeCalls.any((c) => c.callId == event.callId)) {
+      _logger.warning('_onRestoreAcceptedCall: callId=${event.callId} already active, skipping');
+      return;
+    }
+
+    final activeCall = ActiveCall(
+      direction: direction,
+      line: event.line,
+      callId: event.callId,
+      handle: handle,
+      displayName: displayName,
+      video: video,
+      createdTime: clock.now(),
+      incomingOffer: incomingOffer,
+      processingStatus: direction == CallDirection.incoming
+          ? CallProcessingStatus.incomingRestoringMedia
+          : CallProcessingStatus.outgoingRestoringMedia,
+    );
+    emit(state.copyWithPushActiveCall(activeCall));
+
+    if (direction == CallDirection.incoming) {
+      final reportError = await callkeep.reportNewIncomingCall(
+        event.callId,
+        handle,
+        displayName: displayName,
+        hasVideo: video,
+      );
+
+      final acceptableReportErrors = {
+        null,
+        CallkeepIncomingCallError.callIdAlreadyExists,
+        CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
+      };
+      if (!acceptableReportErrors.contains(reportError)) {
+        _logger.warning('_onRestoreAcceptedCall: reportNewIncomingCall returned $reportError, aborting');
+        add(_ResetStateEvent.completeCall(event.callId));
+        return;
+      }
+
+      if (reportError == null || reportError == CallkeepIncomingCallError.callIdAlreadyExists) {
+        final answerError = await callkeep.answerCall(event.callId);
+        if (answerError != null) {
+          _logger.warning('_onRestoreAcceptedCall: answerCall error: $answerError, aborting');
+          add(_ResetStateEvent.completeCall(event.callId));
+          return;
+        }
+      }
+    } else {
+      // Register with Telecom; performStartCall is handled by the canPerformStart guard.
+      final startCallError = await callkeep.startCall(
+        event.callId,
+        handle,
+        displayNameOrContactIdentifier: displayName,
+        hasVideo: video,
+        proximityEnabled: !video,
+      );
+      if (startCallError != null) {
+        _logger.warning('_onRestoreAcceptedCall: startCall error: $startCallError');
+      }
+    }
+
+    MediaStream? localStream;
+    RTCPeerConnection? peerConnection;
+
+    try {
+      localStream = await userMediaBuilder.build(video: video, frontCamera: activeCall.frontCamera);
+      peerConnection = await _createPeerConnection(event.callId, event.line);
+      await Future.forEach(localStream.getTracks(), (t) => peerConnection!.addTrack(t, localStream!));
+
+      emit(
+        state.copyWithMappedActiveCall(
+          event.callId,
+          (c) => c.copyWith(
+            localStream: localStream,
+            processingStatus: CallProcessingStatus.connected,
+            acceptedTime: event.acceptedTime,
+          ),
+        ),
+      );
+      localStream = null;
+
+      _peerConnectionManager.complete(event.callId, peerConnection);
+      peerConnection = null;
+
+      add(_PeerConnectionEvent.renegotiationNeeded(event.callId, event.line));
+    } catch (e, stackTrace) {
+      localStream?.getTracks().forEach((t) => t.stop());
+      await localStream?.dispose();
+      await peerConnection?.dispose();
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
+      add(_ResetStateEvent.completeCall(event.callId));
+      callErrorReporter.handle(e, stackTrace, '_onRestoreAcceptedCall error:');
+    }
+  }
+
   void _handleSignalingEvent(Event event) {
+    _logger.info('[SIG] ${event.runtimeType}');
     if (event is IncomingCallEvent) {
+      _logger.warning('[SIG] IncomingCallEvent: callId=${event.callId} caller=${event.caller} callee=${event.callee}');
       add(
         _CallSignalingEvent.incoming(
           line: event.line,
@@ -2657,6 +2806,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ),
       );
     } else if (event is HangupEvent) {
+      _logger.warning('[SIG] HangupEvent: callId=${event.callId} code=${event.code} reason="${event.reason}"');
       add(_CallSignalingEvent.hangup(line: event.line, callId: event.callId, code: event.code, reason: event.reason));
     } else if (event is UpdatingCallEvent) {
       add(
@@ -2736,6 +2886,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
     } else if (event is TransferringEvent) {
       add(_CallSignalingEvent.transferring(line: event.line, callId: event.callId));
+    } else if (event is CallingEvent) {
+      _logger.info('[SIG] CallingEvent: callId=${event.callId} line=${event.line} - remote is ringing');
+    } else if (event is HangingupEvent) {
+      _logger.info('[SIG] HangingupEvent: callId=${event.callId} line=${event.line} - hangup in progress');
+    } else if (event is IceHangupEvent) {
+      _logger.info('[SIG] IceHangupEvent: line=${event.line} reason="${event.reason}"');
     } else {
       _logger.warning('unhandled signaling event $event');
     }

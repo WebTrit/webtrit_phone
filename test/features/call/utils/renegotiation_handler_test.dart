@@ -67,15 +67,21 @@ void main() {
       expect(executeCalled, isFalse);
     });
 
-    test('skips entirely when state is null', () async {
+    test('proceeds when state is null (Dart-side cache uninitialized = new PC in native stable state)', () async {
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
+      // null signalingState: flutter_webrtc has not yet received a native
+      // onSignalingStateChange callback. A new RTCPeerConnection starts in
+      // native "stable", so null must be treated as stable to allow the
+      // first offer after restoration.
       when(() => mockPC.signalingState).thenReturn(null);
+      when(() => mockPC.createOffer(any())).thenAnswer((_) async => kOffer);
+      when(() => mockPC.setLocalDescription(any())).thenAnswer((_) async {});
 
       var executeCalled = false;
       await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async => executeCalled = true);
 
-      verifyNever(() => mockPC.createOffer(any()));
-      expect(executeCalled, isFalse);
+      verify(() => mockPC.createOffer(any())).called(1);
+      expect(executeCalled, isTrue);
     });
   });
 
