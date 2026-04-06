@@ -17,7 +17,7 @@ final _logger = Logger('SignalingReconnectController');
 ///   [SignalingConnectionLost], and [SignalingDisconnected] events.
 /// - Guards reconnects by [_appActive] and [_networkActive] flags.
 /// - Tracks consecutive connect failures and calls [onConnectionFailed] only
-///   after [notifyAfterConsecutiveFailures] attempts — suppressing spurious
+///   after [notifyAfterConsecutiveFailures] attempts - suppressing spurious
 ///   toasts for transient failures (e.g. brief DNS unavailability on screen
 ///   unlock).
 /// - Calls [onConnectionFailed] immediately on [SignalingConnectionLost]
@@ -25,7 +25,7 @@ final _logger = Logger('SignalingReconnectController');
 ///   user-visible.
 /// - Tracks persistent connection availability and calls
 ///   [onConnectionPresenceChanged] whenever the availability transitions
-///   between available and unavailable — suitable for driving a persistent
+///   between available and unavailable - suitable for driving a persistent
 ///   UI indicator (e.g. a "No connection" banner).
 ///
 /// ## Usage
@@ -111,7 +111,7 @@ class SignalingReconnectController {
   }
 
   /// Call when the app needs an immediate reconnect regardless of lifecycle
-  /// state — e.g. when a new active call appears while the app is in the
+  /// state - e.g. when a new active call appears while the app is in the
   /// background and the signaling client is not connected.
   void notifyForceReconnect() {
     _logger.fine('notifyForceReconnect');
@@ -125,7 +125,7 @@ class SignalingReconnectController {
   /// reconnects triggered by [SignalingConnectionFailed] or
   /// [SignalingConnectionLost] can still fire during a background call.
   /// When [hasActiveCalls] is false and the app is not active, disconnects
-  /// immediately — the call ended while backgrounded so signaling is no
+  /// immediately - the call ended while backgrounded so signaling is no
   /// longer needed.
   void notifyHasActiveCalls({required bool hasActiveCalls}) {
     _logger.fine('notifyHasActiveCalls hasActiveCalls=$hasActiveCalls');
@@ -157,28 +157,28 @@ class SignalingReconnectController {
   void _onEvent(SignalingModuleEvent event) {
     switch (event) {
       case SignalingConnected():
-        _logger.fine('_onEvent: connected — resetting failure counter');
+        _logger.fine('_onEvent: connected - resetting failure counter');
         _consecutiveFailures = 0;
         _reconnectTimer?.cancel();
         _emitPresence(true);
 
       // Initial connect attempt failed before any session was established.
-      // May be transient (e.g. DNS not ready on screen unlock) — notify only
+      // May be transient (e.g. DNS not ready on screen unlock) - notify only
       // after [_notifyThreshold] consecutive failures.
       case SignalingConnectionFailed(:final recommendedReconnectDelay):
         _consecutiveFailures++;
         _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
         if (_consecutiveFailures == _notifyThreshold) {
-          _logger.info('_onEvent: notifying — consecutive failures reached threshold ($_notifyThreshold)');
+          _logger.info('_onEvent: notifying - consecutive failures reached threshold ($_notifyThreshold)');
           _onConnectionFailed?.call();
           _emitPresence(false);
         }
         _scheduleReconnect(recommendedReconnectDelay);
 
-      // Established session was lost — always notify immediately and reset
+      // Established session was lost - always notify immediately and reset
       // the counter so the next reconnect loop starts fresh.
       case SignalingConnectionLost(:final recommendedReconnectDelay):
-        _logger.fine('_onEvent: connection lost — notifying immediately');
+        _logger.fine('_onEvent: connection lost - notifying immediately');
         _consecutiveFailures = 0;
         _onConnectionFailed?.call();
         _emitPresence(false);
@@ -204,21 +204,21 @@ class SignalingReconnectController {
     _reconnectTimer = Timer(delay, () {
       if (_disposed) return;
       _logger.info(
-        '_scheduleReconnect timer fired after $delay — '
+        '_scheduleReconnect timer fired after $delay - '
         'appActive=$_appActive networkActive=$_networkActive '
         'force=$force connected=${_module.isConnected}',
       );
 
       if (!force && !_appActive && !_hasActiveCalls) {
-        _logger.info('_scheduleReconnect: skipped — app not active and no active calls');
+        _logger.info('_scheduleReconnect: skipped - app not active and no active calls');
         return;
       }
       if (!force && !_networkActive) {
-        _logger.info('_scheduleReconnect: skipped — network unavailable');
+        _logger.info('_scheduleReconnect: skipped - network unavailable');
         return;
       }
       if (!force && _module.isConnected) {
-        _logger.info('_scheduleReconnect: skipped — already connected');
+        _logger.info('_scheduleReconnect: skipped - already connected');
         return;
       }
 
@@ -235,7 +235,7 @@ class SignalingReconnectController {
   void _emitPresence(bool isAvailable) {
     if (_lastPresence == isAvailable) return;
     _lastPresence = isAvailable;
-    _logger.info('_emitPresence: connection presence changed → isAvailable=$isAvailable');
+    _logger.info('_emitPresence: connection presence changed -> isAvailable=$isAvailable');
     _onConnectionPresenceChanged?.call(isAvailable);
   }
 
