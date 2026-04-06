@@ -269,111 +269,6 @@ void main() {
 
   // -------------------------------------------------------------------------
 
-  group('SignalingModule - isRepeated deduplication', () {
-    test('first failure has isRepeated: false', () async {
-      final error = Exception('socket error');
-      final module = _buildModule(_failingFactory(error));
-      addTearDown(module.dispose);
-
-      SignalingConnectionFailed? failed;
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failed = e;
-      });
-
-      module.connect();
-      await pumpEventQueue();
-
-      expect(failed?.isRepeated, isFalse);
-    });
-
-    test('same error on second attempt has isRepeated: true', () async {
-      final error = Exception('socket error');
-      final module = _buildModule(_failingFactory(error));
-      addTearDown(module.dispose);
-
-      final failures = <SignalingConnectionFailed>[];
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failures.add(e);
-      });
-
-      module.connect();
-      await pumpEventQueue();
-      module.connect();
-      await pumpEventQueue();
-
-      expect(failures, hasLength(2));
-      expect(failures[0].isRepeated, isFalse);
-      expect(failures[1].isRepeated, isTrue);
-    });
-
-    test('different error resets isRepeated to false', () async {
-      final errors = [Exception('error A'), Exception('error B')];
-      var callCount = 0;
-
-      final module = _buildModule(
-        ({
-          required Uri url,
-          required String tenantId,
-          required String token,
-          required Duration connectionTimeout,
-          required TrustedCertificates certs,
-          required bool force,
-        }) async => throw errors[callCount++ < 1 ? 0 : 1],
-      );
-      addTearDown(module.dispose);
-
-      final failures = <SignalingConnectionFailed>[];
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failures.add(e);
-      });
-
-      module.connect();
-      await pumpEventQueue();
-      module.connect();
-      await pumpEventQueue();
-
-      expect(failures[0].isRepeated, isFalse);
-      expect(failures[1].isRepeated, isFalse);
-    });
-
-    test('successful connect clears error history - next failure is isRepeated: false', () async {
-      final error = Exception('socket error');
-      var failNext = false;
-
-      final module = _buildModule(({
-        required Uri url,
-        required String tenantId,
-        required String token,
-        required Duration connectionTimeout,
-        required TrustedCertificates certs,
-        required bool force,
-      }) async {
-        if (failNext) throw error;
-        return _FakeSignalingClient();
-      });
-      addTearDown(module.dispose);
-
-      // First: succeed (clears history).
-      module.connect();
-      await pumpEventQueue();
-
-      failNext = true;
-
-      // Second: fail - should NOT be repeated even if same error object.
-      SignalingConnectionFailed? failed;
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failed = e;
-      });
-
-      module.connect();
-      await pumpEventQueue();
-
-      expect(failed?.isRepeated, isFalse);
-    });
-  });
-
-  // -------------------------------------------------------------------------
-
   group('SignalingModule - disconnect()', () {
     test('emits SignalingDisconnecting and calls client.disconnect', () async {
       final client = _FakeSignalingClient();
@@ -507,28 +402,6 @@ void main() {
       expect(failed, isNotNull);
       expect(failed!.error, same(error));
       expect(module.signalingClient, isNull);
-    });
-
-    test('_onError sets isRepeated: true on repeated server error', () async {
-      final client = _FakeSignalingClient();
-      final module = _buildModule(_successFactory(client));
-      addTearDown(module.dispose);
-
-      module.connect();
-      await pumpEventQueue();
-
-      final failures = <SignalingConnectionLost>[];
-      module.events.listen((e) {
-        if (e is SignalingConnectionLost) failures.add(e);
-      });
-
-      final error = Exception('keepalive timeout');
-      client.injectError(error);
-      client.injectError(error);
-      await pumpEventQueue();
-
-      expect(failures[0].isRepeated, isFalse);
-      expect(failures[1].isRepeated, isTrue);
     });
   });
 
@@ -691,7 +564,6 @@ void main() {
 
       expect(events[0], isA<SignalingConnecting>());
       expect(events[1], isA<SignalingConnectionFailed>());
-      expect((events[1] as SignalingConnectionFailed).isRepeated, isFalse);
       expect(events[2], isA<SignalingConnecting>());
       expect(events[3], isA<SignalingConnected>());
       expect(module.signalingClient, same(goodClient));

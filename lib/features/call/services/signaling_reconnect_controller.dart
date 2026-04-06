@@ -77,6 +77,7 @@ class SignalingReconnectController {
   int _consecutiveFailures = 0;
   bool _appActive = true;
   bool _networkActive = true;
+  bool _hasActiveCalls = false;
   bool _disposed = false;
 
   /// Last value passed to [_onConnectionPresenceChanged].
@@ -115,6 +116,23 @@ class SignalingReconnectController {
   void notifyForceReconnect() {
     _logger.fine('notifyForceReconnect');
     _scheduleReconnect(kSignalingClientFastReconnectDelay, force: true);
+  }
+
+  /// Call when active-call presence changes while the app may be in the
+  /// background.
+  ///
+  /// When [hasActiveCalls] is true the app-active guard is bypassed so that
+  /// reconnects triggered by [SignalingConnectionFailed] or
+  /// [SignalingConnectionLost] can still fire during a background call.
+  /// When [hasActiveCalls] is false and the app is not active, disconnects
+  /// immediately — the call ended while backgrounded so signaling is no
+  /// longer needed.
+  void notifyHasActiveCalls({required bool hasActiveCalls}) {
+    _logger.fine('notifyHasActiveCalls hasActiveCalls=$hasActiveCalls');
+    _hasActiveCalls = hasActiveCalls;
+    if (!hasActiveCalls && !_appActive) {
+      _disconnect();
+    }
   }
 
   /// Call when network becomes available ([ConnectivityResult] != none).
@@ -191,8 +209,8 @@ class SignalingReconnectController {
         'force=$force connected=${_module.isConnected}',
       );
 
-      if (!force && !_appActive) {
-        _logger.info('_scheduleReconnect: skipped — app not active');
+      if (!force && !_appActive && !_hasActiveCalls) {
+        _logger.info('_scheduleReconnect: skipped — app not active and no active calls');
         return;
       }
       if (!force && !_networkActive) {
@@ -211,7 +229,7 @@ class SignalingReconnectController {
   void _disconnect() {
     _reconnectTimer?.cancel();
     _consecutiveFailures = 0;
-    _module.disconnect();
+    _module.disconnect().ignore();
   }
 
   void _emitPresence(bool isAvailable) {

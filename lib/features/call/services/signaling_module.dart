@@ -26,15 +26,10 @@ class SignalingConnected extends SignalingModuleEvent {}
 /// surfacing a user-visible error. Reconnect delay is always
 /// [kSignalingClientReconnectDelay].
 class SignalingConnectionFailed extends SignalingModuleEvent {
-  SignalingConnectionFailed({required this.error, required this.recommendedReconnectDelay, required this.isRepeated});
+  SignalingConnectionFailed({required this.error, required this.recommendedReconnectDelay});
 
   final Object error;
   final Duration recommendedReconnectDelay;
-
-  /// Whether this failure has the same identity as the immediately preceding
-  /// [SignalingConnectionFailed] (i.e. the same [error] object and no successful
-  /// connect in between). Consumers can use this to suppress duplicate toasts.
-  final bool isRepeated;
 }
 
 /// An already-established session was lost due to a runtime error.
@@ -44,15 +39,10 @@ class SignalingConnectionFailed extends SignalingModuleEvent {
 /// this as an immediate failure (no threshold needed).
 /// Reconnect delay is always [kSignalingClientReconnectDelay].
 class SignalingConnectionLost extends SignalingModuleEvent {
-  SignalingConnectionLost({required this.error, required this.recommendedReconnectDelay, required this.isRepeated});
+  SignalingConnectionLost({required this.error, required this.recommendedReconnectDelay});
 
   final Object error;
   final Duration recommendedReconnectDelay;
-
-  /// Whether this failure has the same identity as the immediately preceding
-  /// connection failure (i.e. the same [error] object and no successful
-  /// connect in between). Consumers can use this to suppress duplicate toasts.
-  final bool isRepeated;
 }
 
 class SignalingDisconnecting extends SignalingModuleEvent {}
@@ -215,10 +205,6 @@ class SignalingModuleIsolateImpl implements SignalingModule {
   WebtritSignalingClient? _client;
   bool _disposed = false;
   bool _connecting = false;
-
-  /// The error from the most recent [SignalingConnectionFailed] emission.
-  /// Reset to null on [SignalingConnected] so the next failure is not marked as repeated.
-  Object? _lastConnectionError;
 
   /// Completer resolved by [_onDisconnect] after a graceful [disconnect] call.
   /// [dispose] awaits it (with timeout) before closing the controller so that
@@ -405,21 +391,12 @@ class SignalingModuleIsolateImpl implements SignalingModule {
         );
 
         _client = client;
-        _lastConnectionError = null;
         _emit(SignalingConnected());
       } catch (e, s) {
         if (_disposed) return;
         _logger.warning('_connectAsync failed', e, s);
 
-        final isRepeated = identical(e, _lastConnectionError);
-        _lastConnectionError = e;
-        _emit(
-          SignalingConnectionFailed(
-            error: e,
-            recommendedReconnectDelay: kSignalingClientReconnectDelay,
-            isRepeated: isRepeated,
-          ),
-        );
+        _emit(SignalingConnectionFailed(error: e, recommendedReconnectDelay: kSignalingClientReconnectDelay));
       }
     } finally {
       _connecting = false;
@@ -446,15 +423,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
     // _onDisconnect callback (socket close after error) is suppressed.
     _errorHandled = true;
 
-    final isRepeated = identical(error, _lastConnectionError);
-    _lastConnectionError = error;
-    _emit(
-      SignalingConnectionLost(
-        error: error,
-        recommendedReconnectDelay: kSignalingClientReconnectDelay,
-        isRepeated: isRepeated,
-      ),
-    );
+    _emit(SignalingConnectionLost(error: error, recommendedReconnectDelay: kSignalingClientReconnectDelay));
   }
 
   void _onDisconnect(int? code, String? reason) {

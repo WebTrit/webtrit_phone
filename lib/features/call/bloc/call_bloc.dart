@@ -243,6 +243,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final connected = _signalingModule.isConnected;
 
       if (appInactive) {
+        _reconnectController.notifyHasActiveCalls(hasActiveCalls: hasActiveCalls);
         if (hasActiveCalls && !connected) {
           _reconnectController.notifyForceReconnect();
         }

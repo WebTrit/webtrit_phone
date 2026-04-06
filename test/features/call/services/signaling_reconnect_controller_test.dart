@@ -42,13 +42,11 @@ class _FakeSignalingModule implements SignalingReconnectable {
 SignalingConnectionFailed _failed({Duration? delay}) => SignalingConnectionFailed(
   error: Exception('connect error'),
   recommendedReconnectDelay: delay ?? kSignalingClientReconnectDelay,
-  isRepeated: false,
 );
 
 SignalingConnectionLost _lost() => SignalingConnectionLost(
   error: Exception('socket error'),
   recommendedReconnectDelay: kSignalingClientReconnectDelay,
-  isRepeated: false,
 );
 
 // ---------------------------------------------------------------------------
