@@ -2665,28 +2665,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     emit(state.copyWithPushActiveCall(activeCall));
 
-    final reportError = await callkeep.reportNewIncomingCall(
-      event.callId,
-      handle,
-      displayName: displayName,
-      hasVideo: video,
-    );
+    if (direction == CallDirection.incoming) {
+      final reportError = await callkeep.reportNewIncomingCall(
+        event.callId,
+        handle,
+        displayName: displayName,
+        hasVideo: video,
+      );
 
-    final acceptableReportErrors = {
-      null,
-      CallkeepIncomingCallError.callIdAlreadyExists,
-      CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
-    };
-    if (!acceptableReportErrors.contains(reportError)) {
-      _logger.warning('_onRestoreAcceptedCall: reportNewIncomingCall returned $reportError, aborting');
-      add(_ResetStateEvent.completeCall(event.callId));
-      return;
-    }
+      final acceptableReportErrors = {
+        null,
+        CallkeepIncomingCallError.callIdAlreadyExists,
+        CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
+      };
+      if (!acceptableReportErrors.contains(reportError)) {
+        _logger.warning('_onRestoreAcceptedCall: reportNewIncomingCall returned $reportError, aborting');
+        add(_ResetStateEvent.completeCall(event.callId));
+        return;
+      }
 
-    if (reportError == null || reportError == CallkeepIncomingCallError.callIdAlreadyExists) {
-      final answerError = await callkeep.answerCall(event.callId);
-      if (answerError != null) {
-        _logger.warning('_onRestoreAcceptedCall: answerCall error: $answerError');
+      if (reportError == null || reportError == CallkeepIncomingCallError.callIdAlreadyExists) {
+        final answerError = await callkeep.answerCall(event.callId);
+        if (answerError != null) {
+          _logger.warning('_onRestoreAcceptedCall: answerCall error: $answerError');
+        }
       }
     }
 

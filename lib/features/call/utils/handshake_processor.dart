@@ -132,7 +132,6 @@ class HandshakeProcessor {
 
       if (latestCallEvent is AcceptedEvent &&
           latestCallEvent.line != null &&
-          connection == null &&
           !activeCallIds.contains(activeLine.callId)) {
         actions.add(
           RestoreCallAction(
