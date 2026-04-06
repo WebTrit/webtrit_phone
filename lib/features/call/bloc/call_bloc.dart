@@ -1426,7 +1426,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
 
     if (canSubmitAnswer == false) {
-      _logger.info('__onCallControlEventAnswered: skipping due stale status: ${call.processingStatus}');
+      _logger.info('__onCallControlEventAnswered: skipping due to stale status: ${call.processingStatus}');
       return;
     }
 
@@ -1833,7 +1833,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _ => false,
     };
     if (!canPerformStart) {
-      _logger.info('__onCallPerformEventStarted: skipping due stale status: ${restoredCall?.processingStatus}');
+      _logger.info('__onCallPerformEventStarted: skipping due to stale status: ${restoredCall?.processingStatus}');
       await callkeep.reportConnectedOutgoingCall(event.callId);
       event.fulfill();
       return;
@@ -2014,7 +2014,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
 
     if (canPerformAnswer == false) {
-      _logger.info('__onCallPerformEventAnswered: skipping due stale status: ${call.processingStatus}');
+      _logger.info('__onCallPerformEventAnswered: skipping due to stale status: ${call.processingStatus}');
       return;
     }
 

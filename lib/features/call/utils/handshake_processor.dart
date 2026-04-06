@@ -10,7 +10,8 @@ sealed class HandshakeAction {
 /// Send a [HangupRequest] to the signaling server and stop processing.
 ///
 /// Emitted when the Callkeep connection for the line is [CallkeepConnectionState.stateDisconnected]
-/// and the latest call event is [AcceptedEvent] or [ProceedingEvent].
+/// and the latest call event is neither [HangupEvent] nor [MissedCallEvent]
+/// (i.e. the call was live — accepted, proceeding, ringing, etc. — when the connection dropped).
 final class HangupSignalingAction extends HandshakeAction {
   const HangupSignalingAction({required this.line, required this.callId});
 
@@ -31,8 +32,10 @@ final class DeclineSignalingAction extends HandshakeAction {
 
 /// Re-negotiate WebRTC media for an already-accepted call after app restart.
 ///
-/// Emitted when the latest call log entry is [AcceptedEvent], the Callkeep connection
-/// is absent, and the call is not already in the BLoC state.
+/// Emitted when the call log contains an [AcceptedEvent] (anywhere in the list,
+/// not necessarily the latest — re-INVITE puts [UpdatedEvent] on top), the call is
+/// not server-terminated ([HangupEvent]/[MissedCallEvent] as the latest entry),
+/// [AcceptedEvent.line] is non-null, and the call is not already tracked in BLoC state.
 /// - [incomingCallEvent] is non-null for incoming calls (provides offer SDP and caller).
 /// - [incomingCallEvent] is null for outgoing calls (callee is taken from [acceptedEvent]).
 final class RestoreCallAction extends HandshakeAction {
@@ -80,12 +83,12 @@ final class EndLocalCallAction extends HandshakeAction {
 ///
 /// **Loop B -per-line decisions:**
 /// - If the Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
-///   the latest event is [AcceptedEvent]/[ProceedingEvent] -> [HangupSignalingAction].
+///   the latest event is [IncomingCallEvent] → [DeclineSignalingAction].
 /// - If the Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
-///   the latest event is [IncomingCallEvent] -> [DeclineSignalingAction].
-/// - If the latest event is [AcceptedEvent] with no local connection -> [RestoreCallAction]
-///   (covers both incoming and outgoing calls).
-/// - If only a single unanswered [IncomingCallEvent] is present -> [HandleIncomingCallAction].
+///   the latest event is not [HangupEvent]/[MissedCallEvent] → [HangupSignalingAction].
+/// - If the log contains an [AcceptedEvent] (non-terminated call, not yet in BLoC) → [RestoreCallAction]
+///   (covers both incoming and outgoing calls; [AcceptedEvent] may not be the newest entry after re-INVITE).
+/// - If only a single unanswered [IncomingCallEvent] is present → [HandleIncomingCallAction].
 ///
 /// **Loop C -orphaned local connections:**
 /// - For each local Callkeep connection whose call ID is absent from the handshake
