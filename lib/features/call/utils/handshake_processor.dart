@@ -115,30 +115,37 @@ class HandshakeProcessor {
         connection = await callkeepConnections.getConnection(callEvent.callId);
 
         if (connection?.state == CallkeepConnectionState.stateDisconnected) {
-          if (callEvent is AcceptedEvent || callEvent is ProceedingEvent) {
-            return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
-          } else if (callEvent is IncomingCallEvent) {
+          if (callEvent is IncomingCallEvent) {
             return [DeclineSignalingAction(line: callEvent.line, callId: callEvent.callId)];
+          } else if (callEvent is! HangupEvent && callEvent is! MissedCallEvent) {
+            return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
           }
         }
       }
 
       // callLogs is newest-first: firstOrNull = latest, lastOrNull = earliest.
       final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
-      final latestCallLog = callEventLogEntries.firstOrNull;
-      final earliestCallLog = callEventLogEntries.lastOrNull;
-      final latestCallEvent = latestCallLog?.callEvent;
-      final earliestCallEvent = earliestCallLog?.callEvent;
+      final latestCallEvent = callEventLogEntries.firstOrNull?.callEvent;
+      final earliestCallEvent = callEventLogEntries.lastOrNull?.callEvent;
 
-      if (latestCallEvent is AcceptedEvent &&
-          latestCallEvent.line != null &&
+      // AcceptedEvent may not be the latest entry after a re-INVITE or transfer —
+      // search the full log list rather than checking only the newest entry.
+      final acceptedLogEntry = callEventLogEntries.where((log) => log.callEvent is AcceptedEvent).firstOrNull;
+
+      // A call is server-terminated when the latest event is a final hangup or missed.
+      final isTerminated = latestCallEvent is HangupEvent || latestCallEvent is MissedCallEvent;
+
+      if (!isTerminated &&
+          acceptedLogEntry != null &&
+          (acceptedLogEntry.callEvent as AcceptedEvent).line != null &&
           !activeCallIds.contains(activeLine.callId)) {
+        final acceptedEvent = acceptedLogEntry.callEvent as AcceptedEvent;
         actions.add(
           RestoreCallAction(
-            line: latestCallEvent.line!,
+            line: acceptedEvent.line!,
             callId: activeLine.callId,
-            acceptedEvent: latestCallEvent,
-            acceptedTime: DateTime.fromMillisecondsSinceEpoch(latestCallLog!.timestamp),
+            acceptedEvent: acceptedEvent,
+            acceptedTime: DateTime.fromMillisecondsSinceEpoch(acceptedLogEntry.timestamp),
             incomingCallEvent: earliestCallEvent is IncomingCallEvent ? earliestCallEvent : null,
           ),
         );

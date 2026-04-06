@@ -179,19 +179,43 @@ void main() {
       expect(actions.whereType<RestoreCallAction>(), isEmpty);
     });
 
-    test('this specific order (newest=AcceptedEvent, oldest=IncomingCallEvent) is required', () async {
-      // Swapped order: oldest=AcceptedEvent, newest=IncomingCallEvent — must NOT trigger restore.
-      final lineSwapped = _makeLine(
+    test('returns RestoreCallAction after re-INVITE: UpdatedEvent newest, AcceptedEvent in logs', () async {
+      // After a re-INVITE (transfer or SDP update) the server puts UpdatedEvent as the newest entry.
+      // AcceptedEvent is no longer first but must still be found to trigger restoration.
+      final line = _makeLine(
         callLogs: [
-          CallEventLog(timestamp: 2000, callEvent: _makeIncomingEvent()), // newest = IncomingCallEvent
-          CallEventLog(timestamp: 1000, callEvent: _makeAcceptedEvent()), // oldest = AcceptedEvent
+          CallEventLog(
+            timestamp: 3000,
+            callEvent: UpdatedEvent(line: _kLine, callId: _kCallId),
+          ),
+          CallEventLog(timestamp: 2000, callEvent: _makeAcceptedEvent()),
+          CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
         ],
       );
 
-      final actions = await processor.process(lines: [lineSwapped], guestLine: null, activeCallIds: {});
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
-      // Should produce HandleIncomingCallAction only if single log, otherwise nothing.
-      // With 2 logs none of the conditions match.
+      expect(actions, hasLength(1));
+      expect(actions.first, isA<RestoreCallAction>());
+      final a = actions.first as RestoreCallAction;
+      expect(a.callId, _kCallId);
+      expect(a.incomingCallEvent, isNotNull);
+    });
+
+    test('skips restoration when HangupEvent is the latest (call server-terminated)', () async {
+      final line = _makeLine(
+        callLogs: [
+          CallEventLog(
+            timestamp: 3000,
+            callEvent: HangupEvent(line: _kLine, callId: _kCallId, code: 200, reason: 'OK'),
+          ),
+          CallEventLog(timestamp: 2000, callEvent: _makeAcceptedEvent()),
+          CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
+        ],
+      );
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
       expect(actions.whereType<RestoreCallAction>(), isEmpty);
     });
   });
