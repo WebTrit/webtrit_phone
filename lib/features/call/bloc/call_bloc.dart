@@ -2649,9 +2649,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       callerDisplayName = incoming.callerDisplayName;
       video = jsep?.hasVideo ?? false;
       // The original offer SDP is stored for UI/video detection purposes only.
-      // It is NOT used for media setup during restoration - __onCallPerformEventAnswered
+      // It is NOT used for media setup during restoration — __onCallPerformEventAnswered
       // is bypassed because the status starts at incomingRestoringMedia (excluded from
-      // canPerformAnswer). Media is re-established via renegotiationNeeded -> UpdateRequest
+      // canPerformAnswer). Media is re-established via renegotiationNeeded → UpdateRequest
       // (ICE restart), which creates a fresh offer with new ICE credentials.
       incomingOffer = jsep;
       direction = CallDirection.incoming;
