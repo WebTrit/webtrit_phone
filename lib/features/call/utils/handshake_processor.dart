@@ -29,7 +29,7 @@ final class DeclineSignalingAction extends HandshakeAction {
   final String callId;
 }
 
-/// Re-negotiate WebRTC media for an already-accepted incoming call (WT-1167 Subtask 2).
+/// Re-negotiate WebRTC media for an already-accepted incoming call.
 ///
 /// Emitted when the handshake contains both [IncomingCallEvent] (oldest) and [AcceptedEvent]
 /// (newest) for a line, the Callkeep connection is absent, and the call is not already in
@@ -123,7 +123,7 @@ class HandshakeProcessor {
         }
       }
 
-      // WT-1167 Subtask 2: restore an accepted incoming call after Activity recreation.
+      // Restore an accepted incoming call after Activity recreation.
       //
       // callLogs is newest-first:
       //   firstOrNull → AcceptedEvent  (latest)
