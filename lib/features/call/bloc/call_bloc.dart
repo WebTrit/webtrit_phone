@@ -1837,6 +1837,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await callkeep.reportConnectedOutgoingCall(event.callId);
       event.fulfill();
       return;
+    } else {
+      _logger.info('__onCallPerformEventStarted: proceeding with status: ${restoredCall?.processingStatus}');
     }
 
     ///
