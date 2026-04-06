@@ -772,7 +772,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // for this callId while contact resolution was in progress.
     if (state.activeCalls.any((c) => c.callId == event.callId)) {
       _logger.fine(
-        '_onCallPushEventIncoming: callId ${event.callId} handled during contact resolution — skipping push duplicate',
+        '_onCallPushEventIncoming: callId ${event.callId} handled during contact resolution - skipping push duplicate',
       );
       return;
     }
@@ -890,7 +890,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     if (nonConnectedCallWithSameCaller != null) {
       // Polite glare resolution: compare call IDs lexicographically so both sides independently
-      // reach the same deterministic decision — exactly one device yields.
+      // reach the same deterministic decision - exactly one device yields.
       // The side whose outgoing callId is lexicographically greater yields: it ends its outgoing
       // call and lets the incoming proceed. The other side declines the incoming and keeps its outgoing.
       final q = [nonConnectedCallWithSameCaller.callId, event.callId]..sort();
@@ -1824,7 +1824,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     // Guard: skip standard outgoing flow for calls restored via _onRestoreAcceptedCall.
     // Telecom fires performStartCall after startCall() regardless, but the call is already
-    // set up — only reportConnectedOutgoingCall is needed to advance Telecom to ACTIVE state.
+    // set up - only reportConnectedOutgoingCall is needed to advance Telecom to ACTIVE state.
     final restoredCall = state.retrieveActiveCall(event.callId);
     final canPerformStart = switch (restoredCall?.processingStatus) {
       CallProcessingStatus.outgoingCreated => true,
@@ -2877,9 +2877,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (event is TransferringEvent) {
       add(_CallSignalingEvent.transferring(line: event.line, callId: event.callId));
     } else if (event is CallingEvent) {
-      _logger.info('[SIG] CallingEvent: callId=${event.callId} line=${event.line} — remote is ringing');
+      _logger.info('[SIG] CallingEvent: callId=${event.callId} line=${event.line} - remote is ringing');
     } else if (event is HangingupEvent) {
-      _logger.info('[SIG] HangingupEvent: callId=${event.callId} line=${event.line} — hangup in progress');
+      _logger.info('[SIG] HangingupEvent: callId=${event.callId} line=${event.line} - hangup in progress');
     } else if (event is IceHangupEvent) {
       _logger.info('[SIG] IceHangupEvent: line=${event.line} reason="${event.reason}"');
     } else {

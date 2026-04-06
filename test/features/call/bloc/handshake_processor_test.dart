@@ -158,7 +158,7 @@ void main() {
           () => mockConnections.getConnection(_kCallId),
         ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
 
-        // stateDisconnected with AcceptedEvent → early exit with HangupSignalingAction, not RestoreCallAction
+        // stateDisconnected with AcceptedEvent -> early exit with HangupSignalingAction, not RestoreCallAction
         final line = _makeRestorationLine();
         final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
@@ -257,7 +257,7 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // stateDisconnected connection — HangupSignalingAction
+  // stateDisconnected connection - HangupSignalingAction
   // -------------------------------------------------------------------------
 
   group('stateDisconnected with AcceptedEvent', () {
@@ -306,7 +306,7 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // stateDisconnected connection — DeclineSignalingAction
+  // stateDisconnected connection - DeclineSignalingAction
   // -------------------------------------------------------------------------
 
   group('stateDisconnected with IncomingCallEvent', () {
@@ -327,7 +327,7 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // Orphaned local connections — EndLocalCallAction
+  // Orphaned local connections - EndLocalCallAction
   // -------------------------------------------------------------------------
 
   group('local connection not in handshake', () {

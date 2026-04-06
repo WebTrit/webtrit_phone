@@ -128,7 +128,7 @@ class HandshakeProcessor {
       final latestCallEvent = callEventLogEntries.firstOrNull?.callEvent;
       final earliestCallEvent = callEventLogEntries.lastOrNull?.callEvent;
 
-      // AcceptedEvent may not be the latest entry after a re-INVITE or transfer —
+      // AcceptedEvent may not be the latest entry after a re-INVITE or transfer -
       // search the full log list rather than checking only the newest entry.
       final acceptedLogEntry = callEventLogEntries.where((log) => log.callEvent is AcceptedEvent).firstOrNull;
 
