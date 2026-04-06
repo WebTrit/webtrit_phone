@@ -486,4 +486,144 @@ void main() {
       });
     });
   });
+
+  // -------------------------------------------------------------------------
+  // onConnectionPresenceChanged
+  // -------------------------------------------------------------------------
+
+  group('SignalingReconnectController - onConnectionPresenceChanged', () {
+    test('emits false when consecutive failures reach threshold', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final presence = <bool>[];
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionPresenceChanged: presence.add,
+          notifyAfterConsecutiveFailures: 2,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_failed());
+        expect(presence, isEmpty);
+
+        module.emit(_failed());
+        expect(presence, [false]);
+      });
+    });
+
+    test('does not emit false again on subsequent failures after threshold', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final presence = <bool>[];
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionPresenceChanged: presence.add,
+          notifyAfterConsecutiveFailures: 2,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_failed());
+        module.emit(_failed());
+        module.emit(_failed());
+        module.emit(_failed());
+
+        expect(presence, [false]);
+      });
+    });
+
+    test('emits false immediately on SignalingConnectionLost', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final presence = <bool>[];
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionPresenceChanged: presence.add,
+          notifyAfterConsecutiveFailures: 5,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_lost());
+
+        expect(presence, [false]);
+      });
+    });
+
+    test('emits true on SignalingConnected after unavailable', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final presence = <bool>[];
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionPresenceChanged: presence.add,
+          notifyAfterConsecutiveFailures: 1,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_failed());
+        expect(presence, [false]);
+
+        module.emit(SignalingConnected());
+        expect(presence, [false, true]);
+      });
+    });
+
+    test('does not emit true twice when already available', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final presence = <bool>[];
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionPresenceChanged: presence.add,
+          notifyAfterConsecutiveFailures: 1,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(SignalingConnected());
+        module.emit(SignalingConnected());
+
+        expect(presence, isEmpty);
+      });
+    });
+
+    test('emits false on notifyNetworkUnavailable', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final presence = <bool>[];
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionPresenceChanged: presence.add,
+        );
+        addTearDown(controller.dispose);
+
+        controller.notifyNetworkUnavailable();
+
+        expect(presence, [false]);
+      });
+    });
+
+    test('full cycle: unavailable → available → unavailable', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final presence = <bool>[];
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionPresenceChanged: presence.add,
+          notifyAfterConsecutiveFailures: 1,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_failed());
+        module.emit(SignalingConnected());
+        module.emit(_lost());
+
+        expect(presence, [false, true, false]);
+      });
+    });
+  });
 }

@@ -23,6 +23,10 @@ final _logger = Logger('SignalingReconnectController');
 /// - Calls [onConnectionFailed] immediately on [SignalingConnectionLost]
 ///   because a previously established session was dropped, which is always
 ///   user-visible.
+/// - Tracks persistent connection availability and calls
+///   [onConnectionPresenceChanged] whenever the availability transitions
+///   between available and unavailable — suitable for driving a persistent
+///   UI indicator (e.g. a "No connection" banner).
 ///
 /// ## Usage
 ///
@@ -34,6 +38,7 @@ final _logger = Logger('SignalingReconnectController');
 /// final controller = SignalingReconnectController(
 ///   signalingModule: module,
 ///   onConnectionFailed: () => submitNotification(SignalingConnectFailedNotification()),
+///   onConnectionPresenceChanged: (isAvailable) => add(_SignalingPresenceChanged(isAvailable)),
 /// );
 ///
 /// // On app lifecycle change:
@@ -48,11 +53,13 @@ class SignalingReconnectController {
   SignalingReconnectController({
     required SignalingReconnectable signalingModule,
     void Function()? onConnectionFailed,
+    void Function(bool isAvailable)? onConnectionPresenceChanged,
     int notifyAfterConsecutiveFailures = 2,
     bool reconnectEnabled = true,
   }) : assert(notifyAfterConsecutiveFailures >= 1, 'notifyAfterConsecutiveFailures must be >= 1'),
        _module = signalingModule,
        _onConnectionFailed = onConnectionFailed,
+       _onConnectionPresenceChanged = onConnectionPresenceChanged,
        _notifyThreshold = notifyAfterConsecutiveFailures,
        _reconnectEnabled = reconnectEnabled {
     _subscription = _module.events.listen(_onEvent);
@@ -60,6 +67,7 @@ class SignalingReconnectController {
 
   final SignalingReconnectable _module;
   final void Function()? _onConnectionFailed;
+  final void Function(bool isAvailable)? _onConnectionPresenceChanged;
   final int _notifyThreshold;
   final bool _reconnectEnabled;
 
@@ -70,6 +78,11 @@ class SignalingReconnectController {
   bool _appActive = true;
   bool _networkActive = true;
   bool _disposed = false;
+
+  /// Last value passed to [_onConnectionPresenceChanged].
+  /// Starts as `true` (assumed available) to avoid a spurious "available"
+  /// callback on the first [SignalingConnected] event.
+  bool _lastPresence = true;
 
   // ---------------------------------------------------------------------------
   // External lifecycle / connectivity notifications
@@ -116,6 +129,7 @@ class SignalingReconnectController {
     _logger.fine('notifyNetworkUnavailable');
     _networkActive = false;
     _disconnect();
+    _emitPresence(false);
   }
 
   // ---------------------------------------------------------------------------
@@ -128,6 +142,7 @@ class SignalingReconnectController {
         _logger.fine('_onEvent: connected — resetting failure counter');
         _consecutiveFailures = 0;
         _reconnectTimer?.cancel();
+        _emitPresence(true);
 
       // Initial connect attempt failed before any session was established.
       // May be transient (e.g. DNS not ready on screen unlock) — notify only
@@ -138,6 +153,7 @@ class SignalingReconnectController {
         if (_consecutiveFailures == _notifyThreshold) {
           _logger.info('_onEvent: notifying — consecutive failures reached threshold ($_notifyThreshold)');
           _onConnectionFailed?.call();
+          _emitPresence(false);
         }
         _scheduleReconnect(recommendedReconnectDelay);
 
@@ -147,6 +163,7 @@ class SignalingReconnectController {
         _logger.fine('_onEvent: connection lost — notifying immediately');
         _consecutiveFailures = 0;
         _onConnectionFailed?.call();
+        _emitPresence(false);
         _scheduleReconnect(recommendedReconnectDelay);
 
       case SignalingDisconnected(:final recommendedReconnectDelay):
@@ -195,6 +212,13 @@ class SignalingReconnectController {
     _reconnectTimer?.cancel();
     _consecutiveFailures = 0;
     _module.disconnect();
+  }
+
+  void _emitPresence(bool isAvailable) {
+    if (_lastPresence == isAvailable) return;
+    _lastPresence = isAvailable;
+    _logger.info('_emitPresence: connection presence changed → isAvailable=$isAvailable');
+    _onConnectionPresenceChanged?.call(isAvailable);
   }
 
   // ---------------------------------------------------------------------------
