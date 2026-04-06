@@ -246,6 +246,6 @@ class SignalingReconnectController {
   void dispose() {
     _disposed = true;
     _reconnectTimer?.cancel();
-    _subscription.cancel();
+    _subscription.cancel().ignore();
   }
 }

@@ -98,6 +98,7 @@ void main() {
     test('no notification below threshold', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -117,6 +118,7 @@ void main() {
     test('notifies exactly once when threshold is reached', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -136,6 +138,7 @@ void main() {
     test('does not notify again on failures beyond threshold', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -157,6 +160,7 @@ void main() {
     test('SignalingConnected resets counter — next outage notifies again at threshold', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -190,6 +194,7 @@ void main() {
     test('notifies immediately on first SignalingConnectionLost', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -208,6 +213,7 @@ void main() {
     test('resets consecutive failure counter on SignalingConnectionLost', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -242,6 +248,7 @@ void main() {
     test('schedules reconnect after SignalingConnectionFailed', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
 
@@ -256,6 +263,7 @@ void main() {
     test('schedules reconnect after SignalingConnectionLost', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
 
@@ -270,6 +278,7 @@ void main() {
     test('schedules reconnect after SignalingDisconnected with non-null delay', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
 
@@ -290,6 +299,7 @@ void main() {
     test('does not schedule reconnect after SignalingDisconnected with null delay', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
 
@@ -310,6 +320,7 @@ void main() {
     test('reconnectEnabled: false — timer never fires connect', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final controller = SignalingReconnectController(signalingModule: module, reconnectEnabled: false);
         addTearDown(controller.dispose);
 
@@ -328,6 +339,7 @@ void main() {
     test('notifyAppPaused without active calls — disconnects and skips reconnect', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         module.isConnected = true;
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
@@ -344,6 +356,7 @@ void main() {
     test('notifyAppPaused with active calls — does not disconnect, reconnect still fires', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         module.isConnected = false;
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
@@ -360,6 +373,7 @@ void main() {
     test('notifyAppResumed — sets app active and schedules fast reconnect', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         module.isConnected = false;
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
@@ -381,6 +395,7 @@ void main() {
     test('notifyNetworkUnavailable — disconnects and skips reconnect timer', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         module.isConnected = true;
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
@@ -397,6 +412,7 @@ void main() {
     test('notifyNetworkAvailable — schedules fast reconnect', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         module.isConnected = false;
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
@@ -418,6 +434,7 @@ void main() {
     test('fires connect even when app is paused', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         module.isConnected = false;
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
@@ -433,6 +450,7 @@ void main() {
     test('fires connect even when network is unavailable', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         module.isConnected = false;
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
@@ -454,6 +472,7 @@ void main() {
     test('timer does not call connect after dispose', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         module.isConnected = false;
         final controller = SignalingReconnectController(signalingModule: module);
 
@@ -468,6 +487,7 @@ void main() {
     test('no events processed after dispose', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -493,6 +513,7 @@ void main() {
     test('emits false when consecutive failures reach threshold', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final presence = <bool>[];
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -513,6 +534,7 @@ void main() {
     test('does not emit false again on subsequent failures after threshold', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final presence = <bool>[];
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -534,6 +556,7 @@ void main() {
     test('emits false immediately on SignalingConnectionLost', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final presence = <bool>[];
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -552,6 +575,7 @@ void main() {
     test('emits true on SignalingConnected after unavailable', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final presence = <bool>[];
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -572,6 +596,7 @@ void main() {
     test('does not emit true twice when already available', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final presence = <bool>[];
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -591,6 +616,7 @@ void main() {
     test('emits false on notifyNetworkUnavailable', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final presence = <bool>[];
         final controller = SignalingReconnectController(
           signalingModule: module,
@@ -604,9 +630,10 @@ void main() {
       });
     });
 
-    test('full cycle: unavailable → available → unavailable', () {
+    test('full cycle: unavailable -> available -> unavailable', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
         final presence = <bool>[];
         final controller = SignalingReconnectController(
           signalingModule: module,
