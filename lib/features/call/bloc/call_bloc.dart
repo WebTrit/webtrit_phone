@@ -2713,10 +2713,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }
       }
     } else {
-      // Register the restored outgoing call with Android Telecom so native call UI appears.
-      // Telecom responds by firing performStartCall; that callback is intercepted by the
-      // canPerformStart guard in __onCallPerformEventStarted, which skips the normal
-      // outgoing flow and advances the connection to ACTIVE via reportConnectedOutgoingCall.
+      // Register with Telecom; performStartCall is handled by the canPerformStart guard.
       final startCallError = await callkeep.startCall(
         event.callId,
         handle,
