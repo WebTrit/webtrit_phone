@@ -2629,7 +2629,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? incoming.callerDisplayName;
 
-    if (state.activeCalls.any((c) => c.callId == event.callId)) return;
+    if (state.activeCalls.any((c) => c.callId == event.callId)) {
+      _logger.warning('_onRestoreAcceptedIncomingCall: callId=${event.callId} already active, skipping');
+      return;
+    }
 
     final activeCall = ActiveCall(
       direction: CallDirection.incoming,
