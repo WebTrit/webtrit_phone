@@ -2611,7 +2611,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // The original offer SDP is stored for UI/video detection purposes only.
       // It is NOT used for media setup during restoration — __onCallPerformEventAnswered
       // is bypassed because the status starts at incomingRestoringMedia (excluded from
-      // canPerformAnswer). Media is re-established via renegotiationNeeded → UpdateRequest
+      // canPerformAnswer). Media is re-established via renegotiationNeeded -> UpdateRequest
       // (ICE restart), which creates a fresh offer with new ICE credentials.
       // Outgoing restored calls use outgoingRestoringMedia for the same reason
       // (excluded from canPerformStart normal flow).

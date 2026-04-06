@@ -83,12 +83,12 @@ final class EndLocalCallAction extends HandshakeAction {
 ///
 /// **Loop B -per-line decisions:**
 /// - If the Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
-///   the latest event is [IncomingCallEvent] → [DeclineSignalingAction].
+///   the latest event is [IncomingCallEvent] -> [DeclineSignalingAction].
 /// - If the Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
-///   the latest event is not [HangupEvent]/[MissedCallEvent] → [HangupSignalingAction].
-/// - If the log contains an [AcceptedEvent] (non-terminated call, not yet in BLoC) → [RestoreCallAction]
+///   the latest event is not [HangupEvent]/[MissedCallEvent] -> [HangupSignalingAction].
+/// - If the log contains an [AcceptedEvent] (non-terminated call, not yet in BLoC) -> [RestoreCallAction]
 ///   (covers both incoming and outgoing calls; [AcceptedEvent] may not be the newest entry after re-INVITE).
-/// - If only a single unanswered [IncomingCallEvent] is present → [HandleIncomingCallAction].
+/// - If only a single unanswered [IncomingCallEvent] is present -> [HandleIncomingCallAction].
 ///
 /// **Loop C -orphaned local connections:**
 /// - For each local Callkeep connection whose call ID is absent from the handshake

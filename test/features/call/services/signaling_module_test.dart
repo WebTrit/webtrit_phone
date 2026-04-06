@@ -1239,9 +1239,9 @@ void main() {
   // the client concurrently tries to send a hangup request.
   //
   // The key asymmetry:
-  //   - Non-intentional 4610 → recommendedReconnectDelay != null → CallBloc schedules reconnect.
-  //   - Intentional disconnect() followed by server 4610 → recommendedReconnectDelay == null
-  //     → CallBloc does NOT schedule a reconnect automatically.
+  //   - Non-intentional 4610 -> recommendedReconnectDelay != null -> CallBloc schedules reconnect.
+  //   - Intentional disconnect() followed by server 4610 -> recommendedReconnectDelay == null
+  //     -> CallBloc does NOT schedule a reconnect automatically.
   //
   // The second case was the root cause of WT-1214 (cannot make calls after
   // blind transfer): post-transfer cleanup called disconnect() (intentional),
