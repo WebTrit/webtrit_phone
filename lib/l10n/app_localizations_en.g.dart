@@ -848,6 +848,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'An unexpected error occurred';
 
   @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count records', one: '$count record');
+    return 'Showing last $_temp0. Use Share to export the full log.';
+  }
+
+  @override
+  String get logRecordsConsole_Button_infoClose => 'Got it';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_info => 'Info';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_clear => 'Clear';
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Chats';
 
   @override

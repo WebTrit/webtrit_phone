@@ -853,6 +853,26 @@ class AppLocalizationsIt extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'Si è verificato un errore imprevisto';
 
   @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Visualizzazione degli ultimi $count record. Usa Condividi per esportare il log completo.',
+      one: 'Visualizzazione dell\'ultimo $count record. Usa Condividi per esportare il log completo.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get logRecordsConsole_Button_infoClose => 'Capito';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_info => 'Info';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_clear => 'Cancella';
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
 
   @override

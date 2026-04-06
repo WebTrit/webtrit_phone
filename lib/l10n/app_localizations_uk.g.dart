@@ -857,6 +857,28 @@ class AppLocalizationsUk extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'Виникла неочікувана помилка';
 
   @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count записи',
+      many: '$count записів',
+      few: '$count записи',
+      one: '$count запис',
+    );
+    return 'Відображено останні $_temp0. Використайте Поділитись для експорту повного журналу.';
+  }
+
+  @override
+  String get logRecordsConsole_Button_infoClose => 'Зрозуміло';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_info => 'Інформація';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_clear => 'Очистити';
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Чати';
 
   @override
