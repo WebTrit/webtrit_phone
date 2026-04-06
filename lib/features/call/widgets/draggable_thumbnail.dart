@@ -108,6 +108,7 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
 
     if (_offset != null && !_dragging) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
         final thumbnailRect = _findThumbnailRect();
         final translateX = _lastStickTranslateX(_stickyRect, thumbnailRect);
         final translateY = _boundTranslateY(_stickyRect, thumbnailRect);

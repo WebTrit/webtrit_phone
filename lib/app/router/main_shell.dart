@@ -56,6 +56,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// preventing consumers from holding stale references across rebuilds.
   CallController? _callController;
 
+  /// Cached localized string for the session-expired notification.
+  /// Populated in [didChangeDependencies] to avoid calling Localizations
+  /// inside [initState], which is not allowed.
+  late String _sessionExpiredMessage;
+
   @override
   void initState() {
     super.initState();
@@ -91,16 +96,24 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     );
     _signalingModule.connect();
 
+    final appBloc = context.read<AppBloc>();
+    final notificationsBloc = context.read<NotificationsBloc>();
+
     _sessionGuard = RouterLogoutSessionGuard(
       performLogout: () {
-        context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
+        appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
       },
       onPreLogout: () {
-        final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
-        final notificationsBloc = context.read<NotificationsBloc>();
+        final notification = ErrorMessageNotification(_sessionExpiredMessage);
         notificationsBloc.add(NotificationsSubmitted(notification));
       },
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _sessionExpiredMessage = context.l10n.notifications_errorSnackBar_sessionExpired;
   }
 
   @override
