@@ -1113,14 +1113,14 @@ void main() {
       final result = state.toLinesState();
       expect(result.isBlank, isFalse);
       expect(result.mainLines, isEmpty);
-      expect(result.guestLine, LineState.idle);
+      expect(result.guestLine, LineState.idle());
     });
 
     test('returns guest line inUse when guest call is active (line == null)', () {
       final state = CallState(linesCount: 0, callServiceState: kRegistered, activeCalls: [_makeCall(line: null)]);
       final result = state.toLinesState();
       expect(result.mainLines, isEmpty);
-      expect(result.guestLine, LineState.inUse);
+      expect(result.guestLine, LineState.inUse(callId: 'call-1'));
     });
   });
 
@@ -1128,8 +1128,8 @@ void main() {
     test('all lines idle when no active calls', () {
       final state = CallState(linesCount: 2, callServiceState: kRegistered);
       final result = state.toLinesState();
-      expect(result.mainLines, [LineState.idle, LineState.idle]);
-      expect(result.guestLine, LineState.idle);
+      expect(result.mainLines, [LineState.idle(), LineState.idle()]);
+      expect(result.guestLine, LineState.idle());
     });
 
     test('line 0 inUse when call on line 0', () {
@@ -1139,8 +1139,8 @@ void main() {
         activeCalls: [_makeCall(callId: 'c1', line: 0)],
       );
       final result = state.toLinesState();
-      expect(result.mainLines[0], LineState.inUse);
-      expect(result.mainLines[1], LineState.idle);
+      expect(result.mainLines[0], LineState.inUse(callId: 'c1'));
+      expect(result.mainLines[1], LineState.idle());
     });
 
     test('line 1 inUse when call on line 1', () {
@@ -1150,8 +1150,8 @@ void main() {
         activeCalls: [_makeCall(callId: 'c1', line: 1)],
       );
       final result = state.toLinesState();
-      expect(result.mainLines[0], LineState.idle);
-      expect(result.mainLines[1], LineState.inUse);
+      expect(result.mainLines[0], LineState.idle());
+      expect(result.mainLines[1], LineState.inUse(callId: 'c1'));
     });
 
     test('all lines inUse when calls on every line', () {
@@ -1164,7 +1164,7 @@ void main() {
         ],
       );
       final result = state.toLinesState();
-      expect(result.mainLines, [LineState.inUse, LineState.inUse]);
+      expect(result.mainLines, [LineState.inUse(callId: 'c1'), LineState.inUse(callId: 'c2')]);
     });
 
     test('guest line inUse when guest call present alongside main calls', () {
@@ -1177,9 +1177,9 @@ void main() {
         ],
       );
       final result = state.toLinesState();
-      expect(result.mainLines[0], LineState.inUse);
-      expect(result.mainLines[1], LineState.idle);
-      expect(result.guestLine, LineState.inUse);
+      expect(result.mainLines[0], LineState.inUse(callId: 'c1'));
+      expect(result.mainLines[1], LineState.idle());
+      expect(result.guestLine, LineState.inUse(callId: 'c2'));
     });
 
     test('guest line idle when no guest call', () {
@@ -1188,7 +1188,7 @@ void main() {
         callServiceState: kRegistered,
         activeCalls: [_makeCall(callId: 'c1', line: 0)],
       );
-      expect(state.toLinesState().guestLine, LineState.idle);
+      expect(state.toLinesState().guestLine, LineState.idle());
     });
   });
 
