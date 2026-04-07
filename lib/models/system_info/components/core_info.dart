@@ -34,7 +34,7 @@ class CoreInfo with EquatableMixin {
   }
 
   bool get hybridPresenceAware {
-    // Hybrid presence was was added in 0.26.0-alpha.2
-    return verifyVersionStr('>=0.26.0-alpha.2 <2.0.0');
+    // Hybrid presence was was added in 0.28.0-alpha.1
+    return verifyVersionStr('>=0.28.0-alpha.1 <2.0.0');
   }
 }
