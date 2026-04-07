@@ -6,3 +6,4 @@ export 'self_config_mapper.dart';
 export 'sip_subscription_api_mapper.dart';
 export 'system_info_mapper.dart';
 export 'system_notification_mapper.dart';
+export 'user_info_mapper.dart';

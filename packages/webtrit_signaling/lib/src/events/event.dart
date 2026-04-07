@@ -24,4 +24,6 @@ abstract class Event extends Equatable {
   static Event? tryFromJson(Map<String, dynamic> json) {
     return GlobalEvent.tryFromJson(json) ?? SessionEvent.tryFromJson(json);
   }
+
+  Map<String, dynamic> toJson();
 }

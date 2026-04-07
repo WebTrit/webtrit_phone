@@ -18,8 +18,6 @@ class SystemInfoLocalRepositoryPrefsImpl with SystemInfoJsonMapper implements Sy
 
   final SecureStorage _secureStorage;
 
-  final _controller = StreamController<WebtritSystemInfo?>.broadcast();
-
   @override
   WebtritSystemInfo? getSystemInfo() {
     final jsonString = _secureStorage.readSystemInfo();
@@ -31,17 +29,13 @@ class SystemInfoLocalRepositoryPrefsImpl with SystemInfoJsonMapper implements Sy
   Future<void> setSystemInfo(WebtritSystemInfo systemInfo) async {
     final jsonString = systemInfoToJson(systemInfo);
     await _secureStorage.writeSystemInfo(jsonString);
-    _controller.add(systemInfo);
   }
 
   @override
   Future<void> clear() async {
     await _secureStorage.deleteSystemInfo();
-    _controller.add(null);
   }
 
   @override
-  Future<void> dispose() async {
-    _controller.close();
-  }
+  Future<void> dispose() async {}
 }

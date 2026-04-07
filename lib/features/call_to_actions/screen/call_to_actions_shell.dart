@@ -20,15 +20,23 @@ class CallToActionsShell extends StatefulWidget {
 }
 
 class _CallToActionsShellState extends State<CallToActionsShell> with RouteAware {
-  late final DemoActionOverlay _actionOverlay = DemoActionOverlay(
-    screenSize: MediaQuery.of(context).size,
-    safePadding: MediaQuery.of(context).padding,
-    stickyPadding: const EdgeInsets.all(8),
-  );
+  DemoActionOverlay? _actionOverlay;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_actionOverlay == null || !_actionOverlay!.inserted) {
+      _actionOverlay = DemoActionOverlay(
+        screenSize: MediaQuery.sizeOf(context),
+        safePadding: MediaQuery.paddingOf(context),
+        stickyPadding: const EdgeInsets.all(8),
+      );
+    }
+  }
 
   @override
   void dispose() {
-    _actionOverlay.remove();
+    _actionOverlay?.remove();
     super.dispose();
   }
 
@@ -69,7 +77,7 @@ class _CallToActionsShellState extends State<CallToActionsShell> with RouteAware
   }
 
   void _removeActionOverlay() {
-    _actionOverlay.remove();
+    _actionOverlay?.remove();
   }
 
   void _updateActionOverlay(BuildContext context, CallToAction action) {
@@ -79,7 +87,7 @@ class _CallToActionsShellState extends State<CallToActionsShell> with RouteAware
     final url = action.url;
     final button = DemoActionButton(title: action.title, description: action.description);
 
-    _actionOverlay.insert(
+    _actionOverlay?.insert(
       context: context,
       child: button,
       onTap: url != null ? () => _navigateToAction(context, url) : null,

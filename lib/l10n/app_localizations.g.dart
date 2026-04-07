@@ -1617,6 +1617,30 @@ abstract class AppLocalizations {
   /// **'An unexpected error occurred'**
   String get logRecordsConsole_Text_failure;
 
+  /// Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing last {count, plural, one{{count} record} other{{count} records}}. Use Share to export the full log.'**
+  String logRecordsConsole_Text_recordsCountHint(int count);
+
+  /// No description provided for @logRecordsConsole_Button_infoClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get logRecordsConsole_Button_infoClose;
+
+  /// No description provided for @logRecordsConsole_PopupMenuItem_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Info'**
+  String get logRecordsConsole_PopupMenuItem_info;
+
+  /// No description provided for @logRecordsConsole_PopupMenuItem_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get logRecordsConsole_PopupMenuItem_clear;
+
   /// No description provided for @main_BottomNavigationBarItemLabel_chats.
   ///
   /// In en, this message translates to:
@@ -3378,6 +3402,18 @@ abstract class AppLocalizations {
   /// **'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues'**
   String get settings_encoding_Section_packetization_tooltip;
 
+  /// No description provided for @settings_encoding_Section_packetization_warning_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning:'**
+  String get settings_encoding_Section_packetization_warning_title;
+
+  /// No description provided for @settings_encoding_Section_packetization_warning_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Some codecs may struggle with non-default ptime values, causing audible glitches or silence. Use only if you know what you are doing.'**
+  String get settings_encoding_Section_packetization_warning_message;
+
   /// No description provided for @settings_encoding_Section_preset.
   ///
   /// In en, this message translates to:
@@ -4403,6 +4439,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get voicemail_Label_retry;
+
+  /// No description provided for @voicemail_Snackbar_notConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact your administrator to activate voicemail'**
+  String get voicemail_Snackbar_notConfigured;
 
   /// No description provided for @voicemail_Title_notSupported.
   ///

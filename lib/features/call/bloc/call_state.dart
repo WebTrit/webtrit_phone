@@ -41,6 +41,31 @@ class CallState with _$CallState {
   /// Indicates that the signaling connection to the server is successfully established.
   bool get isSignalingEstablished => callServiceState.signalingClientStatus.isConnect;
 
+  /// Computes the [LinesState] that reflects the current lines and active calls.
+  ///
+  /// Returns [LinesState.blank] when [linesCount] is 0 and the signaling
+  /// handshake has not yet been received ([isHandshakeEstablished] is false),
+  /// keeping [CallRoutingCubit] in the unready state until server config arrives.
+  ///
+  /// After the handshake, [linesCount] == 0 is a valid server configuration
+  /// (no main lines), so a real [LinesState] is computed to allow guest-line calls.
+  LinesState toLinesState() {
+    if (linesCount == 0 && !isHandshakeEstablished) return LinesState.blank();
+
+    final List<LineState> mainLinesState = [];
+    for (var i = 0; i < linesCount; i++) {
+      final lineCall = activeCalls.firstWhereOrNull((e) => e.line == i);
+      if (lineCall != null) {
+        mainLinesState.add(LineState.inUse(callId: lineCall.callId));
+      } else {
+        mainLinesState.add(LineState.idle());
+      }
+    }
+    final guestLineCall = activeCalls.firstWhereOrNull((e) => e.line == null);
+    final guestLineState = guestLineCall != null ? LineState.inUse(callId: guestLineCall.callId) : LineState.idle();
+    return LinesState(mainLines: mainLinesState, guestLine: guestLineState);
+  }
+
   int? retrieveIdleLine() {
     for (var line = 0; line < linesCount; line++) {
       if (!activeCalls.any((activeCall) => activeCall.line == line)) {
@@ -229,7 +254,16 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   @override
   bool get wasHungUp => hungUpTime != null;
 
-  bool get remoteVideo => remoteStream?.getVideoTracks().isNotEmpty ?? video;
+  /// Whether the remote peer is expected to send (or is already sending) video.
+  ///
+  /// Returns `true` when the remote stream contains at least one video track
+  /// (confirmed by WebRTC). Falls back to the logical [video] flag when the
+  /// stream is absent or audio-only — this covers the window between the SDP
+  /// negotiation completing and the first video frame arriving, which is
+  /// especially common after a glare-resolution rollback where [onAddStream]
+  /// does not re-fire for the updated stream and only [onAddTrack] signals the
+  /// new video track.
+  bool get remoteVideo => (remoteStream?.getVideoTracks().isNotEmpty ?? false) || video;
 
   /// Indicates whether the [localStream] contains at least one video track.
   ///

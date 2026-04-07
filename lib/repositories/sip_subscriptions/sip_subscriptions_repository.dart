@@ -155,4 +155,7 @@ class SipSubscriptionsRepositorySyncableImpl implements SipSubscriptionsReposito
       }
     }
   }
+
+  @override
+  bool get isActive => true;
 }

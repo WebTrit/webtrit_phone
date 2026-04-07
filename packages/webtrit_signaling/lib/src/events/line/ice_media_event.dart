@@ -19,6 +19,9 @@ class IceMediaEvent extends LineEvent {
 
   static const typeValue = 'ice_media';
 
+  @override
+  Map<String, dynamic> toJson() => {...lineBaseJson(typeValue), 'mid': mid, 'type': type.name, 'receiving': receiving};
+
   factory IceMediaEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

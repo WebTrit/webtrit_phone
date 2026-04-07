@@ -76,6 +76,7 @@ class MainAppBar extends AppBar {
                          ],
                        ),
                        onPressed: () {
+                         FocusScope.of(context).unfocus();
                          context.router.navigate(const SettingsRouterPageRoute());
                        },
                      );

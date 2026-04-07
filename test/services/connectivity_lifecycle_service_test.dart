@@ -305,6 +305,29 @@ void main() {
       });
     });
 
+    // Ensures inactive refreshables are skipped during refreshAll() triggered
+    // on reconnect, while active ones are still called normally.
+    test('inactive refreshable is skipped on reconnect', () {
+      fakeAsync((async) {
+        final active = MockRefreshableRepository();
+        final inactive = MockRefreshableRepository()..active = false;
+
+        service = ConnectivityLifecycleService(
+          connectivity: connectivity,
+          options: const ConnectivityLifecycleOptions(debounce: Duration.zero, jitterMaxMs: 0),
+        );
+
+        service.register(ConnectivityRecoveryRegistration.refreshable(active));
+        service.register(ConnectivityRecoveryRegistration.refreshable(inactive));
+
+        connectivity.push(true);
+        async.elapse(Duration.zero);
+
+        expect(active.calls, 1, reason: 'Active refreshable should be called');
+        expect(inactive.calls, 0, reason: 'Inactive refreshable must be skipped');
+      });
+    });
+
     // Ensures no events are processed after dispose(),
     // i.e., timers and subscriptions are cleaned up.
     test('ignores events after dispose', () async {

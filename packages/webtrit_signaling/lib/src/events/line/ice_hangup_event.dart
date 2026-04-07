@@ -10,6 +10,9 @@ class IceHangupEvent extends LineEvent {
 
   static const typeValue = 'ice_hangup';
 
+  @override
+  Map<String, dynamic> toJson() => {...lineBaseJson(typeValue), if (reason != null) 'reason': reason};
+
   factory IceHangupEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

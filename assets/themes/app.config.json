@@ -7,6 +7,9 @@
     {
       "type": "loggingConfig",
       "checkIntervalSec": 15
+    },
+    {
+      "type": "hybridPresence"
     }
   ],
   "loginConfig": {

@@ -96,6 +96,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                   onTap: _compactController.toggle,
                   remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
                   backgroundMode: _backgroundMode,
+                  // Its important to hide video if held to avoid showing frozen/last frames when held,
+                  // and especially for case when both sides turn on hold and after one side unholds video started to show for another 'holded' side.
+                  hideVideo: activeCall.held,
                 ),
               AnimatedBuilder(
                 animation: _compactController,
@@ -164,7 +167,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                           ),
                                         CallActions(
                                           style: style?.actions,
-                                          enableInteractions: widget.callStatus == CallStatus.ready,
+                                          enableInteractions:
+                                              widget.callStatus == CallStatus.ready &&
+                                              activeCalls.any((call) => call.updating) == false,
                                           isIncoming: activeCall.isIncoming,
                                           remoteVideo: activeCall.remoteVideo,
                                           wasAccepted: activeCall.wasAccepted,

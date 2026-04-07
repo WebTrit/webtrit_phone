@@ -56,6 +56,7 @@ class _AppState extends State<App> {
         encodingSettingsRepository: context.read<EncodingSettingsRepository>(),
         localeRepository: context.read<LocaleRepository>(),
         themeModeRepository: context.read<ThemeModeRepository>(),
+        userLocalDatasource: context.read<UserLocalDatasource>(),
         appDatabase: context.read<AppDatabase>(),
       ),
     );
@@ -81,7 +82,7 @@ class _AppState extends State<App> {
 
     final featureAccess = context.watch<FeatureAccess>();
 
-    context.read<AppLogger>().applyConfig(featureAccess.loggingConfig.logLevel);
+    context.read<AppLogger>().applyConfig(featureAccess.loggingConfig);
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,
@@ -140,7 +141,9 @@ class _AppState extends State<App> {
                     context.read<AppAnalyticsRepository>().createObserver(),
                     AutoRouteObserver(),
                   ],
-                  reevaluateListenable: ReevaluateListenable.stream(appBloc.stream),
+                  reevaluateListenable: ReevaluateListenable.stream(
+                    appBloc.stream.distinct((p, n) => p.compareToReevaluate(n)),
+                  ),
                 ),
               );
             },

@@ -5,6 +5,9 @@ class HoldingEvent extends CallEvent {
 
   static const typeValue = 'holding';
 
+  @override
+  Map<String, dynamic> toJson() => callBaseJson(typeValue);
+
   factory HoldingEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

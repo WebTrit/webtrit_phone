@@ -746,6 +746,21 @@
   "@logRecordsConsole_Text_failure": {
     "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
   },
+  "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell'ultimo {count} record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi {count} record. Usa Condividi per esportare il log completo.}}",
+  "@logRecordsConsole_Text_recordsCountHint": {
+    "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logRecordsConsole_Button_infoClose": "Capito",
+  "@logRecordsConsole_Button_infoClose": {},
+  "logRecordsConsole_PopupMenuItem_info": "Info",
+  "@logRecordsConsole_PopupMenuItem_info": {},
+  "logRecordsConsole_PopupMenuItem_clear": "Cancella",
+  "@logRecordsConsole_PopupMenuItem_clear": {},
   "main_BottomNavigationBarItemLabel_chats": "Le chat",
   "@main_BottomNavigationBarItemLabel_chats": {},
   "main_BottomNavigationBarItemLabel_contacts": "Contatti",
@@ -1468,6 +1483,10 @@
   "@settings_encoding_Section_packetization_title": {},
   "settings_encoding_Section_packetization_tooltip": "Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete",
   "@settings_encoding_Section_packetization_tooltip": {},
+  "settings_encoding_Section_packetization_warning_title": "Attenzione:",
+  "@settings_encoding_Section_packetization_warning_title": {},
+  "settings_encoding_Section_packetization_warning_message": "Alcuni codec potrebbero avere difficoltà con valori ptime non predefiniti, causando glitch audio udibili o silenzio. Usare solo se si sa cosa si sta facendo.",
+  "@settings_encoding_Section_packetization_warning_message": {},
   "settings_encoding_Section_preset": "Preimpostato",
   "@settings_encoding_Section_preset": {},
   "settings_encoding_Section_preset_balance": "Bilanciato",
@@ -1956,6 +1975,8 @@
   "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "Riprova",
   "@voicemail_Label_retry": {},
+  "voicemail_Snackbar_notConfigured": "Contatta il tuo amministratore per attivare la segreteria telefonica.",
+  "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Funzionalità non supportata",
   "@voicemail_Title_notSupported": {},
   "voicemail_Widget_screenTitle": "Segreteria telefonica",

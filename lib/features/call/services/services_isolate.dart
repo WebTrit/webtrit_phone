@@ -40,9 +40,9 @@ Future<void> _initializeCommonDependencies() async {
   final isolateOverrides = FeatureOverridesFactory.create(_remoteConfigService!.snapshot);
   final isolateLoggingConfig = LoggingMapper.mapFromOverridesOnly(isolateOverrides);
   _appLogger ??= await AppLogger.init(
-    isolateLoggingConfig.logLevel,
+    isolateLoggingConfig,
     LogzioLoggingService.fromEnvironment(isolateLoggingConfig.remoteLoggingEnabled),
-    _appLabelsProvider!,
+    () => _appLabelsProvider!.logLabels,
   );
   _appCertificates ??= await AppCertificates.init();
   _localPushRepository ??= LocalPushRepositoryFLNImpl();

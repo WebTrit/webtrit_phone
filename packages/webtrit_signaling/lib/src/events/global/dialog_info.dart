@@ -74,4 +74,20 @@ class SignalingDialogInfo extends Equatable {
   String toString() {
     return 'SignalingDialogInfo{id: $id, entityNumber: $entityNumber, state: $state, callId: $callId, direction: $direction, localTag: $localTag, localNumber: $localNumber, localDisplayName: $localDisplayName, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName, arrivalVersion: $arrivalVersion, arrivalTime: $arrivalTime}';
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'entity_number': entityNumber,
+    'state': state.name,
+    if (callId != null) 'call_id': callId,
+    if (direction != null) 'direction': direction!.name,
+    if (localTag != null) 'local_tag': localTag,
+    if (localNumber != null) 'local_number': localNumber,
+    if (localDisplayName != null) 'local_display_name': localDisplayName,
+    if (remoteTag != null) 'remote_tag': remoteTag,
+    if (remoteNumber != null) 'remote_number': remoteNumber,
+    if (remoteDisplayName != null) 'remote_display_name': remoteDisplayName,
+    'arrival_version': arrivalVersion,
+    'arrival_time': arrivalTime.toIso8601String(),
+  };
 }

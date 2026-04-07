@@ -878,6 +878,26 @@ class AppLocalizationsIt extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'Si è verificato un errore imprevisto';
 
   @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Visualizzazione degli ultimi $count record. Usa Condividi per esportare il log completo.',
+      one: 'Visualizzazione dell\'ultimo $count record. Usa Condividi per esportare il log completo.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get logRecordsConsole_Button_infoClose => 'Capito';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_info => 'Info';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_clear => 'Cancella';
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
 
   @override
@@ -1832,6 +1852,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete';
 
   @override
+  String get settings_encoding_Section_packetization_warning_title => 'Attenzione:';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_message =>
+      'Alcuni codec potrebbero avere difficoltà con valori ptime non predefiniti, causando glitch audio udibili o silenzio. Usare solo se si sa cosa si sta facendo.';
+
+  @override
   String get settings_encoding_Section_preset => 'Preimpostato';
 
   @override
@@ -2401,6 +2428,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get voicemail_Label_retry => 'Riprova';
+
+  @override
+  String get voicemail_Snackbar_notConfigured =>
+      'Contatta il tuo amministratore per attivare la segreteria telefonica.';
 
   @override
   String get voicemail_Title_notSupported => 'Funzionalità non supportata';

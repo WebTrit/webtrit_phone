@@ -18,30 +18,11 @@ abstract final class AppDatabaseScope {
     required Future<T> Function(AppDatabase db) action,
     String dbName = 'db.sqlite',
   }) async {
-    final db = IsolateDatabase.create(directoryPath: directoryPath, dbName: dbName);
+    final db = await IsolateDatabase.connectOrCreate(directoryPath: directoryPath, dbName: dbName);
     try {
       return await action(db);
     } finally {
       await db.close();
-    }
-  }
-
-  /// Runs [action] within a database scope.
-  ///
-  /// On error, notifies [onError] (if provided) and returns [fallback],
-  /// preventing the exception from bubbling up the call stack.
-  static Future<T> tryUse<T>({
-    required String directoryPath,
-    required Future<T> Function(AppDatabase db) action,
-    required T fallback,
-    String dbName = 'db.sqlite',
-    void Function(Object error, StackTrace stackTrace)? onError,
-  }) async {
-    try {
-      return await use(directoryPath: directoryPath, dbName: dbName, action: action);
-    } catch (error, stackTrace) {
-      onError?.call(error, stackTrace);
-      return fallback;
     }
   }
 

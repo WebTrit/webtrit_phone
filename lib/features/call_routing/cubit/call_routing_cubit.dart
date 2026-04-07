@@ -42,12 +42,17 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
 
   void _startInfoSubscription() {
     _infoSub = _userRepository
-        .getInfoAndListen()
+        .getAndListen()
         .combineLatest(_linesStateRepository.getStateAndListen(), _combineInfo)
         .listen(emit);
   }
 
-  CallRoutingState _combineInfo(UserInfo userInfo, LinesState linesState) {
+  CallRoutingState? _combineInfo(UserInfo userInfo, LinesState linesState) {
+    // The signaling handshake has not arrived yet — line counts are unknown.
+    // Return null so the cubit stays in its unready state and CallController
+    // waits (via _waitForRoutingState) instead of blocking the call immediately.
+    if (linesState.isBlank) return null;
+
     final mainNumber = userInfo.numbers.main;
     final additionalNumbers = userInfo.numbers.additional?.nonNulls.toList() ?? [];
     final mainLinesState = linesState.mainLines;

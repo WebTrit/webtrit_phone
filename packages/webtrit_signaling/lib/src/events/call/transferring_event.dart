@@ -5,6 +5,9 @@ class TransferringEvent extends CallEvent {
 
   static const typeValue = 'transferring';
 
+  @override
+  Map<String, dynamic> toJson() => callBaseJson(typeValue);
+
   factory TransferringEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

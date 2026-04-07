@@ -31,8 +31,8 @@ Future<void> acceptAgrementsUntilMainShell(PatrolIntegrationTester $) async {
 
       // Process native permission dialogs until they go away
       await Future.doWhile(() async {
-        final isPermissionDialogVisible = await $.native.isPermissionDialogVisible();
-        if (isPermissionDialogVisible) await $.native.grantPermissionWhenInUse();
+        final isPermissionDialogVisible = await $.platformAutomator.mobile.isPermissionDialogVisible();
+        if (isPermissionDialogVisible) await $.platformAutomator.mobile.grantPermissionWhenInUse();
         return isPermissionDialogVisible;
       });
       await $.pumpAndTrySettle();

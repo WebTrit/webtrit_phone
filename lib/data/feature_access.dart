@@ -516,11 +516,7 @@ abstract final class SipPresenceMapper {
     final withBlfViaSip = isSupported && (systemInfo?.adapter?.supportsSipDialogs ?? false);
     final withpresenceViaSip = isSupported && (systemInfo?.adapter?.supportsSipPresence ?? false);
 
-    return SipPresenceConfig(
-      hybridPresenceSupport: isSupported,
-      dialogsViaSipBlfSupport: withBlfViaSip,
-      presenceViaSipSupport: withpresenceViaSip,
-    );
+    return SipPresenceConfig(hybridPresenceSupport: true, dialogsViaSipBlfSupport: true, presenceViaSipSupport: true);
   }
 }
 
@@ -618,6 +614,7 @@ abstract final class LoggingMapper {
       logLevel: logLevel,
       monitorCheckInterval: monitorCheckInterval,
       remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+      anonymizationEnabled: overrides.isLogAnonymizationEnabled ?? loggingFeature?.anonymizationEnabled ?? true,
     );
   }
 
@@ -626,6 +623,7 @@ abstract final class LoggingMapper {
       logLevel: overrides.logLevel ?? _defaultLogLevel,
       monitorCheckInterval: overrides.monitorCheckInterval ?? _defaultInterval,
       remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+      anonymizationEnabled: overrides.isLogAnonymizationEnabled ?? true,
     );
   }
 }

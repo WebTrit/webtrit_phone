@@ -6,7 +6,7 @@ if [ -z "$testfile" ]; then
     patrol build ios --release --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
 else
     echo "Building target test file: $testfile"
-    patrol build ios --release -t integration_test/$testfile --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
+    patrol build ios --release -t patrol_test/$testfile --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
 fi
 
 

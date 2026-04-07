@@ -22,4 +22,15 @@ sealed class AppState with _$AppState {
   ThemeMode get effectiveThemeMode => isThemeModeSupported ? themeMode : ThemeMode.light;
 
   Locale? get effectiveLocale => locale == LocaleExtension.defaultNull ? null : locale;
+
+  /// Compares the current state with another [AppState] to determine if a reevaluation is needed.
+  ///
+  /// Added after bugs when call drops after theme change or locale change
+  bool compareToReevaluate(AppState other) {
+    return status == other.status &&
+        logoutReason == other.logoutReason &&
+        session == other.session &&
+        userAgreementStatus == other.userAgreementStatus &&
+        contactsAgreementStatus == other.contactsAgreementStatus;
+  }
 }

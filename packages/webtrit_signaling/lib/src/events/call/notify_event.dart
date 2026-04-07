@@ -16,6 +16,9 @@ sealed class NotifyEvent extends CallEvent {
   final String? notify;
   final SubscriptionState? subscriptionState;
 
+  @override
+  Map<String, dynamic> toJson();
+
   factory NotifyEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {
@@ -39,13 +42,24 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
     super.transaction,
     required super.line,
     required super.callId,
-    super.notify,
     super.subscriptionState,
     required this.state,
   });
 
   static const notifyValue = 'refer';
   final ReferNotifyState state;
+
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(NotifyEvent.typeValue),
+    'notify': notifyValue,
+    if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
+    'content': switch (state) {
+      ReferNotifyState.trying => 'SIP/2.0 100 Trying',
+      ReferNotifyState.ok => 'SIP/2.0 200 OK',
+      ReferNotifyState.unknown => '',
+    },
+  };
 
   @override
   factory ReferNotifyEvent.fromJson(Map<String, dynamic> json) {
@@ -60,7 +74,6 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
       transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
-      notify: json['notify'],
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
           : null,
@@ -91,6 +104,15 @@ class UnknownNotifyEvent extends NotifyEvent with EquatableMixin {
 
   final String? content;
   final String? contentType;
+
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(NotifyEvent.typeValue),
+    if (notify != null) 'notify': notify,
+    if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
+    if (content != null) 'content': content,
+    if (contentType != null) 'content_type': contentType,
+  };
 
   @override
   factory UnknownNotifyEvent.fromJson(Map<String, dynamic> json) {

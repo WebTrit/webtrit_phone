@@ -20,6 +20,15 @@ class TransferEvent extends LineEvent {
 
   static const typeValue = 'transfer';
 
+  @override
+  Map<String, dynamic> toJson() => {
+    ...lineBaseJson(typeValue),
+    'refer_id': referId,
+    'refer_to': referTo,
+    if (referredBy != null) 'referred_by': referredBy,
+    if (replaceCallId != null) 'replace_call_id': replaceCallId,
+  };
+
   factory TransferEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

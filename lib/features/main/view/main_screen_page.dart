@@ -88,6 +88,7 @@ class MainScreenPage extends StatelessWidget {
           ? BlocProvider<CallToActionsCubit>(
               create: (context) => CallToActionsCubit(
                 callToActionsRepository: context.read<CallToActionsRepository>(),
+                userRepository: context.read<UserRepository>(),
                 locale: context.read<AppBloc>().state.locale,
               ),
               child: CallToActionsShell(child: autoTabsRouter),

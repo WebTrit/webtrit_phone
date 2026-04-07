@@ -27,6 +27,8 @@ import 'package:webtrit_phone/features/system_notifications/services/services.da
 
 import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
 
+import 'package:drift/isolate.dart';
+
 import 'app/session/session.dart';
 import 'firebase_options.dart';
 import 'services/services.dart';
@@ -75,12 +77,14 @@ Future<InstanceRegistry> bootstrap() async {
     localDatasource: systemInfoLocalDatasource,
     remoteDatasource: systemInfoRemoteDatasource,
   );
+
   final authRepository = AuthRepositoryImpl(
     apiClientFactory: apiClientFactory,
     systemInfoRemoteDatasource: systemInfoRemoteDatasource,
     appIdentifier: appInfo.identifier,
     appBundleId: packageInfo.packageName,
   );
+
   final sessionRepository = SessionRepositoryImpl(
     secureStorage: secureStorage,
     sessionCleanupWorker: sessionCleanupWorker,
@@ -104,6 +108,13 @@ Future<InstanceRegistry> bootstrap() async {
   // Utilities - Capturing instances that were previously just `await Class.init()`
   final pushEnvironment = await PushEnvironment.init();
   final appPath = await AppPath.init();
+
+  // Spawn the shared DriftIsolate database server. All isolates (FCM background,
+  // WorkManager) connect to this single server via IsolateNameServer, eliminating
+  // write-write SQLite contention.
+  final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
+  registry.register<DriftIsolate>(driftIsolate);
+
   final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
   final appTime = await AppTime.init();
   final appLabels = await DefaultAppMetadataProvider.init(
@@ -116,9 +127,9 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Logger
   final appLogger = await AppLogger.init(
-    featureAccess.loggingConfig.logLevel,
+    featureAccess.loggingConfig,
     LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
-    appLabels,
+    () => appLabels.logLabels,
   );
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
     ..attachToLogger(Logger.root);
@@ -145,6 +156,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<AuthRepository>(authRepository);
   registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
   registry.register<SessionRepository>(sessionRepository);
+  registry.register<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
   // Logic & Features
   registry.register<FeatureAccess>(featureAccess);
@@ -234,7 +246,10 @@ Future<void> _initFirebaseMessaging() async {
     final appPush = AppRemotePush.fromFCM(message);
     RemotePushBroker.handleOpenedPush(appPush);
   });
-  final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  final initialMessage = await FirebaseMessaging.instance.getInitialMessage().timeout(
+    const Duration(seconds: 5),
+    onTimeout: () => null,
+  );
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
     final appPush = AppRemotePush.fromFCM(initialMessage);
@@ -285,9 +300,9 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   final overrides = FeatureOverridesFactory.create(remoteCacheConfigService.snapshot);
   final loggingConfig = LoggingMapper.mapFromOverridesOnly(overrides);
   await AppLogger.init(
-    loggingConfig.logLevel,
+    loggingConfig,
     LogzioLoggingService.fromEnvironment(loggingConfig.remoteLoggingEnabled),
-    appLabelsProvider,
+    () => appLabelsProvider.logLabels,
   );
 
   final appPush = AppRemotePush.fromFCM(message);
@@ -302,12 +317,14 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
     // due to concurrent database access from multiple isolates.
     final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
 
-    await AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
-      appPush.call.id,
-      CallkeepHandle.number(appPush.call.handle),
-      displayName: displayName,
-      hasVideo: appPush.call.hasVideo,
-    );
+    await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
+        .reportNewIncomingCall(
+          appPush.call.id,
+          CallkeepHandle.number(appPush.call.handle),
+          displayName: displayName,
+          hasVideo: appPush.call.hasVideo,
+        )
+        .timeout(const Duration(seconds: 10), onTimeout: () => _onReportIncomingCallTimeout(logger));
   }
 
   if (appPush is MessagePush) {
@@ -322,12 +339,13 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
       time: DateTime.now(),
     );
 
-    await AppDatabaseScope.use(
+    await AppDatabaseScope.useOrNull(
       directoryPath: appPath.applicationDocumentsPath,
       action: (db) async {
         final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
         await repo.set(activeMessagePush);
       },
+      onError: (e, st) => logger.warning('MessagePush DB write failed: $e'),
     );
   }
 }
@@ -340,28 +358,33 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
   final appPath = await AppPath.init();
 
-  return AppDatabaseScope.tryUse(
-    directoryPath: appPath.applicationDocumentsPath,
-    fallback: appPush.call.displayName,
-    onError: (e, st) {
-      logger.severe(
-        'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
-        'Fallback to push display name will be used.',
-        e,
-        st,
-      );
-    },
-    action: (db) async {
-      final contactsRepository = ContactsRepository(
-        appDatabase: db,
-        contactsRemoteDataSource: null,
-        contactsLocalDataSource: null,
-      );
+  return await AppDatabaseScope.useOrNull(
+        directoryPath: appPath.applicationDocumentsPath,
+        onError: (e, st) {
+          logger.severe(
+            'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
+            'Fallback to push display name will be used.',
+            e,
+            st,
+          );
+        },
+        action: (db) async {
+          final contactsRepository = ContactsRepository(
+            appDatabase: db,
+            contactsRemoteDataSource: null,
+            contactsLocalDataSource: null,
+          );
 
-      final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
-      return contact?.maybeName ?? appPush.call.displayName;
-    },
-  );
+          final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
+          return contact?.maybeName ?? appPush.call.displayName;
+        },
+      ) ??
+      appPush.call.displayName;
+}
+
+CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
+  logger.warning('reportNewIncomingCall timed out — Telecom may be overloaded');
+  return null;
 }
 
 Future _initLocalPushs() async {
@@ -445,16 +468,17 @@ void workManagerDispatcher() {
       final appPath = await AppPath.init();
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      final result = await AppDatabaseScope.tryUse<bool>(
-        directoryPath: appPath.applicationDocumentsPath,
-        fallback: false, // return false so WorkManager can retry on DB/worker failure
-        onError: (e, st) => logger.severe('System notifications task failed', e, st),
-        action: (db) async {
-          final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
-          final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
-          return worker.execute();
-        },
-      );
+      final result =
+          await AppDatabaseScope.useOrNull<bool>(
+            directoryPath: appPath.applicationDocumentsPath,
+            onError: (e, st) => logger.severe('System notifications task failed', e, st),
+            action: (db) async {
+              final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
+              final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
+              return worker.execute();
+            },
+          ) ??
+          false; // return false so WorkManager can retry on DB/worker failure
 
       logger.info('Task result: $result');
       return result;

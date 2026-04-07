@@ -11,6 +11,9 @@ class SessionErrorEvent extends SessionEvent implements ErrorEvent {
   @override
   List<Object?> get props => [...super.props, code, reason];
 
+  @override
+  Map<String, dynamic> toJson() => {...sessionBaseJson(ErrorEvent.typeValue), 'code': code, 'reason': reason};
+
   static SessionErrorEvent? tryFromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != ErrorEvent.typeValue) {

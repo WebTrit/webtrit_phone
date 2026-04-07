@@ -44,7 +44,7 @@ void main() {
     expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active');
 
     // Minimize call and check if it is minimized.
-    await $.native.pressBack();
+    await $.platformAutomator.android.swipeBack();
     await pumpFor(const Duration(seconds: 1), $);
     expect($(CallActiveScaffold).visible, false, reason: 'Call should be minimized');
     expect($(CallActiveThumbnail), findsOneWidget, reason: 'Thumbnail should be visible');

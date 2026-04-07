@@ -873,6 +873,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logRecordsConsole_Text_failure => 'An unexpected error occurred';
 
   @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count records', one: '$count record');
+    return 'Showing last $_temp0. Use Share to export the full log.';
+  }
+
+  @override
+  String get logRecordsConsole_Button_infoClose => 'Got it';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_info => 'Info';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_clear => 'Clear';
+
+  @override
   String get main_BottomNavigationBarItemLabel_chats => 'Chats';
 
   @override
@@ -1817,6 +1832,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues';
 
   @override
+  String get settings_encoding_Section_packetization_warning_title => 'Warning:';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_message =>
+      'Some codecs may struggle with non-default ptime values, causing audible glitches or silence. Use only if you know what you are doing.';
+
+  @override
   String get settings_encoding_Section_preset => 'Preset';
 
   @override
@@ -2378,6 +2400,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voicemail_Label_retry => 'Try again';
+
+  @override
+  String get voicemail_Snackbar_notConfigured => 'Contact your administrator to activate voicemail';
 
   @override
   String get voicemail_Title_notSupported => 'Feature not supported';

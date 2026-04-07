@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/models/enableble.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
 import 'package:webtrit_phone/models/rtp_codec_profile.dart';
@@ -23,8 +24,8 @@ mixin EncodingSettingsJsonMapper {
       opusBitrate: map['opusBitrate'] as int?,
       opusStereo: map['opusStereo'] as bool?,
       opusDtx: map['opusDtx'] as bool?,
-      audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
-      videoProfiles: (map['videoProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).toList(),
+      audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).nonNulls.toList(),
+      videoProfiles: (map['videoProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).nonNulls.toList(),
       removeExtmaps: map['removeExtmaps'] as bool? ?? false,
       removeStaticAudioRtpMaps: map['removeStaticAudioRtpMaps'] as bool? ?? false,
       remapTE8payloadTo101: map['remapTE8payloadTo101'] as bool? ?? false,
@@ -49,7 +50,8 @@ mixin EncodingSettingsJsonMapper {
     };
   }
 
-  Enableble<RTPCodecProfile> profileFromMap(Map<String, dynamic> map) {
+  // returns null if profile is not recognized, which means it should be ignored
+  Enableble<RTPCodecProfile>? profileFromMap(Map<String, dynamic> map) {
     final profile = map['profile'];
     final enabled = map['enabled'];
 
@@ -60,7 +62,10 @@ mixin EncodingSettingsJsonMapper {
     if (profile == 'redAudio') return (option: RTPCodecProfile.redundancy_audio, enabled: enabled);
     if (profile == 'redVideo') return (option: RTPCodecProfile.redundancy_video, enabled: enabled);
 
-    return (option: RTPCodecProfile.values.byName(profile), enabled: enabled);
+    final option = RTPCodecProfile.values.firstWhereOrNull((p) => p.name == profile);
+    if (option == null) return null;
+
+    return (option: option, enabled: enabled);
   }
 
   Map<String, dynamic> profileToMap(Enableble<RTPCodecProfile> param) {

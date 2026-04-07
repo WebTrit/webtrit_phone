@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:drift/drift.dart';
+import 'package:drift/isolate.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -41,11 +44,7 @@ void main() {
 
       Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
 
-      final appDocDir = await getApplicationDocumentsPath();
-      final String baseLogDirectoryPath = '$appDocDir/logs';
-      final String baseLogFilePath = '$baseLogDirectoryPath/app_logs.log';
-
-      runApp(RootApp(instanceRegistry: instanceRegistry, baseLogFilePath: baseLogFilePath));
+      runApp(RootApp(instanceRegistry: instanceRegistry));
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
@@ -57,10 +56,9 @@ void main() {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry, required this.baseLogFilePath});
+  const RootApp({super.key, required this.instanceRegistry});
 
   final InstanceRegistry instanceRegistry;
-  final String baseLogFilePath;
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +151,8 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
-              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get(), dispose: disposeIfDisposable),
+              RepositoryProvider<UserLocalDatasource>(create: (_) => instanceRegistry.get()),
+              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get()),
             ],
             child: const App(),
           );
@@ -163,9 +162,10 @@ class RootApp extends StatelessWidget {
   }
 
   AppDatabaseLifecycleHolder _createAppDatabaseLifecycleHolder(BuildContext context) {
-    final db = IsolateDatabase.create(directoryPath: context.read<AppPath>().applicationDocumentsPath);
-
-    return AppDatabaseLifecycleHolder(db)..attach();
+    final driftIsolate = instanceRegistry.get<DriftIsolate>();
+    // Establish the connection; the IPC handshake to the server isolate starts when this Future is created.
+    final db = AppDatabase(DatabaseConnection.delayed(driftIsolate.connect()));
+    return AppDatabaseLifecycleHolder(db, driftIsolate)..attach();
   }
 
   Future<void> _disposeAppDatabaseLifecycleHolder(BuildContext _, AppDatabaseLifecycleHolder holder) async {
@@ -193,9 +193,10 @@ class RootApp extends StatelessWidget {
 }
 
 class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
-  AppDatabaseLifecycleHolder(this.db);
+  AppDatabaseLifecycleHolder(this.db, this._driftIsolate);
 
   final AppDatabase db;
+  final DriftIsolate _driftIsolate;
 
   void attach() => WidgetsBinding.instance.addObserver(this);
 
@@ -204,13 +205,15 @@ class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
   Future<void> dispose() async {
     detach();
     await db.close();
+    IsolateNameServer.removePortNameMapping(IsolateDatabase.kDbPortName);
+    _driftIsolate.shutdownAll();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.detached) {
-      // NOTE: `close()` is async and unawaited here; another isolate may open DB before it fully closes,
-      // potentially increasing lock contention (`database is locked`).
+      // Close the main-isolate client connection. The server isolate stays alive
+      // until dispose() is called or all clients disconnect.
       unawaited(db.close());
     }
   }

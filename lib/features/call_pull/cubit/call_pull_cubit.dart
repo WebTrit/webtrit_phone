@@ -24,7 +24,7 @@ class CallPullCubit extends Cubit<List<DialogInfo>> {
   List<DialogInfo> _dialogInfos = [];
 
   void init() {
-    _userSub = userRepository.getInfoAndListen().listen(
+    _userSub = userRepository.getAndListen().listen(
       (userInfo) {
         if (isClosed) return;
         _mainNumber = userInfo.numbers.main;

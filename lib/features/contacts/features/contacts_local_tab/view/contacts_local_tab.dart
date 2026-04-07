@@ -47,6 +47,7 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
     }
 
     Future routeToDiagnosticScreen() async {
+      FocusScope.of(context).unfocus();
       context.router.push(const SettingsRouterPageRoute(children: [DiagnosticScreenPageRoute()]));
     }
 

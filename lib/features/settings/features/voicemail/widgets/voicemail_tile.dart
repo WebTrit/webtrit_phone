@@ -59,7 +59,7 @@ class VoicemailTile extends StatelessWidget {
         leading: LeadingAvatar(username: displayName, thumbnail: thumbnail, thumbnailUrl: thumbnailUrl),
         title: Text(voicemail.displaySender),
         subtitle: _VoicemailSubtitle(voicemail: voicemail, dateFormat: dateFormat),
-        bottom: AudioView(path: voicemail.url!, onPlaybackStarted: _onPlaybackStarted),
+        bottom: AudioView(path: voicemail.url!, cacheKey: voicemail.id, onPlaybackStarted: _onPlaybackStarted),
         trailing: PopupMenuButton<_VoicemailMenuAction>(
           padding: EdgeInsets.zero,
           position: PopupMenuPosition.under,

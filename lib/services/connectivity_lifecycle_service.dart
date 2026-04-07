@@ -172,7 +172,7 @@ class ConnectivityLifecycleService implements Disposable {
   Future<void> refreshAll() async {
     if (_isDisposed || _refreshables.isEmpty) return;
 
-    final snapshot = List<Refreshable>.unmodifiable(_refreshables);
+    final snapshot = List<Refreshable>.unmodifiable(_refreshables.where((r) => r.isActive));
 
     if (options.parallelism == Parallelism.concurrent) {
       await _runConcurrent<Refreshable>(snapshot, (r) => r.refresh());
@@ -212,8 +212,8 @@ class ConnectivityLifecycleService implements Disposable {
         } else {
           await run(item);
         }
-      } catch (e, st) {
-        _logger.warning('ConnectivityLifecycleService: listener task failed', e, st);
+      } catch (e) {
+        _logger.warning('ConnectivityLifecycleService: listener task failed', e);
       }
     }
   }
@@ -236,8 +236,8 @@ class ConnectivityLifecycleService implements Disposable {
           } else {
             await run(item);
           }
-        } catch (e, st) {
-          _logger.warning('ConnectivityLifecycleService: listener task failed', e, st);
+        } catch (e) {
+          _logger.warning('ConnectivityLifecycleService: listener task failed', e);
         }
       }());
     }

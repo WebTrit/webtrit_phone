@@ -18,7 +18,8 @@ import 'models/models.dart';
 class WebtritApiClient {
   final Logger _logger;
 
-  final _apiBasePathSegments = ['api', 'v1'];
+  static const _apiBasePath = 'api';
+  static const _apiBasePathSegmentsV1 = [_apiBasePath, 'v1'];
 
   @visibleForTesting
   static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
@@ -82,11 +83,7 @@ class WebtritApiClient {
     ResponseOptions responseOptions = const ResponseOptions(),
   }) async {
     final url = tenantUrl.replace(
-      pathSegments: [
-        ...tenantUrl.pathSegments.where((segment) => segment.isNotEmpty),
-        ..._apiBasePathSegments,
-        ...pathSegments,
-      ],
+      pathSegments: [...tenantUrl.pathSegments.where((segment) => segment.isNotEmpty), ...pathSegments],
       queryParameters: queryParameters,
     );
 
@@ -184,6 +181,16 @@ class WebtritApiClient {
             );
           }
 
+          if (error?.code == 'voicemail_not_configured') {
+            throw VoicemailNotConfiguredException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              token: token,
+              error: error,
+            );
+          }
+
           throw RequestFailure(
             url: tenantUrl,
             statusCode: httpResponse.statusCode,
@@ -193,7 +200,9 @@ class WebtritApiClient {
           );
         }
       } catch (e) {
-        _logger.severe('${method.toUpperCase()} failed for requestId: $requestId with error: $e');
+        if (e is! VoicemailNotConfiguredException && e is! EndpointNotSupportedException) {
+          _logger.severe('${method.toUpperCase()} failed for requestId: $xRequestId with error: $e');
+        }
 
         // Do not retry for valid server responses with a defined HTTP status code.
         if (e is RequestFailure || requestAttempt >= requestOptions.retries) rethrow;
@@ -282,7 +291,7 @@ class WebtritApiClient {
 
   Future<bool> healthCheck({RequestOptions options = const RequestOptions()}) async {
     try {
-      await _httpClientExecuteGet(['health-check'], null, null, requestOptions: options);
+      await _httpClientExecuteGet([_apiBasePath, 'health-check'], null, null, requestOptions: options);
       return true;
     } catch (_) {
       return false;
@@ -290,7 +299,12 @@ class WebtritApiClient {
   }
 
   Future<SystemInfo> getSystemInfo({RequestOptions options = const RequestOptions()}) async {
-    final responseJson = await _httpClientExecuteGet(['system-info'], null, null, requestOptions: options);
+    final responseJson = await _httpClientExecuteGet(
+      [..._apiBasePathSegmentsV1, 'system-info'],
+      null,
+      null,
+      requestOptions: options,
+    );
 
     return SystemInfo.fromJson(responseJson);
   }
@@ -302,7 +316,13 @@ class WebtritApiClient {
   }) async {
     final requestPayload = {...sessionUserCredential.toJson(), if (extraPayload?.isNotEmpty == true) ...extraPayload!};
 
-    final responseJson = await _httpClientExecutePost(['user'], null, null, requestPayload, requestOptions: options);
+    final responseJson = await _httpClientExecutePost(
+      [..._apiBasePathSegmentsV1, 'user'],
+      null,
+      null,
+      requestPayload,
+      requestOptions: options,
+    );
 
     return SessionResult.fromJson(responseJson);
   }
@@ -314,7 +334,7 @@ class WebtritApiClient {
     final requestJson = sessionOtpCredential.toJson();
 
     final responseJson = await _httpClientExecutePost(
-      ['session', 'otp-create'],
+      [..._apiBasePathSegmentsV1, 'session', 'otp-create'],
       null,
       null,
       requestJson,
@@ -332,7 +352,7 @@ class WebtritApiClient {
     final requestJson = {'otp_id': sessionOtpProvisional.otpId, 'code': code};
 
     final responseJson = await _httpClientExecutePost(
-      ['session', 'otp-verify'],
+      [..._apiBasePathSegmentsV1, 'session', 'otp-verify'],
       null,
       null,
       requestJson,
@@ -347,7 +367,13 @@ class WebtritApiClient {
   }) async {
     final requestJson = sessionLoginCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(['session'], null, null, requestJson, requestOptions: options);
+    final responseJson = await _httpClientExecutePost(
+      [..._apiBasePathSegmentsV1, 'session'],
+      null,
+      null,
+      requestJson,
+      requestOptions: options,
+    );
 
     return SessionToken.fromJson(responseJson);
   }
@@ -359,7 +385,7 @@ class WebtritApiClient {
     final requestJson = sessionAutoProvisionCredential.toJson();
 
     final responseJson = await _httpClientExecutePost(
-      ['session', 'auto-provision'],
+      [..._apiBasePathSegmentsV1, 'session', 'auto-provision'],
       null,
       null,
       requestJson,
@@ -370,12 +396,17 @@ class WebtritApiClient {
   }
 
   Future<void> deleteSession(String token, {RequestOptions options = const RequestOptions()}) async {
-    await _httpClientExecuteDelete(['session'], null, token, requestOptions: options);
+    await _httpClientExecuteDelete([..._apiBasePathSegmentsV1, 'session'], null, token, requestOptions: options);
   }
 
   Future<UserInfo> getUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
     try {
-      final responseJson = await _httpClientExecuteGet(['user'], null, token, requestOptions: options);
+      final responseJson = await _httpClientExecuteGet(
+        [..._apiBasePathSegmentsV1, 'user'],
+        null,
+        token,
+        requestOptions: options,
+      );
       return UserInfo.fromJson(responseJson);
     } on RequestFailure catch (e) {
       if (e.statusCode == 404) {
@@ -386,7 +417,12 @@ class WebtritApiClient {
   }
 
   Future<List<UserContact>> getUserContactList(String token, {RequestOptions options = const RequestOptions()}) async {
-    final responseJson = await _httpClientExecuteGet(['user', 'contacts'], null, token, requestOptions: options);
+    final responseJson = await _httpClientExecuteGet(
+      [..._apiBasePathSegmentsV1, 'user', 'contacts'],
+      null,
+      token,
+      requestOptions: options,
+    );
 
     return (responseJson['items'] as List<dynamic>).map((e) {
       return UserContact.fromJson(e as Map<String, dynamic>);
@@ -399,7 +435,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'contacts', userId],
+      [..._apiBasePathSegmentsV1, 'user', 'contacts', userId],
       null,
       token,
       requestOptions: options,
@@ -408,11 +444,16 @@ class WebtritApiClient {
   }
 
   Future<void> deleteUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
-    await _httpClientExecuteDelete(['user'], null, token, requestOptions: options);
+    await _httpClientExecuteDelete([..._apiBasePathSegmentsV1, 'user'], null, token, requestOptions: options);
   }
 
   Future<AppStatus> getAppStatus(String token, {RequestOptions options = const RequestOptions()}) async {
-    final responseJson = await _httpClientExecuteGet(['app', 'status'], null, token, requestOptions: options);
+    final responseJson = await _httpClientExecuteGet(
+      [..._apiBasePathSegmentsV1, 'app', 'status'],
+      null,
+      token,
+      requestOptions: options,
+    );
 
     return AppStatus.fromJson(responseJson);
   }
@@ -424,7 +465,13 @@ class WebtritApiClient {
   }) async {
     final requestJson = appStatus.toJson();
 
-    await _httpClientExecutePatch(['app', 'status'], null, token, requestJson, requestOptions: options);
+    await _httpClientExecutePatch(
+      [..._apiBasePathSegmentsV1, 'app', 'status'],
+      null,
+      token,
+      requestJson,
+      requestOptions: options,
+    );
   }
 
   Future<void> createAppContact(
@@ -434,7 +481,13 @@ class WebtritApiClient {
   }) async {
     final requestJson = appContacts.map((e) => e.toJson()).toList();
 
-    await _httpClientExecutePost(['app', 'contacts'], null, token, requestJson, requestOptions: options);
+    await _httpClientExecutePost(
+      [..._apiBasePathSegmentsV1, 'app', 'contacts'],
+      null,
+      token,
+      requestJson,
+      requestOptions: options,
+    );
   }
 
   Future<List<AppSmartContact>> getAppSmartContactList(
@@ -442,7 +495,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecuteGet(
-      ['app', 'contacts', 'smart'],
+      [..._apiBasePathSegmentsV1, 'app', 'contacts', 'smart'],
       null,
       token,
       requestOptions: options,
@@ -458,7 +511,13 @@ class WebtritApiClient {
   }) async {
     final requestJson = appPushToken.toJson();
 
-    await _httpClientExecutePost(['app', 'push-tokens'], null, token, requestJson, requestOptions: options);
+    await _httpClientExecutePost(
+      [..._apiBasePathSegmentsV1, 'app', 'push-tokens'],
+      null,
+      token,
+      requestJson,
+      requestOptions: options,
+    );
   }
 
   Future<DemoCallToActionsResponse> getCallToActions(
@@ -470,7 +529,7 @@ class WebtritApiClient {
     final requestJson = callToActionsParam.toJson();
 
     final responseJson = await _httpClientExecutePost(
-      ['custom', 'private', 'call-to-actions'],
+      [..._apiBasePathSegmentsV1, 'custom', 'private', 'call-to-actions'],
       {'Accept-Language': locale},
       token,
       requestJson,
@@ -482,7 +541,7 @@ class WebtritApiClient {
 
   Future<SelfConfigResponse> getSelfConfig(String token, {RequestOptions options = const RequestOptions()}) async {
     final responseJson = await _httpClientExecutePost(
-      ['custom', 'private', 'self-config-portal-url'],
+      [..._apiBasePathSegmentsV1, 'custom', 'private', 'self-config-portal-url'],
       null,
       token,
       {},
@@ -497,7 +556,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecutePost(
-      ['custom', 'private', 'external-page-access-token'],
+      [..._apiBasePathSegmentsV1, 'custom', 'private', 'external-page-access-token'],
       null,
       token,
       {},
@@ -513,7 +572,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'voicemails'],
+      [..._apiBasePathSegmentsV1, 'user', 'voicemails'],
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
@@ -529,7 +588,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'voicemails', messageId],
+      [..._apiBasePathSegmentsV1, 'user', 'voicemails', messageId],
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
@@ -545,7 +604,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     await _httpClientExecuteDelete(
-      ['user', 'voicemails', messageId],
+      [..._apiBasePathSegmentsV1, 'user', 'voicemails', messageId],
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
@@ -562,7 +621,7 @@ class WebtritApiClient {
     final requestJson = {'seen': seen};
 
     await _httpClientExecutePatch(
-      ['user', 'voicemails', messageId],
+      [..._apiBasePathSegmentsV1, 'user', 'voicemails', messageId],
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestJson,
@@ -578,7 +637,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'voicemails', messageId, 'attachment'],
+      [..._apiBasePathSegmentsV1, 'user', 'voicemails', messageId, 'attachment'],
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
@@ -592,7 +651,7 @@ class WebtritApiClient {
     final url = tenantUrl.replace(
       pathSegments: [
         ...tenantUrl.pathSegments.where((segment) => segment.isNotEmpty),
-        ..._apiBasePathSegments,
+        ..._apiBasePathSegmentsV1,
         ...['user', 'voicemails', voicemailId, 'attachment'],
       ],
       queryParameters: fileFormat.isNotEmpty ? {'file_format': fileFormat} : null,
@@ -608,7 +667,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'notifications'],
+      [..._apiBasePathSegmentsV1, 'user', 'notifications'],
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
@@ -629,7 +688,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'notifications', 'updates'],
+      [..._apiBasePathSegmentsV1, 'user', 'notifications', 'updates'],
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
@@ -648,7 +707,7 @@ class WebtritApiClient {
     final requestJson = {'seen': true};
 
     await _httpClientExecutePatch(
-      ['user', 'notifications', notificationId.toString()],
+      [..._apiBasePathSegmentsV1, 'user', 'notifications', notificationId.toString()],
       {},
       token,
       requestJson,
@@ -665,7 +724,7 @@ class WebtritApiClient {
     RequestOptions options = const RequestOptions(),
   }) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'history'],
+      [..._apiBasePathSegmentsV1, 'user', 'history'],
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
@@ -681,7 +740,7 @@ class WebtritApiClient {
 
   Future<CallerIdSettings> getCallerIdSettings(String token, {RequestOptions options = const RequestOptions()}) async {
     final responseJson = await _httpClientExecuteGet(
-      ['user', 'preferences', 'caller-id'],
+      [..._apiBasePathSegmentsV1, 'user', 'preferences', 'caller-id'],
       null,
       token,
       requestOptions: options,
@@ -698,7 +757,7 @@ class WebtritApiClient {
     final requestJson = settings.toJson();
 
     final responseJson = await _httpClientExecutePost(
-      ['user', 'preferences', 'caller-id'],
+      [..._apiBasePathSegmentsV1, 'user', 'preferences', 'caller-id'],
       null,
       token,
       requestJson,
@@ -714,7 +773,7 @@ class WebtritApiClient {
   }) async {
     final response =
         await _httpClientExecuteGet(
-              ['user', 'favorites'],
+              [..._apiBasePathSegmentsV1, 'user', 'favorites'],
               ifNoneMatch != null ? {'If-None-Match': ifNoneMatch} : null,
               token,
               requestOptions: options,
@@ -741,7 +800,7 @@ class WebtritApiClient {
   }) async {
     final response =
         await _httpClientExecutePost(
-              ['user', 'favorites', 'batch_sync'],
+              [..._apiBasePathSegmentsV1, 'user', 'favorites', 'batch_sync'],
               null,
               token,
               {'actions': actions.map((a) => a.toJson()).toList()},
@@ -765,7 +824,7 @@ class WebtritApiClient {
   }) async {
     final response =
         await _httpClientExecuteGet(
-              ['user', 'sip_subscriptions'],
+              [..._apiBasePathSegmentsV1, 'user', 'sip_subscriptions'],
               ifNoneMatch != null ? {'If-None-Match': ifNoneMatch} : null,
               token,
               requestOptions: options,
@@ -792,7 +851,7 @@ class WebtritApiClient {
   }) async {
     final response =
         await _httpClientExecutePost(
-              ['user', 'sip_subscriptions', 'batch_sync'],
+              [..._apiBasePathSegmentsV1, 'user', 'sip_subscriptions', 'batch_sync'],
               null,
               token,
               {'actions': actions.map((a) => a.toJson()).toList()},

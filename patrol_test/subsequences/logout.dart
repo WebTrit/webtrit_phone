@@ -19,5 +19,6 @@ Future<void> logout(PatrolIntegrationTester $) async {
   await logoutButton.tap();
   await confirmDialog.waitUntilVisible();
   await confirmButton.tap();
+  await Future.delayed(const Duration(seconds: 2));
   await loginModeSelectScreen.waitUntilVisible();
 }

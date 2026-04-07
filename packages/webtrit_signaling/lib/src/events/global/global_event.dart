@@ -55,6 +55,13 @@ class NumberPresenceUpdate extends GlobalEvent {
           .toList(),
     );
   }
+
+  @override
+  Map<String, dynamic> toJson() => {
+    Event.typeKey: typeValue,
+    'number': number,
+    'presence_info': presenceInfo.map((info) => info.toJson()).toList(),
+  };
 }
 
 class NumberDialogsUpdate extends GlobalEvent {
@@ -79,4 +86,11 @@ class NumberDialogsUpdate extends GlobalEvent {
       dialogInfos: (json['dialog_infos'] as List<dynamic>).map((item) => SignalingDialogInfo.fromJson(item)).toList(),
     );
   }
+
+  @override
+  Map<String, dynamic> toJson() => {
+    Event.typeKey: typeValue,
+    'number': number,
+    'dialog_infos': dialogInfos.map((info) => info.toJson()).toList(),
+  };
 }

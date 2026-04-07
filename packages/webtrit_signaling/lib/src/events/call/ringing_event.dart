@@ -5,6 +5,9 @@ class RingingEvent extends CallEvent {
 
   static const typeValue = 'ringing';
 
+  @override
+  Map<String, dynamic> toJson() => callBaseJson(typeValue);
+
   factory RingingEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

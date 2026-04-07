@@ -66,4 +66,18 @@ class SignalingPresenceInfo extends Equatable {
     return 'SignalingPresenceInfo{id: $id, number: $number, available: $available, note: $note, statusIcon: $statusIcon, device: $device, '
         'timeOffsetMin: $timeOffsetMin, timestamp: $timestamp, activities: $activities, arrivalTime: $arrivalTime, source: $source}';
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'number': number,
+    'available': available,
+    'note': note,
+    if (statusIcon != null) 'status_icon': statusIcon,
+    if (device != null) 'device': device,
+    if (timeOffsetMin != null) 'time_offset_min': timeOffsetMin,
+    if (timestamp != null) 'timestamp': timestamp,
+    'activities': activities,
+    'arrival_time': arrivalTime.toIso8601String(),
+    'source': source.name,
+  };
 }

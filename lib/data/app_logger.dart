@@ -5,46 +5,51 @@ import 'package:logging_appenders/logging_appenders.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
-
-import 'app_metadata_provider.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('AppLogger');
 
 class AppLogger {
   static Future<AppLogger> init(
-    Level logLevel,
-    LogzioLoggingService? logzioService,
-    AppMetadataProvider labelsProvider,
+    LoggingConfig config,
+    RemoteLoggingService? remoteLoggingService,
+    Map<String, String> Function() getLabels,
   ) async {
     hierarchicalLoggingEnabled = true;
 
     Logger.root.clearListeners();
 
+    // Anonymization is intentionally applied only to remote logs (Logzio).
+    // Console output is not anonymized to preserve full detail for local debugging.
     PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
 
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
-    logzioService?.initialize(labelsProvider.logLabels);
-
-    final instance = AppLogger._(logzioService, labelsProvider);
-    instance.applyConfig(logLevel);
+    final instance = AppLogger._(remoteLoggingService, getLabels);
+    instance.updateRemoteLabels();
+    instance.applyConfig(config);
 
     return instance;
   }
 
-  AppLogger._(this._logzioService, this._labelsProvider);
+  AppLogger._(this._remoteLoggingService, this._getLabels);
 
-  final LogzioLoggingService? _logzioService;
-  final AppMetadataProvider _labelsProvider;
+  final RemoteLoggingService? _remoteLoggingService;
+  final Map<String, String> Function() _getLabels;
 
-  void applyConfig(Level logLevel) {
-    Logger.root.level = logLevel;
-    EquatableConfig.stringify = logLevel <= Level.FINE || (_logzioService?.minLevel ?? Level.OFF) <= Level.FINE;
-    _logger.info('AppLogger log level applied: $logLevel');
+  void applyConfig(LoggingConfig config) {
+    Logger.root.level = config.logLevel;
+    _remoteLoggingService?.setAnonymizationEnabled(config.anonymizationEnabled);
+    EquatableConfig.stringify =
+        config.logLevel <= Level.FINE || (_remoteLoggingService?.minLevel ?? Level.OFF) <= Level.FINE;
+    _logger.info('AppLogger log level applied: ${config.logLevel}');
   }
 
-  /// Allows regenerating labels when coreUrl and tenantId are available.
-  void regenerateRemoteLabels() {
-    _logzioService?.initialize(_labelsProvider.logLabels);
+  /// Updates remote logging labels and re-attaches the remote appender.
+  ///
+  /// Call this after authentication when coreUrl and tenantId become available.
+  void updateRemoteLabels() {
+    _remoteLoggingService?.dispose();
+    _remoteLoggingService?.initialize(_getLabels());
   }
 }
