@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
@@ -20,6 +21,8 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
 
   bool disconnected = false;
   int? lastDisconnectCode;
+  int executeCallCount = 0;
+  final Queue<Object?> _executeResponses = Queue<Object?>();
 
   @override
   void listen({
@@ -41,13 +44,21 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
   }
 
   @override
-  Future<void> execute(Request request, [Duration? timeout]) async {}
+  Future<void> execute(Request request, [Duration? timeout]) async {
+    executeCallCount += 1;
+    if (_executeResponses.isEmpty) return;
+    final response = _executeResponses.removeFirst();
+    if (response != null) throw response;
+  }
 
   // Helpers to inject server-side messages in tests.
   void injectHandshake(StateHandshake handshake) => _onStateHandshake?.call(handshake);
   void injectEvent(Event event) => _onEvent?.call(event);
   void injectError(Object error, [StackTrace? st]) => _onError?.call(error, st);
   void injectDisconnect(int? code, String? reason) => _onDisconnect?.call(code, reason);
+  void enqueueExecuteTimeout() => _executeResponses.add(WebtritSignalingTransactionTimeoutException(1, 'tx-timeout'));
+  void enqueueExecuteError(Object error) => _executeResponses.add(error);
+  void enqueueExecuteSuccess() => _executeResponses.add(null);
 }
 
 /// Variant of [_FakeSignalingClient] whose [disconnect] always throws.
@@ -145,6 +156,8 @@ SignalingModuleIsolateImpl _buildModule(SignalingClientFactory factory) => Signa
   trustedCertificates: TrustedCertificates.empty,
   signalingClientFactory: factory,
 );
+
+Request _buildRequest() => HangupRequest(transaction: 'tx-1', line: 0, callId: 'call-1');
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -300,6 +313,72 @@ void main() {
       await module.disconnect();
 
       expect(events, isEmpty);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule - execute()', () {
+    test('retries timeout up to 3 times and succeeds on the next attempt', () async {
+      final client = _FakeSignalingClient()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteSuccess();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      await expectLater(module.execute(_buildRequest()), completes);
+      expect(client.executeCallCount, equals(4));
+    });
+
+    test('throws timeout error after retry limit is exhausted', () async {
+      final client = _FakeSignalingClient()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      await expectLater(module.execute(_buildRequest()), throwsA(isA<WebtritSignalingTransactionTimeoutException>()));
+      expect(client.executeCallCount, equals(4));
+    });
+
+    test('does not retry non-timeout execute errors', () async {
+      final client = _FakeSignalingClient()..enqueueExecuteError(StateError('execute failed'));
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      await expectLater(module.execute(_buildRequest()), throwsA(isA<StateError>()));
+      expect(client.executeCallCount, equals(1));
+    });
+
+    test('queued execute is flushed on connect and uses timeout retries', () async {
+      final client = _FakeSignalingClient()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteSuccess();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final pending = module.execute(_buildRequest());
+      expect(pending, isNotNull);
+
+      module.connect();
+      await pumpEventQueue();
+
+      await expectLater(pending, completes);
+      expect(client.executeCallCount, equals(3));
     });
   });
 
