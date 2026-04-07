@@ -8,6 +8,7 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 
 import '../constants.dart';
 import 'signaling_hub_codec.dart';
+import 'signaling_hub_command.dart';
 
 final _logger = Logger('SignalingHubClient');
 
@@ -55,7 +56,7 @@ class SignalingHubClient {
     if (_started) return;
     _started = true;
     _subscription = _receivePort.listen(_onMessage);
-    _hubPort.send({'cmd': 'sub', 'id': consumerId, 'port': _receivePort.sendPort});
+    _hubPort.send(SignalingHubSubscribeCommand(consumerId: consumerId, replyPort: _receivePort.sendPort));
     _logger.fine('Hub client $consumerId subscribed');
   }
 
@@ -82,7 +83,7 @@ class SignalingHubClient {
     final corrId = _generateId();
     final completer = Completer<void>();
     _pendingExecutions[corrId] = completer;
-    _hubPort.send({'cmd': 'exec', 'id': consumerId, 'corr': corrId, 'req': request.toJson()});
+    _hubPort.send(SignalingHubExecuteCommand(consumerId: consumerId, correlationId: corrId, request: request.toJson()));
     return completer.future.timeout(
       _executeTimeout,
       onTimeout: () {
@@ -94,7 +95,7 @@ class SignalingHubClient {
 
   /// Sends the unsubscribe command and closes all resources.
   Future<void> dispose() async {
-    _hubPort.send({'cmd': 'unsub', 'id': consumerId});
+    _hubPort.send(SignalingHubUnsubscribeCommand(consumerId: consumerId));
     await _subscription?.cancel();
     _receivePort.close();
     for (final c in _pendingExecutions.values) {
