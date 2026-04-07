@@ -21,20 +21,22 @@ export 'package:webtrit_signaling_service/webtrit_signaling_service.dart'
         SignalingHandshakeReceived,
         SignalingProtocolEvent;
 
+const _kPushNotificationSyncTimeout = Duration(seconds: 20);
+
 final _logger = Logger('BackgroundCallIsolate');
 
 // Lazily-initialised isolate-level context.
 PushIsolateContext? _context;
 PushNotificationIsolateManager? _manager;
 
-/// Returns the isolate-level context and manager, initialising them on the
+/// Returns the isolate-level manager, initialising context and manager on the
 /// first call and reusing the same instances on every subsequent call.
 ///
 /// [PushIsolateContext] is kept separate from [PushNotificationIsolateManager]
 /// because the manager depends on feature-layer imports that must not be pulled
 /// into [lib/common]. Both are torn down together by [_disposeContext].
-Future<(PushIsolateContext, PushNotificationIsolateManager)> _getOrInit() async {
-  if (_context != null) return (_context!, _manager!);
+Future<PushNotificationIsolateManager> _getOrInit() async {
+  if (_manager != null) return _manager!;
 
   _context = await PushIsolateContext.init();
   _manager = PushNotificationIsolateManager(
@@ -46,7 +48,7 @@ Future<(PushIsolateContext, PushNotificationIsolateManager)> _getOrInit() async 
     logger: Logger('PushNotificationIsolateManager'),
   );
 
-  return (_context!, _manager!);
+  return _manager!;
 }
 
 /// Closes the manager and releases all isolate-level resources.
@@ -61,25 +63,26 @@ Future<void> _disposeContext() async {
   _manager = null;
 }
 
-/// Called by the Flutter engine when the CallKeep push-notification isolate
-/// synchronises call state with the Android telecom framework.
+/// Entry point for the CallKeep push-notification background isolate.
 ///
-/// Annotated with [@pragma('vm:entry-point')] so that [PluginUtilities] can
-/// serialize its handle.
+/// Runs the full incoming-call lifecycle (signaling, missed-call notification,
+/// call log, native release) with a 20 s timeout, then disposes all resources.
 /// Registered via [AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback].
 @pragma('vm:entry-point')
-Future<void> onPushNotificationSyncCallback(
-  CallkeepPushNotificationSyncStatus status,
-  CallkeepIncomingCallMetadata? metadata,
-) async {
-  _logger.info('onPushNotificationCallback: $status');
-
-  switch (status) {
-    case CallkeepPushNotificationSyncStatus.synchronizeCallStatus:
-      final (_, manager) = await _getOrInit();
-      await manager.launchSignaling(metadata);
-    case CallkeepPushNotificationSyncStatus.releaseResources:
-      await _disposeContext();
+Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
+  try {
+    // Initialise context and manager lazily on first push notification.
+    final manager = await _getOrInit();
+    // Run the full incoming-call lifecycle; guard with a timeout in case it stalls.
+    final incomingCallProcessing = manager.run(metadata);
+    await incomingCallProcessing.timeout(
+      _kPushNotificationSyncTimeout,
+      onTimeout: () => _logger.warning('onPushNotificationSyncCallback: timed out callId=${metadata?.callId}'),
+    );
+  } catch (e) {
+    _logger.severe('onPushNotificationSyncCallback: error=$e');
+  } finally {
+    await _disposeContext();
   }
 }
 
