@@ -20,25 +20,32 @@ sealed class SignalingHubCommand {
   ///
   /// Returns null when [wire] is not a recognised command payload so the hub
   /// can log and ignore unexpected messages safely.
+  ///
+  /// Returns null (rather than throwing) on any malformed payload — wrong tag,
+  /// missing fields, or unexpected field types.
   static SignalingHubCommand? decode(Object? wire) {
     if (wire is! List || wire.isEmpty) return null;
-    final tag = wire[0];
-    switch (tag) {
-      case _tagSubscribe:
-        if (wire.length < 3) return null;
-        return SignalingHubSubscribeCommand(consumerId: wire[1] as String, replyPort: wire[2] as SendPort);
-      case _tagUnsubscribe:
-        if (wire.length < 2) return null;
-        return SignalingHubUnsubscribeCommand(consumerId: wire[1] as String);
-      case _tagExecute:
-        if (wire.length < 4) return null;
-        return SignalingHubExecuteCommand(
-          consumerId: wire[1] as String,
-          correlationId: wire[2] as String,
-          request: Map<String, dynamic>.from(wire[3] as Map),
-        );
-      default:
-        return null;
+    try {
+      final tag = wire[0];
+      switch (tag) {
+        case _tagSubscribe:
+          if (wire.length < 3) return null;
+          return SignalingHubSubscribeCommand(consumerId: wire[1] as String, replyPort: wire[2] as SendPort);
+        case _tagUnsubscribe:
+          if (wire.length < 2) return null;
+          return SignalingHubUnsubscribeCommand(consumerId: wire[1] as String);
+        case _tagExecute:
+          if (wire.length < 4) return null;
+          return SignalingHubExecuteCommand(
+            consumerId: wire[1] as String,
+            correlationId: wire[2] as String,
+            request: Map<String, dynamic>.from(wire[3] as Map),
+          );
+        default:
+          return null;
+      }
+    } on TypeError {
+      return null;
     }
   }
 }
