@@ -50,8 +50,13 @@ sealed class SignalingHubCommand {
   }
 }
 
+/// Wire tag placed at index 0 of the encoded [List] to identify a [SignalingHubSubscribeCommand].
 const _tagSubscribe = 'sub';
+
+/// Wire tag placed at index 0 of the encoded [List] to identify a [SignalingHubUnsubscribeCommand].
 const _tagUnsubscribe = 'unsub';
+
+/// Wire tag placed at index 0 of the encoded [List] to identify a [SignalingHubExecuteCommand].
 const _tagExecute = 'exec';
 
 /// Registers [replyPort] as a subscriber in the hub.
