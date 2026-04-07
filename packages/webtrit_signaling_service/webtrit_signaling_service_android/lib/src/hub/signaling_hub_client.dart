@@ -46,7 +46,7 @@ class SignalingHubClient {
   final _controller = StreamController<SignalingModuleEvent>.broadcast();
   final Map<String, Completer<void>> _pendingExecutions = {};
 
-  StreamSubscription<dynamic>? _subscription;
+  StreamSubscription<Object?>? _subscription;
   bool _started = false;
   Completer<bool>? _subAckCompleter;
 
@@ -55,7 +55,7 @@ class SignalingHubClient {
   void start() {
     if (_started) return;
     _started = true;
-    _subscription = _receivePort.listen(_onMessage);
+    _subscription = _receivePort.listen((msg) => _onMessage(msg as List<Object?>));
     _hubPort.send(SignalingHubSubscribeCommand(consumerId: consumerId, replyPort: _receivePort.sendPort));
     _logger.fine('Hub client $consumerId subscribed');
   }
@@ -106,8 +106,8 @@ class SignalingHubClient {
     _logger.fine('Hub client $consumerId disposed');
   }
 
-  void _onMessage(dynamic msg) {
-    if (msg is! List || msg.isEmpty) return;
+  void _onMessage(List<Object?> msg) {
+    if (msg.isEmpty) return;
     if (isSubAck(msg)) {
       final completer = _subAckCompleter;
       _subAckCompleter = null;

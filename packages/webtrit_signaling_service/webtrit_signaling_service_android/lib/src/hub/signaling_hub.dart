@@ -53,7 +53,7 @@ class SignalingHub {
     _logger.fine('Hub started and registered as $kSignalingHubPortName');
 
     _moduleSubscription = _signalingModule.events.listen(_onModuleEvent);
-    _receivePort.listen(_onCommand);
+    _receivePort.listen((msg) => _onCommand(msg as SignalingHubCommand));
   }
 
   /// Removes the hub from [IsolateNameServer], cancels all subscriptions,
@@ -81,15 +81,14 @@ class SignalingHub {
     }
   }
 
-  void _onCommand(dynamic msg) {
-    if (msg is! SignalingHubCommand) return;
-    switch (msg) {
+  void _onCommand(SignalingHubCommand cmd) {
+    switch (cmd) {
       case SignalingHubSubscribeCommand():
-        _handleSubscribe(msg);
+        _handleSubscribe(cmd);
       case SignalingHubUnsubscribeCommand():
-        _handleUnsubscribe(msg);
+        _handleUnsubscribe(cmd);
       case SignalingHubExecuteCommand():
-        _handleExecute(msg);
+        _handleExecute(cmd);
     }
   }
 
