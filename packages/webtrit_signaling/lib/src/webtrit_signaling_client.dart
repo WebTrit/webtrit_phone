@@ -74,7 +74,7 @@ class WebtritSignalingClient {
   late final ErrorHandler _onError;
   late final DisconnectHandler _onDisconnect;
 
-  late final Duration _keepaliveInterval;
+  Duration? _keepaliveInterval;
   Timer? _keepaliveTimer;
 
   final _transactions = <String, Transaction>{};
@@ -290,7 +290,7 @@ class WebtritSignalingClient {
   //
 
   void _startKeepaliveTimer() {
-    _keepaliveTimer = Timer(_keepaliveInterval, _onKeepalive);
+    _keepaliveTimer = Timer(_keepaliveInterval ?? Duration(seconds: 30), _onKeepalive);
   }
 
   void _stopKeepaliveTimer() {
