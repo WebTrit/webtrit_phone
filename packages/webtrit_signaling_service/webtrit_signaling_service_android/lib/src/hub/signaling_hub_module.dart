@@ -16,6 +16,19 @@ final _logger = Logger('SignalingHubModule');
 ///
 /// [connect] and [disconnect] are no-ops -- the hub owns the connection
 /// lifecycle. [dispose] unsubscribes from the hub and releases resources.
+///
+/// ## Two-level buffering
+///
+/// [SignalingHub] holds a session buffer and replays it to each new
+/// [SignalingHubClient] on subscribe (isolate-boundary replay). This module
+/// holds a second [SignalingEventBuffer] for same-isolate consumers of
+/// [events]: a caller may subscribe to [events] after the hub's replay has
+/// already been forwarded through [_hubClient], so the local buffer is
+/// needed to serve those late subscribers.
+///
+/// Both buffers apply identical rules (cleared on [SignalingConnecting],
+/// [SignalingProtocolEvent] items never included) and receive events in the
+/// same order, so they cannot diverge.
 class SignalingHubModule implements SignalingModule {
   SignalingHubModule(this._hubClient) {
     _sub = _hubClient.events.listen(_onHubEvent);
