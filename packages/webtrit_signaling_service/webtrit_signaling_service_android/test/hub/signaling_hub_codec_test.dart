@@ -313,6 +313,17 @@ void main() {
       expect(decodeHubEvent(['unknown_tag', 'data']), isNull);
     });
 
+    test('decodeHubEvent returns null for malformed connection_failed payload', () {
+      expect(decodeHubEvent(['connection_failed']), isNull);
+    });
+
+    test('decodeHubEvent maps unknown knownCode name to unmappedCode', () {
+      final msg = ['disconnected', null, null, 'nonExistentCode', null];
+      final decoded = decodeHubEvent(msg) as SignalingDisconnected?;
+      expect(decoded, isNotNull);
+      expect(decoded!.knownCode, SignalingDisconnectCode.unmappedCode);
+    });
+
     test('encodeHubEvent -> decodeHubEvent is stable for all stateless events', () {
       final stateless = [SignalingConnecting(), SignalingConnected(), SignalingDisconnecting()];
       for (final event in stateless) {

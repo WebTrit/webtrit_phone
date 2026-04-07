@@ -14,10 +14,10 @@ const _tagSubAck = 'sub_ack';
 /// Encodes a [SignalingModuleEvent] into an isolate-safe [List] for transport
 /// over a [SendPort].
 ///
-/// Returns null for [SignalingProtocolEvent] subclasses that are not handled
-/// (should never occur given the sealed hierarchy, but keeps the return type
-/// nullable for forward compatibility).
-List<dynamic>? encodeHubEvent(SignalingModuleEvent event) {
+/// This encoding is exhaustive for the current [SignalingModuleEvent]
+/// hierarchy. If new event types are added, this method must be updated to
+/// encode them.
+List<dynamic> encodeHubEvent(SignalingModuleEvent event) {
   switch (event) {
     case SignalingConnecting():
       return [_tagConnecting];
@@ -43,44 +43,43 @@ List<dynamic>? encodeHubEvent(SignalingModuleEvent event) {
 SignalingModuleEvent? decodeHubEvent(List<dynamic> msg) {
   if (msg.isEmpty) return null;
   final tag = msg[0];
-  switch (tag) {
-    case _tagConnecting:
-      return SignalingConnecting();
-    case _tagConnected:
-      return SignalingConnected();
-    case _tagConnectionFailed:
-      final delayMs = msg[3] as int;
-      return SignalingConnectionFailed(
-        error: msg[1] as String,
-        isRepeated: msg[2] as bool,
-        recommendedReconnectDelay: Duration(milliseconds: delayMs),
-      );
-    case _tagDisconnecting:
-      return SignalingDisconnecting();
-    case _tagDisconnected:
-      final delayMs = msg[4] as int?;
-      return SignalingDisconnected(
-        code: msg[1] as int?,
-        reason: msg[2] as String?,
-        knownCode: SignalingDisconnectCode.values.byName(msg[3] as String),
-        recommendedReconnectDelay: delayMs != null ? Duration(milliseconds: delayMs) : null,
-      );
-    case _tagHandshakeReceived:
-      try {
+  try {
+    switch (tag) {
+      case _tagConnecting:
+        return SignalingConnecting();
+      case _tagConnected:
+        return SignalingConnected();
+      case _tagConnectionFailed:
+        final delayMs = msg[3] as int;
+        return SignalingConnectionFailed(
+          error: msg[1] as String,
+          isRepeated: msg[2] as bool,
+          recommendedReconnectDelay: Duration(milliseconds: delayMs),
+        );
+      case _tagDisconnecting:
+        return SignalingDisconnecting();
+      case _tagDisconnected:
+        final delayMs = msg[4] as int?;
+        final knownCodeName = msg[3] as String;
+        final knownCode =
+            SignalingDisconnectCode.values.asNameMap()[knownCodeName] ?? SignalingDisconnectCode.unmappedCode;
+        return SignalingDisconnected(
+          code: msg[1] as int?,
+          reason: msg[2] as String?,
+          knownCode: knownCode,
+          recommendedReconnectDelay: delayMs != null ? Duration(milliseconds: delayMs) : null,
+        );
+      case _tagHandshakeReceived:
         final handshake = StateHandshake.fromJson(Map<String, dynamic>.from(msg[1] as Map));
         return SignalingHandshakeReceived(handshake: handshake);
-      } catch (_) {
-        return null;
-      }
-    case _tagProtocolEvent:
-      try {
+      case _tagProtocolEvent:
         final event = Event.fromJson(Map<String, dynamic>.from(msg[1] as Map));
         return SignalingProtocolEvent(event: event);
-      } catch (_) {
+      default:
         return null;
-      }
-    default:
-      return null;
+    }
+  } catch (_) {
+    return null;
   }
 }
 
