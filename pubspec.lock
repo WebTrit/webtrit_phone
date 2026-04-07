@@ -2067,6 +2067,34 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  webtrit_signaling_service:
+    dependency: "direct main"
+    description:
+      path: "packages/webtrit_signaling_service/webtrit_signaling_service"
+      relative: true
+    source: path
+    version: "0.0.1"
+  webtrit_signaling_service_android:
+    dependency: transitive
+    description:
+      path: "packages/webtrit_signaling_service/webtrit_signaling_service_android"
+      relative: true
+    source: path
+    version: "0.0.1"
+  webtrit_signaling_service_ios:
+    dependency: transitive
+    description:
+      path: "packages/webtrit_signaling_service/webtrit_signaling_service_ios"
+      relative: true
+    source: path
+    version: "0.0.1"
+  webtrit_signaling_service_platform_interface:
+    dependency: transitive
+    description:
+      path: "packages/webtrit_signaling_service/webtrit_signaling_service_platform_interface"
+      relative: true
+    source: path
+    version: "0.0.1"
   webview_flutter:
     dependency: "direct main"
     description:
