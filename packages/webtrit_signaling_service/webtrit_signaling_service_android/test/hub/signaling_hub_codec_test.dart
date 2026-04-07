@@ -4,10 +4,6 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 
 import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_codec.dart';
 
-// ---------------------------------------------------------------------------
-// Fixtures
-// ---------------------------------------------------------------------------
-
 final _kHandshake = StateHandshake(
   keepaliveInterval: const Duration(seconds: 30),
   timestamp: 1705322000000,
@@ -18,10 +14,6 @@ final _kHandshake = StateHandshake(
   guestLine: null,
 );
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 T _roundtrip<T extends SignalingModuleEvent>(T event) {
   final encoded = encodeHubEvent(event);
   expect(encoded, isNotNull);
@@ -31,13 +23,9 @@ T _roundtrip<T extends SignalingModuleEvent>(T event) {
 }
 
 void main() {
-  // -------------------------------------------------------------------------
-  // Stateless events -- roundtrip
-  // -------------------------------------------------------------------------
-
   group('SignalingHubCodec -- SignalingConnecting', () {
-    test('encodes to [0]', () {
-      expect(encodeHubEvent(SignalingConnecting()), equals([0]));
+    test('encodes to [connecting]', () {
+      expect(encodeHubEvent(SignalingConnecting()), equals(['connecting']));
     });
 
     test('roundtrip returns SignalingConnecting', () {
@@ -46,8 +34,8 @@ void main() {
   });
 
   group('SignalingHubCodec -- SignalingConnected', () {
-    test('encodes to [1]', () {
-      expect(encodeHubEvent(SignalingConnected()), equals([1]));
+    test('encodes to [connected]', () {
+      expect(encodeHubEvent(SignalingConnected()), equals(['connected']));
     });
 
     test('roundtrip returns SignalingConnected', () {
@@ -56,18 +44,14 @@ void main() {
   });
 
   group('SignalingHubCodec -- SignalingDisconnecting', () {
-    test('encodes to [3]', () {
-      expect(encodeHubEvent(SignalingDisconnecting()), equals([3]));
+    test('encodes to [disconnecting]', () {
+      expect(encodeHubEvent(SignalingDisconnecting()), equals(['disconnecting']));
     });
 
     test('roundtrip returns SignalingDisconnecting', () {
       _roundtrip(SignalingDisconnecting());
     });
   });
-
-  // -------------------------------------------------------------------------
-  // SignalingConnectionFailed
-  // -------------------------------------------------------------------------
 
   group('SignalingHubCodec -- SignalingConnectionFailed', () {
     test('encodes error as string representation', () {
@@ -77,10 +61,10 @@ void main() {
         recommendedReconnectDelay: const Duration(seconds: 3),
       );
       final encoded = encodeHubEvent(event)!;
-      expect(encoded[0], 2);
+      expect(encoded[0], 'connection_failed');
       expect(encoded[1], event.error.toString());
       expect(encoded[2], false);
-      expect(encoded[3], 3000); // milliseconds
+      expect(encoded[3], 3000);
     });
 
     test('roundtrip preserves isRepeated: false', () {
@@ -125,11 +109,19 @@ void main() {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // SignalingDisconnected
-  // -------------------------------------------------------------------------
-
   group('SignalingHubCodec -- SignalingDisconnected', () {
+    test('encodes knownCode as enum name, not index', () {
+      final encoded = encodeHubEvent(
+        SignalingDisconnected(
+          code: 1000,
+          reason: null,
+          knownCode: SignalingDisconnectCode.normalClosure,
+          recommendedReconnectDelay: const Duration(seconds: 3),
+        ),
+      )!;
+      expect(encoded[3], 'normalClosure');
+    });
+
     test('roundtrip preserves code and reason', () {
       final decoded = _roundtrip(
         SignalingDisconnected(
@@ -143,7 +135,7 @@ void main() {
       expect(decoded.reason, 'normal close');
     });
 
-    test('roundtrip preserves knownCode', () {
+    test('roundtrip preserves all SignalingDisconnectCode values', () {
       for (final knownCode in SignalingDisconnectCode.values) {
         final decoded = _roundtrip(
           SignalingDisconnected(
@@ -208,10 +200,6 @@ void main() {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // SignalingHandshakeReceived
-  // -------------------------------------------------------------------------
-
   group('SignalingHubCodec -- SignalingHandshakeReceived', () {
     test('roundtrip produces SignalingHandshakeReceived', () {
       final event = SignalingHandshakeReceived(handshake: _kHandshake);
@@ -244,7 +232,7 @@ void main() {
 
     test('malformed handshake payload returns null', () {
       final msg = [
-        5,
+        'handshake_received',
         <String, dynamic>{'bad': 'data'},
       ];
       final decoded = decodeHubEvent(msg);
@@ -252,22 +240,18 @@ void main() {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // Sub-ack helpers
-  // -------------------------------------------------------------------------
-
   group('SignalingHubCodec -- sub-ack', () {
-    test('encodeSubAck returns [8]', () {
-      expect(encodeSubAck(), equals([8]));
+    test('encodeSubAck returns [sub_ack]', () {
+      expect(encodeSubAck(), equals(['sub_ack']));
     });
 
-    test('isSubAck is true for [8]', () {
-      expect(isSubAck([8]), isTrue);
+    test('isSubAck is true for [sub_ack]', () {
+      expect(isSubAck(['sub_ack']), isTrue);
     });
 
-    test('isSubAck is false for other type codes', () {
-      expect(isSubAck([0]), isFalse);
-      expect(isSubAck([7, 'id', null]), isFalse);
+    test('isSubAck is false for other tags', () {
+      expect(isSubAck(['connecting']), isFalse);
+      expect(isSubAck(['execute_result', 'id', null]), isFalse);
     });
 
     test('isSubAck is false for empty list', () {
@@ -275,33 +259,29 @@ void main() {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // Execute result helpers
-  // -------------------------------------------------------------------------
-
   group('SignalingHubCodec -- execute result', () {
-    test('encodeExecuteResult without error produces [7, corrId, null]', () {
+    test('encodeExecuteResult without error produces [execute_result, corrId, null]', () {
       final encoded = encodeExecuteResult('corr-1', null);
-      expect(encoded[0], 7);
+      expect(encoded[0], 'execute_result');
       expect(encoded[1], 'corr-1');
       expect(encoded[2], isNull);
     });
 
     test('encodeExecuteResult with error stringifies the error', () {
       final encoded = encodeExecuteResult('corr-2', Exception('boom'));
-      expect(encoded[0], 7);
+      expect(encoded[0], 'execute_result');
       expect(encoded[1], 'corr-2');
       expect(encoded[2], isA<String>());
       expect(encoded[2] as String, contains('boom'));
     });
 
-    test('isExecuteResult is true for [7, ...]', () {
-      expect(isExecuteResult([7, 'id', null]), isTrue);
+    test('isExecuteResult is true for [execute_result, ...]', () {
+      expect(isExecuteResult(['execute_result', 'id', null]), isTrue);
     });
 
-    test('isExecuteResult is false for other type codes', () {
-      expect(isExecuteResult([0]), isFalse);
-      expect(isExecuteResult([8]), isFalse);
+    test('isExecuteResult is false for other tags', () {
+      expect(isExecuteResult(['connecting']), isFalse);
+      expect(isExecuteResult(['sub_ack']), isFalse);
     });
 
     test('isExecuteResult is false for empty list', () {
@@ -324,17 +304,24 @@ void main() {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // Edge cases
-  // -------------------------------------------------------------------------
-
   group('SignalingHubCodec -- edge cases', () {
     test('decodeHubEvent returns null for empty list', () {
       expect(decodeHubEvent([]), isNull);
     });
 
-    test('decodeHubEvent returns null for unknown type code', () {
-      expect(decodeHubEvent([99, 'unknown']), isNull);
+    test('decodeHubEvent returns null for unknown tag', () {
+      expect(decodeHubEvent(['unknown_tag', 'data']), isNull);
+    });
+
+    test('decodeHubEvent returns null for malformed connection_failed payload', () {
+      expect(decodeHubEvent(['connection_failed']), isNull);
+    });
+
+    test('decodeHubEvent maps unknown knownCode name to unmappedCode', () {
+      final msg = ['disconnected', null, null, 'nonExistentCode', null];
+      final decoded = decodeHubEvent(msg) as SignalingDisconnected?;
+      expect(decoded, isNotNull);
+      expect(decoded!.knownCode, SignalingDisconnectCode.unmappedCode);
     });
 
     test('encodeHubEvent -> decodeHubEvent is stable for all stateless events', () {

@@ -77,7 +77,6 @@ class SignalingHub {
   void _onModuleEvent(SignalingModuleEvent event) {
     if (event is SignalingConnecting) _sessionBuffer.clear();
     final encoded = encodeHubEvent(event);
-    if (encoded == null) return;
     if (event is! SignalingProtocolEvent) _sessionBuffer.add(encoded);
     _broadcast(encoded);
   }
