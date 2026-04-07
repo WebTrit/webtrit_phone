@@ -119,8 +119,13 @@ offer into it when `IncomingCallEvent` arrives, instead of creating a duplicate 
 resource races on rapid call sequences.
 
 **Connectivity-aware reconnection** — the BLoC monitors both `AppLifecycleState` and network
-connectivity. Reconnection is suppressed when the app is backgrounded with no active calls.
-Fast reconnect (0 s delay) is used on manual trigger; slow (6 s) on unexpected disconnect.
+connectivity. The signaling socket is kept alive when the app is backgrounded so incoming calls
+can arrive via WebSocket without relying on push. Reconnect is triggered on
+`AppLifecycleState.resumed` (in case the OS dropped the connection) and on network restore.
+A forced fast reconnect (0 s delay, force=true) is also triggered inside
+`__onCallPerformEventAnswered` when the user answers from a push notification and signaling is
+not yet connected, reducing the risk of timing out while waiting for the SDP offer.
+Disconnect is only initiated on connectivity loss (`ConnectivityResult.none`).
 
 **iOS audio reset** — on the first and last call, the BLoC forces audio to earpiece via
 `AppleNativeAudioManagement` to work around a platform bug where speaker stays active across
