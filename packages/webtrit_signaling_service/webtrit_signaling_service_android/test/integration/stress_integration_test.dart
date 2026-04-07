@@ -440,8 +440,8 @@ void main() {
         timestamp: 0,
         registration: const Registration(status: RegistrationStatus.registered),
         lines: const [],
-        userActiveCalls: const [],
-        contactsPresenceInfo: const {},
+        presenceInfos: const [],
+        dialogInfos: const [],
         guestLine: null,
       );
 

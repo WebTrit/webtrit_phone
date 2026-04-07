@@ -236,8 +236,8 @@ final _kHandshake = StateHandshake(
   timestamp: 1705322000000,
   registration: const Registration(status: RegistrationStatus.registered),
   lines: const [],
-  userActiveCalls: const [],
-  contactsPresenceInfo: const {},
+  presenceInfos: const [],
+  dialogInfos: const [],
   guestLine: null,
 );
 
