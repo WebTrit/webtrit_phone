@@ -16,6 +16,15 @@ final _logger = Logger('HubConnectionManager');
 ///
 /// Generation-based cancellation prevents stale polling loops from completing
 /// after a concurrent [begin] or [tearDown] call.
+///
+/// TODO(hub-discovery): Replace polling with a push-based discovery mechanism.
+/// Current approach polls [IsolateNameServer] every 100 ms because the background
+/// isolate starts asynchronously and there is no signal for when it is ready.
+/// A cleaner alternative: pass a [SendPort] from the main isolate to the
+/// background isolate at startup (via Pigeon or [RootIsolateToken]), so the
+/// background isolate notifies the main isolate directly when the hub is ready.
+/// This eliminates the polling delay and the 500 ms ack timeout, but requires
+/// changes to the Kotlin bootstrap flow in [FlutterEngineHelper].
 class HubConnectionManager {
   HubConnectionManager({
     required void Function(SignalingModuleEvent) onEvent,
