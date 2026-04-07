@@ -1,80 +1,78 @@
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-// ---------------------------------------------------------------------------
-// Type discriminators (hub -> subscriber, position [0])
-// ---------------------------------------------------------------------------
+const _tagConnecting = 'connecting';
+const _tagConnected = 'connected';
+const _tagConnectionFailed = 'connection_failed';
+const _tagDisconnecting = 'disconnecting';
+const _tagDisconnected = 'disconnected';
+const _tagHandshakeReceived = 'handshake_received';
+const _tagProtocolEvent = 'protocol_event';
+const _tagExecuteResult = 'execute_result';
+const _tagSubAck = 'sub_ack';
 
-const _kConnecting = 0;
-const _kConnected = 1;
-const _kConnectionFailed = 2;
-const _kDisconnecting = 3;
-const _kDisconnected = 4;
-const _kHandshakeReceived = 5;
-const _kProtocolEvent = 6;
-const _kExecuteResult = 7;
-const _kSubAck = 8;
-
-// ---------------------------------------------------------------------------
-// Encode SignalingModuleEvent -> List<dynamic>
-// ---------------------------------------------------------------------------
-
+/// Encodes a [SignalingModuleEvent] into an isolate-safe [List] for transport
+/// over a [SendPort].
+///
+/// Returns null for [SignalingProtocolEvent] subclasses that are not handled
+/// (should never occur given the sealed hierarchy, but keeps the return type
+/// nullable for forward compatibility).
 List<dynamic>? encodeHubEvent(SignalingModuleEvent event) {
   switch (event) {
     case SignalingConnecting():
-      return [_kConnecting];
+      return [_tagConnecting];
     case SignalingConnected():
-      return [_kConnected];
+      return [_tagConnected];
     case SignalingConnectionFailed(:final error, :final isRepeated, :final recommendedReconnectDelay):
-      return [_kConnectionFailed, error.toString(), isRepeated, recommendedReconnectDelay.inMilliseconds];
+      return [_tagConnectionFailed, error.toString(), isRepeated, recommendedReconnectDelay.inMilliseconds];
     case SignalingDisconnecting():
-      return [_kDisconnecting];
+      return [_tagDisconnecting];
     case SignalingDisconnected(:final code, :final reason, :final knownCode, :final recommendedReconnectDelay):
-      return [_kDisconnected, code, reason, knownCode.index, recommendedReconnectDelay?.inMilliseconds];
+      return [_tagDisconnected, code, reason, knownCode.name, recommendedReconnectDelay?.inMilliseconds];
     case SignalingHandshakeReceived(:final handshake):
-      return [_kHandshakeReceived, _encodeHandshake(handshake)];
+      return [_tagHandshakeReceived, _encodeHandshake(handshake)];
     case SignalingProtocolEvent(:final event):
-      return [_kProtocolEvent, event.toJson()];
+      return [_tagProtocolEvent, event.toJson()];
   }
 }
 
-// ---------------------------------------------------------------------------
-// Decode List<dynamic> -> SignalingModuleEvent
-// ---------------------------------------------------------------------------
-
+/// Decodes an isolate-safe [List] back into a [SignalingModuleEvent].
+///
+/// Returns null for unrecognised or malformed messages so that the hub
+/// listener can skip them without crashing.
 SignalingModuleEvent? decodeHubEvent(List<dynamic> msg) {
   if (msg.isEmpty) return null;
-  final type = msg[0] as int;
-  switch (type) {
-    case _kConnecting:
+  final tag = msg[0];
+  switch (tag) {
+    case _tagConnecting:
       return SignalingConnecting();
-    case _kConnected:
+    case _tagConnected:
       return SignalingConnected();
-    case _kConnectionFailed:
+    case _tagConnectionFailed:
       final delayMs = msg[3] as int;
       return SignalingConnectionFailed(
         error: msg[1] as String,
         isRepeated: msg[2] as bool,
         recommendedReconnectDelay: Duration(milliseconds: delayMs),
       );
-    case _kDisconnecting:
+    case _tagDisconnecting:
       return SignalingDisconnecting();
-    case _kDisconnected:
+    case _tagDisconnected:
       final delayMs = msg[4] as int?;
       return SignalingDisconnected(
         code: msg[1] as int?,
         reason: msg[2] as String?,
-        knownCode: SignalingDisconnectCode.values[msg[3] as int],
+        knownCode: SignalingDisconnectCode.values.byName(msg[3] as String),
         recommendedReconnectDelay: delayMs != null ? Duration(milliseconds: delayMs) : null,
       );
-    case _kHandshakeReceived:
+    case _tagHandshakeReceived:
       try {
         final handshake = StateHandshake.fromJson(Map<String, dynamic>.from(msg[1] as Map));
         return SignalingHandshakeReceived(handshake: handshake);
       } catch (_) {
         return null;
       }
-    case _kProtocolEvent:
+    case _tagProtocolEvent:
       try {
         final event = Event.fromJson(Map<String, dynamic>.from(msg[1] as Map));
         return SignalingProtocolEvent(event: event);
@@ -86,32 +84,22 @@ SignalingModuleEvent? decodeHubEvent(List<dynamic> msg) {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Execute result helpers
-// ---------------------------------------------------------------------------
-
+/// Encodes an execute result for transport from hub to subscriber.
 List<dynamic> encodeExecuteResult(String correlationId, Object? error) => [
-  _kExecuteResult,
+  _tagExecuteResult,
   correlationId,
   error?.toString(),
 ];
 
-bool isExecuteResult(List<dynamic> msg) => msg.isNotEmpty && msg[0] == _kExecuteResult;
+bool isExecuteResult(List<dynamic> msg) => msg.isNotEmpty && msg[0] == _tagExecuteResult;
 
 ({String correlationId, String? error}) decodeExecuteResult(List<dynamic> msg) =>
     (correlationId: msg[1] as String, error: msg[2] as String?);
 
-// ---------------------------------------------------------------------------
-// Sub-ack helpers (hub -> subscriber, confirms port is alive)
-// ---------------------------------------------------------------------------
+/// Encodes a subscribe-ack sent by the hub to confirm a new subscriber's port is live.
+List<dynamic> encodeSubAck() => [_tagSubAck];
 
-List<dynamic> encodeSubAck() => [_kSubAck];
-
-bool isSubAck(List<dynamic> msg) => msg.isNotEmpty && msg[0] == _kSubAck;
-
-// ---------------------------------------------------------------------------
-// StateHandshake encoder
-// ---------------------------------------------------------------------------
+bool isSubAck(List<dynamic> msg) => msg.isNotEmpty && msg[0] == _tagSubAck;
 
 Map<String, dynamic> _encodeHandshake(StateHandshake h) {
   return {
