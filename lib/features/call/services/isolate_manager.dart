@@ -91,6 +91,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     _pendingRequests.clear();
     await _signalingSubscription.cancel();
     await _signalingModule.dispose();
+    await _releaseCall(_metadata?.callId);
     _completeWithError(StateError('PushNotificationIsolateManager closed'));
   }
 
@@ -350,7 +351,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   // Native release
   // ---------------------------------------------------------------------------
 
-  Future<void> _releaseCall(String callId) async {
+  Future<void> _releaseCall(String? callId) async {
+    if (callId == null) return;
     try {
       await _pushService.releaseCall(callId);
     } catch (e) {
