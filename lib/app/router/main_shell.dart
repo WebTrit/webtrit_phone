@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart'
+    show SignalingModule, SignalingServiceConfig, WebtritSignalingService;
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
@@ -45,7 +47,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// runs in parallel while the widget tree and [CallBloc] are being built.
   /// Late subscribers (including [CallBloc]) receive all buffered session
   /// events via the replay stream.
-  late final SignalingModuleIsolateImpl _signalingModule;
+  late final SignalingModule _signalingModule;
 
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
@@ -87,14 +89,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     context.read<AppLogger>().updateRemoteLabels();
 
     final session = context.read<AppBloc>().state.session;
-    _signalingModule = SignalingModuleIsolateImpl(
-      coreUrl: session.coreUrl!,
-      tenantId: session.tenantId,
-      token: session.token!,
-      trustedCertificates: context.read<AppCertificates>().trustedCertificates,
-      signalingClientFactory: defaultSignalingClientFactory,
-    );
-    _signalingModule.connect();
+    _signalingModule = SignalingServiceModuleAdapter(
+      service: WebtritSignalingService(),
+      config: SignalingServiceConfig(
+        coreUrl: session.coreUrl!,
+        tenantId: session.tenantId,
+        token: session.token!,
+        trustedCertificates: context.read<AppCertificates>().trustedCertificates,
+      ),
+      mode: context.read<IncomingCallTypeRepository>().getIncomingCallType().toSignalingServiceMode(),
+    )..connect();
 
     final appBloc = context.read<AppBloc>();
     final notificationsBloc = context.read<NotificationsBloc>();
