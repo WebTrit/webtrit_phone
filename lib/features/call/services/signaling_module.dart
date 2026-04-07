@@ -514,7 +514,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
       if (!identical(_client, client) || timeoutRetry >= _executeTimeoutRetryCount) {
         Error.throwWithStackTrace(error, stackTrace);
       }
-      _logger.warning('_executeWithRetry timeout, retrying... (retry #$timeoutRetry)', error, stackTrace);
+      _logger.warning('_executeWithRetry timeout, retrying... (retry #$timeoutRetry)', request);
       return _executeWithRetry(client, request, timeoutRetry + 1);
     }
   }

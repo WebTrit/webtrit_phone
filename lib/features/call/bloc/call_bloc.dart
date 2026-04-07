@@ -483,7 +483,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _reconnectController.notifyNetworkUnavailable();
     } else {
       _reconnectController.notifyNetworkAvailable();
+
+      // Restart ICE for all active calls to trigger faster recovery from connectivity loss.
+      //
+      //  - in network loss scenario restarts RTP from almost imediately compating to built-in WebRTC connectivity checks which can take around 10-20 seconds
+      //  - in double network scenario (e.g already has mobile network, but also connected to wifi)
+      //    it helps to switch to better network instead of staying on old until rtp breaks.
+      for (var activeCall in state.activeCalls) {
+        _logger.info('_onConnectivityResultChanged: restarting ICE for call ${activeCall.callId} ');
+        final pc = await _peerConnectionManager.retrieve(activeCall.callId);
+        pc?.restartIce();
+      }
     }
+
     emit(
       state.copyWith(
         callServiceState: state.callServiceState.copyWith(networkStatus: connectivityResult.toNetworkStatus()),
@@ -607,6 +619,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onSignalingClientEventConnected(_SignalingClientEventConnected event, Emitter<CallState> emit) async {
+    // Renegotiate active calls if there was reconnect
+    //
+    // Important to do in case if there was connection loss for a while and then webrtc detects network loss and restarts ice e.g
+    // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> _safeRenegotiate >> if(!signalingConnected) return;
+    // user turn on network interfaces >> _onSignalingClientEventConnected >> safeRenegotiate
+    for (final call in state.activeCalls) {
+      _logger.warning('__onSignalingClientEventConnected: triggering safe renegotiation for call ${call.callId}');
+      _safeRenegotiate(call.callId, call.line);
+    }
+
     emit(
       state.copyWith(
         callServiceState: state.callServiceState.copyWith(
@@ -837,7 +859,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         line: event.line,
         callId: event.callId,
       );
-      await _signalingModule.execute(declineRequest);
+      try {
+        await _signalingModule.execute(declineRequest);
+      } catch (e, s) {
+        callErrorReporter.handle(e, s, '__onCallSignalingEventIncoming declineRequest error');
+      }
       return;
     }
 
@@ -2273,6 +2299,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventRenegotiationNeeded event,
     Emitter<CallState> emit,
   ) async {
+    _logger.severe('ABS __onPeerConnectionEventRenegotiationNeeded: ${event.callId}');
     final _PeerConnectionEventRenegotiationNeeded(callId: callId, lineId: lineId) = event;
     await _safeRenegotiate(callId, lineId);
   }
@@ -2319,27 +2346,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             final pcState = peerConnection.signalingState;
             if (pcState == RTCSignalingState.RTCSignalingStateStable) {
               await peerConnection.restartIce();
-              final localDescription = await peerConnection.createOffer({});
-              sdpMunger?.apply(localDescription);
-
-              final currentState = peerConnection.signalingState;
-              if (currentState == RTCSignalingState.RTCSignalingStateStable) {
-                // According to the WebRTC spec (https://www.w3.org/TR/webrtc/#dom-rtcpeerconnection-setlocaldescription),
-                // setLocalDescription must be called before sending the offer to the remote side.
-                await peerConnection.setLocalDescription(localDescription);
-
-                final updateRequest = UpdateRequest(
-                  transaction: WebtritSignalingClient.generateTransactionId(),
-                  line: activeCall.line,
-                  callId: activeCall.callId,
-                  jsep: localDescription.toMap(),
-                );
-                await _signalingModule.execute(updateRequest);
-              } else {
-                _logger.warning(
-                  '__onPeerConnectionEventIceConnectionStateChanged: signalingState changed mid-flight ($currentState), skipping setLocalDescription',
-                );
-              }
+              // Will trigger [onPeerConnectionEventRenegotiationNeeded]
+              // No need to create and send a new offer here, as the renegotiation flow will handle that.
             } else {
               _logger.warning(
                 '__onPeerConnectionEventIceConnectionStateChanged: signalingState is $pcState, skipping ICE restart',
@@ -3210,6 +3218,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final pc = await _peerConnectionManager.retrieve(callId);
     if (pc == null) {
       _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
+      return;
+    }
+
+    // Warning, this code block will executes even in case when app has no connection at all
+    // Example1:
+    // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> _safeRenegotiate
+    //
+    // so its important to prevent it from creating new offer and send it to nowhere or it will lead to hasLocalOffer stuck.
+    // Dont forget to invoke _safeRenegotiate manualy when signaling reconnected to make sure the new offer will be sended
+    //
+    final signalingConnected = state.isSignalingEstablished;
+    if (!signalingConnected) {
+      _logger.info('_safeRenegotiate: signaling not connected, skipping renegotiation');
       return;
     }
 
