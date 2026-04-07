@@ -11,6 +11,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 final _logger = Logger('SignalingModule');
 
 const _queuedRequestTimeout = Duration(seconds: 30);
+const _executeTimeoutRetryCount = 3;
 
 // ---------------------------------------------------------------------------
 // Events
@@ -154,6 +155,8 @@ abstract class SignalingModule implements SignalingReconnectable {
   /// Sends [request] via the active connection.
   ///
   /// When connected, the request is sent immediately.
+  /// If send fails with [WebtritSignalingTransactionTimeoutException],
+  /// it is retried up to 3 times.
   /// When not connected, the request is queued and sent on the next successful
   /// connection, or fails with [NotConnectedException] after 30 seconds.
   /// Returns a [Future] that completes when the request has been written to
@@ -295,7 +298,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
   @override
   Future<void>? execute(Request request) {
     final client = _client;
-    if (client != null) return client.execute(request);
+    if (client != null) return _executeWithRetry(client, request);
     return _enqueueRequest(request);
   }
 
@@ -489,7 +492,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
     while (_queuedRequests.isNotEmpty && identical(_client, client)) {
       final queuedRequest = _queuedRequests.first;
       try {
-        await client.execute(queuedRequest.request);
+        await _executeWithRetry(client, queuedRequest.request);
         _queuedRequests.removeFirst();
         queuedRequest.timer.cancel();
         if (!queuedRequest.completer.isCompleted) queuedRequest.completer.complete();
@@ -501,6 +504,18 @@ class SignalingModuleIsolateImpl implements SignalingModule {
           queuedRequest.completer.completeError(error, stackTrace);
         }
       }
+    }
+  }
+
+  Future<void> _executeWithRetry(WebtritSignalingClient client, Request request, [int timeoutRetry = 0]) async {
+    try {
+      await client.execute(request);
+    } on WebtritSignalingTransactionTimeoutException catch (error, stackTrace) {
+      if (!identical(_client, client) || timeoutRetry >= _executeTimeoutRetryCount) {
+        Error.throwWithStackTrace(error, stackTrace);
+      }
+      _logger.warning('_executeWithRetry timeout, retrying... (retry #$timeoutRetry)', error, stackTrace);
+      return _executeWithRetry(client, request, timeoutRetry + 1);
     }
   }
 
