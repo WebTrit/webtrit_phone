@@ -148,8 +148,6 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
           logger.info('Signaling: disconnected code=$code reason=$reason knownCode=$knownCode');
         case SignalingConnectionFailed(:final error):
           _onSignalingError(error);
-        default:
-          logger.info('Signaling: unhandled event ${event.runtimeType}');
       }
     });
   }
