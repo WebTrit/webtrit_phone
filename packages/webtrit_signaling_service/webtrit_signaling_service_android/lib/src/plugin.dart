@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'dart:ui' show IsolateNameServer, PluginUtilities;
+import 'dart:ui' show PluginUtilities;
 import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'hub/signaling_hub_client.dart';
-import 'hub/signaling_hub_module.dart';
+import 'hub_connection_manager.dart';
 import 'isolate/entry_point.dart' show signalingServiceCallbackDispatcher;
 import 'messages.g.dart';
 import 'mode_mapping.dart';
@@ -60,24 +59,24 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   final _hostApi = PSignalingServiceHostApi();
 
   // ---------------------------------------------------------------------------
-  // Hub mode (persistent) state
-  // ---------------------------------------------------------------------------
-
-  SignalingHubModule? _hubModule;
-  StreamSubscription<SignalingModuleEvent>? _hubModuleSub;
-
-  // Hub init background loop state.
-  // Incremented on every teardown or new init to invalidate in-progress loops.
-  int _hubInitGeneration = 0;
-  Future<void>? _hubInitTask;
-
-  // ---------------------------------------------------------------------------
   // Shared state
   // ---------------------------------------------------------------------------
 
   StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
   final _eventBuffer = SignalingEventBuffer();
+
+  late final _hubManager = HubConnectionManager(
+    consumerId: 'android_plugin_$hashCode',
+    onEvent: (event) {
+      _eventBuffer.onEvent(event);
+      if (!_eventsController.isClosed) _eventsController.add(event);
+    },
+    onError: (e, st) {
+      if (!_eventsController.isClosed) _eventsController.addError(e, st);
+    },
+    isActive: () => !_eventsController.isClosed,
+  );
 
   /// Last config passed to [start] -- reused when switching modes via [updateMode].
   SignalingServiceConfig? _currentConfig;
@@ -126,21 +125,20 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       _eventsController = StreamController<SignalingModuleEvent>.broadcast();
     }
 
-    await _startHubMode(config, effectiveMode);
+    await _startService(config, effectiveMode);
   }
 
   @override
   Future<void> attach() async {
     _logger.info('attach');
-    _beginHubInit();
+    _hubManager.begin();
   }
 
   @override
   Future<void> execute(Request request) async {
-    final hub = _hubModule;
-    if (hub != null && hub.isConnected) {
+    if (_hubManager.isConnected) {
       _logger.fine('execute ${request.runtimeType}');
-      await hub.execute(request)!;
+      await _hubManager.execute(request)!;
       return;
     }
     _logger.warning('execute called but not connected (${request.runtimeType})');
@@ -165,16 +163,13 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     }
 
     _eventBuffer.clear();
-    await _startHubMode(config, mode);
+    await _startService(config, mode);
   }
 
   @override
   Future<void> dispose() async {
     _logger.info('dispose');
-    _hubInitGeneration++;
-    await _hubInitTask;
-
-    await _tearDownHubMode();
+    await _hubManager.tearDown();
 
     // NOTE: stopService() is intentionally NOT called here.
     // The Android service lifecycle is managed by the Kotlin side:
@@ -228,11 +223,11 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   }
 
   // ---------------------------------------------------------------------------
-  // Hub mode internals
+  // Service start internals
   // ---------------------------------------------------------------------------
 
-  Future<void> _startHubMode(SignalingServiceConfig config, SignalingServiceMode mode) async {
-    _logger.fine('_startHubMode mode=$mode generation=$_hubInitGeneration');
+  Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
+    _logger.fine('_startService mode=$mode');
     final dispatcherHandle = PluginUtilities.getCallbackHandle(signalingServiceCallbackDispatcher);
     if (dispatcherHandle == null) {
       throw StateError(
@@ -260,111 +255,11 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     // source. Clearing here causes a different failure: when the foreground
     // service is already running (persistent mode), its background isolate's
     // _started guard prevents _hub.start() from being called again, so the
-    // port would never be re-registered after being cleared -- _hubInitLoop
+    // port would never be re-registered after being cleared -- HubConnectionManager
     // would poll forever and the signaling status would be stuck on
-    // "connecting". If a stale port does reach _hubInitLoop, the 500 ms ack
+    // "connecting". If a stale port does reach the init loop, the 500 ms ack
     // timeout causes a safe retry without blocking the happy path.
-    _beginHubInit();
-  }
-
-  Future<void> _tearDownHubMode() async {
-    _logger.fine('_tearDownHubMode generation=$_hubInitGeneration');
-    _hubInitGeneration++;
-    await _hubInitTask;
-    _hubInitTask = null;
-
-    await _hubModuleSub?.cancel();
-    _hubModuleSub = null;
-    await _hubModule?.dispose();
-    _hubModule = null;
-    _logger.fine('_tearDownHubMode complete');
-  }
-
-  // ---------------------------------------------------------------------------
-  // Hub module init
-  // ---------------------------------------------------------------------------
-
-  /// Starts the hub-init background loop if it is not already running and
-  /// no hub module is wired up yet.
-  ///
-  /// Increments [_hubInitGeneration] so any concurrent in-progress loop exits
-  /// on its next iteration check, preventing two concurrent loops.
-  ///
-  /// When an in-progress loop exits due to a generation mismatch (caused by a
-  /// concurrent [_beginHubInit] call), the [whenComplete] callback restarts the
-  /// loop so polling continues with the latest generation instead of stopping.
-  void _beginHubInit() {
-    if (_hubModule != null) return;
-    _hubInitGeneration++;
-    final generation = _hubInitGeneration;
-    _logger.fine('_beginHubInit generation=$generation taskRunning=${_hubInitTask != null}');
-    _hubInitTask ??= _hubInitLoop(generation).whenComplete(() {
-      _hubInitTask = null;
-      if (_hubModule == null && !_eventsController.isClosed) {
-        _logger.fine('_beginHubInit restarting loop after gen-mismatch exit (gen=$_hubInitGeneration)');
-        _beginHubInit();
-      }
-    });
-  }
-
-  /// Polls [IsolateNameServer] indefinitely until the hub port is registered,
-  /// then wires up [SignalingHubModule] and forwards its events to
-  /// [_eventsController].
-  ///
-  /// The loop exits when [_hubInitGeneration] no longer matches [generation]
-  /// (i.e. a newer [_beginHubInit] or [_tearDownHubMode] was called) or the
-  /// events controller is closed.
-  Future<void> _hubInitLoop(int generation) async {
-    const retryDelay = Duration(milliseconds: 100);
-    const ackTimeout = Duration(milliseconds: 500);
-
-    _logger.fine('_hubInitLoop started gen=$generation');
-    var attempts = 0;
-
-    while (true) {
-      if (_hubInitGeneration != generation || _eventsController.isClosed) {
-        _logger.fine(
-          '_hubInitLoop gen=$generation exiting (currentGen=$_hubInitGeneration closed=${_eventsController.isClosed}) after $attempts attempts',
-        );
-        return;
-      }
-
-      final client = SignalingHubClient.tryConnect('android_plugin_$hashCode');
-      if (client != null) {
-        _logger.fine('_hubInitLoop gen=$generation hub port found after $attempts attempts, awaiting ack');
-        // awaitAck MUST be called before start() so the internal Completer
-        // is in place before the hub's sub-ack can arrive.
-        final ackFuture = client.awaitAck(timeout: ackTimeout);
-        final module = SignalingHubModule(client); // subscribes, then calls client.start()
-        final ackReceived = await ackFuture;
-
-        if (ackReceived) {
-          if (_hubInitGeneration != generation || _eventsController.isClosed) {
-            _logger.fine('_hubInitLoop gen=$generation ack received but generation changed, disposing stale module');
-            await module.dispose();
-            return;
-          }
-          _hubModule = module;
-          _logger.info('_hubInitLoop gen=$generation hub connected (consumerId=${client.consumerId})');
-          _hubModuleSub = _hubModule!.events.listen(
-            (event) {
-              _eventBuffer.onEvent(event);
-              if (!_eventsController.isClosed) _eventsController.add(event);
-            },
-            onError: (Object e, StackTrace st) {
-              if (!_eventsController.isClosed) _eventsController.addError(e, st);
-            },
-          );
-          return;
-        }
-
-        _logger.fine('_hubInitLoop gen=$generation ack timeout -- stale port, retrying');
-        await module.dispose();
-      }
-
-      attempts++;
-      await Future<void>.delayed(retryDelay);
-    }
+    _hubManager.begin();
   }
 }
 
