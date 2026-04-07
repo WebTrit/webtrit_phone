@@ -7,7 +7,6 @@ The signaling stack has three layers. Each layer knows only the one below it —
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  Consumers  CallBloc · PushNotificationIsolateManager       │
-│             SignalingForegroundIsolateManager                │
 │  What they know: app lifecycle, network, active calls        │
 │  What they do:   decide WHEN to reconnect, handle state      │
 ├─────────────────────────────────────────────────────────────┤
@@ -88,24 +87,25 @@ broadcast stream. Knows the WebSocket protocol — nothing about the app.
 - Active calls or call state
 - Whether reconnect should happen at all — it only provides `recommendedReconnectDelay`
 
-**Public API:**
+**Public API (`SignalingModuleImpl` from `webtrit_signaling_service_platform_interface`):**
 
 ```dart
-SignalingModule({
+SignalingModuleImpl({
   required String coreUrl,
   required String tenantId,
   required String token,
   required TrustedCertificates trustedCertificates,
-  required SignalingClientFactory signalingClientFactory,
 })
 
-// Per-subscriber stream. Replays all buffered events from the current
-// session, then continues with live events.
+// Per-subscriber stream. Replays buffered lifecycle and handshake events
+// from the current session (SignalingProtocolEvent is NOT replayed),
+// then continues with live events.
 Stream<SignalingModuleEvent> get events;
 
-// null when not connected. Used by consumers to send requests
-// (HangupRequest, AcceptRequest, OutgoingCallRequest, etc.)
-WebtritSignalingClient? get signalingClient;
+bool get isConnected;
+
+// Send a request. Returns null when not connected.
+Future<void>? execute(Request request);
 
 // Fire-and-forget. Clears the session buffer. Result arrives via events.
 void connect();
@@ -151,24 +151,27 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 
 **Session replay buffer:**
 
-`connect()` clears the buffer. Each `_emit()` adds to the buffer AND the broadcast
-controller. The `events` getter subscribes to the live stream first (so no future
-events are missed), then synchronously replays buffered events:
+`connect()` clears the buffer. Each `_emit()` delegates to `SignalingEventBuffer.onEvent()`
+which adds lifecycle/handshake events to the buffer and broadcasts all events live.
+The `events` getter subscribes to the live stream first (so no future events are missed),
+then synchronously replays buffered events:
 
 ```
 connect() called
   → buffer.clear()
   → _connectAsync() fires
 
-events fired: Connecting, Connected, HandshakeReceived
-  → stored in _sessionBuffer
-  → forwarded to _controller (live broadcast)
+events fired: Connecting, Connected, HandshakeReceived → stored in buffer + live broadcast
+events fired: SignalingProtocolEvent (ICE, call events) → live broadcast only, NOT buffered
 
 Late subscriber calls module.events
   → subscribes to live stream (no gap)
   → receives replay: Connecting, Connected, HandshakeReceived
   → then receives future live events normally
 ```
+
+`SignalingProtocolEvent` is intentionally excluded from the buffer — protocol events
+are transient and replaying them to a late subscriber produces incorrect behaviour.
 
 This allows `SignalingModule` to be created and connected in `initState()`,
 before `CallBloc` is built. `CallBloc` receives the full session history when
@@ -212,13 +215,12 @@ case SignalingDisconnected(:final recommendedReconnectDelay):
   if (enableReconnect && recommendedReconnectDelay != null && !_networkNone) {
     _signalingReconnectTimer?.cancel();
     _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
-      if (_signalingModule.signalingClient == null) _signalingModule.connect();
+      if (!_signalingModule.isConnected) _signalingModule.connect();
     });
   }
 ```
 
 `PushNotificationIsolateManager` uses `enableReconnect: false` — never reconnects.
-`SignalingForegroundIsolateManager` uses `enableReconnect: true`.
 
 ---
 
@@ -277,26 +279,25 @@ _signalingSubscription = _signalingModule.events.listen((event) {
 ## Dependency diagram
 
 ```
+bootstrap.dart
+  └── WebtritSignalingService().setModuleFactory(createSignalingModule)
+  └── WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall)
+
 MainShellState.initState()
-  └── SignalingModule.connect()        ← WebSocket starts here, in parallel
-                                          with widget tree construction
+  └── SignalingServiceModuleAdapter(WebtritSignalingService())
+         │  implements SignalingModule interface
+         │  delegates start()/attach() to WebtritSignalingService
          │
          │  Stream<SignalingModuleEvent>  (replay buffer → live events)
          │
          ├──► CallBloc                  (main isolate)
          │      subscribes in constructor
-         │      commands: connect() / disconnect() / signalingClient.execute()
+         │      commands: connect() / disconnect() / module.execute(request)
          │
-         ├──► PushNotificationIsolateManager   (background, no reconnect)
-         │      subscribes in initSignaling()
-         │      commands: connect() via launchSignaling()
-         │
-         └──► SignalingForegroundIsolateManager (background, reconnect enabled)
-                subscribes in initSignaling()
-                commands: connect() via handleLifecycleStatus()
+         └──► background isolates (via plugin foreground service on Android)
 
 
-WebtritSignalingClient  ←  owned by SignalingModule  (1 instance at a time)
+WebtritSignalingClient  ←  owned by SignalingModuleImpl  (1 instance at a time)
   callbacks: onStateHandshake · onEvent · onError · onDisconnect
   commands:  execute(Request) · disconnect()
 ```

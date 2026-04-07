@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/features/call/services/signaling_module.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes / Mocks
@@ -138,12 +138,14 @@ final _kHandshake = StateHandshake(
 // Module builder
 // ---------------------------------------------------------------------------
 
-SignalingModuleIsolateImpl _buildModule(SignalingClientFactory factory) => SignalingModuleIsolateImpl(
+SignalingModuleImpl _buildModule(SignalingClientFactory factory) => SignalingModuleImpl(
   coreUrl: 'https://example.com',
   tenantId: 'test-tenant',
   token: 'test-token',
   trustedCertificates: TrustedCertificates.empty,
-  signalingClientFactory: factory,
+  connectionTimeout: kSignalingClientConnectionTimeout,
+  reconnectDelay: kSignalingClientReconnectDelay,
+  clientFactory: factory,
 );
 
 // ---------------------------------------------------------------------------
