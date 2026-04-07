@@ -510,11 +510,11 @@ class SignalingModuleIsolateImpl implements SignalingModule {
   Future<void> _executeWithRetry(WebtritSignalingClient client, Request request, [int timeoutRetry = 0]) async {
     try {
       await client.execute(request);
-    } on WebtritSignalingTransactionTimeoutException catch (error, stackTrace) {
+    } on WebtritSignalingTransactionTimeoutException {
       if (!identical(_client, client) || timeoutRetry >= _executeTimeoutRetryCount) {
-        Error.throwWithStackTrace(error, stackTrace);
+        rethrow;
       }
-      _logger.warning('_executeWithRetry timeout, retrying... (retry #$timeoutRetry)', request);
+      _logger.warning('_executeWithRetry on timeout, retrying... (retry #$timeoutRetry)', request);
       return _executeWithRetry(client, request, timeoutRetry + 1);
     }
   }
