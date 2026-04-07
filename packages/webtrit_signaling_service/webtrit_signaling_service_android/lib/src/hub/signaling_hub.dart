@@ -8,6 +8,7 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 
 import '../constants.dart';
 import 'signaling_hub_codec.dart';
+import 'signaling_hub_command.dart';
 
 final _logger = Logger('SignalingHub');
 
@@ -18,14 +19,8 @@ final _logger = Logger('SignalingHub');
 /// Any isolate (e.g. push notification isolate) can subscribe by looking up
 /// [kSignalingHubPortName] via [IsolateNameServer].
 ///
-/// Protocol -- subscriber -> hub (Map):
-///   {cmd:'sub',  id:consumerId, port:SendPort}
-///   {cmd:'unsub', id:consumerId}
-///   {cmd:'exec',  id:consumerId, corr:correlationId, req:Map}
-///
-/// Protocol -- hub -> subscriber (List):
-///   See [encodeHubEvent] / [decodeHubEvent] in signaling_hub_codec.dart.
-///   Execute results use [encodeExecuteResult].
+/// Protocol -- subscriber -> hub: [SignalingHubCommand.encode] / [SignalingHubCommand.decode].
+/// Protocol -- hub -> subscriber (List): see [encodeHubEvent] / [decodeHubEvent].
 class SignalingHub {
   SignalingHub(this._signalingModule);
 
@@ -58,7 +53,14 @@ class SignalingHub {
     _logger.fine('Hub started and registered as $kSignalingHubPortName');
 
     _moduleSubscription = _signalingModule.events.listen(_onModuleEvent);
-    _receivePort.listen(_onCommand);
+    _receivePort.listen((msg) {
+      final cmd = SignalingHubCommand.decode(msg);
+      if (cmd == null) {
+        _logger.warning('Hub ignoring unrecognised message: $msg');
+        return;
+      }
+      _onCommand(cmd);
+    });
   }
 
   /// Removes the hub from [IsolateNameServer], cancels all subscriptions,
@@ -71,10 +73,6 @@ class SignalingHub {
     _sessionBuffer.clear();
     _logger.fine('Hub disposed');
   }
-
-  // ---------------------------------------------------------------------------
-  // Module event forwarding
-  // ---------------------------------------------------------------------------
 
   void _onModuleEvent(SignalingModuleEvent event) {
     if (event is SignalingConnecting) _sessionBuffer.clear();
@@ -90,57 +88,45 @@ class SignalingHub {
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Command handling
-  // ---------------------------------------------------------------------------
-
-  void _onCommand(dynamic msg) {
-    if (msg is! Map) return;
-    final cmd = msg['cmd'] as String?;
+  void _onCommand(SignalingHubCommand cmd) {
     switch (cmd) {
-      case 'sub':
-        _handleSubscribe(msg);
-      case 'unsub':
-        _handleUnsubscribe(msg);
-      case 'exec':
-        _handleExecute(msg);
+      case SignalingHubSubscribeCommand():
+        _handleSubscribe(cmd);
+      case SignalingHubUnsubscribeCommand():
+        _handleUnsubscribe(cmd);
+      case SignalingHubExecuteCommand():
+        _handleExecute(cmd);
     }
   }
 
-  void _handleSubscribe(Map<dynamic, dynamic> msg) {
-    final id = msg['id'] as String;
-    final port = msg['port'] as SendPort;
-    _subscribers[id] = port;
-    _logger.fine('Hub subscriber added: $id (total: ${_subscribers.length})');
+  void _handleSubscribe(SignalingHubSubscribeCommand cmd) {
+    _subscribers[cmd.consumerId] = cmd.replyPort;
+    _logger.fine('Hub subscriber added: ${cmd.consumerId} (total: ${_subscribers.length})');
     // Ack first so the subscriber knows the hub port is alive (not stale).
-    port.send(encodeSubAck());
+    cmd.replyPort.send(encodeSubAck());
     // Replay current session buffer so the new subscriber gets the full state.
     for (final event in List<List<dynamic>>.from(_sessionBuffer)) {
-      port.send(event);
+      cmd.replyPort.send(event);
     }
   }
 
-  void _handleUnsubscribe(Map<dynamic, dynamic> msg) {
-    final id = msg['id'] as String;
-    _subscribers.remove(id);
-    _logger.fine('Hub subscriber removed: $id (total: ${_subscribers.length})');
+  void _handleUnsubscribe(SignalingHubUnsubscribeCommand cmd) {
+    _subscribers.remove(cmd.consumerId);
+    _logger.fine('Hub subscriber removed: ${cmd.consumerId} (total: ${_subscribers.length})');
   }
 
-  void _handleExecute(Map<dynamic, dynamic> msg) {
-    final id = msg['id'] as String;
-    final corr = msg['corr'] as String;
-    final reqMap = msg['req'] as Map;
-    final port = _subscribers[id];
+  void _handleExecute(SignalingHubExecuteCommand cmd) {
+    final port = _subscribers[cmd.consumerId];
     if (port == null) {
-      _logger.warning('Hub execute: unknown subscriber $id, corr=$corr');
+      _logger.warning('Hub execute: unknown subscriber ${cmd.consumerId}, corr=${cmd.correlationId}');
       return;
     }
-    unawaited(_executeAndReply(port, corr, reqMap));
+    unawaited(_executeAndReply(port, cmd.correlationId, cmd.request));
   }
 
-  Future<void> _executeAndReply(SendPort replyPort, String correlationId, Map<dynamic, dynamic> reqMap) async {
+  Future<void> _executeAndReply(SendPort replyPort, String correlationId, Map<String, dynamic> reqMap) async {
     try {
-      final request = Request.fromJson(Map<String, dynamic>.from(reqMap));
+      final request = Request.fromJson(reqMap);
       if (!_signalingModule.isConnected) throw StateError('Signaling not connected');
       await _signalingModule.execute(request)!;
       replyPort.send(encodeExecuteResult(correlationId, null));

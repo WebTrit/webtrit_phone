@@ -135,21 +135,21 @@ Future<void> _waitFor(bool Function() condition, {Duration timeout = const Durat
 // ---------------------------------------------------------------------------
 
 void main() {
-  SignalingHub? _hub;
-  _FakeSignalingModule? _module;
+  SignalingHub? hub;
+  _FakeSignalingModule? module;
 
   tearDown(() async {
-    await _hub?.dispose();
-    await _module?.dispose();
-    _hub = null;
-    _module = null;
+    await hub?.dispose();
+    await module?.dispose();
+    hub = null;
+    module = null;
     IsolateNameServer.removePortNameMapping(kSignalingHubPortName);
   });
 
   group('HubConnectionManager', () {
     test('connects when hub is already running before begin()', () async {
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       final (:manager, :received) = _buildManager();
       addTearDown(manager.tearDown);
@@ -169,16 +169,16 @@ void main() {
 
       // Start hub after a delay — manager should find it via polling.
       await Future<void>.delayed(const Duration(milliseconds: 200));
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       await _waitFor(() => manager.isConnected);
       expect(manager.isConnected, isTrue);
     });
 
     test('second begin() call is a no-op when already connected', () async {
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       final (:manager, :received) = _buildManager();
       addTearDown(manager.tearDown);
@@ -196,8 +196,8 @@ void main() {
     });
 
     test('forwards events from hub to onEvent callback', () async {
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       final (:manager, :received) = _buildManager();
       addTearDown(manager.tearDown);
@@ -205,7 +205,7 @@ void main() {
       manager.begin();
       await _waitFor(() => manager.isConnected);
 
-      _module!.inject(SignalingConnecting());
+      module!.inject(SignalingConnecting());
 
       await _waitFor(() => received.whereType<SignalingConnecting>().isNotEmpty);
       expect(received.whereType<SignalingConnecting>(), isNotEmpty);
@@ -223,8 +223,8 @@ void main() {
     });
 
     test('tearDown() after connected disposes the module', () async {
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       final (:manager, :received) = _buildManager();
 
@@ -237,8 +237,8 @@ void main() {
     });
 
     test('events stop arriving after tearDown()', () async {
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       final (:manager, :received) = _buildManager();
 
@@ -247,7 +247,7 @@ void main() {
       await manager.tearDown();
 
       final countAfterTearDown = received.length;
-      _module!.inject(SignalingConnecting());
+      module!.inject(SignalingConnecting());
       await Future<void>.delayed(const Duration(milliseconds: 200));
 
       expect(received.length, equals(countAfterTearDown));
@@ -272,16 +272,16 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
       // Hub starts now, but the loop has already exited.
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
       expect(manager.isConnected, isFalse);
     });
 
     test('concurrent begin() calls result in exactly one connection', () async {
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       final (:manager, :received) = _buildManager();
       addTearDown(manager.tearDown);
@@ -303,8 +303,8 @@ void main() {
       // tearDown() was still running, creating an untracked polling loop.
       // This test verifies that tearDown() fully stops the manager and no
       // reconnection happens unless begin() is explicitly called again.
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       final (:manager, :received) = _buildManager();
 
@@ -321,8 +321,8 @@ void main() {
     });
 
     test('reconnects after tearDown() and begin() cycle', () async {
-      _module = _FakeSignalingModule();
-      _hub = _startHub(_module!);
+      module = _FakeSignalingModule();
+      hub = _startHub(module!);
 
       final (:manager, :received) = _buildManager();
       addTearDown(manager.tearDown);
@@ -339,8 +339,4 @@ void main() {
       expect(manager.isConnected, isTrue);
     });
   });
-}
-
-extension<T> on Iterable<T> {
-  Iterable<S> whereType<S>() => where((e) => e is S).cast<S>();
 }

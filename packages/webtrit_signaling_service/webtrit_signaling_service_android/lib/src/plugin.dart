@@ -58,10 +58,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   final _hostApi = PSignalingServiceHostApi();
 
-  // ---------------------------------------------------------------------------
-  // Shared state
-  // ---------------------------------------------------------------------------
-
   StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
   final _eventBuffer = SignalingEventBuffer();
@@ -88,10 +84,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   /// chosen mode is used instead of reverting to the stale parameter.
   SignalingServiceMode? _currentMode;
 
-  // ---------------------------------------------------------------------------
-  // SignalingServicePlatform -- events
-  // ---------------------------------------------------------------------------
-
   @override
   Stream<SignalingModuleEvent> get events {
     return Stream.multi((sink) {
@@ -102,10 +94,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       }
     }, isBroadcast: true);
   }
-
-  // ---------------------------------------------------------------------------
-  // SignalingServicePlatform -- start / attach / execute / updateMode / dispose
-  // ---------------------------------------------------------------------------
 
   @override
   Future<void> start(
@@ -222,10 +210,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     await _hostApi.stopService();
   }
 
-  // ---------------------------------------------------------------------------
-  // Service start internals
-  // ---------------------------------------------------------------------------
-
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
     _logger.fine('_startService mode=$mode');
     final dispatcherHandle = PluginUtilities.getCallbackHandle(signalingServiceCallbackDispatcher);
@@ -262,10 +246,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _hubManager.begin();
   }
 }
-
-// ---------------------------------------------------------------------------
-// Trusted certificates serialization
-// ---------------------------------------------------------------------------
 
 /// Encodes [TrustedCertificates] to a JSON string for cross-isolate transport.
 ///
