@@ -1688,6 +1688,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // After request succesfully submitted, transfer flow will continue
       // by TransferringEvent event from anus and handled in [_CallSignalingEventTransferring]
       // that means that call transfering is now in progress
+    } on NotConnectedException {
+      _logger.warning('_onCallControlEventBlindTransferSubmitted: not connected, rollback and survive');
+      emit(state.copyWithMappedActiveCall(callId, (activeCall) => activeCall.copyWith(transfer: null)));
+    } on WebtritSignalingTransactionTimeoutException {
+      _logger.warning('_onCallControlEventBlindTransferSubmitted: transaction timeout, rollback and survive');
+      emit(state.copyWithMappedActiveCall(callId, (activeCall) => activeCall.copyWith(transfer: null)));
     } catch (e, s) {
       callErrorReporter.handle(e, s, '_onCallControlEventBlindTransferSubmitted request error:');
     }
@@ -1721,6 +1727,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // After request succesfully submitted, transfer flow will continue
       // by TransferringEvent event from anus and handled in [_CallSignalingEventTransferring]
       // that means that call transfering is now in progress
+    } on NotConnectedException {
+      _logger.warning('_onCallControlEventAttendedTransferSubmitted: not connected, rollback and survive');
+      emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) => activeCall.copyWith(transfer: null)));
+    } on WebtritSignalingTransactionTimeoutException {
+      _logger.warning('_onCallControlEventAttendedTransferSubmitted: transaction timeout, rollback and survive');
+      emit(state.copyWithMappedActiveCall(referorCall.callId, (activeCall) => activeCall.copyWith(transfer: null)));
     } catch (e, s) {
       callErrorReporter.handle(e, s, '_onCallControlEventAttendedTransferSubmitted request error:');
     }
@@ -2200,6 +2212,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return activeCall.copyWith(held: event.onHold);
         }),
       );
+    } on NotConnectedException {
+      _logger.warning('__onCallPerformEventSetHeld: not connected, let call survive');
+    } on WebtritSignalingTransactionTimeoutException {
+      _logger.warning('__onCallPerformEventSetHeld: transaction timeout, let call survive');
     } catch (e, stackTrace) {
       callErrorReporter.handle(e, stackTrace, '__onCallPerformEventSetHeld error');
 
@@ -2320,6 +2336,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             return _signalingModule.execute(iceTrickleRequest);
           }
         });
+      } on NotConnectedException {
+        _logger.warning('__onPeerConnectionEventIceGatheringStateChanged: not connected, let call survive');
+      } on WebtritSignalingTransactionTimeoutException {
+        _logger.warning('__onPeerConnectionEventIceGatheringStateChanged: transaction timeout, let call survive');
       } catch (e, stackTrace) {
         callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceGatheringStateChanged error');
 
@@ -2336,31 +2356,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     if (event.state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
       try {
-        await state.performOnActiveCall(event.callId, (activeCall) async {
-          final peerConnection = await _peerConnectionManager.retrieve(event.callId);
-          if (peerConnection == null) {
-            _logger.warning(
-              '__onPeerConnectionEventIceConnectionStateChanged: peerConnection is null - most likely some state issue',
-            );
-          } else {
-            final pcState = peerConnection.signalingState;
-            if (pcState == RTCSignalingState.RTCSignalingStateStable) {
-              await peerConnection.restartIce();
-              // Will trigger [onPeerConnectionEventRenegotiationNeeded]
-              // No need to create and send a new offer here, as the renegotiation flow will handle that.
-            } else {
-              _logger.warning(
-                '__onPeerConnectionEventIceConnectionStateChanged: signalingState is $pcState, skipping ICE restart',
-              );
-            }
-          }
-        });
+        final peerConnection = await _peerConnectionManager.retrieve(event.callId);
+        if (peerConnection == null) return;
+        final pcState = peerConnection.signalingState;
+        _logger.warning('__onPeerConnectionEventIceConnectionStateChanged: ICE  failed, pcState: $pcState');
+        if (pcState == RTCSignalingState.RTCSignalingStateStable) {
+          // Will trigger [onPeerConnectionEventRenegotiationNeeded]
+          // No need to create and send a new offer here, as the renegotiation flow will handle that.
+          await peerConnection.restartIce();
+        }
       } catch (e, stackTrace) {
         callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceConnectionStateChanged error');
-
-        _peerConnectionManager.completeError(event.callId, e, stackTrace);
-
-        add(_ResetStateEvent.completeCall(event.callId));
       }
     }
   }
@@ -2385,6 +2391,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return _signalingModule.execute(iceTrickleRequest);
         }
       });
+    } on NotConnectedException {
+      _logger.warning('__onPeerConnectionEventIceCandidateIdentified: not connected, let call survive');
+    } on WebtritSignalingTransactionTimeoutException {
+      _logger.warning('__onPeerConnectionEventIceCandidateIdentified: transaction timeout, let call survive');
     } catch (e, stackTrace) {
       callErrorReporter.handle(e, stackTrace, '__onPeerConnectionEventIceCandidateIdentified error');
 
