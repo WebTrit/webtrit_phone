@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
-import 'signaling_module.dart';
+import 'package:webtrit_phone/app/constants.dart';
 
 final _logger = Logger('SignalingReconnectController');
 
@@ -13,15 +13,15 @@ final _logger = Logger('SignalingReconnectController');
 ///
 /// ## Responsibilities
 ///
-/// - Schedules reconnect timers after [SignalingConnectionFailed],
-///   [SignalingConnectionLost], and [SignalingDisconnected] events.
+/// - Schedules reconnect timers after [SignalingConnectionFailed] and
+///   [SignalingDisconnected] events.
 /// - Guards reconnects by [_appActive] and [_networkActive] flags.
 /// - Tracks consecutive connect failures and calls [onConnectionFailed] only
 ///   after [notifyAfterConsecutiveFailures] attempts - suppressing spurious
 ///   toasts for transient failures (e.g. brief DNS unavailability on screen
 ///   unlock).
-/// - Calls [onConnectionFailed] immediately on [SignalingConnectionLost]
-///   because a previously established session was dropped, which is always
+/// - Calls [onConnectionFailed] immediately when an established connection is
+///   lost, because a previously established session was dropped, which is always
 ///   user-visible.
 /// - Tracks persistent connection availability and calls
 ///   [onConnectionPresenceChanged] whenever the availability transitions
@@ -51,7 +51,7 @@ final _logger = Logger('SignalingReconnectController');
 /// ```
 class SignalingReconnectController {
   SignalingReconnectController({
-    required SignalingReconnectable signalingModule,
+    required SignalingModule signalingModule,
     void Function()? onConnectionFailed,
     void Function(bool isAvailable)? onConnectionPresenceChanged,
     int notifyAfterConsecutiveFailures = 2,
@@ -65,13 +65,17 @@ class SignalingReconnectController {
     _subscription = _module.events.listen(_onEvent);
   }
 
-  final SignalingReconnectable _module;
+  final SignalingModule _module;
   final void Function()? _onConnectionFailed;
   final void Function(bool isAvailable)? _onConnectionPresenceChanged;
   final int _notifyThreshold;
   final bool _reconnectEnabled;
 
   late final StreamSubscription<SignalingModuleEvent> _subscription;
+
+  /// Tracks whether a connection was successfully established in the current session.
+  /// Used to distinguish transient connect failures from established-connection drops.
+  bool _wasConnected = false;
   Timer? _reconnectTimer;
 
   int _consecutiveFailures = 0;
@@ -122,8 +126,8 @@ class SignalingReconnectController {
   /// background.
   ///
   /// When [hasActiveCalls] is true the app-active guard is bypassed so that
-  /// reconnects triggered by [SignalingConnectionFailed] or
-  /// [SignalingConnectionLost] can still fire during a background call.
+  /// reconnects triggered by [SignalingConnectionFailed] or an unexpected
+  /// [SignalingDisconnected] can still fire during a background call.
   /// When [hasActiveCalls] is false and the app is not active, disconnects
   /// immediately - the call ended while backgrounded so signaling is no
   /// longer needed.
@@ -158,36 +162,47 @@ class SignalingReconnectController {
     switch (event) {
       case SignalingConnected():
         _logger.fine('_onEvent: connected - resetting failure counter');
+        _wasConnected = true;
         _consecutiveFailures = 0;
         _reconnectTimer?.cancel();
         _emitPresence(true);
 
-      // Initial connect attempt failed before any session was established.
-      // May be transient (e.g. DNS not ready on screen unlock) - notify only
-      // after [_notifyThreshold] consecutive failures.
+      // Covers two scenarios:
+      // 1. Initial connect attempt failed before a session was established -
+      //    may be transient, notify only after [_notifyThreshold] consecutive failures.
+      // 2. An error fired on an already-established WebSocket connection -
+      //    always notify immediately because the user-visible session was lost.
       case SignalingConnectionFailed(:final recommendedReconnectDelay):
-        _consecutiveFailures++;
-        _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
-        if (_consecutiveFailures == _notifyThreshold) {
-          _logger.info('_onEvent: notifying - consecutive failures reached threshold ($_notifyThreshold)');
+        if (_wasConnected) {
+          _logger.fine('_onEvent: connection lost after established session - notifying immediately');
+          _wasConnected = false;
+          _consecutiveFailures = 0;
           _onConnectionFailed?.call();
           _emitPresence(false);
+        } else {
+          _consecutiveFailures++;
+          _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
+          if (_consecutiveFailures == _notifyThreshold) {
+            _logger.info('_onEvent: notifying - consecutive failures reached threshold ($_notifyThreshold)');
+            _onConnectionFailed?.call();
+            _emitPresence(false);
+          }
         }
         _scheduleReconnect(recommendedReconnectDelay);
 
-      // Established session was lost - always notify immediately and reset
-      // the counter so the next reconnect loop starts fresh.
-      case SignalingConnectionLost(:final recommendedReconnectDelay):
-        _logger.fine('_onEvent: connection lost - notifying immediately');
+      // Unexpected TCP-level close without a preceding error event.
+      // Notify immediately - an established session was lost.
+      case SignalingDisconnected(:final recommendedReconnectDelay) when recommendedReconnectDelay != null:
+        _logger.fine('_onEvent: unexpected disconnect - notifying immediately');
+        _wasConnected = false;
         _consecutiveFailures = 0;
         _onConnectionFailed?.call();
         _emitPresence(false);
         _scheduleReconnect(recommendedReconnectDelay);
 
-      case SignalingDisconnected(:final recommendedReconnectDelay):
-        if (recommendedReconnectDelay != null) {
-          _scheduleReconnect(recommendedReconnectDelay);
-        }
+      // Intentional disconnect (recommendedReconnectDelay == null) - no action.
+      case SignalingDisconnected():
+        break;
 
       default:
         break;

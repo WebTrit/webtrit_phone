@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/features/call/services/signaling_module.dart';
 import 'package:webtrit_phone/features/call/services/signaling_reconnect_controller.dart';
 
 // ---------------------------------------------------------------------------
 // Fake SignalingModule
 // ---------------------------------------------------------------------------
 
-class _FakeSignalingModule implements SignalingReconnectable {
+class _FakeSignalingModule implements SignalingModule {
   final _controller = StreamController<SignalingModuleEvent>.broadcast(sync: true);
 
   int connectCalls = 0;
@@ -32,6 +32,10 @@ class _FakeSignalingModule implements SignalingReconnectable {
   @override
   Future<void> disconnect() async => disconnectCalls++;
 
+  @override
+  Future<void>? execute(Request request) => null;
+
+  @override
   Future<void> dispose() async => _controller.close();
 }
 
@@ -41,11 +45,15 @@ class _FakeSignalingModule implements SignalingReconnectable {
 
 SignalingConnectionFailed _failed({Duration? delay}) => SignalingConnectionFailed(
   error: Exception('connect error'),
+  isRepeated: false,
   recommendedReconnectDelay: delay ?? kSignalingClientReconnectDelay,
 );
 
-SignalingConnectionLost _lost() => SignalingConnectionLost(
-  error: Exception('socket error'),
+// Simulates an unexpected TCP-level connection close (established session lost).
+SignalingDisconnected _lost() => SignalingDisconnected(
+  code: null,
+  reason: null,
+  knownCode: SignalingDisconnectCode.unmappedCode,
   recommendedReconnectDelay: kSignalingClientReconnectDelay,
 );
 
@@ -187,11 +195,11 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // SignalingConnectionLost — immediate notification
+  // SignalingDisconnected (unexpected) — immediate notification
   // -------------------------------------------------------------------------
 
-  group('SignalingReconnectController - SignalingConnectionLost', () {
-    test('notifies immediately on first SignalingConnectionLost', () {
+  group('SignalingReconnectController - SignalingDisconnected (unexpected)', () {
+    test('notifies immediately on first SignalingDisconnected (unexpected)', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -210,7 +218,7 @@ void main() {
       });
     });
 
-    test('resets consecutive failure counter on SignalingConnectionLost', () {
+    test('resets consecutive failure counter on SignalingDisconnected (unexpected)', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -260,7 +268,7 @@ void main() {
       });
     });
 
-    test('schedules reconnect after SignalingConnectionLost', () {
+    test('schedules reconnect after SignalingDisconnected (unexpected)', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -553,7 +561,7 @@ void main() {
       });
     });
 
-    test('emits false immediately on SignalingConnectionLost', () {
+    test('emits false immediately on SignalingDisconnected (unexpected)', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);

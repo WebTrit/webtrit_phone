@@ -463,7 +463,7 @@ void main() {
       expect(received?.event, same(event));
     });
 
-    test('_onError emits SignalingConnectionLost and clears signalingClient', () async {
+    test('_onError emits SignalingConnectionFailed and clears signalingClient', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
       addTearDown(module.dispose);
@@ -471,9 +471,9 @@ void main() {
       module.connect();
       await pumpEventQueue();
 
-      SignalingConnectionLost? failed;
+      SignalingConnectionFailed? failed;
       module.events.listen((e) {
-        if (e is SignalingConnectionLost) failed = e;
+        if (e is SignalingConnectionFailed) failed = e;
       });
 
       final error = Exception('keepalive timeout');
@@ -915,8 +915,8 @@ void main() {
       client.injectDisconnect(null, null);
       await pumpEventQueue();
 
-      // Only SignalingConnectionLost - no SignalingDisconnected.
-      expect(events.whereType<SignalingConnectionLost>(), hasLength(1));
+      // Only SignalingConnectionFailed - no SignalingDisconnected.
+      expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
       expect(events.whereType<SignalingDisconnected>(), isEmpty);
     });
   });
@@ -1080,7 +1080,7 @@ void main() {
       client.injectDisconnect(null, null);
       await pumpEventQueue();
 
-      expect(events.whereType<SignalingConnectionLost>(), hasLength(1));
+      expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
       expect(
         events.whereType<SignalingDisconnected>(),
         isEmpty,
@@ -1137,7 +1137,7 @@ void main() {
       expect(late.whereType<SignalingConnecting>(), hasLength(1));
       expect(late.whereType<SignalingConnected>(), hasLength(1));
       expect(late.whereType<SignalingHandshakeReceived>(), hasLength(1));
-      expect(late.whereType<SignalingConnectionLost>(), hasLength(1));
+      expect(late.whereType<SignalingConnectionFailed>(), hasLength(1));
     });
   });
 
@@ -1215,7 +1215,7 @@ void main() {
       await pumpEventQueue();
 
       expect(late.whereType<SignalingHandshakeReceived>(), isEmpty);
-      expect(late.whereType<SignalingConnectionLost>(), hasLength(1));
+      expect(late.whereType<SignalingConnectionFailed>(), hasLength(1));
     });
 
     test('reconnect after no-handshake failure delivers fresh Connecting+Connected+Handshake', () async {

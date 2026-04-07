@@ -142,8 +142,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           add(const _SignalingClientEvent.connected());
         case SignalingConnectionFailed(:final error):
           add(_SignalingClientEvent.failed(error));
-        case SignalingConnectionLost(:final error):
-          add(_SignalingClientEvent.failed(error));
         case SignalingDisconnecting():
           add(const _SignalingClientEvent.disconnecting());
         case SignalingDisconnected(:final code, :final reason):
@@ -2006,7 +2004,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // Trigger reconnect immediately so the offer can arrive — don't wait for AppLifecycleState.resumed.
         if (!_signalingModule.isConnected) {
           _logger.info('__onCallPerformEventAnswered: signaling not connected, forcing reconnect');
-          _reconnectInitiated(delay: Duration.zero, force: true);
+          _reconnectController.notifyForceReconnect();
         }
 
         final offerWaitStart = DateTime.now();
