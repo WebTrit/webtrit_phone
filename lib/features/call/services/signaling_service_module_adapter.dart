@@ -192,15 +192,6 @@ class SignalingServiceModuleAdapter implements SignalingModule {
   }
 }
 
-class NotConnectedException implements Exception {
-  NotConnectedException([this.message = 'Signaling client is not connected']);
-
-  final String message;
-
-  @override
-  String toString() => 'NotConnectedException: $message';
-}
-
 class _QueuedRequest {
   _QueuedRequest({required this.request, required this.completer, required this.timer});
 

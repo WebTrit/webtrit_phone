@@ -18,7 +18,8 @@ export 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
         SignalingServiceConfig,
         SignalingServiceMode,
         SignalingEventBuffer,
-        createSignalingModule;
+        createSignalingModule,
+        NotConnectedException;
 
 /// Public entry point for the signaling service plugin.
 ///
