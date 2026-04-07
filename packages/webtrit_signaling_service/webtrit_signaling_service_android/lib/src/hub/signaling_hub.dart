@@ -19,7 +19,7 @@ final _logger = Logger('SignalingHub');
 /// Any isolate (e.g. push notification isolate) can subscribe by looking up
 /// [kSignalingHubPortName] via [IsolateNameServer].
 ///
-/// Protocol -- subscriber -> hub: [SignalingHubCommand] subtypes.
+/// Protocol -- subscriber -> hub: [SignalingHubCommand.encode] / [SignalingHubCommand.decode].
 /// Protocol -- hub -> subscriber (List): see [encodeHubEvent] / [decodeHubEvent].
 class SignalingHub {
   SignalingHub(this._signalingModule);
@@ -53,7 +53,14 @@ class SignalingHub {
     _logger.fine('Hub started and registered as $kSignalingHubPortName');
 
     _moduleSubscription = _signalingModule.events.listen(_onModuleEvent);
-    _receivePort.listen((msg) => _onCommand(msg as SignalingHubCommand));
+    _receivePort.listen((msg) {
+      final cmd = SignalingHubCommand.decode(msg);
+      if (cmd == null) {
+        _logger.warning('Hub ignoring unrecognised message: $msg');
+        return;
+      }
+      _onCommand(cmd);
+    });
   }
 
   /// Removes the hub from [IsolateNameServer], cancels all subscriptions,

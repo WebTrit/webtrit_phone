@@ -24,7 +24,7 @@ final _logger = Logger('SignalingHubClient');
 /// final client = SignalingHubClient.tryConnect('push_${hashCode}');
 /// if (client != null) {
 ///   final ackFuture = client.awaitAck(); // get future BEFORE start()
-///   client.start();                      // sends 'sub' -> hub replies with ack
+///   client.start();                      // sends SignalingHubSubscribeCommand -> hub replies with ack
 ///   final ackReceived = await ackFuture;
 ///   if (!ackReceived) await client.dispose();
 /// }
@@ -56,7 +56,7 @@ class SignalingHubClient {
     if (_started) return;
     _started = true;
     _subscription = _receivePort.listen((msg) => _onMessage(msg as List<Object?>));
-    _hubPort.send(SignalingHubSubscribeCommand(consumerId: consumerId, replyPort: _receivePort.sendPort));
+    _hubPort.send(SignalingHubSubscribeCommand(consumerId: consumerId, replyPort: _receivePort.sendPort).encode());
     _logger.fine('Hub client $consumerId subscribed');
   }
 
@@ -83,7 +83,9 @@ class SignalingHubClient {
     final corrId = _generateId();
     final completer = Completer<void>();
     _pendingExecutions[corrId] = completer;
-    _hubPort.send(SignalingHubExecuteCommand(consumerId: consumerId, correlationId: corrId, request: request.toJson()));
+    _hubPort.send(
+      SignalingHubExecuteCommand(consumerId: consumerId, correlationId: corrId, request: request.toJson()).encode(),
+    );
     return completer.future.timeout(
       _executeTimeout,
       onTimeout: () {
@@ -95,7 +97,7 @@ class SignalingHubClient {
 
   /// Sends the unsubscribe command and closes all resources.
   Future<void> dispose() async {
-    _hubPort.send(SignalingHubUnsubscribeCommand(consumerId: consumerId));
+    _hubPort.send(SignalingHubUnsubscribeCommand(consumerId: consumerId).encode());
     await _subscription?.cancel();
     _receivePort.close();
     for (final c in _pendingExecutions.values) {
