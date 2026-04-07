@@ -28,7 +28,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
-import '../services/signaling_module.dart';
+import '../services/services.dart';
 import '../utils/utils.dart';
 
 export 'package:webtrit_callkeep/webtrit_callkeep.dart' show CallkeepHandle, CallkeepHandleType;
@@ -86,7 +86,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
-  Timer? _signalingClientReconnectTimer;
+  late final SignalingReconnectController _reconnectController;
   Timer? _presenceInfoSyncTimer;
 
   late final PeerConnectionManager _peerConnectionManager;
@@ -124,21 +124,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _peerConnectionManager = peerConnectionManager;
     _handshakeProcessor = HandshakeProcessor(callkeepConnections: callkeepConnections);
 
+    _reconnectController = SignalingReconnectController(
+      signalingModule: signalingModule,
+      onConnectionFailed: () => submitNotification(const SignalingConnectFailedNotification()),
+      onConnectionPresenceChanged: (isAvailable) =>
+          _logger.info('signaling presence changed: isAvailable=$isAvailable'),
+    );
+
+    // Translates SignalingModule events into BLoC state-transition events.
+    // Reconnect scheduling and notification decisions are fully handled by
+    // [_reconnectController] — this listener only drives [CallState] changes.
     _signalingSubscription = _signalingModule.events.listen((event) {
       switch (event) {
         case SignalingConnecting():
           add(const _SignalingClientEvent.connecting());
         case SignalingConnected():
           add(const _SignalingClientEvent.connected());
-        case SignalingConnectionFailed(:final error, :final isRepeated, :final recommendedReconnectDelay):
-          if (!isRepeated) submitNotification(const SignalingConnectFailedNotification());
+        case SignalingConnectionFailed(:final error):
           add(_SignalingClientEvent.failed(error));
-          _scheduleReconnect(recommendedReconnectDelay);
+        case SignalingConnectionLost(:final error):
+          add(_SignalingClientEvent.failed(error));
         case SignalingDisconnecting():
           add(const _SignalingClientEvent.disconnecting());
-        case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
+        case SignalingDisconnected(:final code, :final reason):
           add(_SignalingClientEvent.disconnected(code, reason));
-          if (recommendedReconnectDelay != null) _scheduleReconnect(recommendedReconnectDelay);
         case SignalingHandshakeReceived(:final handshake):
           _handleHandshakeReceived(handshake);
         case SignalingProtocolEvent(:final event):
@@ -192,7 +201,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await _connectivityChangedSubscription?.cancel();
 
-    _signalingClientReconnectTimer?.cancel();
+    _reconnectController.dispose();
 
     _presenceInfoSyncTimer?.cancel();
 
@@ -234,11 +243,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final connected = _signalingModule.isConnected;
 
       if (appInactive) {
+        _reconnectController.notifyHasActiveCalls(hasActiveCalls: hasActiveCalls);
         if (hasActiveCalls && !connected) {
-          _reconnectInitiated(delay: kSignalingClientFastReconnectDelay, force: true);
+          _reconnectController.notifyForceReconnect();
         }
         if (!hasActiveCalls && connected) {
-          _disconnectInitiated();
+          _reconnectController.notifyAppPaused(hasActiveCalls: false);
         }
       }
     }
@@ -418,62 +428,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  void _reconnectInitiated({Duration delay = kSignalingClientFastReconnectDelay, bool force = false}) {
-    _scheduleReconnect(delay, force: force);
-  }
-
-  void _scheduleReconnect(Duration delay, {bool force = false}) {
-    _signalingClientReconnectTimer?.cancel();
-    _signalingClientReconnectTimer = Timer(delay, () {
-      final appActive = state.currentAppLifecycleState == AppLifecycleState.resumed;
-      final connectionActive = state.callServiceState.networkStatus != NetworkStatus.none;
-      final signalingRemains = _signalingModule.isConnected;
-
-      _logger.info(
-        '_scheduleReconnect Timer callback after $delay, isClosed: $isClosed, appActive: $appActive, connectionActive: $connectionActive',
-      );
-
-      // Guard clause to prevent reconnection when the bloc was closed after delay.
-      if (isClosed) {
-        return;
-      }
-
-      // Guard clause to prevent reconnection when the app is in the background.
-      // Coz reconnect can be triggered by another action e.g conectivity change.
-      if (appActive == false && force == false) {
-        _logger.info('_scheduleReconnect: skipped due to appActive: $appActive');
-        return;
-      }
-
-      // Guard clause to prevent reconnection when there is no connectivity.
-      // Coz reconnect can be triggered by another action e.g app lifecycle change.
-      if (connectionActive == false && force == false) {
-        _logger.info('_scheduleReconnect: skipped due to connectionActive: $connectionActive');
-        return;
-      }
-
-      // Guard clause to prevent reconnection when the signaling client is already connected.
-      //
-      // Can be triggered by switching from wifi to mobile data.
-      // In this case, the connection is recovers automatically, and signaling wasnt disposed.
-      //
-      // Or if app resumes from background or native call screen durning active call,
-      // in this case signaling wasnt disposed
-      if (signalingRemains == true && force == false) {
-        _logger.info('_scheduleReconnect: skipped due signalingRemains: $signalingRemains');
-        return;
-      }
-
-      _signalingModule.connect();
-    });
-  }
-
-  void _disconnectInitiated() {
-    _signalingClientReconnectTimer?.cancel();
-    _signalingClientReconnectTimer = null;
-    unawaited(_signalingModule.disconnect());
-  }
-
   //
 
   Future<void> _onCallStarted(CallStarted event, Emitter<CallState> emit) async {
@@ -499,7 +453,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_ConnectivityResultChanged(currentConnectivityResult));
     });
 
-    _reconnectInitiated(delay: Duration.zero);
+    if (connectivityState == ConnectivityResult.none) {
+      _reconnectController.notifyNetworkUnavailable();
+    } else {
+      _reconnectController.notifyNetworkAvailable();
+    }
 
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
@@ -511,9 +469,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(currentAppLifecycleState: appLifecycleState));
 
     if (appLifecycleState == AppLifecycleState.paused || appLifecycleState == AppLifecycleState.detached) {
-      if (state.isActive == false) _disconnectInitiated();
+      _reconnectController.notifyAppPaused(hasActiveCalls: state.isActive);
     } else if (appLifecycleState == AppLifecycleState.resumed) {
-      _reconnectInitiated();
+      _reconnectController.notifyAppResumed();
     }
   }
 
@@ -521,9 +479,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final connectivityResult = event.result;
     _logger.fine('_onConnectivityResultChanged: $connectivityResult');
     if (connectivityResult == ConnectivityResult.none) {
-      _disconnectInitiated();
+      _reconnectController.notifyNetworkUnavailable();
     } else {
-      _reconnectInitiated();
+      _reconnectController.notifyNetworkAvailable();
     }
     emit(
       state.copyWith(
@@ -1851,7 +1809,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
       // Trigger reconnect so that an outgoing call recovers signaling even when the previous
       // disconnect was intentional (e.g. post-transfer cleanup) and no reconnect was scheduled.
-      _scheduleReconnect(Duration.zero);
+      _reconnectController.notifyForceReconnect();
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
@@ -2653,7 +2611,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // The original offer SDP is stored for UI/video detection purposes only.
       // It is NOT used for media setup during restoration — __onCallPerformEventAnswered
       // is bypassed because the status starts at incomingRestoringMedia (excluded from
-      // canPerformAnswer). Media is re-established via renegotiationNeeded → UpdateRequest
+      // canPerformAnswer). Media is re-established via renegotiationNeeded -> UpdateRequest
       // (ICE restart), which creates a fresh offer with new ICE credentials.
       // Outgoing restored calls use outgoingRestoringMedia for the same reason
       // (excluded from canPerformStart normal flow).

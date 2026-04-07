@@ -19,18 +19,29 @@ class SignalingConnecting extends SignalingModuleEvent {}
 
 class SignalingConnected extends SignalingModuleEvent {}
 
-/// Connect attempt failed (SocketException, TlsException, etc.).
+/// Initial connect attempt failed before a session was established
+/// (SocketException, TlsException, DNS failure, timeout, etc.).
 ///
-/// [isRepeated] is true when the error matches the previous connect attempt.
-/// Consumers may suppress duplicate notifications when [isRepeated] is true.
-///
-/// [recommendedReconnectDelay] is always [kSignalingClientReconnectDelay].
-/// Consumers decide whether to act on it based on app state and network.
+/// May be transient — consumers should apply a failure threshold before
+/// surfacing a user-visible error. Reconnect delay is always
+/// [kSignalingClientReconnectDelay].
 class SignalingConnectionFailed extends SignalingModuleEvent {
-  SignalingConnectionFailed({required this.error, required this.isRepeated, required this.recommendedReconnectDelay});
+  SignalingConnectionFailed({required this.error, required this.recommendedReconnectDelay});
 
   final Object error;
-  final bool isRepeated;
+  final Duration recommendedReconnectDelay;
+}
+
+/// An already-established session was lost due to a runtime error.
+///
+/// Distinct from [SignalingConnectionFailed]: the connection reached
+/// [SignalingConnected] before this error occurred. Consumers should treat
+/// this as an immediate failure (no threshold needed).
+/// Reconnect delay is always [kSignalingClientReconnectDelay].
+class SignalingConnectionLost extends SignalingModuleEvent {
+  SignalingConnectionLost({required this.error, required this.recommendedReconnectDelay});
+
+  final Object error;
   final Duration recommendedReconnectDelay;
 }
 
@@ -74,6 +85,28 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 // Interface
 // ---------------------------------------------------------------------------
 
+/// Minimal interface required by [SignalingReconnectController].
+///
+/// Exposes only the subset of [SignalingModule] that the reconnect controller
+/// needs: the event stream, connection state, and connect/disconnect commands.
+/// Keeping this narrow lets the controller be tested and reused without
+/// pulling in the full module contract.
+abstract class SignalingReconnectable {
+  /// Broadcast stream of lifecycle events ([SignalingConnected],
+  /// [SignalingConnectionFailed], [SignalingConnectionLost],
+  /// [SignalingDisconnected], etc.).
+  Stream<SignalingModuleEvent> get events;
+
+  /// Whether the signaling client is currently connected.
+  bool get isConnected;
+
+  /// Initiates a connection. Fire-and-forget — result arrives via [events].
+  void connect();
+
+  /// Disconnects the current client gracefully.
+  Future<void> disconnect();
+}
+
 /// Contract for a signaling module used by [IsolateManager] and other consumers.
 ///
 /// Abstracts the concrete [SignalingModuleIsolateImpl] so that the integration
@@ -81,19 +114,21 @@ class SignalingProtocolEvent extends SignalingModuleEvent {
 /// consumers. When the webtrit_signaling_service plugin is integrated, this
 /// interface will be replaced by the one from the plugin's platform-interface
 /// package and this local definition removed.
-abstract class SignalingModule {
+abstract class SignalingModule implements SignalingReconnectable {
   /// Broadcast stream of all module lifecycle and protocol events.
   ///
   /// Each new subscriber immediately receives all lifecycle and handshake events
   /// buffered since the last [connect] call, followed by live events.
   /// [SignalingProtocolEvent] items are NOT replayed — they are delivered only
   /// to subscribers already listening when they occur.
+  @override
   Stream<SignalingModuleEvent> get events;
 
   /// Whether the signaling client is currently connected.
   ///
   /// Returns `true` between a successful [connect] and the next [disconnect]
   /// or connection failure. Use this to guard [execute] calls.
+  @override
   bool get isConnected;
 
   /// Initiates a connection. Fire-and-forget — returns immediately.
@@ -101,6 +136,7 @@ abstract class SignalingModule {
   /// The result arrives asynchronously via [events] as [SignalingConnected]
   /// or [SignalingConnectionFailed]. Calling [connect] when already connected
   /// or while a connection attempt is in progress is a no-op.
+  @override
   void connect();
 
   /// Disconnects the current client gracefully.
@@ -109,6 +145,7 @@ abstract class SignalingModule {
   /// emitted later once the underlying WebSocket close-ack arrives. Returns
   /// immediately — callers must not assume the connection is closed when the
   /// returned [Future] completes.
+  @override
   Future<void> disconnect();
 
   /// Sends [request] via the active connection.
@@ -182,7 +219,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
 
   /// Set to true by [_onError] so that the subsequent [_onDisconnect] callback
   /// (which fires when the underlying socket closes after an error) is
-  /// suppressed - [_onError] already emits [SignalingConnectionFailed] and
+  /// suppressed - [_onError] already emits [SignalingConnectionLost] and
   /// consumers would otherwise receive two separate reconnect triggers.
   ///
   /// Ordering invariant: [_onDisconnect] for the failed socket always arrives
@@ -192,9 +229,6 @@ class SignalingModuleIsolateImpl implements SignalingModule {
   /// [_onDisconnect] resets this flag to false, so a newly connected client
   /// starts with a clean state.
   bool _errorHandled = false;
-
-  /// Last connect error as string for deduplication.
-  String? _lastConnectErrorString;
 
   /// Broadcast stream of all module events.
   ///
@@ -357,23 +391,12 @@ class SignalingModuleIsolateImpl implements SignalingModule {
         );
 
         _client = client;
-        _lastConnectErrorString = null;
         _emit(SignalingConnected());
       } catch (e, s) {
         if (_disposed) return;
         _logger.warning('_connectAsync failed', e, s);
 
-        final errorString = e.toString();
-        final isRepeated = _lastConnectErrorString == errorString;
-        _lastConnectErrorString = errorString;
-
-        _emit(
-          SignalingConnectionFailed(
-            error: e,
-            isRepeated: isRepeated,
-            recommendedReconnectDelay: kSignalingClientReconnectDelay,
-          ),
-        );
+        _emit(SignalingConnectionFailed(error: e, recommendedReconnectDelay: kSignalingClientReconnectDelay));
       }
     } finally {
       _connecting = false;
@@ -400,17 +423,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
     // _onDisconnect callback (socket close after error) is suppressed.
     _errorHandled = true;
 
-    final errorString = error.toString();
-    final isRepeated = _lastConnectErrorString == errorString;
-    _lastConnectErrorString = errorString;
-
-    _emit(
-      SignalingConnectionFailed(
-        error: error,
-        isRepeated: isRepeated,
-        recommendedReconnectDelay: kSignalingClientReconnectDelay,
-      ),
-    );
+    _emit(SignalingConnectionLost(error: error, recommendedReconnectDelay: kSignalingClientReconnectDelay));
   }
 
   void _onDisconnect(int? code, String? reason) {
@@ -420,7 +433,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
     final wasIntentional = _intentionalDisconnect;
     _intentionalDisconnect = false;
 
-    // _onError already emitted SignalingConnectionFailed for this connection
+    // _onError already emitted SignalingConnectionLost for this connection
     // failure. Skip SignalingDisconnected to avoid a double reconnect trigger.
     if (_errorHandled) {
       _errorHandled = false;
